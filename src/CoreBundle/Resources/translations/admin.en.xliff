@@ -1,0 +1,2486 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="admin.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_core.error.access_denied">
+                <source>chameleon_system_core.error.access_denied</source>
+                <target>Access denied</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.template_engine.module_edit_state_new">
+                <source>chameleon_system_core.template_engine.module_edit_state_new</source>
+                <target>Not yet edited</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.module_edit_state_partial">
+                <source>chameleon_system_core.template_engine.module_edit_state_partial</source>
+                <target>Not completed</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.module_edit_state_completed">
+                <source>chameleon_system_core.template_engine.module_edit_state_completed</source>
+                <target>Edited</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.select_instance">
+                <source>chameleon_system_core.template_engine.select_instance</source>
+                <target>Choose module content</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.reset_spot">
+                <source>chameleon_system_core.template_engine.reset_spot</source>
+                <target>Reset</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.create_or_edit_instance">
+                <source>chameleon_system_core.template_engine.create_or_edit_instance</source>
+                <target>Create / edit module</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.action_create_module_instance">
+                <source>chameleon_system_core.template_engine.action_create_module_instance</source>
+                <target>Create</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.confirm_page_delete">
+                <source>chameleon_system_core.template_engine.confirm_page_delete</source>
+                <target>Are you sure? You're about to delete the whole page as well as all its containing module contents. If you want to keep the module contents you have to reset (not delete) the module slots first.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.action_edit_template">
+                <source>chameleon_system_core.template_engine.action_edit_template</source>
+                <target>Edit contents</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.action_page_preview">
+                <source>chameleon_system_core.template_engine.action_page_preview</source>
+                <target>Page preview</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.action_page_templates">
+                <source>chameleon_system_core.template_engine.action_page_templates</source>
+                <target>Page templates</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.spot_count">
+                <source>chameleon_system_core.template_engine.spot_count</source>
+                <target>Module:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.module_chooser_close">
+                <source>chameleon_system_core.template_engine.module_chooser_close</source>
+                <target>Close</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.template_engine.slot">
+                <source>chameleon_system_core.template_engine.slot</source>
+                <target>Module slot</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.module_view">
+                <source>chameleon_system_core.template_engine.module_view</source>
+                <target>View</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.select_module_view">
+                <source>chameleon_system_core.template_engine.select_module_view</source>
+                <target>Choose a view</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.action_change_template">
+                <source>chameleon_system_core.template_engine.action_change_template</source>
+                <target>Change template</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.action_delete_instance_content">
+                <source>chameleon_system_core.template_engine.action_delete_instance_content</source>
+                <target>Delete content</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.template_engine.slot_content">
+                <source>chameleon_system_core.template_engine.slot_content</source>
+                <target>Slot content</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.slot_is_empty">
+                <source>chameleon_system_core.template_engine.slot_is_empty</source>
+                <target>Slot is empty</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.slot_edit">
+                <source>chameleon_system_core.template_engine.slot_edit</source>
+                <target>Edit</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.slot_rename">
+                <source>chameleon_system_core.template_engine.slot_rename</source>
+                <target>Rename slot</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.slot_reset">
+                <source>chameleon_system_core.template_engine.slot_reset</source>
+                <target>Reset slot</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.slot_copy_content">
+                <source>chameleon_system_core.template_engine.slot_copy_content</source>
+                <target>Copy content</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.slot_load_content_headline">
+                <source>chameleon_system_core.template_engine.slot_load_content_headline</source>
+                <target>Load</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.slot_load_instance">
+                <source>chameleon_system_core.template_engine.slot_load_instance</source>
+                <target>Load (existing instance)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.slot_load_as_copy">
+                <source>chameleon_system_core.template_engine.slot_load_as_copy</source>
+                <target>Load (as new instance)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.slot_edit_definition">
+                <source>chameleon_system_core.template_engine.slot_edit_definition</source>
+                <target>Edit slot</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.template_engine.action_move_slot_content">
+                <source>chameleon_system_core.template_engine.action_move_slot_content</source>
+                <target>Move content</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.error_primary_navigation_node_required_before_layout_selection">
+                <source>chameleon_system_core.template_engine.error_primary_navigation_node_required_before_layout_selection</source>
+                <target>Please set a primary navigation node and save the page before choosing a layout.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.breadcrumb_title_page">
+                <source>chameleon_system_core.template_engine.breadcrumb_title_page</source>
+                <target>Page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.no_node_selected">
+                <source>chameleon_system_core.template_engine.no_node_selected</source>
+                <target>No navigation node selected, yet</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.action_use_page_template">
+                <source>chameleon_system_core.template_engine.action_use_page_template</source>
+                <target>Use page template</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.error_instance_locked">
+                <source>chameleon_system_core.template_engine.error_instance_locked</source>
+                <target>This module instance is being edited by another user at the moment</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.ajax_error">
+                <source>chameleon_system_core.template_engine.ajax_error</source>
+                <target>Ajax error!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.header_column_record">
+                <source>chameleon_system_core.template_engine.header_column_record</source>
+                <target>Table / record name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.header_lock">
+                <source>chameleon_system_core.template_engine.header_lock</source>
+                <target>Record lock</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.header_revision">
+                <source>chameleon_system_core.template_engine.header_revision</source>
+                <target>Version</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.header_navigation">
+                <source>chameleon_system_core.template_engine.header_navigation</source>
+                <target>Navigation nodes</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.no_secondary_navigation_nodes">
+                <source>chameleon_system_core.template_engine.no_secondary_navigation_nodes</source>
+                <target>no linked navigation nodes</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.msg_copy_success">
+                <source>chameleon_system_core.template_engine.msg_copy_success</source>
+                <target>copied successfully</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.prompt_instance_name">
+                <source>chameleon_system_core.template_engine.prompt_instance_name</source>
+                <target>Please enter a name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.error_delete_still_used">
+                <source>chameleon_system_core.template_engine.error_delete_still_used</source>
+                <target>This module instance is used in the following pages and can't be deleted:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.spot_menu_headline">
+                <source>chameleon_system_core.template_engine.spot_menu_headline</source>
+                <target>Functions</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.error.tree_path_nothing_assigned">
+                <source>chameleon_system_core.error.tree_path_nothing_assigned</source>
+                <target>Not assigned</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cronjob.mail_subject_collected_form_data">
+                <source>chameleon_system_core.cronjob.mail_subject_collected_form_data</source>
+                <target>collected form data from "%formName%"</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.link.open_media_manager">
+                <source>chameleon_system_core.link.open_media_manager</source>
+                <target>Media manager</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.link.open_document_manager">
+                <source>chameleon_system_core.link.open_document_manager</source>
+                <target>Document manager</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.link.upload_and_assign_media">
+                <source>chameleon_system_core.link.upload_and_assign_media</source>
+                <target>upload and assign media</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.error.insufficient_permissions">
+                <source>chameleon_system_core.error.insufficient_permissions</source>
+                <target>You have insufficient permissions</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.link.edit">
+                <source>chameleon_system_core.link.edit</source>
+                <target>Edit</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_varchar_default_value.update_all">
+                <source>chameleon_system_core.field_varchar_default_value.update_all</source>
+                <target>update all records with the previous value "%sOldValue%".</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.field_boolean.no">
+                <source>chameleon_system_core.field_boolean.no</source>
+                <target>No</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_boolean.yes">
+                <source>chameleon_system_core.field_boolean.yes</source>
+                <target>Yes</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_cms_user.select_user">
+                <source>chameleon_system_core.field_cms_user.select_user</source>
+                <target>Choose from list</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_timestamp.is_set_to">
+                <source>chameleon_system_core.field_timestamp.is_set_to</source>
+                <target>created on: %timestamp%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_timestamp.last_change">
+                <source>chameleon_system_core.field_timestamp.last_change</source>
+                <target>last change on: %timestamp% Uhr"</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_timestamp.will_be_set_to">
+                <source>chameleon_system_core.field_timestamp.will_be_set_to</source>
+                <target>will be set to: %timestamp% Uhr</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_date_time.time">
+                <source>chameleon_system_core.field_date_time.time</source>
+                <target>h</target>
+            </trans-unit>
+
+
+
+            <trans-unit id="chameleon_system_core.field_date_time.current_utc">
+                <source>chameleon_system_core.field_date_time.current_utc</source>
+                <target>Current UTC time</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_date_time.not_set">
+                <source>chameleon_system_core.field_date_time.not_set</source>
+                <target>no date set</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_document.select">
+                <source>chameleon_system_core.field_document.select</source>
+                <target>Choose document</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.nothing_selected">
+                <source>chameleon_system_core.field_document.nothing_selected</source>
+                <target>no file selected</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.upload">
+                <source>chameleon_system_core.field_document.upload</source>
+                <target>Upload new document</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.target">
+                <source>chameleon_system_core.field_document.target</source>
+                <target>Target folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.error_missing_target">
+                <source>chameleon_system_core.field_document.error_missing_target</source>
+                <target>Choose a target folder first</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.open_document">
+                <source>chameleon_system_core.field_document.open_document</source>
+                <target>Open</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.download">
+                <source>chameleon_system_core.field_document.download</source>
+                <target>Download</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.right_click_download">
+                <source>chameleon_system_core.field_document.right_click_download</source>
+                <target>Right click - save as</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.replace">
+                <source>chameleon_system_core.field_document.replace</source>
+                <target>Replace</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.upload_error_to_large">
+                <source>chameleon_system_core.field_document.upload_error_to_large</source>
+                <target>This file is too large</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.upload_error_interrupted">
+                <source>chameleon_system_core.field_document.upload_error_interrupted</source>
+                <target>Error: Upload interrupted</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.upload_error_no_file">
+                <source>chameleon_system_core.field_document.upload_error_no_file</source>
+                <target>Error: No file chosen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.upload_error_tmp_folder_not_writable">
+                <source>chameleon_system_core.field_document.upload_error_tmp_folder_not_writable</source>
+                <target>Error: Tmp folder not found or not writable</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.upload_error_unable_to_save_to_disc">
+                <source>chameleon_system_core.field_document.upload_error_unable_to_save_to_disc</source>
+                <target>Error: Couldn't write file</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.upload_error_invalid_file_extension">
+                <source>chameleon_system_core.field_document.upload_error_invalid_file_extension</source>
+                <target>Error: Invalid file extension</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.upload_error_unknown_error">
+                <source>chameleon_system_core.field_document.upload_error_unknown_error</source>
+                <target>Error: Unknown upload error code</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.field_download.remove">
+                <source>chameleon_system_core.field_download.remove</source>
+                <target>Remove</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_download.document_details">
+                <source>chameleon_system_core.field_download.document_details</source>
+                <target>Document details</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_download.confirm_removal">
+                <source>chameleon_system_core.field_download.confirm_removal</source>
+                <target>Do you really want to remove this file attachment?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_download.add_new">
+                <source>chameleon_system_core.field_download.add_new</source>
+                <target>Add new document</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.field_mlt.action_select">
+                <source>chameleon_system_core.field_mlt.action_select</source>
+                <target>Select</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_mlt.item_added">
+                <source>chameleon_system_core.field_mlt.item_added</source>
+                <target>Record added</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_mltrpc.name">
+                <source>chameleon_system_core.field_mltrpc.name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_mltrpc.tab">
+                <source>chameleon_system_core.field_mltrpc.tab</source>
+                <target>Tab: %tab%</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_module_instance.error">
+                <source>chameleon_system_core.field_module_instance.error</source>
+                <target>Error</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.field.time_format">
+                <source>chameleon_system_core.field.time_format</source>
+                <target>hh:mm:ss</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_lookup.switch_to">
+                <source>chameleon_system_core.field_lookup.switch_to</source>
+                <target>Switch to record</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup.select_item">
+                <source>chameleon_system_core.field_lookup.select_item</source>
+                <target>Select from list</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup.nothing_selected">
+                <source>chameleon_system_core.field_lookup.nothing_selected</source>
+                <target>nothing selected</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup.error_assigned_id_does_not_exists">
+                <source>chameleon_system_core.field_lookup.error_assigned_id_does_not_exists</source>
+                <target>The current ID (%id%) doesn't exist in the target table!</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select.open_or_close_list">
+                <source>chameleon_system_core.field_lookup_multi_select.open_or_close_list</source>
+                <target>Open/close list</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select.action_connect_records">
+                <source>chameleon_system_core.field_lookup_multi_select.action_connect_records</source>
+                <target>Link record(s)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select.action_sort_connections">
+                <source>chameleon_system_core.field_lookup_multi_select.action_sort_connections</source>
+                <target>Order records</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.field_property.open_or_close_list">
+                <source>chameleon_system_core.field_property.open_or_close_list</source>
+                <target>Open/close list</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_property.remove">
+                <source>chameleon_system_core.field_property.remove</source>
+                <target>Remove</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_property.add_new">
+                <source>chameleon_system_core.field_property.add_new</source>
+                <target>Add new</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.field_media.remove">
+                <source>chameleon_system_core.field_media.remove</source>
+                <target>Remove</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_media.action_show_details">
+                <source>chameleon_system_core.field_media.action_show_details</source>
+                <target>Details</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_media.action_download_image">
+                <source>chameleon_system_core.field_media.action_download_image</source>
+                <target>Download</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_media.action_assign_image">
+                <source>chameleon_system_core.field_media.action_assign_image</source>
+                <target>Assign</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_media.action_reset_image_assignment">
+                <source>chameleon_system_core.field_media.action_reset_image_assignment</source>
+                <target>Reset</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_media.empty_image_slot">
+                <source>chameleon_system_core.field_media.empty_image_slot</source>
+                <target>empty slot</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_media.form_upload_folder">
+                <source>chameleon_system_core.field_media.form_upload_folder</source>
+                <target>Upload images in this folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_media.active_upload_folder">
+                <source>chameleon_system_core.field_media.active_upload_folder</source>
+                <target>Images will be uploaded to folder %sDefaultCategory%</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.field_property_media.error_missing_target">
+                <source>chameleon_system_core.field_property_media.error_missing_target</source>
+                <target>Please choose a target folder first</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_property_media.created">
+                <source>chameleon_system_core.field_property_media.created</source>
+                <target>Entry created</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_property_media.error_creating">
+                <source>chameleon_system_core.field_property_media.error_creating</source>
+                <target>Error: could not create entry</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_property_media.remove">
+                <source>chameleon_system_core.field_property_media.remove</source>
+                <target>Remove</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_property_media.add_new_media">
+                <source>chameleon_system_core.field_property_media.add_new_media</source>
+                <target>Add new media</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_property_media.upload_headline">
+                <source>chameleon_system_core.field_property_media.upload_headline</source>
+                <target>Upload media</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_property_media.target_folder">
+                <source>chameleon_system_core.field_property_media.target_folder</source>
+                <target>Target folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_property_media.action_upload_and_assign">
+                <source>chameleon_system_core.field_property_media.action_upload_and_assign</source>
+                <target>upload and assign</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select_checkboxes.select_deselect_all">
+                <source>chameleon_system_core.field_lookup_multi_select_checkboxes.select_deselect_all</source>
+                <target>(de)select all</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select_checkboxes.invert_selection">
+                <source>chameleon_system_core.field_lookup_multi_select_checkboxes.invert_selection</source>
+                <target>Invert selection</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select.new">
+                <source>chameleon_system_core.field_lookup_multi_select.new</source>
+                <target>Create new record</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select.remove">
+                <source>chameleon_system_core.field_lookup_multi_select.remove</source>
+                <target>Remove</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select.sort">
+                <source>chameleon_system_core.field_lookup_multi_select.sort</source>
+                <target>Order records</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select.connect_elements">
+                <source>chameleon_system_core.field_lookup_multi_select.connect_elements</source>
+                <target>Connect elements</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select.connected_elements">
+                <source>chameleon_system_core.field_lookup_multi_select.connected_elements</source>
+                <target>Connected elements</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select.connect_element">
+                <source>chameleon_system_core.field_lookup_multi_select.connect_element</source>
+                <target>Add</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select_tag.separator_hint">
+                <source>chameleon_system_core.field_lookup_multi_select_tag.separator_hint</source>
+                <target>Separator: Comma</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select_tag.suggestions">
+                <source>chameleon_system_core.field_lookup_multi_select_tag.suggestions</source>
+                <target>Suggestions</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.field_image_lookup.created">
+                <source>chameleon_system_core.field_image_lookup.created</source>
+                <target>Record created</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_image_lookup.error_creating">
+                <source>chameleon_system_core.field_image_lookup.error_creating</source>
+                <target>Error: Could not create entry</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_lookup_media_tree_import.select_image">
+                <source>chameleon_system_core.field_lookup_media_tree_import.select_image</source>
+                <target>Select images</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_options.select_nothing">
+                <source>chameleon_system_core.field_options.select_nothing</source>
+                <target>nothing selected</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_options.option_value_true">
+                <source>chameleon_system_core.field_options.option_value_true</source>
+                <target>Yes</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_options.option_value_false">
+                <source>chameleon_system_core.field_options.option_value_false</source>
+                <target>No</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_page_tree_node.primary_node">
+                <source>chameleon_system_core.field_page_tree_node.primary_node</source>
+                <target>Primary navigation node</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_page_tree_node.assign_primary_node">
+                <source>chameleon_system_core.field_page_tree_node.assign_primary_node</source>
+                <target>Assign primary navigation node</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_page_tree_node.secondary_nodes">
+                <source>chameleon_system_core.field_page_tree_node.secondary_nodes</source>
+                <target>Secondary navigation nodes</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_page_tree_node.assign_secondary_nodes">
+                <source>chameleon_system_core.field_page_tree_node.assign_secondary_nodes</source>
+                <target>Assign secondary navigation nodes</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_page_tree_node.no_node_assigned">
+                <source>chameleon_system_core.field_page_tree_node.no_node_assigned</source>
+                <target>Page not connected to any navigation node!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_page_tree_node.error_no_portal_selected">
+                <source>chameleon_system_core.field_page_tree_node.error_no_portal_selected</source>
+                <target>Choose a portal before assigning navigation nodes.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_tree_node.assign_node">
+                <source>chameleon_system_core.field_tree_node.assign_node</source>
+                <target>Assign node</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_tree_node.date_starting_on">
+                <source>chameleon_system_core.field_tree_node.date_starting_on</source>
+                <target>active from</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_tree_node.date_ending_on">
+                <source>chameleon_system_core.field_tree_node.date_ending_on</source>
+                <target>active until</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_tree_node.date_unrestricted">
+                <source>chameleon_system_core.field_tree_node.date_unrestricted</source>
+                <target>unlimited time</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_tree_page_assignment.primary_page">
+                <source>chameleon_system_core.field_tree_page_assignment.primary_page</source>
+                <target>Primary page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_tree_page_assignment.date_starting_on">
+                <source>chameleon_system_core.field_tree_page.date_starting_on</source>
+                <target>active from</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_tree_page_assignment.date_ending_on">
+                <source>chameleon_system_core.field_tree_page.date_ending_on</source>
+                <target>active until</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_tree_page_assignment.select_page_template">
+                <source>chameleon_system_core.field_tree_page_assignment.select_page_template</source>
+                <target>Choose a template to create a new page</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_tree_url_name.open">
+                <source>chameleon_system_core.field_tree_url_name.open</source>
+                <target>Open website</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_url.open">
+                <source>chameleon_system_core.field_url.open</source>
+                <target>Website preview</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.field_password.has_password">
+                <source>chameleon_system_core.field_password.has_password</source>
+                <target>A password is set</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_password.has_no_password">
+                <source>chameleon_system_core.field_password.has_no_password</source>
+                <target>No password set</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_password.quality">
+                <source>chameleon_system_core.field_password.quality</source>
+                <target>Password quality</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_password.new_password">
+                <source>chameleon_system_core.field_password.new_password</source>
+                <target>New password</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_password.repeat_password">
+                <source>chameleon_system_core.field_password.repeat_password</source>
+                <target>Repeat password</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_password.error_password_check_does_not_match">
+                <source>chameleon_system_core.field_password.error_password_check_does_not_match</source>
+                <target>Passwords mismatch</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_password.display_not_permitted">
+                <source>chameleon_system_core.field_password.display_not_permitted</source>
+                <target>Display not permitted</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_position.change">
+                <source>chameleon_system_core.field_position.change</source>
+                <target>Change position / sort</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.field_gender.male">
+                <source>chameleon_system_core.field_gender.male</source>
+                <target>Male</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_gender.female">
+                <source>chameleon_system_core.field_gender.female</source>
+                <target>Female</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_google_map.latitude">
+                <source>chameleon_system_core.field_google_map.latitude</source>
+                <target>Google Maps latitude</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_google_map.longitude">
+                <source>chameleon_system_core.field_google_map.longitude</source>
+                <target>Google Maps longitude</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_google_map.show_map">
+                <source>chameleon_system_core.field_google_map.show_map</source>
+                <target>Show map</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_google_map.missing_api_key_error">
+                <source>chameleon_system_core.field_google_map.missing_api_key_error</source>
+                <target>There is no Google Maps API key configured.
+                    Please generate an API key in the Google Cloud Console and add all relevant domains to the whitelist.
+                    Add the key to the config: chameleon_system_core: google_maps: api_key: "your API key"
+                </target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_icon_list.select">
+                <source>chameleon_system_core.field_icon_list.select</source>
+                <target>Choose icon</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_tail_log.last_update">
+                <source>chameleon_system_core.field_tail_log.last_update</source>
+                <target>Last log update</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_tail_log.error_unable_to_read_log">
+                <source>chameleon_system_core.field_tail_log.error_unable_to_read_log</source>
+                <target>Unable to read log</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_translation_parent.owner">
+                <source>chameleon_system_core.field_translation_parent.owner</source>
+                <target>This language version belongs to</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_translation_parent.open_or_close_list">
+                <source>chameleon_system_core.field_translation_parent.open_or_close_list</source>
+                <target>Open/close list</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_translation_parent.is_primary_language">
+                <source>chameleon_system_core.field_translation_parent.is_primary_language</source>
+                <target>This language version is the main language</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_translation_parent.other_language_versions">
+                <source>chameleon_system_core.field_translation_parent.other_language_versions</source>
+                <target>Other language versions</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.list.page_settings">
+                <source>chameleon_system_core.list.page_settings</source>
+                <target>Page settings</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.system_entry_delete_not_allowed">
+                <source>chameleon_system_core.list.system_entry_delete_not_allowed</source>
+                <target>System entry - delete not allowed</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.primary_domain_delete_not_allowed">
+                <source>chameleon_system_core.list.primary_domain_delete_not_allowed</source>
+                <target>Primary domains may not be deleted.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.group_show_all">
+                <source>chameleon_system_core.list.group_show_all</source>
+                <target>All</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.delete_selected">
+                <source>chameleon_system_core.list.delete_selected</source>
+                <target>Delete selected</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.next_page">
+                <source>chameleon_system_core.list.next_page</source>
+                <target>Next page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.previous_page">
+                <source>chameleon_system_core.list.previous_page</source>
+                <target>Previous page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.current_page_details">
+                <source>chameleon_system_core.list.current_page_details</source>
+                <target>Record $startRecord$ - $endRecord$ of $totalFound$</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.search_term">
+                <source>chameleon_system_core.list.search_term</source>
+                <target>Search term</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.perform_search">
+                <source>chameleon_system_core.list.perform_search</source>
+                <target>Search</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.column_name_lock">
+                <source>chameleon_system_core.list.column_name_lock</source>
+                <target>Lock</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.column_name_cmsident">
+                <source>chameleon_system_core.list.column_name_cmsident</source>
+                <target>CMS Ident</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.column_name_name">
+                <source>chameleon_system_core.list.column_name_name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.column_name_actions">
+                <source>chameleon_system_core.list.column_name_actions</source>
+                <target>Functions</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.form_records_per_page">
+                <source>chameleon_system_core.list.form_records_per_page</source>
+                <target>per page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.form_sort_order_asc">
+                <source>chameleon_system_core.list.form_sort_order_asc</source>
+                <target>Sort order [ascending]</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.form_sort_order_desc">
+                <source>chameleon_system_core.list.form_sort_order_desc</source>
+                <target>Sort order [descending]</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.default_language">
+                <source>chameleon_system_core.list.default_language</source>
+                <target>Default language</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.gcf_activity_feed_name_no_feed_found">
+                <source>chameleon_system_core.list.gcf_activity_feed_name_no_feed_found</source>
+                <target>No feed type found</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.gcf_cms_user_unknown">
+                <source>chameleon_system_core.list.gcf_cms_user_unknown</source>
+                <target>Unknown</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.gcf_connected_page_no_page">
+                <source>chameleon_system_core.list.gcf_connected_page_no_page</source>
+                <target>no connected page</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.list_image_database.column_name_preview">
+                <source>chameleon_system_core.list_image_database.column_name_preview</source>
+                <target>Preview</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.list_module_instance.coumn_name_pages_using_instance">
+                <source>chameleon_system_core.list_module_instance.column_name_pages</source>
+                <target>Pages</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list_module_instance.no_usages_found_in_navigation_node">
+                <source>chameleon_system_core.list_module_instance.no_usages_found_in_navigation_node</source>
+                <target>not assigned to any navigation</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.list_tree_node.state_disabled">
+                <source>chameleon_system_core.list_tree_node.state_disabled</source>
+                <target>disabled</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list_tree_node.state_active_and_live">
+                <source>chameleon_system_core.list_tree_node.state_active_and_live</source>
+                <target>active and live</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list_tree_node.state_active_but_not_live">
+                <source>chameleon_system_core.list_tree_node.state_active_but_not_live</source>
+                <target>active, not live</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.list_wysiwyg_connected_images.folder">
+                <source>chameleon_system_core.list_wysiwyg_connected_images.folder</source>
+                <target>Folder</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.record_lock.lock_owner_name">
+                <source>chameleon_system_core.record_lock.lock_owner_name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_lock.lock_owner_mail">
+                <source>chameleon_system_core.record_lock.lock_owner_mail</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_lock.lock_owner_phone">
+                <source>chameleon_system_core.record_lock.lock_owner_phone</source>
+                <target>Tel.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_lock.lock_owner_fax">
+                <source>chameleon_system_core.record_lock.lock_owner_fax</source>
+                <target>Fax</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_lock.lock_owner_city">
+                <source>chameleon_system_core.record_lock.lock_owner_city</source>
+                <target>City</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.record_revision.based_on">
+                <source>chameleon_system_core.record_revision.based_on</source>
+                <target>based on rev.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.revision_number">
+                <source>chameleon_system_core.record_revision.revision_number</source>
+                <target>Revision</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.last_used_date">
+                <source>chameleon_system_core.record_revision.last_used_date</source>
+                <target>last used</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.name">
+                <source>chameleon_system_core.record_revision.name</source>
+                <target>Title</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.description">
+                <source>chameleon_system_core.record_revision.description</source>
+                <target>Description</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.no_revision_exists">
+                <source>chameleon_system_core.record_revision.no_revision_exists</source>
+                <target>unversioned</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.action_restore_revision">
+                <source>chameleon_system_core.record_revision.action_restore_revision</source>
+                <target>restore record revision</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.confirm_restore_revision">
+                <source>chameleon_system_core.record_revision.confirm_restore_revision</source>
+                <target>The current record will be overwritten by an older revision, are you sure?&lt;br/&gt;You should create a new revision&lt;br/&gt;if you're not sure</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.action_confirm_restore_revision">
+                <source>chameleon_system_core.record_revision.action_confirm_restore_revision</source>
+                <target>OK</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.header_new_revision">
+                <source>chameleon_system_core.record_revision.header_new_revision</source>
+                <target>Create revision</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.new_revision_help">
+                <source>chameleon_system_core.record_revision.new_revision_help</source>
+                <target>Please note: All unsaved data will not be revisioned and therefore be lost.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.new_revision_number">
+                <source>chameleon_system_core.record_revision.new_revision_number</source>
+                <target>New revision</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.action_new_revision">
+                <source>chameleon_system_core.record_revision.action_new_revision</source>
+                <target>Create revision</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.action_load_revision">
+                <source>chameleon_system_core.record_revision.action_load_revision</source>
+                <target>Load revision</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.action_create_page_revision">
+                <source>chameleon_system_core.record_revision.action_create_page_revision</source>
+                <target>Create page revisi</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_revision.action_load_page_revision">
+                <source>chameleon_system_core.record_revision.action_load_page_revision</source>
+                <target>Load page revision</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.list.no_entries">
+                <source>chameleon_system_core.list.no_entries</source>
+                <target>No entries found</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.list_document.file_type">
+                <source>chameleon_system_core.list_document.file_type</source>
+                <target>Type</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list_document.title">
+                <source>chameleon_system_core.list_document.title</source>
+                <target>Title</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list_document.file_name">
+                <source>chameleon_system_core.list_document.file_name</source>
+                <target>File name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list_document.file_size">
+                <source>chameleon_system_core.list_document.file_size</source>
+                <target>File size</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_interface.action_run">
+                <source>chameleon_system_core.cms_module_interface.action_run</source>
+                <target>Run selected operation</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_interface.action_run_confirm">
+                <source>chameleon_system_core.cms_module_interface.action_run_confirm</source>
+                <target>Are you sure?</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.cms_module_help_text.header_table">
+                <source>chameleon_system_core.cms_module_help_text.header_table</source>
+                <target>Table</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_help_text.header_field">
+                <source>chameleon_system_core.cms_module_help_text.header_field</source>
+                <target>Field</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_help_text.header_field_description">
+                <source>chameleon_system_core.cms_module_help_text.header_field_description</source>
+                <target>Description</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_help_text.header_tables">
+                <source>chameleon_system_core.cms_module_help_text.header_tables</source>
+                <target>Basic information</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_image_manager.selected_image_not_found">
+                <source>chameleon_system_core.cms_module_image_manager.selected_image_not_found</source>
+                <target>Could not find selected media file</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_image_manager.folder_list">
+                <source>chameleon_system_core.cms_module_image_manager.folder_list</source>
+                <target>Folder list</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.headline">
+                <source>chameleon_system_core.cms_module_page_tree.headline</source>
+                <target>Navigation Administration</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.not_translated">
+                <source>chameleon_system_core.cms_module_page_tree.not_translated</source>
+                <target>Not translated</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.node_has_no_page">
+                <source>chameleon_system_core.cms_module_page_tree.node_has_no_page</source>
+                <target>No page assigned to this navigation node</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.confirm_delete">
+                <source>chameleon_system_core.cms_module_page_tree.confirm_delete</source>
+                <target>Do you want to delete the navigation node "%nodeName%" including all subnodes?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.connect_page">
+                <source>chameleon_system_core.cms_module_page_tree.action_connect_page</source>
+                <target>Connect page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.connected_pages">
+                <source>chameleon_system_core.cms_module_page_tree.connected_pages</source>
+                <target>Connected pages</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.action_edit_page">
+                <source>chameleon_system_core.cms_module_page_tree.action_edit_page</source>
+                <target>Edit page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.action_edit_node">
+                <source>chameleon_system_core.cms_module_page_tree.action_edit_node</source>
+                <target>Edit node</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_header">
+                <source>chameleon_system_core.cms_module_page_tree.legend_header</source>
+                <target>Key</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_node_has_no_page">
+                <source>chameleon_system_core.cms_module_page_tree.legend_node_has_no_page</source>
+                <target>Navigation node without connected page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_has_connected_pages">
+                <source>chameleon_system_core.cms_module_page_tree.legend_has_connected_pages</source>
+                <target>Navigation node with connected page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page">
+                <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page</source>
+                <target>Page has connected navigation node</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page">
+                <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page</source>
+                <target>Navigation node with restricted access page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_hidden">
+                <source>chameleon_system_core.cms_module_page_tree.legend_hidden</source>
+                <target>Navigation node hidden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_external_link">
+                <source>chameleon_system_core.cms_module_page_tree.legend_external_link</source>
+                <target>Link to external page</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.cms_module_media_local_import.error_path_not_found">
+                <source>chameleon_system_core.cms_module_media_local_import.error_path_not_found</source>
+                <target>Folder %path% does not exist</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_local_import.error_no_read_access_to_path">
+                <source>chameleon_system_core.cms_module_media_local_import.error_no_read_access_to_path</source>
+                <target>Folder %path% is not readable</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_local_import.select_source_path">
+                <source>chameleon_system_core.cms_module_media_local_import.select_source_path</source>
+                <target>Please choose the folder to import the media files from.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_local_import.root_path">
+                <source>chameleon_system_core.cms_module_media_local_import.root_path</source>
+                <target>Root path</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_local_media.file_count">
+                <source>chameleon_system_core.cms_module_media_local_media.file_count</source>
+                <target>%count% files</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_local_media.action_import">
+                <source>chameleon_system_core.cms_module_media_local_media.action_import</source>
+                <target>Import</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_local_media.import_result">
+                <source>chameleon_system_core.cms_module_media_local_media.import_result</source>
+                <target>Successfully imported media files</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_local_media.select_target_folder">
+                <source>chameleon_system_core.document_local_import.select_target_folder</source>
+                <target>Please choose the folder to import document files from.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_local_media.mark_as_private">
+                <source>chameleon_system_core.cms_module_media_local_media.mark_as_private</source>
+                <target>mark as private</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.root_folder">
+                <source>chameleon_system_core.cms_module_media_manager.root_folder</source>
+                <target>Media</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.action_new_folder">
+                <source>chameleon_system_core.cms_module_media_manager.action_new_folder</source>
+                <target>Create new folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.action_upload">
+                <source>chameleon_system_core.cms_module_media_manager.action_upload</source>
+                <target>Upload</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.action_delete">
+                <source>chameleon_system_core.cms_module_media_manager.action_delete</source>
+                <target>delete</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.upload_more_files">
+                <source>chameleon_system_core.cms_module_media_manager.upload_more_files</source>
+                <target>upload more files</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_delete_success">
+                <source>chameleon_system_core.cms_module_media_manager.msg_delete_success</source>
+                <target>Media file(s) successfully deleted</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_upload_success">
+                <source>chameleon_system_core.cms_module_media_manager.msg_upload_success</source>
+                <target>Successfully uploaded files</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_select_move_target">
+                <source>chameleon_system_core.cms_module_media_manager.msg_select_move_target</source>
+                <target>Select a folder you want to move the files into</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_single_file_upload_success">
+                <source>chameleon_system_core.cms_module_media_manager.msg_single_file_upload_success</source>
+                <target>File successfully uploaded</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_on_delete_file_in_use">
+                <source>chameleon_system_core.cms_module_media_manager.msg_on_delete_file_in_use</source>
+                <target>The file you want to delete is still used in the following records. It will be removed from these records if you still want to delete it.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_file_in_use">
+                <source>chameleon_system_core.cms_module_media_manager.msg_file_in_use</source>
+                <target>This file is still used by the following records:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_attention">
+                <source>chameleon_system_core.cms_module_media_manager.msg_attention</source>
+                <target>Attention</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.used_in_table">
+                <source>chameleon_system_core.cms_module_media_manager.used_in_table</source>
+                <target>Table</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.used_in_record">
+                <source>chameleon_system_core.cms_module_media_manager.used_in_record</source>
+                <target>Record</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.used_in_field">
+                <source>chameleon_system_core.cms_module_media_manager.used_in_field</source>
+                <target>Field</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.file_id">
+                <source>chameleon_system_core.cms_module_media_manager.file_id</source>
+                <target>Media file ID %id%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.folder">
+                <source>chameleon_system_core.cms_module_media_manager.folder</source>
+                <target>Folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.confirm_none_empty_folder_delete">
+                <source>chameleon_system_core.cms_module_media_manager.confirm_none_empty_folder_delete</source>
+                <target>Force delete folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.confirm_used_image">
+                <source>chameleon_system_core.cms_module_media_manager.confirm_used_image</source>
+                <target>Force delete</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.confirm_delete">
+                <source>chameleon_system_core.cms_module_media_manager.confirm_delete</source>
+                <target>Are you sure you want to delete this file?</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_folder_name_missing">
+                <source>chameleon_system_core.cms_module_media_manager.error_folder_name_missing</source>
+                <target>You haven't entered a folder name!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_upload_error">
+                <source>chameleon_system_core.cms_module_media_manager.error_upload_error</source>
+                <target>Upload failed</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_no_file_selected">
+                <source>chameleon_system_core.cms_module_media_manager.error_no_file_selected</source>
+                <target>You did not select a file to upload</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_upload_to_root_folder_not_permitted">
+                <source>chameleon_system_core.cms_module_media_manager.error_upload_to_root_folder_not_permitted</source>
+                <target>You can't upload a file into the root folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_no_move_source_selected">
+                <source>chameleon_system_core.cms_module_media_manager.error_no_move_source_selected</source>
+                <target>You haven't selected a file to move</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_no_past_source_selected">
+                <source>chameleon_system_core.cms_module_media_manager.error_no_past_source_selected</source>
+                <target>No files selected to paste</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_media_manager.image_size">
+                <source>chameleon_system_core.cms_module_media_manager.image_size</source>
+                <target>Image size</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.table_editor_media.media_usage">
+                <source>chameleon_system_core.table_editor_media.media_usage</source>
+                <target>Usage</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.error_upload">
+                <source>chameleon_system_core.cms_module_universal_uploader.error_upload</source>
+                <target>Upload failed</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.file_type_name_image">
+                <source>chameleon_system_core.cms_module_universal_uploader.file_type_name_image</source>
+                <target>Image</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.file_type_name_documents">
+                <source>chameleon_system_core.cms_module_universal_uploader.file_type_name_documents</source>
+                <target>Files</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.error_no_browser_support">
+                <source>chameleon_system_core.cms_module_universal_uploader.error_no_browser_support</source>
+                <target>The upload module is not supported by your browser. Switching back to simple uploader.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.msg_require_exact_measurements">
+                <source>chameleon_system_core.cms_module_universal_uploader.msg_require_exact_measurements</source>
+                <target>The media file must exactly match these dimensions: (Width x Height): %maxWidth%x%maxHeight% Pixels</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.dimension_unrestricted">
+                <source>chameleon_system_core.cms_module_universal_uploader.dimension_unrestricted</source>
+                <target>unlimited</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.msg_require_max_measurements">
+                <source>chameleon_system_core.cms_module_universal_uploader.msg_require_exact_measurements</source>
+                <target>The media file must fit into these dimensions (Width x Height): %maxWidth%x%maxHeight% Pixels</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.msg_allowed_file_type">
+                <source>chameleon_system_core.cms_module_universal_uploader.msg_allowed_file_type</source>
+                <target>Only files of type %sFileType% allowed</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.error_type_not_allowed">
+                <source>chameleon_system_core.cms_module_universal_uploader.error_type_not_allowed</source>
+                <target>Invalid file type %sFileType% . (Valid types are: %sAllowedFileTypesFromExternal%)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.error_type_not_supported">
+                <source>chameleon_system_core.cms_module_universal_uploader.error_type_not_supported</source>
+                <target>Upload file type not supported</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.proportion_exact_matching_wrong_dimension_parameters">
+                <source>chameleon_system_core.cms_module_universal_uploader.proportion_exact_matching_wrong_dimension_parameters</source>
+                <target>To use exact measures for media, you need to specify height and width.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.max_height_parameter_invalid">
+                <source>chameleon_system_core.cms_module_universal_uploader.max_height_parameter_invalid</source>
+                <target>The maximum height needs to be a number greater than 0.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.max_width_parameter_invalid">
+                <source>chameleon_system_core.cms_module_universal_uploader.max_width_parameter_invalid</source>
+                <target>The maximum width needs to be a number greater than 0.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.invalid_parameter">
+                <source>chameleon_system_core.cms_module_universal_uploader.invalid_parameter</source>
+                <target>Invalid parameters</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.helptext">
+                <source>chameleon_system_core.cms_module_universal_uploader.helptext</source>
+                <target>Add files to the queue and click "Upload file(s)"</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.file_drag_target">
+                <source>chameleon_system_core.cms_module_universal_uploader.file_drag_target</source>
+                <target>Add files to the queue and click "Upload file(s)"</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.headline_choose_files">
+                <source>chameleon_system_core.cms_module_universal_uploader.headline_choose_files</source>
+                <target>Upload media/files</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.filename">
+                <source>chameleon_system_core.cms_module_universal_uploader.filename</source>
+                <target>File name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.size">
+                <source>chameleon_system_core.cms_module_universal_uploader.size</source>
+                <target>File size</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.state">
+                <source>chameleon_system_core.cms_module_universal_uploader.state</source>
+                <target>State</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.choose_files_button_text">
+                <source>chameleon_system_core.cms_module_universal_uploader.choose_files_button_text</source>
+                <target>Choose file(s)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.upload_files_button_text">
+                <source>chameleon_system_core.cms_module_universal_uploader.upload_files_button_text</source>
+                <target>Upload file(s)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.meta_title">
+                <source>chameleon_system_core.cms_module_universal_uploader.meta_title</source>
+                <target>Title / description</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.meta_description">
+                <source>chameleon_system_core.cms_module_universal_uploader.meta_description</source>
+                <target>Keywords / tags</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_universal_uploader.meta_keywords">
+                <source>chameleon_system_core.cms_module_universal_uploader.meta_keywords</source>
+                <target>Keywords</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_wysiwyg_image.upload">
+                <source>chameleon_system_core.cms_module_wysiwyg_image.upload</source>
+                <target>Upload media</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_wysiwyg_image.error_missing_target_folder">
+                <source>chameleon_system_core.cms_module_wysiwyg_image.error_missing_target_folder</source>
+                <target>Please choose a target folder first</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_wysiwyg_image.action_new_file">
+                <source>chameleon_system_core.cms_module_wysiwyg_image.action_new_file</source>
+                <target>Upload new media file</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_wysiwyg_image.form_target_folder">
+                <source>chameleon_system_core.cms_module_wysiwyg_image.form_target_folder</source>
+                <target>Choose a target folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_wysiwyg_image.form_selected_target_folder">
+                <source>chameleon_system_core.cms_module_wysiwyg_image.form_selected_target_folder</source>
+                <target>Selected target folder:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_wysiwyg_image.form_target_folder_no_selection">
+                <source>chameleon_system_core.cms_module_wysiwyg_image.form_target_folder_no_selection</source>
+                <target>Please select</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_robinson_import.headline">
+                <source>chameleon_system_core.cms_module_newsletter_robinson_import.headline</source>
+                <target>Import email addresses into newsletter black list</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_robinson_import.import_success">
+                <source>chameleon_system_core.cms_module_newsletter_robinson_import.import_success</source>
+                <target>imported email addresses</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_robinson_import.import_error">
+                <source>chameleon_system_core.cms_module_newsletter_robinson_import.import_error</source>
+                <target>ignored email addresses</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_robinson_import.import_file_help">
+                <source>chameleon_system_core.cms_module_newsletter_robinson_import.import_file_help</source>
+                <target>The upload file must contain only one email address per line.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_robinson_import.source">
+                <source>chameleon_system_core.cms_module_newsletter_robinson_import.source</source>
+                <target>CSV file</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_robinson_import.action_import">
+                <source>chameleon_system_core.cms_module_newsletter_robinson_import.action_import</source>
+                <target>Import file</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.headline">
+                <source>chameleon_system_core.cms_module_newsletter_import.headline</source>
+                <target>Import newsletter subscribers</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter.import_success">
+                <source>chameleon_system_core.cms_module_newsletter.import_success</source>
+                <target>imported email addresses</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.import_updated">
+                <source>chameleon_system_core.cms_module_newsletter_import.import_updated</source>
+                <target>updated email addresses</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.import_error">
+                <source>chameleon_system_core.cms_module_newsletter_import.import_error</source>
+                <target>ignored email addresses</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.import_invalid_data">
+                <source>chameleon_system_core.cms_module_newsletter_import.import_invalid_data</source>
+                <target>Error on newly imported data: Invalid recipient data </target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.import_updated_invalid_data">
+                <source>chameleon_system_core.cms_module_newsletter_import.import_updated_invalid_data</source>
+                <target>Error on updated data: Invalid recipient data </target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.import_file_help">
+                <source>chameleon_system_core.cms_module_newsletter_import.import_file_help</source>
+                <target>The file you upload must be in CSV format. The field separator has to be a semicolon (;). A field name description in the first line is optional and will not be imported.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.import_file_help_salutation">
+                <source>chameleon_system_core.cms_module_newsletter_import.import_file_help_salutation</source>
+                <target>"Salutation" matches with pattern: %patterns%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.group">
+                <source>chameleon_system_core.cms_module_newsletter_import.group</source>
+                <target>Newsletter subscriber group</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.no_group">
+                <source>chameleon_system_core.cms_module_newsletter_import.no_group</source>
+                <target>No newsletter group</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.portal_help">
+                <source>chameleon_system_core.cms_module_newsletter_import.portal_help</source>
+                <target>Select portal (If no newsletter group is selected)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.replace_subscribers">
+                <source>chameleon_system_core.cms_module_newsletter_import.replace_subscribers</source>
+                <target>Replace newsletter subscribers</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.update_group_only">
+                <source>chameleon_system_core.cms_module_newsletter_import.update_group_only</source>
+                <target>Only set newsletter group for existing subscribers (No subscriber record update)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.source">
+                <source>chameleon_system_core.cms_module_newsletter_import.source</source>
+                <target>CSV File</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.action_import">
+                <source>chameleon_system_core.cms_module_newsletter_import.action_import</source>
+                <target>Import file</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.confirm_replace">
+                <source>chameleon_system_core.cms_module_newsletter_import.confirm_replace</source>
+                <target>You will delete all existing subscribers and fill the subscriber list with your import data. Are you sure?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_newsletter_import.action_confirm_replace">
+                <source>chameleon_system_core.cms_module_newsletter_import.action_confirm_replace</source>
+                <target>Yes, import CSV file</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_cms_search.headline">
+                <source>chameleon_system_core.cms_module_cms_search.headline</source>
+                <target>Create search index</target>
+                <note>@deprecated since 6.2.0 - no longer used.</note>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_cms_search.select_portal">
+                <source>chameleon_system_core.cms_module_cms_search.select_portal</source>
+                <target>Select a portal for which to create the search index</target>
+                <note>@deprecated since 6.2.0 - no longer used.</note>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_cms_search.action_start_index">
+                <source>chameleon_system_core.cms_module_cms_search.action_start_index</source>
+                <target>Start indexing</target>
+                <note>@deprecated since 6.2.0 - no longer used.</note>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_cms_search.state_index_running">
+                <source>chameleon_system_core.cms_module_cms_search.state_index_running</source>
+                <target>Creating search index</target>
+                <note>@deprecated since 6.2.0 - no longer used.</note>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_cms_search.state_indexed">
+                <source>chameleon_system_core.cms_module_cms_search.state_indexed</source>
+                <target>pages indexed</target>
+                <note>@deprecated since 6.2.0 - no longer used.</note>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_table_export.state_export_done">
+                <source>chameleon_system_core.cms_module_table_export.state_export_done</source>
+                <target>The export file has been created</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_export.download_help">
+                <source>chameleon_system_core.cms_module_table_export.download_help</source>
+                <target>Use right-click / save-as to prevent opening of the file in your browser window.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_export.form_select_profile">
+                <source>chameleon_system_core.cms_module_table_export.form_select_profile</source>
+                <target>Select an export profile</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_export.action_generate">
+                <source>chameleon_system_core.cms_module_table_export.action_generate</source>
+                <target>Generate export</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_update.headline">
+                <source>chameleon_system_core.cms_module_update.headline</source>
+                <target>Chameleon updates</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.intro_text">
+                <source>chameleon_system_core.cms_module_update.intro_text</source>
+                <target>Please backup your database before updating Chameleon!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.single_file_update_help">
+                <source>chameleon_system_core.cms_module_update.single_file_update_help</source>
+                <target><![CDATA[
+                    <b>Based on type, folder and file you can select <span style="text-decoration: underline">one</span> single update here.</b><br />
+                    To run that specific update click on "Select update" followed by "Run single update".<br />
+                    CORE updates can not be selected as they will be executed anyway.
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.error_invalid_counter_names">
+                <source>chameleon_system_core.cms_module_update.error_invalid_counter_names</source>
+                <target><![CDATA[
+                    Not all update counters could be verified while reworking update data. Please check the following
+                    for every counter name in the list. Refresh this page afterwards.<br />
+                    - is the package whose name can be derived from the counter name installed? If no, please remove
+                      the corresponding counter name manually from the table cms_config_parameter.<br />
+                    - is the package a bundle? If no, please add the bundle class and register the bundle in the AppKernel.<br />
+                    - is the bundle registered in the AppKernel? If no, please do this.
+                    ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.update_info">
+                <source>chameleon_system_core.cms_module_update.update_info</source>
+                <target>The following updates were found in the system and will be processed.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.update_info_no_updates">
+                <source>chameleon_system_core.cms_module_update.update_info_no_updates</source>
+                <target>No updates were found.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.updates_blacklisted">
+                <source>chameleon_system_core.cms_module_update.updates_blacklisted</source>
+                <target>Some updates are blocked by the blacklist</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.update_blacklisted_notice">
+                <source>chameleon_system_core.cms_module_update.update_blacklisted_notice</source>
+                <target>Update %fileName% in bundle %bundleName% was skipped because it was blacklisted. You can run it later by removing it from the blacklist.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.updates_total">
+                <source>chameleon_system_core.cms_module_update.updates_total</source>
+                <target>Total: </target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.updates_pending">
+                <source>chameleon_system_core.cms_module_update.updates_pending</source>
+                <target>Pending: </target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.updates_processed">
+                <source>chameleon_system_core.cms_module_update.updates_processed</source>
+                <target>Processed: </target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.updates_executed">
+                <source>chameleon_system_core.cms_module_update.updates_executed</source>
+                <target>Executed: </target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.updates_skipped">
+                <source>chameleon_system_core.cms_module_update.updates_skipped</source>
+                <target>Skipped: </target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.progress_bar_initial">
+                <source>chameleon_system_core.cms_module_update.progress_bar_initial</source>
+                <target>Click on "Run updates" to start the update process.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.progress_bar_running">
+                <source>chameleon_system_core.cms_module_update.progress_bar_running</source>
+                <target>Updates are running</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.progress_bar_finished">
+                <source>chameleon_system_core.cms_module_update.progress_bar_finished</source>
+                <target>Finished!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.action_update">
+                <source>chameleon_system_core.cms_module_update.action_update</source>
+                <target>Run updates</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.select_ajax_timeout">
+                <source>chameleon_system_core.cms_module_update.select_ajax_timeout</source>
+                <target>AJAX timeout per update</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.ajax_timeout">
+                <source>chameleon_system_core.cms_module_update.ajax_timeout</source>
+                <target>%minutes% minutes</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.single_update_select_bundle_label">
+                <source>chameleon_system_core.cms_module_update.single_update_select_bundle_label</source>
+                <target>Bundle:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.single_update_select_bundle">
+                <source>chameleon_system_core.cms_module_update.single_update_select_bundle</source>
+                <target>Choose bundle</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.single_update_select_bundle_first">
+                <source>chameleon_system_core.cms_module_update.single_update_select_bundle_first</source>
+                <target>Please choose a bundle first</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.single_update_select_file">
+                <source>chameleon_system_core.cms_module_update.single_update_select_file</source>
+                <target>Choose file</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.action_select_single_update">
+                <source>chameleon_system_core.cms_module_update.action_select_single_update</source>
+                <target>Select update</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.show_all">
+                <source>chameleon_system_core.cms_module_update.show_all</source>
+                <target>Show all updates</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.select_single_update">
+                <source>chameleon_system_core.cms_module_update.select_single_update</source>
+                <target>Run single update (FOR DEBUGGING PURPOSES ONLY!)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.updating_all_table_objects">
+                <source>chameleon_system_core.cms_module_update.updating_all_table_objects</source>
+                <target>Writing table objects to file system ...</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.update_all_virtual_objects">
+                <source>chameleon_system_core.cms_module_update.update_all_virtual_objects</source>
+                <target>Updating virtual non-DB classes ...</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.updates_executed_up_to_build_number">
+                <source>chameleon_system_core.cms_module_update.updates_executed_up_to_build_number</source>
+                <target>This update executed all %bundleName% Updates up to build number #%highestBuildNumber%.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.clearing_cache">
+                <source>chameleon_system_core.cms_module_update.clearing_cache</source>
+                <target>Flushing cache ...</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.info_count">
+                <source>chameleon_system_core.cms_module_update.info_count</source>
+                <target>Number of informational notices during the update process:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.error_count">
+                <source>chameleon_system_core.cms_module_update.error_count</source>
+                <target>Number of errors during the update process:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.info_messages">
+                <source>chameleon_system_core.cms_module_update.info_messages</source>
+                <target>Info messages</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.error_messages">
+                <source>chameleon_system_core.cms_module_update.error_messages</source>
+                <target>Errors</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.fatal_error_message">
+                <source>chameleon_system_core.cms_module_update.fatal_error_message</source>
+                <target>Fatal error</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.go_to_message">
+                <source>chameleon_system_core.cms_module_update.go_to_message</source>
+                <target>(to the message)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.error_message">
+                <source>chameleon_system_core.cms_module_update.error_message</source>
+                <target>Error message:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.file">
+                <source>chameleon_system_core.cms_module_update.file</source>
+                <target>File:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.line">
+                <source>chameleon_system_core.cms_module_update.line</source>
+                <target>Line:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.query">
+                <source>chameleon_system_core.cms_module_update.query</source>
+                <target>Query:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.exception_class">
+                <source>chameleon_system_core.cms_module_update.exception_class</source>
+                <target>Exception class:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.show_successful_queries">
+                <source>chameleon_system_core.cms_module_update.show_successful_queries</source>
+                <target>Show successful queries</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_update.hide_successful_queries">
+                <source>chameleon_system_core.cms_module_update.hide_successful_queries</source>
+                <target>Hide successful queries</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.portal">
+                <source>chameleon_system_core.cms_module_cms_user_rights_overview.portal</source>
+                <target>Portals/Web sites</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.groups">
+                <source>chameleon_system_core.cms_module_cms_user_rights_overview.groups</source>
+                <target>Groups</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.rolls">
+                <source>chameleon_system_core.cms_module_cms_user_rights_overview.rolls</source>
+                <target>Roles</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.permission_create_new">
+                <source>chameleon_system_core.cms_module_cms_user_rights_overview.permission_create_new</source>
+                <target>Rights - Create new record</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.permission_edit">
+                <source>chameleon_system_core.cms_module_cms_user_rights_overview.permission_edit</source>
+                <target>Rights - Edit record</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.permission_delete">
+                <source>chameleon_system_core.cms_module_cms_user_rights_overview.permission_delete</source>
+                <target>Rights - Delete record</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.permission_change_all">
+                <source>chameleon_system_core.cms_module_cms_user_rights_overview.permission_change_all</source>
+                <target>Rights - Edit all records</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.permission_translate">
+                <source>chameleon_system_core.cms_module_cms_user_rights_overview.permission_translate</source>
+                <target>Rights - Create new language</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.headline">
+                <source>chameleon_system_core.cms_module_cms_user_rights_overview.headline</source>
+                <target>System Rights</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.action_print">
+                <source>chameleon_system_core.cms_module_cms_user_rights_overview.action_print</source>
+                <target>Print</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.msg_page_object_cache_cleared">
+                <source>chameleon_system_core.cms_module_header.msg_page_object_cache_cleared</source>
+                <target>Cache cleared.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.msg_full_cache_cleared">
+                <source>chameleon_system_core.cms_module_header.msg_full_cache_cleared</source>
+                <target>Cache and file cache cleared.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.migration_recording_activated">
+                <source>chameleon_system_core.cms_module_header.migration_recording_activated</source>
+                <target>Database recording activated.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.migration_recording_deactivated">
+                <source>chameleon_system_core.cms_module_header.migration_recording_deactivated</source>
+                <target>Database recording deactivated.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.error_unable_to_create_update_counter">
+                <source>chameleon_system_core.cms_module_header.error_unable_to_create_update_counter</source>
+                <target>Error creating database update counter!</target>
+                <note>@deprecated since 6.2.0 - no longer used.</note>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.msg_created_update_counter">
+                <source>chameleon_system_core.cms_module_header.msg_created_update_counter</source>
+                <target>Successfully created new database update counter %sSystemName%.</target>
+                <note>@deprecated since 6.2.0 - no longer used.</note>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.msg_update_counter_switched">
+                <source>chameleon_system_core.cms_module_header.msg_update_counter_switched</source>
+                <target>Successfully switched database update counter.</target>
+                <note>@deprecated since 6.2.0 - no longer used.</note>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.active_update_counter">
+                <source>chameleon_system_core.cms_module_header.active_update_counter</source>
+                <target>Active database update counter</target>
+                <note>@deprecated since 6.2.0 - no longer used.</note>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_edit_navigation_help">
+                <source>chameleon_system_core.cms_module_header.action_edit_navigation_help</source>
+                <target>Edit navigation</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_edit_navigation">
+                <source>chameleon_system_core.cms_module_header.action_edit_navigation</source>
+                <target>Navigation</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_open_website_list_help">
+                <source>chameleon_system_core.cms_module_header.action_open_website_list_help</source>
+                <target>Edit page content</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_open_website_list">
+                <source>chameleon_system_core.cms_module_header.action_open_website_list</source>
+                <target>Pages</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_open_media_manager_help">
+                <source>chameleon_system_core.cms_module_header.action_open_media_manager_help</source>
+                <target><![CDATA[Manage images & videos]]></target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_open_media_manager">
+                <source>chameleon_system_core.cms_module_header.action_open_media_manager</source>
+                <target>Media</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_open_document_manager_help">
+                <source>chameleon_system_core.cms_module_header.action_open_document_manager_help</source>
+                <target><![CDATA[Manage documents & downloads]]></target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_open_document_manager">
+                <source>chameleon_system_core.cms_module_header.action_open_document_manager</source>
+                <target>Documents</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.menu_edit_language_menu">
+                <source>chameleon_system_core.cms_module_header.menu_edit_language_menu</source>
+                <target>Language</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_open_website">
+                <source>chameleon_system_core.cms_module_header.action_open_website</source>
+                <target>Website</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.error_generate_portal_links">
+                <source>chameleon_system_core.cms_module_header.error_generate_portal_links</source>
+                <target>Error while generating portal links.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.menu_cache">
+                <source>chameleon_system_core.cms_module_header.menu_cache</source>
+                <target>Cache</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_clear_page_cache">
+                <source>chameleon_system_core.cms_module_header.action_clear_page_cache</source>
+                <target>Clear cache</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_clear_full_cache">
+                <source>chameleon_system_core.cms_module_header.action_clear_full_cache</source>
+                <target>Clear cache and file cache</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_clear_page_cache_title">
+                <source>chameleon_system_core.cms_module_header.action_clear_page_cache_title</source>
+                <target>Clear Mem-Cache</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_clear_full_cache_title">
+                <source>chameleon_system_core.cms_module_header.action_clear_full_cache_title</source>
+                <target>Clear Mem-Cache, Less, CSS, JS and Symfony-Cache</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_help">
+                <source>chameleon_system_core.cms_module_header.action_help</source>
+                <target>Help</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_open_profile">
+                <source>chameleon_system_core.cms_module_header.action_open_profile</source>
+                <target>Profile</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_logout">
+                <source>chameleon_system_core.cms_module_header.action_logout</source>
+                <target>Logout</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_header.action_main_menu">
+                <source>chameleon_system_core.cms_module_header.action_main_menu</source>
+                <target>Main menu</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_login.form_user_name">
+                <source>chameleon_system_core.cms_module_login.form_user_name</source>
+                <target>Username</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_login.form_password">
+                <source>chameleon_system_core.cms_module_login.form_password</source>
+                <target>Password</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_login.action_login">
+                <source>chameleon_system_core.cms_module_login.action_login</source>
+                <target>Login</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.no_id_set">
+                <source>chameleon_system_core.cms_module_table_editor.no_id_set</source>
+                <target>no ID set</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.error_record_missing">
+                <source>chameleon_system_core.cms_module_table_editor.error_record_missing</source>
+                <target>The record with ID "%id%" in table "%tableName%" does not exist.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.error_unable_to_create_new_record">
+                <source>chameleon_system_core.cms_module_table_editor.error_unable_to_create_new_record</source>
+                <target>Error: Could not create new record in table "%tableName%".</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.confirm_discard_changes">
+                <source>chameleon_system_core.cms_module_table_editor.confirm_discard_changes</source>
+                <target>You have unsaved changes. Are you sure you want to discard them?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.header_record">
+                <source>chameleon_system_core.cms_module_table_editor.header_record</source>
+                <target>Table / Record</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.header_lock">
+                <source>chameleon_system_core.cms_module_table_editor.header_lock</source>
+                <target>Record lock</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.quick_switch">
+                <source>chameleon_system_core.cms_module_table_editor.quick_switch</source>
+                <target>Jump to record</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.field_help">
+                <source>chameleon_system_core.cms_module_table_editor.field_help</source>
+                <target>Help</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.not_translated">
+                <source>chameleon_system_core.cms_module_table_editor.not_translated</source>
+                <target>not yet translated</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.tab_default">
+                <source>chameleon_system_core.cms_module_table_editor.tab_default</source>
+                <target>Basic data</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.right_click_disable">
+                <source>chameleon_system_core.cms_module_table_editor.right_click_disable</source>
+                <target>Disable menu</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.msg_translation_created">
+                <source>chameleon_system_core.cms_module_table_editor.msg_translation_created</source>
+                <target>Translation created</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.action_create_empty_translation">
+                <source>chameleon_system_core.cms_module_table_editor.action_create_empty_translation</source>
+                <target>Create empty translation</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.action_create_translation_from_current_language">
+                <source>chameleon_system_core.cms_module_table_editor.action_create_translation_from_current_language</source>
+                <target>Create translation from current language</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.copied_record_suffix">
+                <source>chameleon_system_core.cms_module_table_editor.copied_record_suffix</source>
+                <target>copy</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_table_editor.error_save">
+                <source>chameleon_system_core.cms_module_table_editor.error_save</source>
+                <target>Error saving record!</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.cms_module_tree_widget.action_new_node">
+                <source>chameleon_system_core.cms_module_tree_widget.action_new_node</source>
+                <target>New node</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_tree_widget.action_delete">
+                <source>chameleon_system_core.cms_module_tree_widget.action_delete</source>
+                <target>Delete</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_tree_widget.action_move">
+                <source>chameleon_system_core.cms_module_tree_widget.action_move</source>
+                <target>Move</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_tree_widget.action_cut">
+                <source>chameleon_system_core.cms_module_tree_widget.action_cut</source>
+                <target>Cut</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_tree_widget.action_paste">
+                <source>chameleon_system_core.cms_module_tree_widget.action_paste</source>
+                <target>Paste</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_tree_widget.action_upload">
+                <source>chameleon_system_core.cms_module_tree_widget.action_upload</source>
+                <target>Upload file</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_tree_widget.action_import_ftp">
+                <source>chameleon_system_core.cms_module_tree_widget.action_import_ftp</source>
+                <target>Import file (FTP)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_tree_widget.action_move_to_here">
+                <source>chameleon_system_core.cms_module_tree_widget.action_move_to_here</source>
+                <target>Move files here</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_tree_widget.action_rename">
+                <source>chameleon_system_core.cms_module_tree_widget.action_rename</source>
+                <target>Rename</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_tree_widget.confirm_delete_folder">
+                <source>chameleon_system_core.cms_module_tree_widget.confirm_delete_folder</source>
+                <target>You will delete this folder as well as every subfolder and all the data they contain. All links in all pages and records will be removed as well. Are you sure?</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.text.image_dimensions">
+                <source>chameleon_system_core.text.image_dimensions</source>
+                <target>Dimensions</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.text.pixel">
+                <source>chameleon_system_core.text.pixel</source>
+                <target>Pixels</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.text.file_size">
+                <source>chameleon_system_core.text.file_size</source>
+                <target>Size</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.text.file_type">
+                <source>chameleon_system_core.text.file_type</source>
+                <target>File type</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.text.unnamed_record">
+                <source>chameleon_system_core.text.unnamed_record</source>
+                <target>Unnamed</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.text.copied_record_marker">
+                <source>chameleon_system_core.text.copied_record_marker</source>
+                <target>Copy</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.text.portal">
+                <source>chameleon_system_core.text.portal</source>
+                <target>Portal</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.text.wait">
+                <source>chameleon_system_core.text.wait</source>
+                <target>Please wait.</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.action.abort">
+                <source>chameleon_system_core.action.abort</source>
+                <target>Abort</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.action.edit">
+                <source>chameleon_system_core.action.edit</source>
+                <target>Edit</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.reset">
+                <source>chameleon_system_core.action.reset</source>
+                <target>Reset</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.copy">
+                <source>chameleon_system_core.action.copy</source>
+                <target>Copy</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.confirm_copy">
+                <source>chameleon_system_core.action.confirm_copy</source>
+                <target>Do you really want to copy this record?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.new">
+                <source>chameleon_system_core.action.new</source>
+                <target>New</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.remove_connection">
+                <source>chameleon_system_core.action.remove_connection</source>
+                <target>Remove connection</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.delete">
+                <source>chameleon_system_core.action.delete</source>
+                <target>Delete</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.confirm_delete">
+                <source>chameleon_system_core.action.confirm_delete</source>
+                <target>Are you sure you want to delete this record?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.confirm_delete_selection">
+                <source>chameleon_system_core.action.confirm_delete_selection</source>
+                <target>Are you sure you want to delete these records?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.preview">
+                <source>chameleon_system_core.action.preview</source>
+                <target>Preview</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.action.open_table_configuration">
+                <source>chameleon_system_core.action.open_table_configuration</source>
+                <target>Table configuration</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.export">
+                <source>chameleon_system_core.action.export</source>
+                <target>Export data</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.close">
+                <source>chameleon_system_core.action.close</source>
+                <target>Close</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.cut">
+                <source>chameleon_system_core.action.cut</source>
+                <target>Cut</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.upload">
+                <source>chameleon_system_core.action.upload</source>
+                <target>Upload</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.save">
+                <source>chameleon_system_core.action.save</source>
+                <target>Save</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.save_and_return">
+                <source>chameleon_system_core.action.save_and_return</source>
+                <target>Save and return</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.translate_from_copy">
+                <source>chameleon_system_core.action.translate_from_copy</source>
+                <target>Translate from copy</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.translate_from_copy_confirm">
+                <source>chameleon_system_core.action.translate_from_copy_confirm</source>
+                <target>Copy non-translated fields from language %lang% ?</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.action.pages_regenerate_page_path">
+                <source>chameleon_system_core.action.pages_regenerate_page_path</source>
+                <target>Regenerate page paths</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.action.return_to_main_menu">
+                <source>chameleon_system_core.action.return_to_main_menu</source>
+                <target>return to main menu</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.form.select_box_nothing_selected">
+                <source>chameleon_system_core.form.select_box_nothing_selected</source>
+                <target>Please select</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record.is_active">
+                <source>chameleon_system_core.record.is_active</source>
+                <target>active</target>
+            </trans-unit>
+
+
+
+
+            <trans-unit id="chameleon_system_shop.variants.variant_editor_headline">
+                <source>chameleon_system_shop.variants.variant_editor_headline</source>
+                <target>Create</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.variants.variant_type">
+                <source>chameleon_system_shop.variants.variant_type</source>
+                <target>Type</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.variants.variant_value">
+                <source>chameleon_system_shop.variants.variant_value</source>
+                <target>Value</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.variants.action_new_variant_value">
+                <source>chameleon_system_shop.variants.action_new_variant_value</source>
+                <target>Create new value</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.variants.action_show_possible_variants">
+                <source>chameleon_system_shop.variants.action_show_possible_variants</source>
+                <target>Show possible variants</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.variants.msg_current_product_is_no_variant">
+                <source>chameleon_system_shop.variants.msg_current_product_is_no_variant</source>
+                <target>This product is the main parent product (no variant).</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.variants.error_create_variant_variant_type_required">
+                <source>chameleon_system_shop.variants.error_create_variant_variant_type_required</source>
+                <target>Select a variant type before creating variants.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.variants.error_to_many_combinations_possible">
+                <source>chameleon_system_shop.variants.error_to_many_combinations_possible</source>
+                <target>Error: Your variant configuration results in more than %max% possible combinations!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.variants.action_create_variants">
+                <source>chameleon_system_shop.variants.action_create_variants</source>
+                <target>Create variants</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.variants.error_create_variant_variant_type_for_parent_required">
+                <source>chameleon_system_shop.variants.error_create_variant_variant_type_for_parent_required</source>
+                <target>Select a variant type for the main product before setting variant values for this variant.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.variants.variant_price">
+                <source>chameleon_system_shop.variants.variant_price</source>
+                <target>Price</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.variants.variant_base_price">
+                <source>chameleon_system_shop.variants.variant_base_price</source>
+                <target>Base price</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.variants.action_select_all_variants">
+                <source>chameleon_system_shop.variants.action_select_all_variants</source>
+                <target>Select all</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.report.total">
+                <source>chameleon_system_shop.report.total</source>
+                <target>Total</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_message_manager.auto_entry_description">
+                <source>chameleon_system_core.cms_message_manager.auto_entry_description</source>
+                <target>New entry from consumer %consumerName% created on [%createdDate%]. Parameter: %parameter%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_message_manager.invalid_code">
+                <source>chameleon_system_core.cms_message_manager.invalid_code</source>
+                <target>Undefined message: %messageCode%</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.action.db_logger">
+                <source>chameleon_system_core.action.db_logger</source>
+                <target>DB logger</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.db_logger.stop_recording">
+                <source>chameleon_system_core.db_logger.stop_recording</source>
+                <target>Stop recording</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.db_logger.start_recording">
+                <source>chameleon_system_core.db_logger.start_recording</source>
+                <target>Start recording</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_chooser.tree_node">
+                <source>chameleon_system_core.document_chooser.tree_node</source>
+                <target>Directory</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.image_chooser.tree_node">
+                <source>chameleon_system_core.image_chooser.tree_node</source>
+                <target>Directory</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.insert_into_text">
+                <source>chameleon_system_core.document_manager.insert_into_text</source>
+                <target>Insert into text</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.action_select">
+                <source>chameleon_system_core.document_manager.action_select</source>
+                <target>Select</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.selected_documents">
+                <source>chameleon_system_core.document_manager.selected_documents</source>
+                <target>selected documents</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.remove_selected">
+                <source>chameleon_system_core.document_manager.remove_selected</source>
+                <target>Remove selection</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.refresh_list">
+                <source>chameleon_system_core.document_manager.refresh_list</source>
+                <target>Refresh list</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.root_node_name">
+                <source>chameleon_system_core.document_manager.root_node_name</source>
+                <target>Documents</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.msg_new_folder">
+                <source>chameleon_system_core.document_manager.msg_new_folder</source>
+                <target>Create new folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.msg_removed_documents">
+                <source>chameleon_system_core.document_manager.msg_removed_documents</source>
+                <target>Document(s) successfully removed.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.msg_missing_folder_name">
+                <source>chameleon_system_core.document_manager.msg_missing_folder_name</source>
+                <target>You haven't entered a folder name!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.msg_upload_success">
+                <source>chameleon_system_core.document_manager.msg_upload_success</source>
+                <target>These files have been sucessfully uploaded</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.msg_upload_error">
+                <source>chameleon_system_core.document_manager.msg_upload_error</source>
+                <target>Upload unsuccessfuly</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.msg_upload_additional_files">
+                <source>chameleon_system_core.document_manager.msg_upload_additional_files</source>
+                <target>Upload more files</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.msg_no_file_selected">
+                <source>chameleon_system_core.document_manager.msg_no_file_selected</source>
+                <target>You didn't select a file to upload.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.msg_no_upload_to_primary_folder_allowed">
+                <source>chameleon_system_core.document_manager.msg_no_upload_to_primary_folder_allowed</source>
+                <target>You can't upload file into the root folder.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.msg_upload">
+                <source>chameleon_system_core.document_manager.msg_upload</source>
+                <target>Upload</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.msg_select_target_folder">
+                <source>chameleon_system_core.document_manager.msg_select_target_folder</source>
+                <target>Choose a target folder to move the files into.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.msg_no_files_selected_for_move">
+                <source>chameleon_system_core.document_manager.msg_no_files_selected_for_move</source>
+                <target>You didn't select files to move.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.msg_no_files_selected_for_insert">
+                <source>chameleon_system_core.document_manager.msg_no_files_selected_for_insert</source>
+                <target>No files selected for pasting.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.msg_upload_single_file_success">
+                <source>chameleon_system_core.document_manager.msg_upload_single_file_success</source>
+                <target>File uploaded successfully</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.action_delete">
+                <source>chameleon_system_core.document_manager.action_delete</source>
+                <target>Delete</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.action_delete_confirm">
+                <source>chameleon_system_core.document_manager.action_delete_confirm</source>
+                <target>Do you really want to delete this file attachment?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.attention">
+                <source>chameleon_system_core.document_manager.attention</source>
+                <target>Attention!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.action_delete_confirm_connections">
+                <source>chameleon_system_core.document_manager.action_delete_confirm_connections</source>
+                <target>The file you want to delete is still used in the following records. It will be removed from these records if you still want to delete it.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.connection_list">
+                <source>chameleon_system_core.document_manager.connection_list</source>
+                <target>The file is still used in the following records.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.delete_document">
+                <source>chameleon_system_core.document_manager.delete_document</source>
+                <target>Delete document ID %id%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.document_id">
+                <source>chameleon_system_core.document_manager.document_id</source>
+                <target>Document ID %id%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.connected_item_column_name">
+                <source>chameleon_system_core.document_manager.connected_item_column_name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.connected_item_column_table">
+                <source>chameleon_system_core.document_manager.connected_item_column_table</source>
+                <target>Tale</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.connected_item_column_field">
+                <source>chameleon_system_core.document_manager.connected_item_column_field</source>
+                <target>Field</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.confirm_delete_with_connections">
+                <source>chameleon_system_core.document_manager.confirm_delete_with_connections</source>
+                <target>Force delete</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.abort_delete">
+                <source>chameleon_system_core.document_manager.abort_delete</source>
+                <target>Cancel</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.close">
+                <source>chameleon_system_core.document_manager.close</source>
+                <target>close</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.table_editor.regenerate_translatable_fields">
+                <source>chameleon_system_core.table_editor.regenerate_translatable_fields</source>
+                <target>Regenerate translation fields</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor.regenerate_translatable_fields_confirm">
+                <source>chameleon_system_core.table_editor.regenerate_translatable_fields_confirm</source>
+                <target>Are you sure? Deactivated languages and their translations will be deleted.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_user.action_login_as_user">
+                <source>chameleon_system_core.table_editor_user.action_login_as_user</source>
+                <target>Login as user</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_cms_user.clone_permissions">
+                <source>chameleon_system_core.table_editor_cms_user.clone_permissions</source>
+                <target>Clone permissions</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_cms_user.mail_login_data">
+                <source>chameleon_system_core.table_editor_cms_user.mail_login_data</source>
+                <target>Email credentials</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_cms_user.action_copy_permissions">
+                <source>chameleon_system_core.table_editor_cms_user.action_copy_permissions</source>
+                <target>Copy permissions</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_cms_user.select_source_user">
+                <source>chameleon_system_core.table_editor_cms_user.select_source_user</source>
+                <target>Select a user to copy permissions from</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_cms_user.user_group">
+                <source>chameleon_system_core.table_editor_cms_user.user_group</source>
+                <target>User groups</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_cms_user.user_rolls">
+                <source>chameleon_system_core.table_editor_cms_user.user_rolls</source>
+                <target>Roles</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_cms_user.portal">
+                <source>chameleon_system_core.table_editor_cms_user.portal</source>
+                <target>Portals</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_cron_jobs.action_run_job">
+                <source>chameleon_system_core.table_editor_cron_jobs.action_run_job</source>
+                <target>Run now</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_cron_jobs.action_run_job_confirm">
+                <source>chameleon_system_core.table_editor_cron_jobs.action_run_job_confirm</source>
+                <target>Run cron job</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.table_editor_document.action_use">
+                <source>chameleon_system_core.table_editor_document.action_use</source>
+                <target>Usage</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_document.action_remove">
+                <source>chameleon_system_core.table_editor_document.action_remove</source>
+                <target>Remove</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_document.action_remove_confirm">
+                <source>chameleon_system_core.table_editor_document.action_remove_confirm</source>
+                <target>Remove file attachment</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.table_editor_file.error_target_folder_missing">
+                <source>chameleon_system_core.table_editor_file.error_target_folder_missing</source>
+                <target>Target folder missing</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_file.error_missing_write_permission_on_target_folder">
+                <source>chameleon_system_core.table_editor_file.error_missing_write_permission_on_target_folder</source>
+                <target>No write permissions on target folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_files.error_missing_permission_to_overwrite_existing_file">
+                <source>chameleon_system_core.table_editor_files.error_missing_permission_to_overwrite_existing_file</source>
+                <target>Target file aready exists and can't be overwritten</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_files.error_expected_uploaded_file">
+                <source>chameleon_system_core.table_editor_files.error_expected_uploaded_file</source>
+                <target>Expected file not found in file system after upload.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_files.error_unable_to_move_or_copy_file">
+                <source>chameleon_system_core.table_editor_files.error_unable_to_move_or_copy_file</source>
+                <target>Unable to move or copy uploaded file to target location</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_files.error_cluster_distribution">
+                <source>chameleon_system_core.table_editor_files.error_cluster_distribution</source>
+                <target>Could not share file in cluster. File: %name%, fileHandler Error: %error%)</target>
+                <note>@deprecated since 6.2.0 - no longer used.</note>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_files.error_file_to_large">
+                <source>chameleon_system_core.table_editor_files.error_file_to_large</source>
+                <target>Uploaded file is too large: %size% bytes (max: %allowed%)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_media.error_requires_exact_dimension">
+                <source>chameleon_system_core.table_editor_media.error_requires_exact_dimension</source>
+                <target>The uploaded file doesn't match the expected dimensions: %width%x%height% pixels (expected: %maxWidth%x%maxHeight% pixels)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_media.error_invalid_dimensions">
+                <source>chameleon_system_core.table_editor_media.error_invalid_dimensions</source>
+                <target>The uploaded file doesn't fit into the specified dimensions (%width%x%height% pixels) (maximum size: %maxWidth%x%maxHeight% pixels)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_media.error_cmyk">
+                <source>chameleon_system_core.table_editor_media.error_cmyk</source>
+                <target>This image was saved in 4channel/CMYK color mode. Please convert to RGB first.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_media.error_invalid_format">
+                <source>chameleon_system_core.table_editor_media.error_invalid_format</source>
+                <target>Invalid file format</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_media.error_invalid_flv">
+                <source>chameleon_system_core.table_editor_media.error_invalid_flv</source>
+                <target>FLV file invalid or unsupported codec detected</target>
+                <note>@deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.</note>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_media.error_permission_target_folder">
+                <source>chameleon_system_core.table_editor_media.error_permission_target_folder</source>
+                <target>Couldn't move file to target folder. Check target folder write permissions</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_portal.action_edit_tree">
+                <source>chameleon_system_core.table_editor_portal.action_edit_tree</source>
+                <target>Edit navigation tree</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_portal.error_navigation_node_required">
+                <source>chameleon_system_core.table_editor_portal.error_navigation_node_required</source>
+                <target>Please choose a navigation start node first</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_portal.action_tmp_enable_inactive_language_for_me">
+                <source>chameleon_system_core.table_editor_portal.action_tmp_enable_inactive_language_for_me</source>
+                <target>Activate disabled languages temporarily (only for me)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_portal.action_disable_tmp_enabled_languages">
+                <source>chameleon_system_core.table_editor_portal.action_disable_tmp_enabled_languages</source>
+                <target>Deactivate temporarily reactivated languages (only for me)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor_page_def_spot.after_copy_name">
+                <source>chameleon_system_core.table_editor_page_def_spot.after_copy_name</source>
+                <target>Copy of %name%</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.table_editor_tree_connection.action_show_list">
+                <source>chameleon_system_core.table_editor_tree_connection.action_show_list</source>
+                <target>List</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.google_map.coordinates">
+                <source>chameleon_system_core.google_map.coordinates</source>
+                <target>Coordinates</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.google_map.find_coordinates">
+                <source>chameleon_system_core.google_map.find_coordinates</source>
+                <target>Search</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.google_map.action_use_coordinates">
+                <source>chameleon_system_core.google_map.action_use_coordinates</source>
+                <target>Use</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.google_map.address">
+                <source>chameleon_system_core.google_map.address</source>
+                <target>Address</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.translation_exporter.error_not_logged_in">
+                <source>chameleon_system_core.translation_exporter.error_invalid_permissions</source>
+                <target>You have to be logged in to access translations.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_tree_page_assignment.already_linked_pages">
+                <source>chameleon_system_core.field_tree_page_assignment.already_linked_pages</source>
+                <target>One or more pages have already been assigned.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_wysiwyg.custom_css_loading_error">
+                <source>chameleon_system_core.field_wysiwyg.custom_css_loading_error</source>
+                <target>Could not import custom WYSIWYG CSS file from: %url%</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select_restriction.check_label">
+                <source>chameleon_system_core.field_lookup_multi_select_restriction.check_label</source>
+                <target>Lock record if list is empty</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup_multi_select_restriction.check_help">
+                <source>chameleon_system_core.field_lookup_multi_select_restriction.check_help</source>
+                <target>If checked, an empty list actually means that the restriction is never satisfied - so the record is effectively disabled. If not checked, an empty list means "no restriction".</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

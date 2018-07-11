@@ -1,0 +1,101 @@
+<?php
+
+/*
+ * This file is part of the Chameleon System (https://www.chameleonsystem.com).
+ *
+ * (c) ESONO AG (https://www.esono.de)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace ChameleonSystem\CoreBundle\Util;
+
+use ChameleonSystem\CoreBundle\DataModel\Routing\PagePath;
+use Symfony\Component\Routing\Route;
+use TdbCmsLanguage;
+use TdbCmsPortal;
+use TdbCmsTree;
+
+interface RoutingUtilInterface
+{
+    /**
+     * Generates a route for the passed tree node object.
+     * This method is only intended for use during route generation or other tasks performed at compile time
+     * as it may incorporate slow backend access.
+     *
+     * @param TdbCmsTree     $tree
+     * @param string         $controller
+     * @param TdbCmsPortal   $portal
+     * @param TdbCmsLanguage $language
+     *
+     * @return Route|null returns null if there is no page linked to the tree object
+     *
+     * @deprecated since 6.1.5 - page routes are no longer generated and cached separately but will be resolved by TPkgCmsRouteControllerCmsTplPage.
+     */
+    public function getRouteForTree(TdbCmsTree $tree, $controller, TdbCmsPortal $portal, TdbCmsLanguage $language);
+
+    /**
+     * Returns the URL of a page assigned to the passed tree node, or null if there is no assigned page.
+     * This method is only intended for use during route generation or other tasks performed at compile time
+     * as it may incorporate slow backend access. During runtime, use PortalAndLanguageAwareRouterInterface::generateWithPrefixes().
+     *
+     * @param TdbCmsTree     $tree
+     * @param TdbCmsLanguage $language
+     *
+     * @return string|null
+     */
+    public function getLinkForTreeNode(TdbCmsTree $tree, TdbCmsLanguage $language);
+
+    /**
+     * Returns the placeholder for domains that needs to be defined in each route.
+     *
+     * @return string
+     */
+    public function getHostRequirementPlaceholder();
+
+    /**
+     * Returns the domain requirements part of a route (all domains for the given portal).
+     *
+     * @param TdbCmsPortal   $portal
+     * @param TdbCmsLanguage $language
+     * @param bool           $secure
+     *
+     * @return string
+     */
+    public function getDomainRequirement(TdbCmsPortal $portal, TdbCmsLanguage $language, $secure);
+
+    /**
+     * @param string         $pagePath
+     * @param TdbCmsPortal   $portal
+     * @param TdbCmsLanguage $language
+     *
+     * @return array|null
+     *
+     * @deprecated since 6.1.5 - page routes are no longer generated and cached separately but will be resolved by TPkgCmsRouteControllerCmsTplPage.
+     */
+    public function getPageDataForPagePath($pagePath, TdbCmsPortal $portal, TdbCmsLanguage $language);
+
+    /**
+     * Returns a list of routes for the passed $portal in the given $language. The list indexes are the page IDs, the
+     * values are corresponding PagePath objects.
+     *
+     * @param TdbCmsPortal   $portal
+     * @param TdbCmsLanguage $language
+     *
+     * @return PagePath[]
+     */
+    public function getAllPageRoutes(TdbCmsPortal $portal, TdbCmsLanguage $language);
+
+    /**
+     * Normalizes a route path in such a way that prefixes and suffixes are removed. This method may not be as
+     * universal as you desire, for it relies on the system configuration to determine which transformations to perform.
+     * Mostly this method will be used for page routes.
+     *
+     * @param string       $path
+     * @param TdbCmsPortal $portal
+     *
+     * @return string
+     */
+    public function normalizeRoutePath($path, TdbCmsPortal $portal);
+}

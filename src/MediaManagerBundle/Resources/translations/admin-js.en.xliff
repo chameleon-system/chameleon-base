@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="admin-js.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_media_manager.dragging.elements">
+                <source>chameleon_system_media_manager.dragging.elements</source>
+                <target>elements</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_media_manager.dragging.move_to">
+                <source>chameleon_system_media_manager.dragging.move_to</source>
+                <target>Move to:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_media_manager.dragging.choose_target">
+                <source>chameleon_system_media_manager.dragging.choose_target</source>
+                <target>Choose target folder</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.tree_context_menu.edit_properties">
+                <source>chameleon_system_media_manager.tree_context_menu.edit_properties</source>
+                <target>Properties</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_media_manager.tree_context_menu.new_folder">
+                <source>chameleon_system_media_manager.tree_context_menu.new_folder</source>
+                <target>New folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_media_manager.tree_context_menu.delete_folder">
+                <source>chameleon_system_media_manager.tree_context_menu.delete_folder</source>
+                <target>Delete folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_media_manager.tree_context_menu.rename">
+                <source>chameleon_system_media_manager.tree_context_menu.rename</source>
+                <target>Rename</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_media_manager.tree_context_menu.upload">
+                <source>chameleon_system_media_manager.tree_context_menu.upload</source>
+                <target>Upload files</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.are_you_sure">
+                <source>chameleon_system_media_manager.delete.are_you_sure</source>
+                <target>Are you sure?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_media_manager.delete.success_message">
+                <source>chameleon_system_media_manager.delete.success_message</source>
+                <target>Successfully deleted.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.tree.multiple_selected_message">
+                <source>chameleon_system_media_manager.tree.multiple_selected_message</source>
+                <target>Multiple categories selected in tree. Categories can be moved via drag'n'drop. To show media items, select a single category.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_media_manager.tree.delete_multiple_selected">
+                <source>chameleon_system_media_manager.tree.delete_multiple_selected</source>
+                <target>Delete selected categories</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_media_manager.tree.new_folder">
+                <source>chameleon_system_media_manager.tree.new_folder</source>
+                <target>New folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_media_manager.tree.nothing_selected_message">
+                <source>chameleon_system_media_manager.tree.nothing_selected_message</source>
+                <target>Please select a category or use the menu on right click.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.editable.tooltip">
+                <source>chameleon_system_media_manager.editable.tooltip</source>
+                <target>Click to edit</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.close_button_text">
+                <source>chameleon_system_media_manager.close_button_text</source>
+                <target>Close</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.replace_window_title">
+                <source>chameleon_system_media_manager.replace_window_title</source>
+                <target>Replace:</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.crop_window_title">
+                <source>chameleon_system_media_manager.crop_window_title</source>
+                <target>Crop:</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,46 @@
+<?php
+
+/*
+ * This file is part of the Chameleon System (https://www.chameleonsystem.com).
+ *
+ * (c) ESONO AG (https://www.esono.de)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+class TCMSTableToField_TCMSTableFieldConf extends TCMSTableToClass_MockRecord
+{
+    private $oFieldType = null;
+    /**
+     * @var TPkgCmsStringUtilities_ReadConfig
+     */
+    private $oCacheExtraConfigFieldObject = null;
+
+    public function __construct(TCMSTableToField_TCMSFieldType $oFieldType)
+    {
+        $this->oFieldType = $oFieldType;
+        parent::__construct('cms_field_conf');
+    }
+
+    public function GetFieldType()
+    {
+        return $this->oFieldType;
+    }
+
+    /**
+     * get field type specific config parameter value for given key.
+     *
+     * @param string $parameterKey
+     *
+     * @return string
+     */
+    public function GetFieldtypeConfigKey($parameterKey)
+    {
+        if (null === $this->oCacheExtraConfigFieldObject) {
+            $this->oCacheExtraConfigFieldObject = new TPkgCmsStringUtilities_ReadConfig($this->sqlData['fieldtype_config']);
+        }
+
+        return $this->oCacheExtraConfigFieldObject->getConfigValue($parameterKey);
+    }
+}

@@ -1,0 +1,65 @@
+{% trans_default_domain constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND') %}
+<script type="text/javascript">
+    var _recordID = '{{recordID}}';
+    var _fieldName = '{{fieldName}}';
+    var _tableID = '{{tableID}}';
+    var _transImageSize = '{{'chameleon_system_core.cms_module_media_manager.image_size'|trans}}';
+    var _transImagePixel = '{{'chameleon_system_core.text.pixel'|trans}}';
+</script>
+<style>
+    html, body {
+        height: 100%;
+    }
+</style>
+
+<div class="row" style="height: 100%; margin-right: 0px;">
+    <div class="col-md-3" style="height: 100%;">
+        <h1>
+            {{'chameleon_system_core.cms_module_media_manager.folder'|trans}}
+        </h1>
+        <div id="treePlacer"></div>
+    </div>
+
+    <div style="height: 100%; padding-right: 0px" class="col-md-9">
+        <div class="btn-group">
+            {% if wysiwygMode != '' %}
+                <button type="button" class="btn btn-sm btn-primary" onclick="InsertDocumentsInWYSIWYG();"><span class="btn-icon" style="background-image: url({{sPathTheme}}/images/icons/attach.png);">{{'chameleon_system_core.document_manager.insert_into_text'|trans}}</span></button>
+            {% endif %}
+
+            {% if recordID != '' %}
+                <button type="button" class="btn btn-sm btn-primary" onclick="chooseSelectedFiles();"><span class="btn-icon" style="background-image: url({{sPathTheme}}/images/icons/accept.png);">{{'chameleon_system_core.document_manager.action_select'|trans}}</span></button>
+            {% endif %}
+            <button type="button" class="btn btn-sm btn-primary" onclick="cutSelectedFiles();"><span class="btn-icon" style="background-image: url({{sPathTheme}}/images/icons/cut.png);">{{'chameleon_system_core.action.cut'|trans}}</span></button>
+            <button type="button" class="btn btn-sm btn-danger" onclick="if(confirm('{{"chameleon_system_core.cms_module_media_manager.confirm_delete"|trans}}')) deleteSelectedItem();"><span class="btn-icon" style="background-image: url({{sPathTheme}}/images/icons/delete.png);">{{'chameleon_system_core.action.delete'|trans}}</span></button>
+        </div>
+
+        {% set url = pathCmsController ~ '?pagedef=tableManagerDocumentManager&id='~id~'&CKEditorFuncNum='~CKEditorFuncNum %}
+        {% set height = '95%' %}
+        {% set iFrameHeight = '100%' %}
+        {% if recordID != '' %}
+            {% set url = url~'&mltTable='~mltTable~'&recordID='~recordID %}
+            {% set height = '50%' %}
+            {% set iFrameHeight = '100%' %}
+        {% endif %}
+
+        <div style="height: {{ height }}; background-color: #fff;">
+            <iframe id="fileList" src="{{url}}" frameborder="0" style="width:100%; height: {{ iFrameHeight }};"></iframe>
+        </div>
+
+        {% if recordID != '' %}
+            <hr />
+            <div class="contentboxHeadline">
+                {{'chameleon_system_core.document_manager.selected_documents'|trans}}
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-warning" onclick="removeSelectedFiles();"><span class="btn-icon" style="background-image: url({{sStaticUrlToWebLibCross}});">{{'chameleon_system_core.document_manager.remove_selected'|trans}}</span></button>
+                <button type="button" class="btn btn-sm btn-primary" onclick="reloadSelectedFilesList();"><span class="btn-icon" style="background-image: url({{sStaticUrlToWebLibActionRefresh}});">{{'chameleon_system_core.document_manager.refresh_list'|trans}}</span></button>
+            </div>
+
+            <div style="height: {{ height }}; background-color: #fff;">
+                <iframe id="selectedFileList" src="{{ pathCmsController }}?pagedef=tableManagerDocumentManagerSelected&id={{id}}&sRestrictionField={{tableName}}_mlt&sRestriction={{recordID}}&fieldName={{fieldName}}" frameborder="0" style="width:100%; height: {{ iFrameHeight }};"></iframe>
+            </div>
+        {% endif %}
+    </div>
+</div>

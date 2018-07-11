@@ -1,0 +1,82 @@
+/*- Menu Tabs J--------------------------- */
+
+/**
+* this file is deprecated tabbed buttons are rendered via bootstrap btn-group now
+*/
+
+.tabsContainer {
+  padding-left: 20px;
+}
+
+.tabsJ {
+  width: 100%;
+  line-height: normal;
+}
+
+.tabsJ ul {
+  margin:0;
+  padding:0px 0px 0 0px;
+  list-style:none;
+}
+
+.tabsJ li {
+  display:inline;
+  margin:0;
+  padding:0;
+}
+
+.tabsJ a {
+  float:left;
+  background:url(../images/tableftJ.gif) no-repeat left top;
+  margin:0;
+  padding:0 0 0 5px;
+  text-decoration:none;
+  letter-spacing: 1px;
+}
+
+.tabsJ a span {
+  float:left;
+  display:block;
+  background:url(../images/tabrightJ.gif) no-repeat right top;
+  padding:4px 5px 0px 1px;
+  line-height: 12px;
+}
+
+.tabsJ a span span {
+  color: #000;
+  padding-left: 20px;
+  line-height: 8px;
+  padding-bottom: 6px;
+}
+
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+.tabsJ a span {float:none;}
+/* End IE5-Mac hack */
+
+.tabsJ a:hover span {
+  color:#FFF;
+  background-position:100% -42px;
+}
+
+.tabsJ a:hover {
+  background-position:0% -42px;
+}
+
+
+.tabsJ #current a {
+  background-position:0% -42px;
+}
+
+.tabsJ #current a span {
+  background-position:100% -42px;
+  color:#FFF;
+}
+
+.tabsJ .activeSpan {
+  color:#FFF;
+  background-position:100% -42px;
+}
+
+.tabsJ .activeLink {
+  background-position:0% -42px;
+}

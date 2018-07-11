@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+
+    <services>
+
+        <service id="chameleon_system_database_migration.query.base" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Query\AbstractQuery" abstract="true">
+            <argument type="service" id="database_connection" />
+            <argument type="service" id="chameleon_system_database_migration.query.abstract_query_data_access" />
+        </service>
+
+        <service id="chameleon_system_database_migration.query.insert" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Query\Insert" parent="chameleon_system_database_migration.query.base">
+        </service>
+
+        <service id="chameleon_system_database_migration.query.update" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Query\Update" parent="chameleon_system_database_migration.query.base">
+        </service>
+
+        <service id="chameleon_system_database_migration.query.delete" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Query\Delete" parent="chameleon_system_database_migration.query.base">
+        </service>
+
+        <service id="chameleon_system_database_migration.query.abstract_query_data_access" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\DataAccess\AbstractQueryDataAccess">
+            <argument type="service" id="database_connection" />
+        </service>
+
+        <service id="chameleon_system_database_migration.recorder.migration_recorder_state_handler" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler">
+            <argument type="service" id="request_stack"/>
+        </service>
+        <service id="chameleon_system_database_migration.recorder.migration_recorder" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorder">
+            <argument type="service" id="service_container" />
+            <argument type="service" id="database_connection" />
+            <argument type="service" id="chameleon_system_database_migration.recorder.query_writer" />
+            <argument type="service" id="cmsPkgCore.logChannel.standard" />
+            <argument type="constant">PATH_CMS_CHANGE_LOG</argument>
+        </service>
+
+        <service id="chameleon_system_database_migration.recorder.query_writer" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\QueryWriter" public="false">
+            <argument type="service" id="service_container" />
+        </service>
+
+    </services>
+</container>

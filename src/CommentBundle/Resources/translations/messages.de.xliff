@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="messages.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_comment.action.refresh">
+                <source>chameleon_system_comment.action.refresh</source>
+                <target>Aktualisieren</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.text.marked_as_inappropriate">
+                <source>chameleon_system_comment.text.marked_as_inappropriate</source>
+                <target>Als ungeeignet gekennzeichnet.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.answer">
+                <source>chameleon_system_comment.action.answer</source>
+                <target>Antworten</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.mark_as_inappropriate">
+                <source>chameleon_system_comment.action.mark_as_inappropriate</source>
+                <target>Diesen Beitrag melden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.text.is_deleted_comment">
+                <source>chameleon_system_comment.text.is_deleted_comment</source>
+                <target>Kommentar wurde gelöscht.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.text.comments_of_a_comment_headline">
+                <source>chameleon_system_comment.text.comments_of_a_comment_headline</source>
+                <target>Kommentare zur Rezension</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.show_all">
+                <source>chameleon_system_comment.action.show_all</source>
+                <target>Alle Kommentare Anzeigen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.show_fewer">
+                <source>chameleon_system_comment.action.show_fewer</source>
+                <target>Weniger Kommentare Anzeigen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.edit">
+                <source>chameleon_system_comment.action.edit</source>
+                <target>Kommentar bearbeiten</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.preview">
+                <source>chameleon_system_comment.action.preview</source>
+                <target>Vorschau</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.submit">
+                <source>chameleon_system_comment.action.submit</source>
+                <target>Beitrag abschicken</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.error.login_required">
+                <source>chameleon_system_comment.error.login_required</source>
+                <target>Sie müssen eingeloggt sein, um Kommentare schreiben zu können. Bitte loggen Sie sich %linkloginstart%hier%linkloginend% ein.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.url.id_page">
+                <source>chameleon_system_comment.url.id_page</source>
+                <target>Kommentarseite</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.url.name">
+                <source>chameleon_system_comment.url.name</source>
+                <target>Kommentar</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.url.jumper">
+                <source>chameleon_system_comment.url.jumper</source>
+                <target>Kommentare</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.text.rss_feed_comment_name">
+                <source>chameleon_system_comment.text.comment_number</source>
+                <target>Kommentar #%number%</target>
+            </trans-unit>
+
+
+        </body>
+    </file>
+</xliff>

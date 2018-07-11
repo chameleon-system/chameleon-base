@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="chameleon_system_extranet.cronjob.cleanup_extranet_login_history_cronjob" class="TCMSCronJob_CleanupExtranetLoginHistory" shared="false">
+            <tag name="chameleon_system.cronjob" />
+        </service>
+
+        <service id="chameleon_system_extranet.event_listener.convert_password_listener" class="ChameleonSystem\ExtranetBundle\EventListener\RehashPasswordListener">
+            <argument type="service" id="chameleon_system_core.util.input_filter"/>
+            <argument type="service" id="chameleon_system_core.security.password.password_hash_generator"/>
+            <tag name="kernel.event_listener" event="chameleon_system_extranet.user_login_success" method="rehashPassword" />
+        </service>
+
+        <service id="chameleon_system_extranet.event_listener.refresh_authenticity_token_listener" class="ChameleonSystem\ExtranetBundle\EventListener\RefreshAuthenticityTokenListener">
+            <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager"/>
+            <tag name="kernel.event_listener" event="chameleon_system_extranet.user_login_success" method="refreshAuthenticityToken" />
+        </service>
+
+        <service id="chameleon_system_extranet.extranet_user_provider" class="ChameleonSystem\ExtranetBundle\Service\ExtranetUserProvider">
+            <argument type="service" id="request_stack" />
+        </service>
+
+        <service id="chameleon_system_extranet.extranet_config" class="ChameleonSystem\ExtranetBundle\Service\ExtranetConfiguration">
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+        </service>
+
+        <service id="chameleon_system_extranet.util.extranet_authentication" class="ChameleonSystem\ExtranetBundle\Util\ExtranetAuthenticationUtil">
+            <argument type="service" id="request_stack" />
+        </service>
+    </services>
+
+</container>

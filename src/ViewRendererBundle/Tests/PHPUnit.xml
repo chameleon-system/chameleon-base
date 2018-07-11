@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="Bootstrap.php"
+         backupGlobals="false"
+         verbose="true">
+    <testsuites>
+        <testsuite name="viewrendererTests">
+            <directory suffix="Test.php">DataMappingServiceTests</directory>
+            <directory suffix="Test.php">ViewRendererTests</directory>
+            <directory suffix="Test.php">VisitorTests</directory>
+            <directory suffix="Test.php">MapperCacheManagerTests</directory>
+            <directory suffix="Test.php">ViewMapperConfigTests</directory>
+            <directory suffix="Test.php">TwigLoaderTests</directory>
+        </testsuite>
+    </testsuites>
+
+    <php>
+        <const name="TESTSUITE" value="true"/>
+    </php>
+
+</phpunit>

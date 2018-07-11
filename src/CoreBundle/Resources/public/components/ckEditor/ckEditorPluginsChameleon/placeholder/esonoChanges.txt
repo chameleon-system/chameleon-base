@@ -1,0 +1,4 @@
+This is the original placeholder plugin with some changes for Chameleon.
+
+We add config variables for the placeholder tag, to configure custom tags.
+For Chameleon we need special placeholder tags like [{}] not [[]] like in the original plugin.

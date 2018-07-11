@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="messages.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_cms_text_block.error.not_found">
+                <source>chameleon_system_cms_text_block.error.not_found</source>
+                <target>Ein Textblock mit dem Systemnamen %name% existiert nicht.</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

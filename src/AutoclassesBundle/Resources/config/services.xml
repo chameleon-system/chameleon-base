@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="chameleon_system_autoclasses.cache_warmer.class">ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer</parameter>
+        <parameter key="chameleon_system_autoclasses.cache_warmer.autoclasses_dir">%kernel.root_dir%/cache/autoclasses/</parameter>
+        <parameter key="chameleon_system_autoclasses.request_listener.class">ChameleonSystem\AutoclassesBundle\Listener\RequestListener</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="chameleon_system_autoclasses.auto_class_manager" class="ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManager" public="false">
+            <argument type="service" id="database_connection" />
+            <argument type="service" id="chameleon_system_core.filemanager" />
+        </service>
+
+        <service id="chameleon_system_autoclasses.autoclasses_db_adapter" class="ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapter" public="false">
+            <call method="setConnection">
+                <argument type="service" id="database_connection" />
+            </call>
+        </service>
+
+        <service id="chameleon_system_autoclasses.autoclasses_map_generator" class="ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGenerator" public="false">
+        </service>
+
+        <service id="chameleon_system_autoclasses.cache_warmer" class="%chameleon_system_autoclasses.cache_warmer.class%">
+            <argument type="service" id="chameleon_system_autoclasses.auto_class_manager" />
+            <argument type="service" id="chameleon_system_autoclasses.autoclasses_db_adapter" />
+            <argument type="service" id="chameleon_system_autoclasses.autoclasses_map_generator" />
+            <argument type="service" id="chameleon_system_core.filemanager" />
+            <argument>%chameleon_system_autoclasses.cache_warmer.autoclasses_dir%</argument>
+        </service>
+
+        <service id="chameleon_system_autoclasses.data_access.autoclasses" class="ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccess">
+            <argument type="service" id="database_connection" />
+        </service>
+
+        <service id="chameleon_system_autoclasses.data_access.autoclasses_request_cache" class="ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesRequestCacheDataAccess" decorates="chameleon_system_autoclasses.data_access.autoclasses">
+            <argument type="service" id="chameleon_system_autoclasses.data_access.autoclasses_request_cache.inner" />
+        </service>
+
+        <service id="chameleon_system_autoclasses.request_listener" class="%chameleon_system_autoclasses.request_listener.class%">
+            <argument>%chameleon_system_autoclasses.cache_warmer.autoclasses_dir%</argument>
+            <argument type="service" id="chameleon_system_autoclasses.cache_warmer" />
+            <argument type="service" id="chameleon_system_core.request_info_service" />
+            <tag name="kernel.event_listener" event="kernel.request" method="checkAutoclasses" priority="253" />
+        </service>
+
+        <service id="chameleon_system_autoclasses.command.generate_autoclasses" class="ChameleonSystem\AutoclassesBundle\Command\GenerateAutoclassesCommand">
+            <argument type="service" id="chameleon_system_autoclasses.cache_warmer" />
+            <tag name="console.command" />
+        </service>
+
+    </services>
+
+</container>

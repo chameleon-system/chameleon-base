@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="messages.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_extranet.action.next_step">
+                <source>chameleon_system_extranet.action.next_step</source>
+                <target>next step</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_extranet.form.mail">
+                <source>chameleon_system_extranet.form.mail</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_extranet.form.date_of_birth">
+                <source>chameleon_system_extranet.form.date_of_birth</source>
+                <target>Date of birth (DD.MM.YYYY)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_extranet.form.password">
+                <source>chameleon_system_extranet.form.password</source>
+                <target>Password</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_extranet.form.validate_password">
+                <source>chameleon_system_extranet.form.validate_password</source>
+                <target>Repeat password</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_extranet.send_password.email_required">
+                <source>chameleon_system_extranet.send_password.email_required</source>
+                <target>Please enter an email address.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_extranet.send_password.email_invalid">
+                <source>chameleon_system_extranet.send_password.email_invalid</source>
+                <target>Please enter a valid email address.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_extranet.send_password.general_error">
+                <source>chameleon_system_extranet.send_password.general_error</source>
+                <target>An error occurred while sending the password recovery email. Please try again.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

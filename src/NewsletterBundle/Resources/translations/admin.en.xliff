@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="admin.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_newsletter.field_campaign_stats.no_queue">
+                <source>chameleon_system_newsletter.field_campaign_stats.no_queue</source>
+                <target>No newsletter recipient address queue created, yet.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.field_campaign_stats.subscriber_count">
+                <source>chameleon_system_newsletter.field_campaign_stats.subscriber_count</source>
+                <target>Recipients count</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.field_campaign_stats.queue_processed">
+                <source>chameleon_system_newsletter.field_campaign_stats.queue_processed</source>
+                <target>Status: Newsletter mailing completed</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.field_campaign_stats.queue_not_started">
+                <source>chameleon_system_newsletter.field_campaign_stats.queue_not_started</source>
+                <target>Status: Newsletter mailing pending start</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.field_campaign_stats.queue_processing">
+                <source>chameleon_system_newsletter.field_campaign_stats.queue_processing</source>
+                <target>Status: Newsletter mailing in progress</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.field_campaign_stats.already_sent">
+                <source>chameleon_system_newsletter.field_campaign_stats.already_sent</source>
+                <target>Newsletter already sent</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.field_campaign_stats.still_to_process">
+                <source>chameleon_system_newsletter.field_campaign_stats.still_to_process</source>
+                <target>Newsletter mailings left to process: %count%</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_newsletter.action.import_blacklist">
+                <source>chameleon_system_newsletter.action.import_blacklist</source>
+                <target>Import blacklist</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.action.import_subscribers">
+                <source>chameleon_system_newsletter.action.import_subscribers</source>
+                <target>Import subscribers</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_newsletter.text.queue_ready">
+                <source>chameleon_system_newsletter.text.queue_ready</source>
+                <target><![CDATA[Newsletter has been prepared for sending.<br/>
+%count% subscribers added to sending queue.]]></target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.action.clear_queue">
+                <source>chameleon_system_newsletter.action.clear_queue</source>
+                <target>Clear sending queue</target>
+            </trans-unit>
+
+
+        </body>
+    </file>
+</xliff>

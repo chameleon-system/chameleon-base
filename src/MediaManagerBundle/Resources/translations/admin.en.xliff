@@ -1,0 +1,281 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="admin.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_media_manager.backend_module.title">
+                <source>chameleon_system_media_manager.backend_module.title</source>
+                <target>Media management</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.upload">
+                <source>chameleon_system_media_manager.list.upload</source>
+                <target>Add files</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.delete_selected">
+                <source>chameleon_system_media_manager.list.delete_selected</source>
+                <target>Delete selected</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.select_all">
+                <source>chameleon_system_media_manager.list.select_all</source>
+                <target>Select all</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.search_in_tree_node_placeholder">
+                <source>chameleon_system_media_manager.list.search_in_tree_node_placeholder</source>
+                <target>Search in %treeNodeName%...</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.search_in_all_media">
+                <source>chameleon_system_media_manager.list.search_in_all_media</source>
+                <target>Search in media...</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.action_confirm_delete">
+                <source>chameleon_system_media_manager.delete.action_confirm_delete</source>
+                <target>Delete items permanently</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.action_cancel_delete">
+                <source>chameleon_system_media_manager.delete.action_cancel_delete</source>
+                <target>Cancel</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.action_revoke_delete">
+                <source>chameleon_system_media_manager.delete.action_revoke_delete</source>
+                <target>Revoke deletion of this image</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.table_header_revoke_delete">
+                <source>chameleon_system_media_manager.delete.table_header_revoke_delete</source>
+                <target>Revoke deletion?</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.table_no_usages">
+                <source>chameleon_system_media_manager.delete.table_no_usages</source>
+                <target>No usages found, save to delete.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.table_header_usages">
+                <source>chameleon_system_media_manager.delete.table_header_usages</source>
+                <target>Usages</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.table_header_info">
+                <source>chameleon_system_media_manager.delete.table_header_info</source>
+                <target>Name (ID)</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.table_header_image">
+                <source>chameleon_system_media_manager.delete.table_header_image</source>
+                <target>Image</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.the_following_items_will_be_permanently_deleted">
+                <source>chameleon_system_media_manager.delete.the_following_items_will_be_permanently_deleted</source>
+                <target>These items will be deleted permanently:</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.are_you_sure">
+                <source>chameleon_system_media_manager.delete.are_you_sure</source>
+                <target>Are you sure?</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.usage_table_header_table">
+                <source>chameleon_system_media_manager.delete.usage_table_header_table</source>
+                <target>Table</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.usage_table_header_id">
+                <source>chameleon_system_media_manager.delete.usage_table_header_id</source>
+                <target>ID</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.usage_table_header_record_name">
+                <source>chameleon_system_media_manager.delete.usage_table_header_record_name</source>
+                <target>Record name</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.usage_table_header_field">
+                <source>chameleon_system_media_manager.delete.usage_table_header_field</source>
+                <target>Field</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.paging.page_size_show_all">
+                <source>chameleon_system_media_manager.paging.page_size_show_all</source>
+                <target>Show all</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.paging.per_page">
+                <source>chameleon_system_media_manager.paging.per_page</source>
+                <target>per page</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.paging.paging_info">
+                <source>chameleon_system_media_manager.paging.paging_info</source>
+                <target>Page %pageNumber% of %numberOfPages% (%numberOfItems% records total)</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.table_header_image">
+                <source>chameleon_system_media_manager.list.table_header_image</source>
+                <target>Image</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.table_header_name">
+                <source>chameleon_system_media_manager.list.table_header_name</source>
+                <target>Name</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.table_header_tags">
+                <source>chameleon_system_media_manager.list.table_header_tags</source>
+                <target>Tags</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.table_header_info">
+                <source>chameleon_system_media_manager.list.table_header_info</source>
+                <target>Info</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.table_header_actions">
+                <source>chameleon_system_media_manager.list.table_header_actions</source>
+                <target>Actions</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.show_images_from_subtree">
+                <source>chameleon_system_media_manager.list.show_images_from_subtree</source>
+                <target>Show images from sub categories</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.no_items_message">
+                <source>chameleon_system_media_manager.list.no_items_message</source>
+                <target>No items in this folder.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.tags_autocomplete_group">
+                <source>chameleon_system_media_manager.list.tags_autocomplete_group</source>
+                <target>Tags</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.tags_autocomplete_error">
+                <source>chameleon_system_media_manager.list.tags_autocomplete_error</source>
+                <target>Error getting the results.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list.delete_with_usage_search">
+                <source>chameleon_system_media_manager.list.delete_with_usage_search</source>
+                <target>Enable secure delete</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.usage_search_disabled">
+                <source>chameleon_system_media_manager.delete.usage_search_disabled</source>
+                <target>Secure delete is disabled, usages are not shown.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.general_error_message">
+                <source>chameleon_system_media_manager.general_error_message</source>
+                <target>An error occurred.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.messages.moved_successfully">
+                <source>chameleon_system_media_manager.messages.moved_successfully</source>
+                <target>Moved successfully.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.details.save_successful">
+                <source>chameleon_system_media_manager.details.save_successful</source>
+                <target>Saved.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.sort.uploaded-desc">
+                <source>chameleon_system_media_manager.sort.uploaded-desc</source>
+                <target>Date created - newest first</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.sort.uploaded-asc">
+                <source>chameleon_system_media_manager.sort.uploaded-asc</source>
+                <target>Date created - oldest first</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.sort.changed-desc">
+                <source>chameleon_system_media_manager.sort.changed-desc</source>
+                <target>Date updated - newest first</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.sort.changed-asc">
+                <source>chameleon_system_media_manager.sort.changed-asc</source>
+                <target>Date updated - oldest first</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.sort.alphabet-desc">
+                <source>chameleon_system_media_manager.sort.alphabet-desc</source>
+                <target>Alphabetically descending</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.sort.alphabet-asc">
+                <source>chameleon_system_media_manager.sort.alphabet-asc</source>
+                <target>Alphabetically ascending</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.sort.choose">
+                <source>chameleon_system_media_manager.sort.choose</source>
+                <target>Sort...</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.changed_date">
+                <source>chameleon_system_media_manager.changed_date</source>
+                <target>Changed</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.tree.untitled_tree_item_placeholder">
+                <source>chameleon_system_media_manager.tree.untitled_tree_item_placeholder</source>
+                <target>Untitled media category</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list_actions.delete">
+                <source>chameleon_system_media_manager.list_actions.delete</source>
+                <target>Delete</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list_actions.edit">
+                <source>chameleon_system_media_manager.list_actions.edit</source>
+                <target>Show/edit</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.list_actions.select">
+                <source>chameleon_system_media_manager.list_actions.select</source>
+                <target>Choose</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.permission_denied">
+                <source>chameleon_system_media_manager.permission_denied</source>
+                <target>Permission denied.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.usages.no_usages_yet">
+                <source>chameleon_system_media_manager.usages.no_usages_yet</source>
+                <target>No usages yet.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.details.replace_button">
+                <source>chameleon_system_media_manager.details.replace_button</source>
+                <target>Replace</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.details.download_button">
+                <source>chameleon_system_media_manager.details.download_button</source>
+                <target>Download</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.usage_finder.error_finding_usages">
+                <source>chameleon_system_media_manager.usage_finder.error_finding_usages</source>
+                <target>Attention: An error occurred when trying to find usages. Not all usages are shown. Presumably, not all usages are cleaned up on delete.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.media_items.not_found_error_message">
+                <source>chameleon_system_media_manager.media_items.not_found_error_message</source>
+                <target>Couldn't fetch media.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

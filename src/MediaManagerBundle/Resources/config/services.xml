@@ -1,0 +1,191 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="chameleon_system_media_manager.media_tree.data_access"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\DataAccess\MediaTreeDataAccess">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.tools"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.media_item.data_access"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\DataAccess\MediaItemDataAccess">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.tools"/>
+            <argument type="service" id="chameleon_system_core.flash_messages"/>
+            <argument type="service" id="chameleon_system_media_manager.sort.sort_column_collection"/>
+            <argument type="service" id="chameleon_system_core.util.field_translation"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.usages.chain_finder"
+                 class="ChameleonSystem\MediaManager\MediaItemChainUsageFinder"/>
+
+        <service id="chameleon_system_media_manager.usages.delete_service_chain"
+                 class="ChameleonSystem\MediaManager\MediaItemUsageChainDeleteService"/>
+
+        <service id="chameleon_system_media_manager.usages.abstract_image_fields_usage_finder"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\UsageFinder\AbstractImageFieldsUsageFinder"
+                 abstract="true"
+        >
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.util.url"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.usages.core_image_fields_finder"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\UsageFinder\CoreImageFieldsUsageFinder"
+                 parent="chameleon_system_media_manager.usages.abstract_image_fields_usage_finder"
+        >
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.util.field_translation"/>
+            <tag name="chameleon_system_media_manager.usage_finder"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.usages.core_fields_usage_delete_service"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\UsageDeleteService\CoreFieldsUsageDeleteService">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.util.field_translation"/>
+            <tag name="chameleon_system_media_manager.usage_delete_service"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.sort.sort_column_collection"
+                 class="ChameleonSystem\MediaManager\SortColumnCollection"/>
+
+        <service id="chameleon_system_media_manager.sort.sort_column_upload_date_desc"
+                 class="ChameleonSystem\MediaManager\SortColumn">
+            <argument type="string">cmsident</argument>
+            <argument type="string">uploaded-desc</argument>
+            <argument type="constant">ChameleonSystem\MediaManager\Interfaces\SortColumnInterface::DIRECTION_DESCENDING</argument>
+            <tag name="chameleon_system_media_manager.sort_column"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.sort.sort_column_upload_date_asc"
+                 class="ChameleonSystem\MediaManager\SortColumn">
+            <argument type="string">cmsident</argument>
+            <argument type="string">uploaded-asc</argument>
+            <argument type="constant">ChameleonSystem\MediaManager\Interfaces\SortColumnInterface::DIRECTION_ASCENDING</argument>
+            <tag name="chameleon_system_media_manager.sort_column"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.sort.sort_column_changed_date_desc"
+                 class="ChameleonSystem\MediaManager\SortColumn">
+            <argument type="string">date_changed</argument>
+            <argument type="string">changed-desc</argument>
+            <argument type="constant">ChameleonSystem\MediaManager\Interfaces\SortColumnInterface::DIRECTION_DESCENDING</argument>
+            <tag name="chameleon_system_media_manager.sort_column"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.sort.sort_column_changed_date_asc"
+                 class="ChameleonSystem\MediaManager\SortColumn">
+            <argument type="string">date_changed</argument>
+            <argument type="string">changed-asc</argument>
+            <argument type="constant">ChameleonSystem\MediaManager\Interfaces\SortColumnInterface::DIRECTION_ASCENDING</argument>
+            <tag name="chameleon_system_media_manager.sort_column"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.sort.sort_column_alphabet_date_desc"
+                 class="ChameleonSystem\MediaManager\SortColumn">
+            <argument type="string">description</argument>
+            <argument type="string">alphabet-desc</argument>
+            <argument type="constant">ChameleonSystem\MediaManager\Interfaces\SortColumnInterface::DIRECTION_DESCENDING</argument>
+            <tag name="chameleon_system_media_manager.sort_column"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.sort.sort_column_alphabet_date_asc"
+                 class="ChameleonSystem\MediaManager\SortColumn">
+            <argument type="string">description</argument>
+            <argument type="string">alphabet-asc</argument>
+            <argument type="constant">ChameleonSystem\MediaManager\Interfaces\SortColumnInterface::DIRECTION_ASCENDING</argument>
+            <tag name="chameleon_system_media_manager.sort_column"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.backend_module.media_manager" shared="false"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\MediaManagerBackendModule">
+            <argument type="service" id="chameleon_system_media_manager.media_tree.data_access"/>
+            <argument type="service" id="chameleon_system_media_manager.media_item.data_access"/>
+            <argument type="service" id="chameleon_system_core.util.url"/>
+            <argument type="service" id="chameleon_system_core.util.input_filter"/>
+            <argument type="service" id="chameleon_system_media_manager.list_state_service"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_media_manager.list_request_service"/>
+            <argument type="service" id="translator"/>
+            <argument type="service" id="chameleon_system_media_manager.extension_collection"/>
+            <tag name="chameleon_system.module"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.list_state_service"
+                 class="ChameleonSystem\MediaManagerBundle\Service\MediaManagerListStateFromRequestService">
+            <argument type="service" id="chameleon_system_core.util.input_filter"/>
+            <argument type="service" id="request_stack"/>
+            <argument>204</argument>
+        </service>
+
+        <service id="chameleon_system_media_manager.list_request_service"
+                 class="ChameleonSystem\MediaManagerBundle\Service\MediaManagerListRequestFactory">
+            <argument type="service" id="chameleon_system_media_manager.media_tree.data_access"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.backend_module_mapper.list_result"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerListResultsMapper">
+            <argument type="service" id="chameleon_system_media_manager.list_request_service"/>
+            <argument type="service" id="chameleon_system_media_manager.media_item.data_access"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.backend_module_mapper.list_sort"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerListSortMapper">
+            <argument type="service" id="chameleon_system_media_manager.sort.sort_column_collection"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.backend_module_mapper.page_size"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerPageSizeMapper">
+            <argument type="collection"/>
+            <argument type="service" id="translator"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.backend_module_mapper.pick_images"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerPickImagesMapper"/>
+
+        <service id="chameleon_system_media_manager.backend_module_mapper.media_item_usages"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerMediaItemUsagesMapper">
+            <argument type="service" id="chameleon_system_media_manager.usages.chain_finder"/>
+            <argument type="service" id="chameleon_system_core.translator"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.backend_module_mapper.media_item_confirm_delete"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerConfirmDeleteMapper">
+            <argument type="service" id="chameleon_system_media_manager.usages.chain_finder"/>
+            <argument type="service" id="chameleon_system_media_manager.media_item.data_access"/>
+            <argument type="service" id="chameleon_system_core.translator"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.backend_module_mapper.search_auto_complete"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerSearchAutoCompleteMapper">
+            <argument type="service" id="chameleon_system_media_manager.media_item.data_access"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.backend_module.media_manager_legacy_list" shared="false"
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\MediaManagerShowAsTableManagerListModule">
+            <tag name="chameleon_system.module"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.event_listener.delete_media_connections_listener"
+                 class="ChameleonSystem\MediaManagerBundle\EventListener\DeleteMediaConnectionsListener">
+            <argument>true</argument>
+            <argument type="service" id="chameleon_system_media_manager.usages.chain_finder"/>
+            <argument type="service" id="chameleon_system_media_manager.media_item.data_access"/>
+            <argument type="service" id="chameleon_system_media_manager.usages.delete_service_chain"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="logger"/>
+            <tag name="monolog.logger" channel="default"/>
+            <tag name="kernel.event_listener" event="chameleon_system_core.before_delete_media" method="onDeleteMedia"/>
+        </service>
+
+        <service id="chameleon_system_media_manager.extension_collection"
+                 class="ChameleonSystem\MediaManager\MediaManagerExtensionCollection"/>
+
+    </services>
+
+</container>

@@ -1,0 +1,12 @@
+{# mediaTreeNode \ChameleonSystem\MediaManager\DataModel\MediaTreeNodeDataModel #}
+<li{% if mediaTreeNode.iconPath %} data-jstree='{"icon": "{{ mediaTreeNode.iconPath }}"}'{% endif %}
+        id="mediaTreeNode{{ mediaTreeNode.id }}">
+    <a href="#">{{ mediaTreeNode.name | default('chameleon_system_media_manager.tree.untitled_tree_item_placeholder' | trans) }}</a>
+    {% if mediaTreeNode.children | length > 0 %}
+        <ul>
+            {% for mediaTreeNodeChild in mediaTreeNode.children %}
+                {% include 'mediaManager/tree/mediaTreeNode.html.twig' with {'mediaTreeNode': mediaTreeNodeChild} %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>

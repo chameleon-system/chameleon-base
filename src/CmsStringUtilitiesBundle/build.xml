@@ -1,0 +1,18 @@
+<project name="String Tests" default="runtests">
+
+  <target name="runtests" depends="tests.check,dumpautoload" if="tests.exist">
+    <exec executable="phpunit" failonerror="true">
+      <arg line="--bootstrap vendor/autoload.php Tests"/>
+    </exec>
+  </target>
+  <target name="dumpautoload" depends="tests.check" if="tests.exist">
+    <exec executable="composer">
+      <arg line="dump-autoload"/>
+    </exec>
+  </target>
+  <target name="tests.check">
+    <condition property="tests.exist">
+      <available file="Tests" type="dir" />
+    </condition>
+  </target>
+</project>

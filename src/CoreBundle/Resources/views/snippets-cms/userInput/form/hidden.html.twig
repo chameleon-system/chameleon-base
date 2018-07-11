@@ -1,0 +1,18 @@
+{#
+    description: an input form for bootstrap
+    vars
+        sLabelText
+        sHelpText
+        sHelpTextHTML
+        sError - error text if one occured. my be html
+        sFieldId - id of the field. required to associate the lable with the input field
+        sName - form field name
+        sValue - current value of the field
+        sPlaceholder - text hint - must be plain text, will be auto translated
+        sInputClass - Optional- To set width of input with span
+        bRequired - optional - to mark a field as required
+#}
+
+        {% block field %}
+            <input {% if sInputClass is defined %}class="{{sInputClass}}"{% endif %} type="hidden" {% if sFieldId is defined %}id="{{sFieldId}}"{% endif %} name="{{sName}}" value="{{sValue}}">
+        {% endblock %}

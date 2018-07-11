@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="admin.en.xliff">
+        <body>
+
+            <trans-unit id="chameleon_system_core.cms_module_login.error_unsupported_browser">
+                <source>chameleon_system_core.cms_module_login.error_unsupported_browser</source>
+                <target>Your web browser is unfortunately not supported.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_login.error_user_already_logged_in">
+                <source>chameleon_system_core.cms_module_login.error_user_already_logged_in</source>
+                <target>You cannot log in with this user account because it is already logged in.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_login.error_invalid_login_data">
+                <source>chameleon_system_core.cms_module_login.error_invalid_login_data</source>
+                <target>User name or password is wrong. Please check your login data.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_login.error_reset_login_data">
+                <source>chameleon_system_core.cms_module_login.error_reset_login_data</source>
+                <target>Your password was reset for security reasons. Please contact the system administrator to receive a new password.</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,28 @@
+{#
+    description: an input form for bootstrap
+    vars
+        sLabelText
+        sHelpText
+        sHelpTextHTML
+        sError - error text if one occured. my be html
+        sFieldId - id of the field. required to associate the lable with the input field
+        sName - form field name
+        sValue - current value of the field
+        sPlaceholder - text hint - must be plain text, will be auto translated
+        sInputClass - Optional- To set width of input with span
+        bRequired - optional - to mark a field as required
+#}
+
+    {% if sLabelText is defined %}<label class="" {% if sFieldId is defined %}for="{{sFieldId}}"{% endif %}>{{sLabelText}}{% if bRequired == true%}<span class="required">*</span> {% endif %}</label>{% endif %}
+
+        {% block field %}
+            <input {% if sInputClass is defined %}class="{{sInputClass}}"{% endif %} type="text" {% if sFieldId is defined %}id="{{sFieldId}}"{% endif %} name="{{sName}}" value="{{sValue}}" {% if sPlaceholder is defined %}placeholder="{{sPlaceholder}}"{% endif %} {% if bRequired == true%} required {%endif%}>
+        {% endblock %}
+        {%if sError or sHelpText or sHelpTextHTML%}
+            <div class="help-inline">
+                {% if sHelpText %}<div class="helptext">{{sHelpText}}</div>{% endif %}
+                {% if sHelpTextHTML %}<div class="helptext">{{sHelpTextHTML|raw}}</div>{% endif %}
+                {% if sError %}<div class="errortext">{{sError|raw}}</div>{% endif %}
+            </div>
+        {% endif %}
+

@@ -1,0 +1,13 @@
+{#
+  description: renders list information like entries in list
+  parameters:
+    -sStartItem
+    -sEndItem
+    -sMaxItems
+
+#}
+<div class="snippetListInformation">
+    <span class="sStart">{{sStartItem}}</span>-<span class="sEnd">{{sEndItem}}</span>
+    {{"chameleon_system_core.word.of"|trans}}
+    <span class="sMax">{{sMaxItems}}</span>
+</div>

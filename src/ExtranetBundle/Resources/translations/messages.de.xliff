@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="messages.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_extranet.action.next_step">
+                <source>chameleon_system_extranet.action.next_step</source>
+                <target>weiter</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_extranet.form.mail">
+                <source>chameleon_system_extranet.form.mail</source>
+                <target>E-Mail</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_extranet.form.date_of_birth">
+                <source>chameleon_system_extranet.form.date_of_birth</source>
+                <target>Geburtsdatum (TT.MM.JJJJ)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_extranet.form.password">
+                <source>chameleon_system_extranet.form.password</source>
+                <target>Passwort</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_extranet.form.validate_password">
+                <source>chameleon_system_extranet.form.validate_password</source>
+                <target>Passwort wiederholen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_extranet.send_password.email_required">
+                <source>chameleon_system_extranet.send_password.email_required</source>
+                <target>Bitte geben Sie eine E-Mail-Adresse ein.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_extranet.send_password.email_invalid">
+                <source>chameleon_system_extranet.send_password.email_invalid</source>
+                <target>Bitte geben Sie eine gültige E-Mail-Adresse ein.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_extranet.send_password.general_error">
+                <source>chameleon_system_extranet.send_password.general_error</source>
+                <target>Beim Versand der E-Mail zur Passwort-Wiederherstellung ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

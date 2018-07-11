@@ -1,0 +1,15 @@
+{% for module in modules %}
+    {% if module.views | length > 0 %}
+
+        <li style="height:auto">
+            <a href="javascript:void(0);" class="hasChildren" onclick="openMenuLevel(this);return false;"><span class="menueicon" style="background-image: url({{ module.icon }});">{{ module.name }}</span></a>
+            <ul>
+                {% for view in  module.views %}
+                    <li><a href="javascript:void(0);" onclick="CreateModuleInstance('[{replaceSpotName}]','{{ module.id|e('js') }}', '{{ view.systemName|e('js') }}');return false;"><span class="menueicon" style="background-image: url({{ iconPath }}/images/icons/layout_content.png);">{{ view.displayName }}</span></a></li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% else %}
+        <li style="height:auto"><a href="javascript:void(0);"><span class="menueicon" style="background-image: url({{ module.icon }});">{{ module.name }}</span></a></li>
+    {% endif %}
+{% endfor %}

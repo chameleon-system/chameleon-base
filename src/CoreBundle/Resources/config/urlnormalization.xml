@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="chameleon_system_core.util.url_normalization" class="ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil">
+        </service>
+
+        <service id="chameleon_system_core.util.url_normalization.basic_start" class="ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizerBasicStart" public="false">
+            <tag name="chameleon_system.url_normalizer" priority="250" />
+        </service>
+
+        <service id="chameleon_system_core.util.url_normalization.german" class="ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizerGerman" public="false">
+            <tag name="chameleon_system.url_normalizer" priority="240" />
+        </service>
+
+        <service id="chameleon_system_core.util.url_normalization.slavic" class="ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizerSlavic" public="false">
+            <tag name="chameleon_system.url_normalizer" priority="230" />
+        </service>
+
+        <service id="chameleon_system_core.util.url_normalization.romanian" class="ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizerRomanian" public="false">
+            <tag name="chameleon_system.url_normalizer" priority="220" />
+        </service>
+
+        <service id="chameleon_system_core.util.url_normalization.special_chars" class="ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizerSpecialChars" public="false">
+            <tag name="chameleon_system.url_normalizer" priority="210" />
+        </service>
+
+        <service id="chameleon_system_core.util.url_normalization.non_latin" class="ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizerNonLatin" public="false">
+            <tag name="chameleon_system.url_normalizer" priority="-200" />
+        </service>
+
+        <service id="chameleon_system_core.util.url_normalization.basic_end" class="ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizerBasicEnd" public="false">
+            <argument type="constant">CHAMELEON_SEO_URL_REWRITE_TO_LOWERCASE</argument>
+            <tag name="chameleon_system.url_normalizer" priority="-250" />
+        </service>
+
+    </services>
+</container>

@@ -1,0 +1,25 @@
+{# listResult \ChameleonSystem\MediaManager\MediaManagerListResult #}
+{# listState \ChameleonSystem\MediaManager\MediaManagerListState #}
+{# accessRightsMedia \ChameleonSystem\MediaManager\AccessRightsModel #}
+{# pickImageMode bool #}
+{# pickImageCallback string #}
+{# pickImageWithCrop bool #}
+{# mediaTreeNode \ChameleonSystem\MediaManager\DataModel\MediaTreeNodeDataModel #}
+
+{% if mediaTreeNode %}
+    {% if listState.listView  == 'tableList' %}
+        {% include 'mediaManager/list/tableList.html.twig' %}
+    {% else %}
+        {% set view = 'mediaManager/list/listGrid.html.twig' %}
+        {% if listState.listView == 'list' %}
+            {% set view = 'mediaManager/list/listList.html.twig' %}
+        {% endif %}
+        {% if listState.listView == 'gridLarge' %}
+            {% set view = 'mediaManager/list/listGridLarge.html.twig' %}
+        {% endif %}
+
+        {% include 'mediaManager/list/listHeader.html.twig' with({'mediaTreeNode': mediaTreeNode, 'mediaTreeNodeEditUrl': mediaTreeNodeEditUrl, 'listState': listState, 'sortColumns': sortColumns, 'accessRightsMedia': accessRightsMedia, 'accessRightsMediaTree': accessRightsMediaTree}) %}
+        {% include view %}
+        {% include 'mediaManager/list/paging.html.twig' with({'listState': listState, 'numberOfPages': listResult.numberOfPages, 'numberOfItems': listResult.numberOfItems, 'pageSizes': pageSizes}) %}
+    {% endif %}
+{% endif %}

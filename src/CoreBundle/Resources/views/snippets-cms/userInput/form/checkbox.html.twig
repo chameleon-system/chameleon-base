@@ -1,0 +1,26 @@
+{#
+    description: an input form for bootstrap
+    vars
+        sLabelText
+        sHelpText
+        sError - error text if one occured. my be html
+        sFieldId - id of the field. required to associate the lable with the input field
+        sName - form field name
+        sValue - the checked value
+        sPlaceholder - text hint - must be plain text, will be auto translated
+        sInputClass - Optional- To set width of input with span
+        bIsChecked
+        sOnClick
+#}
+<label class="checkbox{% if sInputClass is defined %} {{sInputClass}}{% endif %}" {% if sFieldId is defined %}for="{{sFieldId}}"{% endif %}>
+    {% block field %}
+        <input type="checkbox" {% if bRequired == true%} required {%endif%} {%if sOnClick %}onclick="{{sOnClick | raw}}"{%endif%} {% if bIsChecked %}checked="checked"{% endif %} {% if sFieldId is defined %}id="{{sFieldId}}"{% endif %} name="{{sName}}" value="{{sValue}}"> {% if sLabelText is defined %}{{sLabelText | trans}}{% endif %}
+    {% endblock %}
+</label>
+{% if sError or sHelpText %}
+    <div class="help-inline">
+        {% if sError %}<div>{{sError|raw}}</div>{% endif %}
+        {% if sHelpText %}<div>{{sHelpText|trans}}</div>{% endif %}
+    </div>
+{% endif %}
+

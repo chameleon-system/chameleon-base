@@ -1,0 +1,20 @@
+<div class="btn-group">
+    <button type="button" class="btn btn-sm {{ sButtonStyle }}{% if sItemKey %} item{{ sItemKey }}{% endif %} {{ sCSSClass }}"
+        {% if sOnClick -%}
+            onclick="{{ sOnClick|raw }}"
+    {%- endif -%}
+    >
+    {%- if sIconURL -%}
+        <span class="btn-icon" style="background-image: url({{ sIconURL }});">
+    {%- endif -%}
+        {{ sTitle }}</span></button>
+    <button type="button" class="btn btn-sm {{ sButtonStyle }} dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+        {% for aSubItem in aSubItems %}
+        <li><a class="dropdown-icon" style="background-image: url({{ aSubItem.sIconURL }});" href="javascript:{{ aSubItem.sOnClick }}">{{ aSubItem.sTitle }}</a></li>
+        {% endfor %}
+    </ul>
+</div>

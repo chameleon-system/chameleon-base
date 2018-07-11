@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="admin.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_cms_change_log.state.changed">
+                <source>chameleon_system_cms_change_log.state.changed</source>
+                <target>Geändert</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_change_log.state.new">
+                <source>chameleon_system_cms_change_log.state.new</source>
+                <target>Neu</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_change_log.state.removed">
+                <source>chameleon_system_cms_change_log.state.removed</source>
+                <target>Gelöscht</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_change_log.column.changed_field">
+                <source>chameleon_system_cms_change_log.column.changed_field</source>
+                <target>Geändertes Feld</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_change_log.column.old_value">
+                <source>chameleon_system_cms_change_log.column.old_value</source>
+                <target>Alter Wert</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_change_log.column.new_value">
+                <source>chameleon_system_cms_change_log.column.new_value</source>
+                <target>Neuer Wert</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_change_log.column.changed_table">
+                <source>chameleon_system_cms_change_log.column.changed_table</source>
+                <target>Geänderte Tabelle</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_change_log.column.changed_record">
+                <source>chameleon_system_cms_change_log.column.changed_record</source>
+                <target>Geänderter Datensatz</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_change_log.column.changed_on">
+                <source>chameleon_system_cms_change_log.column.changed_on</source>
+                <target>Änderungsdatum</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_change_log.column.changed_by">
+                <source>chameleon_system_cms_change_log.column.changed_by</source>
+                <target>Geändert durch</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_change_log.column.change_type">
+                <source>chameleon_system_cms_change_log.column.change_type</source>
+                <target>Art der Änderung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_change_log.action.show_changes">
+                <source>chameleon_system_cms_change_log.action.show_changes</source>
+                <target>Änderungen anzeigen</target>
+            </trans-unit>
+
+
+        </body>
+    </file>
+</xliff>

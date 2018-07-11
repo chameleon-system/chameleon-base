@@ -1,0 +1,14 @@
+.moduleType {
+  font-size: 10px;
+  font-family: Arial, helvetica, sans-serif;
+  color: white;
+  padding: 3px 3px 3px 23px;
+}
+
+.moduleInfo {
+  padding: 3px;
+  font-size: 10px;
+  font-family: Arial, helvetica, sans-serif;
+  background-color: #354C75;
+  color: white;
+}

@@ -1,0 +1,65 @@
+{# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
+{# accessRightsMedia \ChameleonSystem\MediaManager\AccessRightsModel #}
+<div class="snippetMediaManagerDetail cms-media-item" data-id="{{ mediaItem.id }}" data-name="{{ mediaItem.name }}">
+    <div class="details">
+        <div class="image">
+            <img src="{{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}" alt="" class="preview">
+            <a href="{{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}" target="_blank"
+               class="btn btn-default"><span
+                        class="glyphicon glyphicon-download"></span> {{ 'chameleon_system_media_manager.details.download_button' | trans }}
+            </a>
+            {% if accessRightsMedia.edit %}
+                <a href="#" target="_blank" class="btn btn-default replace-image"><span
+                            class="glyphicon glyphicon-refresh"></span> {{ 'chameleon_system_media_manager.details.replace_button' | trans }}
+                </a>
+            {% endif %}
+            {% if accessRightsMedia.delete and not pickImageMode %}
+                <a href="#"
+                   class="btn btn-danger delete-item">{{ 'chameleon_system_media_manager.list_actions.delete' | trans }}
+                    <span class="glyphicon glyphicon-trash"></span></a>
+            {% endif %}
+
+            {% for additionalButtonTemplate in additionalButtonTemplates %}
+                {% include additionalButtonTemplate %}
+            {% endfor %}
+
+            {% if pickImageMode %}
+                <a class="btn btn-default pick-image"><span
+                            class="glyphicon glyphicon-ok-circle"></span> {{ 'chameleon_system_media_manager.list_actions.select' | trans }}
+                </a>
+            {% endif %}
+
+            <div class="info">
+                {% if mediaItem.type|lower in ['jpg', 'png', 'gif'] %}<img
+                    src="/chameleon/blackbox/images/filetype_icons/16x16/{{ mediaItem.type|lower }}.png"
+                    alt="">{% endif %} {{ mediaItem.type }}<br>
+                <span class="glyphicon glyphicon-resize-full"></span> {{ mediaItem.width }} x {{ mediaItem.height }}
+                px<br>
+                <span class="glyphicon glyphicon-info-sign"></span> ID {{ mediaItem.id }}<br>
+                <span class="glyphicon glyphicon-new-window"></span> {{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}
+                {% if mediaItem.dateChanged %}<br><span
+                        class="glyphicon glyphicon-time"></span> {{ 'chameleon_system_media_manager.changed_date' | trans }} {{ mediaItem.dateChanged | date('d.m.Y H:i:s') }}{% endif %}
+            </div>
+        </div>
+
+        <div class="edit-form">
+            <iframe src="{{ tableEditorIframeUrl }}"></iframe>
+        </div>
+    </div>
+
+    <hr>
+    <h3 class="usage-headline">{{ 'chameleon_system_core.table_editor_media.media_usage' | trans }}</h3>
+    {% if usagesErrorMessage %}
+        <div class="alert alert-danger">{{ usagesErrorMessage }}</div>
+    {% endif %}
+    {% if usages | length > 0 %}
+        {% include 'mediaManager/usages/usageTable.html.twig' with {'usages': usages} %}
+    {% else %}
+        <p>{{ 'chameleon_system_media_manager.usages.no_usages_yet' | trans }}</p>
+    {% endif %}
+
+    {% for additionalDetailViewTemplate in additionalDetailViewTemplates %}
+        {% include(additionalDetailViewTemplate) %}
+    {% endfor %}
+
+</div>

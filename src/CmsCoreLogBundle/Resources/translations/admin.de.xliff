@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="admin.en.xliff">
+        <body>
+            <trans-unit id="pkg_cms_core_log.log_table.field_level">
+                <source>pkg_cms_core_log.log_table.field_level</source>
+                <target>Loglevel</target>
+            </trans-unit>
+            <trans-unit id="pkg_cms_core_log.log_table.select_level_all">
+                <source>pkg_cms_core_log.log_table.select_level_all</source>
+                <target>Alle</target>
+            </trans-unit>
+            <trans-unit id="pkg_cms_core_log.log_table.select_level_all_errors">
+                <source>pkg_cms_core_log.log_table.select_level_all_errors</source>
+                <target>Alle Fehler/Warnungen</target>
+            </trans-unit>
+            <trans-unit id="pkg_cms_core_log.log_table.select_level_only">
+                <source>pkg_cms_core_log.log_table.select_level_only</source>
+                <target>Nur</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

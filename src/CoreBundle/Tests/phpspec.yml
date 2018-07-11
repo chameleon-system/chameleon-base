@@ -1,0 +1,5 @@
+suites:
+  configuration_suite:
+    src_path: ../
+    namespace: ChameleonSystem\CoreBundle\Configuration
+    psr4_prefix: ChameleonSystem\CoreBundle

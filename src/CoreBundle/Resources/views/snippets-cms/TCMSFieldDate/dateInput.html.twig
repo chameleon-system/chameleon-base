@@ -1,0 +1,19 @@
+<div class="row dateInput">
+    <div class="col-xs-12 col-md-4 col-lg-2">
+        <div class="input-group">
+            <input type="text" class="form-control input-sm" id="{{ fieldName|e('html_attr') }}" name="{{ fieldName|e('html_attr') }}" value="{{ fieldValue|e('html_attr') }}" />
+            <span class="input-group-addon">
+                <img src="{{ fieldIconUrl|e('html_attr') }}" class="calenderWidgetTrigger">
+            </span>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+      $(document).ready(function() {
+          $('#{{ fieldName|e('js') }}').datepicker().mask('99.99.9999');
+
+          $('#{{ fieldName|e('js') }}').parent().find('.calenderWidgetTrigger').click(function() {
+              $('#{{ fieldName|e('js') }}').datepicker('show');
+          });
+      });
+</script>

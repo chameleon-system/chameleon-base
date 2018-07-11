@@ -1,0 +1,70 @@
+.THTMLTable a.active {
+  font-weight:bold;
+}
+
+.THTMLTable td, .THTMLTable th {
+  vertical-align:top;
+  text-align:left;
+}
+
+.THTMLTable th a {
+  background-repeat:no-repeat;
+  background-position:right;
+  padding-right:15px;
+  text-decoration:none;
+}
+
+
+.THTMLTable th a.orderbyASC {
+  background-image:url(/chameleon/blackbox/images/arrow_top_small.gif);
+}
+.THTMLTable th a.orderbyDESC {
+  background-image:url(/chameleon/blackbox/images/arrow_down_small.gif);
+}
+
+.THTMLTable tr.odd td {
+  background-color:#F5F5F5;
+}
+
+.THTMLTable .tablenavi ul {
+  list-style:none;
+  margin:0px 0px 0px 0px;
+  padding:0px 0px 0px 0px;
+}
+.THTMLTable .tablenavi ul li {
+  margin:0px 0px 0px 0px;
+  padding:0px 5px 0px 0px;
+  background-image:none;
+  float:left;
+}
+
+.THTMLTable .tablenavi a {
+  text-decoration: none;
+}
+
+.THTMLTable .tablenavi li.pages ul li.activepage a {
+  font-weight:bold;
+}
+
+.THTMLTable tr.filter .filterbox {
+  position:relative;
+}
+.THTMLTable tr.filter .filterbox {
+  position:relative;
+}
+
+.THTMLTable tr.filter .filterbox .filterPopUp {
+  display:none;
+  position:absolute;
+  z-index:100;
+  border:1px solid black;
+  padding:5px;
+  background-color:#F5F5F5;
+}
+
+.THTMLTable tr.actionrow td.actionArrowtop{
+  background:url(/chameleon/blackbox/images/icons/arrow_turn_down.png) transparent no-repeat 4px 4px;
+}
+.THTMLTable tr.actionrow td.actionArrowbottom {
+  background:url(/chameleon/blackbox/images/icons/arrow_turn_up.png) transparent no-repeat 4px 0px;
+}

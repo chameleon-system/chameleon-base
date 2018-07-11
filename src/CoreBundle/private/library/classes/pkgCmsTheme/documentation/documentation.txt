@@ -1,0 +1,7 @@
+pkgCmsTheme
+
+Themes werden über die Tabelle pkgCmsTheme verwaltet. Im Hauptmenü unter als "Website Darstellung / Themes". Dort kann man einen Namen und ein Bild vergeben. Die Snippet-Chain und portalspezifische less-Datei sind vom Portal ins Theme gewandert. Außerdem wurde das Konzept von eigenen Ordnern für bestimmte Themes (aus dem Blog) dorthin übernommen. Pro Portal kann ein Theme ausgewählt werden.
+
+Theme-Blöcke
+
+Um für Blöcke wie z.B. Header oder Footer die einzelnen Spots nicht immer für mehere layouts gleichzeit verwalten zu müssen, wurden Theme-Blöcke eingeführt. Für jeden Theme-Block kann man Spots definieren, exakt wie beim Layout auch. Für jeden Theme-Block wird ein System-name vergeben, im Layout kann man den Block mit $pluginManager->includePlugin('TPkgCmsCoreLayoutPlugin_ThemeBlockLayout', 'System-Name'); ausgeben. Dafür muss der Block beim layout verknüpft werden. Außerdem braucht der Block ein Block-Layout (gleiches Konzept wie bei Seitenlayouts), das die Module rendert die im Block definiert wurden. Ein Theme-Block kann mehrere Block-Layouts besitzen, die jeweils ein eigenes Layout-File und ein eigenes LESS-File haben können. Beim Block wird ein Standard-layout definiert, welches verwendet wird, außer das Layout dieses Blocks wurde beim Theme überschrieben. Sowohl Theme-Blöcke wie auch deren Layouts können mit Vorschaubildern bestückt werden. Die Theme-Blöcke befindne sich im Hauptmenü.

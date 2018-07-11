@@ -1,0 +1,14 @@
+{#
+    description:
+    parameters:
+        ** sStepName
+        ** sHeadLine
+        ** sText
+#}
+
+<div class="snippetPkgNewsletterHeadlineWithWYSIWYGText">
+    <div class="{{ sStepName }}">
+        {% include '/common/textBlock/textBlockStandard.html.twig' with {'sHeadline': sHeadLine,
+                                                                  'sText': sText} %}
+    </div>
+</div>

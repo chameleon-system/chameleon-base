@@ -1,0 +1,21 @@
+{#
+  description: renders a snippet gallery (includes a navigation of the snippet directories and all snippets of the selected directory)
+  parameters:
+    - the snippet delegates its work to the snippets navigation/standard.html.twig and ./list/divList.html.twig. Please check them for parameter description
+#}
+<div class="toggleMenuDiv row">
+    <div class="bookmarklet span12">
+       <a href="javascript:var url = window.location.href;var suffix='&bHideNavigation=';var urlWithoutValue=url.substring(0, url.length-1);if(urlWithoutValue.indexOf(suffix, urlWithoutValue.length - suffix.length) !== -1){ var currentValue = url.substring(url.length-1); var newValue = (currentValue === '1')? '0' : '1'; window.location.href = urlWithoutValue + newValue;} else { window.location.href = url + suffix + '1';}">Toggle Menu</a>
+    </div>
+</div>
+<div class="snippetPkgViewRendererMTPkgViewRendererSnippetGalleryGalleryWithNavigation row">
+    {% if not bHideNavigation %}
+        <div class="navigation span3">
+            {% include 'common/navigation/standard.html.twig' %}
+        </div>
+    {%  endif  %}
+
+    <div class="snippets span12">
+        {% include 'pkgViewRenderer/MTPkgViewRendererSnippetGallery/galleryDivList.html.twig' %}
+    </div>
+</div>

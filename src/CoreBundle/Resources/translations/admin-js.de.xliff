@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="admin-js.en.xliff">
+        <body>
+
+            <trans-unit id="chameleon_system_core.fields.lookup.no_matches">
+                <source>chameleon_system_core.fields.lookup.no_matches</source>
+                <target>Keine Treffer für</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.universal_uploader.invalid_file_type">
+                <source>chameleon_system_core.universal_uploader.invalid_file_type</source>
+                <target>Falscher Dateityp.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.universal_uploader.file_to_large">
+                <source>chameleon_system_core.universal_uploader.file_to_large</source>
+                <target>Datei ist zu groß.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.universal_uploader.file_to_small">
+                <source>chameleon_system_core.universal_uploader.file_to_small</source>
+                <target>Datei ist zu klein.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.universal_uploader.too_many_files">
+                <source>chameleon_system_core.universal_uploader.too_many_files</source>
+                <target>Maximale Dateianzahl überschritten.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.month.january">
+                <source>chameleon_system_core.month.january</source>
+                <target>Januar</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month.february">
+                <source>chameleon_system_core.month.february</source>
+                <target>Februar</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month.march">
+                <source>chameleon_system_core.month.march</source>
+                <target>März</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month.april">
+                <source>chameleon_system_core.month.april</source>
+                <target>April</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month.may">
+                <source>chameleon_system_core.month.may</source>
+                <target>Mai</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month.june">
+                <source>chameleon_system_core.month.june</source>
+                <target>Juni</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month.july">
+                <source>chameleon_system_core.month.july</source>
+                <target>Juli</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month.august">
+                <source>chameleon_system_core.month.august</source>
+                <target>August</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month.september">
+                <source>chameleon_system_core.month.september</source>
+                <target>September</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month.october">
+                <source>chameleon_system_core.month.october</source>
+                <target>Oktober</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month.november">
+                <source>chameleon_system_core.month.november</source>
+                <target>November</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month.december">
+                <source>chameleon_system_core.month.december</source>
+                <target>Dezember</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.month_short.january">
+                <source>chameleon_system_core.month_short.january</source>
+                <target>Jan</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month_short.february">
+                <source>chameleon_system_core.month_short.february</source>
+                <target>Feb</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month_short.march">
+                <source>chameleon_system_core.month_short.march</source>
+                <target>Mär</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month_short.april">
+                <source>chameleon_system_core.month_short.april</source>
+                <target>Apr</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month_short.may">
+                <source>chameleon_system_core.month_short.may</source>
+                <target>Mai</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month_short.june">
+                <source>chameleon_system_core.month_short.june</source>
+                <target>Jun</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month_short.july">
+                <source>chameleon_system_core.month_short.july</source>
+                <target>Jul</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month_short.august">
+                <source>chameleon_system_core.month_short.august</source>
+                <target>Aug</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month_short.september">
+                <source>chameleon_system_core.month_short.september</source>
+                <target>Sep</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month_short.october">
+                <source>chameleon_system_core.month_short.october</source>
+                <target>Okt</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month_short.november">
+                <source>chameleon_system_core.month_short.november</source>
+                <target>Nov</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.month_short.december">
+                <source>chameleon_system_core.month_short.december</source>
+                <target>Dez</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.day.sunday">
+                <source>chameleon_system_core.day.sunday</source>
+                <target>Sonntag</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day.monday">
+                <source>chameleon_system_core.day.monday</source>
+                <target>Montag</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day.tuesday">
+                <source>chameleon_system_core.day.tuesday</source>
+                <target>Dienstag</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day.wednesday">
+                <source>chameleon_system_core.day.wednesday</source>
+                <target>Mittwoch</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day.thursday">
+                <source>chameleon_system_core.day.thursday</source>
+                <target>Donnerstag</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day.friday">
+                <source>chameleon_system_core.day.friday</source>
+                <target>Freitag</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day.saturday">
+                <source>chameleon_system_core.day.saturday</source>
+                <target>Samstag</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_medium.sunday">
+                <source>chameleon_system_core.day_medium.sunday</source>
+                <target>Son</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_medium.monday">
+                <source>chameleon_system_core.day_medium.monday</source>
+                <target>Mon</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_medium.tuesday">
+                <source>chameleon_system_core.day_medium.tuesday</source>
+                <target>Die</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_medium.wednesday">
+                <source>chameleon_system_core.day_medium.wednesday</source>
+                <target>Mit</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_medium.thursday">
+                <source>chameleon_system_core.day_medium.thursday</source>
+                <target>Don</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_medium.friday">
+                <source>chameleon_system_core.day_medium.friday</source>
+                <target>Fre</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_medium.saturday">
+                <source>chameleon_system_core.day_medium.saturday</source>
+                <target>Sam</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_short.sunday">
+                <source>chameleon_system_core.day_short.sunday</source>
+                <target>So</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_short.monday">
+                <source>chameleon_system_core.day_short.monday</source>
+                <target>Mo</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_short.tuesday">
+                <source>chameleon_system_core.day_short.tuesday</source>
+                <target>Di</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_short.wednesday">
+                <source>chameleon_system_core.day_short.wednesday</source>
+                <target>Mi</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_short.thursday">
+                <source>chameleon_system_core.day_short.thursday</source>
+                <target>Do</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_short.friday">
+                <source>chameleon_system_core.day_short.friday</source>
+                <target>Fr</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.day_short.saturday">
+                <source>chameleon_system_core.day_short.saturday</source>
+                <target>Sa</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.ajax_error">
+                <source>chameleon_system_core.js.ajax_error</source>
+                <target>Fehler! Ajax Antwort:\n%s1</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.missing_node">
+                <source>chameleon_system_core.js.missing_node</source>
+                <target>Kein Node ausgwählt</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.prompt_order_confirm_target_mail">
+                <source>chameleon_system_core.js.prompt_order_confirm_target_mail</source>
+                <target>Bitte geben Sie die E-Mail Adresse ein, an die die Bestätigungsmail gesendet werden soll.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.confirm_delete">
+                <source>chameleon_system_core.js.confirm_delete</source>
+                <target>Sind Sie sicher, dass Sie den Datensatz löschen möchten?</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.confirm_multi_delete">
+                <source>chameleon_system_core.js.confirm_multi_delete</source>
+                <target>Wollen Sie ALLE MARKIERTEN Einträge löschen?</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.error_no_selection">
+                <source>chameleon_system_core.js.error_no_selection</source>
+                <target>Keine Datensätze gewählt.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.error_portal_required">
+                <source>chameleon_system_core.js.error_portal_required</source>
+                <target>Sie müssen erst ein Portal wählen.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.change_position">
+                <source>chameleon_system_core.js.change_position</source>
+                <target>Position ändern/Sortieren</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.msg_published">
+                <source>chameleon_system_core.js.msg_published</source>
+                <target>Änderungen wurden erfolgreich veröffentlicht!</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.error_publish">
+                <source>chameleon_system_core.js.error_publish</source>
+                <target>Fehler beim Veröffentlichen!</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.msg_save_success">
+                <source>chameleon_system_core.js.msg_save_success</source>
+                <target>Speichern war erfolgreich!</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.error_save">
+                <source>chameleon_system_core.js.error_save</source>
+                <target>Fehler beim Speichern!</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.nothing_assigned">
+                <source>chameleon_system_core.js.nothing_assigned</source>
+                <target>Keine Zuweisung gesetzt</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.url_preview">
+                <source>chameleon_system_core.js.url_preview</source>
+                <target>URL Vorschau</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.unnamed">
+                <source>chameleon_system_core.js.unnamed</source>
+                <target>Unbenannt</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.record">
+                <source>chameleon_system_core.js.record</source>
+                <target>Datensatz</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.backup_created_link">
+                <source>chameleon_system_core.js.backup_created_link</source>
+                <target><![CDATA[Datensicherung erfolgreich angelegt.<br />Sie können die Datei hier herunterladen: <a href="%s1">%s2</a>]]></target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.backup_created">
+                <source>chameleon_system_core.js.backup_created</source>
+                <target>Datensicherung erfolgreich angelegt.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.created_update_package">
+                <source>chameleon_system_core.js.created_update_package</source>
+                <target><![CDATA[Update Paket erfolgreich angelegt<br />: <a href="%s1">%s2</a><br>info: <a href="%s3">%s4</a>]]></target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.media_upload">
+                <source>chameleon_system_core.js.media_upload</source>
+                <target>Medien hochladen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.media_delete">
+                <source>chameleon_system_core.js.media_delete</source>
+                <target>Medien-Datei löschen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.confirm_module_content_delete">
+                <source>chameleon_system_core.js.confirm_module_content_delete</source>
+                <target>Sind Sie sicher? Auch der Modulinhalt geht durch diesen Vorgang verloren!</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.permission_error_with_logout">
+                <source>chameleon_system_core.js.permission_error_with_logout</source>
+                <target>Es ist ein Rechte-Problem aufgetreten und Sie wurden abgemeldet.\nMöchten Sie zur Login Seite weitergeleitet werden?</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.error">
+                <source>chameleon_system_core.js.error</source>
+                <target>Fehler</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.warning">
+                <source>chameleon_system_core.js.warning</source>
+                <target>Warnung</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.notice">
+                <source>chameleon_system_core.js.notice</source>
+                <target>Hinweis</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.confirm_page_delete">
+                <source>chameleon_system_core.js.confirm_page_delete</source>
+                <target>Sind Sie sicher, dass Sie die Seite mit allen Modul Inhalten löschen möchten?\\nMöchten Sie Modul Inhalte erhalten, so müssen sie die entsprechenden Modul Steckplätze vorher zurücksetzen.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.delete_document">
+                <source>chameleon_system_core.js.delete_document</source>
+                <target>Dokument löschen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.show_all">
+                <source>chameleon_system_core.js.show_all</source>
+                <target>Alle Elemente anzeigen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.wrong_domain">
+                <source>chameleon_system_core.js.wrong_domain</source>
+                <target>Der Aufruf ist nicht auf der gleichen Domain, der Status kann nicht überprüft werden.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.not_found">
+                <source>chameleon_system_core.js.not_found</source>
+                <target>wurde nicht gefunden</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.table_editor.has_no_usages">
+                <source>chameleon_system_core.table_editor.has_no_usages</source>
+                <target>Keine Verwendungstelle gefunden.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.table_editor.usages">
+                <source>chameleon_system_core.table_editor.usages</source>
+                <target>Verwendungen</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

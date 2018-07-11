@@ -1,0 +1,12 @@
+<project name="Unit Tests" default="runtests">
+  <target name="runtests" depends="install">
+    <exec executable="phpunit" failonerror="true">
+      <arg line="-c Tests/PHPUnit.xml"/>
+    </exec>
+  </target>
+  <target name="install">
+    <exec executable="hhvm">
+      <arg line=" -v ResourceLimit.SocketDefaultTimeout=30 -v Http.SlowQueryThreshold=30000 /usr/local/bin/composer install"/>
+    </exec>
+  </target>
+</project>

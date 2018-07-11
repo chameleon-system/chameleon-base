@@ -1,0 +1,11 @@
+#cmsmainmenu {
+}
+
+#cmsleftmenu, #cmsmiddlemenu, #cmsrightmenu{
+  width:33%;
+  float:left;
+}
+
+#cmsmainmenu .columnpadding {
+
+}

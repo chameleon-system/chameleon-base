@@ -1,0 +1,35 @@
+.MTNewsletterSignup {
+}
+
+.MTNewsletterSignup .signuptable {
+  margin-top:10px;
+}
+.MTNewsletterSignup .signuptable input {
+  background-color:#FAFAFA;
+  color:#8D8D91;
+  border:1px solid #D7D7D8;
+  line-height:14px;
+  font-size:10px;
+  margin:0px 0px 0px 0px;
+  padding:0px 5px 0px 5px;
+  width:200px;
+}
+
+.MTNewsletterSignup .signuptable th {
+  text-align:left;
+  padding-right:10px;
+}
+
+.MTNewsletterSignup .signuptable td, .MTNewsletterSignup .signuptable th {
+  padding-bottom:5px;
+  vertical-align:top;
+}
+
+.MTNewsletterSignup input.submitbutton {
+  width:auto;
+  height:auto;
+  border:none;
+  padding:0px 0px 0px 0px;
+  background-color:transparent;
+  float:right;
+}

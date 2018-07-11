@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="chameleon_system_track_views.cronjob.collect_views_cronjob" class="TCMSCronJob_pkgTrackViewsCollectViews" shared="false">
+            <tag name="chameleon_system.cronjob" />
+            <argument>%chameleon_system_track_views.target_table%</argument>
+            <argument>%chameleon_system_track_views.time_to_live%</argument>
+        </service>
+
+        <service id="chameleon_system_track_views.cronjob.update_product_view_counter_cronjob" class="TCMSCronJob_pkgTrackViewsUpdateShopArticleViewCounter" shared="false">
+            <tag name="chameleon_system.cronjob" />
+        </service>
+
+        <service id="chameleon_system_track_views.listener.track_views" class="ChameleonSystem\TrackViewsBundle\EventListener\TrackViewsListener">
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+        </service>
+    </services>
+</container>

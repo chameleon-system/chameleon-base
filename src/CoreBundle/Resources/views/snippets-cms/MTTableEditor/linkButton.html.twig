@@ -1,0 +1,10 @@
+<a href="{{ link }}" role="button" class="btn btn-sm {{ sButtonStyle }}{% if sItemkey %} item{{ sItemKey }}{% endif %} {{ sCSSClass }}"
+{%- if sOnClick %} onclick="{{ sOnClick|raw }}" {% endif -%}
+{%- if cssID %} id="{{ cssID }}" {% endif -%}
+{%- if target %} target="{{ target }}" {% endif -%}
+{%- if onMouseOver %} onmouseover="{{ onMouseOver }}" {% endif -%}
+>
+{%- if sIconURL -%}
+<span class="btn-icon" style="background-image: url({{ sIconURL }});">
+{%- endif -%}
+{{ sTitle }}</span></a>

@@ -1,0 +1,106 @@
+parameters:
+  chameleon_system_core.cache.cache_less_files: true # if disabled less information will still be cached but partly regenerated on file changes; if enabled the generated css will be written as file
+  chameleon_system_core.cache.allow: true
+  chameleon_system_core.cache.default_max_age_in_seconds: 10 # 0 to disable time based cache
+  chameleon_system_core.cache.max_cache_item_live_time_in_seconds: 432000 # default max age of cache entries (should be smaller than chameleon_system_core.cache.memcache_max_cache_item_live_time_in_seconds
+  chameleon_system_core.cache.memcache_activate: true # activate memcache if chameleon_system_core.cache.allow is also set to true
+  chameleon_system_core.cache.memcache_server1: "localhost"
+  chameleon_system_core.cache.memcache_port1: 11211
+  chameleon_system_core.cache.memcache_server2: false
+  chameleon_system_core.cache.memcache_port2: 11212
+  chameleon_system_core.cache.memcache_class: "auto" # @deprecated since 6.2.0 - only Memcached is supported.
+  chameleon_system_core.cache.memcache_use_fallback: false # use fallback cache if memcache rejects the content (because it is full for example)
+  chameleon_system_core.cache.memcache_use_lazy_cache_write: true
+  chameleon_system_core.cache.memcache_max_cache_item_live_time_in_seconds: 2592000 # defines the number of seconds a cache item is valid - max = 30 days. use 0 if you do not want the items to expire. defaults to 30 days. note: this should be an upper limit. Ff the cache manager TCacheManager is passed a value greater than this constant, then that value will be used instead
+  chameleon_system_core.cache.memcache_sessions_server1: false # set memcached server if you want to use a memcached for session management. IMPORTANT: this should NOT be the same as the memcached server for cache (a cache flush would clear all sessions otherwise)
+  chameleon_system_core.cache.memcache_sessions_port1: 11211
+  chameleon_system_core.cache.memcache_sessions_server2: false # second server
+  chameleon_system_core.cache.memcache_sessions_port2: 11211
+  chameleon_system_core.cache.memcache_sessions_use_native_driver: false # if you want to use memcached as session management, and you have at least memcache 3.0.4 installed, you should use the native php connection. Then set this to true
+  chameleon_system_core.cache.include_cache_delete_trace_info: false # set this to true if you want to include info on how a cache item was deleted
+  chameleon_system_core.cache.use_file_system_as_standard_cache: false # set to true if you want to store cache items in the file system instead of storing them in the database.  EXPERIMENTAL!!! You SHOULD use memcache or couchbase!
+  chameleon_system_core.cache.memcached_timeout_in_milliseconds: 250 # the connection timeout for memcached
+
+  chameleon_system_core.debug.debug_last_order: false # set this to true to debug the last order step. If it's set to true the AllowAccessToStep method of the last order step (in the Core) will always return true, so you're able to call the page as often as you want
+  chameleon_system_core.debug.show_view_source_html_hints: false
+  chameleon_system_core.debug.print_module_render_time: false # outputs a comment tag for every module with the render time so it's possible to find slow modules @deprecated since 6.2.0 - use a proper external tool to measure performance.
+  chameleon_system_core.debug.cms_output_page_load_time_info: false # outputs a comment tag with page load time and info if page was loaded from cache @deprecated since 6.2.0 - use a proper external tool to measure performance.
+  chameleon_system_core.debug.cms_debug_cache_record: false # Write TCMSRecord Queries executed into TCMSRegistry (use it to localize code which could be optimized for caching) @deprecated since 6.2.0 - use the ChameleonSystemDebugBundle to profile database requests.
+  chameleon_system_core.debug.cms_debug_cache_recordlist: false # Write TCMSRecordList Queries executed into TCMSRegistry (use it to locate code which could be optimized for caching) @deprecated since 6.2.0 - use the ChameleonSystemDebugBundle to profile database requests.
+  chameleon_system_core.debug.cms_debug_cache_keys: false # outputs a comment for every module if loaded from cache ("module SpotName loaded from cache - cache key: [key...]")
+
+  chameleon_system_core.mail_target_transformation_service.enabled: false
+  chameleon_system_core.mail_target_transformation_service.subject_prefix: '[TEST] '
+  chameleon_system_core.mail_target_transformation_service.target_mail: 'mail@example.com'
+  chameleon_system_core.mail_target_transformation_service.white_list: '@@PORTAL-DOMAINS'
+
+  chameleon_system_core.request.trusted_proxies: "" # IP addresses (separated by comma) from which the forwarded headers are to be trusted. Make sure you define this when working in multi-server configurations
+  chameleon_system_core.request.trusted_header_client_ip: "" # the header under which the trusted proxy forwards the client IP address. defaults to X-Forwarded-For. See Symfony\Component\HttpFoundation\Request::setTrustedHeaderName for details
+  chameleon_system_core.request.trusted_header_client_host: "" # the header under which the trusted proxy forwards the client host. defaults to X-Forwarded-Host. See Symfony\Component\HttpFoundation\Request::setTrustedHeaderName for details
+  chameleon_system_core.request.trusted_header_client_port: "" # the header under which the trusted proxy forwards the client port. defaults to X-Forwarded-Port. See Symfony\Component\HttpFoundation\Request::setTrustedHeaderName for details
+  chameleon_system_core.request.trusted_header_client_protocol: "" # the header under which the trusted proxy forwards the client protocol. defaults to X-Forwarded-Proto. See Symfony\Component\HttpFoundation\Request::setTrustedHeaderName for details
+
+  chameleon_system_core.resources.enable_external_resource_collection: true # if set to true, all external resources (css/js) are combined into one file
+  chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix: "v0" # if CSS & JS are combined into one file, you can use this prefix to force a reload for clients
+  chameleon_system_core.resources.enable_external_resource_collection_minify: true # if set to true, all external resources (css/js) are minified
+
+  chameleon_system_core.allow_database_logging: false # log database changes? @deprecated since 6.2.0 - no longer used. To disallow migration logging, remove the permission for all backend users.
+  chameleon_system_core.development_email: "admin@localhost" # set email address of developer. Fatal errors will be sent to this address in live mode
+  chameleon_system_core.cms_log_level: 1 # define the log level to include in the chameleon log file. Chameleon will log only log messages that have this level (or less)
+                                         #level 0 -> no logging
+                                         #level 1 -> error messages only
+                                         # level 2 -> warnings
+                                         # level 3 -> notices
+                                         # level 4 -> info
+
+  chameleon_system_external_tracker.demo_mode: false # if this constant is switched to true, all external trackers are in demo mode and use the code in field test_identifier instead of identifier
+
+  chameleon_system_external_tracker_google_analytics.enable_campaign_tracking: false # if true, the product exports will add their google campaign parameters (if they support them) to the detail links of the products
+
+  database_port: 3306
+
+  twig.exception_listener.class: ChameleonSystem\CoreBundle\EventListener\ChameleonExceptionListener
+
+  chameleon_system_core.google.api_key: ''
+
+chameleon_system_core:
+    mailer:
+      host: "%mailer_host%"
+      user: "%mailer_user%"
+      password: "%mailer_password%"
+    mail_target_transformation_service:
+      target_mail: "%chameleon_system_core.mail_target_transformation_service.target_mail%"
+      enabled: "%chameleon_system_core.mail_target_transformation_service.enabled%"
+      subject_prefix: "%chameleon_system_core.mail_target_transformation_service.subject_prefix%"
+      white_list: "%chameleon_system_core.mail_target_transformation_service.white_list%"
+
+framework:
+  csrf_protection: ~
+  validation:      { enable_annotations: true }
+  router:
+    resource: "%kernel.root_dir%/config/routing.yml"
+    strict_requirements: ~
+  session:
+    metadata_update_threshold: 120
+    cookie_httponly: true
+    cookie_lifetime: 7200
+    gc_maxlifetime: 7200
+    use_strict_mode: true
+  templating:
+    engines: ['twig']
+  translator: { fallback: en }
+
+twig:
+  debug:            "%kernel.debug%"
+  charset:          "%kernel.charset%"
+  strict_variables:          false
+  exception_controller: chameleon_system_core.controller.exception:showAction
+#  auto_reload:               ~
+#  optimizations:             ~
+
+cmf_routing:
+  chain:
+    routers_by_id:
+      router.default: 300
+      chameleon_system_core.router.chameleon_backend: 200
+      chameleon_system_core.router.chameleon_frontend: 100

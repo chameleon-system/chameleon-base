@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service class="TCMSCronJob_CleanOrphanedMLTConnections" id="chameleon_system_core.cronjob.clean_orphaned_mlt_connections_cronjob" shared="false">
+            <tag name="chameleon_system.cronjob" />
+        </service>
+
+        <service class="TCMSCronJob_CleanTags" id="chameleon_system_core.cronjob.clean_tags_cronjob" shared="false">
+            <tag name="chameleon_system.cronjob" />
+        </service>
+
+        <service class="TCMSCronJob_CleanupModuleContents" id="chameleon_system_core.cronjob.cleanup_module_contents_cronjob" shared="false">
+            <tag name="chameleon_system.cronjob" />
+        </service>
+
+        <service class="TCMSCronJob_ClearCompleteCache" id="chameleon_system_core.cronjob.clear_complete_cache_cronjob" shared="false">
+            <argument type="service" id="chameleon_system_cms_cache.cache"/>
+            <tag name="chameleon_system.cronjob" />
+        </service>
+
+        <service class="TCMSCronJob_ClearOldDownloadTokens" id="chameleon_system_core.cronjob.clear_old_download_tokens_cronjob" shared="false">
+            <tag name="chameleon_system.cronjob" />
+        </service>
+
+    </services>
+</container>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="admin.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_generic_table_export.action.export_to_server">
+                <source>chameleon_system_generic_table_export.action.export_to_server</source>
+                <target>Export to file system</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_generic_table_export.action.export_and_download">
+                <source>chameleon_system_generic_table_export.action.export_and_download</source>
+                <target>Export and download file</target>
+            </trans-unit>
+
+
+        </body>
+    </file>
+</xliff>

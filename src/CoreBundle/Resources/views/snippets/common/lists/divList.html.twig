@@ -1,0 +1,16 @@
+{#
+ aList - array of strings
+#}
+{% if aList|length > 0%}
+<div class="snippetListDivList">
+    {% for sItem in aList %}
+        <div class="listItem">
+            {%block listItem %}
+                {{ sItem | raw}}
+            {%endblock%}
+        </div>
+        <div class="clearfix">&nbsp;</div>
+        <hr />
+    {% endfor %}
+</div>
+{% endif %}

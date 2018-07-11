@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <service id="chameleon_system_core.database_migration.file_system_factory" class="ChameleonSystem\DatabaseMigration\Factory\FileSystemMigrationDataModelFactory">
+            <argument type="service" id="chameleon_system_core.database_migration.migration_path_util" />
+            <argument type="service" id="kernel"/>
+        </service>
+
+        <service id="chameleon_system_core.database_migration.processed_factory" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\MigrationDataModelFactory\ChameleonProcessedMigrationDataModelFactory">
+            <argument type="service" id="chameleon_system_core.database_migration.data_access" />
+        </service>
+
+        <service id="chameleon_system_core.counter.migration_counter_manager" class="ChameleonSystem\DatabaseMigration\Counter\MigrationCounterManager">
+            <argument type="service" id="chameleon_system_core.database_migration.data_access" />
+        </service>
+
+        <service id="chameleon_system_core.database_migration.data_access" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\DataAccess\MigrationDataAccess" public="false">
+            <argument type="service" id="database_connection" />
+        </service>
+
+        <service id="chameleon_system_core.database_migration.data_access_request_level_cache_decorator"
+                 class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\DataAccess\MigrationDataAccessRequestLevelCacheDecorator"
+                 decorates="chameleon_system_core.database_migration.data_access"
+                 public="false"
+        >
+            <argument type="service" id="chameleon_system_core.database_migration.data_access_request_level_cache_decorator.inner" />
+        </service>
+
+        <service id="chameleon_system_core.database_migration.reducer" class="ChameleonSystem\DatabaseMigration\Reducer\MigrationDataModelReducer">
+        </service>
+
+        <service id="chameleon_system_core.database_migration.converter" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Converter\DataModelConverter">
+            <argument type="constant">PATH_PROJECT_BASE</argument>
+        </service>
+
+        <service id="chameleon_system_core.database_migration.migration_path_util" class="ChameleonSystem\DatabaseMigration\Util\MigrationPathUtil">
+            <!-- package updates -->
+            <call method="addPathToUpdatesInBundle">
+                <argument type="string">#^Bridge/Chameleon/Migration/Script/.*updates#</argument>
+            </call>
+            <call method="addPathToUpdatesInBundle">
+                <argument type="string">#^[^/]*updates$#</argument>
+            </call>
+            <call method="addPathToUpdatesInBundle">
+                <argument type="string">#^Bridge/Chameleon/Migration/Script$#</argument>
+            </call>
+            <!-- customer updates -->
+            <call method="addPathToUpdatesInBundle">
+                <argument type="string">#extensions/updates/*#</argument>
+            </call>
+        </service>
+
+    </services>
+</container>

@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="chameleon_system_core.mapper.feedback_additional_fields" class="MTFeedbackMapper_AdditionalFields">
+        </service>
+
+        <service id="chameleon_system_core.mapper.feedback_standard_form" class="MTFeedbackMapper_StandardForm">
+        </service>
+
+        <service id="chameleon_system_core.mapper.feedback_success" class="MTFeedbackMapper_Success">
+        </service>
+
+        <service id="chameleon_system_core.mapper.text_field_text" class="MTTextFieldMapper_Text">
+        </service>
+
+        <service id="chameleon_system_core.mapper.media_field_image_box" class="TCMSMediaFieldImageBoxMapper">
+            <argument type="service" id="chameleon_system_core.util.url" />
+        </service>
+
+        <service id="chameleon_system_core.mapper.media_field" class="TCMSMediaFieldMapper">
+        </service>
+
+        <service id="chameleon_system_core.mapper.media_field_upload" class="TCMSMediaFieldUploadMapper">
+        </service>
+
+        <service id="chameleon_system_core.mapper.media_multi_field" class="TCMSMediaMultiFieldMapper">
+        </service>
+
+        <service id="chameleon_system_core.mapper.message_manager" class="TCMSMessageManagerMapper">
+        </service>
+
+        <service id="chameleon_system_core.mapper.message_manager_overlay" class="TCMSMessageManagerMapper_Overlay">
+        </service>
+
+        <service id="chameleon_system_core.mapper.template_engine.module_chooser_module_list" class="ChameleonSystem\CoreBundle\TemplateEngine\Mapper\ModuleChooserModuleListMapper">
+        </service>
+
+        <service id="chameleon_system_core.mapper.update_recorder" class="MTUpdateRecorder">
+            <argument type="service"
+                      id="chameleon_system_database_migration.recorder.migration_recorder_state_handler"/>
+        </service>
+
+        <service id="chameleon_system_core.mapper.view_port_meta" class="TMapper_ViewPortMeta">
+            <argument type="service" id="chameleon_system_core.view_port_manager" />
+        </service>
+
+        <service id="chameleon_system_core.mapper.view_port_switch" class="TMapper_ViewPortSwitch">
+            <argument type="service" id="chameleon_system_core.active_page_service" />
+            <argument type="service" id="chameleon_system_core.view_port_manager" />
+            <argument type="service" id="translator" />
+        </service>
+
+    </services>
+</container>

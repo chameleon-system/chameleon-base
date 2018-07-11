@@ -1,0 +1,716 @@
+<?php
+
+/*
+ * This file is part of the Chameleon System (https://www.chameleonsystem.com).
+ *
+ * (c) ESONO AG (https://www.esono.de)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+use ChameleonSystem\CoreBundle\CoreEvents;
+use ChameleonSystem\CoreBundle\Event\ResourceCollectionJavaScriptCollectedEvent;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+/**
+ * this class can manage resource collection creation.
+/**/
+class TCMSResourceCollection
+{
+    /**
+     * base path of server ($_SERVER['DOCUMENT_ROOT']).
+     */
+    private $sBasePath = null;
+
+    /**
+     * @var string|null current absolute css path
+     */
+    protected $sCurrentCSSPath = null;
+
+    /**
+     * Check if resource collection is enabled in config.
+     *
+     * @return bool
+     */
+    public function IsEnabled()
+    {
+        return ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection');
+    }
+
+    /**
+     * Checks if system is allowed to use resource collection.
+     * Was used to disable resource collection in template engine.
+     *
+     * @return bool
+     */
+    public function IsAllowed()
+    {
+        $bAllowResourceCollection = false;
+        if ($this->IsEnabled()) {
+            $bAllowResourceCollection = true;
+            $oGlobal = TGlobal::instance();
+            $bIsModuleChooser = $oGlobal->GetUserData('__modulechooser');
+            $bAllowResourceCollection = ($bAllowResourceCollection && !TGlobal::IsCMSMode()); // not in cms backend
+            if ($bAllowResourceCollection) {
+                $bIsTemplateEngine = (TCMSUser::CMSUserDefined() && 'true' == $bIsModuleChooser);
+                $bAllowResourceCollection = ($bAllowResourceCollection && !$bIsTemplateEngine); // not in cms template engine
+            }
+        }
+
+        return $bAllowResourceCollection;
+    }
+
+    /**
+     * combine external resources into one file.
+     *
+     * @param string $sPageContent
+     *
+     * @return string
+     */
+    public function CollectExternalResources($sPageContent)
+    {
+        if ($this->IsAllowed()) {
+            if (false === stripos($sPageContent, '</head>')) {
+                return $sPageContent;
+            }
+            $refreshPrefix = ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix');
+            // find css
+            // <link href="/static/css/reset.css" ...  -> make sure to exclude print media="print"
+            $sReworkContent = $sPageContent;
+            // we only work on the <head></head> content - everything else is kept as is
+            $aPageParts = explode('</head>', $sPageContent);
+            if (count($aPageParts) < 2) {
+                $aPageParts = explode('</HEAD>', $sPageContent);
+            }
+            if (2 == count($aPageParts)) {
+                $sReworkContent = $aPageParts[0];
+
+                // also exclude anything that is marked as exclude
+                $matchString = '/<!--#CMSRESOURCEIGNORE#-->(.+?)<!--#ENDCMSRESOURCEIGNORE#-->/si';
+                $sReworkContent = preg_replace_callback($matchString, array($this, 'CollectExternalResourcesCommentsCallback'), $sReworkContent);
+
+                // we want to ignore css/js in comments. easy if we strip comments first
+                $matchString = '/<!--(.+?)-->/si';
+                $sReworkContent = preg_replace_callback($matchString, array($this, 'CollectExternalResourcesCommentsCallback'), $sReworkContent);
+
+                // create resource collection for dynamic css
+                $matchString = "/<link([^>]+?)href=[\"]([^'\"]+?).css([\?][^[:space:]]+)?[\"]([^>]*?)>(?!\\s*?<!--(.*?)#GLOBALRESOURCECOLLECTION#)/i";
+                $sReworkContent = preg_replace_callback($matchString, array($this, 'CollectExternalResourcesCSSCallback'), $sReworkContent);
+                $aCSS = $this->StaticContentCollector('css');
+                $sFileCSSMD5 = $refreshPrefix.'.css.'.md5(implode(';', $aCSS)).'.css';
+                if (false === $this->CreateCSSResourceCollectionFile($sFileCSSMD5, $aCSS)) {
+                    $sFileCSSMD5 = ''; // reset file because we don`t have includes
+                }
+
+                // create resource collection for static global css
+                $matchString = "/<link([^>]+?)href=[\"]([^'\"]+?).css([\?][^[:space:]]+)?[\"]([^>]*?)>\\s*(<!--.*?#GLOBALRESOURCECOLLECTION#.?-->)/i";
+                $sReworkContent = preg_replace_callback($matchString, array($this, 'CollectExternalResourcesCSSCallback'), $sReworkContent);
+                $aGlobalCSS = $this->StaticContentCollector('cssglobal');
+                $sFileCSSGlobalMD5 = $refreshPrefix.'.global_css.'.md5(implode(';', $aGlobalCSS)).'.css';
+                if (false === $this->CreateCSSResourceCollectionFile($sFileCSSGlobalMD5, $aGlobalCSS)) {
+                    $sFileCSSGlobalMD5 = ''; // reset global file because we don`t have global includes
+                }
+
+                // repeat for js
+                $matchString = "/<script([^>]+?)src=[\"]([^'\"]+?).js([\?][^[:space:]]+)?[\"]([^>]*?)><\/script>(?!\\s*?<!--(.*?)#GLOBALRESOURCECOLLECTION#)/i";
+                $sReworkContent = preg_replace_callback($matchString, array($this, 'CollectExternalResourcesJSCallback'), $sReworkContent);
+                $aJS = $this->StaticContentCollector('js');
+                $minify = ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_minify');
+                if ($minify) {
+                    $sMinifyStatus = 'true';
+                } else {
+                    $sMinifyStatus = 'false';
+                }
+                $sFileJSMD5 = $refreshPrefix.'.js.'.md5(implode(';', $aJS).$sMinifyStatus).'.js';
+                if (false === $this->CreateJSResourceCollectionFile($sFileJSMD5, $aJS)) {
+                    $sFileJSMD5 = ''; // reset file because we don`t have includes
+                }
+
+                $matchString = "/<script([^>]+?)src=[\"]([^'\"]+?).js([\?][^[:space:]]+)?[\"]([^>]*?)><\/script>\\s*(<!--.*?#GLOBALRESOURCECOLLECTION#.?-->)/i";
+                $sReworkContent = preg_replace_callback($matchString, array($this, 'CollectExternalResourcesJSCallback'), $sReworkContent);
+                $aJSGlobal = $this->StaticContentCollector('jsglobal');
+                $sFileJSGlobalMD5 = $refreshPrefix.'.global_js.'.md5(implode(';', $aJSGlobal).$sMinifyStatus).'.js';
+                if (false === $this->CreateJSResourceCollectionFile($sFileJSGlobalMD5, $aJSGlobal)) {
+                    $sFileJSGlobalMD5 = ''; // reset global file because we don`t have global includes
+                }
+
+                if (2 == count($aPageParts)) {
+                    $sPageContent = $sReworkContent.'</head>'.$aPageParts[1];
+                } else {
+                    $sPageContent = $sReworkContent;
+                }
+                $sPageContent = $this->AddResourceCollectionToHead($sPageContent, $sFileCSSMD5, $sFileJSMD5, $sFileCSSGlobalMD5, $sFileJSGlobalMD5);
+            }
+        }
+
+        return $sPageContent;
+    }
+
+    /**
+     * Add resource collection files to head.
+     *
+     * @param string $sPageContent
+     * @param string $sFileMD5
+     * @param string $sFileJSMD5
+     * @param string $sFileCSSGlobalMD5
+     * @param string $sFileJSGlobalMD5
+     *
+     * @return string
+     */
+    protected function AddResourceCollectionToHead($sPageContent, $sFileMD5, $sFileJSMD5, $sFileCSSGlobalMD5, $sFileJSGlobalMD5)
+    {
+        $sCompressLinkCSS = '';
+        $sCompressLinkCSSGlobal = '';
+        $sCompressLinkJs = '';
+        $sCompressLinkJsGlobal = '';
+
+        if (!empty($sFileMD5)) {
+            $sCompressLinkCSS = '<link href="'.TGlobal::GetStaticURL(URL_OUTBOX.'static/css/'.$sFileMD5).'" rel="stylesheet" type="text/css" />'."\n";
+        }
+        if (!empty($sFileCSSGlobalMD5)) {
+            $sCompressLinkCSSGlobal = '<link href="'.TGlobal::GetStaticURL(URL_OUTBOX.'static/css/'.$sFileCSSGlobalMD5).'" rel="stylesheet" type="text/css" />'."\n";
+        }
+        if (!empty($sFileJSMD5)) {
+            $sCompressLinkJs = '<script src="'.TGlobal::GetStaticURL(URL_OUTBOX.'static/js/'.$sFileJSMD5).'" type="text/javascript"></script>'."\n";
+        }
+        if (!empty($sFileJSGlobalMD5)) {
+            $sCompressLinkJsGlobal = '<script src="'.TGlobal::GetStaticURL(URL_OUTBOX.'static/js/'.$sFileJSGlobalMD5).'" type="text/javascript"></script>'."\n";
+        }
+
+        $sPreHeadText = $sCompressLinkCSSGlobal.$sCompressLinkCSS.$sCompressLinkJsGlobal.$sCompressLinkJs;
+        $bCompleteCSSAndJsTagFound = (false !== strpos($sPageContent, '<!--#CMSHEADERCODE-COMPACT-JS-AND-CSS#-->'));
+        $bCSSTagFound = (false !== strpos($sPageContent, '<!--#CMSHEADERCODE-COMPACT-CSS#-->'));
+        $bJSTagFound = (false !== strpos($sPageContent, '<!--#CMSHEADERCODE-COMPACT-JS#-->'));
+        if (!$bCompleteCSSAndJsTagFound && !$bCSSTagFound && !$bJSTagFound) {
+            $sPreHeadText = '<head>'.$sPreHeadText;
+            $sPageContent = str_replace('<head>', $sPreHeadText, $sPageContent);
+        } else {
+            if ($bCompleteCSSAndJsTagFound) {
+                $sPageContent = str_replace('<!--#CMSHEADERCODE-COMPACT-JS-AND-CSS#-->', $sPreHeadText, $sPageContent);
+            }
+            if ($bCSSTagFound) {
+                $sPageContent = str_replace('<!--#CMSHEADERCODE-COMPACT-CSS#-->', ($sCompressLinkCSSGlobal.$sCompressLinkCSS), $sPageContent);
+            }
+            if ($bJSTagFound) {
+                $sPageContent = str_replace('<!--#CMSHEADERCODE-COMPACT-JS#-->', ($sCompressLinkJsGlobal.$sCompressLinkJs), $sPageContent);
+            }
+        }
+        // re-insert comments
+        /** @var $aComments array */
+        $aComments = $this->StaticContentCollector('comment');
+        foreach ($aComments as $iIndex => $sComment) {
+            $sPageContent = str_replace('<!-- [{INDEX:'.$iIndex.'}] -->', $sComment, $sPageContent);
+        }
+
+        return $sPageContent;
+    }
+
+    /**
+     * Write resource collection file for css containing all included css files.
+     *
+     * @param string $sFileMD5
+     * @param array  $aCSS
+     *
+     * @return bool
+     */
+    protected function CreateCSSResourceCollectionFile($sFileMD5, $aCSS)
+    {
+        $bFileCreated = false;
+        if (is_array($aCSS) && count($aCSS) > 0) {
+            $bFileCreated = true;
+            $sCSSStaticPath = PATH_OUTBOX.'/static/css/';
+            if (!file_exists($sCSSStaticPath.$sFileMD5)) {
+                $fileManager = $this->getFileManager();
+
+                $bTargetDirectoryIsWritable = true;
+                if (!is_dir($sCSSStaticPath)) {
+                    $bTargetDirectoryIsWritable = $fileManager->mkdir($sCSSStaticPath, 0777, true);
+                }
+
+                if ($bTargetDirectoryIsWritable) {
+                    $sContent = '';
+                    if (_DEVELOPMENT_MODE) {
+                        $sContent = '/* created: '.date('Y-m-d H:i:s')."\n";
+                        $sContent .= implode("\n", $aCSS)."\n";
+                        $sContent .= "*/\n";
+                    }
+                    $this->sBasePath = $_SERVER['DOCUMENT_ROOT'];
+
+                    foreach ($aCSS as $iIndex => $sCSSFile) {
+                        // strip URL params
+                        $sCSSFile = parse_url($sCSSFile, PHP_URL_PATH);
+
+                        // change static urls to relative urls
+
+                        $sCSSFile = TGlobal::ResolveStaticURL($sCSSFile);
+                        $aStaticURLs = TGlobal::GetStaticURLPrefix();
+                        if (!is_array($aStaticURLs)) {
+                            $aStaticURLs = array($aStaticURLs);
+                        }
+                        foreach ($aStaticURLs as $sStaticURL) {
+                            if (!empty($sStaticURL)) {
+                                if (false !== strpos($sCSSFile, $sStaticURL)) {
+                                    $sCSSFile = substr($sCSSFile, strlen($sStaticURL));
+                                }
+                            }
+                        }
+                        $sCSSFullURL = $sCSSFile;
+                        if ('http://' != substr($sCSSFile, 0, 7) && 'https://' != substr($sCSSFile, 0, 8)) {
+                            $sCSSFile = realpath($this->sBasePath.'/'.$sCSSFile);
+                        }
+                        $aCSS[$iIndex] = $sCSSFile;
+                        if (is_string($sCSSFile)) {
+                            $sSubString = file_get_contents($sCSSFile);
+                            $sSubString = TTools::RemoveUTF8HeaderBomFromString($sSubString); // CSS parsing crashs at UTF-8 BOM Header position
+
+                            $sPath = $this->GetAbsoluteURLPath($sCSSFullURL);
+                            $sSubString = $this->ProcessCSSRecursive($sPath, $sSubString);
+
+                            $minify = ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_minify');
+                            if ($minify) {
+                                $sSubString = CssMin::minify($sSubString);
+                            }
+                            if (_DEVELOPMENT_MODE) {
+                                $sContent .= "/* FROM: {$aCSS[$iIndex]} */\n".$sSubString."\n";
+                            } else {
+                                $sContent .= $sSubString."\n";
+                            }
+                        }
+                    }
+
+                    $fileManager->file_put_contents($sCSSStaticPath.$sFileMD5, $sContent);
+                }
+            }
+        }
+
+        return $bFileCreated;
+    }
+
+    /**
+     * Write resource collection file for JS containing all included JS files.
+     *
+     * @param string $sFileJSMD5
+     * @param array  $aJS
+     *
+     * @return bool
+     */
+    protected function CreateJSResourceCollectionFile($sFileJSMD5, $aJS)
+    {
+        $bFileCreated = false;
+        if (is_array($aJS) && count($aJS) > 0) {
+            $bFileCreated = true;
+            $sJSStaticPath = PATH_OUTBOX.'/static/js/';
+            if (!file_exists($sJSStaticPath.$sFileJSMD5)) {
+                $fileManager = $this->getFileManager();
+
+                $bTargetDirectoryIsWritable = true;
+                if (!is_dir($sJSStaticPath)) {
+                    $bTargetDirectoryIsWritable = $fileManager->mkdir($sJSStaticPath, 0777, true);
+                }
+
+                if ($bTargetDirectoryIsWritable) {
+                    $sContent = '';
+                    if (_DEVELOPMENT_MODE) {
+                        $sContent = '/* created: '.date('Y-m-d H:i:s')."\n";
+                        $sContent .= implode("\n", $aJS)."\n";
+                        $sContent .= "*/\n";
+                    }
+                    $this->sBasePath = $_SERVER['DOCUMENT_ROOT'];
+
+                    foreach ($aJS as $iIndex => $sJSFile) {
+                        // strip URL params
+                        $sJSFile = parse_url($sJSFile, PHP_URL_PATH);
+                        $sJSFile = TGlobal::ResolveStaticURL($sJSFile);
+                        $aStaticURLs = TGlobal::GetStaticURLPrefix();
+                        if (!is_array($aStaticURLs)) {
+                            $aStaticURLs = array($aStaticURLs);
+                        }
+                        foreach ($aStaticURLs as $sStaticURL) {
+                            if (!empty($sStaticURL)) {
+                                if (false !== strpos($sJSFile, $sStaticURL)) {
+                                    $sJSFile = substr($sJSFile, strlen($sStaticURL));
+                                }
+                            }
+                        }
+
+                        if ('http://' != substr($sJSFile, 0, 7) && 'https://' != substr($sJSFile, 0, 8)) {
+                            $sJSFile = realpath($this->sBasePath.'/'.$sJSFile);
+                        }
+                        $aJS[$iIndex] = $sJSFile;
+                        if (is_string($sJSFile)) {
+                            $sSubString = file_get_contents($sJSFile);
+                            $sSubString = TTools::RemoveUTF8HeaderBomFromString($sSubString); // JS parsing crashs at UTF-8 BOM Header position
+
+                            if (_DEVELOPMENT_MODE) {
+                                $sContent .= "/* FROM: {$aJS[$iIndex]} */\n".$sSubString."\n";
+                            } else {
+                                $sContent .= $sSubString."\n";
+                            }
+                        }
+                    }
+                    $sContent = $this->dispatchJSMinifyEvent($sContent);
+                    $fileManager->file_put_contents($sJSStaticPath.$sFileJSMD5, $sContent);
+                }
+            }
+        }
+
+        return $bFileCreated;
+    }
+
+    /**
+     * @param string $jsContent
+     *
+     * @return string
+     */
+    private function dispatchJSMinifyEvent($jsContent)
+    {
+        $event = new ResourceCollectionJavaScriptCollectedEvent($jsContent);
+        /** @var ResourceCollectionJavaScriptCollectedEvent $event */
+        $event = $this->getEventDispatcher()->dispatch(CoreEvents::GLOBAL_RESOURCE_COLLECTION_COLLECTED_JAVASCRIPT, $event);
+
+        return $event->getContent();
+    }
+
+    /**
+     * @return EventDispatcherInterface
+     */
+    private function getEventDispatcher()
+    {
+        return ServiceLocator::get('event_dispatcher');
+    }
+
+    /**
+     * returns absolute URL of current CSS file (strips filename).
+     *
+     * @param  $sFile   full file URL
+     *
+     * @return string path of a file
+     */
+    protected function GetAbsoluteURLPath($sFile)
+    {
+        $sRes = '';
+        if (!empty($sFile)) {
+            $sRes = substr($sFile, 0, strripos($sFile, '/'));
+        }
+
+        return $sRes;
+    }
+
+    /**
+     * @param array $aMatch
+     *
+     * @return string
+     */
+    protected function CollectExternalResourcesCommentsCallback($aMatch)
+    {
+        static $aProtectedComments = array('#CMSHEADERCODE-COMPACT-JS-AND-CSS#', '#CMSHEADERCODE-JS#', '#CMSHEADERCODE-CSS#', '#CMSHEADERCODE#', '#CMSHEADERCODE-COMPACT-JS#', '#CMSHEADERCODE-COMPACT-CSS#', '#GLOBALRESOURCECOLLECTION#');
+        if (is_array($aMatch) && count($aMatch) > 1 && in_array(trim($aMatch[1]), $aProtectedComments)) {
+            return $aMatch[0];
+        }
+
+        if (0 < preg_match('/<!-- \\[\\{INDEX:\\d+?\\}\\] -->/', $aMatch[0])) {
+            return $aMatch[0];
+        }
+
+        $iIndex = $this->StaticContentCollector('comment', $aMatch[0]);
+
+        return '<!-- [{INDEX:'.$iIndex.'}] -->';
+    }
+
+    /**
+     * @param string      $sType
+     * @param null|string $sFile
+     *
+     * @return array
+     */
+    protected function StaticContentCollector($sType, $sFile = null)
+    {
+        static $aContent = array();
+        if (!array_key_exists($sType, $aContent)) {
+            $aContent[$sType] = array();
+        }
+        if (!is_null($sFile)) {
+            $iIndex = count($aContent[$sType]);
+            $aContent[$sType][$iIndex] = $sFile;
+
+            return $iIndex;
+        } else {
+            return $aContent[$sType];
+        }
+    }
+
+    /**
+     * @param string $sAbsoluteCSSFileURL current path of the css file
+     * @param string $sContent            content of the css file
+     *
+     * @return string
+     */
+    protected function ProcessCSSRecursive($sAbsoluteCSSFileURL, $sContent)
+    {
+        //replace the relative url path in css file by absolute, something like [absoluter-path-CSS]/../images/foo.jpg
+        $sTemp = $this->ReplaceRelativePath($sAbsoluteCSSFileURL, $sContent);
+
+        //replace "@import css filename" via insert css content from that css file
+        $sNewCss = $this->ImportCSSContent($sTemp);
+        if ($sNewCss === $sTemp) {
+            return $sNewCss;
+        } else {
+            return $this->ProcessCSSRecursive($this->sCurrentCSSPath, $sNewCss);
+        }
+    }
+
+    /**
+     * replace the relative url path in css file with absolute path.
+     *
+     * @param string $sAbsoluteCSSFileURL current path of the css file
+     * @param string $sContent            content of the css file
+     *
+     * @return mixed|string content in which relative url is replaced with absolute url
+     */
+    protected function ReplaceRelativePath($sAbsoluteCSSFileURL, $sContent)
+    {
+        $this->sCurrentCSSPath = $sAbsoluteCSSFileURL;
+
+        /**
+         * replaces url(..)
+         * from e.g. background-image.
+         */
+        $sRegExp = "/url\([[:space:]]*[\"|\']{0,1}(\.{0,2}\S+)[[:space:]]*[\"|\']{0,1}\)/is";
+        $sNewContent = preg_replace_callback($sRegExp, array($this, 'ReplaceRealPathCallback'), $sContent);
+
+        /**
+         * replaces src=..
+         * from progid:DXImageTransform.Microsoft.AlphaImageLoader(src=..).
+         */
+        $sRegExp = "/src=[[:space:]]*[\"|\']{0,1}(\.{0,2}\S+)[[:space:]]*[\"|\']{0,1}/is";
+        $sNewContent = preg_replace_callback($sRegExp, array($this, 'ReplaceRealPathCallback'), $sNewContent);
+
+        /**
+         * replaces css @import ..
+         */
+        $sRegExp = "/@import [[:space:]]*\"(\.{0,2}\S+)[[:space:]]*\"/is";
+        $sNewContent = preg_replace_callback($sRegExp, array($this, 'ReplaceRealPathCallback'), $sNewContent);
+
+        return $sNewContent;
+    }
+
+    /**
+     * replaces relative URLs to absolute URLs based on current CSS file URL
+     * (e.g. ../images/image.jpg -> /chameleon/javascript/jQuery/pluginName/images/image.jpg).
+     *
+     * @param array $aMatch match array of RegExp
+     *
+     * @return string $aMatch[0]  absolute path
+     */
+    public function ReplaceRealPathCallback($aMatch)
+    {
+        if (isset($aMatch[1]) && 'http://' != substr($aMatch[1], 0, 7) && 'https://' != substr($aMatch[1], 0, 8) && 0 !== strpos($aMatch[1], '/')) {
+            $sNewPath = TGlobal::GetStaticURL($this->sCurrentCSSPath.DIRECTORY_SEPARATOR.$aMatch[1]);
+            if ('http://' == substr($sNewPath, 0, 7)) {
+                $sNewPath = substr($sNewPath, 5);
+            }
+            if ('https://' == substr($sNewPath, 0, 8)) {
+                $sNewPath = substr($sNewPath, 6);
+            }
+            $aMatch[0] = str_replace(trim($aMatch[1]), $sNewPath, $aMatch[0]);
+        }
+
+        return $aMatch[0];
+    }
+
+    /**
+     * Import css Content via replace the css file name by
+     * css content.
+     *
+     * @param string $sContent
+     *
+     * @return string
+     */
+    protected function ImportCSSContent($sContent)
+    {
+        //@import url("print.css") print, @import "<name>" <media>;
+        $sRegExp = "#@import\s*(url\(){0,1}\s*\"(\s*\S+\s*)\"(.*)\;#";
+        $sNewContent = preg_replace_callback($sRegExp, array($this, 'ReplaceCSSImportCallback'), $sContent);
+
+        return $sNewContent;
+    }
+
+    /**
+     * callback for function ImportCSSContent that opens the replaced css files
+     * and fetch the content from it.
+     *
+     * @var array $aMatch
+     *
+     * @return string $sCSS css content
+     */
+    protected function ReplaceCSSImportCallback($aMatch)
+    {
+        $sCSSFile = parse_url(trim($aMatch[2]), PHP_URL_PATH);
+
+        $sCSSFile = TGlobal::ResolveStaticURL($sCSSFile);
+        $aStaticURLs = TGlobal::GetStaticURLPrefix();
+        if (!is_array($aStaticURLs)) {
+            $aStaticURLs = array($aStaticURLs);
+        }
+        foreach ($aStaticURLs as $sStaticURL) {
+            if (!empty($sStaticURL)) {
+                if (false !== strpos($sCSSFile, $sStaticURL)) {
+                    $sCSSFile = substr($sCSSFile, strlen($sStaticURL));
+                }
+            }
+        }
+        if ('http://' != substr($sCSSFile, 0, 7) && 'https://' != substr($sCSSFile, 0, 8)) {
+            $sCSSFile = str_replace('/', DIRECTORY_SEPARATOR, $sCSSFile);
+            $sCSSFile = realpath($this->sBasePath.DIRECTORY_SEPARATOR.$sCSSFile);
+        }
+
+        if (is_readable($sCSSFile)) {
+            $aMatch[0] = file_get_contents($sCSSFile);
+            $aMatch[0] = TTools::RemoveUTF8HeaderBomFromString($aMatch[0]); // CSS parsing crashs at UTF-8 BOM Header position
+        }
+
+        return $aMatch[0];
+    }
+
+    /**
+     * @param array $aMatch
+     *
+     * @return string
+     */
+    protected function CollectExternalResourcesCSSCallback($aMatch)
+    {
+        $sReturn = $aMatch[0];
+
+        // ignore if type = print
+        $sTmp = strtolower(str_replace(' ', '', $aMatch[0]));
+        $sTmp = str_replace("'", '"', $sTmp);
+        if (false === strpos($sTmp, 'media="print"')) {
+            $sCSSName = $aMatch[2].'.css';
+            if (0 === strpos($aMatch[3], '?')) {
+                $sCSSName .= $aMatch[3];
+            }
+            if ($this->isAllowedResource($sCSSName)) {
+                $sType = 'css';
+                if (6 == count($aMatch) && strstr($aMatch[5], '#GLOBALRESOURCECOLLECTION#')) {
+                    $sType = 'cssglobal';
+                }
+                $this->StaticContentCollector($sType, $sCSSName);
+                $sReturn = ''; // '<!-- '.$sReturn.' -->';
+            }
+        }
+
+        return $sReturn;
+    }
+
+    /**
+     * @param array $aMatch
+     *
+     * @return string
+     */
+    protected function CollectExternalResourcesJSCallback($aMatch)
+    {
+        $sReturn = $aMatch[0];
+        // ignore if type = print
+        $sTmp = strtolower(str_replace(' ', '', $aMatch[0]));
+        $sTmp = str_replace("'", '"', $sTmp);
+        $sJSName = $aMatch[2].'.js';
+        if (0 === strpos($aMatch[3], '?')) {
+            $sJSName .= $aMatch[3];
+        }
+        if ($this->isAllowedResource($sJSName)) {
+            $sType = 'js';
+            if (6 == count($aMatch) && strstr($aMatch[5], '#GLOBALRESOURCECOLLECTION#')) {
+                $sType = 'jsglobal';
+            }
+            $this->StaticContentCollector($sType, $sJSName);
+            $sReturn = ''; // '<!-- '.$sReturn.' -->';
+        }
+
+        return $sReturn;
+    }
+
+    /**
+     * Test whether collecting resource is allowed. Resource is only allowed if
+     * it is from local or static.
+     *
+     * @var string $sResource
+     *
+     * @return true if resource ist allowed
+     */
+    protected function isAllowedResource($sResource)
+    {
+        return $this->isCollectable($sResource) && ($this->isLocalResource($sResource) || $this->isStatic($sResource));
+    }
+
+    protected function isCollectable($sResource)
+    {
+        return false === strpos($sResource, 'nocollection=1');
+    }
+
+    /**
+     * Test for Static URL.
+     *
+     * @var string $sResource
+     *
+     * @return true if resource is static url
+     */
+    protected function isStatic($sResource)
+    {
+        if ('[{CMSSTATICURL' == substr($sResource, 0, 14)) {
+            return true;
+        }
+
+        $bIsStatic = false;
+        $aStaticURLs = TGlobal::GetStaticURLPrefix();
+        if (!is_array($aStaticURLs)) {
+            $aStaticURLs = array($aStaticURLs);
+        }
+        foreach ($aStaticURLs as $sStaticURL) {
+            if (!empty($sStaticURL)) {
+                if (false !== strpos($sResource, $sStaticURL)) {
+                    $bIsStatic = true;
+                    break;
+                }
+            }
+        }
+
+        return $bIsStatic;
+    }
+
+    /**
+     * Test for local resource.
+     *
+     * @var string $sResource
+     *
+     * @return bool - true if the resource is in local
+     */
+    protected function isLocalResource($sResource)
+    {
+        $bIsLocal = false;
+        if (('.' === $sResource['0'] || '/' === $sResource['0']) && '/' != $sResource['1']) { // filter protocoll less urls
+            $bIsLocal = true;
+        } else {
+            $sResource = str_replace('http://', '', $sResource);
+            $sResource = str_replace('https://', '', $sResource);
+            if (substr($sResource, 0, strlen($_SERVER['HTTP_HOST'])) === $_SERVER['HTTP_HOST']) {
+                $bIsLocal = true;
+            }
+        }
+
+        return $bIsLocal;
+    }
+
+    public function __construct()
+    {
+    }
+
+    /**
+     * @return IPkgCmsFileManager
+     */
+    private function getFileManager()
+    {
+        return ServiceLocator::get('chameleon_system_cms_file_manager.file_manager');
+    }
+}

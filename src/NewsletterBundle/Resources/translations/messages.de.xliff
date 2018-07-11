@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="messages.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_newsletter.action.unsubscribe_all">
+                <source>chameleon_system_newsletter.action.unsubscribe_all</source>
+                <target>Alle Newsletter abmelden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.action.unsubscribe">
+                <source>chameleon_system_newsletter.action.unsubscribe</source>
+                <target>Newsletter abmelden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.text.unsubscribed">
+                <source>chameleon_system_newsletter.text.unsubscribed</source>
+                <target>Du wurdest aus dem Verteiler gelöscht.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.text.unsubscribed_polite">
+                <source>chameleon_system_newsletter.text.unsubscribed_polite</source>
+                <target>Sie wurden aus dem Verteiler gelöscht.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_newsletter.form.salutation">
+                <source>chameleon_system_newsletter.form.salutation</source>
+                <target>Anrede</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.form.first_name">
+                <source>chameleon_system_newsletter.form.first_name</source>
+                <target>Vorname</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.form.last_name">
+                <source>chameleon_system_newsletter.form.last_name</source>
+                <target>Nachname</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.form.email">
+                <source>chameleon_system_newsletter.form.email</source>
+                <target>E-Mail</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.text.available_newsletter">
+                <source>chameleon_system_newsletter.text.available_newsletter</source>
+                <target>Newsletter</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.form.subscribe_to_all">
+                <source>chameleon_system_newsletter.form.subscribe_to_all</source>
+                <target>Alle Newsletter abonnieren</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_newsletter.text.group_unsubscribe_info">
+                <source>chameleon_system_newsletter.text.group_unsubscribe_info</source>
+                <target>Du wurdest aus folgenden Gruppen entfernt:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.text.group_unsubscribe_info_formal">
+                <source>chameleon_system_newsletter.text.group_unsubscribe_info_formal</source>
+                <target>Sie wurden aus folgenden Gruppen entfernt:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.text.list_of_subscribed_groups">
+                <source>chameleon_system_newsletter.text.list_of_subscribed_groups</source>
+                <target>Du bist noch in folgenden Gruppen angemeldet:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.text.list_of_subscribed_groups_polite">
+                <source>chameleon_system_newsletter.text.list_of_subscribed_groups_polite</source>
+                <target>Sie sind noch in folgenden Gruppen angemeldet:</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

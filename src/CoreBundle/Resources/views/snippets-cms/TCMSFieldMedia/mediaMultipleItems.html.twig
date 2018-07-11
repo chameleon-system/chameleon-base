@@ -1,0 +1,23 @@
+{{ sHtmlHiddenFields|raw }}
+<div id="{{ sFieldName }}_posDummy"></div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12"> <div class="multiMediaImagesManage">{{ sHtmlManageMediaButton|raw }}</div> </div>
+        </div>
+        <div class="row">
+            {%  for sImageBox in aImageBoxList %}
+                {%  if loop.index % 6 == 0 %}
+                    <div class="row">
+                {% endif %}
+                <div class="col-md-2">
+                    {{ sImageBox|raw }}
+                </div>
+                {%  if loop.index % 6 == 0 %}
+                    </div>
+                {% endif %}
+            {%  endfor %}
+        </div>
+    </div>
+</div>
+

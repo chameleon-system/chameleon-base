@@ -1,0 +1,540 @@
+.tableeditID {
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 5px;
+    display: inline;
+    color: #419BDE;
+}
+
+.tableeditcontainer h1,
+.tableeditcontainer h2,
+.tableeditcontainer h3 {
+    margin-top: 0px;
+}
+
+.tableeditcontainer .leftTD {
+    padding-right: 10px;
+    font-weight: bold;
+    color: #0B224B;
+    font-size: 12px;
+    width: 250px;
+    vertical-align: top;
+}
+
+.tableeditcontainer .fieldName {
+    background-repeat: no-repeat;
+    background-position: 100%;
+    padding-right: 15px;
+}
+
+.tableeditcontainer .fieldSeperator {
+    padding: 5px;
+    color: #EFEFEF;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 1px;
+    background-image: url(../images/fieldSeperator_bg.gif);
+    background-repeat: repeat-x;
+    height: 33px;
+    vertical-align: top;
+    padding-top: 7px;
+}
+
+.tableeditcontainer .rightTD {
+    padding-right: 10px;
+}
+
+.tableeditcontainer .fieldnumber {
+    width: 70px;
+    text-align: right;
+}
+
+.tableeditcontainer .fieldvarchar {
+    width: 500px;
+}
+
+.tableeditcontainer .fieldurl {
+    width: 500px;
+}
+
+.tableeditcontainer .fieldtext {
+    width: 500px;
+    height: 200px;
+}
+
+.cmsimagefieldcontainer {
+    position: relative;
+    margin-bottom:15px;
+    display: inline-block; /* stupid IE7 needs this */
+}
+
+.cmsimagefielditem {
+    background-color: #D2DDEC;
+    float: left;
+    border: 1px solid #A9C4E7;
+}
+
+.cmsimagefielditem .cmsimagefielditemtitle {
+    background-color: #428bca;
+    border: 1px solid #9A9A9A;
+    padding: 3px;
+    color: #EFEFEF;
+    font-size: 11px;
+    height: 28px;
+}
+
+.SnippetmediaUploader {
+    margin-top:10px;
+}
+.SnippetmediaUploader .defaultCategoryText , .SnippetmediaUploader .categorySelectorHead , .SnippetmediaUploader .categorySelector, .multiMediaImagesManage{
+    margin-bottom:10px;
+}
+
+.cmsimagefielditemtitle img {
+    margin-left: 5px;
+}
+.SnippetmediaUploader {
+    margin-top:10px;
+}
+.SnippetmediaUploader .defaultCategoryText , .SnippetmediaUploader .categorySelectorHead , .SnippetmediaUploader .categorySelector, .multiMediaImagesManage{
+    margin-bottom:10px;
+}
+
+.rwdimage.img-responsive{
+    width:auto;
+}
+.cmsimagefielditem .cmsimagefielditemimage {
+    padding: 10px;
+    min-width: 150px;
+    display: block;
+    text-align: center;
+}
+
+.cmsimagefielditem .cmsimagefielditemimage img {
+    max-height: 150px;
+}
+
+#datepickeriframe {
+    background-color: transparent;
+}
+
+.toolTipButton, .translateButton {
+    float: right;
+    cursor: pointer;
+    cursor: hand;
+    padding-left: 5px;
+}
+
+.translateButton {
+    margin-right: 5px;
+}
+
+.translateButton span {
+    line-height: 16px;
+}
+
+.charCounter {
+    color: #616974;
+    background-color: #F8F2AA;
+    border: 1px solid #FFB608;
+    min-width: 70px;
+    text-align: right;
+}
+
+.passwordStrengthMeter {
+    width: 246px;
+    height: 35px;
+    background: url(../images/progressMeterColorFull.gif);
+}
+
+.passwordStrengthMeterArrow {
+    width: 10px;
+    height: 12px;
+    margin-top: 4px;
+    margin-left: 12px;
+}
+
+.posListUL {
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+.positionList {
+    background-color: #F8F2AA;
+    color: #616974;
+    border: 1px solid #FFB608;
+    padding: 3px;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 2px;
+    cursor: move;
+}
+
+.positionListActive {
+    background-color: #E3F8D8;
+    color: #0B224B;
+    border: 1px solid #217C21;
+    padding: 3px;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 2px;
+    cursor: move;
+}
+
+/* the breadcrumb in treeNode fields */
+.fieldPreview {
+    padding: 5px;
+    border: 1px solid #ABBDCD;
+    margin-bottom: 10px;
+    width: auto;
+}
+
+.fieldMsg {
+    font-weight: bold;
+    border-style: solid;
+    border-width: 1px;
+    padding: 5px;
+    padding-right: 45px;
+    min-height: 30px;
+    height: auto !important;
+    height: 30px
+}
+
+.fieldMsg.MESSAGE {
+    border-color: #d6e9c6;
+    color: #468847;
+    background: #dff0d8 url(../images/nav_icons/success.png) no-repeat scroll right center;
+}
+
+.fieldMsg.WARNING {
+    border-color: #FFB608;
+    color: #0B224B;
+    background: #F8F2AA url(../images/nav_icons/notice.png) no-repeat scroll right center;
+}
+
+.fieldMsg.ERROR {
+    border-color: #DF7D7D;
+    color: #AF4C4C;
+    background: #FFBFBF url(../images/nav_icons/error.png) no-repeat scroll right center;
+}
+
+.requiredfieldfocus {
+    font-weight: bold;
+    border-color: #DF7D7D;
+    border-style: solid;
+    border-width: 1px;
+    color: #AF4C4C;
+    padding: 5px;
+    padding-right: 45px;
+    background: #FFBFBF url(../images/nav_icons/error.png) no-repeat 5px 2px;
+    background-position: right;
+    min-height: 30px;
+    height: auto !important;
+    height: 30px
+}
+
+.requiredfield {
+    font-weight: bolder;
+    color: #DF7D7D;
+    border: none;
+    font-size: 14px;
+}
+
+.quickLookupListName {
+    color: #717880;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+#quicklookuplist {
+    width: 185px;
+}
+
+.checkboxDIV {
+    width: 250px;
+    float: left;
+    padding: 3px;
+    border-bottom: 1px solid #C1BEBE;
+    border-right: 1px solid #C1BEBE;
+    margin: 0px 5px 5px 0px;
+}
+
+.checkboxDIV label {
+    font-weight: normal;
+    line-height: 25px;
+}
+
+.checkboxDIV input {
+    margin-right: 5px;
+    float: left;
+}
+
+.checkBoxHeaderActionLink {
+    display: block;
+    float: left;
+    height: 20px;
+    line-height: 18px;
+    padding-left: 20px;
+    padding-top: 3px;
+}
+
+.tooltipContainer {
+    background-color: #F8F2AA;
+    color: #0B224B;
+    padding: 8px;
+    z-index: 10;
+    display: block;
+    font-family: Arial, helvetica, sans-serif;
+    font-size: 11px;
+    border: 2px solid #FFB608;
+    line-height: 16px;
+    width: 70%;
+    margin-bottom: 20px;
+}
+
+#tableEditorHeader th, #tableEditorHeader td, #tableEditorHeader td span, #tableEditorHeader td div {
+    color: #717880;
+    text-align: left;
+    text-shadow: 1px 2px 3px whitesmoke;
+}
+
+#tableEditorHeader th {
+    font-weight: bold;
+    padding-top: 5px;
+    padding-right: 20px;
+    padding-bottom: 3px;
+}
+
+#tableEditorHeader td {
+    padding-right: 20px;
+}
+
+#tableEditorHeader .pageNavigationTreeSelectBox td {
+    padding-right: 0px;
+}
+
+.pageNavigationTreeSelectBox .treeSelectBox div {
+    float: left;
+    height: 26px;
+}
+
+.pageNavigationTreeSelectBox .dropdownButton {
+
+}
+
+.pageNavigationTreeSelectBox .additionalNavis {
+    position: absolute;
+    display: none;
+}
+
+.pageNavigationTreeSelectBox .additionalNavis .boxborder {
+    line-height: 0px;
+    font-size: 0px;
+    padding: 0px 0px 0px 0px;
+}
+
+.pageNavigationTreeSelectBox .additionalNavis .boxcontent {
+    background-color: #f4f5f7;
+}
+
+.switchToRecordBox {
+    float: left;
+    margin-left: 20px;
+}
+
+.rsakeymanagerbox .rsakeyline {
+    padding-bottom: 5px;
+}
+
+.rsakeymanagerbox .rsakeyline input, .rsakeymanagerbox .rsakeyline textarea {
+    width: 650px;
+}
+
+.rsakeymanagerbox .rsakeyline textarea {
+    height: auto;
+    background-color: transparent;
+    border: none;
+}
+
+.rsakeymanagerbox .rsakeyline span.keyname {
+    width: 150px;
+    float: left;
+}
+
+.rsakeymanagerbox .generatekey {
+    padding-left: 150px;
+    padding-top: 10px;
+}
+
+.rsakeymanagerbox .generatekey select {
+    float: left;
+    margin-right: 20px;
+}
+
+.description {
+    padding: 5px;
+}
+
+.descriptionContainer {
+    padding: 0px;
+    min-height: 3px;
+    height: auto !important;
+    height: 3px;
+    margin-bottom: 7px;
+    -webkit-box-shadow: 3px 3px 8px #1f1f1f;
+    -moz-box-shadow: 3px 3px 8px #1f1f1f;
+    box-shadow: 3px 3px 8px #1f1f1f;
+    margin-top: -11px;
+    background-color: #EFF0F3;
+}
+
+.translationStateIcon {
+    float: right;
+    padding-right: 5px;
+}
+
+.custom-combobox {
+    position: relative;
+    display: inline-block;
+}
+
+.custom-combobox-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+}
+
+.custom-combobox-input {
+    margin: 0;
+    padding: 0.3em;
+}
+
+.ui-autocomplete {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.button-spacing {
+    margin-left: 10px;
+}
+
+/*
+* TCMSFieldBoolean
+*/
+.TCMSFieldBoolean .btn {
+    text-transform: uppercase;
+}
+
+.TCMSFieldBoolean .button-on.active {
+    color: #fff;
+    background-color: #5cb85c;
+    background-image: -webkit-linear-gradient(top, #5cb85c 0%, #419641 100%);
+    background-image:         linear-gradient(to bottom, #5cb85c 0%, #419641 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c', endColorstr='#ff419641', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    background-repeat: repeat-x;
+    border-color: #3e8f3e;
+}
+
+.TCMSFieldBoolean .button-on.active:hover,
+.TCMSFieldBoolean .button-on.active:focus,
+.TCMSFieldBoolean .button-on.active:active
+{
+    color: #fff;
+    border-color: #398439;
+    background-color: #419641;
+    background-position: 0 -15px;
+}
+
+.TCMSFieldBoolean .button-off.active {
+    color: #fff;
+    background-color: #d9534f;
+    background-image: -webkit-linear-gradient(top, #d9534f 0%, #c12e2a 100%);
+    background-image:         linear-gradient(to bottom, #d9534f 0%, #c12e2a 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9534f', endColorstr='#ffc12e2a', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    background-repeat: repeat-x;
+    border-color: #b92c28;
+}
+
+.TCMSFieldBoolean .button-off.active:hover,
+.TCMSFieldBoolean .button-off.active:focus,
+.TCMSFieldBoolean .button-off.active:active
+{
+    color: #fff;
+    border-color: #ac2925;
+    background-color: #c12e2a;
+    background-position: 0 -15px;
+}
+
+/**
+* search field
+*/
+.right-inner-addon {
+    position: relative;
+}
+.right-inner-addon input {
+    padding-right: 30px;
+}
+.right-inner-addon i {
+    position: absolute;
+    right: 0px;
+    padding: 8px 10px;
+    pointer-events: none;
+}
+
+.dateInput .ui-datepicker-trigger {
+    display: none;
+}
+
+.helpText {
+    background: url(../images/icons/icon_info.gif) no-repeat 2px 0px;
+    font-size: 11px;
+    color: #7B96BD;
+    margin-top: 8px;
+    display: block;
+    padding-left: 25px;
+}
+
+.helpText ul {
+    margin: 0 0 5px 0;
+    padding: 0;
+}
+
+.helpText ul li {
+    list-style: none;
+}
+
+.helpText li.head {
+    font-weight:bold;
+}
+
+.helpText ul ul,
+.helpText ul.info {
+    margin: 0;
+    padding: 0 0 0 30px;
+}
+
+.helpText ul li ul li,
+.helpText ul.info li {
+    list-style: disc;
+}
+
+.helpText ul.info li.no-icon {
+    list-style: none;
+}
+
+.helpText span.strike-through {
+    text-decoration: line-through;
+}
+
+.helpText div.important strong,
+.helpText strong.important {
+    color: #900;
+}
+
+.dateInput .ui-datepicker-trigger {
+    display: none;
+}

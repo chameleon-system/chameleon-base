@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ORDER>
+    <IDENT>{{ sqlData.id }}</IDENT>
+    <ORDERNUMBER>{{ sqlData.ordernumber }}</ORDERNUMBER>
+    <BASKET_IDENT>{{ sqlData.order_ident }}</BASKET_IDENT>
+    <CUSTOMERNUMBER>{{ sqlData.customer_number }}</CUSTOMERNUMBER>
+    <DATE>{{ sqlData.datecreated }}</DATE>
+    <VALUE_TOTAL>{{ sqlData.value_total|number_format(2, '.', '') }}</VALUE_TOTAL>
+    <VALUE_ARTICLES>{{sqlData.value_article|number_format(2, '.', '')}}</VALUE_ARTICLES>
+    <VALUE_WRAPPING>{{ sqlData.value_wrapping|number_format(2, '.', '') }}</VALUE_WRAPPING>
+    <VALUE_WRAPPING_CARD>{{ sqlData.value_wrapping_card|number_format(2, '.', '') }}</VALUE_WRAPPING_CARD>
+    <VALUE_VOUCHERS>{{ sqlData.value_vouchers|number_format(2, '.', '') }}</VALUE_VOUCHERS>
+    <VALUE_VOUCHERS_NOT_SPONSERED>{{ sqlData.value_vouchers_not_sponsered|number_format(2, '.', '') }}</VALUE_VOUCHERS_NOT_SPONSERED>
+    <VALUE_DISCOUNTS>{{ sqlData.value_discounts|number_format(2, '.', '') }}</VALUE_DISCOUNTS>
+    <VALUE_VAT_TOTAL>{{ sqlData.value_vat_total|number_format(2, '.', '') }}</VALUE_VAT_TOTAL>
+    <ARTICLE_COUNT>{{ sqlData.count_articles|number_format(0, '.', '') }}</ARTICLE_COUNT>
+    <UNIQUE_ARTICLE_COUNT>{{ sqlData.count_unique_articles|number_format(0, '.', '') }}</UNIQUE_ARTICLE_COUNT>
+    <SHIPPINGGROUP>
+        <NAME>{{ sqlData.shop_shipping_group_name }}</NAME>
+        <PRICE>{{ sqlData.shop_shipping_group_price|number_format(2, '.', '') }}</PRICE>
+        <VAT>{{ sqlData.shop_shipping_group_vat_percent|number_format(2, '.', '') }}</VAT>
+    </SHIPPINGGROUP>
+    <PAYMENT>
+        <NAME>{{ sqlData.shop_payment_method_name }}</NAME>
+        <PRICE>{{ sqlData.shop_payment_method_price|number_format(2, '.', '') }}</PRICE>
+        <VAT>{{ sqlData.shop_payment_method_vat_percent|number_format(2, '.', '') }}</VAT>
+    </PAYMENT>
+    <USER_EMAIL>{{ sqlData.user_email }}</USER_EMAIL>
+    <AFFILIATE_CODE>{{ sqlData.ffiliate_code }}</AFFILIATE_CODE>
+    <PAID>{{ sqlData.order_is_paid }}</PAID>
+    <PAID_DATE>{{ sqlData.order_is_paid_date }}</PAID_DATE>
+    <CANCELED>{{ sqlData.canceled }}</CANCELED>
+    <CANCELED_DATE>{{ sqlData.canceled_date }}</CANCELED_DATE>
+
+    <ADDRESS_BILLING>
+        <SALUTATION>{{ adr_billing_salutation }}</SALUTATION>
+        <FIRSTNAME>{{ sqlData.adr_billing_firstname }}</FIRSTNAME>
+        <LASTNAME>{{ sqlData.adr_billing_lastname }}</LASTNAME>
+        <COMPANY>{{ sqlData.adr_billing_company }}</COMPANY>
+        <STREET>{{ sqlData.adr_billing_street }}</STREET>
+        <STREETNR>{{ sqlData.adr_billing_streetnr }}</STREETNR>
+        <ADDITIONAL_INFO>{{ sqlData.adr_billing_additional_info }}</ADDITIONAL_INFO>
+        <POSTALCODE>{{ sqlData.adr_billing_postalcode }}</POSTALCODE>
+        <CITY>{{ sqlData.adr_billing_city }}</CITY>
+        <COUNTRY>{{ adr_billing_country }}</COUNTRY>
+        <TELEPHONE>{{ sqlData.adr_billing_telefon }}</TELEPHONE>
+        <FAX>{{ sqlData.adr_billing_fax }}</FAX>
+    </ADDRESS_BILLING>
+
+    <USE_BILLING_AS_SHIPPING>{{ sqlData.adr_shipping_use_billing }}</USE_BILLING_AS_SHIPPING>
+    {% if sqlData.adr_shipping_use_billing == 0 %}
+        <ADDRESS_SHIPPING>
+            <IS_DHL_PACKSTATION>{{ adr_shipping_is_dhl_packstation }}</IS_DHL_PACKSTATION>
+            <SALUTATION>{{ adr_shipping_salutation }}</SALUTATION>
+            <FIRSTNAME>{{ sqlData.adr_shipping_firstname }}</FIRSTNAME>
+            <LASTNAME>{{ sqlData.adr_shipping_lastname }}</LASTNAME>
+            <COMPANY>{{ sqlData.adr_shipping_company }}</COMPANY>
+            <STREET>{{ sqlData.adr_shipping_street }}</STREET>
+            <STREETNR>{{ sqlData.adr_shipping_streetnr }}</STREETNR>
+            <ADDITIONAL_INFO>{{ sqlData.adr_shipping_additional_info }}</ADDITIONAL_INFO>
+            <POSTALCODE>{{ sqlData.adr_shipping_postalcode }}</POSTALCODE>
+            <CITY>{{ sqlData.adr_shipping_city }}</CITY>
+            <COUNTRY>{{ adr_shipping_country }}</COUNTRY>
+            <TELEPHONE>{{ sqlData.adr_shipping_telefon }}</TELEPHONE>
+            <FAX>{{ sqlData.adr_shipping_fax }}</FAX>
+        </ADDRESS_SHIPPING>
+    {% endif %}
+
+    <ORDER_ITEMS>
+        {% for aOrderItem in aOrderItemList %}
+        <ORDER_ITEM>
+            <IDENT>{{ aOrderItem.id }}</IDENT>
+            <BASKET_IDENT>{{ aOrderItem.basket_item_key }}</BASKET_IDENT>
+            <NAME>{{ aOrderItem.name }}</NAME>
+            <ARTICLENUMBER>{{ aOrderItem.articlenumber }}</ARTICLENUMBER>
+            <MANUFACTURER>{{ aOrderItem.shop_manufacturer_name }}</MANUFACTURER>
+            <PRICE>{{ aOrderItem.order_price|number_format(2,'.','') }}</PRICE>
+            <VAT>{{ aOrderItem.vat_percent|number_format(2,'.','') }}</VAT>
+            <AMOUNT>{{ aOrderItem.order_amount|number_format(0,'.','') }}</AMOUNT>
+            <VALUE_TOTAL>{{ aOrderItem.order_price_total|number_format(2,'.','') }}</VALUE_TOTAL>
+            {% for sArticleType in aOrderItem.type %}
+                <TYPE>{{ sArticleType }}</TYPE>
+            {% endfor %}
+        </ORDER_ITEM>
+        {% endfor %}
+    </ORDER_ITEMS>
+
+</ORDER>

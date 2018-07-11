@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="chameleon_system_twig_debug.collector_extension.class">ChameleonSystem\TwigDebugBundle\Twig\Extension\DebugExtension</parameter>
+        <parameter key="chameleon_system_twig_debug.post_render_listener.class">ChameleonSystem\TwigDebugBundle\ViewRenderer\ViewRendererPostRenderListener</parameter>
+    </parameters>
+    <services>
+        <service id="chameleon_system_twig_debug.collector_extension" class="%chameleon_system_twig_debug.collector_extension.class%">
+            <tag name="twig.extension" />
+        </service>
+
+        <service id="chameleon_system_twig_debug.post_render_listener" class="%chameleon_system_twig_debug.post_render_listener.class%">
+            <tag name="kernel.event_listener" event="chameleon_system.viewrenderer.post_render" method="handlePostRender" />
+        </service>
+    </services>
+</container>
+

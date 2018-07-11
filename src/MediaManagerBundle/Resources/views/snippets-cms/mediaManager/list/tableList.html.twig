@@ -1,0 +1,29 @@
+<div class="snippetMediaManagerListHeader cancel-unselect">
+    <div class="top-bar">
+        <h2 class="h3 headline">{{ mediaTreeNode.name | default('chameleon_system_media_manager.tree.untitled_tree_item_placeholder' | trans) }}
+            {% if accessRightsMediaTree.edit %}
+                <a href="{{ mediaTreeNodeEditUrl }}" class="edit-media-tree-node" data-id="{{ mediaTreeNode.id }}"><span
+                            class="glyphicon glyphicon-cog"></span></a>
+            {% endif %}
+        </h2>
+    </div>
+    <div class="action-bar">
+        {% if accessRightsMedia.new %}
+            <a class="upload" data-id="{{ mediaTreeNode.id }}"><span
+                        class="glyphicon glyphicon-upload"></span> {{ 'chameleon_system_media_manager.list.upload' | trans }}
+            </a>
+        {% endif %}
+    </div>
+    <div class="list-view-selector">
+        <a class="list-view grid{% if listState.listView == 'grid' %} active{% endif %}" data-view="grid"><span
+                    class="glyphicon glyphicon-th"></span></a>
+        <a class="list-view grid-large{% if listState.listView == 'gridLarge' %} active{% endif %}"
+           data-view="gridLarge"><span class="glyphicon glyphicon-th-large"></span></a>
+        <a class="list-view list{% if listState.listView == 'list' %} active{% endif %}" data-view="list"><span
+                    class="glyphicon glyphicon-th-list"></span></a>
+        <a class="list-view list{% if listState.listView == 'tableList' %} active{% endif %}"
+           data-view="tableList"><span
+                    class="glyphicon glyphicon-list-alt"></span></a>
+    </div>
+</div>
+<iframe src="{{ tableSrc }}" style="height: 100%; width: 100%;" id="auto-height-frame"></iframe>

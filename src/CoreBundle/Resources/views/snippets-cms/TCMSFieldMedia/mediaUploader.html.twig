@@ -1,0 +1,31 @@
+{% trans_default_domain constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND') %}
+
+{% if sCategorySelectOptionsHtml %}
+<div class="SnippetmediaUploader">
+    <div class="row">
+        {% if bShowCategorySelector == false %}
+            <div class="col-md-12">
+                <div class="defaultCategoryText">
+                    <input type="hidden" name="{{ sSelectCategoryName }}" value="{{ sCategoryDefaultId }}" />
+                    {{"chameleon_system_core.field_media.active_upload_folder"|trans({'%sDefaultCategory%':sDefaultCategory}) }}
+                </div>
+            </div>
+            <div class="col-md-12">{{ sUploadButton|raw }}</div>
+        {% else %}
+            <div class="col-md-12">
+                <div class="categorySelectorHead">
+                    {{ "chameleon_system_core.field_media.form_upload_folder"|trans }}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="categorySelector">
+                    <select name="{{ sFieldName }}__cms_media_tree_id" class="form-control input-sm">
+                        {{ sCategorySelectOptionsHtml|raw }}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12">{{ sUploadButton|raw }}</div>
+        {%  endif %}
+    </div>
+</div>
+{% endif %}

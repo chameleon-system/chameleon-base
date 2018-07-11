@@ -1,0 +1,169 @@
+{
+    "name": "chameleon-system/chameleon-base",
+    "type": "library",
+    "description": "The Chameleon System core.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ESONO AG",
+            "email": "info@chameleonsystem.com",
+            "homepage": "https://www.chameleonsystem.com",
+            "role": "Company"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://composer.esono.de"
+        }
+    ],
+    "require": {
+        "ckeditor/ckeditor": "4.6.2",
+        "doctrine/dbal": "~2.5",
+        "ext-curl": "*",
+        "ext-tidy": "*",
+        "ext-pdo_mysql": "*",
+        "ezyang/htmlpurifier": "~4.6",
+        "kartik-v/strength-meter": "~1.1.0",
+        "natxet/CssMin": "~3.0.0",
+        "php": "^7.1",
+        "phpmailer/phpmailer": "~6.0",
+        "sensio/distribution-bundle": "~4.0",
+        "symfony/monolog-bundle": "~2.3|^3.0.2",
+        "symfony/symfony": "~2.8.0",
+        "symfony-cmf/routing-bundle": "~1.2.0",
+        "tedivm/jshrink": "~1.0",
+        "twig/twig": "~1.13"
+    },
+    "require-dev": {
+        "chameleon-system/sanitycheck": "dev-master@dev",
+        "chameleon-system/sanitycheck-bundle": "dev-master@dev",
+        "phpunit/phpunit": "~7.0"
+    },
+    "autoload": {
+        "classmap": [
+            "src/CoreBundle/FrontController/chameleon.php",
+            "src/CoreBundle/private",
+            "src/AtomicLockBundle/Cronjobs",
+            "src/AtomicLockBundle/objects",
+            "src/CmsActionPluginBundle/objects",
+            "src/CmsCaptchaBundle/objects",
+            "src/CmsChangeLogBundle/src",
+            "src/CmsClassManagerBundle",
+            "src/CmsCoreLogBundle/interfaces",
+            "src/CmsCoreLogBundle/monolog",
+            "src/CmsCoreLogBundle/objects",
+            "src/CmsEventBundle/objects",
+            "src/CmsFileManagerBundle/interfaces",
+            "src/CmsFileManagerBundle/objects",
+            "src/CmsInterfaceManagerBundle/objects",
+            "src/CmsNavigationBundle/mapper",
+            "src/CmsNavigationBundle/objects",
+            "src/CmsResultCacheBundle/objects",
+            "src/CmsStringUtilitiesBundle/Interfaces",
+            "src/CmsStringUtilitiesBundle/objects",
+            "src/CmsTextBlockBundle/mappers",
+            "src/CmsTextBlockBundle/objects",
+            "src/CmsTextBlockBundle/TCMSPkgCmsTextBlockTCMSTextField.class.php",
+            "src/CmsTextFieldBundle/mapper",
+            "src/CmsTextFieldBundle/objects",
+            "src/CommentBundle/objects",
+            "src/Csv2SqlBundle/objects",
+            "src/ExternalTrackerBundle/objects",
+            "src/ExternalTrackerBundle/pkgArticle",
+            "src/ExternalTrackerBundle/pkgExtranet",
+            "src/ExternalTrackerBundle/pkgSearch",
+            "src/ExternalTrackerBundle/pkgShop",
+            "src/ExternalTrackerGoogleAnalyticsBundle/objects",
+            "src/ExtranetBundle/mapper",
+            "src/ExtranetBundle/objects",
+            "src/GenericTableExportBundle/objects",
+            "src/MultiModuleBundle/mappers",
+            "src/MultiModuleBundle/objects",
+            "src/NewsletterBundle/mappers",
+            "src/NewsletterBundle/objects",
+            "src/PkgCoreBundle/cmsModules",
+            "src/PkgCoreBundle/exceptions",
+            "src/PkgCoreBundle/interfaces",
+            "src/PkgCoreBundle/mappers",
+            "src/PkgCoreBundle/objects",
+            "src/RevisionManagementBundle/objects",
+            "src/SnippetRendererBundle/Filter",
+            "src/SnippetRendererBundle/interfaces",
+            "src/SnippetRendererBundle/objects",
+            "src/TrackViewsBundle/objects",
+            "src/TrackViewsBundle/pkgShop",
+            "src/UrlAliasBundle/objects",
+            "src/ViewRendererBundle/mappers",
+            "src/ViewRendererBundle/objects"
+        ],
+        "psr-4": {
+            "ChameleonSystem\\": "src",
+            "esono\\pkgCmsCache\\": "src/CmsCacheBundle/src/esono/pkgCmsCache",
+            "esono\\pkgCmsCounter\\": "src/CmsCounterBundle/src/esono/pkgCmsCounter",
+            "esono\\pkgCmsRouting\\": "src/CmsRoutingBundle/src/esono/pkgCmsRouting",
+            "esono\\pkgCoreValidatorConstraints\\": "src/CoreValidatorConstraintsBundle/src/esono/pkgCoreValidatorConstraints"
+        },
+        "exclude-from-classmap": [
+            "/tests/",
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "classmap": [
+            "src/AutoclassesBundle/Tests",
+            "src/ViewRendererBundle/Tests"
+        ]
+    },
+    "bin": [
+        "src/CoreBundle/bin/chameleon",
+        "src/CoreBundle/bin/console"
+    ],
+    "config": {
+        "bin-dir": "vendor/bin",
+        "sort-packages": true
+    },
+    "replace": {
+        "chameleon-system/autoclasses-bundle": "*",
+        "chameleon-system/cookie-consent-bundle": "*",
+        "chameleon-system/core": "*",
+        "chameleon-system/database-migration-bundle": "*",
+        "chameleon-system/debug-bundle": "*",
+        "chameleon-system/distribution-bundle": "*",
+        "chameleon-system/minifier-js-jshrink-bundle": "*",
+        "chameleon-system/pkgatomiclock": "*",
+        "chameleon-system/pkgcmsactionplugin": "*",
+        "chameleon-system/pkgcmscache": "*",
+        "chameleon-system/pkgcmscaptcha": "*",
+        "chameleon-system/pkgcmschangelog": "*",
+        "chameleon-system/pkgcmsclassmanager": "*",
+        "chameleon-system/pkgcmscorelog": "*",
+        "chameleon-system/pkgcmscounter": "*",
+        "chameleon-system/pkgcmsevent": "*",
+        "chameleon-system/pkgcmsfilemanager": "*",
+        "chameleon-system/pkgcmsinterfacemanager": "*",
+        "chameleon-system/pkgcmsnavigation": "*",
+        "chameleon-system/pkgcmsresultcache": "*",
+        "chameleon-system/pkgcmsrouting": "*",
+        "chameleon-system/pkgcmsstringutilities": "*",
+        "chameleon-system/pkgcmstextblock": "*",
+        "chameleon-system/pkgcmstextfield": "*",
+        "chameleon-system/pkgcomment": "*",
+        "chameleon-system/pkgcore": "*",
+        "chameleon-system/pkgcorevalidatorconstraints": "*",
+        "chameleon-system/pkgcsv2sql": "*",
+        "chameleon-system/pkgexternaltracker": "*",
+        "chameleon-system/pkgexternaltrackergoogleanalytics": "*",
+        "chameleon-system/pkgextranet": "*",
+        "chameleon-system/pkggenerictableexport": "*",
+        "chameleon-system/pkgmultimodule": "*",
+        "chameleon-system/pkgnewsletter": "*",
+        "chameleon-system/pkgrevisionmanagement": "*",
+        "chameleon-system/pkgsnippetrenderer": "*",
+        "chameleon-system/pkgtrackviews": "*",
+        "chameleon-system/pkgurlalias": "*",
+        "chameleon-system/pkgviewrenderer": "*",
+        "chameleon-system/twig-debug-bundle": "*",
+        "chameleon-system/update-counter-migration-bundle": "*"
+    }
+}

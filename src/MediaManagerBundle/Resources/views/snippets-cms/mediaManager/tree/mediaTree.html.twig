@@ -1,0 +1,14 @@
+{# mediaTree \ChameleonSystem\MediaManager\DataModel\MediaTreeDataModel #}
+<form class="media-search-box">
+    <input type="text" class="form-control search-all autocomplete-search" value=""
+           placeholder="{{ 'chameleon_system_media_manager.list.search_in_all_media' | trans }}"
+           data-target="search-all-auto-complete">
+    <button type="submit" class="search-button"><span class="glyphicon glyphicon-search"></span></button>
+    <div id="search-all-auto-complete"></div>
+</form>
+
+<div class="snippetMediaManagerMediaTree tree-container">
+    <ul>
+        {% include 'mediaManager/tree/mediaTreeNode.html.twig' with {'mediaTreeNode': mediaTree.rootNode} %}
+    </ul>
+</div>

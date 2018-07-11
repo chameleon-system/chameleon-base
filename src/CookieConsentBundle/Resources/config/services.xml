@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="chameleon_system_cookie_consent.add_cookie_consent_includes_listener" class="ChameleonSystem\CookieConsentBundle\EventListener\AddCookieConsentIncludesListener">
+            <argument /> <!-- position -->
+            <argument /> <!-- theme -->
+            <argument /> <!-- bg_color -->
+            <argument /> <!-- button_bg_color -->
+            <argument /> <!-- button_text_color -->
+            <argument /> <!-- privacy_policy_system_page_name -->
+            <argument type="service" id="chameleon_system_core.request_info_service" />
+            <argument type="service" id="twig" />
+            <argument type="service" id="chameleon_system_core.system_page_service" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.header" method="onGlobalHtmlHeaderInclude" priority="-250" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.footer" method="onGlobalHtmlFooterInclude" priority="-250" />
+        </service>
+
+    </services>
+</container>

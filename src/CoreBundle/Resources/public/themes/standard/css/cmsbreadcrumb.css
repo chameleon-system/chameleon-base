@@ -1,0 +1,31 @@
+#cmsbreadcrumb {
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 23px;
+}
+
+#cmsbreadcrumb ul {
+    padding: 0px;
+    margin: 0;
+    list-style: none;
+    list-style-position: inside;
+}
+
+#cmsbreadcrumb li {
+    display: inline;
+    line-height: 21px;
+    background: transparent url("/chameleon/blackbox/themes/standard/images/breadcrumb/arrow.gif") no-repeat scroll left center;
+    padding-left: 20px;
+}
+
+#cmsbreadcrumb a, #cmsbreadcrumb a:link,
+#cmsbreadcrumb a:visited, #cmsbreadcrumb a:hover,
+#cmsbreadcrumb a:active, #cmsbreadcrumb a:focus {
+    text-decoration: none;
+    border-bottom-color: transparent;
+    color: #151C55;
+}
+
+#cmsbreadcrumb a:hover {
+    color: #7B96BD;
+}

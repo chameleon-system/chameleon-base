@@ -1,0 +1,33 @@
+#!/usr/bin/php
+<?php
+
+if (false === isset($argv[1])) {
+    echo sprintf("Usage: %s <command> <arguments>\n", $argv[0]);
+    exit;
+}
+
+$basedir = __DIR__ . '/../../../../../..';
+if (true === file_exists($basedir . '/app/autoload.php')) {
+    include_once $basedir . '/app/autoload.php';
+} else {
+    include_once $basedir . '/vendor/autoload.php';
+}
+
+$command = strtolower($argv[1]);
+
+switch($command) {
+    case 'migrate': migrate($argv); break;
+}
+
+function migrate(array $arguments)
+{
+    if (false === isset($arguments[2])) {
+        echo sprintf("Please specify the version to migrate to, e.g. '6.2'.\n");
+        exit();
+    }
+
+    $migrator = new \ChameleonSystem\CoreBundle\Maintenance\Migrator();
+
+    $targetVersion = strtolower($arguments[2]);
+    $migrator->migrate($targetVersion);
+}

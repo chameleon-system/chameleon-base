@@ -1,0 +1,220 @@
+/* TFullGroupTable styles */
+.tablelistfunctions {
+    position: relative;
+    vertical-align: middle;
+}
+
+.tablelistfunctions div {
+    color: #0B224B;
+}
+
+.tablelistfunctions img {
+    float: right;
+    padding-left: 8px;
+}
+
+.tablelistfunctions .functionTitle {
+    float: right;
+}
+
+thead th {
+    background-color: #428bca;
+    color: white;
+}
+
+.row.TFullGroupTable {
+    margin: 5px 0px 5px 5px;
+}
+
+.TFullGroupTable .form-inline label {
+    margin-right: 5px;
+    margin-bottom: 0px;
+}
+
+.TFullGroupTable .form-inline .form-control {
+    margin-right: 5px;
+}
+
+.TFullGroupTablePagination {
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+.TFullGroupTablePerPageSelect {
+    margin-top: 5px;
+}
+
+.groupCell {
+    font-weight: bolder;
+    background-color: #c6c6c6 !important;
+    padding: 0px 0px 3px 5px !important;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: 1px;
+    color: #428bca;
+    border-bottom: 2px solid #777 !important;
+}
+
+.groupSpacer {
+    font-size: 1px;
+    background-color: #FFFFFF;
+    width: 1px;
+}
+
+.tblListBorder {
+    border: 1px solid #9A9A9A;
+    padding-left: 3px;
+    padding-right: 3px;
+    background-color: #ffffff;
+}
+
+.tblGroupSelector {
+    max-width: 170px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.tblSearchButtonTDstyle {
+    padding-left: 10px;
+}
+
+.tblSearchFieldTDstyle {
+    padding-left: 5px;
+}
+
+.functionButton {
+    border: 1px solid #000000;
+    margin-left: 10px;
+    float: left;
+    line-height: 16px;
+    padding: 1px;
+    padding-left: 16px;
+    background-color: #EFEFEF;
+    margin-bottom: 2px;
+    background-repeat: no-repeat;
+    background-position: 3px center;
+    width: 100px;
+}
+
+.functionButton a {
+    text-decoration: none;
+    line-height: 16px;
+    color: black;
+}
+
+.functionButton img {
+    padding-left: 3px;
+}
+
+.tblsearchLimit {
+    padding-right: 10px;
+}
+
+.tblsearch {
+    padding-bottom: 5px;
+}
+
+.tblsearch .row {
+    margin-left: 0px;
+}
+
+.tblsearch .row .form-group {
+    margin-right: 10px;
+}
+
+.tblsearch .row .form-group label {
+    margin-bottom: 0px;
+}
+
+.TGroupTableLink {
+    display: block;
+}
+
+.TGroupTableLink:hover {
+    text-decoration: none;
+}
+
+.foundItems {
+    text-align: center;
+}
+
+.TCMSListManagerFullGroupTable {
+    margin-bottom: 0px;
+}
+
+.table-function-bar ul {
+    padding: 0px;
+    margin-bottom: 5px;
+    list-style: none;
+}
+
+.table-function-bar ul li {
+    display: inline-block;
+    padding: 0 4px 0 4px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.table-function-bar ul li a, .table-function-bar ul li a:hover {
+    color: inherit!important;
+}
+
+.table-function-bar ul li span {
+    top: 3px;
+}
+
+.table-function-bar ul li:last-child {
+    padding-right: 0;
+}
+
+.table-function-bar ul li.table-function-delete {
+    color: #d9534f;
+}
+
+table.table-condensed tbody tr td, table.table-condensed thead tr th {
+    vertical-align: middle;
+}
+
+table.table-condensed tbody tr td[onclick] {
+    cursor: pointer;
+}
+
+table.table-condensed tbody tr td {
+    padding: 5px 5px 5px 7px;
+}
+
+table.table-condensed thead tr th {
+    padding: 9px 5px 7px 7px;
+}
+
+table td[data-field-type="data-field-selectbox"] input[type="checkbox"] {
+    position: relative;
+    top: 0;
+    z-index: 1;
+}
+
+table th[data-field-type="data-field-selectbox"] input[type="checkbox"] {
+    position: relative;
+    top: -1px;
+}
+
+table td[data-field-type="data-field-function-bar"] {
+    width: 60px;
+}
+
+table td[data-field-type="data-field-selectbox"] {
+    position: relative;
+}
+
+table td[data-field-type="data-field-selectbox"] .checkbox-bedding {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+td[data-field-type="data-field-lock-status"] div[data-record-lock-status] {
+    line-height: 1.75;
+}

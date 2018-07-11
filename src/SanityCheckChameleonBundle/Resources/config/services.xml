@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="chameleon_system_sanity_check_chameleon.module.cms_sanity_check"
+                 class="ChameleonSystem\SanityCheckChameleonBundle\Bridge\Chameleon\Module\CMSSanityCheck\CMSSanityCheck" shared="false">
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="chameleon_system_sanity_check.check_data_holder"/>
+            <argument type="service" id="chameleon_system_sanity_check.check_handler"/>
+            <argument type="service" id="chameleon_system_sanity_check.output_resolver"/>
+            <argument type="service" id="chameleon_system_core.language_service" on-invalid="ignore"/>
+            <argument type="service" id="translator"/>
+            <tag name="chameleon_system.module"/>
+        </service>
+    </services>
+</container>

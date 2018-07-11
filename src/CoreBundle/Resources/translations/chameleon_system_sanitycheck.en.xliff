@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="en" datatype="plaintext" original="chameleon_system_sanitycheck.en.xliff">
+    <body>
+      <trans-unit id="check.bundles_loaded.directorynotopened">
+        <source>check.bundles_loaded.directorynotopened</source>
+        <target>Directory could not be opened: %0%</target>
+      </trans-unit>
+      <trans-unit id="check.bundles_loaded.notregistered">
+        <source>check.bundles_loaded.notregistered</source>
+        <target>Bundle is not registered: %0%</target>
+      </trans-unit>
+      <trans-unit id="check.bundles_loaded.ok">
+        <source>check.bundles_loaded.ok</source>
+        <target>All bundles are registered.</target>
+      </trans-unit>
+      <trans-unit id="check.cache.active">
+        <source>check.cache.active</source>
+        <target>Cache is active.</target>
+      </trans-unit>
+      <trans-unit id="check.cache.activedev">
+        <source>check.cache.activedev</source>
+        <target>Cache is active. This might be obstructive in development mode.</target>
+      </trans-unit>
+      <trans-unit id="check.cache.inactivedev">
+        <source>check.cache.inactivedev</source>
+        <target>Cache is inactive. This is ok in development mode.</target>
+      </trans-unit>
+      <trans-unit id="check.cache.notactive">
+        <source>check.cache.notactive</source>
+        <target>Cache is inactive. For better performance please configure caching.</target>
+      </trans-unit>
+      <trans-unit id="check.database_utf8check.ok">
+        <source>check.database_utf8check.ok</source>
+        <target>Check of used character set for the database connection was successful.</target>
+      </trans-unit>
+      <trans-unit id="check.database_utf8check.wrongcharset">
+        <source>check.database_utf8check.wrongcharset</source>
+        <target>Wrong Character Set: '%0%' uses Character Set '%1%' instead of 'utf8'</target>
+      </trans-unit>
+      <trans-unit id="check.database_utf8check.wrongcollation">
+        <source>check.database_utf8check.wrongcollation</source>
+        <target>Wrong Collation: '%0%' uses Collation '%1%' instead of 'utf8_unicode_ci'</target>
+      </trans-unit>
+      <trans-unit id="check.cronjob.toolong">
+        <source>check.cronjob.toolong</source>
+        <target>Cronjobs have been triggered %0% seconds ago. The threshold is set to %1% seconds.</target>
+      </trans-unit>
+      <trans-unit id="check.cronjob.ok">
+        <source>check.cronjob.ok</source>
+        <target>Cronjobs are being triggered correctly</target>
+      </trans-unit>
+      <trans-unit id="check.cronjob.never">
+        <source>check.cronjob.never</source>
+        <target>Cronjobs aren't being triggered.</target>
+      </trans-unit>
+      <trans-unit id="check.imagemagick.found">
+        <source>check.imagemagick.found</source>
+        <target>ImageMagick was found.</target>
+      </trans-unit>
+      <trans-unit id="check.imagemagick.inactive">
+        <source>check.imagemagick.inactive</source>
+        <target>ImageMagick is deactivated.</target>
+      </trans-unit>
+      <trans-unit id="check.imagemagick.notfound">
+        <source>check.imagemagick.notfound</source>
+        <target>ImageMagick was not found and can therefore not be used.</target>
+      </trans-unit>
+      <trans-unit id="label.directorieswritable">
+        <source>label.directorieswritable</source>
+        <target>Needed write permissions on directories given.</target>
+      </trans-unit>
+      <trans-unit id="label.diskspace">
+        <source>label.diskspace</source>
+        <target>Enough disk space is available.</target>
+      </trans-unit>
+      <trans-unit id="label.imagemagickactive">
+        <source>label.imagemagickfound</source>
+        <target>ImageMagick is found.</target>
+      </trans-unit>
+      <trans-unit id="label.phpmodulesloaded">
+        <source>label.phpmodulesloaded</source>
+        <target>All needed PHP modules are loaded.</target>
+      </trans-unit>
+      <trans-unit id="label.supportedphpversion">
+        <source>label.supportedphpversion</source>
+        <target>A supported PHP version is used.</target>
+      </trans-unit>
+      <trans-unit id="label.databaseutf8">
+        <source>label.databaseutf8</source>
+        <target>The database connection uses UTF-8 encoding.</target>
+      </trans-unit>
+      <trans-unit id="label.cache">
+        <source>label.cache</source>
+        <target>The recommended cache settings are set.</target>
+      </trans-unit>
+      <trans-unit id="label.bundlesloaded">
+        <source>label.bundlesloaded</source>
+        <target>All Symfony bundles are initialized.</target>
+      </trans-unit>
+      <trans-unit id="label.sql_strict_mode_disabled">
+        <source>label.sql_strict_mode_disabled</source>
+        <target>MySQL strict mode is deactivated.</target>
+      </trans-unit>
+      <trans-unit id="label.cronjobs">
+        <source>label.cronjobs</source>
+        <target>Cronjobs are being called.</target>
+      </trans-unit>
+
+      <trans-unit id="check.sql_strict.databaseerror">
+        <source>check.sql_strict.databaseerror</source>
+        <target>Error while accessing the database: %0%</target>
+      </trans-unit>
+      <trans-unit id="check.sql_strict.ok">
+        <source>check.sql_strict.ok</source>
+        <target>SQL strict mode setting is ok.</target>
+      </trans-unit>
+      <trans-unit id="check.sql_strict.mustbestrict">
+        <source>check.sql_strict.mustbestrict</source>
+        <target>SQL strict mode must be turned on. You can activate strict mode in the MySQL configuration (my.cnf/my.ini) by adding e.g. the parameter 'sql-mode="STRICT_TRANS_TABLES"'.</target>
+      </trans-unit>
+      <trans-unit id="check.sql_strict.mustnotbestrict">
+        <source>check.sql_strict.mustnotbestrict</source>
+        <target>SQL strict mode must not be turned on. You can disable strict mode in the MySQL configuration (my.cnf/my.ini) by adding e.g. the parameter 'sql-mode="NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"'.</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,60 @@
+.contentbox{
+  position:relative;
+  margin-bottom:2px;
+  font-size:12px;
+}
+
+.contentbox .contentcontainer {
+  position:relative;
+  top:-2px;
+  left:-2px;
+}
+.contentbox .header {
+  padding-top:7px;
+  padding-bottom:7px;
+  padding-left:5px;
+  color: #841313;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 25px;
+  letter-spacing: 1px;
+}
+.contentbox .content {
+}
+.contentbox .evenrow, .contentbox .oddrow {
+  padding:5px;
+	border-bottom:1px solid #C1BEBE;
+	border-top:1px solid #FFF;
+	border-left:1px solid #FFF;
+}
+
+.contentbox .evenrow {
+  background-color: #F2F8FC;
+}
+.contentbox .oddrow {
+}
+.contentbox .hr {
+  width:100%;
+  background-image:url(../images/line.gif);
+  background-position:left;
+  background-repeat: repeat-x;
+  border:none;
+  background-color:transparent;
+}
+.contentbox .icon {
+  position:absolute;
+  right:6px;
+  top:-5px;
+}
+
+.contentbox a,.contentbox a:link,
+.contentbox a:visited,.contentbox a:hover,
+.contentbox a:active, .contentbox a:focus
+{
+  text-decoration: none;
+  background-color: transparent;
+  border: none;
+  color : #000000;
+  width:100%;
+  display:block;
+}

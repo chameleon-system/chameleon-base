@@ -1,0 +1,10 @@
+<phpunit
+        bootstrap="vendor/autoload.php"
+        colors="true"
+>
+    <testsuites>
+        <testsuite name="chameleon-system/core">
+            <directory>./Tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

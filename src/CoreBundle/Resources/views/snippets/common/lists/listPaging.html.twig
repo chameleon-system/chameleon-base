@@ -1,0 +1,44 @@
+{#
+  description: renders list paging
+  parameters:
+    -iActivePage
+    -iLastPage
+    -sURL with {[pageNumber]} to replace with page number (use {[pageNumber0]} if your url pages start at 0 instead of 1)
+    - bPagesStartAtZero - set to true if the page parameter in the url needs to be offset because page 1 must be passed as 0 instead of 1
+#}
+{% import "/common/lists/list-paging.macro.twig" as paging %}
+{% if iLastPage > 1 %}
+    <div class="snippetListPaging">
+        {% if iActivePage > 1 %}
+
+            <a class="back" href="{{ paging.getPageURL(sURL, iActivePage -1) }}"><span class="icon-back">{{ "chameleon_system_core.snippet_paging.previous_page"|trans }}</span></a>
+        {% else %}
+            <span class="backDummy">&nbsp;</span>
+        {% endif %}
+        {% if iActivePage > 2 %}
+
+            <a class="pageItem" href="{{ paging.getPageURL(sURL, 1) }}">1</a>
+            <span class="spacerBack">...</span>
+
+        {% endif %}
+        {% if iActivePage > 1 %}
+            <a class="pageItem" href="{{ paging.getPageURL(sURL, iActivePage -1) }}">{{ iActivePage -1 }}</a>
+        {% endif %}
+        <a class="pageItem activePageItem" href="{{ paging.getPageURL(sURL, iActivePage) }}">{{ iActivePage }}</a>
+        {% if iActivePage < iLastPage %}
+            <a class="pageItem" href="{{ paging.getPageURL(sURL, iActivePage +1) }}">{{ iActivePage +1 }}</a>
+        {% endif %}
+        {% if iActivePage < iLastPage-1 %}
+
+            <span class="spacerNext">...</span>
+            <a class="pageItem" href="{{ paging.getPageURL(sURL, iLastPage) }}">{{ iLastPage }}</a>
+
+        {% endif %}
+        {% if iActivePage < iLastPage %}
+            <a class="next" href="{{ paging.getPageURL(sURL, iActivePage +1) }}"><span class="icon-next">{{ "chameleon_system_core.snippet_paging.next_page"|trans }}</span></a>
+        {% else %}
+            <span class="nextDummy">&nbsp;</span>
+        {% endif %}
+        <div class="cleardiv">&nbsp;</div>
+    </div>
+{% endif %}

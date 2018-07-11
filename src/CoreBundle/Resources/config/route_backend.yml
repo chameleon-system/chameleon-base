@@ -1,0 +1,22 @@
+backend_js_translation_database:
+  path: /cms/rest/js-translation-db/{_locale}{trailingSlash}
+  defaults: { _controller: "chameleon_system_core.i18n.export_translation_db_controller", trailingSlash: '' }
+  requirements:
+    _locale: ".+"
+    trailingSlash: "[/]?"
+  schemes: ["https"]
+
+universal_uploader_upload:
+  path: /cms/upload{trailingSlash}
+  defaults: { _controller: "chameleon_system_core.universal_uploader.uploader_controller", trailingSlash: '' }
+  methods:  [POST, PUT]
+  requirements:
+    trailingSlash: "[/]?"
+  schemes: ["https"]
+
+cms_backend:
+  path: /cms{trailingSlash}
+  defaults: { _controller: "chameleon_system_core.backend_controller", trailingSlash: '' }
+  requirements:
+    trailingSlash: "[/]?"
+  schemes: ["https"]

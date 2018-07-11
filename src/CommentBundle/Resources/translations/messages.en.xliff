@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="messages.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_comment.action.refresh">
+                <source>chameleon_system_comment.action.refresh</source>
+                <target>Refresh</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.text.marked_as_inappropriate">
+                <source>chameleon_system_comment.text.marked_as_inappropriate</source>
+                <target>Marked as inappropriate.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.answer">
+                <source>chameleon_system_comment.action.answer</source>
+                <target>Answer</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.mark_as_inappropriate">
+                <source>chameleon_system_comment.action.mark_as_inappropriate</source>
+                <target>Mark as inapproriate</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.text.is_deleted_comment">
+                <source>chameleon_system_comment.text.is_deleted_comment</source>
+                <target>Comment has been deleted.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.text.comments_of_a_comment_headline">
+                <source>chameleon_system_comment.text.comments_of_a_comment_headline</source>
+                <target>Review comments</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.show_all">
+                <source>chameleon_system_comment.action.show_all</source>
+                <target>Show all comments</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.show_fewer">
+                <source>chameleon_system_comment.action.show_fewer</source>
+                <target>Show fewer comments</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.edit">
+                <source>chameleon_system_comment.action.edit</source>
+                <target>Edit comment</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.preview">
+                <source>chameleon_system_comment.action.preview</source>
+                <target>Preview</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.action.submit">
+                <source>chameleon_system_comment.action.submit</source>
+                <target>Submit comment</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.error.login_required">
+                <source>chameleon_system_comment.error.login_required</source>
+                <target>You have to be logged in to write a comment. Please proceed to %linkloginstart%login%linkloginend%.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.url.id_page">
+                <source>chameleon_system_comment.url.id_page</source>
+                <target>Comments page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.url.name">
+                <source>chameleon_system_comment.url.name</source>
+                <target>Comment</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.url.jumper">
+                <source>chameleon_system_comment.url.jumper</source>
+                <target>Comments</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_comment.text.rss_feed_comment_name">
+                <source>chameleon_system_comment.text.comment_number</source>
+                <target>Comment #%number%</target>
+            </trans-unit>
+
+
+        </body>
+    </file>
+</xliff>

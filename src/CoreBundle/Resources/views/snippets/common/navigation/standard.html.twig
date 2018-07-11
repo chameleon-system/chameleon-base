@@ -1,0 +1,37 @@
+{#
+  description: renders a navigation tree
+  parameters:
+  - aTree: array of items (object or assoc array). each item has the following properties:
+    ** bIsActive
+    ** bIsExpanded
+    ** sLink
+    ** sTitle
+    ** sSeoTitle (defaults to sTitle)
+    ** aChildren - this is a subtree of the same form as aTree
+#}
+{% if aTree is defined and aTree|length > 0 %}
+    {% if iLevel is defined %}
+        {% set iLevel = iLevel + 1 %}
+    {% else %}
+        {% set iLevel = 1 %}
+    {% endif%}
+        {% set sClass = 'level_'~iLevel %}
+        {%if loop.last%}{% set sClass = sClass ~' lastNode'%}{% endif %}
+        {%if oItem.bIsActive%}{% set sClass = sClass ~' active'%}{% endif %}
+        {%if oItem.bIsExpanded%}{% set sClass = sClass ~' expanded'%}{% endif %}
+        {%if loop.first%}{% set sClass = sClass ~' firstNode'%}{% endif %}
+    <ul class="nav nav-list level_{{iLevel}} {%block ulClass%}standard{% endblock %}">
+        {% for oItem in aTree %}
+            <li class="{{sClass|trim}}">
+                {%block link%}
+                    <a class="{{sClass|trim}}" href="{{oItem.sLink|raw}}" title="{{oItem.sSeoTitle | default(oItem.sTitle)}}">{{oItem.sTitle}}</a>
+                {%endblock%}
+                {%block child%}
+                    {% if oItem.aChildren %}
+                        {% include _self with {'aTree': oItem.aChildren} %}
+                    {% endif %}
+                {%endblock%}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

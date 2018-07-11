@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="chameleon_system_newsletter.cronjob.send_newsletter_cronjob" class="TCMSCronJobSendNewsletter" shared="false">
+            <tag name="chameleon_system.cronjob" />
+        </service>
+
+        <service id="chameleon_system_newsletter.post_processor_collector" class="ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorCollectionService">
+
+        </service>
+        <service id="chameleon_system_newsletter.post_processor_user_content" class="ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorUserContent" public="false">
+            <tag name="chameleon_system_newsletter.post_processor" />
+        </service>
+
+        <service id="chameleon_system_newsletter.response_listener" class="ChameleonSystem\NewsletterBundle\Listener\NewsletterPostProcessorListener">
+            <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
+            <argument type="service" id="chameleon_system_newsletter.post_processor_collector" />
+        </service>
+
+        <service id="chameleon_system_newsletter.user_data_factory" class="ChameleonSystem\NewsletterBundle\PostProcessing\Bridge\NewsletterUserDataFactory">
+        </service>
+
+        <service id="chameleon_system_newsletter.mapper.signout_config" class="TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig">
+        </service>
+
+        <service id="chameleon_system_newsletter.mapper.signout_config_form" class="TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form">
+        </service>
+
+        <service id="chameleon_system_newsletter.mapper.signup_config" class="TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig">
+        </service>
+
+        <service id="chameleon_system_newsletter.mapper.signup_config_form" class="TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig_Form">
+        </service>
+
+        <service id="chameleon_system_newsletter.mapper.quick_signup" class="TPkgNewsletterMapper_QuickSignup">
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.system_page_service" />
+        </service>
+
+    </services>
+</container>

@@ -1,0 +1,40 @@
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="chameleon_system_core.mailer" class="TCMSMail" shared="false">
+            <call method="setTools">
+                <argument type="service" id="chameleon_system_core.tools" />
+            </call>
+            <call method="setTransformationService">
+                <argument type="service" id="chameleon_system_core.mail_target_transformation_service" />
+            </call>
+            <call method="setMailPeerSecurity">
+                <argument type="service" id="chameleon_system_core.security.mail.mail_peer_security" />
+            </call>
+        </service>
+
+        <service id="chameleon_system_core.phpmailer" class="TCMSMail" shared="false" />
+
+        <service id="chameleon_system_core.mail_target_transformation_service" class="ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService" public="false">
+            <argument>%chameleon_system_core.mail_target_transformation_service.target_mail%</argument>
+            <argument>%chameleon_system_core.mail_target_transformation_service.white_list%</argument>
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <call method="setEnableTransformation">
+                <argument>%chameleon_system_core.mail_target_transformation_service.enabled%</argument>
+            </call>
+            <call method="setSubjectPrefix">
+                <argument>%chameleon_system_core.mail_target_transformation_service.subject_prefix%</argument>
+            </call>
+        </service>
+
+        <service id="chameleon_system_core.security.mail.strict_mail_peer_security" class="ChameleonSystem\CoreBundle\Security\Https\StrictHttpsContext" />
+
+        <service id="chameleon_system_core.security.mail.permissive_mail_peer_security" class="ChameleonSystem\CoreBundle\Security\Https\PermissiveHttpsContext" />
+
+        <service id="chameleon_system_core.security.mail.mail_peer_security" alias="chameleon_system_core.security.mail.permissive_mail_peer_security" />
+
+    </services>
+
+</container>

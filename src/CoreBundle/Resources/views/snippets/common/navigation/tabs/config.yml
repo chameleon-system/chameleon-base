@@ -1,0 +1,5 @@
+js:
+   - /assets/js/snippets/navigation/tabs/standard.js
+   - /assets/js/jquery/jquery.blockUI.js
+less:
+   - /assets/less/snippets/navigation/tabs/standard.less

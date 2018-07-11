@@ -1,0 +1,64 @@
+<div>
+    {% if couldNotLoadCustomCss %}
+        <div class="alert alert-info">{{ 'chameleon_system_core.field_wysiwyg.custom_css_loading_error'|trans({'%url%': customCssUrl}) }}</div>
+    {% endif %}
+    <textarea cols="80" id="{{ sEditorName }}" name="{{ sFieldName }}" rows="10">
+        {{ data|raw }}
+    </textarea>
+
+    <script type="text/javascript">
+
+        var editorStyleSets = '';
+        editorStyleSets = {{ aEditorSettings.stylesSet|raw }};
+        if (false === editorStyleSets in CKEDITOR.stylesSet.registered) {
+            {% if aEditorSettings.stylesSet %}
+                CKEDITOR.stylesSet.add({{ aEditorSettings.stylesSet|raw }}, [
+                    {% for style in aStyles %}
+                    {
+                        name: {{ style.name|raw }},
+                        element: {{ style.element|raw }},
+                        attributes: {
+                            'class': {{ style.attributes.class|raw }}
+                        }
+                    } {% if not loop.last %},{% endif %}{% endfor %}
+                ]);
+                {% endif %}
+            }
+
+            var settingsSystem = {
+                {% for sSettingKey, sSettingValue in aEditorSettings %}
+                    {{ sSettingKey|raw }}: {{ sSettingValue|raw }}{% if not loop.last %},{% endif %}
+                {% endfor %}
+            };
+            var settingsDefault = {
+                on: {
+                    change: function (event) {
+                        // copy data to text area
+                        var editor = event.editor,
+                                instanceName = editor.name,
+                                instanceData = editor.getData();
+                        $('#' + instanceName).val(instanceData);
+                    }
+                }
+            };
+
+            var settings = {};
+
+            $.extend(true, settings, settingsSystem, settingsDefault);
+
+            {% include 'TCMSFieldWYSIWYG/cKEditor/plugins.html.twig' %}
+
+            //        var basePath = CKEDITOR.basePath;
+            //        basePath = basePath.substr(0, basePath.indexOf("ckeditor/"));
+            {% for extraPluginConfiguration in extraPluginsConfiguration %}
+            CKEDITOR.plugins.addExternal('{{ extraPluginConfiguration.name }}', '{{ extraPluginConfiguration.dir }}', '{{ extraPluginConfiguration.jsFile }}');
+            {% endfor %}
+
+            CHAMELEON.CORE.CKEditor.instantiate('{{ sEditorName }}', settings);
+
+            CKEDITOR.on('instanceReady', function () {
+                if (CKEDITOR.lang.de) CKEDITOR.lang.de.common.browseServer = 'CMS Quelle wählen';
+                else if (CKEDITOR.lang.en) CKEDITOR.lang.en.common.browseServer = 'Select CMS Source';
+            });
+    </script>
+</div>

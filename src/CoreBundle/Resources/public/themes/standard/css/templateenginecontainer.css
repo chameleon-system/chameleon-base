@@ -1,0 +1,69 @@
+#cmscontainer{
+  background-color: #A9C4E7;
+}
+
+.layoutitem{
+}
+
+.layoutitem h1 {
+  font-size:12px;
+  font-weight:bold;
+  margin:0;
+  padding:0px;
+}
+
+.layoutitem a.layoutitemlink,
+.layoutitem a.layoutitemactivelink {
+  color:#000000;
+  text-decoration: none;
+  display:block;
+}
+
+.layoutitem a.layoutitemlink:hover,
+.layoutitem a.layoutitemactivelink:hover {
+  background-color:#FFA6A6;
+}
+
+
+.extraBold {
+  font-size: 16px;
+  font-weight: bold;
+  color: #419BDE;
+  padding: 2px 10px 2px 0px;
+}
+
+.pageTitle {
+  font-size: 12px;
+  font-weight: bold;
+  color: #419BDE;
+  padding: 2px 10px 2px 0px;
+}
+
+.pageTitleValue {
+  font-size: 12px;
+  font-weight: bold;
+  color: #0B224B;
+  padding: 2px 0px 2px 0px;
+}
+
+#pageLayoutList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#pageLayoutList li {
+  font-size:11px;
+  color: #0B224B;
+  border: 2px solid #FFB608;
+  background-color: #F8F2AA;
+  padding: 4px;
+  cursor: hand;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+
+#pageLayoutList .layoutitemactive {
+  background: #F8F2AA url(../images/pageLayoutChecked.png) no-repeat 235px 6px;
+}

@@ -1,0 +1,288 @@
+.moduleType {
+  font-size: 10px !important;
+  font-family: Arial, helvetica, sans-serif !important;
+  color: white !important;
+  padding: 3px 3px 3px 23px !important;
+}
+
+.moduleInfo {
+  padding: 3px 3px 3px 3px !important;
+  font-size: 10px !important;
+  font-family: Arial, helvetica, sans-serif !important;
+  background-color: #354C75 !important;
+  color: white !important;
+}
+
+.moduleInfo strong {
+  color: white !important;
+}
+
+#cmsModuleMenu {
+  background: #efefef;
+  border: 1px solid #354C75;
+  height: 335px;
+  left: 300px;
+  margin: 0px;
+  overflow: hidden;
+  padding: 0px;
+  position: absolute;
+  top: 50px;
+  width: 227px;
+  z-index: 9998;
+  font-family: Arial, helvetica, sans-serif;
+  font-size: 11px;
+  text-align: left;
+}
+
+#cmsModuleMenu .moduleMenuHeader {
+  background: url(/chameleon/blackbox/images/header_bg.gif) #354C75;
+  color:#FFFFFF;
+  cursor:move;
+  height:18px;
+  line-height:18px;
+  text-align:right;
+  vertical-align:middle;
+  width: 227px;
+  position:absolute;
+  top:0px;
+}
+
+#cmsModuleMenu .moduleMenuHeader a {
+	cursor: pointer;
+	color: #fff;
+	margin-right: 8px;
+	text-decoration: none;
+  background: transparent url(/chameleon/blackbox/images/icons/cross.png) no-repeat scroll 3px 50%;
+  padding-left: 20px;
+}
+
+#cmsModuleMenu .moduleMenuHeader a:hover {
+	color: #efefef;
+	text-decoration: none;
+}
+
+#cmsModuleMenu #menuWrapper {
+  position:absolute;
+  top:32px;
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 14px 1px;
+  overflow: hidden;
+  width: 225px;
+  height: 288px;
+}
+#cmsModuleMenu {
+  position:realtive;
+}
+#cmsModuleMenu a.scrolltop {
+  position:absolute;
+  top:18px;
+}
+#cmsModuleMenu a.scrolltop, #cmsModuleMenu a.scrollbottom {
+  display: block;
+  height: 14px;
+  background-color: #99BBF0;
+  background-image: url(/chameleon/blackbox/images/arrow_top_small.gif);
+  background-position: center center;
+  background-repeat: no-repeat;
+  cursor: hand;
+  cursor: pointer;
+  text-decoration: none;
+  width: 225px;
+  margin: 1px;
+  line-height: 0px;
+  font-size: 0px;
+}
+
+#cmsModuleMenu a.scrolltop:hover, #cmsModuleMenu a.scrollbottom:hover {
+  text-decoration: none;
+  background-color: #C0D9FD;
+}
+
+#cmsModuleMenu a.scrollbottom {
+  background-image: url(/chameleon/blackbox/images/arrow_down_small.gif);
+  position:absolute;
+  bottom:0px;
+}
+
+#menuWrapper ul {
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin:0px;
+  padding:0px;
+  display: block;
+}
+
+#menuWrapper ul li {
+  display: block;
+  margin: -1px 0px 0px 0px;
+  border-top:1px solid #EFEFEF;
+  width: 225px;
+  position:relative;
+  color: #333333;
+  font-family: Arial, helvetica, sans-serif;
+  background-image:none;
+  padding-left:0px;
+}
+
+#menuWrapper ul li a {
+  color: #000;
+  display: block;
+  padding: 0px 5px 0px 5px;
+  background-color: #85aeec;
+  text-decoration: none;
+  font-family: Arial, helvetica, sans-serif;
+}
+
+#menuWrapper ul li a:hover {
+  background-color: #D2E4FD;
+}
+
+#menuWrapper ul ul {
+  display:none;
+
+}
+
+#menuWrapper ul ul {
+}
+
+#menuWrapper ul li.active ul {
+  display: block;
+}
+#menuWrapper ul li.active ul li ul {
+  display: none;
+}
+
+#menuWrapper ul li.active ul li.active ul {
+  display:block;
+}
+
+#menuWrapper ul li.active ul li.active ul li ul{
+  display:none;
+}
+
+#menuWrapper ul li.active ul li.active ul li.active ul{
+  display:block;
+}
+
+
+#menuWrapper ul li a, #menuWrapper ul li a span {
+  color: #333333;
+}
+
+#menuWrapper ul li.active ul li a, #menuWrapper ul li.active ul li a span {
+  color: #333333;
+}
+
+#menuWrapper ul li.active ul li.active ul li a, #menuWrapper ul li.active ul li.active ul li a span {
+  color: #333333;
+}
+
+#menuWrapper ul li.active ul li.active ul li.active ul li a, #menuWrapper ul li.active ul li.active ul li.active ul li a span {
+  color: #333333;
+}
+
+.hasChildren {
+  background: url(/chameleon/blackbox/images/arrow_right_small.gif) no-repeat scroll 98% center;
+}
+
+#menuWrapper ul li a.expanded {
+  color: #000;
+  background: url(/chameleon/blackbox/images/arrow_left_small.gif) no-repeat scroll 98% center;
+  background-color: #D2E4FD;
+  font-weight: bold;
+  border-bottom: 7px solid #354C75;
+  position:relative;
+  z-index:100;
+}
+#menuWrapper ul li a.expanded span {
+  color: #000;
+}
+#menuWrapper ul li.active{
+    margin-top:-1px;
+}
+#menuWrapper ul li.active ul li a.expanded {
+  color: #000;
+  background: url(/chameleon/blackbox/images/arrow_left_small.gif) no-repeat scroll 98% center;
+  background-color: #D2E4FD;
+  font-weight: bold;
+  border-bottom: 1px solid #354C75;
+}
+#menuWrapper ul li.active ul li a.expanded span {
+  color: #000;
+}
+
+#menuWrapper ul li.active ul li.active ul li a.expanded {
+  color: #000;
+  background: url(/chameleon/blackbox/images/arrow_left_small.gif) no-repeat scroll 98% center;
+  background-color: #D2E4FD;
+  font-weight: bold;
+  border-bottom: 7px solid #354C75;
+}
+#menuWrapper ul li.active ul li.active ul li a.expanded span {
+  color: #000;
+}
+#menuWrapper ul li.active ul li.active ul li.active ul li a.expanded {
+  color: #000;
+  background: url(/chameleon/blackbox/images/arrow_left_small.gif) no-repeat scroll 98% center;
+  background-color: #D2E4FD;
+  font-weight: bold;
+  border-bottom: 7px solid #354C75;
+}
+#menuWrapper ul li.active ul li.active ul li.active ul li a.expanded span {
+  color: #000;
+}
+.menueicon {
+  display: block;
+  background-position: left center;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  padding-left: 20px;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+a.cmsModuleMenuLauncher {
+  display: block;
+  color: #fff;
+  background: #81A6DD url(/chameleon/blackbox/images/icons/layout_edit.png) no-repeat 5px center;
+  padding-left: 25px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a.cmsModuleMenuLauncher:hover {
+  display: block;
+  background-color: #e3f1ff;
+  text-decoration: none;
+  color: #151c55;
+  cursor: arrow;
+  cursor: hand;
+}
+
+a.cmsModuleMenuLauncher span {
+  color: #fff;
+  display: block;
+  background: url(/chameleon/blackbox/images/arrow_down_small.gif) no-repeat scroll 98% center;
+  height: 20px;
+}
+.cmsModuleInstanceWorkflow{
+  position:absolute;
+  left:120px;
+  top:3px;
+  width:20px;
+  height:18px;
+}
+
+.CMSModuleChooserReadOnly, .CMSModuleChooserTarget, #menuWrapper {
+  font-family: Verdana,Arial,Helvetica,sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  line-height: 15px;
+  letter-spacing: normal;
+}
+
+.CMSModuleChooserReadOnly, .CMSModuleChooserTarget {
+  width: 155px;
+  border: 2px solid black;
+}

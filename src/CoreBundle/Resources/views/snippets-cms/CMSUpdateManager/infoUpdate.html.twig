@@ -1,0 +1,10 @@
+<div id="infoMessageContainer-{{ bundleName }}-{{ buildNumber }}" class="infoMessageContainer">
+    <div class="head">
+        <span class="message">{{ 'chameleon_system_core.cms_module_update.info_messages'|trans }}</span> (<span class="count">{{ messages|length }}</span>)
+    </div>
+    <ul class="messageList">
+        {% for message in messages %}
+            <li><a name="info-{{ bundleName }}-{{ buildNumber }}-{{ loop.index0 }}"></a><b>{{ message.level }}:</b><br />{{ message.text }}</li>
+        {% endfor %}
+    </ul>
+</div>

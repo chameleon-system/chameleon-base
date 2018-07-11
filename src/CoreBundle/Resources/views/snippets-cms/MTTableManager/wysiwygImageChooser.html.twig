@@ -1,0 +1,30 @@
+<form id="cmsform" name="cmsform" method="post" action="{{ pathCmsController }}" target="_top" accept-charset="UTF-8">
+    <input type="hidden" name="tableid" value="{{id}}"/>
+    <input type="hidden" name="pagedef" value="tableeditor"/>
+    <input type="hidden" name="id" value=""/>
+    <input type="hidden" name="module_fnc[contentmodule]" value=""/>
+    {% for key, value in aHiddenFields %}
+        <input type="hidden" name="{{key}}" value="{{value}}"/>
+    {% endfor %}
+</form>
+<form id="cmsformAjaxCall" name="cmsformAjaxCall" method="post" accept-charset="UTF-8">
+    <input type="hidden" name="tableid" value="{{id}}"/>
+    <input type="hidden" name="pagedef" value="tableeditor"/>
+    <input type="hidden" name="id" value=""/>
+    <input type="hidden" name="_fnc" value="GetName"/>
+    {% if fieldName %}
+        <input type="hidden" name="fieldName" value="{{fieldName}}"/>
+    {% endif %}
+    <input type="hidden" name="_noModuleFunction" value="true"/>
+    <input type="hidden" name="module_fnc[contentmodule]" value="ExecuteAjaxCall"/>
+    {% for key, value in aHiddenFields %}
+        <input type="hidden" name="{{key}}" value="{{value}}"/>
+    {% endfor %}
+</form>
+{% if CKEditorFuncNum is defined %}
+<script type="text/javascript">
+    parent.setCKEditorFuncNum('{{CKEditorFuncNum}}');
+</script>
+{% endif %}
+
+{{sTable|raw}}

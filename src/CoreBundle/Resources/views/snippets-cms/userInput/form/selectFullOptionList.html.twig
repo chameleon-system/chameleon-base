@@ -1,0 +1,19 @@
+{#
+    description: show a select field
+    vars:
+        - same as /common/userInput/form/text.html.twig
+        - aValueList (array with each element having  sValue and sName)
+        - onChange (JS event)
+#}
+{% extends "/userInput/form/text.html.twig" %}
+{% block field %}
+    <select
+            {% if sInputClass is defined %}class="{{sInputClass}}"{% endif %}
+            {% if sFieldId is defined %}id="{{sFieldId}}"{% endif %}
+            {% if onChange is defined %} onchange="{{onChange}}" {% endif %}
+            name="{{sName}}"
+            {% if bRequired == true%} required {%endif%}
+    >
+        {{ options|raw }}
+    </select>
+{% endblock %}

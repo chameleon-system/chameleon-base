@@ -1,0 +1,46 @@
+#!/usr/bin/php
+<?php
+
+set_time_limit(0);
+
+/**
+ * set $_SERVER vars manually, as they are not available in console.
+ */
+$_SERVER['DOCUMENT_ROOT'] = realpath(__DIR__.'/../../../../../../web');
+$_SERVER['HTTP_HOST'] = 'you-have-no-host-because-you-are-in-console.com';
+define('REQUEST_PROTOCOL', 'console');
+
+define('PATH_WEB', $_SERVER['DOCUMENT_ROOT']);
+require_once __DIR__.'/../Resources/config/const.inc.php';
+
+if (file_exists(PATH_PROJECT_BASE.'/app/autoload.php')) {
+    include_once PATH_PROJECT_BASE.'/app/autoload.php';
+} else {
+    include_once __DIR__.'/../../../../../autoload.php';
+}
+
+require_once PATH_PROJECT_CONFIG.'/config.inc.php';
+require_once PATH_CORE_CONFIG.'/config.inc.php';
+require_once PATH_CORE_CONFIG.'/defaults.inc.php';
+
+spl_autoload_register('ChameleonSystem\AutoclassesBundle\Loader\AutoClassLoader::loadClassDefinition');
+
+TGlobal::setMode(TGlobal::MODE_BACKEND);
+
+require_once PATH_PROJECT_BASE.'/app/AppKernel.php';
+
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+
+$input = new ArgvInput();
+$env = $input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'dev');
+$debug = '0' !== getenv('SYMFONY_DEBUG') && !$input->hasParameterOption(array('--no-debug', '')) && 'prod' !== $env;
+
+try {
+    $kernel = new AppKernel($env, $debug);
+    $application = new Application($kernel);
+    $application->setCatchExceptions(false);
+    $application->run($input);
+} catch (Exception $e) {
+    echo $e;
+}

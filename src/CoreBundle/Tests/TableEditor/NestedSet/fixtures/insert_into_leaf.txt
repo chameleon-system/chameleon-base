@@ -1,0 +1,13 @@
+Clothing
+__Men's
+____Suits
+______Slacks
+______Jackets
+__Women's
+____Dresses
+______Evening Gowns
+______Sun Dresses
+________Short
+____Skirts
+____Blouses
+Other

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ status_code }} {{ status_text }}</title>
+    <link rel="stylesheet" href="/chameleon/blackbox/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ status_code }} {{ status_text }}</h1>
+            {% block debugDetails %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Exception Thrown</h3>
+                    </div>
+                    <div class="panel-body">
+                        {% include '@Twig/Exception/exception.html.twig' %}
+                    </div>
+                </div>
+
+                <div class="alert alert-info" role="alert">Note: you can assign a cms page to this error by creating a system page for the portal with the name error-{{ status_code }}</div>
+            {% endblock %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

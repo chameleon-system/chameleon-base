@@ -1,0 +1,2 @@
+<iframe width="<?=$data['oTableRow']->sqlData['width']; ?>" height="<?=$data['oTableRow']->sqlData['height']; ?>"
+        frameborder="0" src="<?=$data['oTableRow']->sqlData['website_url']; ?>"></iframe>

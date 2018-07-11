@@ -1,0 +1,21 @@
+{# @var position string #}
+{# @var theme string #}
+{# @var bgcolor string #}
+{# @var buttonbgcolor string #}
+{# @var buttontextcolor string #}
+{# @var morelinkurl string #}
+
+<span id="chameleon_system_cookie_consent.config" style="display:none"
+      data-position="{{ position|e('html_attr') }}"
+      data-theme="{{ theme|e('html_attr') }}"
+      data-bgcolor="{{ bgcolor|e('html_attr') }}"
+      data-buttonbgcolor="{{ buttonbgcolor|e('html_attr') }}"
+      data-buttontextcolor="{{ buttontextcolor|e('html_attr') }}"
+      data-consentmessage="{{ 'chameleon_system_cookie_consent.message'|trans|e('html_attr') }}"
+      data-okbuttonmessage="{{ 'chameleon_system_cookie_consent.ok_button'|trans|e('html_attr') }}"
+      data-morelinktext="{{ 'chameleon_system_cookie_consent.more_link_title'|trans|e('html_attr') }}"
+      data-morelinkurl="{{ morelinkurl|sanitizeurl('html_attr') }}"
+></span>
+
+<script src="/bundles/chameleonsystemcookieconsent/js/cookieconsent-3.0.3.min.js"></script>
+<script src="/bundles/chameleonsystemcookieconsent/js/cookieConsentInitializer.js"></script>

@@ -1,0 +1,15 @@
+<div id="exceptionContainer-{{ bundleName }}-{{ buildNumber }}" class="errorQueryContainer">
+    <div class="head">
+        <span class="message">{{ 'chameleon_system_core.cms_module_update.error_messages'|trans }}</span> (<span class="count">{{ messages|length }}</span>)
+    </div>
+    <ul class="queryList">
+        {% for message in messages %}
+            <li><a id="exception-{{ bundleName }}-{{ buildNumber }}-{{ loop.index0 }}"></a>
+                {{ 'chameleon_system_core.cms_module_update.error_message'|trans }} <pre>{{ message.exception.message }}</pre><br />
+                {{ 'chameleon_system_core.cms_module_update.file'|trans }} {{ message.exception.file }}<br />
+                {{ 'chameleon_system_core.cms_module_update.line'|trans }} {{ message.exception.line }}<br />
+                {{ 'chameleon_system_core.cms_module_update.exception_class'|trans }} {{ message.exceptionClass }}
+            </li>
+        {% endfor %}
+    </ul>
+</div>

@@ -1,0 +1,17 @@
+{% trans_default_domain constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND') %}
+
+{% if aPortalLinks %}
+    {% if aPortalLinks|length == 1 %}
+        {% for aPortal in aPortalLinks %}
+            <li><a href="{{ aPortal.url }}" target="_blank"><span class="glyphicon glyphicon-globe"></span> &nbsp;{{ 'chameleon_system_core.cms_module_header.action_open_website'|trans }}</a></li>
+        {% endfor %}
+    {% else %}
+        <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-globe"></span> &nbsp;{{ 'chameleon_system_core.cms_module_header.action_open_website'|trans }} <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+        {% for aPortal in aPortalLinks %}
+            <li><a href="{{ aPortal.url }}" target="_blank"><span class="glyphicon glyphicon-globe"></span> {{ aPortal.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endif %}

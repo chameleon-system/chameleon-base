@@ -1,0 +1,83 @@
+.MTPkgImageHotspot .standard {
+  position:relative;
+}
+.MTPkgImageHotspot a.nextItemLink {
+  position:absolute;
+  z-index:10;
+  right:23px;
+}
+
+.TPkgImageHotspotItem .standard {
+  position:relative;
+}
+
+
+.TPkgImageHotspotItemSpot {
+  position:absolute;
+}
+
+
+.TPkgImageHotspotItemSpot div.spotmarker {
+  display:block;
+  text-decoration:none;
+  padding-top:10px;
+  margin-top:-10px;
+  cursor:pointer;
+}
+.TPkgImageHotspotItemSpot {
+}
+.TPkgImageHotspotItemSpot div.spotmarker:hover {
+  text-decoration:none;
+}
+
+.TPkgImageHotspotItemSpot div.spotmarker .objectDisplayBlock,
+.image-map .objectDisplayBlock {
+  display:none;
+  z-index:50;
+  position:relative;
+  margin-top:-38px;
+  padding-left:30px;
+}
+
+.image-map .objectDisplayBlock {
+  position: absolute;
+  top:0;
+  left:0;
+  display:none;
+}
+
+.TPkgImageHotspotItemSpot div.spotmarker .objectDisplayBlockContent,
+.image-map .objectDisplayBlockContent {
+  z-index:50;
+  background-color:#1A171B;
+  border-left:1px solid #ffffff;
+  color:#ffffff;
+  min-height:50px;
+  padding:10px;
+}
+.TPkgImageHotspotItemSpot div.spotmarker .objectDisplayBlockContent a,
+.image-map .objectDisplayBlockContent a{
+  color:#ffffff;
+  text-decoration:underline;
+}
+
+.TPkgImageHotspotItemSpot div.spotmarker .objectDisplayBlockContent a.productName,
+.image-map .objectDisplayBlockContent a.productName {
+  color:#64D4FF;
+  text-decoration:none;
+}
+
+.TPkgImageHotspotItemSpot div.spotmarker:hover .objectDisplayBlock {
+  display:block;
+}
+
+.TPkgImageHotspotItemSpot div.spotmarker .objectDisplayBlock .blockNose,
+.image-map .objectDisplayBlock .blockNose {
+  position:absolute;
+  top:4px;
+  left:22px;
+}
+
+.TPkgImageHotspotItemMarker{
+  position:absolute;
+}

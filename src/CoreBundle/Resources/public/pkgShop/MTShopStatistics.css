@@ -1,0 +1,83 @@
+/* Basic */
+.module-shop-statistic .standard .module-headline {
+  background: url('../images/icons/chart_pie.png') transparent no-repeat 0 0;
+  font-size: 14px;
+  padding-left: 21px;
+  margin-bottom:10px;
+}
+
+.module-shop-statistic .standard .filter input, .module-shop-statistic .standard .filter select {
+  margin-right:10px;
+}
+/* Table */
+.TCMSGroupedStatistics .html-table .statsTable {
+  border-collapse:collapse;
+}
+.TCMSGroupedStatistics .html-table .statsTable td, .TCMSGroupedStatistics .html-table .statsTable th {
+  padding: 5px 8px;
+}
+.TCMSGroupedStatistics .html-table .statsTable td {
+  text-align:right;
+}
+/* Barchart */
+.TCMSGroupedStatistics .html-barchart .barchart-groupname {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom:10px;
+}
+.TCMSGroupedStatistics .html-barchart .barchart-body {
+  border-bottom: 1px dotted black;
+  margin-bottom:40px;
+  padding-bottom:10px;
+}
+
+.TCMSGroupedStatistics .html-barchart .groupcontainer-barchart {
+  position:relative;
+}
+
+.TCMSGroupedStatistics .html-barchart .bar-gridline {
+  position:absolute;
+  width:100%;
+  border-bottom:1px grey solid;
+  text-align:left;
+}
+
+.TCMSGroupedStatistics .html-barchart .barchart-item {
+  float:left;
+  margin-left:30px;
+}
+
+.TCMSGroupedStatistics .html-barchart .columnHeader {
+  height:20px;
+}
+
+.TCMSGroupedStatistics .html-barchart .columnBars {
+  position:relative;
+}
+
+.TCMSGroupedStatistics .html-barchart .bar-wrapper {
+  position:relative;
+  float:left;
+}
+
+.TCMSGroupedStatistics .html-barchart .bar {
+  position:absolute;
+  bottom:0px;
+}
+
+.TCMSGroupedStatistics .html-barchart .legend-square {
+  display:inline-block;
+  height:10px;
+  width:10px;
+  margin-right:5px;
+}
+
+.TCMSGroupedStatistics .html-barchart .legend-divider {
+  display: block;
+  border-top: 1px grey dotted;
+  width: 100px;
+  height:0px;
+  line-height:0px;
+  margin-top:2px;
+  margin-bottom: 2px;
+}

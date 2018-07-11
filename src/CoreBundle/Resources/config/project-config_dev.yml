@@ -1,0 +1,30 @@
+imports:
+   - { resource: project-config.yml }
+
+parameters:
+  chameleon_system_core.cache.allow: false
+  chameleon_system_core.cache.default_max_age_in_seconds: 60
+  chameleon_system_core.cache.cache_less_files: false
+
+  chameleon_system_core.resources.enable_external_resource_collection: false
+  chameleon_system_core.resources.enable_external_resource_collection_minify: false
+
+framework:
+  router:
+    resource: "%kernel.root_dir%/config/routing_dev.yml"
+    strict_requirements: true
+  profiler: { only_exceptions: false }
+  session:
+    cookie_lifetime: 43200
+    gc_maxlifetime: 43200
+
+monolog:
+  handlers:
+    main:
+      type:   stream
+      path:   "%kernel.logs_dir%/%kernel.environment%.log"
+      level:  debug
+
+web_profiler:
+    toolbar: true
+    intercept_redirects: false

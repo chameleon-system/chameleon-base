@@ -1,0 +1,1 @@
+../../../../../../../../../ckeditor/ckeditor/ckeditor.js

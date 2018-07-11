@@ -1,0 +1,47 @@
+<?php
+
+/*
+ * This file is part of the Chameleon System (https://www.chameleonsystem.com).
+ *
+ * (c) ESONO AG (https://www.esono.de)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * std varchar text field (max 255 chars).
+/**/
+class TCMSFieldTreeURLName extends TCMSFieldVarchar
+{
+    public function GetHTML()
+    {
+        $html = parent::GetHTML();
+
+        return $html;
+    }
+
+    protected function GetTreeNodeLink()
+    {
+        $url = $this->oTableRow->GetLink();
+
+        return $url;
+    }
+
+    /**
+     * renders the read only view of the field.
+     *
+     * @return string
+     */
+    public function GetReadOnly()
+    {
+        $html = $this->_GetHiddenField().TGlobal::OutHTML($this->data);
+
+        $url = $this->GetTreeNodeLink();
+        if (!empty($url)) {
+            $html .= '<div style="padding-top: 5px;"><a class="externalLink" href="'.TGlobal::OutHTML($url).'" target="_blank">'.TGlobal::Translate('chameleon_system_core.field_tree_url_name.open').'</a></div>';
+        }
+
+        return $html;
+    }
+}

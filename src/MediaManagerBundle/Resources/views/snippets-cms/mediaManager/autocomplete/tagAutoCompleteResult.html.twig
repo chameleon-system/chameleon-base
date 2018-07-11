@@ -1,0 +1,11 @@
+{% if autoCompleteTags | length > 0 or hasError %}
+    <div class="autocomplete-links">
+        {% if hasError %}
+            <div class="alert alert-danger">{{ 'chameleon_system_media_manager.list.tags_autocomplete_error' | trans }}</div>
+        {% endif %}
+        <div class="group-headline">{{ 'chameleon_system_media_manager.list.tags_autocomplete_group' | trans }}</div>
+        {% for item in autoCompleteTags %}
+            <div class="record-link" data-id="{{ item.id }}">{{ item.name }}</div>
+        {% endfor %}
+    </div>
+{% endif %}

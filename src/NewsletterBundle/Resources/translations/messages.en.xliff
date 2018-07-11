@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="messages.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_newsletter.action.unsubscribe_all">
+                <source>chameleon_system_newsletter.action.unsubscribe_all</source>
+                <target>Unsubscribe from all newsletters</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.action.unsubscribe">
+                <source>chameleon_system_newsletter.action.unsubscribe</source>
+                <target>Unsubscribe from newsletter</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.text.unsubscribed">
+                <source>chameleon_system_newsletter.text.unsubscribed</source>
+                <target>You have been unsubscribed.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.text.unsubscribed_polite">
+                <source>chameleon_system_newsletter.text.unsubscribed_polite</source>
+                <target>You have been unsubscribed.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_newsletter.form.salutation">
+                <source>chameleon_system_newsletter.form.salutation</source>
+                <target>Salutation</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.form.first_name">
+                <source>chameleon_system_newsletter.form.first_name</source>
+                <target>First name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.form.last_name">
+                <source>chameleon_system_newsletter.form.last_name</source>
+                <target>Last name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.form.email">
+                <source>chameleon_system_newsletter.form.email</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.text.available_newsletter">
+                <source>chameleon_system_newsletter.text.available_newsletter</source>
+                <target>Newsletter</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.form.subscribe_to_all">
+                <source>chameleon_system_newsletter.form.subscribe_to_all</source>
+                <target>Subscribe to all newsletters</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_newsletter.text.group_unsubscribe_info">
+                <source>chameleon_system_newsletter.text.group_unsubscribe_info</source>
+                <target>You have been unsubscribed from these groups:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.text.group_unsubscribe_info_formal">
+                <source>chameleon_system_newsletter.text.group_unsubscribe_info_formal</source>
+                <target>You have been unsubscribed from these groups:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.text.list_of_subscribed_groups">
+                <source>chameleon_system_newsletter.text.list_of_subscribed_groups</source>
+                <target>You're currently subscribed to these groups:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.text.list_of_subscribed_groups_polite">
+                <source>chameleon_system_newsletter.text.list_of_subscribed_groups_polite</source>
+                <target>You're currently subscribed to these groups:</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

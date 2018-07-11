@@ -1,0 +1,27 @@
+{#
+    description: shows bootstrap tab view
+    vars
+        aTabs
+            sTitle
+            bIsActive
+            sURL
+            sAjaxURL
+        sContent
+
+#}
+{% block snippetClass %}<div class="snippetNavigationTabsStandard tabbable"> {% endblock%}
+        <ul class="nav nav-tabs">
+            {% for aTab in aTabs %}
+                <li class="{% if aTab.bIsActive %}active {% endif %}{%if aTab.sClass%}{{aTab.sClass}}{%endif%}">
+                    <a href="{{aTab.sURL | raw}}" title="{{aTab.sTitle}} {{"chameleon_system_core.snippet_tab.show"|trans}}" {% if aTab.sAjaxURL %}data-content="{{aTab.sAjaxURL | raw}}"{% endif %}>{% block linkText%}{{aTab.sTitle}}{%endblock%}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% block tabcontent%}
+            <div class="tab-content">
+                <div class="tab-pane active">
+                    {{sContent | raw}}
+                </div>
+            </div>
+        {%endblock%}
+    </div>

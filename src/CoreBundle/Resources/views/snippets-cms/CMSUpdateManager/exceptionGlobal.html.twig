@@ -1,0 +1,8 @@
+{% for message in messages %}
+    <li><a href="#exception-{{ bundleName }}-{{ buildNumber }}-{{ loop.index0 }}">{{ 'chameleon_system_core.cms_module_update.go_to_message'|trans }}</a>
+        {{ 'chameleon_system_core.cms_module_update.error_message'|trans }} <pre>{{ message.exception.message }}</pre><br />
+        {{ 'chameleon_system_core.cms_module_update.file'|trans }} {{ message.exception.file }}<br />
+        {{ 'chameleon_system_core.cms_module_update.line'|trans }} {{ message.exception.line }}<br />
+        {{ 'chameleon_system_core.cms_module_update.exception_class'|trans }} {{ message.exceptionClass }}
+    </li>
+{% endfor %}

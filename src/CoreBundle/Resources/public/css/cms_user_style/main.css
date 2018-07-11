@@ -1,0 +1,469 @@
+/**
+* CSS styles to render download links, flash replacements and some basic wysiwyg issues
+*/
+
+.cmsdownloaditem a {
+    background-position: left;
+    background-repeat: no-repeat;
+    padding: 5px 5px 5px 20px;
+}
+
+.cmsdownloaditem a.nofileicon {
+    background-image: none;
+    padding-left: 0px;
+}
+
+span.wysiwyg_cmsdownloaditem {
+    color: #0000EE !important;
+    text-decoration: underline !important;
+}
+
+/*
+* using unicode to handle classnames starting with a number
+* @see http://www.markinns.com/articles/full/using_numbers_as_css_class_or_id_values
+*/
+.cmsdownloaditem a {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/application.png);
+}
+
+.cmsdownloaditem a.\33 ds {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/3ds.png);
+}
+
+.cmsdownloaditem a.\37 z {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/7z.png);
+}
+
+.cmsdownloaditem a.aac {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/aac.png);
+}
+
+.cmsdownloaditem a.ai {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/ai.png);
+}
+
+.cmsdownloaditem a.aif {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/aif.png);
+}
+
+.cmsdownloaditem a.aiff {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/aiff.png);
+}
+
+.cmsdownloaditem a.avi {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/avi.png);
+}
+
+.cmsdownloaditem a.bmp {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/bmp.png);
+}
+
+.cmsdownloaditem a.bz2 {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/bz2.png);
+}
+
+.cmsdownloaditem a.cdr {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/cdr.png);
+}
+
+.cmsdownloaditem a.conf {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/conf.png);
+}
+
+.cmsdownloaditem a.css {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/css.png);
+}
+
+.cmsdownloaditem a.csv {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/csv.png);
+}
+
+.cmsdownloaditem a.diff {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/diff.png);
+}
+
+.cmsdownloaditem a.doc {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/doc.png);
+}
+
+.cmsdownloaditem a.docx {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/docx.png);
+}
+
+.cmsdownloaditem a.dot {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/dot.png);
+}
+
+.cmsdownloaditem a.dotx {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/dotx.png);
+}
+
+.cmsdownloaditem a.dtaus {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/dtaus.png);
+}
+
+.cmsdownloaditem a.dwg {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/dwg.png);
+}
+
+.cmsdownloaditem a.dxf {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/dxf.png);
+}
+
+.cmsdownloaditem a.eps {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/eps.png);
+}
+
+.cmsdownloaditem a.epub {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/epub.png);
+}
+
+.cmsdownloaditem a.exe {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/exe.png);
+}
+
+.cmsdownloaditem a.f4v {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/f4v.png);
+}
+
+.cmsdownloaditem a.flac {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/flac.png);
+}
+
+.cmsdownloaditem a.fli {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/fli.png);
+}
+
+.cmsdownloaditem a.flv {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/flv.png);
+}
+
+.cmsdownloaditem a.gif {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/gif.png);
+}
+
+.cmsdownloaditem a.gpx {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/gpx.png);
+}
+
+.cmsdownloaditem a.gz {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/gz.png);
+}
+
+.cmsdownloaditem a.h264 {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/h264.png);
+}
+
+.cmsdownloaditem a.htm {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/htm.png);
+}
+
+.cmsdownloaditem a.html {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/html.png);
+}
+
+.cmsdownloaditem a.ico {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/ico.png);
+}
+
+.cmsdownloaditem a.ics {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/ics.png);
+}
+
+.cmsdownloaditem a.iso {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/iso.png);
+}
+
+.cmsdownloaditem a.jar {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/jar.png);
+}
+
+.cmsdownloaditem a.java {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/java.png);
+}
+
+.cmsdownloaditem a.jpe {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/jpe.png);
+}
+
+.cmsdownloaditem a.jpeg {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/jpeg.png);
+}
+
+.cmsdownloaditem a.jpg {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/jpg.png);
+}
+
+.cmsdownloaditem a.js {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/js.png);
+}
+
+.cmsdownloaditem a.json {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/json.png);
+}
+
+.cmsdownloaditem a.kml {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/kml.png);
+}
+
+.cmsdownloaditem a.kmz {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/kmz.png);
+}
+
+.cmsdownloaditem a.log {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/log.png);
+}
+
+.cmsdownloaditem a.m4u {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/m4u.png);
+}
+
+.cmsdownloaditem a.m4v {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/m4v.png);
+}
+
+.cmsdownloaditem a.midi {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/midi.png);
+}
+
+.cmsdownloaditem a.mkv {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/mkv.png);
+}
+
+.cmsdownloaditem a.mov {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/mov.png);
+}
+
+.cmsdownloaditem a.mp3 {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/mp3.png);
+}
+
+.cmsdownloaditem a.mpe {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/mpe.png);
+}
+
+.cmsdownloaditem a.mpeg {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/mpeg.png);
+}
+
+.cmsdownloaditem a.mpg {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/mpg.png);
+}
+
+.cmsdownloaditem a.nfo {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/nfo.png);
+}
+
+.cmsdownloaditem a.odc {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/odc.png);
+}
+
+.cmsdownloaditem a.odf {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/odf.png);
+}
+
+.cmsdownloaditem a.odg {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/odg.png);
+}
+
+.cmsdownloaditem a.odi {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/odi.png);
+}
+
+.cmsdownloaditem a.odp {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/odp.png);
+}
+
+.cmsdownloaditem a.ods {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/ods.png);
+}
+
+.cmsdownloaditem a.odt {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/odt.png);
+}
+
+.cmsdownloaditem a.ogg {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/ogg.png);
+}
+
+.cmsdownloaditem a.ogv {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/ogv.png);
+}
+
+.cmsdownloaditem a.pdf {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/pdf.png);
+}
+
+.cmsdownloaditem a.pgp {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/pgp.png);
+}
+
+.cmsdownloaditem a.php {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/php.png);
+}
+
+.cmsdownloaditem a.png {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/png.png);
+}
+
+.cmsdownloaditem a.pot {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/pot.png);
+}
+
+.cmsdownloaditem a.potx {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/potx.png);
+}
+
+.cmsdownloaditem a.pps {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/pps.png);
+}
+
+.cmsdownloaditem a.ppsx {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/ppsx.png);
+}
+
+.cmsdownloaditem a.ppt {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/ppt.png);
+}
+
+.cmsdownloaditem a.pptx {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/pptx.png);
+}
+
+.cmsdownloaditem a.psd {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/psd.png);
+}
+
+.cmsdownloaditem a.pub {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/pub.png);
+}
+
+.cmsdownloaditem a.rar {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/rar.png);
+}
+
+.cmsdownloaditem a.rb {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/rb.png);
+}
+
+.cmsdownloaditem a.rpm {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/rpm.png);
+}
+
+.cmsdownloaditem a.rtf {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/rtf.png);
+}
+
+.cmsdownloaditem a.s3m {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/s3m.png);
+}
+
+.cmsdownloaditem a.sql {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/sql.png);
+}
+
+.cmsdownloaditem a.svg {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/svg.png);
+}
+
+.cmsdownloaditem a.swf {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/swf.png);
+}
+
+.cmsdownloaditem a.tar {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/tar.png);
+}
+
+.cmsdownloaditem a.tgz {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/tgz.png);
+}
+
+.cmsdownloaditem a.tif {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/tif.png);
+}
+
+.cmsdownloaditem a.tiff {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/tif.png);
+}
+
+.cmsdownloaditem a.txt {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/txt.png);
+}
+
+.cmsdownloaditem a.vcd {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/vcd.png);
+}
+
+.cmsdownloaditem a.vcf {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/vcf.png);
+}
+
+.cmsdownloaditem a.wav {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/wav.png);
+}
+
+.cmsdownloaditem a.webm {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/webm.png);
+}
+
+.cmsdownloaditem a.webp {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/webp.png);
+}
+
+.cmsdownloaditem a.wma {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/wma.png);
+}
+
+.cmsdownloaditem a.wmf {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/wmf.png);
+}
+
+.cmsdownloaditem a.wmv {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/wmv.png);
+}
+
+.cmsdownloaditem a.xls {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/xls.png);
+}
+
+.cmsdownloaditem a.xlsx {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/xlsx.png);
+}
+
+.cmsdownloaditem a.xm {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/xm.png);
+}
+
+.cmsdownloaditem a.xml {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/xml.png);
+}
+
+.cmsdownloaditem a.xpi {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/xpi.png);
+}
+
+.cmsdownloaditem a.zip {
+    background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/zip.png);
+}
+
+/* jquery.flash.js alt Text */
+.flash-replaced .alt {
+    display: none;
+}
+
+a.cmsanchor {
+    padding: 0px;
+    margin: 0px;
+    height: 0px;
+    line-height: 0px;
+    width: 0px;
+}
+
+span.cssmediacaption {
+    display: block;
+}
+
+a.cmsmediafullimagelink {
+    padding-left: 0px;
+    background-image: none;
+}

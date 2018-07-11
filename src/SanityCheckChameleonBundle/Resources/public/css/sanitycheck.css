@@ -1,0 +1,12 @@
+
+.sanity_check_info {
+    color: green;
+}
+
+.sanity_check_warning {
+    color: orange;
+}
+
+.sanity_check_error {
+    color: red;
+}

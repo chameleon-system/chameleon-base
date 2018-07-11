@@ -1,0 +1,113 @@
+<?php
+
+/*
+ * This file is part of the Chameleon System (https://www.chameleonsystem.com).
+ *
+ * (c) ESONO AG (https://www.esono.de)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace ChameleonSystem\CoreBundle\Service;
+
+use TdbCmsLanguage;
+
+/**
+ * LanguageServiceInterface defines a service that sets and returns the currently active language.
+ */
+interface LanguageServiceInterface
+{
+    /**
+     * Returns the language ID defined in the backend as the base language.
+     * This is the language used for all multi-language fields if you do not specify the locale as part of the field name.
+     *
+     * @return string
+     */
+    public function getCmsBaseLanguageId();
+
+    /**
+     * Returns the language defined in the backend as the base language.
+     * This is the language used for all multi-language fields if you do not specify the locale as part of the field name.
+     *
+     * @return TdbCmsLanguage
+     */
+    public function getCmsBaseLanguage();
+
+    /**
+     * Returns the ISO 639-1 language code of the language with the passed ID, or null if the language could not be loaded.
+     * If null is passed for $languageId, the active language will be used.
+     *
+     * @param string $languageId
+     *
+     * @return null|string
+     */
+    public function getLanguageIsoCode($languageId = null);
+
+    /**
+     * Returns a language object for the passed ISO 639-1 code.
+     * The object will be loaded using the $targetLanguageId for localization of the object itself.
+     * If null is passed for $targetLanguageId, the active language will be used.
+     * Returns null if the language could not be loaded.
+     *
+     * @param string      $isoCode
+     * @param null|string $targetLanguageId
+     *
+     * @return null|TdbCmsLanguage
+     */
+    public function getLanguageFromIsoCode($isoCode, $targetLanguageId = null);
+
+    /**
+     * @see GetActiveLanguage()
+     *
+     * @return string|null
+     */
+    public function getActiveLanguageId();
+
+    /**
+     * Returns a language object with the passed ID, or null if the language could not be loaded.
+     * The object will be loaded using the $targetLanguageId for localization of the object itself.
+     * If null is passed for $targetLanguageId, the active language will be used.
+     *
+     * @param string      $id
+     * @param null|string $targetLanguageId
+     *
+     * @return null|TdbCmsLanguage
+     */
+    public function getLanguage($id, $targetLanguageId = null);
+
+    /**
+     * Returns the currently active language, determined by the request (domain, language prefix, active page). If no
+     * request is available or the language could not be determined for other reasons (mostly because we're in the backend
+     * without a valid user, e.g. for cron jobs), we return the system's base language.
+     *
+     * @return TdbCmsLanguage
+     */
+    public function getActiveLanguage();
+
+    /**
+     * @param string $languageId
+     */
+    public function setActiveLanguage($languageId);
+
+    /**
+     * Returns the currently active locale (ISO 6391 code of the currently active language),
+     * or null if there is no active language.
+     *
+     * @return string|null
+     */
+    public function getActiveLocale();
+
+    /**
+     * Returns the currently active edit language, or the base language if no backend user is available,
+     * or null if neither backend user nor base language is available.
+     *
+     * @return TdbCmsLanguage|null
+     */
+    public function getActiveEditLanguage();
+
+    /**
+     * @param TdbCmsLanguage $fallbackLanguage
+     */
+    public function setFallbackLanguage(TdbCmsLanguage $fallbackLanguage);
+}

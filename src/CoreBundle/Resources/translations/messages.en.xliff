@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="messages.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_core.word.of">
+                <source>chameleon_system_core.word.of</source>
+                <target>of</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.word.image">
+                <source>chameleon_system_core.word.image</source>
+                <target>Image</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.text.wait_for_processing">
+                <source>chameleon_system_core.text.wait_for_processing</source>
+                <target>processing...</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.error.flash_required">
+                <source>chameleon_system_core.error.flash_required</source>
+                <target>You need Adobe Flash Player version %iVersion% to view this video</target>
+                <note>@deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.</note>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.text.redirect_text">
+                <source>chameleon_system_core.text.redirect_text</source>
+                <target>Click %linkstart%here%linkend% if you're not redirected automatically.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.word.date_of_birth">
+                <source>chameleon_system_core.word.date_of_birth</source>
+                <target>Date of birth</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.word.day">
+                <source>chameleon_system_core.word.day</source>
+                <target>Day</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.word.month">
+                <source>chameleon_system_core.word.month</source>
+                <target>Month</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.word.year">
+                <source>chameleon_system_core.word.year</source>
+                <target>Year</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.action.abort">
+                <source>chameleon_system_core.action.abort</source>
+                <target>Cancel</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.error.missing_required_fields">
+                <source>chameleon_system_core.error.missing_required_fields</source>
+                <target>Please fill out all required fields!</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop_service_item_giftcard.form.apply_to_all">
+                <source>chameleon_system_shop_service_item_giftcard.form.apply_to_all</source>
+                <target>Apply to all</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_service_item_giftcard.form.apply_to_product">
+                <source>chameleon_system_shop_service_item_giftcard.form.apply_to_product</source>
+                <target>Apply to product</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_service_item_giftcard.form.apply_to_none">
+                <source>chameleon_system_shop_service_item_giftcard.form.apply_to_none</source>
+                <target>Apply to none</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop_service_item_wrapping.form.apply_to_all">
+                <source>chameleon_system_shop_service_item_wrapping.form.apply_to_all</source>
+                <target>Apply to all</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_service_item_wrapping.form.apply_to_product">
+                <source>chameleon_system_shop_service_item_wrapping.form.apply_to_product</source>
+                <target>Apply to product</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_service_item_wrapping.form.apply_to_none">
+                <source>chameleon_system_shop_service_item_wrapping.form.apply_to_none</source>
+                <target>Apply to none</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.module_search.result_headline">
+                <source>chameleon_system_core.module_search.result_headline</source>
+                <target>Search results</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_search.no_results">
+                <source>chameleon_system_core.module_search.no_results</source>
+                <target>We're sorry - There is no content matching your search</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_search.search_box_headline">
+                <source>chameleon_system_core.module_search.search_box_headline</source>
+                <target>Search</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_search.action_run_search">
+                <source>chameleon_system_core.module_search.action_run_search</source>
+                <target>search</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.module_send_a_friend.from_name">
+                <source>chameleon_system_core.module_send_a_friend.from_name</source>
+                <target>Your name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.error_missing_from_name">
+                <source>chameleon_system_core.module_send_a_friend.error_missing_from_name</source>
+                <target>Please enter your name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.from_email">
+                <source>chameleon_system_core.module_send_a_friend.from_email</source>
+                <target>Your email address</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.error_missing_from_email">
+                <source>chameleon_system_core.module_send_a_friend.error_missing_from_email</source>
+                <target>Please enter your email address</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.error_invalid_email">
+                <source>chameleon_system_core.module_send_a_friend.error_invalid_email</source>
+                <target>Please enter a valid email address</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.to_name">
+                <source>chameleon_system_core.module_send_a_friend.to_name</source>
+                <target>Receiver name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.error_missing_to_name">
+                <source>chameleon_system_core.module_send_a_friend.error_missing_to_name</source>
+                <target>Please enter a receiver name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.to_email">
+                <source>chameleon_system_core.module_send_a_friend.to_email</source>
+                <target>Receiver email address</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.error_missing_to_email">
+                <source>chameleon_system_core.module_send_a_friend.error_missing_to_email</source>
+                <target>Please enter a receiver email address</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.message">
+                <source>chameleon_system_core.module_send_a_friend.message</source>
+                <target>Message (optional)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.help_required_fields">
+                <source>chameleon_system_core.module_send_a_friend.help_required_fields</source>
+                <target>Fields marked with * are required.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.action_send">
+                <source>chameleon_system_core.module_send_a_friend.action_send</source>
+                <target>Send</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.mail_subject">
+                <source>chameleon_system_core.module_send_a_friend.mail_subject</source>
+                <target>Website suggestion</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.mail_intro">
+                <source>chameleon_system_core.module_send_a_friend.mail_intro</source>
+                <target>Hello %name%,
+%username% send you a link that may be interesting for you:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.mail_message_from">
+                <source>chameleon_system_core.module_send_a_friend.mail_message_from</source>
+                <target>Message from %username%:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.data_use_info">
+                <source>chameleon_system_core.module_send_a_friend.data_use_info</source>
+                <target>Please note: Your email address is only used as the sender address and not used for newsletters or promotions.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_send_a_friend.msg_success">
+                <source>chameleon_system_core.module_send_a_friend.msg_success</source>
+                <target>Your suggestion was successfully sent</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.snippet_list_option.apply">
+                <source>chameleon_system_core.snippet_list_option.apply</source>
+                <target>Apply</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.snippet_paging.previous_page">
+                <source>chameleon_system_core.snippet_paging.previous_page</source>
+                <target>Previous page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.snippet_paging.next_page">
+                <source>chameleon_system_core.snippet_paging.next_page</source>
+                <target>Next page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.snippet_tab.show">
+                <source>chameleon_system_core.snippet_tab.show</source>
+                <target>show</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.anti_spam.dot">
+                <source>chameleon_system_core.anti_spam.dot</source>
+                <target>Dot</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.anti_spam.at">
+                <source>chameleon_system_core.anti_spam.at</source>
+                <target>AtSign</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.page_meta_core.no_title">
+                <source>chameleon_system_core.page_meta_core.no_title</source>
+                <target>NOT ASSIGNED</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.page_meta_core.no_url">
+                <source>chameleon_system_core.page_meta_core.no_url</source>
+                <target>NOT ASSIGNED</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.mobile.mobile_version">
+                <source>chameleon_system_core.mobile.mobile_version</source>
+                <target>Mobile version</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.mobile.desktop_version">
+                <source>chameleon_system_core.mobile.desktop_version</source>
+                <target>Desktop version</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.module_feedback.required_field_missing">
+                <source>chameleon_system_core.module_feedback.required_field_missing</source>
+                <target>Please fill out this field</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.module_feedback.mailer_error">
+                <source>chameleon_system_core.module_feedback.mailer_error</source>
+                <target>Your email could not be sent. Please try again.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.template_tool.hide_dynamic_box">
+                <source>chameleon_system_core.template_tool.hide_dynamic_box</source>
+                <target>hide</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_tool.show_dynamic_box">
+                <source>chameleon_system_core.template_tool.show_dynamic_box</source>
+                <target>show</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

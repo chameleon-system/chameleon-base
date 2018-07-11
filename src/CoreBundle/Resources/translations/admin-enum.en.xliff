@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="admin-enum.en.xliff">
+        <body>
+
+            <trans-unit id="cms_field_conf.modifier.none">
+                <source>cms_field_conf.modifier.none</source>
+                <target>Default</target>
+            </trans-unit>
+            <trans-unit id="cms_field_conf.modifier.readonly">
+                <source>cms_field_conf.modifier.readonly</source>
+                <target>Readonly</target>
+            </trans-unit>
+            <trans-unit id="cms_field_conf.modifier.hidden">
+                <source>cms_field_conf.modifier.hidden</source>
+                <target>Hidden</target>
+            </trans-unit>
+            <trans-unit id="cms_field_conf.modifier.edit-on-click">
+                <source>cms_field_conf.modifier.edit-on-click</source>
+                <target>Edit on click</target>
+            </trans-unit>
+            <trans-unit id="cms_field_conf.modifier.readonly-if-filled">
+                <source>cms_field_conf.modifier.readonly-if-filled</source>
+                <target>Readonly if filled</target>
+            </trans-unit>
+
+            <trans-unit id="cms_tbl_conf.engine.ARCHIVE">
+                <source>cms_tbl_conf.engine.ARCHIVE</source>
+                <target>ARCHIVE</target>
+            </trans-unit>
+            <trans-unit id="cms_tbl_conf.engine.InnoDB">
+                <source>cms_tbl_conf.engine.InnoDB</source>
+                <target>InnoDB</target>
+            </trans-unit>
+            <trans-unit id="cms_tbl_conf.engine.MEMORY">
+                <source>cms_tbl_conf.engine.MEMORY</source>
+                <target>MEMORY</target>
+            </trans-unit>
+            <trans-unit id="cms_tbl_conf.engine.MyISAM">
+                <source>cms_tbl_conf.engine.MyISAM</source>
+                <target>MyISAM</target>
+            </trans-unit>
+
+            <trans-unit id="cms_field_type.indextype.none">
+                <source>cms_field_type.indextype.none</source>
+                <target>None</target>
+            </trans-unit>
+            <trans-unit id="cms_field_type.indextype.index">
+                <source>cms_field_type.indextype.index</source>
+                <target>Index</target>
+            </trans-unit>
+            <trans-unit id="cms_field_type.indextype.unique">
+                <source>cms_field_type.indextype.unique</source>
+                <target>Unique</target>
+            </trans-unit>
+            <trans-unit id="cms_field_type.base_type.standard">
+                <source>cms_field_type.base_type.standard</source>
+                <target>Default</target>
+            </trans-unit>
+            <trans-unit id="cms_field_type.base_type.mlt">
+                <source>cms_field_type.base_type.mlt</source>
+                <target>MLT</target>
+            </trans-unit>
+
+            <trans-unit id="cms_content_box.show_in_col.left">
+                <source>cms_content_box.show_in_col.left</source>
+                <target>Left</target>
+            </trans-unit>
+            <trans-unit id="cms_content_box.show_in_col.middle">
+                <source>cms_content_box.show_in_col.middle</source>
+                <target>Middle</target>
+            </trans-unit>
+            <trans-unit id="cms_content_box.show_in_col.right">
+                <source>cms_content_box.show_in_col.right</source>
+                <target>Right</target>
+            </trans-unit>
+
+            <trans-unit id="cms_export_profiles.export_type.CSV">
+                <source>cms_export_profiles.export_type.CSV</source>
+                <target>CSV</target>
+            </trans-unit>
+            <trans-unit id="cms_export_profiles.export_type.TABs">
+                <source>cms_export_profiles.export_type.TABs</source>
+                <target>TABs</target>
+            </trans-unit>
+            <trans-unit id="cms_export_profiles.export_type.HTML">
+                <source>cms_export_profiles.export_type.HTML</source>
+                <target>HTML</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

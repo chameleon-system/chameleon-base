@@ -1,0 +1,9 @@
+Clothing
+__Men's
+____Suits
+______Slacks
+______Jackets
+__Women's
+____Skirts
+____Blouses
+Other

@@ -1,0 +1,10 @@
+{#
+#}
+
+{% extends '/common/lists/divList.html.twig' %}
+
+{%block listItem %}
+    <h3 class="itemName">{{ sItem.sName}}</h3>
+    <div class="itemContent">{{ sItem.sContent | raw}}</div>
+{%endblock%}
+

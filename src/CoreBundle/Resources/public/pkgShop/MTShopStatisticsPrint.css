@@ -1,0 +1,17 @@
+/* Basic */
+
+@page { size:landscape; }
+.filter,
+.actionLinks {
+  visibility:hidden;
+  display:none;
+}
+.barchart-body {
+  page-break-after: always;
+}
+
+/* Barchart */
+
+.bar {
+  background-color: #185EA8;
+}

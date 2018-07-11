@@ -1,0 +1,47 @@
+
+{% trans_default_domain constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND') %}
+
+<script language="javascript">
+    function openUploadDialog() {
+        var treeNodeID = document.getElementById('treeNodeUploadFormTreeID').options[document.getElementById('treeNodeUploadFormTreeID').options.selectedIndex].value;
+        if (treeNodeID != '') {
+            var url = '{{ pathCmsController }}?pagedef=CMSUniversalUploader&amp;mode=media&amp;treeNodeID=' + treeNodeID + '&amp;queueCompleteCallback=queueCompleteCallback';
+            CreateModalIFrameDialogCloseButton(url, 650, 550);
+        } else {
+            alert('{{'chameleon_system_core.cms_module_wysiwyg_image.error_missing_target_folder'|trans}}');
+        }
+    }
+
+    function queueCompleteCallback() {
+        var uploadTitle = window.frames[1].document.getElementById('uploadname').value;
+        var treeNodeID = document.getElementById('treeNodeUploadFormTreeID').options[document.getElementById('treeNodeUploadFormTreeID').options.selectedIndex].value;
+        url = '{{ pathCmsController }}?pagedef=tableManagerWYSIWYGImages&id={{sImageTableConfId}}&cms_media_tree_id=' + treeNodeID + '&_listName=cmstablelistObj{{sImageTableConfCmsident}}&sAllowedFileTypes={{sAllowedFileTypes}}&CKEditor={{CKEditor}}&CKEditorFuncNum={{CKEditorFuncNum}}&langCode={{langCode}}';
+
+        if (uploadTitle != '') {
+            url += '&_search_word=' + uploadTitle;
+        }
+
+        document.getElementById('imageList').src = url;
+        CloseModalIFrameDialog();
+    }
+</script>
+<div>
+    <div class="row" style="margin-right: 0px; margin-left: -10px;">
+        <div class="col-md-9 col-sm-9">
+            <iframe id="imageList" src="{{ pathCmsController }}?pagedef=tableManagerWYSIWYGImages&amp;id={{sImageTableConfId}}&amp;sAllowedFileTypes={{sAllowedFileTypes}}&amp;CKEditor={{CKEditor}}&amp;CKEditorFuncNum={{CKEditorFuncNum}}&amp;langCode={{langCode}}" frameborder="0" style="height: 717px; width: 100%"></iframe>
+        </div>
+        <div class="col-md-3 col-sm-3" id="uploadWidget" style="margin-left: -10px">
+            <h4>{{'chameleon_system_core.cms_module_wysiwyg_image.action_new_file'|trans}}</h4>
+            <form method="post" action="" id="uploadForm" name="uploadForm" accept-charset="UTF-8" class="form-inline" role="form">
+                <div>
+                    <select name="treeNodeUploadFormTreeID" id="treeNodeUploadFormTreeID" class="form-control input-sm" onchange="$('#currentDirectory').html('<strong>{{"chameleon_system_core.cms_module_wysiwyg_image.form_target_folder"|trans}}</strong><br />' + this.options[this.selectedIndex].title);">
+                        <option value="">{{"chameleon_system_core.cms_module_wysiwyg_image.form_target_folder_no_selection"|trans}}</option>
+                        {{mediaTreeSelectBox|raw}}
+                    </select>
+                    <div id="currentDirectory" style="padding: 10px 0px 10px 0px;"></div>
+                    {{sButton|raw}}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

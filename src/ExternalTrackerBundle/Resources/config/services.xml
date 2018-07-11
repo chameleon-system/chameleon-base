@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+
+    <services>
+        <service id="chameleon_system_external_tracker.listener.search_result" class="ChameleonSystem\ExternalTrackerBundle\EventListener\SearchResultTriggerCmsObserverListener">
+            <tag name="kernel.event_listener" event="chameleon_system_shop.article_list.result_generated" method="onArticleListResultGenerated" />
+        </service>
+        <service id="chameleon_system_external_tracker.listener.category_result" class="ChameleonSystem\ExternalTrackerBundle\EventListener\CategoryTriggerCmsObserverListener">
+            <tag name="kernel.event_listener" event="chameleon_system_shop.article_list.result_generated" method="onArticleListResultGenerated" />
+        </service>
+
+
+    </services>
+
+</container>

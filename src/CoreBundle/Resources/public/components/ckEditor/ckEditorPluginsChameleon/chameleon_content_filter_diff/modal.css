@@ -1,0 +1,40 @@
+#modal_dialog table {
+    border-collapse: collapse;
+    margin-top: 10px;
+    width: 100%;
+    font-family: 'Bitstream Vera Sans Mono', Courier, monospace;
+    border: 1px solid #CCC;
+}
+#modal_dialog table thead {
+
+}
+#modal_dialog table thead tr {
+    font-weight: normal;
+    text-aling: left;
+    height: 2em;
+    border-bottom: 1px solid #DDD;
+    background-color: #ECECEC;
+    background: -webkit-gradient(linear, left top, left bottom, from(#FAFAFA), to(#ECECEC));
+    background: -moz-linear-gradient(top, #FAFAFA, #ECECEC);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FAFAFA', endColorstr='#ECECEC');
+}
+#modal_dialog table thead tr td {
+
+}
+#modal_dialog table tbody tr.del {
+    background-color: #FDD;
+}
+#modal_dialog table tbody tr.add {
+    background-color: #DFD;
+}
+#modal_dialog table tbody tr td.codekolom {
+    text-align: right;
+    min-width: 3em;
+    background-color: #ECECEC;
+    border-right: 1px solid #DDD;
+    color: #AAA;
+}
+#modal_dialog table tbody tr td.bredecode {
+    width: 100%;
+    padding-left: 4px;
+}

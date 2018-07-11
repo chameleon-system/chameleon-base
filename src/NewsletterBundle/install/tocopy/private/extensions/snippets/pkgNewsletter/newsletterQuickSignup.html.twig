@@ -1,0 +1,20 @@
+{#
+    description: shows the newsletter quick signup box
+    vars
+        sNewsletterLink
+        sModuleSpotName
+        sFieldNamesPrefix
+#}
+
+{% set q = 'chameleon_system_theme_shop_standard.newsletter.form_quick_signup_help' | trans %}
+<div class="snippetPkgNewsletterNewsletterQuickSignup">
+    <form class="form-inline" name="newsletterquicksignupform" action="{{sNewsletterLink|raw}}" method="post" accept-charset="utf-8">
+        <input type="hidden" value="SignUp" name="module_fnc[{{sModuleSpotName}}]"/>
+        {% embed "/common/userInput/userInputSubmit.html.twig" with {'sInputValue':q,'sInputName':sFieldNamesPrefix ~ '[email]', 'sPlaceholder':'chameleon_system_theme_shop_standard.newsletter.form_quick_signup_help'|trans}%}
+            {% block inputField %}
+                <input onfocus="if(this.value == '{{ q }}') {this.value = '';}" onblur="if(this.value == '') {this.value = '{{ q }}';}" class="userInputBoxInput" title="{{"chameleon_system_theme_shop_standard.newsletter.form_quick_signup_title"|trans}}" type="text" name="{{sInputName}}"  value="{{sInputValue}}" {%if sPlaceholder %}placeholder="{{sPlaceholder}}"{%endif%} />
+            {% endblock%}
+        {% endembed %}
+
+    </form>
+</div>

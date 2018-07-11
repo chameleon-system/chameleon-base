@@ -1,0 +1,119 @@
+.uploader-component {
+    border: 1px solid #AAAAAA;
+}
+
+.uploader-component .headline {
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top,  #ffffff 0%, #eeeeee 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#eeeeee)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #ffffff 0%,#eeeeee 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #ffffff 0%,#eeeeee 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #ffffff 0%,#eeeeee 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #ffffff 0%,#eeeeee 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+    padding: 10px;
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid #AAAAAA;
+}
+
+.uploader-component .headline .h4 {
+    margin: 0 0 10px 0;
+}
+
+.uploader-component .dropzone {
+    padding-top: 10px;
+    position: relative;
+    height: 160px;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.uploader-component .fileupload-progress {
+    display: none;
+}
+
+.uploader-component .fileupload-progress.in {
+    display: block;
+}
+
+.uploader-component .headline .glyphicon {
+    font-size: 16px;
+}
+
+.uploader-component .queue {
+    border-bottom: 1px solid #AAAAAA;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.uploader-component .queue .filename {
+    text-indent: 10px;
+}
+
+.uploader-component .queue-header .filename,
+.uploader-component .queue-header .size,
+.uploader-component .queue-header .state {
+    font-weight: bold;
+}
+
+.uploader-component .fileupload-buttonbar {
+    padding: 10px;
+}
+
+.uploader-component .meta-fields {
+    padding: 10px;
+}
+
+.uploader-component .queue-header {
+    border-bottom: 1px solid #AAAAAA;
+}
+
+.uploader-component .drag-drop-notice {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    left: 0;
+    line-height: 20px;
+    height: 20px;
+    margin-top: -10px;
+    z-index: -1;
+    text-align: center;
+}
+
+.uploader-component .state .progress {
+    float: left;
+    width: 70%;
+}
+
+.uploader-component .state {
+    text-align: center;
+}
+
+.uploader-component .state .cancel {
+    float: left;
+    width: 30%;
+    display: block;
+    padding-left: 5px;
+}
+
+.uploader-component .queue-element {
+    background-color: #fff;
+}
+
+.uploader-component .dropzone.hover .queue-element,
+.uploader-component .dropzone.hover {
+    background-color: #f6f6f6;
+}
+
+.uploader-component .progress-process {
+    padding: 10px;
+}
+
+.uploader-component .template-download {
+    padding-bottom: 20px;
+}
+
+.uploader-component .error-container {
+    padding: 0 10px;
+}

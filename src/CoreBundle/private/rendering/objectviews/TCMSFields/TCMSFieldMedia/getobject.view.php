@@ -1,0 +1,1 @@
+            return $this->GetImage($imagePos, '<?= $aFieldData['sFieldDatabaseName']; ?>', $includeDummyImages);
