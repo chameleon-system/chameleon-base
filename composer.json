@@ -11,12 +11,6 @@
             "role": "Company"
         }
     ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://composer.esono.de"
-        }
-    ],
     "require": {
         "ckeditor/ckeditor": "4.6.2",
         "doctrine/dbal": "~2.5",
@@ -36,8 +30,8 @@
         "twig/twig": "~1.13"
     },
     "require-dev": {
-        "chameleon-system/sanitycheck": "dev-master@dev",
-        "chameleon-system/sanitycheck-bundle": "dev-master@dev",
+        "chameleon-system/sanitycheck": "~6.2.0@dev",
+        "chameleon-system/sanitycheck-bundle": "~6.2.0@dev",
         "phpunit/phpunit": "~7.0"
     },
     "autoload": {
