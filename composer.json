@@ -12,6 +12,7 @@
         }
     ],
     "require": {
+        "chameleon-system/sanitycheck-bundle": "dev-master",
         "ckeditor/ckeditor": "4.6.2",
         "doctrine/dbal": "~2.5",
         "ext-curl": "*",
@@ -30,8 +31,6 @@
         "twig/twig": "~1.13"
     },
     "require-dev": {
-        "chameleon-system/sanitycheck": "dev-master@dev",
-        "chameleon-system/sanitycheck-bundle": "dev-master@dev",
         "phpunit/phpunit": "~7.0"
     },
     "autoload": {
