@@ -11,12 +11,6 @@
             "role": "Company"
         }
     ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://composer.esono.de"
-        }
-    ],
     "require": {
         "ckeditor/ckeditor": "4.6.2",
         "doctrine/dbal": "~2.5",
