@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\MediaManager\Interfaces\MediaManagerListStateServiceInterface;
 use ChameleonSystem\MediaManager\MediaManagerListState;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class MediaManagerListStateFromRequestService implements MediaManagerListStateServiceInterface
 {
@@ -108,13 +109,34 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
         $isPickImageMode = $this->isPickImageMode();
         $state->setPickImageMode($isPickImageMode, $this->getPickImageCallback(), $this->isPickImageWithCrop());
 
+        $this->saveStateToSession($state);
+
         return $state;
     }
 
     /**
      * @return null|MediaManagerListState
      */
-    private function getStateFromSession()
+    private function getStateFromSession(): ?MediaManagerListState
+    {
+        $session = $this->getSession();
+
+        return $session->get(self::SESSION_KEY);
+    }
+
+    /**
+     * @param MediaManagerListState $state
+     */
+    private function saveStateToSession(MediaManagerListState $state): void
+    {
+        $session = $this->getSession();
+        $session->set(self::SESSION_KEY, $state);
+    }
+
+    /**
+     * @return null|SessionInterface
+     */
+    private function getSession(): ?SessionInterface
     {
         $request = $this->requestStack->getMasterRequest();
         $session = null === $request ? null : $request->getSession();
@@ -122,7 +144,7 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
             return null;
         }
 
-        return $session->get(self::SESSION_KEY);
+        return $session;
     }
 
     /**
