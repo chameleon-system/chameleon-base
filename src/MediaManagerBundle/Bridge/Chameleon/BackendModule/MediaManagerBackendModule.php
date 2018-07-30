@@ -330,7 +330,8 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $configurationState->pageSize = $listState->getPageSize();
         $configurationState->searchTerm = $listState->getSearchTerm();
         $configurationState->listView = $listState->getListView();
-        $configurationState->showSubtree = true === $listState->isShowSubtree() ? '1' : '0';
+        $configurationState->showSubtree = $listState->isShowSubtree();
+        $configurationState->deleteWithUsageSearch = $listState->isDeleteWithUsageSearch();
         $configurationState->sortColumn = $listState->getSortColumn();
 
         $configurationState->pickImageMode = $listState->isPickImageMode();
