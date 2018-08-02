@@ -123,6 +123,7 @@
         "chameleon-system/database-migration-bundle": "*",
         "chameleon-system/debug-bundle": "*",
         "chameleon-system/distribution-bundle": "*",
+        "chameleon-system/javascript-minification-bundle": "*",
         "chameleon-system/minifier-js-jshrink-bundle": "*",
         "chameleon-system/pkgatomiclock": "*",
         "chameleon-system/pkgcmsactionplugin": "*",
