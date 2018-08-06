@@ -7,6 +7,12 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
  * @var UrlUtil $urlUtil
  */
 $urlUtil = ServiceLocator::get('chameleon_system_core.util.url');
+$editLanguage = ServiceLocator::get('chameleon_system_core.language_service')->getActiveEditLanguage();
+if (null === $editLanguage) {
+    $previewLanguageId = TCMSConfig::GetInstance()->fieldTranslationBaseLanguageId;
+} else {
+    $previewLanguageId = $editLanguage->id;
+}
 
 ?>
 <!-- show list of layouts -->
@@ -28,6 +34,7 @@ $urlUtil = ServiceLocator::get('chameleon_system_core.util.url');
             '__masterPageDef' => 'true',
             '__modulechooser' => 'true',
             'id' => TGlobal::OutHTML($oPageLayout->id),
+            'previewLanguageId' => $previewLanguageId,
         ];
         $url = $urlUtil->getArrayAsUrl($urlParameters, URL_WEB_CONTROLLER.'?', '&');
 
