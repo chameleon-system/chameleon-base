@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
 /**
@@ -573,6 +575,14 @@ class CMSTemplateEngine extends TCMSModelBase
                 $sDialogContent .= '<input type="hidden" name="bLoadCopy" value="1"/>';
             }
 
+            $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+            if (null === $editLanguage) {
+                $previewLanguageId = TCMSConfig::GetInstance()->fieldTranslationBaseLanguageId;
+            } else {
+                $previewLanguageId = $editLanguage->id;
+            }
+            $sDialogContent .= '<input type="hidden" name="previewLanguageId" value="'.TGlobal::OutHTML($previewLanguageId).'"/>  '."\n".'';
+
             /** @var $oCmsTplModuleInstance TdbCmsTplModuleInstance */
             $oCmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance($sInstanceId);
 
@@ -642,6 +652,11 @@ class CMSTemplateEngine extends TCMSModelBase
      */
     private function getInputFilter()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getLanguageService(): LanguageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 }
