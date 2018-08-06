@@ -176,7 +176,11 @@ class CounterMigrationDataAccess implements CounterMigrationDataAccessInterface
      */
     public function getAllCountersVersionOne()
     {
-        $query = "SELECT * FROM `cms_config_parameter` WHERE `systemname` LIKE 'dbversion-meta-%' ORDER BY `systemname`";
+        $query = "SELECT * 
+                    FROM `cms_config_parameter` 
+                   WHERE `systemname` LIKE 'dbversion-meta-%' 
+                     AND `value` LIKE '%buildNumbers%' 
+                ORDER BY `systemname`";
 
         return $this->connection->fetchAll($query);
     }
