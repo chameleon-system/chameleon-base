@@ -1,5 +1,6 @@
 <?php
 
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
@@ -7,9 +8,13 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
  * @var UrlUtil $urlUtil
  */
 $urlUtil = ServiceLocator::get('chameleon_system_core.util.url');
-$editLanguage = ServiceLocator::get('chameleon_system_core.language_service')->getActiveEditLanguage();
+/**
+ * @var LanguageServiceInterface $languageService
+ */
+$languageService = ServiceLocator::get('chameleon_system_core.language_service');
+$editLanguage = $languageService->getActiveEditLanguage();
 if (null === $editLanguage) {
-    $previewLanguageId = TCMSConfig::GetInstance()->fieldTranslationBaseLanguageId;
+    $previewLanguageId = $languageService->getCmsBaseLanguageId();
 } else {
     $previewLanguageId = $editLanguage->id;
 }
