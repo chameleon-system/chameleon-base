@@ -575,9 +575,10 @@ class CMSTemplateEngine extends TCMSModelBase
                 $sDialogContent .= '<input type="hidden" name="bLoadCopy" value="1"/>';
             }
 
-            $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+            $languageService = $this->getLanguageService();
+            $editLanguage = $languageService->getActiveEditLanguage();
             if (null === $editLanguage) {
-                $previewLanguageId = TCMSConfig::GetInstance()->fieldTranslationBaseLanguageId;
+                $previewLanguageId = $languageService->getCmsBaseLanguageId();
             } else {
                 $previewLanguageId = $editLanguage->id;
             }
