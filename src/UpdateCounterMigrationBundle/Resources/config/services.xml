@@ -10,6 +10,10 @@
             <argument type="service" id="kernel" />
         </service>
 
+        <service id="chameleon_system_update_counter_migration.bundle_data_access" class="ChameleonSystem\UpdateCounterMigrationBundle\DataAccess\BundleDataAccess">
+            <argument type="service" id="kernel" />
+        </service>
+
         <service id="chameleon_system_update_counter_migration.data_access" class="ChameleonSystem\UpdateCounterMigrationBundle\DataAccess\CounterMigrationDataAccess">
             <argument type="service" id="database_connection" />
             <argument type="service" id="chameleon_system_core.tools"/>
@@ -23,7 +27,7 @@
 
         <service id="chameleon_system_update_counter_migration.version_migrator" class="ChameleonSystem\UpdateCounterMigrationBundle\Migrator\UpdateCounterVersionMigrator">
             <argument type="service" id="chameleon_system_update_counter_migration.data_access" />
-            <argument type="service" id="kernel" />
+            <argument type="service" id="chameleon_system_update_counter_migration.bundle_data_access" />
         </service>
 
         <service id="chameleon_system_update_counter_migration.command.generate_migration_config" class="ChameleonSystem\UpdateCounterMigrationBundle\Command\GenerateMigrationConfigCommand">

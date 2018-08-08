@@ -11,10 +11,9 @@
 
 namespace ChameleonSystem\UpdateCounterMigrationBundle\Migrator;
 
+use ChameleonSystem\UpdateCounterMigrationBundle\DataAccess\BundleDataAccessInterface;
 use ChameleonSystem\UpdateCounterMigrationBundle\DataAccess\CounterMigrationDataAccessInterface;
 use ChameleonSystem\UpdateCounterMigrationBundle\Exception\InvalidMigrationCounterException;
-use LogicException;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class UpdateCounterVersionMigrator
 {
@@ -23,18 +22,14 @@ class UpdateCounterVersionMigrator
      */
     private $counterMigrationDataAccess;
     /**
-     * @var KernelInterface
+     * @var BundleDataAccessInterface
      */
-    private $kernel;
+    private $bundleDataAccess;
 
-    /**
-     * @param CounterMigrationDataAccessInterface $counterMigrationDataAccess
-     * @param KernelInterface                     $kernel
-     */
-    public function __construct(CounterMigrationDataAccessInterface $counterMigrationDataAccess, KernelInterface $kernel)
+    public function __construct(CounterMigrationDataAccessInterface $counterMigrationDataAccess, BundleDataAccessInterface $bundleDataAccess)
     {
         $this->counterMigrationDataAccess = $counterMigrationDataAccess;
-        $this->kernel = $kernel;
+        $this->bundleDataAccess = $bundleDataAccess;
     }
 
     /**
@@ -77,10 +72,8 @@ class UpdateCounterVersionMigrator
         $invalidCounters = array();
         foreach ($oldCounters as $oldCounter) {
             $oldName = $oldCounter['systemname'];
-
-            try {
-                $newName = $this->getNewCounterName($oldName);
-            } catch (LogicException $e) {
+            $newName = $this->getNewCounterName($oldName);
+            if (null === $newName) {
                 $invalidCounters[] = $oldName;
                 continue;
             }
@@ -107,9 +100,7 @@ class UpdateCounterVersionMigrator
     /**
      * @param string $oldName
      *
-     * @return string
-     *
-     * @throws LogicException
+     * @return string|null
      */
     private function getNewCounterName($oldName)
     {
@@ -120,66 +111,66 @@ class UpdateCounterVersionMigrator
         switch ($type) {
             case 'core':
             case 'core3':
-                $newName = 'ChameleonSystemCoreBundle';
-                break;
+                return 'ChameleonSystemCoreBundle';
             case 'custom-core':
-                $newName = '';
-                break;
+                return null;
             case 'customer':
-                $newName = 'EsonoCustomerBundle';
-                break;
+                return 'EsonoCustomerBundle';
             case 'module':
-                preg_match('#dbversion-meta-module-(.+?)(-updates|/|$)#', $oldName, $matches);
-                $tempName = $matches[1];
-                if ('pkgShop' === $tempName) {
-                    $newName = 'ChameleonSystemShopBundle';
-                } elseif ('pkgExtranetUserProfile' === $tempName) {
-                    throw new LogicException(sprintf('pkgExtranetUserProfile no longer supported as a module. The migration counter "%s" will automatically be removed from the database.', $oldName));
-                } else {
-                    $newName = 'ChameleonSystemCoreBundle';
-                }
-                break;
+                return $this->getNewModuleCounterName($oldName);
             case 'packages':
-                preg_match('#dbversion-meta-\w+-(.+?)(-updates|/|$)#', $oldName, $matches);
-                try {
-                    $newName = $this->getBundleNameFromPackageName($matches[1]);
-                } catch (LogicException $e) {
-                    throw new LogicException(sprintf(
-                        'No bundle was found for package "%s". The migration counter "%s" will automatically be removed from the database.',
-                        $matches[1],
-                        $oldName
-                    ));
-                }
-                break;
+                return $this->getNewPackageCounterName($oldName);
             default:
-                $newName = '';
-                break;
+                return null;
+        }
+    }
+
+    private function getNewModuleCounterName(string $oldName): ?string
+    {
+        preg_match('#dbversion-meta-module-(.+?)(-updates|/|$)#', $oldName, $matches);
+        $packageName = $matches[1];
+
+        if ('pkgShop' === $packageName) {
+            return 'ChameleonSystemShopBundle';
+        }
+        if ('pkgExtranetUserProfile' === $packageName) { // no longer supported as module, only as package
+            return null;
         }
 
-        return $newName;
+        return 'ChameleonSystemCoreBundle';
     }
 
     /**
-     * @param string $packageName
+     * @param string $oldName
      *
-     * @return string
-     *
-     * @throws LogicException
+     * @return string|null
      */
-    private function getBundleNameFromPackageName($packageName)
+    private function getNewPackageCounterName($oldName)
     {
-        $normalizedPackageName = $this->normalizeBundleName($packageName);
-        $bundles = $this->kernel->getBundles();
-        foreach ($bundles as $bundle) {
-            $bundlePath = $bundle->getPath();
-            $normalizedBundleName = $this->normalizeBundleName(\basename($bundlePath));
-            if ($normalizedBundleName === $normalizedPackageName
-                || (true === \array_key_exists($normalizedPackageName, self::$packageNames) && self::$packageNames[$normalizedPackageName] === $normalizedBundleName)) {
-                return $bundle->getName();
+        preg_match('#dbversion-meta-\w+-(.+?)(-updates|/|$)#', $oldName, $matches);
+        $normalizedPackageName = $this->normalizeBundleName($matches[1]);
+
+        $bundlePaths = $this->bundleDataAccess->getBundlePaths();
+        foreach ($bundlePaths as $bundleName => $bundlePath) {
+            /*
+             * Handle bundles named CustomerBundle; the "official" EsonoCustomerBundle is already handled in
+             * getNewCounterName(), so we are sure that it is not applicable here.
+             */
+            if ('EsonoCustomerBundle' === $bundleName) {
+                continue;
+            }
+
+            $normalizedBundleDirectory = $this->normalizeBundleName(\basename($bundlePath));
+            if ($normalizedBundleDirectory === $normalizedPackageName) {
+                return $bundleName;
+            }
+            if ($normalizedBundleDirectory === $this->getChameleonBaseOrShopBundleName($normalizedPackageName)
+                && 0 === strpos($bundleName, 'ChameleonSystem')) {
+                return $bundleName;
             }
         }
 
-        throw new LogicException();
+        return null;
     }
 
     /**
@@ -190,6 +181,11 @@ class UpdateCounterVersionMigrator
     private function normalizeBundleName($bundleName)
     {
         return \mb_strtolower(\str_replace('-', '', $bundleName));
+    }
+
+    private function getChameleonBaseOrShopBundleName(string $normalizedPackageName): ?string
+    {
+        return self::$packageNames[$normalizedPackageName] ?? null;
     }
 
     /**
