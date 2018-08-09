@@ -115,8 +115,8 @@ class ViewMapperConfigTest extends TestCase
 
     public function testGetAsString()
     {
-        $configString = "one=foobar.html.twig;MapperOne{arraymapping}[foo->bar][baz->chucknorris],MapperOne1[foo->bar]{arraymapping}[baz->chucknorris],MapperOne2{arraymapping},MapperOne3[foo->bar],MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo";
-        $expected = "one=foobar.html.twig;MapperOne{arraymapping}[foo->bar][baz->chucknorris],MapperOne1{arraymapping}[foo->bar][baz->chucknorris],MapperOne2{arraymapping},MapperOne3[foo->bar],MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo";
+        $configString = "one=foobar.html.twig;MapperOne{arraymapping}[foo->bar][baz->chucknorris],MapperOne1[foo->bar]{arraymapping}[baz->chucknorris],MapperOne2{arraymapping},MapperOne3[foo->bar],MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo\nthree=\nfour";
+        $expected = "one=foobar.html.twig;MapperOne{arraymapping}[foo->bar][baz->chucknorris],MapperOne1{arraymapping}[foo->bar][baz->chucknorris],MapperOne2{arraymapping},MapperOne3[foo->bar],MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo\nthree=\nfour";
         $config = new ViewMapperConfig($configString);
 
         $string = $config->getAsString();
@@ -171,8 +171,8 @@ class ViewMapperConfigTest extends TestCase
 
     public function testReplaceMapperForAllConfigs()
     {
-        $configString = "one=foobar.html.twig;MapperOne{arraymapping}[foo->bar][baz->chucknorris],MapperOne1{arraymapping}[foo->bar][baz->chucknorris],MapperOne2{arraymapping},MapperOne3[foo->bar],MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo";
-        $expected = "one=foobar.html.twig;MapperNineThousand{arraymapping}[foo->bar][baz->chucknorris],MapperOne1{arraymapping}[foo->bar][baz->chucknorris],MapperOne2{arraymapping},MapperOne3[foo->bar],MapperTwo\ntwo=foobaz.html.twig;MapperNineThousand,MapperTwo";
+        $configString = "one=foobar.html.twig;MapperOne{arraymapping}[foo->bar][baz->chucknorris],MapperOne1{arraymapping}[foo->bar][baz->chucknorris],MapperOne2{arraymapping},MapperOne3[foo->bar],MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo\nthree=barbaz.html.twig\nfour=\nfive";
+        $expected = "one=foobar.html.twig;MapperNineThousand{arraymapping}[foo->bar][baz->chucknorris],MapperOne1{arraymapping}[foo->bar][baz->chucknorris],MapperOne2{arraymapping},MapperOne3[foo->bar],MapperTwo\ntwo=foobaz.html.twig;MapperNineThousand,MapperTwo\nthree=barbaz.html.twig\nfour=\nfive";
         $config = new ViewMapperConfig($configString);
         $config->replaceMapper('MapperOne', 'MapperNineThousand');
         $string = $config->getAsString();
