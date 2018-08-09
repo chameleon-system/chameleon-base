@@ -5,7 +5,7 @@
 </div>
 <?php
 
-if (false === TCMSLogChange::FieldExists('cms_media','cms_tags_mlt')) {
+if (false === TCMSLogChange::FieldExists('cms_media', 'cms_tags_mlt')) {
     $tagsFieldId = TCMSLogChange::createUnusedRecordId('cms_field_conf');
     $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
         ->setFields(
