@@ -43,7 +43,6 @@
         };
 
     function Plugin(element, state, options) {
-        console.log(state);
         this.element = $(element);
         this.settings = $.extend({}, defaults, options);
         this.state = $.extend({}, stateDefaults, state);
@@ -629,8 +628,6 @@
             var self = this;
             self.showWaitingAnimation();
             var enableUsageSearch = '0';
-
-            console.log(self.state.deleteWithUsageSearch);
 
             if ($('.delete-with-usage-search').is(':checked') || true === self.state.deleteWithUsageSearch) {
                 enableUsageSearch = '1';
