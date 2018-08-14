@@ -34,8 +34,8 @@
             searchTerm: '',
             mediaTreeNodeId: '',
             listView: '',
-            showSubtree: '',
-            deleteWithUsageSearch: '',
+            showSubtree: false,
+            deleteWithUsageSearch: false,
             sortColumn: null,
             pickImageMode: false,
             pickImageCallback: '',
@@ -339,8 +339,8 @@
                     's': state.searchTerm,
                     'mediaTreeId': state.mediaTreeNodeId,
                     'listView': state.listView,
-                    'subtree': state.showSubtree,
-                    'enableUsageSearch': state.deleteWithUsageSearch,
+                    'subtree': state.showSubtree ? '1' : '0',
+                    'enableUsageSearch': state.deleteWithUsageSearch ? '1' : '0',
                     'sr': state.sortColumn,
                     'pickImage': state.pickImageMode ? '1' : '0',
                     'pickImageCallback': state.pickImageMode ? state.pickImageCallback : null,
@@ -511,9 +511,9 @@
             });
 
             $('.show-subtree', self.editContainer).on('change', function (evt) {
-                var showTree = '0';
+                var showTree = false;
                 if ($(this).is(':checked')) {
-                    showTree = '1';
+                    showTree = true;
                 }
                 var state = {
                     pageNumber: 0,
@@ -523,9 +523,9 @@
             });
 
             $('.delete-with-usage-search', self.editContainer).on('change', function (evt) {
-                var enableUsageSearch = '0';
+                var enableUsageSearch = false;
                 if ($(this).is(':checked')) {
-                    enableUsageSearch = '1';
+                    enableUsageSearch = true;
                 }
                 var state = {
                     deleteWithUsageSearch: enableUsageSearch
@@ -599,7 +599,7 @@
                     'pickImage': self.state.pickImageMode ? '1' : '0',
                     'pickImageCallback': self.state.pickImageMode ? self.state.pickImageCallback : null,
                     'pickImageWithCrop': self.state.pickImageMode && self.state.pickImageWithCrop ? '1' : '0',
-                    'enableUsageSearch': self.state.deleteWithUsageSearch
+                    'enableUsageSearch': self.state.deleteWithUsageSearch ? '1' : '0',
                 },
                 url: self.settings.urls.mediaItemDetailsUrlTemplate.replace('--id--', mediaItemId),
                 error: function (responseData) {
@@ -628,7 +628,8 @@
             var self = this;
             self.showWaitingAnimation();
             var enableUsageSearch = '0';
-            if ($('.delete-with-usage-search').is(':checked') || '1' === self.state.deleteWithUsageSearch) {
+
+            if ($('.delete-with-usage-search').is(':checked') || true === self.state.deleteWithUsageSearch) {
                 enableUsageSearch = '1';
             }
             $.ajax({
