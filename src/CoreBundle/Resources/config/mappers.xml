@@ -22,8 +22,6 @@
         </service>
 
         <service id="chameleon_system_core.mapper.media_field" class="TCMSMediaFieldMapper">
-            <argument type="service" id="chameleon_system_core.media_manager.url_generator" />
-            <argument type="service" id="translator" />
         </service>
 
         <service id="chameleon_system_core.mapper.media_field_upload" class="TCMSMediaFieldUploadMapper">
