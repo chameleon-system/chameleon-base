@@ -47,7 +47,7 @@ class ConfigurationPass implements CompilerPassInterface
         $arguments[2] = $config['default_page_size'];
         $serviceDefinitionListStateService->setArguments($arguments);
 
-        $container->setParameter('chameleon_system_media_manager.render_media_properties_field', false);
+        $container->setParameter('chameleon_system_core.render_media_properties_field', false);
     }
 
     /**

@@ -96,7 +96,7 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
      */
     private function renderMediaPropertiesField()
     {
-        return ServiceLocator::getParameter('chameleon_system_media_manager.render_media_properties_field');
+        return ServiceLocator::getParameter('chameleon_system_core.render_media_properties_field');
     }
 
     /**

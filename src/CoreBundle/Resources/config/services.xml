@@ -11,7 +11,7 @@
         <parameter key="chameleon_system_core.database.estimation_lower_limit">0</parameter>
         <parameter key="chameleon_system_core.controller_invoke_listener.class">ChameleonSystem\CoreBundle\Controller\ChameleonControllerInvokeListener</parameter>
         <parameter key="chameleon_system_core.tpl_page_controller.class">TPkgCmsRouteControllerCmsTplPage</parameter>
-        <parameter key="chameleon_system_media_manager.render_media_properties_field">true</parameter>
+        <parameter key="chameleon_system_core.render_media_properties_field">true</parameter>
     </parameters>
 
     <services>
