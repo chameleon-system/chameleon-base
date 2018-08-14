@@ -114,28 +114,28 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
         return $state;
     }
 
-    /**
-     * @return null|MediaManagerListState
-     */
     private function getStateFromSession(): ?MediaManagerListState
     {
         $session = $this->getSession();
 
+        if (null === $session) {
+            return null;
+        }
+
         return $session->get(self::SESSION_KEY);
     }
 
-    /**
-     * @param MediaManagerListState $state
-     */
     private function saveStateToSession(MediaManagerListState $state): void
     {
         $session = $this->getSession();
+
+        if (null === $session) {
+            return;
+        }
+
         $session->set(self::SESSION_KEY, $state);
     }
 
-    /**
-     * @return null|SessionInterface
-     */
     private function getSession(): ?SessionInterface
     {
         $request = $this->requestStack->getMasterRequest();
