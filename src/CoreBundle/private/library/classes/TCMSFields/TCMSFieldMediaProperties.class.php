@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TCMSFieldMediaProperties extends TCMSFieldNumber
 {
     /** @var bool */
@@ -75,6 +77,26 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
         $html .= '</table>';
 
         return $html;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetDisplayType()
+    {
+        if (false === $this->renderMediaPropertiesField()) {
+            return 'hidden';
+        }
+
+        return parent::GetDisplayType();
+    }
+
+    /**
+     * @return bool
+     */
+    private function renderMediaPropertiesField()
+    {
+        return ServiceLocator::getParameter('chameleon_system_core.render_media_properties_field');
     }
 
     /**
