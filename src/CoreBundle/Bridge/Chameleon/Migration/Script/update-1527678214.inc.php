@@ -5,20 +5,6 @@
 </div>
 <?php
 
-$data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'de')
-  ->setFields([
-      'list_query' => 'SELECT `cms_tree`.*, `cms_portal`.`name` AS portal_name
-FROM `cms_tree`
-LEFT JOIN `cms_tree` AS parent on `cms_tree`.`lft` BETWEEN parent.`lft` AND parent.`rgt`
-INNER JOIN `cms_portal` on parent.id = `cms_portal`.`main_node_tree`
-',
-  ])
-  ->setWhereEquals([
-      'name' => 'cms_tree',
-  ])
-;
-TCMSLogChange::update(__LINE__, $data);
-
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_list_fields', 'en')
   ->setFields([
       'title' => 'Path',
