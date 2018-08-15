@@ -15,7 +15,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setWhereEquals(
         array(
             'cms_tbl_conf_id' => $cmsMediaTableId,
-            'name' => 'alt_tag'
+            'name' => 'alt_tag',
         )
     );
 TCMSLogChange::update(__LINE__, $data);
@@ -29,7 +29,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setWhereEquals(
         array(
             'cms_tbl_conf_id' => $cmsMediaTableId,
-            'name' => 'systemname'
+            'name' => 'systemname',
         )
     );
 TCMSLogChange::update(__LINE__, $data);
