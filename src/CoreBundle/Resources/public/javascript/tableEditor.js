@@ -184,6 +184,9 @@ function _SetDocument(documentID) {
 
 function ClearImageResponse(data, responseMessage) {
     if (data) {
+        var form = document.getElementById('cmseditform');
+        form.querySelector('[name=' + data.fieldname + ']').value = data.imageFieldContent;
+
         _ResetImage(data.fieldname, data.imagePosition);
         CloseModalIFrameDialog();
     }
