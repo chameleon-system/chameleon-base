@@ -66,8 +66,13 @@
            data-view="gridLarge"><span class="glyphicon glyphicon-th-large"></span></a>
         <a class="list-view list{% if listState.listView == 'list' %} active{% endif %}" data-view="list"><span
                     class="glyphicon glyphicon-th-list"></span></a>
-        <a class="list-view list{% if listState.listView == 'tableList' %} active{% endif %}"
+        {#
+            Deactivated as the list is always displayed empty and is therefore of no use.
+            See https://github.com/chameleon-system/chameleon-system/issues/3
+            and https://github.com/chameleon-system/chameleon-system/issues/28
+        #}
+        {#<a class="list-view list{% if listState.listView == 'tableList' %} active{% endif %}"
            data-view="tableList"><span
-                    class="glyphicon glyphicon-list-alt"></span></a>
+                    class="glyphicon glyphicon-list-alt"></span></a>#}
     </div>
 </div>
