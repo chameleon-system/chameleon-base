@@ -1,12 +1,12 @@
 | Q             | A
 | ------------- | ---
-| Branch?       | master for features / 6.2 for bug fixes <!-- see below -->
+| Branch        | master for features / 6.2.x for bug fixes <!-- see below -->
 | Bug fix?      | yes/no
 | New feature?  | yes/no <!-- don't forget to update CHANGELOG.md files -->
 | BC breaks?    | no     <!-- does the change break backwards compatibility? Only allowed for major versions -->
 | Deprecations? | yes/no <!-- don't forget to update UPGRADE-*.md and CHANGELOG.md files -->
 | Tests pass?   | yes    <!-- please add some, will be required by reviewers -->
-| Fixed issues  | #...   <!-- #-prefixed issue number(s), if any -->
+| Fixed issues  | chameleon-system/chameleon-system#...   <!-- #-prefixed issue number(s), if any -->
 | License       | MIT
 
 <!--

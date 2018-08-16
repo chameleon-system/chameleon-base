@@ -25,7 +25,7 @@
         "phpmailer/phpmailer": "~6.0",
         "sensio/distribution-bundle": "~4.0",
         "symfony/monolog-bundle": "~2.3|^3.0.2",
-        "symfony/symfony": "~2.8.0",
+        "symfony/symfony": "~2.8.23",
         "symfony-cmf/routing-bundle": "~1.2.0",
         "tedivm/jshrink": "~1.0",
         "twig/twig": "~1.13"
@@ -123,6 +123,7 @@
         "chameleon-system/database-migration-bundle": "*",
         "chameleon-system/debug-bundle": "*",
         "chameleon-system/distribution-bundle": "*",
+        "chameleon-system/javascript-minification-bundle": "*",
         "chameleon-system/minifier-js-jshrink-bundle": "*",
         "chameleon-system/pkgatomiclock": "*",
         "chameleon-system/pkgcmsactionplugin": "*",

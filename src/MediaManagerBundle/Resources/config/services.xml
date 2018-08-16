@@ -186,6 +186,13 @@
         <service id="chameleon_system_media_manager.extension_collection"
                  class="ChameleonSystem\MediaManager\MediaManagerExtensionCollection"/>
 
+        <service id="chameleon_system_media_manager.mapper.media_field_decorator" class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\Mapper\TCMSMediaFieldMapperDecorator"
+                 decorates="chameleon_system_core.mapper.media_field">
+            <argument id="chameleon_system_media_manager.mapper.media_field_decorator.inner" type="service"/>
+            <argument id="chameleon_system_core.media_manager.url_generator" type="service"/>
+            <argument id="translator" type="service"/>
+        </service>
+
     </services>
 
 </container>
