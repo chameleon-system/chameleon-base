@@ -42,15 +42,68 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     {
         parent::Init($oTableConf);
 
+        $oGlobal = TGlobal::instance();
+        $this->tableObj = null;
         $this->columnCount = 0;
         $_SESSION['_tmpCurrentTableName'] = $this->oTableConf->sqlData['name']; // needed for the callback functions...
         $_SESSION['_tmpCurrentTableID'] = $this->oTableConf->sqlData['id']; // needed for the callback functions...
 
-        $this->CreateTableObj();
-        $this->tableObj->orderList = [];
-        $this->AddFields();
-        $this->AddSortInformation();
-        $this->AddTableGrouping();
+        $listName = $oGlobal->GetUserData('_listName');
+        $objectChangeRequest = (isset($listName) && $listName == 'cmstablelistObj' . $this->oTableConf->sqlData['cmsident']);
+
+        $oOldTableObj = null;
+        $sListCacheKey = $this->GetListCacheKey();
+
+        if ($this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE) {
+            if (!array_key_exists('_listObjCache', $_SESSION)) {
+                $_SESSION['_listObjCache'] = array();
+            }
+            $objectInSession = (array_key_exists($sListCacheKey, $_SESSION['_listObjCache']));
+
+            if ($objectInSession) {
+                $tmp = base64_decode($_SESSION['_listObjCache'][$sListCacheKey]);
+                $oOldTableObj = unserialize(gzuncompress($tmp));
+            }
+        }
+
+        $aOrderData = array();
+        if (!is_null($oOldTableObj) && $oOldTableObj !== false) {
+            $aOrderData = $oOldTableObj->orderList;
+        }
+
+        // table is not in cache, load it
+        if (is_null($oOldTableObj) || $oOldTableObj === false) {
+            $this->CreateTableObj();
+            $this->tableObj->orderList = $aOrderData;
+            $this->AddFields();
+            $this->AddSortInformation();
+            $this->AddTableGrouping();
+        } else { // table is in cache, load it from there and inject current post parameters
+            $postData = $oGlobal->GetUserData();
+            $this->tableObj = $oOldTableObj;
+            $this->tableObj->_postData = array_merge($this->tableObj->_postData, $postData); // overwrite anything that is passed via get or post
+            foreach ($this->tableObj->customSearchFieldParameter AS $key => $val) {
+                if (!array_key_exists($key, $this->tableObj->_postData)) {
+                    $this->tableObj->_postData[$key] = $this->tableObj->customSearchFieldParameter[$key];
+                }
+            }
+            $this->AddSortInformation();
+            if (isset($this->tableObj->groupByCell->colSpan)) {
+                $this->AddTableGrouping($this->tableObj->groupByCell->colSpan);
+            }
+            $this->tableObj->sql = $this->FilterQuery(); // need to refresh this since it may change for mlt lists
+            if (isset($postData['_startRecord']) && (!empty($postData['_startRecord']) || $postData['_startRecord'] == '0')) { // we need to check the 0 condition because 0 is treated as empty
+                $this->tableObj->startRecord = $postData['_startRecord']; // set current start record
+            }
+
+            $this->PostCreateTableObjectHook();
+        }
+
+        if (($objectChangeRequest || is_null($oOldTableObj)) && $this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE) {
+            $tmp = serialize($this->tableObj);
+            $tmp = gzcompress($tmp, 9);
+            $_SESSION['_listObjCache'][$sListCacheKey] = base64_encode($tmp);
+        }
     }
 
     /**

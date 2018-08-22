@@ -967,7 +967,7 @@ if (!defined('CMS_ACTIVE_BACKEND_LIST_CACHE')) {
     /**
      * @deprecated since 6.2.0 - no longer used.
      */
-    define('CMS_ACTIVE_BACKEND_LIST_CACHE', false);
+    define('CMS_ACTIVE_BACKEND_LIST_CACHE', true);
 }
 
 /**
