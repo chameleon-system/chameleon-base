@@ -119,7 +119,7 @@ class TCMSConfig extends TCMSRecord
      *
      * @param string $sModuleClassName
      *
-     * @return string
+     * @return string|bool
      */
     public function GetRealModuleClassName($sModuleClassName)
     {

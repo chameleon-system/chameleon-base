@@ -39,7 +39,7 @@ class AutoClassLoader
         } catch (ServiceNotFoundException $e) {
             return false;
         }
-        if (isset(static::$runningNestedSearchForClass[$sClassName])) {
+        if (isset(self::$runningNestedSearchForClass[$sClassName])) {
             return false;
         }
 
@@ -48,10 +48,10 @@ class AutoClassLoader
             self::loadClassRepository();
             $classSubtype = self::getClassSubtypeFromCache($sClassName);
             if (null === $classSubtype) {
-                static::$runningNestedSearchForClass[$sClassName] = true;
+                self::$runningNestedSearchForClass[$sClassName] = true;
                 // try to auto load using other auto loader
                 spl_autoload_call($sClassName);
-                unset(static::$runningNestedSearchForClass[$sClassName]);
+                unset(self::$runningNestedSearchForClass[$sClassName]);
                 if (class_exists($sClassName, false) || interface_exists($sClassName, false)) {
                     return true;
                 }

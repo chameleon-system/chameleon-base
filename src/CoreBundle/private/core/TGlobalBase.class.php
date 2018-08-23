@@ -44,7 +44,7 @@ class TGlobalBase
     /**
      * a copy of all rewrite parameter - these parameters will be excluded from the GetRealURL request (since they are part of the url anyway).
      *
-     * @var string
+     * @var array
      */
     protected $aRewriteParameter = array();
 

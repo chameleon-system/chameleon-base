@@ -11,12 +11,16 @@
 
 namespace esono\pkgCmsCounter;
 
+use Doctrine\DBAL\Connection;
+
 class CmsCounter
 {
-    /** @var null|\Doctrine\DBAL\Connection */
-    private $db = null;
+    /**
+     * @var Connection
+     */
+    private $db;
 
-    public function __construct(\Doctrine\DBAL\Connection $db)
+    public function __construct(Connection $db)
     {
         $this->db = $db;
     }

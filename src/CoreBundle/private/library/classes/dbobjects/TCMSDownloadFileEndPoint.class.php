@@ -459,7 +459,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
      *
      * @param string $fileExtension
      *
-     * @return int - id of file type... false if file type wasn't found
+     * @return string|bool - id of file type... false if file type wasn't found
      */
     public static function GetFileTypeIdByExtension($fileExtension)
     {

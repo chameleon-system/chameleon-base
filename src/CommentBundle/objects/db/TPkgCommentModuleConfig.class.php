@@ -212,7 +212,7 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
      *
      * @deprecated use TGlobal::GetActiveLanguageId() instead of this
      *
-     * @return int
+     * @return string
      */
     protected static function GetDefaultLanguageId()
     {
@@ -224,7 +224,7 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
     /**
      * return active item.
      *
-     * @return object $oItme
+     * @return object
      */
     public function GetActiveItem()
     {

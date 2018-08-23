@@ -331,7 +331,7 @@ class TFormWizardStep extends TCMSRecord
      *                                    (it will still prefere the current instance, but searches in the other
      *                                    instances as a fallback)
      *
-     * @return string
+     * @return string|bool
      */
     public function GetStepLink($sName, $bSearchAllInstances = false)
     {
