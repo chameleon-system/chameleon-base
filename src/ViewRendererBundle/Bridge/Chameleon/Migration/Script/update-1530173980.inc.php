@@ -23,4 +23,3 @@ $data = TCMSLogChange::createMigrationQueryData('cms_smart_url_handler_cms_porta
         'source_id' => $oldUrlHandlerId,
     ]);
 TCMSLogChange::delete(__LINE__, $data);
-

@@ -75,7 +75,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
      * renders the tree.
      *
      * @param TdbCmsTree $oNode
-     * @param int          $activeID
+     * @param int        $activeID
      * @param $fieldName
      * @param string $path
      * @param int    $level

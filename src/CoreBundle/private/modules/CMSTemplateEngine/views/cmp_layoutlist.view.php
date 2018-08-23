@@ -41,10 +41,8 @@ if (null === $editLanguage) {
             'id' => TGlobal::OutHTML($oPageLayout->id),
             'previewLanguageId' => $previewLanguageId,
         ];
-        $url = $urlUtil->getArrayAsUrl($urlParameters, URL_WEB_CONTROLLER.'?', '&');
-
-        ?>
-        <li class="<?= $layoutItemClass ?>" onClick="parent.document.getElementById('userwebpageiframe').src='<?= $url; ?>';">
+        $url = $urlUtil->getArrayAsUrl($urlParameters, URL_WEB_CONTROLLER.'?', '&'); ?>
+        <li class="<?= $layoutItemClass; ?>" onClick="parent.document.getElementById('userwebpageiframe').src='<?= $url; ?>';">
             <div class="extraBold"><?=TGlobal::OutHTML($oPageLayout->sqlData['name']); ?></div>
             <div class="cleardiv">&nbsp;</div>
             <div class="pageTitle" style="float: left; width: 60px;"><?=TGlobal::Translate('chameleon_system_core.template_engine.spot_count'); ?></div>
@@ -54,12 +52,12 @@ if (null === $editLanguage) {
                 <?=nl2br(TGlobal::OutHTML($oPageLayout->sqlData['description'])); ?>
             </div>
             <?php if (!$bIsActiveLayout) {
-                ?>
+            ?>
                 <div>
                     <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_use_page_template'), "javascript:document.setpagedef.sourcepagedef.value='".TGlobal::OutHTML($oPageLayout->id)."';document.setpagedef.submit();", TGlobal::GetPathTheme().'/images/icons/accept.png'); ?>
                 </div>
                 <?php
-            } ?>
+        } ?>
         </li>
         <?php
     }

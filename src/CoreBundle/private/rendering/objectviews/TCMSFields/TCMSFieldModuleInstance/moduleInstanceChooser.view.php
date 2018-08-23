@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $oField TCMSFieldModuleInstance
+ * @var $oField      TCMSFieldModuleInstance
  * @var $oModuleList TdbCmsTplModuleList
  */
 $menuPrefix = $oField->name;
