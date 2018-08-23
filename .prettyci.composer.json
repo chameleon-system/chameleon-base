@@ -1,0 +1,17 @@
+{
+    "name": "chameleon-system/chameleon-base",
+    "type": "library",
+    "license": "MIT",
+    "description": "Separate composer config for PrettyCI only - see composer.json for anything else.",
+    "authors": [
+        {
+            "name": "ESONO AG",
+            "email": "info@chameleonsystem.com",
+            "homepage": "https://www.chameleonsystem.com",
+            "role": "Company"
+        }
+    ],
+    "require-dev": {
+        "chameleon-system/code-style-config": "dev-master@dev"
+    }
+}
