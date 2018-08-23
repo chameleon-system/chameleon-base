@@ -157,7 +157,7 @@ class CoreImageFieldsUsageFinder extends AbstractImageFieldsUsageFinder
     private function findRecordsForCmsFieldMedia($tableName, $fieldName, MediaItemDataModel $mediaItem)
     {
         $translatedFieldNames = $this->getTranslatedFieldNames($tableName, $fieldName);
-        $wherePart = implode( ' OR ', array_map(function ($element) {
+        $wherePart = implode(' OR ', array_map(function ($element) {
             return sprintf('%1$s LIKE :mediaItemIdCommaFront OR
                 %1$s LIKE :mediaItemIdCommaEnd OR
                 %1$s LIKE :mediaItemIdCommaBoth OR
@@ -192,7 +192,7 @@ class CoreImageFieldsUsageFinder extends AbstractImageFieldsUsageFinder
     private function findRecordsForCmsFieldWysiwyg($tableName, $fieldName, MediaItemDataModel $mediaItem)
     {
         $translatedFieldNames = $this->getTranslatedFieldNames($tableName, $fieldName);
-        $wherePart = implode( ' OR ', array_map(function ($element) {
+        $wherePart = implode(' OR ', array_map(function ($element) {
             return sprintf('%s LIKE :mediaTag', $this->databaseConnection->quoteIdentifier($element));
         }, $translatedFieldNames));
 
