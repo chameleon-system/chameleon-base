@@ -6,6 +6,7 @@ use ChameleonSystem\CoreBundle\Event\ChangeActivePageEvent;
 
 /**
  * Use a no-cache header for every secure page so that browser "back" does not get these pages from the cache.
+ *
  * @see https://redmine.esono.de/issues/33950
  */
 class NoCacheForSecurePageListener

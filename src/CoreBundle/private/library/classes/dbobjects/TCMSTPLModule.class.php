@@ -164,7 +164,7 @@ class TCMSTPLModule extends TCMSRecord
             $sViewTranslatedName = trim(implode('=', $aSplittedParts));
             $aViewMapping[$sViewOriginalname] = $sViewTranslatedName;
         }
-        \asort($aViewMapping, SORT_NATURAL|SORT_FLAG_CASE);
+        \asort($aViewMapping, SORT_NATURAL | SORT_FLAG_CASE);
 
         return $aViewMapping;
     }

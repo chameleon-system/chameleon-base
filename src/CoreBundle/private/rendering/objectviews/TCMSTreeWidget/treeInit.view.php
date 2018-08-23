@@ -193,7 +193,7 @@
             $('#' + data.rslt.obj.attr("id").replace("node", "") + ' a').click();
             $("#treePlacer").jstree("refresh", parentNodeID);
         } else {
-            showFileList(<?=$sRootNodeID;?>);
+            showFileList(<?=$sRootNodeID; ?>);
             $("#treePlacer").jstree("refresh", parentNodeID);
         }
     }
