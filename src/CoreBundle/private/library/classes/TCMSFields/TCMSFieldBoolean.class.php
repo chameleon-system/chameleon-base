@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -69,7 +70,7 @@ class TCMSFieldBoolean extends TCMSFieldOption
         $aData['sFieldType'] = 'boolean';
 
         $aData['sFieldDefaultValue'] = 'false';
-        if ('1' === $this->data) {
+        if ('1' == $this->data) {
             $aData['sFieldDefaultValue'] = 'true';
         }
 
@@ -91,17 +92,20 @@ class TCMSFieldBoolean extends TCMSFieldOption
      */
     public function DataIsValid()
     {
-        $bDataIsValid = parent::DataIsValid();
-        if (true === $bDataIsValid && '0' !== $this->data && '1' !== $this->data && true === $this->HasContent()) {
-            $messageManager = TCMSMessageManager::GetInstance();
-            $consumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
-            $fieldTitle = $this->oDefinition->GetName();
-            $messageManager->AddMessage($consumerName, 'TABLEEDITOR_FIELD_BOOLEAN_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $fieldTitle));
-
+        if (false === parent::DataIsValid()) {
             return false;
         }
 
-        return $bDataIsValid;
+        if ('0' == $this->data || '1' == $this->data || false === $this->HasContent()) {
+            return true;
+        }
+
+        $messageManager = TCMSMessageManager::GetInstance();
+        $consumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
+        $fieldTitle = $this->oDefinition->GetName();
+        $messageManager->AddMessage($consumerName, 'TABLEEDITOR_FIELD_BOOLEAN_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $fieldTitle));
+
+        return false;
     }
 
     /**
@@ -109,12 +113,7 @@ class TCMSFieldBoolean extends TCMSFieldOption
      */
     public function HasContent()
     {
-        $bHasContent = false;
-        if (!empty($this->data) || '0' === $this->data) {
-            $bHasContent = true;
-        }
-
-        return $bHasContent;
+        return '0' == $this->data || false === empty($this->data);
     }
 
     /**
@@ -160,6 +159,6 @@ class TCMSFieldBoolean extends TCMSFieldOption
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
     }
 }
