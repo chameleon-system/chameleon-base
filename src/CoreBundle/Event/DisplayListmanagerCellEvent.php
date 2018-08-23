@@ -49,8 +49,8 @@ class DisplayListmanagerCellEvent extends Event
 
     /**
      * @param \TGroupTableField $tableCell
-     * @param array $rowData
-     * @param bool $isHeader
+     * @param array             $rowData
+     * @param bool              $isHeader
      */
     public function __construct(\TGroupTableField $tableCell, array $rowData, $isHeader)
     {

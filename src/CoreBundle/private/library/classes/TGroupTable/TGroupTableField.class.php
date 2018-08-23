@@ -167,7 +167,7 @@ class TGroupTableField
 
     /**
      * @param array $row
-     * @param bool $isTableHeader
+     * @param bool  $isTableHeader
      *
      * @return string
      */
