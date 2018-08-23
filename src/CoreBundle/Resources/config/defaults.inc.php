@@ -965,7 +965,7 @@ if (!defined('CMS_SEARCH_INDEX_USE_LOAD_FILE')) {
 */
 if (!defined('CMS_ACTIVE_BACKEND_LIST_CACHE')) {
     /**
-     * @deprecated since 6.2.0 - no longer used.
+     * @deprecated since 6.2.0 - list caching will be removed in any later Chameleon version.
      */
     define('CMS_ACTIVE_BACKEND_LIST_CACHE', true);
 }
