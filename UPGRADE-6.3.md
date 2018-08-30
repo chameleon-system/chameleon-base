@@ -15,23 +15,23 @@ Note that ONLY BC breaking changes are listed, according to our backwards compat
 ## ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccess
 
 - New method `getActivePortalCandidate()`.
-- New method `getDomainObjectsByName()`.
+- New method `getDomainDataByName()`.
 - New method `getPortalPrefixListForDomain()`.
 
 ## ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessCacheDecorator
 
 - New method `getActivePortalCandidate()`.
-- New method `getDomainObjectsByName()`.
+- New method `getDomainDataByName()`.
 - New method `getPortalPrefixListForDomain()`.
 
 ## ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface
 
 - New method `getActivePortalCandidate()`.
-- New method `getDomainObjectsByName()`.
+- New method `getDomainDataByName()`.
 - New method `getPortalPrefixListForDomain()`.
 
 ## ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessRequestLevelCacheDecorator
 
 - New method `getActivePortalCandidate()`.
-- New method `getDomainObjectsByName()`.
+- New method `getDomainDataByName()`.
 - New method `getPortalPrefixListForDomain()`.

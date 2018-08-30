@@ -95,6 +95,7 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
 
     /**
      * @param Request $request
+     * @param PortalDomainServiceInterface $portalDomainService
      *
      * @return array
      *
@@ -113,7 +114,7 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
         if ('/' !== substr($frontController, 0, 1)) {
             $frontController = '/'.$frontController;
         }
-        if ($frontController === $sRelativePath) { // index.php
+        if ($frontController === $sRelativePath) {
             $pagedef = $request->query->get('pagedef');
             if (null !== $pagedef) {
                 $oPage = \TdbCmsTplPage::GetNewInstance();
@@ -173,32 +174,18 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
             'domain' => null,
         );
 
-        $domainList = $this->cmsPortalDomainsDataAccess->getDomainObjectsByName($sName);
+        $domainList = $this->cmsPortalDomainsDataAccess->getDomainDataByName($sName);
 
         $iPortalId = null;
         $domainCount = \count($domainList);
         // If we have more than one possible domain, we need to use the first part of the path as the portal prefix.
         if ($domainCount > 1) {
-            // this works only if we have a part in the path
-            $tmpPath = $sRelativePath;
-            if ('/' !== substr($tmpPath, 0, 1)) {
-                $tmpPath = '/'.$tmpPath;
-            }
-            $aPathParts = explode('/', $tmpPath);
-            if ('/' !== $tmpPath && is_array($aPathParts) && count($aPathParts) > 1) {
-                $tmpPath = $aPathParts[1];
-            } elseif (is_array($aPathParts)) {
-                $tmpPath = $aPathParts[0];
-            } else {
-                $tmpPath = '';
-            }
-
             $portalIdList = [];
             foreach ($domainList as $domain) {
                 $portalIdList[] = $domain['cms_portal_id'];
             }
 
-            $aPortal = $this->cmsPortalDomainsDataAccess->getActivePortalCandidate($portalIdList, $tmpPath, $isUserSignedInToBackend);
+            $aPortal = $this->cmsPortalDomainsDataAccess->getActivePortalCandidate($portalIdList, $prefix, $isUserSignedInToBackend);
             if (null !== $aPortal) {
                 $oPortal = \TdbCmsPortal::GetNewInstance($aPortal);
                 $aResultData['portal'] = $oPortal;
