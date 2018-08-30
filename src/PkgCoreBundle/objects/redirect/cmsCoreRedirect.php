@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Controller\ChameleonController;
+use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -36,19 +36,18 @@ class cmsCoreRedirect implements ICmsCoreRedirect
      * @var UrlUtil
      */
     private $urlUtil;
-
     /**
-     * @param RequestStack                       $requestStack
-     * @param ChameleonRedirectStrategyInterface $redirectStrategy
-     * @param UrlUtil                            $urlUtil
-     * @param ContainerInterface                 $container
+     * @var ResponseVariableReplacerInterface
      */
-    public function __construct(RequestStack $requestStack, ChameleonRedirectStrategyInterface $redirectStrategy, UrlUtil $urlUtil, ContainerInterface $container)
+    private $responseVariableReplacer;
+
+    public function __construct(RequestStack $requestStack, ChameleonRedirectStrategyInterface $redirectStrategy, UrlUtil $urlUtil, ContainerInterface $container, ResponseVariableReplacerInterface $responseVariableReplacer)
     {
         $this->requestStack = $requestStack;
         $this->redirectStrategy = $redirectStrategy;
         $this->urlUtil = $urlUtil;
-        $this->container = $container; // avoid circular references and retrieve controller
+        $this->container = $container; // avoid circular references
+        $this->responseVariableReplacer = $responseVariableReplacer;
     }
 
     /**
@@ -57,7 +56,7 @@ class cmsCoreRedirect implements ICmsCoreRedirect
     public function redirect($url, $status = 302, $allowOnlyInternalUrls = false)
     {
         if (true === $this->isInternalURL($url)) {
-            $url = $this->getController()->PreOutputCallbackFunctionReplaceCustomVars($url);
+            $url = $this->responseVariableReplacer->replaceVariables($url);
         } elseif ($allowOnlyInternalUrls) {
             throw new NotFoundHttpException('Only internal URLs allowed here, but got external URL: '.$url);
         }
@@ -101,9 +100,6 @@ class cmsCoreRedirect implements ICmsCoreRedirect
         $this->redirect($this->getActivePageService()->getLinkToActivePageRelative($parameters, $excludeParameters));
     }
 
-    /**
-     * @param GetResponseForExceptionEvent $event
-     */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
@@ -130,13 +126,5 @@ class cmsCoreRedirect implements ICmsCoreRedirect
     protected function getActivePageService()
     {
         return $this->container->get('chameleon_system_core.active_page_service');
-    }
-
-    /**
-     * @return ChameleonController
-     */
-    private function getController()
-    {
-        return $this->container->get('chameleon_system_core.chameleon_controller');
     }
 }
