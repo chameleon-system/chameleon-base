@@ -25,10 +25,6 @@ class CmsPortalDomainsDataAccessCacheDecorator implements CmsPortalDomainsDataAc
      */
     private $subject;
 
-    /**
-     * @param ContainerInterface                  $container
-     * @param CmsPortalDomainsDataAccessInterface $subject
-     */
     public function __construct(ContainerInterface $container, CmsPortalDomainsDataAccessInterface $subject)
     {
         $this->container = $container; // Avoid circular dependency on CacheInterface.
@@ -62,9 +58,63 @@ class CmsPortalDomainsDataAccessCacheDecorator implements CmsPortalDomainsDataAc
     }
 
     /**
-     * @return CacheInterface
+     * {@inheritdoc}
      */
-    private function getCache()
+    public function getPortalPrefixListForDomain(string $domainName): array
+    {
+        $cache = $this->getCache();
+        $cacheKey = $cache->getKey([
+            __METHOD__,
+            \get_class($this->subject),
+            $domainName,
+        ]);
+        $value = $cache->get($cacheKey);
+        if (null !== $value) {
+            return $value;
+        }
+
+        $value = $this->subject->getPortalPrefixListForDomain($domainName);
+        $cache->set($cacheKey, $value, [
+            [ 'table' => 'cms_portal', 'id' => null ],
+            [ 'table' => 'cms_portal_domains', 'id' => null ],
+        ]);
+
+        return $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getActivePortalCandidate(array $idRestrictionList, string $identifierRestriction, bool $allowInactivePortals): ?array
+    {
+        return $this->subject->getActivePortalCandidate($idRestrictionList, $identifierRestriction, $allowInactivePortals);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDomainDataByName(string $domainName): array
+    {
+        $cache = $this->getCache();
+        $cacheKey = $cache->getKey([
+            __METHOD__,
+            \get_class($this->subject),
+            $domainName,
+        ]);
+        $value = $cache->get($cacheKey);
+        if (null !== $value) {
+            return $value;
+        }
+
+        $value = $this->subject->getDomainDataByName($domainName);
+        $cache->set($cacheKey, $value, [
+            [ 'table' => 'cms_portal_domains', 'id' => null ],
+        ]);
+
+        return $value;
+    }
+
+    private function getCache(): CacheInterface
     {
         return $this->container->get('chameleon_system_cms_cache.cache');
     }

@@ -11,22 +11,17 @@
 
 namespace ChameleonSystem\CoreBundle\Service\Initializer;
 
+use ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface;
+use ChameleonSystem\CoreBundle\Exception\InvalidPortalDomainException;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use ErrorException;
 use esono\pkgCmsCache\CacheInterface;
-use MySqlLegacySupport;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use TdbCmsPortal;
-use TdbCmsPortalDomains;
-use TdbCmsPortalDomainsList;
-use TdbCmsTplPage;
-use TPkgCmsException_Log;
 
 /**
  * Class PortalDomainServiceInitializer.
@@ -45,17 +40,17 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
      * @var RequestStack
      */
     private $requestStack;
-
     /**
-     * @param InputFilterUtilInterface $inputFilterUtil
-     * @param ContainerInterface       $container
-     * @param RequestStack             $requestStack
+     * @var CmsPortalDomainsDataAccessInterface
      */
-    public function __construct(InputFilterUtilInterface $inputFilterUtil, ContainerInterface $container, RequestStack $requestStack)
+    private $cmsPortalDomainsDataAccess;
+
+    public function __construct(InputFilterUtilInterface $inputFilterUtil, ContainerInterface $container, RequestStack $requestStack, CmsPortalDomainsDataAccessInterface $cmsPortalDomainsDataAccess)
     {
         $this->inputFilterUtil = $inputFilterUtil;
         $this->container = $container; // avoid circular dependencies
         $this->requestStack = $requestStack;
+        $this->cmsPortalDomainsDataAccess = $cmsPortalDomainsDataAccess;
     }
 
     /**
@@ -85,8 +80,10 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
 
     /**
      * @return array
+     *
+     * @throws InvalidPortalDomainException
      */
-    private function determinePortalAndDomainForCmsTemplateEngineMode(PortalDomainServiceInterface $portalDomainService)
+    private function determinePortalAndDomainForCmsTemplateEngineMode(PortalDomainServiceInterface $portalDomainService): array
     {
         $previewLanguageID = $this->inputFilterUtil->getFilteredInput('previewLanguageId');
 
@@ -101,10 +98,9 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
      *
      * @return array
      *
-     * @throws ErrorException
-     * @throws TPkgCmsException_Log
+     * @throws InvalidPortalDomainException
      */
-    private function determinePortalAndDomainDefault(Request $request, PortalDomainServiceInterface $portalDomainService)
+    private function determinePortalAndDomainDefault(Request $request, PortalDomainServiceInterface $portalDomainService): array
     {
         $portal = null;
         $domain = null;
@@ -118,9 +114,9 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
             $frontController = '/'.$frontController;
         }
         if ($frontController === $sRelativePath) { // index.php
-            $pagedef = $request->query->get('pagedef', null);
+            $pagedef = $request->query->get('pagedef');
             if (null !== $pagedef) {
-                $oPage = TdbCmsTplPage::GetNewInstance();
+                $oPage = \TdbCmsTplPage::GetNewInstance();
                 if ($oPage->Load($pagedef)) {
                     $portal = $oPage->GetPortal();
 
@@ -137,7 +133,7 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
         }
 
         $prefix = '';
-        if (strlen($sRelativePath) > 1) {
+        if (\strlen($sRelativePath) > 1) {
             $secondSlashPosition = strpos($sRelativePath, '/', 1);
             if (false === $secondSlashPosition) {
                 $prefix = substr($sRelativePath, 1);
@@ -145,7 +141,7 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
                 $prefix = substr($sRelativePath, 1, $secondSlashPosition - 1);
             }
             if ('' !== $prefix) {
-                $aPermittedPrefixList = $this->getPortalPrefixList($sName);
+                $aPermittedPrefixList = $this->cmsPortalDomainsDataAccess->getPortalPrefixListForDomain($sName);
                 if (false === in_array($prefix, $aPermittedPrefixList)) {
                     $prefix = '';
                 }
@@ -175,20 +171,14 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
         $aResultData = array(
             'portal' => null,
             'domain' => null,
-            'portalIdentifier' => null,
         );
 
-        $query = "SELECT * FROM `cms_portal_domains`
-                 WHERE (`name` = '{$sName}' AND `name` != '')
-                    OR (`sslname` = '{$sName}' AND `sslname` != '')
-              GROUP BY `cms_portal_domains`.`cms_portal_id`
-               ";
+        $domainList = $this->cmsPortalDomainsDataAccess->getDomainObjectsByName($sName);
 
-        $oPortalDomainsList = TdbCmsPortalDomainsList::GetList($query);
         $iPortalId = null;
-        // if we have more than one possible domain, we need to use the first part of the path as the portal
-        // prefix.
-        if ($oPortalDomainsList->Length() > 1) {
+        $domainCount = \count($domainList);
+        // If we have more than one possible domain, we need to use the first part of the path as the portal prefix.
+        if ($domainCount > 1) {
             // this works only if we have a part in the path
             $tmpPath = $sRelativePath;
             if ('/' !== substr($tmpPath, 0, 1)) {
@@ -203,81 +193,37 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
                 $tmpPath = '';
             }
 
-            $sIDs = '';
-            while ($oPortalDomain = $oPortalDomainsList->Next()) {
-                $sIDs .= "'".MySqlLegacySupport::getInstance()->real_escape_string(
-                        $oPortalDomain->sqlData['cms_portal_id']
-                    )."',";
+            $portalIdList = [];
+            foreach ($domainList as $domain) {
+                $portalIdList[] = $domain['cms_portal_id'];
             }
-            $sIDs = substr($sIDs, 0, -1); // cut comma
-            $oPortalDomainsList->GoToStart();
 
-            // allow access to deactivated portals for backend users
-            $sRestrictToActivePortals = "AND `cms_portal`.`deactive_portal` != '1'";
-            if (true === $isUserSignedInToBackend) {
-                $sRestrictToActivePortals = '';
-            }
-            $query = 'SELECT *
-                    FROM `cms_portal`
-                   WHERE `id` IN ('.$sIDs.")
-                     AND (`identifier` = '".MySqlLegacySupport::getInstance()->real_escape_string($tmpPath)."' OR `identifier` = '')
-                     {$sRestrictToActivePortals}
-                ORDER BY `identifier` DESC
-                   LIMIT 0,1
-                 ";
-            $aPortal = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query));
-            if (false != $aPortal) {
-                $oPortal = TdbCmsPortal::GetNewInstance();
-                $oPortal->LoadFromRow($aPortal);
+            $aPortal = $this->cmsPortalDomainsDataAccess->getActivePortalCandidate($portalIdList, $tmpPath, $isUserSignedInToBackend);
+            if (null !== $aPortal) {
+                $oPortal = \TdbCmsPortal::GetNewInstance($aPortal);
                 $aResultData['portal'] = $oPortal;
                 $iPortalId = $aPortal['id'];
-                // drop the portal identifier from the path
-                $aPortal['identifier'] = trim($aPortal['identifier']);
-                if (!empty($aPortal['identifier'])) {
-                    $aResultData['portalIdentifier'] = '/'.$aPortal['identifier'];
-                } else {
-                    $aResultData['portalIdentifier'] = '';
-                }
 
-                while ($oPortalDomain = $oPortalDomainsList->Next()) {
-                    if ($oPortalDomain->sqlData['cms_portal_id'] == $iPortalId) {
-                        $aResultData['domain'] = $oPortalDomain;
+                foreach ($domainList as $domain) {
+                    if ($domain['cms_portal_id'] === $iPortalId) {
+                        $aResultData['domain'] = \TdbCmsPortalDomains::GetNewInstance($domain);
                         break;
                     }
                 }
             }
-        } elseif (1 == $oPortalDomainsList->Length()) {
-            // if we have only one portal, but the portal has a prefix, we need to remove it from the path
-            /** @var $oPortalDomain TdbCmsPortalDomains */
-            $oPortalDomain = $oPortalDomainsList->Current();
-            $aResultData['domain'] = $oPortalDomain;
-            $query = "SELECT `identifier` FROM `cms_portal` WHERE `id` = '".MySqlLegacySupport::getInstance(
-                )->real_escape_string($oPortalDomain->sqlData['cms_portal_id'])."' ";
-            if ($aTmpPortal = MySqlLegacySupport::getInstance()->fetch_row(
-                MySqlLegacySupport::getInstance()->query($query)
-            )
-            ) {
-                $sIdent = trim($aTmpPortal[0]);
-                $aResultData['portalIdentifier'] = '';
-                if (!empty($sIdent)) {
-                    $sIdent = '/'.$sIdent;
-                    $aResultData['portalIdentifier'] = $sIdent;
-                }
-            }
-        }
-        if (null === $iPortalId) {
-            $oPortalDomain = $oPortalDomainsList->Current();
-            if (is_object($oPortalDomain)) {
-                $iPortalId = $oPortalDomain->sqlData['cms_portal_id'];
-            }
+        } elseif (1 === $domainCount) {
+            $aResultData['domain'] = \TdbCmsPortalDomains::GetNewInstance($domainList[0]);
         }
 
         if (null === $aResultData['portal']) {
-            $aResultData['portal'] = TdbCmsPortal::GetNewInstance();
-            if (false === $aResultData['portal']->Load($iPortalId)) {
-                $aResultData['portal'] = null;
-            } elseif (true === $aResultData['portal']->fieldDeactivePortal && false === $isUserSignedInToBackend) {
-                $aResultData['portal'] = null;
+            if (null === $iPortalId && $domainCount > 0) {
+                $iPortalId = $domainList[0]['cms_portal_id'];
+            }
+            $portal = \TdbCmsPortal::GetNewInstance();
+            if (false !== $portal->Load($iPortalId)) {
+                if (false === $portal->fieldDeactivePortal || true === $isUserSignedInToBackend) {
+                    $aResultData['portal'] = $portal;
+                }
             }
         }
 
@@ -296,66 +242,17 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
         return array($portal, $domain);
     }
 
-    /**
-     * return an array of prefix for the portal.
-     *
-     * @param string $domain
-     *
-     * @return array
-     */
-    private function getPortalPrefixList($domain)
-    {
-        $cache = $this->getCache();
-        $key = $cache->getKey(array(
-            'class' => __CLASS__,
-            'method' => 'getPortalPrefixList',
-            'domain' => $domain,
-        ),
-            false
-        );
-        $prefixList = $cache->get($key);
-        if (null !== $prefixList) {
-            return $prefixList;
-        }
-
-        $prefixList = array();
-        $query = "SELECT cms_portal.identifier
-                    FROM `cms_portal_domains`
-              INNER JOIN `cms_portal` ON `cms_portal_domains`.`cms_portal_id` = `cms_portal`.`id`
-                 WHERE (`cms_portal_domains`.`name` = '{$domain}' AND `cms_portal_domains`.`name` != '')
-                    OR (`cms_portal_domains`.`sslname` = '{$domain}' AND `cms_portal_domains`.`sslname` != '')
-              GROUP BY `cms_portal_domains`.`cms_portal_id`
-               ";
-        $tRes = MySqlLegacySupport::getInstance()->query($query);
-        while ($row = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-            $prefixList[] = $row['identifier'];
-        }
-
-        $cache->set($key, $prefixList, array(array('table' => 'cms_portal', 'id' => null), array('table' => 'cms_portal_domains', 'id' => null)));
-
-        return $prefixList;
-    }
-
-    /**
-     * @return RequestInfoServiceInterface
-     */
-    private function getRequestInfoService()
+    private function getRequestInfoService(): RequestInfoServiceInterface
     {
         return $this->container->get('chameleon_system_core.request_info_service');
     }
 
-    /**
-     * @return CacheInterface
-     */
-    private function getCache()
+    private function getCache(): CacheInterface
     {
         return $this->container->get('chameleon_system_cms_cache.cache');
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
         return $this->container->get('chameleon_system_core.active_page_service');
     }
