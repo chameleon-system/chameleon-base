@@ -1615,7 +1615,7 @@ class TCMSLogChange
      */
     public static function RunUpdate($sFolderName, $sType = null, $iBuildNumber = null)
     {
-        if ($iBuildNumber == -1) {
+        if (-1 == $iBuildNumber) {
             $iBuildNumber = null;
         }
         $oUpdateManager = &TCMSUpdateManager::GetInstance();

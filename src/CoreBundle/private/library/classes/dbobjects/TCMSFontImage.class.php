@@ -175,7 +175,7 @@ class TCMSFontImage extends TAdbCmsFontImage
         $aFont_RGB_Array = $this->HexToRGB($this->fieldFontColor);
         $oFontColor = imagecolorallocate($buff, $aFont_RGB_Array[0], $aFont_RGB_Array[1], $aFont_RGB_Array[2]);
 
-        if ($this->fieldImgBackgroundColor == -1) {
+        if (-1 == $this->fieldImgBackgroundColor) {
             $aBG_RGB_Array = $this->HexToRGB('000000');
             imagealphablending($buff, false);
             $oBackgroundColor = imagecolorallocatealpha($buff, $aBG_RGB_Array[0], $aBG_RGB_Array[1], $aBG_RGB_Array[2], 127);
@@ -236,7 +236,7 @@ class TCMSFontImage extends TAdbCmsFontImage
         $aFont_RGB_Array = $this->HexToRGB($this->fieldFontColor);
         $oFontColor = imagecolorallocate($buff, $aFont_RGB_Array[0], $aFont_RGB_Array[1], $aFont_RGB_Array[2]);
 
-        if ($this->fieldImgBackgroundColor == -1) {
+        if (-1 == $this->fieldImgBackgroundColor) {
             $aBG_RGB_Array = $this->HexToRGB('000000');
             imagealphablending($buff, false);
             $oBackgroundColor = imagecolorallocatealpha($buff, $aBG_RGB_Array[0], $aBG_RGB_Array[1], $aBG_RGB_Array[2], 127);

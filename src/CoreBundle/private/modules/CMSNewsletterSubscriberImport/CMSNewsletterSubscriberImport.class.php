@@ -111,7 +111,7 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
             }
             unset($rows); // free up some memory
 
-            if ($aData[0][0] == 'email') {
+            if ('email' == $aData[0][0]) {
                 unset($aData[0]);
             }
 
