@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Session;
 
+use ChameleonSystem\CoreBundle\Exception\MemcachedAccessFailedException;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 use PDO;
@@ -84,9 +85,13 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         $this->inputFilterUtil = $inputFilterUtil;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function boot()
     {
         $sessionHandler = null;
+        $memcache = null;
         if (true === TdbCmsConfig::RequestIsInBotList()) {
             $sessionHandler = new NullSessionHandler();
         } else {
@@ -174,6 +179,14 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         $request->getSession()->start();
         $this->isSessionStarting = false;
         $this->registerSessionInContainer($request->getSession());
+
+        if (null !== $memcache && null !== $memcache->getDriver()) {
+            $sessionInitResult = $memcache->getDriver()->getResultCode();
+
+            if (\Memcached::RES_SERVER_TEMPORARILY_DISABLED === $sessionInitResult || \Memcached::RES_HOST_LOOKUP_FAILURE === $sessionInitResult) {
+                throw new MemcachedAccessFailedException(sprintf('Access to memcached failed with code %s', $sessionInitResult));
+            }
+        }
     }
 
     /**
