@@ -91,6 +91,7 @@ class CaseInsensitivePortalExceptionListener
      * In Chameleon 6.3 this method will be located in CmsPortalDomainsDataAccess. In 6.2.x we avoid the BC break.
      *
      * @param string $domain
+     *
      * @return array
      */
     private function getPortalPrefixListForDomain(string $domain)
