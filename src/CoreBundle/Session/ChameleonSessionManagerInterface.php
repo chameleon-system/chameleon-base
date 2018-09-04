@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Session;
 
-use ChameleonSystem\CoreBundle\Exception\MemcachedAccessFailedException;
+use ChameleonSystem\CoreBundle\Exception\SessionAccessFailedException;
 
 /**
  * ChameleonSessionManagerInterface defines a service that is responsible for starting a correctly configured user
@@ -22,7 +22,7 @@ interface ChameleonSessionManagerInterface
     /**
      * Starts the session.
      *
-     * @throws MemcachedAccessFailedException
+     * @throws SessionAccessFailedException
      */
     public function boot();
 
