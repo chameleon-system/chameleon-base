@@ -475,6 +475,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
         $quotedTableName = $databaseConnection->quoteIdentifier($sTableName);
         $quotedFieldName = $databaseConnection->quoteIdentifier($sFieldName);
         $quotedId = $databaseConnection->quote($this->sId);
+        $quotedId = trim($quotedId, "'");
         $Select = "SELECT *
                    FROM $quotedTableName
                    WHERE
