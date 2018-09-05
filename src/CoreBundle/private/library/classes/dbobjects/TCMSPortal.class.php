@@ -230,7 +230,7 @@ class TCMSPortal extends TCMSRecord
     /**
      * returns the id of the homepage of this portal.
      *
-     * @return int
+     * @return string|bool
      */
     public function GetPortalPageId()
     {

@@ -109,9 +109,7 @@ class TPkgComment extends TPkgCommentAutoParent
      * If no action was defined function returns re comment. This is needed for compatibility to older version
      * which not know the url parameter.
      *
-     * @param  $sResponseId
-     *
-     * @return bool
+     * @return string|bool
      */
     public function GetActionModeForActiveComment()
     {
@@ -329,7 +327,7 @@ class TPkgComment extends TPkgCommentAutoParent
      *
      * @deprecated use TGlobal::GetActiveLanguageId() instead of this
      *
-     * @return int
+     * @return string
      */
     protected static function GetDefaultLanguageId()
     {
