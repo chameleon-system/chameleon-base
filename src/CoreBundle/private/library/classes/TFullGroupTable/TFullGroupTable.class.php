@@ -701,7 +701,7 @@ class TFullGroupTable extends TGroupTable
         $tableNavigation .= '<ul class="pagination pagination-md TFullGroupTablePagination">';
         $tableNavigation .= '<li class="disabled"><a href="#"><span class="glyphicon glyphicon-list" aria-hidden="true" style="margin-right: 5px;"></span>'.$hitText.'</a></li>';
 
-        if ($this->startRecord > 0 && $this->showRecordCount != -1) {
+        if ($this->startRecord > 0 && -1 != $this->showRecordCount) {
             $tableNavigation .= '<li><a href="javascript:switchPage(\'0\');"><span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span></a></li>';
             $tableNavigation .= '<li><a href="javascript:switchPage(\''.$back_startValue.'\');"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></a></li>';
         } else {
@@ -742,7 +742,7 @@ class TFullGroupTable extends TGroupTable
             $tableNavigation .= '<li'.$active."><a href=\"javascript:switchPage('".($i * $recordsPerPage)."');\">".($i + 1)."</a></li>\n";
         }
 
-        if (($this->startRecord + $this->showRecordCount) < $this->recordCount && $this->showRecordCount != -1) {
+        if (($this->startRecord + $this->showRecordCount) < $this->recordCount && -1 != $this->showRecordCount) {
             $tableNavigation .= '<li><a href="javascript:switchPage(\''.$next_startValue.'\');"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></a></li>';
             $tableNavigation .= '<li><a href="javascript:switchPage(\''.(($pageCount - 1) * $recordsPerPage).'\');"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span></a></li>';
         } else {

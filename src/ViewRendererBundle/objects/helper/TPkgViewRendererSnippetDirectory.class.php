@@ -419,6 +419,10 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
      */
     private function getVerifiedPath($element, $baseDirectory)
     {
+        if ('' === $element) {
+            return null;
+        }
+
         if ('@' === $element[0]) {
             try {
                 $path = $this->kernel->locateResource($element).'/'.$baseDirectory;

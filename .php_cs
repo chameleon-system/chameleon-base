@@ -2,6 +2,7 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__.'/src')
+    ->exclude('CoreBundle/private/library/classes/HTMLParser')
 ;
 
 $config = include __DIR__.'/vendor/chameleon-system/code-style-config/.php_cs';

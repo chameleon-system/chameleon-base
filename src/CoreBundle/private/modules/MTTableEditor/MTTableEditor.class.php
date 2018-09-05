@@ -335,7 +335,7 @@ class MTTableEditor extends TCMSModelBase
                 if (null !== $this->fillEmptyFromLanguageId) {
                     $oPostTable = $this->fillEmptyFieldsWithTranslationFrom($oPostTable, $this->fillEmptyFromLanguageId);
                 }
-                if (array_key_exists('module_fnc', $aPostData) && array_key_exists('contentmodule', $aPostData['module_fnc']) && $aPostData['module_fnc']['contentmodule'] === 'Save') {
+                if (array_key_exists('module_fnc', $aPostData) && array_key_exists('contentmodule', $aPostData['module_fnc']) && 'Save' === $aPostData['module_fnc']['contentmodule']) {
                     $aPostBlackList = array('pagedef', 'tableid', 'id', 'referer_id', 'referer_table', '_fnc', 'module_fnc', '_noModuleFunction');
                     foreach ($aPostBlackList as $forbiddenPostKey) {
                         unset($aPostData[$forbiddenPostKey]);

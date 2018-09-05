@@ -435,8 +435,8 @@ class TCMSFieldDownloads extends TCMSMLTField
                 $sConsumerName = TdbPkgCmsForm::MSG_MANAGER_BASE.'-FIELD_'.$this->name;
                 foreach ($this->data as $key => $value) {
                     if (!array_key_exists('presavedocument', $value)) {
-                        if (array_key_exists($this->name.'document', $_FILES) && array_key_exists($key, $_FILES[$this->name.'document']['name']) && $_FILES[$this->name.'document']['error'][$key] != UPLOAD_ERR_NO_FILE) {
-                            if ($_FILES[$this->name.'document']['error'][$key] != UPLOAD_ERR_OK) {
+                        if (array_key_exists($this->name.'document', $_FILES) && array_key_exists($key, $_FILES[$this->name.'document']['name']) && UPLOAD_ERR_NO_FILE != $_FILES[$this->name.'document']['error'][$key]) {
+                            if (UPLOAD_ERR_OK != $_FILES[$this->name.'document']['error'][$key]) {
                                 $bIsValid = false;
                                 $oMsgManager->AddMessage($sConsumerName, 'ERROR-INVALID-DOCUMENT');
                                 break;

@@ -382,8 +382,8 @@ class TCMSFieldMedia extends TCMSField
             $sConsumerName = TdbPkgCmsForm::MSG_MANAGER_BASE.'-FIELD_'.$this->name;
             foreach ($this->data as $key => $value) {
                 if (!array_key_exists('presaveimage', $value)) {
-                    if (array_key_exists($this->name.'image', $_FILES) && array_key_exists($key, $_FILES[$this->name.'image']['name']) && $_FILES[$this->name.'image']['error'][$key] != UPLOAD_ERR_NO_FILE) {
-                        if ($_FILES[$this->name.'image']['error'][$key] != UPLOAD_ERR_OK) {
+                    if (array_key_exists($this->name.'image', $_FILES) && array_key_exists($key, $_FILES[$this->name.'image']['name']) && UPLOAD_ERR_NO_FILE != $_FILES[$this->name.'image']['error'][$key]) {
+                        if (UPLOAD_ERR_OK != $_FILES[$this->name.'image']['error'][$key]) {
                             $bIsValid = false;
                             $oMsgManager->AddMessage($sConsumerName, 'ERROR-INVALID-IMAGE1');
                             break;
