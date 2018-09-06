@@ -106,7 +106,8 @@ class TCMSFieldLookupDirectory extends TCMSField
     {
         $aData = parent::GetFieldWriterData();
 
-        $aData['sFieldDefaultValue'] = "'{$this->data}'";
+        $value = \str_replace("'", "\'", $this->data);
+        $aData['sFieldDefaultValue'] = "'$value'";
 
         return $aData;
     }
