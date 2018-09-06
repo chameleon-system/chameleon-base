@@ -14,7 +14,7 @@ use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 /****************************************************************************
  * Download files
 /***************************************************************************/
-class TCMSFieldDownloads extends TCMSMLTField
+class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
 {
     protected $oTableConf = null;
 
@@ -157,13 +157,15 @@ class TCMSFieldDownloads extends TCMSMLTField
     }
 
     /**
-     * returns the mlt table name.
+     * @param array $aFieldData sql field data
      *
      * @return string
      */
-    public function GetMLTTableName()
+    public function GetMLTTableName($aFieldData = [])
     {
-        return $this->sTableName.'_'.$this->name.'_cms_document_mlt';
+        $name = $aFieldData['name'] ?? $this->name; 
+        
+        return $this->sTableName.'_'.$name.'_cms_document_mlt';
     }
 
     public function GetForeignTableName()
@@ -176,7 +178,12 @@ class TCMSFieldDownloads extends TCMSMLTField
      */
     public function GetConnectedTableName($bExistingCount = true)
     {
-        return 'cms_document';
+        return $this->GetMLTTableName();
+    }
+
+    protected function GetConnectedTableNameFromSQLData($aNewFieldData)
+    {
+        return $this->GetMLTTableName($aNewFieldData);
     }
 
     /**
