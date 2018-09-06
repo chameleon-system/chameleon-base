@@ -24,7 +24,7 @@ class Configuration implements ConfigurationInterface
             ->isRequired()
             ->addDefaultsIfNotSet();
 
-        $rootq
+        $root
             ->children()
                 ->booleanNode('allow_script_tags')
                     ->defaultTrue()
