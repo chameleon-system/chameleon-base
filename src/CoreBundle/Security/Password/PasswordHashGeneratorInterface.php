@@ -18,6 +18,8 @@ namespace ChameleonSystem\CoreBundle\Security\Password;
  */
 interface PasswordHashGeneratorInterface
 {
+    public const MAXIMUM_PASSWORD_LENGTH = 1000;
+
     /**
      * Returns a hashed password.
      *
