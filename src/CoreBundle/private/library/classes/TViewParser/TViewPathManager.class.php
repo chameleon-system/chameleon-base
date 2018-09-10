@@ -361,6 +361,5 @@ class TViewPathManager implements IViewPathManager
         'pkgshopratingservice' => 'chameleon-shop/src/ShopRatingServiceBundle',
         'pkgshopwishlist' => 'chameleon-shop/src/ShopWishlistBundle',
         'pkgtshoppaymenthandlersofortueberweisung' => 'chameleon-shop/src/ShopPaymentHandlerSofortueberweisungBundle',
-        'themeshopstandard' => 'chameleon-shop/src/ThemeShopStandardBundle',
     ];
 }
