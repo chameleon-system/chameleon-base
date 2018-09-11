@@ -157,9 +157,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
     }
 
     /**
-     * @param array $aFieldData sql field data
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function GetMLTTableName($aFieldData = [])
     {
@@ -174,13 +172,16 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function GetConnectedTableName($bExistingCount = true)
     {
         return $this->GetMLTTableName();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function GetConnectedTableNameFromSQLData($aNewFieldData)
     {
         return $this->GetMLTTableName($aNewFieldData);
