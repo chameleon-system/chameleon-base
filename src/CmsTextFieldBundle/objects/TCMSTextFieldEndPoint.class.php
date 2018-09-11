@@ -156,7 +156,7 @@ class TCMSTextFieldEndPoint
         $content = $this->_RemoveEmptyTags($content);
         $content = $this->_AddCMSClassToAnchors($content);
         $content = $this->_ReplaceCmsTextBlockInString($content, $thumbnailWidth);
-        if (false === $this->doesAllowScriptTags()) {
+        if (false === $this->isScriptTagAllowed()) {
             $content = $this->_RemoveScriptTags($content);
         }
         $content = $this->ReplaceCustomVariablesInString($content, $aCustomVariables, $thumbnailWidth);
@@ -171,6 +171,11 @@ class TCMSTextFieldEndPoint
         }
 
         return $content;
+    }
+
+    private function isScriptTagAllowed(): bool
+    {
+        return ServiceLocator::getParameter('chameleon_system_cms_text_field.allow_script_tags');
     }
 
     /**
@@ -210,7 +215,7 @@ class TCMSTextFieldEndPoint
         $content = $this->_ReplaceEmptyAligns($content);
         $content = $this->_RemoveEmptyTags($content);
         $content = $this->_ReplaceCmsTextBlockInString($content, $thumbnailWidth);
-        if (true === $bClearScriptTags || false === $this->doesAllowScriptTags()) {
+        if (true === $bClearScriptTags || false === $this->isScriptTagAllowed()) {
             $content = $this->_RemoveScriptTags($content);
         }
         $content = $this->ReplaceCustomVariablesInString($content, $aCustomVariables, $thumbnailWidth);
@@ -1231,10 +1236,5 @@ class TCMSTextFieldEndPoint
     protected function isForceThumbnailGenerationOnFullSizeImagesEnabled()
     {
         return false;
-    }
-
-    private function doesAllowScriptTags(): bool
-    {
-        return ServiceLocator::getParameter('chameleon_system_cms_text_field.allow_script_tags');
     }
 }

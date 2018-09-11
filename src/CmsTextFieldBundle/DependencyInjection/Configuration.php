@@ -29,7 +29,7 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('allow_script_tags')
                     ->defaultTrue()
                 ->info('If set to false, script tags are removed on display. This is a security feature: 
-                If an attacker somehow manages to gain access to the backend, they still cannot inject scripts.
+                If an attacker somehow manages to gain access to the backend, they cannot inject scripts.
                 Consider setting this option to false if script support in text fields is not required.')
                 ->end()
             ->end()
