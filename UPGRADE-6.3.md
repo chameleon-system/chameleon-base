@@ -12,25 +12,7 @@ See the Changed Interfaces and Method Signatures section if changes in signature
 This section contains information on interface and method signature changes which affect backwards compatibility (BC).
 Note that ONLY BC breaking changes are listed, according to our backwards compatibility policy.
 
-## ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccess
-
-- New method `getActivePortalCandidate()`.
-- New method `getDomainDataByName()`.
-- New method `getPortalPrefixListForDomain()`.
-
-## ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessCacheDecorator
-
-- New method `getActivePortalCandidate()`.
-- New method `getDomainDataByName()`.
-- New method `getPortalPrefixListForDomain()`.
-
 ## ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface
-
-- New method `getActivePortalCandidate()`.
-- New method `getDomainDataByName()`.
-- New method `getPortalPrefixListForDomain()`.
-
-## ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessRequestLevelCacheDecorator
 
 - New method `getActivePortalCandidate()`.
 - New method `getDomainDataByName()`.
