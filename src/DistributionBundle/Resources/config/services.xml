@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="chameleon_system_distribution.command.create_initial_backend_user" class="ChameleonSystem\DistributionBundle\Command\CreateInitialBackendUserCommand">
+            <argument type="service" id="chameleon_system_distribution.bootstrap.initial_backend_user_creator"/>
+            <tag name="console.command" />
+        </service>
+
+        <service id="chameleon_system_distribution.bootstrap.initial_backend_user_creator" class="ChameleonSystem\DistributionBundle\Bootstrap\InitialBackendUserCreator">
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.database_access_layer_field_config"/>
+            <argument type="service" id="chameleon_system_core.security.password.password_hash_generator"/>
+        </service>
+    </services>
+</container>
