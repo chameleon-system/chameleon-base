@@ -346,6 +346,7 @@
             <argument type="service" id="chameleon_system_core.util.input_filter" />
             <argument type="service" id="service_container" />
             <argument type="service" id="request_stack" />
+            <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains"/>
         </service>
 
         <service id="chameleon_system_core.language_service" class="ChameleonSystem\CoreBundle\Service\LanguageService">

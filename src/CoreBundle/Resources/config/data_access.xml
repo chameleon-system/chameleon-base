@@ -7,7 +7,7 @@
 
         <!-- cms_portal_domains -->
 
-        <service id="chameleon_system_core.data_access_cms_portal_domains" class="ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccess" public="false">
+        <service id="chameleon_system_core.data_access_cms_portal_domains" class="ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccess" public="true">
             <argument type="service" id="database_connection" />
         </service>
         <service id="chameleon_system_core.data_access_cms_portal_domains_cache_decorator" class="ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessCacheDecorator" public="false">

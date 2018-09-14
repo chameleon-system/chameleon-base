@@ -47,4 +47,28 @@ class CmsPortalDomainsDataAccessRequestLevelCacheDecorator implements CmsPortalD
 
         return $domain;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPortalPrefixListForDomain(string $domainName): array
+    {
+        return $this->subject->getPortalPrefixListForDomain($domainName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getActivePortalCandidate(array $idRestrictionList, string $identifierRestriction, bool $allowInactivePortals): ?array
+    {
+        return $this->subject->getActivePortalCandidate($idRestrictionList, $identifierRestriction, $allowInactivePortals);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDomainDataByName(string $domainName): array
+    {
+        return $this->subject->getDomainDataByName($domainName);
+    }
 }
