@@ -458,6 +458,10 @@ $data = TCMSLogChange::createMigrationQueryData('cms_media', 'en')
 ;
 TCMSLogChange::update(__LINE__, $data);
 
+if (false === is_dir(PATH_MEDIA_LIBRARY_THUMBS.'c/4c/')) {
+    return;
+}
+
 $finder = \Symfony\Component\Finder\Finder::create()
     ->files()
     ->in(PATH_MEDIA_LIBRARY_THUMBS.'c/4c/')
