@@ -23,10 +23,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CreateInitialBackendUserCommand extends Command
 {
     /**
-     * @var LanguageServiceInterface
-     */
-    private $languageService;
-    /**
      * @var InitialBackendUserCreator
      */
     private $initialBackendUserCreator;
@@ -63,10 +59,5 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->initialBackendUserCreator->create($input, $output, $this->getHelper('question'));
-    }
-
-    public function setLanguageService(LanguageServiceInterface $languageService): void
-    {
-        $this->languageService = $languageService;
     }
 }
