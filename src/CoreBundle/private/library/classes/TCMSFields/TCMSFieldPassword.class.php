@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
+use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -16,6 +19,8 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class TCMSFieldPassword extends TCMSFieldVarchar
 {
+    public const DEFAULT_MINIMUM_PASSWORD_LENGTH = 6;
+
     /**
      * @var null|string
      */
@@ -149,25 +154,90 @@ class TCMSFieldPassword extends TCMSFieldVarchar
      */
     public function DataIsValid()
     {
-        $dataIsValid = parent::DataIsValid();
-
-        if (false === $dataIsValid) {
+        if (false === parent::DataIsValid()) {
             return false;
         }
 
-        $checkFieldName = $this->name.'_check';
-        $passwordIsSet = '' !== trim($this->data);
-        $passwordCheckEqualsPassword = (isset($this->oTableRow->sqlData[$checkFieldName]) && $this->data === $this->oTableRow->sqlData[$checkFieldName]);
-
-        if (true === $passwordIsSet && false === $passwordCheckEqualsPassword) {
-            $dataIsValid = false;
-            $oMessageManager = TCMSMessageManager::GetInstance();
-            $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
-            $sFieldTitle = $this->oDefinition->GetName();
-            $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_PASSWORD_CHECK_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+        if ('' === trim($this->data)) {
+            return true;
         }
 
-        return $dataIsValid;
+        if (false === $this->isRepeatedPasswordValid()) {
+            return false;
+        }
+
+        if (false === $this->isPasswordLengthValid()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function isRepeatedPasswordValid(): bool
+    {
+        $checkFieldName = $this->name.'_check';
+
+        if (true === isset($this->oTableRow->sqlData[$checkFieldName])
+            && $this->data === $this->oTableRow->sqlData[$checkFieldName]) {
+            return true;
+        }
+
+        $this->addBackendErrorMessage('TABLEEDITOR_FIELD_PASSWORD_CHECK_NOT_VALID');
+
+        return false;
+    }
+
+    private function isPasswordLengthValid(): bool
+    {
+        $passwordLength = \mb_strlen($this->data);
+        $minimumLength = $this->getMinimumLength();
+        if ($passwordLength < $minimumLength) {
+            $this->addBackendErrorMessage('TABLEEDITOR_FIELD_PASSWORD_TOO_SHORT', [
+                'min' => $minimumLength,
+            ]);
+
+            return false;
+        }
+        $maximumLength = $this->getMaximumLength();
+        if ($passwordLength > $maximumLength) {
+            $this->addBackendErrorMessage('TABLEEDITOR_FIELD_PASSWORD_TOO_LONG', [
+                'max' => $maximumLength,
+            ]);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private function getMinimumLength(): int
+    {
+        $minimumLength = $this->oDefinition->GetFieldtypeConfigKey('minimumLength');
+        if (false === \is_numeric($minimumLength)) {
+            return self::DEFAULT_MINIMUM_PASSWORD_LENGTH;
+        }
+
+        return (int) $minimumLength;
+    }
+
+    private function getMaximumLength(): int
+    {
+        return PasswordHashGeneratorInterface::MAXIMUM_PASSWORD_LENGTH;
+    }
+
+    private function addBackendErrorMessage(string $messageKey, array $additionalVariables = []): void
+    {
+        $variables = \array_merge([
+            'sFieldName' => $this->name,
+            'sFieldTitle' => $this->oDefinition->GetName(),
+        ], $additionalVariables);
+
+        $flashMessageService = $this->getFlashMessageService();
+        $flashMessageService->addMessage(
+            TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
+            $messageKey,
+            $variables
+        );
     }
 
     /**
@@ -204,12 +274,17 @@ class TCMSFieldPassword extends TCMSFieldVarchar
         return $this->backendLanguageCode;
     }
 
+    private function getFlashMessageService(): FlashMessageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
+    }
+
     /**
      * @return ViewRenderer
      */
     private function getViewRenderer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 
     /**
@@ -217,6 +292,6 @@ class TCMSFieldPassword extends TCMSFieldVarchar
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
     }
 }

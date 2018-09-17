@@ -1147,13 +1147,11 @@ class TCMSLogChange
         );
         if (count($result) > 0) {
             $row = $result[0];
-            if (TCMSMessageManager::AUTO_CREATED_MARKER === substr($row['description'], 0, strlen(TCMSMessageManager::AUTO_CREATED_MARKER))) { // message stub found so update
-                $data->setFields($fields);
-                $data->setWhereEquals(array(
-                    'id' => $row['id'],
-                ));
-                self::update(__LINE__, $data);
-            }
+            $data->setFields($fields);
+            $data->setWhereEquals(array(
+                'id' => $row['id'],
+            ));
+            self::update(__LINE__, $data);
         } else { // not found... insert it
             $fields['name'] = $identifierName;
             $fields['id'] = self::createUnusedRecordId('cms_message_manager_backend_message');
