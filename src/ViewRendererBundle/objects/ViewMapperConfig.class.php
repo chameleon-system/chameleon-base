@@ -81,6 +81,11 @@ class ViewMapperConfig implements ViewMapperConfigInterface
         $lines = array();
         reset($this->aMapperConfig);
         foreach ($this->aMapperConfig as $config => $configData) {
+            if (false === isset($configData['snippet'])) {
+                $lines[] = $config;
+                continue;
+            }
+
             $line = $config.'='.$configData['snippet'];
             if (count($configData['aMapper']) > 0) {
                 $mapper = array();
@@ -281,6 +286,9 @@ class ViewMapperConfig implements ViewMapperConfigInterface
         }
         foreach ($configsToChange as $configName => $configToChange) {
             $newMapperConfig = array();
+            if (false === isset($configToChange['aMapper'])) {
+                continue;
+            }
             foreach ($configToChange['aMapper'] as $key => $originalMapperData) {
                 if ($oldMapper === $originalMapperData['name']) {
                     $newMapperData = $originalMapperData;
