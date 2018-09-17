@@ -13,7 +13,9 @@ namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
+use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
+use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
@@ -27,7 +29,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use TCMSMessageManager;
 use TCMSPageDefinitionFile;
 use TCMSResourceCollection;
 use TGlobal;
@@ -69,6 +70,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
     protected $redirectPageDef;
     /**
      * @var array
+     *
+     * @deprecated since 6.3.0 - not used anymore
      */
     protected $postRenderVariables;
     /**
@@ -81,6 +84,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
     protected $aFooterIncludes = array();
     /**
      * @var string
+     *
+     * @deprecated since 6.3.0 - not used anymore
      */
     protected $sGeneratedPage;
     /**
@@ -120,6 +125,10 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @var InputFilterUtilInterface
      */
     private $inputFilterUtil;
+    /**
+     * @var ResponseVariableReplacerInterface
+     */
+    private $responseVariableReplacer;
 
     /**
      * @param RequestStack                 $requestStack
@@ -434,7 +443,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     private function isModuleMethodCallAllowed(TModelBase $module, $method)
     {
         return true === $this->authenticityTokenManager->isTokenValid()
-                || true === $module->AllowAccessWithoutAuthenticityToken($method);
+            || true === $module->AllowAccessWithoutAuthenticityToken($method);
     }
 
     /**
@@ -542,7 +551,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
                 $bHeaderParsed = true;
             }
         }
-        $sPageContent = $this->PreOutputCallbackFunctionReplaceCustomVars($sPageContent);
+        $sPageContent = $this->responseVariableReplacer->replaceVariables($sPageContent);
         $this->sGeneratedPage .= $sPageContent;
 
         return $sPageContent;
@@ -693,29 +702,14 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @param object|array|string $sPageContent
      *
      * @return string
+     *
+     * @deprecated since 6.3.0 - use ResponseVariableReplacerInterface::replaceVariables() instead.
+     *
+     * @throws TokenInjectionFailedException
      */
     public function PreOutputCallbackFunctionReplaceCustomVars($sPageContent)
     {
-        if (is_object($sPageContent)) {
-            foreach ($sPageContent as $sProperty => $sValue) {
-                $sPageContent->{$sProperty} = $this->PreOutputCallbackFunctionReplaceCustomVars($sValue);
-            }
-        } elseif (is_array($sPageContent)) {
-            foreach ($sPageContent as $sKey => $sValue) {
-                $sPageContent[$sKey] = $this->PreOutputCallbackFunctionReplaceCustomVars($sValue);
-            }
-        } else {
-            $oMsgManager = TCMSMessageManager::GetInstance();
-            $sPageContent = $oMsgManager->InjectMessageIntoString($sPageContent);
-            $sPageContent = $this->authenticityTokenManager->addTokenToForms($sPageContent);
-            $aPageVariables = $this->GetPostRenderVariables();
-            if (is_array($aPageVariables) && count($aPageVariables) > 0) {
-                $oStringReplace = new \TPkgCmsStringUtilities_VariableInjection();
-                $sPageContent = $oStringReplace->replace($sPageContent, $aPageVariables);
-            }
-        }
-
-        return $sPageContent;
+        return $this->responseVariableReplacer->replaceVariables($sPageContent);
     }
 
     /**
@@ -724,6 +718,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * note: see TGlobalBase::ReplaceCustomVariablesInString() to find out what format the variables must have in your html code.
      *
      * @return array
+     *
+     * @deprecated since 6.3.0 - no longer used. To add custom variables use ResponseVariableReplacerInterface::addVariable() instead of
+     *             overwriting this method.
      */
     protected function GetPostRenderVariables()
     {
@@ -945,5 +942,10 @@ abstract class ChameleonController implements ChameleonControllerInterface
     public function setInputFilterUtil(InputFilterUtilInterface $inputFilterUtil)
     {
         $this->inputFilterUtil = $inputFilterUtil;
+    }
+
+    public function setResponseVariableReplacer(ResponseVariableReplacerInterface $responseVariableReplacer): void
+    {
+        $this->responseVariableReplacer = $responseVariableReplacer;
     }
 }

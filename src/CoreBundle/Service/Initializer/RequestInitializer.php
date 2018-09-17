@@ -11,11 +11,10 @@
 
 namespace ChameleonSystem\CoreBundle\Service\Initializer;
 
-use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Session\ChameleonSessionManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use TGlobal;
-use TTools;
 
 /**
  * Class RequestInitializer.
@@ -27,16 +26,13 @@ class RequestInitializer
      */
     private $sessionManager;
     /**
-     * @var RequestInfoServiceInterface $requestInfoService
+     * @var ResponseVariableReplacerInterface
      */
-    private $requestInfoService;
+    private $responseVariableReplacer;
 
-    /**
-     * @param RequestInfoServiceInterface $requestInfoService
-     */
-    public function __construct(RequestInfoServiceInterface $requestInfoService)
+    public function __construct(ResponseVariableReplacerInterface $responseVariableReplacer)
     {
-        $this->requestInfoService = $requestInfoService;
+        $this->responseVariableReplacer = $responseVariableReplacer;
     }
 
     /**
@@ -49,6 +45,7 @@ class RequestInitializer
         $this->registerErrorHandler();
 
         $this->addStaticURLs();
+        $this->addSchemeVariable($request);
         $this->sessionManager->boot();
         $this->transformParameters($request);
     }
@@ -88,13 +85,16 @@ class RequestInitializer
         if (!is_array($aStaticURLs)) {
             $aStaticURLs = array($aStaticURLs);
         }
-        $aStaticURLMapping = array();
         $iCount = 0;
         foreach ($aStaticURLs as $sStaticURL) {
-            $aStaticURLMapping['CMSSTATICURL_'.$iCount] = trim($sStaticURL);
+            $this->responseVariableReplacer->addVariable('CMSSTATICURL_'.$iCount, trim($sStaticURL));
             ++$iCount;
         }
-        TTools::AddStaticPageVariables($aStaticURLMapping);
+    }
+
+    private function addSchemeVariable(Request $request): void
+    {
+        $this->responseVariableReplacer->addVariable('CMS-PROTOCOL', $request->getScheme());
     }
 
     /**
