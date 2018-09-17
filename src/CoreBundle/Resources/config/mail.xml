@@ -17,16 +17,16 @@
 
         <service id="chameleon_system_core.phpmailer" class="TCMSMail" shared="false" />
 
-        <service id="chameleon_system_core.mail_target_transformation_service" class="ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService" public="false">
+        <service id="chameleon_system_core.mail_target_transformation_service" alias="chameleon_system_core.null_mail_target_transformation_service" />
+
+        <service id="chameleon_system_core.transforming_mail_target_transformation_service" class="ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService" public="false">
             <argument>%chameleon_system_core.mail_target_transformation_service.target_mail%</argument>
             <argument>%chameleon_system_core.mail_target_transformation_service.white_list%</argument>
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
-            <call method="setEnableTransformation">
-                <argument>%chameleon_system_core.mail_target_transformation_service.enabled%</argument>
-            </call>
-            <call method="setSubjectPrefix">
-                <argument>%chameleon_system_core.mail_target_transformation_service.subject_prefix%</argument>
-            </call>
+            <argument>%chameleon_system_core.mail_target_transformation_service.subject_prefix%</argument>
+        </service>
+
+        <service id="chameleon_system_core.null_mail_target_transformation_service" class="ChameleonSystem\CoreBundle\Service\NullOutgoingMailTargetsService">
         </service>
 
         <service id="chameleon_system_core.security.mail.strict_mail_peer_security" class="ChameleonSystem\CoreBundle\Security\Https\StrictHttpsContext" />

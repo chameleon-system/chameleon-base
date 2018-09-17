@@ -18,20 +18,41 @@ use Prophecy\Prophecy\ObjectProphecy;
 
 class TransformOutgoingMailTargetsServiceTest extends TestCase
 {
+    /**
+     * @var string
+     */
     private $targetMail;
+    /**
+     * @var array
+     */
     private $whiteList;
     /**
-     * @var PortalDomainServiceInterface
+     * @var PortalDomainServiceInterface|ObjectProphecy
      */
     private $portalDomainService;
     /**
      * @var TransformOutgoingMailTargetsService
      */
     private $service;
+    /**
+     * @var string
+     */
     private $transformedMail;
+    /**
+     * @var string
+     */
     private $inputMail;
+    /**
+     * @var string
+     */
     private $subjectPrefix;
+    /**
+     * @var string
+     */
     private $transformedSubject;
+    /**
+     * @var string
+     */
     private $sourceSubject;
 
     protected function tearDown()
@@ -98,15 +119,13 @@ class TransformOutgoingMailTargetsServiceTest extends TestCase
 
     private function given_an_instance_of_the_service()
     {
-        $this->service = new TransformOutgoingMailTargetsService($this->targetMail, $this->whiteList, $this->portalDomainService);
-        $this->service->setEnableTransformation(true);
-        $this->service->setSubjectPrefix($this->subjectPrefix);
+        $this->service = new TransformOutgoingMailTargetsService($this->targetMail, $this->whiteList, $this->portalDomainService, $this->subjectPrefix);
     }
 
     private function given_that_the_active_portal_has_the_following_domains($domainList)
     {
         /** @var $portalDomainService PortalDomainServiceInterface|ObjectProphecy */
-        $portalDomainService = $this->prophesize('ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface');
+        $portalDomainService = $this->prophesize(PortalDomainServiceInterface::class);
         $portalDomainService->getDomainNameList()->willReturn($domainList);
         $this->portalDomainService = $portalDomainService->reveal();
     }

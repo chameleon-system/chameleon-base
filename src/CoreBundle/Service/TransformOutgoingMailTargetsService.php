@@ -18,7 +18,7 @@ class TransformOutgoingMailTargetsService implements TransformOutgoingMailTarget
     /**
      * @var bool
      */
-    private $enableTransformation = false;
+    private $enableTransformation = true;
     /**
      * @var PortalDomainServiceInterface
      */
@@ -48,16 +48,22 @@ class TransformOutgoingMailTargetsService implements TransformOutgoingMailTarget
      * @param string                       $transformationTarget
      * @param string                       $whiteList
      * @param PortalDomainServiceInterface $portalDomainService
+     * @param string                       $subjectPrefix
      */
-    public function __construct($transformationTarget, $whiteList, PortalDomainServiceInterface $portalDomainService)
+    public function __construct($transformationTarget, $whiteList, PortalDomainServiceInterface $portalDomainService, $subjectPrefix)
     {
-        $this->portalDomainService = $portalDomainService;
         $this->transformationTarget = $transformationTarget;
         $this->extractWhiteList($whiteList);
+        $this->portalDomainService = $portalDomainService;
+        $this->subjectPrefix = $subjectPrefix;
     }
 
     /**
-     * @param bool $enableTransformation
+     * {@inheritdoc}
+     *
+     * @deprecated since 6.3.0 - see deprecation note in interface. This implementation is now active by default
+     *             and should simply not be called if it should not be used (e.g. by using NullOutgoingMailTargetsService
+     *             instead). If deactivated by calling this method, the email subject will still be prefixed.
      */
     public function setEnableTransformation($enableTransformation)
     {
@@ -65,7 +71,9 @@ class TransformOutgoingMailTargetsService implements TransformOutgoingMailTarget
     }
 
     /**
-     * @param string $prefix
+     * {@inheritdoc}
+     *
+     * @deprecated since 6.3.0 - use constructor injection instead.
      */
     public function setSubjectPrefix($prefix)
     {
@@ -73,9 +81,7 @@ class TransformOutgoingMailTargetsService implements TransformOutgoingMailTarget
     }
 
     /**
-     * @param string $mail
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function transform($mail)
     {
@@ -91,9 +97,7 @@ class TransformOutgoingMailTargetsService implements TransformOutgoingMailTarget
     }
 
     /**
-     * @param string $subject
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function transformSubject($subject)
     {
