@@ -644,6 +644,11 @@
             <argument type="service" id="chameleon_system_core.request_info_service" />
         </service>
 
+        <service id="chameleon_system_core.event_listener.case_insensitive_portal_exception_listener" class="ChameleonSystem\CoreBundle\EventListener\CaseInsensitivePortalExceptionListener">
+            <argument type="service" id="database_connection"/>
+            <tag name="kernel.event_listener" event="kernel.exception" />
+        </service>
+
         <service id="chameleon_system_core.util.routing" class="ChameleonSystem\CoreBundle\Util\RoutingUtil">
             <argument type="service" id="chameleon_system_core.util.routing_data_access" />
             <argument type="service" id="chameleon_system_core.tree_service" />
