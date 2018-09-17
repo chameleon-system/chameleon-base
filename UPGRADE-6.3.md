@@ -5,7 +5,7 @@ UPGRADE FROM 6.2 TO 6.3
 
 ## Changed Signatures
 
-See the Changed Interfaces and Method Signatures section if changes in signatures affect the project.
+See the Changed Interfaces and Method Signatures section whether changes in signatures affect the project.
 
 # Changed Interfaces and Method Signatures
 
@@ -45,14 +45,18 @@ None.
 
 ## Properties
 
-None.
+- \ChameleonSystem\CoreBundle\Controller\ChameleonController::$sGeneratedPage
+- \ChameleonSystem\CoreBundle\Controller\ChameleonController::$postRenderVariables
 
 ## Methods
 
+- \ChameleonSystem\CoreBundle\Controller\ChameleonController::GetPostRenderVariables()
+- \ChameleonSystem\CoreBundle\Controller\ChameleonController::PreOutputCallbackFunctionReplaceCustomVars()
 - \ChameleonSystem\CoreBundle\Interfaces\TransformOutgoingMailTargetsServiceInterface::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Interfaces\TransformOutgoingMailTargetsServiceInterface::setSubjectPrefix()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
+- \TTools::AddStaticPageVariables()
 
 ## JavaScript Files and Functions
 

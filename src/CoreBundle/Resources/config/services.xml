@@ -69,6 +69,7 @@
             <argument type="service" id="chameleon_system_core.redirectstrategy.registershutdown" />
             <argument type="service" id="chameleon_system_core.util.url" />
             <argument type="service" id="service_container" />
+            <argument type="service" id="chameleon_system_core.response.response_variable_replacer"/>
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
         </service>
 
@@ -111,7 +112,7 @@
         </service>
 
         <service id="chameleon_system_core.service_initializer.request" class="ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer">
-            <argument type="service" id="chameleon_system_core.request_info_service" />
+            <argument type="service" id="chameleon_system_core.response.response_variable_replacer" />
             <call method="setSessionManager">
                 <argument type="service" id="chameleon_system_core.session.chameleon_session_manager" />
             </call>
@@ -186,6 +187,9 @@
             </call>
             <call method="setAuthenticityTokenManager">
                 <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager" />
+            </call>
+            <call method="setResponseVariableReplacer">
+                <argument type="service" id="chameleon_system_core.response.response_variable_replacer" />
             </call>
         </service>
 
@@ -784,6 +788,10 @@
             <argument type="service" id="request_stack"/>
         </service>
 
+        <service id="chameleon_system_core.response.response_variable_replacer" class="ChameleonSystem\CoreBundle\Response\ResponseVariableReplacer">
+            <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager"/>
+            <argument type="service" id="chameleon_system_core.flash_messages"/>
+        </service>
 
     </services>
 </container>

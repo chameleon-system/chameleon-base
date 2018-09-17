@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Exception\ModuleException;
+use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -1830,18 +1831,23 @@ class TTools
      * @param array $aVariables
      * @param bool  $bEscapeViaOutHTML - set to true, if you want to pass each value through TGlobal::OutHTML
      *
-     * @return array
+     * @return array|null
+     *
+     * @deprecated since 6.3.0 - use ResponseVariableReplacerInterface::addVariable() instead (allows only string values,
+     *             does not escape, does not return variables).
      */
     public static function AddStaticPageVariables($aVariables, $bEscapeViaOutHTML = false)
     {
         static $aPageVars = array();
         if (is_array($aVariables)) {
+            $responseVariableReplacer = self::getResponseVariableReplacer();
             foreach ($aVariables as $sKey => $value) {
                 if ($bEscapeViaOutHTML) {
                     $aPageVars[$sKey] = TGlobal::OutHTML($aVariables[$sKey]);
                 } else {
                     $aPageVars[$sKey] = $aVariables[$sKey];
                 }
+                $responseVariableReplacer->addVariable($sKey, (string) $aPageVars[$sKey]);
             }
         } elseif (null === $aVariables) {
             return $aPageVars;
@@ -2157,6 +2163,11 @@ class TTools
     private static function getDatabaseConnection()
     {
         return ServiceLocator::get('database_connection');
+    }
+
+    private static function getResponseVariableReplacer(): ResponseVariableReplacerInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.response.response_variable_replacer');
     }
 
     /**

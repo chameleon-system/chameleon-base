@@ -86,19 +86,6 @@ class chameleon
             register_shutdown_function(array('TCMSErrorHandler', 'ShutdownHandler'));
         }
 
-        // add the static server URLs
-        $aStaticURLs = TGlobal::GetStaticURLPrefix();
-        if (!is_array($aStaticURLs)) {
-            $aStaticURLs = array($aStaticURLs);
-        }
-        $aStaticURLMapping = array();
-        $iCount = 0;
-        foreach ($aStaticURLs as $sStaticURL) {
-            $aStaticURLMapping['CMSSTATICURL_'.$iCount] = trim($sStaticURL);
-            ++$iCount;
-        }
-        TTools::AddStaticPageVariables($aStaticURLMapping);
-
         if ($this->isInMaintenanceMode($requestType)) {
             $this->showMaintenanceModePage();
         }
