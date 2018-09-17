@@ -499,6 +499,9 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
                 $this->PostLoginHook();
             }
         }
+        if (false === $this->isLoggedIn) {
+            $this->getEventDispatcher()->dispatch(ExtranetEvents::USER_LOGIN_FAILURE, new ExtranetUserEvent($this));
+        }
 
         return $this->isLoggedIn;
     }

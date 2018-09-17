@@ -13,7 +13,8 @@ namespace ChameleonSystem\ExtranetBundle;
 
 final class ExtranetEvents
 {
-    const USER_LOGIN_SUCCESS = 'chameleon_system_extranet.user_login_success';
-    const USER_BEFORE_LOGOUT = 'chameleon_system_extranet.user_before_logout';
-    const USER_LOGOUT_SUCCESS = 'chameleon_system_extranet.user_logout_success';
+    public const USER_LOGIN_SUCCESS = 'chameleon_system_extranet.user_login_success';
+    public const USER_LOGIN_FAILURE = 'chameleon_system_extranet.user_login_failure';
+    public const USER_BEFORE_LOGOUT = 'chameleon_system_extranet.user_before_logout';
+    public const USER_LOGOUT_SUCCESS = 'chameleon_system_extranet.user_logout_success';
 }
