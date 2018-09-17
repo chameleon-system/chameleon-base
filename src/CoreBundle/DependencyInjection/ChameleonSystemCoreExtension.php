@@ -83,6 +83,12 @@ class ChameleonSystemCoreExtension extends Extension
         foreach ($config as $key => $value) {
             $container->setParameter("chameleon_system_core.mail_target_transformation_service.$key", $value);
         }
+
+        if (true === $config['enabled']) {
+            $container->setAlias('chameleon_system_core.mail_target_transformation_service', 'chameleon_system_core.transforming_mail_target_transformation_service');
+        } else {
+            $container->setAlias('chameleon_system_core.mail_target_transformation_service', 'chameleon_system_core.null_mail_target_transformation_service');
+        }
     }
 
     /**

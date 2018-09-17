@@ -119,6 +119,14 @@ class ResponseVariableReplacerTest extends TestCase
         ];
     }
 
+    public function testTokenInjectionFailedException(): void
+    {
+        $this->givenResponseVariableReplacer([]);
+        $this->givenAuthenticityTokenManagerFailsOnTokenInjection();
+        $this->thenExpectTokenInjectionFailedException();
+        $this->whenReplaceVariablesIsCalled('xxx');
+    }
+
     private function givenResponseVariableReplacer(array $placeholders): void
     {
         $this->authenticityTokenManagerMock = $this->prophesize(AuthenticityTokenManagerInterface::class);
@@ -151,14 +159,6 @@ class ResponseVariableReplacerTest extends TestCase
     private function thenTheExpectedResultShouldBeReturned($expectedResult): void
     {
         $this->assertEquals($expectedResult, $this->actualResult);
-    }
-
-    public function testTokenInjectionFailedException(): void
-    {
-        $this->givenResponseVariableReplacer([]);
-        $this->givenAuthenticityTokenManagerFailsOnTokenInjection();
-        $this->thenExpectTokenInjectionFailedException();
-        $this->whenReplaceVariablesIsCalled('xxx');
     }
 
     private function givenAuthenticityTokenManagerFailsOnTokenInjection(): void

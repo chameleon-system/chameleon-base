@@ -5,32 +5,14 @@ UPGRADE FROM 6.2 TO 6.3
 
 ## Changed Signatures
 
-See the Changed Interfaces and Method Signatures section if changes in signatures affect the project.
+See the Changed Interfaces and Method Signatures section whether changes in signatures affect the project.
 
 # Changed Interfaces and Method Signatures
 
 This section contains information on interface and method signature changes which affect backwards compatibility (BC).
 Note that ONLY BC breaking changes are listed, according to our backwards compatibility policy.
 
-## ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccess
-
-- New method `getActivePortalCandidate()`.
-- New method `getDomainDataByName()`.
-- New method `getPortalPrefixListForDomain()`.
-
-## ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessCacheDecorator
-
-- New method `getActivePortalCandidate()`.
-- New method `getDomainDataByName()`.
-- New method `getPortalPrefixListForDomain()`.
-
 ## ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface
-
-- New method `getActivePortalCandidate()`.
-- New method `getDomainDataByName()`.
-- New method `getPortalPrefixListForDomain()`.
-
-## ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessRequestLevelCacheDecorator
 
 - New method `getActivePortalCandidate()`.
 - New method `getDomainDataByName()`.
@@ -70,6 +52,10 @@ None.
 
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::GetPostRenderVariables()
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::PreOutputCallbackFunctionReplaceCustomVars()
+- \ChameleonSystem\CoreBundle\Interfaces\TransformOutgoingMailTargetsServiceInterface::setEnableTransformation()
+- \ChameleonSystem\CoreBundle\Interfaces\TransformOutgoingMailTargetsServiceInterface::setSubjectPrefix()
+- \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
+- \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
 - \TTools::AddStaticPageVariables()
 
 ## JavaScript Files and Functions
