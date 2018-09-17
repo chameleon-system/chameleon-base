@@ -62,7 +62,7 @@ class CaseInsensitivePortalExceptionListener
     }
 
     /**
-     * Returns the path fragment between first and second backslash (or everything after the first slash if there is no
+     * Returns the path fragment between first and second slash (or everything after the first slash if there is no
      * second one) - this might be a portal prefix.
      *
      * @param string $relativePath
