@@ -97,7 +97,6 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'de')
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-
 $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'en')
   ->setFields([
       '049_trans' => 'Password (secure)',
@@ -189,7 +188,6 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'de')
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
-
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields([
