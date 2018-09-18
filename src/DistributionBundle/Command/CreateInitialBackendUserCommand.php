@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\DistributionBundle\Command;
 
-use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\DistributionBundle\Bootstrap\InitialBackendUserCreator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

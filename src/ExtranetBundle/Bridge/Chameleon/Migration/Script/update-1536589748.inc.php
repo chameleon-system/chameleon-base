@@ -5,7 +5,6 @@
 </div>
 <?php
 
-
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
       'fieldtype_config' => 'minimumLength=6',

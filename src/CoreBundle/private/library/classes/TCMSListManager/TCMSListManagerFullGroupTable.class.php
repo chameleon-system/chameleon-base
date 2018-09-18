@@ -49,7 +49,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $_SESSION['_tmpCurrentTableID'] = $this->oTableConf->sqlData['id']; // needed for the callback functions...
 
         $listName = $oGlobal->GetUserData('_listName');
-        $objectChangeRequest = (isset($listName) && $listName == 'cmstablelistObj' . $this->oTableConf->sqlData['cmsident']);
+        $objectChangeRequest = (isset($listName) && $listName == 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident']);
 
         $oOldTableObj = null;
         $sListCacheKey = $this->GetListCacheKey();
@@ -67,12 +67,12 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         }
 
         $aOrderData = array();
-        if (!is_null($oOldTableObj) && $oOldTableObj !== false) {
+        if (!is_null($oOldTableObj) && false !== $oOldTableObj) {
             $aOrderData = $oOldTableObj->orderList;
         }
 
         // table is not in cache, load it
-        if (is_null($oOldTableObj) || $oOldTableObj === false) {
+        if (is_null($oOldTableObj) || false === $oOldTableObj) {
             $this->CreateTableObj();
             $this->tableObj->orderList = $aOrderData;
             $this->AddFields();
@@ -82,7 +82,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $postData = $oGlobal->GetUserData();
             $this->tableObj = $oOldTableObj;
             $this->tableObj->_postData = array_merge($this->tableObj->_postData, $postData); // overwrite anything that is passed via get or post
-            foreach ($this->tableObj->customSearchFieldParameter AS $key => $val) {
+            foreach ($this->tableObj->customSearchFieldParameter as $key => $val) {
                 if (!array_key_exists($key, $this->tableObj->_postData)) {
                     $this->tableObj->_postData[$key] = $this->tableObj->customSearchFieldParameter[$key];
                 }
@@ -92,7 +92,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 $this->AddTableGrouping($this->tableObj->groupByCell->colSpan);
             }
             $this->tableObj->sql = $this->FilterQuery(); // need to refresh this since it may change for mlt lists
-            if (isset($postData['_startRecord']) && (!empty($postData['_startRecord']) || $postData['_startRecord'] == '0')) { // we need to check the 0 condition because 0 is treated as empty
+            if (isset($postData['_startRecord']) && (!empty($postData['_startRecord']) || '0' == $postData['_startRecord'])) { // we need to check the 0 condition because 0 is treated as empty
                 $this->tableObj->startRecord = $postData['_startRecord']; // set current start record
             }
 
