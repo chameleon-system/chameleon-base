@@ -10,6 +10,9 @@ Chameleon System CoreBundle
     html-includes
     i18n
     module-configuration
+    request-state
+    resource-collection
+    routing
     services
     universal-uploader
     updates

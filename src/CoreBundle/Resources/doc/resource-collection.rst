@@ -30,7 +30,7 @@ Details
 The resource collection mechanism will honor page-specific includes so they are not delivered for other pages.
 To do this there is a differentiation between global includes and page-specific ones. Generally every include line
 (CSS or JS) without the tag `<!-- #GLOBALRESOURCECOLLECTION# -->` will be considered page-specific.
-This also allows for example module specific includes (using `GetHtmlHeadIncludes()` or a view config.yml) to work as
+This also allows for example module-specific includes (using `GetHtmlHeadIncludes()` or a view config.yml) to work as
 expected and be page-specific.
 
 As a consequence there are at most 4 different files for a page: Global JS, global CSS, optional page-specific JS,
