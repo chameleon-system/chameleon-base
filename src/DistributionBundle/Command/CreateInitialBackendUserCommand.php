@@ -42,7 +42,7 @@ class CreateInitialBackendUserCommand extends Command
             ->setDefinition(array())
             ->setDescription('Creates a backend user.')
             ->setHelp(<<<EOF
-The <info>%command.name%</info> creates the initial Chameleon backend user, either by accepting arguments from the environment
+The <info>%command.name%</info> command creates the initial Chameleon backend user, either by accepting arguments from the environment
 or interactively. The user created by this command is a basic stub that is minimally configured to be able to log into the backend.
 The user should be edited in the backend thereafter.
 Possible environment variables:
