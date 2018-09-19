@@ -67,7 +67,7 @@ interface PortalDomainServiceInterface
      *
      * @throws InvalidPortalDomainException if no primary domain was found.
      *                                      Is also thrown if no portal ID or language ID was given and no active values
-     *                                      could be determined.
+     *                                      could be determined
      */
     public function getPrimaryDomain($portalId = null, $languageId = null);
 

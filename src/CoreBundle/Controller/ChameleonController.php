@@ -337,7 +337,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @var string $pagedef
      *
-     * @return TCMSPageDefinitionFile
+     * @return TCMSPageDefinitionFile|bool
      */
     public function &GetPagedefObject($pagedef)
     {
@@ -616,7 +616,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
             TPkgCmsEvent::GetNewInstance($this, TPkgCmsEvent::CONTEXT_CORE, TPkgCmsEvent::NAME_GET_CUSTOM_HEADER_DATA));
 
         $event = new HtmlIncludeEvent();
-        /** @var $event HtmlIncludeEvent */
         $event = $this->eventDispatcher->dispatch(CoreEvents::GLOBAL_HTML_HEADER_INCLUDE, $event);
 
         if ($bAsArray) {

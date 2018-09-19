@@ -232,7 +232,7 @@ class TIterator
      */
     public function &current()
     {
-        if ($this->getItemPointer() == -1 && count($this->_items) > 0) {
+        if (-1 == $this->getItemPointer() && count($this->_items) > 0) {
             $this->setItemPointer(0);
         }
         if (is_null($this->_items[$this->getItemPointer()])) {

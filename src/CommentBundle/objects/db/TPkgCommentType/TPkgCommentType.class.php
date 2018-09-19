@@ -19,7 +19,7 @@ class TPkgCommentType extends TPkgCommentTypeAutoParent
      *
      * @param string|int $sPkgCommentTypeId
      *
-     * @return TdbPkgCommentType
+     * @return TdbPkgCommentType|bool
      */
     public function GetInstance($sPkgCommentTypeId)
     {

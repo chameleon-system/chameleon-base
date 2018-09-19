@@ -218,7 +218,7 @@ class TCMSRecordWritable extends TCMSRecord
      *
      * @param array $aFields
      *
-     * @return string
+     * @return string|bool
      */
     public function SaveFieldsFast($aFields)
     {

@@ -33,8 +33,8 @@ class SnippetChainUtil
      * Adds a path to the snippet chain of some or all themes.
      *
      * @param string   $pathToAdd
-     * @param string   $afterThisPath The new path is added after this path (provide the complete line as shown in the theme view in the backend without \n).
-     *                                If the path is null or not found in the chain, the $pathToAdd will be appended at the end.
+     * @param string   $afterThisPath the new path is added after this path (provide the complete line as shown in the theme view in the backend without \n).
+     *                                If the path is null or not found in the chain, the $pathToAdd will be appended at the end
      * @param string[] $toTheseThemes an array of theme IDs. Add to all themes if empty.
      *
      * @throws DBALException

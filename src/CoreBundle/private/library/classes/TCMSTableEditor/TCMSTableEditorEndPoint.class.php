@@ -3159,7 +3159,7 @@ class TCMSTableEditorEndPoint
         if ($oCmsTag->Load($sConnectedID)) {
             $oCmsTagsTableEditor = TTools::GetTableEditorManager('cms_tags', $sConnectedID);
             if ($oCmsTag->sqlData['count'] > 0) {
-                $oCmsTag->sqlData['count'] -= 1;
+                --$oCmsTag->sqlData['count'];
             }
             $oCmsTagsTableEditor->AllowEditByAll(true);
             $oCmsTagsTableEditor->SaveField('count', $oCmsTag->sqlData['count']);

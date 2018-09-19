@@ -39,6 +39,10 @@ class PasswordHashGenerator implements PasswordHashGeneratorInterface
      */
     public function verify($plainPassword, $hash)
     {
+        if (\mb_strlen($plainPassword) > self::MAXIMUM_PASSWORD_LENGTH) {
+            return false;
+        }
+
         return $this->hashAlgorithm->verify($plainPassword, $hash);
     }
 

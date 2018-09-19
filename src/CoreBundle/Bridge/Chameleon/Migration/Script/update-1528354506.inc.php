@@ -37,4 +37,3 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_orderfields', '
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
-

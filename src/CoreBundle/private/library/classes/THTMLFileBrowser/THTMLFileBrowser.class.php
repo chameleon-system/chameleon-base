@@ -205,7 +205,7 @@ class THTMLFileBrowser
     public function Next()
     {
         $oEntry = false;
-        if ($this->iNumberOfRecsPerPage == -1 || ($this->iCurrentRecord < ($this->iCurrentPage + 1) * $this->iNumberOfRecsPerPage)) {
+        if (-1 == $this->iNumberOfRecsPerPage || ($this->iCurrentRecord < ($this->iCurrentPage + 1) * $this->iNumberOfRecsPerPage)) {
             $oEntry = $this->ReadNext();
         }
 

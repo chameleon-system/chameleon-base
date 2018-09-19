@@ -21,5 +21,3 @@ while ($name = $statement->fetch(\PDO::FETCH_COLUMN)) {
     ;
     TCMSLogChange::update(__LINE__, $data);
 }
-
-

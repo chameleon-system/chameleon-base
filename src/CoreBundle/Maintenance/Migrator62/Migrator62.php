@@ -200,7 +200,6 @@ class Migrator62 implements MigratorInterface
             'chameleon-system/pkgtshoppaymenthandlersofortueberweisung',
             'chameleon-system/pkgurlalias',
             'chameleon-system/pkgviewrenderer',
-            'chameleon-system/themeshopstandard',
             'chameleon-system/twig-debug-bundle',
             'chameleon-system/update-counter-migration-bundle',
         ];

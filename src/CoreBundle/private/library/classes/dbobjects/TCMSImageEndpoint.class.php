@@ -1959,7 +1959,7 @@ class TCMSImageEndpoint
      * @param int $maxThumbWidth
      * @param int $maxThumbHeight
      *
-     * @return string
+     * @return string|bool
      */
     public function GetRSSMediaXMLTags($maxThumbWidth, $maxThumbHeight)
     {
@@ -2015,7 +2015,7 @@ class TCMSImageEndpoint
      * @param int $maxThumbWidth
      * @param int $maxThumbHeight
      *
-     * @return string
+     * @return string|bool
      */
     public function getAtomMediaTag($maxThumbWidth, $maxThumbHeight)
     {

@@ -338,9 +338,9 @@ JAVASCRIPTCODE;
                         if (array_key_exists($this->name.'image', $_FILES) && array_key_exists(
                                 $key,
                                 $_FILES[$this->name.'image']['name']
-                            ) && $_FILES[$this->name.'image']['error'][$key] != UPLOAD_ERR_NO_FILE
+                            ) && UPLOAD_ERR_NO_FILE != $_FILES[$this->name.'image']['error'][$key]
                         ) {
-                            if ($_FILES[$this->name.'image']['error'][$key] != UPLOAD_ERR_OK) {
+                            if (UPLOAD_ERR_OK != $_FILES[$this->name.'image']['error'][$key]) {
                                 $bIsValid = false;
                                 $oMsgManager->AddMessage($sConsumerName, 'ERROR-INVALID-IMAGE');
                                 break;

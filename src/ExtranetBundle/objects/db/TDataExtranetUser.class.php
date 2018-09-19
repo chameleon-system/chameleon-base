@@ -9,10 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerFieldConfig;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ExtranetBundle\Exception\PasswordGenerationFailedException;
@@ -286,7 +288,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     public static function GetInstance($bReset = false)
     {
         /** @var $extranetUserProvider ExtranetUserProviderInterface */
-        $extranetUserProvider = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        $extranetUserProvider = ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
         if ($bReset) {
             $extranetUserProvider->reset();
         }
@@ -497,6 +499,9 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
                 $this->PostLoginHook();
             }
         }
+        if (false === $this->isLoggedIn) {
+            $this->getEventDispatcher()->dispatch(ExtranetEvents::USER_LOGIN_FAILURE, new ExtranetUserEvent($this));
+        }
 
         return $this->isLoggedIn;
     }
@@ -559,7 +564,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     protected function getEventDispatcher()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('event_dispatcher');
+        return ServiceLocator::get('event_dispatcher');
     }
 
     /**
@@ -1874,8 +1879,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             }
         }
 
-        $pwd1 = (isset($aData['password'])) ? ($aData['password']) : ('');
-        $pwd2 = (isset($aData['password2'])) ? ($aData['password2']) : ('');
+        $pwd1 = $aData['password'] ?? '';
+        $pwd2 = $aData['password2'] ?? '';
 
         // check pwd field
         if (empty($pwd1)) {
@@ -1905,7 +1910,6 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     public function ValidatePassword($sPassword, $sPasswordCopy)
     {
-        // check pwd field
         if (empty($sPassword)) {
             return 'ERROR-USER-REGISTER-PWD-REQUIRED';
         }
@@ -1914,11 +1918,32 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             return 'ERROR-USER-REGISTER-PWD-NO-MATCH';
         }
 
-        if (mb_strlen($sPassword) < 6) {
+        $passwordLength = \mb_strlen($sPassword);
+        if ($passwordLength < $this->getMinimumPasswordLength()) {
             return 'ERROR-USER-REGISTER-PWD-TO-SHORT';
         }
 
+        if ($passwordLength > $this->getMaximumPasswordLength()) {
+            return 'ERROR-USER-REGISTER-PWD-TO-LONG';
+        }
+
         return true;
+    }
+
+    private function getMinimumPasswordLength(): int
+    {
+        $definition = $this->getDatabaseAccessLayerFieldConfig()->GetFieldDefinition('data_extranet_user', 'password');
+        $minimumLength = $definition->GetFieldtypeConfigKey('minimumLength');
+        if (false === \is_numeric($minimumLength)) {
+            return TCMSFieldPassword::DEFAULT_MINIMUM_PASSWORD_LENGTH;
+        }
+
+        return (int) $minimumLength;
+    }
+
+    private function getMaximumPasswordLength(): int
+    {
+        return PasswordHashGeneratorInterface::MAXIMUM_PASSWORD_LENGTH;
     }
 
     /**
@@ -2444,7 +2469,12 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     private function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
+    }
+
+    private function getDatabaseAccessLayerFieldConfig(): DatabaseAccessLayerFieldConfig
+    {
+        return ServiceLocator::get('chameleon_system_core.database_access_layer_field_config');
     }
 
     /**
@@ -2452,7 +2482,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     private function getPasswordHashGenerator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.security.password.password_hash_generator');
+        return ServiceLocator::get('chameleon_system_core.security.password.password_hash_generator');
     }
 
     /**
@@ -2460,7 +2490,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -2468,7 +2498,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     /**
@@ -2476,7 +2506,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -2484,7 +2514,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     private function getFlashMessageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
     /**
@@ -2492,7 +2522,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     private static function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 
     /**
@@ -2500,7 +2530,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     private function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 
     /**
@@ -2508,6 +2538,6 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     private function getUrlUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

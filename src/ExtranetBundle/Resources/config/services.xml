@@ -15,6 +15,10 @@
             <tag name="kernel.event_listener" event="chameleon_system_extranet.user_login_success" method="rehashPassword" />
         </service>
 
+        <service id="chameleon_system_extranet.event_listener.delay_failed_login_attempt_listener" class="ChameleonSystem\ExtranetBundle\EventListener\DelayFailedLoginAttemptListener">
+            <tag name="kernel.event_listener" event="chameleon_system_extranet.user_login_failure" method="addDelay"/>
+        </service>
+
         <service id="chameleon_system_extranet.event_listener.refresh_authenticity_token_listener" class="ChameleonSystem\ExtranetBundle\EventListener\RefreshAuthenticityTokenListener">
             <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager"/>
             <tag name="kernel.event_listener" event="chameleon_system_extranet.user_login_success" method="refreshAuthenticityToken" />

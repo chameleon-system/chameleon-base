@@ -121,12 +121,12 @@ class TCMSTextFieldEndPoint
     }
 
     /**
-     * output a wysiwyg text. will return an empty string, if the text field is "empty" (<div>&nbsp;</div> are considert empty too)
-     * Optional custom variables can be placed into the wysiwyg editor - they will be replaced using the aCustomVariables passed.
-     * These variables must have the following format: [{name:formatierung}]
-     * "formatierung" ist either string, date, or number. It is possible to specify the number of decimals
-     * used when formating a number: [{variable:number:decimalplaces}]
-     * example [{costs:number:2}].
+     * Outputs a WYSIWYG text. Will return an empty string if the text field is "empty" (<div>&nbsp;</div> are
+     * considered empty, too).
+     * Optionally custom variables can be placed into the WYSIWYG editor - they will be replaced using the
+     * aCustomVariables passed. These variables must have the following format: [{name:format}] where "format" is either
+     * "string", "date", or "number". It is possible to specify the number of decimals used when formating a number:
+     * [{variable:number:decimalplaces}] - example: [{costs:number:2}].
      *
      * @param int    $thumbnailWidth   - max image width within the text
      * @param bool   $includeClearDiv  - include a clear div at the end of the text block (is true by default)
@@ -156,6 +156,9 @@ class TCMSTextFieldEndPoint
         $content = $this->_RemoveEmptyTags($content);
         $content = $this->_AddCMSClassToAnchors($content);
         $content = $this->_ReplaceCmsTextBlockInString($content, $thumbnailWidth);
+        if (false === $this->isScriptTagAllowed()) {
+            $content = $this->_RemoveScriptTags($content);
+        }
         $content = $this->ReplaceCustomVariablesInString($content, $aCustomVariables, $thumbnailWidth);
         $this->content = trim($this->content); // trim whitespaces
         if (!$this->IsEmpty() && !$includeClearDiv) {
@@ -170,6 +173,11 @@ class TCMSTextFieldEndPoint
         return $content;
     }
 
+    private function isScriptTagAllowed(): bool
+    {
+        return ServiceLocator::getParameter('chameleon_system_cms_text_field.allow_script_tags');
+    }
+
     /**
      * @param string $content
      *
@@ -181,12 +189,9 @@ class TCMSTextFieldEndPoint
     }
 
     /**
-     * output a wysiwyg text. will return an empty string, if the text field is "empty" (<div>&nbsp;</div> are considert empty too)
-     * Optional custom variables can be placed into the wysiwyg editor - they will be replaced using the aCustomVariables passed.
-     * These variables must have the following format: [{name:formatierung}]
-     * "formatierung" ist either string, date, or number. It is possible to specify the number of decimals
-     * used when formating a number: [{variable:number:decimalplaces}]
-     * example [{costs:number:2}].
+     * Outputs a WYSIWYG text for a field for external usage, such as emails, RSS feeds etc.
+     *
+     * @see TCMSTextFieldEndPoint::GetText()
      *
      * @param int   $thumbnailWidth   - max image width within the text
      * @param bool  $includeClearDiv  - include a clear div at the end of the text block (is false by default)
@@ -210,7 +215,7 @@ class TCMSTextFieldEndPoint
         $content = $this->_ReplaceEmptyAligns($content);
         $content = $this->_RemoveEmptyTags($content);
         $content = $this->_ReplaceCmsTextBlockInString($content, $thumbnailWidth);
-        if ($bClearScriptTags) {
+        if (true === $bClearScriptTags || false === $this->isScriptTagAllowed()) {
             $content = $this->_RemoveScriptTags($content);
         }
         $content = $this->ReplaceCustomVariablesInString($content, $aCustomVariables, $thumbnailWidth);
