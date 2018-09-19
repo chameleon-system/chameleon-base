@@ -8,7 +8,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_newsletter.field_campaign_stats.subscriber_count">
                 <source>chameleon_system_newsletter.field_campaign_stats.subscriber_count</source>
-                <target>Recipients count</target>
+                <target>Recipient count</target>
             </trans-unit>
             <trans-unit id="chameleon_system_newsletter.field_campaign_stats.queue_processed">
                 <source>chameleon_system_newsletter.field_campaign_stats.queue_processed</source>
@@ -49,8 +49,6 @@
                 <source>chameleon_system_newsletter.action.clear_queue</source>
                 <target>Clear sending queue</target>
             </trans-unit>
-
-
         </body>
     </file>
 </xliff>

@@ -159,7 +159,7 @@
 
             <trans-unit id="chameleon_system_media_manager.list.tags_autocomplete_error">
                 <source>chameleon_system_media_manager.list.tags_autocomplete_error</source>
-                <target>Es ein Fehler beim erstellen der Ergebnisse aufgetreten.</target>
+                <target>Es ist ein Fehler beim Erstellen der Ergebnisliste aufgetreten.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_media_manager.list.delete_with_usage_search">
@@ -239,12 +239,12 @@
 
             <trans-unit id="chameleon_system_media_manager.list_actions.edit">
                 <source>chameleon_system_media_manager.list_actions.edit</source>
-                <target>Ansehen/Bearbeiten</target>
+                <target>Ansehen/bearbeiten</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_media_manager.list_actions.select">
                 <source>chameleon_system_media_manager.list_actions.select</source>
-                <target>Auswählen/Zuweisen</target>
+                <target>Auswählen/zuweisen</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_media_manager.permission_denied">

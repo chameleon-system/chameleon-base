@@ -8,7 +8,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_csv2sql.msg.import_completed">
                 <source>chameleon_system_csv2sql.msg.import_completed</source>
-                <target>Imports completed</target>
+                <target>Import completed</target>
             </trans-unit>
             <trans-unit id="chameleon_system_csv2sql.error.validation_errors">
                 <source>chameleon_system_csv2sql.error.validation_errors</source>

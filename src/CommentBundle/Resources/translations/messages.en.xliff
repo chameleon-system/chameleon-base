@@ -48,7 +48,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_comment.error.login_required">
                 <source>chameleon_system_comment.error.login_required</source>
-                <target>You have to be logged in to write a comment. Please proceed to %linkloginstart%login%linkloginend%.</target>
+                <target>You need to be logged in to write a comment. Please proceed to %linkloginstart%login%linkloginend%.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_comment.url.id_page">
                 <source>chameleon_system_comment.url.id_page</source>
