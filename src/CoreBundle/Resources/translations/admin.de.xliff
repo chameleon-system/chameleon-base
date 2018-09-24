@@ -561,10 +561,12 @@
             <trans-unit id="chameleon_system_core.field_options.option_value_true">
                 <source>chameleon_system_core.field_options.option_value_true</source>
                 <target>Ja</target>
+                <note>@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_options.option_value_false">
                 <source>chameleon_system_core.field_options.option_value_false</source>
                 <target>Nein</target>
+                <note>@deprecated since 6.2.0 - no longer used.</note>                
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.field_page_tree_node.primary_node">
