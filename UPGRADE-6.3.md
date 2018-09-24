@@ -64,7 +64,8 @@ None.
 
 ## Translations
 
-None.
+- chameleon_system_core.field_options.option_value_true
+- chameleon_system_core.field_options.option_value_false
 
 ## Database Tables
 
