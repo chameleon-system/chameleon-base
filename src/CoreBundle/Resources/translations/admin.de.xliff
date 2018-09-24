@@ -558,6 +558,14 @@
                 <source>chameleon_system_core.field_options.select_nothing</source>
                 <target>keine Auswahl</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.field_options.option_value_true">
+                <source>chameleon_system_core.field_options.option_value_true</source>
+                <target>Ja</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_options.option_value_false">
+                <source>chameleon_system_core.field_options.option_value_false</source>
+                <target>Nein</target>
+            </trans-unit>
 
             <trans-unit id="chameleon_system_core.field_page_tree_node.primary_node">
                 <source>chameleon_system_core.field_page_tree_node.primary_node</source>
