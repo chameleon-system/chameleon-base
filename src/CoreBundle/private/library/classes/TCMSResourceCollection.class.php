@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ResourceCollectionJavaScriptCollectedEvent;
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -75,10 +76,8 @@ class TCMSResourceCollection
             if (false === stripos($sPageContent, '</head>')) {
                 return $sPageContent;
             }
-            $refreshPrefix = ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix');
-            // find css
-            // <link href="/static/css/reset.css" ...  -> make sure to exclude print media="print"
-            $sReworkContent = $sPageContent;
+            $filesPrefix = $this->getFilesRefreshAndDomainPrefix();
+
             // we only work on the <head></head> content - everything else is kept as is
             $aPageParts = explode('</head>', $sPageContent);
             if (count($aPageParts) < 2) {
@@ -99,7 +98,7 @@ class TCMSResourceCollection
                 $matchString = "/<link([^>]+?)href=[\"]([^'\"]+?).css([\?][^[:space:]]+)?[\"]([^>]*?)>(?!\\s*?<!--(.*?)#GLOBALRESOURCECOLLECTION#)/i";
                 $sReworkContent = preg_replace_callback($matchString, array($this, 'CollectExternalResourcesCSSCallback'), $sReworkContent);
                 $aCSS = $this->StaticContentCollector('css');
-                $sFileCSSMD5 = $refreshPrefix.'.css.'.md5(implode(';', $aCSS)).'.css';
+                $sFileCSSMD5 = $filesPrefix.'.css.'.md5(implode(';', $aCSS)).'.css';
                 if (false === $this->CreateCSSResourceCollectionFile($sFileCSSMD5, $aCSS)) {
                     $sFileCSSMD5 = ''; // reset file because we don`t have includes
                 }
@@ -108,7 +107,7 @@ class TCMSResourceCollection
                 $matchString = "/<link([^>]+?)href=[\"]([^'\"]+?).css([\?][^[:space:]]+)?[\"]([^>]*?)>\\s*(<!--.*?#GLOBALRESOURCECOLLECTION#.?-->)/i";
                 $sReworkContent = preg_replace_callback($matchString, array($this, 'CollectExternalResourcesCSSCallback'), $sReworkContent);
                 $aGlobalCSS = $this->StaticContentCollector('cssglobal');
-                $sFileCSSGlobalMD5 = $refreshPrefix.'.global_css.'.md5(implode(';', $aGlobalCSS)).'.css';
+                $sFileCSSGlobalMD5 = $filesPrefix.'.global_css.'.md5(implode(';', $aGlobalCSS)).'.css';
                 if (false === $this->CreateCSSResourceCollectionFile($sFileCSSGlobalMD5, $aGlobalCSS)) {
                     $sFileCSSGlobalMD5 = ''; // reset global file because we don`t have global includes
                 }
@@ -123,7 +122,7 @@ class TCMSResourceCollection
                 } else {
                     $sMinifyStatus = 'false';
                 }
-                $sFileJSMD5 = $refreshPrefix.'.js.'.md5(implode(';', $aJS).$sMinifyStatus).'.js';
+                $sFileJSMD5 = $filesPrefix.'.js.'.md5(implode(';', $aJS).$sMinifyStatus).'.js';
                 if (false === $this->CreateJSResourceCollectionFile($sFileJSMD5, $aJS)) {
                     $sFileJSMD5 = ''; // reset file because we don`t have includes
                 }
@@ -131,7 +130,7 @@ class TCMSResourceCollection
                 $matchString = "/<script([^>]+?)src=[\"]([^'\"]+?).js([\?][^[:space:]]+)?[\"]([^>]*?)><\/script>\\s*(<!--.*?#GLOBALRESOURCECOLLECTION#.?-->)/i";
                 $sReworkContent = preg_replace_callback($matchString, array($this, 'CollectExternalResourcesJSCallback'), $sReworkContent);
                 $aJSGlobal = $this->StaticContentCollector('jsglobal');
-                $sFileJSGlobalMD5 = $refreshPrefix.'.global_js.'.md5(implode(';', $aJSGlobal).$sMinifyStatus).'.js';
+                $sFileJSGlobalMD5 = $filesPrefix.'.global_js.'.md5(implode(';', $aJSGlobal).$sMinifyStatus).'.js';
                 if (false === $this->CreateJSResourceCollectionFile($sFileJSGlobalMD5, $aJSGlobal)) {
                     $sFileJSGlobalMD5 = ''; // reset global file because we don`t have global includes
                 }
@@ -146,6 +145,23 @@ class TCMSResourceCollection
         }
 
         return $sPageContent;
+    }
+
+    private function getFilesRefreshAndDomainPrefix(): string
+    {
+        $filesPrefix = ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix');
+
+        /**
+         * @var $portalDomainService PortalDomainServiceInterface
+         */
+        $portalDomainService = ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        $portal = $portalDomainService->getActivePortal();
+
+        if (null !== $portal) {
+            $filesPrefix .= $portal->getFileSuffix();
+        }
+
+        return $filesPrefix;
     }
 
     /**
