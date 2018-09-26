@@ -1585,6 +1585,7 @@ class TCMSLogChange
      * @param string $sClassName
      *
      * @throws ErrorException
+     * @throws DBALException
      */
     public static function deleteVirtualNonDbExtension($iLine, $sEntryPoint, $sClassName)
     {
@@ -1597,9 +1598,10 @@ class TCMSLogChange
             throw new ErrorException("unable to find virtual extension {$sClassName} for {$sEntryPoint} (called from the running update in line {$iLine})", 0, E_USER_ERROR, __FILE__, __LINE__);
         }
 
-        $tableEditorManager = TTools::GetTableEditorManager($oExtension->table, $oExtension->id);
-        $tableEditorManager->AllowDeleteByAll(true);
-        $tableEditorManager->Delete($oExtension->id);
+        $connection = self::getDatabaseConnection();
+
+        $query = 'DELETE FROM '.$connection->quoteIdentifier($oExtension->table).' WHERE id = '.$connection->quote($oExtension->id);
+        $connection->executeQuery($query);
 
         $oManager->UpdateVirtualClasses();
     }
