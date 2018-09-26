@@ -28,11 +28,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_comment.action.show_all">
                 <source>chameleon_system_comment.action.show_all</source>
-                <target>Alle Kommentare Anzeigen</target>
+                <target>Alle Kommentare anzeigen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_comment.action.show_fewer">
                 <source>chameleon_system_comment.action.show_fewer</source>
-                <target>Weniger Kommentare Anzeigen</target>
+                <target>Weniger Kommentare anzeigen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_comment.action.edit">
                 <source>chameleon_system_comment.action.edit</source>
@@ -66,8 +66,6 @@
                 <source>chameleon_system_comment.text.comment_number</source>
                 <target>Kommentar #%number%</target>
             </trans-unit>
-
-
         </body>
     </file>
 </xliff>

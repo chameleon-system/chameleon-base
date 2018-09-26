@@ -8,15 +8,15 @@
             </trans-unit>
             <trans-unit id="chameleon_system_csv2sql.msg.import_completed">
                 <source>chameleon_system_csv2sql.msg.import_completed</source>
-                <target>Imports wurden durchgeführt</target>
+                <target>Import wurde durchgeführt</target>
             </trans-unit>
             <trans-unit id="chameleon_system_csv2sql.error.validation_errors">
                 <source>chameleon_system_csv2sql.error.validation_errors</source>
-                <target>Validierungs Fehler</target>
+                <target>Validierungsfehler</target>
             </trans-unit>
             <trans-unit id="chameleon_system_csv2sql.error.import_errors">
                 <source>chameleon_system_csv2sql.error.import_errors</source>
-                <target>Import Fehler</target>
+                <target>Import-Fehler</target>
             </trans-unit>
 
 

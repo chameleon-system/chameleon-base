@@ -20,7 +20,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_newsletter.field_campaign_stats.queue_processing">
                 <source>chameleon_system_newsletter.field_campaign_stats.queue_processing</source>
-                <target>Status: Newsletterversand noch in bearbeitung</target>
+                <target>Status: Newsletterversand noch in Bearbeitung</target>
             </trans-unit>
             <trans-unit id="chameleon_system_newsletter.field_campaign_stats.already_sent">
                 <source>chameleon_system_newsletter.field_campaign_stats.already_sent</source>
@@ -47,10 +47,8 @@
             </trans-unit>
             <trans-unit id="chameleon_system_newsletter.action.clear_queue">
                 <source>chameleon_system_newsletter.action.clear_queue</source>
-                <target>Warteschlangen Einträge löschen</target>
+                <target>Warteschlangen-Einträge löschen</target>
             </trans-unit>
-
-
         </body>
     </file>
 </xliff>

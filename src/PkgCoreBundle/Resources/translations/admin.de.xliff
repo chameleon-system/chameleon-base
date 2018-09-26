@@ -13,11 +13,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_login.error_invalid_login_data">
                 <source>chameleon_system_core.cms_module_login.error_invalid_login_data</source>
-                <target>Benutzer oder Passwort falsch. Bitte überprüfen Sie Ihre Eingabe.</target>
+                <target>Benutzername oder Passwort falsch. Bitte überprüfen Sie Ihre Eingabe.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_login.error_reset_login_data">
                 <source>chameleon_system_core.cms_module_login.error_reset_login_data</source>
-                <target>Ihre Zugangsdaten wurden aus Sicherheitsgründen zurückgesetzt. Bitte kontaktieren Sie den Administrator des Systems um ein neues Passwort zu erhalten.</target>
+                <target>Ihre Zugangsdaten wurden aus Sicherheitsgründen zurückgesetzt. Bitte kontaktieren Sie den Administrator des Systems, um ein neues Passwort zu erhalten.</target>
             </trans-unit>
 
         </body>

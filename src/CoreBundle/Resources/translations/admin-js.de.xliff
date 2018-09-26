@@ -210,7 +210,7 @@
 
             <trans-unit id="chameleon_system_core.js.ajax_error">
                 <source>chameleon_system_core.js.ajax_error</source>
-                <target>Fehler! Ajax Antwort:\n%s1</target>
+                <target>Fehler! Ajax-Antwort:\n%s1</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.missing_node">
@@ -220,7 +220,7 @@
 
             <trans-unit id="chameleon_system_core.js.prompt_order_confirm_target_mail">
                 <source>chameleon_system_core.js.prompt_order_confirm_target_mail</source>
-                <target>Bitte geben Sie die E-Mail Adresse ein, an die die Bestätigungsmail gesendet werden soll.</target>
+                <target>Bitte geben Sie die E-Mail-Adresse ein, an die die Bestätigungs-E-Mail gesendet werden soll.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.confirm_delete">
@@ -230,7 +230,7 @@
 
             <trans-unit id="chameleon_system_core.js.confirm_multi_delete">
                 <source>chameleon_system_core.js.confirm_multi_delete</source>
-                <target>Wollen Sie ALLE MARKIERTEN Einträge löschen?</target>
+                <target>Möchten Sie ALLE MARKIERTEN Einträge löschen?</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.error_no_selection">
@@ -240,32 +240,32 @@
 
             <trans-unit id="chameleon_system_core.js.error_portal_required">
                 <source>chameleon_system_core.js.error_portal_required</source>
-                <target>Sie müssen erst ein Portal wählen.</target>
+                <target>Bitte wählen Sie zuerst ein Portal aus.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.change_position">
                 <source>chameleon_system_core.js.change_position</source>
-                <target>Position ändern/Sortieren</target>
+                <target>Position ändern/sortieren</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.msg_published">
                 <source>chameleon_system_core.js.msg_published</source>
-                <target>Änderungen wurden erfolgreich veröffentlicht!</target>
+                <target>Änderungen wurden erfolgreich veröffentlicht.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.error_publish">
                 <source>chameleon_system_core.js.error_publish</source>
-                <target>Fehler beim Veröffentlichen!</target>
+                <target>Fehler beim Veröffentlichen.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.msg_save_success">
                 <source>chameleon_system_core.js.msg_save_success</source>
-                <target>Speichern war erfolgreich!</target>
+                <target>Speichern war erfolgreich.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.error_save">
                 <source>chameleon_system_core.js.error_save</source>
-                <target>Fehler beim Speichern!</target>
+                <target>Fehler beim Speichern.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.nothing_assigned">
@@ -275,7 +275,7 @@
 
             <trans-unit id="chameleon_system_core.js.url_preview">
                 <source>chameleon_system_core.js.url_preview</source>
-                <target>URL Vorschau</target>
+                <target>URL-Vorschau</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.unnamed">
@@ -300,7 +300,7 @@
 
             <trans-unit id="chameleon_system_core.js.created_update_package">
                 <source>chameleon_system_core.js.created_update_package</source>
-                <target><![CDATA[Update Paket erfolgreich angelegt<br />: <a href="%s1">%s2</a><br>info: <a href="%s3">%s4</a>]]></target>
+                <target><![CDATA[Update-Paket erfolgreich angelegt<br />: <a href="%s1">%s2</a><br>info: <a href="%s3">%s4</a>]]></target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.media_upload">
@@ -310,7 +310,7 @@
 
             <trans-unit id="chameleon_system_core.js.media_delete">
                 <source>chameleon_system_core.js.media_delete</source>
-                <target>Medien-Datei löschen</target>
+                <target>Mediendatei löschen</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.confirm_module_content_delete">
@@ -340,7 +340,7 @@
 
             <trans-unit id="chameleon_system_core.js.confirm_page_delete">
                 <source>chameleon_system_core.js.confirm_page_delete</source>
-                <target>Sind Sie sicher, dass Sie die Seite mit allen Modul Inhalten löschen möchten?\\nMöchten Sie Modul Inhalte erhalten, so müssen sie die entsprechenden Modul Steckplätze vorher zurücksetzen.</target>
+                <target>Sind Sie sicher, dass Sie die Seite mit allen Modulinhalten löschen möchten?\\nMöchten Sie Modulinhalte erhalten, so müssen Sie die entsprechenden Modul-Steckplätze vorher zurücksetzen.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.delete_document">
@@ -365,7 +365,7 @@
 
             <trans-unit id="chameleon_system_core.table_editor.has_no_usages">
                 <source>chameleon_system_core.table_editor.has_no_usages</source>
-                <target>Keine Verwendungstelle gefunden.</target>
+                <target>Keine Verwendungsstelle gefunden.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor.usages">
                 <source>chameleon_system_core.table_editor.usages</source>

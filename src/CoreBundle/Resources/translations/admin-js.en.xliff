@@ -230,7 +230,7 @@
 
             <trans-unit id="chameleon_system_core.js.confirm_multi_delete">
                 <source>chameleon_system_core.js.confirm_multi_delete</source>
-                <target>You really want to delete ALL SELECTED entries?</target>
+                <target>Do you really want to delete ALL SELECTED entries?</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.error_no_selection">
@@ -275,7 +275,7 @@
 
             <trans-unit id="chameleon_system_core.js.url_preview">
                 <source>chameleon_system_core.js.url_preview</source>
-                <target>URL Preview</target>
+                <target>URL preview</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.unnamed">
@@ -305,7 +305,7 @@
 
             <trans-unit id="chameleon_system_core.js.media_upload">
                 <source>chameleon_system_core.js.media_upload</source>
-                <target>Upload Media</target>
+                <target>Upload media</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.media_delete">
@@ -320,7 +320,7 @@
 
             <trans-unit id="chameleon_system_core.js.permission_error_with_logout">
                 <source>chameleon_system_core.js.permission_error_with_logout</source>
-                <target>You tried to perform an action or access an entry to which you do not have sufficient permission. You have been logged out as a security precaution.\n Do you want to be redirected to the login page?</target>
+                <target>You tried to perform an action or access an entry for which you do not have sufficient permission. You have been logged out as a security precaution.\n Do you want to be redirected to the login page?</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.error">
@@ -340,7 +340,7 @@
 
             <trans-unit id="chameleon_system_core.js.confirm_page_delete">
                 <source>chameleon_system_core.js.confirm_page_delete</source>
-                <target>Are you sure you want to delete the page including all module content?\nIf you want to keep module content you need to reset the module spots before deleting the page.</target>
+                <target>Are you sure you want to delete the page including all module content?\nTo keep module contents, reset the module spots before deleting the page.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.delete_document">
@@ -350,7 +350,7 @@
 
             <trans-unit id="chameleon_system_core.js.show_all">
                 <source>chameleon_system_core.js.show_all</source>
-                <target>Show All Items</target>
+                <target>Show all items</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.wrong_domain">
@@ -360,7 +360,7 @@
 
             <trans-unit id="chameleon_system_core.js.not_found">
                 <source>chameleon_system_core.js.not_found</source>
-                <target>didn\'t match any item</target>
+                <target>didn\'t match any items</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.table_editor.has_no_usages">

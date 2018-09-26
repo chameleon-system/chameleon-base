@@ -46,7 +46,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.error.missing_required_fields">
                 <source>chameleon_system_core.error.missing_required_fields</source>
-                <target>Please fill out all required fields!</target>
+                <target>Please fill out all required fields.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_shop_service_item_giftcard.form.apply_to_all">
@@ -81,7 +81,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_search.no_results">
                 <source>chameleon_system_core.module_search.no_results</source>
-                <target>We're sorry - There is no content matching your search</target>
+                <target>There is no content matching your search</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_search.search_box_headline">
                 <source>chameleon_system_core.module_search.search_box_headline</source>
@@ -114,19 +114,19 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.to_name">
                 <source>chameleon_system_core.module_send_a_friend.to_name</source>
-                <target>Receiver name</target>
+                <target>Recipient name</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.error_missing_to_name">
                 <source>chameleon_system_core.module_send_a_friend.error_missing_to_name</source>
-                <target>Please enter a receiver name</target>
+                <target>Please enter a recipient name</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.to_email">
                 <source>chameleon_system_core.module_send_a_friend.to_email</source>
-                <target>Receiver email address</target>
+                <target>Recipient email address</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.error_missing_to_email">
                 <source>chameleon_system_core.module_send_a_friend.error_missing_to_email</source>
-                <target>Please enter a receiver email address</target>
+                <target>Please enter a recipient email address</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.message">
                 <source>chameleon_system_core.module_send_a_friend.message</source>
@@ -147,7 +147,7 @@
             <trans-unit id="chameleon_system_core.module_send_a_friend.mail_intro">
                 <source>chameleon_system_core.module_send_a_friend.mail_intro</source>
                 <target>Hello %name%,
-%username% send you a link that may be interesting for you:</target>
+%username% sent you a link that may be interesting for you:</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.mail_message_from">
                 <source>chameleon_system_core.module_send_a_friend.mail_message_from</source>
@@ -214,7 +214,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_feedback.mailer_error">
                 <source>chameleon_system_core.module_feedback.mailer_error</source>
-                <target>Your email could not be sent. Please try again.</target>
+                <target>Email could not be sent. Please try again.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.template_tool.hide_dynamic_box">
