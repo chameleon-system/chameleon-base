@@ -1604,7 +1604,7 @@ class TCMSLogChange
         try {
             $connection->executeQuery($query);
         } catch (DBALException $e) {
-            throw new ErrorException($e->getMessage(), 0 , $e);
+            throw new ErrorException($e->getMessage(), 0, $e);
         }
 
         $oManager->UpdateVirtualClasses();
