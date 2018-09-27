@@ -1599,10 +1599,12 @@ class TCMSLogChange
 
         $connection = self::getDatabaseConnection();
 
-        $query = 'DELETE FROM '.$connection->quoteIdentifier($oExtension->table).' WHERE id = '.$connection->quote($oExtension->id);
+        $query = 'DELETE FROM '.$connection->quoteIdentifier($oExtension->table).' WHERE id = ?';
 
         try {
-            $connection->executeQuery($query);
+            $connection->executeQuery($query, [
+                $oExtension->id,
+            ]);
         } catch (DBALException $e) {
             throw new ErrorException($e->getMessage(), 0, $e);
         }
