@@ -1597,9 +1597,17 @@ class TCMSLogChange
             throw new ErrorException("unable to find virtual extension {$sClassName} for {$sEntryPoint} (called from the running update in line {$iLine})", 0, E_USER_ERROR, __FILE__, __LINE__);
         }
 
-        $tableEditorManager = TTools::GetTableEditorManager($oExtension->table, $oExtension->id);
-        $tableEditorManager->AllowDeleteByAll(true);
-        $tableEditorManager->Delete($oExtension->id);
+        $connection = self::getDatabaseConnection();
+
+        $query = 'DELETE FROM '.$connection->quoteIdentifier($oExtension->table).' WHERE id = ?';
+
+        try {
+            $connection->executeQuery($query, [
+                $oExtension->id,
+            ]);
+        } catch (DBALException $e) {
+            throw new ErrorException($e->getMessage(), 0, $e);
+        }
 
         $oManager->UpdateVirtualClasses();
     }
