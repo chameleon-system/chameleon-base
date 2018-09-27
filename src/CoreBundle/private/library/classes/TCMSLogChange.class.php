@@ -1585,7 +1585,6 @@ class TCMSLogChange
      * @param string $sClassName
      *
      * @throws ErrorException
-     * @throws DBALException
      */
     public static function deleteVirtualNonDbExtension($iLine, $sEntryPoint, $sClassName)
     {
@@ -1601,7 +1600,12 @@ class TCMSLogChange
         $connection = self::getDatabaseConnection();
 
         $query = 'DELETE FROM '.$connection->quoteIdentifier($oExtension->table).' WHERE id = '.$connection->quote($oExtension->id);
-        $connection->executeQuery($query);
+
+        try {
+            $connection->executeQuery($query);
+        } catch (DBALException $e) {
+            throw new ErrorException($e->getMessage(), 0 , $e);
+        }
 
         $oManager->UpdateVirtualClasses();
     }
