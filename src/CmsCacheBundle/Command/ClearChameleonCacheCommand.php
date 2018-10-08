@@ -28,7 +28,7 @@ class ClearChameleonCacheCommand extends Command
      * @param CacheInterface $cache
      * @param null|string    $name
      *
-     *  @throws LogicException When the command name is empty
+     * @throws LogicException When the command name is empty
      */
     public function __construct(CacheInterface $cache, $name = null)
     {
