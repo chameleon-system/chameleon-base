@@ -43,7 +43,7 @@ class ClearChameleonCacheCommand extends Command
     protected function configure()
     {
         $this->setName('chameleon_system:cache:clear')
-            ->setDescription('Clears the chameleon cache.');
+            ->setDescription('Clears the Chameleon cache.');
     }
 
     /**
