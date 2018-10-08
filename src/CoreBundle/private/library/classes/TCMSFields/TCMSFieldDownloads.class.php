@@ -153,6 +153,15 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getConnectedTableNameFromDefinition(): ?string
+    {
+        return $this->GetForeignTableName();
+    }
+
+
+    /**
      * Get an array of either posted data or data from db if nothings has been posted.
      *
      * @return array
