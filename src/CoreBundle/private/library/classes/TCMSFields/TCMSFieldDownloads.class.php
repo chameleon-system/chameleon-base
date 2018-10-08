@@ -111,61 +111,18 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
     }
 
     /**
-     * removes any related tables (like mlt tables). the function will be called
-     * from the outside whenever there is a change of type FROM this type of field.
+     * {@inheritdoc}
      */
-    public function DeleteRelatedTables()
+    public function GetMLTTableName($aFieldData = [])
     {
-        $tableName = $this->GetMLTTableName();
-        $query = 'DROP TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($tableName).'`';
-        MySqlLegacySupport::getInstance()->query($query);
+        $name = $aFieldData['name'] ?? $this->name;
 
-        $aQuery = array(new LogChangeDataModel($query));
-        TCMSLogChange::WriteTransaction($aQuery);
-    }
-
-    /**
-     * creates any related tables (like mlt tables). the function will be called
-     * from the outside whenever there is a change of type TO this type of field.
-     */
-    public function CreateRelatedTables($returnDDL = false)
-    {
-        $sql = '';
-        $tableName = $this->GetMLTTableName();
-        if (!TGlobal::TableExists($tableName)) {
-            $query = 'CREATE TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($tableName)."` (
-                  `source_id` CHAR( 36 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
-                  `target_id` CHAR( 36 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
-                  `entry_sort` int(11) NOT NULL default '0',
-                  PRIMARY KEY ( `source_id` , `target_id` ),
-                  INDEX (target_id),
-                  INDEX (entry_sort)
-                )";
-
-            if (!$returnDDL) {
-                MySqlLegacySupport::getInstance()->query($query);
-                $aQuery = array(new LogChangeDataModel($query));
-
-                TCMSLogChange::WriteTransaction($aQuery);
-            } else {
-                $sql .= $query.";\n";
-            }
-        }
-        if ($returnDDL) {
-            return $sql;
-        }
+        return parent::GetMLTTableName(['name' => $name]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function GetMLTTableName($aFieldData = [])
-    {
-        $name = $aFieldData['name'] ?? $this->name; 
-        
-        return $this->sTableName.'_'.$name.'_cms_document_mlt';
-    }
-
     public function GetForeignTableName()
     {
         return 'cms_document';
@@ -174,9 +131,17 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
     /**
      * {@inheritdoc}
      */
+    protected function GetConnectedTableNameFromFieldConfig($aFieldSQLData, $sParameterKey = 'connectedTableName')
+    {
+        return $this->GetForeignTableName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function GetConnectedTableName($bExistingCount = true)
     {
-        return $this->GetMLTTableName();
+        return $this->GetForeignTableName();
     }
 
     /**
@@ -184,46 +149,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
      */
     protected function GetConnectedTableNameFromSQLData($aNewFieldData)
     {
-        return $this->GetMLTTableName($aNewFieldData);
-    }
-
-    /**
-     * overwrite to delete the related download mlt table.
-     */
-    public function DeleteFieldDefinition()
-    {
-        $this->DeleteRelatedTables();
-        parent::DeleteFieldDefinition();
-    }
-
-    /**
-     * renders the read only view of the field.
-     *
-     * @return string
-     */
-    public function GetReadOnly()
-    {
-        $this->oTableConf = &$this->oTableRow->GetTableConf();
-        $html = $this->GetAttachedDocumentListAsHTML(true);
-
-        return $html;
-    }
-
-    /**
-     * returns true if field data is not empty
-     * overwrite this method for mlt and property fields.
-     *
-     * @return bool
-     */
-    public function HasContent()
-    {
-        $bHasContent = false;
-        $oDownloads = $this->oTableRow->GetDownloads($this->name);
-        if ($oDownloads->Length() > 0) {
-            $bHasContent = true;
-        }
-
-        return $bHasContent;
+        return $this->GetForeignTableName();
     }
 
     /**
@@ -279,7 +205,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
      */
     protected function GetForeignTableNameFrontend()
     {
-        return 'cms_document';
+        return $this->GetForeignTableName();
     }
 
     /**
@@ -523,16 +449,6 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
         $aAdditionalViewData['aRecordsConnected'] = $this->GetRecordsConnectedArrayFrontend();
 
         return $aAdditionalViewData;
-    }
-
-    public function FetchMLTRecords()
-    {
-        $foreignTableName = $this->GetForeignTableName();
-        $sFilterQuery = $this->GetMLTFilterQuery();
-        /** @var $oMLTRecords TCMSRecordList */
-        $oMLTRecords = call_user_func(array(TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List', 'GetList'), $sFilterQuery);
-
-        return $oMLTRecords;
     }
 
     /**
