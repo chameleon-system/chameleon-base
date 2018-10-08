@@ -55,5 +55,10 @@
         <service id="chameleon_system_cms_cache.storage.null" class="esono\pkgCmsCache\storage\NullStorage">
         </service>
 
+        <service id="chameleon_system_cms_cache.clear_chameleon_cache_command" class="ChameleonSystem\CmsCacheBundle\Command\ClearChameleonCacheCommand">
+            <argument type="service" id="chameleon_system_cms_cache.cache"/>
+            <tag name="console.command"/>
+        </service>
+
     </services>
 </container>
