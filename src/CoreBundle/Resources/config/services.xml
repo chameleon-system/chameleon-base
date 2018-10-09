@@ -792,5 +792,10 @@
             <argument type="service" id="database_connection"/>
         </service>
 
+        <service id="chameleon_system_core.command.activate_maintenance_mode" class="ChameleonSystem\CoreBundle\Command\ActivateMaintenanceModeCommand">
+            <argument type="service" id="chameleon_system_core.maintenance_mode_service"/>
+            <tag name="console.command"/>
+        </service>
+
     </services>
 </container>

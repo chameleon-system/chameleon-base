@@ -2,7 +2,9 @@
 
 namespace ChameleonSystem\CoreBundle\Service;
 
+use ChameleonSystem\CoreBundle\Exception\MaintenanceModeErrorException;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class MaintenanceModeService implements MaintenanceModeServiceInterface
 {
@@ -34,17 +36,33 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
 
     public function activate(): void
     {
-        $this->connection->executeUpdate("UPDATE `cms_config` SET `shutdown_websites` = '1'");
+        try {
+            $this->connection->executeUpdate("UPDATE `cms_config` SET `shutdown_websites` = '1'");
+        } catch (DBALException $exception) {
+            throw new MaintenanceModeErrorException('Cannot save maintenance mode flag in database', 0, $exception);
+        }
         
-        touch(PATH_MAINTENANCE_MODE_MARKER);
+        $fileSuccess = touch(PATH_MAINTENANCE_MODE_MARKER);
+
+        if (false === $fileSuccess) {
+            throw new MaintenanceModeErrorException('Cannot save maintenance mode flag in file system');
+        }
     }
 
     public function deactivate(): void
     {
-        if (file_exists(PATH_MAINTENANCE_MODE_MARKER)) {
-            unlink(PATH_MAINTENANCE_MODE_MARKER);
+        if (true === file_exists(PATH_MAINTENANCE_MODE_MARKER)) {
+            $fileSuccess = unlink(PATH_MAINTENANCE_MODE_MARKER);
+
+            if (false === $fileSuccess) {
+                throw new MaintenanceModeErrorException('Cannot delete maintenance mode flag in file system');
+            }
         }
 
-        $this->connection->executeUpdate("UPDATE `cms_config` SET `shutdown_websites` = '0'");
+        try {
+            $this->connection->executeUpdate("UPDATE `cms_config` SET `shutdown_websites` = '0'");
+        } catch (DBALException $exception) {
+            throw new MaintenanceModeErrorException('Cannot reset maintenance mode flag in database', 0, $exception);
+        }
     }
 }

@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Exception\MaintenanceModeErrorException;
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\MaintenanceModeServiceInterface;
+
 class TCMSTableEditorCMSConfig extends TCMSTableEditor
 {
     /**
@@ -65,16 +69,34 @@ class TCMSTableEditorCMSConfig extends TCMSTableEditor
     protected function PostSaveHook(&$oFields, &$oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
+
         /**
-         * @var TdbCmsConfig $config
+         * @var $maintenanceModeService MaintenanceModeServiceInterface
          */
-        $config = $this->oTable;
-        if ($config->fieldShutdownWebsites) {
-            touch(PATH_MAINTENANCE_MODE_MARKER);
-        } else {
-            if (file_exists(PATH_MAINTENANCE_MODE_MARKER)) {
-                unlink(PATH_MAINTENANCE_MODE_MARKER);
+        $maintenanceModeService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.maintenance_mode_service');
+
+        /**
+         * @var TdbCmsConfig $newConfig
+         */
+        $newConfig = $this->oTable;
+
+        try {
+            if ($newConfig->fieldShutdownWebsites) {
+                $maintenanceModeService->activate();
+            } else {
+                $maintenanceModeService->deactivate();
             }
+        } catch (MaintenanceModeErrorException $exception) {
+            /**
+             * @var $flashMessageService FlashMessageServiceInterface
+             */
+            $flashMessageService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
+
+            $flashMessageService->addMessage(
+                \TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
+                'TABLEEDITOR_CMS_CONFIG_MAINTENANCE_ERROR',
+                ['exceptionMessage' => $exception->getMessage()]
+            );
         }
     }
 }
