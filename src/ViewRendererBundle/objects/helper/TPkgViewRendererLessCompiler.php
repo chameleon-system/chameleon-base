@@ -20,13 +20,23 @@ use ViewRenderException;
 class TPkgViewRendererLessCompiler
 {
     /**
+     * @var string
+     */
+    private $dir;
+
+    public function __construct(string $dir)
+    {
+        $this->dir = $dir;
+    }
+
+    /**
      * local path to less directory - this is where the chameleon_?.css files live.
      *
      * @return string
      */
     public function getLocalPathToCompiledLess()
     {
-        return PATH_USER_CMS_PUBLIC.'/outbox/static/less';
+        return $this->dir;
     }
 
     /**
