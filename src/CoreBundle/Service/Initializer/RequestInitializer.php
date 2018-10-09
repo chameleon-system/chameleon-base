@@ -11,32 +11,20 @@
 
 namespace ChameleonSystem\CoreBundle\Service\Initializer;
 
-use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Session\ChameleonSessionManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use TGlobal;
 use TTools;
 
-/**
- * Class RequestInitializer.
- */
 class RequestInitializer
 {
     /**
      * @var ChameleonSessionManagerInterface
      */
     private $sessionManager;
-    /**
-     * @var RequestInfoServiceInterface $requestInfoService
-     */
-    private $requestInfoService;
 
-    /**
-     * @param RequestInfoServiceInterface $requestInfoService
-     */
-    public function __construct(RequestInfoServiceInterface $requestInfoService)
+    public function __construct()
     {
-        $this->requestInfoService = $requestInfoService;
     }
 
     /**
