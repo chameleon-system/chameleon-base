@@ -41,7 +41,34 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
         } catch (DBALException $exception) {
             throw new MaintenanceModeErrorException('Cannot save maintenance mode flag in database', 0, $exception);
         }
-        
+
+        $this->addMarkerFile();
+    }
+
+    public function deactivate(): void
+    {
+        $this->removeMarkerFile();
+
+        try {
+            $this->connection->executeUpdate("UPDATE `cms_config` SET `shutdown_websites` = '0'");
+        } catch (DBALException $exception) {
+            throw new MaintenanceModeErrorException('Cannot reset maintenance mode flag in database', 0, $exception);
+        }
+    }
+
+    /**
+     * @throws MaintenanceModeErrorException
+     */
+    protected function addMarkerFile(): void
+    {
+        $markerDir = \dirname(PATH_MAINTENANCE_MODE_MARKER);
+
+        if (false === \is_dir($markerDir)) {
+            if (!mkdir($markerDir, 0777, true) && !\is_dir($markerDir)) {
+                throw new MaintenanceModeErrorException('Cannot create maintenance mode flag directory');
+            }
+        }
+
         $fileSuccess = touch(PATH_MAINTENANCE_MODE_MARKER);
 
         if (false === $fileSuccess) {
@@ -49,7 +76,10 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
         }
     }
 
-    public function deactivate(): void
+    /**
+     * @throws MaintenanceModeErrorException
+     */
+    protected function removeMarkerFile(): void
     {
         if (true === file_exists(PATH_MAINTENANCE_MODE_MARKER)) {
             $fileSuccess = unlink(PATH_MAINTENANCE_MODE_MARKER);
@@ -57,12 +87,6 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
             if (false === $fileSuccess) {
                 throw new MaintenanceModeErrorException('Cannot delete maintenance mode flag in file system');
             }
-        }
-
-        try {
-            $this->connection->executeUpdate("UPDATE `cms_config` SET `shutdown_websites` = '0'");
-        } catch (DBALException $exception) {
-            throw new MaintenanceModeErrorException('Cannot reset maintenance mode flag in database', 0, $exception);
         }
     }
 }

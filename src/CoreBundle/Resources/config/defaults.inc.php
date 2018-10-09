@@ -1199,5 +1199,5 @@ if (!defined('CHAMELEON_PKG_NEWSLETTER_NEW_MODULE')) {
  * would then change its name.
  */
 if (!defined('PATH_MAINTENANCE_MODE_MARKER')) {
-    define('PATH_MAINTENANCE_MODE_MARKER', sys_get_temp_dir().'/chameleon-maintenance-mode-'.md5(dirname($_SERVER['SCRIPT_FILENAME'])));
+    define('PATH_MAINTENANCE_MODE_MARKER', PATH_CMS_CUSTOMER_DATA.'/maintenance/chameleon-maintenance-mode-marker');
 }
