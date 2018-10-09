@@ -22,11 +22,11 @@ class TPkgViewRendererLessCompiler
     /**
      * @var string
      */
-    private $cssDir;
+    private $dir;
 
-    public function __construct(string $cssDirRelativeToWebRoot)
+    public function __construct(string $dir)
     {
-        $this->cssDir = '/'.ltrim(rtrim($cssDirRelativeToWebRoot, '/'), '/');
+        $this->dir = $dir;
     }
 
     /**
@@ -36,7 +36,7 @@ class TPkgViewRendererLessCompiler
      */
     public function getLocalPathToCompiledLess()
     {
-        return rtrim(PATH_WEB, '/').$this->cssDir;
+        return $this->dir;
     }
 
     /**
