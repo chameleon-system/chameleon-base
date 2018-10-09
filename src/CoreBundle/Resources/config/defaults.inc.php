@@ -1192,11 +1192,8 @@ if (!defined('CHAMELEON_PKG_NEWSLETTER_NEW_MODULE')) {
 }
 
 /**
- * Path to the file that marks if maintenance mode is active. The current directory's hash is added to
- * distinguish multiple Chameleon instances on a shared host.
- * We use the SCRIPT_FILENAME variable because we do NOT want to resolve symlinks. Otherwise it would not be possible
- * to activate maintenance mode and then perform a deployment using atomic deploys, because the maintenance marker
- * would then change its name.
+ * Path to the file that marks if maintenance mode is active. The default value with "cmsdata" should take care
+ * of multi-server installations.
  */
 if (!defined('PATH_MAINTENANCE_MODE_MARKER')) {
     define('PATH_MAINTENANCE_MODE_MARKER', PATH_CMS_CUSTOMER_DATA.'/maintenance/chameleon-maintenance-mode-marker');
