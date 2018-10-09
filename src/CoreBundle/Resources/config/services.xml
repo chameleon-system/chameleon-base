@@ -788,6 +788,9 @@
             <argument type="service" id="request_stack"/>
         </service>
 
+        <service id="chameleon_system_core.maintenance_mode_service" class="ChameleonSystem\CoreBundle\Service\MaintenanceModeService">
+            <argument type="service" id="database_connection"/>
+        </service>
 
     </services>
 </container>
