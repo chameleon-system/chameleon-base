@@ -147,6 +147,12 @@ class TPkgViewRendererLessCompiler
 
             $lessPortalIdentifier = $portal->getFileSuffix();
 
+            $cachedLessDir = $this->getLocalPathToCachedLess();
+            $dirSuccess = $this->checkAndCreateDir($cachedLessDir);
+            if (false === $dirSuccess) {
+                throw new ViewRenderException(sprintf('Cannot create dir for Less cache %s', $cachedLessDir));
+            }
+
             $options = _DEVELOPMENT_MODE ? array(
                 'sourceMap' => true,
                 'sourceMapWriteTo' => $this->getLocalPathToCompiledLess().'/lessSourceMap_'.$lessPortalIdentifier.'.map',
@@ -154,7 +160,7 @@ class TPkgViewRendererLessCompiler
             ) : array();
 
             $options['import_dirs'] = array(PATH_WEB => '/');
-            $options['cache_dir'] = $this->getLocalPathToCachedLess();
+            $options['cache_dir'] = $cachedLessDir;
             $options['compress'] = $minifyCss;
 
             $filesForLessParsing = array();
@@ -162,7 +168,7 @@ class TPkgViewRendererLessCompiler
                 $filesForLessParsing[PATH_WEB.$lessFile] = '/';
             }
 
-            \Less_Cache::SetCacheDir($options['cache_dir']);
+            \Less_Cache::SetCacheDir($cachedLessDir);
             try {
                 $cssFile = \Less_Cache::Get($filesForLessParsing, $options);
             } catch (Exception $exc) {
@@ -237,11 +243,8 @@ class TPkgViewRendererLessCompiler
     {
         $lessDir = $this->getLocalPathToCompiledLess();
 
-        if (false === \is_dir($lessDir)) {
-            if (!mkdir($lessDir, 0777, true) && !\is_dir($lessDir)) {
-                return false;
-            }
-        }
+        // NOTE this is probably already done in getGeneratedCssForPortal() for the cache of Less itself
+        $this->checkAndCreateDir($lessDir);
 
         $filename = $this->getCompiledCssFilename($portal);
         $targetPath = $lessDir.'/'.$filename;
@@ -266,10 +269,7 @@ class TPkgViewRendererLessCompiler
             'chameleon_system_core.resources.enable_external_resource_collection_minify');
     }
 
-    /**
-     * @throws ViewRenderException
-     */
-    private function createDirectoryIfNeeded(string $dir): bool
+    private function checkAndCreateDir(string $dir): bool
     {
         if (false === \is_dir($dir)) {
             if (false === \mkdir($dir, 0777, true) && false === \is_dir($dir)) {
