@@ -11,12 +11,13 @@
 
 namespace ChameleonSystem\CoreBundle\EventListener;
 
+use ChameleonSystem\CoreBundle\Exception\MaintenanceModeErrorException;
 use ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer;
+use ChameleonSystem\CoreBundle\Service\MaintenanceModeServiceInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
-/**
- * Class InitializeRequestListener.
- */
 class InitializeRequestListener
 {
     /**
@@ -25,11 +26,16 @@ class InitializeRequestListener
     private $requestInitializer;
 
     /**
-     * @param RequestInitializer $requestInitializer
+     * @var MaintenanceModeServiceInterface
      */
-    public function __construct(RequestInitializer $requestInitializer)
-    {
+    private $maintenanceModeService;
+
+    public function __construct(
+        RequestInitializer $requestInitializer,
+        MaintenanceModeServiceInterface $maintenanceModeService
+    ) {
         $this->requestInitializer = $requestInitializer;
+        $this->maintenanceModeService = $maintenanceModeService;
     }
 
     /**
@@ -40,6 +46,41 @@ class InitializeRequestListener
         if (!$event->isMasterRequest()) {
             return;
         }
+
+        $this->recheckMaintenanceMode($event);
+
         $this->requestInitializer->initialize($event->getRequest());
+    }
+
+    private function recheckMaintenanceMode(GetResponseEvent $event): void
+    {
+        try {
+            if (true === $this->maintenanceModeService->isActivatedInDb()) {
+                // TODO should the service handle the clearstatcache?
+                $this->renewMaintenanceMarkerFileCache();
+
+                if (true === $this->maintenanceModeService->isActivated()) {
+                    $this->redirectToCurrentPage($event);
+                }
+            }
+        } catch (MaintenanceModeErrorException $exception) {
+            // TODO what to do here?
+        }
+    }
+
+    private function renewMaintenanceMarkerFileCache(): void
+    {
+        clearstatcache(true, PATH_MAINTENANCE_MODE_MARKER);
+    }
+
+    private function redirectToCurrentPage(GetResponseEvent $event): void
+    {
+        $request = $event->getRequest();
+        if (true === $request->isMethodSafe()) {
+            $event->setResponse(new RedirectResponse($_SERVER['REQUEST_URI']));
+        } else {
+            // Redirect is not meaningful for a POST request:
+            $event->setResponse(new Response('Maintenance mode is now active', Response::HTTP_SERVICE_UNAVAILABLE));
+        }
     }
 }
