@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ChameleonSystem\CoreBundle\Service;
+namespace ChameleonSystem\CoreBundle\MaintenanceMode;
 
 use ChameleonSystem\CoreBundle\Exception\MaintenanceModeErrorException;
 
