@@ -90,12 +90,14 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
      */
     protected function removeMarkerFile(): void
     {
-        if (true === file_exists(PATH_MAINTENANCE_MODE_MARKER)) {
-            $fileSuccess = unlink(PATH_MAINTENANCE_MODE_MARKER);
+        if (false === file_exists(PATH_MAINTENANCE_MODE_MARKER)) {
+            return;
+        }
 
-            if (false === $fileSuccess) {
-                throw new MaintenanceModeErrorException('Cannot delete maintenance mode flag in file system');
-            }
+        $fileSuccess = unlink(PATH_MAINTENANCE_MODE_MARKER);
+
+        if (false === $fileSuccess) {
+            throw new MaintenanceModeErrorException('Cannot delete maintenance mode flag in file system');
         }
     }
 }
