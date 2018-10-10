@@ -1192,8 +1192,13 @@ if (!defined('CHAMELEON_PKG_NEWSLETTER_NEW_MODULE')) {
 }
 
 /**
- * Path to the file that marks if maintenance mode is active. The default value with "cmsdata" should take care
- * of multi-server installations.
+ * Path to the file that marks if maintenance mode is active.
+ *
+ * The following properties should be true for this location:
+ * - It must survive a deploy (if it was present before is should also be afterwards).
+ * - Different Chameleon installations on the same host must be distinguishable here (can be done with an id also with the path).
+ * - The same physical marker should be present for all nodes of a multi-node installation.
+ * The default value with "cmsdata" (if shared between nodes) should take care of these properties.
  */
 if (!defined('PATH_MAINTENANCE_MODE_MARKER')) {
     define('PATH_MAINTENANCE_MODE_MARKER', PATH_CMS_CUSTOMER_DATA.'/maintenance/chameleon-maintenance-mode-marker');
