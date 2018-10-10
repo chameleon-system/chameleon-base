@@ -148,10 +148,7 @@ class TPkgViewRendererLessCompiler
             $lessPortalIdentifier = $portal->getFileSuffix();
 
             $cachedLessDir = $this->getLocalPathToCachedLess();
-            $dirSuccess = $this->checkAndCreateDir($cachedLessDir);
-            if (false === $dirSuccess) {
-                throw new ViewRenderException(sprintf('Cannot create dir for Less cache %s', $cachedLessDir));
-            }
+            $this->createDirectoryIfNeeded($cachedLessDir);
 
             $options = _DEVELOPMENT_MODE ? array(
                 'sourceMap' => true,
@@ -238,13 +235,15 @@ class TPkgViewRendererLessCompiler
      * @param TdbCmsPortal $portal
      *
      * @return bool
+     *
+     * @throws ViewRenderException
      */
     public function writeCssFileForPortal($css, $portal)
     {
         $lessDir = $this->getLocalPathToCompiledLess();
 
         // NOTE this is probably already done in getGeneratedCssForPortal() for the cache of Less itself
-        $this->checkAndCreateDir($lessDir);
+        $this->createDirectoryIfNeeded($lessDir);
 
         $filename = $this->getCompiledCssFilename($portal);
         $targetPath = $lessDir.'/'.$filename;
@@ -269,7 +268,10 @@ class TPkgViewRendererLessCompiler
             'chameleon_system_core.resources.enable_external_resource_collection_minify');
     }
 
-    private function checkAndCreateDir(string $dir): bool
+    /**
+     * @throws ViewRenderException
+     */
+    private function createDirectoryIfNeeded(string $dir): bool
     {
         if (false === \is_dir($dir)) {
             if (false === \mkdir($dir, 0777, true) && false === \is_dir($dir)) {
