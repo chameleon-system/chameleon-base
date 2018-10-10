@@ -235,14 +235,16 @@ class TPkgViewRendererLessCompiler
      * @param TdbCmsPortal $portal
      *
      * @return bool
-     *
-     * @throws ViewRenderException
      */
     public function writeCssFileForPortal($css, $portal)
     {
         $lessDir = $this->getLocalPathToCompiledLess();
 
-        $this->createDirectoryIfNeeded($lessDir);
+        try {
+            $this->createDirectoryIfNeeded($lessDir);
+        } catch (ViewRenderException $exception) {
+            return false;
+        }
 
         $filename = $this->getCompiledCssFilename($portal);
         $targetPath = $lessDir.'/'.$filename;
