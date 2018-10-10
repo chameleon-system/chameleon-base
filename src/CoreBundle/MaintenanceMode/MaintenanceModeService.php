@@ -29,7 +29,7 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
 
     public function isActivated(): bool
     {
-        return file_exists(PATH_MAINTENANCE_MODE_MARKER);
+        return true === file_exists(PATH_MAINTENANCE_MODE_MARKER);
     }
 
     public function isActivatedInDb(): bool
@@ -73,7 +73,7 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
         $markerDir = \dirname(PATH_MAINTENANCE_MODE_MARKER);
 
         if (false === \is_dir($markerDir)) {
-            if (!mkdir($markerDir, 0777, true) && !\is_dir($markerDir)) {
+            if (false === \mkdir($markerDir, 0777, true) && false === \is_dir($markerDir)) {
                 throw new MaintenanceModeErrorException('Cannot create maintenance mode flag directory');
             }
         }
