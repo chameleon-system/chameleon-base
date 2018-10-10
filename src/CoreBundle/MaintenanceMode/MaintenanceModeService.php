@@ -73,7 +73,7 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
     /**
      * @throws MaintenanceModeErrorException
      */
-    protected function createMarkerFile(): void
+    private function createMarkerFile(): void
     {
         $markerDir = \dirname(PATH_MAINTENANCE_MODE_MARKER);
 
@@ -93,7 +93,7 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
     /**
      * @throws MaintenanceModeErrorException
      */
-    protected function removeMarkerFile(): void
+    private function removeMarkerFile(): void
     {
         if (false === file_exists(PATH_MAINTENANCE_MODE_MARKER)) {
             return;
