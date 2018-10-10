@@ -788,6 +788,9 @@
             <argument type="service" id="request_stack"/>
         </service>
 
+        <service id="chameleon_system_core.command.update.count" class="ChameleonSystem\CoreBundle\Command\CountUpdateCommand">
+            <tag name="console.command"/>
+        </service>
 
     </services>
 </container>
