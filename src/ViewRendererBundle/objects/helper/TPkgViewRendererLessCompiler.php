@@ -289,7 +289,7 @@ class TPkgViewRendererLessCompiler
     private function createDirectoryIfNeeded(string $dir): bool
     {
         if (false === \is_dir($dir)) {
-            if (!mkdir($dir, 0777, true) && !\is_dir($dir)) {
+            if (false === \mkdir($dir, 0777, true) && false === \is_dir($dir)) {
                 throw new ViewRenderException(sprintf('Cannot create directory %s', $dir));
             }
         }
