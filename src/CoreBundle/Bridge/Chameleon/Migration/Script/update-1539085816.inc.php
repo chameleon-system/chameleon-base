@@ -5,18 +5,18 @@
 </div>
 <?php
 
-TCMSLogChange::AddFrontEndMessage(
+TCMSLogChange::AddBackEndMessage(
     'TABLEEDITOR_CMS_CONFIG_MAINTENANCE_ERROR',
     "Einstellung für 'Alle Webseiten abschalten' konnte nicht gespeichert werden: [{exceptionMessage}]",
     TCMSLogChange::GetMessageTypeByName('Fehler'),
-    '', '', 'Core', 'standard', 'de'
+    '', 'de'
 );
 
-TCMSLogChange::AddFrontEndMessage(
+TCMSLogChange::AddBackEndMessage(
     'TABLEEDITOR_CMS_CONFIG_MAINTENANCE_ERROR',
     "Setting for 'Turn off all websites' could not be saved: [{exceptionMessage}]",
     TCMSLogChange::GetMessageTypeByName('Fehler'),
-    '', '', 'Core', 'standard', 'en'
+    '', 'en'
 );
 
 
