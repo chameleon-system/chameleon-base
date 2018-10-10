@@ -34,7 +34,11 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
 
     public function isActivatedInDb(): bool
     {
-        $col = $this->connection->fetchColumn("SELECT `shutdown_websites` FROM `cms_config`");
+        try {
+            $col = $this->connection->fetchColumn('SELECT `shutdown_websites` FROM `cms_config`');
+        } catch (DBALException $exception) {
+            throw new MaintenanceModeErrorException('Cannot determine maintenance mode flag from database', 0, $exception);
+        }
 
         if (false === $col) {
             return false;
