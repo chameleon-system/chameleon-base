@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Console command for counting updates that have not been executed yet.
  */
-class UpdateCountCommand extends Command
+class CountUpdateCommand extends Command
 {
     public function __construct($name = null)
     {
@@ -33,6 +33,10 @@ class UpdateCountCommand extends Command
         $this
             ->setDefinition([])
             ->setDescription('Prints the count of all pending updates')
+            ->setHelp(<<<EOF
+The <info>%command.name%</info> command prints the count of all pending updates.
+EOF
+            )
         ;
     }
 
