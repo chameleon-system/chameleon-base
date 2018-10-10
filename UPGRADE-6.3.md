@@ -7,6 +7,13 @@ UPGRADE FROM 6.2 TO 6.3
 
 See the Changed Interfaces and Method Signatures section whether changes in signatures affect the project.
 
+# Changed Features
+
+## TTools::GetModuleLoaderObject Returns New Object
+
+The method `TTools::GetModuleLoaderObject` now returns a new `TModuleLoader` instance instead of the global module
+loader. This instance will therefore only contain the module passed as argument, not all modules on the current page. 
+
 # Changed Interfaces and Method Signatures
 
 This section contains information on interface and method signature changes which affect backwards compatibility (BC).

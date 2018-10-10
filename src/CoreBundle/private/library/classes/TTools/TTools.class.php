@@ -235,7 +235,7 @@ class TTools
     }
 
     /**
-     * fetches Module Loader Object.
+     * Fetches a new module loader instance.
      *
      * @param string $sModule     - class name of the module
      * @param string $sView       - view to use
@@ -246,7 +246,7 @@ class TTools
      */
     public static function &GetModuleLoaderObject($sModule, $sView, $aParameters = array(), $sSpotName = 'tmpmodule')
     {
-        $oModuleLoader = ServiceLocator::get('chameleon_system_core.usermoduleloader');
+        $oModuleLoader = self::getSubModuleLoader();
         $aModuleParameters = array('model' => $sModule, 'view' => $sView);
         $aModuleParameters = array_merge($aModuleParameters, $aParameters);
         $moduleList = array($sSpotName => $aModuleParameters);
@@ -2216,5 +2216,10 @@ class TTools
     private static function getServiceContainer()
     {
         return ServiceLocator::get('service_container');
+    }
+
+    private static function getSubModuleLoader(): TUserModuleLoader
+    {
+        return ServiceLocator::get('chameleon_system_core.subusermoduleloader');
     }
 }
