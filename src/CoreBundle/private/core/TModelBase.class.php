@@ -202,7 +202,7 @@ class TModelBase
     public function &Execute()
     {
         $this->data['sModuleSpotName'] = $this->sModuleSpotName;
-        $this->data['_oModules'] = &$this->controller->moduleLoader;
+        $this->data['_oModules'] = &$this->getController()->moduleLoader;
         $pagedef = $this->global->GetUserData('pagedef');
         $this->data['pagedef'] = $pagedef;
         $this->data['_pagedefType'] = 'Core';
@@ -352,7 +352,7 @@ class TModelBase
         header('X-Robots-Tag: noindex, nofollow', true); //never index json responses
         // inject messages (replace [{CMSMSG-*}])
         if (!$bPreventPreOutputInjection) {
-            $parameter = $this->controller->PreOutputCallbackFunctionReplaceCustomVars($parameter);
+            $parameter = $this->getController()->PreOutputCallbackFunctionReplaceCustomVars($parameter);
         }
         // allow using a JS callback function
         if ($this->global->UserDataExists('callback')) {
@@ -375,7 +375,7 @@ class TModelBase
     protected function _OutputForAjax(&$parameter)
     {
         $this->SetHTMLDivWrappingStatus(false);
-        $parameter = $this->controller->PreOutputCallbackFunctionReplaceCustomVars($parameter);
+        $parameter = $this->getController()->PreOutputCallbackFunctionReplaceCustomVars($parameter);
         $encodedData = json_encode($parameter);
         $this->_OutputForAjaxPlain($encodedData, true);
     }
@@ -873,6 +873,21 @@ class TModelBase
     private function getCache()
     {
         return ServiceLocator::get('chameleon_system_core.cache');
+    }
+
+    /**
+     * Returns the current controller. For modules that are defined as services the controller is NOT set as property of
+     * each module, so we need to get it from the service container.
+     *
+     * @return ChameleonControllerInterface
+     */
+    private function getController(): ChameleonControllerInterface
+    {
+        if (null !== $this->controller) {
+            return $this->controller;
+        }
+
+        return ServiceLocator::get('chameleon_system_core.chameleon_controller');
     }
 
     /**
