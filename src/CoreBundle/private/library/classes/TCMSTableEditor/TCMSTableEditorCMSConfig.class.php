@@ -79,7 +79,7 @@ class TCMSTableEditorCMSConfig extends TCMSTableEditor
         $newConfig = $this->oTable;
 
         try {
-            if ($newConfig->fieldShutdownWebsites) {
+            if (true === $newConfig->fieldShutdownWebsites) {
                 $maintenanceModeService->activate();
             } else {
                 $maintenanceModeService->deactivate();
