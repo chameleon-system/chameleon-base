@@ -20,6 +20,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('css_dir')
                     ->defaultValue(PATH_USER_CMS_PUBLIC.'/outbox/static/less')
+                    ->info('Directory path to where the less compiler caches work and the output files are stored.')
                 ->end()
             ->end();
 
