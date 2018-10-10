@@ -151,10 +151,7 @@ class TCMSResourceCollection
     {
         $filesPrefix = ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix');
 
-        /**
-         * @var $portalDomainService PortalDomainServiceInterface
-         */
-        $portalDomainService = ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        $portalDomainService = $this->getPortalDomainService();
         $portal = $portalDomainService->getActivePortal();
 
         if (null !== $portal) {
@@ -728,5 +725,10 @@ class TCMSResourceCollection
     private function getFileManager()
     {
         return ServiceLocator::get('chameleon_system_cms_file_manager.file_manager');
+    }
+
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }
