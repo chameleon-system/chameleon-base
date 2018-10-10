@@ -11,7 +11,8 @@
 
 use ChameleonSystem\CoreBundle\Exception\MaintenanceModeErrorException;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\MaintenanceModeServiceInterface;
+use ChameleonSystem\CoreBundle\MaintenanceMode\MaintenanceModeServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class TCMSTableEditorCMSConfig extends TCMSTableEditor
 {
@@ -70,10 +71,7 @@ class TCMSTableEditorCMSConfig extends TCMSTableEditor
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
-        /**
-         * @var $maintenanceModeService MaintenanceModeServiceInterface
-         */
-        $maintenanceModeService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.maintenance_mode_service');
+        $maintenanceModeService = $this->getMaintenanceModeService();
 
         /**
          * @var TdbCmsConfig $newConfig
@@ -98,5 +96,10 @@ class TCMSTableEditorCMSConfig extends TCMSTableEditor
                 ['exceptionMessage' => $exception->getMessage()]
             );
         }
+    }
+
+    private function getMaintenanceModeService(): MaintenanceModeServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.maintenance_mode_service');
     }
 }
