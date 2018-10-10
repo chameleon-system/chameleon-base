@@ -51,7 +51,7 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
             throw new MaintenanceModeErrorException('Cannot save maintenance mode flag in database', 0, $exception);
         }
 
-        $this->addMarkerFile();
+        $this->createMarkerFile();
     }
 
     public function deactivate(): void
@@ -68,7 +68,7 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
     /**
      * @throws MaintenanceModeErrorException
      */
-    protected function addMarkerFile(): void
+    protected function createMarkerFile(): void
     {
         $markerDir = \dirname(PATH_MAINTENANCE_MODE_MARKER);
 
