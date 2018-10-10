@@ -31,7 +31,6 @@ class CountUpdateCommand extends Command
     protected function configure()
     {
         $this
-            ->setDefinition([])
             ->setDescription('Prints the count of all pending updates')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command prints the count of all pending updates.
