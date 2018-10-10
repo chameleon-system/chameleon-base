@@ -130,6 +130,7 @@ class TModuleLoader
      */
     public function LoadModules($moduleList, $templateLanguage = null)
     {
+        $this->modules = [];
         foreach ($moduleList as $name => $config) {
             // @TODO: check if the class is a descendant of TModelBase
             $this->modules[$name] = &$this->_SetModuleConfigData($name, $config, $templateLanguage);
