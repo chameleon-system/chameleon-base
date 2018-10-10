@@ -85,10 +85,7 @@ class TCMSTableEditorCMSConfig extends TCMSTableEditor
                 $maintenanceModeService->deactivate();
             }
         } catch (MaintenanceModeErrorException $exception) {
-            /**
-             * @var $flashMessageService FlashMessageServiceInterface
-             */
-            $flashMessageService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
+            $flashMessageService = $this->getFlashMessageService();
 
             $flashMessageService->addMessage(
                 \TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
@@ -101,5 +98,10 @@ class TCMSTableEditorCMSConfig extends TCMSTableEditor
     private function getMaintenanceModeService(): MaintenanceModeServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.maintenance_mode_service');
+    }
+
+    private function getFlashMessageService(): FlashMessageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 }
