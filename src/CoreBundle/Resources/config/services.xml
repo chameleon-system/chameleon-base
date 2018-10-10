@@ -790,6 +790,7 @@
 
         <service id="chameleon_system_core.maintenance_mode_service" class="ChameleonSystem\CoreBundle\MaintenanceMode\MaintenanceModeService">
             <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_cms_cache.cache"/>
         </service>
 
         <service id="chameleon_system_core.command.activate_maintenance_mode" class="ChameleonSystem\CoreBundle\Command\ActivateMaintenanceModeCommand">

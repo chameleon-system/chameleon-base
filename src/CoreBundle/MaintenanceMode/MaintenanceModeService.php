@@ -14,6 +14,7 @@ namespace ChameleonSystem\CoreBundle\MaintenanceMode;
 use ChameleonSystem\CoreBundle\Exception\MaintenanceModeErrorException;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use esono\pkgCmsCache\CacheInterface;
 
 class MaintenanceModeService implements MaintenanceModeServiceInterface
 {
@@ -22,9 +23,15 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
      */
     private $connection;
 
-    public function __construct(Connection $connection)
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
+
+    public function __construct(Connection $connection, CacheInterface $cache)
     {
         $this->connection = $connection;
+        $this->cache = $cache;
     }
 
     public function isActivated(): bool
@@ -51,9 +58,13 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
     {
         try {
             $this->connection->executeUpdate("UPDATE `cms_config` SET `shutdown_websites` = '1'");
+
+            $this->cache->callTrigger('cms_config');
         } catch (DBALException $exception) {
             throw new MaintenanceModeErrorException('Cannot save maintenance mode flag in database', 0, $exception);
         }
+
+
 
         $this->createMarkerFile();
     }
@@ -64,6 +75,8 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
 
         try {
             $this->connection->executeUpdate("UPDATE `cms_config` SET `shutdown_websites` = '0'");
+
+            $this->cache->callTrigger('cms_config');
         } catch (DBALException $exception) {
             throw new MaintenanceModeErrorException('Cannot reset maintenance mode flag in database', 0, $exception);
         }
