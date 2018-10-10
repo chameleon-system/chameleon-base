@@ -20,9 +20,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DeactivateMaintenanceModeCommand extends Command
 {
-    public function __construct($name = null)
+    /**
+     * @var MaintenanceModeServiceInterface
+     */
+    private $maintenanceModeService;
+
+    public function __construct(MaintenanceModeServiceInterface $maintenanceModeService)
     {
         parent::__construct('chameleon_system:maintenance_mode:deactivate');
+
+        $this->maintenanceModeService = $maintenanceModeService;
     }
 
     /**
@@ -44,13 +51,8 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /**
-         * @var $maintenanceModeService MaintenanceModeServiceInterface
-         */
-        $maintenanceModeService = ServiceLocator::get('chameleon_system_core.maintenance_mode_service');
-
         try {
-            $maintenanceModeService->deactivate();
+            $this->maintenanceModeService->deactivate();
         } catch (MaintenanceModeErrorException $exception) {
             $output->writeln(sprintf('Maintenance mode could not be deactivated: %s', $exception->getMessage()));
 
