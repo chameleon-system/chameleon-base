@@ -27,8 +27,6 @@ interface MaintenanceModeServiceInterface
      * Returns if the maintenance mode is activated (in database).
      *
      * @return bool
-     *
-     * @throws MaintenanceModeErrorException
      */
     public function isActivatedInDb(): bool;
 
