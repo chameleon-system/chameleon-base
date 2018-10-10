@@ -242,7 +242,6 @@ class TPkgViewRendererLessCompiler
     {
         $lessDir = $this->getLocalPathToCompiledLess();
 
-        // NOTE this is probably already done in getGeneratedCssForPortal() for the cache of Less itself
         $this->createDirectoryIfNeeded($lessDir);
 
         $filename = $this->getCompiledCssFilename($portal);
