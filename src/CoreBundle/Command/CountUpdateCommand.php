@@ -47,7 +47,12 @@ EOF
         $updateManager = new \TCMSUpdateManager();
         $updateList = $updateManager->getAllUpdateFilesToProcess();
 
-        $output->writeln(\count($updateList));
+        $updateCount = 0;
+        foreach ($updateList as $bundleName => $updates) {
+            $updateCount += \count($updates);
+        }
+
+        $output->writeln($updateCount);
 
         return 0;
     }
