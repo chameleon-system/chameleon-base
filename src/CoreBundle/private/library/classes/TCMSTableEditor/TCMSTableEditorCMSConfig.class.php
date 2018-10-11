@@ -11,7 +11,7 @@
 
 use ChameleonSystem\CoreBundle\Exception\MaintenanceModeErrorException;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
-use ChameleonSystem\CoreBundle\MaintenanceMode\MaintenanceModeServiceInterface;
+use ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class TCMSTableEditorCMSConfig extends TCMSTableEditor

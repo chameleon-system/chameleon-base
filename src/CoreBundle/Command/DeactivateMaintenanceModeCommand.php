@@ -12,7 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Command;
 
 use ChameleonSystem\CoreBundle\Exception\MaintenanceModeErrorException;
-use ChameleonSystem\CoreBundle\MaintenanceMode\MaintenanceModeServiceInterface;
+use ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeServiceInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
