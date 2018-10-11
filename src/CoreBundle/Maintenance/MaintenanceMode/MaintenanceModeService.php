@@ -51,7 +51,7 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
 
             $this->cache->callTrigger('cms_config');
         } catch (DBALException $exception) {
-            throw new MaintenanceModeErrorException('Cannot save maintenance mode flag in database', 0, $exception);
+            throw new MaintenanceModeErrorException('Cannot save maintenance mode flag in database.', 0, $exception);
         }
 
         $this->createMarkerFile();
@@ -66,7 +66,7 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
 
             $this->cache->callTrigger('cms_config');
         } catch (DBALException $exception) {
-            throw new MaintenanceModeErrorException('Cannot reset maintenance mode flag in database', 0, $exception);
+            throw new MaintenanceModeErrorException('Cannot reset maintenance mode flag in database.', 0, $exception);
         }
     }
 
@@ -79,14 +79,14 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
 
         if (false === \is_dir($markerDir)) {
             if (false === \mkdir($markerDir, 0777, true) && false === \is_dir($markerDir)) {
-                throw new MaintenanceModeErrorException('Cannot create maintenance mode flag directory');
+                throw new MaintenanceModeErrorException('Cannot create maintenance mode flag directory.');
             }
         }
 
         $fileSuccess = touch(PATH_MAINTENANCE_MODE_MARKER);
 
         if (false === $fileSuccess) {
-            throw new MaintenanceModeErrorException('Cannot save maintenance mode flag in file system');
+            throw new MaintenanceModeErrorException('Cannot save maintenance mode flag in file system.');
         }
     }
 
@@ -102,7 +102,7 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
         $fileSuccess = unlink(PATH_MAINTENANCE_MODE_MARKER);
 
         if (false === $fileSuccess) {
-            throw new MaintenanceModeErrorException('Cannot delete maintenance mode flag in file system');
+            throw new MaintenanceModeErrorException('Cannot delete maintenance mode flag in file system.');
         }
     }
 }
