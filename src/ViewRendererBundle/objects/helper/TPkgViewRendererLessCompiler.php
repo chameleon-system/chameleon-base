@@ -287,7 +287,7 @@ class TPkgViewRendererLessCompiler
     /**
      * @throws ViewRenderException
      */
-    private function createDirectoryIfNeeded(string $dir): bool
+    private function createDirectoryIfNeeded(string $dir): void
     {
         if (false === \is_dir($dir)) {
             if (false === \mkdir($dir, 0777, true) && false === \is_dir($dir)) {
