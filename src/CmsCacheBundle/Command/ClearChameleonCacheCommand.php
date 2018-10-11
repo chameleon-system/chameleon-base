@@ -53,7 +53,11 @@ class ClearChameleonCacheCommand extends Command
     {
         $this->cache->clearAll();
 
-        $output->writeln('<info>OK</info>');
+        if (true === $this->cache->isActive()) {
+            $output->writeln('<info>OK</info>');
+        } else {
+            $output->writeln('<comment>Note: Cache is not active.</comment>');
+        }
 
         return 0;
     }
