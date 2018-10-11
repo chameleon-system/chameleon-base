@@ -265,4 +265,16 @@ class TPkgViewRendererLessCompiler
         return \ChameleonSystem\CoreBundle\ServiceLocator::getParameter(
             'chameleon_system_core.resources.enable_external_resource_collection_minify');
     }
+
+    /**
+     * @throws ViewRenderException
+     */
+    private function createDirectoryIfNeeded(string $dir): bool
+    {
+        if (false === \is_dir($dir)) {
+            if (false === \mkdir($dir, 0777, true) && false === \is_dir($dir)) {
+                throw new ViewRenderException(sprintf('Cannot create directory %s', $dir));
+            }
+        }
+    }
 }
