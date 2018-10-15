@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="chameleon_system_cms_text_block.error.not_found">
                 <source>chameleon_system_cms_text_block.error.not_found</source>
-                <target>There is no text block with the name %name%.</target>
+                <target>There is no text block with the system name %name%.</target>
             </trans-unit>
 
         </body>

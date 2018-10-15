@@ -16,7 +16,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.error.flash_required">
                 <source>chameleon_system_core.error.flash_required</source>
-                <target>Sie benötigen den Adobe Flash Player Version %iVersion% um das Video abspielen zu können</target>
+                <target>Sie benötigen den Adobe Flash Player Version %iVersion%, um das Video abspielen zu können</target>
                 <note>@deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.text.redirect_text">
@@ -46,7 +46,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.error.missing_required_fields">
                 <source>chameleon_system_core.error.missing_required_fields</source>
-                <target>Bitte füllen Sie alle Felder aus!</target>
+                <target>Bitte füllen Sie alle Felder aus.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_shop_service_item_giftcard.form.apply_to_all">
@@ -98,35 +98,35 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.error_missing_from_name">
                 <source>chameleon_system_core.module_send_a_friend.error_missing_from_name</source>
-                <target>Bitte geben Sie ihren Namen an!</target>
+                <target>Bitte geben Sie Ihren Namen an.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.from_email">
                 <source>chameleon_system_core.module_send_a_friend.from_email</source>
-                <target>Ihre E-Mail</target>
+                <target>Ihre E-Mail-Adresse</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.error_missing_from_email">
                 <source>chameleon_system_core.module_send_a_friend.error_missing_from_email</source>
-                <target>Bitte geben Sie Ihre E-Mail Adresse an!</target>
+                <target>Bitte geben Sie Ihre E-Mail-Adresse an.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.error_invalid_email">
                 <source>chameleon_system_core.module_send_a_friend.error_invalid_email</source>
-                <target>Bitte eine gültige E-Mail Adresse angeben!</target>
+                <target>Bitte geben Sie eine gültige E-Mail-Adresse an.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.to_name">
                 <source>chameleon_system_core.module_send_a_friend.to_name</source>
-                <target>Empfänger Name</target>
+                <target>Empfängername</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.error_missing_to_name">
                 <source>chameleon_system_core.module_send_a_friend.error_missing_to_name</source>
-                <target>Bitte den Namen des Empfängers angeben!</target>
+                <target>Bitte geben Sie den Namen des Empfängers an.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.to_email">
                 <source>chameleon_system_core.module_send_a_friend.to_email</source>
-                <target>Empfänger E-Mail</target>
+                <target>Empfänger E-Mail-Adresse</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.error_missing_to_email">
                 <source>chameleon_system_core.module_send_a_friend.error_missing_to_email</source>
-                <target>Bitte eine Ziel E-Mail Adresse angeben!</target>
+                <target>Bitte geben Sie die E-Mail-Adresse des Empfängers an.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.message">
                 <source>chameleon_system_core.module_send_a_friend.message</source>
@@ -142,7 +142,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.mail_subject">
                 <source>chameleon_system_core.module_send_a_friend.mail_subject</source>
-                <target>Website Empfehlung</target>
+                <target>Website-Empfehlung</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.module_send_a_friend.mail_intro">
                 <source>chameleon_system_core.module_send_a_friend.mail_intro</source>

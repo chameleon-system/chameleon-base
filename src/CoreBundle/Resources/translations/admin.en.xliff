@@ -2066,7 +2066,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.action.return_to_main_menu">
                 <source>chameleon_system_core.action.return_to_main_menu</source>
-                <target>return to main menu</target>
+                <target>Return to main menu</target>
             </trans-unit>
 
 

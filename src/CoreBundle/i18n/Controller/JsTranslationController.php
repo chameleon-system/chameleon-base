@@ -60,8 +60,6 @@ CHAMELEON.CORE.i18n.isInitialized = true;
 CHAMELEON.CORE.i18n.Translation = {$exportString};
 JS;
 
-        $response = new Response($jsResponse);
-
-        return $response;
+        return new Response($jsResponse, Response::HTTP_OK, ['Content-Type' => 'application/javascript']);
     }
 }

@@ -146,11 +146,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.error_instance_locked">
                 <source>chameleon_system_core.template_engine.error_instance_locked</source>
-                <target>Diese Modul Instanz ist bereits durch einen anderen Benutzer in Bearbeitung</target>
+                <target>Diese Modul-Instanz ist bereits durch einen anderen Benutzer in Bearbeitung</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.ajax_error">
                 <source>chameleon_system_core.template_engine.ajax_error</source>
-                <target>Ajax error!</target>
+                <target>Ajax-Fehler!</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.header_column_record">
                 <source>chameleon_system_core.template_engine.header_column_record</source>
@@ -182,7 +182,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.error_delete_still_used">
                 <source>chameleon_system_core.template_engine.error_delete_still_used</source>
-                <target>Die Modul-Instanz konnte nicht gelöscht werden, weil Sie noch in folgenden Seiten verwendet wird:</target>
+                <target>Die Modul-Instanz konnte nicht gelöscht werden, weil sie noch in folgenden Seiten verwendet wird:</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.spot_menu_headline">
                 <source>chameleon_system_core.template_engine.spot_menu_headline</source>
@@ -287,7 +287,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_document.error_missing_target">
                 <source>chameleon_system_core.field_document.error_missing_target</source>
-                <target>Sie müssen zuerst ein Zielverzeichnis wählen</target>
+                <target>Bitte wählen Sie zuerst ein Zielverzeichnis</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_document.open_document">
                 <source>chameleon_system_core.field_document.open_document</source>
@@ -319,7 +319,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_document.upload_error_tmp_folder_not_writable">
                 <source>chameleon_system_core.field_document.upload_error_tmp_folder_not_writable</source>
-                <target>Der tmp Order wurde nicht gefunden oder war nicht schreibbar</target>
+                <target>Das temporäre Verzeichnis wurde nicht gefunden oder war nicht schreibbar</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_document.upload_error_unable_to_save_to_disc">
                 <source>chameleon_system_core.field_document.upload_error_unable_to_save_to_disc</source>
@@ -341,7 +341,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_download.document_details">
                 <source>chameleon_system_core.field_download.document_details</source>
-                <target>Dokument Details</target>
+                <target>Dokumenten-Details</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_download.confirm_removal">
                 <source>chameleon_system_core.field_download.confirm_removal</source>
@@ -415,7 +415,7 @@
 
             <trans-unit id="chameleon_system_core.field_property.open_or_close_list">
                 <source>chameleon_system_core.field_property.open_or_close_list</source>
-                <target>Liste ein/ausblenden</target>
+                <target>Liste ein-/ausblenden</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_property.remove">
                 <source>chameleon_system_core.field_property.remove</source>
@@ -471,7 +471,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_property_media.error_creating">
                 <source>chameleon_system_core.field_property_media.error_creating</source>
-                <target>Fehler: der Eintrag konnte nicht erstellt werden</target>
+                <target>Fehler: Der Eintrag konnte nicht erstellt werden</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_property_media.remove">
                 <source>chameleon_system_core.field_property_media.remove</source>
@@ -546,7 +546,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_image_lookup.error_creating">
                 <source>chameleon_system_core.field_image_lookup.error_creating</source>
-                <target>Fehler: der Eintrag konnte nicht erstellt werden</target>
+                <target>Fehler: Der Eintrag konnte nicht erstellt werden</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.field_lookup_media_tree_import.select_image">
@@ -591,7 +591,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_page_tree_node.error_no_portal_selected">
                 <source>chameleon_system_core.field_page_tree_node.error_no_portal_selected</source>
-                <target>Sie müssen erst ein Portal wählen, bevor Sie Navigationspunkte zuweisen können.</target>
+                <target>Bitte wählen Sie zuerst ein Portal, bevor Sie Navigationspunkte zuweisen.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.field_tree_node.assign_node">
@@ -634,7 +634,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_url.open">
                 <source>chameleon_system_core.field_url.open</source>
-                <target>Website Vorschau</target>
+                <target>Website-Vorschau</target>
             </trans-unit>
 
 
@@ -648,7 +648,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_password.quality">
                 <source>chameleon_system_core.field_password.quality</source>
-                <target>Passwort Qualität</target>
+                <target>Passwortqualität</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_password.new_password">
                 <source>chameleon_system_core.field_password.new_password</source>
@@ -656,7 +656,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_password.repeat_password">
                 <source>chameleon_system_core.field_password.repeat_password</source>
-                <target>Passwort Wiederholung</target>
+                <target>Passwort-Wiederholung</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_password.error_password_check_does_not_match">
                 <source>chameleon_system_core.field_password.error_password_check_does_not_match</source>
@@ -697,7 +697,7 @@
             <trans-unit id="chameleon_system_core.field_google_map.missing_api_key_error">
                 <source>chameleon_system_core.field_google_map.missing_api_key_error</source>
                 <target>Sie haben keinen Google Maps API Key konfiguriert.
-                    Bitte generieren Sie sich einen API Key in der Google Cloud Console und setzen sie alle relevanten Domains auf die Whitelist.
+                    Bitte generieren Sie einen API Key in der Google Cloud Console und setzen Sie alle relevanten Domains auf die Whitelist.
                     Tragen Sie den Key in die Config ein: chameleon_system_core: google_maps: api_key: "Ihr API Key"
                 </target>
             </trans-unit>
@@ -713,7 +713,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_tail_log.error_unable_to_read_log">
                 <source>chameleon_system_core.field_tail_log.error_unable_to_read_log</source>
-                <target>Die Log Datei konnte nicht gelesen werden</target>
+                <target>Die Log-Datei konnte nicht gelesen werden</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.field_translation_parent.owner">
@@ -722,7 +722,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_translation_parent.open_or_close_list">
                 <source>chameleon_system_core.field_translation_parent.open_or_close_list</source>
-                <target>Liste ein/ausblenden</target>
+                <target>Liste ein-/ausblenden</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_translation_parent.is_primary_language">
                 <source>chameleon_system_core.field_translation_parent.is_primary_language</source>
@@ -755,11 +755,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.list.next_page">
                 <source>chameleon_system_core.list.next_page</source>
-                <target>Liste weiter blättern</target>
+                <target>Liste weiterblättern</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.list.previous_page">
                 <source>chameleon_system_core.list.previous_page</source>
-                <target>Liste zurück blättern</target>
+                <target>Liste zurückblättern</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.list.current_page_details">
                 <source>chameleon_system_core.list.current_page_details</source>
@@ -803,7 +803,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.list.default_language">
                 <source>chameleon_system_core.list.default_language</source>
-                <target>Defaultsprache</target>
+                <target>Standardsprache</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.list.gcf_activity_feed_name_no_feed_found">
                 <source>chameleon_system_core.list.gcf_activity_feed_name_no_feed_found</source>
@@ -898,7 +898,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.action_restore_revision">
                 <source>chameleon_system_core.record_revision.action_restore_revision</source>
-                <target>Datensatz Version wiederherstellen</target>
+                <target>Datensatzversion wiederherstellen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.confirm_restore_revision">
                 <source>chameleon_system_core.record_revision.confirm_restore_revision</source>
@@ -990,7 +990,7 @@
 
             <trans-unit id="chameleon_system_core.cms_module_image_manager.selected_image_not_found">
                 <source>chameleon_system_core.cms_module_image_manager.selected_image_not_found</source>
-                <target>Die ausgewählte Medienndatei konnte nicht gefunden werden.</target>
+                <target>Die ausgewählte Mediendatei konnte nicht gefunden werden.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_image_manager.folder_list">
                 <source>chameleon_system_core.cms_module_image_manager.folder_list</source>
@@ -1085,7 +1085,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_local_media.import_result">
                 <source>chameleon_system_core.cms_module_media_local_media.import_result</source>
-                <target>Erfolgreich importierte Media Dateien</target>
+                <target>Erfolgreich importierte Mediendateien</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_local_media.select_target_folder">
                 <source>chameleon_system_core.document_local_import.select_target_folder</source>
@@ -1115,11 +1115,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.upload_more_files">
                 <source>chameleon_system_core.cms_module_media_manager.upload_more_files</source>
-                <target>Weitere Dateien Hochladen</target>
+                <target>Weitere Dateien hochladen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_delete_success">
                 <source>chameleon_system_core.cms_module_media_manager.msg_delete_success</source>
-                <target>Medien-Datei(en) erfolgreich gelöscht.</target>
+                <target>Mediendatei(en) erfolgreich gelöscht.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_upload_success">
                 <source>chameleon_system_core.cms_module_media_manager.msg_upload_success</source>
@@ -1127,7 +1127,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_select_move_target">
                 <source>chameleon_system_core.cms_module_media_manager.msg_select_move_target</source>
-                <target>Wählen Sie jetzt einen Ordner in den Sie die Dateien verschieben möchten.</target>
+                <target>Wählen Sie jetzt einen Ordner, in den Sie die Dateien verschieben möchten.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_single_file_upload_success">
                 <source>chameleon_system_core.cms_module_media_manager.msg_single_file_upload_success</source>
@@ -1135,7 +1135,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_on_delete_file_in_use">
                 <source>chameleon_system_core.cms_module_media_manager.msg_on_delete_file_in_use</source>
-                <target>Die zu löschende Datei wird noch von folgenden Datensätzen verwendet. Wenn Sie die Mediendatei trotzdem löschen, wird diese unwiderruflich aus den Inhalten entfernt</target>
+                <target>Die zu löschende Datei wird noch von folgenden Datensätzen verwendet. Wenn Sie die Mediendatei dennoch löschen, wird diese unwiderruflich aus den Inhalten entfernt</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_file_in_use">
                 <source>chameleon_system_core.cms_module_media_manager.msg_file_in_use</source>
@@ -1159,7 +1159,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.file_id">
                 <source>chameleon_system_core.cms_module_media_manager.file_id</source>
-                <target>Medien-Datei ID %id%</target>
+                <target>Mediendatei ID %id%</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.folder">
                 <source>chameleon_system_core.cms_module_media_manager.folder</source>
@@ -1167,20 +1167,20 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.confirm_none_empty_folder_delete">
                 <source>chameleon_system_core.cms_module_media_manager.confirm_none_empty_folder_delete</source>
-                <target>Ordner trotzdem löschen</target>
+                <target>Ordner dennoch löschen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.confirm_used_image">
                 <source>chameleon_system_core.cms_module_media_manager.confirm_used_image</source>
-                <target>Trotzdem löschen</target>
+                <target>Dennoch löschen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.confirm_delete">
                 <source>chameleon_system_core.cms_module_media_manager.confirm_delete</source>
-                <target>Sind Sie sicher, dass sie diese Datei löschen möchten?</target>
+                <target>Sind Sie sicher, dass Sie diese Datei löschen möchten?</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.cms_module_media_manager.error_folder_name_missing">
                 <source>chameleon_system_core.cms_module_media_manager.error_folder_name_missing</source>
-                <target>Sie haben keinen Titel für den Ordner angegeben!</target>
+                <target>Bitte geben Sie einen Titel für den Ordner an.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.error_upload_error">
                 <source>chameleon_system_core.cms_module_media_manager.error_upload_error</source>
@@ -1188,7 +1188,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.error_no_file_selected">
                 <source>chameleon_system_core.cms_module_media_manager.error_no_file_selected</source>
-                <target>Sie haben keine Datei zum Upload ausgewählt.</target>
+                <target>Bitte wählen Sie eine Datei zum Upload aus.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_media_manager.error_upload_to_root_folder_not_permitted">
                 <source>chameleon_system_core.cms_module_media_manager.error_upload_to_root_folder_not_permitted</source>
@@ -1226,11 +1226,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_universal_uploader.error_no_browser_support">
                 <source>chameleon_system_core.cms_module_universal_uploader.error_no_browser_support</source>
-                <target>Das Datei-Upload Modul wird von Ihrem Browser nicht unterstützt, einfacher Upload wird verwendet.</target>
+                <target>Das Datei-Upload-Modul wird von Ihrem Browser nicht unterstützt, einfacher Upload wird verwendet.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_universal_uploader.msg_require_exact_measurements">
                 <source>chameleon_system_core.cms_module_universal_uploader.msg_require_exact_measurements</source>
-                <target>Die Medien Datei muss exakt dieses Maß haben (Breite x Höhe): %maxWidth%x%maxHeight% Pixel</target>
+                <target>Die Mediendatei muss exakt dieses Maß haben (Breite x Höhe): %maxWidth%x%maxHeight% Pixel</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_universal_uploader.dimension_unrestricted">
                 <source>chameleon_system_core.cms_module_universal_uploader.dimension_unrestricted</source>
@@ -1238,7 +1238,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_universal_uploader.msg_require_max_measurements">
                 <source>chameleon_system_core.cms_module_universal_uploader.msg_require_exact_measurements</source>
-                <target>Die Medien Datei darf maximal dieses Maß haben (Breite x Höhe): %maxWidth%x%maxHeight% Pixel</target>
+                <target>Die Mediendatei darf maximal dieses Maß haben (Breite x Höhe): %maxWidth%x%maxHeight% Pixel</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_universal_uploader.msg_allowed_file_type">
                 <source>chameleon_system_core.cms_module_universal_uploader.msg_allowed_file_type</source>
@@ -1246,11 +1246,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_universal_uploader.error_type_not_allowed">
                 <source>chameleon_system_core.cms_module_universal_uploader.error_type_not_allowed</source>
-                <target>Der Dateityp %sFileType% ist nicht zulässig. (Erlaubt: %sAllowedFileTypesFromExternal%)</target>
+                <target>Der Dateityp %sFileType% ist nicht zulässig (erlaubt: %sAllowedFileTypesFromExternal%).</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_universal_uploader.error_type_not_supported">
                 <source>chameleon_system_core.cms_module_universal_uploader.error_type_not_supported</source>
-                <target>Der Dateityp der Upload-Datei wird vom CMS nicht unterstützt</target>
+                <target>Der Dateityp der Upload-Datei wird vom System nicht unterstützt</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_universal_uploader.proportion_exact_matching_wrong_dimension_parameters">
                 <source>chameleon_system_core.cms_module_universal_uploader.proportion_exact_matching_wrong_dimension_parameters</source>
@@ -1319,7 +1319,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_wysiwyg_image.error_missing_target_folder">
                 <source>chameleon_system_core.cms_module_wysiwyg_image.error_missing_target_folder</source>
-                <target>Bitte wählen Sie zuerst einen Ziel-Ordner!</target>
+                <target>Bitte wählen Sie zuerst einen Ziel-Ordner.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_wysiwyg_image.action_new_file">
                 <source>chameleon_system_core.cms_module_wysiwyg_image.action_new_file</source>
@@ -1341,23 +1341,23 @@
 
             <trans-unit id="chameleon_system_core.cms_module_newsletter_robinson_import.headline">
                 <source>chameleon_system_core.cms_module_newsletter_robinson_import.headline</source>
-                <target>E-Mail Adressen in die Newsletter-Blacklist importieren</target>
+                <target>E-Mail-Adressen in die Newsletter-Blacklist importieren</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_robinson_import.import_success">
                 <source>chameleon_system_core.cms_module_newsletter_robinson_import.import_success</source>
-                <target>importierte E-Mail Adressen</target>
+                <target>importierte E-Mail-Adressen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_robinson_import.import_error">
                 <source>chameleon_system_core.cms_module_newsletter_robinson_import.import_error</source>
-                <target>ignorierte E-Mail Adressen</target>
+                <target>ignorierte E-Mail-Adressen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_robinson_import.import_file_help">
                 <source>chameleon_system_core.cms_module_newsletter_robinson_import.import_file_help</source>
-                <target>Die hochzuladende Datei darf pro Zeile nur 1 E-Mail Adresse enthalten.</target>
+                <target>Die hochzuladende Datei darf pro Zeile nur eine einzelne E-Mail-Adresse enthalten.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_robinson_import.source">
                 <source>chameleon_system_core.cms_module_newsletter_robinson_import.source</source>
-                <target>CSV Datei</target>
+                <target>CSV-Datei</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_robinson_import.action_import">
                 <source>chameleon_system_core.cms_module_newsletter_robinson_import.action_import</source>
@@ -1366,15 +1366,15 @@
 
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.headline">
                 <source>chameleon_system_core.cms_module_newsletter_import.headline</source>
-                <target>Newsletter Abonnenten importieren</target>
+                <target>Newsletter-Abonnenten importieren</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter.import_success">
                 <source>chameleon_system_core.cms_module_newsletter.import_success</source>
-                <target>importierte E-Mail Adressen</target>
+                <target>importierte E-Mail-Adressen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.import_updated">
                 <source>chameleon_system_core.cms_module_newsletter_import.import_updated</source>
-                <target>aktualisierte E-Mail Adressen</target>
+                <target>aktualisierte E-Mail-Adressen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.import_error">
                 <source>chameleon_system_core.cms_module_newsletter_import.import_error</source>
@@ -1390,7 +1390,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.import_file_help">
                 <source>chameleon_system_core.cms_module_newsletter_import.import_file_help</source>
-                <target>Die hochzuladende Datei muss im CSV Format sein mit Semikolon (;) als Trennzeichen zwischen Spalten. Eine optionale feldbeschreibende Zeile wird nicht mit importiert.</target>
+                <target>Die hochzuladende Datei muss im CSV-Format vorliegen, mit Semikolon (;) als Trennzeichen zwischen Spalten. Eine optionale feldbeschreibende Zeile wird nicht mit importiert.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.import_file_help_salutation">
                 <source>chameleon_system_core.cms_module_newsletter_import.import_file_help_salutation</source>
@@ -1398,27 +1398,27 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.group">
                 <source>chameleon_system_core.cms_module_newsletter_import.group</source>
-                <target>Newsletter Abonnenten Gruppe</target>
+                <target>Newsletter-Abonnentengruppe</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.no_group">
                 <source>chameleon_system_core.cms_module_newsletter_import.no_group</source>
-                <target>Keine Newslettergruppe</target>
+                <target>Keine Newsletter-Abonnentengruppe</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.portal_help">
                 <source>chameleon_system_core.cms_module_newsletter_import.portal_help</source>
-                <target>Portal wählen: Muss nur ausgewählt werden wenn keine Newslettergruppe ausgewählt wird</target>
+                <target>Portal wählen: Muss nur ausgewählt werden wenn keine Newsletter-Abonnentengruppe ausgewählt wird</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.replace_subscribers">
                 <source>chameleon_system_core.cms_module_newsletter_import.replace_subscribers</source>
-                <target>Newsletter Abonnenten ersetzen</target>
+                <target>Newsletter-Abonnenten ersetzen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.update_group_only">
                 <source>chameleon_system_core.cms_module_newsletter_import.update_group_only</source>
-                <target>Bei vorhandenen Newsletter Abonnenten nur Newslettergruppe setzten (Kein Update der Abonnentendaten)</target>
+                <target>Bei vorhandenen Newsletter-Abonnenten nur Newsletter-Abonnentengruppe setzen (Kein Update der Abonnentendaten)</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.source">
                 <source>chameleon_system_core.cms_module_newsletter_import.source</source>
-                <target>CSV Datei</target>
+                <target>CSV-Datei</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.action_import">
                 <source>chameleon_system_core.cms_module_newsletter_import.action_import</source>
@@ -1426,11 +1426,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.confirm_replace">
                 <source>chameleon_system_core.cms_module_newsletter_import.confirm_replace</source>
-                <target>Sind Sie sicher, dass sie alle Abonnenten des Newsletters unwiderruflich löschen und durch Ihren Import ersetzen möchten?</target>
+                <target>Sind Sie sicher, dass Sie alle Abonnenten des Newsletters unwiderruflich löschen und durch Ihren Import ersetzen möchten?</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.action_confirm_replace">
                 <source>chameleon_system_core.cms_module_newsletter_import.action_confirm_replace</source>
-                <target>Ja, CSV Datei importieren</target>
+                <target>Ja, CSV-Datei importieren</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.cms_module_cms_search.headline">
@@ -1465,7 +1465,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_table_export.download_help">
                 <source>chameleon_system_core.cms_module_table_export.download_help</source>
-                <target>Damit die Datei nicht im Browser geöffnet wird, müssen Sie diese über "Rechtsklick" - "Ziel speichern unter" direkt speichern</target>
+                <target>Damit die Datei nicht im Browser geöffnet wird, speichern Sie diese direkt über "Rechtsklick" - "Ziel speichern unter".</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_table_export.form_select_profile">
                 <source>chameleon_system_core.cms_module_table_export.form_select_profile</source>
@@ -1478,7 +1478,7 @@
 
             <trans-unit id="chameleon_system_core.cms_module_update.headline">
                 <source>chameleon_system_core.cms_module_update.headline</source>
-                <target>CMS Updates</target>
+                <target>CMS-Updates</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_update.intro_text">
                 <source>chameleon_system_core.cms_module_update.intro_text</source>
@@ -1497,11 +1497,11 @@
                 <target><![CDATA[
                     Beim Aktualisieren der Update-Daten konnten nicht alle Counter verifiziert werden. Bitte prüfen Sie
                     für jeden der folgenden Counter-Namen folgendes und laden Sie diese Seite anschließend erneut:<br />
-                    - ist das Package, das aus dem Namen ersichtlich ist, installiert? Wenn nein, entfernen Sie bitte den
+                    - Ist das Package, das aus dem Namen ersichtlich ist, installiert? Wenn nein, entfernen Sie bitte den
                       entsprechenden Counter-Namen manuell aus der Tabelle cms_config_parameter.<br />
-                    - ist das Package ein Bundle? Wenn nein, ergänzen Sie bitte die Bundle-Klasse und registrieren Sie sie
+                    - Ist das Package ein Bundle? Wenn nein, ergänzen Sie bitte die Bundle-Klasse und registrieren Sie sie
                       im AppKernel.<br />
-                    - ist das Bundle im AppKernel registriert? Wenn nein, holen Sie dies bitte nach.
+                    - Ist das Bundle im AppKernel registriert? Wenn nein, holen Sie dies bitte nach.
                     ]]>
                 </target>
             </trans-unit>
@@ -1519,7 +1519,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_update.update_blacklisted_notice">
                 <source>chameleon_system_core.cms_module_update.update_blacklisted_notice</source>
-                <target>Update %fileName% in Bundle %bundleName% wurde übersprungen weil es auf der Blacklist steht. Sie können das Update später ausführen indem Sie es von der Blacklist nehmen.</target>
+                <target>Update %fileName% in Bundle %bundleName% wurde übersprungen, weil es auf der Blacklist steht. Sie können das Update später ausführen, indem Sie es von der Blacklist nehmen.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_update.updates_total">
                 <source>chameleon_system_core.cms_module_update.updates_total</source>
@@ -1559,7 +1559,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_update.select_ajax_timeout">
                 <source>chameleon_system_core.cms_module_update.select_ajax_timeout</source>
-                <target>Ajax Timeout pro Update</target>
+                <target>Ajax-Timeout pro Update</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_update.ajax_timeout">
                 <source>chameleon_system_core.cms_module_update.ajax_timeout</source>
@@ -1664,7 +1664,7 @@
 
             <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.portal">
                 <source>chameleon_system_core.cms_module_cms_user_rights_overview.portal</source>
-                <target>Portale/Webseiten</target>
+                <target>Portale/Websites</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.groups">
                 <source>chameleon_system_core.cms_module_cms_user_rights_overview.groups</source>
@@ -1696,7 +1696,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.headline">
                 <source>chameleon_system_core.cms_module_cms_user_rights_overview.headline</source>
-                <target>Kumulierte CMS Rechte</target>
+                <target>Kumulierte CMS-Rechte</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_cms_user_rights_overview.action_print">
                 <source>chameleon_system_core.cms_module_cms_user_rights_overview.action_print</source>
@@ -1796,11 +1796,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_header.action_clear_page_cache_title">
                 <source>chameleon_system_core.cms_module_header.action_clear_page_cache_title</source>
-                <target>Leert Mem-Cache</target>
+                <target>Leert Objekt-Cache</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_header.action_clear_full_cache_title">
                 <source>chameleon_system_core.cms_module_header.action_clear_full_cache_title</source>
-                <target>Leert Mem-Cache, Less, CSS, JS und Symfony-Cache</target>
+                <target>Leert Objekt-Cache, Less, CSS, JS und Symfony-Cache</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_header.action_help">
                 <source>chameleon_system_core.cms_module_header.action_help</source>
@@ -2110,11 +2110,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop.variants.error_create_variant_variant_type_required">
                 <source>chameleon_system_shop.variants.error_create_variant_variant_type_required</source>
-                <target>Sie müssen erst ein Variantenset wählen um Varianten anlegen zu können.</target>
+                <target>Bitte wählen Sie zuerst ein Variantenset, um Varianten anlegen zu können.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.variants.error_to_many_combinations_possible">
                 <source>chameleon_system_shop.variants.error_to_many_combinations_possible</source>
-                <target>Aus ihrem Variantenset ergeben sich mehr als %max% mögliche Kombinationen!</target>
+                <target>Aus ihrem Variantenset ergeben sich mehr als %max% mögliche Kombinationen.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.variants.action_create_variants">
                 <source>chameleon_system_shop.variants.action_create_variants</source>
@@ -2122,7 +2122,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop.variants.error_create_variant_variant_type_for_parent_required">
                 <source>chameleon_system_shop.variants.error_create_variant_variant_type_for_parent_required</source>
-                <target>Um für diese Variante Variantenwerte definieren zu können, müssen Sie erst ein Variantenset beim Hauptartikel definieren.</target>
+                <target>Bitte legen Sie zuerst ein Variantenset beim Hauptartikel an, um für diese Variante Variantenwerte definieren zu können.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.variants.variant_price">
                 <source>chameleon_system_shop.variants.variant_price</source>
@@ -2130,7 +2130,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop.variants.variant_base_price">
                 <source>chameleon_system_shop.variants.variant_base_price</source>
-                <target>Basis Preis</target>
+                <target>Basispreis</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.variants.action_select_all_variants">
                 <source>chameleon_system_shop.variants.action_select_all_variants</source>
@@ -2153,7 +2153,7 @@
 
             <trans-unit id="chameleon_system_core.action.db_logger">
                 <source>chameleon_system_core.action.db_logger</source>
-                <target>DB Logger</target>
+                <target>DB-Logger</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.db_logger.stop_recording">
                 <source>chameleon_system_core.db_logger.stop_recording</source>
@@ -2217,11 +2217,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.msg_upload_additional_files">
                 <source>chameleon_system_core.document_manager.msg_upload_additional_files</source>
-                <target>Weitere Dateien Hochladen</target>
+                <target>Weitere Dateien hochladen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.msg_no_file_selected">
                 <source>chameleon_system_core.document_manager.msg_no_file_selected</source>
-                <target>Sie haben vergessen eine Datei zum Upload auszuwählen.</target>
+                <target>Sie haben keine Datei zum Upload ausgewählt.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.msg_no_upload_to_primary_folder_allowed">
                 <source>chameleon_system_core.document_manager.msg_no_upload_to_primary_folder_allowed</source>
@@ -2233,7 +2233,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.msg_select_target_folder">
                 <source>chameleon_system_core.document_manager.msg_select_target_folder</source>
-                <target>Wählen Sie jetzt einen Ordner in den Sie die Dateien verschieben möchten.</target>
+                <target>Wählen Sie jetzt einen Ordner, in den Sie die Dateien verschieben möchten.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.msg_no_files_selected_for_move">
                 <source>chameleon_system_core.document_manager.msg_no_files_selected_for_move</source>
@@ -2261,7 +2261,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.action_delete_confirm_connections">
                 <source>chameleon_system_core.document_manager.action_delete_confirm_connections</source>
-                <target>Die zu löschende Datei wird noch von folgenden Datensätzen verwendet. Wenn Sie das Dokument trotzdem löschen, wird dieses unwiderruflich aus den Inhalten entfernt.</target>
+                <target>Die zu löschende Datei wird noch von folgenden Datensätzen verwendet. Wenn Sie das Dokument dennoch löschen, wird dieses unwiderruflich aus den Inhalten entfernt.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.connection_list">
                 <source>chameleon_system_core.document_manager.connection_list</source>
@@ -2269,7 +2269,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.delete_document">
                 <source>chameleon_system_core.document_manager.delete_document</source>
-                <target>Dokument ID %id% löschen</target>
+                <target>Dokument mit ID %id% löschen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.document_id">
                 <source>chameleon_system_core.document_manager.document_id</source>
@@ -2289,7 +2289,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.confirm_delete_with_connections">
                 <source>chameleon_system_core.document_manager.confirm_delete_with_connections</source>
-                <target>Trotzdem löschen</target>
+                <target>Dennoch löschen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.abort_delete">
                 <source>chameleon_system_core.document_manager.abort_delete</source>
@@ -2303,7 +2303,7 @@
 
             <trans-unit id="chameleon_system_core.table_editor.regenerate_translatable_fields">
                 <source>chameleon_system_core.table_editor.regenerate_translatable_fields</source>
-                <target>Feld-Basierte Übersetzungen aktualisieren</target>
+                <target>Feldbasierte Übersetzungen aktualisieren</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor.regenerate_translatable_fields_confirm">
                 <source>chameleon_system_core.table_editor.regenerate_translatable_fields_confirm</source>
@@ -2327,11 +2327,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_cms_user.select_source_user">
                 <source>chameleon_system_core.table_editor_cms_user.select_source_user</source>
-                <target>Wählen Sie einen CMS Benutzer / Autor, von dem die Rechte kopiert werden sollen</target>
+                <target>Wählen Sie einen CMS-Benutzer/Autor, von dem die Rechte kopiert werden sollen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_cms_user.user_group">
                 <source>chameleon_system_core.table_editor_cms_user.user_group</source>
-                <target>Benutzer Gruppen</target>
+                <target>Benutzergruppen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_cms_user.user_rolls">
                 <source>chameleon_system_core.table_editor_cms_user.user_rolls</source>
@@ -2373,7 +2373,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_files.error_missing_permission_to_overwrite_existing_file">
                 <source>chameleon_system_core.table_editor_files.error_missing_permission_to_overwrite_existing_file</source>
-                <target>Zieldatei existiert bereits aber kann nicht überschrieben werden</target>
+                <target>Zieldatei existiert bereits, kann aber nicht überschrieben werden</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_files.error_expected_uploaded_file">
                 <source>chameleon_system_core.table_editor_files.error_expected_uploaded_file</source>
@@ -2390,7 +2390,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_files.error_file_to_large">
                 <source>chameleon_system_core.table_editor_files.error_file_to_large</source>
-                <target>Die hochgeladene Datei ist zu gross mit %size% bytes (erlaubt: %allowed%)</target>
+                <target>Die hochgeladene Datei ist zu groß mit %size% Bytes (erlaubt: %allowed%)</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_media.error_requires_exact_dimension">
                 <source>chameleon_system_core.table_editor_media.error_requires_exact_dimension</source>
@@ -2415,15 +2415,15 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_media.error_permission_target_folder">
                 <source>chameleon_system_core.table_editor_media.error_permission_target_folder</source>
-                <target>Die Datei konnte nicht in den Zielordner verschoben werden. Überprüfen Sie die Berechtigungen des Zielordners</target>
+                <target>Die Datei konnte nicht in das Zielverzeichnis verschoben werden. Überprüfen Sie die Berechtigungen des Zielverzeichnisses</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_portal.action_edit_tree">
                 <source>chameleon_system_core.table_editor_portal.action_edit_tree</source>
-                <target>Seitenbaum Editieren</target>
+                <target>Seitenbaum editieren</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_portal.error_navigation_node_required">
                 <source>chameleon_system_core.table_editor_portal.error_navigation_node_required</source>
-                <target>Sie müssen zuerst einen Navigationsstartpunkt auswählen</target>
+                <target>Bitte wählen Sie zuerst einen Navigationsstartpunkt aus</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_portal.action_tmp_enable_inactive_language_for_me">
                 <source>chameleon_system_core.table_editor_portal.action_tmp_enable_inactive_language_for_me</source>
@@ -2462,7 +2462,7 @@
 
             <trans-unit id="chameleon_system_core.translation_exporter.error_not_logged_in">
                 <source>chameleon_system_core.translation_exporter.error_invalid_permissions</source>
-                <target>Sie müssen im CMS angemeldet sein, um Zugriff auf die Übersetzungen zu erhalten.</target>
+                <target>Bitte melden Sie sich im CMS an, um Zugriff auf die Übersetzungen zu erhalten.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.field_tree_page_assignment.already_linked_pages">
@@ -2472,7 +2472,7 @@
 
             <trans-unit id="chameleon_system_core.field_wysiwyg.custom_css_loading_error">
                 <source>chameleon_system_core.field_wysiwyg.custom_css_loading_error</source>
-                <target>WYSIWYG CSS Datei konnte nicht verarbeitet werden: %url%</target>
+                <target>WYSIWYG-CSS-Datei konnte nicht verarbeitet werden: %url%</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.field_lookup_multi_select_restriction.check_label">

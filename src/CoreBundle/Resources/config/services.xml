@@ -795,6 +795,10 @@
             <argument type="service" id="request_stack"/>
         </service>
 
+        <service id="chameleon_system_core.command.update.count" class="ChameleonSystem\CoreBundle\Command\CountUpdateCommand">
+            <tag name="console.command"/>
+        </service>
+
         <service id="chameleon_system_core.response.response_variable_replacer" class="ChameleonSystem\CoreBundle\Response\ResponseVariableReplacer">
             <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager"/>
             <argument type="service" id="chameleon_system_core.flash_messages"/>

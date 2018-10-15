@@ -4,11 +4,11 @@
         <body>
             <trans-unit id="chameleon_system_newsletter.action.unsubscribe_all">
                 <source>chameleon_system_newsletter.action.unsubscribe_all</source>
-                <target>Alle Newsletter abmelden</target>
+                <target>Von allen Newsletters abmelden</target>
             </trans-unit>
             <trans-unit id="chameleon_system_newsletter.action.unsubscribe">
                 <source>chameleon_system_newsletter.action.unsubscribe</source>
-                <target>Newsletter abmelden</target>
+                <target>Von Newsletter abmelden</target>
             </trans-unit>
             <trans-unit id="chameleon_system_newsletter.text.unsubscribed">
                 <source>chameleon_system_newsletter.text.unsubscribed</source>

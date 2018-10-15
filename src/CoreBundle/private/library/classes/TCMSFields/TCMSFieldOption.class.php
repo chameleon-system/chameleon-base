@@ -117,15 +117,7 @@ class TCMSFieldOption extends TCMSField
                     $value = mb_substr($value, 0, -1);
                 } // remove the ending "'"
 
-                if ('false' === $value || '0' === $value) {
-                    $displayValue = TGlobal::Translate('chameleon_system_core.field_options.option_value_false');
-                } elseif ('true' === $value || '1' === $value) {
-                    $displayValue = TGlobal::Translate('chameleon_system_core.field_options.option_value_true');
-                } else {
-                    $displayValue = $this->translateEnumKey($value);
-                }
-
-                $this->options[$value] = $displayValue;
+                $this->options[$value] = $this->translateEnumKey($value);
             }
         }
 

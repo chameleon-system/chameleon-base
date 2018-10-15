@@ -609,7 +609,7 @@ class TCMSRecordWritable extends TCMSRecord
     }
 
     /**
-     * deletes one or all images of an image field (all if iPos == null.
+     * deletes one or all images of an image field (all if iPos == null).
      *
      * @param string $sFieldName
      * @param int    $iPos
@@ -663,7 +663,9 @@ class TCMSRecordWritable extends TCMSRecord
 
             $tableEditor = new TCMSTableEditorManager();
             $tableEditor->Init($mediaTableConf->id, $imageId);
+            $tableEditor->AllowDeleteByAll(true);
             $tableEditor->Delete($imageId);
+            $tableEditor->AllowDeleteByAll(false);
 
             if (array_key_exists($imagePosition, $defaultImageIds)) {
                 $images[$imagePosition] = $defaultImageIds[$imagePosition];
