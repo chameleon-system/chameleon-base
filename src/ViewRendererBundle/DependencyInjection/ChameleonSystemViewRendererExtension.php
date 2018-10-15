@@ -12,21 +12,25 @@
 namespace ChameleonSystem\ViewRendererBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
-class ChameleonSystemViewRendererExtension extends ConfigurableExtension
+class ChameleonSystemViewRendererExtension extends Extension
 {
     /**
-     * {@inheritdoc}
+     * Loads a specific configuration.
+     *
+     * @param array            $config    An array of configuration values
+     * @param ContainerBuilder $container A ContainerBuilder instance
+     *
+     * @throws \InvalidArgumentException When provided tag is not defined in this extension
+     *
+     * @api
      */
-    protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
+    public function load(array $config, ContainerBuilder $container)
     {
         $loader = new XMLFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('services.xml');
-
-        $lessCompiler = $container->getDefinition('chameleon_system_view_renderer.less_compiler');
-        $lessCompiler->replaceArgument(0, $mergedConfig['css_dir']);
     }
 }

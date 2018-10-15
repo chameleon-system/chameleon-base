@@ -57,9 +57,7 @@
             <argument type="service" id="kernel"/>
         </service>
 
-        <service id="chameleon_system_view_renderer.less_compiler" class="ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler">
-            <argument/> <!-- will be replaced by ChameleonSystemViewRendererExtension -->
-        </service>
+        <service id="chameleon_system_view_renderer.less_compiler" class="ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler" />
 
         <service id="chameleon_system_view_renderer.compile_less_command" class="ChameleonSystem\ViewRendererBundle\Command\CompileLessCommand">
             <argument type="service" id="chameleon_system_view_renderer.less_compiler" />
