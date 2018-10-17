@@ -174,6 +174,7 @@ class ChameleonSystemCoreExtension extends Extension
             return;
         }
         $mailerDefinition = $container->getDefinition('chameleon_system_core.mailer');
+
         $mailerDefinition->addMethodCall('setSmtpHost', array($mailerConfig['host']));
         $mailerDefinition->addMethodCall('setSmtpUser', array($mailerConfig['user']));
         $mailerDefinition->addMethodCall('setSmtpPassword', array($mailerConfig['password']));

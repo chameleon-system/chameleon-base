@@ -103,6 +103,7 @@ class Configuration implements ConfigurationInterface
         $subTree->addDefaultsIfNotSet();
         $subTree->children()
             ->scalarNode('host')
+                ->info('The mailer host. To use a port other than 25, add the port to the host with a colon (Example: myhost:123). To use TLS, prefix the host with "tls://".')
             ->end()
             ->scalarNode('user')
             ->end()
