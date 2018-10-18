@@ -72,7 +72,7 @@ class TCMSCronJob extends TCMSRecord
         }
 
         if (false === $this->_Lock()) {
-            return ;
+            return;
         }
 
         $this->getLogger()->info(
