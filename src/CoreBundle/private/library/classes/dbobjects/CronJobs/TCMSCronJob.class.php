@@ -67,8 +67,12 @@ class TCMSCronJob extends TCMSRecord
      */
     public function RunScript($bForceExecution = false)
     {
-        if ((false === $bForceExecution && false === $this->_NeedExecution()) && false === $this->_Lock()) {
+        if (false === $bForceExecution && false === $this->_NeedExecution()) {
             return;
+        }
+
+        if (false === $this->_Lock()) {
+            return ;
         }
 
         $this->getLogger()->info(
