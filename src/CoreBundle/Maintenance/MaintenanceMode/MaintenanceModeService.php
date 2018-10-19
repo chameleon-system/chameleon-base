@@ -34,16 +34,6 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
         $this->cache = $cache;
     }
 
-    public function isActivated(): bool
-    {
-        return true === file_exists(PATH_MAINTENANCE_MODE_MARKER);
-    }
-
-    public function isActivatedInDb(): bool
-    {
-        return \TdbCmsConfig::GetInstance()->fieldShutdownWebsites;
-    }
-
     public function activate(): void
     {
         try {
