@@ -788,6 +788,10 @@
             <argument type="service" id="request_stack"/>
         </service>
 
+        <service id="chameleon_system_core.command.update.count" class="ChameleonSystem\CoreBundle\Command\CountUpdateCommand">
+            <tag name="console.command"/>
+        </service>
+
         <service id="chameleon_system_core.maintenance_mode_service" class="ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeService">
             <argument type="service" id="database_connection"/>
             <argument type="service" id="chameleon_system_cms_cache.cache"/>
