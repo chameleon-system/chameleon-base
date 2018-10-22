@@ -109,16 +109,16 @@ class ChameleonSystemCoreExtension extends Extension
         $backendAccessCheckDefinition = $container->getDefinition('chameleon_system_core.security.backend_access_check');
         $backendAccessCheckDefinition->addMethodCall('unrestrictPagedef', array('runcrons', $cronjobConfig['ip_whitelist']));
 
-        $exceptionErrorLevel = $cronjobConfig['exception_error_level'];
-        if (-1 === $exceptionErrorLevel) {
-            $env = $container->getParameter('kernel.environment');
-            if ('prod' === $env) {
-                $exceptionErrorLevel = E_ALL & !E_NOTICE & !E_USER_NOTICE & !E_DEPRECATED & !E_USER_DEPRECATED;
+        $failOnErrorLevel = $cronjobConfig['fail_on_error_level'];
+        if (-1 === $failOnErrorLevel) {
+            $debug = $container->getParameter('kernel.debug');
+            if (true === $debug) {
+                $failOnErrorLevel = E_ALL;
             } else {
-                $exceptionErrorLevel = E_ALL;
+                $failOnErrorLevel = E_ALL & !E_NOTICE & !E_USER_NOTICE & !E_DEPRECATED & !E_USER_DEPRECATED;
             }
         }
-        $container->setParameter('chameleon_system_core.cronjobs.exception_error_level', $exceptionErrorLevel);
+        $container->setParameter('chameleon_system_core.cronjobs.fail_on_error_level', $failOnErrorLevel);
     }
 
     /**

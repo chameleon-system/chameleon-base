@@ -249,11 +249,11 @@ class TCMSCronJob extends TCMSRecord
      **/
     private function setExceptionErrorHandler()
     {
-        $exceptionErrorLevel = $this->getExceptionErrorLevel();
+        $failureErrorLevel = $this->getFailureErrorLevel();
 
         return set_error_handler(
-            function ($severity, $message, $file, $line) use ($exceptionErrorLevel) {
-                if (0 === ($exceptionErrorLevel & $severity)) {
+            function ($severity, $message, $file, $line) use ($failureErrorLevel) {
+                if (0 === ($failureErrorLevel & $severity)) {
                     return;
                 }
                 throw new ErrorException($message, 0, $severity, $file, $line);
@@ -261,9 +261,9 @@ class TCMSCronJob extends TCMSRecord
         );
     }
 
-    private function getExceptionErrorLevel(): int
+    private function getFailureErrorLevel(): int
     {
-        return ServiceLocator::getParameter('chameleon_system_core.cronjobs.exception_error_level');
+        return ServiceLocator::getParameter('chameleon_system_core.cronjobs.fail_on_error_level');
     }
 
     /**

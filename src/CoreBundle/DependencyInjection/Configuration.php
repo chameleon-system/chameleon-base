@@ -63,7 +63,7 @@ class Configuration implements ConfigurationInterface
                 ->defaultValue(array())
                 ->prototype('scalar')->end()
             ->end()
-            ->integerNode('exception_error_level')
+            ->integerNode('fail_on_error_level')
                 ->defaultValue(-1)
                 ->info('A PHP error during a cronjob will terminate this cronjob if the error level is covered by
                     this setting (standard PHP error levels given as a bit mask, e.g. E_ALL & !E_NOTICE). If set to -1,
