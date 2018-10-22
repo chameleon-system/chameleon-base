@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * manages a cronjob.
 /**/
@@ -56,7 +58,7 @@ class TCMSCronJob extends TCMSRecord
      */
     protected function getLogger()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.cronjobs');
+        return ServiceLocator::get('cmsPkgCore.logChannel.cronjobs');
     }
 
     /**
@@ -247,15 +249,21 @@ class TCMSCronJob extends TCMSRecord
      **/
     private function setExceptionErrorHandler()
     {
+        $failureErrorLevel = $this->getFailureErrorLevel();
+
         return set_error_handler(
-            function ($severity, $message, $file, $line) {
-                if (!(error_reporting() & $severity)) {
-                    // This error code is not included in error_reporting - taken from the php documentation
+            function ($severity, $message, $file, $line) use ($failureErrorLevel) {
+                if (0 === ($failureErrorLevel & $severity)) {
                     return;
                 }
                 throw new ErrorException($message, 0, $severity, $file, $line);
             }
         );
+    }
+
+    private function getFailureErrorLevel(): int
+    {
+        return ServiceLocator::getParameter('chameleon_system_core.cronjobs.fail_on_error_level');
     }
 
     /**

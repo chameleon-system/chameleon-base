@@ -63,6 +63,14 @@ class Configuration implements ConfigurationInterface
                 ->defaultValue(array())
                 ->prototype('scalar')->end()
             ->end()
+            ->integerNode('fail_on_error_level')
+                ->defaultValue(-1)
+                ->info('A PHP error during a cronjob will terminate this cronjob if the error level is covered by
+                    this setting (standard PHP error levels given as a bit mask, e.g. E_ALL & !E_NOTICE). If set to -1,
+                    notices and deprecation warnings will be ignored in the prod environment while in other environments
+                    all errors lead to termination of the job. This setting is intended for existing older cronjob
+                    implementations; new code should throw exceptions directly and not use PHP errors.')
+            ->end()
         ->end();
 
         return $subTree;
