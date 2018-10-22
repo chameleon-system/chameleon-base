@@ -154,7 +154,13 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     {
         $js = parent::_GetOpenWindowJS($oPopupTableConf);
 
-        $aParams = array('pagedef' => 'extendedLookupList', 'id' => $oPopupTableConf->id, 'fieldName' => $this->name, 'sourceTblConfId' => $this->oDefinition->fieldCmsTblConfId);
+        $aParams = array(
+            'pagedef' => 'extendedLookupList',
+            'id' => $oPopupTableConf->id,
+            'fieldName' => $this->name,
+            'field' => $this->name,
+            'sourceTblConfId' => $this->oDefinition->fieldCmsTblConfId,
+        );
 
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParams);
         $sWindowTitle = TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected');
