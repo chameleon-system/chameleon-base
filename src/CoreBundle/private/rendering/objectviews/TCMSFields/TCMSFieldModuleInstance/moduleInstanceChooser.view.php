@@ -73,7 +73,7 @@ $menuPrefix = $oField->name;
     function DeleteModuleInstanceFinal(data, statusText) {
         CloseModalIFrameDialog();
         if (data && typeof(data) == 'object') {
-            var message = '<h1><?=TGlobal::Translate('chameleon_system_core.field_module_instance.error'); ?></h1><?=TGlobal::Translate('chameleon_system_core.template_engine.error_delete_still_used'); ?><br /><br />';
+            var message = "<h1><?=TGlobal::Translate('chameleon_system_core.field_module_instance.error'); ?></h1><?=TGlobal::Translate('chameleon_system_core.template_engine.error_delete_still_used'); ?><br /><br />";
 
             for (var i = 0; i < data.length; i++) {
                 message += '<div style="padding-bottom: 10px;">';
