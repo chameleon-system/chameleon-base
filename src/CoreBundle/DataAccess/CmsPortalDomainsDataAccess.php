@@ -90,13 +90,13 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
                      AND (`identifier` = ? OR `identifier` = '')
         ";
 
-         if (false === $allowInactivePortals) {
-             $query .= " AND `cms_portal`.`deactive_portal` != '1' ";
-         }
-         $query .= ' ORDER BY `identifier` DESC
+        if (false === $allowInactivePortals) {
+            $query .= " AND `cms_portal`.`deactive_portal` != '1' ";
+        }
+        $query .= ' ORDER BY `identifier` DESC
                        LIMIT 0,1';
 
-         $portalCandidate = $this->connection->fetchAssoc($query, [
+        $portalCandidate = $this->connection->fetchAssoc($query, [
              $idRestrictionList,
              $identifierRestriction,
          ], [
@@ -104,11 +104,11 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
              ParameterType::STRING,
          ]);
 
-         if (false === $portalCandidate) {
-             return null;
-         }
+        if (false === $portalCandidate) {
+            return null;
+        }
 
-         return $portalCandidate;
+        return $portalCandidate;
     }
 
     /**

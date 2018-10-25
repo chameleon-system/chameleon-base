@@ -13,7 +13,6 @@ namespace ChameleonSystem\TwigDebugBundle\Twig\Node;
 
 use Twig_Compiler;
 use Twig_Node_Include;
-use Twig_NodeInterface;
 use Twig_NodeOutputInterface;
 
 class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputInterface

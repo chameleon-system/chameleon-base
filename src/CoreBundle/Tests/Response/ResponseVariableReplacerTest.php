@@ -9,7 +9,6 @@ use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedEx
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Twig\Token;
 
 class ResponseVariableReplacerTest extends TestCase
 {

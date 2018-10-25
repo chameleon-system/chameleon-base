@@ -37,7 +37,6 @@ class ChameleonModulePass implements CompilerPassInterface
                 throw new \LogicException('Chameleon modules must not be shared service instances. This module is shared: '.$moduleServiceId);
             }
             $services[$moduleServiceId] = new Reference($moduleServiceId);
-
         }
 
         $moduleServiceDefinition->replaceArgument(0, ServiceLocatorTagPass::register($container, $services));
