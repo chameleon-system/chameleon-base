@@ -8,8 +8,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Tests\CronJob\fixtures\CronJobThatExtendsTCMSCronJob;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use TCMSCronJob;
+use Psr\Container\ContainerInterface;
 
 class CronJobFactoryTest extends TestCase
 {
@@ -22,7 +21,7 @@ class CronJobFactoryTest extends TestCase
      */
     private $cronJobFactory;
     /**
-     * @var TCMSCronJob
+     * @var \TCMSCronJob
      */
     private $actualResult;
 
@@ -45,19 +44,15 @@ class CronJobFactoryTest extends TestCase
     {
         $this->containerMock = $this->prophesize(ContainerInterface::class);
         $this->containerMock->has('existing_service')->willReturn(true);
-        $this->containerMock->has('non_existing_service')->willReturn(false);
+        $this->containerMock->has('unknown_identifier')->willReturn(false);
         $this->containerMock->has('service_that_is_unknown_to_the_service_container')->willReturn(false);
-        $this->containerMock->has('\ChameleonSystem\CoreBundle\Tests\CronJob\fixtures\CronJobThatExtendsTCMSCronJob')->willReturn(false);
-        $this->containerMock->has('\ChameleonSystem\CoreBundle\Tests\CronJob\fixtures\CronJobThatDoesNotExtendTCMSCronJob')->willReturn(false);
+        $this->containerMock->has('ChameleonSystem\CoreBundle\Tests\CronJob\fixtures\CronJobThatExtendsTCMSCronJob')->willReturn(false);
+        $this->containerMock->has('ChameleonSystem\CoreBundle\Tests\CronJob\fixtures\CronJobThatDoesNotExtendTCMSCronJob')->willReturn(false);
         $this->containerMock->get('existing_service')->willReturn(new CronJobThatExtendsTCMSCronJob());
         $this->containerMock->get('chameleon_system_core.request_state_hash_provider')->willReturn($this->prophesize(RequestStateHashProviderInterface::class));
         ServiceLocator::setContainer($this->containerMock->reveal());
 
         $this->cronJobFactory = new CronJobFactory($this->containerMock->reveal());
-        $this->cronJobFactory->setCronJobs([
-            'existing_service',
-            'service_that_is_unknown_to_the_service_container',
-        ]);
     }
 
     private function whenConstructCronJobIsCalledForAnExistingCronJob()

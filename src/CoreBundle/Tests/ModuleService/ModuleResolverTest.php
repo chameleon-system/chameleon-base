@@ -13,44 +13,48 @@ namespace ChameleonSystem\CoreBundle\Tests\moduleservice;
 
 use ChameleonSystem\CoreBundle\ModuleService\ModuleResolver;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
+use Psr\Container\ContainerInterface;
 
 class ModuleResolverTest extends TestCase
 {
     /**
      * @var ModuleResolver
      */
-    private $service;
+    private $subject;
 
     protected function setUp()
     {
         parent::setUp();
-        $containerMock = $this->prophesize('Symfony\Component\DependencyInjection\ContainerInterface');
+        $containerMock = $this->prophesize(ContainerInterface::class);
+        $containerMock->has(Argument::any())->willReturn(false);
+        $containerMock->has('service_id')->willReturn(true);
         $containerMock->get('service_id')->willReturn('success');
+        $containerMock->has('service_id2')->willReturn(true);
         $containerMock->get('service_id2')->willReturn('success2');
-        $this->service = new ModuleResolver($containerMock->reveal());
+        $this->subject = new ModuleResolver($containerMock->reveal());
     }
 
     protected function tearDown()
     {
         parent::tearDown();
-        $this->service = null;
+        $this->subject = null;
     }
 
     /**
      * @test
      */
-    public function it_lets_you_add_service_ids()
+    public function it_returns_modules(): void
     {
-        $this->service->addModule('service_id');
-        $this->assertEquals('success', $this->service->getModule('service_id'));
+        $this->assertEquals('success', $this->subject->getModule('service_id'));
     }
 
     /**
      * @test
      */
-    public function it_will_return_null_on_nonexisting_module()
+    public function it_returns_null_on_nonexisting_module()
     {
-        $this->assertNull($this->service->getModule('foo'));
+        $this->assertNull($this->subject->getModule('foo'));
     }
 
     /**
@@ -58,27 +62,7 @@ class ModuleResolverTest extends TestCase
      */
     public function it_lets_you_check_if_a_module_exists()
     {
-        $this->service->addModule('service_id');
-        $this->assertTrue($this->service->hasModule('service_id'));
-        $this->assertFalse($this->service->hasModule('name2'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_takes_an_array_of_modules()
-    {
-        $this->service->addModules(array('service_id', 'service_id2'));
-        $this->assertEquals('success', $this->service->getModule('service_id'));
-        $this->assertEquals('success2', $this->service->getModule('service_id2'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_provides_a_list_of_modules()
-    {
-        $this->service->addModules(array('service_id', 'service_id2'));
-        $this->assertEquals(array('service_id', 'service_id2'), $this->service->getModules());
+        $this->assertTrue($this->subject->hasModule('service_id'));
+        $this->assertFalse($this->subject->hasModule('name2'));
     }
 }

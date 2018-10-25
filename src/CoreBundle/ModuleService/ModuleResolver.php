@@ -11,23 +11,15 @@
 
 namespace ChameleonSystem\CoreBundle\ModuleService;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use TModelBase;
+use Psr\Container\ContainerInterface;
 
-class ModuleResolver
+class ModuleResolver implements ModuleResolverInterface
 {
     /**
      * @var ContainerInterface
      */
     private $container;
-    /**
-     * @var array
-     */
-    private $idlist = array();
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -35,20 +27,19 @@ class ModuleResolver
 
     /**
      * @param string $id
+     *
+     * @deprecated since 6.3.0 - available modules are injected by constructor now
      */
     public function addModule($id)
     {
-        $this->idlist[] = $id;
     }
 
     /**
-     * @param string $name
-     *
-     * @return TModelBase|null
+     * {@inheritdoc}
      */
     public function getModule($name)
     {
-        if (!$this->hasModule($name)) {
+        if (false === $this->container->has($name)) {
             return null;
         }
 
@@ -56,28 +47,29 @@ class ModuleResolver
     }
 
     /**
-     * @param string $name
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasModule($name)
     {
-        return in_array($name, $this->idlist);
+        return $this->container->has($name);
     }
 
     /**
      * @param string[] $ids
+     *
+     * @deprecated since 6.3.0 - available modules are injected by constructor now
      */
     public function addModules(array $ids)
     {
-        $this->idlist = array_merge($this->idlist, $ids);
     }
 
     /**
      * @return string[]
+     *
+     * @deprecated since 6.3.0 - complete module list can no longer be retrieved
      */
     public function getModules()
     {
-        return $this->idlist;
+        return [];
     }
 }

@@ -11,7 +11,7 @@
 
         <service id="cmsPkgCore.logHandler.database" class="TPkgCmsCoreLogMonologHandler_Database" public="false" />
 
-        <service id="cmsPkgCore.tableEditorListFieldState" class="TTableEditorListFieldState" />
+        <service id="cmsPkgCore.tableEditorListFieldState" class="TTableEditorListFieldState" public="true" />
 
         <service id="cmsPkgCore.logHandler.fingerscrossed" class="Monolog\Handler\FingersCrossedHandler" public="false">
             <argument type="service" id="cmsPkgCore.logHandler.database" />

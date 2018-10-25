@@ -111,7 +111,7 @@
             <tag name="chameleon_system.sanity_check.check" translation_key="label.cache" />
         </service>
 
-        <service id="chameleon_system_core.check_imagemagick" class="ChameleonSystem\CoreBundle\SanityCheck\ImageMagickCheck">
+        <service id="chameleon_system_core.check_image_magick" class="ChameleonSystem\CoreBundle\SanityCheck\ImageMagickCheck">
             <argument>%chameleon_system_sanity_check.level.warning%</argument>
             <tag name="chameleon_system.sanity_check.check" translation_key="label.imagemagickfound" />
         </service>
