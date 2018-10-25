@@ -26,7 +26,7 @@ $menuPrefix = $oField->name;
     function Rename(fieldName, instanceName) {
         var sNewName = '';
         var defaultValue = instanceName;
-        sNewName = window.prompt('<?=TGlobal::Translate('chameleon_system_core.template_engine.prompt_instance_name'); ?>:', defaultValue);
+        sNewName = window.prompt('<?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.template_engine.prompt_instance_name')); ?>:', defaultValue);
         if (sNewName != null && sNewName != defaultValue) {
             GetAjaxCall('<?=$sAjaxURL; ?>&_fieldName=' + fieldName + '&_fnc=RenameInstance&sName=' + escape(sNewName), RenameFinal);
         }
@@ -52,7 +52,7 @@ $menuPrefix = $oField->name;
 
     function CreateModuleInstance(fieldName, moduleID, sView) {
         $('#cmsModuleMenu').hide('fast');
-        sNewName = window.prompt('<?=TGlobal::Translate('chameleon_system_core.template_engine.prompt_instance_name'); ?>:', '<?=$sRecordName; ?>');
+        sNewName = window.prompt('<?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.template_engine.prompt_instance_name')); ?>:', '<?=$sRecordName; ?>');
         GetAjaxCall('<?=$sAjaxURL; ?>&_fieldName=' + fieldName + '&_fnc=CreateNewInstance&moduleID=' + moduleID + '&sName=' + escape(sNewName) + '&sView=' + escape(sView), CreateModuleInstanceFinal);
     }
 
@@ -64,7 +64,7 @@ $menuPrefix = $oField->name;
     }
 
     function DeleteModuleInstance(fieldName, moduleInstanceId) {
-        if (window.confirm('<?=TGlobal::Translate('chameleon_system_core.action.confirm_delete'); ?>')) {
+        if (window.confirm('<?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.action.confirm_delete')); ?>')) {
             $('#cmsModuleMenu').hide('fast');
             GetAjaxCall('<?=$sAjaxURL; ?>&_fieldName=' + fieldName + '&_fnc=DeleteInstance&moduleInstanceId=' + moduleInstanceId, DeleteModuleInstanceFinal);
         }
@@ -73,12 +73,12 @@ $menuPrefix = $oField->name;
     function DeleteModuleInstanceFinal(data, statusText) {
         CloseModalIFrameDialog();
         if (data && typeof(data) == 'object') {
-            var message = "<h1><?=TGlobal::Translate('chameleon_system_core.field_module_instance.error'); ?></h1><?=TGlobal::Translate('chameleon_system_core.template_engine.error_delete_still_used'); ?><br /><br />";
+            var message = '<h1><?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.field_module_instance.error')); ?></h1><?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.template_engine.error_delete_still_used')); ?><br /><br />';
 
             for (var i = 0; i < data.length; i++) {
                 message += '<div style="padding-bottom: 10px;">';
                 message += data[i].tree;
-                message += '<a href="<?=$sPageEditURL; ?>&id=' + data[i].id + '" target="_parent" class="actionButton"><?=TGlobal::Translate('chameleon_system_core.cms_module_page_tree.action_edit_page'); ?></a><hr width="95%" />';
+                message += '<a href="<?=$sPageEditURL; ?>&id=' + data[i].id + '" target="_parent" class="actionButton"><?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_page_tree.action_edit_page')); ?></a><hr width="95%" />';
                 message += '</div>';
             }
             CreateModalIFrameDialogFromContent(message, 550, 350);
@@ -93,7 +93,7 @@ $menuPrefix = $oField->name;
 
         $(document).ready(function(){
             var container = '<div id="cmsModuleMenu" style="display: none;">';
-            container += '<div class="moduleMenuHeader"><a href="#" onclick="jQuery(\'#cmsModuleMenu\').hide(\'fast\');"><?=TGlobal::Translate('chameleon_system_core.action.close'); ?></a></div>';
+            container += '<div class="moduleMenuHeader"><a href="#" onclick="jQuery(\'#cmsModuleMenu\').hide(\'fast\');"><?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.action.close')); ?></a></div>';
             container += '<a class="scrolltop" href="#">&nbsp;</a>';
             container += '<div id="menuWrapper">&nbsp;</div>';
             container += '<a href="#" class="scrollbottom">&nbsp;</a>';
