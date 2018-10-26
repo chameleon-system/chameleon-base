@@ -151,9 +151,8 @@ class TCMSTableWriter extends TCMSTableEditor
 
     /**
      * @param TCMSRecord $oPostTable
-     * @param string $tableName
-     * @throws ErrorException
-     * @throws TPkgCmsException_Log
+     * @param string     $tableName
+     * @throws DBALException
      */
     private function adaptTableEngine(&$oPostTable, string $tableName): void
     {
@@ -169,13 +168,16 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * @param string $oldTableName
      * @param string $newTableName
-     * @throws TPkgCmsException_Log
+     * @throws DBALException
      */
     private function adaptTableName(string $oldTableName, string $newTableName): void
     {
         if ($oldTableName !== $newTableName) {
-            $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($oldTableName).'` RENAME `'.MySqlLegacySupport::getInstance()->real_escape_string($newTableName).'`';
-            MySqlLegacySupport::getInstance()->query($query);
+            $databaseConnection = $this->getDatabaseConnection();
+
+            $query = sprintf('ALTER TABLE %s RENAME %s', $databaseConnection->quoteIdentifier($oldTableName), $databaseConnection->quoteIdentifier($newTableName));
+            $databaseConnection->executeQuery($query);
+
             $aQuery = array(new LogChangeDataModel($query));
             TCMSLogChange::WriteTransaction($aQuery);
 
@@ -186,15 +188,18 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * @param string $tableName
      * @param string $oldTableComment
-     * @throws TPkgCmsException_Log
+     * @throws DBALException
      */
     private function adaptTableComment(string $tableName, string $oldTableComment): void
     {
         $newTableComment = $this->getTableComment($this->oTable->sqlData['translation'], $this->oTable->sqlData['notes']);
 
         if ($oldTableComment !== $newTableComment) {
-            $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($tableName)."` COMMENT = '".MySqlLegacySupport::getInstance()->real_escape_string($newTableComment)."'";
-            MySqlLegacySupport::getInstance()->query($query);
+            $databaseConnection = $this->getDatabaseConnection();
+
+            $query = sprintf('ALTER TABLE %s COMMENT %s', $databaseConnection->quoteIdentifier($tableName), $databaseConnection->quote($newTableComment));
+            $databaseConnection->executeQuery($query);
+
             $aQuery = array(new LogChangeDataModel($query));
             TCMSLogChange::WriteTransaction($aQuery);
         }
@@ -507,13 +512,15 @@ class TCMSTableWriter extends TCMSTableEditor
      * @param string $tableName
      * @param string $newEngine
      *
-     * @throws ErrorException
-     * @throws TPkgCmsException_Log
+     * @throws DBALException
      */
     protected function changeTableEngine($tableName, $newEngine)
     {
-        $query = 'ALTER TABLE  `'.MySqlLegacySupport::getInstance()->real_escape_string($tableName)."` ENGINE = {$newEngine}";
-        MySqlLegacySupport::getInstance()->query($query);
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $query = sprintf('ALTER TABLE %s ENGINE %s', $databaseConnection->quoteIdentifier($tableName), $newEngine);
+        $databaseConnection->executeQuery($query);
+
         TCMSLogChange::WriteTransaction(array(new LogChangeDataModel($query)));
     }
 
