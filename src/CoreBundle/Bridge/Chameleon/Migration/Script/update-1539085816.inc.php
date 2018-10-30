@@ -20,4 +20,3 @@ TCMSLogChange::AddBackEndMessage(
     ERROR_MESSAGE_TYPE,
     '', 'en'
 );
-

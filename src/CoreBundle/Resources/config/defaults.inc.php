@@ -1196,7 +1196,7 @@ if (!defined('CHAMELEON_PKG_NEWSLETTER_NEW_MODULE')) {
  *
  * The following properties should be true for this location:
  * - It must survive deployment (if it was present before it should also be afterwards).
- * - Different Chameleon installations on the same host must be distinguishable here (by generating some kind of 
+ * - Different Chameleon installations on the same host must be distinguishable here (by generating some kind of
  *   generated ID or using a path within the project directory).
  * - The same physical marker should be present for all nodes of a multi-node installation.
  *
