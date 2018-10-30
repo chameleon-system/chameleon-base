@@ -5,9 +5,9 @@
 
     <services>
 
-        <service id="chameleon_system_cms_cache.cache_database_connection" alias="database_connection" />
+        <service id="chameleon_system_cms_cache.cache_database_connection" alias="database_connection"  public="true"/>
 
-        <service id="chameleon_system_cms_cache.cache" class="esono\pkgCmsCache\Cache">
+        <service id="chameleon_system_cms_cache.cache" class="esono\pkgCmsCache\Cache" public="true">
             <argument type="service" id="request_stack" />
             <argument type="service" id="chameleon_system_cms_cache.cache_database_connection" />
             <argument type="service" id="chameleon_system_cms_cache.storage.null" />
@@ -22,7 +22,7 @@
             <argument>%chameleon_system_core.cache.memcached_timeout_in_milliseconds%</argument>
         </service>
 
-        <service id="chameleon_system_cms_cache.memcache_cache" parent="chameleon_system_cms_cache.memcache_base">
+        <service id="chameleon_system_cms_cache.memcache_cache" parent="chameleon_system_cms_cache.memcache_base" public="true">
             <argument type="collection">
                 <argument type="collection">
                     <argument key="host">%chameleon_system_core.cache.memcache_server1%</argument>
@@ -35,7 +35,7 @@
             </argument>
         </service>
 
-        <service id="chameleon_system_cms_cache.memcache_session" parent="chameleon_system_cms_cache.memcache_base">
+        <service id="chameleon_system_cms_cache.memcache_session" parent="chameleon_system_cms_cache.memcache_base" public="true">
             <argument type="collection">
                 <argument type="collection">
                     <argument key="host">%chameleon_system_core.cache.memcache_sessions_server1%</argument>

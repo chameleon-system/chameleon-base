@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CmsCoreLogBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -197,8 +198,7 @@ class LogShowCommand extends Command
         }
 
         if (!empty($tableColumns)) {
-            /** @var \Symfony\Component\Console\Helper\TableHelper $table */
-            $table = $this->getHelper('table');
+            $table = new Table($output);
 
             switch ($input->getOption('details')) {
                 case 'min':
@@ -240,7 +240,7 @@ class LogShowCommand extends Command
                 }
             } else {
                 $table->setRows($tableColumns);
-                $table->render($output);
+                $table->render();
             }
         } else {
             $output->writeln('<error>No log entries found</error>');

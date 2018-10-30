@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Yaml\Yaml;
+
 class TPkgViewRendererSnippetResourceCollectorEndPoint
 {
     /**
@@ -24,7 +26,7 @@ class TPkgViewRendererSnippetResourceCollectorEndPoint
         $aSnippetTree = $oTree->getConfigTree($oPortal, $snippetPath);
         $aTmpResources = $this->getConfigsFromTree($aSnippetTree);
         foreach ($aTmpResources as $sPathToConfig) {
-            $aConfig = Symfony\Component\Yaml\Yaml::parse($sPathToConfig);
+            $aConfig = Yaml::parse(\file_get_contents($sPathToConfig));
             if (isset($aConfig['less'])) {
                 foreach ($aConfig['less'] as $sResource) {
                     $aLessFiles[$sResource] = true;

@@ -12,7 +12,9 @@
 namespace ChameleonSystem\CoreBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 class AddCronJobsPass implements CompilerPassInterface
 {
@@ -23,14 +25,16 @@ class AddCronJobsPass implements CompilerPassInterface
     {
         $cronJobFactoryDefinition = $container->getDefinition('chameleon_system_core.cronjob.cronjob_factory');
         $cronJobServiceIds = array_keys($container->findTaggedServiceIds('chameleon_system.cronjob'));
+        $services = [];
 
-        foreach ($cronJobServiceIds as $cronjobServiceId) {
-            $cronJobDefinition = $container->getDefinition($cronjobServiceId);
+        foreach ($cronJobServiceIds as $cronJobServiceId) {
+            $cronJobDefinition = $container->getDefinition($cronJobServiceId);
             if ($cronJobDefinition->isShared()) {
-                throw new \LogicException('Chameleon cron jobs must not be shared service instances. This cron job is shared: '.$cronjobServiceId);
+                throw new \LogicException('Chameleon cron jobs must not be shared service instances. This cron job is shared: '.$cronJobServiceId);
             }
+            $services[$cronJobServiceId] = new Reference($cronJobServiceId);
         }
 
-        $cronJobFactoryDefinition->addMethodCall('setCronJobs', array($cronJobServiceIds));
+        $cronJobFactoryDefinition->replaceArgument(0, ServiceLocatorTagPass::register($container, $services));
     }
 }

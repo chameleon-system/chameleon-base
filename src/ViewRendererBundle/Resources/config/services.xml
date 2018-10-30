@@ -30,7 +30,7 @@
         </service>
 
         <service id="chameleon_system_view_renderer.view_renderer"
-                 class="%chameleon_system_view_renderer.view_renderer.class%" shared="false">
+                 class="%chameleon_system_view_renderer.view_renderer.class%" shared="false" public="true">
             <argument type="service" id="chameleon_system_view_renderer.data_mapping_service"/>
             <argument type="service" id="chameleon_system_snippet_renderer.snippet_renderer" />
             <argument type="service" id="event_dispatcher" />
@@ -47,7 +47,7 @@
             <tag name="twig.loader" priority="128" />
         </service>
 
-        <service id="chameleon_system_view_renderer.twig.loader.string" class="Twig_Loader_String">
+        <service id="chameleon_system_view_renderer.twig.loader.string" class="ChameleonSystem\ViewRendererBundle\Bridge\Twig\Loader\TwigStringLoader">
             <tag name="twig.loader" priority="-255" />
         </service>
 

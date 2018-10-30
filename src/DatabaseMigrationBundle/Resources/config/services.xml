@@ -25,7 +25,7 @@
             <argument type="service" id="database_connection" />
         </service>
 
-        <service id="chameleon_system_database_migration.recorder.migration_recorder_state_handler" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler">
+        <service id="chameleon_system_database_migration.recorder.migration_recorder_state_handler" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler" public="true">
             <argument type="service" id="request_stack"/>
         </service>
         <service id="chameleon_system_database_migration.recorder.migration_recorder" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorder">

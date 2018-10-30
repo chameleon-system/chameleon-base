@@ -40,9 +40,9 @@ interface CmsPortalDomainsDataAccessInterface
     /**
      * Returns all data for a portal that "might be" the currently active portal, given the passed restrictions.
      *
-     * @param array $idRestrictionList
+     * @param array  $idRestrictionList
      * @param string $identifierRestriction
-     * @param bool $allowInactivePortals
+     * @param bool   $allowInactivePortals
      *
      * @return array|null
      */

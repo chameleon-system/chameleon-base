@@ -75,8 +75,8 @@ class CmsPortalDomainsDataAccessCacheDecorator implements CmsPortalDomainsDataAc
 
         $value = $this->subject->getPortalPrefixListForDomain($domainName);
         $cache->set($cacheKey, $value, [
-            [ 'table' => 'cms_portal', 'id' => null ],
-            [ 'table' => 'cms_portal_domains', 'id' => null ],
+            ['table' => 'cms_portal', 'id' => null],
+            ['table' => 'cms_portal_domains', 'id' => null],
         ]);
 
         return $value;
@@ -108,7 +108,7 @@ class CmsPortalDomainsDataAccessCacheDecorator implements CmsPortalDomainsDataAc
 
         $value = $this->subject->getDomainDataByName($domainName);
         $cache->set($cacheKey, $value, [
-            [ 'table' => 'cms_portal_domains', 'id' => null ],
+            ['table' => 'cms_portal_domains', 'id' => null],
         ]);
 
         return $value;

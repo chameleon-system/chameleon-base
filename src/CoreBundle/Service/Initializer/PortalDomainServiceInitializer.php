@@ -94,7 +94,7 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
     }
 
     /**
-     * @param Request $request
+     * @param Request                      $request
      * @param PortalDomainServiceInterface $portalDomainService
      *
      * @return array

@@ -13,7 +13,7 @@ use ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface;
 use ChameleonSystem\CoreBundle\Exception\ModuleException;
 use ChameleonSystem\CoreBundle\Exception\ModuleExecutionFailedException;
 use ChameleonSystem\CoreBundle\ModuleService\ModuleExecutionStrategyInterface;
-use ChameleonSystem\CoreBundle\ModuleService\ModuleResolver;
+use ChameleonSystem\CoreBundle\ModuleService\ModuleResolverInterface;
 use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -45,7 +45,7 @@ class TModuleLoader
      */
     private $requestStack;
     /**
-     * @var ModuleResolver
+     * @var ModuleResolverInterface
      */
     protected $moduleResolver;
     /**
@@ -65,15 +65,7 @@ class TModuleLoader
      */
     private $moduleExecutionStrategy;
 
-    /**
-     * @param RequestStack                     $requestStack
-     * @param ModuleResolver                   $moduleResolver
-     * @param IViewPathManager                 $viewPathManager
-     * @param CacheInterface                   $cache
-     * @param TGlobalBase                      $global
-     * @param ModuleExecutionStrategyInterface $moduleExecutionStrategy
-     */
-    public function __construct(RequestStack $requestStack, ModuleResolver $moduleResolver, IViewPathManager $viewPathManager, CacheInterface $cache, TGlobalBase $global, ModuleExecutionStrategyInterface $moduleExecutionStrategy)
+    public function __construct(RequestStack $requestStack, ModuleResolverInterface $moduleResolver, IViewPathManager $viewPathManager, CacheInterface $cache, TGlobalBase $global, ModuleExecutionStrategyInterface $moduleExecutionStrategy)
     {
         $this->requestStack = $requestStack;
         $this->moduleResolver = $moduleResolver;
