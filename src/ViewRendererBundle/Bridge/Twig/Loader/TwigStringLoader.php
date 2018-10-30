@@ -3,7 +3,12 @@
 namespace ChameleonSystem\ViewRendererBundle\Bridge\Twig\Loader;
 
 /**
- * Loads a template from a string.
+ * Loads a template from a string. In the Chameleon System this class is only used in case a template could not be
+ * found. We can then display the template name so that developers can more easily locate errors.
+ *
+ * The class is taken from Twig 1.x, the original docblock follows.
+ *
+ * ---
  *
  * This loader should NEVER be used. It only exists for Twig internal purposes.
  *
@@ -13,10 +18,6 @@ namespace ChameleonSystem\ViewRendererBundle\Bridge\Twig\Loader;
  * control, you need to take care of clearing the old cache file by yourself.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
- *
- * In the Chameleon System this class is only used in case a template could not be found. We can then display the
- * template name so that developers can more easily locate errors.
  */
 class TwigStringLoader implements \Twig_LoaderInterface
 {
