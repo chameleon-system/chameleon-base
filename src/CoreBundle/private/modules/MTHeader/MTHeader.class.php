@@ -767,8 +767,6 @@ class MTHeader extends TCMSModelBase
         $aIncludes[] = '<link href="/chameleon/blackbox/bootstrap/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="/chameleon/blackbox/bootstrap/css/bootstrap-theme.min.css" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/bootstrap.css" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<link href="/chameleon/blackbox/iconFonts/foundation/foundation-icons.css" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<link href="/chameleon/blackbox/iconFonts/ionicons/ionicons.css" media="screen" rel="stylesheet" type="text/css" />';
 
         return $aIncludes;
     }
