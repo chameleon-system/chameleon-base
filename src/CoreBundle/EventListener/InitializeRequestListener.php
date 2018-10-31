@@ -12,8 +12,8 @@
 namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\Exception\MaintenanceModeErrorException;
+use ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeServiceInterface;
 use ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer;
-use ChameleonSystem\CoreBundle\Service\MaintenanceModeServiceInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -55,22 +55,12 @@ class InitializeRequestListener
     private function recheckMaintenanceMode(GetResponseEvent $event): void
     {
         try {
-            if (true === $this->maintenanceModeService->isActivatedInDb()) {
-                // TODO should the service handle the clearstatcache?
-                $this->renewMaintenanceMarkerFileCache();
-
-                if (true === $this->maintenanceModeService->isActivated()) {
-                    $this->redirectToCurrentPage($event);
-                }
+            if (true === $this->maintenanceModeService->isActivated()) {
+                $this->redirectToCurrentPage($event);
             }
         } catch (MaintenanceModeErrorException $exception) {
             // TODO what to do here?
         }
-    }
-
-    private function renewMaintenanceMarkerFileCache(): void
-    {
-        clearstatcache(true, PATH_MAINTENANCE_MODE_MARKER);
     }
 
     private function redirectToCurrentPage(GetResponseEvent $event): void

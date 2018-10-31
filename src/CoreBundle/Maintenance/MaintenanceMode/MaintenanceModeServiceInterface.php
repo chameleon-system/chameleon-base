@@ -15,6 +15,8 @@ use ChameleonSystem\CoreBundle\Exception\MaintenanceModeErrorException;
 
 interface MaintenanceModeServiceInterface
 {
+    public function isActivated(): bool;
+
     /**
      * @throws MaintenanceModeErrorException
      */
