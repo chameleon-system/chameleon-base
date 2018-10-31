@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
+use Doctrine\DBAL\DBALException;
 
 /**
  * manages creating, changing, and deleting fields from a table.
@@ -31,6 +32,16 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     protected $_oParentRecord = null;
 
     protected $_sqlFieldName = null;
+
+    /**
+     * @var array|null
+     */
+    private $oldData;
+
+    /**
+     * @var bool
+     */
+    private $isChangeFromTable = false;
 
     /**
      * @return TCMSStdClass
@@ -120,34 +131,24 @@ class TCMSTableFieldWriter extends TCMSTableEditor
             return false;
         }
 
-        $bTargetTableChangeForMLTField = false;
-        if (array_key_exists('bTargetTableChangeForMLTField', $postData)) {
-            $bTargetTableChangeForMLTField = $postData['bTargetTableChangeForMLTField'];
-        }
+        $this->oldData = $this->oTable->sqlData;
+        $this->isChangeFromTable = $postData['bTargetTableChangeForMLTField'] ?? false; // true (from TCMSTableWriter) prohibits target changes
+
+        $oldTypeId = $this->oldData['cms_field_type_id'];
+        $newTypeId = $postData['cms_field_type_id'];
+
         // if the name of the field has changed we need to alter the table definition
         // we also need to change the field definition if the type changed
-        $bTypeChanged = false;
-        if (array_key_exists('cms_field_type_id', $this->oTable->sqlData)) {
-            $bTypeChanged = ($this->oTable->sqlData['cms_field_type_id'] != $postData['cms_field_type_id']);
-            $currentFieldTypeQuery = "SELECT * FROM `cms_field_type` WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->oTable->sqlData['cms_field_type_id'])."'";
-            $currentFieldTypeResult = MySqlLegacySupport::getInstance()->query($currentFieldTypeQuery);
-            $currentFieldTypeRow = MySqlLegacySupport::getInstance()->fetch_assoc($currentFieldTypeResult);
-        }
-        $aOriginalData = $this->oTable->sqlData;
-
-        $newFieldTypeQuery = "SELECT * FROM `cms_field_type` WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($postData['cms_field_type_id'])."'";
-        $newFieldTypeResult = MySqlLegacySupport::getInstance()->query($newFieldTypeQuery);
-        $newFieldTypeRow = MySqlLegacySupport::getInstance()->fetch_assoc($newFieldTypeResult);
-
-        $oldName = $postData['name'];
-        if (array_key_exists('name', $this->oTable->sqlData)) {
-            $oldName = $this->oTable->sqlData['name'];
-        }
+        $bTypeChanged = $oldTypeId !== $newTypeId;
+        $currentFieldTypeRow = $this->getFieldTypeDefinition($oldTypeId);
+        $newFieldTypeRow = $this->getFieldTypeDefinition($newTypeId);
 
         if ($bTypeChanged) {
             $this->_oField->ChangeFieldTypePreHook();
         }
-        if (!$bTargetTableChangeForMLTField) {
+
+        // TODO these "BeforeFieldSave" are rather odd; compare to "AfterFieldSave" below
+        if (false === $this->isChangeFromTable) {
             if ($this->_oField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
                 $this->_oField->DeleteRelatedTables();
             } elseif ($this->_oField->AllowRenameRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
@@ -157,9 +158,10 @@ class TCMSTableFieldWriter extends TCMSTableEditor
             $this->_oField->RenameRelatedTables($postData);
         }
         $this->_oField->RemoveFieldIndex();
+
         // need to change the type of field object
-        $this->oTable->sqlData['cms_field_type_id'] = $postData['cms_field_type_id'];
-        $this->_oField = &$this->oTable->GetFieldObject();
+        $this->oTable->sqlData['cms_field_type_id'] = $newTypeId;
+        $this->_oField = &$this->oTable->GetFieldObject(); // is a TCMSFieldDefinition
         $this->_oField->name = $this->oTable->sqlData['name'];
         $this->_oField->sTableName = $this->_oParentRecord->sqlData['name'];
         $this->_oField->recordId = $this->sId;
@@ -167,19 +169,34 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         if ($bTypeChanged) {
             $this->_oField->ChangeFieldTypePostHook();
         }
-        $this->_oField->ChangeFieldDefinition($oldName, $postData['name'], $postData);
-        $aOldData = $this->oTable->sqlData;
+        $this->_oField->ChangeFieldDefinition($this->oldData['name'], $postData['name'], $postData);
+
         parent::Save($postData);
+
         $this->oTable->Load($this->oTable->id);
-        if (!$bTargetTableChangeForMLTField && $this->_oField->AllowCreateRelatedTablesAfterFieldSave($aOldData, $currentFieldTypeRow, $newFieldTypeRow)) {
+        if (false === $this->isChangeFromTable && $this->_oField->AllowCreateRelatedTablesAfterFieldSave($this->oldData, $currentFieldTypeRow, $newFieldTypeRow)) {
             $this->_oField->CreateRelatedTables();
         }
         $this->_oField->CreateFieldIndex();
 
-        $this->_oField->oDefinition->UpdateFieldTranslationKeys($aOriginalData);
+        $this->_oField->oDefinition->UpdateFieldTranslationKeys($this->oldData);
         $this->getAutoclassesCacheWarmer()->updateTableById($this->oTable->sqlData['cms_tbl_conf_id']);
 
         return $this->GetObjectShortInfo($postData);
+    }
+
+    /**
+     * @param string $typeId
+     * @return array|bool
+     * @throws DBALException
+     */
+    private function getFieldTypeDefinition(string $typeId)
+    {
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $query = 'SELECT * FROM `cms_field_type` WHERE `id` = :typeId';
+
+        return $databaseConnection->fetchAssoc($query, ['typeId' => $typeId]);
     }
 
     /**
@@ -361,4 +378,5 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_autoclasses.cache_warmer.autoclasses_dir');
     }
+
 }
