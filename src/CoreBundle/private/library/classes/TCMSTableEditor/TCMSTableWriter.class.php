@@ -152,6 +152,7 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * @param TCMSRecord $oPostTable
      * @param string     $tableName
+     *
      * @throws DBALException
      */
     private function adaptTableEngine(&$oPostTable, string $tableName): void
@@ -168,6 +169,7 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * @param string $oldTableName
      * @param string $newTableName
+     *
      * @throws DBALException
      */
     private function adaptTableName(string $oldTableName, string $newTableName): void
@@ -188,6 +190,7 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * @param string $tableName
      * @param string $oldTableComment
+     *
      * @throws DBALException
      */
     private function adaptTableComment(string $tableName, string $oldTableComment): void
@@ -402,6 +405,7 @@ class TCMSTableWriter extends TCMSTableEditor
      * still be required in some other context (a table may be a property of more than one parent for example).
      *
      * @param int|null $sId
+     *
      * @throws TPkgCmsException_Log
      */
     public function Delete($sId = null)
