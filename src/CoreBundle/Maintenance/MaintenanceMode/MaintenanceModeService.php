@@ -36,20 +36,13 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
 
     public function isActivated(): bool
     {
-        clearstatcache(true, PATH_MAINTENANCE_MODE_MARKER);
+        if (true === \TdbCmsConfig::GetInstance()->fieldShutdownWebsites) {
+            clearstatcache(true, PATH_MAINTENANCE_MODE_MARKER);
 
-        return file_exists(PATH_MAINTENANCE_MODE_MARKER);
-    }
-
-    private function isActivatedInDb(): bool
-    {
-        $col = $this->connection->fetchColumn("SELECT `shutdown_websites` FROM `cms_config`");
-
-        if (false === $col) {
-            return false;
+            return true;
         }
 
-        return '1' === $col;
+        return false;
     }
 
     public function activate(): void
