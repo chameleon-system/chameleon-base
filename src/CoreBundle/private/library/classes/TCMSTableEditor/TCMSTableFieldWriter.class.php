@@ -181,14 +181,14 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         $currentFieldTypeRow = $this->getFieldTypeDefinition($oldTypeId);
         $newFieldTypeRow = $this->getFieldTypeDefinition($newTypeId);
 
-        if ($bTypeChanged) {
+        if (true === $bTypeChanged) {
             $this->oldField->ChangeFieldTypePreHook();
         }
 
         if (false === $this->isChangeFromTable) {
-            if ($this->oldField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
+            if (true === $this->oldField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
                 $this->oldField->DeleteRelatedTables();
-            } elseif ($this->_oField->AllowRenameRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
+            } elseif (true === $this->oldField->AllowRenameRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
                 $this->oldField->RenameRelatedTables($newName);
                 // TODO $newName is wrong here! Must be array
             }
@@ -208,14 +208,14 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         $newField->sTableName = $this->_oParentRecord->sqlData['name'];
         $newField->recordId = $this->sId;
         $newField->oDefinition = &$this->oTable;
-        if ($bTypeChanged) {
+        if (true === $bTypeChanged) {
             $newField->ChangeFieldTypePostHook();
         }
         $newField->ChangeFieldDefinition($this->oldData['name'], $newName, $postData);
 
         // NOTE here was Save() before the reorganization - hence the method names
 
-        if (false === $this->isChangeFromTable && $newField->AllowCreateRelatedTablesAfterFieldSave($this->oldData, $currentFieldTypeRow, $newFieldTypeRow)) {
+        if (false === $this->isChangeFromTable && true === $newField->AllowCreateRelatedTablesAfterFieldSave($this->oldData, $currentFieldTypeRow, $newFieldTypeRow)) {
             $newField->CreateRelatedTables();
         }
         $newField->CreateFieldIndex();
