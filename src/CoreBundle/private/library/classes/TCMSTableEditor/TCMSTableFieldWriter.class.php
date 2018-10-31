@@ -20,9 +20,9 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     /**
      * The field represented by this record.
      *
-     * @var TCMSField
+     * @var TCMSField|null
      */
-    protected $_oField = null;
+    protected $_oField;
 
     /**
      * the record of the cms_tbl_conf that points to this field.
@@ -37,6 +37,16 @@ class TCMSTableFieldWriter extends TCMSTableEditor
      * @var array|null
      */
     private $oldData;
+
+    /**
+     * @var TCMSField|null
+     */
+    private $oldField;
+
+    /**
+     * @var TCMSFieldDefinition|null
+     */
+    private $oldFieldDefinition;
 
     /**
      * @var bool
@@ -132,57 +142,87 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         }
 
         $this->oldData = $this->oTable->sqlData;
+        $this->oldField = $this->_oField;
+        $this->oldFieldDefinition = $this->_oField->oDefinition;
         $this->isChangeFromTable = $postData['bTargetTableChangeForMLTField'] ?? false; // true (from TCMSTableWriter) prohibits target changes
 
+        $x = parent::Save($postData);
+
+        return $x;
+        // TODO this still needed? $this->oTable->Load($this->oTable->id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function PostSaveHook(&$oFields, &$oPostTable)
+    {
+        parent::PostSaveHook($oFields, $oPostTable);
+
+        $this->_oField = $this->adaptFieldAndRelatedTables($oPostTable->sqlData);
+
+        $this->getAutoclassesCacheWarmer()->updateTableById($oPostTable->sqlData['cms_tbl_conf_id']);
+    }
+
+    /**
+     * @param array $postData
+     * @return TCMSField - the new definition after changes
+     * @throws DBALException
+     */
+    protected function adaptFieldAndRelatedTables(array $postData): TCMSField
+    {
         $oldTypeId = $this->oldData['cms_field_type_id'];
         $newTypeId = $postData['cms_field_type_id'];
+        $newName = $this->oTable->sqlData['name'];
 
-        // if the name of the field has changed we need to alter the table definition
-        // we also need to change the field definition if the type changed
+        $this->oldField->oDefinition = $this->oldFieldDefinition; // something in parent::Save has changed $this->oldField->oDefinition
+
         $bTypeChanged = $oldTypeId !== $newTypeId;
         $currentFieldTypeRow = $this->getFieldTypeDefinition($oldTypeId);
         $newFieldTypeRow = $this->getFieldTypeDefinition($newTypeId);
 
         if ($bTypeChanged) {
-            $this->_oField->ChangeFieldTypePreHook();
+            $this->oldField->ChangeFieldTypePreHook();
         }
 
-        // TODO these "BeforeFieldSave" are rather odd; compare to "AfterFieldSave" below
         if (false === $this->isChangeFromTable) {
-            if ($this->_oField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
-                $this->_oField->DeleteRelatedTables();
+            if ($this->oldField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
+                $this->oldField->DeleteRelatedTables();
             } elseif ($this->_oField->AllowRenameRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
-                $this->_oField->RenameRelatedTables($postData);
+                $this->oldField->RenameRelatedTables($newName);
+                // TODO $newName is wrong here! Must be array
             }
         } else {
-            $this->_oField->RenameRelatedTables($postData);
+            $this->oldField->RenameRelatedTables($newName);
         }
-        $this->_oField->RemoveFieldIndex();
+        $this->oldField->RemoveFieldIndex();
 
-        // need to change the type of field object
+
         $this->oTable->sqlData['cms_field_type_id'] = $newTypeId;
-        $this->_oField = &$this->oTable->GetFieldObject(); // is a TCMSFieldDefinition
-        $this->_oField->name = $this->oTable->sqlData['name'];
-        $this->_oField->sTableName = $this->_oParentRecord->sqlData['name'];
-        $this->_oField->recordId = $this->sId;
-        $this->_oField->oDefinition = &$this->oTable;
+        /**
+         * @var $newField TCMSField
+         */
+        $newField = &$this->oTable->GetFieldObject();
+
+        $newField->name = $newName;
+        $newField->sTableName = $this->_oParentRecord->sqlData['name'];
+        $newField->recordId = $this->sId;
+        $newField->oDefinition = &$this->oTable;
         if ($bTypeChanged) {
-            $this->_oField->ChangeFieldTypePostHook();
+            $newField->ChangeFieldTypePostHook();
         }
-        $this->_oField->ChangeFieldDefinition($this->oldData['name'], $postData['name'], $postData);
+        $newField->ChangeFieldDefinition($this->oldData['name'], $newName, $postData);
 
-        parent::Save($postData);
+        // NOTE here was Save() before the reorganization - hence the method names
 
-        $this->oTable->Load($this->oTable->id);
-        if (false === $this->isChangeFromTable && $this->_oField->AllowCreateRelatedTablesAfterFieldSave($this->oldData, $currentFieldTypeRow, $newFieldTypeRow)) {
-            $this->_oField->CreateRelatedTables();
+        if (false === $this->isChangeFromTable && $newField->AllowCreateRelatedTablesAfterFieldSave($this->oldData, $currentFieldTypeRow, $newFieldTypeRow)) {
+            $newField->CreateRelatedTables();
         }
-        $this->_oField->CreateFieldIndex();
+        $newField->CreateFieldIndex();
 
-        $this->_oField->oDefinition->UpdateFieldTranslationKeys($this->oldData);
-        $this->getAutoclassesCacheWarmer()->updateTableById($this->oTable->sqlData['cms_tbl_conf_id']);
+        $newField->oDefinition->UpdateFieldTranslationKeys($this->oldData);
 
-        return $this->GetObjectShortInfo($postData);
+        return $newField;
     }
 
     /**
@@ -378,5 +418,4 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_autoclasses.cache_warmer.autoclasses_dir');
     }
-
 }
