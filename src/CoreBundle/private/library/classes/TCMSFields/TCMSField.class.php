@@ -846,12 +846,12 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * Renames existing related table.
      *
-     * @param string $sNewTableName
-     * @param bool   $returnDDL
+     * @param array $newFieldData
+     * @param bool  $returnDDL
      *
      * @return string|null
      */
-    public function RenameRelatedTables($sNewTableName, $returnDDL = false)
+    public function RenameRelatedTables($newFieldData, $returnDDL = false)
     {
         if ($returnDDL) {
             return '';

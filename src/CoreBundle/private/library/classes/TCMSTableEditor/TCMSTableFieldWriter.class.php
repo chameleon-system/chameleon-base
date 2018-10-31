@@ -175,6 +175,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         $newTypeId = $postData['cms_field_type_id'];
         $newName = $this->oTable->sqlData['name'];
 
+        // TODO!
         $this->oldField->oDefinition = $this->oldFieldDefinition; // something in parent::Save has changed $this->oldField->oDefinition
 
         $bTypeChanged = $oldTypeId !== $newTypeId;
@@ -189,11 +190,10 @@ class TCMSTableFieldWriter extends TCMSTableEditor
             if (true === $this->oldField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
                 $this->oldField->DeleteRelatedTables();
             } elseif (true === $this->oldField->AllowRenameRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
-                $this->oldField->RenameRelatedTables($newName);
-                // TODO $newName is wrong here! Must be array
+                $this->oldField->RenameRelatedTables($postData);
             }
         } else {
-            $this->oldField->RenameRelatedTables($newName);
+            $this->oldField->RenameRelatedTables($postData);
         }
         $this->oldField->RemoveFieldIndex();
 
