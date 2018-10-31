@@ -11,7 +11,7 @@
 
 function gcf_CMSUserWithImage($name, $row, $fieldName)
 {
-    $imageTag = '<img src="'.URL_CMS.'/images/nav_icons/user.gif"  hspace="0" vspace="0" border="0" style="margin-right:10px" align="left" />';
+    $imageTag = '<img src="'. TGlobal::GetPathTheme().'/images/icons/user.png" hspace="0" vspace="0" border="0" style="margin-right:10px" align="left" />';
 
     $imageId = $row['images'];
     if ($imageId >= 1000 || !is_numeric($imageId)) {
