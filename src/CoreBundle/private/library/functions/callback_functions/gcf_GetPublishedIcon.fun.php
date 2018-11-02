@@ -16,7 +16,7 @@ function gcf_GetPublishedIcon($value, $row)
     if ('1' == $value) {
         $returnVal = '<img src="'.TGlobal::GetPathTheme().'/images/icons/accept.png" />';
     } else {
-        $returnVal = '<img src="'.TGlobal::GetPathTheme().'/images/icons/action_stop.png" />';
+        $returnVal = '<img src="'.TGlobal::GetPathTheme().'/images/icons/delete.png" />';
     }
 
     return $returnVal;
