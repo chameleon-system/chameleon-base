@@ -11,42 +11,115 @@
 
 header('HTTP/1.0 503 Service unavailable');
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
-  <head>
-    <meta http-equiv="Content-Language" content="de" />
-     <title>This page is down for maintenance </title>
-     <style type="text/css">
-
-        .errorMessage {
-          font-family: "Segoe UI", Arial, helvetica, sans-serif;
-          line-height: 18px;
-          background: #F8F2AA url(/chameleon/blackbox/images/nav_icons/notice.png) no-repeat 5px 9px;
-          color: #0B224B;
-          border: 2px solid #FFB608;
-          padding-left: 45px;
-          padding-right: 10px;
-          padding-top: 5px;
-          padding-bottom: 5px;
-          font-weight: bold;
-          font-size: 12px;
-          min-height: 40px;
-          display: block;
-          margin-top: 100px;
-          width: 250px;
-          margin-left: auto;
-          margin-right: auto;
+?><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>This page is down for maintenance</title>
+    <style type="text/css">
+        body {
+            font-family: "Segoe UI", Arial, helvetica, sans-serif;
+            background-color: #e4e5e6;
+            color: #23282c;
+            margin: 0;
+            padding: 0;
+            text-align: center;
         }
 
-     </style>
-  </head>
-  <body>
-    <div align="center">
-      <div class="errorMessage">
-        Sorry! This page is down for maintenance.<br />
-        Diese Seite ist zur Zeit nicht erreichbar.
-      </div>
+        @media (min-width: 320px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            p {
+                font-size: 1em;
+            }
+        }
+
+        @media (min-width: 480px) {
+            h1 {
+                font-size: 3em;
+            }
+
+            h2 {
+                font-size: 1.75em;
+            }
+
+            p {
+                font-size: 1em;
+            }
+        }
+
+        @media (min-width: 600px) {
+            h1 {
+                font-size: 4em;
+            }
+
+            h2 {
+                font-size: 2em;
+            }
+
+            p {
+                font-size: 1.25em;
+            }
+        }
+
+        @media (min-width: 801px) {
+            h1 {
+                font-size: 5em;
+            }
+
+            h2 {
+                font-size: 3em;
+            }
+
+            p {
+                font-size: 2em;
+            }
+        }
+
+        @media (min-width: 1025px) {
+            h1 {
+                font-size: 6em;
+            }
+
+            h2 {
+                font-size: 4em;
+            }
+
+            p {
+                font-size: 2.25em;
+            }
+        }
+
+        @media (min-width: 1281px) {
+            h1 {
+                font-size: 7em;
+            }
+
+            h2 {
+                font-size: 5em;
+            }
+
+            p {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="center">
+    <div>
+        <h1>503</h1>
+        <h2>Sorry! This page is down for maintenance.</h2>
+        <p>
+            Try again later.
+        </p>
     </div>
-  </body>
-  </html>
+</div>
+</body>
+</html>
