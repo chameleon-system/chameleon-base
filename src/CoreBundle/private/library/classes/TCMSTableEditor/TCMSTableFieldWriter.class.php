@@ -39,14 +39,9 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     private $oldData;
 
     /**
-     * @var TCMSField|null
+     * @var string|null
      */
-    private $oldField;
-
-    /**
-     * @var TCMSFieldDefinition|null
-     */
-    private $oldFieldDefinition;
+    private $oldTableName;
 
     /**
      * @var bool
@@ -142,19 +137,10 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         }
 
         $this->oldData = $this->oTable->sqlData;
-        $this->oldField = clone $this->_oField;
-        $this->oldField->oDefinition = clone $this->_oField->oDefinition;
-        $this->oldField->oDefinition->sqlData = $this->_oField->oDefinition->sqlData;
-
-
-        $this->oldFieldDefinition = $this->_oField->oDefinition;
-        $oldIsVirtual = $this->oldField->oDefinition->isVirtualField();
+        $this->oldTableName = $this->_oParentRecord->sqlData['name'];
         $this->isChangeFromTable = $postData['bTargetTableChangeForMLTField'] ?? false; // true (from TCMSTableWriter) prohibits target changes
 
-        $x = parent::Save($postData);
-
-        return $x;
-        // TODO this still needed? $this->oTable->Load($this->oTable->id);
+        return parent::Save($postData);
     }
 
     /**
@@ -180,29 +166,32 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         $newTypeId = $postData['cms_field_type_id'];
         $newName = $this->oTable->sqlData['name'];
 
-        // TODO!
-        //$this->oldField->oDefinition = $this->oldFieldDefinition; // something in parent::Save has changed $this->oldField->oDefinition
-
         $bTypeChanged = $oldTypeId !== $newTypeId;
         $currentFieldTypeRow = $this->getFieldTypeDefinition($oldTypeId);
         $newFieldTypeRow = $this->getFieldTypeDefinition($newTypeId);
 
-        $oldFieldIsVirtual = $this->oldField->oDefinition->isVirtualField();
+        /**
+         * @var $oldField TCMSField
+         */
+        $oldField = $this->oTablePreChangeData->GetFieldObject();
+        $oldField->oDefinition = $this->oTablePreChangeData;
+        $oldField->sTableName = $this->oldTableName;
+        $oldField->name = $this->oldData['name'];
 
         if (true === $bTypeChanged) {
-            $this->oldField->ChangeFieldTypePreHook();
+            $oldField->ChangeFieldTypePreHook();
         }
 
         if (false === $this->isChangeFromTable) {
-            if (true === $this->oldField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
-                $this->oldField->DeleteRelatedTables();
-            } elseif (true === $this->oldField->AllowRenameRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
-                $this->oldField->RenameRelatedTables($postData);
+            if (true === $oldField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
+                $oldField->DeleteRelatedTables();
+            } elseif (true === $oldField->AllowRenameRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
+                $oldField->RenameRelatedTables($postData);
             }
         } else {
-            $this->oldField->RenameRelatedTables($postData);
+            $oldField->RenameRelatedTables($postData);
         }
-        $this->oldField->RemoveFieldIndex();
+        $oldField->RemoveFieldIndex();
 
 
         $this->oTable->sqlData['cms_field_type_id'] = $newTypeId;
@@ -219,7 +208,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
             $newField->ChangeFieldTypePostHook();
         }
 
-        $oldFieldIsVirtual = $this->oldField->oDefinition->isVirtualField();
+        $oldFieldIsVirtual = $oldField->oDefinition->isVirtualField();
         $newFieldIsVirtual = $newField->oDefinition->isVirtualField();
 
         if ($oldFieldIsVirtual === $newFieldIsVirtual) {
@@ -228,7 +217,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
             if (false === $newFieldIsVirtual) {
                 $newField->CreateFieldDefinition(); // is missing: old one was virtual
             } else {
-                $this->oldField->DeleteFieldDefinition();
+                $oldField->DeleteFieldDefinition();
             }
         }
 
