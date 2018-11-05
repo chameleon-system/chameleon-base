@@ -66,7 +66,7 @@ class InitializeRequestListener
             $event->setResponse(new RedirectResponse($_SERVER['REQUEST_URI']));
         } else {
             // Redirect is not meaningful for a POST request:
-            $event->setResponse(new Response('Maintenance mode is now active', Response::HTTP_SERVICE_UNAVAILABLE));
+            $event->setResponse(new Response('Maintenance mode is active.', Response::HTTP_SERVICE_UNAVAILABLE));
         }
     }
 }
