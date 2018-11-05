@@ -26,7 +26,7 @@ class TPkgViewRendererLessCompiler
 
     public function __construct(string $cssDir)
     {
-        $this->cssDir = $cssDir;
+        $this->cssDir = ltrim($cssDir, '/');
     }
 
     /**
@@ -77,6 +77,8 @@ class TPkgViewRendererLessCompiler
      * @see getCompiledCssFilename
      *
      * @return string
+     *
+     * @deprecated since 6.2.0 - the pattern is handled in routing.yml. To modify the pattern, replace the according routing file in the backend's routing config.
      */
     public function getCompiledCssFilenamePattern()
     {
@@ -255,7 +257,7 @@ class TPkgViewRendererLessCompiler
      */
     protected function getLessDirUrlPath(): string
     {
-        return $this->cssDir;
+        return '/' . $this->cssDir;
     }
 
     /**
@@ -270,7 +272,7 @@ class TPkgViewRendererLessCompiler
     /**
      * @throws ViewRenderException
      */
-    private function createDirectoryIfNeeded(string $dir): bool
+    private function createDirectoryIfNeeded(string $dir): void
     {
         if (false === \is_dir($dir)) {
             if (false === \mkdir($dir, 0777, true) && false === \is_dir($dir)) {
