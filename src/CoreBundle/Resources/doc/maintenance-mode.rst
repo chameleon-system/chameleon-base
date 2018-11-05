@@ -1,40 +1,38 @@
-Maintenance mode
+Maintenance Mode
 ================
 
-The maintenance mode can be activated to signal extended downtimes of the page to the (frontend) user.
+Maintenance mode can be activated to signal extended downtimes of the page to the frontend user.
 It is activated in the backend (CMS settings > Turn off all websites) or with a console command (chameleon_system:maintenance_mode:activate).
-If activated any frontend request is normally cancelled early on with checking a marker file and showing
-an appropriate system down page.
+If active, any frontend request is cancelled early on, showing an appropriate maintenance page.
 
-Technical details
+Technical Details
 -----------------
 
-On activation this setting is written to the database and the marker file is written
+On activation this setting is written to the database and a marker file is written
 (see \ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeService::activate()).
-The marker file is checked at the end of the boot process (see \chameleon::boot()). If found the file
+The marker file is checked during the boot process before the Symfony container is built. This
+allows to show maintenance mode even if the container can't be built at this time. If found the file
 `/web/maintenance.php` is rendered.
 The location of the marker file is configured with a constant `PATH_MAINTENANCE_MODE_MARKER`.
 
-Now there are two potential problems with this: file stat cache and multi-node environments.
-Both can show an outdated state.
-
-File stat cache
----------------
-
-Php potentially caches stat information about files. So it might go unnoticed if such a file is changed (created/deleted).
-In order to mitigate this every time the file is detected an `clearstatcache()` is called to refresh
-the cache information - at least for the next request. The cache is _not_ cleared here for normal requests (if the
-file is not found).
-
-Later in the startup process when the database is available and the config information from there is queried and cached
-the database field on the maintenance mode is checked. If that is (unexpectedly) active the file stat cache is cleared again
-and a redirect to the same page performed - which then should end up on the maintenance mode page early.
-
-Multi-node environments
+Multi-node Environments
 -----------------------
 
-For installations with multiple server instances this is complicated a bit: Now regulary another node can change
-the maintenance mode marker file unnoticed. However the database state is natively shared between nodes and is generally
-authoritative. With the above second check only one additional property is needed for this to work properly:
-The location of the `PATH_MAINTENANCE_MODE_MARKER` file must be specified in a directory that is also shared between nodes.
+For installations with multiple server instances the maintenance marker must be located in a shared directory.
 
+Internally this kind of setup requires additional precautions, as creating or deleting the marker file on one node might
+go unnoticed on other nodes because of PHP's stat cache. There are two problems we need to avoid:
+
+- Maintenance mode could be activated by an administrator, but other nodes still serve requests regularly.
+- Maintenance mode could be deactivated by an administrator, but other nodes still serve the maintenance page.
+
+We want to avoid the performance overhead of clearing the stat cache for every regular request. So we solve the first
+problem as follows: As soon as the Symfony container is available during the boot process we re-check the state of the
+maintenance mode flag in the cms_config table. By reading this information from TdbCmsConfig (which is cached), we do not
+need an additional database query, so this check is cheap. If the database tells us that maintenance mode is active, we
+know that the stat cache is stale, so we clear it. Then we redirect to the same page, which leads to the early maintenance
+check in chameleon.php showing the maintenance page.
+Note that we always assume that all nodes in a Chameleon cluster either share a common database or there is some external synchronization process that works transparently for Chameleon.
+
+We solve the second problem by clearing the stat cache for every request that would end in maintenance mode. Delivering the
+static maintenance page is quite cheap, so we can afford the overhead of clearing the cache.
