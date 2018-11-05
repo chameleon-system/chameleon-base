@@ -62,6 +62,14 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
+     * @return string - the path part of the URL to the less directory
+     */
+    protected function getLessDirUrlPath(): string
+    {
+        return '/' . $this->cssDir;
+    }
+
+    /**
      * @param TdbCmsPortal|null $portal
      *
      * @return string
@@ -73,12 +81,17 @@ class TPkgViewRendererLessCompiler
         return 'chameleon'.$fileSuffix.'.css';
     }
 
+    public function getCompiledCssFilenameRoutingPattern(): string
+    {
+        return '/chameleon_{portalId}.css';
+    }
+
     /**
      * @see getCompiledCssFilename
      *
      * @return string
      *
-     * @deprecated since 6.2.0 - the pattern is handled in routing.yml. To modify the pattern, replace the according routing file in the backend's routing config.
+     * @deprecated since 6.2.0 - handled in GenerateCssRouteCollectionGenerator
      */
     public function getCompiledCssFilenamePattern()
     {
@@ -250,14 +263,6 @@ class TPkgViewRendererLessCompiler
         $targetPath = $lessDir.'/'.$filename;
 
         return file_put_contents($targetPath, $css);
-    }
-
-    /**
-     * @return string - the path part of the URL to the less directory
-     */
-    protected function getLessDirUrlPath(): string
-    {
-        return '/' . $this->cssDir;
     }
 
     /**
