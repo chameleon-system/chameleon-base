@@ -34,7 +34,7 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
         $this->cache = $cache;
     }
 
-    public function isActivated(): bool
+    public function isActive(): bool
     {
         if (true === \TdbCmsConfig::GetInstance()->fieldShutdownWebsites) {
             clearstatcache(true, PATH_MAINTENANCE_MODE_MARKER);

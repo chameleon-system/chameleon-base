@@ -54,12 +54,8 @@ class InitializeRequestListener
 
     private function recheckMaintenanceMode(GetResponseEvent $event): void
     {
-        try {
-            if (true === $this->maintenanceModeService->isActivated()) {
-                $this->redirectToCurrentPage($event);
-            }
-        } catch (MaintenanceModeErrorException $exception) {
-            // TODO what to do here?
+        if (true === $this->maintenanceModeService->isActive()) {
+            $this->redirectToCurrentPage($event);
         }
     }
 
