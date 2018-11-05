@@ -37,8 +37,10 @@ class MaintenanceModeService implements MaintenanceModeServiceInterface
     public function isActive(): bool
     {
         if (true === \TdbCmsConfig::GetInstance()->fieldShutdownWebsites) {
-            // This location should not have been reached if maintenance mode is on.
-            //   The reason could be that the file/stat cache is outdated. So we refresh it here for the next request / the imminent redirect.
+            /*
+             * This location should not have been reached if maintenance mode is on.
+             * The reason could be that the file/stat cache is outdated. So we refresh it here for the next request / the imminent redirect.
+             */
             clearstatcache(true, PATH_MAINTENANCE_MODE_MARKER);
 
             return true;
