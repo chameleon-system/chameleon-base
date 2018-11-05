@@ -77,8 +77,6 @@ class TPkgViewRendererLessCompiler
      * @see getCompiledCssFilename
      *
      * @return string
-     *
-     * @deprecated since 6.2.0 - the pattern is handled in routing.yml. To modify the pattern, replace the according routing file in the backend's routing config.
      */
     public function getCompiledCssFilenamePattern()
     {
