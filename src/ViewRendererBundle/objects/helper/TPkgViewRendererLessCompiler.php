@@ -13,6 +13,7 @@ namespace ChameleonSystem\ViewRendererBundle\objects;
 
 use CssMin;
 use Exception;
+
 use TdbCmsPortal;
 use TPkgViewRendererSnippetResourceCollector;
 use ViewRenderException;
@@ -24,15 +25,15 @@ class TPkgViewRendererLessCompiler
      */
     private $cssDir;
 
-    public function __construct(string $cssDir)
+    public function __construct(string $cssDirRelativeToWebRoot)
     {
-        $this->cssDir = ltrim($cssDir, '/');
+        $this->cssDir = trim($cssDirRelativeToWebRoot, '/');
     }
 
     /**
-     * local path to less directory - this is where the chameleon_?.css files live.
+     * Local path to less directory - this is where the chameleon_?.css files live.
      *
-     * @return string
+     * @return string - relative path without trailing slash
      */
     public function getLocalPathToCompiledLess()
     {
@@ -40,7 +41,7 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
-     * @return string
+     * @return string - relative path without trailing slash
      */
     public function getLocalPathToCachedLess()
     {
@@ -62,7 +63,7 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
-     * @return string - the path part of the URL to the less directory
+     * @return string - the path part of the URL to the less directory; including a leading slash
      */
     protected function getLessDirUrlPath(): string
     {
@@ -81,9 +82,12 @@ class TPkgViewRendererLessCompiler
         return 'chameleon'.$fileSuffix.'.css';
     }
 
+    /**
+     * @return string - the file part for route generation; without a leading slash
+     */
     public function getCompiledCssFilenameRoutingPattern(): string
     {
-        return '/chameleon_{portalId}.css';
+        return 'chameleon_{portalId}.css';
     }
 
     /**

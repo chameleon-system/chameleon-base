@@ -38,7 +38,7 @@ class GenerateCssRouteCollectionGenerator implements CollectionGeneratorInterfac
 
         $routeCollection = new RouteCollection();
         $routeCollection->add('chameleon_system_view_renderer.generate_css', new Route(
-            $path.$pattern,
+            $path.'/'.$pattern,
             [
                 '_controller' => 'chameleon_system_view_renderer.controller.generate_css_controller',
                 'containsPortalAndLanguagePrefix' => true,
