@@ -142,8 +142,13 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         }
 
         $this->oldData = $this->oTable->sqlData;
-        $this->oldField = $this->_oField;
+        $this->oldField = clone $this->_oField;
+        $this->oldField->oDefinition = clone $this->_oField->oDefinition;
+        $this->oldField->oDefinition->sqlData = $this->_oField->oDefinition->sqlData;
+
+
         $this->oldFieldDefinition = $this->_oField->oDefinition;
+        $oldIsVirtual = $this->oldField->oDefinition->isVirtualField();
         $this->isChangeFromTable = $postData['bTargetTableChangeForMLTField'] ?? false; // true (from TCMSTableWriter) prohibits target changes
 
         $x = parent::Save($postData);
@@ -176,11 +181,13 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         $newName = $this->oTable->sqlData['name'];
 
         // TODO!
-        $this->oldField->oDefinition = $this->oldFieldDefinition; // something in parent::Save has changed $this->oldField->oDefinition
+        //$this->oldField->oDefinition = $this->oldFieldDefinition; // something in parent::Save has changed $this->oldField->oDefinition
 
         $bTypeChanged = $oldTypeId !== $newTypeId;
         $currentFieldTypeRow = $this->getFieldTypeDefinition($oldTypeId);
         $newFieldTypeRow = $this->getFieldTypeDefinition($newTypeId);
+
+        $oldFieldIsVirtual = $this->oldField->oDefinition->isVirtualField();
 
         if (true === $bTypeChanged) {
             $this->oldField->ChangeFieldTypePreHook();
@@ -211,7 +218,19 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         if (true === $bTypeChanged) {
             $newField->ChangeFieldTypePostHook();
         }
-        $newField->ChangeFieldDefinition($this->oldData['name'], $newName, $postData);
+
+        $oldFieldIsVirtual = $this->oldField->oDefinition->isVirtualField();
+        $newFieldIsVirtual = $newField->oDefinition->isVirtualField();
+
+        if ($oldFieldIsVirtual === $newFieldIsVirtual) {
+            $newField->ChangeFieldDefinition($this->oldData['name'], $newName, $postData);
+        } else {
+            if (false === $newFieldIsVirtual) {
+                $newField->CreateFieldDefinition(); // is missing: old one was virtual
+            } else {
+                $this->oldField->DeleteFieldDefinition();
+            }
+        }
 
         // NOTE here was Save() before the reorganization - hence the method names
 
