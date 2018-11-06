@@ -157,7 +157,9 @@ class TCMSTableFieldWriter extends TCMSTableEditor
 
     /**
      * @param array $postData
+     *
      * @return TCMSField - the new definition after changes
+     *
      * @throws DBALException
      */
     protected function adaptFieldAndRelatedTables(array $postData): TCMSField
@@ -192,7 +194,6 @@ class TCMSTableFieldWriter extends TCMSTableEditor
             $oldField->RenameRelatedTables($postData);
         }
         $oldField->RemoveFieldIndex();
-
 
         $this->oTable->sqlData['cms_field_type_id'] = $newTypeId;
         /**
@@ -235,7 +236,9 @@ class TCMSTableFieldWriter extends TCMSTableEditor
 
     /**
      * @param string $typeId
+     *
      * @return array|bool
+     *
      * @throws DBALException
      */
     private function getFieldTypeDefinition(string $typeId)
