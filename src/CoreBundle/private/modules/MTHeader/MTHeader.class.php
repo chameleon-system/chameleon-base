@@ -455,9 +455,6 @@ class MTHeader extends TCMSModelBase
             return;
         }
         $sDir = PATH_OUTBOX.$sDir;
-        if ('/' !== $sDir[strlen($sDir) - 1]) {
-            $sDir .= '/';
-        }
 
         $this->clearFilesInDir($sDir);
     }
