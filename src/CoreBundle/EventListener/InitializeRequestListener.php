@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\EventListener;
 
-use ChameleonSystem\CoreBundle\Exception\MaintenanceModeErrorException;
 use ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeServiceInterface;
 use ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer;
 use Symfony\Component\HttpFoundation\RedirectResponse;
