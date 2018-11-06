@@ -6,33 +6,23 @@
 <?php
 
 $connection = TCMSLogChange::getDatabaseConnection();
-$oldValue = trim($connection->fetchColumn('SELECT `additional_files_to_delete_from_cache` FROM `cms_config`'));
-$newValue = getSnippetChainWithElementRemoved($oldValue, 'chameleon/outbox/static/less/cached');
+$cachePathSettings = trim($connection->fetchColumn('SELECT `additional_files_to_delete_from_cache` FROM `cms_config`'));
+$pathToRemove = 'chameleon/outbox/static/less/cached';
+
+// Code copied from SnippetChainModifier:
+
+$quotedAfterThisPath = preg_quote($pathToRemove, '#');
+$pattern = '#(\s+|^)'.$quotedAfterThisPath.'(\s+|$)#';
+$cachePathSettings = preg_replace($pattern, "\n", $cachePathSettings);
+$cachePathSettings = preg_replace('#\s+#', "\n", $cachePathSettings);
+$cachePathSettings = trim($cachePathSettings);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_config', 'de')
   ->setFields(array(
-      'additional_files_to_delete_from_cache' => $newValue,
+      'additional_files_to_delete_from_cache' => $cachePathSettings,
   ))
   ->setWhereEquals(array(
       'id' => '1',
   ))
 ;
 TCMSLogChange::update(__LINE__, $data);
-
-// Helpers copied from SnippetChainModifier:
-function optimizeSnippetChainString(string $snippetChain): string
-{
-    $snippetChain = preg_replace('#\s+#', "\n", $snippetChain);
-    $snippetChain = trim($snippetChain);
-
-    return $snippetChain;
-}
-
-function getSnippetChainWithElementRemoved(string $snippetChain, string $pathToRemove)
-{
-    $quotedAfterThisPath = preg_quote($pathToRemove, '#');
-    $pattern = '#(\s+|^)'.$quotedAfterThisPath.'(\s+|$)#';
-    $snippetChain = preg_replace($pattern, "\n", $snippetChain);
-
-    return optimizeSnippetChainString($snippetChain);
-}
