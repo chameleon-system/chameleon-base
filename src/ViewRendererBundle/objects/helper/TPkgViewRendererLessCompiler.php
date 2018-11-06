@@ -65,7 +65,7 @@ class TPkgViewRendererLessCompiler
     /**
      * @return string - the path part of the URL to the less directory; including a leading slash
      */
-    protected function getLessDirUrlPath(): string
+    protected function getLessDirUrlPath()
     {
         return '/' . $this->cssDir;
     }
