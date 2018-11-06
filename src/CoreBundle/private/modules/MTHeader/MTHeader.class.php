@@ -461,9 +461,10 @@ class MTHeader extends TCMSModelBase
 
     /**
      * Delete all the files in the given dir - except .gitkeep files.
+     *
      * @param string $dir
      *
-     * NOTE also see deleteFileOrDirectoryContent() which does something similar.
+     * NOTE also see deleteFileOrDirectoryContent() which does something similar
      */
     private function clearFilesInDir(string $dir): void
     {

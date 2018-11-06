@@ -13,7 +13,6 @@ namespace ChameleonSystem\ViewRendererBundle\objects;
 
 use CssMin;
 use Exception;
-
 use TdbCmsPortal;
 use TPkgViewRendererSnippetResourceCollector;
 use ViewRenderException;
@@ -67,7 +66,7 @@ class TPkgViewRendererLessCompiler
      */
     protected function getLessDirUrlPath()
     {
-        return '/' . $this->cssDir;
+        return '/'.$this->cssDir;
     }
 
     /**
@@ -280,6 +279,7 @@ class TPkgViewRendererLessCompiler
 
     /**
      * @param string $dir
+     *
      * @throws ViewRenderException
      */
     private function createDirectoryIfNeeded(string $dir): void
