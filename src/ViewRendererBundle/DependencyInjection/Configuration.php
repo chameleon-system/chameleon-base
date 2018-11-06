@@ -20,7 +20,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('css_dir')
                     ->defaultValue('chameleon/outbox/static/less')
-                    ->info('Directory path to where the less compiler cache works and the output files are stored. Relative to the web root directory. All the files here are deleted on cache clear.')
+                    ->info('Path used as working and output directory for the less compiler, relative to the web root directory. CAUTION: All files in this directory are deleted on cache clear.')
                 ->end()
             ->end();
 
