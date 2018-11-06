@@ -459,7 +459,7 @@ class MTHeader extends TCMSModelBase
             $sDir .= '/';
         }
 
-        $this->clearDir($sDir);
+        $this->clearFilesInDir($sDir);
     }
 
     /**
@@ -468,7 +468,7 @@ class MTHeader extends TCMSModelBase
      *
      * NOTE also see deleteFileOrDirectoryContent() which does something similar.
      */
-    private function clearDir(string $dir): void
+    private function clearFilesInDir(string $dir): void
     {
         $dir = rtrim($dir, '/').'/';
 
@@ -488,9 +488,9 @@ class MTHeader extends TCMSModelBase
 
         $lessCompiler = $this->getLessCompiler();
         $cssTargetDir = $lessCompiler->getLocalPathToCompiledLess();
-        $this->clearDir($cssTargetDir);
+        $this->clearFilesInDir($cssTargetDir);
         $cssCacheDir = $lessCompiler->getLocalPathToCachedLess();
-        $this->clearDir($cssCacheDir);
+        $this->clearFilesInDir($cssCacheDir);
 
         $oConfig = TdbCmsConfig::GetInstance();
         $aAdditionalFiles = explode("\n", $oConfig->fieldAdditionalFilesToDeleteFromCache);
