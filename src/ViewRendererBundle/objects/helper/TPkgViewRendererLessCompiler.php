@@ -279,6 +279,7 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
+     * @param string $dir
      * @throws ViewRenderException
      */
     private function createDirectoryIfNeeded(string $dir): void
