@@ -1137,8 +1137,8 @@ if (!defined('CMS_SNIPPET_PATH')) {
     define('CMS_SNIPPET_PATH', 'snippets');
 }
 
-/** enables the less parser for snippets (requires less compiler on the server)
- *  to import snippet less files, add "@import "/chameleon/outbox/static/less/all.less";" to the chameleon.less file in /assets/less.
+/**
+ * enables the less parser for snippets (requires less compiler on the server).
  */
 if (!defined('CMS_PKG_VIEW_RENDERER_ENABLE_LESS_COMPILER')) {
     define('CMS_PKG_VIEW_RENDERER_ENABLE_LESS_COMPILER', false);
