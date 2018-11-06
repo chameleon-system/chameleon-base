@@ -99,8 +99,12 @@ class chameleon
         }
         TTools::AddStaticPageVariables($aStaticURLMapping);
 
-        if ($this->isInMaintenanceMode($requestType)) {
-            $this->showMaintenanceModePage();
+        if (true === $this->isInMaintenanceMode($requestType)) {
+            $this->clearMaintenanceModeMarkerFileCache();
+
+            if (true === $this->isInMaintenanceMode($requestType)) {
+                $this->showMaintenanceModePage();
+            }
         }
     }
 
@@ -218,6 +222,11 @@ class chameleon
         } else {
             die('down for maintenance');
         }
+    }
+
+    private function clearMaintenanceModeMarkerFileCache(): void
+    {
+        clearstatcache(true, PATH_MAINTENANCE_MODE_MARKER);
     }
 
     /**
