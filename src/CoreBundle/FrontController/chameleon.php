@@ -82,10 +82,6 @@ class chameleon
 
         require_once PATH_CORE_CONFIG.'/version.inc.php';
 
-        if (!_DEVELOPMENT_MODE && USE_DEFAULT_ERROR_HANDLER) {
-            register_shutdown_function(array('TCMSErrorHandler', 'ShutdownHandler'));
-        }
-
         // add the static server URLs
         $aStaticURLs = TGlobal::GetStaticURLPrefix();
         if (!is_array($aStaticURLs)) {
