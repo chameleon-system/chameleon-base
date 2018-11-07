@@ -112,14 +112,15 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     </style>
 </head>
 <body>
-<div class="center">
-    <div>
-        <h1>503</h1>
-        <h2>Sorry! This page is down for maintenance.</h2>
-        <p>
-            Try again later.
-        </p>
-    </div>
-</div>
+    <h1>503</h1>
+    <h2>Sorry! This page is down for maintenance.</h2>
+    <p>
+        Try again later.
+    </p>
+
+    <h2>Diese Seite ist wegen Wartungsarbeiten zur Zeit nicht erreichbar.</h2>
+    <p>
+        Bitte versuchen Sie es in ein paar Minuten noch einmal.
+    </p>
 </body>
 </html>
