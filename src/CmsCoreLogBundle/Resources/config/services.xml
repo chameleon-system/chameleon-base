@@ -7,5 +7,110 @@
         <service id="chameleon_system_cms_core_log.cronjob.cleanup_cronjob" class="TPkgCmsCoreLogCleanupCronJob" shared="false">
             <tag name="chameleon_system.cronjob" />
         </service>
+
+        <service id="cmsPkgCore.logHandler.files" class="Monolog\Handler\StreamHandler" public="false">
+            <argument>%kernel.logs_dir%/core.log</argument>
+            <argument>200</argument>
+        </service>
+
+        <service id="cmsPkgCore.logHandler.database" class="TPkgCmsCoreLogMonologHandler_Database" public="false" />
+
+        <service id="cmsPkgCore.logHandler.fingerscrossed" class="Monolog\Handler\FingersCrossedHandler" public="false">
+            <argument type="service" id="cmsPkgCore.logHandler.database" />
+        </service>
+
+        <service id="cmsPkgCore.logDriver.standard" class="Monolog\Logger" public="false">
+            <argument>core.standard</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.fingerscrossed" />
+            </call>
+        </service>
+
+        <service id="cmsPkgCore.logChannel.standard" class="TPkgCmsCoreLog">
+            <argument type="service" id="cmsPkgCore.logDriver.standard" />
+        </service>
+
+        <service id="cmsPkgCore.logDriver.security" class="Monolog\Logger" public="false">
+            <argument>core.security</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.database" />
+            </call>
+        </service>
+
+        <!-- use this logger to log any security related infos -->
+        <service id="cmsPkgCore.logChannel.security" class="TPkgCmsCoreLog">
+            <argument type="service" id="cmsPkgCore.logDriver.security" />
+        </service>
+
+        <service id="cmsPkgCore.logHandler.dbal" class="Monolog\Handler\StreamHandler" public="false">
+            <argument>%kernel.logs_dir%/dbal.log</argument>
+            <argument>300</argument>
+        </service>
+
+        <service id="cmsPkgCore.logDriver.dbal" class="Monolog\Logger" public="false">
+            <argument>core.dbal</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.dbal" />
+            </call>
+        </service>
+
+        <service id="cmsPkgCore.logChannel.dbal" class="TPkgCmsCoreLog">
+            <argument type="service" id="cmsPkgCore.logDriver.dbal" />
+        </service>
+
+        <service id="cmsPkgCore.logDriver.cmsUpdates" class="Monolog\Logger" public="false">
+            <argument>core.cmsUpdates</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.database" />
+            </call>
+        </service>
+
+        <service id="cmsPkgCore.logChannel.cmsUpdates" class="TPkgCmsCoreLog">
+            <argument type="service" id="cmsPkgCore.logDriver.cmsUpdates" />
+        </service>
+
+        <service id="cmsPkgCore.logDriver.cronjobs" class="Monolog\Logger" public="false">
+            <argument>core.cronjobs</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.database" />
+            </call>
+        </service>
+
+        <service id="cmsPkgCore.logChannel.cronjobs" class="TPkgCmsCoreLog">
+            <argument type="service" id="cmsPkgCore.logDriver.cronjobs" />
+        </service>
+
+        <service id="cmsPkgCore.logDriver.apilogger" class="Monolog\Logger" public="false">
+            <argument>core.api</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.database" />
+            </call>
+        </service>
+
+        <service id="cmsPkgCore.logChannel.apilogger" class="TPkgCmsCoreLog">
+            <argument type="service" id="cmsPkgCore.logDriver.apilogger" />
+        </service>
+
+        <service id="pkgShopPaymentPayone.logDriver.apilogger" class="Monolog\Logger" public="false">
+            <argument>pkgShopPaymentPayone.apilogger</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.database" />
+            </call>
+        </service>
+
+        <service id="pkgShopPaymentPayone.logChannel.apilogger" class="TPkgCmsCoreLog">
+            <argument type="service" id="pkgShopPaymentPayone.logDriver.apilogger" />
+        </service>
+
+        <service id="pkgShopPaymentPayone.logDriver.standard" class="Monolog\Logger" public="false">
+            <argument>pkgShopPaymentPayone.standard</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.database" />
+            </call>
+        </service>
+
+        <service id="pkgShopPaymentPayone.logChannel.standard" class="TPkgCmsCoreLog">
+            <argument type="service" id="pkgShopPaymentPayone.logDriver.standard" />
+        </service>
     </services>
 </container>
