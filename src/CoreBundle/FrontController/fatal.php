@@ -10,6 +10,7 @@
  */
 
 header($_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error', true, 500);
+
 function OutHTML($nonEscapedString)
 {
     $sEscapedHTML = htmlentities($nonEscapedString, ENT_QUOTES, 'UTF-8');
@@ -21,9 +22,8 @@ function OutHTML($nonEscapedString)
 }
 
 if (isset($_GET['sIdentifier'])) {
-    $sIdentifier = urldecode($_GET['sIdentifier']);
+    $sIdentifier = $_GET['sIdentifier'];
 }
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -101,20 +101,16 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     </style>
 </head>
 <body>
-<div class="center">
-    <div>
-        <h1>500</h1>
-        <h2>INTERNAL SERVER ERROR</h2>
-        <p>
-    <?php 
-    if (isset($sIdentifier)) {
-    ?>
-            Error Identifier: <strong><?= OutHTML($sIdentifier); ?></strong>
+<h1>500</h1>
+<h2>INTERNAL SERVER ERROR</h2>
+<p>
     <?php
-    } 
+    if (isset($sIdentifier)) {
+        ?>
+        Error Identifier: <strong><?= OutHTML($sIdentifier); ?></strong>
+        <?php
+    }
     ?>
-        </p>
-    </div>
-</div>
+</p>
 </body>
 </html>
