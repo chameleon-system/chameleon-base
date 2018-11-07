@@ -22,7 +22,7 @@ function OutHTML($nonEscapedString)
 }
 
 if (isset($_GET['sIdentifier'])) {
-    $sIdentifier = $_GET['sIdentifier'];
+    $identifier = $_GET['sIdentifier'];
 }
 ?><!DOCTYPE html>
 <html lang="en">
@@ -105,9 +105,9 @@ if (isset($_GET['sIdentifier'])) {
 <h2>INTERNAL SERVER ERROR</h2>
 <p>
     <?php
-    if (isset($sIdentifier)) {
+    if (isset($identifier)) {
         ?>
-        Error Identifier: <strong><?= OutHTML($sIdentifier); ?></strong>
+        Error Identifier: <strong><?= OutHTML($identifier); ?></strong>
         <?php
     }
     ?>
