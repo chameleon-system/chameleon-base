@@ -113,9 +113,6 @@
 
         <service id="chameleon_system_core.service_initializer.request" class="ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer">
             <argument type="service" id="chameleon_system_core.response.response_variable_replacer" />
-            <call method="setSessionManager">
-                <argument type="service" id="chameleon_system_core.session.chameleon_session_manager" />
-            </call>
         </service>
 
         <service id="chameleon_system_core.InitializeRequestListener" class="ChameleonSystem\CoreBundle\EventListener\InitializeRequestListener" public="true">
@@ -124,20 +121,19 @@
         </service>
 
         <service id="chameleon_system_core.session.chameleon_session_manager" class="ChameleonSystem\CoreBundle\Session\ChameleonSessionManager" public="true">
-            <argument type="service" id="request_stack" />
             <argument type="service" id="database_connection" />
             <argument type="service" id="chameleon_system_core.sessionPdo" />
-            <argument type="service" id="service_container" />
             <argument>%session.metadata.update_threshold%</argument>
             <argument>%session.storage.options%</argument>
-            <argument type="service" id="chameleon_system_core.util.input_filter" />
         </service>
 
         <service id="chameleon_system_core.ChameleonSessionManager" alias="chameleon_system_core.session.chameleon_session_manager" public="true">
             <deprecated>The "%service_id%" service is deprecated since Chameleon 6.2.0 - use chameleon_system_core.session.chameleon_session_manager instead.</deprecated>
         </service>
 
-        <service id="session" synthetic="true" public="true"/>
+        <service id="session" class="TPkgCmsSession" public="true">
+            <factory service="chameleon_system_core.session.chameleon_session_manager" method="boot" />
+        </service>
 
         <service id="chameleon_system_core.chameleon_controller" synthetic="true" public="true"/>
 

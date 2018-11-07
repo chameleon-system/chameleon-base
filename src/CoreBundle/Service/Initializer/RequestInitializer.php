@@ -12,19 +12,11 @@
 namespace ChameleonSystem\CoreBundle\Service\Initializer;
 
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
-use ChameleonSystem\CoreBundle\Session\ChameleonSessionManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use TGlobal;
 
-/**
- * Class RequestInitializer.
- */
 class RequestInitializer
 {
-    /**
-     * @var ChameleonSessionManagerInterface
-     */
-    private $sessionManager;
     /**
      * @var ResponseVariableReplacerInterface
      */
@@ -35,9 +27,6 @@ class RequestInitializer
         $this->responseVariableReplacer = $responseVariableReplacer;
     }
 
-    /**
-     * @param Request $request
-     */
     public function initialize(Request $request)
     {
         // removed check for request type here. If we need it for something else here besides the setting via chameleon::boot, look here again
@@ -46,7 +35,6 @@ class RequestInitializer
 
         $this->addStaticURLs();
         $this->addSchemeVariable($request);
-        $this->sessionManager->boot();
         $this->transformParameters($request);
     }
 
@@ -69,14 +57,6 @@ class RequestInitializer
         if (!_DEVELOPMENT_MODE && USE_DEFAULT_ERROR_HANDLER) {
             register_shutdown_function(array('TCMSErrorHandler', 'ShutdownHandler'));
         }
-    }
-
-    /**
-     * @param ChameleonSessionManagerInterface $sessionManager
-     */
-    public function setSessionManager($sessionManager)
-    {
-        $this->sessionManager = $sessionManager;
     }
 
     protected function addStaticURLs()

@@ -2450,12 +2450,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function sessionWakeupHook()
+    public function validateLogin()
     {
-        parent::sessionWakeupHook();
         if (true === $this->ValidateSessionData()) {
             $this->isLoggedIn = true;
         } elseif (null !== $this->id && $this->ForceLogoutOnInstanceLoading()) {

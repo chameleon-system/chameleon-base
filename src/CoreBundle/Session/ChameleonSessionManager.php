@@ -11,13 +11,8 @@
 
 namespace ChameleonSystem\CoreBundle\Session;
 
-use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 use PDO;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\NullSessionHandler;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
@@ -32,10 +27,6 @@ use TPkgCmsSessionHandler_Decorator_Locking;
 class ChameleonSessionManager implements ChameleonSessionManagerInterface
 {
     /**
-     * @var RequestStack
-     */
-    private $requestStack;
-    /**
      * @var Connection
      */
     private $databaseConnection;
@@ -43,10 +34,6 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
      * @var PDO
      */
     private $sessionPdo;
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
     /**
      * @var int
      */
@@ -56,35 +43,25 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
      */
     private $sessionOptions;
     /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-    /**
      * @var bool
      */
     private $isSessionStarting = false;
 
     /**
-     * @param RequestStack             $requestStack
      * @param Connection               $databaseConnection
      * @param PDO                      $sessionPdo
-     * @param ContainerInterface       $container
      * @param int                      $metaDataTimeout
      * @param array                    $sessionOptions
-     * @param InputFilterUtilInterface $inputFilterUtil
      */
-    public function __construct(RequestStack $requestStack, Connection $databaseConnection, PDO $sessionPdo, ContainerInterface $container, $metaDataTimeout, array $sessionOptions, InputFilterUtilInterface $inputFilterUtil)
+    public function __construct(Connection $databaseConnection, PDO $sessionPdo, $metaDataTimeout, array $sessionOptions)
     {
-        $this->requestStack = $requestStack;
         $this->databaseConnection = $databaseConnection;
         $this->sessionPdo = $sessionPdo;
-        $this->container = $container;
         $this->metaDataTimeout = $metaDataTimeout;
         $this->sessionOptions = $sessionOptions;
-        $this->inputFilterUtil = $inputFilterUtil;
     }
 
-    public function boot()
+    public function boot(): \TPKgCmsSession
     {
         $sessionHandler = null;
         if (true === TdbCmsConfig::RequestIsInBotList()) {
@@ -152,44 +129,11 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
             $session->setSessionLockingEnabled(true);
         }
 
-        $request = $this->getRequest();
-        $request->setSession($session);
-
-        if (false === USE_ONLY_COOKIES_FOR_SESSION_ID) {
-            $sessionId = $this->inputFilterUtil->getFilteredInput($request->getSession()->getName(), null);
-            if (null === $sessionId) {
-                $sessionId = $request->cookies->get($request->getSession()->getName(), null);
-                if ('' === $sessionId) {
-                    // do not allow an empty session id
-                    $request->cookies->remove($request->getSession()->getName());
-                }
-            }
-
-            if (null !== $sessionId && '' !== $sessionId) {
-                $request->getSession()->setId($sessionId);
-            }
-        }
-
         $this->isSessionStarting = true;
-        $request->getSession()->start();
+        $session->start();
         $this->isSessionStarting = false;
-        $this->registerSessionInContainer($request->getSession());
-    }
 
-    /**
-     * @return Request
-     */
-    protected function getRequest()
-    {
-        return $this->requestStack->getCurrentRequest();
-    }
-
-    /**
-     * @param SessionInterface $session
-     */
-    private function registerSessionInContainer(SessionInterface $session)
-    {
-        $this->container->set('session', $session);
+        return $session;
     }
 
     /**

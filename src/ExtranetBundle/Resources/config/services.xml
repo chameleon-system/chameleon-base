@@ -24,6 +24,13 @@
             <tag name="kernel.event_listener" event="chameleon_system_extranet.user_login_success" method="refreshAuthenticityToken" />
         </service>
 
+        <service id="chamelon_system_extranet.event_listener.validate_login_data_listener" class="ChameleonSystem\ExtranetBundle\EventListener\ValidateLoginDataListener">
+            <argument type="service" id="chameleon_system_core.request_info_service"/>
+            <argument type="service" id="chameleon_system_extranet.extranet_user_provider"/>
+            <!-- We set the priority as high as possible but not before session_listener as we need the session from the request -->
+            <tag name="kernel.event_listener" event="kernel.request" priority="127" />
+        </service>
+
         <service id="chameleon_system_extranet.extranet_user_provider" class="ChameleonSystem\ExtranetBundle\Service\ExtranetUserProvider" public="true">
             <argument type="service" id="request_stack" />
         </service>
