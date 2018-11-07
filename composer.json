@@ -31,6 +31,7 @@
         "symfony/framework-bundle": "~3.4.0",
         "symfony/routing": "~3.4.0",
         "symfony/templating": "~3.4.0",
+        "symfony/twig-bundle": "~3.4.0",
         "symfony/validator": "~3.4.0",
         "symfony/yaml": "~3.4.0",
         "symfony-cmf/routing-bundle": "~2.1.0",
@@ -40,10 +41,7 @@
     "require-dev": {
         "chameleon-system/code-style-config": "dev-master@dev",
         "chameleon-system/sanitycheck": "dev-master",
-        "phpunit/phpunit": "~7.0",
-        "symfony/debug-bundle": "~3.4.0",
-        "symfony/stopwatch": "~3.4.0",
-        "symfony/web-profiler-bundle": "~3.4.0"
+        "phpunit/phpunit": "~7.0"
     },
     "autoload": {
         "classmap": [
