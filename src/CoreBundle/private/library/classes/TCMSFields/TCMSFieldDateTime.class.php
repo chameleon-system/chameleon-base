@@ -44,7 +44,7 @@ class TCMSFieldDateTime extends TCMSField
 
         $html .= '
         <input type="hidden" name="'.TGlobal::OutHTML($this->name).'" value="" />
-        <input type="text" id="'.TGlobal::OutHTML($this->name).'_date" name="'.TGlobal::OutHTML($this->name).'_date" class="form-control form-control-sm" value="'.TGlobal::OutHTML($date).'" style="width: 80px;" />
+        <input type="text" id="'.TGlobal::OutHTML($this->name).'_date" name="'.TGlobal::OutHTML($this->name).'_date" class="form-control form-control-sm" value="'.TGlobal::OutHTML($date).'" style="width: 80px; display: inline;" />
       &nbsp;&nbsp;
       <select id="'.TGlobal::OutHTML($this->name).'_hour" name="'.TGlobal::OutHTML($this->name)."_hour\" class=\"form-control form-control-sm\" style=\"width: 65px; display: inline;\">\n";
 
