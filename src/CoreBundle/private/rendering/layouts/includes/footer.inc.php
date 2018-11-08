@@ -1,6 +1,6 @@
 <div class="cleardiv">&nbsp;</div>
 <div id="footer">
-    <div class="pull-left">
+    <div class="float-left">
         <?php
         $oUser = TCMSUser::GetActiveUser();
         if ($oUser) {
@@ -8,7 +8,7 @@
         }
         ?>
     </div>
-    <div class="pull-right">
+    <div class="float-right">
         &nbsp;&copy;&nbsp;&nbsp;<a href="http://www.esono.de" target="_blank">ESONO AG</a>&nbsp;&nbsp; <?=date('Y'); ?>
     </div>
 </div>
