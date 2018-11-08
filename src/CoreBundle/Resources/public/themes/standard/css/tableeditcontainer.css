@@ -46,20 +46,10 @@
 
 .tableeditcontainer .fieldnumber {
     width: 70px;
-    text-align: right;
-}
-
-.tableeditcontainer .fieldvarchar {
-    width: 500px;
-}
-
-.tableeditcontainer .fieldurl {
-    width: 500px;
 }
 
 .tableeditcontainer .fieldtext {
-    width: 500px;
-    height: 200px;
+    min-height: 200px;
 }
 
 .cmsimagefieldcontainer {
@@ -116,21 +106,6 @@
 
 #datepickeriframe {
     background-color: transparent;
-}
-
-.toolTipButton, .translateButton {
-    float: right;
-    cursor: pointer;
-    cursor: hand;
-    padding-left: 5px;
-}
-
-.translateButton {
-    margin-right: 5px;
-}
-
-.translateButton span {
-    line-height: 16px;
 }
 
 .charCounter {
@@ -342,35 +317,6 @@
     margin-left: 20px;
 }
 
-.rsakeymanagerbox .rsakeyline {
-    padding-bottom: 5px;
-}
-
-.rsakeymanagerbox .rsakeyline input, .rsakeymanagerbox .rsakeyline textarea {
-    width: 650px;
-}
-
-.rsakeymanagerbox .rsakeyline textarea {
-    height: auto;
-    background-color: transparent;
-    border: none;
-}
-
-.rsakeymanagerbox .rsakeyline span.keyname {
-    width: 150px;
-    float: left;
-}
-
-.rsakeymanagerbox .generatekey {
-    padding-left: 150px;
-    padding-top: 10px;
-}
-
-.rsakeymanagerbox .generatekey select {
-    float: left;
-    margin-right: 20px;
-}
-
 .description {
     padding: 5px;
 }
@@ -537,4 +483,16 @@
 
 .dateInput .ui-datepicker-trigger {
     display: none;
+}
+
+.translation-badge, .help-badge {
+    font-weight: bold;
+    font-size: 1.2em;
+    text-transform: uppercase;
+}
+
+.help-badge {
+    font-size: 1.1em;
+    cursor: pointer;
+    margin-left: 8px;
 }

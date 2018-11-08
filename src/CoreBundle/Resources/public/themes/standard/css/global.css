@@ -94,8 +94,6 @@ legend {
   font-weight: bold;
   font-size: 13px;
   min-height: 40px;
-  /*margin-top: 8px;
-  margin-bottom: 8px;*/
   display: block;
 }
 
@@ -190,7 +188,6 @@ div.success, span.success, .successMessage {
   border: 2px solid #FFB608;
 }
 
-
 .contentboxHeadline {
   height: 28px;
   color: #841313;
@@ -218,7 +215,7 @@ div.success, span.success, .successMessage {
   height: 100%;
   border: 1px solid #ABBDCD;
   margin-top: 5px;
-  background-image:url(/chameleon/blackbox//images/icons/page_navigation.gif);
+  background-image:url(/chameleon/blackbox/images/icons/page_navigation.gif);
   background-position:5px 3px;
   background-repeat:no-repeat;
 }
@@ -379,7 +376,7 @@ div.grippie {
 }
 
 input, textarea, select,
-.btn, .badge, .input-group-addon, .chosen-single, .dropdown-menu, .ui-dialog,
+.btn, .input-group-addon, .chosen-single, .dropdown-menu, .ui-dialog,
 .ui-corner-all, .alert, .panel,
 .pagination > li > a, .pagination > li > span, .ui-tabs .ui-tabs-nav li a {
   border-radius: 0 !important;
@@ -402,23 +399,11 @@ input, textarea, select,
  */
 .cmsBoxBorder {
     background-color: #fff;
-    padding: 6px;
-    border: 1px solid #808080;
-    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    padding: 5px;
 }
 
-#cmsbreadcrumb {
-    margin: 0px 15px 0px 15px;
-}
 #cmsbreadcrumb .breadcrumb {
     border-radius: 0;
-    opacity: .7;
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
-}
-
-#cmsbreadcrumb .breadcrumb>li:before {
-    color: #000;
 }
 
 #cmsleftmenu, #cmsmiddlemenu, #cmsrightmenu {
@@ -453,53 +438,9 @@ input, textarea, select,
 }
 
 #topNavSpacer {
-    padding-top: 60px;
+    padding-top: 50px;
     line-height: 0px;
     font-size: 0px;
-}
-
-#cmsTopNavbar .btn-group .dropdown-menu {
-    margin-top: -4px;
-}
-
-#cmsTopNavbar .btn-group .dropdown-menu:before {
-    position: absolute;
-    top: -7px;
-    left: 9px;
-    display: inline-block;
-    border-right: 7px solid transparent;
-    border-bottom: 7px solid #ccc;
-    border-left: 7px solid transparent;
-    border-bottom-color: rgba(0, 0, 0, 0.2);
-    content: '';
-}
-
-#cmsTopNavbar .btn-group .dropdown-menu:after {
-    position: absolute;
-    top: -6px;
-    left: 10px;
-    display: inline-block;
-    border-right: 6px solid transparent;
-    border-bottom: 6px solid #ffffff;
-    border-left: 6px solid transparent;
-    content: '';
-}
-
-#cmsTopNavbar .nav > li > a {
-    padding: 15px 8px 15px 8px;
-}
-
-@media (max-width: 1100px) {
-    .navbar-fixed-top {
-        position: relative;
-        top: auto;
-    }
-    .navbar-collapse {
-        max-height: none;
-    }
-    #topNavSpacer {
-        padding: 0;
-    }
 }
 
 .tabsContainer {
@@ -514,11 +455,6 @@ input, textarea, select,
     z-index: 10 !important;
 }
 
-.ion {
-    font-size: 140%;
-    font-weight: 400;
-}
-
 .navbar-xs-iframe {
     border-radius: 0px;
     margin-bottom: 5px;
@@ -529,19 +465,15 @@ input, textarea, select,
     padding: 5px;
 }
 
-.navbar-brand {
-    padding: 5px 0 17px 15px;
-    margin-right: 30px;
+#header-nav {
+  padding: 0;
 }
 
-.navbar-default .navbar-nav, .navbar-inverse .navbar-nav {
-    background: transparent!important;
+#ToggleRecording {
+  margin-top: 5px;
 }
 
-.navbar-inverse {
-    background: #404040!important;
-}
-
-.navbar-inverse .navbar-nav > li > a {
-    color: #ccc;
+#dbLoggerDropdown {
+  min-width: 260px;
+  padding-left: 10px;
 }
