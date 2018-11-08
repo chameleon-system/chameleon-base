@@ -19,7 +19,7 @@ while ($oField = $data['oFields']->Next()) {
                 $sTmpFormTabsContent .= "<tr><td colspan=\"2\"{$rowColorStyle}>";
                 $sTmpFormTabsContent .= '<div class="fieldSeperator">';
                 if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
-                    $sTmpFormTabsContent .= '<div id="tooltip'.$oField->name.'" style="float:left;" class="xtoolTipButton"><img src="'.TGlobal::GetPathTheme()."/images/icons/icon_info.gif\" width=\"16\" height=\"16\" alt=\"\" onclick=\"$('#tooltip".$oField->name."_content').toggle();\"></div>&nbsp;&nbsp;";
+                    $sTmpFormTabsContent .= '<div id="tooltip'.$oField->name.'" style="float:left;" class="badge"><img src="'.TGlobal::GetPathTheme()."/images/icons/icon_info.gif\" width=\"16\" height=\"16\" alt=\"\" onclick=\"$('#tooltip".$oField->name."_content').toggle();\"></div>&nbsp;&nbsp;";
                 }
                 $sTmpFormTabsContent .= $oField->GetContent();
                 $sTmpFormTabsContent .= '</div>';
@@ -39,7 +39,7 @@ while ($oField = $data['oFields']->Next()) {
             ';
 
                 if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
-                    $sTmpFormTabsContent .= '<div id="tooltip'.$oField->name.'" class="toolTipButton"><img src="'.TGlobal::GetPathTheme().'/images/icons/icon_info.gif" width="16" height="16" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help'))."\" onclick=\"$('#tooltip".$oField->name."_content').toggle();\"></div>\n";
+                    $sTmpFormTabsContent .= '<span id="tooltip'.$oField->name.'" class="help-badge badge badge-info float-right" role="button"><span class="glyphicon glyphicon-info-sign" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'" onclick="$(\'#tooltip'.$oField->name.'_content\').toggle();"></span></span>';
                 }
 
                 $oFieldConfig = TdbCmsFieldConf::GetNewInstance();
@@ -62,7 +62,7 @@ while ($oField = $data['oFields']->Next()) {
                             $sPrefix = $oBaseLanguage->fieldIso6391;
                         }
 
-                        $sTmpFormTabsContent .= '<span class="badge pull-right">'.$sPrefix."</span>\n";
+                        $sTmpFormTabsContent .= '<span class="badge badge-secondary float-right translation-badge">'.$sPrefix."</span>\n";
 
                         // show icon if record is not translated yet (disabled for MLT fields)
                         if ($oFieldType->fieldBaseType = 'standard' && isset($oTable->sqlData[$oFieldConfig->fieldName.'__'.$sPrefix])) {
