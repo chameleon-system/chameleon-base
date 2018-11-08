@@ -225,9 +225,9 @@ if ($bRevisionManagementActive) {
 
 <script type="text/javascript">
     $(document).ready(function() {
-        iBodyHeight = parseInt($(window).height());
-        iHeaderHeight = parseInt($("#isDeveloperModeBar").height() + 10 + $("#headerline").height() + 13 + 71 + 57 + $("#footer").height() + 56 );
-        iFrameHeight = iBodyHeight-iHeaderHeight;
+        bodyHeight = parseInt($(window).height());
+        headerHeight = parseInt($("#headerline").height() + 197 + $("#footer").height());
+        iFrameHeight = bodyHeight-headerHeight;
         if(iFrameHeight < 450){
             iFrameHeight = 450;
         }
