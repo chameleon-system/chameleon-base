@@ -64,11 +64,11 @@ class TCMSCronJob_CleanOrphanedMLTConnections extends TCMSCronJob
 
         if (count($aDeleteList) > 0) {
             foreach ($aDeleteList as $sTableName => $aDeletes) {
-                $this->getLogger()->warning(
-                    'removed '.count($aDeletes).' MLT orphaned mlt entries from '.$sTableName,
-                    __FILE__,
-                    __LINE__,
-                    array('deletelist' => $aDeletes)
+                $this->getCronjobLogger()->warning(
+                    sprintf('Removed %s MLT orphaned mlt entries from %s.', \count($aDeletes), $sTableName),
+                    [
+                        'deletelist' => $aDeletes,
+                    ]
                 );
             }
         }

@@ -55,10 +55,17 @@ class TCMSCronJob extends TCMSRecord
 
     /**
      * @return IPkgCmsCoreLog
+     *
+     * @deprecated - use getCronjobLogger()
      */
     protected function getLogger()
     {
         return ServiceLocator::get('cmsPkgCore.logChannel.cronjobs');
+    }
+
+    protected function getCronjobLogger(): \Psr\Log\LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.core_cronjobs');
     }
 
     /**
@@ -77,11 +84,11 @@ class TCMSCronJob extends TCMSRecord
             return;
         }
 
-        $this->getLogger()->info(
+        $this->getCronjobLogger()->info(
             sprintf('Cronjob "%s" started. [pid: %s]', $this->sqlData['name'], getmypid()),
-            __FILE__,
-            __LINE__,
-            array('job' => $this->sqlData)
+            [
+                'job' => $this->sqlData,
+            ]
         );
 
         if (false === $bForceExecution) {
@@ -121,13 +128,16 @@ class TCMSCronJob extends TCMSRecord
     {
         if (null === $error) {
             $sMessage = sprintf('Cronjob "%s" completed. [pid: %s]', $this->sqlData['name'], getmypid());
-            $this->getLogger()->info($sMessage, __FILE__, __LINE__);
+            $this->getCronjobLogger()->info($sMessage);
         } else {
             $sMessage = sprintf('Cronjob "%s" failed with PHP error: %s [pid: %s]', $this->sqlData['name'], $error->getMessage(), getmypid());
-            $this->getLogger()->critical($sMessage, __FILE__, __LINE__, array(
-                'fullMessage' => $error->getMessage(),
-                'trace' => $error->getTraceAsString(),
-            ));
+            $this->getCronjobLogger()->critical(
+                $sMessage,
+                [
+                    'fullMessage' => $error->getMessage(),
+                    'trace' => $error->getTraceAsString(),
+                ]
+            );
         }
         $this->AddMessageOutput($sMessage);
     }
