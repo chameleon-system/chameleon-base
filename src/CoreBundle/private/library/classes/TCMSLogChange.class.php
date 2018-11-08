@@ -32,7 +32,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Provides a facade for operations required for recording and executing migration scripts.
-/**/
+ */
 class TCMSLogChange
 {
     const INFO_MESSAGE_LEVEL_INFO = 'INFO';
@@ -1880,7 +1880,7 @@ class TCMSLogChange
         return  \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.cmsUpdates');
     }
 
-    protected static function getLogger(): LoggerInterface
+    private static function getLogger(): LoggerInterface
     {
         return  \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.core_cms_updates');
     }

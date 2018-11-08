@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
 
 /**
  * manages a cronjob.
@@ -63,7 +64,7 @@ class TCMSCronJob extends TCMSRecord
         return ServiceLocator::get('cmsPkgCore.logChannel.cronjobs');
     }
 
-    protected function getCronjobLogger(): \Psr\Log\LoggerInterface
+    protected function getCronjobLogger(): LoggerInterface
     {
         return ServiceLocator::get('monolog.logger.core_cronjobs');
     }

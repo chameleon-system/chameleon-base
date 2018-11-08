@@ -22,6 +22,7 @@ use ChameleonSystem\DatabaseMigration\Exception\AccessDeniedException;
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -244,11 +245,14 @@ class MTHeader extends TCMSModelBase
                 }
             } catch (Exception $e) {
                 $this->getFlashMessages()->addBackendToasterMessage('chameleon_system_core.cms_module_header.error_generate_portal_links');
-                $this->getLogger()->error('Error while generating portal links', __FILE__, __LINE__, array(
-                    'e.message' => $e->getMessage(),
-                    'e.file' => $e->getFile(),
-                    'e.line' => $e->getLine(),
-                ));
+                $this->getLogger()->error(
+                    sprintf('Error while generating portal links: %s', $e->getMessage()),
+                    [
+                        'e.message' => $e->getMessage(),
+                        'e.file' => $e->getFile(),
+                        'e.line' => $e->getLine(),
+                    ]
+                );
             }
         }
 
@@ -857,12 +861,9 @@ class MTHeader extends TCMSModelBase
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
-    /**
-     * @return IPkgCmsCoreLog
-     */
-    private function getLogger()
+    private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmspkgcore.logchannel.standard');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.core_standard');
     }
 
     /**

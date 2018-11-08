@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use esono\pkgCmsCache\CacheInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class TCMSPortal extends TCMSRecord
@@ -622,7 +623,9 @@ class TCMSPortal extends TCMSRecord
                             }
                             $aTmpList[$oSystemPage->fieldNameInternal] = array('link' => $sLink, 'nodeId' => $oNode->id);
                         } catch (RouteNotFoundException $e) {
-                            $this->getLogger()->warning(sprintf('Error while generating link for system page %s: %s', $oSystemPage->fieldNameInternal, $e->getMessage()), __FILE__, __LINE__);
+                            $this->getLogger()->warning(
+                                sprintf('Error while generating link for system page %s: %s', $oSystemPage->fieldNameInternal, $e->getMessage())
+                            );
                         }
                     }
                 }
@@ -901,11 +904,8 @@ class TCMSPortal extends TCMSRecord
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    /**
-     * @return IPkgCmsCoreLog
-     */
-    private function getLogger()
+    private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmspkgcore.logchannel.standard');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.core_standard');
     }
 }

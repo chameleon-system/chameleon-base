@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
@@ -355,11 +356,8 @@ class MTSendAFriendCore extends TUserCustomModelBase
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 
-    /**
-     * @return IPkgCmsCoreLog
-     */
-    private function getLogger()
+    private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmspkgcore.logchannel.standard');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.core_standard');
     }
 }

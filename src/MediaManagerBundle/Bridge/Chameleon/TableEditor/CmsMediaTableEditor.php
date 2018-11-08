@@ -17,7 +17,7 @@ use ChameleonSystem\MediaManager\Exception\UsageFinderException;
 use ChameleonSystem\MediaManager\Interfaces\MediaItemDataAccessInterface;
 use ChameleonSystem\MediaManager\MediaItemChainUsageFinder;
 use esono\pkgCmsCache\CacheInterface;
-use IPkgCmsCoreLog;
+use Psr\Log\LoggerInterface;
 use TCMSTableEditorMedia;
 
 class CmsMediaTableEditor extends TCMSTableEditorMedia
@@ -47,15 +47,11 @@ class CmsMediaTableEditor extends TCMSTableEditorMedia
             }
         } catch (UsageFinderException $e) {
             $this->getLogger()->error(
-                sprintf('Usages not found when clearing cache of image with ID %s: %s', $sImageId, $e->getMessage()),
-                __FILE__,
-                __LINE__
+                sprintf('Usages not found when clearing cache of image with ID %s: %s', $sImageId, $e->getMessage())
             );
         } catch (DataAccessException $e) {
             $this->getLogger()->error(
-                sprintf('Image with ID %s not found: %s', $sImageId, $e->getMessage()),
-                __FILE__,
-                __LINE__
+                sprintf('Image with ID %s not found: %s', $sImageId, $e->getMessage())
             );
         }
     }
@@ -84,11 +80,8 @@ class CmsMediaTableEditor extends TCMSTableEditorMedia
         return ServiceLocator::get('chameleon_system_media_manager.media_item.data_access');
     }
 
-    /**
-     * @return IPkgCmsCoreLog
-     */
-    private function getLogger()
+    private function getLogger(): LoggerInterface
     {
-        return ServiceLocator::get('cmsPkgCore.logChannel.standard');
+        return ServiceLocator::get('monolog.logger.core_standard');
     }
 }

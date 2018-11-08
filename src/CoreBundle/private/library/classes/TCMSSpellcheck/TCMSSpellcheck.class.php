@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use Psr\Log\LoggerInterface;
 
 class TCMSSpellcheck
 {
@@ -153,7 +154,7 @@ class TCMSSpellcheck
         }
 
         if (!empty($err)) {
-            $this->getLogger()->warning("aspell returned an error: $err", __FILE__, __LINE__);
+            $this->getLogger()->warning(sprintf('aspell returned an error: %s', $err));
 
             return array();
         }
@@ -178,11 +179,8 @@ class TCMSSpellcheck
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }
 
-    /**
-     * @return IPkgCmsCoreLog
-     */
-    private function getLogger()
+    private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmspkgcore.logchannel.standard');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.core_standard');
     }
 }

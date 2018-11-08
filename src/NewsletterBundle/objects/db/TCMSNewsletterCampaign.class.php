@@ -272,19 +272,15 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
             $sPlaintext = $this->ReplaceVariablesInTextHook($sPlaintext, $oNewsletterUser);
             $sGeneratedNewsletter = $this->ReplaceVariablesInTextHook($sGeneratedNewsletter, $oNewsletterUser);
 
-            // $oMailObject->AltBody($sPlaintext);
+            $logger = \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.core_standard');
             if (false === $this->isNewsletterAlreadySent($oNewsletterUser)) {
                 if (!$oMailObject->Send(array('sBody' => $sGeneratedNewsletter, 'sTextBody' => $sPlaintext))) {
-                    $sMessage = 'Unable to sen Newsletter: '.$oMailObject->ErrorInfo;
-                    $oLogger = \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
-                    $oLogger->warning($sMessage, __FILE__, __LINE__);
+                    $logger->warning(sprintf('Unable to send Newsletter: %s', $oMailObject->ErrorInfo));
                 } else {
                     $bSend = true;
                 }
             } else {
-                $sMessage = 'mail to newsletter queue entry with e-mail '.$oNewsletterUser->fieldEmail.' already sent';
-                $oLogger = \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
-                $oLogger->warning($sMessage, __FILE__, __LINE__, array('originalMessage' => $sMessage));
+                $logger->warning(sprintf('Mail to newsletter queue entry with e-mail %s already sent.', $oNewsletterUser->fieldEmail));
             }
         }
 
