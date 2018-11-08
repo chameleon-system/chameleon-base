@@ -36,8 +36,6 @@
             <argument type="collection">
                 <argument key="driver">pdo_mysql</argument>
                 <argument key="pdo" type="service" id="chameleon_system_core.pdo" />
-                <argument key="charset">UTF8</argument>
-                <argument key="logging" type="service" id="cmsPkgCore.logChannel.dbal" />
             </argument>
         </service>
 
