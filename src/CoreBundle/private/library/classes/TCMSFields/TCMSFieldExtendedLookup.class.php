@@ -113,8 +113,8 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         $oCmsTblConf = TdbCmsTblConf::GetNewInstance();
         $oCmsTblConf->LoadFromField('name', $sTableName);
 
-        $sHTML = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.select_item'), 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf), URL_CMS.'/images/icons/box.gif', 'pull-left');
-        $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:resetExtendedListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected'))."')", URL_CMS.'/images/icons/action_stop.gif', 'pull-left button-spacing');
+        $sHTML = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.select_item'), 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf), URL_CMS.'/images/icons/box.gif', 'float-left');
+        $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:resetExtendedListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected'))."')", URL_CMS.'/images/icons/action_stop.gif', 'float-left button-spacing');
 
         return $sHTML;
     }

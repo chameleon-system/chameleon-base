@@ -34,8 +34,8 @@ class TCMSFieldLookupFieldTypes extends TCMSFieldLookup
       </script>";
 
         $html .= '<div class="row">
-        <div class="col-md-6">
-        <select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name)."\" class=\"form-control input-sm\" onkeyup=\"showFieldTypeHelp(this.options[this.selectedIndex].value)\" onchange=\"showFieldTypeHelp(this.options[this.selectedIndex].value)\">\n";
+        <div class="col-lg-6">
+        <select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name)."\" class=\"form-control form-control-sm\" onkeyup=\"showFieldTypeHelp(this.options[this.selectedIndex].value)\" onchange=\"showFieldTypeHelp(this.options[this.selectedIndex].value)\">\n";
         foreach ($this->options as $key => $value) {
             $selected = '';
             if (0 == strcmp($this->data, $key)) {
@@ -46,7 +46,7 @@ class TCMSFieldLookupFieldTypes extends TCMSFieldLookup
         $html .= '</select>
         </div>';
 
-        $html .= '<div id="'.TGlobal::OutHTML($this->name)."helpContainer\" class=\"helpText col-md-6\"></div>
+        $html .= '<div id="'.TGlobal::OutHTML($this->name)."helpContainer\" class=\"helpText col-lg-6\"></div>
         </div>\n";
 
         $html .= $this->sFieldHelpTextHTML;

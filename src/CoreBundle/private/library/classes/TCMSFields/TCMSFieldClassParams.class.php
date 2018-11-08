@@ -22,7 +22,7 @@ class TCMSFieldClassParams extends TCMSField
     {
         parent::GetHTML();
 
-        $html = '<textarea id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name)."\" class=\"fieldtext\" style=\"width: {$this->fieldCSSwidth}\" width=\"{$this->fieldWidth}\">";
+        $html = '<textarea id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name)."\" class=\"form-control\" style=\"width: {$this->fieldCSSwidth}\" width=\"{$this->fieldWidth}\">";
         $html .= TGlobal::OutHTML($this->data);
         $html .= '</textarea>';
 

@@ -28,7 +28,7 @@ class TCMSFieldIconList extends TCMSField
             $imagePath = URL_CMS.$iconPath.$image;
         }
 
-        $html .= '<div class="badge" style="margin-right: 10px;"><img src="'.TGlobal::OutHTML($imagePath).'" id="'.TGlobal::OutHTML($this->name).'_img" border="0" /></div>';
+        $html .= '<div class="badge badge-pill" style="margin-right: 10px;"><img src="'.TGlobal::OutHTML($imagePath).'" id="'.TGlobal::OutHTML($this->name).'_img" border="0" /></div>';
 
         $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => $modulePageDef, 'image' => $image, 'fieldName' => $this->name));
         $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_icon_list.select'), "javascript:CreateModalIFrameDialogCloseButton('{$url}','780','550','".TGlobal::Translate('chameleon_system_core.field_icon_list.select')."');", URL_CMS.'/images/icons/image.gif');

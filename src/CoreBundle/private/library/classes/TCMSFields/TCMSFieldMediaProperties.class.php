@@ -37,7 +37,7 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
         $html .= $oImage->GetThumbnailTag(200, 140, 400, 400);
 
         $html .= '</div>
-      <table border="0" style="float: left; width: 50%" class="table table-condensed table-striped">
+      <table border="0" style="float: left; width: 50%" class="table table-sm table-striped">
         <tr>
           <td width="60">ID:</td>
           <td>'.TGlobal::OutHTML($this->oTableRow->sqlData['id']).'</td>
@@ -61,7 +61,7 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
 
         $html .= '<tr>
             <td colspan="2">
-            '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.download'), $oImage->GetFullURL(), TGlobal::GetStaticURLToWebLib('/images/icons/drive_disk.png'), 'pull-left').'
+            '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.download'), $oImage->GetFullURL(), TGlobal::GetStaticURLToWebLib('/images/icons/drive_disk.png'), 'float-left').'
             <div style="padding-left: 10px; float: left;">('.TGlobal::Translate('chameleon_system_core.field_document.right_click_download').')</div>
             </td>
           </tr>';
