@@ -74,7 +74,7 @@ class TCMSFieldVarchar extends TCMSField
     protected function getInputFieldAttributes()
     {
         $attributes = [
-            'class' => 'form-control input-sm',
+            'class' => 'form-control form-control-sm',
             'type' => $this->sFieldHTMLInputType,
             'id' => $this->name,
             'name' => $this->name,

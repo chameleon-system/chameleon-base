@@ -16,7 +16,7 @@ class TCMSFieldNumber extends TCMSFieldVarchar
 {
     public function GetHTML()
     {
-        $html = '<input class="fieldnumber form-control input-sm" type="text" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($this->data).'" />';
+        $html = '<input class="fieldnumber form-control form-control-sm" type="text" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($this->data).'" />';
 
         return $html;
     }
