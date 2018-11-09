@@ -406,24 +406,6 @@ input, textarea, select,
     border-radius: 0;
 }
 
-#cmsleftmenu, #cmsmiddlemenu, #cmsrightmenu {
-    width:33.3333%;
-    float:left;
-}
-
-#cmsmainmenu .cmsBoxBorder {
-    padding: 10px 6px 6px 6px;
-    margin-bottom: 10px;
-}
-
-#cmsmainmenu .columnpadding {
-    padding-left: 10px;
-}
-
-#cmsleftmenu .columnpadding {
-    padding-left: 0px;
-}
-
 .additionalInfoHeaderContainer {
     border-radius: 0;
     background-image: url(/chameleon/blackbox/themes/standard/images/box/header_bg.png);

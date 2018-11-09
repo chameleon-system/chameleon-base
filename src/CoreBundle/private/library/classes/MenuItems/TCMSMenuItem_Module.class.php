@@ -38,6 +38,6 @@ class TCMSMenuItem_Module extends TCMSMenuItem
             $rightIconStyle .= ' padding-left: 20px;';
         }
 
-        return '<a href="'.$url.'" title="'.$this->data['name']."\"{$iconStyle}><span style=\"{$rightIconStyle}\">".$this->data['name'].'</span></a>';
+        return '<a class="nav-link" href="'.$url.'" title="'.$this->data['name']."\"{$iconStyle}><span style=\"{$rightIconStyle}\">".$this->data['name'].'</span></a>';
     }
 }
