@@ -68,7 +68,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         }
 
         $html = '<div style="">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_tag.separator_hint')).'</div>
-      <div style="padding-right: 27px;"><textarea id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" class="form-control">'.TGlobal::OutHTML($tags)."</textarea></div>\n";
+      <div style="padding-right: 27px;"><textarea id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" class="form-control form-control-sm">'.TGlobal::OutHTML($tags)."</textarea></div>\n";
         if ($this->bShowSuggestions) {
             $html .= '<div id="'.TGlobal::OutHTML($this->name).'_suggested" class="tagInputSuggestedTags"><span class="label">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_tag.suggestions')).": </span><span class=\"tagInputSuggestedTagList\"></span></div>\n";
         }

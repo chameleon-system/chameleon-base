@@ -52,7 +52,7 @@ class TCMSFieldText extends TCMSField
         }
 
         $html = '';
-        $html .= '<textarea id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name)."\" class=\"fieldtext form-control resizable\" width=\"{$this->fieldWidth}\" style=\"".$cssWidth;
+        $html .= '<textarea id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name)."\" class=\"fieldtext form-control form-control-sm resizable\" width=\"{$this->fieldWidth}\" style=\"".$cssWidth;
         if (!is_null($iTextareaSize)) {
             $html .= ' ;height: '.$iTextareaSize.'px';
         }
