@@ -1,5 +1,4 @@
 @import "./cms_user_style/main.css";
-@import "./contentRoundedBox.css";
 
 html, body{
     height: 100%; /** we need this to set all block level elements to their real height, fixes problems in IE */
