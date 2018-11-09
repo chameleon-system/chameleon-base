@@ -697,8 +697,8 @@ class TFullGroupTable extends TGroupTable
             document.'.$this->listName.'.submit();
         }
         </script>
-        <div>';
-        $tableNavigation .= '<nav>';
+        <div class="row">';
+        $tableNavigation .= '<nav class="col-auto mr-auto">';
         $tableNavigation .= '<ul class="pagination pagination-md TFullGroupTablePagination">';
         $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><span class="glyphicon glyphicon-list" aria-hidden="true" style="margin-right: 5px;"></span>'.$hitText.'</a></li>';
 
@@ -740,7 +740,7 @@ class TFullGroupTable extends TGroupTable
                 $active = 'active';
             }
 
-            $tableNavigation .= '<li class="page-item '.$active.'"><a href="javascript:switchPage(\'".($i * $recordsPerPage)."\');" class="page-link">'.($i + 1)."</a></li>\n";
+            $tableNavigation .= '<li class="page-item '.$active.'"><a href="javascript:switchPage(\''.($i * $recordsPerPage).'\');" class="page-link">'.($i + 1).'</a></li>';
         }
 
         if (($this->startRecord + $this->showRecordCount) < $this->recordCount && -1 != $this->showRecordCount) {
@@ -756,10 +756,11 @@ class TFullGroupTable extends TGroupTable
         $tableNavigation .= '</nav>';
 
         if ($this->showRowsPerPageChooser) {
-            $tableNavigation .= '<div class="form-group float-right form-inline TFullGroupTablePerPageSelect">
-            <label>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_records_per_page'))."
-            <select name=\"_limit\" class=\"form-control form-control-sm\" onChange=\"document.{$this->listName}._startRecord.value=0;document.{$this->listName}.submit();\">
-            </label>";
+            $tableNavigation .= '<div class="col-auto form-group TFullGroupTablePerPageSelect">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend"><span class="input-group-text">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_records_per_page')).'</span></div>
+                <select name="_limit" class="form-control" onChange="document.'.$this->listName.'._startRecord.value=0;document.'.$this->listName.'.submit();">
+            ';
 
             $userCount = $this->showRecordCount;
             if (!empty($this->_postData['_limit'])) {
@@ -777,6 +778,7 @@ class TFullGroupTable extends TGroupTable
             }
 
             $tableNavigation .= '</select>
+            </div>
             </div>';
         }
 
