@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeServiceInterface;
 use ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -29,12 +30,19 @@ class InitializeRequestListener
      */
     private $maintenanceModeService;
 
+    /**
+     * @var RequestInfoServiceInterface
+     */
+    private $requestInfoService;
+
     public function __construct(
         RequestInitializer $requestInitializer,
-        MaintenanceModeServiceInterface $maintenanceModeService
+        MaintenanceModeServiceInterface $maintenanceModeService,
+        RequestInfoServiceInterface $requestInfoService
     ) {
         $this->requestInitializer = $requestInitializer;
         $this->maintenanceModeService = $maintenanceModeService;
+        $this->requestInfoService = $requestInfoService;
     }
 
     /**
@@ -46,7 +54,9 @@ class InitializeRequestListener
             return;
         }
 
-        $this->recheckMaintenanceMode($event);
+        if (false === $this->requestInfoService->isBackendMode() && false === $this->requestInfoService->isCmsTemplateEngineEditMode()) {
+            $this->recheckMaintenanceMode($event);
+        }
 
         $this->requestInitializer->initialize($event->getRequest());
     }
