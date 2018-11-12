@@ -729,6 +729,8 @@ class MTHeader extends TCMSModelBase
                 $(document).ready(function () {
                     // init tooltips
                     $(\'[data-toggle="tooltip"], [rel="tooltip"]\').bootstrapTooltip({container: \'body\', trigger: \'hover\'});
+                    
+                    $(\'[data-toggle="popover"]\').popover({ html: true });
                 });
             </script>
             ';
