@@ -42,7 +42,7 @@ while ($oField = $data['oFields']->Next()) {
                 $oFieldConfig->Load($oField->oDefinition->id);
 
                 if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
-                    $sTmpFormTabsContent .= '<span class="help-badge badge badge-info float-right" role="button" data-toggle="popover" data-placement="bottom" data-content="'.TGlobal::OutHTML(nl2br($oField->oDefinition->sqlData['049_helptext'])).'" data-original-title="'.TGlobal::OutHTML($oFieldConfig->fieldTranslation).'">
+                    $sTmpFormTabsContent .= '<span class="help-badge badge badge-info float-right" role="button" data-toggle="popover" data-placement="right" data-content="'.TGlobal::OutHTML(nl2br($oField->oDefinition->sqlData['049_helptext'])).'" data-original-title="'.TGlobal::OutHTML($oFieldConfig->fieldTranslation).'">
                         <span class="glyphicon glyphicon-info-sign" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'""></span>
                     </span>';
                 }
