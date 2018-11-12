@@ -117,20 +117,26 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
 
         if (true === $hasParameters) {
             $relativeSourceUrl = substr($relativeSourceUrl, 0, $paramStartPos);
-            $relativeSourceUrl = rtrim($relativeSourceUrl, '/');
+            $relativeSourceUrl = trim($relativeSourceUrl, '/');
             $absoluteSourceUrl = $request->getSchemeAndHttpHost().'/'.$relativeSourceUrl;
 
             $conditions[] = '`source_url` LIKE '.$dbConnection->quote($relativeSourceUrl.'?%');
-            $conditions[] = '`source_url` LIKE '.$dbConnection->quote($absoluteSourceUrl.'?%');
             $conditions[] = '`source_url` LIKE '.$dbConnection->quote($relativeSourceUrl.'/?%');
+            $conditions[] = '`source_url` LIKE '.$dbConnection->quote('/'.$relativeSourceUrl.'/?%');
+            $conditions[] = '`source_url` LIKE '.$dbConnection->quote('/'.$relativeSourceUrl.'?%');
+
+            $conditions[] = '`source_url` LIKE '.$dbConnection->quote($absoluteSourceUrl.'?%');
             $conditions[] = '`source_url` LIKE '.$dbConnection->quote($absoluteSourceUrl.'/?%');
         } else {
-            $relativeSourceUrl = rtrim($relativeSourceUrl, '/');
+            $relativeSourceUrl = trim($relativeSourceUrl, '/');
             $absoluteSourceUrl = $request->getSchemeAndHttpHost().'/'.$relativeSourceUrl;
 
             $conditions[] = '`source_url` = '.$dbConnection->quote($relativeSourceUrl);
-            $conditions[] = '`source_url` = '.$dbConnection->quote($absoluteSourceUrl);
+            $conditions[] = '`source_url` = '.$dbConnection->quote('/'.$relativeSourceUrl.'/');
             $conditions[] = '`source_url` = '.$dbConnection->quote($relativeSourceUrl.'/');
+            $conditions[] = '`source_url` = '.$dbConnection->quote('/'.$relativeSourceUrl);
+
+            $conditions[] = '`source_url` = '.$dbConnection->quote($absoluteSourceUrl);
             $conditions[] = '`source_url` = '.$dbConnection->quote($absoluteSourceUrl.'/');
         }
 
