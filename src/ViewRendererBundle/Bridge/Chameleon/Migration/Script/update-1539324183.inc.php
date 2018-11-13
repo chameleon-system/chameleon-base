@@ -27,5 +27,8 @@ $data = TCMSLogChange::createMigrationQueryData('cms_config', 'de')
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-TCMSLogChange::addInfoMessage('Removing "chameleon/outbox/static/less/cached" from additionally to clean cache directories.
-Is now handled as part of the system - path can be configured.');
+TCMSLogChange::addInfoMessage('The path for generated CSS can now be configured using bundle config
+chameleon_system_view_renderer: css_dir (formerly the path was fixed to web/chameleon/outbox/static/less).');
+
+TCMSLogChange::addInfoMessage('Removed "chameleon/outbox/static/less/cached" from additionally to clean cache directories.
+It is now handled as part of the system.');
