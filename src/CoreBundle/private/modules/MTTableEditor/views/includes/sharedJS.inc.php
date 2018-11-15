@@ -1,7 +1,7 @@
 <script type="text/javascript">
     if (!parent.framestosave) parent.framestosave = new Array();
 </script>
-<div style="position: relative; top: 4px;">
+<div>
 <?php
 if ($data['aPermission']['showlist'] && '1' == $data['only_one_record_tbl'] && array_key_exists('bIsLoadedFromIFrame', $data) && $data['bIsLoadedFromIFrame']) {
     ?>

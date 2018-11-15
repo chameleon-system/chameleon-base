@@ -34,7 +34,7 @@ while ($oField = $data['oFields']->Next()) {
                 }
 
                 $sTmpFormTabsContent .= '<tr class="'.$rowClass.'">
-            <td valign="top" class="leftTD"'.$rowColorStyle.'>
+            <th valign="top" class="leftTD"'.$rowColorStyle.'>
               <div id="fieldname_'.TGlobal::OutHTML($oField->name).'">
             ';
 
@@ -82,7 +82,7 @@ while ($oField = $data['oFields']->Next()) {
                 }
                 $sTmpFormTabsContent .= '</div>
             </div>
-    	    </td>
+    	    </th>
           <td class="rightTD">';
                 $sTmpFormTabsContent .= $oField->GetContent();
                 $sTmpFormTabsContent .= '</td>
@@ -125,7 +125,7 @@ if (!empty($sTmpFormTabsContent)) {
     }
     $sFormTabsContent .= '
 
-        <table class="table table-striped table-hover">
+        <table class="table table-responsive-sm table-striped table-sm">
         ';
 
     $sFormTabsContent .= $sTmpFormTabsContent;
