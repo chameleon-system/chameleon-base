@@ -46,9 +46,10 @@ parameters:
 
   chameleon_system_core.allow_database_logging: false # log database changes? @deprecated since 6.2.0 - no longer used. To disallow migration logging, remove the permission for all backend users.
   chameleon_system_core.development_email: "admin@localhost" # set email address of developer. Fatal errors will be sent to this address in live mode
-  chameleon_system_core.cms_log_level: 1 # define the log level to include in the chameleon log file. Chameleon will log only log messages that have this level (or less)
-                                         #level 0 -> no logging
-                                         #level 1 -> error messages only
+  chameleon_system_core.cms_log_level: 1 # @deprecated since 6.3.0 - no longer used
+                                         # define the log level to include in the chameleon log file. Chameleon will log only log messages that have this level (or less)
+                                         # level 0 -> no logging
+                                         # level 1 -> error messages only
                                          # level 2 -> warnings
                                          # level 3 -> notices
                                          # level 4 -> info
