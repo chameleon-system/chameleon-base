@@ -1,47 +1,13 @@
 @import "./cms_user_style/main.css";
-@import "./contentRoundedBox.css";
-
-html, body{
-    height: 100%; /** we need this to set all block level elements to their real height, fixes problems in IE */
-}
-
-body, td, div {
-  font-family: "Segoe UI", Arial, helvetica, sans-serif;
-  font-size: 12px;
-  line-height: 14px;
-}
-
-a {
-  color: black;
-  text-decoration: none;
-}
 
 a:hover {
   text-decoration: underline;
-}
-
-body {
-  background-color: #6C83AC;
 }
 
 iframe{
   background-image: none;
   background-color: #ffffff;
   border: none;
-}
-
-H1 {
-  color: #841313;
-  font-weight: bold;
-  font-size: 13px;
-  line-height: 20px;
-}
-
-H2 {
-  color: #841313;
-  font-weight: bold;
-  font-size: 11px;
-  line-height: 17px;
 }
 
 HR {
@@ -94,8 +60,6 @@ legend {
   font-weight: bold;
   font-size: 13px;
   min-height: 40px;
-  /*margin-top: 8px;
-  margin-bottom: 8px;*/
   display: block;
 }
 
@@ -190,7 +154,6 @@ div.success, span.success, .successMessage {
   border: 2px solid #FFB608;
 }
 
-
 .contentboxHeadline {
   height: 28px;
   color: #841313;
@@ -218,7 +181,7 @@ div.success, span.success, .successMessage {
   height: 100%;
   border: 1px solid #ABBDCD;
   margin-top: 5px;
-  background-image:url(/chameleon/blackbox//images/icons/page_navigation.gif);
+  background-image:url(/chameleon/blackbox/images/icons/page_navigation.gif);
   background-position:5px 3px;
   background-repeat:no-repeat;
 }
@@ -378,13 +341,6 @@ div.grippie {
   color: #0B224B;
 }
 
-input, textarea, select,
-.btn, .badge, .input-group-addon, .chosen-single, .dropdown-menu, .ui-dialog,
-.ui-corner-all, .alert, .panel,
-.pagination > li > a, .pagination > li > span, .ui-tabs .ui-tabs-nav li a {
-  border-radius: 0 !important;
-}
-
 .btn .btn-icon {
   background-position: left center;
   background-repeat: no-repeat;
@@ -402,48 +358,11 @@ input, textarea, select,
  */
 .cmsBoxBorder {
     background-color: #fff;
-    padding: 6px;
-    border: 1px solid #808080;
-    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    padding: 5px;
 }
 
-#cmsbreadcrumb {
-    margin: 0px 15px 0px 15px;
-}
 #cmsbreadcrumb .breadcrumb {
     border-radius: 0;
-    opacity: .7;
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
-}
-
-#cmsbreadcrumb .breadcrumb>li:before {
-    color: #000;
-}
-
-#cmsleftmenu, #cmsmiddlemenu, #cmsrightmenu {
-    width:33.3333%;
-    float:left;
-}
-
-#cmsmainmenu .cmsBoxBorder {
-    padding: 10px 6px 6px 6px;
-    margin-bottom: 10px;
-}
-
-#cmsmainmenu .columnpadding {
-    padding-left: 10px;
-}
-
-#cmsleftmenu .columnpadding {
-    padding-left: 0px;
-}
-
-.additionalInfoHeaderContainer {
-    border-radius: 0;
-    background-image: url(/chameleon/blackbox/themes/standard/images/box/header_bg.png);
-    background-position: 0px -5px;
-    border: 0px;
 }
 
 .cmsNavIcon {
@@ -453,53 +372,9 @@ input, textarea, select,
 }
 
 #topNavSpacer {
-    padding-top: 60px;
+    padding-top: 50px;
     line-height: 0px;
     font-size: 0px;
-}
-
-#cmsTopNavbar .btn-group .dropdown-menu {
-    margin-top: -4px;
-}
-
-#cmsTopNavbar .btn-group .dropdown-menu:before {
-    position: absolute;
-    top: -7px;
-    left: 9px;
-    display: inline-block;
-    border-right: 7px solid transparent;
-    border-bottom: 7px solid #ccc;
-    border-left: 7px solid transparent;
-    border-bottom-color: rgba(0, 0, 0, 0.2);
-    content: '';
-}
-
-#cmsTopNavbar .btn-group .dropdown-menu:after {
-    position: absolute;
-    top: -6px;
-    left: 10px;
-    display: inline-block;
-    border-right: 6px solid transparent;
-    border-bottom: 6px solid #ffffff;
-    border-left: 6px solid transparent;
-    content: '';
-}
-
-#cmsTopNavbar .nav > li > a {
-    padding: 15px 8px 15px 8px;
-}
-
-@media (max-width: 1100px) {
-    .navbar-fixed-top {
-        position: relative;
-        top: auto;
-    }
-    .navbar-collapse {
-        max-height: none;
-    }
-    #topNavSpacer {
-        padding: 0;
-    }
 }
 
 .tabsContainer {
@@ -514,34 +389,28 @@ input, textarea, select,
     z-index: 10 !important;
 }
 
-.ion {
-    font-size: 140%;
-    font-weight: 400;
-}
-
-.navbar-xs-iframe {
-    border-radius: 0px;
-    margin-bottom: 5px;
-    min-height: auto;
-}
-
 .iframeInnerSpacing {
     padding: 5px;
 }
 
-.navbar-brand {
-    padding: 5px 0 17px 15px;
-    margin-right: 30px;
+#header-nav {
+  padding: 0;
 }
 
-.navbar-default .navbar-nav, .navbar-inverse .navbar-nav {
-    background: transparent!important;
+#ToggleRecording {
+  margin-top: 5px;
 }
 
-.navbar-inverse {
-    background: #404040!important;
+#dbLoggerDropdown {
+  min-width: 260px;
+  padding-left: 10px;
 }
 
-.navbar-inverse .navbar-nav > li > a {
-    color: #ccc;
+.app-header .navbar-brand {
+  width: auto;
+}
+
+/** fix for missing border color, looks like a bootstrap bug */
+.card.bg-success .card-footer {
+  border-color: #379457;
 }

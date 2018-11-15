@@ -12,15 +12,6 @@
     margin-top: 0px;
 }
 
-.tableeditcontainer .leftTD {
-    padding-right: 10px;
-    font-weight: bold;
-    color: #0B224B;
-    font-size: 12px;
-    width: 250px;
-    vertical-align: top;
-}
-
 .tableeditcontainer .fieldName {
     background-repeat: no-repeat;
     background-position: 100%;
@@ -40,26 +31,12 @@
     padding-top: 7px;
 }
 
-.tableeditcontainer .rightTD {
-    padding-right: 10px;
-}
-
 .tableeditcontainer .fieldnumber {
     width: 70px;
-    text-align: right;
-}
-
-.tableeditcontainer .fieldvarchar {
-    width: 500px;
-}
-
-.tableeditcontainer .fieldurl {
-    width: 500px;
 }
 
 .tableeditcontainer .fieldtext {
-    width: 500px;
-    height: 200px;
+    min-height: 200px;
 }
 
 .cmsimagefieldcontainer {
@@ -116,21 +93,6 @@
 
 #datepickeriframe {
     background-color: transparent;
-}
-
-.toolTipButton, .translateButton {
-    float: right;
-    cursor: pointer;
-    cursor: hand;
-    padding-left: 5px;
-}
-
-.translateButton {
-    margin-right: 5px;
-}
-
-.translateButton span {
-    line-height: 16px;
 }
 
 .charCounter {
@@ -293,16 +255,7 @@
 }
 
 #tableEditorHeader th, #tableEditorHeader td, #tableEditorHeader td span, #tableEditorHeader td div {
-    color: #717880;
     text-align: left;
-    text-shadow: 1px 2px 3px whitesmoke;
-}
-
-#tableEditorHeader th {
-    font-weight: bold;
-    padding-top: 5px;
-    padding-right: 20px;
-    padding-bottom: 3px;
 }
 
 #tableEditorHeader td {
@@ -316,10 +269,6 @@
 .pageNavigationTreeSelectBox .treeSelectBox div {
     float: left;
     height: 26px;
-}
-
-.pageNavigationTreeSelectBox .dropdownButton {
-
 }
 
 .pageNavigationTreeSelectBox .additionalNavis {
@@ -340,35 +289,6 @@
 .switchToRecordBox {
     float: left;
     margin-left: 20px;
-}
-
-.rsakeymanagerbox .rsakeyline {
-    padding-bottom: 5px;
-}
-
-.rsakeymanagerbox .rsakeyline input, .rsakeymanagerbox .rsakeyline textarea {
-    width: 650px;
-}
-
-.rsakeymanagerbox .rsakeyline textarea {
-    height: auto;
-    background-color: transparent;
-    border: none;
-}
-
-.rsakeymanagerbox .rsakeyline span.keyname {
-    width: 150px;
-    float: left;
-}
-
-.rsakeymanagerbox .generatekey {
-    padding-left: 150px;
-    padding-top: 10px;
-}
-
-.rsakeymanagerbox .generatekey select {
-    float: left;
-    margin-right: 20px;
 }
 
 .description {
@@ -537,4 +457,16 @@
 
 .dateInput .ui-datepicker-trigger {
     display: none;
+}
+
+.translation-badge, .help-badge {
+    font-weight: bold;
+    font-size: 1.2em;
+    text-transform: uppercase;
+}
+
+.help-badge {
+    font-size: 1.1em;
+    cursor: pointer;
+    margin-left: 8px;
 }

@@ -142,7 +142,19 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.action_use_page_template">
                 <source>chameleon_system_core.template_engine.action_use_page_template</source>
-                <target>Use page template</target>
+                <target>Select</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.action_preview_template">
+                <source>chameleon_system_core.template_engine.action_preview_template</source>
+                <target>Preview</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.headline_layout">
+                <source>chameleon_system_core.template_engine.headline_layout</source>
+                <target>Page Layouts</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.active">
+                <source>chameleon_system_core.template_engine.active</source>
+                <target>active</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.error_instance_locked">
                 <source>chameleon_system_core.template_engine.error_instance_locked</source>

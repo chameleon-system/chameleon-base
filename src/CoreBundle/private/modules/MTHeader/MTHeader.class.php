@@ -719,19 +719,20 @@ class MTHeader extends TCMSModelBase
         if (TGlobal::CMSUserDefined()) {
             // first the includes that are needed for the all fields
             $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-            // bootstrap 3
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/bootstrap/js/bootstrap.min.js').'" type="text/javascript"></script>';
+            // bootstrap 4
+            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/bootstrap/js/bootstrap.bundle.min.js?v4.1').'" type="text/javascript"></script>';
+            $aIncludes[] = '<script src="'.TGlobal::GetPathTheme().'/coreui/js/coreui.min.js" type="text/javascript"></script>';
+            $aIncludes[] = '<script src="'.TGlobal::GetPathTheme().'/coreui/js/coreui-utilities.min.js" type="text/javascript"></script>';
             $aIncludes[] = '
             <script type="text/javascript">
-                var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-                $.fn.bootstrapBtn = bootstrapButton;            // give $().bootstrapBtn the Bootstrap functionality
-
                 var bootstrapTooltip = $.fn.tooltip.noConflict(); // return $.fn.tooltip to previously assigned value
                 $.fn.bootstrapTooltip = bootstrapTooltip;            // give $().bootstrapTooltip the Bootstrap functionality
 
                 $(document).ready(function () {
                     // init tooltips
                     $(\'[data-toggle="tooltip"], [rel="tooltip"]\').bootstrapTooltip({container: \'body\', trigger: \'hover\'});
+                    
+                    $(\'[data-toggle="popover"]\').popover({ html: true });
                 });
             </script>
             ';
@@ -764,9 +765,10 @@ class MTHeader extends TCMSModelBase
             $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         }
         $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/themes/cupertino/cupertino.css').'" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<link href="/chameleon/blackbox/bootstrap/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<link href="/chameleon/blackbox/bootstrap/css/bootstrap-theme.min.css" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/bootstrap.css" media="screen" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<link href="/chameleon/blackbox/bootstrap/css/bootstrap.min.css?v4.1" media="screen" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<link href="/chameleon/blackbox/bootstrap/css/bootstrap.min.css?v4.1" media="screen" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/coreui/css/coreui-standalone.min.css" media="screen" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<link href="/chameleon/blackbox/bootstrap/css/glyph-icons.css?v4.1" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="/chameleon/blackbox/iconFonts/foundation/foundation-icons.css" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="/chameleon/blackbox/iconFonts/ionicons/ionicons.css" media="screen" rel="stylesheet" type="text/css" />';
 

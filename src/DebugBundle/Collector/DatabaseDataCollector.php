@@ -47,6 +47,11 @@ class DatabaseDataCollector extends DataCollector
         );
     }
 
+    public function reset()
+    {
+        $this->data = [];
+    }
+
     public function getBacktraceEnabled()
     {
         return $this->data['backtraceEnabled'];

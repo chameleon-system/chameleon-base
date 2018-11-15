@@ -13,13 +13,11 @@ namespace ChameleonSystem\ViewRendererBundle\Tests\ChameleonStandardExtensionTes
 
 use ChameleonSystem\ViewRendererBundle\Twig\Extension\ChameleonStandardExtension;
 use PHPUnit\Framework\TestCase;
-use Twig_Environment;
-use Twig_Markup;
 
 class ChameleonStandardExtensionTest extends TestCase
 {
     /**
-     * @var Twig_Environment
+     * @var \Twig_Environment
      */
     private $env;
 
@@ -29,7 +27,8 @@ class ChameleonStandardExtensionTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->env = new Twig_Environment();
+        $loaderMock = $this->prophesize(\Twig_LoaderInterface::class);
+        $this->env = new \Twig_Environment($loaderMock->reveal());
     }
 
     /**
@@ -85,7 +84,7 @@ class ChameleonStandardExtensionTest extends TestCase
         return [
             [1],
             [0.4],
-            [new Twig_Markup('foo', 'UTF-8')],
+            [new \Twig_Markup('foo', 'UTF-8')],
         ];
     }
 }

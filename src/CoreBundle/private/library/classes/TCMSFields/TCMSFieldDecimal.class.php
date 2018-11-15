@@ -9,10 +9,9 @@
  * file that was distributed with this source code.
  */
 
-require_once PATH_LIBRARY.'/functions/ConvertNumber.fun.php';
 /**
  * a number (int).
-/**/
+ * /**/
 class TCMSFieldDecimal extends TCMSField
 {
     /**
@@ -29,10 +28,16 @@ class TCMSFieldDecimal extends TCMSField
 
     public function GetHTML()
     {
-        $html = '';
         // number of decimals can be retrived from the length set of the field definition
-        $sFormatValue = number_format($this->data, $this->_GetNumberOfDecimals(), ',', '.'); //ConvertNumber($this->data,'sql2g',2);
-        $html = "<input onblur=\"this.value=NumberFormat(NumberToFloat(this.value, ',', '.'), {$this->numberOfDecimals}, ',', '.')\" type=\"text\" id=\"".TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($sFormatValue)."\" style=\"width: {$this->fieldCSSwidth}\" size=\"{$this->fieldWidth}\" maxlength=\"{$this->fieldWidth}\" />";
+        $sFormatValue = number_format($this->data, $this->_GetNumberOfDecimals(), ',', '.');
+
+        $html = '<input class="fieldnumber form-control form-control-sm" onblur="this.value=NumberFormat(NumberToFloat(this.value, \',\', \'.\'), '.$this->numberOfDecimals.', \',\', \'.\')" type="text" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($sFormatValue).'"';
+
+        if ('' !== $this->fieldWidth && $this->fieldWidth > 0) {
+            $html .= ' size="'.TGlobal::OutHTML($this->fieldWidth).'" maxlength="'.TGlobal::OutHTML($this->fieldWidth).'"';
+        }
+
+        $html .= ' />';
 
         return $html;
     }

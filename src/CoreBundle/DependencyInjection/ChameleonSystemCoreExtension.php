@@ -114,6 +114,17 @@ class ChameleonSystemCoreExtension extends Extension
     {
         $backendAccessCheckDefinition = $container->getDefinition('chameleon_system_core.security.backend_access_check');
         $backendAccessCheckDefinition->addMethodCall('unrestrictPagedef', array('runcrons', $cronjobConfig['ip_whitelist']));
+
+        $failOnErrorLevel = $cronjobConfig['fail_on_error_level'];
+        if (-1 === $failOnErrorLevel) {
+            $debug = $container->getParameter('kernel.debug');
+            if (true === $debug) {
+                $failOnErrorLevel = E_ALL;
+            } else {
+                $failOnErrorLevel = E_ALL & !E_NOTICE & !E_USER_NOTICE & !E_DEPRECATED & !E_USER_DEPRECATED;
+            }
+        }
+        $container->setParameter('chameleon_system_core.cronjobs.fail_on_error_level', $failOnErrorLevel);
     }
 
     /**
@@ -180,6 +191,7 @@ class ChameleonSystemCoreExtension extends Extension
             return;
         }
         $mailerDefinition = $container->getDefinition('chameleon_system_core.mailer');
+
         $mailerDefinition->addMethodCall('setSmtpHost', array($mailerConfig['host']));
         $mailerDefinition->addMethodCall('setSmtpUser', array($mailerConfig['user']));
         $mailerDefinition->addMethodCall('setSmtpPassword', array($mailerConfig['password']));

@@ -56,7 +56,7 @@ class TCMSListManagerWYSIWYGImage extends TCMSListManagerImagedatabase
         $options .= $oTreeSelect->GetTreeOptions($mediaTreeId);
 
         $oViewRenderer = new ViewRenderer();
-        $oViewRenderer->AddSourceObject('sInputClass', 'form-control input-sm');
+        $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm');
         $oViewRenderer->AddSourceObject('sName', 'cms_media_tree_id');
         $oViewRenderer->AddSourceObject('sLabelText', TGlobal::Translate('chameleon_system_core.image_chooser.tree_node'));
         $oViewRenderer->AddSourceObject('onChange', "document.forms['".TGlobal::OutHTML($this->tableObj->listName)."'].submit();");

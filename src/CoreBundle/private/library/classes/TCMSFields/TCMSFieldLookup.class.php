@@ -21,7 +21,7 @@
  * you may also connect to a table with a different name than the field. just add:
  *    connectedTableName=tablename
  * to the feldtyp konfiguration
-/**/
+ * /**/
 class TCMSFieldLookup extends TCMSField
 {
     /**
@@ -64,17 +64,14 @@ class TCMSFieldLookup extends TCMSField
                 $sOnChangeAttr = "OnChange=\"CHAMELEON.CORE.MTTableEditor.bCmsContentChanged=false;PleaseWait();document.cmseditform.elements['module_fnc[contentmodule]'].value='Save';document.cmseditform.submit();\"";
                 $sClass .= ' cmsdisablechangemessage';
             }
-            if (!empty($sClass)) {
-                $sClass = 'class="'.$sClass.'"';
-            }
 
             $sWidgetClass = '';
             if ($comboboxEnabled) {
                 $sWidgetClass = 'ui-widget';
             }
 
-            $html = '<div class="'.$sWidgetClass."\" style=\"float: left;\">
-            <select {$sClass} name=\"".TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name).'" '.$sOnChangeAttr."  class=\"form-control input-sm\" style=\"width: 363px; float: left;\">\n";
+            $html = '<div class="'.$sWidgetClass.'" style="float: left;">
+            <select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name).'" '.$sOnChangeAttr.'  class="'.TGlobal::OutHTML($sClass).'form-control form-control-sm" style="width: 363px; float: left;">';
             if ($this->allowEmptySelection) {
                 $chooseMessage = TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected');
 

@@ -459,13 +459,16 @@ class TCMSMail extends PHPMailer
      */
     public function setSmtpHost($smtpHost)
     {
-        if (false === $colonPos = strpos($smtpHost, ':')) {
-            $this->smtpHost = $smtpHost;
-            $this->smtpPort = 25;
-        } else {
-            $this->smtpHost = substr($smtpHost, 0, $colonPos);
-            $this->smtpPort = (int) substr($smtpHost, $colonPos + 1);
+        $port = 25;
+        if (false !== ($portPosition = \mb_strrpos($smtpHost, ':'))) {
+            $portInHost = \mb_substr($smtpHost, $portPosition + 1);
+            if (true === \is_numeric($portInHost)) {
+                $port = (int) $portInHost;
+                $smtpHost = \mb_substr($smtpHost, 0, $portPosition);
+            }
         }
+        $this->smtpHost = $smtpHost;
+        $this->smtpPort = $port;
     }
 
     /**

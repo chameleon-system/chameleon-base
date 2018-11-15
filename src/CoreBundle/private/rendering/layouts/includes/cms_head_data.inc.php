@@ -9,7 +9,7 @@ if (false === headers_sent()) {
 <!--#CMSHEADERCODE#-->
 <link href="<?=TGlobal::GetPathTheme(); ?>/css/global.css" rel="stylesheet" type="text/css"/>
 </head>
-  <body <?php
+  <body class="app header-fixed" <?php
       if (isset($bodyAttributes)) {
           echo $bodyAttributes;
       }

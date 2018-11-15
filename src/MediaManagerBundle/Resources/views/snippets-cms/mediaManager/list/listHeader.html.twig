@@ -25,7 +25,7 @@
             </div>
         {% endif %}
         {% if sortColumns | length > 0 %}
-            <select name="sort-order" class="sort-order">
+            <select name="sort-order" class="sort-order" class="form-control form-control-sm">
                 <option>{{ 'chameleon_system_media_manager.sort.choose' | trans }}</option>
                 {% for sortColumn in sortColumns %}
                     {# sortColumn \ChameleonSystem\MediaManager\Interfaces\SortColumnInterface #}
@@ -38,7 +38,7 @@
     </div>
     <div class="action-bar">
         <form class="search-box">
-            <input type="text" class="form-control search-category autocomplete-search"
+            <input type="text" class="form-control search-category autocomplete-search form-control-sm"
                    value="{{ listState.searchTerm }}"
                    placeholder="{{ 'chameleon_system_media_manager.list.search_in_tree_node_placeholder' | trans({'%treeNodeName%': mediaTreeNode.name}) }}"
                    data-target="search-category-auto-complete">

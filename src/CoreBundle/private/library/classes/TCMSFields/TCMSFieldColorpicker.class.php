@@ -20,8 +20,8 @@ class TCMSFieldColorpicker extends TCMSField
         if (!empty($this->data)) {
             $value = '#'.$value;
         }
-        $html = '<div class="input-group" id="colorPickerCotainer'.TGlobal::OutHTML($this->name).'">
-    <span class="input-group-addon"><i></i></span>
+        $html = '<div class="input-group input-group-sm" id="colorPickerCotainer'.TGlobal::OutHTML($this->name).'">
+    <span class="input-group-append"><i></i></span>
     <input type="text" value="'.TGlobal::OutHTML($value).'" class="form-control" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" />
 </div>
 <script>

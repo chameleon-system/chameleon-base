@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @deprecated since 6.3.0 - Viddler is no longer supported
+ */
 // main layout
 $layoutTemplate = 'popup_iframe';
 

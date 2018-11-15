@@ -109,7 +109,7 @@ if (0 === \count($updatesByBundle)) {
             <a class="btn btn-success" href="#" id="btnRunUpdates" data-loading-text="<?=TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.action_update')); ?>"><?=TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.action_update')); ?></a>
             <div id="ajaxTimeoutContainer">
                 <label for="ajaxTimeoutSelect"><?=TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.select_ajax_timeout')); ?>: </label>
-                <select id="ajaxTimeoutSelect">
+                <select id="ajaxTimeoutSelect" class="form-control form-control-sm">
                     <option value="120"><?=TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.ajax_timeout', array('%minutes%' => 120))); ?></option>
                 </select>
             </div>

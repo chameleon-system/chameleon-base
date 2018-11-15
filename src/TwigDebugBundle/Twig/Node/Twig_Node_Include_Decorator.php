@@ -13,7 +13,6 @@ namespace ChameleonSystem\TwigDebugBundle\Twig\Node;
 
 use Twig_Compiler;
 use Twig_Node_Include;
-use Twig_NodeInterface;
 use Twig_NodeOutputInterface;
 
 class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputInterface
@@ -24,9 +23,9 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
     private $original;
 
     /**
-     * @param Twig_NodeInterface $original
+     * @param Twig_Node_Include $original
      */
-    public function __construct(Twig_NodeInterface $original)
+    public function __construct(Twig_Node_Include $original)
     {
         $this->original = $original;
     }
@@ -46,11 +45,6 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
     public function getIterator()
     {
         return $this->original->getIterator();
-    }
-
-    public function getLine()
-    {
-        return $this->original->getLine();
     }
 
     public function getNodeTag()
@@ -76,21 +70,5 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
     public function getTemplateName()
     {
         return $this->original->getTemplateName();
-    }
-
-    /**
-     * @deprecated since 1.27 (to be removed in 2.0)
-     */
-    public function setFilename($name)
-    {
-        $this->original->setFilename($name);
-    }
-
-    /**
-     * @deprecated since 1.27 (to be removed in 2.0)
-     */
-    public function getFilename()
-    {
-        return $this->original->getFilename();
     }
 }

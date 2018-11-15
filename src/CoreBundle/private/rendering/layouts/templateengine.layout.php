@@ -1,10 +1,13 @@
-<?php require_once dirname(__FILE__).'/includes/cms_head_data.inc.php'; ?>
-<div id="cmscontainer">
+<?php require_once PATH_LAYOUTTEMPLATES.'/includes/cms_head_data.inc.php'; ?>
+<header class="app-header">
     <?php $modules->GetModule('headerimage'); ?>
-    <div id="cmscontentcontainer">
+</header>
+<div id="cmscontainer" class="app-body">
+    <main class="main" id="cmscontentcontainer">
+        <?php $modules->GetModule('breadcrumb'); ?>
         <?php $modules->GetModule('templateengine'); ?>
-    </div>
-    <?php require_once dirname(__FILE__).'/includes/footer.inc.php'; ?>
+    </main>
 </div>
+<?php require_once PATH_LAYOUTTEMPLATES.'/includes/footer.inc.php'; ?>
 </body>
 </html>

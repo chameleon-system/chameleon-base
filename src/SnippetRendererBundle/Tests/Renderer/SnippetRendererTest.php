@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\ViewRendererBundle\Bridge\Twig\Loader\TwigStringLoader;
 use PHPUnit\Framework\TestCase;
 
 class SnippetRendererTest extends TestCase
@@ -28,7 +29,7 @@ class SnippetRendererTest extends TestCase
     public function setUp()
     {
         //$twigEnv = $this->getMockBuilder('Twig_Environment')->getMock();
-        $snippetRenderer = new TPkgSnippetRenderer(new Twig_Environment(new Twig_Loader_String()));
+        $snippetRenderer = new TPkgSnippetRenderer(new Twig_Environment(new TwigStringLoader()));
         $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
         $container->set('chameleon_system_snippet_renderer.snippet_renderer', $snippetRenderer);
         ServiceLocator::setContainer($container);

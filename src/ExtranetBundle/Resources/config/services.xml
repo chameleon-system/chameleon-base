@@ -24,7 +24,7 @@
             <tag name="kernel.event_listener" event="chameleon_system_extranet.user_login_success" method="refreshAuthenticityToken" />
         </service>
 
-        <service id="chameleon_system_extranet.extranet_user_provider" class="ChameleonSystem\ExtranetBundle\Service\ExtranetUserProvider">
+        <service id="chameleon_system_extranet.extranet_user_provider" class="ChameleonSystem\ExtranetBundle\Service\ExtranetUserProvider" public="true">
             <argument type="service" id="request_stack" />
         </service>
 
@@ -32,7 +32,7 @@
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
         </service>
 
-        <service id="chameleon_system_extranet.util.extranet_authentication" class="ChameleonSystem\ExtranetBundle\Util\ExtranetAuthenticationUtil">
+        <service id="chameleon_system_extranet.util.extranet_authentication" class="ChameleonSystem\ExtranetBundle\Util\ExtranetAuthenticationUtil" public="true">
             <argument type="service" id="request_stack" />
         </service>
     </services>

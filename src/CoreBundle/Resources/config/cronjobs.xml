@@ -16,7 +16,6 @@
         </service>
 
         <service class="TCMSCronJob_ClearCompleteCache" id="chameleon_system_core.cronjob.clear_complete_cache_cronjob" shared="false">
-            <argument type="service" id="chameleon_system_cms_cache.cache"/>
             <tag name="chameleon_system.cronjob" />
         </service>
 

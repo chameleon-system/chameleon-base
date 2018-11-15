@@ -307,6 +307,6 @@ class TViewParser
      */
     private function getViewPathManager()
     {
-        return ServiceLocator::get('chameleon_system_core.viewpathmanager');
+        return ServiceLocator::get('chameleon_system_core.viewPathManager');
     }
 }

@@ -19,7 +19,7 @@ while ($oField = $data['oFields']->Next()) {
                 $sTmpFormTabsContent .= "<tr><td colspan=\"2\"{$rowColorStyle}>";
                 $sTmpFormTabsContent .= '<div class="fieldSeperator">';
                 if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
-                    $sTmpFormTabsContent .= '<div id="tooltip'.$oField->name.'" style="float:left;" class="xtoolTipButton"><img src="'.TGlobal::GetPathTheme()."/images/icons/icon_info.gif\" width=\"16\" height=\"16\" alt=\"\" onclick=\"$('#tooltip".$oField->name."_content').toggle();\"></div>&nbsp;&nbsp;";
+                    $sTmpFormTabsContent .= '<div id="tooltip'.$oField->name.'" style="float:left;" class="badge"><img src="'.TGlobal::GetPathTheme()."/images/icons/icon_info.gif\" width=\"16\" height=\"16\" alt=\"\" onclick=\"$('#tooltip".$oField->name."_content').toggle();\"></div>&nbsp;&nbsp;";
                 }
                 $sTmpFormTabsContent .= $oField->GetContent();
                 $sTmpFormTabsContent .= '</div>';
@@ -33,18 +33,19 @@ while ($oField = $data['oFields']->Next()) {
                     $oField->oDefinition->sqlData['modifier'] = 'readonly';
                 }
 
-                $sTmpFormTabsContent .= '<tr class="'.$rowClass.'">
-            <td valign="top" class="leftTD"'.$rowColorStyle.'>
+                $sTmpFormTabsContent .= '<tr class="row m-0 '.$rowClass.'">
+            <th valign="top" class="leftTD col-2"'.$rowColorStyle.'>
               <div id="fieldname_'.TGlobal::OutHTML($oField->name).'">
             ';
 
-                if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
-                    $sTmpFormTabsContent .= '<div id="tooltip'.$oField->name.'" class="toolTipButton"><img src="'.TGlobal::GetPathTheme().'/images/icons/icon_info.gif" width="16" height="16" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help'))."\" onclick=\"$('#tooltip".$oField->name."_content').toggle();\"></div>\n";
-                }
-
                 $oFieldConfig = TdbCmsFieldConf::GetNewInstance();
-
                 $oFieldConfig->Load($oField->oDefinition->id);
+
+                if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
+                    $sTmpFormTabsContent .= '<span class="help-badge badge badge-info float-right" role="button" data-toggle="popover" data-placement="right" data-content="'.TGlobal::OutHTML(nl2br($oField->oDefinition->sqlData['049_helptext'])).'" data-original-title="'.TGlobal::OutHTML($oFieldConfig->fieldTranslation).'">
+                        <span class="glyphicon glyphicon-info-sign" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'""></span>
+                    </span>';
+                }
 
                 if (ACTIVE_TRANSLATION) {
                     $bIsTextField = false;
@@ -62,7 +63,7 @@ while ($oField = $data['oFields']->Next()) {
                             $sPrefix = $oBaseLanguage->fieldIso6391;
                         }
 
-                        $sTmpFormTabsContent .= '<span class="badge pull-right">'.$sPrefix."</span>\n";
+                        $sTmpFormTabsContent .= '<span class="badge badge-secondary float-right translation-badge">'.$sPrefix."</span>\n";
 
                         // show icon if record is not translated yet (disabled for MLT fields)
                         if ($oFieldType->fieldBaseType = 'standard' && isset($oTable->sqlData[$oFieldConfig->fieldName.'__'.$sPrefix])) {
@@ -81,11 +82,8 @@ while ($oField = $data['oFields']->Next()) {
                 }
                 $sTmpFormTabsContent .= '</div>
             </div>
-    	    </td>
-          <td class="rightTD">';
-                if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
-                    $sTmpFormTabsContent .= '<div style="display: none;" id="tooltip'.$oField->name.'_content" class="tooltipContainer">'.nl2br($oField->oDefinition->sqlData['049_helptext'])."</div>\n";
-                }
+    	    </th>
+          <td class="rightTD col-10">';
                 $sTmpFormTabsContent .= $oField->GetContent();
                 $sTmpFormTabsContent .= '</td>
         </tr>
@@ -127,7 +125,7 @@ if (!empty($sTmpFormTabsContent)) {
     }
     $sFormTabsContent .= '
 
-        <table class="table table-striped table-hover">
+        <table class="table table-responsive-sm table-striped table-sm">
         ';
 
     $sFormTabsContent .= $sTmpFormTabsContent;

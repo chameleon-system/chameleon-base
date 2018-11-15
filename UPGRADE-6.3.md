@@ -9,6 +9,24 @@ See the Changed Interfaces and Method Signatures section whether changes in sign
 
 # Changed Features
 
+## Symfony 3.4
+
+The system now uses Symfony 3.4, which needs a few adjustments:
+
+- In dev mode the debug toolbar will report deprecations concerning services that are retrieved through the
+  ServiceLocator or the Symfony container directly. To be prepared for Symfony 4, ServiceLocator and container calls
+  should be used as rarely as possible (no news here) and dependency injection should be preferred. Where dependency
+  injection is not possible, services should be declared public explicitly. The deprecation warnings will also be
+  logged, potentially leading to huge log files and if there is a large number of warnings, performance in the dev
+  environment will degrade. Therefore it is recommended to deal with most of the deprecations.
+- The scope concept is gone. Remove any scope references in service definitions (e.g. Chameleon modules used
+  `scope="prototype"` in the past, which should have been changed to `shared="false"` when migrating to 6.2.x).
+
+## Twig 2.x
+
+The system now uses Twig 2.x. Please have a look at the Twig changelog for required adjustments, but major problems are
+not expected.
+
 ## TTools::GetModuleLoaderObject Returns New Object
 
 The method `TTools::GetModuleLoaderObject` now returns a new `TModuleLoader` instance instead of the global module
@@ -59,8 +77,12 @@ None.
 
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::GetPostRenderVariables()
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::PreOutputCallbackFunctionReplaceCustomVars()
+- \ChameleonSystem\CoreBundle\CronJob\CronJobFactory::setCronJobs()
 - \ChameleonSystem\CoreBundle\Interfaces\TransformOutgoingMailTargetsServiceInterface::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Interfaces\TransformOutgoingMailTargetsServiceInterface::setSubjectPrefix()
+- \ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::addModule()
+- \ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::addModules()
+- \ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::getModules()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
 - \TTools::AddStaticPageVariables()
@@ -81,3 +103,80 @@ None.
 ## Database Fields
 
 None.
+
+## Backend Theme Library
+
+The Backend was upgraded to Bootstrap 4.1.3
+
+See the [Bootstrap Migration Guide](https://getbootstrap.com/docs/4.1/migration/) for needed changes to your backend modules.
+
+During the upgrade to Bootstrap 4 the following styles where checked and these are our findings:
+
+not found anywhere (so you may skip this search, too):
+- well
+- thumbnail
+- list-line
+- page-header
+- dl-horizontal
+- blockquote
+- btn-xs
+- btn-group-justified
+- btn-group-xs
+- breadcrumb
+- center-block
+- img-responsive
+- img-rounded
+- form-horizontal
+- radio
+- checkbox
+- input-lg
+- control-label 
+- hidden/visible-xs, sm, md, lg
+- label
+- navbar-form
+- navbar-btn
+- progress-bar*
+
+btn-default -> btn-secondary
+- some TCMSField types and TCMSTableEditors so check yours) 
+
+.pull-left > .float-left
+- TCMSFieldDocument
+- TCMSFieldDocumentProperties
+- TCMSFieldMediaProperties
+- TCMSFieldModuleInstance
+- MTHeader
+- header navigation
+- footer
+- added CSS class migration in TCMSRender::DrawButton method for backwards compatibility
+
+.input-sm > .form-control-sm
+- almost all TCMSField classes and twig templates
+- some list managers
+- some TCMSTableEditor classes
+
+.table-condensed > .table-sm
+- TCMSFieldDocumentProperties
+- TCMSFieldMediaProperties
+- TFullGroupTable
+
+New: .page-item + .page-link
+- pagination in TFullGroupTable
+
+.pull-rigt > .float-right
+- TFullGroupTable
+- MTHeader
+- MTTableditor
+
+.input-group-addon > .input-group-append
+- field types using the text length counter addon (varchar)
+
+.navbar-default > .navbar-light
+- TCMSTableManager and the layout manager iframes
+
+.navbar-toggle > .navbar-toggler
+- header navbar
+
+.col-md-* > .col-lg-*
+- header
+- login

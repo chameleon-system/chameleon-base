@@ -2,8 +2,7 @@
 
 namespace ChameleonSystem\CoreBundle\CronJob;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use TCMSCronJob;
+use Psr\Container\ContainerInterface;
 
 class CronJobFactory implements CronJobFactoryInterface
 {
@@ -11,10 +10,6 @@ class CronJobFactory implements CronJobFactoryInterface
      * @var ContainerInterface
      */
     private $container;
-    /**
-     * @var array
-     */
-    private $idList = [];
 
     public function __construct(ContainerInterface $container)
     {
@@ -23,13 +18,11 @@ class CronJobFactory implements CronJobFactoryInterface
 
     /**
      * @param string[] $idList
+     *
+     * @deprecated since 6.3.0 - available cron jobs are injected by constructor now
      */
     public function setCronJobs(array $idList)
     {
-        $this->idList = [];
-        foreach ($idList as $id) {
-            $this->idList[$id] = true;
-        }
     }
 
     /**
@@ -37,10 +30,7 @@ class CronJobFactory implements CronJobFactoryInterface
      */
     public function constructCronJob($identifier, array $data)
     {
-        if (isset($this->idList[$identifier])) {
-            if (false === $this->container->has($identifier)) {
-                throw new \InvalidArgumentException(sprintf('Service with ID %s could not be loaded.', $identifier));
-            }
+        if (true === $this->container->has($identifier)) {
             $cronJob = $this->container->get($identifier);
         } else {
             if (false === \class_exists($identifier)) {
@@ -52,7 +42,7 @@ class CronJobFactory implements CronJobFactoryInterface
             throw new \InvalidArgumentException(sprintf('Class for given identifier %s does not extend TCMSCronJob', $identifier));
         }
         /**
-         * @var TCMSCronJob $cronJob
+         * @var \TCMSCronJob $cronJob
          */
         $cronJob->LoadFromRow($data);
 

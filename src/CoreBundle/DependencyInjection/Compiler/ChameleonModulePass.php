@@ -12,8 +12,9 @@
 namespace ChameleonSystem\CoreBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Reference;
 
 class ChameleonModulePass implements CompilerPassInterface
 {
@@ -28,14 +29,16 @@ class ChameleonModulePass implements CompilerPassInterface
     {
         $moduleServiceDefinition = $container->getDefinition('chameleon_system_core.module_resolver');
         $moduleServiceIds = array_keys($container->findTaggedServiceIds('chameleon_system.module'));
+        $services = [];
 
         foreach ($moduleServiceIds as $moduleServiceId) {
             $moduleDefinition = $container->getDefinition($moduleServiceId);
-            if (true === $moduleDefinition->isShared() && ContainerInterface::SCOPE_PROTOTYPE !== $moduleDefinition->getScope()) {
+            if (true === $moduleDefinition->isShared()) {
                 throw new \LogicException('Chameleon modules must not be shared service instances. This module is shared: '.$moduleServiceId);
             }
+            $services[$moduleServiceId] = new Reference($moduleServiceId);
         }
 
-        $moduleServiceDefinition->addMethodCall('addModules', array($moduleServiceIds));
+        $moduleServiceDefinition->replaceArgument(0, ServiceLocatorTagPass::register($container, $services));
     }
 }
