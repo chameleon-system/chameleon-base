@@ -28,7 +28,7 @@ if (null === $editLanguage) {
 </form>
 <div class="p-2 mb-4">
 
-    <h4><?=TGlobal::Translate('chameleon_system_core.template_engine.headline_layout')?></h4>
+    <h4><?=TGlobal::Translate('chameleon_system_core.template_engine.headline_layout'); ?></h4>
     <?php
     while ($oPageLayout = $data['oMasterDefs']->Next()) {
         /** @var $oPageLayout TdbCmsMasterPagedef */
@@ -42,19 +42,23 @@ if (null === $editLanguage) {
             'id' => TGlobal::OutHTML($oPageLayout->id),
             'previewLanguageId' => $previewLanguageId,
         ];
-        $url = $urlUtil->getArrayAsUrl($urlParameters, URL_WEB_CONTROLLER.'?', '&');
-        ?>
-        <div class="card <?php if ($bIsActiveLayout) { ?>text-white bg-success<?php } ?>">
+        $url = $urlUtil->getArrayAsUrl($urlParameters, URL_WEB_CONTROLLER.'?', '&'); ?>
+        <div class="card <?php if ($bIsActiveLayout) {
+            ?>text-white bg-success<?php
+        } ?>">
             <div class="card-header p-2">
                 <span class="card-title mb-0"><?=TGlobal::OutHTML($oPageLayout->sqlData['name']); ?></span>
-                <?php if (true === $bIsActiveLayout) { ?>
-                <span class="badge badge-pill badge-light float-right"><?=TGlobal::Translate('chameleon_system_core.template_engine.active')?></span>
-                <?php } ?>
+                <?php if (true === $bIsActiveLayout) {
+            ?>
+                <span class="badge badge-pill badge-light float-right"><?=TGlobal::Translate('chameleon_system_core.template_engine.active'); ?></span>
+                <?php
+        } ?>
             </div>
             <div class="card-body p-2">
                 <div class="callout mt-0 mb-1 <?php
                 if (false === $bIsActiveLayout) {
-                ?>callout-success<?php } ?>">
+                    ?>callout-success<?php
+                } ?>">
                     <small class="text-muted"><?=TGlobal::Translate('chameleon_system_core.template_engine.spot_count'); ?></small><br>
                     <strong class="h6"><?=$oPageLayout->NumberOfDynamicModules(); ?></strong>
                 </div>
@@ -64,7 +68,7 @@ if (null === $editLanguage) {
             </div>
             <?php
             if (false === $bIsActiveLayout) {
-            ?>
+                ?>
             <div class="card-footer p-2">
                 <div class="btn-group">
                     <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:parent.document.getElementById('userwebpageiframe').src=\''.$url.'\';", TGlobal::GetStaticURLToWebLib('/images/icons/eye.png')); ?>
@@ -73,13 +77,12 @@ if (null === $editLanguage) {
             </div>
             <?php
             } else {
-            ?>
+                ?>
             <div class="card-footer p-2 bg-success">
                 <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:parent.document.getElementById('userwebpageiframe').src=\''.$url.'\';", TGlobal::GetStaticURLToWebLib('/images/icons/eye.png')); ?>
             </div>
             <?php
-            }
-            ?>
+            } ?>
         </div>
         <?php
     }
