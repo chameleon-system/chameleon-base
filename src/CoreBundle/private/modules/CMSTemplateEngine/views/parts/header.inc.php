@@ -15,7 +15,6 @@ if ($data['aPermission']['showlist']) {
 }
 $oController = TGlobal::GetController();
 ?>
-<div class="cmsBoxBorder additionalInfoHeaderContainer">
 <table cellpadding="0" cellspacing="0" id="tableEditorHeader">
 <tr>
     <th>IDs</th>
@@ -203,7 +202,6 @@ if ($bRevisionManagementActive) {
 </td>
 </tr>
 </table>
-</div>
 <script type="text/javascript">
     $(document).ready(function () {
         $('.pageNavigationTreeSelectBox').hover(function () {
@@ -225,13 +223,15 @@ if ($bRevisionManagementActive) {
 
 <script type="text/javascript">
     $(document).ready(function() {
-        bodyHeight = parseInt($(window).height());
-        headerHeight = parseInt($("#headerline").height() + 197 + $("#footer").height());
-        iFrameHeight = bodyHeight-headerHeight;
+        var bodyHeight = parseInt($(window).height());
+        var iFramePos = $('#templateengine .card-body').position();
+        var additionPaddings = 235;
+        var iFrameHeight = bodyHeight - iFramePos.top - additionPaddings;
+
         if(iFrameHeight < 450){
             iFrameHeight = 450;
         }
-        $('#userwebpageiframe').css("height", iFrameHeight);
 
+        $('#userwebpageiframe').css("height", iFrameHeight);
     });
 </script>
