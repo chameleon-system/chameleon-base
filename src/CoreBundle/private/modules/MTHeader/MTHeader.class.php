@@ -721,6 +721,8 @@ class MTHeader extends TCMSModelBase
             $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
             // bootstrap 4
             $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/bootstrap/js/bootstrap.bundle.min.js?v4.1').'" type="text/javascript"></script>';
+            $aIncludes[] = '<script src="'.TGlobal::GetPathTheme().'/coreui/js/coreui.min.js" type="text/javascript"></script>';
+            $aIncludes[] = '<script src="'.TGlobal::GetPathTheme().'/coreui/js/coreui-utilities.min.js" type="text/javascript"></script>';
             $aIncludes[] = '
             <script type="text/javascript">
                 var bootstrapTooltip = $.fn.tooltip.noConflict(); // return $.fn.tooltip to previously assigned value
@@ -764,6 +766,8 @@ class MTHeader extends TCMSModelBase
         }
         $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/themes/cupertino/cupertino.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="/chameleon/blackbox/bootstrap/css/bootstrap.min.css?v4.1" media="screen" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<link href="/chameleon/blackbox/bootstrap/css/bootstrap.min.css?v4.1" media="screen" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/coreui/css/coreui-standalone.min.css" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="/chameleon/blackbox/bootstrap/css/glyph-icons.css?v4.1" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="/chameleon/blackbox/iconFonts/foundation/foundation-icons.css" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="/chameleon/blackbox/iconFonts/ionicons/ionicons.css" media="screen" rel="stylesheet" type="text/css" />';
