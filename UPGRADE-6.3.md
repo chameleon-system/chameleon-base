@@ -124,7 +124,6 @@ not found anywhere (so you may skip this search, too):
 - btn-group-xs
 - breadcrumb
 - center-block
-- img-responsive
 - img-rounded
 - form-horizontal
 - radio
@@ -136,6 +135,10 @@ not found anywhere (so you may skip this search, too):
 - navbar-form
 - navbar-btn
 - progress-bar*
+
+-img-responsive -> -img-fluid
+- TCMSFieldMedia
+- TCSMFieldFMapCoordinate
 
 btn-default -> btn-secondary
 - some TCMSField types and TCMSTableEditors so check yours) 
