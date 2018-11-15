@@ -14,8 +14,6 @@ namespace ChameleonSystem\CoreBundle\EventListener;
 use ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeServiceInterface;
 use ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 class InitializeRequestListener
@@ -55,27 +53,27 @@ class InitializeRequestListener
         }
 
         if (false === $this->requestInfoService->isBackendMode() && false === $this->requestInfoService->isCmsTemplateEngineEditMode()) {
-            $this->recheckMaintenanceMode($event);
+            $this->recheckMaintenanceMode();
         }
 
         $this->requestInitializer->initialize($event->getRequest());
     }
 
-    private function recheckMaintenanceMode(GetResponseEvent $event): void
+    private function recheckMaintenanceMode(): void
     {
         if (true === $this->maintenanceModeService->isActive()) {
-            $this->redirectToCurrentPage($event);
+            $this->showMaintenanceModePage();
         }
     }
 
-    private function redirectToCurrentPage(GetResponseEvent $event): void
+    private function showMaintenanceModePage(): void
     {
-        $request = $event->getRequest();
-        if (true === $request->isMethodSafe()) {
-            $event->setResponse(new RedirectResponse($_SERVER['REQUEST_URI']));
-        } else {
-            // Redirect is not meaningful for a POST request:
-            $event->setResponse(new Response('Maintenance mode is active.', Response::HTTP_SERVICE_UNAVAILABLE));
+        if (\file_exists(PATH_WEB.'/maintenance.php')) {
+            require PATH_WEB.'/maintenance.php';
+
+            exit();
         }
+
+        die('Sorry! This page is down for maintenance.');
     }
 }

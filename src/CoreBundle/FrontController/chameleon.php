@@ -210,14 +210,15 @@ class chameleon
             || (isset($_POST['__modulechooser']) && 'true' === $_POST['__modulechooser']);
     }
 
-    private function showMaintenanceModePage()
+    private function showMaintenanceModePage(): void
     {
-        if (file_exists(PATH_WEB.'/maintenance.php')) {
+        if (\file_exists(PATH_WEB.'/maintenance.php')) {
             require PATH_WEB.'/maintenance.php';
+
             exit();
-        } else {
-            die('down for maintenance');
         }
+
+        die('Sorry! This page is down for maintenance.');
     }
 
     private function clearMaintenanceModeMarkerFileCache(): void
