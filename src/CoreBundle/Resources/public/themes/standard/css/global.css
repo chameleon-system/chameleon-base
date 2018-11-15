@@ -1,46 +1,13 @@
 @import "./cms_user_style/main.css";
 
-html, body{
-    height: 100%; /** we need this to set all block level elements to their real height, fixes problems in IE */
-}
-
-body, td, div {
-  font-family: "Segoe UI", Arial, helvetica, sans-serif;
-  font-size: 12px;
-  line-height: 14px;
-}
-
-a {
-  color: black;
-  text-decoration: none;
-}
-
 a:hover {
   text-decoration: underline;
-}
-
-body {
-  background-color: #6C83AC;
 }
 
 iframe{
   background-image: none;
   background-color: #ffffff;
   border: none;
-}
-
-H1 {
-  color: #841313;
-  font-weight: bold;
-  font-size: 13px;
-  line-height: 20px;
-}
-
-H2 {
-  color: #841313;
-  font-weight: bold;
-  font-size: 11px;
-  line-height: 17px;
 }
 
 HR {
@@ -374,13 +341,6 @@ div.grippie {
   color: #0B224B;
 }
 
-input, textarea, select,
-.btn, .input-group-addon, .chosen-single, .dropdown-menu, .ui-dialog,
-.ui-corner-all, .alert, .panel,
-.pagination > li > a, .pagination > li > span, .ui-tabs .ui-tabs-nav li a {
-  border-radius: 0 !important;
-}
-
 .btn .btn-icon {
   background-position: left center;
   background-repeat: no-repeat;
@@ -403,13 +363,6 @@ input, textarea, select,
 
 #cmsbreadcrumb .breadcrumb {
     border-radius: 0;
-}
-
-.additionalInfoHeaderContainer {
-    border-radius: 0;
-    background-image: url(/chameleon/blackbox/themes/standard/images/box/header_bg.png);
-    background-position: 0px -5px;
-    border: 0px;
 }
 
 .cmsNavIcon {
@@ -436,12 +389,6 @@ input, textarea, select,
     z-index: 10 !important;
 }
 
-.navbar-xs-iframe {
-    border-radius: 0px;
-    margin-bottom: 5px;
-    min-height: auto;
-}
-
 .iframeInnerSpacing {
     padding: 5px;
 }
@@ -457,4 +404,13 @@ input, textarea, select,
 #dbLoggerDropdown {
   min-width: 260px;
   padding-left: 10px;
+}
+
+.app-header .navbar-brand {
+  width: auto;
+}
+
+/** fix for missing border color, looks like a bootstrap bug */
+.card.bg-success .card-footer {
+  border-color: #379457;
 }
