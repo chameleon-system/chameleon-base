@@ -64,10 +64,11 @@ class InitializeRequestListener
     private function recheckMaintenanceMode(GetResponseEvent $event): void
     {
         if (true === $this->maintenanceModeService->isActive()) {
-            $this->redirectToCurrentPage($event);
+            $this->showMaintenanceModePage();
         }
     }
 
+    // TODO not used: see #119 - this probably needs a different solution.
     private function redirectToCurrentPage(GetResponseEvent $event): void
     {
         $request = $event->getRequest();
@@ -77,5 +78,16 @@ class InitializeRequestListener
             // Redirect is not meaningful for a POST request:
             $event->setResponse(new Response('Maintenance mode is active.', Response::HTTP_SERVICE_UNAVAILABLE));
         }
+    }
+
+    private function showMaintenanceModePage(): void
+    {
+        if (\file_exists(PATH_WEB.'/maintenance.php')) {
+            require PATH_WEB.'/maintenance.php';
+
+            exit();
+        }
+
+        die('Sorry! This page is down for maintenance.');
     }
 }
