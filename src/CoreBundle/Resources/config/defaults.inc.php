@@ -1137,8 +1137,8 @@ if (!defined('CMS_SNIPPET_PATH')) {
     define('CMS_SNIPPET_PATH', 'snippets');
 }
 
-/** enables the less parser for snippets (requires less compiler on the server)
- *  to import snippet less files, add "@import "/chameleon/outbox/static/less/all.less";" to the chameleon.less file in /assets/less.
+/**
+ * enables the less parser for snippets (requires less compiler on the server).
  */
 if (!defined('CMS_PKG_VIEW_RENDERER_ENABLE_LESS_COMPILER')) {
     define('CMS_PKG_VIEW_RENDERER_ENABLE_LESS_COMPILER', false);
@@ -1192,12 +1192,17 @@ if (!defined('CHAMELEON_PKG_NEWSLETTER_NEW_MODULE')) {
 }
 
 /**
- * Path to the file that marks if maintenance mode is active. The current directory's hash is added to
- * distinguish multiple Chameleon instances on a shared host.
- * We use the SCRIPT_FILENAME variable because we do NOT want to resolve symlinks. Otherwise it would not be possible
- * to activate maintenance mode and then perform a deployment using atomic deploys, because the maintenance marker
- * would then change its name.
+ * Path to the file that marks if maintenance mode is active.
+ *
+ * The following properties should be true for this location:
+ * - It must survive deployment (if it was present before it should also be afterwards).
+ * - Different Chameleon installations on the same host must be distinguishable here (by generating some kind of
+ *   generated ID or using a path within the project directory).
+ * - The same physical marker should be present for all nodes of a multi-node installation.
+ *
+ * The default value under "cmsdata" fulfills these requirements if cmsdata is shared between nodes in a multi-node
+ * setup.
  */
 if (!defined('PATH_MAINTENANCE_MODE_MARKER')) {
-    define('PATH_MAINTENANCE_MODE_MARKER', sys_get_temp_dir().'/chameleon-maintenance-mode-'.md5(dirname($_SERVER['SCRIPT_FILENAME'])));
+    define('PATH_MAINTENANCE_MODE_MARKER', PATH_CMS_CUSTOMER_DATA.'/maintenance/chameleon-maintenance-mode-marker');
 }

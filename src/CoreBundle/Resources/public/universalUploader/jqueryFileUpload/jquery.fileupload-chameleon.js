@@ -1,8 +1,19 @@
 /*
- * This plugin for jquery file upload replaces jquery.fileupload-ui.js
+ * This plugin for jquery file upload is built on and replaces jquery.fileupload-ui.js
  * Key parts changed:
  * - Removed JS template engine
  * - Removed option to delete uploaded files
+ */
+
+/*
+ * jQuery File Upload User Interface Plugin
+ * https://github.com/blueimp/jQuery-File-Upload
+ *
+ * Copyright 2010, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
  */
 
 /* jshint nomen:false */
