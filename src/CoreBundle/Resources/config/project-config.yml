@@ -105,3 +105,14 @@ cmf_routing:
       router.default: 300
       chameleon_system_core.router.chameleon_backend: 200
       chameleon_system_core.router.chameleon_frontend: 100
+
+monolog:
+  # NOTE this channel list is not / must not be a complete list.
+  # It is only necessary here in advance for backwards-compatibility (ie users of "IPkgCmsCoreLog" and any Tdb or TCMS object).
+  channels:
+  - "core_standard"
+  - "core_security"
+  - "core_dbal"
+  - "core_cms_updates"
+  - "core_cronjobs"
+  - "core_api"
