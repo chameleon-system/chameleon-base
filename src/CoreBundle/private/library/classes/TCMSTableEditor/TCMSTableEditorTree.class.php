@@ -269,11 +269,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
       }
 
       .tableeditcontainer .leftTD {
-        width: 150px;
-      }
-
-      .tabsContainer {
-        padding-left: 0px;
+        min-width: 150px;
       }
       </style>';
 
