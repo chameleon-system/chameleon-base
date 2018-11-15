@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-lg-4 lg-offset-4">
-            <div class="card card.bg-primary.text-white">
+        <div class="col-lg-4 lg-offset-4 mt-5">
+            <div class="card bg-light">
                 <div class="card-header">
                     <h4>Login</h4>
                 </div>
