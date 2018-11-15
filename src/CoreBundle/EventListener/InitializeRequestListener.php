@@ -55,28 +55,16 @@ class InitializeRequestListener
         }
 
         if (false === $this->requestInfoService->isBackendMode() && false === $this->requestInfoService->isCmsTemplateEngineEditMode()) {
-            $this->recheckMaintenanceMode($event);
+            $this->recheckMaintenanceMode();
         }
 
         $this->requestInitializer->initialize($event->getRequest());
     }
 
-    private function recheckMaintenanceMode(GetResponseEvent $event): void
+    private function recheckMaintenanceMode(): void
     {
         if (true === $this->maintenanceModeService->isActive()) {
             $this->showMaintenanceModePage();
-        }
-    }
-
-    // TODO not used: see #119 - this probably needs a different solution.
-    private function redirectToCurrentPage(GetResponseEvent $event): void
-    {
-        $request = $event->getRequest();
-        if (true === $request->isMethodSafe()) {
-            $event->setResponse(new RedirectResponse($_SERVER['REQUEST_URI']));
-        } else {
-            // Redirect is not meaningful for a POST request:
-            $event->setResponse(new Response('Maintenance mode is active.', Response::HTTP_SERVICE_UNAVAILABLE));
         }
     }
 
