@@ -1880,7 +1880,7 @@ class TCMSLogChange
         return  \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.cmsUpdates');
     }
 
-    private static function getLogger(): LoggerInterface
+    public static function getLogger(): LoggerInterface
     {
         return  \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.core_cms_updates');
     }
