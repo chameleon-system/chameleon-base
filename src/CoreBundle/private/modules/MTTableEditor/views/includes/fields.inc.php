@@ -33,8 +33,8 @@ while ($oField = $data['oFields']->Next()) {
                     $oField->oDefinition->sqlData['modifier'] = 'readonly';
                 }
 
-                $sTmpFormTabsContent .= '<tr class="'.$rowClass.'">
-            <th valign="top" class="leftTD"'.$rowColorStyle.'>
+                $sTmpFormTabsContent .= '<tr class="row m-0 '.$rowClass.'">
+            <th valign="top" class="leftTD col-2"'.$rowColorStyle.'>
               <div id="fieldname_'.TGlobal::OutHTML($oField->name).'">
             ';
 
@@ -83,7 +83,7 @@ while ($oField = $data['oFields']->Next()) {
                 $sTmpFormTabsContent .= '</div>
             </div>
     	    </th>
-          <td class="rightTD">';
+          <td class="rightTD col-10">';
                 $sTmpFormTabsContent .= $oField->GetContent();
                 $sTmpFormTabsContent .= '</td>
         </tr>
