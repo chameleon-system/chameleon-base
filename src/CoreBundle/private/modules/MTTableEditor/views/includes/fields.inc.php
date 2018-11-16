@@ -43,7 +43,7 @@ while ($oField = $data['oFields']->Next()) {
 
                 if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
                     $sTmpFormTabsContent .= '<span class="help-badge badge badge-info float-right" role="button" data-toggle="popover" data-placement="right" data-content="'.TGlobal::OutHTML(nl2br($oField->oDefinition->sqlData['049_helptext'])).'" data-original-title="'.TGlobal::OutHTML($oFieldConfig->fieldTranslation).'">
-                        <span class="glyphicon glyphicon-info-sign" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'""></span>
+                        <span class="glyphicon glyphicon-info-sign" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'"></span>
                     </span>';
                 }
 
@@ -100,34 +100,7 @@ if (!empty($sTmpFormTabsContent)) {
         $sTabName = 'base';
     }
     $sFormTabsContent .= '<div id="tab-'.strtolower(TTools::RealNameToURLName($sTabName)).'">';
-
-    if (isset($sTabName) && $sTabName == TGlobal::Translate('chameleon_system_core.cms_module_table_editor.tab_default')) {
-        if ('' != $oTableDefinition->sqlData['notes']) {
-            $sFormTabsContent .= '<div class="descriptionContainer">
-                                                    <div style="display: none" class="description" id="tabDescription'.$iTabCount.'">
-                                                        '.nl2br(TGlobal::OutHTML($oTableDefinition->sqlData['notes'])).'
-                                                    </div>
-                                              </div>
-                                           <img src="'.TGlobal::GetStaticURLToWebLib('/images/icons/bookmark.png').'" name="scrollup" id="scrollup" onClick="$(\'#tabDescription'.$iTabCount.'\').toggle(\'fast\');" style="cursor: hand; cursor: pointer; margin-top: -7px;" />
-                                           ';
-        }
-    }
-    if (isset($oTab)) {
-        if ('' != $oTab->fieldDescription) {
-            $sFormTabsContent .= '<div class="descriptionContainer">
-                                                    <div style="display: none" class="description" id="tabDescription'.$iTabCount.'">
-                                                        '.nl2br(TGlobal::OutHTML($oTab->fieldDescription)).'
-                                                    </div>
-                                              </div>
-                                           <img src="'.TGlobal::GetStaticURLToWebLib('/images/icons/bookmark.png').'" name="scrollup" id="scrollup" onClick="$(\'#tabDescription'.$iTabCount.'\').toggle(\'fast\');" style="cursor: hand; cursor: pointer; margin-top: -7px;" />
-                                           ';
-        }
-    }
-    $sFormTabsContent .= '
-
-        <table class="table table-responsive-sm table-striped table-sm">
-        ';
-
+    $sFormTabsContent .= '<table class="table table-responsive-sm table-striped table-sm">';
     $sFormTabsContent .= $sTmpFormTabsContent;
     $sFormTabsContent .= '</table>
       </div>
