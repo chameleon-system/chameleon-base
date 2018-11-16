@@ -875,9 +875,9 @@
                 <source>chameleon_system_core.record_lock.lock_owner_phone</source>
                 <target>Tel.</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.record_lock.lock_owner_fax">
-                <source>chameleon_system_core.record_lock.lock_owner_fax</source>
-                <target>Fax</target>
+            <trans-unit id="chameleon_system_core.record_lock.locked_by">
+                <source>chameleon_system_core.record_lock.locked_by</source>
+                <target>locked by</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_lock.lock_owner_city">
                 <source>chameleon_system_core.record_lock.lock_owner_city</source>
