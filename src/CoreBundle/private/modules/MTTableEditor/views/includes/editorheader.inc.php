@@ -38,8 +38,7 @@ $oController = TGlobal::GetController();
     <form class="form-inline">
         <?php
         $idsPopoverText = '<div class="callout callout-info mt-0 mb-1"><strong class="text-muted">Auto-Increment ID:</strong><br><strong class="h6">'.$data['cmsident'].'</strong></div>
-<div class="callout mt-0 mb-1"><strong class="text-muted">ID:</strong><br><strong class="h6">'.$data['id'].'</strong></div>
-    ';
+        <div class="callout callout-info mt-0 mb-1"><strong class="text-muted">ID:</strong><br><strong class="h6">'.$data['id'].'</strong></div>';
         ?>
         <button class="btn btn-outline-info mr-2" type="button" role="button" data-toggle="popover"
                 data-placement="bottom"
