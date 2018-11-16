@@ -439,3 +439,32 @@
     cursor: pointer;
     margin-left: 8px;
 }
+
+/**
+ * TCMSFieldBoolean: Add icons and custom styling for coreUI switches.
+ */
+
+label.switch .switch-input:checked ~ .switch-slider::after {
+    left: 1px;
+    color: #fff;
+    content: attr(data-active);
+}
+
+label.switch .switch-slider {
+    border-color: #f86c6b;
+}
+
+label.switch .switch-slider::after {
+    position: absolute;
+    top: 50%;
+    right: 1px;
+    z-index: 1;
+    width: 50%;
+    margin-top: -.5em;
+    font-weight: 600;
+    line-height: 1;
+    color: #f86c6b;
+    text-align: center;
+    content: attr(data-inactive);
+    transition: inherit;
+}

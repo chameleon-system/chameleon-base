@@ -717,3 +717,14 @@ function updateIframeSize(sFieldName,iHeight){
         $('#' + sFieldName + '_iframe').height(iHeight + 'px');
     }
 }
+
+CHAMELEON.CORE.MTTableEditor.addCheckBoxFieldChangeEvent = function (fieldName) {
+    var checkBoxField = document.getElementById(fieldName);
+    var hiddenField = document.getElementById(fieldName+'hidden');
+
+    if (checkBoxField.checked) {
+        hiddenField.disabled = true;
+    } else {
+        hiddenField.disabled = false;
+    }
+}
