@@ -47,7 +47,7 @@
             $iTabCount = 0;
             require dirname(__FILE__).'/fields.inc.php';
         }
-        echo '<div class="tab-content">' . $sFormTabsContent . '</div>';
+        echo '<div class="tab-content">'.$sFormTabsContent.'</div>';
         ?>
     </div>
 </form>
