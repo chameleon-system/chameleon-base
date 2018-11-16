@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Util;
 
 use ChameleonSystem\CoreBundle\DataModel\Routing\PagePath;
 use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use TCMSPortal;
 use TdbCmsLanguage;
 use TdbCmsPortal;
@@ -71,6 +72,11 @@ class RoutingUtil implements RoutingUtilInterface
         }
 
         $routes = $this->getAllPageRoutes($portal, $language);
+
+        if (false === \array_key_exists($linkedPage->id, $routes)) {
+            throw new RouteNotFoundException(\sprintf('Could not find route for linked page by id \'%s\' in portal \'%s\'.', $linkedPage->id, $portal->id));
+        }
+
         $url = $routes[$linkedPage->id]->getPrimaryPath();
         $url = $tree->replacePlaceHolderInURL($url);
         if (0 !== strpos($url, '/')) {
