@@ -43,7 +43,7 @@ class TCMSFieldBoolean extends TCMSFieldOption
 
         $html = '
             <label class="switch switch-lg switch-label switch-success">
-                <input id="'.TGlobal::OutHTML($this->name).'" type="checkbox" value="1" name="'.TGlobal::OutHTML($this->name).'" autocomplete="off" class="switch-input"'.$checked.' onclick="CHAMELEON.CORE.MTTableEditor.addCheckBoxFieldChangeEvent(\''.TGlobal::OutHTML($this->name).'\')">
+                <input id="'.TGlobal::OutHTML($this->name).'" type="checkbox" value="1" name="'.TGlobal::OutHTML($this->name).'" autocomplete="off" class="switch-input"'.$checked.'>
                 <span class="switch-slider" data-active="✓" data-inactive="✕"></span>
             </label>
             <input id="'.TGlobal::OutHTML($this->name).'hidden" type="hidden" value="0" name="'.TGlobal::OutHTML($this->name).'" autocomplete="off"'.$disabled.'>';
