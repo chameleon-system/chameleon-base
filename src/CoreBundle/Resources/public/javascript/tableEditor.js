@@ -710,7 +710,26 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
         document.cmseditform.elements['module_fnc[contentmodule]'].value = 'Delete';
         document.cmseditform.submit();
     }
-}
+};
+
+$(document).ready(function () {
+    CHAMELEON.CORE.MTTableEditor.setGetActiveTab();
+});
+
+
+CHAMELEON.CORE.MTTableEditor.setGetActiveTab = function () {
+    var url = document.URL;
+    var hash = url.substring(url.indexOf('#'));
+
+    $(".nav-tabs").find("li a").each(function(key, val) {
+        if (hash == $(val).attr('href')) {
+            $(val).click();
+        }
+        $(val).click(function() {
+            location.hash = $(this).attr('href');
+        });
+    });
+};
 
 function updateIframeSize(sFieldName,iHeight){
     if (sFieldName != '') {
