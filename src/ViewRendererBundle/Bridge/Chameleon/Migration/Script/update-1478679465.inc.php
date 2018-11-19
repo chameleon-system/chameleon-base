@@ -5,6 +5,8 @@
 </div>
 <?php
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 function delTree($dir)
 {
     // Delete all contents recursively; but not the directory/ies itself
@@ -15,7 +17,7 @@ function delTree($dir)
     }
 }
 
-    $lessCompiler = new \ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler();
+    $lessCompiler = ServiceLocator::get('chameleon_system_view_renderer.less_compiler');
     $cachePath = $lessCompiler->getLocalPathToCompiledLess();
 
     delTree($cachePath);
