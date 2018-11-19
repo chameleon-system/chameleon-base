@@ -33,31 +33,48 @@ class TCMSFieldBoolean extends TCMSFieldOption
     public function GetHTML()
     {
         $this->GetOptions();
-        $html = '<div class="btn-group btn-group-sm btn-group-toggle TCMSFieldBoolean" data-toggle="buttons">';
-        foreach ($this->options as $key => $value) {
-            $key = (string) $key;
 
-            $selected = '';
-            $sClass = '';
-            if ($this->data === $key) {
-                $selected = ' checked';
-                $sClass = 'active';
-            }
-
-            if ('1' === $key) {
-                $sClass .= ' button-on';
-            } else {
-                $sClass .= ' button-off';
-            }
-
-            $html .= '<label class="btn btn-secondary '.$sClass.'">
-                        <input type="radio" class="radio" autocomplete="off" id="'.TGlobal::OutHTML($this->name.$key).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($key).'"'.$selected.' /> '.TGlobal::OutHTML($value)."
-                      </label>\n";
+        $checked = '';
+        $disabled = '';
+        if (true === $this->isChecked()) {
+            $checked = ' checked';
+            $disabled = ' disabled';
         }
 
-        $html .= '</div>';
+        $html = '
+            <label class="switch switch-lg switch-label switch-success">
+                <input id="'.TGlobal::OutHTML($this->name).'" type="checkbox" value="1" name="'.TGlobal::OutHTML($this->name).'" autocomplete="off" class="switch-input"'.$checked.'>
+                <span class="switch-slider" data-active="✓" data-inactive="✕"></span>
+            </label>
+            <input id="'.TGlobal::OutHTML($this->name).'hidden" type="hidden" value="0" name="'.TGlobal::OutHTML($this->name).'" autocomplete="off"'.$disabled.'>';
 
         return $html;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetReadOnly()
+    {
+        $checked = '';
+        if (true === $this->isChecked()) {
+            $checked = ' checked';
+        }
+
+        // The checbox in readonly mode is a dummy for styling issues and therefore has no name and value.
+        $html = '
+            <label class="switch switch-lg switch-label switch-success">
+            <input type="checkbox" autocomplete="off" class="switch-input"'.$checked.' disabled>
+                <span class="switch-slider" data-active="✓" data-inactive="✕"></span>
+            </label>';
+
+
+        return $html;
+    }
+
+    private function isChecked()
+    {
+        return $this->data === '1';
     }
 
     /**

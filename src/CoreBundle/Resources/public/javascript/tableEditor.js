@@ -36,7 +36,7 @@ function GetUsages(tableId, type) {
         sModuleSpotName = 'contentmodule';
         sType = 'documentIDs';
     }
-    var url = window.location.pathname+"?pagedef=" + sPageDef + "&module_fnc[" + sModuleSpotName
+    var url = window.location.pathname + "?pagedef=" + sPageDef + "&module_fnc[" + sModuleSpotName
         + "]=ExecuteAjaxCall&_fnc=CheckConnectionsAndDelete&bDoNotDelete=true&" + sType + "=" + tableId;
     GetAjaxCall(url, ShowUsagesResponse);
 }
@@ -59,8 +59,8 @@ function ShowUsageDialog(index, _connectedDataHTML) {
 function ExecutePostCommand(command) {
     document.cmseditform.elements['module_fnc[contentmodule]'].value = command;
     if (command == 'Save') {
-        if("undefined" != typeof CKEDITOR) {
-            $.map(CKEDITOR.instances, function(instance, instanceName){
+        if ("undefined" != typeof CKEDITOR) {
+            $.map(CKEDITOR.instances, function (instance, instanceName) {
                 $("#" + instanceName).val(instance.getData());
             });
         }
@@ -90,7 +90,7 @@ function AddFormElementToEditForm(sName, sValue) {
 function GoToRecordBySelectBox(tableID, fieldID) {
     var recordID = document.getElementById(fieldID).options[document.getElementById(fieldID).selectedIndex].value;
     if (recordID != '' && recordID != '0') {
-        document.location.href = window.location.pathname+'?pagedef=tableeditor&id=' + recordID + '&tableid=' + tableID;
+        document.location.href = window.location.pathname + '?pagedef=tableeditor&id=' + recordID + '&tableid=' + tableID;
     }
 }
 
@@ -144,11 +144,11 @@ function _SetImage(imageID, customCallback) {
     var _currentPosition = getCMSRegistryEntry('_currentPosition');
     var form = document.getElementById('cmseditform');
     var _currentTableId = form.querySelector('[name=tableid]').value;
-    var _currentRecordId =form.querySelector('[name=id]').value;
+    var _currentRecordId = form.querySelector('[name=id]').value;
     var fieldValue = form.querySelector('[name=' + _currentFieldName + ']').value;
 
-    var url = window.location.pathname+"?pagedef=CMSImageManager&module_fnc[module]=ExecuteAjaxCall&_fnc=SetImage&imageid=" + imageID + "&imagefieldname=" + _currentFieldName + "&tableid=" + _currentTableId + "&id=" + _currentRecordId + "&position=" + _currentPosition + "&imagefieldvalue=" + fieldValue;
-    if(typeof customCallback === 'undefined') {
+    var url = window.location.pathname + "?pagedef=CMSImageManager&module_fnc[module]=ExecuteAjaxCall&_fnc=SetImage&imageid=" + imageID + "&imagefieldname=" + _currentFieldName + "&tableid=" + _currentTableId + "&id=" + _currentRecordId + "&position=" + _currentPosition + "&imagefieldvalue=" + fieldValue;
+    if (typeof customCallback === 'undefined') {
         customCallback = SetImageResponse;
     }
     GetAjaxCall(url, customCallback);
@@ -229,7 +229,7 @@ function loadHomeTreeNodeSelection(fieldName, id) {
     var portalID = document.cmseditform.id.value;
 
     if (portalID != '0' && portalID != '') {
-        CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=treenodeselect&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID , 400, 500);
+        CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=treenodeselect&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID, 400, 500);
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_portal_required'), 'WARNING');
     }
@@ -405,14 +405,15 @@ function showMLTField(objID, outerObjID, url) {
         $objID.hide();
     }
 }
+
 function setTableEditorListFieldState(triggerDiv, requestURL) {
     triggerDiv = $(triggerDiv);
     var state = 0;
     if (triggerDiv.data('fieldstate') != '1') {
         state = 1;
     }
-    triggerDiv.data('fieldstate',state);
-    GetAjaxCallTransparent(requestURL+'&state='+state);
+    triggerDiv.data('fieldstate', state);
+    GetAjaxCallTransparent(requestURL + '&state=' + state);
 }
 
 /*
@@ -436,7 +437,7 @@ function resetExtendedMultiTableListField(fieldName, defaultValue, defaultPrevie
  * tableEditor: method to lock a record
  */
 function RefreshRecordEditLock() {
-    if($('#cmseditform').length > 0 ){
+    if ($('#cmseditform').length > 0) {
         document.cmseditform.elements['module_fnc[contentmodule]'].value = 'ExecuteAjaxCall';
         document.cmseditform._fnc.value = 'RefreshLock';
 
@@ -512,15 +513,15 @@ function SaveFieldViaAjaxCustomCallback(customCallbackFunction) {
 
 function SaveViaAjax() {
 
-    if("undefined" != typeof CKEDITOR) {
-        $.map(CKEDITOR.instances, function(instance, instanceName){
-           $("#" + instanceName).val(instance.getData());
+    if ("undefined" != typeof CKEDITOR) {
+        $.map(CKEDITOR.instances, function (instance, instanceName) {
+            $("#" + instanceName).val(instance.getData());
         });
     }
 
     if (typeof(framestosave) != 'undefined' && framestosave.length > 0) {
-        $.map(framestosave, function(frameToSave, index){
-            $('.itemsave:first', $('#'+frameToSave).contents()).trigger('click')
+        $.map(framestosave, function (frameToSave, index) {
+            $('.itemsave:first', $('#' + frameToSave).contents()).trigger('click')
         });
     }
     SaveViaAjaxCustomCallback(SaveViaAjaxCallback);
@@ -539,13 +540,13 @@ function SaveViaAjaxCallback(data, statusText) {
 
         if (data.aMessages) {
             var bOnLoadResetted = false;
-            $.map(data.aMessages, function(oMessage, index) {
+            $.map(data.aMessages, function (oMessage, index) {
                 toasterMessage(oMessage.sMessage, oMessage.sMessageType);
 
                 // messages do have a reference to field (e.g. mail-field not valid)
-                if(oMessage.sMessageRefersToField) {
+                if (oMessage.sMessageRefersToField) {
                     // add the class to field
-                    $('#fieldname_'+oMessage.sMessageRefersToField).addClass('fieldMsg '+oMessage.sMessageType);
+                    $('#fieldname_' + oMessage.sMessageRefersToField).addClass('fieldMsg ' + oMessage.sMessageType);
                 }
 
                 if (oMessage.sMessageType != 'ERROR' && !bOnLoadResetted) {
@@ -598,18 +599,20 @@ function ShowAjaxSaveResult(data, statusText) {
     if (data.success == true) {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.msg_save_success'), 'MESSAGE');
         var contentContainer = parent.document ? parent.document.getElementById(data.fieldname + '_contentdiv') : null;
-        if(contentContainer) {
+        if (contentContainer) {
             contentContainer.innerHTML = data.contentFormatted;
         }
         var reponse = jQuery(data.contentFormatted);
         var reponseScript = reponse.filter("script");
-        parent.jQuery.each(reponseScript, function(idx, val) {
+        parent.jQuery.each(reponseScript, function (idx, val) {
             parent.eval(val.text);
         });
         window.dispatchEvent(new Event("savesuccess"));
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_save'), 'ERROR');
-        setTimeout(function() { window.dispatchEvent(new Event("saveerror")); }, 1000);
+        setTimeout(function () {
+            window.dispatchEvent(new Event("saveerror"));
+        }, 1000);
     }
 }
 
@@ -685,13 +688,6 @@ function openLayoutManagerResponse(data, statusText) {
     else toasterMessage(data.sToasterErrorMessage, 'ERROR');
 }
 
-$(document).ready(function () {
-    $('.noChangesWarning').click(function () {
-        window.onbeforeunload = function () {
-        };
-    });
-});
-
 /** needed for backwards compatibility */
 function DeleteRecord() {
     CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.confirm_delete'));
@@ -731,8 +727,31 @@ CHAMELEON.CORE.MTTableEditor.setGetActiveTab = function () {
     });
 };
 
-function updateIframeSize(sFieldName,iHeight){
+function updateIframeSize(sFieldName, iHeight) {
     if (sFieldName != '') {
         $('#' + sFieldName + '_iframe').height(iHeight + 'px');
     }
 }
+
+CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent = function (selector) {
+    $(selector).bind('click', function () {
+        var checkBoxFieldElement = $(this);
+        var hiddenFieldName = checkBoxFieldElement.attr('name') + 'hidden';
+        var hiddenFieldElement = $('#' + hiddenFieldName);
+
+        if (checkBoxFieldElement.is(':checked')) {
+            hiddenFieldElement.attr('disabled', true);
+        } else {
+            hiddenFieldElement.removeAttr('disabled');
+        }
+    });
+}
+
+$(document).ready(function () {
+    $('.noChangesWarning').click(function () {
+        window.onbeforeunload = function () {
+        };
+    });
+
+    CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent('label.switch input[type=checkbox]');
+});
