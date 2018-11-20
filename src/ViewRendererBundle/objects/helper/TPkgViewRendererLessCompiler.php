@@ -32,7 +32,7 @@ class TPkgViewRendererLessCompiler
     /**
      * Local path to less directory - this is where the chameleon_?.css files live.
      *
-     * @return string - relative path without trailing slash
+     * @return string - relative path (to PATH_WEB) without trailing slash
      */
     public function getLocalPathToCompiledLess()
     {
@@ -163,12 +163,12 @@ class TPkgViewRendererLessCompiler
 
             $lessPortalIdentifier = $portal->getFileSuffix();
 
-            $cachedLessDir = $this->getLocalPathToCachedLess();
+            $cachedLessDir = PATH_WEB.'/'.$this->getLocalPathToCachedLess();
             $this->createDirectoryIfNeeded($cachedLessDir);
 
             $options = _DEVELOPMENT_MODE ? array(
                 'sourceMap' => true,
-                'sourceMapWriteTo' => $this->getLocalPathToCompiledLess().'/lessSourceMap_'.$lessPortalIdentifier.'.map',
+                'sourceMapWriteTo' => PATH_WEB.'/'.$this->getLocalPathToCompiledLess().'/lessSourceMap_'.$lessPortalIdentifier.'.map',
                 'sourceMapURL' => $this->getLessDirUrlPath().'/lessSourceMap_'.$lessPortalIdentifier.'.map',
             ) : array();
 
@@ -187,7 +187,7 @@ class TPkgViewRendererLessCompiler
             } catch (Exception $exc) {
                 if (false !== strpos($exc->getMessage(), 'stat failed')) {
                     // Consider this as a 'File removed! Halp!' and clear the cache and try again
-                    array_map('unlink', glob($this->getLocalPathToCachedLess().'/*'));
+                    array_map('unlink', glob($cachedLessDir.'/*'));
 
                     $cssFile = \Less_Cache::Get($filesForLessParsing, $options);
                 } else {
@@ -195,7 +195,7 @@ class TPkgViewRendererLessCompiler
                 }
             }
 
-            $absoluteCssFilepath = $this->getLocalPathToCachedLess().'/'.$cssFile;
+            $absoluteCssFilepath = $cachedLessDir.'/'.$cssFile;
 
             $_SERVER['DOCUMENT_ROOT'] = $originalDocumentRoot;
 
@@ -254,7 +254,7 @@ class TPkgViewRendererLessCompiler
      */
     public function writeCssFileForPortal($css, $portal)
     {
-        $lessDir = $this->getLocalPathToCompiledLess();
+        $lessDir = PATH_WEB.'/'.$this->getLocalPathToCompiledLess();
 
         try {
             $this->createDirectoryIfNeeded($lessDir);
