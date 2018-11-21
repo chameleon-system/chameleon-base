@@ -40,7 +40,7 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
-     * @return string - absolute path without trailing slash
+     * @return string - absolute path (guaranteed to be below PATH_WEB) without trailing slash
      */
     public function getLocalPathToCachedLess(): string
     {
