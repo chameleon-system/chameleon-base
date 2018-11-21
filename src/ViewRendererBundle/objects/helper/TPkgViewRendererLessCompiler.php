@@ -34,7 +34,7 @@ class TPkgViewRendererLessCompiler
      *
      * @return string - absolute path (in PATH_WEB) without trailing slash
      */
-    public function getLocalPathToCompiledLess(): string
+    public function getLocalPathToCompiledLess()
     {
         return PATH_WEB.'/'.$this->cssDir;
     }
@@ -42,7 +42,7 @@ class TPkgViewRendererLessCompiler
     /**
      * @return string - absolute path (guaranteed to be below PATH_WEB) without trailing slash
      */
-    public function getLocalPathToCachedLess(): string
+    public function getLocalPathToCachedLess()
     {
         return $this->getLocalPathToCompiledLess().'/cached';
     }
@@ -92,7 +92,7 @@ class TPkgViewRendererLessCompiler
     /**
      * @return string - the file part for route generation; without a leading slash
      *
-     * @deprecated since 6.2.4 - use getCssRoutingPattern() which includes the relative path
+     * will deprecate with 6.3.0 - use getCssRoutingPattern() which includes the relative path
      */
     public function getCompiledCssFilenameRoutingPattern(): string
     {
