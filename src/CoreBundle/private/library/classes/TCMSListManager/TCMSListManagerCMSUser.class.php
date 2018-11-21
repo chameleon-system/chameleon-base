@@ -75,6 +75,13 @@ class TCMSListManagerCMSUser extends TCMSListManagerFullGroupTable
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function usesManagedTables(): bool {
+        return false;
+    }
+
+    /**
      * @return Connection
      */
     private function getDatabaseConnection()

@@ -14,4 +14,11 @@ class TCMSListManagerCmsTableConf extends TCMSListManagerFullGroupTable
     public function _AddFunctionColumn()
     {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function usesManagedTables(): bool {
+        return false;
+    }
 }
