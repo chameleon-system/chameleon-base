@@ -32,17 +32,17 @@ class TPkgViewRendererLessCompiler
     /**
      * Local path to less directory - this is where the chameleon_?.css files live.
      *
-     * @return string - relative path (to PATH_WEB) without trailing slash
+     * @return string - absolute path (in PATH_WEB) without trailing slash
      */
-    public function getLocalPathToCompiledLess()
+    public function getLocalPathToCompiledLess(): string
     {
-        return $this->cssDir;
+        return PATH_WEB.'/'.$this->cssDir;
     }
 
     /**
-     * @return string - relative path without trailing slash
+     * @return string - absolute path without trailing slash
      */
-    public function getLocalPathToCachedLess()
+    public function getLocalPathToCachedLess(): string
     {
         return $this->getLocalPathToCompiledLess().'/cached';
     }
@@ -82,11 +82,11 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
-     * @return string - the relative (to PATH_WEB) path pattern to the chameleon css file
+     * @return string - the relative (to PATH_WEB) path pattern to the chameleon css file, without leading slash
      */
     public function getCssRoutingPattern(): string
     {
-        return $this->getLocalPathToCompiledLess().'/'.'chameleon_{portalId}.css';
+        return $this->cssDir.'/'.'chameleon_{portalId}.css';
     }
 
     /**
@@ -173,12 +173,12 @@ class TPkgViewRendererLessCompiler
 
             $lessPortalIdentifier = $portal->getFileSuffix();
 
-            $cachedLessDir = PATH_WEB.'/'.$this->getLocalPathToCachedLess();
+            $cachedLessDir = $this->getLocalPathToCachedLess();
             $this->createDirectoryIfNeeded($cachedLessDir);
 
             $options = _DEVELOPMENT_MODE ? array(
                 'sourceMap' => true,
-                'sourceMapWriteTo' => PATH_WEB.'/'.$this->getLocalPathToCompiledLess().'/lessSourceMap_'.$lessPortalIdentifier.'.map',
+                'sourceMapWriteTo' => $this->getLocalPathToCompiledLess().'/lessSourceMap_'.$lessPortalIdentifier.'.map',
                 'sourceMapURL' => $this->getLessDirUrlPath().'/lessSourceMap_'.$lessPortalIdentifier.'.map',
             ) : array();
 
@@ -264,7 +264,7 @@ class TPkgViewRendererLessCompiler
      */
     public function writeCssFileForPortal($css, $portal)
     {
-        $lessDir = PATH_WEB.'/'.$this->getLocalPathToCompiledLess();
+        $lessDir = $this->getLocalPathToCompiledLess();
 
         try {
             $this->createDirectoryIfNeeded($lessDir);

@@ -485,9 +485,9 @@ class MTHeader extends TCMSModelBase
         $this->ClearOutBox('static/css/');
 
         $lessCompiler = $this->getLessCompiler();
-        $cssTargetDir = PATH_WEB.'/'.$lessCompiler->getLocalPathToCompiledLess();
+        $cssTargetDir = $lessCompiler->getLocalPathToCompiledLess();
         $this->clearFilesInDir($cssTargetDir);
-        $cssCacheDir = PATH_WEB.'/'.$lessCompiler->getLocalPathToCachedLess();
+        $cssCacheDir = $lessCompiler->getLocalPathToCachedLess();
         $this->clearFilesInDir($cssCacheDir);
 
         $oConfig = TdbCmsConfig::GetInstance();
