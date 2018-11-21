@@ -99,6 +99,8 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $this->PostCreateTableObjectHook();
         }
 
+        $this->tableObj->isManagedTable = $this->usesManagedTables();
+
         if (($objectChangeRequest || is_null($oOldTableObj)) && $this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE) {
             $tmp = serialize($this->tableObj);
             $tmp = gzcompress($tmp, 9);
