@@ -14,7 +14,7 @@
     <?php
 } ?>
 
-    <div id="formTabs" style="border: none; float:none; max-width: 100%; overflow-x: hidden;">
+    <div id="tabs-wrapper">
         <?php
         $sFormTabsContent = '';
 
@@ -41,13 +41,13 @@
                 require dirname(__FILE__).'/fields.inc.php';
             }
             if (!empty($sFormTabsTitles)) {
-                echo '<ul>'.$sFormTabsTitles."\n</ul>";
+                echo '<ul class="nav nav-tabs" role="tablist">'.$sFormTabsTitles."\n</ul>";
             }
         } else {
             $iTabCount = 0;
             require dirname(__FILE__).'/fields.inc.php';
         }
-        echo $sFormTabsContent;
+        echo '<div class="tab-content">'.$sFormTabsContent.'</div>';
         ?>
     </div>
 </form>

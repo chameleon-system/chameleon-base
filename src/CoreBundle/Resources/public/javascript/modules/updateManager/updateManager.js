@@ -172,7 +172,6 @@ CHAMELEON.UPDATE_MANAGER = {
             $('#ajaxTimeoutSelect').attr('disabled', 'disabled');
 
             $(this).attr("disabled", "disabled");
-            $(this).bootstrapBtn('loading');
             $(self.config.sGoBackButtonId).bind('click',function (event) {
                 event.preventDefault();
                 return false;
