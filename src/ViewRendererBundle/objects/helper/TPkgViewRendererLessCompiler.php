@@ -32,7 +32,7 @@ class TPkgViewRendererLessCompiler
     /**
      * Local path to less directory - this is where the chameleon_?.css files live.
      *
-     * @return string - absolute path (in PATH_WEB) without trailing slash
+     * @return string - absolute path (guaranteed to be below PATH_WEB) without trailing slash
      */
     public function getLocalPathToCompiledLess(): string
     {
