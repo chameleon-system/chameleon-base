@@ -872,6 +872,17 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     }
 
     /**
+     * Decides if table instances created by this list manager are managed, receiving data attributes with table metadata
+     * for client-side management, overlay- and inline editing features. Subclasses to list managers with special functionality
+     * may disable table management, particularly when not using a table function bar (see "_AddFunctionColumn").
+     *
+     * @return bool
+     */
+    protected function usesManagedTables(): bool {
+        return true;
+    }
+
+    /**
      * tests, whether $row has a workflow_action and the record is part of the
      * current workflow transaction
      * returns always true on tables without activated transaction handling.
