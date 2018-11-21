@@ -18,6 +18,6 @@ function delTree($dir)
 }
 
     $lessCompiler = ServiceLocator::get('chameleon_system_view_renderer.less_compiler');
-    $cachePath = PATH_WEB.'/'.$lessCompiler->getLocalPathToCompiledLess();
+    $cachePath = $lessCompiler->getLocalPathToCompiledLess();
 
     delTree($cachePath);
