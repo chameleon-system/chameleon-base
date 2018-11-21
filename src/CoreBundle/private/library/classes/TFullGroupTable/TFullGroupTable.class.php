@@ -241,6 +241,14 @@ class TFullGroupTable extends TGroupTable
     public $sPagingSection = '';
 
     /**
+     *
+     * the table is managed by client-side modules, should receive data attributes with table metadata.
+     *
+     * @var bool
+     */
+    public $isManagedTable = false;
+
+    /**
      * CSS classes for the table tag.
      *
      * @var string
@@ -371,6 +379,10 @@ class TFullGroupTable extends TGroupTable
      */
     private function getManagedAttributes()
     {
+        if (false === $this->isManagedTable) {
+            return [];
+        }
+
         $inputFilterUtil = $this->getInputFilterUtil();
         $tableConfigurationId = $inputFilterUtil->getFilteredInput('id');
         $tableEditorConfId = TTools::GetCMSTableId('cms_tbl_conf');
