@@ -97,15 +97,15 @@ if (!empty($sTmpFormTabsContent)) {
     if (isset($sTabName)) {
         $titleAnchorClass = 'nav-link';
         $titleAriaSelected = 'false';
-        $contentClass = 'tab-pane fade';
+        $contentClass = 'tab-pane fade p-0';
 
-        if (1 == $iTabCount) {
+        if (1 === $iTabCount) {
             $titleAnchorClass .= ' active';
             $titleAriaSelected = 'true';
             $contentClass .= ' show active';
         }
 
-        $sFormTabsTitles .= '<li class="nav-item"><a id="'.strtolower(TTools::RealNameToURLName($sTabName)).'-tab" class="'.$titleAnchorClass.'" data-toggle="tab" href="#tab-'.strtolower(TTools::RealNameToURLName($sTabName)).'" role="tab" aria-controls="tab-'.strtolower(TTools::RealNameToURLName($sTabName)).'" aria-selected="'.$titleAriaSelected.'">'.$sTabName.'</a></li>';
+        $sFormTabsTitles .= '<li class="nav-item"><a id="'.TGlobal::OutHTML(strtolower(TTools::RealNameToURLName($sTabName))).'-tab" class="'.TGlobal::OutHTML($titleAnchorClass).'" data-toggle="tab" href="#tab-'.TGlobal::OutHTML(strtolower(TTools::RealNameToURLName($sTabName))).'" role="tab" aria-controls="tab-'.TGlobal::OutHTML(strtolower(TTools::RealNameToURLName($sTabName))).'" aria-selected="'.TGlobal::OutHTML($titleAriaSelected).'">'.TGlobal::OutHTML($sTabName).'</a></li>';
         $sFormTabsContent .= '<div class="'.$contentClass.'" id="tab-'.strtolower(TTools::RealNameToURLName($sTabName)).'" role="tabpanel" aria-labelledby="'.strtolower(TTools::RealNameToURLName($sTabName)).'">';
     } else {
         $sFormTabsContent .= '<div id="tab-base">';
