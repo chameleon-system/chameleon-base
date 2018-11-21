@@ -82,7 +82,7 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
-     * @return string - the relative (to PATH_WEB) path pattern to the chameleon css file, without leading slash
+     * @return string - the path pattern to the generated CSS file, relative to PATH_WEB, without leading slash
      */
     public function getCssRoutingPattern(): string
     {
