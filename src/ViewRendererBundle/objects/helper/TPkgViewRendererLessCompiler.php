@@ -82,7 +82,17 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
+     * @return string - the relative (to PATH_WEB) path pattern to the chameleon css file
+     */
+    public function getCssRoutingPattern(): string
+    {
+        return $this->getLocalPathToCompiledLess().'/'.'chameleon_{portalId}.css';
+    }
+
+    /**
      * @return string - the file part for route generation; without a leading slash
+     *
+     * @deprecated since 6.2.4 - use getCssRoutingPattern() which includes the relative path
      */
     public function getCompiledCssFilenameRoutingPattern(): string
     {
