@@ -33,12 +33,11 @@ class GenerateCssRouteCollectionGenerator implements CollectionGeneratorInterfac
      */
     public function getCollection($config, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
-        $path = $this->lessCompiler->getLocalPathToCompiledLess();
-        $pattern = $this->lessCompiler->getCompiledCssFilenameRoutingPattern();
+        $pattern = $this->lessCompiler->getCssRoutingPattern();
 
         $routeCollection = new RouteCollection();
         $routeCollection->add('chameleon_system_view_renderer.generate_css', new Route(
-            $path.'/'.$pattern,
+            $pattern,
             [
                 '_controller' => 'chameleon_system_view_renderer.controller.generate_css_controller',
                 'containsPortalAndLanguagePrefix' => true,
