@@ -1785,11 +1785,9 @@ class TTools
                 break;
             case 3:
                 $logger->notice($sMessage);
-
                 break;
             case 4:
                 $logger->info($sMessage);
-
                 break;
             case 5:
             default:

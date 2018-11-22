@@ -14,7 +14,9 @@ use ChameleonSystem\CoreBundle\Exception\ModuleException;
 use ChameleonSystem\CoreBundle\Exception\ModuleExecutionFailedException;
 use ChameleonSystem\CoreBundle\ModuleService\ModuleExecutionStrategyInterface;
 use ChameleonSystem\CoreBundle\ModuleService\ModuleResolverInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgCmsCache\CacheInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -391,7 +393,12 @@ class TModuleLoader
         $body .= 'Backtrace: '.$backtrace."\n";
 
         $logMessage = "@@\n".$subject."\n".$body.'END@@';
-        TTools::WriteLogEntry($logMessage, 1, __FILE__, __LINE__, 'mapper-exceptions.log');
+
+        /**
+         * @var $logger LoggerInterface
+         */
+        $logger = ServiceLocator::get('monolog.logger.core_standard');
+        $logger->error($logMessage);
     }
 
     /**

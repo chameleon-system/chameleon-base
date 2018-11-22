@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+
 class TPkgCsv2SqlManager
 {
     /**
@@ -35,15 +38,20 @@ class TPkgCsv2SqlManager
         $aData['oImportName'] = 'CSV-2-SQL Datenimport:';
         $aData['successMessage'] = '';
 
-        TTools::WriteLogEntry('TPkgCsv2SqlManager: ProcessAll Start', 4, __FILE__, __LINE__, self::IMPORT_ERROR_LOG_FILE);
+        /**
+         * @var $logger LoggerInterface
+         */
+        $logger = ServiceLocator::get('monolog.logger.core_standard');
+
+        $logger->info('TPkgCsv2SqlManager: ProcessAll Start');
         $aValidationErrors = self::ValidateAll();
-        TTools::WriteLogEntry('TPkgCsv2SqlManager: ValidateAll end', 4, __FILE__, __LINE__, self::IMPORT_ERROR_LOG_FILE);
+        $logger->info('TPkgCsv2SqlManager: ValidateAll end');
         if (0 == count($aValidationErrors)) {
             // all good, import
             $aImportErrors = self::ImportAll();
             $aData['successMessage'] = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_csv2sql.msg.import_completed'));
         }
-        TTools::WriteLogEntry('TPkgCsv2SqlManager: ImportAll end', 4, __FILE__, __LINE__, self::IMPORT_ERROR_LOG_FILE);
+        $logger->info('TPkgCsv2SqlManager: ImportAll end');
 
         $aAllErr = TPkgCsv2Sql::ArrayConcat($aAllErr, $aValidationErrors);
         $aAllErr = TPkgCsv2Sql::ArrayConcat($aAllErr, $aImportErrors);
@@ -51,7 +59,7 @@ class TPkgCsv2SqlManager
             //send all errors by email
             self::SendErrorNotification($aAllErr);
         }
-        TTools::WriteLogEntry('TPkgCsv2SqlManager: SendErrorNotification end', 4, __FILE__, __LINE__, self::IMPORT_ERROR_LOG_FILE);
+        $logger->info('TPkgCsv2SqlManager: SendErrorNotification end');
 
         //View vars
         $aData['aValidationErrors'] = (array) $aValidationErrors;
@@ -71,13 +79,18 @@ class TPkgCsv2SqlManager
      */
     public static function ImportAll()
     {
+        /**
+         * @var $logger LoggerInterface
+         */
+        $logger = ServiceLocator::get('monolog.logger.core_standard');
+
         $aErrors = array();
         // get list of import handler
         /** @var $oCsv2SqlList TdbPkgCsv2sqlList */
         $oCsv2SqlList = TdbPkgCsv2sqlList::GetList();
         $oCsv2SqlList->GoToStart();
         while ($oListItem = $oCsv2SqlList->Next()) {
-            TTools::WriteLogEntry('TPkgCsv2SqlManager: Import '.$oListItem->fieldName, 4, __FILE__, __LINE__, self::IMPORT_ERROR_LOG_FILE);
+            $logger->info('TPkgCsv2SqlManager: Import '.$oListItem->fieldName);
 
             $aItemErrors = $oListItem->Import();
             $aErrors = TPkgCsv2Sql::ArrayConcat($aErrors, $aItemErrors);
@@ -103,6 +116,11 @@ class TPkgCsv2SqlManager
      */
     public static function ValidateAll()
     {
+        /**
+         * @var $logger LoggerInterface
+         */
+        $logger = ServiceLocator::get('monolog.logger.core_standard');
+
         $aErrors = array();
 
         //get list of import handler
@@ -110,7 +128,7 @@ class TPkgCsv2SqlManager
         $oCsv2SqlList = TdbPkgCsv2sqlList::GetList();
         $oCsv2SqlList->GoToStart();
         while ($oListItem = $oCsv2SqlList->Next()) {
-            TTools::WriteLogEntry('TPkgCsv2SqlManager: Validating '.$oListItem->fieldName, 4, __FILE__, __LINE__, self::IMPORT_ERROR_LOG_FILE);
+            $logger->info('TPkgCsv2SqlManager: Validating '.$oListItem->fieldName);
             $aItemErrors = $oListItem->Validate();
             $aErrors = TPkgCsv2Sql::ArrayConcat($aErrors, $aItemErrors);
         }

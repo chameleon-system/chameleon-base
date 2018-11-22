@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+
 class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
 {
     protected $sTimeStampFormat = 'Ymd_His';
@@ -82,7 +85,14 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
             if (!$this->aImportStats['bHasErrors']) {
                 $this->aImportStats['bHasErrors'] = true;
             }
-            TTools::WriteLogEntry($sMsg, 1, $sFileName, $sFileLine, $this->GetLogFile());
+
+            /**
+             * @var $logger LoggerInterface
+             */
+            $logger = ServiceLocator::get('monolog.logger.core_standard');
+            $logger->error($sMsg);
+            // NOTE there was a mechanism for the "current log file": $this->GetLogFile()
+
             $bRet = true;
         }
 
@@ -98,13 +108,18 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      */
     protected function CreateTable(&$aErrorList)
     {
+        /**
+         * @var $logger LoggerInterface
+         */
+        $logger = ServiceLocator::get('monolog.logger.core_standard');
+
         $bRet = false;
         // DROP TABLE IF EXISTS  test1
         $databaseConnection = $this->getDatabaseConnection();
         $quotedTargetTableName = $databaseConnection->quoteIdentifier($this->GetTempTargetTableName());
         $sQry = "DROP TABLE IF EXISTS $quotedTargetTableName ";
         MySqlLegacySupport::getInstance()->query($sQry);
-        TTools::WriteLogEntry('create table drop '.MySqlLegacySupport::getInstance()->error(), 4, __FILE__, __LINE__, TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE);
+        $logger->info('create table drop '.MySqlLegacySupport::getInstance()->error());
 
         $sColumnSet = array();
         $aRowDefinition = $this->GetRowDef();
@@ -121,7 +136,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
 
             MySqlLegacySupport::getInstance()->query($sQry);
             $sError = MySqlLegacySupport::getInstance()->error();
-            TTools::WriteLogEntry('create table  '.$sQry.' WITH ERROR: '.$sError, 4, __FILE__, __LINE__, TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE);
+            $logger->info('create table  '.$sQry.' WITH ERROR: '.$sError);
             if ($sError) {
                 $bRet = false;
                 $this->LogError('SQL-ERROR in: '.$sQry."\n".$sError."\n---");
@@ -223,6 +238,11 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
             return array('error importing data: '.$bResult);
         }
 
+        /**
+         * @var $logger LoggerInterface
+         */
+        $logger = ServiceLocator::get('monolog.logger.core_standard');
+
         $databaseConnection = $this->getDatabaseConnection();
         $quotedTempTargetTableName = $databaseConnection->quoteIdentifier($this->GetTempTargetTableName());
         $sQry = "SELECT COUNT(*) AS rowcount FROM $quotedTempTargetTableName ";
@@ -237,7 +257,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
                 $quotedFinalTargetTableName = $databaseConnection->quoteIdentifier($this->GetFinalTargetTableName());
                 $sQry = "DROP TABLE IF EXISTS $quotedFinalTargetTableName ";
                 MySqlLegacySupport::getInstance()->query($sQry);
-                TTools::WriteLogEntry('drop table in commit table '.$sQry, 4, __FILE__, __LINE__, TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE);
+                $logger->info('drop table in commit table '.$sQry);
 
                 $this->AddTableIndex();
                 $sQry = "ALTER TABLE $quotedTempTargetTableName RENAME $quotedFinalTargetTableName ";
@@ -253,7 +273,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
                 //no data found! remove table?
                 $sQry = "DROP TABLE IF EXISTS $quotedTempTargetTableName ";
                 MySqlLegacySupport::getInstance()->query($sQry);
-                TTools::WriteLogEntry('drop table because no data was found in CommitTable '.$sQry, 4, __FILE__, __LINE__, TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE);
+                $logger->info('drop table because no data was found in CommitTable '.$sQry);
             }
         }
 
@@ -311,6 +331,11 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      */
     public function Import($sLogName = null, IPkgCmsBulkSql $oBulkInsertManager = null)
     {
+        /**
+         * @var $logger LoggerInterface
+         */
+        $logger = ServiceLocator::get('monolog.logger.core_standard');
+
         $this->aImportStats['start'] = time();
 
         $aRowDefinition = $this->GetRowDef();
@@ -326,7 +351,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         }
         if (false === $this->oBulkInsert->Initialize($this->GetTempTargetTableName(), $aFieldNames)) {
             // error initializing - exit
-            TTools::WriteLogEntry('CSV not processed because bulk import could not be initialized: '.$this->GetTempTargetTableName(), 4, __FILE__, __LINE__, TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE);
+            $logger->info('CSV not processed because bulk import could not be initialized: '.$this->GetTempTargetTableName());
 
             return false;
         }
@@ -349,13 +374,13 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         }
         //directory
         if (!$bDone && is_dir($sImportDir) && is_readable($sImportDir)) {
-            TTools::WriteLogEntry('importing dir '.$sImportDir, 4, __FILE__, __LINE__, TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE);
+            $logger->info('importing dir '.$sImportDir);
             $aRes = $this->_ImportDir($sSource);
             $bDone = true;
         }
         //file
         if (!$bDone && is_file($sSource) && file_exists($sSource) && is_readable($sSource)) {
-            TTools::WriteLogEntry('importing FILE '.$sImportDir, 4, __FILE__, __LINE__, TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE);
+            $logger->info('importing FILE '.$sImportDir);
             $bTableOK = true;
             if (!$this->CreateTable($aResultArray)) {
                 $bTableOK = false;
@@ -424,18 +449,23 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
             $sPattern = substr($sSource, strrpos($sSource, '/') + 1);
         }
 
+        /**
+         * @var $logger LoggerInterface
+         */
+        $logger = ServiceLocator::get('monolog.logger.core_standard');
+
         if (is_dir($sImportDir) && is_readable($sImportDir)) {
-            TTools::WriteLogEntry('importing DIR FOUND '.$sImportDir, 4, __FILE__, __LINE__, TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE);
+            $logger->info('importing DIR FOUND '.$sImportDir);
             $oFileList = TCMSFileList::GetInstance($sImportDir, $sPattern, false);
             $oFileList->GoToStart();
             if ($oFileList->Length()) {
-                TTools::WriteLogEntry('importing DIR has length '.$sImportDir, 4, __FILE__, __LINE__, TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE);
+                $logger->info('importing DIR has length '.$sImportDir);
                 $bTableOK = true;
                 if (!$this->CreateTable($aResultArray)) {
                     $bTableOK = false;
                 }
                 if ($bTableOK) {
-                    TTools::WriteLogEntry('importing DIR import file '.$sImportDir, 4, __FILE__, __LINE__, TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE);
+                    $logger->info('importing DIR import file '.$sImportDir);
                     while ($oFile = $oFileList->Next()) {
                         $aRes = $this->_ImportFile($oFile->sPath);
                         $aResultArray = self::ArrayConcat($aResultArray, $aRes);
@@ -444,7 +474,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
                 }
             }
         } else {
-            TTools::WriteLogEntry('importing DIR NOT FOUND '.$sImportDir, 4, __FILE__, __LINE__, TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE);
+            $logger->info('importing DIR NOT FOUND '.$sImportDir);
         }
 
         return $aResultArray;
