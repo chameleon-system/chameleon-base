@@ -92,21 +92,29 @@ class TGroupTableField
     public $originalTable;
 
     /**
+     * Management status of table class owning table field.
+     *
+     * @var bool
+     */
+    public $tableIsManaged = false;
+
+    /**
      * Table cell configuration.
      *
-     * @param string|array  $name           - if it is an array it should be of the form 'name'=>'full_name'
-     * @param string        $align
+     * @param string|array $name - if it is an array it should be of the form 'name'=>'full_name'
+     * @param string $align
      * @param resource|null $formatCallBack - a callback function to use for the column (the function will get 2 parameters,
      *                                      the value, and the row. The string returned by the function will be displayed
      *                                      in the cell
-     * @param array|null    $linkFields
-     * @param int           $colSpan
-     * @param object|null   $selectFormat   - callback function for option titles
-     * @param string|null   $ident
-     * @param string|null   $originalField
-     * @param string|null   $originalTable
+     * @param array|null $linkFields
+     * @param int $colSpan
+     * @param object|null $selectFormat - callback function for option titles
+     * @param string|null $ident
+     * @param string|null $originalField
+     * @param string|null $originalTable
+     * @param bool $tableIsManaged
      */
-    public function __construct($name, $align = 'left', $formatCallBack = null, $linkFields = null, $colSpan = 1, $selectFormat = null, $ident = null, $originalField = null, $originalTable = null)
+    public function __construct($name, $align = 'left', $formatCallBack = null, $linkFields = null, $colSpan = 1, $selectFormat = null, $ident = null, $originalField = null, $originalTable = null, $tableIsManaged = false)
     {
         if (is_array($name)) {
             $tkey = array_keys($name);
@@ -117,16 +125,20 @@ class TGroupTableField
             $this->name = $name;
             $this->full_db_name = $this->name;
         }
+
         if (null === $originalField) {
             $originalField = $this->name;
         }
+
         $this->originalTable = $originalTable;
+        $this->tableIsManaged = $tableIsManaged;
         $this->sOriginalField = $originalField;
         $this->align = $align;
         $this->format = $formatCallBack;
         $this->linkFields = $linkFields;
         $this->colSpan = $colSpan;
         $this->selectFormat = $selectFormat;
+
         if (null !== $ident) {
             $this->sIdent = $ident;
         } else {
