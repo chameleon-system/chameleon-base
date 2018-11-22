@@ -43,6 +43,11 @@ Note that ONLY BC breaking changes are listed, according to our backwards compat
 - New method `getDomainDataByName()`.
 - New method `getPortalPrefixListForDomain()`.
 
+## \TTools
+
+- Changed method `WriteLogEntry()`: parameter `$sLogFileName` is now ignored
+- Changed method `WriteLogEntrySimple()`: parameter `$sLogFileName` is now ignored
+
 # Deprecated Code Entities
 
 It is recommended that all references to the classes, interfaces, properties, constants, methods and services in the

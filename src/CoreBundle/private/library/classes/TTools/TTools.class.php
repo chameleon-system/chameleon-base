@@ -17,6 +17,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\Corebundle\Util\UrlUtil;
 use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Email;
@@ -1762,45 +1763,37 @@ class TTools
      * @param int    $iLineNumber   - line the log request is called from
      * @param string $sLogFileName  - optional log file name (path is relative to PATH_CMS_CUSTOMER_DATA)
      *
-     * @deprecated - use your own logger service or 'monolog.logger.core_standard' instead.
+     * @deprecated - use your own logger service (with appropriate channel) or 'logger' or 'monolog.logger.core_standard' directly instead.
      */
     public static function WriteLogEntry($sMessage, $sLogLevel, $sCallFromFile, $iLineNumber, $sLogFileName = null)
     {
-        /** @var IPkgCmsCoreLog $oLogger */
-        $oLogger = null;
-        if (null !== $sLogFileName) {
-            $sLoggerName = str_replace('.log', '', $sLogFileName);
-            $sLoggerName = str_replace('/logs/', '', $sLoggerName);
-            $sLoggerName = str_replace('logs/', '', $sLoggerName);
-            $sLoggerName = str_replace('/', '.', $sLoggerName);
-            $sLoggerName = 'cmsPkgCore.logChannel.'.$sLoggerName;
+        /**
+         * @var $logger LoggerInterface
+         */
+        $logger = ServiceLocator::get('monolog.logger.core_standard');
 
-            if (true == self::getServiceContainer()->has($sLoggerName)) {
-                $oLogger = ServiceLocator::get($sLoggerName);
-            }
-        }
-        if (null === $oLogger) {
-            $oLogger = ServiceLocator::get('cmsPkgCore.logChannel.standard');
+        if (null !== $sLogFileName) {
+            $logger->warning(sprintf('Additional log file parameter %s to TTools::WriteLogEntry() ignored.', $sLogFileName));
         }
 
         switch ($sLogLevel) {
             case 1:
-                $oLogger->error($sMessage, $sCallFromFile, $iLineNumber, array('originalMessage' => $sMessage));
+                $logger->error($sMessage);
                 break;
             case 2:
-                $oLogger->warning($sMessage, $sCallFromFile, $iLineNumber, array('originalMessage' => $sMessage));
+                $logger->warning($sMessage);
                 break;
             case 3:
-                $oLogger->notice($sMessage, $sCallFromFile, $iLineNumber, array('originalMessage' => $sMessage));
+                $logger->notice($sMessage);
 
                 break;
             case 4:
-                $oLogger->info($sMessage, $sCallFromFile, $iLineNumber, array('originalMessage' => $sMessage));
+                $logger->info($sMessage);
 
                 break;
             case 5:
             default:
-                $oLogger->debug($sMessage, $sCallFromFile, $iLineNumber, array('originalMessage' => $sMessage));
+                $logger->debug($sMessage);
                 break;
         }
     }
