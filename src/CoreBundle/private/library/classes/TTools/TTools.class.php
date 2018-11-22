@@ -1805,7 +1805,7 @@ class TTools
      * @param int    $iLineNumber   - line the log request is called from
      * @param string $sLogFileName  - optional log file name (path is relative to PATH_CMS_CUSTOMER_DATA)
      *
-     * @deprecated - use the logger service container instead
+     * @deprecated - use a logger service instead
      */
     public static function WriteLogEntrySimple($sMessage, $sLogLevel, $sCallFromFile, $iLineNumber, $sLogFileName = null)
     {
