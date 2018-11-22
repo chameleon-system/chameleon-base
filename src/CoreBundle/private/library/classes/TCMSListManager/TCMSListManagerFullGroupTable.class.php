@@ -74,6 +74,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         // table is not in cache, load it
         if (is_null($oOldTableObj) || false === $oOldTableObj) {
             $this->CreateTableObj();
+            $this->tableObj->isManagedTable = $this->usesManagedTables();
             $this->tableObj->orderList = $aOrderData;
             $this->AddFields();
             $this->AddSortInformation();
@@ -98,8 +99,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
             $this->PostCreateTableObjectHook();
         }
-
-        $this->tableObj->isManagedTable = $this->usesManagedTables();
 
         if (($objectChangeRequest || is_null($oOldTableObj)) && $this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE) {
             $tmp = serialize($this->tableObj);
