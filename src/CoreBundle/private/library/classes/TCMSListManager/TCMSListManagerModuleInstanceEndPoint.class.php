@@ -164,6 +164,13 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function usesManagedTables(): bool {
+        return false;
+    }
+
+    /**
      * @return Connection
      */
     private function getDatabaseConnection()

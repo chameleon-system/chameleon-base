@@ -34,6 +34,13 @@ class TCMSListManagerPortalDomains extends TCMSListManagerFullGroupTable
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function usesManagedTables(): bool {
+        return false;
+    }
+
+    /**
      * @return TranslatorInterface
      */
     private function getTranslator()

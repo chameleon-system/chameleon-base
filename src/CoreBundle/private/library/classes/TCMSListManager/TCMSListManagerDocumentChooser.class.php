@@ -168,4 +168,12 @@ class TCMSListManagerDocumentChooser extends TCMSListManagerFullGroupTable
 
         return $html;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function usesManagedTables(): bool {
+        return false;
+    }
+
 }

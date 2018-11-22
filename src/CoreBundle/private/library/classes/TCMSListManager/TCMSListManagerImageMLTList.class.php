@@ -58,4 +58,12 @@ class TCMSListManagerImageMLTList extends TCMSListManagerMLTList
         $this->oMenuItems->RemoveItem('sItemKey', 'deleteall');
         $this->oMenuItems->RemoveItem('sItemKey', 'edittableconf');
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function usesManagedTables(): bool {
+        return false;
+    }
+
 }

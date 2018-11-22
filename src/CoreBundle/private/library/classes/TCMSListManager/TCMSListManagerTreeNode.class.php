@@ -149,4 +149,12 @@ class TCMSListManagerTreeNode extends TCMSListManagerFullGroupTable
         $this->tableObj->orderList['active'] = 'DESC';
         $this->tableObj->orderList['start_date'] = 'ASC';
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function usesManagedTables(): bool {
+        return false;
+    }
+
 }

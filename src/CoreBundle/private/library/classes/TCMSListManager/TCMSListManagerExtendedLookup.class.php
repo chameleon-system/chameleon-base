@@ -56,6 +56,13 @@ class TCMSListManagerExtendedLookup extends TCMSListManagerFullGroupTable
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function usesManagedTables(): bool {
+        return false;
+    }
+
+    /**
      * add table-specific buttons to the editor (add them directly to $this->oMenuItems).
      */
     protected function GetCustomMenuItems()

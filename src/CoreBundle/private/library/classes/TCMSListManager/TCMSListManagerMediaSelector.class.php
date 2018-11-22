@@ -275,6 +275,13 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function usesManagedTables(): bool {
+        return false;
+    }
+
+    /**
      * @return Connection
      */
     private function getDatabaseConnection()

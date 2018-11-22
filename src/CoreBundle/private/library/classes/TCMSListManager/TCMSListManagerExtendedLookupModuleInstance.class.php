@@ -37,4 +37,12 @@ class TCMSListManagerExtendedLookupModuleInstance extends TCMSListManagerModuleI
 
         return $aIncludes;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function usesManagedTables(): bool {
+        return false;
+    }
+
 }

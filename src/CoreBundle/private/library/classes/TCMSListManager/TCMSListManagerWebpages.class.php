@@ -85,4 +85,12 @@ class TCMSListManagerWebpages extends TCMSListManagerFullGroupTable
 
         return $aItems;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function usesManagedTables(): bool {
+        return false;
+    }
+
 }

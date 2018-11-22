@@ -173,6 +173,13 @@ class TCMSListManagerDocumentManagerSelected extends TCMSListManagerFullGroupTab
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function usesManagedTables(): bool {
+        return false;
+    }
+
+    /**
      * @return Connection
      */
     private function getDatabaseConnection()
