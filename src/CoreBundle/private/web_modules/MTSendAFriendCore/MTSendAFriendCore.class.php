@@ -358,6 +358,6 @@ class MTSendAFriendCore extends TUserCustomModelBase
 
     private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.core_standard');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon');
     }
 }

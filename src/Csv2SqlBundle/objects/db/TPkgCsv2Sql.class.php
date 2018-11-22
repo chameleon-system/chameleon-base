@@ -89,7 +89,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
             /**
              * @var $logger LoggerInterface
              */
-            $logger = ServiceLocator::get('monolog.logger.core_standard');
+            $logger = ServiceLocator::get('monolog.logger.chameleon');
             $logger->error($sMsg);
             // NOTE there was a mechanism for the "current log file": $this->GetLogFile()
 
@@ -111,7 +111,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.core_standard');
+        $logger = ServiceLocator::get('monolog.logger.chameleon');
 
         $bRet = false;
         // DROP TABLE IF EXISTS  test1
@@ -241,7 +241,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.core_standard');
+        $logger = ServiceLocator::get('monolog.logger.chameleon');
 
         $databaseConnection = $this->getDatabaseConnection();
         $quotedTempTargetTableName = $databaseConnection->quoteIdentifier($this->GetTempTargetTableName());
@@ -334,7 +334,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.core_standard');
+        $logger = ServiceLocator::get('monolog.logger.chameleon');
 
         $this->aImportStats['start'] = time();
 
@@ -452,7 +452,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.core_standard');
+        $logger = ServiceLocator::get('monolog.logger.chameleon');
 
         if (is_dir($sImportDir) && is_readable($sImportDir)) {
             $logger->info('importing DIR FOUND '.$sImportDir);

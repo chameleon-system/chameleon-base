@@ -272,7 +272,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
             $sPlaintext = $this->ReplaceVariablesInTextHook($sPlaintext, $oNewsletterUser);
             $sGeneratedNewsletter = $this->ReplaceVariablesInTextHook($sGeneratedNewsletter, $oNewsletterUser);
 
-            $logger = \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.core_standard');
+            $logger = \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon');
             if (false === $this->isNewsletterAlreadySent($oNewsletterUser)) {
                 if (!$oMailObject->Send(array('sBody' => $sGeneratedNewsletter, 'sTextBody' => $sPlaintext))) {
                     $logger->warning(sprintf('Unable to send Newsletter: %s', $oMailObject->ErrorInfo));

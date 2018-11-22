@@ -397,7 +397,7 @@ class TModuleLoader
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.core_standard');
+        $logger = ServiceLocator::get('monolog.logger.chameleon');
         $logger->error($logMessage);
     }
 

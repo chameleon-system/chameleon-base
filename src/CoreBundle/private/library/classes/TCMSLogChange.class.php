@@ -1882,7 +1882,7 @@ class TCMSLogChange
 
     public static function getLogger(): LoggerInterface
     {
-        return  \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.core_cms_updates');
+        return  \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_cms_updates');
     }
 
     /**

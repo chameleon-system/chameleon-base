@@ -41,7 +41,7 @@ class TPkgCsv2SqlManager
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.core_standard');
+        $logger = ServiceLocator::get('monolog.logger.chameleon');
 
         $logger->info('TPkgCsv2SqlManager: ProcessAll Start');
         $aValidationErrors = self::ValidateAll();
@@ -82,7 +82,7 @@ class TPkgCsv2SqlManager
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.core_standard');
+        $logger = ServiceLocator::get('monolog.logger.chameleon');
 
         $aErrors = array();
         // get list of import handler
@@ -119,7 +119,7 @@ class TPkgCsv2SqlManager
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.core_standard');
+        $logger = ServiceLocator::get('monolog.logger.chameleon');
 
         $aErrors = array();
 

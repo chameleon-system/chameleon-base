@@ -110,9 +110,10 @@ monolog:
   # NOTE this channel list is not / must not be a complete list.
   # It is only necessary here in advance for backwards-compatibility (ie users of "IPkgCmsCoreLog" and any Tdb or TCMS object).
   channels:
-  - "core_standard"
-  - "core_security"
-  - "core_dbal"
-  - "core_cms_updates"
-  - "core_cronjobs"
-  - "core_api"
+    - "chameleon"
+    - "chameleon_cms_updates"
+    - "chameleon_cronjobs"
+    # legacy channels
+    - "chameleon_security"
+    - "chameleon_dbal"
+    - "chameleon_api"

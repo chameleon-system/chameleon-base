@@ -385,7 +385,7 @@ class TCMSRecordWritable extends TCMSRecord
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.core_security');
+        $logger = ServiceLocator::get('monolog.logger.chameleon_security');
         $logger->warning(
             sprintf(
                 'Trying to write a record %s in %s that does not belong to the current user %s. AUTO-LOGOUT and REDIRECT executed.',

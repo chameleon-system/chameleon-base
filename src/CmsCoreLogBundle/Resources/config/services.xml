@@ -33,7 +33,7 @@
         </service>
 
         <service id="cmsPkgCore.logChannel.standard" class="TPkgCmsCoreLog">
-            <argument type="service" id="monolog.logger.core_standard"/>
+            <argument type="service" id="monolog.logger.chameleon"/>
         </service>
 
         <service id="cmsPkgCore.logDriver.security" class="Monolog\Logger" public="false">
@@ -45,7 +45,7 @@
 
         <!-- use this logger to log any security related infos -->
         <service id="cmsPkgCore.logChannel.security" class="TPkgCmsCoreLog">
-            <argument type="service" id="monolog.logger.core_security"/>
+            <argument type="service" id="monolog.logger.chameleon_security"/>
         </service>
 
         <service id="cmsPkgCore.logHandler.dbal" class="Monolog\Handler\StreamHandler" public="false">
@@ -61,7 +61,7 @@
         </service>
 
         <service id="cmsPkgCore.logChannel.dbal" class="TPkgCmsCoreLog">
-            <argument type="service" id="monolog.logger.core_dbal"/>
+            <argument type="service" id="monolog.logger.chameleon_dbal"/>
         </service>
 
         <service id="cmsPkgCore.logDriver.cmsUpdates" class="Monolog\Logger" public="false">
@@ -72,7 +72,7 @@
         </service>
 
         <service id="cmsPkgCore.logChannel.cmsUpdates" class="TPkgCmsCoreLog">
-            <argument type="service" id="monolog.logger.core_cms_updates"/>
+            <argument type="service" id="monolog.logger.chameleon_cms_updates"/>
         </service>
 
         <service id="cmsPkgCore.logDriver.cronjobs" class="Monolog\Logger" public="false">
@@ -83,7 +83,7 @@
         </service>
 
         <service id="cmsPkgCore.logChannel.cronjobs" class="TPkgCmsCoreLog">
-            <argument type="service" id="monolog.logger.core_cronjobs"/>
+            <argument type="service" id="monolog.logger.chameleon_cronjobs"/>
         </service>
 
         <service id="cmsPkgCore.logDriver.apilogger" class="Monolog\Logger" public="false">
@@ -94,7 +94,7 @@
         </service>
 
         <service id="cmsPkgCore.logChannel.apilogger" class="TPkgCmsCoreLog">
-            <argument type="service" id="monolog.logger.core_api"/>
+            <argument type="service" id="monolog.logger.chameleon_api"/>
         </service>
 
         <service id="pkgShopPaymentPayone.logDriver.apilogger" class="Monolog\Logger" public="false">

@@ -82,7 +82,7 @@ class TPkgCmsCoreLogMonologHandler_Database extends AbstractProcessingHandler
 
         $data = array_merge($data, $requestData);
 
-        // TODO catch exception (the channel "core_dbal" would then be the correct one for these errors...)?
+        // TODO catch exception (the channel "chameleon_dbal" would then be the correct one for these errors...)?
         $this->connection->insert('pkg_cms_core_log', $data);
     }
 

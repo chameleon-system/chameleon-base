@@ -82,6 +82,6 @@ class CmsMediaTableEditor extends TCMSTableEditorMedia
 
     private function getLogger(): LoggerInterface
     {
-        return ServiceLocator::get('monolog.logger.core_standard');
+        return ServiceLocator::get('monolog.logger.chameleon');
     }
 }

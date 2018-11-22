@@ -77,7 +77,7 @@ class TPkgCmsException_Log extends TPkgCmsException
 
     private function getExceptionLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.core_standard');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon');
     }
 
     public function getLogLevel()
