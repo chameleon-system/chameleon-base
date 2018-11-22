@@ -92,7 +92,7 @@ class TPkgViewRendererLessCompiler
     /**
      * @return string - the file part for route generation; without a leading slash
      *
-     * will deprecate with 6.3.0 - use getCssRoutingPattern() which includes the relative path
+     * will be deprecated in 6.3.0 - use getCssRoutingPattern() which includes the relative path
      */
     public function getCompiledCssFilenameRoutingPattern(): string
     {
