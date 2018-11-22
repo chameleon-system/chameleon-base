@@ -32,15 +32,15 @@ class TPkgViewRendererLessCompiler
     /**
      * Local path to less directory - this is where the chameleon_?.css files live.
      *
-     * @return string - relative path without trailing slash
+     * @return string - absolute path (guaranteed to be below PATH_WEB) without trailing slash
      */
     public function getLocalPathToCompiledLess()
     {
-        return $this->cssDir;
+        return PATH_WEB.'/'.$this->cssDir;
     }
 
     /**
-     * @return string - relative path without trailing slash
+     * @return string - absolute path (guaranteed to be below PATH_WEB) without trailing slash
      */
     public function getLocalPathToCachedLess()
     {
@@ -82,7 +82,17 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
+     * @return string - the path pattern to the generated CSS file, relative to PATH_WEB, without leading slash
+     */
+    public function getCssRoutingPattern(): string
+    {
+        return $this->cssDir.'/'.'chameleon_{portalId}.css';
+    }
+
+    /**
      * @return string - the file part for route generation; without a leading slash
+     *
+     * will be deprecated in 6.3.0 - use getCssRoutingPattern() which includes the relative path
      */
     public function getCompiledCssFilenameRoutingPattern(): string
     {
@@ -187,7 +197,7 @@ class TPkgViewRendererLessCompiler
             } catch (Exception $exc) {
                 if (false !== strpos($exc->getMessage(), 'stat failed')) {
                     // Consider this as a 'File removed! Halp!' and clear the cache and try again
-                    array_map('unlink', glob($this->getLocalPathToCachedLess().'/*'));
+                    array_map('unlink', glob($cachedLessDir.'/*'));
 
                     $cssFile = \Less_Cache::Get($filesForLessParsing, $options);
                 } else {
@@ -195,7 +205,7 @@ class TPkgViewRendererLessCompiler
                 }
             }
 
-            $absoluteCssFilepath = $this->getLocalPathToCachedLess().'/'.$cssFile;
+            $absoluteCssFilepath = $cachedLessDir.'/'.$cssFile;
 
             $_SERVER['DOCUMENT_ROOT'] = $originalDocumentRoot;
 
