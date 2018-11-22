@@ -57,28 +57,20 @@ parameters:
 
   chameleon_system_external_tracker_google_analytics.enable_campaign_tracking: false # if true, the product exports will add their google campaign parameters (if they support them) to the detail links of the products
 
-  database_port: 3306
+  database_host: "" # @deprecated since 6.3.0 - no longer used
+  database_port: 3306 # @deprecated since 6.3.0 - no longer used
+  database_name: "" # @deprecated since 6.3.0 - no longer used
+  database_user: "" # @deprecated since 6.3.0 - no longer used
+  database_password: "" # @deprecated since 6.3.0 - no longer used
 
   twig.exception_listener.class: ChameleonSystem\CoreBundle\EventListener\ChameleonExceptionListener
 
   chameleon_system_core.google.api_key: ''
 
-chameleon_system_core:
-    mailer:
-      host: "%mailer_host%"
-      user: "%mailer_user%"
-      password: "%mailer_password%"
-    mail_target_transformation_service:
-      target_mail: "%chameleon_system_core.mail_target_transformation_service.target_mail%"
-      enabled: "%chameleon_system_core.mail_target_transformation_service.enabled%"
-      subject_prefix: "%chameleon_system_core.mail_target_transformation_service.subject_prefix%"
-      white_list: "%chameleon_system_core.mail_target_transformation_service.white_list%"
-
 framework:
   csrf_protection: ~
-  validation:      { enable_annotations: true }
+  validation: ~
   router:
-    resource: "%kernel.root_dir%/config/routing.yml"
     strict_requirements: ~
   session:
     metadata_update_threshold: 120

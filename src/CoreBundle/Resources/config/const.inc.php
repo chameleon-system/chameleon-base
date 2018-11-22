@@ -4,7 +4,7 @@ if (!defined('PATH_WEB')) {
     define('PATH_WEB', $_SERVER['DOCUMENT_ROOT']);
 }
 define('PATH_PROJECT_BASE', PATH_WEB.'/../');
-define('PATH_PROJECT_CONFIG', PATH_PROJECT_BASE.'/app/config/');
+define('PATH_PROJECT_CONFIG', PATH_PROJECT_BASE.'/config/');
 /**
  * @deprecated since 6.2.0 - the vendor path should no longer be used. Use the bundle syntax to refer to concrete bundles instead.
  */

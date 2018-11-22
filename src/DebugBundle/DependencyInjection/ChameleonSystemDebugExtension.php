@@ -25,6 +25,12 @@ class ChameleonSystemDebugExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('services.xml');
 
+        if (false === $config['database_profiler_enabled']) {
+            return;
+        }
+
+        $loader->load('database_profiler.xml');
+
         foreach (array($container->getDefinition('chameleon_system_debug.database_collector'),
                     $container->getDefinition('chameleon_system_debug.profiler_database_connection'), ) as $definition) {
             $definition->addMethodCall('setBacktraceEnabled', array($config['backtrace_enabled']));

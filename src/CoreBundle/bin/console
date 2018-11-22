@@ -1,23 +1,36 @@
 #!/usr/bin/php
 <?php
 
+use App\Kernel;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Debug\Debug;
+
 set_time_limit(0);
+
+require __DIR__.'/../../../../../../vendor/autoload.php';
 
 /**
  * set $_SERVER vars manually, as they are not available in console.
  */
-$_SERVER['DOCUMENT_ROOT'] = realpath(__DIR__.'/../../../../../../web');
+$_SERVER['DOCUMENT_ROOT'] = realpath(__DIR__.'/../../../../../../public');
 $_SERVER['HTTP_HOST'] = 'you-have-no-host-because-you-are-in-console.com';
 define('REQUEST_PROTOCOL', 'console');
 
 define('PATH_WEB', $_SERVER['DOCUMENT_ROOT']);
 require_once __DIR__.'/../Resources/config/const.inc.php';
 
-if (file_exists(PATH_PROJECT_BASE.'/app/autoload.php')) {
-    include_once PATH_PROJECT_BASE.'/app/autoload.php';
-} else {
-    include_once __DIR__.'/../../../../../autoload.php';
+$input = new ArgvInput();
+if (null !== $_ENV['APP_ENV'] = $input->getParameterOption(['--env', '-e'], null, true)) {
+    putenv('APP_ENV='.$_ENV['APP_ENV']);
+    // force loading .env files when --env is defined
+    $_SERVER['APP_ENV'] = null;
 }
+
+if ($input->hasParameterOption('--no-debug', true)) {
+    putenv('APP_DEBUG='.$_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = '0');
+}
+require __DIR__.'/../../../../../../src/.bootstrap.php';
 
 require_once PATH_PROJECT_CONFIG.'/config.inc.php';
 require_once PATH_CORE_CONFIG.'/config.inc.php';
@@ -27,20 +40,14 @@ spl_autoload_register('ChameleonSystem\AutoclassesBundle\Loader\AutoClassLoader:
 
 TGlobal::setMode(TGlobal::MODE_BACKEND);
 
-require_once PATH_PROJECT_BASE.'/app/AppKernel.php';
+if (true === $_SERVER['APP_DEBUG']) {
+    umask(0000);
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArgvInput;
-
-$input = new ArgvInput();
-$env = $input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'dev');
-$debug = '0' !== getenv('SYMFONY_DEBUG') && !$input->hasParameterOption(array('--no-debug', '')) && 'prod' !== $env;
-
-try {
-    $kernel = new AppKernel($env, $debug);
-    $application = new Application($kernel);
-    $application->setCatchExceptions(false);
-    $application->run($input);
-} catch (Exception $e) {
-    echo $e;
+    if (class_exists(Debug::class)) {
+        Debug::enable();
+    }
 }
+
+$kernel = new Kernel($_SERVER['APP_ENV'], $_SERVER['APP_DEBUG']);
+$application = new Application($kernel);
+$application->run($input);

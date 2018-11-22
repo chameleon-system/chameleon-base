@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="vendor_dir">%kernel.root_dir%/../vendors</parameter>
+        <parameter key="vendor_dir">%kernel.project_dir%/vendor</parameter>
         <parameter key="chameleon_system_core.pdo.mysql_attr_init_command" type="constant">\PDO::MYSQL_ATTR_INIT_COMMAND</parameter>
         <parameter key="chameleon_system_core.pdo.mysql_attr_compression_name" type="constant">\PDO::MYSQL_ATTR_COMPRESS</parameter>
         <parameter key="chameleon_system_core.pdo.enable_mysql_compression">false</parameter>
@@ -15,30 +15,8 @@
     </parameters>
 
     <services>
-        <service id="chameleon_system_core.pdo" class="PDO" public="false">
-            <argument>mysql:dbname=%database_name%;host=%database_host%;port=%database_port%;charset=utf8</argument>
-            <argument>%database_user%</argument>
-            <argument>%database_password%</argument>
-            <argument type="collection">
-                <argument key="%chameleon_system_core.pdo.mysql_attr_init_command%">SET NAMES utf8</argument>
-                <argument key="%chameleon_system_core.pdo.mysql_attr_compression_name%">%chameleon_system_core.pdo.enable_mysql_compression%</argument>
-            </argument>
-            <call method="setAttribute">
-                <argument type="constant">\PDO::ATTR_ERRMODE</argument>
-                <argument type="constant">\PDO::ERRMODE_EXCEPTION</argument>
-            </call>
-        </service>
-
-        <service id="chameleon_system_core.sessionPdo" alias="chameleon_system_core.pdo" />
-
-        <service id="database_connection" class="Doctrine\DBAL\Connection" public="true">
-            <factory class="Doctrine\DBAL\DriverManager" method="getConnection" />
-            <argument type="collection">
-                <argument key="driver">pdo_mysql</argument>
-                <argument key="pdo" type="service" id="chameleon_system_core.pdo" />
-                <argument key="charset">UTF8</argument>
-                <argument key="logging" type="service" id="cmsPkgCore.logChannel.dbal" />
-            </argument>
+        <service id="chameleon_system_core.sessionPdo" class="PDO">
+            <factory service="database_connection" method="getWrappedConnection" />
         </service>
 
         <service id="chameleon_system_core.global" class="TGlobal" public="true">

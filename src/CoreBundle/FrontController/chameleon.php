@@ -51,7 +51,6 @@ class chameleon
             exit(0);
         }
         mb_internal_encoding('UTF-8');
-        $this->InitAutoloader();
         if ('console' === REQUEST_PROTOCOL) {
             $requestType = RequestTypeInterface::REQUEST_TYPE_BACKEND;
         } else {
@@ -89,11 +88,6 @@ class chameleon
         if ($this->isInMaintenanceMode($requestType)) {
             $this->showMaintenanceModePage();
         }
-    }
-
-    private function InitAutoloader()
-    {
-        require_once realpath(PATH_PROJECT_BASE.'/app/autoload.php');
     }
 
     /**

@@ -11,7 +11,7 @@
             <argument type="service" id="request_stack" />
             <argument type="service" id="chameleon_system_cms_cache.cache_database_connection" />
             <argument type="service" id="chameleon_system_cms_cache.storage.null" />
-            <argument>%secret%</argument>
+            <argument>%env(APP_SECRET)%</argument>
             <argument>%chameleon_system_core.cache.allow%</argument>
             <argument type="service" id="chameleon_system_core.util.hash_array"/>
             <argument type="service" id="chameleon_system_core.request_state_hash_provider"/>

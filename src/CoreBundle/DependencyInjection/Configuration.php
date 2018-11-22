@@ -95,7 +95,9 @@ class Configuration implements ConfigurationInterface
             ->booleanNode('enabled')
                 ->defaultValue(false)
             ->end()
-            ->scalarNode('subject_prefix')->end()
+            ->scalarNode('subject_prefix')
+                ->defaultValue('')
+            ->end()
         ->end();
 
         return $subTree;

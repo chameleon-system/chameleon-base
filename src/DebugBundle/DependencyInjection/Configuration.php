@@ -28,6 +28,9 @@ class Configuration implements ConfigurationInterface
 
         $root
             ->children()
+                ->booleanNode('database_profiler_enabled')
+                    ->defaultFalse()
+                ->end()
                 ->booleanNode('backtrace_enabled')
                     ->defaultFalse()
                 ->end()

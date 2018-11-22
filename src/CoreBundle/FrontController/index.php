@@ -9,7 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use App\Kernel;
+use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
+
+require __DIR__.'/../../../../../../src/.bootstrap.php';
 
 require_once dirname(__DIR__).'/Resources/config/const.inc.php';
 
@@ -29,21 +33,20 @@ if ((array_key_exists('HTTPS', $_SERVER) && 'on' === $_SERVER['HTTPS'])
 
 require_once PATH_PROJECT_CONFIG.'/config.inc.php';
 
+define('_DEVELOPMENT_MODE', $_SERVER['APP_DEBUG']);
+
+if (true === $_SERVER['APP_DEBUG']) {
+    umask(0000);
+    Debug::enable();
+}
+
 require_once __DIR__.'/chameleon.php';
 $chameleon = new chameleon();
 $chameleon->boot();
 
 spl_autoload_register('ChameleonSystem\AutoclassesBundle\Loader\AutoClassLoader::loadClassDefinition');
 
-require_once PATH_PROJECT_BASE.'/app/AppKernel.php';
-
-$devmode = defined('_DEVELOPMENT_MODE') && _DEVELOPMENT_MODE === true;
-$env = $devmode ? 'dev' : 'prod';
-//if($devmode) {
-//    Symfony\Component\Debug\Debug::enable(null, false);
-//}
-
-$kernel = new AppKernel($env, $devmode);
+$kernel = new Kernel($_SERVER['APP_ENV'], $_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();

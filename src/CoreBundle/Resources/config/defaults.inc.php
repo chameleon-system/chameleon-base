@@ -54,11 +54,11 @@ if (!defined('PATH_CMS_UPDATE')) {
  * CMS customer data path.
  */
 if (!defined('PATH_CMS_CUSTOMER_DATA')) {
-    define('PATH_CMS_CUSTOMER_DATA', PATH_PROJECT_BASE.'/app/cmsdata/');
+    define('PATH_CMS_CUSTOMER_DATA', PATH_PROJECT_BASE.'/var/cmsdata/');
 }
 
 if (!defined('PATH_CACHE')) {
-    define('PATH_CACHE', PATH_PROJECT_BASE.'/app/cache/');
+    define('PATH_CACHE', PATH_PROJECT_BASE.'/var/cache/');
 }
 /**
  * path to the customer pagelayouts
