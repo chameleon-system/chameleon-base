@@ -241,14 +241,6 @@ class TFullGroupTable extends TGroupTable
     public $sPagingSection = '';
 
     /**
-     *
-     * the table is managed by client-side modules, should receive data attributes with table metadata.
-     *
-     * @var bool
-     */
-    public $isManagedTable = false;
-
-    /**
      * CSS classes for the table tag.
      *
      * @var string

@@ -138,6 +138,14 @@ class TGroupTable
     public $rowCallback = null;
 
     /**
+     *
+     * the table is managed by client-side modules, should receive data attributes with table metadata.
+     *
+     * @var bool
+     */
+    public $isManagedTable = false;
+
+    /**
      * you may fill this via $this->table->SetCustomOrderString($sMyOrderString);
      * if a custom order string is set _GetOrderString() uses this
      * instead of generating it based on current configured order fields.
@@ -165,7 +173,7 @@ class TGroupTable
      */
     public function AddGroupField($name, $align = 'left', $format = null, $linkField = null, $colSpan = 1, $selectFormat = null)
     {
-        $this->groupByCell = new TGroupTableField($name, $align, $format, $linkField, $colSpan, $selectFormat);
+        $this->groupByCell = new TGroupTableField($name, $align, $format, $linkField, $colSpan, $selectFormat, null, null, null, $this->isManagedTable);
     }
 
     /**
@@ -196,7 +204,7 @@ class TGroupTable
     public function AddColumn($name, $align = 'left', $formatCallBack = null, $linkField = null, $colSpan = 1, $selectFormat = null, $sIdent = null, $columnPosition = null, $originalField = null, $originalTable = null)
     {
         $this->_columnCount += $colSpan;
-        $oField = new TGroupTableField($name, $align, $formatCallBack, $linkField, $colSpan, $selectFormat, $sIdent, $originalField, $originalTable);
+        $oField = new TGroupTableField($name, $align, $formatCallBack, $linkField, $colSpan, $selectFormat, $sIdent, $originalField, $originalTable, $this->isManagedTable);
 
         if (null !== $columnPosition && count($this->columnList) > 0) {
             $count = 0;
