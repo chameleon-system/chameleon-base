@@ -91,7 +91,8 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
              */
             $logger = ServiceLocator::get('monolog.logger.chameleon');
             $logger->error($sMsg);
-            // NOTE there was a mechanism for the "current log file": $this->GetLogFile()
+            // TODO/NOTE there was a mechanism for the "current log file": $this->GetLogFile()
+            // - also see \TPkgCsv2SqlManager::MergeLogs() which further uses this
 
             $bRet = true;
         }
