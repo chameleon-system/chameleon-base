@@ -46,13 +46,7 @@
      */
     function moveNode(nodeID, parentNodeID, position) {
         if (typeof parentNodeID != 'undefined' && typeof nodeID != 'undefined') {
-
-            /**
-             * block parent window so the modal can't be closed.
-             */
-            window.parent.$.blockUI.defaults.css = {};
-            window.parent.$.blockUI({message: $('#pleaseWaitMessage').html(), css: { width:	'12%', top: '48%', left:'44%'}, baseZ: 1031, draggable: false, ignoreIfBlocked: true });
-
+            CHAMELEON.CORE.processingDialog('show');
             var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('module' => 'ExecuteAjaxCall'), '_fnc' => 'MoveNode', 'tableid' => $data['treeTableID'])); ?>&nodeID=' + nodeID + '&parentNodeID=' + parentNodeID + '&position=' + position;
             GetAjaxCallTransparent(url, moveNodeSuccess);
         }
@@ -62,7 +56,7 @@
      * unblocks the UI
      */
     function moveNodeSuccess(nodeID, responseMessage) {
-        window.parent.$.unblockUI();
+        window.parent.CHAMELEON.CORE.processingDialog('hide');
     }
 
     /**
@@ -121,15 +115,7 @@
 		if(confirm(confirmMessage)){
 			var nodeID = $(node).attr('esrealid');
 			var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('module' => 'ExecuteAjaxCall'), '_fnc' => 'DeleteNode', 'tableid' => $data['treeTableID'], 'tbl' => 'cms_tpl_page')); ?>&nodeID=' + nodeID;
-
-			/**
-			 * block parent window so the modal can't be closed.
-			 *
-			 * if the frame is opened in a separate window the blocking will also work,
-			 * as parent refers to the current window, if not parent is present
-			*/
-			window.parent.$.blockUI.defaults.css = {};
-			window.parent.$.blockUI({message: $('#pleaseWaitMessage').html(), css: { width:	'12%', top: '48%', left:'44%'}, baseZ: 1031, draggable: false, ignoreIfBlocked: true });
+            CHAMELEON.CORE.processingDialog('show');
 
 			GetAjaxCallTransparent(url, deleteNodeSuccess);
 		}
@@ -146,7 +132,7 @@
 		/**
 		 * see "deleteNode" method for explanation why "window.parent" is used here
 		 */
-		window.parent.$.unblockUI();
+		window.parent.CHAMELEON.CORE.processingDialog('hide');
 
     }
 

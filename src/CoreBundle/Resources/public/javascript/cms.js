@@ -5,13 +5,30 @@ CHAMELEON.CORE = CHAMELEON.CORE || {};
 
 var sLastDialogID = null;
 
+CHAMELEON.CORE.processingDialog = function (state) {
+    if ('hide' === state) {
+        // $("#processingDialog").dialog('hide'); is not working, so this is the fix.
+        $("#processingDialog").removeClass("in");
+        $(".modal-backdrop").remove();
+        $('body').removeClass('modal-open');
+        $('body').css('padding-right', '');
+        $("#processingDialog").hide();
+    } else { // show dialog
+        if (!($("#processingDialog").data('bs.modal') || {})._isShown){
+            $("#processingDialog").modal('show');
+        }
+    }
+}
+
+/**
+ * @deprecated since 6.3.0 - call CHAMELEON.CORE.processingDialog('show'); instead
+ */
 function PleaseWait() {
-    $.blockUI.defaults.css = {};
-    $.blockUI({message: $('#pleaseWaitMessage').html(), css: { width:	'12%', top: '48%', left:'44%'}, baseZ: 1031, draggable: false, ignoreIfBlocked: true });
+    CHAMELEON.CORE.processingDialog('show');
 }
 
 function PostAjaxForm(formid, functionName) {
-    PleaseWait();
+    CHAMELEON.CORE.processingDialog('show');
     PostAjaxFormTransparent(formid, functionName);
 }
 
@@ -29,7 +46,7 @@ function PostAjaxFormTransparent(formid, callbackFunction) {
 }
 
 function GetAjaxCall(url, functionName) {
-    PleaseWait();
+    CHAMELEON.CORE.processingDialog('show');
     GetAjaxCallTransparent(url, functionName);
 }
 
@@ -58,8 +75,8 @@ function GetAjaxCallTransparent(url, functionName) {
 
 function AjaxError(XMLHttpRequest, textStatus, errorThrown) {
     if (textStatus === 'parsererror') {
-        window.parent.$.unblockUI();
-        $.unblockUI();
+        window.parent.CHAMELEON.CORE.processingDialog('hide');
+        CHAMELEON.CORE.processingDialog('hide');
         toasterMessage('Error! Wasn`t able to parse ajax response.', 'ERROR');
         if (XMLHttpRequest.responseText !== '') {
             var sError = XMLHttpRequest.responseText;
@@ -92,7 +109,7 @@ var stack_bottomright = {"dir1": "up", "dir2": "left", "push": "top", "firstpos1
  * allowed style types: MESSAGE (default), WARNING, ERROR, FATAL
  */
 function toasterMessage(message,type) {
-    $.unblockUI();
+    CHAMELEON.CORE.processingDialog('hide');
     var sStylingClass = '';
     if(type == 'ERROR' || type == 'FATAL') {
         type = 'error';
@@ -169,7 +186,7 @@ function getCMSRegistryEntry(id) {
     if (document.getElementById(registryID)) {
         return document.getElementById(registryID).innerHTML;
     } else {
-        return false; // alert('CMS registry error! Object ID: ' + registryID + ' is missing.');
+        return false;
     }
 }
 
@@ -294,7 +311,7 @@ function CloseModalIFrameDialog() {
             $('#modal_dialog').dialog('destroy');
         }
     }
-    $.unblockUI();
+    CHAMELEON.CORE.processingDialog('hide');
 }
 
 function getRadioValue(rObj) {

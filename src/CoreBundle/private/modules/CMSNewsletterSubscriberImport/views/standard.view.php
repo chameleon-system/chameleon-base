@@ -87,7 +87,7 @@ $oPkgNewsletterGroupList = $data['oPkgNewsletterGroupList'];
     }
 
     function StartCSVImport() {
-        PleaseWait();
+        CHAMELEON.CORE.processingDialog('show');
         document.importCSV.submit();
     }
 </script>

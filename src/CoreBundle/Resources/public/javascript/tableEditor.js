@@ -71,7 +71,7 @@ function ExecutePostCommand(command) {
         // reattach the message binding
         SetChangedDataMessage();
     }
-    PleaseWait();
+    CHAMELEON.CORE.processingDialog('show');
     document.cmseditform.submit();
 }
 
@@ -584,7 +584,7 @@ function SaveViaAjaxCallback(data, statusText) {
 }
 
 function Save() {
-    PleaseWait();
+    CHAMELEON.CORE.processingDialog('show');
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'Save';
     document.cmseditform.submit();
 }
@@ -702,7 +702,7 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
     if (confirm(sConfirmText)) {
         window.onbeforeunload = function () {
         };
-        PleaseWait();
+        CHAMELEON.CORE.processingDialog('show');
         document.cmseditform.elements['module_fnc[contentmodule]'].value = 'Delete';
         document.cmseditform.submit();
     }

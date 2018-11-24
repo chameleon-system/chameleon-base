@@ -61,7 +61,7 @@ class TCMSFieldLookup extends TCMSField
             $foreignTableName = $this->GetConnectedTableName();
             $sOnChangeAttr = '';
             if ($this->GetReloadOnChangeParam()) {
-                $sOnChangeAttr = "OnChange=\"CHAMELEON.CORE.MTTableEditor.bCmsContentChanged=false;PleaseWait();document.cmseditform.elements['module_fnc[contentmodule]'].value='Save';document.cmseditform.submit();\"";
+                $sOnChangeAttr = "OnChange=\"CHAMELEON.CORE.MTTableEditor.bCmsContentChanged=false;CHAMELEON.CORE.processingDialog('show');document.cmseditform.elements['module_fnc[contentmodule]'].value='Save';document.cmseditform.submit();\"";
                 $sClass .= ' cmsdisablechangemessage';
             }
 

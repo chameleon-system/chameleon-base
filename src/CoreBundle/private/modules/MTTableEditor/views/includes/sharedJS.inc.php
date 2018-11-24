@@ -91,7 +91,6 @@ $rowCount = 0;
 
 
         function ActivateRecordRevision(id) {
-            $("#pleaseWaitMessage").append('<div id="dialog-confirm" title="<?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.record_revision.action_restore_revision')); ?>"><p><?=TGlobal::Translate('chameleon_system_core.record_revision.confirm_restore_revision'); ?></p></div>');
             $("#dialog-confirm").dialog({
                 resizable:false,
                 height:180,
