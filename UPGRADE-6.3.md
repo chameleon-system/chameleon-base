@@ -89,7 +89,10 @@ None.
 
 ## JavaScript Files and Functions
 
-None.
+- $.blockUI();
+- $.unblockUI();
+
+Use CHAMELEON.CORE.processingDialog('show') and CHAMELEON.CORE.processingDialog('hide') instead.
 
 ## Translations
 
