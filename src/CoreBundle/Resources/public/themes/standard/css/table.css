@@ -17,11 +17,6 @@
     float: right;
 }
 
-thead th {
-    background-color: #428bca;
-    color: white;
-}
-
 .row.TFullGroupTable {
     margin: 5px 0px 5px 5px;
 }
@@ -42,17 +37,6 @@ thead th {
 
 .TFullGroupTablePerPageSelect {
     margin-top: 5px;
-}
-
-.groupCell {
-    font-weight: bolder;
-    background-color: #c6c6c6 !important;
-    padding: 0px 0px 3px 5px !important;
-    font-size: 15px;
-    line-height: 20px;
-    letter-spacing: 1px;
-    color: #428bca;
-    border-bottom: 2px solid #777 !important;
 }
 
 .groupSpacer {

@@ -241,9 +241,9 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $this->tableObj->showRecordCount = $oCMSConfig->sqlData['entry_per_page'];
 
         // style of every field
-        $this->tableObj->style->group = 'groupCell';
+        $this->tableObj->style->group = 'bg-secondary';
         $this->tableObj->style->groupSpacer = 'groupSpacer';
-        $this->tableObj->style->header = 'tblHeader';
+        $this->tableObj->style->header = 'bg-primary';
         $this->tableObj->style->navigation = 'tblNav';
         $this->tableObj->style->filter = 'tblfilter';
         $this->tableObj->style->search = 'tblsearch';
