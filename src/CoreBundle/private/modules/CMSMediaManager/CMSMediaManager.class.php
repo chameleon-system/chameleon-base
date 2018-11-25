@@ -311,7 +311,7 @@ class CMSMediaManager extends TCMSModelBase
           </div>
           <div style="float:right;width:570px;">
             <table cellpadding="0" cellspacing="0" width="100%">
-             <tr class="tblHeader">
+             <tr class="bg-primary">
                <td>'.TGlobal::Translate('chameleon_system_core.cms_module_media_manager.used_in_table').'</td>
                <td>ID</td>
                <td>'.TGlobal::Translate('chameleon_system_core.cms_module_media_manager.used_in_record').'</td>
@@ -466,7 +466,7 @@ class CMSMediaManager extends TCMSModelBase
             if ($aFoundConnections) {
                 $returnVal = '
           <table cellpadding="0" cellspacing="0" width="450">
-           <tr class="tblHeader">
+           <tr class="bg-primary">
              <td>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.used_in_table')).'</td>
              <td>ID</td>
              <td>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.used_in_record')).'</td>

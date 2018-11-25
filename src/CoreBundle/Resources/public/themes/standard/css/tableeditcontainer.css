@@ -64,14 +64,6 @@
     background-color: transparent;
 }
 
-.charCounter {
-    color: #616974;
-    background-color: #F8F2AA;
-    border: 1px solid #FFB608;
-    min-width: 70px;
-    text-align: right;
-}
-
 .passwordStrengthMeter {
     width: 246px;
     height: 35px;
@@ -307,55 +299,6 @@
 
 .button-spacing {
     margin-left: 10px;
-}
-
-/*
-* TCMSFieldBoolean
-*/
-.TCMSFieldBoolean .btn {
-    text-transform: uppercase;
-}
-
-.TCMSFieldBoolean .button-on.active {
-    color: #fff;
-    background-color: #5cb85c;
-    background-image: -webkit-linear-gradient(top, #5cb85c 0%, #419641 100%);
-    background-image:         linear-gradient(to bottom, #5cb85c 0%, #419641 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c', endColorstr='#ff419641', GradientType=0);
-    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
-    background-repeat: repeat-x;
-    border-color: #3e8f3e;
-}
-
-.TCMSFieldBoolean .button-on.active:hover,
-.TCMSFieldBoolean .button-on.active:focus,
-.TCMSFieldBoolean .button-on.active:active
-{
-    color: #fff;
-    border-color: #398439;
-    background-color: #419641;
-    background-position: 0 -15px;
-}
-
-.TCMSFieldBoolean .button-off.active {
-    color: #fff;
-    background-color: #d9534f;
-    background-image: -webkit-linear-gradient(top, #d9534f 0%, #c12e2a 100%);
-    background-image:         linear-gradient(to bottom, #d9534f 0%, #c12e2a 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9534f', endColorstr='#ffc12e2a', GradientType=0);
-    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
-    background-repeat: repeat-x;
-    border-color: #b92c28;
-}
-
-.TCMSFieldBoolean .button-off.active:hover,
-.TCMSFieldBoolean .button-off.active:focus,
-.TCMSFieldBoolean .button-off.active:active
-{
-    color: #fff;
-    border-color: #ac2925;
-    background-color: #c12e2a;
-    background-position: 0 -15px;
 }
 
 /**

@@ -343,7 +343,7 @@ class CMSDocumentManager extends TCMSModelBase
             </div>
             <div class="cleardiv">&nbsp;</div>
           <div>'.$sNotice.'<table cellpadding="0" cellspacing="0" width="100%">
-             <tr class="tblHeader">
+             <tr class="bg-primary">
                <td>ID</td>
                <td>'.TGlobal::Translate('chameleon_system_core.document_manager.connected_item_column_name').'</td>
                <td>'.TGlobal::Translate('chameleon_system_core.document_manager.connected_item_column_table').'</td>
