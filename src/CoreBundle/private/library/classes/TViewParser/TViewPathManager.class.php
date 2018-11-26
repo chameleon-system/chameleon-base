@@ -102,19 +102,19 @@ class TViewPathManager implements IViewPathManager
         /*
          * @deprecated only used by pkgBlog
          */
-        $sPath = TPkgViewRendererSnippetDirectory::PATH_MODULES;
+        $templateModulePath = TPkgViewRendererSnippetDirectory::PATH_MODULES;
         if (!TGlobal::IsCMSMode()) {
             // overwrite path with theme path if we find a portal for the current page and a theme is set
             $activePortal = $this->portalDomainService->getActivePortal();
             if (null !== $activePortal) {
                 $sThemePath = $activePortal->GetThemeObjectViewsPath();
                 if (!empty($sThemePath)) {
-                    $sPath = $sThemePath;
+                    $templateModulePath = $sThemePath;
                 }
             }
         }
 
-        $sTemplatePath = $sPath.'/'.$sViewFileName;
+        $sTemplatePath = $templateModulePath.'/'.$sViewFileName;
 
         return $sTemplatePath;
     }
@@ -191,17 +191,17 @@ class TViewPathManager implements IViewPathManager
             return $sTemplatePathFromTheme;
         }
 
-        $sPath = TPkgViewRendererSnippetDirectory::PATH_OBJECTVIEWS;
+        $templateObjectPath = TPkgViewRendererSnippetDirectory::PATH_OBJECTVIEWS;
         if ('Core' !== $sType && false == TGlobal::IsCMSMode()) {
             $activePortal = $this->portalDomainService->getActivePortal();
             if (null !== $activePortal) {
                 $sThemePath = $activePortal->GetThemeObjectViewsPath();
                 if (!empty($sThemePath)) {
-                    $sPath = $sThemePath;
+                    $templateObjectPath = $sThemePath;
                 }
             }
         }
-        $sTemplatePath = $sPath.'/'.$sFilePath;
+        $sTemplatePath = $templateObjectPath.'/'.$sFilePath;
 
         return $sTemplatePath;
     }
