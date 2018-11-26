@@ -17,8 +17,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
       'isrequired' => '1',
   ])
   ->setWhereEquals([
-      'id' => '1362',
-      'name' => 'indextype',
+      'id' => TCMSLogChange::GetTableFieldId(TCMSLogChange::GetTableId('cms_field_type'), 'indextype'),
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
