@@ -82,19 +82,6 @@ class chameleon
 
         require_once PATH_CORE_CONFIG.'/version.inc.php';
 
-        // add the static server URLs
-        $aStaticURLs = TGlobal::GetStaticURLPrefix();
-        if (!is_array($aStaticURLs)) {
-            $aStaticURLs = array($aStaticURLs);
-        }
-        $aStaticURLMapping = array();
-        $iCount = 0;
-        foreach ($aStaticURLs as $sStaticURL) {
-            $aStaticURLMapping['CMSSTATICURL_'.$iCount] = trim($sStaticURL);
-            ++$iCount;
-        }
-        TTools::AddStaticPageVariables($aStaticURLMapping);
-
         if (true === $this->isInMaintenanceMode($requestType)) {
             $this->clearMaintenanceModeMarkerFileCache();
 
