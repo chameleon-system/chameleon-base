@@ -14,7 +14,7 @@ namespace ChameleonSystem\CoreBundle\Tests\DatabaseAccessLayer;
 use ChameleonSystem\core\DatabaseAccessLayer\QueryModifierOrderBy;
 use PHPUnit\Framework\TestCase;
 
-class QueryModifierOrderByText extends TestCase
+class QueryModifierOrderByTest extends TestCase
 {
     /**
      * @var QueryModifierOrderBy
@@ -64,7 +64,7 @@ class QueryModifierOrderByText extends TestCase
      *
      * @param string $query
      * @param string $expectedResult
-     * @param array $orderBy
+     * @param array  $orderBy
      */
     public function it_handles_invalid_sort_direction(string $query, string $expectedResult, array $orderBy): void
     {
@@ -148,17 +148,17 @@ class QueryModifierOrderByText extends TestCase
             [
                 'select foo from bar order by ping ASC, pong DESC',
                 'select foo from bar ORDER BY ping ASC, newpong ASC',
-                [ 'ping' => 'ASC', 'newpong' => 'foo' ],
+                ['ping' => 'ASC', 'newpong' => 'foo'],
             ],
             [
                 'select foo from bar order by ping ASC, pong DESC',
                 'select foo from bar ORDER BY ping ASC, newpong DESC',
-                [ 'ping' => '\'; -- BOBBY TABLES', 'newpong' => 'DESC' ],
+                ['ping' => '\'; -- BOBBY TABLES', 'newpong' => 'DESC'],
             ],
             [
                 'select foo from bar order by ping ASC',
                 'select foo from bar ORDER BY ping DESC',
-                [ 'ping' => ' desc ' ],
+                ['ping' => ' desc '],
             ],
         ];
     }
