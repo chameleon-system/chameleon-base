@@ -7,7 +7,7 @@
 
 TCMSLogChange::RunQuery(__LINE__, "UPDATE `cms_field_type` SET `indextype` = 'none' WHERE `indextype` = ''");
 
-$query ="ALTER TABLE `cms_field_type`
+$query = "ALTER TABLE `cms_field_type`
                      CHANGE `indextype`
                             `indextype` ENUM('none','index','unique') DEFAULT 'none' NOT NULL COMMENT 'Field index: Defines what type of index is to be created for this field type.'";
 TCMSLogChange::RunQuery(__LINE__, $query);
@@ -21,4 +21,3 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
-
