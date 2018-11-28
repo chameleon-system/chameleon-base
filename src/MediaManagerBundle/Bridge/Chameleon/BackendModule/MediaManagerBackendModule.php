@@ -767,6 +767,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
 
         try {
             $editLanguage = $this->languageService->getActiveEditLanguage();
+            if (null === $editLanguage) {
+                $this->returnGeneralErrorMessageForAjax();
+            }
             $mediaTreeNode = $this->mediaTreeDataAccess->getMediaTreeNode($mediaTreeNodeId, $editLanguage->id);
             if (null === $mediaTreeNode) {
                 $this->returnGeneralErrorMessageForAjax();
@@ -775,7 +778,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 $mediaTreeNodeId,
                 $mediaTreeNodeParentId,
                 $position,
-                $editLanguage->id
+                $editLanguage
             );
         } catch (DataAccessException $e) {
             $this->returnGeneralErrorMessageForAjax();
