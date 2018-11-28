@@ -775,7 +775,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 $mediaTreeNodeId,
                 $mediaTreeNodeParentId,
                 $position,
-                $editLanguage
+                $editLanguage->id
             );
         } catch (DataAccessException $e) {
             $this->returnGeneralErrorMessageForAjax();
