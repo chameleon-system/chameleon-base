@@ -206,7 +206,6 @@ class TViewPathManager implements IViewPathManager
             }
         }
 
-
         return $sTemplatePath;
     }
 
