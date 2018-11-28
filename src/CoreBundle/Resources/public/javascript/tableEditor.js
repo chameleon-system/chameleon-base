@@ -710,6 +710,7 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
 
 $(document).ready(function () {
     CHAMELEON.CORE.MTTableEditor.setGetActiveTab();
+    CHAMELEON.CORE.MTTableEditor.inputFields();
 });
 
 
@@ -733,6 +734,30 @@ function updateIframeSize(sFieldName, iHeight) {
     }
 }
 
+CHAMELEON.CORE.MTTableEditor.inputFields = function () {
+    $('[data-datetimepicker-option]').each(function () {
+        console.log($(this).data("datetimepicker-option"));
+        $(this).datetimepicker( $(this).data("datetimepicker-option") );
+    });
+
+    $('.datetimepicker-input').each( function() {
+        var id = $(this).attr('id');
+
+        //this custom-event of the datetimepicker only works with the id of the element!!!
+        $('#'+id).on("change.datetimepicker", function(e) {
+            var moment = e.date;
+
+            if ($(this).hasClass('format-L')) {
+                var cmsDate = moment.format('YYYY-MM-DD');
+            } else {
+                var cmsDate = moment.format('YYYY-MM-DD HH:mm:ss');
+            }
+            // We need a sql-date-format for BC reasons.
+            $('input[name='+id+']').val(cmsDate);
+        });
+    });
+};
+
 CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent = function (selector) {
     $(selector).bind('click', function () {
         var checkBoxFieldElement = $(this);
@@ -745,7 +770,7 @@ CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent = function (selector) {
             hiddenFieldElement.removeAttr('disabled');
         }
     });
-}
+};
 
 $(document).ready(function () {
     $('.noChangesWarning').click(function () {
