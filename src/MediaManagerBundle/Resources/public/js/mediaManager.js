@@ -336,6 +336,7 @@
                 url: url,
                 data: {
                     'ps': state.pageSize,
+                    'p': state.pageNumber,
                     's': state.searchTerm,
                     'mediaTreeId': state.mediaTreeNodeId,
                     'listView': state.listView,
