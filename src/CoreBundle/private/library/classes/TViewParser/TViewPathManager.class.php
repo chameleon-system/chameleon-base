@@ -107,13 +107,18 @@ class TViewPathManager implements IViewPathManager
             // overwrite path with theme path if we find a portal for the current page and a theme is set
             $activePortal = $this->portalDomainService->getActivePortal();
             if (null !== $activePortal) {
-                $sThemePath = $activePortal->GetThemeObjectViewsPath();
+                $sThemePath = $activePortal->GetThemeBaseModuleViewsPath();
                 if (!empty($sThemePath)) {
-                    $templateModulePath = $sThemePath;
+                    $sTemplatePath = $sThemePath.'/'.$sModuleName.'/'.$sViewName.'.view.php';
                 }
             }
         }
 
+        if (null !== $sTemplatePath) {
+            return $sTemplatePath;
+        }
+
+        $templateModulePath = TPkgViewRendererSnippetDirectory::PATH_MODULES;
         $sTemplatePath = $templateModulePath.'/'.$sViewFileName;
 
         return $sTemplatePath;
@@ -191,17 +196,16 @@ class TViewPathManager implements IViewPathManager
             return $sTemplatePathFromTheme;
         }
 
-        $templateObjectPath = TPkgViewRendererSnippetDirectory::PATH_OBJECTVIEWS;
         if ('Core' !== $sType && false == TGlobal::IsCMSMode()) {
             $activePortal = $this->portalDomainService->getActivePortal();
             if (null !== $activePortal) {
                 $sThemePath = $activePortal->GetThemeObjectViewsPath();
                 if (!empty($sThemePath)) {
-                    $templateObjectPath = $sThemePath;
+                    $sTemplatePath = $sThemePath.'/'.$sFilePath;
                 }
             }
         }
-        $sTemplatePath = $templateObjectPath.'/'.$sFilePath;
+
 
         return $sTemplatePath;
     }
