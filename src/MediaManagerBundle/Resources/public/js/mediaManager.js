@@ -198,9 +198,7 @@
                 .one('state_ready.jstree', self.onTreeRestoredState.bind(this))
             ;
 
-            self.element.css('height', $(window).height() - 10);
             $(window).on('resize', function () {
-                self.element.css('height', $(window).height() - 10);
                 $('.gutter-horizontal', self.element).css('height', self.element.height());
             });
 
@@ -1036,7 +1034,9 @@
                 newHeight = this.element.height();
             }
 
-            layover.css({'height': newHeight, 'width': '100%'});
+            console.log("Setting height "+newHeight);
+
+            //layover.css({'height': newHeight, 'width': '100%'});
             closeButton.on('click', function (evt) {
                 self.showWaitingAnimation();
                 layover.remove();
