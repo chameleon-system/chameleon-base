@@ -46,7 +46,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
           ';
 
         $activeUser = &TCMSUser::GetActiveUser();
-        if ($activeUser->oAccessManager->HasNewPermission($foreignTableName)) {
+        if (true === $this->canShowNewRecordButton() && true === $activeUser->oAccessManager->HasNewPermission($foreignTableName)) {
             $html .= "<a href=\"javascript:document.cmseditform.tableid.value='".TGlobal::OutJS($oTargetTableConf->sqlData['id'])."';ExecutePostCommand('Insert');\" class=\"checkBoxHeaderActionLink\" style=\"margin-left: 10px; background: url(".URL_CMS.'/images/icons/page_new.gif) 0px 3px no-repeat;">'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.new').'</a>';
         }
         $urlUtil = $this->getUrlUtil();
@@ -117,6 +117,11 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
       </div>';
 
         return $html;
+    }
+
+    protected function canShowNewRecordButton(): bool
+    {
+        return true;
     }
 
     /**
