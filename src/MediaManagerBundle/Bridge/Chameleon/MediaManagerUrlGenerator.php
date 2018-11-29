@@ -67,10 +67,6 @@ class MediaManagerUrlGenerator implements MediaManagerUrlGeneratorInterface
      */
     public function openStandaloneMediaManagerInNewWindow()
     {
-        if ('1' === $this->inputFilterUtil->getFilteredGetInput('pickImage')) {
-            return true;
-        }
-
         return $this->openInNewWindow;
     }
 
