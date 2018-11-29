@@ -410,6 +410,14 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
             if (array_key_exists('height', $oPostTable->sqlData)) {
                 $this->SaveField('height', $oPostTable->sqlData['height']);
             }
+            if (array_key_exists('width', $oPostTable->sqlData)) {
+                // See https://github.com/chameleon-system/chameleon-system/issues/30
+                // TODO remove with https://github.com/chameleon-system/chameleon-system/issues/30 - do not use TCMSFieldMediaProperties for "width"
+
+                $this->AllowEditByAll(true);
+                $this->SaveField('width', $oPostTable->sqlData['width']);
+                $this->AllowEditByAll(false);
+            }
 
             $this->SaveField('date_changed', date('Y-m-d H:i:s'));
             /**
