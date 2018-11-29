@@ -1029,14 +1029,6 @@
             var closeButton = $('<span class="close-button">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.close_button_text') + ' <span class="glyphicon glyphicon-remove"></span></span>');
             var layover = $('<div class="media-manager-layover"><div class="title h3">' + title + '</div></div>');
 
-            var newHeight = $(window).height() - this.editContainer.offset().top;
-            if (newHeight < this.element.height()) {
-                newHeight = this.element.height();
-            }
-
-            console.log("Setting height "+newHeight);
-
-            //layover.css({'height': newHeight, 'width': '100%'});
             closeButton.on('click', function (evt) {
                 self.showWaitingAnimation();
                 layover.remove();
