@@ -1873,7 +1873,7 @@ class TCMSLogChange
     /**
      * @return IPkgCmsCoreLog
      *
-     * @deprecated - use getLogger()
+     * @deprecated since 6.3.0 - use getLogger()
      */
     public static function getUpdateLogger()
     {

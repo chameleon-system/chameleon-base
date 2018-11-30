@@ -71,7 +71,7 @@ None.
 
 ## Classes and Interfaces
 
-None.
+- \IPkgCmsCoreLog
 
 ## Properties
 
@@ -90,6 +90,9 @@ None.
 - \ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::getModules()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
+- \TCMSCronJob::getLogger()
+- \TPkgCmsException_Log::getLogger()
+- \TCMSLogChange::getUpdateLogger()
 - \TTools::AddStaticPageVariables()
 
 ## JavaScript Files and Functions

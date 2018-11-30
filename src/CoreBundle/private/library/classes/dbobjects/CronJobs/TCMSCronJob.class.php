@@ -57,7 +57,7 @@ class TCMSCronJob extends TCMSRecord
     /**
      * @return IPkgCmsCoreLog
      *
-     * @deprecated - use getCronjobLogger()
+     * @deprecated since 6.3.0 - use getCronjobLogger()
      */
     protected function getLogger()
     {

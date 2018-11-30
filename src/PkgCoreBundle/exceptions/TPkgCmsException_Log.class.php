@@ -68,7 +68,7 @@ class TPkgCmsException_Log extends TPkgCmsException
     /**
      * @return IPkgCmsCoreLog
      *
-     * @deprecated - use getExceptionLogger()
+     * @deprecated since 6.3.0 - use getExceptionLogger()
      */
     protected function getLogger()
     {

@@ -11,6 +11,9 @@
 
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 
+/**
+ * @deprecated since 6.3.0
+ */
 class TPkgCmsCoreLog implements IPkgCmsCoreLog
 {
     /**
