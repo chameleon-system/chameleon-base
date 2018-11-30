@@ -27,6 +27,55 @@ The system now uses Symfony 3.4, which needs a few adjustments:
 The system now uses Twig 2.x. Please have a look at the Twig changelog for required adjustments, but major problems are
 not expected.
 
+## Logging
+
+Any logging should now be done using `Monolog` (and `LoggerInterface`).
+Desired differences in logging - like different log files - should be configured using Monolog or implemented using
+its interfaces (like `HandlerInterface`, `ProcessorInterface`, ...).
+
+NOTE that the old default logging into the database is not done anymore.
+You can still configure this if needed with the service `cmsPkgCore.logHandler.database` (TPkgCmsCoreLogMonologHandler_Database).
+Also note that the standard logging channel is not configured as "fingerscrossed" anymore. All messages there will simply
+be logged everytime.
+See below for the full legacy config.
+
+This was largely changed in the two base packages (chameleon-base and chameleon-shop).
+
+However deprecated service definitions for the old log (channel) handler classes still exist in 
+`vendor/chameleon-system/chameleon-base/src/CmsCoreLogBundle/Resources/config/services.xml`.
+
+The full config (in config.yml) that would replicate the legacy logging behavior of Chameleon 6.2 looks like this:
+
+```
+monolog:
+   handlers:
+     database:
+       type: service
+       id: cmsPkgCore.logHandler.database
+       channels:
+         - "core_security"
+         - "core_cms_updates"
+         - "core_cronjobs"
+         - "core_api"
+ 
+     database_for_fingers_crossed:
+       type: service
+       id: cmsPkgCore.logHandler.database
+ 
+     standard:
+       type: fingers_crossed
+       handler: database_for_fingers_crossed
+       channels:
+         - "core_standard"
+ 
+     dbal:
+       type: stream
+       path: "%kernel.logs_dir%/dbal.log"
+       channels:
+         - "core_dbal"
+       level: warning
+```
+
 ## TTools::GetModuleLoaderObject Returns New Object
 
 The method `TTools::GetModuleLoaderObject` now returns a new `TModuleLoader` instance instead of the global module
