@@ -736,7 +736,6 @@ function updateIframeSize(sFieldName, iHeight) {
 
 CHAMELEON.CORE.MTTableEditor.inputFields = function () {
     $('[data-datetimepicker-option]').each(function () {
-        console.log($(this).data("datetimepicker-option"));
         $(this).datetimepicker( $(this).data("datetimepicker-option") );
     });
 
