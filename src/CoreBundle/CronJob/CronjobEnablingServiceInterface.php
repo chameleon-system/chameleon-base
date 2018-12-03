@@ -33,5 +33,5 @@ interface CronjobEnablingServiceInterface
     /**
      * @throws CronjobEnableException
      */
-    public function disableAllCronjobExecution() :void;
+    public function disableCronjobExecution() :void;
 }
