@@ -21,7 +21,8 @@ logged, potentially leading to huge log files and if there is a large number of 
 environment will degrade. Therefore it is recommended to deal with most of the deprecations.
 
 The scope concept is gone. Remove any scope references in service definitions (e.g. Chameleon modules used
-`scope="prototype"` in the past, which should have been changed to `shared="false"` when migrating to 6.2.x).
+`scope="prototype"` in the past; if you didn't change these services to use `shared="false"` during the migration to
+Chameleon 6.2.x, it needs to be done now).
 
 In `app/config/routing_dev.yml`, replace this route import:
 
