@@ -66,7 +66,7 @@ class TCMSCronJob extends TCMSRecord
 
     protected function getCronjobLogger(): LoggerInterface
     {
-        return ServiceLocator::get('monolog.logger.chameleon_cronjobs');
+        return ServiceLocator::get('monolog.logger.chameleon_cronjob');
     }
 
     /**

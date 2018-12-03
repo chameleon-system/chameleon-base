@@ -83,7 +83,7 @@
 
         <service id="cmsPkgCore.logChannel.cmsUpdates" class="TPkgCmsCoreLog">
             <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
-            <argument type="service" id="monolog.logger.chameleon_cms_updates"/>
+            <argument type="service" id="monolog.logger.chameleon_cms_update"/>
         </service>
 
         <service id="cmsPkgCore.logDriver.cronjobs" class="Monolog\Logger" public="false">
@@ -96,7 +96,7 @@
 
         <service id="cmsPkgCore.logChannel.cronjobs" class="TPkgCmsCoreLog">
             <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
-            <argument type="service" id="monolog.logger.chameleon_cronjobs"/>
+            <argument type="service" id="monolog.logger.chameleon_cronjob"/>
         </service>
 
         <service id="cmsPkgCore.logDriver.apilogger" class="Monolog\Logger" public="false">

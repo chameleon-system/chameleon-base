@@ -111,8 +111,8 @@ monolog:
   # It is only necessary here in advance for backwards-compatibility (ie users of "IPkgCmsCoreLog" and any Tdb or TCMS object).
   channels:
     - "chameleon"
-    - "chameleon_cms_updates"
-    - "chameleon_cronjobs"
+    - "chameleon_cms_update"
+    - "chameleon_cronjob"
     # legacy channels
     - "chameleon_security"
     - "chameleon_dbal"
