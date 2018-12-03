@@ -56,7 +56,7 @@ class TCMSFieldLookupMultiselectCheckboxesSelectFieldsFromTable extends TCMSFiel
     /**
      * {@inheritdoc}
      */
-    protected function canShowNewRecordButton(): bool
+    protected function isRecordCreationAllowed(): bool
     {
         return false; // Would make no sense (no use-case) here: Create a new field in cms_field_conf.
     }
