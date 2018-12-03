@@ -20,7 +20,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
       'restrict_to_groups' => '0',
       'field_width' => '0',
       'position' => '2171',
-      '049_helptext' => 'Gibt an, ob Cronjobs ausgeführt werden sollen. Dies wird kurz vor der Ausführung eines jeden Cronjobs geprüft. Es kann also die Ausführung aller Cronjobs mittendrin unterbrochen werden.
+      '049_helptext' => 'Gibt an, ob Cronjobs ausgeführt werden sollen. Falls die Cronjobs deaktiviert werden während sie gerade ausgeführt werden, wird der aktuelle Job regulär zu Ende ausgeführt, aber kein weiterer Job mehr gestartet.
 Dabei wird allerdings der gerade laufende nicht abgebrochen. #135',
       'row_hexcolor' => '',
       'is_translatable' => '0',
