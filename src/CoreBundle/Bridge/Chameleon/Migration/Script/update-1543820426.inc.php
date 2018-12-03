@@ -38,7 +38,7 @@ TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_config'), 'cronjo
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields([
         'translation' => 'Cronjobs enabled',
-        '049_helptext' => 'Specifies if cron jobs should be executed. If cronjob execution is deactivated during execution, the current job is still completed, but no further job gets started.
+        '049_helptext' => 'Specifies if cron jobs should be executed. If cronjob execution is deactivated during execution the current job is still completed, but no further job gets started.
 The currently running cron job is not cancelled however. #135',
     ])
     ->setWhereEquals([
