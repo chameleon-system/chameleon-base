@@ -5,10 +5,10 @@
 </div>
 <?php
 
-$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
+$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
   ->setFields([
       'name' => 'cronjobs_enabled',
-      'translation' => 'Cronjobs erlaubt',
+      'translation' => 'Cronjobs aktiv',
       'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_BOOLEAN'),
       'cms_tbl_field_tab' => '',
       'isrequired' => '0',
