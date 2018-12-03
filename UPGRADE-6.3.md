@@ -116,7 +116,25 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Services
 
-None.
+- cmsPkgCore.logChannel.apilogger
+- cmsPkgCore.logChannel.cmsUpdates
+- cmsPkgCore.logChannel.cronjobs
+- cmsPkgCore.logChannel.dbal
+- cmsPkgCore.logChannel.security
+- cmsPkgCore.logChannel.standard
+- cmsPkgCore.logDriver.apilogger
+- cmsPkgCore.logDriver.cmsUpdates
+- cmsPkgCore.logDriver.cronjobs
+- cmsPkgCore.logDriver.dbal
+- cmsPkgCore.logDriver.security
+- cmsPkgCore.logDriver.standard
+- cmsPkgCore.logHandler.dbal
+- cmsPkgCore.logHandler.files
+- cmsPkgCore.logHandler.fingerscrossed
+- pkgShopPaymentPayone.logChannel.apilogger
+- pkgShopPaymentPayone.logChannel.standard
+- pkgShopPaymentPayone.logDriver.apilogger
+- pkgShopPaymentPayone.logDriver.standard
 
 ## Container Parameters
 
@@ -129,6 +147,7 @@ None.
 ## Classes and Interfaces
 
 - \IPkgCmsCoreLog
+- \TPkgCmsCoreLog
 
 ## Properties
 
