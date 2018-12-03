@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\CronJob\CronjobEnablingServiceInterface;
 use ChameleonSystem\CoreBundle\CronJob\CronJobFactoryInterface;
 use ChameleonSystem\CoreBundle\SanityCheck\CronJobDataAccess;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -36,7 +37,7 @@ class CMSRunCrons extends TModelBase
             if (!empty($sCronID)) {
                 $oTdbCmsCronJob = TdbCmsCronjobs::GetNewInstance();
                 $oTdbCmsCronJob->Load($sCronID);
-                if (false === $oTdbCmsCronJob->fieldLock) {
+                if (false === $oTdbCmsCronJob->fieldLock && true === $this->isCronjobsEnabled()) {
                     $this->RunCronJob($oTdbCmsCronJob, true);
                 }
             }
@@ -54,11 +55,20 @@ class CMSRunCrons extends TModelBase
             $oTdbCmsCronjobsList = TdbCmsCronjobsList::GetList($sQuery);
             /** @var $oTdbCmsCronJob TdbCmsCronjobs */
             while ($oTdbCmsCronJob = $oTdbCmsCronjobsList->Next()) {
+                if (false === $this->isCronjobsEnabled()) {
+                    break;
+                }
+
                 $this->RunCronJob($oTdbCmsCronJob);
             }
         }
 
         return $this->data;
+    }
+
+    private function isCronjobsEnabled(): bool
+    {
+        return $this->getCronjobActivationService()->isCronjobExecutionEnabled();
     }
 
     protected function unlockOldBlockedCronJobs()
@@ -110,5 +120,10 @@ class CMSRunCrons extends TModelBase
     private function getCronjobFactory()
     {
         return ServiceLocator::get('chameleon_system_core.cronjob.cronjob_factory');
+    }
+
+    private function getCronjobActivationService(): CronjobEnablingServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cronjob.cronjob_enabling_service');
     }
 }

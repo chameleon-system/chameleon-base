@@ -759,6 +759,11 @@
             <argument /> <!-- Service locator will be set by AddCronJobsPass -->
         </service>
 
+        <service id="chameleon_system_core.cronjob.cronjob_enabling_service" class="ChameleonSystem\CoreBundle\CronJob\CronjobEnablingService" public="true">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_cms_cache.cache"/>
+        </service>
+
         <service id="security.csrf.token_storage" class="ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenStorage" public="false">
             <argument type="service" id="request_stack"/>
         </service>
@@ -813,6 +818,16 @@
 
         <service id="chameleon_system_core.command.deactivate_maintenance_mode" class="ChameleonSystem\CoreBundle\Command\DeactivateMaintenanceModeCommand">
             <argument type="service" id="chameleon_system_core.maintenance_mode_service"/>
+            <tag name="console.command"/>
+        </service>
+
+        <service id="chameleon_system_core.command.activate_cronjobs" class="ChameleonSystem\CoreBundle\Command\EnableCronjobsCommand">
+            <argument type="service" id="chameleon_system_core.cronjob.cronjob_enabling_service"/>
+            <tag name="console.command"/>
+        </service>
+
+        <service id="chameleon_system_core.command.deactivate_cronjobs" class="ChameleonSystem\CoreBundle\Command\DisableCronjobsCommand">
+            <argument type="service" id="chameleon_system_core.cronjob.cronjob_enabling_service"/>
             <tag name="console.command"/>
         </service>
 
