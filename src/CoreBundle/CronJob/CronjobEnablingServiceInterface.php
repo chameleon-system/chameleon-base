@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\CronJob;
 
-use ChameleonSystem\CoreBundle\Exception\CronjobEnableException;
+use ChameleonSystem\CoreBundle\Exception\CronjobHandlingException;
 
 /**
  * Enables or disables all cronjobs.
@@ -26,12 +26,17 @@ interface CronjobEnablingServiceInterface
     public function isCronjobExecutionEnabled(): bool;
 
     /**
-     * @throws CronjobEnableException
+     * @throws CronjobHandlingException
      */
     public function enableCronjobExecution(): void;
 
     /**
-     * @throws CronjobEnableException
+     * @throws CronjobHandlingException
      */
     public function disableCronjobExecution(): void;
+
+    /**
+     * @throws CronjobHandlingException
+     */
+    public function isOneCronjobRunning(): bool;
 }

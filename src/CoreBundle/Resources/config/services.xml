@@ -815,6 +815,11 @@
             <tag name="console.command"/>
         </service>
 
+        <service id="chameleon_system_core.command.active_cronjob_check" class="ChameleonSystem\CoreBundle\Command\ActiveCronjobCommand">
+            <argument type="service" id="chameleon_system_core.cronjob.cronjob_enabling_service"/>
+            <tag name="console.command"/>
+        </service>
+
         <service id="chameleon_system_core.response.response_variable_replacer" class="ChameleonSystem\CoreBundle\Response\ResponseVariableReplacer" public="true">
             <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager"/>
             <argument type="service" id="chameleon_system_core.flash_messages"/>

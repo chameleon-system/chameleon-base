@@ -11,6 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\Exception;
 
-class CronjobEnableException extends \Exception
+class CronjobHandlingException extends \Exception
 {
 }

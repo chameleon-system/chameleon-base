@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\CronJob;
 
-use ChameleonSystem\CoreBundle\Exception\CronjobEnableException;
+use ChameleonSystem\CoreBundle\Exception\CronjobHandlingException;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use esono\pkgCmsCache\CacheInterface;
@@ -39,11 +39,18 @@ class CronjobEnablingService implements CronjobEnablingServiceInterface
     {
         $config = TdbCmsConfig::GetInstance();
 
+        $t = $this->connection->fetchColumn("SELECT COUNT(*) FROM `cms_cronjobs` WHERE `lock` = '1'");
+        $x = $t > 0;
+
+        if ($x) {
+            $dmy = 0;
+        }
+
         return true === $config->fieldCronjobsEnabled;
     }
 
     /**
-     * @throws CronjobEnableException
+     * @throws CronjobHandlingException
      */
     public function enableCronjobExecution(): void
     {
@@ -51,12 +58,12 @@ class CronjobEnablingService implements CronjobEnablingServiceInterface
             $this->connection->executeUpdate("UPDATE `cms_config` SET `cronjobs_enabled` = '1'");
             $this->cache->callTrigger('cms_config');
         } catch (DBALException $exception) {
-            throw new CronjobEnableException('Cannot save cron jobs enable flag in database.', 0, $exception);
+            throw new CronjobHandlingException('Cannot save cron jobs enable flag in database.', 0, $exception);
         }
     }
 
     /**
-     * @throws CronjobEnableException
+     * @throws CronjobHandlingException
      */
     public function disableCronjobExecution(): void
     {
@@ -64,7 +71,21 @@ class CronjobEnablingService implements CronjobEnablingServiceInterface
             $this->connection->executeUpdate("UPDATE `cms_config` SET `cronjobs_enabled` = '0'");
             $this->cache->callTrigger('cms_config');
         } catch (DBALException $exception) {
-            throw new CronjobEnableException('Cannot reset cron jobs enable flag in database.', 0, $exception);
+            throw new CronjobHandlingException('Cannot reset cron jobs enable flag in database.', 0, $exception);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isOneCronjobRunning(): bool
+    {
+        try {
+            $t = $this->connection->fetchColumn("SELECT COUNT(*) FROM `cms_cronjobs` WHERE `lock` = '1'");
+
+            return $this->connection->fetchColumn("SELECT COUNT(*) FROM `cms_cronjobs` WHERE `lock` = '1'") > 0;
+        } catch (DBALException $exception) {
+            throw new CronjobHandlingException('Cannot check for cron jobs in database.', 0, $exception);
         }
     }
 }

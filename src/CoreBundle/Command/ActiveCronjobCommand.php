@@ -17,7 +17,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DisableCronjobsCommand extends Command
+class ActiveCronjobCommand extends Command
 {
     /**
      * @var CronjobEnablingServiceInterface
@@ -26,7 +26,7 @@ class DisableCronjobsCommand extends Command
 
     public function __construct(CronjobEnablingServiceInterface $cronjobEnablingService)
     {
-        parent::__construct('chameleon_system:cronjobs:disable');
+        parent::__construct('chameleon_system:cronjobs:active_check');
 
         $this->cronjobEnablingService = $cronjobEnablingService;
     }
@@ -37,9 +37,9 @@ class DisableCronjobsCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Disables the cron job execution')
+            ->setDescription('Checks if any cron job is running')
             ->setHelp(<<<EOF
-The <info>%command.name%</info> command disables all cronjob execution.
+The <info>%command.name%</info> command outputs "true" if a cron job is currently running. Otherwise "false".
 EOF
             )
         ;
@@ -51,9 +51,13 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $this->cronjobEnablingService->disableCronjobExecution();
+            if (true === $this->cronjobEnablingService->isOneCronjobRunning()) {
+                $output->writeln('true');
+            } else {
+                $output->writeln('false');
+            }
         } catch (CronjobHandlingException $exception) {
-            $output->writeln(sprintf('Cron job execution could not be disabled: %s', $exception->getMessage()));
+            $output->writeln(sprintf('Cron job execution could not be checked: %s', $exception->getMessage()));
 
             return 1;
         }
