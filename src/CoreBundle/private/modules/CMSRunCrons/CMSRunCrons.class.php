@@ -66,7 +66,7 @@ class CMSRunCrons extends TModelBase
         return $this->data;
     }
 
-    private function isCronjobsEnabled(): bool
+    private function isCronjobExecutionEnabled(): bool
     {
         return $this->getCronjobActivationService()->isCronjobExecutionEnabled();
     }
