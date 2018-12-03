@@ -38,6 +38,7 @@ class CronjobEnablingService implements CronjobEnablingServiceInterface
     public function isCronjobExecutionEnabled(): bool
     {
         $config = TdbCmsConfig::GetInstance(true);
+
         return true === $config->fieldCronjobsEnabled;
     }
 
