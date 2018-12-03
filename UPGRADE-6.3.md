@@ -94,8 +94,16 @@ Note that ONLY BC breaking changes are listed, according to our backwards compat
 
 ## \TTools
 
-- Changed method `WriteLogEntry()`: parameter `$sLogFileName` is now ignored
-- Changed method `WriteLogEntrySimple()`: parameter `$sLogFileName` is now ignored
+- Changed method `WriteLogEntry()`: parameter `$sLogFileName` is now ignored.
+- Changed method `WriteLogEntrySimple()`: parameter `$sLogFileName` is now ignored.
+
+## \ChameleonSystem\AmazonPaymentBundle\AmazonOrderReferenceObject
+
+- Changed method `__construct()` is now using `LoggerInterface` as parameter type.
+
+## \ChameleonSystem\AmazonPaymentBundle\AmazonPaymentGroupConfig
+
+- Changed method `setLogger()` is now using `LoggerInterface` as parameter type.
 
 # Deprecated Code Entities
 

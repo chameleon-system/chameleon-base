@@ -31,6 +31,14 @@ Furthermore it contains some channel names for legacy classes (without dependenc
 
 The `PrependExtensionInterface` would normally also be used for legacy classes and
 their respective logging channel definitions in bundles.
+Pre-defining a log channel there works like this:
+```   
+public function prepend(ContainerBuilder $container)
+ {
+     $container->prependExtensionConfig('monolog', ['channels' => ['chameleon_order']]);
+ }
+```
+
 
 
 The default logging channel name of any message if not otherwise specified is "app".
@@ -42,5 +50,42 @@ a `LoggerInterface` class of Monolog (normally just "logger").
 If you need further logging behavior you can either use the respective `Monolog` classes (ie MandrillHandler, 
 MemoryProcessor or HtmlFormatter) or implement them yourself using the Monolog interfaces.
 
-## Best practises
+## Config examples
 
+- Changing the log (line) format - here omitting the date
+```
+<service id="chameleon_system_cms_core_log.formatter_with_stacktraces" class="Monolog\Formatter\LineFormatter" public="false">
+    <!-- See \Monolog\Formatter\LineFormatter::SIMPLE_FORMAT for the default format: -->
+    <argument type="string">%%channel%%.%%level_name%%: %%message%% %%context%% %%extra%%\n</argument>
+    <call method="includeStacktraces"/>
+</service>
+```
+
+- Logging to standard output - with the above line formatter
+```
+monolog:
+  handlers:
+    main:
+      type: stream
+      path: "php://stdout"
+      formatter: chameleon_system_cms_core_log.formatter_with_stacktraces
+```
+NOTE used inside a docker the docker also prepends every log message with a warning prefix and an additional date.
+
+- Usage of a fingers crossed logger
+```
+monolog:
+  handlers:
+     # Logs everything to the database
+     database_for_fingers_crossed:
+       type: service
+       id: cmsPkgCore.logHandler.database
+ 
+     # Takes/replaces the above handler and amends its behavior with "fingers crossed" (log everything once an error occurs)
+     standard:
+       type: fingers_crossed
+       handler: database_for_fingers_crossed
+       channels:
+         - "standard"
+```
+NOTE logging (with `database_for_fingers_crossed`) is then only done once warning or above occurs and only for channel "standard" 
