@@ -28,7 +28,7 @@ interface CronjobEnablingServiceInterface
     /**
      * @throws CronjobEnableException
      */
-    public function enableAllCronjobExecution() : void;
+    public function enableCronjobExecution() : void;
 
     /**
      * @throws CronjobEnableException
