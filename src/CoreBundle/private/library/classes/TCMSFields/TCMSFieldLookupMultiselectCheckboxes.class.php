@@ -120,7 +120,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
 
     protected function isRecordCreationAllowed(string $foreignTableName): bool
     {
-        $activeUser = &TCMSUser::GetActiveUser();
+        $activeUser = TCMSUser::GetActiveUser();
 
         if (null === $activeUser) {
             return false;
@@ -131,7 +131,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
 
     protected function isRecordChangingAllowed(string $foreignTableName): bool
     {
-        $activeUser = &TCMSUser::GetActiveUser();
+        $activeUser = TCMSUser::GetActiveUser();
 
         if (null === $activeUser) {
             return false;
