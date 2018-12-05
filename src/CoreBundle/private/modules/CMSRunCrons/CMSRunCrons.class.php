@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\CronJob\CronjobEnablingServiceInterface;
 use ChameleonSystem\CoreBundle\CronJob\CronJobFactoryInterface;
 use ChameleonSystem\CoreBundle\SanityCheck\CronJobDataAccess;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
 
 /**
  * runs one explicit or all cronjobs.
@@ -52,10 +53,17 @@ class CMSRunCrons extends TModelBase
                      AND `active` = '1'
                 ORDER BY `execute_every_n_minutes`
                  ";
+
+            $cronjobsWereEnabled = $this->isCronjobExecutionEnabled();
+
             $oTdbCmsCronjobsList = TdbCmsCronjobsList::GetList($sQuery);
             /** @var $oTdbCmsCronJob TdbCmsCronjobs */
             while ($oTdbCmsCronJob = $oTdbCmsCronjobsList->Next()) {
                 if (false === $this->isCronjobExecutionEnabled()) {
+                    if (true === $cronjobsWereEnabled) {
+                        $this->getLogger()->warning(sprintf('Executing all cronjobs was disabled before executing %s', $oTdbCmsCronJob->id));
+                    }
+
                     break;
                 }
 
@@ -125,5 +133,10 @@ class CMSRunCrons extends TModelBase
     private function getCronjobActivationService(): CronjobEnablingServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.cronjob.cronjob_enabling_service');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger'); // TODO this must use (the channel) monolog.logger.cms_update once #92 is finished
     }
 }
