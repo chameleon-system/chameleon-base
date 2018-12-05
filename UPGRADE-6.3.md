@@ -76,6 +76,45 @@ monolog:
        level: warning
 ```
 
+Example for changing/defining a log handler for a channel logging to a file:
+
+Old in service.xml:
+```
+<service id="cmsPkgCore.logHandler.files" class="Monolog\Handler\StreamHandler" public="false">
+    <argument>%kernel.logs_dir%/core.log</argument>
+    <argument>200</argument>
+</service>
+        
+<service id="cmsPkgCore.logDriver.cmsUpdates" class="Monolog\Logger" public="false">
+    <argument>core.cmsUpdates</argument>
+    <call method="pushHandler">
+        <argument type="service" id="cmsPkgCore.logHandler.files"/>
+    </call>
+</service>
+
+<service id="cmsPkgCore.logChannel.cmsUpdates" class="TPkgCmsCoreLog">
+    <argument type="service" id="monolog.logger.chameleon_cms_update"/>
+</service>
+```
+
+New in config.yml - changed the channel name slightly:
+```
+monolog:
+   handlers:
+       cms_updates:
+           type: stream
+           path: "%kernel.logs_dir%/core.log"
+           channels:
+               - "cms_updates
+           level: info
+```
+
+This is then used in that service.xml as two service arguments instead of a reference to `cmsPkgCore.logChannel.cmsUpdates`:
+```
+    <argument type="service" id="logger"/>
+    <tag name="monolog.logger" channel="cms_updates"/>
+```
+
 ## TTools::GetModuleLoaderObject Returns New Object
 
 The method `TTools::GetModuleLoaderObject` now returns a new `TModuleLoader` instance instead of the global module
@@ -138,7 +177,7 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Container Parameters
 
-None.
+- Three (newly) defined logging channels are deprecated and only necessary for backwards compatibility: chameleon_security, chameleon_dbal, chameleon_api
 
 ## Constants
 
