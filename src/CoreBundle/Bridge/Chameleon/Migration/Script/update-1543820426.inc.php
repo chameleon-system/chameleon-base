@@ -49,6 +49,3 @@ $query ="ALTER TABLE `cms_config`
                         ADD `cronjobs_enabled` ENUM('0','1') DEFAULT '1' NOT NULL COMMENT 'Cronjobs aktiv: Gibt an, ob Cronjobs ausgeführt werden sollen. Dies wird kurz vor der Ausführung eines jeden Cronjobs geprüft. Es kann also die Ausführung aller Cronjobs mittendrin unterbrochen werden.\\nDabei wird allerdings der gerade laufende nicht a'";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
-$query ="ALTER TABLE `cms_config` ADD INDEX ( `cronjobs_enabled` )";
-TCMSLogChange::RunQuery(__LINE__, $query);
-
