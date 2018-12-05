@@ -20,8 +20,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
       'restrict_to_groups' => '0',
       'field_width' => '0',
       'position' => '2171',
-      '049_helptext' => 'Gibt an, ob Cronjobs ausgeführt werden sollen. Falls die Cronjobs deaktiviert werden während sie gerade ausgeführt werden, wird der aktuelle Job regulär zu Ende ausgeführt, aber kein weiterer Job mehr gestartet.
-Dabei wird allerdings der gerade laufende nicht abgebrochen. #135',
+      '049_helptext' => 'Gibt an, ob Cronjobs ausgeführt werden sollen. Falls die Cronjobs deaktiviert werden während sie gerade ausgeführt werden, wird der aktuelle Job regulär zu Ende ausgeführt, aber kein weiterer Job mehr gestartet. #135',
       'row_hexcolor' => '',
       'is_translatable' => '0',
       'validation_regex' => '',
@@ -38,8 +37,7 @@ TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_config'), 'cronjo
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields([
         'translation' => 'Cronjobs enabled',
-        '049_helptext' => 'Specifies if cron jobs should be executed. If cronjob execution is deactivated during execution the current job is still completed, but no further job gets started.
-The currently running cron job is not cancelled however. #135',
+        '049_helptext' => 'Specifies if cron jobs should be executed. If cronjob execution is deactivated during execution the current job is still completed, but no further job gets started. #135',
     ])
     ->setWhereEquals([
         'id' => 'f3d7a042-69ae-521f-4fd9-8c145d7571c3',
