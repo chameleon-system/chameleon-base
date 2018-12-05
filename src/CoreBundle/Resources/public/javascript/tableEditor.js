@@ -755,6 +755,10 @@ CHAMELEON.CORE.MTTableEditor.inputFields = function () {
             $('input[name='+id+']').val(cmsDate);
         });
     });
+
+    $('[data-select2-option]').each(function () {
+        $(this).select2( $(this).data("select2-option") );
+    });
 };
 
 CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent = function (selector) {

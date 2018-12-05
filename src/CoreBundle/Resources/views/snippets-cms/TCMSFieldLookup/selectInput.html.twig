@@ -1,0 +1,34 @@
+
+{% set selectOptions -%}
+    {"placeholder": "{{ 'chameleon_system_core.form.select_box_nothing_selected'|trans }}"{% if allowEmptySelection %}, "allowClear": true{% endif %} }
+{%- endset %}
+
+<div class="lookup-container row">
+    <div class="col-12 col-md-8">
+        <select name="{{ fieldName }}" id="{{ fieldName }}" class="{{ sClass }} comboboxContainer" data-select2-option='{{ selectOptions }}' style="width: 100%;">
+            {% if allowEmptySelection %}
+                <option></option>
+            {% endif %}
+            {% for key, option in options %}
+                {% if key == connectedRecordId %}
+                    {% set selected = 'selected=selected' %}
+                {% else %}
+                    {% set selected = '' %}
+                {% endif %}
+                <option {{ selected }} value="{{ key }}">{{ option }}</option>
+            {% endfor %}
+
+        </select>
+    </div>
+
+    <div class="col-12 pt-2 col-md-4 pt-md-0">
+        {% if buttonLink is defined %}
+            <button type="button" class="btn btn-sm btn-secondary" onclick="{{ buttonLink }}">{{ 'chameleon_system_core.field_lookup.switch_to'|trans }}</button>
+        {% endif %}
+    </div>
+</div>
+{% if showErrorMessage %}     {# current ID is an orphan, show message #}
+    <div class="error mt-2">
+        {{ 'chameleon_system_core.field_lookup.error_assigned_id_does_not_exists'|trans({'%id%': connectedRecordId }) }}
+    </div>
+{% endif %}
