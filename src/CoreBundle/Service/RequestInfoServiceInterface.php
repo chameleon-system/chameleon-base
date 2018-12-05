@@ -55,4 +55,11 @@ interface RequestInfoServiceInterface
      * @return string
      */
     public function getPathInfoWithoutPortalAndLanguagePrefix();
+
+    /**
+     * Returns the a unique id for every request.
+     *
+     * @return string
+     */
+    public function getRequestId(): string;
 }

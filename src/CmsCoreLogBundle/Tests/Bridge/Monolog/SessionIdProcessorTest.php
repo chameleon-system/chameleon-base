@@ -53,7 +53,7 @@ class SessionIdProcessorTest extends TestCase
         $this->subject = new SessionIdProcessor($this->mockRequestStack->reveal());
     }
 
-    public function testInvokeAddsTheRequestId(): void
+    public function testInvokeAddsTheSessionId(): void
     {
         $sessionId = 'session-id';
         $this->givenARequest();
