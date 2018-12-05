@@ -37,7 +37,7 @@ class CMSRunCrons extends TModelBase
             if (!empty($sCronID)) {
                 $oTdbCmsCronJob = TdbCmsCronjobs::GetNewInstance();
                 $oTdbCmsCronJob->Load($sCronID);
-                if (false === $oTdbCmsCronJob->fieldLock && true === $this->isCronjobsEnabled()) {
+                if (false === $oTdbCmsCronJob->fieldLock && true === $this->isCronjobExecutionEnabled()) {
                     $this->RunCronJob($oTdbCmsCronJob, true);
                 }
             }
@@ -55,7 +55,7 @@ class CMSRunCrons extends TModelBase
             $oTdbCmsCronjobsList = TdbCmsCronjobsList::GetList($sQuery);
             /** @var $oTdbCmsCronJob TdbCmsCronjobs */
             while ($oTdbCmsCronJob = $oTdbCmsCronjobsList->Next()) {
-                if (false === $this->isCronjobsEnabled()) {
+                if (false === $this->isCronjobExecutionEnabled()) {
                     break;
                 }
 
