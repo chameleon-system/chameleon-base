@@ -28,6 +28,11 @@
             <tag name="monolog.processor"/>
         </service>
 
+        <service id="chameleon_system_cms_core_log.processor.session_id" class="ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\SessionIdProcessor" public="false">
+            <argument type="service" id="request_stack"/>
+            <tag name="monolog.processor"/>
+        </service>
+
         <service id="cmsPkgCore.logHandler.files" class="Monolog\Handler\StreamHandler" public="false">
             <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
             <argument>%kernel.logs_dir%/core.log</argument>
