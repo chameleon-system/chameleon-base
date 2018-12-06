@@ -82,7 +82,7 @@ class MediaManagerUrlGenerator implements MediaManagerUrlGeneratorInterface
         $position = 0
     ) {
         $parameters = array(
-            'pagedef' => MediaManagerBackendModule::PAGEDEF_IFRAME_NAME,
+            'pagedef' => MediaManagerBackendModule::PAGEDEF_NAME_PICK_IMAGE,
             '_pagedefType' => MediaManagerBackendModule::PAGEDEF_TYPE,
             MediaManagerListState::URL_NAME_PICK_IMAGE_MODE => '1',
             MediaManagerListState::URL_NAME_PICK_IMAGE_CALLBACK => $javaScriptCallbackFunctionName,
@@ -98,7 +98,7 @@ class MediaManagerUrlGenerator implements MediaManagerUrlGeneratorInterface
     public function getUrlToPickImageForWysiwyg($javaScriptCallbackFunctionName = 'selectImage')
     {
         $parameters = array(
-            'pagedef' => MediaManagerBackendModule::PAGEDEF_IFRAME_NAME,
+            'pagedef' => MediaManagerBackendModule::PAGEDEF_NAME_PICK_IMAGE,
             '_pagedefType' => MediaManagerBackendModule::PAGEDEF_TYPE,
             MediaManagerListState::URL_NAME_PICK_IMAGE_MODE => '1',
             MediaManagerListState::URL_NAME_PICK_IMAGE_CALLBACK => $javaScriptCallbackFunctionName,

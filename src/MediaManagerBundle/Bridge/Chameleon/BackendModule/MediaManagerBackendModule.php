@@ -48,7 +48,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
 {
     const PAGEDEF_NAME = 'mediaManager';
 
-    const PAGEDEF_IFRAME_NAME = 'mediaManagerIframe';
+    const PAGEDEF_NAME_PICK_IMAGE = 'mediaManagerPickImage';
 
     const PAGEDEF_TYPE = '@ChameleonSystemMediaManagerBundle';
 
