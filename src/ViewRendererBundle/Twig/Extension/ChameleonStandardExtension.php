@@ -56,13 +56,6 @@ class ChameleonStandardExtension extends \Twig_Extension
         );
     }
 
-    public function getTokenParsers()
-    {
-        return array(
-            new TPkgSnippetRenderer_TranslationTokenParser(),
-        );
-    }
-
     /**
      * chameleonTwigEscapeFilter wraps the original twig escape extension to make sure the authenticity token string
      * won't get escaped by Twig and thus be rendered useless.
