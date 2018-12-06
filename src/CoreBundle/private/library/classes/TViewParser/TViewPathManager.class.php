@@ -102,7 +102,6 @@ class TViewPathManager implements IViewPathManager
         /*
          * @deprecated only used by pkgBlog
          */
-        $templateModulePath = TPkgViewRendererSnippetDirectory::PATH_MODULES;
         if (!TGlobal::IsCMSMode()) {
             // overwrite path with theme path if we find a portal for the current page and a theme is set
             $activePortal = $this->portalDomainService->getActivePortal();
