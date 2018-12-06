@@ -39,13 +39,6 @@ class CronjobEnablingService implements CronjobEnablingServiceInterface
     {
         $config = TdbCmsConfig::GetInstance();
 
-        $t = $this->connection->fetchColumn("SELECT COUNT(*) FROM `cms_cronjobs` WHERE `lock` = '1'");
-        $x = $t > 0;
-
-        if ($x) {
-            $dmy = 0;
-        }
-
         return true === $config->fieldCronjobsEnabled;
     }
 
@@ -81,8 +74,6 @@ class CronjobEnablingService implements CronjobEnablingServiceInterface
     public function isOneCronjobRunning(): bool
     {
         try {
-            $t = $this->connection->fetchColumn("SELECT COUNT(*) FROM `cms_cronjobs` WHERE `lock` = '1'");
-
             return $this->connection->fetchColumn("SELECT COUNT(*) FROM `cms_cronjobs` WHERE `lock` = '1'") > 0;
         } catch (DBALException $exception) {
             throw new CronjobHandlingException('Cannot check for cron jobs in database.', 0, $exception);
