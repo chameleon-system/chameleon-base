@@ -228,8 +228,6 @@ class TCMSTableWriter extends TCMSTableEditor
      *
      * @param  $sOldTableName
      * @param  $sNewTableName
-     *
-     * @throws TPkgCmsException_Log
      */
     protected function RenameRelatedTablesSource($sOldTableName, $sNewTableName)
     {
