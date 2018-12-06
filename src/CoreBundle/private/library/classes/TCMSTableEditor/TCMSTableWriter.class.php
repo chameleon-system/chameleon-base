@@ -144,9 +144,9 @@ class TCMSTableWriter extends TCMSTableEditor
 
         $this->getAutoclassesCacheWarmer()->updateTableById($this->sId);
 
+        $this->changeTableName($this->sOldTblName, $newTableName);
         $requestedEngine = $this->getTableEngine($oPostTable->sqlData);
         $this->changeTableEngine($newTableName, $requestedEngine);
-        $this->changeTableName($this->sOldTblName, $newTableName);
         $this->changeTableComment($newTableName, $this->oldTableComment);
     }
 
