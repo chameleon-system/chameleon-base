@@ -12,7 +12,6 @@
 namespace ChameleonSystem\ViewRendererBundle\Twig\Extension;
 
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
-use TPkgSnippetRenderer_TranslationTokenParser;
 use Twig_Environment;
 use Twig_SimpleFilter;
 
