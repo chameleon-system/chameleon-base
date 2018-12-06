@@ -64,8 +64,13 @@ class TCMSTableEditorPage extends TCMSTableEditor
      */
     protected function PostSaveHook(&$oFields, &$oPostTable)
     {
-        $this->UpdatePageNaviBreadCrumb();
         parent::PostSaveHook($oFields, $oPostTable);
+
+        $this->UpdatePageNaviBreadCrumb();
+        // TODO With this reversed order this save cannot be part of the change log...
+        // But otherwise this second save overwrites the (new) values of the first general save
+
+        // Also note vendor/chameleon-system/chameleon-base/src/CmsChangeLogBundle/src/esono/pkgcmschangelog/TCMSTableEditor/TCMSTableEditorChangeLog.class.php:100
     }
 
     /**
