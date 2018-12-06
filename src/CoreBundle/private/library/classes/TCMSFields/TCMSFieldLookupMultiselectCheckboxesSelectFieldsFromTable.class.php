@@ -56,7 +56,7 @@ class TCMSFieldLookupMultiselectCheckboxesSelectFieldsFromTable extends TCMSFiel
     /**
      * {@inheritdoc}
      */
-    protected function isRecordCreationAllowed(): bool
+    protected function isRecordCreationAllowed(string $foreignTableName): bool
     {
         return false; // Would make no sense (no use-case) here: Create a new field in cms_field_conf.
     }
