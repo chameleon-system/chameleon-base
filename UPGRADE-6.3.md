@@ -255,6 +255,10 @@ Note that ONLY BC breaking changes are listed, according to our backwards compat
 The field classes now use the language independent SQL date format in frontend rendering instead of always using
 German date format. For backwards compatibility reasons they work with German date format too.
 
+## \TCMSTableWriter
+
+- Method `changeTableEngine()` now also changes the table config accordingly.
+
 ## \TTools
 
 - Changed method `WriteLogEntry()`: parameter `$sLogFileName` is now ignored.
