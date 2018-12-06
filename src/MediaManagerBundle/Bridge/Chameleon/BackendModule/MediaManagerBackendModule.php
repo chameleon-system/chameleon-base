@@ -386,7 +386,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $includes = parent::GetHtmlFooterIncludes();
         $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemmediamanager/lib/jstree/3.3.2/jstree.js'
+                '/bundles/chameleonsystemmediamanager/lib/jstree/3.3.7/jstree.js'
             ).'"></script>';
         $includes[] = '<script src="'.TGlobal::GetStaticURL(
                 '/bundles/chameleonsystemmediamanager/lib/xselectable/xselectable.js'
