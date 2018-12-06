@@ -54,9 +54,10 @@ EOF
             $this->cronjobEnablingService->disableCronjobExecution();
         } catch (CronjobEnableException $exception) {
             $output->writeln(sprintf('Cron job execution could not be disabled: %s', $exception->getMessage()));
-            
+
             return 1;
         }
+
         return 0;
     }
 }

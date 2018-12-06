@@ -28,10 +28,10 @@ interface CronjobEnablingServiceInterface
     /**
      * @throws CronjobEnableException
      */
-    public function enableCronjobExecution() : void;
+    public function enableCronjobExecution(): void;
 
     /**
      * @throws CronjobEnableException
      */
-    public function disableCronjobExecution() :void;
+    public function disableCronjobExecution(): void;
 }
