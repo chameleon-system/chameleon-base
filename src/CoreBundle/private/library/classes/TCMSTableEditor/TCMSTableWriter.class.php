@@ -145,8 +145,8 @@ class TCMSTableWriter extends TCMSTableEditor
         $this->getAutoclassesCacheWarmer()->updateTableById($this->sId);
 
         $this->adaptTableEngine($oPostTable, $newTableName);
-        $this->adaptTableName($this->sOldTblName, $newTableName);
-        $this->adaptTableComment($newTableName, $this->oldTableComment);
+        $this->changeTableName($this->sOldTblName, $newTableName);
+        $this->changeTableComment($newTableName, $this->oldTableComment);
     }
 
     /**
@@ -172,12 +172,16 @@ class TCMSTableWriter extends TCMSTableEditor
      *
      * @throws DBALException
      */
-    private function adaptTableName(string $oldTableName, string $newTableName): void
+    private function changeTableName(string $oldTableName, string $newTableName): void
     {
         if ($oldTableName !== $newTableName) {
             $databaseConnection = $this->getDatabaseConnection();
 
-            $query = sprintf('ALTER TABLE %s RENAME %s', $databaseConnection->quoteIdentifier($oldTableName), $databaseConnection->quoteIdentifier($newTableName));
+            $query = sprintf(
+                'ALTER TABLE %s RENAME %s',
+                $databaseConnection->quoteIdentifier($oldTableName),
+                $databaseConnection->quoteIdentifier($newTableName)
+            );
             $databaseConnection->executeQuery($query);
 
             $aQuery = array(new LogChangeDataModel($query));
@@ -193,7 +197,7 @@ class TCMSTableWriter extends TCMSTableEditor
      *
      * @throws DBALException
      */
-    private function adaptTableComment(string $tableName, string $oldTableComment): void
+    private function changeTableComment(string $tableName, string $oldTableComment): void
     {
         $newTableComment = $this->getTableComment($this->oTable->sqlData['translation'], $this->oTable->sqlData['notes']);
 
@@ -521,7 +525,6 @@ class TCMSTableWriter extends TCMSTableEditor
     protected function changeTableEngine($tableName, $newEngine)
     {
         $databaseConnection = $this->getDatabaseConnection();
-
         $query = sprintf('ALTER TABLE %s ENGINE %s', $databaseConnection->quoteIdentifier($tableName), $newEngine);
         $databaseConnection->executeQuery($query);
 
