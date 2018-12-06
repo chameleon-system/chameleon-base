@@ -158,21 +158,23 @@ class TCMSTableWriter extends TCMSTableEditor
      */
     private function changeTableName(string $oldTableName, string $newTableName): void
     {
-        if ($oldTableName !== $newTableName) {
-            $databaseConnection = $this->getDatabaseConnection();
-
-            $query = sprintf(
-                'ALTER TABLE %s RENAME %s',
-                $databaseConnection->quoteIdentifier($oldTableName),
-                $databaseConnection->quoteIdentifier($newTableName)
-            );
-            $databaseConnection->executeQuery($query);
-
-            $aQuery = array(new LogChangeDataModel($query));
-            TCMSLogChange::WriteTransaction($aQuery);
-
-            $this->_RenameRelatedTables($this->sOldTblName, $newTableName);
+        if ($oldTableName === $newTableName) {
+            return;
         }
+
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $query = sprintf(
+            'ALTER TABLE %s RENAME %s',
+            $databaseConnection->quoteIdentifier($oldTableName),
+            $databaseConnection->quoteIdentifier($newTableName)
+        );
+        $databaseConnection->executeQuery($query);
+
+        $aQuery = array(new LogChangeDataModel($query));
+        TCMSLogChange::WriteTransaction($aQuery);
+
+        $this->_RenameRelatedTables($this->sOldTblName, $newTableName);
     }
 
     /**
@@ -185,15 +187,17 @@ class TCMSTableWriter extends TCMSTableEditor
     {
         $newTableComment = $this->getTableComment($this->oTable->sqlData['translation'], $this->oTable->sqlData['notes']);
 
-        if ($oldTableComment !== $newTableComment) {
-            $databaseConnection = $this->getDatabaseConnection();
-
-            $query = sprintf('ALTER TABLE %s COMMENT %s', $databaseConnection->quoteIdentifier($tableName), $databaseConnection->quote($newTableComment));
-            $databaseConnection->executeQuery($query);
-
-            $aQuery = array(new LogChangeDataModel($query));
-            TCMSLogChange::WriteTransaction($aQuery);
+        if ($oldTableComment === $newTableComment) {
+            return;
         }
+
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $query = sprintf('ALTER TABLE %s COMMENT %s', $databaseConnection->quoteIdentifier($tableName), $databaseConnection->quote($newTableComment));
+        $databaseConnection->executeQuery($query);
+
+        $aQuery = array(new LogChangeDataModel($query));
+        TCMSLogChange::WriteTransaction($aQuery);
     }
 
     /**
