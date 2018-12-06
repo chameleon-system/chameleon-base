@@ -30,6 +30,12 @@ class CMSRunCrons extends TModelBase
         $this->data['sMessageOutput'] = '';
 
         if ($this->global->UserDataExists('cronjobid') && TCMSUser::CMSUserDefined()) {
+            if (false === $this->isCronjobExecutionEnabled()) {
+                $this->displayError('Cronjob execution is disabled in config.');
+
+                return $this->data;
+            }
+
             /*
             * run explicit cronjob (needs valid CMS user session), called from backend
             * cronjob execution is forced (ignores active and last run, but checks for lock)
@@ -38,13 +44,28 @@ class CMSRunCrons extends TModelBase
             if (!empty($sCronID)) {
                 $oTdbCmsCronJob = TdbCmsCronjobs::GetNewInstance();
                 $oTdbCmsCronJob->Load($sCronID);
-                if (false === $oTdbCmsCronJob->fieldLock && true === $this->isCronjobExecutionEnabled()) {
-                    $this->RunCronJob($oTdbCmsCronJob, true);
+
+                if (true === $oTdbCmsCronJob->fieldLock) {
+                    $this->displayError('Cronjob is still locked.');
+
+                    return $this->data;
                 }
+
+                $this->RunCronJob($oTdbCmsCronJob, true);
             }
-        } else { // run all active cronjobs
+        } else {
+            // run all active cronjobs
+
             // unlock all cron jobs that are past their max lock time
             $this->unlockOldBlockedCronJobs();
+
+            $cronjobsWereEnabled = $this->isCronjobExecutionEnabled();
+
+            if (false === $cronjobsWereEnabled) {
+                $this->getLogger()->info('Executing all cronjobs was disabled before starting.');
+
+                return $this->data;
+            }
 
             $now = date('Y-m-d');
             $sQuery = "SELECT * FROM `cms_cronjobs`
@@ -54,17 +75,13 @@ class CMSRunCrons extends TModelBase
                 ORDER BY `execute_every_n_minutes`
                  ";
 
-            $cronjobsWereEnabled = $this->isCronjobExecutionEnabled();
-
             $oTdbCmsCronjobsList = TdbCmsCronjobsList::GetList($sQuery);
             /** @var $oTdbCmsCronJob TdbCmsCronjobs */
             while ($oTdbCmsCronJob = $oTdbCmsCronjobsList->Next()) {
                 if (false === $this->isCronjobExecutionEnabled()) {
-                    if (true === $cronjobsWereEnabled) {
-                        $this->getLogger()->info(sprintf('Executing all cronjobs was disabled before executing %s', $oTdbCmsCronJob->id));
-                    }
+                    $this->getLogger()->info(sprintf('Executing all cronjobs was disabled before executing %s', $oTdbCmsCronJob->id));
 
-                    break;
+                    return $this->data;
                 }
 
                 $this->RunCronJob($oTdbCmsCronJob);
@@ -120,6 +137,11 @@ class CMSRunCrons extends TModelBase
     private function cronJobClassFactory($oTdbCmsCronJob)
     {
         return $this->getCronjobFactory()->constructCronJob($oTdbCmsCronJob->sqlData['cron_class'], $oTdbCmsCronJob->sqlData);
+    }
+
+    private function displayError(string $errorMessage): void
+    {
+        $this->data['sMessageOutput'] = sprintf('<div style="color: red">%s</div>', $errorMessage);
     }
 
     /**
