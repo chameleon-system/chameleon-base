@@ -144,26 +144,10 @@ class TCMSTableWriter extends TCMSTableEditor
 
         $this->getAutoclassesCacheWarmer()->updateTableById($this->sId);
 
-        $this->adaptTableEngine($oPostTable, $newTableName);
+        $requestedEngine = $this->getTableEngine($oPostTable->sqlData);
+        $this->changeTableEngine($newTableName, $requestedEngine);
         $this->changeTableName($this->sOldTblName, $newTableName);
         $this->changeTableComment($newTableName, $this->oldTableComment);
-    }
-
-    /**
-     * @param TCMSRecord $oPostTable
-     * @param string     $tableName
-     *
-     * @throws DBALException
-     */
-    private function adaptTableEngine(&$oPostTable, string $tableName): void
-    {
-        $realEngine = $this->getRealTableEngine($tableName);
-        $requestedEngine = $this->getTableEngine($oPostTable->sqlData);
-        if (strtolower($realEngine) !== strtolower($requestedEngine)) {
-            $this->changeTableEngine($tableName, $requestedEngine);
-            $newTableEngine = $this->getRealTableEngine($tableName);
-            $this->SaveField('engine', $newTableEngine, false);
-        }
     }
 
     /**
@@ -524,11 +508,17 @@ class TCMSTableWriter extends TCMSTableEditor
      */
     protected function changeTableEngine($tableName, $newEngine)
     {
-        $databaseConnection = $this->getDatabaseConnection();
-        $query = sprintf('ALTER TABLE %s ENGINE %s', $databaseConnection->quoteIdentifier($tableName), $newEngine);
-        $databaseConnection->executeQuery($query);
+        $realEngine = $this->getRealTableEngine($tableName);
+        if (strtolower($realEngine) !== strtolower($newEngine)) {
+            $databaseConnection = $this->getDatabaseConnection();
+            $query = sprintf('ALTER TABLE %s ENGINE %s', $databaseConnection->quoteIdentifier($tableName), $newEngine);
+            $databaseConnection->executeQuery($query);
 
-        TCMSLogChange::WriteTransaction(array(new LogChangeDataModel($query)));
+            TCMSLogChange::WriteTransaction(array(new LogChangeDataModel($query)));
+
+            $newTableEngine = $this->getRealTableEngine($tableName);
+            $this->SaveField('engine', $newTableEngine, false);
+        }
     }
 
     /**
