@@ -28,15 +28,15 @@
 
         <noscript>
             <div class="alert alert-danger" role="alert">
-                {% trans %}chameleon_system_core.cms_module_universal_uploader.error_no_browser_support{% endtrans %}
+                {{ 'chameleon_system_core.cms_module_universal_uploader.error_no_browser_support' | trans }}
             </div>
         </noscript>
 
         <div class="headline">
             <div class="h4">
-                <span class="glyphicon glyphicon-upload"></span> {% trans %}chameleon_system_core.cms_module_universal_uploader.headline_choose_files{% endtrans %}
+                <span class="glyphicon glyphicon-upload"></span> {{ 'chameleon_system_core.cms_module_universal_uploader.headline_choose_files' | trans }}
             </div>
-            {% trans %}chameleon_system_core.cms_module_universal_uploader.helptext{% endtrans %}
+            {{ 'chameleon_system_core.cms_module_universal_uploader.helptext' | trans }}
         </div>
 
         <div class="progress-process">
@@ -51,7 +51,7 @@
         </div>
 
         {% if maxUploadWidth and maxUploadHeight and proportionExactMatch%}
-            {% trans with {'%maxWidth%':maxUploadWidth, '%maxHeight%':maxUploadHeight} %}chameleon_system_core.cms_module_universal_uploader.msg_require_exact_measurements{% endtrans %}
+            {{ 'chameleon_system_core.cms_module_universal_uploader.msg_require_exact_measurements' | trans({'%maxWidth%':maxUploadWidth, '%maxHeight%':maxUploadHeight}) }}
         {% else %}
             {% if maxUploadWidth or maxUploadHeight %}
                 {% set maxUploadWidthText = maxUploadWidth %}
@@ -63,7 +63,7 @@
                     {% set maxUploadHeightText = 'chameleon_system_core.cms_module_universal_uploader.dimension_unrestricted' | trans %}
                 {% endif %}
                 {{ maxUploadHeightText }}
-                {% trans with {'%maxWidth%':maxUploadWidthText, '%maxHeight%':maxUploadHeightText} %}chameleon_system_core.cms_module_universal_uploader.msg_require_max_measurements{% endtrans %}
+                {{ 'chameleon_system_core.cms_module_universal_uploader.msg_require_max_measurements' | trans({'%maxWidth%':maxUploadWidthText, '%maxHeight%':maxUploadHeightText}) }}
             {% endif %}
         {% endif %}
 
@@ -71,19 +71,19 @@
             <div class="queue-header">
                 <div class="row">
                     <div class="col-xs-7 filename">
-                        {% trans %}chameleon_system_core.cms_module_universal_uploader.filename{% endtrans %}
+                        {{ 'chameleon_system_core.cms_module_universal_uploader.filename' | trans }}
                     </div>
                     <div class="col-xs-2 size">
-                        {% trans %}chameleon_system_core.cms_module_universal_uploader.size{% endtrans %}
+                        {{ 'chameleon_system_core.cms_module_universal_uploader.size' | trans }}
                     </div>
                     <div class="col-xs-3 state">
-                        {% trans %}chameleon_system_core.cms_module_universal_uploader.state{% endtrans %}
+                        {{ 'chameleon_system_core.cms_module_universal_uploader.state' | trans }}
                     </div>
                 </div>
             </div>
             <div class="file-container dropzone">
                 <div class="drag-drop-notice">
-                    {% trans %}chameleon_system_core.cms_module_universal_uploader.file_drag_target{% endtrans %}
+                    {{ 'chameleon_system_core.cms_module_universal_uploader.file_drag_target' | trans }}
                 </div>
             </div>
         </div>
@@ -91,10 +91,10 @@
         <div class="fileupload-buttonbar">
 
             <div class="btn btn-primary fileinput-button">
-                <span class="glyphicon glyphicon-plus"></span> {% trans %}chameleon_system_core.cms_module_universal_uploader.choose_files_button_text{% endtrans %}
+                <span class="glyphicon glyphicon-plus"></span> {{ 'chameleon_system_core.cms_module_universal_uploader.choose_files_button_text' | trans }}
                 <input type="file" name="files[]"{% if not singleMode %} multiple{% endif %}>
             </div>
-            <button class="btn btn-primary start" disabled><span class="glyphicon glyphicon-upload"></span> {% trans %}chameleon_system_core.cms_module_universal_uploader.upload_files_button_text{% endtrans %}</button>
+            <button class="btn btn-primary start" disabled><span class="glyphicon glyphicon-upload"></span> {{ 'chameleon_system_core.cms_module_universal_uploader.upload_files_button_text' | trans }}</button>
 
         </div>
 
@@ -102,11 +102,11 @@
         <div class="meta-fields">
             <div class="row">
                 <div class="col-xs-6">
-                    <div>{% trans %}chameleon_system_core.cms_module_universal_uploader.meta_title{% endtrans %}</div>
+                    <div>{{ 'chameleon_system_core.cms_module_universal_uploader.meta_title' | trans }}</div>
                     <textarea cols="30" id="uploadname" name="uploadname" style="height: 50px;" class="form-control">{{ uploadName }}</textarea>
                 </div>
                 <div class="col-xs-6">
-                    <div>{% trans %}chameleon_system_core.cms_module_universal_uploader.meta_description{% endtrans %}</div>
+                    <div>{{ 'chameleon_system_core.cms_module_universal_uploader.meta_description' | trans }}</div>
                     <textarea cols="30" id="uploaddescription" name="uploaddescription" style="height: 50px;" class="form-control">{{ uploadDescription }}</textarea>
                 </div>
             </div>
