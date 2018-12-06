@@ -61,7 +61,7 @@ class CMSRunCrons extends TModelBase
             while ($oTdbCmsCronJob = $oTdbCmsCronjobsList->Next()) {
                 if (false === $this->isCronjobExecutionEnabled()) {
                     if (true === $cronjobsWereEnabled) {
-                        $this->getLogger()->warning(sprintf('Executing all cronjobs was disabled before executing %s', $oTdbCmsCronJob->id));
+                        $this->getLogger()->info(sprintf('Executing all cronjobs was disabled before executing %s', $oTdbCmsCronJob->id));
                     }
 
                     break;
