@@ -45,7 +45,7 @@ class CronjobEnablingService implements CronjobEnablingServiceInterface
     /**
      * @throws CronjobEnableException
      */
-    public function enableAllCronjobExecution(): void
+    public function enableCronjobExecution(): void
     {
         try {
             $this->connection->executeUpdate("UPDATE `cms_config` SET `cronjobs_enabled` = '1'");
@@ -58,7 +58,7 @@ class CronjobEnablingService implements CronjobEnablingServiceInterface
     /**
      * @throws CronjobEnableException
      */
-    public function disableAllCronjobExecution(): void
+    public function disableCronjobExecution(): void
     {
         try {
             $this->connection->executeUpdate("UPDATE `cms_config` SET `cronjobs_enabled` = '0'");

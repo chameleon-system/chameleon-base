@@ -51,7 +51,7 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $this->cronjobEnablingService->disableAllCronjobExecution();
+            $this->cronjobEnablingService->disableCronjobExecution();
         } catch (CronjobEnableException $exception) {
             $output->writeln(sprintf('Cron job execution could not be disabled: %s', $exception->getMessage()));
             
