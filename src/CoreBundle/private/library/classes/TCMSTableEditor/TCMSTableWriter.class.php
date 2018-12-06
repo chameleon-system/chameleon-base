@@ -174,7 +174,7 @@ class TCMSTableWriter extends TCMSTableEditor
         $aQuery = array(new LogChangeDataModel($query));
         TCMSLogChange::WriteTransaction($aQuery);
 
-        $this->_RenameRelatedTables($this->sOldTblName, $newTableName);
+        $this->_RenameRelatedTables($oldTableName, $newTableName);
     }
 
     /**
