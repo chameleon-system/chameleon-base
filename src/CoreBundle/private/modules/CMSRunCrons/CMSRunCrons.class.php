@@ -162,7 +162,7 @@ class CMSRunCrons extends TModelBase
 
     private function getLogger(): LoggerInterface
     {
-        return ServiceLocator::get('logger'); // TODO this must use (the channel) monolog.logger.cms_update once #92 is finished
+        return ServiceLocator::get('logger'); // TODO this must use (the channel) monolog.logger.cms_cronjob once #92 is finished
     }
 
     private function getTranslator(): TranslatorInterface
