@@ -120,6 +120,16 @@ This is then used in that service.xml as two service arguments instead of a refe
 The method `TTools::GetModuleLoaderObject` now returns a new `TModuleLoader` instance instead of the global module
 loader. This instance will therefore only contain the module passed as argument, not all modules on the current page. 
 
+## Csv2SqlBundle
+
+- `\TPkgCsv2Sql::Import()`
+
+Return type annotation fixed: is actually "array" but was "bool".
+
+- `\TPkgCsv2SqlManager::SendErrorNotification()`
+
+Log output is no longer collected and no longer sent as attachements with the notification mail.
+
 # Changed Interfaces and Method Signatures
 
 This section contains information on interface and method signature changes which affect backwards compatibility (BC).
@@ -181,7 +191,7 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Constants
 
-None.
+- \TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE
 
 ## Classes and Interfaces
 
@@ -192,6 +202,7 @@ None.
 
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$sGeneratedPage
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$postRenderVariables
+- \TPkgCsv2Sql::$sLogFileName
 
 ## Methods
 
@@ -206,8 +217,10 @@ None.
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
 - \TCMSCronJob::getLogger()
-- \TPkgCmsException_Log::getLogger()
 - \TCMSLogChange::getUpdateLogger()
+- \TPkgCmsException_Log::getLogger()
+- \TPkgCsv2Sql::CreateLogFileName()
+- \TPkgCsv2Sql::GetLogFile()
 - \TTools::AddStaticPageVariables()
 
 ## JavaScript Files and Functions

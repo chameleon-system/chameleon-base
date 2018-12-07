@@ -18,6 +18,9 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
 
     protected $bDebugMode = false;
 
+    /**
+     * @deprecated since 6.3.0 - not used anymore
+     */
     protected $sLogFileName = 'csv2sql_import.log';
 
     protected $aImportStats = array('start' => null, 'end' => null, 'bHasErrors' => false);
@@ -39,34 +42,12 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      * returns the name of the log file for active object.
      *
      * @return string
+     *
+     * @deprecated since 6.3.0 - not used anymore
      */
     public function GetLogFile()
     {
-        $sContent = $this->GetFromInternalCache('csv2sql_active_logfile');
-        if (is_null($sContent)) {
-            $bDirOk = true;
-            $sPath = ERROR_LOG_FOLDER;
-
-            if (!is_dir($sPath)) {
-                if (!mkdir($sPath)) {
-                    $bDirOk = false;
-                    trigger_error("Can't create ".$sPath, E_USER_ERROR);
-                }
-            } else {
-                if (!is_writable($sPath)) {
-                    $bDirOk = false;
-                    trigger_error('Directory is not writeable '.$sPath, E_USER_ERROR);
-                }
-            }
-
-            if ($bDirOk) {
-                //return filename
-                $sContent = $this->CreateLogFileName();
-                $this->SetInternalCache('csv2sql_active_logfile', $sContent);
-            }
-        }
-
-        return $sContent;
+        return '';
     }
 
     /**
@@ -91,8 +72,6 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
              */
             $logger = ServiceLocator::get('monolog.logger.chameleon_csv2sql');
             $logger->error($sMsg);
-            // TODO/NOTE there was a mechanism for the "current log file": $this->GetLogFile()
-            // - also see \TPkgCsv2SqlManager::MergeLogs() which further uses this
 
             $bRet = true;
         }
@@ -177,15 +156,12 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      * Get valid log-file-name for this object.
      *
      * @return string
+     *
+     * @deprecated since 6.3.0 - not used anymore
      */
     public function CreateLogFileName()
     {
-        $sLogFileName = 'csv2sql_import.log';
-        if (!empty($this->fieldDestinationTableName)) {
-            $sLogFileName = $this->fieldDestinationTableName.'.log';
-        }
-
-        return $sLogFileName;
+        return '';
     }
 
     /**
@@ -328,7 +304,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      * @param null                $sLogName
      * @param null|IPkgCmsBulkSql $oBulkInsertManager alternative bulk insert manager if not passed TPkgCmsBulkSql_LoadDataInfile will be used
      *
-     * @return bool
+     * @return array - of error strings
      */
     public function Import($sLogName = null, IPkgCmsBulkSql $oBulkInsertManager = null)
     {

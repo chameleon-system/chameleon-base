@@ -20,6 +20,8 @@ class TPkgCsv2SqlManager
     const IMPORT_ERROR_LOG_MAIL = 'shop-import-data';
     /**
      * error-log filename.
+     *
+     * @deprecated since 6.3.0 - not used anymore
      */
     const IMPORT_ERROR_LOG_FILE = 'TPkgCsv2SqlManager.log';
 
@@ -138,28 +140,11 @@ class TPkgCsv2SqlManager
 
     /**
      * Merge all logs to big one.
+     *
+     * @deprecated since 6.3.0 - not supported anymore
      */
     protected static function MergeLogs()
     {
-        $sLogSourcePath = ERROR_LOG_FOLDER;
-        $sMainLogFile = $sLogSourcePath.self::IMPORT_ERROR_LOG_FILE;
-
-        /** @var $oCsv2SqlList TdbPkgCsv2sqlList */
-        $oCsv2SqlList = TdbPkgCsv2sqlList::GetList();
-        while ($oListItem = $oCsv2SqlList->Next()) {
-            $sLog = $sLogSourcePath.$oListItem->fieldDestinationTableName.'.log';
-            if (file_exists($sLog)) {
-                $sfp = fopen($sLog, 'rb');
-                $fp = fopen($sMainLogFile, 'wb');
-                $sStrTmp = "\r\n\r\n*******************************".$oListItem->fieldDestinationTableName."*******************************\r\n\r\n";
-                fwrite($fp, $sStrTmp, strlen($sStrTmp));
-                while ($string = fread($sfp, 4096)) {
-                    fwrite($fp, $string, strlen($string));
-                }
-                fclose($sfp);
-                fclose($fp);
-            }
-        }
     }
 
     /**
@@ -169,19 +154,7 @@ class TPkgCsv2SqlManager
      */
     public static function SendErrorNotification($aErrors)
     {
-        self::MergeLogs();
-
-        $sLogSourcePath = ERROR_LOG_FOLDER;
-        $sLogAchivePath = $sLogSourcePath.'/import-archiv/';
-
-        //check archive-path
-        $bArchivePathOK = false;
-        if (file_exists($sLogAchivePath) && is_dir($sLogAchivePath) && is_writeable($sLogAchivePath)) {
-            $bArchivePathOK = true;
-        }
-
         $sMailBody = __CLASS__.'-Report'."\r\n\r\n";
-        //$sErrorLines = implode("\r\n",$aErrors);
         $sErrorLines = '';
         if (is_array($aErrors) && count($aErrors)) {
             foreach ($aErrors as $iK => $mVal) {
@@ -196,46 +169,13 @@ class TPkgCsv2SqlManager
 
         //send report by mail
         $oMailProfile = TdbDataMailProfile::GetProfile(self::IMPORT_ERROR_LOG_MAIL);
-        if (count($aErrors)) {
+        if (\count($aErrors) > 0) {
             $oMailProfile->SetSubject('FEHLER: '.$oMailProfile->sqlData['subject']);
-        }
-
-        $aAttachFiles = null;
-        $sLogFile = $sLogSourcePath.self::IMPORT_ERROR_LOG_FILE;
-        if (count($aErrors)) {
-            //attach error-log as mail-attachment
-            if (file_exists($sLogFile)) {
-                $aAttachFiles[] = $sLogFile;
-            } else {
-                //we have errors but no error file? report!
-                $sMailBody .= "\r\nACHTUNG: \r\nEs sind Fehler aufgetreten, aber es wurde kein Logfile gefunden in:".$sLogFile." !\r\n";
-            }
-
-            //check if Archive-Path exists (if not report!)
-            if (!$bArchivePathOK) {
-                $sMailBody .= "\r\nACHTUNG: \r\nArchiv-Pfad für Logs existiert nicht oder ist nicht beschreibbar!\r\nLogs können nicht verschoben werden nach: ".$sLogAchivePath."\r\n";
-            }
+            $sMailBody .= "\r\nACHTUNG: \r\nEs sind Fehler aufgetreten. Überprüfen Sie auch Log-Informationen.\r\n";
         }
 
         $aMailData = array('sReport' => '<pre>'.$sMailBody.'</pre>');
         $oMailProfile->AddDataArray($aMailData);
-        $oMailProfile->SendUsingObjectView('emails', 'Customer', $aAttachFiles);
-
-        if (is_array($aAttachFiles) && $bArchivePathOK) {
-            //move files to import-archive
-            foreach ($aAttachFiles as $iFKey => $sFilePath) {
-                $sNewPath = $sLogAchivePath.date('y-m-d-H-i-s').basename($sFilePath);
-                if (!@rename($sFilePath, $sNewPath)) {
-                    if (copy($sFilePath, $sNewPath)) {
-                        if (!@unlink($sFilePath)) {
-                            echo 'Das Log wurde in das Archiv-Verzeichnis kopiert. Es konnte jedoch nicht entfernt werden!';
-                            //try to clear file
-                            $f = fopen($sFilePath, 'w+');
-                            fclose($f);
-                        }
-                    }
-                }
-            }
-        }
+        $oMailProfile->SendUsingObjectView('emails', 'Customer');
     }
 }
