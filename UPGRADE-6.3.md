@@ -192,12 +192,13 @@ is recommended (although this tool may not find database-related deprecations).
 ## Constants
 
 - \TCMSCronJob_CleanOrphanedMLTConnections::MLT_DELETE_LOG_FILE
+
+// TODO the following are of packages:
 - \TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE
 - \TPkgMailChimpWebHookHandlerEndPoint::LOG_FILE_NAME
 - \TPkgMandrillWebHookHandlerEndPoint::LOG_FILE
 - \TPkgNewsletterMailChimpUser::LOG_FILE_NAME
 - \TPkgShopStoredUserPaymentManager::LOG_FILE
-- \TShopPaymentHandlerPayPal_PayViaLink::LOG_FILE
 
 ## Classes and Interfaces
 
