@@ -276,6 +276,7 @@ is recommended (although this tool may not find database-related deprecations).
 
 - \IPkgCmsCoreLog
 - \TPkgCmsCoreLog
+- \TCMSFieldMediaProperties
 - \TPkgSnippetRenderer_TranslationNode
 - \TPkgSnippetRenderer_TranslationTokenParser
 
