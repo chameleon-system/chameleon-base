@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\CronJob\CronJobFactoryInterface;
 use ChameleonSystem\CoreBundle\SanityCheck\CronJobDataAccess;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * runs one explicit or all cronjobs.
@@ -30,8 +31,10 @@ class CMSRunCrons extends TModelBase
         $this->data['sMessageOutput'] = '';
 
         if ($this->global->UserDataExists('cronjobid') && TCMSUser::CMSUserDefined()) {
+            $tranlator = $this->getTranslator();
+
             if (false === $this->isCronjobExecutionEnabled()) {
-                $this->displayError('Cronjob execution is disabled in config.');
+                $this->displayError($tranlator->trans('chameleon_system_core.cronjob.error_cronjobs_disabled'));
 
                 return $this->data;
             }
@@ -46,7 +49,7 @@ class CMSRunCrons extends TModelBase
                 $oTdbCmsCronJob->Load($sCronID);
 
                 if (true === $oTdbCmsCronJob->fieldLock) {
-                    $this->displayError('Cronjob is still locked.');
+                    $this->displayError($tranlator->trans('chameleon_system_core.cronjob.error_cronjob_still_locked'));
 
                     return $this->data;
                 }
@@ -160,5 +163,10 @@ class CMSRunCrons extends TModelBase
     private function getLogger(): LoggerInterface
     {
         return ServiceLocator::get('logger'); // TODO this must use (the channel) monolog.logger.cms_update once #92 is finished
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
     }
 }
