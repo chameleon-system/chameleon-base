@@ -17,6 +17,7 @@ use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedEx
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgCmsCache\CacheInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -350,6 +351,8 @@ class TModelBase
             try {
                 $content = $this->getResponseVariableReplacer()->replaceVariables($content);
             } catch (TokenInjectionFailedException $exception) {
+                $this->getLogger()->error(sprintf('Cannot render AJAX output plain %s', $exception->getMessage()));
+
                 http_response_code(500);
 
                 exit;
@@ -371,6 +374,8 @@ class TModelBase
         try {
             $content = $this->getResponseVariableReplacer()->replaceVariables($content);
         } catch (TokenInjectionFailedException $exception) {
+            $this->getLogger()->error(sprintf('Cannot render AJAX output %s', $exception->getMessage()));
+
             http_response_code(500);
 
             exit;
@@ -928,5 +933,11 @@ class TModelBase
     private function getResponseVariableReplacer(): ResponseVariableReplacerInterface
     {
         return ServiceLocator::get('chameleon_system_core.response.response_variable_replacer');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('cmsPkgCore.logChannel.standard'); // TODO this needs to use monolog.logger.chameleon once #92 is finished
+        // TODO also add the exception to the log context on error above
     }
 }
