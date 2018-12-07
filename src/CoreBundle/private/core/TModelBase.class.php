@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface;
 use ChameleonSystem\CoreBundle\Exception\ModuleException;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
+use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgCmsCache\CacheInterface;
@@ -346,10 +347,16 @@ class TModelBase
     protected function _OutputForAjaxPlain(&$content, $bPreventPreOutputInjection = false)
     {
         if (!$bPreventPreOutputInjection) {
-            $content = $this->getResponseVariableReplacer()->replaceVariables($content);
+            try {
+                $content = $this->getResponseVariableReplacer()->replaceVariables($content);
+            } catch (TokenInjectionFailedException $exception) {
+                http_response_code(500);
+
+                exit;
+            }
         }
 
-        $this->outputForAjaxAndExit($content, 'text/');
+        $this->outputForAjaxAndExit($content, 'text/plain');
     }
 
     /**
@@ -361,13 +368,17 @@ class TModelBase
      */
     protected function _OutputForAjax(&$content)
     {
-        $content = $this->getResponseVariableReplacer()->replaceVariables($content);
+        try {
+            $content = $this->getResponseVariableReplacer()->replaceVariables($content);
+        } catch (TokenInjectionFailedException $exception) {
+            http_response_code(500);
+
+            exit;
+        }
         $jsonContent = \json_encode($content);
 
-        $this->outputForAjaxAndExit($jsonContent, 'text/');
+        $this->outputForAjaxAndExit($jsonContent, 'application/json');
     }
-
-    // TODO what about & in &$content?
 
     /**
      * @param object|array|string $content
@@ -393,7 +404,7 @@ class TModelBase
 
         echo $content;
 
-        exit(0);
+        exit;
     }
 
     /**
