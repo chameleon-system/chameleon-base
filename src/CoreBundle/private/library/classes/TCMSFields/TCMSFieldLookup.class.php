@@ -81,7 +81,7 @@ class TCMSFieldLookup extends TCMSField
                 $viewRenderer->AddSourceObject('showErrorMessage', true);
             }
 
-            return $viewRenderer->Render('TCMSFieldLookup/selectInput.html.twig', null, false);
+            return $viewRenderer->Render('TCMSFieldLookup/fieldLookup.html.twig', null, false);
         }
     }
 
