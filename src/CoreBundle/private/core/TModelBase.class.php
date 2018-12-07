@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface;
 use ChameleonSystem\CoreBundle\Exception\ModuleException;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
+use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgCmsCache\CacheInterface;
@@ -352,7 +353,7 @@ class TModelBase
         header('X-Robots-Tag: noindex, nofollow', true); //never index json responses
         // inject messages (replace [{CMSMSG-*}])
         if (!$bPreventPreOutputInjection) {
-            $parameter = $this->getController()->PreOutputCallbackFunctionReplaceCustomVars($parameter);
+            $parameter = $this->getResponseVariableReplacer()->replaceVariables($parameter);
         }
         // allow using a JS callback function
         if ($this->global->UserDataExists('callback')) {
@@ -375,7 +376,7 @@ class TModelBase
     protected function _OutputForAjax(&$parameter)
     {
         $this->SetHTMLDivWrappingStatus(false);
-        $parameter = $this->getController()->PreOutputCallbackFunctionReplaceCustomVars($parameter);
+        $parameter = $this->getResponseVariableReplacer()->replaceVariables($parameter);
         $encodedData = json_encode($parameter);
         $this->_OutputForAjaxPlain($encodedData, true);
     }
@@ -896,5 +897,10 @@ class TModelBase
     private function getViewRenderer()
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+    }
+
+    private function getResponseVariableReplacer(): ResponseVariableReplacerInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.response.response_variable_replacer');
     }
 }
