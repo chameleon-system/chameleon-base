@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * Class TPkgCmsCoreSendToHost
  * use the class to send http requests to a remote server.
@@ -351,18 +353,14 @@ class TPkgCmsCoreSendToHost
 
         $this->parseResponseHeader($sHeader);
 
-        $iLogLevel = 4;
+
+        $msg = "REQUEST:\n".$this->getLastRequest()."\n\nRESPONSE:\n".$this->getLastResponseHeader().$this->getLastResponseBody();
+
         if (true === $this->logRequest) {
-            $iLogLevel = 1;
+            ServiceLocator::get('monolog.logger.chameleon')->error($msg);
+        } else {
+            ServiceLocator::get('monolog.logger.chameleon')->info($msg);
         }
-        TTools::WriteLogEntry(
-            "REQUEST:\n".$this->getLastRequest()."\n\nRESPONSE:\n".$this->getLastResponseHeader(
-            ).$this->getLastResponseBody(),
-            $iLogLevel,
-            __FILE__,
-            __LINE__,
-            '/logs/sendtohost.log'
-        );
 
         return $this->lastResponseBody;
     }
@@ -493,8 +491,7 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * when enabled, then all transactions will be written to /logs/sendtohost.log"
-     * otherweise we only write them to the log in log level 4.
+     * When enabled log is written as error - otherwise as info message.
      *
      * @param bool $logRequest
      *
