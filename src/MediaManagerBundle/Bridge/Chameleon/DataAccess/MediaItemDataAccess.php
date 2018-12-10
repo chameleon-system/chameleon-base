@@ -329,7 +329,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
 
         foreach ($descriptionSearchQueryParts as $key => $termItems) {
             if (count($termItems) > 1) {
-                $parts[] = '('.implode(' AND ', $termItems).')';
+                $parts[] = ' ('.implode(' AND ', $termItems).') ';
             } else {
                 $parts[] = $termItems[0];
             }
