@@ -359,7 +359,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $includes = parent::GetHtmlHeadIncludes();
         $includes[] = sprintf(
             '<link rel="stylesheet" href="%s">',
-            TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/jstree/3.3.2/themes/default/style.css')
+            TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/jstree/3.3.7/themes/default/style.css')
         );
         $includes[] = sprintf(
             '<link rel="stylesheet" href="%s">',
