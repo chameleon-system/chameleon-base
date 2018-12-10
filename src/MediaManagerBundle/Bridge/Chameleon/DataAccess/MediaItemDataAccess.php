@@ -227,7 +227,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         }
 
         $orderBy = $this->getOrderBy($mediaManagerListRequest, $languageId);
-        $query .= $orderBy;
+        $query .= ' '.$orderBy;
 
         return $this->getResultForQueryAndParameters(
             $mediaManagerListRequest,
@@ -279,36 +279,60 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         array &$paramTypes
     ) {
         $searchTerm = $mediaManagerListRequest->getSearchTerm();
-        if (null === $searchTerm || '' === trim($searchTerm)) {
+        $searchTerm = trim($searchTerm);
+        if (null === $searchTerm || '' === $searchTerm) {
             return;
         }
 
         $language = $this->languageService->getLanguage($languageId);
-        $parts = array();
+        $parts = [];
 
-        $parts[] = '`id` LIKE :fullTerm';
-        $parts[] = '`cmsident` LIKE :fullTerm';
+        $parts[] = '`id` = :fullTerm';
+        $parts[] = '`cmsident` = :fullTerm';
+
         $params['fullTerm'] = $searchTerm;
         $paramTypes['fullTerm'] = \PDO::PARAM_STR;
 
         $terms = preg_split(',[\.\/\\-\s],', $searchTerm);
 
-        $descriptionFieldName = $this->fieldTranslationUtil->getTranslatedFieldName(
+        $descriptionFieldName = 'description';
+        $descriptionFieldNameTranslated = $this->fieldTranslationUtil->getTranslatedFieldName(
             'cms_media',
-            'description',
+            $descriptionFieldName,
             $language
         );
 
-        $pathFieldName = $this->fieldTranslationUtil->getTranslatedFieldName('cms_media', 'path', $language);
+        $pathFieldName = 'path';
+        $pathFieldNameTranslated = $this->fieldTranslationUtil->getTranslatedFieldName('cms_media', $pathFieldName, $language);
         $tagNameFieldName = $this->fieldTranslationUtil->getTranslatedFieldName('cms_tags', 'name', $language);
 
+        $descriptionSearchQueryParts = [];
         $i = 0;
         foreach ($terms as $term) {
             ++$i;
-            $parts[] = $this->databaseConnection->quoteIdentifier($descriptionFieldName).' LIKE :term'.(string) $i;
-            $parts[] = $this->databaseConnection->quoteIdentifier($pathFieldName).' LIKE :term'.(string) $i;
+
+            $descriptionSearchQueryParts[$descriptionFieldNameTranslated][] = $this->databaseConnection->quoteIdentifier($descriptionFieldNameTranslated).' LIKE :term'.(string) $i;
+
+            if ($descriptionFieldNameTranslated !== $descriptionFieldName) {
+                $descriptionSearchQueryParts[$descriptionFieldName][] = $this->databaseConnection->quoteIdentifier($descriptionFieldName).' LIKE :term'.(string) $i;
+            }
+
+            $descriptionSearchQueryParts[$pathFieldNameTranslated][] = $this->databaseConnection->quoteIdentifier($pathFieldNameTranslated).' LIKE :term'.(string) $i;
+
+            if ($pathFieldNameTranslated !== $pathFieldName) {
+                $descriptionSearchQueryParts[$pathFieldName][] = $this->databaseConnection->quoteIdentifier($pathFieldName).' LIKE :term'.(string) $i;
+            }
+
             $params['term'.(string) $i] = '%'.$term.'%';
             $paramTypes['term'.(string) $i] = \PDO::PARAM_STR;
+        }
+
+        foreach ($descriptionSearchQueryParts as $key => $termItems) {
+            if (count($termItems) > 1) {
+                $parts[] = '('.implode(' AND ', $termItems).')';
+            } else {
+                $parts[] = $termItems[0];
+            }
         }
 
         $i = 0;
