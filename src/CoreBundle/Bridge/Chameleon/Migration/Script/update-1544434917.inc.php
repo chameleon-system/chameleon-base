@@ -8,7 +8,7 @@
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
       'name' => 'active',
-      'translation' => 'Activ',
+      'translation' => 'Active',
       'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_BOOLEAN'),
       'cms_tbl_field_tab' => '',
       'isrequired' => '0',
@@ -53,7 +53,7 @@ TCMSLogChange::RunQuery(__LINE__, $query);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_list_fields', 'en')
   ->setFields([
-      'title' => 'Activ',
+      'title' => 'Active',
       'name' => '`pkg_cms_routing`.`active`',
       'db_alias' => 'active',
       'position' => '271',
@@ -70,8 +70,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_list_fields', '
 ;
 TCMSLogChange::insert(__LINE__, $data);
 
-// TODO how to write this?
-//TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_tbl_display_list_fields'))
+TCMSLogChange::SetDisplayFieldPositionByAlias(TCMSLogChange::GetTableId('cms_tbl_display_list_fields'), 'active', 'name');
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_list_fields', 'de')
     ->setFields([

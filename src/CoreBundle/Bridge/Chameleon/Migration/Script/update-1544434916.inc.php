@@ -24,6 +24,5 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_list_fields', '
 ;
 TCMSLogChange::insert(__LINE__, $data);
 
-// TODO how to write this?
-//TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_tbl_display_list_fields'))
+TCMSLogChange::SetDisplayFieldPositionByAlias(TCMSLogChange::GetTableId('cms_tbl_display_list_fields'), 'cms_portal__name', 'resource');
 
