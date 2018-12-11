@@ -235,6 +235,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
 - \TCMSCronJob::getLogger()
 - \TCMSLogChange::getUpdateLogger()
+- \TPkgCmsCoreSendToHost::setLogRequest()
 - \TPkgCmsException_Log::getLogger()
 - \TPkgCsv2Sql::CreateLogFileName()
 - \TPkgCsv2Sql::GetLogFile()

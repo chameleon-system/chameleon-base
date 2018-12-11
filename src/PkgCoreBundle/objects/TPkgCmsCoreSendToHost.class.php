@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class TPkgCmsCoreSendToHost
@@ -355,12 +357,12 @@ class TPkgCmsCoreSendToHost
 
 
         $msg = "REQUEST:\n".$this->getLastRequest()."\n\nRESPONSE:\n".$this->getLastResponseHeader().$this->getLastResponseBody();
-
-        if (true === $this->logRequest) {
-            ServiceLocator::get('monolog.logger.chameleon')->error($msg);
+        if (Response::HTTP_OK === $this->getLastResponseCode()) {
+            $this->getLogger()->info($msg);
         } else {
-            ServiceLocator::get('monolog.logger.chameleon')->info($msg);
+            $this->getLogger()->error($msg);
         }
+
 
         return $this->lastResponseBody;
     }
@@ -491,11 +493,14 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * When enabled log is written as error - otherwise as info message.
+     *  when enabled, then all transactions will be written to /logs/sendtohost.log"
+     * otherweise we only write them to the log in log level 4.
      *
      * @param bool $logRequest
      *
      * @return $this
+     *
+     * @deprecated since 6.3.0 - Not supported anymore: everything is logged
      */
     public function setLogRequest($logRequest)
     {
@@ -520,5 +525,10 @@ class TPkgCmsCoreSendToHost
     public function getLastResponseCodeRaw()
     {
         return $this->lastResponseCodeRaw;
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.chameleon_pkg_core');
     }
 }
