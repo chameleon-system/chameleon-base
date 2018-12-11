@@ -51,6 +51,8 @@ final class CoreEvents
 
     const CHANGE_USE_SLASH_IN_SEO_URLS_FOR_PORTAL = 'chameleon_system_core.change_use_slash_in_seo_urls_for_portal';
 
+    const CHANGE_ACTIVATE_ROUTING_CONFIG = 'chameleon_system_core.change_activate_routing_config';
+
     /**
      * The chameleon_system_core.*_record is dispatched each time a record is inserted/updated/deleted.
      * The event listener receives an \ChameleonSystem\CoreBundle\Event\RecordChangeEvent instance.
