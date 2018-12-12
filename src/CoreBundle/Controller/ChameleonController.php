@@ -163,11 +163,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $pagedef = $this->getRequest()->attributes->get('pagedef');
         $this->handleRequest($pagedef);
 
-//        ServiceLocator::get('monolog.logger.api')->error('Test message');
-
-//        ServiceLocator::get('monolog.logger.cronjob')->info('Info message');
-//        ServiceLocator::get('monolog.logger.core_standard')->error('Eroro message');
-
         return $this->getResponse();
     }
 
