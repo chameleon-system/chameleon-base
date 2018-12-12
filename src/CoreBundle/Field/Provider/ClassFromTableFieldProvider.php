@@ -33,8 +33,10 @@ class ClassFromTableFieldProvider implements ClassFromTableFieldProviderInterfac
         if ('id' === $tableField) {
             return null;
         }
+
         $tableFieldDictionary = $this->getDictionaryFromTableField($tableField);
         $fieldName = $tableFieldDictionary['fieldName'];
+
         if ('id' === $fieldName || 'cmsident' === $fieldName) {
             return null;
         }
@@ -64,9 +66,12 @@ class ClassFromTableFieldProvider implements ClassFromTableFieldProviderInterfac
             return null;
         }
 
+        $tableName = $tableConfIdSplit[0];
+        $fieldName = $this->stripFieldTranslationSuffix($tableConfIdSplit[1]);
+
         return array(
-            'tableName' => $tableConfIdSplit[0],
-            'fieldName' => $tableConfIdSplit[1],
+            'tableName' => $tableName,
+            'fieldName' => $fieldName,
         );
     }
 
