@@ -185,16 +185,6 @@ is recommended (although this tool may not find database-related deprecations).
 - pkgShopPaymentPayone.logDriver.apilogger
 - pkgShopPaymentPayone.logDriver.standard
 
-// TODO from pkgshoptradebyte
-- chameleon_system_trade_byte.logChannel.article_import_logger
-- chameleon_system_trade_byte.logChannel.invoice_import_logger
-- chameleon_system_trade_byte.logChannel.order_status_import_logger
-- chameleon_system_trade_byte.logChannel.stock_import_logger
-- chameleon_system_trade_byte.logDriver.article_import_logger
-- chameleon_system_trade_byte.logDriver.invoice_import_logger
-- chameleon_system_trade_byte.logDriver.order_status_import_logger
-- chameleon_system_trade_byte.logDriver.stock_import_logger
-
 ## Container Parameters
 
 - Three (newly) defined logging channels are deprecated and only necessary for backwards compatibility: chameleon_security, chameleon_dbal, chameleon_api
@@ -202,13 +192,7 @@ is recommended (although this tool may not find database-related deprecations).
 ## Constants
 
 - \TCMSCronJob_CleanOrphanedMLTConnections::MLT_DELETE_LOG_FILE
-
-// TODO the following are of packages:
 - \TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE
-- \TPkgMailChimpWebHookHandlerEndPoint::LOG_FILE_NAME
-- \TPkgMandrillWebHookHandlerEndPoint::LOG_FILE
-- \TPkgNewsletterMailChimpUser::LOG_FILE_NAME
-- \TPkgShopStoredUserPaymentManager::LOG_FILE
 
 ## Classes and Interfaces
 
