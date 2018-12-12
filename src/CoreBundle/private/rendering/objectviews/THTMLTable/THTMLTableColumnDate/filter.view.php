@@ -27,11 +27,11 @@ if (is_array($searchFilter)) {
             <input type="text"
                    name="<?=TGlobal::OutHTML($oOwningTable->sListIdentKey); ?>[<?=THTMLTable::URL_PARAM_SEARCH; ?>][<?=TGlobal::OutHTML($oColumn->sColumnAlias); ?>][<?=THTMLTableColumnDate::FILTER_TO; ?>]"
                    value="<?=TGlobal::OutHTML($sEndVal); ?>"/>
-            <input type="submit" value="<?=TGlobal::Translate('Filter'); ?>"/>
+            <input type="submit" value="<?=TGlobal::OutHTML(TGlobal::Translate('Filter')); ?>"/>
         </form>
     </div>
     <span class="set"><a href="#" onclick="$('#<?=$sFilterPopupId; ?>').show()"><img
-        src="/chameleon/blackbox/images/icons/magnifier.png" alt="<?=TGlobal::Translate('Filter setzen'); ?>" border="0"/></a></span>
+        src="/chameleon/blackbox/images/icons/magnifier.png" alt="<?=TGlobal::OutHTML(TGlobal::Translate('Filter setzen')); ?>" border="0"/></a></span>
     <?php
     if (!empty($sStartVal) || !empty($sEndVal)) {
         $sFilterString = '';
@@ -44,7 +44,7 @@ if (is_array($searchFilter)) {
         } ?>
         <span class="term"><?=TGlobal::OutHTML($sFilterString); ?></span><span class="clear"><a
             href="<?=$oOwningTable->GetFilterURL($oColumn); ?>"><img src="/chameleon/blackbox/images/icons/bin_closed.png"
-                                                                   alt="<?=TGlobal::Translate('Filter zurücksetzen'); ?>"
+                                                                   alt="<?=TGlobal::OutHTML(TGlobal::Translate('Filter zurücksetzen')); ?>"
                                                                    border="0"/></a></span>
         <?php
     }

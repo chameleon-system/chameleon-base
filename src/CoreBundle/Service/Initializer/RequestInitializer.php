@@ -16,9 +16,6 @@ use ChameleonSystem\CoreBundle\Session\ChameleonSessionManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use TGlobal;
 
-/**
- * Class RequestInitializer.
- */
 class RequestInitializer
 {
     /**
