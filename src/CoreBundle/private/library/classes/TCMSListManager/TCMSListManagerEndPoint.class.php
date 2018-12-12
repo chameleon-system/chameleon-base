@@ -544,10 +544,8 @@ class TCMSListManagerEndPoint
         return $aAdditionalParameterData;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function usesManagedTables(): bool {
+    protected function usesManagedTables(): bool
+    {
         return false;
     }
 

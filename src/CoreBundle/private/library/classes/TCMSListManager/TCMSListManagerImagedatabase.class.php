@@ -61,10 +61,10 @@ class TCMSListManagerImagedatabase extends TCMSListManagerFullGroupTable
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    protected function usesManagedTables(): bool {
+    protected function usesManagedTables(): bool
+    {
         return false;
     }
-
 }

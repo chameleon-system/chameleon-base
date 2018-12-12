@@ -87,10 +87,10 @@ class TCMSListManagerWebpages extends TCMSListManagerFullGroupTable
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    protected function usesManagedTables(): bool {
+    protected function usesManagedTables(): bool
+    {
         return false;
     }
-
 }

@@ -57,10 +57,10 @@ class TCMSListManagerImagedatabaseMLT extends TCMSListManagerMLT
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    protected function usesManagedTables(): bool {
+    protected function usesManagedTables(): bool
+    {
         return false;
     }
-
 }

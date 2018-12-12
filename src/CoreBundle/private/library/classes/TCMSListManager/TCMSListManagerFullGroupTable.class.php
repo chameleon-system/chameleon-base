@@ -879,7 +879,8 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      *
      * @return bool
      */
-    protected function usesManagedTables(): bool {
+    protected function usesManagedTables(): bool
+    {
         return true;
     }
 

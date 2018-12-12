@@ -39,10 +39,10 @@ class TCMSListManagerExtendedLookupModuleInstance extends TCMSListManagerModuleI
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    protected function usesManagedTables(): bool {
+    protected function usesManagedTables(): bool
+    {
         return false;
     }
-
 }
