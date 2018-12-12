@@ -529,6 +529,6 @@ class TPkgCmsCoreSendToHost
 
     private function getLogger(): LoggerInterface
     {
-        return ServiceLocator::get('monolog.logger.pkg_core');
+        return ServiceLocator::get('logger');
     }
 }
