@@ -179,7 +179,6 @@
             <argument type="service" id="chameleon_system_media_manager.usages.delete_service_chain"/>
             <argument type="service" id="chameleon_system_core.language_service"/>
             <argument type="service" id="logger"/>
-            <tag name="monolog.logger" channel="chameleon"/>
             <tag name="kernel.event_listener" event="chameleon_system_core.before_delete_media" method="onDeleteMedia"/>
         </service>
 
