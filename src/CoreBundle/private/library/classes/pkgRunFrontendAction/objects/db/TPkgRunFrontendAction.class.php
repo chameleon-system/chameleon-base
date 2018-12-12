@@ -60,7 +60,7 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
     public static function CreateAction($sClass, $sPortalId = null, $aParameter = null, $sLanguageId = null)
     {
         $oAction = null;
-        $logger = \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon');
+        $logger = \ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
         if (!class_exists($sClass)) {
             $logger->warning(sprintf('Class %s doesn\'t exist.', $sClass));
         } else {

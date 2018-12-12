@@ -863,7 +863,7 @@ class MTHeader extends TCMSModelBase
 
     private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
     }
 
     /**

@@ -70,7 +70,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
             /**
              * @var $logger LoggerInterface
              */
-            $logger = ServiceLocator::get('monolog.logger.chameleon_csv2sql');
+            $logger = ServiceLocator::get('monolog.logger.csv2sql');
             $logger->error($sMsg);
 
             $bRet = true;
@@ -91,7 +91,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.chameleon_csv2sql');
+        $logger = ServiceLocator::get('monolog.logger.csv2sql');
 
         $bRet = false;
         // DROP TABLE IF EXISTS  test1
@@ -218,7 +218,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.chameleon_csv2sql');
+        $logger = ServiceLocator::get('monolog.logger.csv2sql');
 
         $databaseConnection = $this->getDatabaseConnection();
         $quotedTempTargetTableName = $databaseConnection->quoteIdentifier($this->GetTempTargetTableName());
@@ -311,7 +311,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.chameleon_csv2sql');
+        $logger = ServiceLocator::get('monolog.logger.csv2sql');
 
         $this->aImportStats['start'] = time();
 
@@ -429,7 +429,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.chameleon_csv2sql');
+        $logger = ServiceLocator::get('monolog.logger.csv2sql');
 
         if (is_dir($sImportDir) && is_readable($sImportDir)) {
             $logger->info('importing DIR FOUND '.$sImportDir);

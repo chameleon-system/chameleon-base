@@ -1763,14 +1763,14 @@ class TTools
      * @param int    $iLineNumber   - line the log request is called from
      * @param string $sLogFileName  - optional log file name (path is relative to PATH_CMS_CUSTOMER_DATA)
      *
-     * @deprecated - use your own logger service (with appropriate channel) or 'logger' or 'monolog.logger.chameleon' directly instead.
+     * @deprecated - use your own logger service (with appropriate channel) or 'logger' directly instead.
      */
     public static function WriteLogEntry($sMessage, $sLogLevel, $sCallFromFile, $iLineNumber, $sLogFileName = null)
     {
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.chameleon');
+        $logger = ServiceLocator::get('logger');
 
         if (null !== $sLogFileName) {
             $logger->warning(sprintf('Additional log file parameter %s to TTools::WriteLogEntry() ignored.', $sLogFileName));

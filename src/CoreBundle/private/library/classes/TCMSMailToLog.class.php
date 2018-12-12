@@ -70,7 +70,7 @@ class TCMSMailToLog extends TCMSMail
             /**
              * @var $logger LoggerInterface
              */
-            $logger = ServiceLocator::get('monolog.logger.chameleon');
+            $logger = ServiceLocator::get('logger');
             $logger->info($sLog);
         }
 

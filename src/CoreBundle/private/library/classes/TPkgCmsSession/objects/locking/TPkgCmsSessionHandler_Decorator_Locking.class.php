@@ -72,7 +72,7 @@ class TPkgCmsSessionHandler_Decorator_Locking extends \Symfony\Component\HttpFou
                 /**
                  * @var $logger LoggerInterface
                  */
-                $logger = ServiceLocator::get('monolog.logger.chameleon');
+                $logger = ServiceLocator::get('logger');
                 $logger->error('Unable to obtain session lock for id '.$sSessionId);
             }
             throw new TPkgCmsSessionStorageLockException('Unable to obtain session lock for id '.$sSessionId);
@@ -95,7 +95,7 @@ class TPkgCmsSessionHandler_Decorator_Locking extends \Symfony\Component\HttpFou
                 /**
                  * @var $logger LoggerInterface
                  */
-                $logger = ServiceLocator::get('monolog.logger.chameleon');
+                $logger = ServiceLocator::get('logger');
 
                 $logger->warning('unable to write '.$sSessionId.' because the session was locked by another thread');
             }

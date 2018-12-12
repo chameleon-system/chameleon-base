@@ -33,6 +33,6 @@ class ChameleonSystemCsv2SqlExtension extends Extension implements PrependExtens
      */
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig('monolog', ['channels' => ['chameleon_csv2sql']]);
+        $container->prependExtensionConfig('monolog', ['channels' => ['csv2sql']]);
     }
 }

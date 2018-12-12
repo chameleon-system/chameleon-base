@@ -33,6 +33,6 @@ class ChameleonSystemPkgCoreExtension extends Extension implements PrependExtens
      */
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig('monolog', ['channels' => ['chameleon_pkg_core']]);
+        $container->prependExtensionConfig('monolog', ['channels' => ['pkg_core']]);
     }
 }

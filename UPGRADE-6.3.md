@@ -93,7 +93,7 @@ Old in service.xml:
 </service>
 
 <service id="cmsPkgCore.logChannel.cmsUpdates" class="TPkgCmsCoreLog">
-    <argument type="service" id="monolog.logger.chameleon_cms_update"/>
+    <argument type="service" id="monolog.logger.cms_update"/>
 </service>
 ```
 
@@ -105,7 +105,7 @@ monolog:
            type: stream
            path: "%kernel.logs_dir%/core.log"
            channels:
-               - "cms_updates
+               - "cms_update"
            level: info
 ```
 
