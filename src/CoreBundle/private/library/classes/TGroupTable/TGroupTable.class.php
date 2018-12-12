@@ -138,7 +138,6 @@ class TGroupTable
     public $rowCallback = null;
 
     /**
-     *
      * the table is managed by client-side modules, should receive data attributes with table metadata.
      *
      * @var bool

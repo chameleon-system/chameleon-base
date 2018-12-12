@@ -252,7 +252,7 @@ class HtmlParser
 
     public function skipEndOfTag()
     {
-        while (($ch = $this->iCurrentChar) !== -1) {
+        while (-1 !== ($ch = $this->iCurrentChar)) {
             if ('>' == $ch) {
                 $this->moveNext();
 
@@ -265,7 +265,7 @@ class HtmlParser
     public function skipInTag($chars)
     {
         $sb = '';
-        while (($ch = $this->iCurrentChar) !== -1) {
+        while (-1 !== ($ch = $this->iCurrentChar)) {
             if ('>' == $ch) {
                 return $sb;
             } else {
@@ -291,7 +291,7 @@ class HtmlParser
     {
         $sb = '';
         $count = 0;
-        while (($ch = $this->iCurrentChar) !== -1 && $count++ < $maxChars) {
+        while (-1 !== ($ch = $this->iCurrentChar) && $count++ < $maxChars) {
             if ('>' == $ch) {
                 return $sb;
             } else {
@@ -316,7 +316,7 @@ class HtmlParser
     public function skipToInTag($chars)
     {
         $sb = '';
-        while (($ch = $this->iCurrentChar) !== -1) {
+        while (-1 !== ($ch = $this->iCurrentChar)) {
             $match = '>' == $ch;
             if (!$match) {
                 for ($idx = 0; $idx < count($chars); ++$idx) {
@@ -339,7 +339,7 @@ class HtmlParser
     public function skipToElement()
     {
         $sb = '';
-        while (($ch = $this->iCurrentChar) !== -1) {
+        while (-1 !== ($ch = $this->iCurrentChar)) {
             if ('<' == $ch) {
                 return $sb;
             }
