@@ -356,13 +356,13 @@ class TPkgCmsCoreSendToHost
         $this->parseResponseHeader($sHeader);
 
 
-        $msg = "REQUEST:\n".$this->getLastRequest()."\n\nRESPONSE:\n".$this->getLastResponseHeader().$this->getLastResponseBody();
+        $msg = "REQUEST: ".$this->getLastRequest()." RESPONSE: ".$this->getLastResponseHeader().$this->getLastResponseBody();
+        $msg = str_replace(["\r", "\n"], ['', '\n'], $msg);
         if (Response::HTTP_OK === $this->getLastResponseCode()) {
             $this->getLogger()->info($msg);
         } else {
             $this->getLogger()->error($msg);
         }
-
 
         return $this->lastResponseBody;
     }
