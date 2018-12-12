@@ -69,4 +69,14 @@ class ClassFromTableFieldProvider implements ClassFromTableFieldProviderInterfac
             'fieldName' => $tableConfIdSplit[1],
         );
     }
+
+    /**
+     * @param string $suffixedFieldName
+     *
+     * @return string
+     */
+    private function stripFieldTranslationSuffix(string $suffixedFieldName): string
+    {
+        return preg_replace('/__\w+$/', '', $suffixedFieldName);
+    }
 }
