@@ -37,14 +37,7 @@ class TCMSFieldDocument extends TCMSFieldLookup
         $oTreeSelect = new TCMSRenderDocumentTreeSelectBox();
         $viewRenderer->AddSourceObject('optionsHTML', $oTreeSelect->GetTreeOptions());
 
-        $html = $viewRenderer->Render('TCMSFieldDocument/fieldDocument.html.twig', null, false);
-
-//        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.select'), 'javascript:'.$this->_GetOpenWindowJS(), URL_CMS.'/images/icons/page_attachment.gif', 'float-left');
-//        $html .= ' &nbsp; '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:_ResetDocument('".TGlobal::OutHTML($this->name)."', '".TGlobal::Translate('chameleon_system_core.field_document.nothing_selected')."','".TGlobal::OutHTML($this->oDefinition->sqlData['field_default_value'])."')", URL_CMS.'/images/icons/action_stop.gif', 'float-left');
-
-//        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.upload'), 'javascript:'.$this->_GetOpenUploadWindowJS(), URL_CMS.'/images/icons/add.png', '');
-
-        return $html;
+        return $viewRenderer->Render('TCMSFieldDocument/fieldDocument.html.twig', null, false);
     }
 
     public function _GetOpenWindowJS()
