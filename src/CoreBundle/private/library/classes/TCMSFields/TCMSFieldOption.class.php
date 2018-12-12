@@ -42,12 +42,12 @@ class TCMSFieldOption extends TCMSField
 
         if (count($this->options) >= 3) {
             // show as select box
-            $html = '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name).'" class="form-control form-control-sm" style="width: 363px; float: left;">';
+            $html = '<div class="row"><div class="col-12 col-lg-8">';
+            $html .= '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name).'" class="form-control form-control-sm" data-select2-option="">';
             if ($this->allowEmptySelection) {
                 $chooseMessage = TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected');
 
                 $html .= '<option value="">'.TGlobal::OutHTML($chooseMessage)."</option>\n";
-                $html .= '<option value="">'.TGlobal::OutHTML('-------------------------------------------')."</option>\n";
             }
             foreach ($this->options as $key => $value) {
                 $selected = '';
@@ -57,10 +57,9 @@ class TCMSFieldOption extends TCMSField
                 $html .= '<option value="'.TGlobal::OutHTML($key)."\"{$selected}>".TGlobal::OutHTML($value)."</option>\n";
             }
             $html .= "</select>
-        <div class=\"switchToRecordBox\">\n";
+                <div class=\"col-12 col-lg-4 switchToRecordBox\"></div>\n";
 
-            $html .= "<div class=\"cleardiv\">&nbsp;</div>
-        </div>\n";
+            $html .= "</div>\n";
         } else {
             // show as radio button
             $html = '';

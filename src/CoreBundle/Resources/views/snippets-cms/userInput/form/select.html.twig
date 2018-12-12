@@ -13,6 +13,7 @@
             {% if onChange is defined %} onchange="{{onChange}}" {% endif %}
             name="{{sName}}"
             {% if bRequired == true%} required {%endif%}
+            data-select2-option=""
     >
         {% for aValue in aValueList %}
             <option value="{{aValue.sValue}}" {% if sValue == aValue.sValue %}selected="selected"{% endif %}>{{aValue.sName}}</option>
