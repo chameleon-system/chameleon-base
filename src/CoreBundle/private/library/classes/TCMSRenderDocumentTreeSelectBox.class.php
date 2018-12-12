@@ -33,8 +33,8 @@ class TCMSRenderDocumentTreeSelectBox
     /**
      * renders one tree level as <option>.
      *
-     * @param string|int  $parent_id
-     * @param int         $level
+     * @param string|int $parent_id
+     * @param int        $level
      */
     public function RenderDocumentTree($parent_id = 1, $level = 0)
     {
