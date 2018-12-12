@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorInterface;
+use Psr\Log\LoggerInterface;
 
 class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
 {
@@ -272,6 +273,9 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
             $sPlaintext = $this->ReplaceVariablesInTextHook($sPlaintext, $oNewsletterUser);
             $sGeneratedNewsletter = $this->ReplaceVariablesInTextHook($sGeneratedNewsletter, $oNewsletterUser);
 
+            /**
+             * @var $logger LoggerInterface
+             */
             $logger = \ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
             if (false === $this->isNewsletterAlreadySent($oNewsletterUser)) {
                 if (!$oMailObject->Send(array('sBody' => $sGeneratedNewsletter, 'sTextBody' => $sPlaintext))) {
