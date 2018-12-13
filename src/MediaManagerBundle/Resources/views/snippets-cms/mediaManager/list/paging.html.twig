@@ -1,81 +1,84 @@
 {# listState \ChameleonSystem\MediaManager\MediaManagerListState #}
 {% if numberOfItems > 0 %}
-    <div class="snippetMediaManagerListPaging">
 
-        <ul class="pagination pagination-md TFullGroupTablePagination">
-            <li class="disabled">
-                <a href="#"><span class="glyphicon glyphicon-list" aria-hidden="true"
-                                  style="margin-right: 5px;"></span>{{ 'chameleon_system_media_manager.paging.paging_info' | trans({'%pageNumber%': listState.pageNumber + 1, '%numberOfPages%': numberOfPages, '%numberOfItems%': numberOfItems}) }}
-                </a>
-            </li>
-
-            {% if numberOfPages > 1 %}
-
-                <li{% if listState.pageNumber < 1 %} class="disabled"{% endif %}><a href="#" class="go-to-page"
-                                                                                    data-page-number="0"><span
-                                class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span></a></li>
-                <li{% if listState.pageNumber < 1 %} class="disabled"{% endif %}><a href="#" class="go-to-page"
-                                                                                    data-page-number="{{ listState.pageNumber - 1 }}"><span
-                                class="glyphicon glyphicon-backward" aria-hidden="true"></span></a></li>
-
-
-                {# always show first page#}
-                <li{% if 0 == listState.pageNumber %} class="active"{% endif %}>
-                    <a href="#" class="go-to-page" data-page-number="0">1</a>
+    <div class="row snippetMediaManagerListPaging">
+        <nav class="col-auto mr-auto">
+            <ul class="pagination pagination-md TFullGroupTablePagination">
+                <li class="page-item disabled">
+                    <a href="#" class="page-link"><span class="glyphicon glyphicon-list" aria-hidden="true"
+                                      style="margin-right: 5px;"></span>{{ 'chameleon_system_media_manager.paging.paging_info' | trans({'%pageNumber%': listState.pageNumber + 1, '%numberOfPages%': numberOfPages, '%numberOfItems%': numberOfItems}) }}
+                    </a>
                 </li>
 
-                {# first gap from page 4#}
-                {% if listState.pageNumber > 2 %}
-                    <li class="block"><a>...</a></li>
-                {% endif %}
+                {% if numberOfPages > 1 %}
 
-                {% set endLoop = listState.pageNumber+1 %}
-                {% if listState.pageNumber == 0 %}
-                    {% set endLoop = listState.pageNumber+2 %}
-                {% endif %}
+                    <li{% if listState.pageNumber < 1 %} class="page-item disabled"{% endif %}><a href="#"
+                                                                                                  class="page-link go-to-page"
+                                                                                                  data-page-number="0"><span
+                                    class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span></a></li>
+                    <li{% if listState.pageNumber < 1 %} class="page-item disabled"{% endif %}><a href="#"
+                                                                                                  class="page-link go-to-page"
+                                                                                                  data-page-number="{{ listState.pageNumber - 1 }}"><span
+                                    class="glyphicon glyphicon-backward" aria-hidden="true"></span></a></li>
 
-                {% for i in listState.pageNumber-1..endLoop %}
-                    {% if i > 0 and i <= numberOfPages-1 %}
-                        <li{% if i == listState.pageNumber %} class="active"{% endif %}>
-                            <a href="#" class="go-to-page" data-page-number="{{ i }}">{{ i+1 }}</a>
-                        </li>
+
+                    {# always show first page#}
+                    <li{% if 0 == listState.pageNumber %} class="page-item active"{% endif %}>
+                        <a href="#" class="page-link go-to-page" data-page-number="0">1</a>
+                    </li>
+
+                    {# first gap from page 4#}
+                    {% if listState.pageNumber > 2 %}
+                        <li class="page-item block"><a>...</a></li>
                     {% endif %}
-                {% endfor %}
+
+                    {% set endLoop = listState.pageNumber+1 %}
+                    {% if listState.pageNumber == 0 %}
+                        {% set endLoop = listState.pageNumber+2 %}
+                    {% endif %}
+
+                    {% for i in listState.pageNumber-1..endLoop %}
+                        {% if i > 0 and i <= numberOfPages-1 %}
+                            <li{% if i == listState.pageNumber %} class="page-item active"{% endif %}>
+                                <a href="#" class="page-link go-to-page" data-page-number="{{ i }}">{{ i+1 }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
 
 
-                {% if listState.pageNumber < numberOfPages-1 and numberOfPages > 4 %}
-                    {% if listState.pageNumber < numberOfPages-3 %}
-                        <li class="block"><a>...</a></li>
+                    {% if listState.pageNumber < numberOfPages-1 and numberOfPages > 4 %}
+                        {% if listState.pageNumber < numberOfPages-3 %}
+                            <li class="page-item block"><a class="page-link">...</a></li>
+                        {% endif %}
+                        {% if listState.pageNumber < numberOfPages-2 %}
+                            <li class="page-item">
+                                <a href="#" class="page-link go-to-page"
+                                   data-page-number="{{ numberOfPages-1 }}">{{ numberOfPages }}</a>
+                            </li>
+                        {% endif %}
                     {% endif %}
-                    {% if listState.pageNumber < numberOfPages-2 %}
-                        <li>
-                            <a href="#" class="go-to-page"
-                               data-page-number="{{ numberOfPages-1 }}">{{ numberOfPages }}</a>
-                        </li>
-                    {% endif %}
+
+                    <li{% if numberOfPages < listState.pageNumber+2 %} class="page-item disabled"{% endif %}><a href="#"
+                                                                                                                class="page-link go-to-page"
+                                                                                                                data-page-number="{{ listState.pageNumber + 1 }}"><span
+                                    class="glyphicon glyphicon-forward" aria-hidden="true"></span></a></li>
+                    <li{% if numberOfPages < listState.pageNumber+2 %} class="page-item disabled"{% endif %}><a href="#"
+                                                                                                                class="page-link go-to-page"
+                                                                                                                data-page-number="{{ numberOfPages - 1 }}"><span
+                                    class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span></a></li>
                 {% endif %}
+            </ul>
+        </nav>
+        <div class="col-auto form-group TFullGroupTablePerPageSelect">
+            <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text">{{ 'chameleon_system_media_manager.paging.per_page' | trans }}</span></div>
 
-                <li{% if numberOfPages < listState.pageNumber+2 %} class="disabled"{% endif %}><a href="#"
-                                                                                                  class="go-to-page"
-                                                                                                  data-page-number="{{ listState.pageNumber + 1 }}"><span
-                                class="glyphicon glyphicon-forward" aria-hidden="true"></span></a></li>
-                <li{% if numberOfPages < listState.pageNumber+2 %} class="disabled"{% endif %}><a href="#"
-                                                                                                  class="go-to-page"
-                                                                                                  data-page-number="{{ numberOfPages - 1 }}"><span
-                                class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span></a></li>
-            {% endif %}
-        </ul>
-
-
-        <div class="form-group pull-right form-inline TFullGroupTablePerPageSelect">
-            <label>{{ 'chameleon_system_media_manager.paging.per_page' | trans }}
-                <select class="page-size-selection form-control form-control-sm">
+                <select class="page-size-selection form-control">
                     {% for label, value in pageSizes %}
                         <option value="{{ value | e('html_attr') }}"{% if value == listState.pageSize %} selected{% endif %}>{{ label }}</option>
                     {% endfor %}
                 </select>
-            </label>
+            </div>
         </div>
-
     </div>
 {% endif %}
