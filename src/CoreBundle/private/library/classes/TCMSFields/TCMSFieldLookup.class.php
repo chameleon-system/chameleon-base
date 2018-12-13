@@ -474,11 +474,21 @@ class TCMSFieldLookup extends TCMSField
      */
     public function GetCMSHtmlHeadIncludes()
     {
-        $aIncludes = parent::GetCMSHtmlHeadIncludes();
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
+        $includes = parent::GetCMSHtmlHeadIncludes();
+        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
-        return $aIncludes;
+        return $includes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetCMSHtmlFooterIncludes()
+    {
+        $includes = parent::GetCMSHtmlFooterIncludes();
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
+
+        return $includes;
     }
 
     /**
