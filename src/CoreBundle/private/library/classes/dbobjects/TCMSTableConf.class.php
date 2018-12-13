@@ -196,6 +196,7 @@ class TCMSTableConf extends TCMSRecord
                         $fieldName = $oField->name;
 
                         if ($language !== null) {
+                            // TODO GetEditFieldNameForLanguage() returns wrong if the base translation language === current language
                             $fieldNameForLanguage = $oFieldDef->GetEditFieldNameForLanguage($language);
 
                             if (false !== $fieldNameForLanguage && true === \array_key_exists($fieldNameForLanguage, $oTableRow->sqlData)) {
