@@ -334,6 +334,7 @@
                 url: url,
                 data: {
                     'ps': state.pageSize,
+                    'p': state.pageNumber,
                     's': state.searchTerm,
                     'mediaTreeId': state.mediaTreeNodeId,
                     'listView': state.listView,
@@ -691,12 +692,18 @@
             var errorMsg = CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.general_error_message');
 
             if (typeof data !== 'undefined') {
-                var jsonData = $.parseJSON(data.responseText);
-                if (jsonData.errorMessage) {
-                    errorMsg = jsonData.errorMessage;
-                }
-                if (jsonData.message) {
-                    errorMsg = jsonData.message;
+                errorMsg = data.status + " " + data.statusText + "\n";
+
+                try {
+                    var jsonData = $.parseJSON(data.responseText);
+                    if (jsonData.errorMessage) {
+                        errorMsg += jsonData.errorMessage;
+                    }
+                    if (jsonData.message) {
+                        errorMsg += jsonData.message;
+                    }
+                } catch (err) {
+                    // ignore here: is already an error with above general message
                 }
             }
 

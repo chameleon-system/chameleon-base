@@ -9,15 +9,19 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Doctrine\DBAL\Connection;
+
 class TCMSRenderDocumentTreeSelectBox
 {
     public $treeHTML = '';
-    private $selectedID = null;
+    private $selectedID;
 
-    public function TCMSRenderDocumentTreeSelectBox()
-    {
-    }
-
+    /**
+     * @param string|null $selectedID
+     *
+     * @return string
+     */
     public function GetTreeOptions($selectedID = null)
     {
         $this->selectedID = $selectedID;
@@ -29,20 +33,11 @@ class TCMSRenderDocumentTreeSelectBox
     /**
      * renders one tree level as <option>.
      *
-     * @param in  $parent_id
-     * @param int $level
+     * @param string|int $parent_id
+     * @param int        $level
      */
     public function RenderDocumentTree($parent_id = 1, $level = 0)
     {
-        /*
-        IE7 has noe clue what to do with option padding... *snort*
-
-        $padding = 5;
-        for ($i=0;$i<$level;$i++) {
-          $padding = $padding +10;
-        }
-        */
-
         $paddingString = '&nbsp;';
         for ($i = 0; $i < $level; ++$i) {
             $paddingString .= '&nbsp;&nbsp;';
@@ -50,23 +45,29 @@ class TCMSRenderDocumentTreeSelectBox
 
         ++$level;
 
-        $query = "SELECT * FROM `cms_document_tree` WHERE `parent_id` = '".$parent_id."' ORDER BY `entry_sort`";
-        $result = MySqlLegacySupport::getInstance()->query($query);
+        $quotedParentId = $this->getDatabaseConnection()->quote($parent_id);
+        $query = "SELECT * FROM `cms_document_tree` WHERE `parent_id` = $quotedParentId ORDER BY `entry_sort`";
+        $treeList = TdbCmsDocumentTreeList::GetList($query);
 
         $symbol = '';
         if ($level > 0) {
             $symbol = '&#187;&nbsp;';
         }
 
-        while ($row = MySqlLegacySupport::getInstance()->fetch_assoc($result)) {
+        while ($element = $treeList->Next()) {
             $selected = '';
-            if (!is_null($this->selectedID) && $this->selectedID == $row['id']) {
-                $selected = ' selected="selected"';
+            if (null !== $this->selectedID && $this->selectedID == $element->id) {
+                $selected = 'selected="selected"';
             }
 
-            $directoryName = $row['name'];
-            $this->treeHTML .= "<option value=\"{$row['id']}\"{$selected}>".$paddingString.$symbol.$directoryName."</option>\n";
-            $this->RenderDocumentTree($row['id'], $level);
+            $directoryName = $element->fieldName;
+            $this->treeHTML .= sprintf('<option value="%s" %s>%s%s%s</option>\n', $element->id, $selected, $paddingString, $symbol, $directoryName);
+            $this->RenderDocumentTree($element->id, $level);
         }
+    }
+
+    private function getDatabaseConnection(): Connection
+    {
+        return ServiceLocator::get('database_connection');
     }
 }
