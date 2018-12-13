@@ -757,6 +757,23 @@ CHAMELEON.CORE.MTTableEditor.inputFields = function () {
             }
         });
     });
+
+    $('[data-select2-option]').each(function () {
+        $(this).select2( $(this).data("select2-option") );
+    });
+
+    $('.lookup-container-field-types select').on('select2:select', function (e) {
+        var data = e.params.data;
+        var fieldName = $(this).attr('name');
+        var fieldID = '#fieldTypeHelp' + data.id;
+        var helpText = $(fieldID).html();
+
+        if(helpText == '') {
+            $("#" + fieldName + "-helpContainer").html("&nbsp;");
+        } else {
+            $("#" + fieldName + "-helpContainer").html(helpText);
+        }
+    });
 };
 
 CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent = function (selector) {

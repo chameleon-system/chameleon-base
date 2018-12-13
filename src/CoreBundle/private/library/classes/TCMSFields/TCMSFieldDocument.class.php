@@ -15,9 +15,6 @@ class TCMSFieldDocument extends TCMSFieldLookup
     {
         $this->oTableConf = &$this->oTableRow->GetTableConf();
 
-        $html = '<input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($this->data).'" />
-      <div>';
-
         $currentFile = TGlobal::Translate('chameleon_system_core.field_document.nothing_selected');
         if (!empty($this->data)) {
             $oCmsDocument = TdbCmsDocument::GetNewInstance();
@@ -27,33 +24,20 @@ class TCMSFieldDocument extends TCMSFieldLookup
             }
         }
 
-        $html .= '<div class="alert alert-info" id="'.TGlobal::OutHTML($this->name).'currentFile">'.$currentFile."</div>
-      <div class=\"cleardiv\">&nbsp;</div>\n";
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.select'), 'javascript:'.$this->_GetOpenWindowJS(), URL_CMS.'/images/icons/page_attachment.gif', 'float-left');
-        $html .= ' &nbsp; '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:_ResetDocument('".TGlobal::OutHTML($this->name)."', '".TGlobal::Translate('chameleon_system_core.field_document.nothing_selected')."','".TGlobal::OutHTML($this->oDefinition->sqlData['field_default_value'])."')", URL_CMS.'/images/icons/action_stop.gif', 'float-left');
-        $html .= "<div class=\"cleardiv\">&nbsp;</div>\n";
-        $html .= '<fieldset style="margin-top: 15px;">
-        <legend>'.TGlobal::Translate('chameleon_system_core.field_document.upload')."</legend>\n";
-        $html .= '
-            <select name="documentTreeId_'.TGlobal::OutHTML($this->name).'" id="documentTreeId_'.TGlobal::OutHTML($this->name).'"  class="form-control form-control-sm float-left" style="max-width: 300px; width: auto;">
-            <option value="" style="font-weight: bold;">'.TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected')."</option>\n";
+        $viewRenderer = $this->getViewRenderer();
+        $viewRenderer->AddSourceObject('fieldName', $this->name);
+        $viewRenderer->AddSourceObject('fieldValue', $this->data);
+        $viewRenderer->AddSourceObject('currentFile', $currentFile);
+
+        $viewRenderer->AddSourceObject('onClickDocument', $this->_GetOpenWindowJS());
+        $onClickReset = "_ResetDocument('".TGlobal::OutHTML($this->name)."', '".TGlobal::Translate('chameleon_system_core.field_document.nothing_selected')."','".TGlobal::OutHTML($this->oDefinition->sqlData['field_default_value'])."')";
+        $viewRenderer->AddSourceObject('onClickReset', $onClickReset);
+        $viewRenderer->AddSourceObject('onClickNewFile', $this->_GetOpenUploadWindowJS());
 
         $oTreeSelect = new TCMSRenderDocumentTreeSelectBox();
+        $viewRenderer->AddSourceObject('optionsHTML', $oTreeSelect->GetTreeOptions());
 
-        $html .= $oTreeSelect->GetTreeOptions();
-        $html .= '
-            </select>
-          ';
-
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.upload'), 'javascript:'.$this->_GetOpenUploadWindowJS(), URL_CMS.'/images/icons/add.png', 'float-left');
-
-        $html .= "</fieldset>\n";
-
-        $html .= "<div class=\"cleardiv\">&nbsp;</div>\n";
-        $html .= '<div class="cmsdocumentfieldcontainer">';
-        $html .= "</div>\n";
-
-        return $html;
+        return $viewRenderer->Render('TCMSFieldDocument/fieldDocument.html.twig', null, false);
     }
 
     public function _GetOpenWindowJS()
@@ -95,5 +79,13 @@ class TCMSFieldDocument extends TCMSFieldLookup
         $aIncludes[] = $html;
 
         return $aIncludes;
+    }
+
+    /**
+     * @return ViewRenderer
+     */
+    private function getViewRenderer()
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }
