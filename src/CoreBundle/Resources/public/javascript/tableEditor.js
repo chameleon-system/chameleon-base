@@ -364,7 +364,7 @@ function loadPositionList(tableID, tableSQLName, fieldName, recordID, sRestricti
         sRestriction = $('#' + sRestrictionField).val();
     }
 
-    if (typeof(sRestriction) == 'undefined') sRestriction = '';
+    if (typeof (sRestriction) == 'undefined') sRestriction = '';
 
     var url = window.location.pathname + '?pagedef=CMSFieldPositionRPC&_rmhist=false&module_fnc[contentmodule]=GetSortElements';
     url += '&tableID=' + tableID;
@@ -446,7 +446,7 @@ function RefreshRecordEditLock() {
 }
 
 function CheckRefreshReturn(data) {
-    if (typeof(data) == 'object' && data instanceof Array && data.length == 2) {
+    if (typeof (data) == 'object' && data instanceof Array && data.length == 2) {
         if (data[0] == 'logedoutajax') {
             document.location.href = data[1]
         }
@@ -519,7 +519,7 @@ function SaveViaAjax() {
         });
     }
 
-    if (typeof(framestosave) != 'undefined' && framestosave.length > 0) {
+    if (typeof (framestosave) != 'undefined' && framestosave.length > 0) {
         $.map(framestosave, function (frameToSave, index) {
             $('.itemsave:first', $('#' + frameToSave).contents()).trigger('click')
         });
@@ -718,11 +718,11 @@ CHAMELEON.CORE.MTTableEditor.setGetActiveTab = function () {
     var url = document.URL;
     var hash = url.substring(url.indexOf('#'));
 
-    $(".nav-tabs").find("li a").each(function(key, val) {
+    $(".nav-tabs").find("li a").each(function (key, val) {
         if (hash == $(val).attr('href')) {
             $(val).click();
         }
-        $(val).click(function() {
+        $(val).click(function () {
             location.hash = $(this).attr('href');
         });
     });
@@ -736,14 +736,14 @@ function updateIframeSize(sFieldName, iHeight) {
 
 CHAMELEON.CORE.MTTableEditor.inputFields = function () {
     $('[data-datetimepicker-option]').each(function () {
-        $(this).datetimepicker( $(this).data("datetimepicker-option") );
+        $(this).datetimepicker($(this).data("datetimepicker-option"));
     });
 
-    $('.datetimepicker-input').each( function() {
+    $('.datetimepicker-input').each(function () {
         var id = $(this).attr('id');
 
         // This custom-event of the datetimepicker only works with the id of the element.
-        $('#'+id).on("change.datetimepicker", function(e) {
+        $('#' + id).on("change.datetimepicker", function (e) {
             var moment = e.date;
 
             if (moment !== undefined) {
@@ -753,13 +753,13 @@ CHAMELEON.CORE.MTTableEditor.inputFields = function () {
                     var cmsDate = moment.format('YYYY-MM-DD HH:mm:ss');
                 }
                 // We need a sql-date-format for BC reasons.
-                $('input[name='+id+']').val(cmsDate);
+                $('input[name=' + id + ']').val(cmsDate);
             }
         });
     });
 
     $('[data-select2-option]').each(function () {
-        $(this).select2( $(this).data("select2-option") );
+        $(this).select2($(this).data("select2-option"));
     });
 
     $('.lookup-container-field-types select').on('select2:select', function (e) {
@@ -768,7 +768,7 @@ CHAMELEON.CORE.MTTableEditor.inputFields = function () {
         var fieldID = '#fieldTypeHelp' + data.id;
         var helpText = $(fieldID).html();
 
-        if(helpText == '') {
+        if (helpText == '') {
             $("#" + fieldName + "-helpContainer").html("&nbsp;");
         } else {
             $("#" + fieldName + "-helpContainer").html(helpText);
