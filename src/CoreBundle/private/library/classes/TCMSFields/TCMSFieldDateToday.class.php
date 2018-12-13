@@ -42,7 +42,7 @@ class TCMSFieldDateToday extends TCMSFieldDate
     public function _GetHTMLValue()
     {
         $htmldate = $this->data;
-        if ('0000-00-00' == $htmldate || empty($htmldate)) {
+        if ('0000-00-00' === $htmldate || empty($htmldate)) {
             $this->currentDateIsEmpty = true;
             $htmldate = date('Y-m-d');
         }
