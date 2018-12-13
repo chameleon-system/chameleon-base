@@ -198,7 +198,7 @@ class TCMSTableConf extends TCMSRecord
                         if ($language !== null) {
                             $fieldNameForLanguage = $oFieldDef->GetEditFieldNameForLanguage($language);
 
-                            if (true === \array_key_exists($fieldNameForLanguage, $oTableRow->sqlData)) {
+                            if (false !== $fieldNameForLanguage && true === \array_key_exists($fieldNameForLanguage, $oTableRow->sqlData)) {
                                 $fieldName = $fieldNameForLanguage;
                             } // else could be a Save() - containing only mono-language data
                         }

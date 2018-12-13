@@ -571,7 +571,7 @@ class TCMSFieldDefinition extends TCMSRecord
 
     public function isTranslatable(): bool
     {
-        return '!' === $this->sqlData['is_translatable'];
+        return '1' === $this->sqlData['is_translatable'];
     }
 
     /**
