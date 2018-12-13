@@ -150,7 +150,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     /**
      * computes differences between new and old values.
      *
-     * @param TIterator  $newFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator  $newFields  holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      *
      * @return array
