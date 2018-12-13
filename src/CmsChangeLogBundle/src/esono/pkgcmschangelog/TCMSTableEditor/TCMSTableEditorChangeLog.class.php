@@ -20,8 +20,6 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      * the original data of the row before a save overwrites the data.
      *
      * @var TCMSField[]
-     *
-     * @deprecated since 6.3.0 - determined from $this->oTablePreChangeData
      */
     protected $oOldFields = array();
 
@@ -77,9 +75,9 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     }
 
     /**
-     * @param array $postData
+     * Not used anymore. Handled with $this->oTablePreChangeData.
      *
-     * @deprecated since 6.3.0 - the existing $this->oTablePreChangeData is used
+     * @param array $postData
      */
     protected function savePreSaveValues(array $postData)
     {
