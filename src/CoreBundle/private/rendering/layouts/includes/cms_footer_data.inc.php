@@ -3,7 +3,7 @@ if (TGlobal::CMSUserDefined()) {
     ?>
     <script type="text/javascript">
         $(document).ready(function () {
-            saveCMSRegistryEntry('dialogCloseButtonText', '<?=TGlobal::Translate('chameleon_system_core.action.close'); ?>');
+            saveCMSRegistryEntry('dialogCloseButtonText', '<?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.action.close')); ?>');
         });
     </script>
 

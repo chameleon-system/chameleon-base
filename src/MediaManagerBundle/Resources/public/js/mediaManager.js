@@ -198,9 +198,7 @@
                 .one('state_ready.jstree', self.onTreeRestoredState.bind(this))
             ;
 
-            self.element.css('height', $(window).height() - 10);
             $(window).on('resize', function () {
-                self.element.css('height', $(window).height() - 10);
                 $('.gutter-horizontal', self.element).css('height', self.element.height());
             });
 
@@ -336,6 +334,7 @@
                 url: url,
                 data: {
                     'ps': state.pageSize,
+                    'p': state.pageNumber,
                     's': state.searchTerm,
                     'mediaTreeId': state.mediaTreeNodeId,
                     'listView': state.listView,
@@ -693,12 +692,18 @@
             var errorMsg = CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.general_error_message');
 
             if (typeof data !== 'undefined') {
-                var jsonData = $.parseJSON(data.responseText);
-                if (jsonData.errorMessage) {
-                    errorMsg = jsonData.errorMessage;
-                }
-                if (jsonData.message) {
-                    errorMsg = jsonData.message;
+                errorMsg = data.status + " " + data.statusText + "\n";
+
+                try {
+                    var jsonData = $.parseJSON(data.responseText);
+                    if (jsonData.errorMessage) {
+                        errorMsg += jsonData.errorMessage;
+                    }
+                    if (jsonData.message) {
+                        errorMsg += jsonData.message;
+                    }
+                } catch (err) {
+                    // ignore here: is already an error with above general message
                 }
             }
 
@@ -1031,12 +1036,6 @@
             var closeButton = $('<span class="close-button">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.close_button_text') + ' <span class="glyphicon glyphicon-remove"></span></span>');
             var layover = $('<div class="media-manager-layover"><div class="title h3">' + title + '</div></div>');
 
-            var newHeight = $(window).height() - this.editContainer.offset().top;
-            if (newHeight < this.element.height()) {
-                newHeight = this.element.height();
-            }
-
-            layover.css({'height': newHeight, 'width': '100%'});
             closeButton.on('click', function (evt) {
                 self.showWaitingAnimation();
                 layover.remove();

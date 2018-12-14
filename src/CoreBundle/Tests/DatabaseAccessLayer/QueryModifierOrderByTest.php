@@ -14,7 +14,7 @@ namespace ChameleonSystem\CoreBundle\Tests\DatabaseAccessLayer;
 use ChameleonSystem\core\DatabaseAccessLayer\QueryModifierOrderBy;
 use PHPUnit\Framework\TestCase;
 
-class QueryModifierOrderByText extends TestCase
+class QueryModifierOrderByTest extends TestCase
 {
     /**
      * @var QueryModifierOrderBy
@@ -48,10 +48,25 @@ class QueryModifierOrderByText extends TestCase
      * @dataProvider dataProviderChangeOrderBy
      *
      * @param $query
-     * @param $expected
+     * @param $expectedResult
      * @param array $orderBy
      */
     public function it_changes_order_by($query, $expectedResult, array $orderBy)
+    {
+        $this->given_a_modifier();
+        $this->when_we_call_getQueryWithOrderBy_with($query, $orderBy);
+        $this->then_we_expect($expectedResult);
+    }
+
+    /**
+     * @test
+     * @dataProvider dataProviderHandleInvalidSortDirection
+     *
+     * @param string $query
+     * @param string $expectedResult
+     * @param array  $orderBy
+     */
+    public function it_handles_invalid_sort_direction(string $query, string $expectedResult, array $orderBy): void
     {
         $this->given_a_modifier();
         $this->when_we_call_getQueryWithOrderBy_with($query, $orderBy);
@@ -125,5 +140,26 @@ class QueryModifierOrderByText extends TestCase
                 array('`tbl`.`newping`' => 'DESC', '`tbl2`.`newpong`' => 'ASC'),
             ),
         );
+    }
+
+    public function dataProviderHandleInvalidSortDirection(): array
+    {
+        return [
+            [
+                'select foo from bar order by ping ASC, pong DESC',
+                'select foo from bar ORDER BY ping ASC, newpong ASC',
+                ['ping' => 'ASC', 'newpong' => 'foo'],
+            ],
+            [
+                'select foo from bar order by ping ASC, pong DESC',
+                'select foo from bar ORDER BY ping ASC, newpong DESC',
+                ['ping' => '\'; -- BOBBY TABLES', 'newpong' => 'DESC'],
+            ],
+            [
+                'select foo from bar order by ping ASC',
+                'select foo from bar ORDER BY ping DESC',
+                ['ping' => ' desc '],
+            ],
+        ];
     }
 }

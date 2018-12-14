@@ -165,8 +165,6 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
     {
         $activeFieldName = $this->fieldTranslationUtil->getTranslatedFieldName('cms_tree_node', 'active', $language);
         $activeFieldName = $this->databaseConnection->quoteIdentifier($activeFieldName);
-        $nameFieldName = $this->fieldTranslationUtil->getTranslatedFieldName('cms_tpl_page', 'name', $language);
-        $nameFieldName = $this->databaseConnection->quoteIdentifier($nameFieldName);
 
         $query = "SELECT DISTINCT t.`id` AS tree_id, p.`id` AS page_id FROM cms_tree AS t
           JOIN `cms_tree_node` AS tn
@@ -177,7 +175,6 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
           AND tn.$activeFieldName = '1'
           AND tn.`start_date` <= :date
           AND (tn.`end_date` >= :date OR tn.`end_date` = '0000-00-00 00:00:00')
-          AND p.$nameFieldName <> ''
           ORDER BY 
             CASE WHEN (t.`id` = p.`primary_tree_id_hidden`)
                  THEN 1

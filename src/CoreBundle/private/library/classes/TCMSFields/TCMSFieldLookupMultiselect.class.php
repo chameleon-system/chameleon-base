@@ -9,8 +9,8 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 
 /****************************************************************************
@@ -117,9 +117,9 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
     WHERE MLT.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->oTableRow->sqlData['id'])."'";
         $bShowCustomsort = $this->oDefinition->GetFieldtypeConfigKey('bAllowCustomSortOrder');
         if (true == $bShowCustomsort) {
-            $query .= 'ORDER BY MLT.`entry_sort` ASC , `'.MySqlLegacySupport::getInstance()->real_escape_string($sNameField).'`';
+            $query .= ' ORDER BY MLT.`entry_sort` ASC , `'.MySqlLegacySupport::getInstance()->real_escape_string($sNameField).'`';
         } else {
-            $query .= 'ORDER BY `'.MySqlLegacySupport::getInstance()->real_escape_string($sNameField).'` ';
+            $query .= ' ORDER BY `'.MySqlLegacySupport::getInstance()->real_escape_string($sNameField).'` ';
         }
         $oMLTRecords = call_user_func(array(TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List', 'GetList'), $query);
 
@@ -142,22 +142,20 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
     protected function GetMLTFilterQuery()
     {
         $foreignTableName = $this->GetForeignTableName();
+        $foreignTableConf = new TCMSTableConf();
+        $foreignTableConf->LoadFromField('name', $foreignTableName);
+        $foreignFieldName = $foreignTableConf->GetNameColumn();
 
-        $oTableConf = new TCMSTableConf();
-        $oTableConf->LoadFromField('name', $foreignTableName);
-        $sNameField = $oTableConf->GetNameColumn();
+        $foreignTableNameQuoted = $this->getDatabaseConnection()->quoteIdentifier($foreignTableName);
+        $foreignFieldNameQuoted = $this->getDatabaseConnection()->quoteIdentifier($foreignFieldName);
+        $mltRestrictions = $this->GetMLTRecordRestrictions();
 
-        $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($foreignTableName).'` AS parenttable
-    WHERE 1=1
-    '.$this->GetMLTRecordRestrictions().'';
-        $bShowCustomsort = $this->oDefinition->GetFieldtypeConfigKey('bAllowCustomSortOrder');
-        if (true == $bShowCustomsort) {
-            $query .= 'ORDER BY MLT.`entry_sort` ASC , `parenttable`.`'.MySqlLegacySupport::getInstance()->real_escape_string($sNameField).'`';
-        } else {
-            $query .= 'ORDER BY `parenttable`.`'.MySqlLegacySupport::getInstance()->real_escape_string($sNameField).'`';
-        }
-
-        return $query;
+        return sprintf(
+            'SELECT * FROM %s AS parenttable WHERE 1=1 %s ORDER BY `parenttable`.%s',
+            $foreignTableNameQuoted,
+            $mltRestrictions,
+            $foreignFieldNameQuoted
+        );
     }
 
     /**

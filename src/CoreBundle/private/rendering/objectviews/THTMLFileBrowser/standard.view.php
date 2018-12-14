@@ -78,7 +78,7 @@ $activePageService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_
                         | <a href="#"
                              onclick="THTMLFileBrowserSelectAll(document.<?=TGlobal::OutHTML($oTable->sListId); ?>,false);return false;"><?=TGlobal::OutHTML(TGlobal::Translate('Auswahl aufheben')); ?></a>
                         <select name="actionselectortop"
-                                onchange="if (confirm('<?=TGlobal::OutHTML(TGlobal::Translate('Wollen Sie diese Aktion wirklich auf alle ausgewählten Einträge anwenden?')); ?>')) {document.<?=TGlobal::OutHTML($oTable->sListId); ?>.elements['module_fnc[<?=TGlobal::OutHTML($sControllingModuleSpotName); ?>]'].value=this.value;document.<?=TGlobal::OutHTML($oTable->sListId); ?>.submit();}">
+                                onchange="if (confirm('<?=TGlobal::OutJS(TGlobal::Translate('Wollen Sie diese Aktion wirklich auf alle ausgewählten Einträge anwenden?')); ?>')) {document.<?=TGlobal::OutHTML($oTable->sListId); ?>.elements['module_fnc[<?=TGlobal::OutHTML($sControllingModuleSpotName); ?>]'].value=this.value;document.<?=TGlobal::OutHTML($oTable->sListId); ?>.submit();}">
                             <option value=""><?=TGlobal::OutHTML(TGlobal::Translate('markierte Einträge:')); ?></option>
                             <?php foreach ($aActions as $sMethod => $sName) {
         ?>
@@ -131,7 +131,7 @@ $activePageService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_
                         | <a href="#"
                              onclick="THTMLFileBrowserSelectAll(document.<?=TGlobal::OutHTML($oTable->sListId); ?>,false);return false;"><?=TGlobal::OutHTML(TGlobal::Translate('Auswahl aufheben')); ?></a>
                         <select name="actionselectorbottom"
-                                onchange="if (confirm('<?=TGlobal::OutHTML(TGlobal::Translate('Wollen Sie diese Aktion wirklich auf alle ausgewählten Einträge anwenden?')); ?>')) {document.<?=TGlobal::OutHTML($oTable->sListId); ?>.elements['module_fnc[<?=TGlobal::OutHTML($sControllingModuleSpotName); ?>]'].value=this.value;document.<?=TGlobal::OutHTML($oTable->sListId); ?>.submit();}">
+                                onchange="if (confirm('<?=TGlobal::OutJS(TGlobal::Translate('Wollen Sie diese Aktion wirklich auf alle ausgewählten Einträge anwenden?')); ?>')) {document.<?=TGlobal::OutHTML($oTable->sListId); ?>.elements['module_fnc[<?=TGlobal::OutHTML($sControllingModuleSpotName); ?>]'].value=this.value;document.<?=TGlobal::OutHTML($oTable->sListId); ?>.submit();}">
                             <option value=""><?=TGlobal::OutHTML(TGlobal::Translate('markierte Einträge:')); ?></option>
                             <?php foreach ($aActions as $sMethod => $sName) {
                         ?>

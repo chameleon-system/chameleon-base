@@ -178,6 +178,10 @@ function _SetDocumentResponse(data, responseMessage) {
  * sets the choosen document in a TCMSFieldDocument
  */
 function _SetDocument(documentID) {
+    var _currentFieldName = getCMSRegistryEntry('_currentFieldName');
+    var form = document.getElementById('cmseditform');
+    form.querySelector('[name=' + _currentFieldName + ']').value = documentID;
+
     var url = window.location.pathname + "?pagedef=CMSUniversalUploader&module_fnc[contentmodule]=ExecuteAjaxCall&_fnc=GetDownloadHTML&documentID=" + documentID;
     GetAjaxCall(url, _SetDocumentResponse);
 }
