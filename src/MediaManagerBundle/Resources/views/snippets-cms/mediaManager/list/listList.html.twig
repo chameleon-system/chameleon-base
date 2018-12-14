@@ -1,6 +1,7 @@
 {# accessRightsMedia \ChameleonSystem\MediaManager\AccessRightsModel #}
 <div class="snippetMediaManagerListList">
-    <table>
+    <table class="table table-sm">
+        <thead class="">
         <tr>
             <th colspan="2">{{ 'chameleon_system_media_manager.list.table_header_image' | trans }}</th>
             <th>{{ 'chameleon_system_media_manager.list.table_header_name' | trans }}</th>
@@ -8,6 +9,8 @@
             <th>{{ 'chameleon_system_media_manager.list.table_header_info' | trans }}</th>
             <th class="actions">{{ 'chameleon_system_media_manager.list.table_header_actions' | trans }}</th>
         </tr>
+        </thead>
+        <tbody>
         {% set mediaItems = listResult.items %}
         {% for mediaItem in mediaItems %}
             {# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
@@ -27,7 +30,7 @@
                          data-type="description">{{ mediaItem.name }}</div>
                 </td>
                 <td>
-                    {% if mediaItem.tags | length > 0 %}<span class="glyphicon glyphicon-tag"></span>{% endif %}
+                    <span class="glyphicon glyphicon-tag"></span>
                     <div class="tags{% if accessRightsMedia.edit %} editable{% endif %}"
                          data-type="tags">{{ mediaItem.tags | join(', ') }}</div>
                 </td>
@@ -45,6 +48,7 @@
                     {% include('mediaManager/list/actions.html.twig') with {'mediaItem': mediaItem, 'pickImageMode': pickImageMode, 'pickImageCallback': pickImageCallback, 'pickImageWithCrop': pickImageWithCrop, 'accessRightsMedia': accessRightsMedia} %}
                 </td>
             </tr>
+        </tbody>
         {% endfor %}
     </table>
 </div>

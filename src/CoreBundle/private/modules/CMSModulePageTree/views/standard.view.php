@@ -376,10 +376,10 @@
 </ul>
 
 <div id="treelegend" style="position: absolute; top: 10px; right: 30px;">
-    <h1>
+    <h3>
         <span class="nodeIndicatorIcon"></span>
         <?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_header'); ?>
-    </h1>
+    </h3>
 
     <div class="text">
         <span class="nodeIndicatorIcon"></span>

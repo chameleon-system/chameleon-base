@@ -1085,6 +1085,7 @@ class TCMSLogChange
                     }
                 }
             } else {
+                $fields['id'] = self::createUnusedRecordId('cms_message_manager_message');
                 $fields['cms_portal_id'] = $sPortalID;
                 $data->setFields($fields);
                 static::insert(__LINE__, $data);

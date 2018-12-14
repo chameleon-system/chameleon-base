@@ -85,7 +85,10 @@ class QueryModifierOrderBy implements QueryModifierOrderByInterface
         $orderByParts = array();
         foreach ($orderBy as $field => $direction) {
             $field = trim($field);
-            $direction = trim($direction);
+            $direction = \mb_strtoupper(\trim($direction));
+            if ('DESC' !== $direction) {
+                $direction = 'ASC';
+            }
             $orderByParts[] = "{$field} {$direction}";
         }
 

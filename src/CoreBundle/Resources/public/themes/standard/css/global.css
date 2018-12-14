@@ -391,6 +391,10 @@ div.grippie {
     border-color: #856404 transparent transparent transparent;
 }
 
+.app-body .main {
+    background-color: #A9C4E7;
+}
+
 /**
 * Animated Spinner.
 * https://loading.io/css/

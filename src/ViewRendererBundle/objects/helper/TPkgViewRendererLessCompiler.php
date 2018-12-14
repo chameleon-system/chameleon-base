@@ -20,17 +20,27 @@ use ViewRenderException;
 class TPkgViewRendererLessCompiler
 {
     /**
-     * local path to less directory - this is where the chameleon_?.css files live.
-     *
-     * @return string
+     * @var string
      */
-    public function getLocalPathToCompiledLess()
+    private $cssDir;
+
+    public function __construct(string $cssDirRelativeToWebRoot)
     {
-        return PATH_USER_CMS_PUBLIC.'/outbox/static/less';
+        $this->cssDir = trim($cssDirRelativeToWebRoot, '/');
     }
 
     /**
-     * @return string
+     * Local path to less directory - this is where the chameleon_?.css files live.
+     *
+     * @return string - absolute path (guaranteed to be below PATH_WEB) without trailing slash
+     */
+    public function getLocalPathToCompiledLess()
+    {
+        return PATH_WEB.'/'.$this->cssDir;
+    }
+
+    /**
+     * @return string - absolute path (guaranteed to be below PATH_WEB) without trailing slash
      */
     public function getLocalPathToCachedLess()
     {
@@ -52,6 +62,14 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
+     * @return string - the path part of the URL to the less directory; including a leading slash
+     */
+    protected function getLessDirUrlPath()
+    {
+        return '/'.$this->cssDir;
+    }
+
+    /**
      * @param TdbCmsPortal|null $portal
      *
      * @return string
@@ -64,11 +82,29 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
+     * @return string - the path pattern to the generated CSS file, relative to PATH_WEB, without leading slash
+     */
+    public function getCssRoutingPattern(): string
+    {
+        return $this->cssDir.'/'.'chameleon_{portalId}.css';
+    }
+
+    /**
+     * @return string - the file part for route generation; without a leading slash
+     *
+     * will be deprecated in 6.3.0 - use getCssRoutingPattern() which includes the relative path
+     */
+    public function getCompiledCssFilenameRoutingPattern(): string
+    {
+        return 'chameleon_{portalId}.css';
+    }
+
+    /**
      * @see getCompiledCssFilename
      *
      * @return string
      *
-     * @deprecated since 6.2.0 - the pattern is handled in routing.yml. To modify the pattern, replace the according routing file in the backend's routing config.
+     * @deprecated since 6.2.0 - handled in GenerateCssRouteCollectionGenerator
      */
     public function getCompiledCssFilenamePattern()
     {
@@ -137,6 +173,9 @@ class TPkgViewRendererLessCompiler
 
             $lessPortalIdentifier = $portal->getFileSuffix();
 
+            $cachedLessDir = $this->getLocalPathToCachedLess();
+            $this->createDirectoryIfNeeded($cachedLessDir);
+
             $options = _DEVELOPMENT_MODE ? array(
                 'sourceMap' => true,
                 'sourceMapWriteTo' => $this->getLocalPathToCompiledLess().'/lessSourceMap_'.$lessPortalIdentifier.'.map',
@@ -144,7 +183,7 @@ class TPkgViewRendererLessCompiler
             ) : array();
 
             $options['import_dirs'] = array(PATH_WEB => '/');
-            $options['cache_dir'] = $this->getLocalPathToCachedLess();
+            $options['cache_dir'] = $cachedLessDir;
             $options['compress'] = $minifyCss;
 
             $filesForLessParsing = array();
@@ -152,13 +191,13 @@ class TPkgViewRendererLessCompiler
                 $filesForLessParsing[PATH_WEB.$lessFile] = '/';
             }
 
-            \Less_Cache::SetCacheDir($options['cache_dir']);
+            \Less_Cache::SetCacheDir($cachedLessDir);
             try {
                 $cssFile = \Less_Cache::Get($filesForLessParsing, $options);
             } catch (Exception $exc) {
                 if (false !== strpos($exc->getMessage(), 'stat failed')) {
                     // Consider this as a 'File removed! Halp!' and clear the cache and try again
-                    array_map('unlink', glob($this->getLocalPathToCachedLess().'/*'));
+                    array_map('unlink', glob($cachedLessDir.'/*'));
 
                     $cssFile = \Less_Cache::Get($filesForLessParsing, $options);
                 } else {
@@ -166,7 +205,7 @@ class TPkgViewRendererLessCompiler
                 }
             }
 
-            $absoluteCssFilepath = $this->getLocalPathToCachedLess().'/'.$cssFile;
+            $absoluteCssFilepath = $cachedLessDir.'/'.$cssFile;
 
             $_SERVER['DOCUMENT_ROOT'] = $originalDocumentRoot;
 
@@ -227,10 +266,10 @@ class TPkgViewRendererLessCompiler
     {
         $lessDir = $this->getLocalPathToCompiledLess();
 
-        if (false === \is_dir($lessDir)) {
-            if (!mkdir($lessDir, 0777, true) && !\is_dir($lessDir)) {
-                return false;
-            }
+        try {
+            $this->createDirectoryIfNeeded($lessDir);
+        } catch (ViewRenderException $exception) {
+            return false;
         }
 
         $filename = $this->getCompiledCssFilename($portal);
@@ -240,34 +279,25 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
-     * returns the URL path to the less directory.
-     *
-     * @return string
-     */
-    protected function getLessDirUrlPath()
-    {
-        $sOutboxURL = URL_OUTBOX;
-
-        // remove the domain an protocol
-        $sOutboxURL = str_replace('http://', '', $sOutboxURL);
-        $sOutboxURL = str_replace('https://', '', $sOutboxURL);
-        $sOutboxURL = substr($sOutboxURL, strpos($sOutboxURL, '/'));
-
-        if ('/' == substr($sOutboxURL, -1)) {
-            $sOutboxURL = substr($sOutboxURL, 0, -1);
-        }
-
-        $sOutboxURL .= '/static/less';
-
-        return $sOutboxURL;
-    }
-
-    /**
      * @return mixed
      */
     private function getMinifyParameter()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::getParameter(
             'chameleon_system_core.resources.enable_external_resource_collection_minify');
+    }
+
+    /**
+     * @param string $dir
+     *
+     * @throws ViewRenderException
+     */
+    private function createDirectoryIfNeeded(string $dir): void
+    {
+        if (false === \is_dir($dir)) {
+            if (false === \mkdir($dir, 0777, true) && false === \is_dir($dir)) {
+                throw new ViewRenderException(sprintf('Cannot create directory %s', $dir));
+            }
+        }
     }
 }

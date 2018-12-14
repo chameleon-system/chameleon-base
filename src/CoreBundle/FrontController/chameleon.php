@@ -82,12 +82,12 @@ class chameleon
 
         require_once PATH_CORE_CONFIG.'/version.inc.php';
 
-        if (!_DEVELOPMENT_MODE && USE_DEFAULT_ERROR_HANDLER) {
-            register_shutdown_function(array('TCMSErrorHandler', 'ShutdownHandler'));
-        }
+        if (true === $this->isInMaintenanceMode($requestType)) {
+            $this->clearMaintenanceModeMarkerFileCache();
 
-        if ($this->isInMaintenanceMode($requestType)) {
-            $this->showMaintenanceModePage();
+            if (true === $this->isInMaintenanceMode($requestType)) {
+                $this->showMaintenanceModePage();
+            }
         }
     }
 
@@ -197,14 +197,20 @@ class chameleon
             || (isset($_POST['__modulechooser']) && 'true' === $_POST['__modulechooser']);
     }
 
-    private function showMaintenanceModePage()
+    private function showMaintenanceModePage(): void
     {
-        if (file_exists(PATH_WEB.'/maintenance.php')) {
+        if (\file_exists(PATH_WEB.'/maintenance.php')) {
             require PATH_WEB.'/maintenance.php';
+
             exit();
-        } else {
-            die('down for maintenance');
         }
+
+        die('Sorry! This page is down for maintenance.');
+    }
+
+    private function clearMaintenanceModeMarkerFileCache(): void
+    {
+        clearstatcache(true, PATH_MAINTENANCE_MODE_MARKER);
     }
 
     /**

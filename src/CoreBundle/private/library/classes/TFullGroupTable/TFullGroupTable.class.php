@@ -757,7 +757,7 @@ class TFullGroupTable extends TGroupTable
 
         if ($this->showRowsPerPageChooser) {
             $tableNavigation .= '<div class="col-auto form-group TFullGroupTablePerPageSelect">
-            <div class="input-group input-group-sm">
+            <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_records_per_page')).'</span></div>
                 <select name="_limit" class="form-control" onChange="document.'.$this->listName.'._startRecord.value=0;document.'.$this->listName.'.submit();">
             ';

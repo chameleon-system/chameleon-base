@@ -254,7 +254,7 @@ class TCMSRecordList extends TIterator
     /**
      * change the order by of the list.
      *
-     * @param array $aOrderInfo - must be of the form `table`.`field` => ASC/DESC or fieldalias=>ASC/DESC
+     * @param array $aOrderInfo - must be of the form `table`.`field` => ASC/DESC or fieldalias=>ASC/DESC - fields MUST be quoted!
      */
     public function ChangeOrderBy($aOrderInfo)
     {

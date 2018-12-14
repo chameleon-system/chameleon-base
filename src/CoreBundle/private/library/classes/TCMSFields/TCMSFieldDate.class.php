@@ -78,12 +78,22 @@ class TCMSFieldDate extends TCMSField
      */
     public function GetCMSHtmlHeadIncludes()
     {
-        $aIncludes = array();
-        $aIncludes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/bootstrap/js/moment-with-locales.js'));  //moment.js for datetimepicker
-        $aIncludes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/bootstrap/js/tempusdominus-bootstrap-4.min.js?v4.1'));  //datetimepicker
-        $aIncludes[] = sprintf('<link href="%s" media="screen" rel="stylesheet" type="text/css" />', TGlobal::GetStaticURL('/chameleon/blackbox/bootstrap/css/tempusdominus-bootstrap-4.min.css?v4.1'));  //datetimepicker
+        $includes = parent::GetCMSHtmlHeadIncludes();
+        $includes[] = sprintf('<link href="%s" media="screen" rel="stylesheet" type="text/css" />', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.1.2/css/tempusdominus-bootstrap-4.min.css')); //datetimepicker
 
-        return $aIncludes;
+        return $includes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetCMSHtmlFooterIncludes()
+    {
+        $includes = parent::GetCMSHtmlFooterIncludes();
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/moment-2.23.0/js/moment-with-locales.min.js')); //moment.js for datetimepicker
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.1.2/js/tempusdominus-bootstrap-4.min.js')); //datetimepicker
+
+        return $includes;
     }
 
     /**

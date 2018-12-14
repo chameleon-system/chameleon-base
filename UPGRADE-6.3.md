@@ -13,14 +13,32 @@ See the Changed Interfaces and Method Signatures section whether changes in sign
 
 The system now uses Symfony 3.4, which needs a few adjustments:
 
-- In dev mode the debug toolbar will report deprecations concerning services that are retrieved through the
-  ServiceLocator or the Symfony container directly. To be prepared for Symfony 4, ServiceLocator and container calls
-  should be used as rarely as possible (no news here) and dependency injection should be preferred. Where dependency
-  injection is not possible, services should be declared public explicitly. The deprecation warnings will also be
-  logged, potentially leading to huge log files and if there is a large number of warnings, performance in the dev
-  environment will degrade. Therefore it is recommended to deal with most of the deprecations.
-- The scope concept is gone. Remove any scope references in service definitions (e.g. Chameleon modules used
-  `scope="prototype"` in the past, which should have been changed to `shared="false"` when migrating to 6.2.x).
+In dev mode the debug toolbar will report deprecations concerning services that are retrieved through the
+ServiceLocator or the Symfony container directly. To be prepared for Symfony 4, ServiceLocator and container calls
+should be used as rarely as possible (no news here) and dependency injection should be preferred. Where dependency
+injection is not possible, services should be declared public explicitly. The deprecation warnings will also be
+logged, potentially leading to huge log files and if there is a large number of warnings, performance in the dev
+environment will degrade. Therefore it is recommended to deal with most of the deprecations.
+
+The scope concept is gone. Remove any scope references in service definitions (e.g. Chameleon modules used
+`scope="prototype"` in the past; if you didn't change these services to use `shared="false"` during the migration to
+Chameleon 6.2.x, it needs to be done now).
+
+In `app/config/routing_dev.yml`, replace this route import:
+
+```yaml
+_configurator:
+    resource: "@SensioDistributionBundle/Resources/config/routing/webconfigurator.xml"
+    prefix:   /_configurator
+```
+
+with this one:
+
+```yaml
+_errors:
+    resource: '@TwigBundle/Resources/config/routing/errors.xml'
+    prefix:   /_error
+```
 
 ## Twig 2.x
 

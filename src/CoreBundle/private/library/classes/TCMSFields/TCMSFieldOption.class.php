@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Translation\TranslatorInterface;
+
 /**
  * an enum field.
 /**/
@@ -216,7 +218,7 @@ class TCMSFieldOption extends TCMSField
             return $value;
         }
         $key = $this->createEnumTranslationKey($value);
-        $translatedValue = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans($key, array(), \ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND_ENUM);
+        $translatedValue = $this->getTranslator()->trans($key, array(), \ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND_ENUM);
         if ($translatedValue === $key) {
             return $value;
         }
@@ -234,5 +236,32 @@ class TCMSFieldOption extends TCMSField
     private function createEnumTranslationKey($value)
     {
         return $this->sTableName.'.'.$this->name.'.'.$value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetCMSHtmlHeadIncludes()
+    {
+        $includes = parent::GetCMSHtmlHeadIncludes();
+        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
+
+        return $includes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetCMSHtmlFooterIncludes()
+    {
+        $includes = parent::GetCMSHtmlFooterIncludes();
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
+
+        return $includes;
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 }
