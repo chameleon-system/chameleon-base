@@ -1014,7 +1014,13 @@
             var layover = self.openLayover(title, '');
 
             if (typeof height === 'undefined') {
-                height = layover.height() - layover.find('.title').height() - 50;
+
+                var height = layover.height();
+                if (height < 100) {
+                    height = $('#edit-container').height();
+                }
+
+                height = height - (layover.find('.title').height() - 50);
             }
             iframe.css({'width': '100%', 'height': height}).appendTo(layover);
 
