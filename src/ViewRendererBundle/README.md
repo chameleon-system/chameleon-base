@@ -61,23 +61,14 @@ Der `default` Filter lässt den Designer einen standard Wert angeben, sollte die
 
 ### trans
 
-Der `trans` Filter wird von Chameleon implemetiert, sodass intern die
-TGlobal::Translate Funktion zur Übersetzung verwendet wird
+Der `trans`-Filter wird von Symfony bereitgestellt (\Symfony\Bridge\Twig\Extension\TranslationExtension::trans()).
+Er unterstützt Übersetzungskeys (message_code).
 
-    {{message|trans}}
+    {{ 'message_code' | trans }}
 
-`trans` kann - und wird in den meisten Fällen - als Tag verwendet
-werden. Somit wird es wesentlich einfacher, ganze Textblöcke zu
-übersetzen.
+Das `trans`-Filter erlaubt auch die Nutzung von Platzhaltern (im übersetzten Text) für Wertersetzung:
 
-    {% trans %}Why hello good sir.{% endtrans %}
-
-Das `trans` Tag erlaubt auch die Nutzung von Platzhaltern für
-eingesetzte Werte:
-
-    {% trans with {'name':name} %}
-    Why hello good sir. People call me [{name}].
-    {% endtrans %}
+    {{ 'message_code_with_%placeholder%_in_translated_text' | trans({'%placeholder%': some_twig_expression}) }}
 
 Dummy Daten
 -----------
