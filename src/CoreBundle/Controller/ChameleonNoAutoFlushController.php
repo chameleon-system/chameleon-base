@@ -13,6 +13,9 @@ namespace ChameleonSystem\CoreBundle\Controller;
 
 use esono\pkgCmsCache\CacheInterface;
 
+/**
+ * @deprecated since 6.3.0 - early flushing should not be used
+ */
 class ChameleonNoAutoFlushController implements ChameleonControllerInterface
 {
     /**

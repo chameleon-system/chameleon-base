@@ -86,7 +86,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('Register', 'UpdateUser', 'UpdateUserPasswordRequired', 'UpdateUserAddress', 'Login', 'Logout', 'SendPassword', 'ConfirmUser');
+        $externalFunctions = array( 'UpdateUser', 'UpdateUserPasswordRequired', 'UpdateUserAddress', 'Login', 'Logout', 'SendPassword', 'ConfirmUser');
         $externalFunctions[] = 'SelectBillingAddress';
         $externalFunctions[] = 'SelectShippingAddress';
         $externalFunctions[] = 'DeleteBillingAddress';

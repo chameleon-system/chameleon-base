@@ -45,6 +45,12 @@ _errors:
 The system now uses Twig 2.x. Please have a look at the Twig changelog for required adjustments, but major problems are
 not expected.
 
+## Deprecated auto-flushing
+
+The function for early flushing content to the browser is deprecated (ChameleonController::FlushContentToBrowser()).
+You should simply be able to remove respective calls in your code.
+If this poses a (perceived) performance problem at all other optimization effort should be done.
+
 ## TTools::GetModuleLoaderObject Returns New Object
 
 The method `TTools::GetModuleLoaderObject` now returns a new `TModuleLoader` instance instead of the global module
@@ -72,7 +78,7 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Services
 
-None.
+- \ChameleonSystem\CoreBundle\Controller\ChameleonNoAutoFlushController
 
 ## Container Parameters
 
@@ -80,7 +86,7 @@ None.
 
 ## Constants
 
-None.
+- CHAMELEON_ENABLE_FLUSHING
 
 ## Classes and Interfaces
 
@@ -93,8 +99,11 @@ None.
 
 ## Methods
 
+- \ChameleonSystem\CoreBundle\Controller\ChameleonController::getBlockAutoFlushToBrowser()
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::GetPostRenderVariables()
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::PreOutputCallbackFunctionReplaceCustomVars()
+- \ChameleonSystem\CoreBundle\Controller\ChameleonController::SetBlockAutoFlushToBrowser()
+- \ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface::FlushContentToBrowser()
 - \ChameleonSystem\CoreBundle\CronJob\CronJobFactory::setCronJobs()
 - \ChameleonSystem\CoreBundle\Interfaces\TransformOutgoingMailTargetsServiceInterface::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Interfaces\TransformOutgoingMailTargetsServiceInterface::setSubjectPrefix()
@@ -103,6 +112,7 @@ None.
 - \ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::getModules()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
+- \TModuleLoader::SetEnableAutoFlush()
 - \TTools::AddStaticPageVariables()
 
 ## JavaScript Files and Functions
