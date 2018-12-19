@@ -210,7 +210,7 @@
 
             <trans-unit id="chameleon_system_core.js.ajax_error">
                 <source>chameleon_system_core.js.ajax_error</source>
-                <target>Error! Ajax response:\n%s1</target>
+                <target>Error! Ajax response: %s1</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.missing_node">
