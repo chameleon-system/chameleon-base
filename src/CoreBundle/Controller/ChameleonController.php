@@ -537,7 +537,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
                 $sPattern = "/<script (?!.*blackbox.*).*\/javascript\/.*<\/script>/i";
                 $sPageContent = preg_replace($sPattern, '', $sPageContent);
 
-                $sPageContent = str_replace('@@jquery@@', '/chameleon/blackbox/javascript/jquery/jquery.js', $sPageContent);
+                $sPageContent = str_replace('@@jquery@@', '/chameleon/blackbox/javascript/jquery/jquery-3.3.1.min.js', $sPageContent);
 
                 $sPattern = "/<script>.*?<\/script>/si";
                 $sPageContent = preg_replace($sPattern, '', $sPageContent);
