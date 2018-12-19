@@ -755,10 +755,7 @@ class MTHeader extends TCMSModelBase
             ';
             $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/form/jquery.form.js').'" type="text/javascript"></script>'; // ajax form plugin
             $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/BlockUI/jquery.blockUI.js').'" type="text/javascript"></script>';
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.js').'" type="text/javascript"></script>';
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqDnR.js').'" type="text/javascript"></script>';
             $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
-            $aIncludes[] = '<link media="screen" rel="stylesheet" href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.css').'" type="text/css" />';
             $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/images/favicon.ico" rel="shortcut icon" />';
             $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
 

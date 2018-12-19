@@ -339,9 +339,6 @@ class CMSModuleImageManager extends TCMSModelBase
         $aIncludes[] = '<!--[if lte IE 7]><meta name="MSSmartTagsPreventParsing" content="true" /><![endif]-->';
         $aIncludes[] = '<!--[if lte IE 7]><meta http-equiv="imagetoolbar" content="false" /><![endif]-->';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqDnR.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />';

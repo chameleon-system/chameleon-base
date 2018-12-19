@@ -153,9 +153,6 @@ class CMSMediaManager extends TCMSModelBase
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/form/jquery.form.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/BlockUI/jquery.blockUI.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqDnR.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />'; // we need this for the list of connections by delete events
         $aIncludes[] = '<script type="text/javascript">
       var messageNewFolder = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.action_new_folder')).'\';

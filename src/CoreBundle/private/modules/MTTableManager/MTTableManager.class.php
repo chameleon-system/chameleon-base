@@ -444,9 +444,6 @@ class MTTableManager extends TCMSModelBase
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/form/jquery.form.js').'" type="text/javascript"></script>'; // ajax form plugin
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/BlockUI/jquery.blockUI.js').'" type="text/javascript"></script>';
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.js').'" type="text/javascript"></script>';
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqDnR.js').'"> type="text/javascript"></script>';
-        $includeLines[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         $includeLines[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />';
