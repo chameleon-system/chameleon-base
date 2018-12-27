@@ -415,17 +415,13 @@ class MTTableManager extends TCMSModelBase
         while ($record = $recordList->Next()) {
             $name = $record->GetName();
             if (!empty($name)) {
-                $tmp = new stdClass();
                 if ($record->id == $recordID) {
                     $name = $name.' <---';
                 }
-                $tmp->label = $name;
-                $tmp->value = $record->id;
-                $returnVal[] = $tmp;
+                $returnVal[] = ['id'=>$record->id, 'text'=>$name];
             }
         }
-
-        return $returnVal;
+        return json_encode($returnVal);
     }
 
     /**
