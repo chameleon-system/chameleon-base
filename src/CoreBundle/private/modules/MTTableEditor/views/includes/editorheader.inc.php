@@ -20,8 +20,8 @@ if ($data['aPermission']['showlist'] && '1' != $data['only_one_record_tbl']) {
 }
 $oController = TGlobal::GetController();
 ?>
-<nav class="navbar navbar-light bg-light pl-2 pr-2 pt-1">
-    <span class="navbar-brand"><?php
+<nav class="navbar navbar-light bg-light pl-2 pr-2 pt-0">
+    <span class="navbar-brand pt-2"><?php
         if ('' === $sRecordName) {
             $sRecordName = TGlobal::Translate('chameleon_system_core.text.unnamed_record');
         } else {
@@ -40,7 +40,7 @@ $oController = TGlobal::GetController();
         $idsPopoverText = '<div class="callout callout-info mt-0 mb-1"><strong class="text-muted">Auto-Increment ID:</strong><br><strong class="h6">'.$data['cmsident'].'</strong></div>
         <div class="callout callout-info mt-0 mb-1"><strong class="text-muted">ID:</strong><br><strong class="h6">'.$data['id'].'</strong></div>';
         ?>
-        <button class="btn btn-outline-info mr-2" type="button" role="button" data-toggle="popover"
+        <button class="btn btn-outline-info mt-2 mr-2" type="button" role="button" data-toggle="popover"
                 data-placement="bottom"
                 data-content="<?= TGlobal::OutHTML($idsPopoverText); ?>" data-original-title="IDs">
             IDs
@@ -49,7 +49,7 @@ $oController = TGlobal::GetController();
         <?php
         if ('' !== $oTableDefinition->sqlData['notes']) {
             ?>
-            <button class="btn btn-outline-info mr-2" type="button" role="button" data-toggle="popover"
+            <button class="btn btn-outline-info mt-2 mr-2" type="button" role="button" data-toggle="popover"
                     data-placement="bottom"
                     data-content="<?= nl2br(TGlobal::OutHTML($oTableDefinition->sqlData['notes'])); ?>"
                     data-original-title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')); ?>">
@@ -70,7 +70,7 @@ $oController = TGlobal::GetController();
             }
 
             $sData .= '<div class="callout callout-danger mt-0 mb-1">'.$oCmsLock->GetDateField('time_stamp').'</div>'; ?>
-            <button class="btn btn-danger mr-2" type="button" role="button" data-toggle="popover"
+            <button class="btn btn-danger mt-2 mr-2" type="button" role="button" data-toggle="popover"
                     data-placement="bottom"
                     data-content="<?= TGlobal::OutHTML($sData); ?>"
                     data-original-title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.record_lock.locked_by')); ?>">
@@ -80,14 +80,8 @@ $oController = TGlobal::GetController();
         }
 
         if ($data['aPermission']['showlist'] && '1' != $data['only_one_record_tbl']) {
-            ?>
-            <div id="quicklookuplistBG" class="right-inner-addon"><i class="glyphicon glyphicon-search"></i>
-                <input id="quicklookuplist" class="form-control ac_input" type="search"
-                       aria-label="Search" name="quicklookuplist" value="" autocomplete="off"
-                       placeholder="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')); ?>"/>
-            </div>
-        <?php
-        $sRestrictionField = '';
+
+            $sRestrictionField = '';
             $sRestriction = '';
             if (!empty($data['sRestrictionField'])) {
                 $sRestrictionField = urlencode($data['sRestrictionField']);
@@ -100,34 +94,46 @@ $oController = TGlobal::GetController();
              * @var \ChameleonSystem\CoreBundle\Util\UrlUtil $urlUtil
              */
             $urlUtil = ServiceLocator::get('chameleon_system_core.util.url');
+
             $sAjaxURL = $urlUtil->getArrayAsUrl([
-            'id' => TGlobal::OutJS($data['tableid']),
-            'pagedef' => 'tablemanager',
-            '_rmhist' => 'false',
-            'sOutputMode' => 'Ajax',
-            'module_fnc[contentmodule]' => 'ExecuteAjaxCall',
-            '_fnc' => 'GetAutoCompleteAjaxList',
-            'sRestrictionField' => $sRestrictionField,
-            'sRestriction' => $sRestriction,
-            'recordID' => $data['id'],
-        ], PATH_CMS_CONTROLLER); ?>
+                'id' => TGlobal::OutJS($data['tableid']),
+                'pagedef' => 'tablemanager',
+                '_rmhist' => 'false',
+                'sOutputMode' => 'Ajax',
+                'module_fnc[contentmodule]' => 'ExecuteAjaxCall',
+                '_fnc' => 'GetAutoCompleteAjaxList',
+                'sRestrictionField' => $sRestrictionField,
+                'sRestriction' => $sRestriction,
+                'recordID' => $data['id'],
+            ], PATH_CMS_CONTROLLER.'?', '&');
+
+            ?>
+
+            <div class="mt-2">
+                <select id="quicklookuplist" class="form-control"></select>
+            </div>
+
             <script type="text/javascript">
                 $(document).ready(function () {
-                    $("#quicklookuplist").autocomplete(
-                        {
-                            source: "<?= TGlobal::OutJS($sAjaxURL); ?>",
-                            minLength: 1,
-                            select: function (event, ui) {
-                                switchRecord(ui.item.value);
-                            },
-                            open: function (event, ui) {
-                                $('.ui-autocomplete:last').css('width', 'auto').css('min-width', '155px').css('z-index', '100');
+                    $("#quicklookuplist").select2({
+                        placeholder: '<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')); ?>',
+                        ajax: {
+                            url: '<?= $sAjaxURL ?>',
+                            dataType: 'json',
+                            delay: 250,
+                            processResults: function (data) {
+                                return {
+                                  results: JSON.parse(data)
+                                };
                             }
                         }
-                    );
+                    }).on('select2:select', function (e) {
+                        var id = e.params.data.id;
+                        switchRecord(id);
+                    });
                 });
             </script>
-            <?php
+        <?php
         }
         ?>
     </form>
