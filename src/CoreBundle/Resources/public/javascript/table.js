@@ -115,4 +115,8 @@ $(document).ready(function () {
         var TRHeight = $(this).innerHeight() - 13; // - TD padding and borders
         $(this).find('a.TGroupTableLink').css('height', TRHeight);
     });
+
+    $('[data-select2-option]').each(function () {
+        $(this).select2($(this).data("select2-option"));
+    });
 });
