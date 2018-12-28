@@ -104,6 +104,7 @@ None.
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
 - \TTools::AddStaticPageVariables()
+- \TCMSFieldColorPicker::isFirstInstance()
 
 ## JavaScript Files and Functions
 
@@ -111,6 +112,16 @@ None.
 - $.unblockUI();
 
 Use CHAMELEON.CORE.processingDialog('show') and CHAMELEON.CORE.processingDialog('hide') instead.
+
+- jquery.form.js was updated to version 4.2.2 and is now located in Resources/public/javascript/jquery-form-4.2.2/jquery.form.min.js.
+- jquery library was upgraded to 3.3.1. To be backwards compatible jquery.migrate is included in version 1.4.1.
+- bootstrap-colorpicker was upgraded to 3.0.3 and the directory name changed to bootstrap-colorpicker-3.0.3. The old dirrectory is deprecated.
+- chosen.jquery.js
+- jqModal.js 
+- jqDnR.js
+- jquery.selectboxes.js
+- respond.min.js
+- pngForIE.htc
 
 ## Translations
 
