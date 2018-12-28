@@ -40,7 +40,7 @@ $oController = TGlobal::GetController();
         $idsPopoverText = '<div class="callout callout-info mt-0 mb-1"><strong class="text-muted">Auto-Increment ID:</strong><br><strong class="h6">'.$data['cmsident'].'</strong></div>
         <div class="callout callout-info mt-0 mb-1"><strong class="text-muted">ID:</strong><br><strong class="h6">'.$data['id'].'</strong></div>';
         ?>
-        <button class="btn btn-outline-info mt-2 mr-2" type="button" role="button" data-toggle="popover"
+        <button class="btn btn-outline-info btn-sm mt-2 mr-2" type="button" role="button" data-toggle="popover"
                 data-placement="bottom"
                 data-content="<?= TGlobal::OutHTML($idsPopoverText); ?>" data-original-title="IDs">
             IDs
@@ -49,7 +49,7 @@ $oController = TGlobal::GetController();
         <?php
         if ('' !== $oTableDefinition->sqlData['notes']) {
             ?>
-            <button class="btn btn-outline-info mt-2 mr-2" type="button" role="button" data-toggle="popover"
+            <button class="btn btn-outline-info btn-sm mt-2 mr-2" type="button" role="button" data-toggle="popover"
                     data-placement="bottom"
                     data-content="<?= nl2br(TGlobal::OutHTML($oTableDefinition->sqlData['notes'])); ?>"
                     data-original-title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')); ?>">
