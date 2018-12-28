@@ -419,9 +419,10 @@ class MTTableManager extends TCMSModelBase
                 if ($record->id == $recordID) {
                     $html = '<strong>'.$name.'</strong>';
                 }
-                $returnVal[] = ['id'=>$record->id, 'text'=>$name, 'html'=>$html];
+                $returnVal[] = ['id' => $record->id, 'text' => $name, 'html' => $html];
             }
         }
+
         return json_encode($returnVal);
     }
 
