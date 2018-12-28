@@ -415,10 +415,11 @@ class MTTableManager extends TCMSModelBase
         while ($record = $recordList->Next()) {
             $name = $record->GetName();
             if (!empty($name)) {
+                $html = $name;
                 if ($record->id == $recordID) {
-                    $name = $name.' <---';
+                    $html = '<strong>'.$name.'</strong>';
                 }
-                $returnVal[] = ['id'=>$record->id, 'text'=>$name];
+                $returnVal[] = ['id'=>$record->id, 'text'=>$name, 'html'=>$html];
             }
         }
         return json_encode($returnVal);
@@ -449,6 +450,7 @@ class MTTableManager extends TCMSModelBase
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/table.js').'" type="text/javascript"></script>';
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/WayfarerTooltip/WayfarerTooltip.js').'" type="text/javascript"></script>';
         $includeLines[] = '<link href="'.TGlobal::GetPathTheme().'/css/tooltip.css" rel="stylesheet" type="text/css" />';
+        $includeLines[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
         $this->LoadMessages();
 
@@ -476,6 +478,17 @@ class MTTableManager extends TCMSModelBase
         $includeLines = array_merge($includeLines, $tableListIncludeLines);
 
         return $includeLines;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetHtmlFooterIncludes()
+    {
+        $includes = parent::GetHtmlFooterIncludes();
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
+
+        return $includes;
     }
 
     /**
