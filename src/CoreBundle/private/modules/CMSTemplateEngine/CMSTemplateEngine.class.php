@@ -488,12 +488,7 @@ class CMSTemplateEngine extends TCMSModelBase
     {
         $aIncludes = array();
         // first the includes that are needed for the all fields
-        $aIncludes[] = '<!--[if lte IE 7]><meta name="MSSmartTagsPreventParsing" content="true" /><![endif]-->';
-        $aIncludes[] = '<!--[if lte IE 7]><meta http-equiv="imagetoolbar" content="false" /><![endif]-->';
 
-        // autocomplete field
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/bgiframe/jquery.bgiframe.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.autocomplete.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tableeditcontainer.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/tableEditor.js').'" type="text/javascript"></script>';
