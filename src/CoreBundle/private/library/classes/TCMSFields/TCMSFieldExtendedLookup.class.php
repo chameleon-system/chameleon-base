@@ -28,7 +28,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         $html = $this->_GetHiddenField();
 
         $html .= '<div class="input-group input-group-sm">';
-        $html .= '<div id="'.TGlobal::OutHTML($this->name).'CurrentSelection" class="form-control form-control-sm">'.TGlobal::OutHTML($value).'</div>';
+        $html .= '<div id="'.TGlobal::OutHTML($this->name).'CurrentSelection" class="form-control form-control-sm">'.$value.'</div>';
 
         $goToRecordButtonHtml = $this->GetGoToRecordButton();
 
