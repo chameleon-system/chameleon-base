@@ -49,7 +49,8 @@ class TCMSFieldDate extends TCMSField
         }
 
         if (false === $this->IsSQLDate($this->data)) {
-            $dateTime = new DateTime($this->data);
+            $dateTime = new \DateTime($this->data);
+
             return $dateTime->format('Y-m-d');
         }
 
@@ -61,7 +62,8 @@ class TCMSFieldDate extends TCMSField
      */
     public function GetReadOnly()
     {
-        $dateTime = new DateTime($this->data);
+        $dateTime = new \DateTime($this->data);
+
         return TGlobal::OutHTML($dateTime->format('d.m.Y'));
     }
 
@@ -111,7 +113,7 @@ class TCMSFieldDate extends TCMSField
 
         setlocale(LC_TIME, 0);
 
-        $dateTime = new DateTime($date);
+        $dateTime = new \DateTime($date);
         $returnString = $dayString.' '.$dateTime->format('d.m.Y');
 
         return $returnString;

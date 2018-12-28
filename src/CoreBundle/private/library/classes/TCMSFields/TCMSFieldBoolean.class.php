@@ -68,13 +68,12 @@ class TCMSFieldBoolean extends TCMSFieldOption
                 <span class="switch-slider" data-active="✓" data-inactive="✕"></span>
             </label>';
 
-
         return $html;
     }
 
     private function isChecked()
     {
-        return $this->data === '1';
+        return '1' === $this->data;
     }
 
     /**

@@ -53,5 +53,4 @@ class TCMSFieldLookupFieldTypes extends TCMSFieldLookup
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
-
 }

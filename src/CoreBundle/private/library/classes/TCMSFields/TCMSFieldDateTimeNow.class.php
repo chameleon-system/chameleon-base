@@ -33,8 +33,9 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
     {
         $fieldValue = parent::_GetHTMLValue();
         if ('' === $fieldValue || '0000-00-00 00:00:00' === $fieldValue) {
-            $fieldValue = date('Y-m-d H:i') . ':00'; //datetimepicker crashs if you give him seconds != "00", but for saving we need it
+            $fieldValue = date('Y-m-d H:i').':00'; //datetimepicker crashs if you give him seconds != "00", but for saving we need it
         }
+
         return $fieldValue;
     }
 

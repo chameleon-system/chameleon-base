@@ -12,19 +12,19 @@ while ($oMenu = $data[$menuColName]->Next()) {
                 <nav class="nav flex-column">
                     <?php
                     $count = 0;
-                    while ($oMenuItem = $oMenu->oMenuItems->Next()) {
-                        $count++;
+        while ($oMenuItem = $oMenu->oMenuItems->Next()) {
+            ++$count;
 
-                        $rowClass = 'bg-light';
-                        if ($count %2) {
-                            $rowClass = '';
-                        }
+            $rowClass = 'bg-light';
+            if ($count % 2) {
+                $rowClass = '';
+            }
 
-                        echo '<div class="pl-2 '.$rowClass.'">';
-                        /** @var $oMenuItem TCMSMenuItem */
-                        echo $oMenuItem->GetLink();
-                        echo '</div>';
-                    } ?>
+            echo '<div class="pl-2 '.$rowClass.'">';
+            /** @var $oMenuItem TCMSMenuItem */
+            echo $oMenuItem->GetLink();
+            echo '</div>';
+        } ?>
                 </nav>
             </div>
         </div>

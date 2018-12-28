@@ -82,7 +82,6 @@ class TCMSFieldDateTime extends TCMSField
         return $html;
     }
 
-
     /**
      * this method converts post data like datetime (3 fields with date, hours, minutes in human readable format)
      * to sql format.
@@ -97,6 +96,7 @@ class TCMSFieldDateTime extends TCMSField
             $returnVal = $this->oTableRow->sqlData[$this->name];
         }
         $this->data = $returnVal;
+
         return $returnVal;
     }
 

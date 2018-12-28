@@ -80,7 +80,6 @@ $oController = TGlobal::GetController();
         }
 
         if ($data['aPermission']['showlist'] && '1' != $data['only_one_record_tbl']) {
-
             $sRestrictionField = '';
             $sRestriction = '';
             if (!empty($data['sRestrictionField'])) {
@@ -105,9 +104,7 @@ $oController = TGlobal::GetController();
                 'sRestrictionField' => $sRestrictionField,
                 'sRestriction' => $sRestriction,
                 'recordID' => $data['id'],
-            ], PATH_CMS_CONTROLLER.'?', '&');
-
-            ?>
+            ], PATH_CMS_CONTROLLER.'?', '&'); ?>
 
             <div class="mt-2">
                 <select id="quicklookuplist" class="form-control"></select>
@@ -118,7 +115,7 @@ $oController = TGlobal::GetController();
                     $("#quicklookuplist").select2({
                         placeholder: '<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')); ?>',
                         ajax: {
-                            url: '<?= $sAjaxURL ?>',
+                            url: '<?= $sAjaxURL; ?>',
                             dataType: 'json',
                             delay: 250,
                             processResults: function (data) {
