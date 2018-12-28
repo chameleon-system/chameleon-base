@@ -436,3 +436,7 @@ div.grippie {
         transform: rotate(360deg);
     }
 }
+
+.select2-selection.select2-selection--single {
+    border: 1px solid #e4e7ea;
+}
