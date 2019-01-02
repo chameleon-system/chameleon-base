@@ -167,12 +167,12 @@ $oController = TGlobal::GetController();
                         'sRestrictionField' => $sRestrictionField,
                         'sRestriction' => $sRestriction,
                         'recordID' => $data['id'],
-                ], PATH_CMS_CONTROLLER); ?>
+                ], PATH_CMS_CONTROLLER.'?', '&'); ?>
                 <script type="text/javascript">
                     $(document).ready(function () {
                         $("#quicklookuplist").autocomplete(
                             {
-                                source: "<?= TGlobal::OutJS($sAjaxURL); ?>",
+                                source: "<?= \addslashes($sAjaxURL); ?>",
                                 minLength: 1,
                                 select: function( event, ui ) {
                                     switchRecord(ui.item.value);
