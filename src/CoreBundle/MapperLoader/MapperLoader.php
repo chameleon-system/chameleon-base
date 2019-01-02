@@ -13,7 +13,7 @@ namespace ChameleonSystem\CoreBundle\MapperLoader;
 
 use IViewMapper;
 use LogicException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class MapperLoader implements MapperLoaderInterface
 {
@@ -35,15 +35,18 @@ class MapperLoader implements MapperLoaderInterface
      */
     public function getMapper($identifier)
     {
-        $object = $this->container->get($identifier, ContainerInterface::NULL_ON_INVALID_REFERENCE);
-        if (null === $object) {
+        if (false === $this->container->has($identifier)) {
             if (false === class_exists($identifier)) {
-                throw new LogicException(sprintf('Tried to instantiate mapper "%s", but neither a service with this ID nor a class with this name was found.', $identifier));
+                throw new LogicException(sprintf('Tried to instantiate mapper "%s", but neither a service with this ID and tagged with "chameleon_system.mapper" nor a class with this name was found.', $identifier));
             }
-            $object = new $identifier();
+
+            return new $identifier();
         }
+
+        $object = $this->container->get($identifier);
+
         if (false === $object instanceof IViewMapper) {
-            throw new LogicException(sprintf('Tried to instantiate mapper with identifier %s, but the resolved class does not implement IViewMapper.', $identifier));
+            throw new LogicException(sprintf('Tried to instantiate mapper "%s", but the resolved class does not implement IViewMapper.', $identifier));
         }
 
         return $object;

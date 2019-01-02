@@ -732,7 +732,7 @@
         </service>
 
         <service id="chameleon_system_core.mapper_loader" class="ChameleonSystem\CoreBundle\MapperLoader\MapperLoader" public="true">
-            <argument type="service" id="service_container" />
+            <argument/> <!-- Service locator will be set by ChameleonMappersPass -->
         </service>
 
         <service id="chameleon_system_core.media_manager.url_generator"

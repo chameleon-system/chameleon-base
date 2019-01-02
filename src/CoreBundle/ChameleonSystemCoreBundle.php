@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle;
 
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\AddCronJobsPass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\AddUrlNormalizersPass;
+use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\ChameleonMappersPass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\ChameleonModulePass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\CollectRequestStateElementProvidersPass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\ControllerResolverPass;
@@ -30,6 +31,7 @@ class ChameleonSystemCoreBundle extends Bundle
     {
         $container->addCompilerPass(new AddCronJobsPass());
         $container->addCompilerPass(new AddUrlNormalizersPass());
+        $container->addCompilerPass(new ChameleonMappersPass());
         $container->addCompilerPass(new ChameleonModulePass());
         $container->addCompilerPass(new ControllerResolverPass());
         $container->addCompilerPass(new SetChameleonHttpKernelPass());
