@@ -152,7 +152,6 @@ class TCMSTableConf extends TCMSRecord
      */
     public function &GetFields(&$oTableRow, $loadDefaults = false, $bDoNotUseAutoObjects = false)
     {
-        // TODO this could also be a parameter here?
         $languageService = self::getLanguageService();
         $language = $languageService->getActiveEditLanguage();
 
