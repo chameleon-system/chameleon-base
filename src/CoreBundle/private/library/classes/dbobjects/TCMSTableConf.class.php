@@ -152,9 +152,6 @@ class TCMSTableConf extends TCMSRecord
      */
     public function &GetFields(&$oTableRow, $loadDefaults = false, $bDoNotUseAutoObjects = false)
     {
-        $languageService = self::getLanguageService();
-        $language = $languageService->getActiveEditLanguage();
-
         $oFieldDefinition = &$this->GetFieldDefinitions(array(), $bDoNotUseAutoObjects);
         $oFields = new TIterator();
         while ($oFieldDef = $oFieldDefinition->next()) {
@@ -194,8 +191,11 @@ class TCMSTableConf extends TCMSRecord
 
                         $fieldName = $oField->name;
 
-                        if ($language !== null) {
-                            $fieldNameForLanguage = $oFieldDef->GetEditFieldNameForLanguage($language);
+                        $languageService = self::getLanguageService();
+                        $currentLanguage = $languageService->getLanguage($this->GetLanguage());
+
+                        if ($currentLanguage !== null) {
+                            $fieldNameForLanguage = $oFieldDef->GetEditFieldNameForLanguage($currentLanguage);
 
                             if (false !== $fieldNameForLanguage && true === \array_key_exists($fieldNameForLanguage, $oTableRow->sqlData)) {
                                 $fieldName = $fieldNameForLanguage;
