@@ -153,7 +153,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      *
      * @return array
      */
-    protected function computeDifferences($newFields, $oPostTable)
+    protected function computeDifferences(&$newFields, &$oPostTable)
     {
         $result = [];
 
