@@ -5,6 +5,10 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <instanceof id="\IViewMapper" autoconfigure="false">
+            <tag name="chameleon_system.mapper"/>
+        </instanceof>
+
         <service id="chameleon_system_newsletter.cronjob.send_newsletter_cronjob" class="TCMSCronJobSendNewsletter" shared="false">
             <tag name="chameleon_system.cronjob" />
         </service>

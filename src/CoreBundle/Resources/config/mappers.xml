@@ -4,6 +4,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults autoconfigure="true"/>
 
         <service id="chameleon_system_core.mapper.feedback_additional_fields" class="MTFeedbackMapper_AdditionalFields">
         </service>
@@ -53,6 +54,5 @@
             <argument type="service" id="chameleon_system_core.view_port_manager" />
             <argument type="service" id="translator" />
         </service>
-
     </services>
 </container>

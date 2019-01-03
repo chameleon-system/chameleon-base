@@ -6,6 +6,7 @@
 
     <services>
         <service id="chameleon_system_cms_text_block.mapper.get_text" class="TPkgCmsTextBlockMapper_GetText">
+            <tag name="chameleon_system.mapper"/>
         </service>
 
         <service id="chameleon_system_cms_text_block.text_block_lookup" class="ChameleonSystem\CmsTextBlockBundle\Service\TextBlockLookup">
