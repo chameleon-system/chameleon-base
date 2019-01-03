@@ -77,7 +77,7 @@ function AjaxError(XMLHttpRequest, textStatus, errorThrown) {
     }
 
     if (textStatus === 'parsererror') {
-        toasterMessage('Error! Wasn`t able to parse ajax response.', 'ERROR');
+        toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.ajax_parse_error'), 'ERROR');
 
         if (XMLHttpRequest.responseText !== '') {
             // check if response is the login page, so we need to redirect the user

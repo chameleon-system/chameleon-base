@@ -338,6 +338,11 @@
                 <target>Notice</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_core.js.ajax_parse_error">
+                <source>chameleon_system_core.js.ajax_parse_error</source>
+                <target>Wasn't able to parse ajax response.</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_core.js.confirm_page_delete">
                 <source>chameleon_system_core.js.confirm_page_delete</source>
                 <target>Are you sure you want to delete the page including all module content?\nTo keep module contents, reset the module spots before deleting the page.</target>
