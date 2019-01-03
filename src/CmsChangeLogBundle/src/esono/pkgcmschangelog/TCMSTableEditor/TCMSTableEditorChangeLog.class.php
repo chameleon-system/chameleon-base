@@ -64,11 +64,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
         if ($this->oTableConf->fieldChangelogActive) {
             $this->failOnForbiddenTables();
 
-            if (isset($postData['id'])) {
-                $this->bIsUpdate = true;
-            } else {
-                $this->bIsUpdate = false;
-            }
+            $this->bIsUpdate = isset($postData['id']);
         }
 
         return parent::Save($postData, $bDataIsInSQLForm);
@@ -325,11 +321,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
         if ($this->oTableConf->fieldChangelogActive) {
             $this->failOnForbiddenTables();
 
-            if (null !== $this->sId) {
-                $this->bIsUpdate = true;
-            } else {
-                $this->bIsUpdate = false;
-            }
+            $this->bIsUpdate = null !== $this->sId;
         }
 
         return parent::SaveField(
