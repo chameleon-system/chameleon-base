@@ -46,6 +46,8 @@ class MapperLoader implements MapperLoaderInterface
         $object = $this->container->get($identifier);
 
         if (false === $object instanceof IViewMapper) {
+            // TODO? is currently also done in ChameleonAppKernel
+
             throw new LogicException(sprintf('Tried to instantiate mapper "%s", but the resolved class does not implement IViewMapper.', $identifier));
         }
 

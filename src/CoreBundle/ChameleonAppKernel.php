@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 
 abstract class ChameleonAppKernel extends Kernel
@@ -95,5 +96,16 @@ abstract class ChameleonAppKernel extends Kernel
                 define($const, $this->container->getParameter($param));
             }
         }
+    }
+
+    protected function build(ContainerBuilder $container)
+    {
+        $container
+            ->registerForAutoconfiguration(\IViewMapper::class)
+            ->addTag('chameleon_system.mapper');
+
+        // NOTE $container->findTaggedServiceIds('chameleon_system.mapper') will still return nothing here: the tag is only set during actual container compilation
+
+        parent::build($container);
     }
 }
