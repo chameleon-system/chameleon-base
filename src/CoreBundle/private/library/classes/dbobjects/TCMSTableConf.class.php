@@ -152,6 +152,9 @@ class TCMSTableConf extends TCMSRecord
      */
     public function &GetFields(&$oTableRow, $loadDefaults = false, $bDoNotUseAutoObjects = false)
     {
+        $languageService = self::getLanguageService();
+        $currentLanguage = $languageService->getLanguage($this->GetLanguage());
+
         $oFieldDefinition = &$this->GetFieldDefinitions(array(), $bDoNotUseAutoObjects);
         $oFields = new TIterator();
         while ($oFieldDef = $oFieldDefinition->next()) {
@@ -189,20 +192,13 @@ class TCMSTableConf extends TCMSRecord
                         // Standard case
                         // Try to find the correct field name for the data in $oTableRow with respect to the language
 
-                        $fieldName = $oField->name;
+                        $data = $this->getDataForLanguage($oFieldDef, $oTableRow->sqlData, $currentLanguage);
 
-                        $languageService = self::getLanguageService();
-                        $currentLanguage = $languageService->getLanguage($this->GetLanguage());
-
-                        if ($currentLanguage !== null) {
-                            $fieldNameForLanguage = $oFieldDef->GetEditFieldNameForLanguage($currentLanguage);
-
-                            if (false !== $fieldNameForLanguage && true === \array_key_exists($fieldNameForLanguage, $oTableRow->sqlData)) {
-                                $fieldName = $fieldNameForLanguage;
-                            } // else could be a Save() - containing only mono-language data
+                        if (null === $data) {
+                            $data = $oTableRow->sqlData[$oField->name];
                         }
 
-                        $oField->data = $oTableRow->sqlData[$fieldName];
+                        $oField->data = $data;
                     }
                     $bAllowAddingField = true;
                 }
@@ -214,6 +210,28 @@ class TCMSTableConf extends TCMSRecord
         }
 
         return $oFields;
+    }
+
+    /**
+     * @param TdbCmsFieldConf|TCMSFieldDefinition $fieldDefinition
+     * @param array                               $sqlData
+     * @param null|TdbCmsLanguage                 $language
+     * @return mixed|null
+     */
+    private function getDataForLanguage($fieldDefinition, array $sqlData, ?TdbCmsLanguage $language)
+    {
+        if ($language === null) {
+            return null;
+        }
+
+        $fieldNameForLanguage = $fieldDefinition->GetEditFieldNameForLanguage($language);
+
+        if (false === $fieldNameForLanguage || false === \array_key_exists($fieldNameForLanguage, $sqlData)) {
+            // could be a Save() - containing only mono-language data
+            return null;
+        }
+
+        return $sqlData[$fieldNameForLanguage];
     }
 
     /**
