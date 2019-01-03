@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+
 /**
  * the Table metadata manager.
  * db table: cms_tbl_conf.
@@ -192,7 +194,7 @@ class TCMSTableConf extends TCMSRecord
                         // Standard case
                         // Try to find the correct field name for the data in $oTableRow with respect to the language
 
-                        $data = $this->getDataForLanguage($oFieldDef, $oTableRow->sqlData, $currentLanguage);
+                        $data = $this->getDataForCurrentLanguage($oFieldDef, $oTableRow->sqlData, $languageService);
 
                         if (null === $data) {
                             $data = $oTableRow->sqlData[$oField->name];
@@ -215,11 +217,19 @@ class TCMSTableConf extends TCMSRecord
     /**
      * @param TdbCmsFieldConf|TCMSFieldDefinition $fieldDefinition
      * @param array                               $sqlData
-     * @param null|TdbCmsLanguage                 $language
+     * @param LanguageServiceInterface            $languageService
      * @return mixed|null
      */
-    private function getDataForLanguage($fieldDefinition, array $sqlData, ?TdbCmsLanguage $language)
+    private function getDataForCurrentLanguage($fieldDefinition, array $sqlData, LanguageServiceInterface $languageService)
     {
+        $languageId = $this->GetLanguage();
+
+        if (null === $languageId) {
+            return null;
+        }
+
+        $language = $languageService->getLanguage($languageId);
+
         if ($language === null) {
             return null;
         }
@@ -259,9 +269,8 @@ class TCMSTableConf extends TCMSRecord
                 $oField->data = $oFieldDef->sqlData['field_default_value'];
             } elseif (null !== $oTableRow && is_array($oTableRow->sqlData) && array_key_exists($oField->name, $oTableRow->sqlData)) {
                 $languageService = self::getLanguageService();
-                $currentLanguage = $languageService->getLanguage($this->GetLanguage());
 
-                $data = $this->getDataForLanguage($oFieldDef, $oTableRow->sqlData, $currentLanguage);
+                $data = $this->getDataForCurrentLanguage($oFieldDef, $oTableRow->sqlData, $languageService);
 
                 if (null === $data) {
                     $data = $oTableRow->sqlData[$oField->name];
