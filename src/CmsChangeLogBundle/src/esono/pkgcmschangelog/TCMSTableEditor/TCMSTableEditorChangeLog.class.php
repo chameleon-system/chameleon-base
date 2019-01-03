@@ -325,7 +325,6 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
         if ($this->oTableConf->fieldChangelogActive) {
             $this->failOnForbiddenTables();
 
-            // TODO? this still overwrites the value from Save() above - if executed in the PostSaveHook() of a sub class TableEditor
             if (null !== $this->sId) {
                 $this->bIsUpdate = true;
             } else {
