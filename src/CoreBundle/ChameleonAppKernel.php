@@ -98,6 +98,9 @@ abstract class ChameleonAppKernel extends Kernel
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function build(ContainerBuilder $container)
     {
         $container
