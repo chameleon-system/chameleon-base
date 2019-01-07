@@ -10,18 +10,17 @@
  */
 
 /**
- * **************************************************************************
  * ReloadOnChange=true.
  *
  * it is possible to add a custom restriction using the "feldtyp konfiguration" from the field definition:
- *  restriction=expression
- *  - expression may contain references to the current record in the form [{fieldname}]
- *  : example: restriction=some_field_in_the_lookup_id=[{some_field_in_the_owning_record}]
- *  the restriction will be added "as is" to the sql query
+ * restriction=expression
+ * - expression may contain references to the current record in the form [{fieldname}]
+ * : example: restriction=some_field_in_the_lookup_id=[{some_field_in_the_owning_record}]
+ * the restriction will be added "as is" to the sql query
  * you may also connect to a table with a different name than the field. just add:
- *    connectedTableName=tablename
- * to the feldtyp konfiguration
- * /**/
+ * connectedTableName=tablename
+ * to the field type configuration.
+ */
 class TCMSFieldLookup extends TCMSField
 {
     /**
