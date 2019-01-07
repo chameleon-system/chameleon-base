@@ -126,7 +126,7 @@ btn-default -> btn-secondary
 - Added CSS class migration in TCMSRender::DrawButton method for backwards compatibility
 
 .input-sm > .form-control-sm
-- Almost all TCMSField classes and twig templates
+- Almost all TCMSField classes and Twig templates
 - Some list managers
 - Some TCMSTableEditor classes
 
@@ -136,7 +136,7 @@ btn-default -> btn-secondary
 - TFullGroupTable
 
 New: .page-item + .page-link
-- pagination in TFullGroupTable
+- Pagination in TFullGroupTable
 
 .pull-rigt > .float-right
 - TFullGroupTable
@@ -144,7 +144,7 @@ New: .page-item + .page-link
 - MTTableditor
 
 .input-group-addon > .input-group-append
-- field types using the text length counter addon (varchar)
+- Field types using the text length counter addon (varchar)
 
 .navbar-default > .navbar-light
 - TCMSTableManager and the layout manager iframes
