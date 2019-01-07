@@ -1,7 +1,5 @@
 <?php
 
-namespace ChameleonSystem\CmsCoreLogBundle\Bridge\Chameleon\ListManager;
-
 /*
  * This file is part of the Chameleon System (https://www.chameleonsystem.com).
  *
@@ -10,6 +8,8 @@ namespace ChameleonSystem\CmsCoreLogBundle\Bridge\Chameleon\ListManager;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+namespace ChameleonSystem\CmsCoreLogBundle\Bridge\Chameleon\ListManager;
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
