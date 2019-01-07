@@ -175,7 +175,11 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Container Parameters
 
-- Three (newly) defined logging channels are deprecated and only necessary for backwards compatibility: chameleon_security, chameleon_dbal, chameleon_api
+None.
+
+## Log channels
+
+- Three newly defined log channels are deprecated and only necessary for backwards compatibility: chameleon_security, chameleon_dbal, chameleon_api
 
 ## Constants
 
