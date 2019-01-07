@@ -128,7 +128,7 @@ Return type annotation fixed: is actually "array" but was "bool".
 
 - `\TPkgCsv2SqlManager::SendErrorNotification()`
 
-Log output is no longer collected and no longer sent as attachements with the notification mail.
+Log output is no longer collected and no longer sent as attachments with the notification email.
 
 # Changed Interfaces and Method Signatures
 
