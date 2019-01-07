@@ -122,10 +122,6 @@ loader. This instance will therefore only contain the module passed as argument,
 
 ## Csv2SqlBundle
 
-- `\TPkgCsv2Sql::Import()`
-
-Return type annotation fixed: is actually "array" but was "bool".
-
 - `\TPkgCsv2SqlManager::SendErrorNotification()`
 
 Log output is no longer collected and no longer sent as attachments with the notification email.
