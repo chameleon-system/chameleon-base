@@ -304,7 +304,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      * @param null                $sLogName
      * @param null|IPkgCmsBulkSql $oBulkInsertManager alternative bulk insert manager if not passed TPkgCmsBulkSql_LoadDataInfile will be used
      *
-     * @return array - of error strings
+     * @return array|bool - array of error strings or false on error
      */
     public function Import($sLogName = null, IPkgCmsBulkSql $oBulkInsertManager = null)
     {
