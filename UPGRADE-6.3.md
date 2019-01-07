@@ -115,7 +115,7 @@ During the upgrade to Bootstrap 4 the following styles where checked and these a
 btn-default -> btn-secondary
 - Some TCMSField types and TCMSTableEditors so check yours) 
 
-.pull-left > .float-left
+.pull-left -> .float-left
 - TCMSFieldDocument
 - TCMSFieldDocumentProperties
 - TCMSFieldMediaProperties
@@ -125,12 +125,12 @@ btn-default -> btn-secondary
 - footer
 - Added CSS class migration in TCMSRender::DrawButton method for backwards compatibility
 
-.input-sm > .form-control-sm
+.input-sm -> .form-control-sm
 - Almost all TCMSField classes and Twig templates
 - Some list managers
 - Some TCMSTableEditor classes
 
-.table-condensed > .table-sm
+.table-condensed -> .table-sm
 - TCMSFieldDocumentProperties
 - TCMSFieldMediaProperties
 - TFullGroupTable
@@ -138,21 +138,21 @@ btn-default -> btn-secondary
 New: .page-item + .page-link
 - Pagination in TFullGroupTable
 
-.pull-rigt > .float-right
+.pull-rigt -> .float-right
 - TFullGroupTable
 - MTHeader
 - MTTableditor
 
-.input-group-addon > .input-group-append
+.input-group-addon -> .input-group-append
 - Field types using the text length counter addon (varchar)
 
-.navbar-default > .navbar-light
+.navbar-default -> .navbar-light
 - TCMSTableManager and the layout manager iframes
 
-.navbar-toggle > .navbar-toggler
+.navbar-toggle -> .navbar-toggler
 - header navbar
 
-.col-md-* > .col-lg-*
+.col-md-* -> .col-lg-*
 - header
 - login
 
