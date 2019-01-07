@@ -387,35 +387,34 @@ abstract class ChameleonController implements ChameleonControllerInterface
         reset($this->moduleLoader->modules);
     }
 
-    /*
+    /**
      * a page can execute any number of functions in any module. which functions
-     * to execute, in which module, needs to be passed via post or get through
+     * to execute, in which module, needs to be passed via POST or GET through
      * the variable module_fnc. This function will fetch the contents of that
      * variable and loop through the resulting list of module->function sets. if the
      * function exists within the specified module it will be called. order of
      * execution is the same as the order in module_fnc array.
      *
      * @param TModuleLoader $modulesObject
-    */
+     */
     protected function ExecuteModuleMethod(&$modulesObject)
     {
-        $moduleFunctions = $this->inputFilterUtil->getFilteredInput('module_fnc', null);
-        if (null === $moduleFunctions || false === is_array($moduleFunctions) || 0 === count($moduleFunctions)) {
+        $moduleFunctions = $this->getRequestedModuleFunctions();
+
+        if (0 === \count($moduleFunctions)) {
             return;
         }
-        /**
-         * @var array $moduleFunctions
-         */
-        foreach ($moduleFunctions as $modulename => $method) {
+
+        foreach ($moduleFunctions as $spotName => $method) {
             $method = trim($method);
             if ('' === $method) {
                 continue;
             }
-            if (array_key_exists($modulename, $modulesObject->modules)) {
+            if (array_key_exists($spotName, $modulesObject->modules)) {
                 /**
                  * @var TModelBase $module
                  */
-                $module = $modulesObject->modules[$modulename];
+                $module = $modulesObject->modules[$spotName];
                 if ($this->isModuleMethodCallAllowed($module, $method)) {
                     $this->global->SetExecutingModulePointer($module);
                     $module->_CallMethod($method);
@@ -426,8 +425,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
                 $oActivePage = $this->activePageService->getActivePage();
                 if ($oActivePage) {
                     $oActionPluginManager = new TPkgCmsActionPluginManager($oActivePage);
-                    if ($oActionPluginManager->actionPluginExists($modulename)) {
-                        $oActionPluginManager->callAction($modulename, $method, $this->global->GetUserData());
+                    if ($oActionPluginManager->actionPluginExists($spotName)) {
+                        $oActionPluginManager->callAction($spotName, $method, $this->global->GetUserData());
                     }
                 }
             }
@@ -946,5 +945,29 @@ abstract class ChameleonController implements ChameleonControllerInterface
     public function setResponseVariableReplacer(ResponseVariableReplacerInterface $responseVariableReplacer): void
     {
         $this->responseVariableReplacer = $responseVariableReplacer;
+    }
+
+    /**
+     * Returns all module function definitions of the request specified by either POST or GET
+     * in the form 'spot name' => 'method name'. POST has precedence (first in the array).
+     *
+     * @return array|string
+     */
+    private function getRequestedModuleFunctions(): array
+    {
+        $moduleFunctions = $this->inputFilterUtil->getFilteredPostInput('module_fnc', null);
+        if (null !== $moduleFunctions && false === is_array($moduleFunctions)) {
+            // TODO show/log error?
+            $moduleFunctions = [];
+        }
+        $moduleFunctionsGet = $this->inputFilterUtil->getFilteredGetInput('module_fnc', null);
+        if (null !== $moduleFunctionsGet && false === is_array($moduleFunctionsGet)) {
+            // TODO show/log error?
+            $moduleFunctionsGet = [];
+        }
+
+        $moduleFunctions = \array_merge($moduleFunctions ?? [], $moduleFunctionsGet ?? []);
+
+        return $moduleFunctions;
     }
 }
