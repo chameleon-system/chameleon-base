@@ -189,7 +189,12 @@ class TCMSField implements TCMSFieldVisitableInterface
     {
         $this->bReadOnlyMode = true;
 
-        return $this->_GetHiddenField().TGlobal::OutHTML($this->data);
+        $html = $this->_GetHiddenField();
+        $html .= '<div class="input-group input-group-sm">';
+        $html .= '<div class="form-control form-control-sm" readonly>'.TGlobal::OutHTML($this->data).'</div>';
+        $html .= '</div>';
+
+        return $html;
     }
 
     /**

@@ -66,7 +66,7 @@ class TCMSTableEditorMenuItem
 
     /**
      * bootstrap button style (default: btn-primary)
-     * possible values in bootstrap 4.1: btn-secondary, btn-primary, btn-success, btn-info, btn-warning, btn-danger, btn-link.
+     * possible values in bootstrap 4.1: btn-primary, btn-secondary, btn-success, btn-info, btn-warning, btn-danger, btn-link.
      *
      * @see http://getbootstrap.com/css/#buttons
      *
@@ -218,7 +218,7 @@ class TCMSTableEditorMenuItem
 
     /**
      * bootstrap button style (default: btn-primary)
-     * possible values in bootstrap 4.1: btn-secondary, btn-primary, btn-success, btn-info, btn-warning, btn-danger, btn-link.
+     * possible values in bootstrap 4.1: btn-primary, btn-secondary, btn-success, btn-info, btn-warning, btn-danger, btn-link.
      *
      * @see http://getbootstrap.com/css/#buttons
      *
