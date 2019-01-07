@@ -11,7 +11,7 @@
 
 /**
  * a number (int).
- * /**/
+ */
 class TCMSFieldDecimal extends TCMSField
 {
     /**

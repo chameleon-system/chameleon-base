@@ -737,7 +737,7 @@ class MTHeader extends TCMSModelBase
             // first the includes that are needed for the all fields
             $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
             // bootstrap 4
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/bootstrap/js/bootstrap.bundle.min.js?v4.1').'" type="text/javascript"></script>';
+            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/bootstrap/js/bootstrap.bundle.min.js?v4.1.3').'" type="text/javascript"></script>';
             $aIncludes[] = '<script src="'.TGlobal::GetPathTheme().'/coreui/js/coreui.min.js" type="text/javascript"></script>';
             $aIncludes[] = '<script src="'.TGlobal::GetPathTheme().'/coreui/js/coreui-utilities.min.js" type="text/javascript"></script>';
             $aIncludes[] = '
