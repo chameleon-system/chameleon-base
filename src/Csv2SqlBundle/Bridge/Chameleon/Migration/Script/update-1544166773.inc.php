@@ -21,7 +21,7 @@ Beispiel: "/wawi/incoming/my.csv" setzt voraus, dass es folgende Ordner gibt:
 
 ./app/cmsdata/wawi/incoming - Hier befindet sich die zu importierende Datei my.csv.
 ./app/cmsdata/wawi/working - Hier wird die Datei hin verschoben, wenn sie vom System verarbeitet wird.
-./app/cmsdata/wawi/archive - In das Archiv wird die Datei geschoben, wenn die Verarbeitung abgeschlossen ist (die Datei wird mit YYYYMMDD_HHMMSS- geprefixed).
+./app/cmsdata/wawi/archive - In das Archiv wird die Datei geschoben, wenn die Verarbeitung abgeschlossen ist (die Datei erhält das Prefix YYYYMMDD_HHMMSS-).
 
 Die gleiche Regel gilt, wenn anstelle einer Datei alle Dateien eines Ordners importiert werden sollen.
 
