@@ -67,10 +67,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
                 $this->aImportStats['bHasErrors'] = true;
             }
 
-            /**
-             * @var $logger LoggerInterface
-             */
-            $logger = ServiceLocator::get('monolog.logger.csv2sql');
+            $logger = $this->getLogger();
             $logger->error($sMsg);
 
             $bRet = true;
@@ -88,10 +85,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      */
     protected function CreateTable(&$aErrorList)
     {
-        /**
-         * @var $logger LoggerInterface
-         */
-        $logger = ServiceLocator::get('monolog.logger.csv2sql');
+        $logger = $this->getLogger();
 
         $bRet = false;
         // DROP TABLE IF EXISTS  test1
@@ -215,10 +209,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
             return array('error importing data: '.$bResult);
         }
 
-        /**
-         * @var $logger LoggerInterface
-         */
-        $logger = ServiceLocator::get('monolog.logger.csv2sql');
+        $logger = $this->getLogger();
 
         $databaseConnection = $this->getDatabaseConnection();
         $quotedTempTargetTableName = $databaseConnection->quoteIdentifier($this->GetTempTargetTableName());
@@ -308,10 +299,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      */
     public function Import($sLogName = null, IPkgCmsBulkSql $oBulkInsertManager = null)
     {
-        /**
-         * @var $logger LoggerInterface
-         */
-        $logger = ServiceLocator::get('monolog.logger.csv2sql');
+        $logger = $this->getLogger();
 
         $this->aImportStats['start'] = time();
 
@@ -426,10 +414,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
             $sPattern = substr($sSource, strrpos($sSource, '/') + 1);
         }
 
-        /**
-         * @var $logger LoggerInterface
-         */
-        $logger = ServiceLocator::get('monolog.logger.csv2sql');
+        $logger = $this->getLogger();
 
         if (is_dir($sImportDir) && is_readable($sImportDir)) {
             $logger->info('importing DIR FOUND '.$sImportDir);
@@ -870,5 +855,10 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         }
 
         return $sSource;
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.csv2sql');
     }
 }

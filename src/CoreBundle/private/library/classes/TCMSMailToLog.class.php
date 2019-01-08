@@ -67,10 +67,7 @@ class TCMSMailToLog extends TCMSMail
                 $sLog = 'New Mail: '.$this->actualSubject."\nTo: ".$to;
             }
 
-            /**
-             * @var $logger LoggerInterface
-             */
-            $logger = ServiceLocator::get('logger');
+            $logger = $this->getLogger();
             $logger->info($sLog);
         }
 
@@ -80,5 +77,10 @@ class TCMSMailToLog extends TCMSMail
     public function setVerbose($verbose)
     {
         $this->verbose = $verbose;
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
     }
 }

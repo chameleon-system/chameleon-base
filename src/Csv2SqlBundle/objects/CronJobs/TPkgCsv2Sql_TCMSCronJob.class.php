@@ -29,7 +29,12 @@ class TPkgCsv2Sql_TCMSCronJob extends TdbCmsCronjobs
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.csv2sql');
+        $logger = $this->getCsv2SqlLogger();
         $logger->info('Run cron-job result for: '.$this->sqlData['name']."\n".$sResult);
+    }
+
+    private function getCsv2SqlLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.csv2sql');
     }
 }

@@ -40,10 +40,7 @@ class TPkgCsv2SqlManager
         $aData['oImportName'] = 'CSV-2-SQL Datenimport:';
         $aData['successMessage'] = '';
 
-        /**
-         * @var $logger LoggerInterface
-         */
-        $logger = ServiceLocator::get('monolog.logger.csv2sql');
+        $logger = self::getLogger();
 
         $logger->info('TPkgCsv2SqlManager: ProcessAll Start');
         $aValidationErrors = self::ValidateAll();
@@ -81,10 +78,7 @@ class TPkgCsv2SqlManager
      */
     public static function ImportAll()
     {
-        /**
-         * @var $logger LoggerInterface
-         */
-        $logger = ServiceLocator::get('monolog.logger.csv2sql');
+        $logger = self::getLogger();
 
         $aErrors = array();
         // get list of import handler
@@ -118,10 +112,7 @@ class TPkgCsv2SqlManager
      */
     public static function ValidateAll()
     {
-        /**
-         * @var $logger LoggerInterface
-         */
-        $logger = ServiceLocator::get('monolog.logger.csv2sql');
+        $logger = self::getLogger();
 
         $aErrors = array();
 
@@ -177,5 +168,10 @@ class TPkgCsv2SqlManager
         $aMailData = array('sReport' => '<pre>'.$sMailBody.'</pre>');
         $oMailProfile->AddDataArray($aMailData);
         $oMailProfile->SendUsingObjectView('emails', 'Customer');
+    }
+
+    private static function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.csv2sql');
     }
 }

@@ -382,10 +382,7 @@ class TCMSRecordWritable extends TCMSRecord
     {
         $user = self::getExtranetUserProvider()->getActiveUser();
 
-        /**
-         * @var $logger LoggerInterface
-         */
-        $logger = ServiceLocator::get('monolog.logger.security');
+        $logger = $this->getSecurityLogger();
         $logger->warning(
             sprintf(
                 'Trying to write a record %s in %s that does not belong to the current user %s. AUTO-LOGOUT and REDIRECT executed.',
@@ -969,5 +966,10 @@ class TCMSRecordWritable extends TCMSRecord
     private function getRedirect()
     {
         return ServiceLocator::get('chameleon_system_core.redirect');
+    }
+
+    private function getSecurityLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.security');
     }
 }

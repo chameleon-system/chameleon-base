@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorInterface;
 use Psr\Log\LoggerInterface;
 
@@ -273,10 +274,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
             $sPlaintext = $this->ReplaceVariablesInTextHook($sPlaintext, $oNewsletterUser);
             $sGeneratedNewsletter = $this->ReplaceVariablesInTextHook($sGeneratedNewsletter, $oNewsletterUser);
 
-            /**
-             * @var $logger LoggerInterface
-             */
-            $logger = \ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
+            $logger = $this->getLogger();
             if (false === $this->isNewsletterAlreadySent($oNewsletterUser)) {
                 if (!$oMailObject->Send(array('sBody' => $sGeneratedNewsletter, 'sTextBody' => $sPlaintext))) {
                     $logger->warning(sprintf('Unable to send Newsletter: %s', $oMailObject->ErrorInfo));
@@ -394,7 +392,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      */
     private function getMailer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.mailer');
+        return ServiceLocator::get('chameleon_system_core.mailer');
     }
 
     /**
@@ -402,7 +400,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      */
     protected function getPostProcessorCollector()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_newsletter.post_processor_collector');
+        return ServiceLocator::get('chameleon_system_newsletter.post_processor_collector');
     }
 
     /**
@@ -410,7 +408,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      */
     private function getNewsletterUserDataFactory()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_newsletter.user_data_factory');
+        return ServiceLocator::get('chameleon_system_newsletter.user_data_factory');
     }
 
     /**
@@ -418,6 +416,11 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
     }
 }

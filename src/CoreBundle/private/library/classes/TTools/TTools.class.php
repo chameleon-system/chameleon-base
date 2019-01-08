@@ -1767,10 +1767,7 @@ class TTools
      */
     public static function WriteLogEntry($sMessage, $sLogLevel, $sCallFromFile, $iLineNumber, $sLogFileName = null)
     {
-        /**
-         * @var $logger LoggerInterface
-         */
-        $logger = ServiceLocator::get('logger');
+        $logger = self::getLogger();
 
         if (null !== $sLogFileName) {
             $logger->warning(sprintf('Additional log file parameter %s to TTools::WriteLogEntry() ignored.', $sLogFileName));
@@ -2212,5 +2209,10 @@ class TTools
     private static function getSubModuleLoader(): TUserModuleLoader
     {
         return ServiceLocator::get('chameleon_system_core.subusermoduleloader');
+    }
+
+    private static function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
     }
 }
