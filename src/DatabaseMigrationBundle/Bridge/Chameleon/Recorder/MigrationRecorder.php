@@ -47,7 +47,7 @@ class MigrationRecorder
      * @param ContainerInterface $container
      * @param Connection         $databaseConnection
      * @param QueryWriter        $queryWriter
-     * @param LoggerInterface     $logger
+     * @param LoggerInterface    $logger
      * @param string             $logFilePath
      */
     public function __construct(ContainerInterface $container, Connection $databaseConnection, QueryWriter $queryWriter, LoggerInterface $logger, $logFilePath)

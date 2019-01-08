@@ -24,4 +24,3 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'de')
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
-

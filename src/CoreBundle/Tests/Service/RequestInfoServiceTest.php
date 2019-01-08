@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Tests\Service;
 
-use\ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoService;
 use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;

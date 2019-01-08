@@ -63,7 +63,7 @@ class TPkgCmsException_Log extends TPkgCmsException
                 break;
         }
 
-        $this->getExceptionLogger()->log($level, (string)$this, [$this->getContextData()]);
+        $this->getExceptionLogger()->log($level, (string) $this, [$this->getContextData()]);
     }
 
     /**
