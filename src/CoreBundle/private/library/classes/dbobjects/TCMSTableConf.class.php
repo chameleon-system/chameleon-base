@@ -217,7 +217,7 @@ class TCMSTableConf extends TCMSRecord
      * @param TdbCmsFieldConf|TCMSFieldDefinition $fieldDefinition
      * @param array                               $sqlData
      * @param LanguageServiceInterface            $languageService
-     * @return mixed|null
+     * @return mixed
      */
     private function getDataForCurrentLanguage($fieldDefinition, array $sqlData, LanguageServiceInterface $languageService)
     {
