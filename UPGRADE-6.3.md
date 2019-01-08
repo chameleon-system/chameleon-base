@@ -113,7 +113,7 @@ See the [Bootstrap Migration Guide](https://getbootstrap.com/docs/4.1/migration/
 During the upgrade to Bootstrap 4 the following styles where checked and these are our findings:
 
 btn-default -> btn-secondary
-- Some TCMSField types and TCMSTableEditors so check yours) 
+- Some TCMSField types and TCMSTableEditors so check yours.
 
 .pull-left -> .float-left
 - TCMSFieldDocument
