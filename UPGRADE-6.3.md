@@ -29,7 +29,7 @@ not expected.
 
 ## Logging
 
-Any logging should now be done using `Monolog` (and `LoggerInterface`).
+Any logging should now be done using `Monolog` and `Psr\Log\LoggerInterface`.
 Desired differences in logging - like different log files - should be configured using Monolog or implemented using
 its interfaces (like `HandlerInterface`, `ProcessorInterface`, ...).
 
