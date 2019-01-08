@@ -25,7 +25,7 @@ Configuration of logging generally is done in these locations:
 Any configuration of specific project needs should be done in the project's config.yml (or config_<env>.yml respectively).
 For example if everything should be logged to standard output a handler for stream `"php://stdout"` would be configured there.
 
-The project-config.yml contains the one default logger configuration "main".
+project-config.yml contains the default logger configuration "main".
 It logs any warning or above to the following file: `%kernel.logs_dir%/%kernel.environment%.log"`
 Furthermore it contains some channel names for legacy classes (without dependency injection)
 
