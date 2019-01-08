@@ -79,7 +79,7 @@ Usage of a fingers-crossed logger:
                type: service
                id: cmsPkgCore.logHandler.database
 
-             # Takes/replaces the above handler and amends its behavior with "fingers crossed" (log everything once an error occurs)
+             # Adds fingers-crossed behavior to the above handler (log everything once an error occurs)
              standard:
                type: fingers_crossed
                handler: database_for_fingers_crossed
