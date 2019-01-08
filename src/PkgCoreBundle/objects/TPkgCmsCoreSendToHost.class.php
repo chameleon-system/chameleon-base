@@ -493,7 +493,7 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     *  when enabled, then all transactions will be written to /logs/sendtohost.log"
+     * When enabled, all transactions will be written to /logs/sendtohost.log"
      * otherweise we only write them to the log in log level 4.
      *
      * @param bool $logRequest
