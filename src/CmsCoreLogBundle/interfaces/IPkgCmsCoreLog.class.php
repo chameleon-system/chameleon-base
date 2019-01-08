@@ -10,7 +10,7 @@
  */
 
 /**
- * @deprecated since 6.3.0 - use plain Monolog Logger(Interface)
+ * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface instead
  */
 interface IPkgCmsCoreLog
 {
