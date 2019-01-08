@@ -415,14 +415,20 @@ class TFullGroupTable extends TGroupTable
         return $inline;
     }
 
-    private function getAjaxRecordsUrl(): string
+    private function getTableEditorPagedef($pagedef): string
     {
         $inputFilterUtil = $this->getInputFilterUtil();
-        $pagedef = 'tablemanager';
         $customTableEditor = $inputFilterUtil->getFilteredInput('sTableEditorPagdef');
         if (null !== $customTableEditor && '' !== $customTableEditor) {
             $pagedef = $customTableEditor;
         }
+        return $pagedef;
+    }
+
+    private function getAjaxRecordsUrl(): string
+    {
+        $pagedef = $this->getTableEditorPagedef('tablemanager');
+        $inputFilterUtil = $this->getInputFilterUtil();
         $tableId = $inputFilterUtil->getFilteredInput('id');
         $urlUtil = ServiceLocator::get('chameleon_system_core.util.url');
         $sAjaxURL = $urlUtil->getArrayAsUrl([
@@ -442,14 +448,9 @@ class TFullGroupTable extends TGroupTable
 
     private function switchToSelectedRecord(): string
     {
+        $pagedef = $this->getTableEditorPagedef('tableeditor');
         $inputFilterUtil = $this->getInputFilterUtil();
-        $pagedef = 'tableeditor';
-        $customTableEditor = $inputFilterUtil->getFilteredInput('sTableEditorPagdef');
-        if (null !== $customTableEditor && '' !== $customTableEditor) {
-            $pagedef = $customTableEditor;
-        }
         $tableId = $inputFilterUtil->getFilteredInput('id');
-
         $urlUtil = ServiceLocator::get('chameleon_system_core.util.url');
         $recordUrl = $urlUtil->getArrayAsUrl([
             'pagedef' => $pagedef,
