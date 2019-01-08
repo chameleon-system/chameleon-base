@@ -153,14 +153,12 @@ class RequestInfoService implements RequestInfoServiceInterface
     }
 
     /**
-     * Returns the a unique id for every request.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getRequestId(): string
     {
         if (null === $this->requestId) {
-            $this->requestId = \TTools::GetUUID(); // TODO could/should be without -?
+            $this->requestId = \TTools::GetUUID();
         }
 
         return $this->requestId;
