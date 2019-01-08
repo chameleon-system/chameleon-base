@@ -141,11 +141,11 @@ SELECT `pkg_cms_routing`.*, `cms_portal`.`id` AS portal_id
 FROM `pkg_cms_routing`
 LEFT JOIN `pkg_cms_routing_cms_portal_mlt` ON `pkg_cms_routing`.`id` = `pkg_cms_routing_cms_portal_mlt`.`source_id`
 JOIN `cms_portal`
-WHERE `pkg_cms_routing_cms_portal_mlt`.`target_id` IS NULL OR `pkg_cms_routing_cms_portal_mlt`.`target_id` = `cms_portal`.`id`
+WHERE (`pkg_cms_routing_cms_portal_mlt`.`target_id` IS NULL OR `pkg_cms_routing_cms_portal_mlt`.`target_id` = `cms_portal`.`id`)
+  AND `pkg_cms_routing`.`active` = '1'
 ORDER BY `cms_portal`.`identifier` DESC, `pkg_cms_routing`.`position` ASC
 SQL;
         $configList = TdbPkgCmsRoutingList::GetList($query);
-        $configList->AddFilterString("`pkg_cms_routing`.`active` = '1'");
         while ($config = $configList->Next()) {
             $configArray[] = $config->sqlData;
         }
