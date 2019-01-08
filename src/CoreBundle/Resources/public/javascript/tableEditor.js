@@ -780,7 +780,6 @@ CHAMELEON.CORE.MTTableEditor.inputFields = function () {
     });
 
     var quicklookuplist = $('#quicklookuplist');
-    console.log(quicklookuplist.data('select2-ajax'));
     quicklookuplist.select2({
         placeholder: quicklookuplist.data('select2-placeholder'),
         ajax: {
