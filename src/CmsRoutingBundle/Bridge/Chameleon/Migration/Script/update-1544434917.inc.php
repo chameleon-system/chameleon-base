@@ -5,6 +5,8 @@
 </div>
 <?php
 
+$fieldId = TCMSLogChange::createUnusedRecordId('cms_field_conf');
+
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
       'name' => 'active',
@@ -27,7 +29,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
       'cms_tbl_conf_id' => TCMSLogChange::GetTableId('pkg_cms_routing'),
       'fieldclass_subtype' => '',
       'class_type' => 'Core',
-      'id' => '35caadaf-764e-2492-a4e8-cb4d7bc339ac',
+      'id' => $fieldId,
   ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
@@ -43,13 +45,15 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
       'translation' => 'Aktiv',
   ])
   ->setWhereEquals([
-      'id' => '35caadaf-764e-2492-a4e8-cb4d7bc339ac',
+      'id' => $fieldId,
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
 
 $query ="ALTER TABLE `pkg_cms_routing` ADD INDEX ( `active` )";
 TCMSLogChange::RunQuery(__LINE__, $query);
+
+$listFieldId = TCMSLogChange::createUnusedRecordId('cms_tbl_display_list_fields');
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_list_fields', 'en')
   ->setFields([
@@ -65,7 +69,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_list_fields', '
       'show_in_sort' => '0',
       'cms_tbl_conf_id' => TCMSLogChange::GetTableId('pkg_cms_routing'),
       'cms_translation_field_name' => '',
-      'id' => '7179ca5e-91f5-0912-b378-fbd4755e9820',
+      'id' => $listFieldId,
   ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
@@ -77,7 +81,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_list_fields', '
         'translation' => 'Aktiv',
     ])
     ->setWhereEquals([
-        'id' => '7179ca5e-91f5-0912-b378-fbd4755e9820',
+        'id' => $listFieldId,
     ])
 ;
 TCMSLogChange::update(__LINE__, $data);

@@ -5,6 +5,8 @@
 </div>
 <?php
 
+$listFieldId = TCMSLogChange::createUnusedRecordId('cms_field_conf');
+
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_list_fields', 'en')
   ->setFields([
       'title' => 'Portal',
@@ -19,7 +21,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_list_fields', '
       'show_in_sort' => '0',
       'cms_tbl_conf_id' => TCMSLogChange::GetTableId('pkg_cms_routing'),
       'cms_translation_field_name' => '',
-      'id' => 'fc6f7c91-c197-fdda-869e-deb35eda1b98',
+      'id' => $listFieldId,
   ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
