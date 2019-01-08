@@ -33,20 +33,12 @@ Pre-defining a log channel there works like this:
         $container->prependExtensionConfig('monolog', ['channels' => ['chameleon_order']]);
     }
 
+Additional logging data
+-----------------------
 
-Adding additional data to any log message is done with a Processor. For example you can use WebProcessor to add the REQUEST_URI.
-Adding a service with the tag `monolog.processor` is sufficient for this.
-Restricting it to a certain handler is done with a another argument to that tag:
-
-.. configuration-block::
-    .. code-block:: xml
-
-        <service id="chameleon_system_cms_core_log.processor.web" class="Monolog\Processor\WebProcessor" public="false">
-            <tag name="monolog.processor" handler="main"/>
-        </service>
-
-If you need further logging behavior you can either use the respective `Monolog` classes (ie MandrillHandler,
-MemoryProcessor or HtmlFormatter) or implement them yourself using the Monolog interfaces.
+There are now two additional logging processors which add a request id and the session id to the context of any log message:
+`\ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\RequestIdProcessor`,
+`\ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\SessionIdProcessor`.
 
 Config examples
 ---------------
