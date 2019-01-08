@@ -129,6 +129,10 @@ loader. This instance will therefore only contain the module passed as argument,
 
 Log output is no longer collected and no longer sent as attachments with the notification email.
 
+## RequestInfoService
+
+- A method `getRequestId()` is added. This is a request-level-cached GUID specific for Chameleon.
+
 # Changed Interfaces and Method Signatures
 
 This section contains information on interface and method signature changes which affect backwards compatibility (BC).
