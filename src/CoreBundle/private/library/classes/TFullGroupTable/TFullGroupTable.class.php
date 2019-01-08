@@ -415,6 +415,59 @@ class TFullGroupTable extends TGroupTable
         return $inline;
     }
 
+    private function getAjaxRecordsUrl(): string
+    {
+        $inputFilterUtil = $this->getInputFilterUtil();
+
+        $pagedef = 'tablemanager';
+        $customTableEditor = $inputFilterUtil->getFilteredInput('sTableEditorPagdef');
+        if (null !== $customTableEditor && '' !== $customTableEditor) {
+            $pagedef = $customTableEditor;
+        }
+
+        $tableId = $inputFilterUtil->getFilteredInput('id');
+
+        $urlUtil = ServiceLocator::get('chameleon_system_core.util.url');
+        $sAjaxURL = $urlUtil->getArrayAsUrl([
+            'id' => $tableId,
+            'pagedef' => $pagedef,
+            '_rmhist' => 'false',
+            'sOutputMode' => 'Ajax',
+            'module_fnc[contentmodule]' => 'ExecuteAjaxCall',
+            '_fnc' => 'GetAutoCompleteAjaxList',
+            'sRestrictionField' => '',
+            'sRestriction' => '',
+            'recordID' => ''
+        ], PATH_CMS_CONTROLLER.'?', '&');
+
+        return $sAjaxURL;
+    }
+
+
+    private function switchToSelectedRecord(): string
+    {
+        $inputFilterUtil = $this->getInputFilterUtil();
+
+        $pagedef = 'tableeditor';
+
+        $customTableEditor = $inputFilterUtil->getFilteredInput('sTableEditorPagdef');
+        if (null !== $customTableEditor && '' !== $customTableEditor) {
+            $pagedef = $customTableEditor;
+        }
+
+        $tableId = $inputFilterUtil->getFilteredInput('id');
+
+        return '<script type="text/javascript">
+                function switchRecord(id) {
+                    if (id !== "") {
+                        var url = "' . PATH_CMS_CONTROLLER . '?pagedef='.$pagedef.'&id=" + id + "&tableid='.$tableId.'&sRestriction=&sRestrictionField&popLastURL=1";
+                        document.location.href = url;
+                    }
+                } 
+                </script>';
+    }
+
+
     /**
      * returns the table as string.
      *
@@ -865,10 +918,22 @@ class TFullGroupTable extends TGroupTable
 
         if ($this->showSearchBox) {
             $this->somethingToShow = true;
+
+            $filterContent .= '<div class="form-group mr-2">';
+            $filterContent .= '<select id="searchLookup" name="_search_word" data-listname="'. TGlobal::OutHTML($this->listName) .'" class="form-control" data-select2-placeholder="';
+            $filterContent .= $this->searchFieldText;
+            $filterContent .= '" data-select2-ajax="'. $this->getAjaxRecordsUrl() .'">';
+
+            if ("" !== $this->_postData['_search_word']) {
+                $filterContent .= '<option value="'.TGlobal::OutHTML($this->_postData['_search_word']).'" selected>'.TGlobal::OutHTML($this->_postData['_search_word']).'</option>';
+            }
+            $filterContent .= '</select></div>';
+
             $filterContent .= '<div class="form-group">';
-            $filterContent .= '<input type="text" class="form-control form-control-sm" name="_search_word" value="'.TGlobal::OutHTML($this->_postData['_search_word'])."\" onKeyDown=\"if (window.event && window.event.keyCode == 13) document.{$this->listName}._startRecord.value=0\" onChange=\"document.{$this->listName}._startRecord.value=0;document.{$this->listName}.submit();\" placeholder=\"".$this->searchFieldText."\">\n";
             $filterContent .= "<input type=\"button\" class=\"form-control form-control-sm btn-sm btn-primary\" value=\"{$this->searchButtonText}\" onClick=\"document.{$this->listName}._startRecord.value=0;document.{$this->listName}.submit();\" class=\"btn btn-sm btn-primary\">
             </div>";
+
+            $filterContent .= $this->switchToSelectedRecord();
         }
 
         // use callback function if one was defined
