@@ -22,8 +22,8 @@ project-config.yml contains the default logger configuration "main".
 It logs any warning or above to the following file: `%kernel.logs_dir%/%kernel.environment%.log"`
 Furthermore it contains some channel names for legacy classes that cannot use dependency injection.
 
-The `PrependExtensionInterface` would normally also be used for legacy classes and
-their respective logging channel definitions in bundles.
+An implementation of `PrependExtensionInterface` can be used in a bundle to define log channels for use in legacy classes
+that cannot use dependency injection.
 Pre-defining a log channel there works like this:
 
 .. code-block:: php
