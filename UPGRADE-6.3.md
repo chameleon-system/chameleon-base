@@ -33,7 +33,7 @@ Any logging should now be done using `Monolog` and `Psr\Log\LoggerInterface`.
 Desired differences in logging - like different log files - should be configured using Monolog or implemented using
 its interfaces (like `HandlerInterface`, `ProcessorInterface`, ...).
 
-NOTE that the old default logging into the database is not done anymore.
+Note that log messages are no longer written to database.
 You can still configure this if needed with the service `cmsPkgCore.logHandler.database` (TPkgCmsCoreLogMonologHandler_Database).
 Also note that the standard logging channel is not configured as "fingerscrossed" anymore. All messages there will simply
 be logged everytime.
