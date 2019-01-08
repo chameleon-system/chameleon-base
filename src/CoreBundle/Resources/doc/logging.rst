@@ -22,7 +22,7 @@ Configuration of logging generally is done in these locations:
 - `vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/config/project-config.yml`
 - the Extension class of any bundle if it implements `PrependExtensionInterface`
 
-Any configuration of specific project needs should be done in the project's config.yml (or config_prod.yml respectively).
+Any configuration of specific project needs should be done in the project's config.yml (or config_<env>.yml respectively).
 For example if everything should be logged to standard output a handler for stream `"php://stdout"` would be configured there.
 
 The project-config.yml contains the one default logger configuration "main".
