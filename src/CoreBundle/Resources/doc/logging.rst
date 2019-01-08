@@ -67,8 +67,6 @@ Config examples
               path: "php://stdout"
               formatter: chameleon_system_cms_core_log.formatter_with_stacktraces
 
-NOTE used inside a docker the docker also prepends every log message with a warning prefix and an additional date.
-
 - Usage of a fingers crossed logger:
 
 .. configuration-block::
