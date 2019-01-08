@@ -695,7 +695,7 @@
             <tag name="kernel.event_listener" event="chameleon_system_core.change_default_language_for_portal" method="clearRoutingCache" />
             <tag name="kernel.event_listener" event="chameleon_system_core.change_active_languages_for_portal" method="clearRoutingCache" />
             <tag name="kernel.event_listener" event="chameleon_system_core.change_use_slash_in_seo_urls_for_portal" method="clearRoutingCache" />
-            <tag name="kernel.event_listener" event="chameleon_system_core.change_activate_routing_config" method="clearRoutingCache" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.change_routing_config" method="clearRoutingCache" />
             <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
         </service>
 
