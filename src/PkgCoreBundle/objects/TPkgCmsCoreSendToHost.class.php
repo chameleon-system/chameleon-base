@@ -500,7 +500,7 @@ class TPkgCmsCoreSendToHost
      *
      * @return $this
      *
-     * @deprecated since 6.3.0 - Not supported anymore: everything is logged
+     * @deprecated since 6.3.0 - not supported anymore: Logging is always enabled
      */
     public function setLogRequest($logRequest)
     {
