@@ -55,7 +55,7 @@ JsMin or Jshrink. If this block is not set, no JS will be minified.
 Optional Step 4: Configure Logging
 ----------------------------------
 
-The bundle uses standard logging (Monolog).
+The bundle uses standard logging (Monolog). It uses the channel "javascript_minify".
 
 
 Usage
