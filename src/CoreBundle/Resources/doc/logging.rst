@@ -27,6 +27,7 @@ their respective logging channel definitions in bundles.
 Pre-defining a log channel there works like this:
 
 .. code-block:: php
+
     public function prepend(ContainerBuilder $container)
     {
         $container->prependExtensionConfig('monolog', ['channels' => ['chameleon_order']]);
@@ -44,6 +45,7 @@ Restricting it to a certain handler is done with a another argument to that tag:
 
 .. configuration-block::
     .. code-block:: xml
+
         <service id="chameleon_system_cms_core_log.processor.web" class="Monolog\Processor\WebProcessor" public="false">
             <tag name="monolog.processor" handler="main"/>
         </service>
@@ -58,6 +60,7 @@ Config examples
 
 .. configuration-block::
     .. code-block:: xml
+
         <service id="chameleon_system_cms_core_log.formatter_with_stacktraces" class="Monolog\Formatter\LineFormatter" public="false">
             <!-- See \Monolog\Formatter\LineFormatter::SIMPLE_FORMAT for the default format: -->
             <argument type="string">%%channel%%.%%level_name%%: %%message%% %%context%% %%extra%%\n</argument>
@@ -69,6 +72,7 @@ Config examples
 
 .. configuration-block::
     .. code-block:: yaml
+
         monolog:
           handlers:
             main:
@@ -82,6 +86,7 @@ NOTE used inside a docker the docker also prepends every log message with a warn
 
 .. configuration-block::
     .. code-block:: yaml
+
         monolog:
           handlers:
              # Logs everything to the database
