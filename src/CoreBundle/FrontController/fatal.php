@@ -107,7 +107,7 @@ if (isset($_GET['sIdentifier'])) {
     <?php
     if (isset($identifier)) {
         ?>
-        Error Identifier: <strong><?= OutHTML($identifier); ?></strong>
+        Error identifier: <strong><?= OutHTML($identifier); ?></strong>
         <?php
     }
     ?>
