@@ -43,7 +43,7 @@ There are now two additional logging processors which add a request id and the s
 Config examples
 ---------------
 
-- Changing the log (line) format - here omitting the date:
+Changing the log line format - here omitting the date:
 
 .. configuration-block::
     .. code-block:: xml
@@ -55,7 +55,7 @@ Config examples
         </service>
 
 
-- Logging to standard output - with the above line formatter:
+Logging to standard output with the above line formatter:
 
 .. configuration-block::
     .. code-block:: yaml
@@ -67,7 +67,7 @@ Config examples
               path: "php://stdout"
               formatter: chameleon_system_cms_core_log.formatter_with_stacktraces
 
-- Usage of a fingers crossed logger:
+Usage of a fingers-crossed logger:
 
 .. configuration-block::
     .. code-block:: yaml
