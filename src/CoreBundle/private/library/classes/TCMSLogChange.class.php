@@ -2401,7 +2401,7 @@ class TCMSLogChange
     private static function logError($line, $exception)
     {
         $logger = self::getLogger();
-        $logger->error(sprintf('Sql error in line %s: %s', $line, (string) $exception));
+        $logger->error(sprintf('SQL error in line %s: %s', $line, (string) $exception));
     }
 
     /**
