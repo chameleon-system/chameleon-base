@@ -29,11 +29,13 @@ not expected.
 
 ## Logging
 
-Any logging should now be done using `Monolog` and `Psr\Log\LoggerInterface`.
+We are now using standard logging for Symfony applications using `Monolog` and `Psr\Log\LoggerInterface`.
 Desired differences in logging - like different log files - should be configured using Monolog or implemented using
 its interfaces (like `HandlerInterface`, `ProcessorInterface`, ...).
 
 This is already done in most places in Chameleon itself (chameleon-base and chameleon-shop).
+
+Project code should also be adapted to this. See below for a migration example.
 
 Note that log messages are no longer written to database.
 You can still configure this if needed with the service `cmsPkgCore.logHandler.database` (TPkgCmsCoreLogMonologHandler_Database).
@@ -41,45 +43,14 @@ Also note that the standard logging channel is not configured as "fingerscrossed
 be logged everytime.
 See below for the full legacy config.
 
+However deprecated service definitions for the old log (channel) handler classes still exist in 
+`vendor/chameleon-system/chameleon-base/src/CmsCoreLogBundle/Resources/config/services.xml`.
+These will be removed in a later release.
+
 The menu entries in the backend ("logs", "log channel definition") are now hidden - that is: they are no longer 
 assigned to the category window ("Logs"). To show them again you can assign them again.
 
-However deprecated service definitions for the old log (channel) handler classes still exist in 
-`vendor/chameleon-system/chameleon-base/src/CmsCoreLogBundle/Resources/config/services.xml`.
-
-The full config (in config.yml) that would replicate the legacy logging behavior of Chameleon 6.2 looks like this:
-
-```
-monolog:
-   handlers:
-     database:
-       type: service
-       id: cmsPkgCore.logHandler.database
-       channels:
-         - "core_security"
-         - "core_cms_updates"
-         - "core_cronjobs"
-         - "core_api"
- 
-     database_for_fingers_crossed:
-       type: service
-       id: cmsPkgCore.logHandler.database
- 
-     standard:
-       type: fingers_crossed
-       handler: database_for_fingers_crossed
-       channels:
-         - "core_standard"
- 
-     dbal:
-       type: stream
-       path: "%kernel.logs_dir%/dbal.log"
-       channels:
-         - "core_dbal"
-       level: warning
-```
-
-Example for changing/defining a log handler for a channel logging to a file:
+Migration example for changing/defining a log handler for a channel logging to a file:
 
 Old in service.xml:
 ```
@@ -116,6 +87,38 @@ This is then used in that service.xml as two service arguments instead of a refe
 ```
     <argument type="service" id="logger"/>
     <tag name="monolog.logger" channel="cms_updates"/>
+```
+
+The full config (in config.yml) that would replicate the legacy logging behavior of Chameleon 6.2 looks like this:
+
+```
+monolog:
+   handlers:
+     database:
+       type: service
+       id: cmsPkgCore.logHandler.database
+       channels:
+         - "core_security"
+         - "core_cms_updates"
+         - "core_cronjobs"
+         - "core_api"
+ 
+     database_for_fingers_crossed:
+       type: service
+       id: cmsPkgCore.logHandler.database
+ 
+     standard:
+       type: fingers_crossed
+       handler: database_for_fingers_crossed
+       channels:
+         - "core_standard"
+ 
+     dbal:
+       type: stream
+       path: "%kernel.logs_dir%/dbal.log"
+       channels:
+         - "core_dbal"
+       level: warning
 ```
 
 ## TTools::GetModuleLoaderObject Returns New Object
