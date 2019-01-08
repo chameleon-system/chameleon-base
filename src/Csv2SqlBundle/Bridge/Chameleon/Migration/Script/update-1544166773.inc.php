@@ -12,23 +12,23 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
 - Verzeichnis
 - Muster
 
-Alle Verzeichnisse sind relativ zu private/cmsdata/.
+Alle Verzeichnisse sind relativ zu app/cmsdata/.
 
 Ein Hinweis zur Ordnerstruktur:
 Zu importierende Dateien müssen immer in einem Ordner "incoming" liegen. Parallel zu "incoming" sollte es "working" und "archive" geben.
 
 Beispiel: "/wawi/incoming/my.csv" setzt voraus, dass es folgende Ordner gibt:
 
-./private/cmsdata/wawi/incoming - Hier befindet sich die zu importierende Datei my.csv.
-./private/cmsdata/wawi/working - Hier wird die Datei hin verschoben, wenn sie vom System verarbeitet wird.
-./private/cmsdata/wawi/archive - In das Archiv wird die Datei geschoben, wenn die Verarbeitung abgeschlossen ist (die Datei wird mit YYYYMMDD_HHMMSS- geprefixed).
+./app/cmsdata/wawi/incoming - Hier befindet sich die zu importierende Datei my.csv.
+./app/cmsdata/wawi/working - Hier wird die Datei hin verschoben, wenn sie vom System verarbeitet wird.
+./app/cmsdata/wawi/archive - In das Archiv wird die Datei geschoben, wenn die Verarbeitung abgeschlossen ist (die Datei wird mit YYYYMMDD_HHMMSS- geprefixed).
 
 Die gleiche Regel gilt, wenn anstelle einer Datei alle Dateien eines Ordners importiert werden sollen.
 
-Beispiel: "/wawi/attribute/incoming" -> Import aller CSV-Dateien aus dem Ordner ./private/cmsdata/wawi/attribute/incoming setzt voraus, dass es folgende Ordner gibt:
-./private/cmsdata/wawi/attribute/incoming
-./private/cmsdata/wawi/attribute/working
-./private/cmsdata/wawi/attribute/archive
+Beispiel: "/wawi/attribute/incoming" -> Import aller CSV-Dateien aus dem Ordner ./app/cmsdata/wawi/attribute/incoming setzt voraus, dass es folgende Ordner gibt:
+./app/cmsdata/wawi/attribute/incoming
+./app/cmsdata/wawi/attribute/working
+./app/cmsdata/wawi/attribute/archive
 ',
   ])
   ->setWhereEquals([
