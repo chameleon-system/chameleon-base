@@ -23,7 +23,7 @@ class CmsRoutingTableEditor extends TCMSTableEditor
 
         $this->getEventDispatcher()->dispatch(
             CoreEvents::CHANGE_ROUTING_CONFIG,
-            new RoutingConfigChangedEvent($this->sId)
+            new RoutingConfigChangedEvent($this->oTable)
         );
     }
 }

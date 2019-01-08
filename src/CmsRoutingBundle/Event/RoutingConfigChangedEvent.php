@@ -16,17 +16,17 @@ use Symfony\Component\EventDispatcher\Event;
 class RoutingConfigChangedEvent extends Event
 {
     /**
-     * @var string
+     * @var \TdbPkgCmsRouting
      */
-    private $routingId;
+    private $routing;
 
-    public function __construct(string $routingId)
+    public function __construct(\TdbPkgCmsRouting $routing)
     {
-        $this->routingId = $routingId;
+        $this->routing = $routing;
     }
 
-    public function getRoutingId(): string
+    public function getRouting(): \TdbPkgCmsRouting
     {
-        return $this->routingId;
+        return $this->routing;
     }
 }
