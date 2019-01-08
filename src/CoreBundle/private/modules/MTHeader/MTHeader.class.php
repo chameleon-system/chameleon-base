@@ -20,6 +20,7 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\DatabaseMigration\Constant\MigrationRecorderConstants;
 use ChameleonSystem\DatabaseMigration\Exception\AccessDeniedException;
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
+use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
@@ -450,16 +451,27 @@ class MTHeader extends TCMSModelBase
      */
     protected function ClearOutBox($sDir)
     {
-        $fileManager = $this->getFileManager();
-
         if (false === is_dir(PATH_OUTBOX)) {
             return;
         }
         $sDir = PATH_OUTBOX.$sDir;
-        if ('/' !== $sDir[strlen($sDir) - 1]) {
-            $sDir .= '/';
-        }
-        $files = array_values(preg_grep('/^((?!.gitkeep).)*$/', glob($sDir.'*.*')));
+
+        $this->clearFilesInDir($sDir);
+    }
+
+    /**
+     * Delete all the files in the given dir - except .gitkeep files.
+     *
+     * @param string $dir
+     *
+     * NOTE also see deleteFileOrDirectoryContent() which does something similar
+     */
+    private function clearFilesInDir(string $dir): void
+    {
+        $dir = rtrim($dir, '/').'/';
+
+        $fileManager = $this->getFileManager();
+        $files = array_values(preg_grep('/^((?!.gitkeep).)*$/', glob($dir.'*.*')));
         if ($files) {
             foreach ($files as $file) {
                 $fileManager->unlink($file);
@@ -471,7 +483,12 @@ class MTHeader extends TCMSModelBase
     {
         $this->ClearOutBox('static/js/');
         $this->ClearOutBox('static/css/');
-        $this->ClearOutBox('static/less/');
+
+        $lessCompiler = $this->getLessCompiler();
+        $cssTargetDir = $lessCompiler->getLocalPathToCompiledLess();
+        $this->clearFilesInDir($cssTargetDir);
+        $cssCacheDir = $lessCompiler->getLocalPathToCachedLess();
+        $this->clearFilesInDir($cssCacheDir);
 
         $oConfig = TdbCmsConfig::GetInstance();
         $aAdditionalFiles = explode("\n", $oConfig->fieldAdditionalFilesToDeleteFromCache);
@@ -911,5 +928,10 @@ class MTHeader extends TCMSModelBase
     private function getTranslator()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+    }
+
+    private function getLessCompiler(): TPkgViewRendererLessCompiler
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.less_compiler');
     }
 }

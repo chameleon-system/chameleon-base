@@ -1,5 +1,1 @@
-chameleon_system_view_renderer.generate_css:
-  path: /chameleon/outbox/static/less/chameleon_{portalId}.css
-  defaults:  { _controller: chameleon_system_view_renderer.controller.generate_css_controller }
-  requirements:
-    portalId: \d+
+

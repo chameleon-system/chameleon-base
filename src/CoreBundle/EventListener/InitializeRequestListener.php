@@ -11,12 +11,11 @@
 
 namespace ChameleonSystem\CoreBundle\EventListener;
 
+use ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeServiceInterface;
 use ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
-/**
- * Class InitializeRequestListener.
- */
 class InitializeRequestListener
 {
     /**
@@ -25,11 +24,23 @@ class InitializeRequestListener
     private $requestInitializer;
 
     /**
-     * @param RequestInitializer $requestInitializer
+     * @var MaintenanceModeServiceInterface
      */
-    public function __construct(RequestInitializer $requestInitializer)
-    {
+    private $maintenanceModeService;
+
+    /**
+     * @var RequestInfoServiceInterface
+     */
+    private $requestInfoService;
+
+    public function __construct(
+        RequestInitializer $requestInitializer,
+        MaintenanceModeServiceInterface $maintenanceModeService,
+        RequestInfoServiceInterface $requestInfoService
+    ) {
         $this->requestInitializer = $requestInitializer;
+        $this->maintenanceModeService = $maintenanceModeService;
+        $this->requestInfoService = $requestInfoService;
     }
 
     /**
@@ -40,6 +51,29 @@ class InitializeRequestListener
         if (!$event->isMasterRequest()) {
             return;
         }
+
+        if (false === $this->requestInfoService->isBackendMode() && false === $this->requestInfoService->isCmsTemplateEngineEditMode()) {
+            $this->recheckMaintenanceMode();
+        }
+
         $this->requestInitializer->initialize($event->getRequest());
+    }
+
+    private function recheckMaintenanceMode(): void
+    {
+        if (true === $this->maintenanceModeService->isActive()) {
+            $this->showMaintenanceModePage();
+        }
+    }
+
+    private function showMaintenanceModePage(): void
+    {
+        if (\file_exists(PATH_WEB.'/maintenance.php')) {
+            require PATH_WEB.'/maintenance.php';
+
+            exit();
+        }
+
+        die('Sorry! This page is down for maintenance.');
     }
 }

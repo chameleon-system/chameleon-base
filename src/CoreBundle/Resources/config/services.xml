@@ -111,7 +111,6 @@
         </service>
 
         <service id="chameleon_system_core.service_initializer.request" class="ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer">
-            <argument type="service" id="chameleon_system_core.request_info_service" />
             <call method="setSessionManager">
                 <argument type="service" id="chameleon_system_core.session.chameleon_session_manager" />
             </call>
@@ -120,6 +119,8 @@
         <service id="chameleon_system_core.InitializeRequestListener" class="ChameleonSystem\CoreBundle\EventListener\InitializeRequestListener">
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="252" />
             <argument type="service" id="chameleon_system_core.service_initializer.request" />
+            <argument type="service" id="chameleon_system_core.maintenance_mode_service"/>
+            <argument type="service" id="chameleon_system_core.request_info_service"/>
         </service>
 
         <service id="chameleon_system_core.session.chameleon_session_manager" class="ChameleonSystem\CoreBundle\Session\ChameleonSessionManager">
@@ -789,6 +790,21 @@
         </service>
 
         <service id="chameleon_system_core.command.update.count" class="ChameleonSystem\CoreBundle\Command\CountUpdateCommand">
+            <tag name="console.command"/>
+        </service>
+
+        <service id="chameleon_system_core.maintenance_mode_service" class="ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeService">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_cms_cache.cache"/>
+        </service>
+
+        <service id="chameleon_system_core.command.activate_maintenance_mode" class="ChameleonSystem\CoreBundle\Command\ActivateMaintenanceModeCommand">
+            <argument type="service" id="chameleon_system_core.maintenance_mode_service"/>
+            <tag name="console.command"/>
+        </service>
+
+        <service id="chameleon_system_core.command.deactivate_maintenance_mode" class="ChameleonSystem\CoreBundle\Command\DeactivateMaintenanceModeCommand">
+            <argument type="service" id="chameleon_system_core.maintenance_mode_service"/>
             <tag name="console.command"/>
         </service>
 
