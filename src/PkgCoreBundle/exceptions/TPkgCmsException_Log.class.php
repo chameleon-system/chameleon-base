@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -72,12 +73,12 @@ class TPkgCmsException_Log extends TPkgCmsException
      */
     protected function getLogger()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
+        return ServiceLocator::get('cmsPkgCore.logChannel.standard');
     }
 
     private function getExceptionLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
+        return ServiceLocator::get('logger');
     }
 
     public function getLogLevel()
