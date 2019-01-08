@@ -108,7 +108,8 @@ cmf_routing:
 
 monolog:
   # NOTE this channel list is not / must not be a complete list.
-  # It is only necessary here in advance for backwards-compatibility (ie users of "IPkgCmsCoreLog" and any Tdb or TCMS object).
+  # It is only necessary for creating loggers for the named channels which can then be used by classes that cannot use regular
+  # dependency injection (ie any Tdb or TCMS object).
   channels:
     - "cms_update"
     - "cronjob"
