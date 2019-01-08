@@ -138,7 +138,7 @@ During the upgrade to Bootstrap 4 the following styles where checked and these a
 - TCSMFieldFMapCoordinate
 
 btn-default -> btn-secondary
-- Some TCMSField types and TCMSTableEditors so check yours) 
+- Some TCMSField types and TCMSTableEditors so check yours.
 
 .pull-left -> .float-left
 - TCMSFieldDocument
