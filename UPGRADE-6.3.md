@@ -27,9 +27,11 @@ The system now uses Symfony 3.4, which needs a few adjustments:
 The system now uses Twig 2.x. Please have a look at the Twig changelog for required adjustments, but major problems are
 not expected.
 
-## Mailer peer security
+## Mailer Peer Security
 
-The default value of config key `chameleon_system_core:mailer:peer_security` was change from "permissive" to "strict".
+The default value of config key `chameleon_system_core: mailer: peer_security` was changed from "permissive" to "strict".
+This means that the class `\ChameleonSystem\CoreBundle\Security\Https\StrictHttpsContext` is used for the settings
+for SMTP communication (ie verification is done and no self-signed certificates are allowed).
 
 ## TTools::GetModuleLoaderObject Returns New Object
 
