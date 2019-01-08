@@ -1,23 +1,16 @@
 Logging
 =======
 
-Logging is generally used to get different runtime data of a system to a desired location.
-Originally this would be one or several log files. And currently maybe the standard output (for dockers) and consequently some log
-tracking system like Kibana.
+Chameleon uses the standard logging of Symfony combined with Monolog: https://symfony.com/doc/current/logging.html
 
-The main differentiating properties of different log messages (beside their content) are log level and channel name.
-
-With channel names it is possible to configure a desired different output for different logging messages. For example all
-messages during ordering could be logged additionally in another file or different database or to an AMQP message broker.
-You would then use a channel "order" for these messages and configure a different handler for that channel.
-
-All logging should be done with `Monolog` and the PSR4 interface `LoggerInterface`.
+All logging should thus be done with the PSR4 interface `LoggerInterface` with appropriate channels if needed.
 
 
 Configuration
 -------------
 
 Configuration of logging generally is done in these locations:
+
 - the `config.yml` of a specific project
 - `vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/config/project-config.yml`
 - the Extension class of any bundle if it implements `PrependExtensionInterface`
