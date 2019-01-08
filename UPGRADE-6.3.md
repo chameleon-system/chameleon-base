@@ -33,6 +33,8 @@ Any logging should now be done using `Monolog` and `Psr\Log\LoggerInterface`.
 Desired differences in logging - like different log files - should be configured using Monolog or implemented using
 its interfaces (like `HandlerInterface`, `ProcessorInterface`, ...).
 
+This is already done in most places in Chameleon itself (chameleon-base and chameleon-shop).
+
 Note that log messages are no longer written to database.
 You can still configure this if needed with the service `cmsPkgCore.logHandler.database` (TPkgCmsCoreLogMonologHandler_Database).
 Also note that the standard logging channel is not configured as "fingerscrossed" anymore. All messages there will simply
@@ -41,8 +43,6 @@ See below for the full legacy config.
 
 The menu entries in the backend ("logs", "log channel definition") are now hidden - that is: they are no longer 
 assigned to the category window ("Logs"). To show them again you can assign them again.
-
-This was largely changed in the two base packages (chameleon-base and chameleon-shop).
 
 However deprecated service definitions for the old log (channel) handler classes still exist in 
 `vendor/chameleon-system/chameleon-base/src/CmsCoreLogBundle/Resources/config/services.xml`.
