@@ -55,21 +55,7 @@ JsMin or Jshrink. If this block is not set, no JS will be minified.
 Optional Step 4: Configure Logging
 ----------------------------------
 
-The bundle logs errors in its own channel during JS minification: javascript_minify
-So if you want you can customize the logger.
-
-This is an example to customize the logger if you are using the Chameleon System.
-
-.. configuration-block::
-.. code-block:: yaml
-
-        monolog:
-          handlers:
-            javascript_minify:
-              type: stream
-              path: "%kernel.logs_dir%/javascript_minify_%kernel.environment%.log"
-              level: warning
-              channels: ["javascript_minify"]
+The bundle uses standard logging (Monolog).
 
 
 Usage
@@ -92,6 +78,7 @@ Usage
 - add the tag "chameleon_system.minify_js" to this service and specify an alias
 - set the configuration value `js_minifier_to_use` to this alias
 
+The bundle logs errors into channel `javascript_minify`.
 
 Note
 ----
