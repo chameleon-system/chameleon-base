@@ -31,16 +31,13 @@ class RequestIdProcessor implements ProcessorInterface
      */
     public function __invoke(array $record)
     {
-        $extraData = ['request_id' => $this->requestInfoService->getRequestId()];
+        $requestId = $this->requestInfoService->getRequestId();
 
         if (true === \array_key_exists('extra', $record)) {
-            $extraData = \array_merge(
-                $record['extra'],
-                $extraData
-            );
+            $record['extra']['request_id'] = $requestId;
+        } else {
+            $record['extra'] = ['request_id' => $requestId];
         }
-
-        $record['extra'] = $extraData;
 
         return $record;
     }

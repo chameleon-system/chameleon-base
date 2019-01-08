@@ -41,16 +41,13 @@ class SessionIdProcessor implements ProcessorInterface
             return $record;
         }
 
-        $extraData = ['session_id' => $request->getSession()->getId()];
+        $sessionId = $request->getSession()->getId();
 
         if (true === \array_key_exists('extra', $record)) {
-            $extraData = \array_merge(
-                $record['extra'],
-                $extraData
-            );
+            $record['extra']['session_id'] = $sessionId;
+        } else {
+            $record['extra'] = ['session_id' => $sessionId];
         }
-
-        $record['extra'] = $extraData;
 
         return $record;
     }
