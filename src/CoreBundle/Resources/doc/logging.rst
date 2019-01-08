@@ -34,11 +34,6 @@ Pre-defining a log channel there works like this:
     }
 
 
-The default logging channel name of any message if not otherwise specified is "app".
-If you want to change this a logging channel is normally configured using the tag
-`\<tag name="monolog.logger" channel="\<name\>"/\>` in the service definition that also has a dependency to a
-a `LoggerInterface` class of Monolog (normally just "logger").
-
 Adding additional data to any log message is done with a Processor. For example you can use WebProcessor to add the REQUEST_URI.
 Adding a service with the tag `monolog.processor` is sufficient for this.
 Restricting it to a certain handler is done with a another argument to that tag:
