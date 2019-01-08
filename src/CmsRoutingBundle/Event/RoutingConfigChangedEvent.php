@@ -18,18 +18,15 @@ class RoutingConfigChangedEvent extends Event
     /**
      * @var string
      */
-    private $routingName;
+    private $routingId;
 
-    public function __construct(string $routingName)
+    public function __construct(string $routingId)
     {
-        $this->routingName = $routingName;
+        $this->routingId = $routingId;
     }
 
-    /**
-     * @return string
-     */
-    public function getRoutingName(): string
+    public function getRoutingId(): string
     {
-        return $this->routingName;
+        return $this->routingId;
     }
 }
