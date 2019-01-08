@@ -29,13 +29,13 @@ class TCMSFieldDocument extends TCMSFieldLookup
 
         $html .= '<div class="alert alert-info" id="'.TGlobal::OutHTML($this->name).'currentFile">'.$currentFile."</div>
       <div class=\"cleardiv\">&nbsp;</div>\n";
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.select'), 'javascript:'.$this->_GetOpenWindowJS(), URL_CMS.'/images/icons/page_attachment.gif', 'pull-left');
-        $html .= ' &nbsp; '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:_ResetDocument('".TGlobal::OutHTML($this->name)."', '".TGlobal::Translate('chameleon_system_core.field_document.nothing_selected')."','".TGlobal::OutHTML($this->oDefinition->sqlData['field_default_value'])."')", URL_CMS.'/images/icons/action_stop.gif', 'pull-left');
+        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.select'), 'javascript:'.$this->_GetOpenWindowJS(), URL_CMS.'/images/icons/page_attachment.gif', 'float-left');
+        $html .= ' &nbsp; '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:_ResetDocument('".TGlobal::OutHTML($this->name)."', '".TGlobal::Translate('chameleon_system_core.field_document.nothing_selected')."','".TGlobal::OutHTML($this->oDefinition->sqlData['field_default_value'])."')", URL_CMS.'/images/icons/action_stop.gif', 'float-left');
         $html .= "<div class=\"cleardiv\">&nbsp;</div>\n";
         $html .= '<fieldset style="margin-top: 15px;">
         <legend>'.TGlobal::Translate('chameleon_system_core.field_document.upload')."</legend>\n";
         $html .= '
-            <select name="documentTreeId_'.TGlobal::OutHTML($this->name).'" id="documentTreeId_'.TGlobal::OutHTML($this->name).'"  class="form-control input-sm pull-left" style="max-width: 300px; width: auto;">
+            <select name="documentTreeId_'.TGlobal::OutHTML($this->name).'" id="documentTreeId_'.TGlobal::OutHTML($this->name).'"  class="form-control form-control-sm float-left" style="max-width: 300px; width: auto;">
             <option value="" style="font-weight: bold;">'.TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected')."</option>\n";
 
         $oTreeSelect = new TCMSRenderDocumentTreeSelectBox();
@@ -45,7 +45,7 @@ class TCMSFieldDocument extends TCMSFieldLookup
             </select>
           ';
 
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.upload'), 'javascript:'.$this->_GetOpenUploadWindowJS(), URL_CMS.'/images/icons/add.png', 'pull-left');
+        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.upload'), 'javascript:'.$this->_GetOpenUploadWindowJS(), URL_CMS.'/images/icons/add.png', 'float-left');
 
         $html .= "</fieldset>\n";
 

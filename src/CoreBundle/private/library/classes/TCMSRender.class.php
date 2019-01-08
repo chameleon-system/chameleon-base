@@ -38,7 +38,7 @@ class TCMSRender
     }
 
     /**
-     * renders a bootstrap 3 CSS button.
+     * renders a bootstrap 4 CSS button.
      *
      * sample usage with thickbox and javascript mouseover event:
      * TCMSRender::DrawButton('Webseite anzeigen',"",URL_CMS."/images/icons/icon_world.gif",'thickbox','document.location.href=document.getElementById(\''.TGlobal::OutHTML($this->name).'\').value + \'?TB_iframe=true&height=600&width=800\'');
@@ -58,6 +58,11 @@ class TCMSRender
     {
         $sTemplate = 'singleMenuButton';
 
+        // migrate BS3 to BS4 float class name
+        if ('pull-left' === $linkClass) {
+            $linkClass = 'float-left';
+        }
+
         if (is_null($onclick) && !is_null($link)) {
             if ('javascript:' == substr($link, 0, 11)) {
                 $onclick = substr($link, 11);
@@ -76,7 +81,7 @@ class TCMSRender
         $oViewRenderer->AddSourceObject('sCSSClass', $linkClass);
         $oViewRenderer->AddSourceObject('sOnClick', $onclick);
         $oViewRenderer->AddSourceObject('sIconURL', $imgPath);
-        $oViewRenderer->AddSourceObject('sButtonStyle', 'btn-default');
+        $oViewRenderer->AddSourceObject('sButtonStyle', 'btn-secondary');
         $oViewRenderer->AddSourceObject('onMouseOver', $onMouseOver);
         $oViewRenderer->AddSourceObject('cssID', $id);
         $oViewRenderer->AddSourceObject('link', $link);

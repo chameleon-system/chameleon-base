@@ -45,8 +45,14 @@ class TCMSFieldText extends TCMSField
                 $iTextareaSize = 200;
             }
         }
+
+        $cssWidth = '';
+        if ('100%' !== $this->fieldCSSwidth) {
+            $cssWidth = 'width: '.$this->fieldCSSwidth;
+        }
+
         $html = '';
-        $html .= '<textarea id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name)."\" class=\"fieldtext resizable\" width=\"{$this->fieldWidth}\" style=\"width: {$this->fieldCSSwidth}";
+        $html .= '<textarea id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name)."\" class=\"fieldtext form-control form-control-sm resizable\" width=\"{$this->fieldWidth}\" style=\"".$cssWidth;
         if (!is_null($iTextareaSize)) {
             $html .= ' ;height: '.$iTextareaSize.'px';
         }

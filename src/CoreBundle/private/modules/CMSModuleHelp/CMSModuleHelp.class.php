@@ -36,7 +36,7 @@ class CMSModuleHelp extends TCMSModelBase
         $oCMSUser = TCMSUser::GetActiveUser();
         $aTableBlackList = array();
 
-        $sTableHTML = '<table class="table table-striped table-bordered table-condensed">
+        $sTableHTML = '<table class="table table-striped table-bordered table-sm">
         <thead>
             <tr>
                 <th>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_help_text.header_table')).'</th>

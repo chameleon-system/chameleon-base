@@ -92,10 +92,14 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             }
 
             $escapedRecordId = TGlobal::OutHTML($recordId);
+
+            $escapedId = $sEscapedNameField.'_'.$escapedRecordId;
+
             $html .= '<div class="checkboxDIV">';
-            $html .= '<label style="float: left;">';
-            $html .= "<input type=\"checkbox\" class=\"checkbox\" name=\"{$sEscapedNameField}[$escapedRecordId]\" value=\"$escapedRecordId\" id=\"{$sEscapedNameField}[]\" {$checked} {$disabled} />".TGlobal::OutHTML($displayValue);
-            $html .= '</label>';
+            $html .= '<div class="form-check form-check-inline">
+                          <input class="form-check-input" type="checkbox" name="'.$sEscapedNameField.'['.$escapedRecordId.']" value="'.$escapedRecordId.'" id="'.$escapedId.'" '.$checked.' '.$disabled.'>
+                          <label class="form-check-label" for="'.$escapedId.'">'.TGlobal::OutHTML($displayValue).'</label>
+                      </div>';
 
             if ($hasEditPermissionForForeignTable) {
                 $url = $urlUtil->getArrayAsUrl(
@@ -105,10 +109,9 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
                     ),
                     PATH_CMS_CONTROLLER.'?'
                 );
-                $html .= "<div style=\"float: right;\"><a href=\"$url\"><img src=\"".URL_CMS.'/images/icons/page_edit.gif" border="0"></a></div>';
+                $html .= "<div class=\"float-right\"><a href=\"$url\"><img src=\"".URL_CMS.'/images/icons/page_edit.gif" border="0"></a></div>';
             }
 
-            $html .= "\n<div class=\"cleardiv\">&nbsp;</div>\n";
             $html .= '</div>';
         }
 

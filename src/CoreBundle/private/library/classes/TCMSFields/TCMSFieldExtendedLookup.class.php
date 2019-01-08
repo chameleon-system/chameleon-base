@@ -23,23 +23,23 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
      */
     public function GetHTML()
     {
-        $sValue = $this->_GetHTMLValue(); // the method returns the value ESCAPED
+        $value = $this->_GetHTMLValue(); // the method returns the value ESCAPED
 
-        $sHTML = $this->_GetHiddenField();
-        $sHTML .= '<div id="'.TGlobal::OutHTML($this->name).'CurrentSelection" class="fieldPreview" style="float: left; width: 350px; margin-bottom: 10px; vertical-align: middle; padding-top: 4px;">'.$sValue.'</div>';
+        $html = $this->_GetHiddenField();
 
-        $sHTML .= '<div class="goToRecordButton-wrapper" style="float: left; width: 200px; margin-left: 20px;">'."\n";
+        $html .= '<div class="input-group input-group-sm">';
+        $html .= '<input type="text" id="'.TGlobal::OutHTML($this->name).'CurrentSelection" class="form-control form-control-sm" value="'.TGlobal::OutHTML($value).'" readonly>';
 
-        $sHTML .= $this->GetGoToRecordButton();
+        $goToRecordButtonHtml = $this->GetGoToRecordButton();
 
-        $sHTML .= '<div class="cleardiv">&nbsp;</div>
-      </div>'."\n";
+        if ('' !== $goToRecordButtonHtml) {
+            $html .= '<div class="input-group-append">'.$goToRecordButtonHtml.'</div>';
+        }
 
-        $sHTML .= '<div class="cleardiv">&nbsp;</div>';
+        $html .= '</div>';
+        $html .= $this->GetExtendedListButtons();
 
-        $sHTML .= $this->GetExtendedListButtons();
-
-        return $sHTML;
+        return $html;
     }
 
     /**
@@ -87,19 +87,21 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
      */
     public function GetReadOnly()
     {
-        $sValue = $this->_GetHTMLValue();
+        $value = $this->_GetHTMLValue();
 
-        $sHTML = $this->_GetHiddenField();
-        $sHTML .= '<div id="'.TGlobal::OutHTML($this->name).'CurrentSelection" class="fieldPreview" style="margin-bottom: 10px; vertical-align: middle; padding-top: 4px;">'.$sValue.'</div>';
-        $sHTML .= '<div style="float: left; width: 200px; margin-left: 20px;">'."\n";
+        $html = $this->_GetHiddenField();
+        $html .= '<div class="input-group input-group-sm">';
+        $html .= '<input type="text" class="form-control form-control-sm" value="'.TGlobal::OutHTML($value).'" readonly>';
 
-        $sHTML .= $this->GetGoToRecordButton();
+        $goToRecordButtonHtml = $this->GetGoToRecordButton();
 
-        $sHTML .= '<div class="cleardiv">&nbsp;</div>
-      </div>'."\n";
-        $sHTML .= '<div class="cleardiv">&nbsp;</div>';
+        if ('' !== $goToRecordButtonHtml) {
+            $html .= '<div class="input-group-append">'.$goToRecordButtonHtml.'</div>';
+        }
 
-        return $sHTML;
+        $html .= '</div>';
+
+        return $html;
     }
 
     /**
@@ -113,8 +115,8 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         $oCmsTblConf = TdbCmsTblConf::GetNewInstance();
         $oCmsTblConf->LoadFromField('name', $sTableName);
 
-        $sHTML = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.select_item'), 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf), URL_CMS.'/images/icons/box.gif', 'pull-left');
-        $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:resetExtendedListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected'))."')", URL_CMS.'/images/icons/action_stop.gif', 'pull-left button-spacing');
+        $sHTML = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.select_item'), 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf), URL_CMS.'/images/icons/box.gif', 'float-left');
+        $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:resetExtendedListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected'))."')", URL_CMS.'/images/icons/action_stop.gif', 'float-left button-spacing');
 
         return $sHTML;
     }
