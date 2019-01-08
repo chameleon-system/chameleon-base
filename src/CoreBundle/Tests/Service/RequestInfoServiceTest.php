@@ -46,6 +46,21 @@ class RequestInfoServiceTest extends TestCase
      */
     private $subject;
 
+    /**
+     * @var RequestInfoService
+     */
+    private $subject2;
+
+    /**
+     * @var string
+     */
+    private $returnedValue;
+
+    /**
+     * @var string
+     */
+    private $returnedValue2;
+
     protected function setUp()
     {
         parent::setUp();
@@ -65,31 +80,66 @@ class RequestInfoServiceTest extends TestCase
 
     public function testGetRequestIdReturnsSomething(): void
     {
-        $requestId = $this->subject->getRequestId();
+        $this->whenICallGetRequestId();
 
-        $this->assertNotEmpty($requestId);
+        $this->thenThereShouldHaveBeenReturnedSomething();
     }
 
     public function testGetRequestIdReturnsSameIdOnSecondCall(): void
     {
-        $requestId1 = $this->subject->getRequestId();
-        $requestId2 = $this->subject->getRequestId();
+        $this->whenICallGetRequestIdTwice();
 
-        $this->assertSame($requestId2, $requestId1);
+        $this->thenTheTwoReturnedValuesShouldBeTheSame();
     }
 
     public function testGetRequestIdReturnsDifferentIdOnSecondInstance(): void
     {
-        $subject2 = new RequestInfoService(
+        $this->givenASecondSubject();
+
+        $this->whenICallGetRequestIdTwiceOnDifferentSubject();
+
+        $this->thenTheTwoReturnedValuesShouldBeDifferent();
+    }
+
+    private function givenASecondSubject(): void
+    {
+        $this->subject2 = new RequestInfoService(
             $this->mockRequestStack->reveal(),
             $this->mockPortalDomainService->reveal(),
             $this->mockLanguageService->reveal(),
             $this->mockUrlPrefixGenerator->reveal()
         );
+    }
 
-        $requestId1 = $this->subject->getRequestId();
-        $requestId2 = $subject2->getRequestId();
+    private function whenICallGetRequestId(): void
+    {
+        $this->returnedValue = $this->subject->getRequestId();
+    }
 
-        $this->assertNotEquals($requestId2, $requestId1);
+    private function whenICallGetRequestIdTwice(): void
+    {
+        $this->returnedValue = $this->subject->getRequestId();
+        $this->returnedValue2 = $this->subject->getRequestId();
+    }
+
+    private function whenICallGetRequestIdTwiceOnDifferentSubject(): void
+    {
+        $this->returnedValue = $this->subject->getRequestId();
+        $this->returnedValue2 = $this->subject2->getRequestId();
+    }
+
+    private function thenThereShouldHaveBeenReturnedSomething(): void
+    {
+        $this->assertNotEmpty($this->returnedValue);
+    }
+
+    private function thenTheTwoReturnedValuesShouldBeTheSame(): void
+    {
+        $this->assertSame($this->returnedValue, $this->returnedValue2);
+    }
+
+    private function thenTheTwoReturnedValuesShouldBeDifferent(): void
+    {
+        $this->assertNotEquals($this->returnedValue, $this->returnedValue2);
     }
 }
