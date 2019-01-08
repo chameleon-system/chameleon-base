@@ -73,11 +73,9 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     }
 
     /**
-     * Not used anymore. Handled with $this->oTablePreChangeData.
-     *
      * @param array $postData
      *
-     * @deprecated since 6.3.0 - the existing $this->oTablePreChangeData is used
+     * @deprecated since 6.3.0 - Not used anymore. Handled with $this->oTablePreChangeData.
      */
     protected function savePreSaveValues(array $postData)
     {
