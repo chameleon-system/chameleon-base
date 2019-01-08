@@ -67,7 +67,7 @@ class TPkgCmsCoreLogMonologHandler_Database extends AbstractProcessingHandler
 
         foreach ($cleanContext as $key => $value) {
             if ($value instanceof Throwable) {
-                $cleanContext[$key] = $this->getExceptionForContext($value);
+                $cleanContext[$key] = $this->formatExceptionForContext($value);
             }
         }
 
@@ -86,7 +86,7 @@ class TPkgCmsCoreLogMonologHandler_Database extends AbstractProcessingHandler
         $this->connection->insert('pkg_cms_core_log', $data);
     }
 
-    private function getExceptionForContext(Throwable $e): string
+    private function formatExceptionForContext(Throwable $e): string
     {
         // Taken from \Monolog\Formatter\LineFormatter
 
