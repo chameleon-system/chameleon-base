@@ -103,7 +103,7 @@ NOTE used inside a docker the docker also prepends every log message with a warn
                channels:
                  - "standard"
 
-NOTE logging (with `database_for_fingers_crossed`) is then only done once warning or above occurs and only for channel "standard".
+The logger `database_for_fingers_crossed` writes only if, during a request, a message of level warning or above is logged. In this configuration, this logger only logs channel "standard".
 
 Also note that a fingers_crossed handler (and also a group handler) will reset the channel list of the wrapped logger(s):
 If `database_for_fingers_crossed` had channels defined it will not have them afterwards. Only the ones on `standard` remain.
