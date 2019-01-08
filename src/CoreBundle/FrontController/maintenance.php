@@ -113,12 +113,12 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 </head>
 <body>
     <h1>503</h1>
-    <h2>Sorry! This page is down for maintenance.</h2>
+    <h2>This site is temporarily down for maintenance.</h2>
     <p>
-        Try again later.
+        Please retry in a few minutes.
     </p>
 
-    <h2>Diese Seite ist wegen Wartungsarbeiten zur Zeit nicht erreichbar.</h2>
+    <h2>Diese Website ist wegen Wartungsarbeiten kurzzeitig nicht erreichbar.</h2>
     <p>
         Bitte versuchen Sie es in ein paar Minuten noch einmal.
     </p>
