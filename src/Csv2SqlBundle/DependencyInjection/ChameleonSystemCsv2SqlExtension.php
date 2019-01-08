@@ -1,7 +1,5 @@
 <?php
 
-namespace ChameleonSystem\Csv2SqlBundle\DependencyInjection;
-
 /*
  * This file is part of the Chameleon System (https://www.chameleonsystem.com).
  *
@@ -10,6 +8,8 @@ namespace ChameleonSystem\Csv2SqlBundle\DependencyInjection;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+namespace ChameleonSystem\Csv2SqlBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
