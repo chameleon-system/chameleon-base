@@ -39,6 +39,9 @@ Also note that the standard logging channel is not configured as "fingerscrossed
 be logged everytime.
 See below for the full legacy config.
 
+The menu entries in the backend ("logs", "log channel definition") are now hidden - that is: they are no longer 
+assigned to the category window ("Logs"). To show them again you can assign them again.
+
 This was largely changed in the two base packages (chameleon-base and chameleon-shop).
 
 However deprecated service definitions for the old log (channel) handler classes still exist in 
