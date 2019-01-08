@@ -58,6 +58,7 @@ interface RequestInfoServiceInterface
 
     /**
      * Returns the a unique ID for every request.
+     * It will be between 20 and 40 characters and only contain [a-zA-Z0-9-_].
      *
      * @return string
      */
