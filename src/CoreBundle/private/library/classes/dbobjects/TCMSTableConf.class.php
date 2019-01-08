@@ -155,7 +155,6 @@ class TCMSTableConf extends TCMSRecord
     public function &GetFields(&$oTableRow, $loadDefaults = false, $bDoNotUseAutoObjects = false)
     {
         $languageService = self::getLanguageService();
-        $currentLanguage = $languageService->getLanguage($this->GetLanguage());
 
         $oFieldDefinition = &$this->GetFieldDefinitions(array(), $bDoNotUseAutoObjects);
         $oFields = new TIterator();
