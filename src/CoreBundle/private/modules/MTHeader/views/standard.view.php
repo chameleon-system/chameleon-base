@@ -101,7 +101,10 @@ if (isset($oUser)) {
                 <?php
             }
 
-            $viewRenderer = new ViewRenderer();
+            /**
+             * @var ViewRenderer $viewRenderer
+             */
+            $viewRenderer = ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
             $viewRenderer->AddSourceObject('aPortalLinks', $aPortalLinks);
             echo $viewRenderer->Render('MTHeader/portalLinks.html.twig');
 
@@ -127,10 +130,10 @@ if (isset($oUser)) {
                 <li class="nav-item"><a href="<?=PATH_CMS_CONTROLLER; ?>?pagedef=CMSModuleHelp" class="nav-link" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> &nbsp;<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_help')); ?></a></li>
             </ul>
                     <?php
-                    /**
-                     * @var ViewRenderer $viewRenderer
-                     */
-                    $viewRenderer = ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+            /**
+             * @var ViewRenderer $viewRenderer
+             */
+            $viewRenderer = ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
             $viewRenderer->addMapperFromIdentifier('chameleon_system_core.mapper.update_recorder');
             $viewRenderer->AddSourceObject('sModuleSpotName', $sModuleSpotName);
             echo $viewRenderer->Render('MTUpdateRecorder/flyout.html.twig');
