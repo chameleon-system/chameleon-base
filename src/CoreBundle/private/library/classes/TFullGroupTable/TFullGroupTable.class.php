@@ -690,10 +690,11 @@ class TFullGroupTable extends TGroupTable
         }
 
         $hitText = str_replace(array('$startRecord$', '$endRecord$', '$totalFound$'), array(($this->startRecord + 1), $next_startValue, $this->recordCount), $this->hitText);
-        $tableNavigation .= "<div id=\"{$this->listName}_navi\">
+        $tableNavigation .= '
+                    <div id="'.TGlobal::OutHTML($this->listName).'_navi">
         <script>
         function switchPage(startRecord) {
-            document.".$this->listName.'._startRecord.value = startRecord;
+            document.'.$this->listName.'._startRecord.value = startRecord;
             document.'.$this->listName.'.submit();
         }
         </script>
