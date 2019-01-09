@@ -36,7 +36,7 @@ TCMSLogChange::insert(__LINE__, $data);
 
 TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('pkg_cms_routing'), 'active', 'cms_portal_mlt');
 
-$query ="ALTER TABLE `pkg_cms_routing`
+$query = "ALTER TABLE `pkg_cms_routing`
                         ADD `active` ENUM('0','1') DEFAULT '1' NOT NULL COMMENT 'Aktiv: '";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
@@ -50,7 +50,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-$query ="ALTER TABLE `pkg_cms_routing` ADD INDEX ( `active` )";
+$query = 'ALTER TABLE `pkg_cms_routing` ADD INDEX ( `active` )';
 TCMSLogChange::RunQuery(__LINE__, $query);
 
 $listFieldId = TCMSLogChange::createUnusedRecordId('cms_tbl_display_list_fields');
