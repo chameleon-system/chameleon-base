@@ -471,7 +471,7 @@ class TFullGroupTable extends TGroupTable
                 $sTable .= $this->sPagingSection;
             }
         } else {
-            $notfoundRow = '<div class="alert alert-info">
+            $notfoundRow = '<div class="alert alert-warning mb-0 rounded-0 mt-0">
             '.$this->notFoundText.'</div>';
             $sTable .= $notfoundRow;
         }
