@@ -4,15 +4,10 @@ use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManag
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
 $translator = ServiceLocator::get('translator');
-
-$sLogoLink = PATH_CMS_CONTROLLER;
-if (isset($oUser)) {
-    $sLogoLink .= '?pagedef=main';
-}
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" role="navigation" id="header-nav">
     <div class="container-fluid">
-        <a href="<?=$sLogoLink; ?>" class="navbar-brand"><img src="<?=TGlobal::OutHTML($sLogoURL); ?>" /></a>
+        <a href="<?=PATH_CMS_CONTROLLER; ?>?_rmhist=true&_histid=0" class="navbar-brand"><img src="<?=TGlobal::OutHTML($sLogoURL); ?>" /></a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#cmsTopNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
