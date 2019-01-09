@@ -371,7 +371,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      */
     private function getOldFields(): array
     {
-        return $this->oTablePreChangeData->getFields();
+        return $this->oTablePreChangeData->getFieldsIndexed();
     }
 
     /**

@@ -892,7 +892,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      * @return array - the fields with current values; indexed by field name
      */
-    public function getFields(): array
+    public function getFieldsIndexed(): array
     {
         $fieldsIterator = $this->GetTableConf()->GetFields($this);
 
