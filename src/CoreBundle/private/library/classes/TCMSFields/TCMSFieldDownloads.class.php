@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
-
 /****************************************************************************
  * Download files
 /***************************************************************************/
@@ -159,7 +157,6 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
     {
         return $this->GetForeignTableName();
     }
-
 
     /**
      * Get an array of either posted data or data from db if nothings has been posted.

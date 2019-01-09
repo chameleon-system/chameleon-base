@@ -46,4 +46,3 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'en')
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
-
