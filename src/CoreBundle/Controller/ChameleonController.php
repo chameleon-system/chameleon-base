@@ -220,7 +220,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     {
         $pagedefData = $this->getPagedefData($pagedef);
         if (false === $pagedefData) {
-            return new Response("<div style=\"background: #ffcccc url(/chameleon/blackbox/images/nav_icons/error.png) no-repeat 5px 9px; color: #900; border: 2px solid #c00; padding-left: 45px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;\">Error: invalid page definition: {$pagedef}</div>", Response::HTTP_NOT_FOUND);
+            return new Response('<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error: invalid page definition: '.TGlobal::OutHTML($pagedef).'</div>', Response::HTTP_NOT_FOUND);
         }
 
         $this->moduleLoader->LoadModules($pagedefData['moduleList']);
@@ -235,7 +235,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         $templatePath = $this->LoadLayoutTemplate($pagedefData['sLayoutFile']);
         if (false === file_exists($templatePath)) {
-            $sErrorMessage = "<div style=\"background: #ffcccc url(/chameleon/blackbox/images/nav_icons/error.png) no-repeat 5px 9px; color: #900; border: 2px solid #c00; padding-left: 45px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;\">Error: Invalid template: {$templatePath} ({$pagedefData['sLayoutFile']})</div>\n";
+            $sErrorMessage = '<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error: Invalid template: '.TGlobal::OutHTML($templatePath).' ('.TGlobal::OutHTML($pagedefData['sLayoutFile']).")</div>\n";
             /** @noinspection CallableInLoopTerminationConditionInspection */
             /** @noinspection SuspiciousLoopInspection */
             for ($i = 0; ob_get_level() > $i; ++$i) {
