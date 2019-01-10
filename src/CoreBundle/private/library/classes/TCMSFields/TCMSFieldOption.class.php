@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -262,6 +263,6 @@ class TCMSFieldOption extends TCMSField
 
     private function getTranslator(): TranslatorInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
     }
 }

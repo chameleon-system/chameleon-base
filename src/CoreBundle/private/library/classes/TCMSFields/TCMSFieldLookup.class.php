@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * ReloadOnChange=true.
  *
@@ -553,11 +555,8 @@ class TCMSFieldLookup extends TCMSField
         return implode(', ', $aRetValueArray);
     }
 
-    /**
-     * @return ViewRenderer
-     */
-    private function getViewRenderer()
+    private function getViewRenderer(): ViewRenderer
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }

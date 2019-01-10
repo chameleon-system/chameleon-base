@@ -9,9 +9,21 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TCMSFieldLookupFieldTypes extends TCMSFieldLookup
 {
-    protected $fieldsHelpText = [];
+    /**
+     * @deprecated since 6.3.0
+     *
+     * @var string
+     */
+    protected $sFieldHelpTextHTML = '';
+
+    /**
+     * @var string[]
+     */
+    protected $fieldHelpTexts = [];
 
     public function GetHTML()
     {
@@ -22,7 +34,7 @@ class TCMSFieldLookupFieldTypes extends TCMSFieldLookup
         $viewRenderer->AddSourceObject('options', $this->options);
         $viewRenderer->AddSourceObject('allowEmptySelection', false);
         $viewRenderer->AddSourceObject('connectedRecordId', $this->data);
-        $viewRenderer->AddSourceObject('fieldsHelpText', $this->fieldsHelpText);
+        $viewRenderer->AddSourceObject('fieldsHelpText', $this->fieldHelpTexts);
 
         return $viewRenderer->Render('TCMSFieldLookup/fieldLookupFieldTypes.html.twig', null, false);
     }
@@ -42,15 +54,12 @@ class TCMSFieldLookupFieldTypes extends TCMSFieldLookup
             if (!empty($name)) {
                 $this->options[$oRow->id] = $oRow->GetName();
             }
-            $this->fieldsHelpText += [$oRow->id => $oRow->GetTextField('help_text')];
+            $this->fieldHelpTexts[$oRow->id] = $oRow->GetTextField('help_text');
         }
     }
 
-    /**
-     * @return ViewRenderer
-     */
-    private function getViewRenderer()
+    private function getViewRenderer(): ViewRenderer
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }

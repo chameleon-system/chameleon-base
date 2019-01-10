@@ -95,6 +95,7 @@ None.
 
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$sGeneratedPage
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$postRenderVariables
+- \TCMSFieldLookupFieldTypes::sFieldHelpTextHTML
 
 ## Methods
 
