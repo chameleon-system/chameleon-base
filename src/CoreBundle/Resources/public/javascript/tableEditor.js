@@ -713,12 +713,12 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
 };
 
 $(document).ready(function () {
-    CHAMELEON.CORE.MTTableEditor.setGetActiveTab();
+    CHAMELEON.CORE.MTTableEditor.initTabs();
     CHAMELEON.CORE.MTTableEditor.inputFields();
 });
 
 
-CHAMELEON.CORE.MTTableEditor.setGetActiveTab = function () {
+CHAMELEON.CORE.MTTableEditor.initTabs = function () {
     var url = document.URL;
     var hash = window.location.hash.substr(0);
 
