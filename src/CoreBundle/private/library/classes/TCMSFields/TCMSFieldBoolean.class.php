@@ -61,7 +61,7 @@ class TCMSFieldBoolean extends TCMSFieldOption
             $checked = ' checked';
         }
 
-        // The checbox in readonly mode is a dummy for styling issues and therefore has no name and value.
+        // The checkbox in readonly mode is a dummy for styling issues and therefore has no name and value.
         $html = '
             <label class="switch switch-lg switch-label switch-success">
             <input type="checkbox" autocomplete="off" class="switch-input"'.$checked.' disabled>
