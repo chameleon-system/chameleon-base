@@ -61,6 +61,11 @@ Note that ONLY BC breaking changes are listed, according to our backwards compat
 - New method `getDomainDataByName()`.
 - New method `getPortalPrefixListForDomain()`.
 
+## TCMSFieldDate/TCMSFieldDateToday
+
+The field classes now use the language independent SQL date format in frontend rendering instead of always using a german date format. 
+For backwards compatibility reasons they work with the german date format, too. 
+
 # Deprecated Code Entities
 
 It is recommended that all references to the classes, interfaces, properties, constants, methods and services in the

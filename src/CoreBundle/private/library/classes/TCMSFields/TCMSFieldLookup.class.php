@@ -45,43 +45,49 @@ class TCMSFieldLookup extends TCMSField
     public function GetHTML()
     {
         $this->GetOptions();
-        $oConnectedRecord = $this->getConnectedRecordObject();
+        $connectedRecord = $this->getConnectedRecordObject();
 
-        if (!empty($this->data) && (!isset($this->options[$this->data]) && false !== $oConnectedRecord)) {
+        if (!empty($this->data) && (!isset($this->options[$this->data]) && false !== $connectedRecord)) {
             return $this->GetReadOnly();
-        } else {
-            $sClass = '';
-            $sOnChangeAttr = '';
-            if ($this->GetReloadOnChangeParam()) {
-                $sOnChangeAttr = "OnChange=\"CHAMELEON.CORE.MTTableEditor.bCmsContentChanged=false;CHAMELEON.CORE.showProcessingDialog();document.cmseditform.elements['module_fnc[contentmodule]'].value='Save';document.cmseditform.submit();\"";
-                $sClass .= 'cmsdisablechangemessage';
-            }
-
-            $viewRenderer = $this->getViewRenderer();
-            $viewRenderer->AddSourceObject('fieldName', $this->name);
-            $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
-            $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
-
-            $viewRenderer->AddSourceObject('sClass', $sClass);
-
-            $viewRenderer->AddSourceObject('onchangeAttr', $sOnChangeAttr);
-            $viewRenderer->AddSourceObject('options', $this->options);
-            $viewRenderer->AddSourceObject('allowEmptySelection', $this->allowEmptySelection);
-
-            $foreignTableName = $this->GetConnectedTableName();
-            $viewRenderer->AddSourceObject('foreignTableName', $foreignTableName);
-            $oGlobal = TGlobal::instance();
-            if ($oGlobal->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
-                $viewRenderer->AddSourceObject('buttonLink', $this->GoToRecordJS());
-            }
-            $viewRenderer->AddSourceObject('connectedRecordId', $this->data);
-            // current ID is an orphan, show message
-            if (!empty($this->data) && false === $oConnectedRecord) {
-                $viewRenderer->AddSourceObject('showErrorMessage', true);
-            }
-
-            return $viewRenderer->Render('TCMSFieldLookup/fieldLookup.html.twig', null, false);
         }
+
+        $viewRenderer = $this->getViewRenderer();
+        $viewRenderer = $this->addFieldRenderVariables($viewRenderer);
+
+        // current ID is an orphan, show message
+        if (!empty($this->data) && false === $connectedRecord) {
+            $viewRenderer->AddSourceObject('showErrorMessage', true);
+        }
+
+        return $viewRenderer->Render('TCMSFieldLookup/fieldLookup.html.twig', null, false);
+    }
+
+    private function addFieldRenderVariables(ViewRenderer $viewRenderer): ViewRenderer
+    {
+        $sClass = '';
+        $sOnChangeAttr = '';
+        if ($this->GetReloadOnChangeParam()) {
+            $sOnChangeAttr = "OnChange=\"CHAMELEON.CORE.MTTableEditor.bCmsContentChanged=false;CHAMELEON.CORE.showProcessingDialog();document.cmseditform.elements['module_fnc[contentmodule]'].value='Save';document.cmseditform.submit();\"";
+            $sClass .= 'cmsdisablechangemessage';
+        }
+
+        $viewRenderer->AddSourceObject('fieldName', $this->name);
+        $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
+        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('sClass', $sClass);
+        $viewRenderer->AddSourceObject('onchangeAttr', $sOnChangeAttr);
+        $viewRenderer->AddSourceObject('options', $this->options);
+        $viewRenderer->AddSourceObject('allowEmptySelection', $this->allowEmptySelection);
+
+        $foreignTableName = $this->GetConnectedTableName();
+        $viewRenderer->AddSourceObject('foreignTableName', $foreignTableName);
+        $oGlobal = TGlobal::instance();
+        if ($oGlobal->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
+            $viewRenderer->AddSourceObject('buttonLink', $this->GoToRecordJS());
+        }
+        $viewRenderer->AddSourceObject('connectedRecordId', $this->data);
+
+        return $viewRenderer;
     }
 
     public function GetOptions()

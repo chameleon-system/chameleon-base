@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TCMSFieldDocument extends TCMSFieldLookup
 {
     public function GetHTML()
@@ -69,7 +71,7 @@ class TCMSFieldDocument extends TCMSFieldLookup
         $url = PATH_CMS_CONTROLLER.'?pagedef=CMSUniversalUploader&mode=document&callback=_SetDocument&singleMode=1&treeNodeID=';
         $html = "<script type=\"text/javascript\">
       function OpenUploadWindow(documentTreeID) {
-        if(documentTreeID != '') {
+        if(documentTreeID !== '') {
           CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."' + documentTreeID,560,500);
         } else {
           toasterMessage('".TGlobal::Translate('chameleon_system_core.field_document.error_missing_target').".','ERROR');
@@ -81,11 +83,8 @@ class TCMSFieldDocument extends TCMSFieldLookup
         return $aIncludes;
     }
 
-    /**
-     * @return ViewRenderer
-     */
-    private function getViewRenderer()
+    private function getViewRenderer(): ViewRenderer
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }
