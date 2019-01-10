@@ -45,7 +45,7 @@ $rowCount = 0;
             sConfirmText += "\n \"<?=TGlobal::Translate('chameleon_system_core.text.unnamed_record'); ?>\"";
         }
         if (confirm(sConfirmText)) {
-            CHAMELEON.CORE.processingDialog('show');
+            CHAMELEON.CORE.showProcessingDialog();
             document.cmseditform.elements['module_fnc[contentmodule]'].value = 'Delete';
             document.cmseditform.submit();
         }

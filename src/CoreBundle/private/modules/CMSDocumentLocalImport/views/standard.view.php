@@ -41,7 +41,7 @@ if (!empty($data['errorMessage'])) {
             <input type="radio" name="private" value="0"> <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_boolean.no')); ?>
         </div>
         <div style="padding-top: 10px;"><?php
-            echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_media_local_media.action_import'), "javascript:CHAMELEON.CORE.processingDialog('show');document.importForm.submit();", URL_CMS.'/images/icons/database_add.png'); ?></div>
+            echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_media_local_media.action_import'), "javascript:CHAMELEON.CORE.showProcessingDialog();document.importForm.submit();", URL_CMS.'/images/icons/database_add.png'); ?></div>
     </form>
 
     <?php

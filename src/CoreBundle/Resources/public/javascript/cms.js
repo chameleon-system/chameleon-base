@@ -5,30 +5,32 @@ CHAMELEON.CORE = CHAMELEON.CORE || {};
 
 var sLastDialogID = null;
 
-CHAMELEON.CORE.processingDialog = function (state) {
-    if ('hide' === state) {
-        // $("#processingDialog").dialog('hide'); is not working, so this is the fix.
-        $("#processingDialog").removeClass("in");
-        $(".modal-backdrop").remove();
-        $('body').removeClass('modal-open');
-        $('body').css('padding-right', '');
-        $("#processingDialog").hide();
-    } else { // show dialog
-        if (!($("#processingDialog").data('bs.modal') || {})._isShown){
-            $("#processingDialog").modal('show');
-        }
+CHAMELEON.CORE.showProcessingDialog = function () {
+    var processingDialogContainer = $("#processingDialog");
+
+    if (!(processingDialogContainer.data('bs.modal') || {})._isShown){
+        processingDialogContainer.modal('show');
     }
-}
+};
+
+CHAMELEON.CORE.hideProcessingDialog = function () {
+    // $("#processingDialog").dialog('hide'); is not working, so this is the fix.
+    var processingDialogContainer = $("#processingDialog");
+    processingDialogContainer.removeClass("in");
+    $(".modal-backdrop").remove();
+    $('body').removeClass('modal-open');
+    processingDialogContainer.hide();
+};
 
 /**
- * @deprecated since 6.3.0 - call CHAMELEON.CORE.processingDialog('show'); instead
+ * @deprecated since 6.3.0 - call CHAMELEON.CORE.showProcessingDialog(); instead
  */
 function PleaseWait() {
-    CHAMELEON.CORE.processingDialog('show');
+    CHAMELEON.CORE.showProcessingDialog();
 }
 
 function PostAjaxForm(formid, functionName) {
-    CHAMELEON.CORE.processingDialog('show');
+    CHAMELEON.CORE.showProcessingDialog();
     PostAjaxFormTransparent(formid, functionName);
 }
 
@@ -46,7 +48,7 @@ function PostAjaxFormTransparent(formid, callbackFunction) {
 }
 
 function GetAjaxCall(url, functionName) {
-    CHAMELEON.CORE.processingDialog('show');
+    CHAMELEON.CORE.showProcessingDialog();
     GetAjaxCallTransparent(url, functionName);
 }
 
@@ -75,8 +77,8 @@ function GetAjaxCallTransparent(url, functionName) {
 
 function AjaxError(XMLHttpRequest, textStatus, errorThrown) {
     if (textStatus === 'parsererror') {
-        window.parent.CHAMELEON.CORE.processingDialog('hide');
-        CHAMELEON.CORE.processingDialog('hide');
+        window.parent.CHAMELEON.CORE.hideProcessingDialog();
+        CHAMELEON.CORE.hideProcessingDialog();
         toasterMessage('Error! Wasn`t able to parse ajax response.', 'ERROR');
         if (XMLHttpRequest.responseText !== '') {
             var sError = XMLHttpRequest.responseText;
@@ -109,7 +111,7 @@ var stack_bottomright = {"dir1": "up", "dir2": "left", "push": "top", "firstpos1
  * allowed style types: MESSAGE (default), WARNING, ERROR, FATAL
  */
 function toasterMessage(message,type) {
-    CHAMELEON.CORE.processingDialog('hide');
+    CHAMELEON.CORE.hideProcessingDialog();
     var sStylingClass = '';
     if(type == 'ERROR' || type == 'FATAL') {
         type = 'error';
@@ -311,7 +313,7 @@ function CloseModalIFrameDialog() {
             $('#modal_dialog').dialog('destroy');
         }
     }
-    CHAMELEON.CORE.processingDialog('hide');
+    CHAMELEON.CORE.hideProcessingDialog();
 }
 
 function getRadioValue(rObj) {

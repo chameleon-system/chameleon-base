@@ -25,7 +25,7 @@
     function forceFileDownloadForm(formName) {
         $.fileDownload($('#'+formName).prop('action'), {
             prepareCallback: function (url) {
-                parent.CHAMELEON.CORE.processingDialog('show');
+                parent.CHAMELEON.CORE.showProcessingDialog();
             },
 
             successCallback: function (url) {

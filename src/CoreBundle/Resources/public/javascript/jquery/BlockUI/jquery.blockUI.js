@@ -24,12 +24,12 @@
 		$.unblockUI = function(opts) { remove(window, opts); };
 
 		function install(el, opts) {
-            CHAMELEON.CORE.processingDialog('show');
+            CHAMELEON.CORE.showProcessingDialog();
 		}
 
 		// remove the block
 		function remove(el, opts) {
-            CHAMELEON.CORE.processingDialog('hide');
+            CHAMELEON.CORE.hideProcessingDialog();
 		}
 	}
 

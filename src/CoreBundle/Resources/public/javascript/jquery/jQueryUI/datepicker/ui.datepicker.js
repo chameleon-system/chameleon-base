@@ -820,7 +820,7 @@ $.extend(Datepicker.prototype, {
 			if (this._inDialog) {
 				this._dialogInput.css({ position: 'absolute', left: '0', top: '-100px' });
 				if ($.blockUI) {
-					CHAMELEON.CORE.processingDialog('hide');
+					CHAMELEON.CORE.hideProcessingDialog();
 					$('body').append(this.dpDiv);
 				}
 			}
