@@ -714,9 +714,9 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
 
 $(document).ready(function () {
     CHAMELEON.CORE.MTTableEditor.initTabs();
-    CHAMELEON.CORE.MTTableEditor.inputFields();
+    CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
+    CHAMELEON.CORE.MTTableEditor.initSelectBoxes();
 });
-
 
 CHAMELEON.CORE.MTTableEditor.initTabs = function () {
     var url = document.URL;
@@ -739,7 +739,7 @@ function updateIframeSize(sFieldName, iHeight) {
     }
 }
 
-CHAMELEON.CORE.MTTableEditor.inputFields = function () {
+CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
     $('[data-datetimepicker-option]').each(function () {
         $(this).datetimepicker($(this).data("datetimepicker-option"));
     });
@@ -762,7 +762,9 @@ CHAMELEON.CORE.MTTableEditor.inputFields = function () {
             }
         });
     });
+};
 
+CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     $('[data-select2-option]').each(function () {
         $(this).select2($(this).data("select2-option"));
     });
