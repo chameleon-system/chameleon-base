@@ -90,6 +90,29 @@ class TCMSFieldLookup extends TCMSField
         return $viewRenderer;
     }
 
+    /**
+     * comboBox is enabled on 30 elements or more
+     * you may disable the combobox using "disableComboBox=true" in field config or by extending this method.
+     *
+     * @deprecated sind 6.3.0
+     *
+     * @return bool
+     */
+    protected function enableComboBox()
+    {
+        $bReturnVal = true;
+        if (count($this->options) < 30) {
+            $bReturnVal = false;
+        }
+
+        $disableComboBox = $this->oDefinition->GetFieldtypeConfigKey('disableComboBox');
+        if (!empty($disableComboBox) && ('1' == $disableComboBox || 'true' == $disableComboBox)) {
+            $bReturnVal = false;
+        }
+
+        return $bReturnVal;
+    }
+
     public function GetOptions()
     {
         if (in_array($this->GetDisplayType(), array('readonly', 'hidden'))) {
