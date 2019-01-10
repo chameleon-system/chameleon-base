@@ -24,11 +24,11 @@ MIT License
 - LessPHP, modified by ESONO AG - http://leafo.net/lessphp/
 - SWFObject - https://github.com/swfobject/swfobject
 
+- Bootstrap - http://getbootstrap.com/
 - jQuery - http://jquery.com
 - jQuery UI - http://jqueryui.com
 - jQuery GoogleMapsV3OverviewControl plugin - https://github.com/drcoen/Google-Maps-API-V3-Overview-Control
 - jQuery-bgiframe plugin - https://github.com/brandonaaron/bgiframe
-- jQuery-blockUI plugin - http://malsup.com/jquery/block/
 - jQuery Chosen plugin - http://harvesthq.github.io/chosen/
 - jQuery ContextMenu plugin - http://medialize.github.io/jQuery-contextMenu/
 - jQuery Cookie plugin - https://github.com/js-cookie/js-cookie
@@ -41,9 +41,15 @@ MIT License
 - jQuery Modal plugin
 - jQuery jsTree plugin - https://www.jstree.com/
 - jQuery Masked Input plugin - http://digitalbush.com/projects/masked-input-plugin/
-- jQuery Selectboxes - http://www.texotela.co.uk/code/jquery/select/
+- jQuery Select2 - https://github.com/select2/select2/
 - jQuery Tag Input modified by ESONO AG - http://roberto.open-lab.com/2010/02/10/a-delicious-javascript-tagging-input-field/
 - jQuery Wayfarer Tooltip plugin - http://www.wayfarerweb.com/wtooltip.php
+
+- Animated Spinner from loading.io - https://loading.io/tos/
+- CoreUI - https://http://coreui.io
+- moment.js - https://github.com/moment/moment/
+- Tempus Dominus - https://github.com/tempusdominus/bootstrap-4/
+
 
 - HTML5 Shiv - https://github.com/afarkas/html5shiv
 - pnotify - http://sciactive.com/pnotify/
@@ -55,13 +61,13 @@ MIT License
 
 - Foundation Icon Font - https://github.com/zurb/foundation-icons
 - Ionicons - http://ionicons.com/
+- Font Awesome - https://fontawesome.com/
 - file type icons generated with https://github.com/splitbrain/file-icon-generator
 
 Apache License 2.0
 ------------------
 (see the end of this file for the license text)
 
-- Bootstrap - http://getbootstrap.com/
 - Bootstrap Colorpicker - http://mjolnic.github.io/bootstrap-colorpicker/
 - Amazon Payments API - https://github.com/amzn/login-and-pay-with-amazon-sdk-php
 - Instaclick PHP-Webdriver - https://github.com/instaclick/php-webdriver
