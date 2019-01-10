@@ -237,10 +237,7 @@ class TCMSFieldDateTime extends TCMSField
         return $date;
     }
 
-    /**
-     * @return ViewRenderer
-     */
-    protected function getViewRenderer()
+    private function getViewRenderer(): ViewRenderer
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }

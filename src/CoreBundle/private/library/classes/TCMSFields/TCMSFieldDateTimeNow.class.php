@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TCMSFieldDateTimeNow extends TCMSFieldDateTime
 {
     /**
@@ -62,5 +64,10 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
         }
 
         return $html;
+    }
+
+    private function getViewRenderer(): ViewRenderer
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }
