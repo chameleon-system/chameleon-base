@@ -720,13 +720,14 @@ $(document).ready(function () {
 
 CHAMELEON.CORE.MTTableEditor.setGetActiveTab = function () {
     var url = document.URL;
-    var hash = window.location.hash.substr(1);
+    var hash = window.location.hash.substr(0);
 
-    $('.nav-tabs').find('li a').each(function (key, val) {
-        if (hash == $(val).attr('href')) {
-            $(val).click();
+    $('.nav-tabs').find('li a').each(function (key, tabLinkItem) {
+        var $tabLinkItem = $(tabLinkItem);
+        if (hash === $tabLinkItem.attr('href')) {
+            $tabLinkItem.click();
         }
-        $(val).click(function () {
+        $tabLinkItem.click(function () {
             window.location.hash = $(this).attr('href');
         });
     });
