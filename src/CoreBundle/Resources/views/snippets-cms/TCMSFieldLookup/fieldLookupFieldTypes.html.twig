@@ -4,8 +4,8 @@
 
 <div class="lookup-container-field-types row">
     <div class="col-12 col-lg-6">
-        <select name="{{ fieldName }}" id="{{ fieldName }}" class="{{ sClass }}"
-                data-select2-option='{{ selectOptions }}'>
+        <select name="{{ fieldName|e(html_attr) }}" id="{{ fieldName|e(html_attr) }}" class="{{ sClass|e(html_attr) }}"
+                data-select2-option='{{ selectOptions|e(html_attr) }}'>
             {% if allowEmptySelection %}
                 <option></option>
             {% endif %}
@@ -17,16 +17,16 @@
                 {% else %}
                     {% set selected = "" %}
                 {% endif %}
-                <option {{ selected }} value="{{ key }}">{{ option }}</option>
+                <option {{ selected }} value="{{ key|e(html_attr) }}">{{ option }}</option>
             {% endfor %}
         </select>
     </div>
 
     <div class="col-12 pt-2 col-lg-6 pt-lg-0">
-        <div id="{{ fieldName }}-helpContainer" class="helpText">{{ helpText|raw }}</div>
+        <div id="{{ fieldName|e(html_attr) }}-helpContainer" class="helpText">{{ helpText|raw }}</div>
     </div>
 
     {% for id, helpText in fieldsHelpText %}
-        <div id="fieldTypeHelp{{ id }}" style="display: none;">{{ helpText|raw }}</div>
+        <div id="fieldTypeHelp{{ id|e(html_attr) }}" style="display: none;">{{ helpText|raw }}</div>
     {% endfor %}
 </div>
