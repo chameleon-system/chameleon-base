@@ -116,6 +116,7 @@ Use CHAMELEON.CORE.showProcessingDialog() and CHAMELEON.CORE.hideProcessingDialo
 
 - chameleon_system_core.field_options.option_value_true
 - chameleon_system_core.field_options.option_value_false
+- chameleon_system_core.record_lock.lock_owner_fax
 
 ## Database Tables
 

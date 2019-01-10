@@ -875,6 +875,11 @@
                 <source>chameleon_system_core.record_lock.lock_owner_phone</source>
                 <target>Tel.</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.record_lock.lock_owner_fax">
+                <source>chameleon_system_core.record_lock.lock_owner_fax</source>
+                <target>Fax</target>
+                 <note>@deprecated since 6.3.0 - no longer used.</note>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.record_lock.locked_by">
                 <source>chameleon_system_core.record_lock.locked_by</source>
                 <target>gesperrt durch</target>
