@@ -5,46 +5,46 @@
         <div class="btn-group btn-group-sm" role="group">
             {% if bReadOnly == false %}
                 {% if bImageSet %}
-                    <button type="button" onclick="{{ sOpenWindowJSMediaDetail }}"
+                    <button type="button" onclick="{{ sOpenWindowJSMediaDetail|e('html_attr') }}"
                             class="btn btn-secondary rounded-0"
                             data-toggle="tooltip" data-placement="top"
                             title="{{ 'chameleon_system_core.field_media.action_show_details'|trans }}"><img
-                                src="{{ sImageIconURL }}/images/icons/image_link.png" width="16"
+                                src="{{ sImageIconURL|e('html_attr') }}/images/icons/image_link.png" width="16"
                                 height="16"/></button>
 
-                    <button type="button" onclick="window.open('{{ sImageURL }}')"
+                    <button type="button" onclick="window.open('{{ sImageURL|e('js') }}')"
                             class="btn btn-secondary rounded-0"
                             data-toggle="tooltip" data-placement="top"
                             title="{{ "chameleon_system_core.field_media.action_download_image"|trans }}"><img
-                                src="{{ sImageIconURL }}/images/icons/disk.png" width="16"
+                                src="{{ sImageIconURL|e('html_attr') }}/images/icons/disk.png" width="16"
                                 height="16"/></button>
                 {% endif %}
 
-                <button type="button" onclick="{{ sOpenWindowJSSetImage }}" class="btn btn-secondary rounded-0"
+                <button type="button" onclick="{{ sOpenWindowJSSetImage|e('html_attr') }}" class="btn btn-secondary rounded-0"
                         data-toggle="tooltip" data-placement="top"
                         title="{{ 'chameleon_system_core.field_media.action_assign_image'|trans }}"><img
-                            src="{{ sImageIconURL }}/images/icons/image.gif" width="16"
+                            src="{{ sImageIconURL|e('html_attr') }}/images/icons/image.gif" width="16" alt=""
                             height="16"/></button>
 
                 <button type="button"
                         onclick="ClearImage('{{ sTableId|e('js') }}','{{ sRecordId|e('js') }}','{{ sFieldName|e('js') }}','{{ iPosition|e('js') }}')"
                         style="visibility: {{ sDeleteVisibleType }};"
-                        id="cmsimagefielditem_clearbutton_{{ sFieldName }}{{ iPosition }}"
+                        id="cmsimagefielditem_clearbutton_{{ sFieldName|e('html_attr') }}{{ iPosition|e('html_attr') }}"
                         class="btn btn-secondary rounded-0"
                         data-toggle="tooltip" data-placement="top"
                         title="{{ 'chameleon_system_core.field_media.action_assign_image'|trans }}"><img
-                            src="{{ sImageIconURL }}/images/icons/image_delete.gif" width="16"
+                            src="{{ sImageIconURL|e('html_attr') }}/images/icons/image_delete.gif" width="16" alt=""
                             height="16"/></button>
             {% endif %}
         </div>
     </div>
     <div class="card-body p-0 text-center">
         <div class="cmsimagefielditemimage">
-            <div id="cmsimagefielditem_noimagediv_{{ sFieldName }}{{ iPosition }}" class="noImageDiv"
+            <div id="cmsimagefielditem_noimagediv_{{ sFieldName|e('html_attr') }}{{ iPosition|e('html_attr') }}" class="noImageDiv"
                  style="display:none;">
-                <img src="{{ emptyImageUrl }}" class="img-fluid">
+                <img src="{{ emptyImageUrl|e('html_attr') }}" class="img-fluid" alt="">
             </div>
-            <div id="cmsimagefielditem_imagediv_{{ sFieldName }}{{ iPosition }}" class="imageHolder" style="">
+            <div id="cmsimagefielditem_imagediv_{{ sFieldName|e('html_attr') }}{{ iPosition|e('html_attr') }}" class="imageHolder" style="">
                 {% include '/common/media/pkgCmsTextFieldImageResponsive.html.twig' %}
             </div>
         </div>
