@@ -747,19 +747,21 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
     $('.datetimepicker-input').each(function () {
         var id = $(this).attr('id');
 
-        // This custom-event of the datetimepicker only works with the id of the element.
+        // This custom-event of the datetimepicker only works with the ID of the element.
         $('#' + id).on("change.datetimepicker", function (e) {
             var moment = e.date;
 
-            if (moment !== undefined) {
-                if ($(this).hasClass('format-L')) {
-                    var cmsDate = moment.format('YYYY-MM-DD');
-                } else {
-                    var cmsDate = moment.format('YYYY-MM-DD HH:mm:ss');
-                }
-                // We need a sql-date-format for BC reasons.
-                $('input[name=' + id + ']').val(cmsDate);
+            if (moment === undefined) {
+                return;
             }
+
+            if ($(this).hasClass('format-L')) {
+                var cmsDate = moment.format('YYYY-MM-DD');
+            } else {
+                var cmsDate = moment.format('YYYY-MM-DD HH:mm:ss');
+            }
+            // We need a sql-date-format for BC reasons.
+            $('input[name=' + id + ']').val(cmsDate);
         });
     });
 };
