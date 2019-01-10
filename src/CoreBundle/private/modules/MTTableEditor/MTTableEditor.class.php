@@ -537,18 +537,9 @@ class MTTableEditor extends TCMSModelBase
 
         // onbeforeunload message
         $aIncludes[] = '<script type="text/javascript">
-        $(document).ready(function(){
-           SetChangedDataMessage();
-        });
-
-        function SetChangedDataMessage() {
-          $("input:text,input:checkbox,input:radio,textarea,select,input:hidden",$("#cmseditform")).not(".cmsdisablechangemessage").one("change",function() {
-            CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
-          });
-        }
         window.onbeforeunload = function () {
           if (CHAMELEON.CORE.MTTableEditor.bCmsContentChanged) {
-            CHAMELEON.CORE.processingDialog(\'hide\');
+            CHAMELEON.CORE.hideProcessingDialog();
             return \''.TGlobal::Translate('chameleon_system_core.cms_module_table_editor.confirm_discard_changes').'\';
           }
         }

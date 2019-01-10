@@ -760,7 +760,7 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
             } else {
                 var cmsDate = moment.format('YYYY-MM-DD HH:mm:ss');
             }
-            // We need a sql-date-format for BC reasons.
+            // We need a SQL-date-format for BC reasons.
             $('input[name=' + id + ']').val(cmsDate);
         });
     });
@@ -774,10 +774,10 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     $('.lookup-container-field-types select').on('select2:select', function (e) {
         var data = e.params.data;
         var fieldName = $(this).attr('name');
-        var fieldID = '#fieldTypeHelp' + data.id;
-        var helpText = $(fieldID).html();
+        var fieldId = '#fieldTypeHelp' + data.id;
+        var helpText = $(fieldId).html();
 
-        if (helpText == '') {
+        if (helpText === '') {
             $("#" + fieldName + "-helpContainer").html("&nbsp;");
         } else {
             $("#" + fieldName + "-helpContainer").html(helpText);
@@ -800,9 +800,8 @@ CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent = function (selector) {
 };
 
 $(document).ready(function () {
-    $('.noChangesWarning').click(function () {
-        window.onbeforeunload = function () {
-        };
+    $("input:text,input:checkbox,input:radio,textarea,select,input:hidden",$("#cmseditform")).not(".cmsdisablechangemessage").one("change",function() {
+        CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
     });
 
     CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent('label.switch input[type=checkbox]');
