@@ -45,6 +45,41 @@ _errors:
 The system now uses Twig 2.x. Please have a look at the Twig changelog for required adjustments, but major problems are
 not expected.
 
+## DoctrineBundle
+
+We now use the DoctrineBundle. While we do not use many of its features yet (especially no ORM mapping), initializing
+the database connection is now handled by Doctrine. In practice the most noticeable difference is that the connection
+is opened lazily, so that more console commands can be executed without a working database connection.
+
+This change requires to add the following configuration to `/app/config/config.yml`:
+
+```yaml
+doctrine:
+  dbal:
+    host:           '%database_host%'
+    port:           '%database_port%'
+    dbname:         '%database_name%'
+    user:           '%database_user%'
+    password:       '%database_password%'
+    driver:         'pdo_mysql'
+    server_version: '5.7'
+    charset:        'utf8'
+    default_table_options:
+      charset: 'utf8'
+      collate: 'utf8_unicode_ci'
+```
+
+The parameters should already be defined.
+
+Please note that the parameter `chameleon_system_core.pdo.enable_mysql_compression` no longer works. To use compression,
+add the configuration value `doctrine: options: 1006: 1`.
+
+The DoctrineBundle provides a profiler in the Web Debug Toolbar. Therefore the Chameleon database profiler is now
+disabled by default. To enable it again, set the configuration key
+`chameleon_system_debug: database_profiler: enabled: true`. Note that the `backtrace_enabled` and `backtrace_limit` keys
+were moved under the `database_profiler` key (e.g. `chameleon_system_debug: database_profiler: backtrace_enabled`
+instead of `chameleon_system_debug: backtrace_enabled`).
+
 ## TTools::GetModuleLoaderObject Returns New Object
 
 The method `TTools::GetModuleLoaderObject` now returns a new `TModuleLoader` instance instead of the global module
@@ -72,11 +107,18 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Services
 
-None.
+- chameleon_system_core.pdo
 
 ## Container Parameters
 
-None.
+- chameleon_system_core.pdo.enable_mysql_compression
+- chameleon_system_core.pdo.mysql_attr_compression_name
+- chameleon_system_core.pdo.mysql_attr_init_command
+
+## Bundle Configuration
+
+- chameleon_system_debug: backtrace_enabled
+- chameleon_system_debug: backtrace_limit
 
 ## Constants
 
