@@ -724,11 +724,11 @@ CHAMELEON.CORE.MTTableEditor.setGetActiveTab = function () {
 
     $('.nav-tabs').find('li a').each(function (key, tabLinkItem) {
         var $tabLinkItem = $(tabLinkItem);
-        if (hash === $tabLinkItem.attr('href')) {
+        if (hash === tabLinkItem.getAttribute('href')) {
             $tabLinkItem.click();
         }
         $tabLinkItem.click(function () {
-            window.location.hash = $(this).attr('href');
+            window.location.hash = this.getAttribute('href');
         });
     });
 };
