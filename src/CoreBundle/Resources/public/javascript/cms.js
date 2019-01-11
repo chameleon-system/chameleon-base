@@ -57,21 +57,29 @@ function GetAjaxCallTransparent(url, functionName) {
 }
 
 function AjaxError(XMLHttpRequest, textStatus, errorThrown) {
+    window.parent.$.unblockUI();
+    $.unblockUI();
+
+    var errorMessage = "Error";
+
+    if (XMLHttpRequest.responseText !== "" || XMLHttpRequest.statusText !== "") {
+        var responseError = XMLHttpRequest.responseText;
+
+        if (responseError.length > 1024) {
+            responseError = responseError.substr(0, 1024);
+        }
+
+        if (responseError.indexOf('<title>') !== -1) {
+            responseError = XMLHttpRequest.statusText;
+        }
+
+        errorMessage = CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.ajax_error', responseError);
+    }
+
     if (textStatus === 'parsererror') {
-        window.parent.$.unblockUI();
-        $.unblockUI();
-        toasterMessage('Error! Wasn`t able to parse ajax response.', 'ERROR');
+        toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.ajax_parse_error'), 'ERROR');
+
         if (XMLHttpRequest.responseText !== '') {
-            var sError = XMLHttpRequest.responseText;
-
-            if (sError.length > 1024) {
-                sError = sError.substr(0, 1024);
-            }
-
-            if (sError.indexOf('<title>') !== -1) sError = '';
-
-            var sMessage = CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.ajax_error', sError);
-
             // check if response is the login page, so we need to redirect the user
             if (XMLHttpRequest.responseText.indexOf('<input type="hidden" name="pagedef" value="login" />') !== -1) {
                 var sLogoutMessage = CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.permission_error_with_logout');
@@ -79,9 +87,11 @@ function AjaxError(XMLHttpRequest, textStatus, errorThrown) {
                     top.document.location.href = window.location.pathname;
                 }
             } else {
-                alert(sMessage);
+                alert(errorMessage);
             }
         }
+    } else {
+        toasterMessage(errorMessage, "ERROR");
     }
 }
 

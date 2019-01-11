@@ -48,6 +48,8 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
 {
     const PAGEDEF_NAME = 'mediaManager';
 
+    const PAGEDEF_NAME_PICK_IMAGE = 'mediaManagerPickImage';
+
     const PAGEDEF_TYPE = '@ChameleonSystemMediaManagerBundle';
 
     const MEDIA_ITEM_URL_NAME = 'mediaItemId';
@@ -359,7 +361,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $includes = parent::GetHtmlHeadIncludes();
         $includes[] = sprintf(
             '<link rel="stylesheet" href="%s">',
-            TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/jstree/3.3.2/themes/default/style.css')
+            TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/jstree/3.3.7/themes/default/style.css')
         );
         $includes[] = sprintf(
             '<link rel="stylesheet" href="%s">',
@@ -386,7 +388,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $includes = parent::GetHtmlFooterIncludes();
         $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemmediamanager/lib/jstree/3.3.2/jstree.js'
+                '/bundles/chameleonsystemmediamanager/lib/jstree/3.3.7/jstree.js'
             ).'"></script>';
         $includes[] = '<script src="'.TGlobal::GetStaticURL(
                 '/bundles/chameleonsystemmediamanager/lib/xselectable/xselectable.js'
@@ -767,6 +769,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
 
         try {
             $editLanguage = $this->languageService->getActiveEditLanguage();
+            if (null === $editLanguage) {
+                $this->returnGeneralErrorMessageForAjax();
+            }
             $mediaTreeNode = $this->mediaTreeDataAccess->getMediaTreeNode($mediaTreeNodeId, $editLanguage->id);
             if (null === $mediaTreeNode) {
                 $this->returnGeneralErrorMessageForAjax();
@@ -775,7 +780,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 $mediaTreeNodeId,
                 $mediaTreeNodeParentId,
                 $position,
-                $editLanguage
+                $editLanguage->id
             );
         } catch (DataAccessException $e) {
             $this->returnGeneralErrorMessageForAjax();

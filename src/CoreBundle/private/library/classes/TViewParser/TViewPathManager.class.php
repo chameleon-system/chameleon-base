@@ -113,6 +113,13 @@ class TViewPathManager implements IViewPathManager
             }
         }
 
+        if (null !== $sTemplatePath) {
+            return $sTemplatePath;
+        }
+
+        $templateModulePath = TPkgViewRendererSnippetDirectory::PATH_MODULES;
+        $sTemplatePath = $templateModulePath.'/'.$sViewFileName;
+
         return $sTemplatePath;
     }
 
@@ -188,7 +195,7 @@ class TViewPathManager implements IViewPathManager
             return $sTemplatePathFromTheme;
         }
 
-        if ('Core' != $sType && false == TGlobal::IsCMSMode()) {
+        if ('Core' !== $sType && false == TGlobal::IsCMSMode()) {
             $activePortal = $this->portalDomainService->getActivePortal();
             if (null !== $activePortal) {
                 $sThemePath = $activePortal->GetThemeObjectViewsPath();

@@ -48,8 +48,7 @@
   margin-top:15px;
   font-size:15px;
   font-weight:bold;
-  background-image:url("/chameleon/blackbox/images/nav_icons/success.png");
-  padding-left:37px;
+  padding-left:10px;
   background-repeat:no-repeat;
   background-position:left middle;
   line-height:30px;
@@ -60,8 +59,7 @@
   margin-top:15px;
   font-size:15px;
   font-weight:bold;
-  background-image:url("/chameleon/blackbox/images/nav_icons/error.png");
-  padding-left:37px;
+  padding-left:10px;
   background-repeat:no-repeat;
   background-position:left middle;
   line-height:30px;
@@ -127,16 +125,14 @@
 }
 .importedheader
 {
-  background-image:url("/chameleon/blackbox/images/nav_icons/success.png");
-  padding-left:37px;
+  padding-left:10px;
   background-repeat:no-repeat;
   background-position:left top;
   height:52px;
 }
 .notimportedheader
 {
-  background-image:url("/chameleon/blackbox/images/nav_icons/notice.png");
-  padding-left:37px;
+  padding-left:10px;
   background-repeat:no-repeat;
   background-position:left top;
   height:52px;

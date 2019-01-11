@@ -56,6 +56,7 @@ MIT License
 - Foundation Icon Font - https://github.com/zurb/foundation-icons
 - Ionicons - http://ionicons.com/
 - file type icons generated with https://github.com/splitbrain/file-icon-generator
+- /src/CoreBundle/Resources/public/themes/standard/images/icons/user.png - https://github.com/material-components/material-components-web/
 
 Apache License 2.0
 ------------------
