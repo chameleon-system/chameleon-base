@@ -78,7 +78,6 @@ Usage
 - add the tag "chameleon_system.minify_js" to this service and specify an alias
 - set the configuration value `js_minifier_to_use` to this alias
 
-The bundle logs errors into channel `javascript_minify`.
 
 Note
 ----
