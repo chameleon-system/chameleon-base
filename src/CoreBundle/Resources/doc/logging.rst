@@ -36,7 +36,7 @@ Pre-defining a log channel there works like this:
 Additional Log Data
 -----------------------
 
-There are now two additional logging processors which add a request id and the session id to the context of any log message:
+There are two additional logging processors which add a request ID and the session ID to the context of any log message:
 `\ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\RequestIdProcessor`,
 `\ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\SessionIdProcessor`.
 
