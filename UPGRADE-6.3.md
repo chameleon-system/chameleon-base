@@ -53,7 +53,7 @@ assigned to the category window ("Logs"). To show them again you can assign them
 Migration example for changing/defining a log handler for a channel logging to a file:
 
 Old in service.xml:
-```
+```xml
 <service id="cmsPkgCore.logHandler.files" class="Monolog\Handler\StreamHandler" public="false">
     <argument>%kernel.logs_dir%/core.log</argument>
     <argument>200</argument>
