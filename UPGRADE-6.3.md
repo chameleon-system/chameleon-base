@@ -45,6 +45,11 @@ _errors:
 The system now uses Twig 2.x. Please have a look at the Twig changelog for required adjustments, but major problems are
 not expected.
 
+## Mailer Peer Security
+
+The default value of config key `chameleon_system_core: mailer: peer_security` was changed from "permissive" to "strict".
+Using this setting SMTP connections verify SSL/TLS certificate validity so that invalid or self-signed certificates are rejected.
+
 ## TTools::GetModuleLoaderObject Returns New Object
 
 The method `TTools::GetModuleLoaderObject` now returns a new `TModuleLoader` instance instead of the global module
