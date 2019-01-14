@@ -2500,6 +2500,10 @@
                 <source>chameleon_system_core.field_lookup_multi_select_restriction.check_help</source>
                 <target>If checked, an empty list actually means that the restriction is never satisfied - so the record is effectively disabled. If not checked, an empty list means "no restriction".</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.admin_message.button_title">
+                <source>chameleon_system_core.admin_message.button_title</source>
+                <target>Attention</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

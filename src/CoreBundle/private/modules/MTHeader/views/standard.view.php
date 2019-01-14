@@ -19,12 +19,11 @@ $translator = ServiceLocator::get('translator');
             <?php
             if (isset($data['check_messages'])) {
                 ?>
-                <div class="btn-group float-left">
-                    <button type="button" class="btn btn-sm dropdown-toggle navbar-item btn-secondary" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-warning-sign"></span> <?php echo TGlobal::OutHTML('Achtung'); ?>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm dropdown-toggle navbar-btn btn-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+                        <span class="glyphicon glyphicon-warning-sign"></span> <?=TGlobal::OutHTML($translator->trans('chameleon_system_core.admin_message.button_title')); ?>
                     </button>
-                    <div class="dropdown-menu" role="search" style="min-width: 370px;">
-
+                    <div class="dropdown-menu" aria-labelledby="adminMessagesDropDown" style="min-width: 370px;">
                         <div class="row">
                             <div class="col-lg-12">
                                 <ul>
@@ -35,11 +34,11 @@ $translator = ServiceLocator::get('translator');
                                 </ul>
                             </div>
                         </div>
-
                     </div>
                 </div>
-            <?php
-            } ?>
+                <?php
+            }
+            ?>
             <ul class="navbar-nav mr-auto">
                 <?php
                 if ($data['showWebsiteEditNavi'] && $data['show_template_engine']) {
