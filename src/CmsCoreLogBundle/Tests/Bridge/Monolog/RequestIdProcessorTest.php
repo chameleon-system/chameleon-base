@@ -61,11 +61,9 @@ class RequestIdProcessorTest extends TestCase
         $this->thenTheRequestIdShouldHaveBeenAddedToExtra($requestId);
     }
 
-    private function thenTheRequestIdShouldHaveBeenAddedToExtra(string $requestId): void
+    private function givenARequestId(string $requestId): void
     {
-        $this->assertArrayHasKey('extra', $this->actualResult);
-        $this->assertArrayHasKey('request_id', $this->actualResult['extra']);
-        $this->assertContains($requestId, $this->actualResult['extra']);
+        $this->mockRequestInfoService->getRequestId()->willReturn($requestId);
     }
 
     private function whenICallInvoke(array $input): void
@@ -73,8 +71,10 @@ class RequestIdProcessorTest extends TestCase
         $this->actualResult = $this->subject->__invoke($input);
     }
 
-    private function givenARequestId(string $requestId): void
+    private function thenTheRequestIdShouldHaveBeenAddedToExtra(string $requestId): void
     {
-        $this->mockRequestInfoService->getRequestId()->willReturn($requestId);
+        $this->assertArrayHasKey('extra', $this->actualResult);
+        $this->assertArrayHasKey('request_id', $this->actualResult['extra']);
+        $this->assertContains($requestId, $this->actualResult['extra']);
     }
 }
