@@ -356,19 +356,6 @@
 
     });
 </script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#treeNodeAssignDialog')
-            .jqm({
-                zIndex:600,
-                overlay:15
-            })
-            .jqDrag('.jqDrag')
-            .jqResize('.jqResize')
-    });
-</script>
-
-
 <ul class="simpleTree">
     <?php
         echo $data['sTreeHTML'];
