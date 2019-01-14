@@ -134,7 +134,7 @@ Log output is no longer collected and no longer sent as attachments with the not
 
 ## RequestInfoService
 
-- A method `getRequestId()` is added. This is a request-level-cached GUID specific for Chameleon.
+- New method `getRequestId()`.
 
 # Changed Interfaces and Method Signatures
 
