@@ -1,7 +1,5 @@
 <?php
 
-namespace ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog;
-
 /*
  * This file is part of the Chameleon System (https://www.chameleonsystem.com).
  *
@@ -10,6 +8,9 @@ namespace ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+namespace ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog;
+
 
 use Monolog\Processor\ProcessorInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
