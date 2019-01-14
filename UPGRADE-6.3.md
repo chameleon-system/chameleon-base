@@ -30,8 +30,7 @@ not expected.
 ## Mailer Peer Security
 
 The default value of config key `chameleon_system_core: mailer: peer_security` was changed from "permissive" to "strict".
-This means that the class `\ChameleonSystem\CoreBundle\Security\Https\StrictHttpsContext` is used for the settings
-for SMTP communication (ie verification is done and no self-signed certificates are allowed).
+Using this setting SMTP connections verify SSL/TLS certificate validity so that invalid or self-signed certificates are rejected.
 
 ## TTools::GetModuleLoaderObject Returns New Object
 
