@@ -32,6 +32,31 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     protected $sCurrentCSSPath = null;
 
     /**
+     * @var IPkgCmsFileManager
+     */
+    private $cmsFileManager;
+
+    /**
+     * @var PortalDomainServiceInterface
+     */
+    private $portalDomainService;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    public function __construct(
+        IPkgCmsFileManager $cmsFileManager,
+        PortalDomainServiceInterface $portalDomainService,
+        EventDispatcherInterface $eventDispatcher
+    ) {
+        $this->cmsFileManager = $cmsFileManager;
+        $this->portalDomainService = $portalDomainService;
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function IsEnabled()
@@ -143,8 +168,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     {
         $filesPrefix = ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix');
 
-        $portalDomainService = $this->getPortalDomainService();
-        $portal = $portalDomainService->getActivePortal();
+        $portal = $this->portalDomainService->getActivePortal();
 
         if (null !== $portal) {
             $filesPrefix .= $portal->getFileSuffix();
@@ -227,11 +251,9 @@ class TCMSResourceCollection implements ResourceCollectorInterface
             $bFileCreated = true;
             $sCSSStaticPath = PATH_OUTBOX.'/static/css/';
             if (!file_exists($sCSSStaticPath.$sFileMD5)) {
-                $fileManager = $this->getFileManager();
-
                 $bTargetDirectoryIsWritable = true;
                 if (!is_dir($sCSSStaticPath)) {
-                    $bTargetDirectoryIsWritable = $fileManager->mkdir($sCSSStaticPath, 0777, true);
+                    $bTargetDirectoryIsWritable = $this->cmsFileManager->mkdir($sCSSStaticPath, 0777, true);
                 }
 
                 if ($bTargetDirectoryIsWritable) {
@@ -285,7 +307,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
                         }
                     }
 
-                    $fileManager->file_put_contents($sCSSStaticPath.$sFileMD5, $sContent);
+                    $this->cmsFileManager->file_put_contents($sCSSStaticPath.$sFileMD5, $sContent);
                 }
             }
         }
@@ -308,11 +330,9 @@ class TCMSResourceCollection implements ResourceCollectorInterface
             $bFileCreated = true;
             $sJSStaticPath = PATH_OUTBOX.'/static/js/';
             if (!file_exists($sJSStaticPath.$sFileJSMD5)) {
-                $fileManager = $this->getFileManager();
-
                 $bTargetDirectoryIsWritable = true;
                 if (!is_dir($sJSStaticPath)) {
-                    $bTargetDirectoryIsWritable = $fileManager->mkdir($sJSStaticPath, 0777, true);
+                    $bTargetDirectoryIsWritable = $this->cmsFileManager->mkdir($sJSStaticPath, 0777, true);
                 }
 
                 if ($bTargetDirectoryIsWritable) {
@@ -356,7 +376,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
                         }
                     }
                     $sContent = $this->dispatchJSMinifyEvent($sContent);
-                    $fileManager->file_put_contents($sJSStaticPath.$sFileJSMD5, $sContent);
+                    $this->cmsFileManager->file_put_contents($sJSStaticPath.$sFileJSMD5, $sContent);
                 }
             }
         }
@@ -372,18 +392,9 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     private function dispatchJSMinifyEvent($jsContent)
     {
         $event = new ResourceCollectionJavaScriptCollectedEvent($jsContent);
-        /** @var ResourceCollectionJavaScriptCollectedEvent $event */
-        $event = $this->getEventDispatcher()->dispatch(CoreEvents::GLOBAL_RESOURCE_COLLECTION_COLLECTED_JAVASCRIPT, $event);
+        $event = $this->eventDispatcher->dispatch(CoreEvents::GLOBAL_RESOURCE_COLLECTION_COLLECTED_JAVASCRIPT, $event);
 
         return $event->getContent();
-    }
-
-    /**
-     * @return EventDispatcherInterface
-     */
-    private function getEventDispatcher()
-    {
-        return ServiceLocator::get('event_dispatcher');
     }
 
     /**
@@ -705,22 +716,5 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         }
 
         return $bIsLocal;
-    }
-
-    public function __construct()
-    {
-    }
-
-    /**
-     * @return IPkgCmsFileManager
-     */
-    private function getFileManager()
-    {
-        return ServiceLocator::get('chameleon_system_cms_file_manager.file_manager');
-    }
-
-    private function getPortalDomainService(): PortalDomainServiceInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

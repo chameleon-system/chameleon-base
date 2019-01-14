@@ -790,7 +790,11 @@
             <argument type="service" id="request_stack"/>
         </service>
 
-        <service id="chameleon_system_core.resource_collector" class="TCMSResourceCollection"/>
+        <service id="chameleon_system_core.resource_collector" class="TCMSResourceCollection">
+            <argument type="service" id="chameleon_system_core.filemanager"/>
+            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
+            <argument type="service" id="event_dispatcher"/>
+        </service>
 
         <service id="chameleon_system_core.command.update.count" class="ChameleonSystem\CoreBundle\Command\CountUpdateCommand">
             <tag name="console.command"/>
