@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ResourceCollectionJavaScriptCollectedEvent;
+use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -18,7 +19,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * this class can manage resource collection creation.
 /**/
-class TCMSResourceCollection
+class TCMSResourceCollection implements ResourceCollectorInterface
 {
     /**
      * base path of server ($_SERVER['DOCUMENT_ROOT']).
@@ -31,9 +32,7 @@ class TCMSResourceCollection
     protected $sCurrentCSSPath = null;
 
     /**
-     * Check if resource collection is enabled in config.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function IsEnabled()
     {
@@ -41,10 +40,7 @@ class TCMSResourceCollection
     }
 
     /**
-     * Checks if system is allowed to use resource collection.
-     * Was used to disable resource collection in template engine.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function IsAllowed()
     {
@@ -64,11 +60,7 @@ class TCMSResourceCollection
     }
 
     /**
-     * combine external resources into one file.
-     *
-     * @param string $sPageContent
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function CollectExternalResources($sPageContent)
     {

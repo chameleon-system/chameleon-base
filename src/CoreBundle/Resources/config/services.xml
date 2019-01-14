@@ -167,6 +167,7 @@
             <argument type="service" id="request_stack"/>
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.resource_collector"/>
             <call method="setCache">
                 <argument type="service" id="chameleon_system_cms_cache.cache" />
             </call>
@@ -788,6 +789,8 @@
             <argument id="chameleon_system_core.request_state_hash_provider_cache.inner" type="service"/>
             <argument type="service" id="request_stack"/>
         </service>
+
+        <service id="chameleon_system_core.resource_collector" class="TCMSResourceCollection"/>
 
         <service id="chameleon_system_core.command.update.count" class="ChameleonSystem\CoreBundle\Command\CountUpdateCommand">
             <tag name="console.command"/>

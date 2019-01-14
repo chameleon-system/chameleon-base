@@ -11,8 +11,8 @@
 
 namespace ChameleonSystem\CoreBundle\Controller;
 
+use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
-use IViewPathManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -36,18 +36,17 @@ class ChameleonFrontendController extends ChameleonController
      */
     private $configToLessMapper;
 
-    /**
-     * @param RequestStack                       $requestStack
-     * @param EventDispatcherInterface           $eventDispatcher
-     * @param PortalDomainServiceInterface       $portalDomainService
-     * @param TModuleLoader                      $moduleLoader
-     * @param IViewPathManager|null              $viewPathManager
-     * @param ContainerInterface                 $container
-     * @param TPkgViewRendererConfigToLessMapper $configToLessMapper
-     */
-    public function __construct(RequestStack $requestStack, EventDispatcherInterface $eventDispatcher, PortalDomainServiceInterface $portalDomainService, TModuleLoader $moduleLoader, $viewPathManager, ContainerInterface $container, TPkgViewRendererConfigToLessMapper $configToLessMapper)
-    {
-        parent::__construct($requestStack, $eventDispatcher, $portalDomainService, $moduleLoader, $viewPathManager);
+    public function __construct(
+        RequestStack $requestStack,
+        EventDispatcherInterface $eventDispatcher,
+        PortalDomainServiceInterface $portalDomainService,
+        ResourceCollectorInterface $resourceCollector,
+        TModuleLoader $moduleLoader,
+        $viewPathManager,
+        ContainerInterface $container,
+        TPkgViewRendererConfigToLessMapper $configToLessMapper
+    ) {
+        parent::__construct($requestStack, $eventDispatcher, $portalDomainService, $resourceCollector, $moduleLoader, $viewPathManager);
         $this->container = $container; // for ViewRenderer instantiation
         $this->configToLessMapper = $configToLessMapper;
     }
