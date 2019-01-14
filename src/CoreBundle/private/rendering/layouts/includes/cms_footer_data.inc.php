@@ -7,7 +7,7 @@ if (TGlobal::CMSUserDefined()) {
         });
     </script>
 
-    <div class="modal fade" id="processingDialog" tabindex="-1" role="dialog" aria-labelledby="processingDialog"
+    <div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingDialog"
          aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
