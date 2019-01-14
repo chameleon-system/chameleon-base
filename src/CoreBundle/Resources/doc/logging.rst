@@ -33,7 +33,7 @@ Pre-defining a log channel there works like this:
         $container->prependExtensionConfig('monolog', ['channels' => ['chameleon_order']]);
     }
 
-Additional logging data
+Additional Log Data
 -----------------------
 
 There are now two additional logging processors which add a request id and the session id to the context of any log message:
