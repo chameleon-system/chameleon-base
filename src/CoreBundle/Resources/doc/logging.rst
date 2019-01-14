@@ -40,7 +40,7 @@ There are two additional logging processors which add a request ID and the sessi
 `\ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\RequestIdProcessor`,
 `\ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\SessionIdProcessor`.
 
-Config examples
+Config Examples
 ---------------
 
 Changing the log line format - here omitting the date:
