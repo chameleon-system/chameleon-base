@@ -69,7 +69,7 @@ class TCMSFieldLookup extends TCMSField
         $sClass = '';
         $sOnChangeAttr = '';
         if ($this->GetReloadOnChangeParam()) {
-            $sOnChangeAttr = "OnChange=\"CHAMELEON.CORE.MTTableEditor.bCmsContentChanged=false;CHAMELEON.CORE.showProcessingDialog();document.cmseditform.elements['module_fnc[contentmodule]'].value='Save';document.cmseditform.submit();\"";
+            $sOnChangeAttr = "OnChange=\"CHAMELEON.CORE.MTTableEditor.bCmsContentChanged=false;CHAMELEON.CORE.showProcessingModal();document.cmseditform.elements['module_fnc[contentmodule]'].value='Save';document.cmseditform.submit();\"";
             $sClass .= 'cmsdisablechangemessage';
         }
 

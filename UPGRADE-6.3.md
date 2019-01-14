@@ -117,7 +117,7 @@ None.
 - $.blockUI();
 - $.unblockUI();
 
-Use CHAMELEON.CORE.showProcessingDialog() and CHAMELEON.CORE.hideProcessingDialog() instead.
+Use CHAMELEON.CORE.showProcessingModal() and CHAMELEON.CORE.hideProcessingModal() instead.
 
 ## Translations
 

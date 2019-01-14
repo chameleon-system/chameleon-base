@@ -5,7 +5,7 @@ CHAMELEON.CORE = CHAMELEON.CORE || {};
 
 var sLastDialogID = null;
 
-CHAMELEON.CORE.showProcessingDialog = function () {
+CHAMELEON.CORE.showProcessingModal = function () {
     var processingDialogContainer = $("#processingDialog");
 
     if (!(processingDialogContainer.data('bs.modal') || {})._isShown){
@@ -13,7 +13,7 @@ CHAMELEON.CORE.showProcessingDialog = function () {
     }
 };
 
-CHAMELEON.CORE.hideProcessingDialog = function () {
+CHAMELEON.CORE.hideProcessingModal = function () {
     // $("#processingDialog").dialog('hide'); is not working, so this is the fix.
     var processingDialogContainer = $("#processingDialog");
     processingDialogContainer.removeClass("in");

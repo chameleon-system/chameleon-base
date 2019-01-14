@@ -74,7 +74,7 @@ function ChangeAssignedFileSelection(id) {
 function chooseSelectedFiles() {
     if (window.opener && window.opener.open && !window.opener.closed) {
         if (selectedFiles.length > 0) {
-            CHAMELEON.CORE.showProcessingDialog();
+            CHAMELEON.CORE.showProcessingModal();
             var sSelectedFiles = selectedFiles.join(",");
             if (typeof window.opener.assignDocuments == 'function' || typeof window.opener.assignDocuments == 'object') {
                 window.opener.assignDocuments(_fieldName, sSelectedFiles, _recordID, _tableID);
@@ -89,7 +89,7 @@ function chooseSelectedFiles() {
 function removeSelectedFiles() {
     if (window.opener && window.opener.open && !window.opener.closed) {
         if (assignedSelectedFiles.length > 0) {
-            CHAMELEON.CORE.showProcessingDialog();
+            CHAMELEON.CORE.showProcessingModal();
             var sAssignedSelectedFiles = assignedSelectedFiles.join(",");
             if (typeof window.opener.removeDocument == 'function' || typeof window.opener.removeDocument == 'object') {
                 window.opener.removeDocument(_fieldName, sAssignedSelectedFiles, _recordID, _tableID);

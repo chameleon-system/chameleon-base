@@ -67,7 +67,7 @@ function DeleteRecord(id) {
     var message = CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.confirm_delete');
 
     if (confirm(message)) {
-        CHAMELEON.CORE.showProcessingDialog();
+        CHAMELEON.CORE.showProcessingModal();
         document.cmsformdel.elements['module_fnc[contentmodule]'].value = 'Delete';
         document.cmsformdel.id.value = id;
         document.cmsformdel.submit();

@@ -539,7 +539,7 @@ class MTTableEditor extends TCMSModelBase
         $aIncludes[] = '<script type="text/javascript">
         window.onbeforeunload = function () {
           if (CHAMELEON.CORE.MTTableEditor.bCmsContentChanged) {
-            CHAMELEON.CORE.hideProcessingDialog();
+            CHAMELEON.CORE.hideProcessingModal();
             return \''.TGlobal::Translate('chameleon_system_core.cms_module_table_editor.confirm_discard_changes').'\';
           }
         }

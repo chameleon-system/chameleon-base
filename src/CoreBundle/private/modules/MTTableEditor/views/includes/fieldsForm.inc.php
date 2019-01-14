@@ -1,5 +1,5 @@
 <form name="cmseditform" id="cmseditform" method="post" action="<?=PATH_CMS_CONTROLLER; ?>" style="margin 0; padding 0;"
-      accept-charset="UTF-8" onsubmit="CHAMELEON.CORE.showProcessingDialog();">
+      accept-charset="UTF-8" onsubmit="CHAMELEON.CORE.showProcessingModal();">
     <input type="hidden" name="pagedef" value="<?=$data['pagedef']; ?>"/>
     <input type="hidden" name="tableid" value="<?=TGlobal::OutHTML($data['tableid']); ?>"/>
     <input type="hidden" name="id" value="<?=TGlobal::OutHTML($data['id']); ?>"/>

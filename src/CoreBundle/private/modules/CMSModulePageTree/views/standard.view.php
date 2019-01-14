@@ -46,7 +46,7 @@
      */
     function moveNode(nodeID, parentNodeID, position) {
         if (typeof parentNodeID != 'undefined' && typeof nodeID != 'undefined') {
-            CHAMELEON.CORE.showProcessingDialog();
+            CHAMELEON.CORE.showProcessingModal();
             var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('module' => 'ExecuteAjaxCall'), '_fnc' => 'MoveNode', 'tableid' => $data['treeTableID'])); ?>&nodeID=' + nodeID + '&parentNodeID=' + parentNodeID + '&position=' + position;
             GetAjaxCallTransparent(url, moveNodeSuccess);
         }
@@ -56,7 +56,7 @@
      * unblocks the UI
      */
     function moveNodeSuccess(nodeID, responseMessage) {
-        window.parent.CHAMELEON.CORE.hideProcessingDialog();
+        window.parent.CHAMELEON.CORE.hideProcessingModal();
     }
 
     /**
@@ -93,7 +93,7 @@
      */
     function TreeNodeAssignFormResponse(data, responseMessage) {
         if (data) {
-            $('#treeNodeAssignDialog').jqmHide();
+            CloseModalIFrameDialog();
             if (data.assigned) {
                 $('#' + data.treeNodeID + ' span').addClass('activeConnectedNode');
             } else {
@@ -115,7 +115,7 @@
 		if(confirm(confirmMessage)){
 			var nodeID = $(node).attr('esrealid');
 			var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('module' => 'ExecuteAjaxCall'), '_fnc' => 'DeleteNode', 'tableid' => $data['treeTableID'], 'tbl' => 'cms_tpl_page')); ?>&nodeID=' + nodeID;
-            CHAMELEON.CORE.showProcessingDialog();
+            CHAMELEON.CORE.showProcessingModal();
 
 			GetAjaxCallTransparent(url, deleteNodeSuccess);
 		}
@@ -132,7 +132,7 @@
 		/**
 		 * see "deleteNode" method for explanation why "window.parent" is used here
 		 */
-		window.parent.CHAMELEON.CORE.hideProcessingDialog();
+		window.parent.CHAMELEON.CORE.hideProcessingModal();
 
     }
 
