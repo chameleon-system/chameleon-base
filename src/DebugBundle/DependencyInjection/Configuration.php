@@ -48,11 +48,11 @@ class Configuration implements ConfigurationInterface
         $subTree->children()
             ->booleanNode('backtrace_enabled')
                 ->info('When enabled, adds a stacktrace for all queries in the profiler panel, so that queries can more easily be located.')
-                ->defaultFalse()
+                ->defaultTrue()
             ->end()
             ->integerNode('backtrace_limit')
                 ->info('When backtraces are enabled, this value controls the stack depth to be displayed. Higher values lead to higher memory consumption.')
-                ->defaultValue(8)
+                ->defaultValue(7)
             ->end()
         ;
 

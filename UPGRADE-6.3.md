@@ -76,7 +76,7 @@ add the configuration value `doctrine: options: 1006: 1`.
 
 The DoctrineBundle provides a profiler in the Web Debug Toolbar. Therefore the Chameleon database profiler is now
 disabled by default, as its main benefit is now the backtrace feature. To enable it again, set the configuration key
-`chameleon_system_debug: database_profiler: enabled: true`.
+`chameleon_system_debug: database_profiler: enabled: true`. Backtrace will then be enabled by default.
 
 The `backtrace_enabled` and `backtrace_limit` keys
 were moved under the `database_profiler` key (e.g. `chameleon_system_debug: database_profiler: backtrace_enabled`
