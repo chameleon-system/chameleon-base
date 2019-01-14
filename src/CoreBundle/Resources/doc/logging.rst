@@ -3,7 +3,7 @@ Logging
 
 Chameleon uses the standard logging of Symfony combined with Monolog: https://symfony.com/doc/current/logging.html
 
-All logging should thus be done with the PSR4 interface `LoggerInterface` with appropriate channels if needed.
+All logging should thus be done with the PSR-3 interface `Psr\\Log\\LoggerInterface`, using different channels where appropriate.
 
 
 Configuration
