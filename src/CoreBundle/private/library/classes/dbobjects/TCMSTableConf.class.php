@@ -211,6 +211,11 @@ class TCMSTableConf extends TCMSRecord
         return $oFields;
     }
 
+    public function SetLanguage($iLanguageId)
+    {
+        parent::SetLanguage($iLanguageId);
+    }
+
     /**
      * @param TdbCmsFieldConf|TCMSFieldDefinition $fieldDefinition
      * @param array                               $sqlData
@@ -267,7 +272,7 @@ class TCMSTableConf extends TCMSRecord
             } elseif (null !== $oTableRow && is_array($oTableRow->sqlData) && array_key_exists($oField->name, $oTableRow->sqlData)) {
                 $languageService = self::getLanguageService();
 
-                $data = $this->getDataForCurrentLanguage($oFieldDef, $oTableRow->sqlData, $languageService);
+                $data = $this->getDataForCurrentLanguage($oFieldDef, $oTableRow->sqlData);
 
                 if (null === $data) {
                     $data = $oTableRow->sqlData[$oField->name];
