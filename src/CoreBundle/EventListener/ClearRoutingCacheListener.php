@@ -11,8 +11,8 @@
 
 namespace ChameleonSystem\CoreBundle\EventListener;
 
-use ChameleonSystem\CmsRoutingBundle\Event\RoutingConfigChangedEvent;
 use ChameleonSystem\CoreBundle\Routing\ChameleonBaseRouter;
+use Symfony\Component\EventDispatcher\Event;
 
 class ClearRoutingCacheListener
 {
@@ -29,7 +29,7 @@ class ClearRoutingCacheListener
         $this->router = $router;
     }
 
-    public function clearRoutingCache(RoutingConfigChangedEvent $event)
+    public function clearRoutingCache(Event $event)
     {
         $this->router->clearCache();
     }
