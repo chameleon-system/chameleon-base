@@ -211,11 +211,6 @@ class TCMSTableConf extends TCMSRecord
         return $oFields;
     }
 
-    public function SetLanguage($iLanguageId)
-    {
-        parent::SetLanguage($iLanguageId);
-    }
-
     /**
      * @param TdbCmsFieldConf|TCMSFieldDefinition $fieldDefinition
      * @param array                               $sqlData
