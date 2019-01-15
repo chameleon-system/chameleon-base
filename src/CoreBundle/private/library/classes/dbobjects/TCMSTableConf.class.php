@@ -265,9 +265,7 @@ class TCMSTableConf extends TCMSRecord
             if ($loadDefaults) {
                 $oField->data = $oFieldDef->sqlData['field_default_value'];
             } elseif (null !== $oTableRow && is_array($oTableRow->sqlData) && array_key_exists($oField->name, $oTableRow->sqlData)) {
-                $languageService = self::getLanguageService();
-
-                $data = $this->getDataForCurrentLanguage($oFieldDef, $oTableRow->sqlData, $languageService);
+                $data = $this->getDataForCurrentLanguage($oFieldDef, $oTableRow->sqlData);
 
                 if (null === $data) {
                     $data = $oTableRow->sqlData[$oField->name];
