@@ -31,10 +31,10 @@ class CMSRunCrons extends TModelBase
         $this->data['sMessageOutput'] = '';
 
         if ($this->global->UserDataExists('cronjobid') && TCMSUser::CMSUserDefined()) {
-            $tranlator = $this->getTranslator();
+            $translator = $this->getTranslator();
 
             if (false === $this->isCronjobExecutionEnabled()) {
-                $this->displayError($tranlator->trans('chameleon_system_core.cronjob.error_cronjobs_disabled'));
+                $this->displayError($translator->trans('chameleon_system_core.cronjob.error_cronjobs_disabled'));
 
                 return $this->data;
             }
@@ -49,7 +49,7 @@ class CMSRunCrons extends TModelBase
                 $oTdbCmsCronJob->Load($sCronID);
 
                 if (true === $oTdbCmsCronJob->fieldLock) {
-                    $this->displayError($tranlator->trans('chameleon_system_core.cronjob.error_cronjob_still_locked'));
+                    $this->displayError($translator->trans('chameleon_system_core.cronjob.error_cronjob_still_locked'));
 
                     return $this->data;
                 }
