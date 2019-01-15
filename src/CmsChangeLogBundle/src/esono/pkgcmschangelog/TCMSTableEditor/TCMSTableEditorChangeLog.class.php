@@ -161,6 +161,10 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
             /** @var TCMSField $oldField */
             if (isset($oldFields[$newField->name])) {
                 $oldField = $oldFields[$newField->name];
+
+                if ($oldField instanceof TCMSMLTField) {
+                    $oldField->data = $oldField->getMltValues();
+                }
             } else {
                 if ($this->bIsUpdate) {
                     continue;
