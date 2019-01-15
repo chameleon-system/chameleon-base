@@ -119,6 +119,14 @@ None.
 
 Use CHAMELEON.CORE.showProcessingModal() and CHAMELEON.CORE.hideProcessingModal() instead.
 
+- SetChangedDataMessage()
+
+Use CHAMELEON.CORE.MTTableEditor.initInputChangeObservation() instead.
+
+- CreateModalIFrameDialogFromContentWithoutClose
+
+Use CreateModalIFrameDialogFromContent() instead. (modals always show a header and close button)
+
 ## Translations
 
 - chameleon_system_core.field_options.option_value_true

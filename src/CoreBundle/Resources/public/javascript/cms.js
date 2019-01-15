@@ -19,18 +19,19 @@ CHAMELEON.CORE.hideProcessingModal = function () {
     processingDialogContainer.removeClass("in");
     $(".modal-backdrop").remove();
     $('body').removeClass('modal-open');
+    $('body').css('padding-right', ''); // Needed because bootstrap adds a 15px padding to the body on modal dialog init.
     processingDialogContainer.hide();
 };
 
 /**
- * @deprecated since 6.3.0 - call CHAMELEON.CORE.showProcessingDialog(); instead
+ * @deprecated since 6.3.0 - call CHAMELEON.CORE.showProcessingModal(); instead
  */
 function PleaseWait() {
-    CHAMELEON.CORE.showProcessingDialog();
+    CHAMELEON.CORE.showProcessingModal();
 }
 
 function PostAjaxForm(formid, functionName) {
-    CHAMELEON.CORE.showProcessingDialog();
+    CHAMELEON.CORE.showProcessingModal();
     PostAjaxFormTransparent(formid, functionName);
 }
 
@@ -48,7 +49,7 @@ function PostAjaxFormTransparent(formid, callbackFunction) {
 }
 
 function GetAjaxCall(url, functionName) {
-    CHAMELEON.CORE.showProcessingDialog();
+    CHAMELEON.CORE.showProcessingModal();
     GetAjaxCallTransparent(url, functionName);
 }
 
@@ -77,8 +78,8 @@ function GetAjaxCallTransparent(url, functionName) {
 
 function AjaxError(XMLHttpRequest, textStatus, errorThrown) {
     if (textStatus === 'parsererror') {
-        window.parent.CHAMELEON.CORE.hideProcessingDialog();
-        CHAMELEON.CORE.hideProcessingDialog();
+        window.parent.CHAMELEON.CORE.hideProcessingModal();
+        CHAMELEON.CORE.hideProcessingModal();
         toasterMessage('Error! Wasn`t able to parse ajax response.', 'ERROR');
         if (XMLHttpRequest.responseText !== '') {
             var sError = XMLHttpRequest.responseText;
@@ -111,7 +112,7 @@ var stack_bottomright = {"dir1": "up", "dir2": "left", "push": "top", "firstpos1
  * allowed style types: MESSAGE (default), WARNING, ERROR, FATAL
  */
 function toasterMessage(message,type) {
-    CHAMELEON.CORE.hideProcessingDialog();
+    CHAMELEON.CORE.hideProcessingModal();
     var sStylingClass = '';
     if(type == 'ERROR' || type == 'FATAL') {
         type = 'error';
@@ -159,7 +160,7 @@ function DisplayAjaxMessage(data, statusText) {
 function DisplayAjaxTextarea(data, statusText) {
     CloseModalIFrameDialog();
     var content = "<form accept-charset=\"UTF-8\"><textarea wrap=\"off\" style=\"width:100%;height:550px;\">" + data + "</textarea></form>";
-    CreateModalIFrameDialogFromContent(content, 750, 650);
+    CreateModalIFrameDialogFromContent(content);
 }
 
 /*
@@ -206,55 +207,108 @@ function deleteCMSRegistryEntry(id) {
  * create dialog
  */
 function LoadJQMDialog(width, height, dialogContent, hasCloseButton, title, isDraggable, isResizable, isModal) {
-    if (typeof(isModal) == "undefined") {
-        if (hasCloseButton) {
-            isModal = false;
-        } else {
-            isModal = true;
-        }
-    }
-    if (!title) title = 'Chameleon CMS';
-    if (typeof(isDraggable) == 'undefined') isDraggable = true;
-    if (typeof(isResizable) == 'undefined') isResizable = true;
-
-    if ($('#modal_dialog').length == 0) {
-        $('body').append('<div id="modal_dialog" style="display: none;"></div>');
-    }
-
-    $('#modal_dialog').dialog({
-        width:parseInt(width) + 15,
-        height:parseInt(height),
-        title:title,
-        modal:isModal,
-        position:"center",
-        resizable:isResizable,
-        draggable:isDraggable,
-        close:function (event, ui) {
-            CloseModalIFrameDialog();
-        },
-        open:function (event, ui) {
-            if (!hasCloseButton) {
-                $(event.currentTarget).find('.ui-dialog-titlebar-close').css('display', 'none');
-            }
-        }
-    }).html(dialogContent);
-
-    if (isModal) {
-        $('.ui-widget-overlay').click(function () {
-            CloseModalIFrameDialog();
-        });
-    }
-
-    return true;
+    return CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
 }
+
+CHAMELEON.CORE.getModalSizeClassByPixel = function (width) {
+
+    if (typeof width === 'undefined') {
+        return 'modal-xxl';
+    }
+
+    width = parseInt(width,10);
+
+    if (0 === width) {
+        return 'modal-xxl';
+    }
+
+    if (width > 950) {
+        return 'modal-xxl';
+    } else if (width >= 720) {
+        return 'modal-xl';
+    } else if (width > 540) {
+        return 'modal-lg';
+    } else if (width > 300) {
+        return 'modal-md';
+    }
+
+    return 'modal-sm';
+};
+
+CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
+
+    if (typeof sizeClass === 'undefined') {
+        sizeClass = 'modal-xxl';
+    }
+
+    var modalDialog = document.getElementById('modalDialog');
+
+    if (null === modalDialog) {
+        document.body.innerHTML += '<div class="modal fade" id="modalDialog" tabindex="-1" role="dialog" aria-labelledby="modalDialog"\n' +
+            '         aria-hidden="true">\n' +
+            '        <div class="modal-dialog modal-dialog-centered '+sizeClass+'">\n' +
+            '            <div class="modal-content">      ' +
+            '                <div class="modal-header" id="modalHeader">\n' +
+            '                    <h5 class="modal-title" id="modalDialogLabel"></h5>\n' +
+            '                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
+            '                        <span aria-hidden="true">&times;</span>\n' +
+            '                    </button>\n' +
+            '                </div>' +
+            '                <div class="modal-body">\n' +
+            '            </div>\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            '    </div>';
+
+        modalDialog = document.getElementById('modalDialog');
+    } else {
+        // set dialog size
+        var modalDialogInner = document.querySelectorAll('#modalDialog .modal-dialog')[0];
+        modalDialogInner.classList.remove('modal-xxl', 'modal-xl', 'modal-lg', 'modal-md');
+        modalDialogInner.classList.add(sizeClass);
+
+        // reset content
+        var modalBody = document.querySelectorAll('#modalDialog .modal-body')[0];
+        modalBody.innerHTML = '';
+
+    }
+
+    // set title
+    var modaldialogLabel = document.getElementById('modalDialogLabel');
+    modaldialogLabel.innerHTML = '';
+
+    if (title) {
+        modaldialogLabel.innerHTML = title;
+    }
+
+    // set content after dialog is initialized
+    $('#modalDialog').on('shown.bs.modal', function () {
+        $('#modalDialog .modal-body').html(content);
+    });
+
+    console.log(height);
+
+    if (typeof height === 'undefined' || height < 300) {
+        height = window.innerHeight-150;
+    }
+
+    var modalBody = document.querySelectorAll('#modalDialog .modal-body')[0];
+    modalBody.style.height = height+'px';
+
+    var $modalDialog = $('#modalDialog');
+
+    // init/reset modal
+    $modalDialog.modal({});
+    $modalDialog.modal('handleUpdate');
+};
 
 /*
  * creates a ModalDialog without close button from iFrame
  */
 function CreateModalIFrameDialog(url, width, height, title, isDraggable, isResizable) {
     url = CMSAddGlobalParametersToURL(url);
-    var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="100%" height="99.5%" border="0" frameborder="0"></iframe>';
-    LoadJQMDialog(width, height, dialogContent, false, title, isDraggable, isResizable, true);
+    var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="100%" height="100%" frameborder="0"></iframe>';
+    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
 }
 
 /*
@@ -262,15 +316,15 @@ function CreateModalIFrameDialog(url, width, height, title, isDraggable, isResiz
  */
 function CreateModalIFrameDialogCloseButton(url, width, height, title, isDraggable, isResizable) {
     url = CMSAddGlobalParametersToURL(url);
-    var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="100%" height="99.5%" border="0" frameborder="0"></iframe>';
-    LoadJQMDialog(width, height, dialogContent, true, title, isDraggable, isResizable, true);
+    var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="100%" height="100%" frameborder="0"></iframe>';
+    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
 }
 
 /*
  * creates a ModalDialog with close button from content string
  */
 function CreateModalIFrameDialogFromContent(content, width, height, title, isDraggable, isResizable) {
-    LoadJQMDialog(width, height, content, true, title, isDraggable, isResizable, true);
+    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
 }
 
 /*
@@ -281,39 +335,35 @@ function CreateModalDialogFromContainer(contentID, width, height, title, isDragg
     $('#' + contentID).html('');
     top.sLastDialogID = contentID;
     var dialogContent = '<div style="width:100%;height:100%;" id="modal_dialog_content">' + content + '</div>';
-    LoadJQMDialog(width, height, dialogContent, true, title, isDraggable, isResizable, true);
+    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
 }
 
 /*
  * creates a ModalDialog to show a full image from Image-URL
  */
 function CreateMediaZoomDialogFromImageURL(imageURL, width, height) {
-    dialogContent = '<a href="javascript:void();" onclick="CloseModalIFrameDialog();return false;"><img src="' + imageURL + '" width="' + width + '" height="' + height + '" border="0" style="cursor:hand;cursor:pointer;" /></a>';
+    dialogContent = '<a href="javascript:void();" onclick="CloseModalIFrameDialog();return false;" style="display: flex; justify-content: center"><img src="' + imageURL + '" width="' + width + '" height="' + height + '" border="0" style="cursor:hand;cursor:pointer;" /></a>';
     width = (parseInt(width) + 30);
     height = (parseInt(height) + 65);
-    LoadJQMDialog(width, height, dialogContent, true, false, false, true, true);
-    $(".ui-dialog-titlebar").hide();
+    CHAMELEON.CORE.showModal('Image', dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
 }
 
 /*
+ * @deprecated since 6.3.0
+ *
  * creates a ModalDialog without close button from content string
  */
 function CreateModalIFrameDialogFromContentWithoutClose(content, width, height, title, isDraggable, isResizable) {
-    LoadJQMDialog(width, height, content, false, title, isDraggable, isResizable, true);
+    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
 }
 
 /*
  * closes Modal Dialog
  */
 function CloseModalIFrameDialog() {
-    $('#modal_dialog').html('&nbsp;');
-    var isDialog = $('#modal_dialog').is(':ui-dialog');
-    if(isDialog) {
-        if ($('#modal_dialog').dialog('isOpen')) {
-            $('#modal_dialog').dialog('destroy');
-        }
-    }
-    CHAMELEON.CORE.hideProcessingDialog();
+    $('#modalDialog .modal-body').html('&nbsp;');
+    $('#modalDialog').modal('hide');
+    CHAMELEON.CORE.hideProcessingModal();
 }
 
 function getRadioValue(rObj) {
@@ -403,6 +453,10 @@ function loadStandaloneDocumentManager() {
 
 $(document).ready(function () {
     initLightBox();
+
+    // init tooltips
+    $('[data-toggle="tooltip"], [rel="tooltip"]').tooltip({container: 'body', trigger: 'hover'});
+    $('[data-toggle="popover"]').popover({ html: true });
 });
 
 function initLightBox(){
