@@ -154,8 +154,6 @@ class TCMSTableConf extends TCMSRecord
      */
     public function &GetFields(&$oTableRow, $loadDefaults = false, $bDoNotUseAutoObjects = false)
     {
-        $languageService = self::getLanguageService();
-
         $oFieldDefinition = &$this->GetFieldDefinitions(array(), $bDoNotUseAutoObjects);
         $oFields = new TIterator();
         while ($oFieldDef = $oFieldDefinition->next()) {
@@ -193,7 +191,7 @@ class TCMSTableConf extends TCMSRecord
                         // Standard case
                         // Try to find the correct field name for the data in $oTableRow with respect to the language
 
-                        $data = $this->getDataForCurrentLanguage($oFieldDef, $oTableRow->sqlData, $languageService);
+                        $data = $this->getDataForCurrentLanguage($oFieldDef, $oTableRow->sqlData);
 
                         if (null === $data) {
                             $data = $oTableRow->sqlData[$oField->name];
@@ -216,11 +214,10 @@ class TCMSTableConf extends TCMSRecord
     /**
      * @param TdbCmsFieldConf|TCMSFieldDefinition $fieldDefinition
      * @param array                               $sqlData
-     * @param LanguageServiceInterface            $languageService
      *
      * @return mixed
      */
-    private function getDataForCurrentLanguage($fieldDefinition, array $sqlData, LanguageServiceInterface $languageService)
+    private function getDataForCurrentLanguage($fieldDefinition, array $sqlData)
     {
         $languageId = $this->GetLanguage();
 
@@ -228,7 +225,7 @@ class TCMSTableConf extends TCMSRecord
             return null;
         }
 
-        $language = $languageService->getLanguage($languageId);
+        $language = self::getLanguageService()->getLanguage($languageId);
 
         if (null === $language) {
             return null;
