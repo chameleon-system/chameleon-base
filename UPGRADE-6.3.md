@@ -109,8 +109,8 @@ None.
 - \ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::getModules()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
-- \TTools::AddStaticPageVariables()
 - \TCMSFieldLookup::enableComboBox()
+- \TTools::AddStaticPageVariables()
 
 ## JavaScript Files and Functions
 
