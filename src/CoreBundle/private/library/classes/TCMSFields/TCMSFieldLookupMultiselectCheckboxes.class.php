@@ -19,7 +19,7 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
  *  - expression may contain references to the current record in the form [{fieldname}]
  *  : example: restriction=some_field_in_the_lookup_id='[{some_field_in_the_owning_record}]'
  *  the restriction will be added "as is" to the sql query.
-/**/
+ */
 class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
 {
     public function GetHTML()
@@ -45,8 +45,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
           <a href=\"javascript:invertCheckboxes('".TGlobal::OutJS($this->name)."')\" class=\"checkBoxHeaderActionLink\" style=\"margin-left: 10px; background: url(".URL_CMS.'/images/icons/arrow_switch.png) 0px 3px no-repeat;">'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_checkboxes.invert_selection').'</a>
           ';
 
-        $activeUser = &TCMSUser::GetActiveUser();
-        if ($activeUser->oAccessManager->HasNewPermission($foreignTableName)) {
+        if (true === $this->isRecordCreationAllowed($foreignTableName)) {
             $html .= "<a href=\"javascript:document.cmseditform.tableid.value='".TGlobal::OutJS($oTargetTableConf->sqlData['id'])."';ExecutePostCommand('Insert');\" class=\"checkBoxHeaderActionLink\" style=\"margin-left: 10px; background: url(".URL_CMS.'/images/icons/page_new.gif) 0px 3px no-repeat;">'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.new').'</a>';
         }
         $urlUtil = $this->getUrlUtil();
@@ -71,7 +70,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
 
         $mltRecords = $this->getMltRecordData($oTargetTableConf->sqlData['list_group_field_column']);
         $activeGroup = '';
-        $hasEditPermissionForForeignTable = $activeUser->oAccessManager->HasEditPermission($foreignTableName);
+        $hasEditPermissionForForeignTable = $this->isRecordChangingAllowed($foreignTableName);
         foreach ($mltRecords as $mltRecord) {
             $recordId = $mltRecord['id'];
             $currentGroup = $mltRecord['group'];
@@ -93,10 +92,14 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             }
 
             $escapedRecordId = TGlobal::OutHTML($recordId);
+
+            $escapedId = $sEscapedNameField.'_'.$escapedRecordId;
+
             $html .= '<div class="checkboxDIV">';
-            $html .= '<label style="float: left;">';
-            $html .= "<input type=\"checkbox\" class=\"checkbox\" name=\"{$sEscapedNameField}[$escapedRecordId]\" value=\"$escapedRecordId\" id=\"{$sEscapedNameField}[]\" {$checked} {$disabled} />".TGlobal::OutHTML($displayValue);
-            $html .= '</label>';
+            $html .= '<div class="form-check form-check-inline">
+                          <input class="form-check-input" type="checkbox" name="'.$sEscapedNameField.'['.$escapedRecordId.']" value="'.$escapedRecordId.'" id="'.$escapedId.'" '.$checked.' '.$disabled.'>
+                          <label class="form-check-label" for="'.$escapedId.'">'.TGlobal::OutHTML($displayValue).'</label>
+                      </div>';
 
             if ($hasEditPermissionForForeignTable) {
                 $url = $urlUtil->getArrayAsUrl(
@@ -106,10 +109,9 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
                     ),
                     PATH_CMS_CONTROLLER.'?'
                 );
-                $html .= "<div style=\"float: right;\"><a href=\"$url\"><img src=\"".URL_CMS.'/images/icons/page_edit.gif" border="0"></a></div>';
+                $html .= "<div class=\"float-right\"><a href=\"$url\"><img src=\"".URL_CMS.'/images/icons/page_edit.gif" border="0"></a></div>';
             }
 
-            $html .= "\n<div class=\"cleardiv\">&nbsp;</div>\n";
             $html .= '</div>';
         }
 
@@ -117,6 +119,28 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
       </div>';
 
         return $html;
+    }
+
+    protected function isRecordCreationAllowed(string $foreignTableName): bool
+    {
+        $activeUser = TCMSUser::GetActiveUser();
+
+        if (null === $activeUser) {
+            return false;
+        }
+
+        return true === $activeUser->oAccessManager->HasNewPermission($foreignTableName);
+    }
+
+    protected function isRecordChangingAllowed(string $foreignTableName): bool
+    {
+        $activeUser = TCMSUser::GetActiveUser();
+
+        if (null === $activeUser) {
+            return false;
+        }
+
+        return true === $activeUser->oAccessManager->HasEditPermission($foreignTableName);
     }
 
     /**

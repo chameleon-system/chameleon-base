@@ -45,6 +45,11 @@ _errors:
 The system now uses Twig 2.x. Please have a look at the Twig changelog for required adjustments, but major problems are
 not expected.
 
+## Mailer Peer Security
+
+The default value of config key `chameleon_system_core: mailer: peer_security` was changed from "permissive" to "strict".
+Using this setting SMTP connections verify SSL/TLS certificate validity so that invalid or self-signed certificates are rejected.
+
 ## DoctrineBundle
 
 We now use the DoctrineBundle. While we do not use many of its features yet (especially no ORM mapping), initializing
@@ -165,3 +170,80 @@ None.
 ## Database Fields
 
 None.
+
+## Backend Theme Library
+
+The Backend was upgraded to Bootstrap 4.1.3.
+
+See the [Bootstrap Migration Guide](https://getbootstrap.com/docs/4.1/migration/) for needed changes to your backend modules.
+
+During the upgrade to Bootstrap 4 the following styles where checked and these are our findings:
+
+btn-default -> btn-secondary
+- Some TCMSField types and TCMSTableEditors so check yours.
+
+.pull-left -> .float-left
+- TCMSFieldDocument
+- TCMSFieldDocumentProperties
+- TCMSFieldMediaProperties
+- TCMSFieldModuleInstance
+- MTHeader
+- header navigation
+- footer
+- Added CSS class migration in TCMSRender::DrawButton method for backwards compatibility
+
+.input-sm -> .form-control-sm
+- Almost all TCMSField classes and Twig templates
+- Some list managers
+- Some TCMSTableEditor classes
+
+.table-condensed -> .table-sm
+- TCMSFieldDocumentProperties
+- TCMSFieldMediaProperties
+- TFullGroupTable
+
+New: .page-item + .page-link
+- Pagination in TFullGroupTable
+
+.pull-rigt -> .float-right
+- TFullGroupTable
+- MTHeader
+- MTTableditor
+
+.input-group-addon -> .input-group-append
+- Field types using the text length counter addon (varchar)
+
+.navbar-default -> .navbar-light
+- TCMSTableManager and the layout manager iframes
+
+.navbar-toggle -> .navbar-toggler
+- header navbar
+
+.col-md-* -> .col-lg-*
+- header
+- login
+
+Not found anywhere (so you might want to skip this search, too):
+- well
+- thumbnail
+- list-line
+- page-header
+- dl-horizontal
+- blockquote
+- btn-xs
+- btn-group-justified
+- btn-group-xs
+- breadcrumb
+- center-block
+- img-responsive
+- img-rounded
+- form-horizontal
+- radio
+- checkbox
+- input-lg
+- control-label 
+- hidden/visible-xs, sm, md, lg
+- label
+- navbar-form
+- navbar-btn
+- progress-bar*

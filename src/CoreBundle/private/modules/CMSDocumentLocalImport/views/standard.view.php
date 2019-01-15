@@ -11,7 +11,7 @@ if (!empty($data['errorMessage'])) {
         <input type="hidden" name="pagedef" value="CMSDocumentLocalImport"/>
         <input type="hidden" name="nodeID" value="<?=$data['nodeID']; ?>"/>
         <input type="hidden" name="module_fnc[contentmodule]" value="ImportFiles"/>
-        <select name="directory">
+        <select name="directory" class="form-control form-control-sm">
             <?php
             foreach ($data['dirListing'] as $aDir) {
                 $sValue = $aDir['directory'];

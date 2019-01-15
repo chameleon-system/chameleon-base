@@ -245,7 +245,7 @@ class TFullGroupTable extends TGroupTable
      *
      * @var string
      */
-    protected $tableCSS = 'table table-condensed table-striped table-bordered table-hover TCMSListManagerFullGroupTable';
+    protected $tableCSS = 'table table-sm table-striped table-bordered table-hover TCMSListManagerFullGroupTable';
 
     public function TFullGroupTable($postData = array())
     {
@@ -697,16 +697,17 @@ class TFullGroupTable extends TGroupTable
             document.'.$this->listName.'.submit();
         }
         </script>
-        <div>';
+        <div class="row">';
+        $tableNavigation .= '<nav class="col-auto mr-auto">';
         $tableNavigation .= '<ul class="pagination pagination-md TFullGroupTablePagination">';
-        $tableNavigation .= '<li class="disabled"><a href="#"><span class="glyphicon glyphicon-list" aria-hidden="true" style="margin-right: 5px;"></span>'.$hitText.'</a></li>';
+        $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><span class="glyphicon glyphicon-list" aria-hidden="true" style="margin-right: 5px;"></span>'.$hitText.'</a></li>';
 
         if ($this->startRecord > 0 && -1 != $this->showRecordCount) {
-            $tableNavigation .= '<li><a href="javascript:switchPage(\'0\');"><span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span></a></li>';
-            $tableNavigation .= '<li><a href="javascript:switchPage(\''.$back_startValue.'\');"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></a></li>';
+            $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\'0\');" class="page-link"><span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span></a></li>';
+            $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\''.$back_startValue.'\');" class="page-link"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></a></li>';
         } else {
-            $tableNavigation .= '<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span></a></li>';
-            $tableNavigation .= '<li class="disabled"><a href="#"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></a></li>';
+            $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span></a></li>';
+            $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></a></li>';
         }
 
         $recordsPerPage = $this->showRecordCount;
@@ -736,28 +737,30 @@ class TFullGroupTable extends TGroupTable
         for ($i = $pagingStartPage; ($i < $pageCount && $i <= ($maxPagingElements + $pagingStartPage)); ++$i) {
             $active = '';
             if ($i == $currentPage) {
-                $active = ' class="active"';
+                $active = 'active';
             }
 
-            $tableNavigation .= '<li'.$active."><a href=\"javascript:switchPage('".($i * $recordsPerPage)."');\">".($i + 1)."</a></li>\n";
+            $tableNavigation .= '<li class="page-item '.$active.'"><a href="javascript:switchPage(\''.($i * $recordsPerPage).'\');" class="page-link">'.($i + 1).'</a></li>';
         }
 
         if (($this->startRecord + $this->showRecordCount) < $this->recordCount && -1 != $this->showRecordCount) {
-            $tableNavigation .= '<li><a href="javascript:switchPage(\''.$next_startValue.'\');"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></a></li>';
-            $tableNavigation .= '<li><a href="javascript:switchPage(\''.(($pageCount - 1) * $recordsPerPage).'\');"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span></a></li>';
+            $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\''.$next_startValue.'\');" class="page-link"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></a></li>';
+            $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\''.(($pageCount - 1) * $recordsPerPage).'\');" class="page-link"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span></a></li>';
         } else {
-            $tableNavigation .= '<li class="disabled"><a href="#"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></a></li>';
-            $tableNavigation .= '<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span></a></li>';
+            $tableNavigation .= '<li class="page-item disabled"><a href="#" class="page-link"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></a></li>';
+            $tableNavigation .= '<li class="page-item disabled"><a href="#" class="page-link"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span></a></li>';
         }
 
         $tableNavigation .= '
             </ul>';
+        $tableNavigation .= '</nav>';
 
         if ($this->showRowsPerPageChooser) {
-            $tableNavigation .= '<div class="form-group pull-right form-inline TFullGroupTablePerPageSelect">
-            <label>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_records_per_page'))."
-            <select name=\"_limit\" class=\"form-control input-sm\" onChange=\"document.{$this->listName}._startRecord.value=0;document.{$this->listName}.submit();\">
-            </label>";
+            $tableNavigation .= '<div class="col-auto form-group TFullGroupTablePerPageSelect">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend"><span class="input-group-text">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_records_per_page')).'</span></div>
+                <select name="_limit" class="form-control" onChange="document.'.$this->listName.'._startRecord.value=0;document.'.$this->listName.'.submit();">
+            ';
 
             $userCount = $this->showRecordCount;
             if (!empty($this->_postData['_limit'])) {
@@ -775,6 +778,7 @@ class TFullGroupTable extends TGroupTable
             }
 
             $tableNavigation .= '</select>
+            </div>
             </div>';
         }
 
@@ -862,8 +866,8 @@ class TFullGroupTable extends TGroupTable
         if ($this->showSearchBox) {
             $this->somethingToShow = true;
             $filterContent .= '<div class="form-group">';
-            $filterContent .= '<input type="text" class="form-control input-sm" name="_search_word" value="'.TGlobal::OutHTML($this->_postData['_search_word'])."\" onKeyDown=\"if (window.event && window.event.keyCode == 13) document.{$this->listName}._startRecord.value=0\" onChange=\"document.{$this->listName}._startRecord.value=0;document.{$this->listName}.submit();\" placeholder=\"".$this->searchFieldText."\">\n";
-            $filterContent .= "<input type=\"button\" class=\"form-control input-sm btn-sm btn-primary\" value=\"{$this->searchButtonText}\" onClick=\"document.{$this->listName}._startRecord.value=0;document.{$this->listName}.submit();\" class=\"btn btn-sm btn-primary\">
+            $filterContent .= '<input type="text" class="form-control form-control-sm" name="_search_word" value="'.TGlobal::OutHTML($this->_postData['_search_word'])."\" onKeyDown=\"if (window.event && window.event.keyCode == 13) document.{$this->listName}._startRecord.value=0\" onChange=\"document.{$this->listName}._startRecord.value=0;document.{$this->listName}.submit();\" placeholder=\"".$this->searchFieldText."\">\n";
+            $filterContent .= "<input type=\"button\" class=\"form-control form-control-sm btn-sm btn-primary\" value=\"{$this->searchButtonText}\" onClick=\"document.{$this->listName}._startRecord.value=0;document.{$this->listName}.submit();\" class=\"btn btn-sm btn-primary\">
             </div>";
         }
 

@@ -34,7 +34,7 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
             $translator = $this->getTranslator();
             $sHTML .= $translator->trans('chameleon_system_core.field_tree_page_assignment.already_linked_pages', array(), \ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND);
         } else {
-            $sHTML .= '<select name="'.TGlobal::OutHTML($this->name)."_pagedef\" class=\"form-control input-sm\">\n";
+            $sHTML .= '<select name="'.TGlobal::OutHTML($this->name)."_pagedef\" class=\"form-control form-control-sm\">\n";
             $sHTML .= $this->GetPagedefSelectionOptions();
             $sHTML .= '</select>';
         }

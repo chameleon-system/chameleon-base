@@ -119,7 +119,7 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->enumNode('peer_security')
                 ->values(array('strict', 'permissive'))
-                ->defaultValue('permissive')
+                ->defaultValue('strict')
             ->end()
         ->end();
 

@@ -98,9 +98,9 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     {
         $oTableConf = new TCMSTableConf();
         $oTableConf->LoadFromField('name', 'cms_tpl_module_instance');
-        $html = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.select_instance'), 'javascript:'.$this->_GetOpenWindowJS($oTableConf).'', URL_CMS.'/images/icons/box.gif', 'pull-left');
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.reset_spot'), "javascript:ResetModuleInstance('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."')", URL_CMS.'/images/icons/action_stop.gif', 'pull-left button-spacing');
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.create_or_edit_instance'), '#', URL_CMS.'/images/icons/add.png', 'pull-left button-spacing', null, $this->name.'NewInstanceButton');
+        $html = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.select_instance'), 'javascript:'.$this->_GetOpenWindowJS($oTableConf).'', URL_CMS.'/images/icons/box.gif', 'float-left');
+        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.reset_spot'), "javascript:ResetModuleInstance('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."')", URL_CMS.'/images/icons/action_stop.gif', 'float-left button-spacing');
+        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.create_or_edit_instance'), '#', URL_CMS.'/images/icons/add.png', 'float-left button-spacing', null, $this->name.'NewInstanceButton');
 
         return $html;
     }

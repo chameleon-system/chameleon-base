@@ -219,9 +219,6 @@ class FieldTranslationUtil
         if (false === $fieldConf->sqlData) {
             throw new InvalidArgumentException("Field with ID '$fieldId' not found.");
         }
-        if ($fieldConf->fieldIsTranslatable === $translatable) {
-            return;
-        }
 
         $translatableString = $translatable ? '1' : '0';
         $tableEditorManager = TTools::GetTableEditorManager('cms_field_conf', $fieldId);

@@ -31,6 +31,6 @@ class TCMSMenuItem_Table extends TCMSMenuItem
             $titleAttribute = ' title="'.TGlobal::OutHTML($this->data['notes']).'"';
         }
 
-        return '<a href="'.PATH_CMS_CONTROLLER.'?pagedef=tablemanager&amp;id='.urlencode($this->data['id'])."\"{$iconStyle}{$titleAttribute}><span style=\"{$rightIconStyle}\">".TGlobal::OutHTML($this->data['translation']).'</span></a>';
+        return '<a class="nav-link" href="'.PATH_CMS_CONTROLLER.'?pagedef=tablemanager&amp;id='.urlencode($this->data['id'])."\"{$iconStyle}{$titleAttribute}><span style=\"{$rightIconStyle}\">".TGlobal::OutHTML($this->data['translation']).'</span></a>';
     }
 }

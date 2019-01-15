@@ -34,7 +34,7 @@
             <h4>{{'chameleon_system_core.cms_module_wysiwyg_image.action_new_file'|trans}}</h4>
             <form method="post" action="" id="uploadForm" name="uploadForm" accept-charset="UTF-8" class="form-inline" role="form">
                 <div>
-                    <select name="treeNodeUploadFormTreeID" id="treeNodeUploadFormTreeID" class="form-control input-sm" onchange="$('#currentDirectory').html('<strong>{{"chameleon_system_core.cms_module_wysiwyg_image.form_target_folder"|trans}}</strong><br />' + this.options[this.selectedIndex].title);">
+                    <select name="treeNodeUploadFormTreeID" id="treeNodeUploadFormTreeID" class="form-control form-control-sm" onchange="$('#currentDirectory').html('<strong>{{"chameleon_system_core.cms_module_wysiwyg_image.form_target_folder"|trans}}</strong><br />' + this.options[this.selectedIndex].title);">
                         <option value="">{{"chameleon_system_core.cms_module_wysiwyg_image.form_target_folder_no_selection"|trans}}</option>
                         {{mediaTreeSelectBox|raw}}
                     </select>

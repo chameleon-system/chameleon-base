@@ -11,7 +11,7 @@
     <form name="searchbuildform" id="searchbuildform" method="post" accept-charset="UTF-8">
         <input type="hidden" name="pagedef" value="CMSCreateSearchIndexPlain"/>
         <input type="hidden" name="module_fnc[<?=$data['sModuleSpotName']; ?>]" value="BuildIndex"/>
-        <select name="cms_portal_id" id="cms_portal_id">
+        <select name="cms_portal_id" id="cms_portal_id" class="form-control form-control-sm">
             <?=$data['portalOptions']; ?>
         </select>
     </form>

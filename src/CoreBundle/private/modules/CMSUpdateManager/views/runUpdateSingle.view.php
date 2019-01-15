@@ -31,7 +31,7 @@ $bundlesWithUpdates = array_keys($updatesByBundle);
                             <?= $translator->trans('chameleon_system_core.cms_module_update.single_update_select_bundle_label'); ?>&nbsp;
                         </div>
                         <div>
-                             <select id="singleUpdateSelectBundle">
+                             <select id="singleUpdateSelectBundle" class="form-control form-control-sm">
                                  <option value="NULL"><?=$translator->trans('chameleon_system_core.cms_module_update.single_update_select_bundle'); ?></option>
                                 <?php
                                     foreach ($bundlesWithUpdates as $bundleName) {
@@ -46,7 +46,7 @@ $bundlesWithUpdates = array_keys($updatesByBundle);
                             <?= $translator->trans('chameleon_system_core.cms_module_update.single_update_select_file'); ?>&nbsp;
                         </div>
                         <div>
-                            <select id="singleUpdateSelectFile" disabled="disabled">
+                            <select id="singleUpdateSelectFile" disabled="disabled" class="form-control form-control-sm">
                                 <option value="NULL"><?=$translator->trans('chameleon_system_core.cms_module_update.single_update_select_bundle_first'); ?></option>
                             </select>
                         </div>
@@ -67,7 +67,7 @@ $bundlesWithUpdates = array_keys($updatesByBundle);
             <a class="btn disabled" href="#" id="btnRunUpdates" data-loading-text="<?=$translator->trans('chameleon_system_core.cms_module_update.action_update'); ?>"><?=$translator->trans('chameleon_system_core.cms_module_update.action_update'); ?></a>
             <div id="ajaxTimeoutContainer">
                 <label for="ajaxTimeoutSelect"><?=$translator->trans('chameleon_system_core.cms_module_update.select_ajax_timeout'); ?>: </label>
-                <select id="ajaxTimeoutSelect">
+                <select id="ajaxTimeoutSelect" class="form-control form-control-sm">
                     <option value="120"><?=TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.ajax_timeout', array('%minutes%' => 120))); ?></option>
                 </select>
             </div>
