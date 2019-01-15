@@ -54,7 +54,7 @@ class TCMSFieldLookup extends TCMSField
         }
 
         $viewRenderer = $this->getViewRenderer();
-        $viewRenderer = $this->addFieldRenderVariables($viewRenderer);
+        $this->addFieldRenderVariables($viewRenderer);
 
         // current ID is an orphan, show message
         if (!empty($this->data) && false === $connectedRecord) {
@@ -64,7 +64,7 @@ class TCMSFieldLookup extends TCMSField
         return $viewRenderer->Render('TCMSFieldLookup/fieldLookup.html.twig', null, false);
     }
 
-    private function addFieldRenderVariables(ViewRenderer $viewRenderer): ViewRenderer
+    private function addFieldRenderVariables(ViewRenderer $viewRenderer): void
     {
         $sClass = '';
         $sOnChangeAttr = '';
@@ -88,8 +88,6 @@ class TCMSFieldLookup extends TCMSField
             $viewRenderer->AddSourceObject('buttonLink', $this->GoToRecordJS());
         }
         $viewRenderer->AddSourceObject('connectedRecordId', $this->data);
-
-        return $viewRenderer;
     }
 
     /**
