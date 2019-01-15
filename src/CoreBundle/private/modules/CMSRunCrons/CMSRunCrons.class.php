@@ -142,10 +142,9 @@ class CMSRunCrons extends TModelBase
         return $this->getCronjobFactory()->constructCronJob($oTdbCmsCronJob->sqlData['cron_class'], $oTdbCmsCronJob->sqlData);
     }
 
-    // NOTE there is also logic for this in TCMSCronjob::AddMessageOutput() - which doesn't consider translation keys or errors
     private function displayError(string $errorMessage): void
     {
-        $this->data['sMessageOutput'] = sprintf('<div style="color: red">%s</div>', $errorMessage);
+        $this->data['sMessageOutput'] = $errorMessage;
     }
 
     /**
