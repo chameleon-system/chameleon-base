@@ -14,7 +14,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 class TCMSFieldLookupFieldTypes extends TCMSFieldLookup
 {
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - moved to array fieldHelpTexts
      *
      * @var string
      */
