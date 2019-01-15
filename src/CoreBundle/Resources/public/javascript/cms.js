@@ -286,8 +286,6 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
         $('#modalDialog .modal-body').html(content);
     });
 
-    console.log(height);
-
     if (typeof height === 'undefined' || height < 300) {
         height = window.innerHeight-150;
     }
@@ -307,7 +305,7 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
  */
 function CreateModalIFrameDialog(url, width, height, title, isDraggable, isResizable) {
     url = CMSAddGlobalParametersToURL(url);
-    var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="100%" height="100%" frameborder="0"></iframe>';
+    var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="99%" height="100%" frameborder="0"></iframe>';
     CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
 }
 

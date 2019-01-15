@@ -132,6 +132,23 @@ The modal uses CSS classes for the size. If not really necessary the modal is al
 To be backwards compatible the size classes are determined using CHAMELEON.CORE.getModalSizeClassByPixel().
 You should remove all width/height settings in CreateModalXY calls if it does not necessarily render smaller.
 
+- $.jBreadCrumb()
+- $.bgiframe()
+- $.jqM() (jqModal)
+- $.jqDnR() (part of jqModal)
+- $.addOption() (jquery.selectboxes plugin)
+
+## jQueryUi
+
+jQueryUi is replaced everywhere in the code.
+The only exception is drag&drop functionality in the template engine for module spot placing and reordering of elements
+using TCMSFieldPosition.
+
+Deprecated is every jquery plugin in: 
+
+/Resources/public/javascript/jquery/jQueryUI/
+
+
 ## Translations
 
 - chameleon_system_core.field_options.option_value_true
