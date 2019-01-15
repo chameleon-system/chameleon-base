@@ -31,12 +31,12 @@ class TCMSMenuItem_Module extends TCMSMenuItem
             $url = "javascript:CreateModalIFrameDialogCloseButton('".$url."',".TGlobal::OutHTML($this->data['width']).','.TGlobal::OutHTML($this->data['height']).');';
         }
 
-        $iconStyle = '';
-        $rightIconStyle = 'padding-left: 20px;';
-        if (array_key_exists('icon_list', $this->data) && !empty($this->data['icon_list'])) {
-            $iconStyle = ' style="background-image: url('.URL_CMS.'/images/icons/'.$this->data['icon_list'].'); background-repeat: no-repeat; background-position: left center; line-height: 17px;"';
+        if (array_key_exists('icon_font_awesome', $this->data) && !empty($this->data['icon_font_awesome'])) {
+            $icon = $this->data['icon_font_awesome'];
+        } else {
+            $icon = 'fas fa-sign-out-alt'; //standard icon
         }
 
-        return '<a class="nav-link" href="'.$url.'" title="'.$this->data['name']."\"{$iconStyle}><span style=\"{$rightIconStyle}\">".$this->data['name'].'</span></a>';
+        return '<a class="nav-link-fa" href="'.$url.'"><i class="'.$icon.'"></i><span>'. TGlobal::OutHTML($this->data['name']).'</span></a>';
     }
 }
