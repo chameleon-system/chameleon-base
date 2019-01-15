@@ -112,7 +112,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         if (!empty($sRestrictToModule)) {
             $url .= '&amp;sModuleRestriction='.urlencode($sRestrictToModule);
         }
-        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."','900','640');";
+        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."');";
 
         return $js;
     }

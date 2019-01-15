@@ -46,7 +46,7 @@ $translator = ServiceLocator::get('translator');
                         $windowTitle = $translator->trans('chameleon_system_core.cms_module_page_tree.headline');
                         $fieldName = 'mainNavNavi';
                         $url = PATH_CMS_CONTROLLER.'?pagedef=CMSModulePageTreePlain&table=cms_tpl_page&noassign=1&rootID='.$data['startTreeID'];
-                        $naviJS = "CreateModalIFrameDialogCloseButton('".$url."',950,690,'".$windowTitle."');"; ?>
+                        $naviJS = "CreateModalIFrameDialogCloseButton('".$url."',0,0,'".$windowTitle."');"; ?>
                         <li class="nav-item"><a href="javascript:<?=$naviJS; ?>" class="nav-link" data-toggle="tooltip" data-placement="bottom" title="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_edit_navigation_help')); ?>"><span class="glyphicon glyphicon-leaf"></span> &nbsp;<?php echo TGlobal::Translate('chameleon_system_core.cms_module_header.action_edit_navigation'); ?></a></li>
                     <?php
                     } ?>

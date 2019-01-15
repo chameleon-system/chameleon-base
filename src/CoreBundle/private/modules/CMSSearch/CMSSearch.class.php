@@ -65,11 +65,10 @@ class CMSSearch extends TModelBase
          </script>
         <meta http-equiv="Content-Language" content="de" />
         <link href="/chameleon/blackbox/themes/standard/css/layout.css" rel="stylesheet" type="text/css" />
-        <link href="/chameleon/blackbox/themes/standard/css/global.css" rel="stylesheet" type="text/css" />
         <link href="/chameleon/blackbox/bootstrap/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="'.TGlobal::GetPathTheme().'/coreui/css/coreui-standalone.min.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="/chameleon/blackbox/themes/standard/css/global.css" rel="stylesheet" type="text/css" />             
         <link href="/chameleon/blackbox/bootstrap/css/glyph-icons.css" media="screen" rel="stylesheet" type="text/css" />
-        
       </head>
        <body style="background-color: #fff;">
          <div style="padding: 10px 0px 10px 0px;">

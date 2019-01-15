@@ -125,7 +125,7 @@ function CleanDelete() {
  *
  */
 function UploadFiles(selectedNodeID) {
-    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSUniversalUploader&amp;mode=document&amp;queueCompleteCallback=queueCompleteCallback&amp;treeNodeID=' + selectedNodeID, 700, 550, 'Upload');
+    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSUniversalUploader&amp;mode=document&amp;queueCompleteCallback=queueCompleteCallback&amp;treeNodeID=' + selectedNodeID, 0, 0, 'Upload');
 
     //refresh parent header
     RefreshOpenerHeader();
@@ -138,7 +138,7 @@ function UploadFiles(selectedNodeID) {
  *
  */
 function UploadFilesFromLocal(selectedNodeID) {
-    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSDocumentLocalImport&amp;nodeID=' + selectedNodeID, 650, 500, 'FTP Import');
+    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSDocumentLocalImport&amp;nodeID=' + selectedNodeID, 0, 0, 'FTP Import');
 
     //refresh parent header
     RefreshOpenerHeader();

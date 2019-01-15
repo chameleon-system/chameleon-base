@@ -53,7 +53,7 @@ function ShowUsagesResponse(data, responseMessage) {
 }
 
 function ShowUsageDialog(index, _connectedDataHTML) {
-    CreateModalIFrameDialogFromContentWithoutClose(_connectedDataHTML[index], 700, 600, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.table_editor.usages'));
+    CreateModalIFrameDialogFromContent(_connectedDataHTML[index], 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.table_editor.usages'));
 }
 
 function ExecutePostCommand(command) {
@@ -69,7 +69,7 @@ function ExecutePostCommand(command) {
         window.onbeforeunload = function () {
         };
         // reattach the message binding
-        SetChangedDataMessage();
+        CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
     }
     CHAMELEON.CORE.showProcessingModal();
     document.cmseditform.submit();
@@ -378,7 +378,7 @@ function loadPositionList(tableID, tableSQLName, fieldName, recordID, sRestricti
     url += '&sRestriction=' + sRestriction;
     url += '&sRestrictionField=' + sRestrictionField;
 
-    CreateModalIFrameDialogCloseButton(url, 500, 550, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
+    CreateModalIFrameDialogCloseButton(url, 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
 }
 
 /*
@@ -391,7 +391,7 @@ function loadMltPositionList(tableSQLName, sRestriction, sRestrictionField) {
     url += '&sRestriction=' + sRestriction;
     url += '&sRestrictionField=' + sRestrictionField;
 
-    CreateModalIFrameDialogCloseButton(url, 500, 550, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
+    CreateModalIFrameDialogCloseButton(url, 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
 }
 
 /*
@@ -559,7 +559,7 @@ function SaveViaAjaxCallback(data, statusText) {
                     window.onbeforeunload = function () {
                     };
                     // reattach the message binding
-                    SetChangedDataMessage();
+                    CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
                 }
 
 
@@ -569,7 +569,7 @@ function SaveViaAjaxCallback(data, statusText) {
             window.onbeforeunload = function () {
             };
             // reattach the message binding
-            SetChangedDataMessage();
+            CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
             if (data.message && data.message != '') {
                 toasterMessage(data.message, 'MESSAGE');
             }
@@ -799,10 +799,20 @@ CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent = function (selector) {
     });
 };
 
-$(document).ready(function () {
+CHAMELEON.CORE.MTTableEditor.initInputChangeObservation = function () {
     $("input:text,input:checkbox,input:radio,textarea,select,input:hidden",$("#cmseditform")).not(".cmsdisablechangemessage").one("change",function() {
         CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
     });
+};
 
+/**
+ * @deprecated since 6.3.0 - use CHAMELEON.CORE.MTTableEditor.initInputChangeObservation(); instead
+ */
+function SetChangedDataMessage() {
+    CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
+}
+
+$(document).ready(function () {
+    CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
     CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent('label.switch input[type=checkbox]');
 });

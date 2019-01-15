@@ -45,7 +45,7 @@ class TCMSFieldDocument extends TCMSFieldLookup
     public function _GetOpenWindowJS()
     {
         $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSDocumentSelect', 'documentfieldname' => $this->name, 'tableid' => $this->oTableConf->id, 'id' => $this->recordId));
-        $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($this->name)."');CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."',991,650);";
+        $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($this->name)."');CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."');";
 
         return $js;
     }
@@ -72,7 +72,7 @@ class TCMSFieldDocument extends TCMSFieldLookup
         $html = "<script type=\"text/javascript\">
       function OpenUploadWindow(documentTreeID) {
         if(documentTreeID !== '') {
-          CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."' + documentTreeID,560,500);
+          CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."' + documentTreeID);
         } else {
           toasterMessage('".TGlobal::Translate('chameleon_system_core.field_document.error_missing_target').".','ERROR');
         }

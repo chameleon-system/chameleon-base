@@ -506,7 +506,7 @@ class CMSTemplateEngine extends TCMSModelBase
         if ('cmp_loadmoduleinstance' == $this->aModuleConfig['view']) {
             $aIncludes[] = "<script type=\"text/javascript\">
       function openModuleViewChooseDialog() {
-        CreateModalDialogFromContainer('chooseModuleViewDialog',400,180);
+        CreateModalDialogFromContainer('chooseModuleViewDialog');
       }
 
 

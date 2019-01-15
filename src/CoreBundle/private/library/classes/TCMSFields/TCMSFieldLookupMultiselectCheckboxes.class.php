@@ -60,7 +60,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
                 'sRestrictionField' => $this->sTableName.'_mlt',
             ), PATH_CMS_CONTROLLER.'?', '&');
 
-            $html .= "<a href=\"javascript:parent.CreateModalIFrameDialogCloseButton('".$sSortUrl."',600,400,'".TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.sort')."');\" class=\"checkBoxHeaderActionLink\" style=\"margin-left: 10px; background: url(".URL_CMS.'/images/icons/application_cascade.png) 0px 3px no-repeat;">'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.sort').'</a>';
+            $html .= "<a href=\"javascript:parent.CreateModalIFrameDialogCloseButton('".$sSortUrl."',0,0,'".TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.sort')."');\" class=\"checkBoxHeaderActionLink\" style=\"margin-left: 10px; background: url(".URL_CMS.'/images/icons/application_cascade.png) 0px 3px no-repeat;">'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.sort').'</a>';
         }
         $html .= '<div class="cleardiv">&nbsp;</div>
         </div>

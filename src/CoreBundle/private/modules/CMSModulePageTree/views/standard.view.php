@@ -27,7 +27,7 @@
         var nodeID = $(node).attr('esrealid');
         currentNodeID = nodeID; // save node ID in global var
         var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('tableid' => $data['treeTableID'], 'pagedef' => 'tableeditorPopup')); ?>&id=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url, 850, 610);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     /**
@@ -38,7 +38,7 @@
         var nodeID = $(node).attr('esrealid');
         currentNodeID = nodeID; // save node ID in global var
         var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('tableid' => $data['treeTableID'], 'pagedef' => 'tableeditorPopup', 'module_fnc' => array('contentmodule' => 'Insert'))); ?>&parent_id=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url, 850, 610);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     /**
@@ -76,7 +76,7 @@
     function openPageConnectionList(node) {
         var nodeID = $(node).attr('esrealid');
         var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('id' => $data['treeNodeTableID'], 'pagedef' => 'tablemanagerframe', 'sRestrictionField' => 'cms_tree_id')); ?>&sRestriction=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url, 820, 660);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     function assignPage(node) {
@@ -85,7 +85,7 @@
     echo $data['dataID'];
 } ?>';
         var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('tableid' => $data['treeNodeTableID'], 'pagedef' => 'tableeditorPopup', 'sRestrictionField' => 'cms_tree_id', 'module_fnc' => array('contentmodule' => 'Insert'), 'active' => '1', 'preventTemplateEngineRedirect' => '1')); ?>&sRestriction=' + nodeID + '&contid=' + assignedDataID + '&cms_tree_id=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url, 820, 660);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     /**

@@ -81,7 +81,7 @@ $menuPrefix = $oField->name;
                 message += '<a href="<?=$sPageEditURL; ?>&id=' + data[i].id + '" target="_parent" class="actionButton"><?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_page_tree.action_edit_page')); ?></a><hr width="95%" />';
                 message += '</div>';
             }
-            CreateModalIFrameDialogFromContent(message, 550, 350);
+            CreateModalIFrameDialogFromContent(message);
         } else if (data) {
             $('#' + data).val('0');
             $('#' + data + '_view').val(' ');

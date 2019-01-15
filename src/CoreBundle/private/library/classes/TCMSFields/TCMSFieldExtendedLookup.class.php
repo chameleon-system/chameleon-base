@@ -143,7 +143,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         $translator = $this->getTranslationService();
         $sWindowTitle = $translator->trans('chameleon_system_core.field_lookup.select_item', array(), 'admin');
 
-        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sURL)."','780','550','".$sWindowTitle."');return false;";
+        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sURL)."',0,0,'".$sWindowTitle."');return false;";
 
         return $js;
     }
