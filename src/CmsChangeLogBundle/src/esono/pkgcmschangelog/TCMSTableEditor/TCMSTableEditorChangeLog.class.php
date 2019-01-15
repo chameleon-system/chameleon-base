@@ -170,7 +170,11 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
             }
 
             $newField = clone $newField;
-            $newField->data = $newField->ConvertPostDataToSQL();
+            if ($newField instanceof TCMSMLTField) {
+                $newField->data = $newField->getMltValues();
+            } else {
+                $newField->data = $newField->ConvertPostDataToSQL();
+            }
 
             if (is_array($oldField->data)) {
                 if (isset($oldField->data['x']) && '-' === $oldField->data['x']) {
