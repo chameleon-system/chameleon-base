@@ -286,7 +286,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
               $('#tooltipcms_portal_id_content').parent('td').prepend('<input type=\"hidden\" name=\"cms_portal_id\" id=\"cms_portal_id\" value=\"' + portalID + '\" />' + portalName);
               $('#tooltipcms_portal_id_content').siblings('.switchToRecordBox').remove();
             }
-            CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=treenodeselect&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID,400,500);
+            CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=treenodeselect&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID);
           } else {
             toasterMessage('".TGlobal::Translate('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
           }
@@ -300,14 +300,14 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
               $('#cms_portal_id').remove();
               $('#tooltipcms_portal_id_content').parent('td').prepend('<input type=\"hidden\" name=\"cms_portal_id\" id=\"cms_portal_id\" value=\"' + portalID + '\" />' + portalName);
               $('#tooltipcms_portal_id_content').siblings('.switchToRecordBox').remove();
-              CreateModalIFrameDialogCloseButton('".$url."',900,650,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
+              CreateModalIFrameDialogCloseButton('".$url."',0,0,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
             } else {
               toasterMessage('".TGlobal::Translate('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
             }
           } else {
             var portalID = document.getElementById('cms_portal_id').value;
             if(portalID != '0' && portalID != '') {
-              CreateModalIFrameDialogCloseButton('".$url."',900,650,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
+              CreateModalIFrameDialogCloseButton('".$url."',0,0,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
             } else {
               toasterMessage('".TGlobal::Translate('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
             }

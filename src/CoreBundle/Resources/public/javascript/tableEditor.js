@@ -53,7 +53,7 @@ function ShowUsagesResponse(data, responseMessage) {
 }
 
 function ShowUsageDialog(index, _connectedDataHTML) {
-    CreateModalIFrameDialogFromContentWithoutClose(_connectedDataHTML[index], 700, 600, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.table_editor.usages'));
+    CreateModalIFrameDialogFromContent(_connectedDataHTML[index], 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.table_editor.usages'));
 }
 
 function ExecutePostCommand(command) {
@@ -69,9 +69,9 @@ function ExecutePostCommand(command) {
         window.onbeforeunload = function () {
         };
         // reattach the message binding
-        SetChangedDataMessage();
+        CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
     }
-    CHAMELEON.CORE.processingDialog('show');
+    CHAMELEON.CORE.showProcessingModal();
     document.cmseditform.submit();
 }
 
@@ -378,7 +378,7 @@ function loadPositionList(tableID, tableSQLName, fieldName, recordID, sRestricti
     url += '&sRestriction=' + sRestriction;
     url += '&sRestrictionField=' + sRestrictionField;
 
-    CreateModalIFrameDialogCloseButton(url, 500, 550, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
+    CreateModalIFrameDialogCloseButton(url, 700, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
 }
 
 /*
@@ -391,7 +391,7 @@ function loadMltPositionList(tableSQLName, sRestriction, sRestrictionField) {
     url += '&sRestriction=' + sRestriction;
     url += '&sRestrictionField=' + sRestrictionField;
 
-    CreateModalIFrameDialogCloseButton(url, 500, 550, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
+    CreateModalIFrameDialogCloseButton(url, 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
 }
 
 /*
@@ -559,7 +559,7 @@ function SaveViaAjaxCallback(data, statusText) {
                     window.onbeforeunload = function () {
                     };
                     // reattach the message binding
-                    SetChangedDataMessage();
+                    CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
                 }
 
 
@@ -569,7 +569,7 @@ function SaveViaAjaxCallback(data, statusText) {
             window.onbeforeunload = function () {
             };
             // reattach the message binding
-            SetChangedDataMessage();
+            CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
             if (data.message && data.message != '') {
                 toasterMessage(data.message, 'MESSAGE');
             }
@@ -588,7 +588,7 @@ function SaveViaAjaxCallback(data, statusText) {
 }
 
 function Save() {
-    CHAMELEON.CORE.processingDialog('show');
+    CHAMELEON.CORE.showProcessingModal();
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'Save';
     document.cmseditform.submit();
 }
@@ -706,28 +706,29 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
     if (confirm(sConfirmText)) {
         window.onbeforeunload = function () {
         };
-        CHAMELEON.CORE.processingDialog('show');
+        CHAMELEON.CORE.showProcessingModal();
         document.cmseditform.elements['module_fnc[contentmodule]'].value = 'Delete';
         document.cmseditform.submit();
     }
 };
 
 $(document).ready(function () {
-    CHAMELEON.CORE.MTTableEditor.setGetActiveTab();
-    CHAMELEON.CORE.MTTableEditor.inputFields();
+    CHAMELEON.CORE.MTTableEditor.initTabs();
+    CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
+    CHAMELEON.CORE.MTTableEditor.initSelectBoxes();
 });
 
-
-CHAMELEON.CORE.MTTableEditor.setGetActiveTab = function () {
+CHAMELEON.CORE.MTTableEditor.initTabs = function () {
     var url = document.URL;
-    var hash = url.substring(url.indexOf('#'));
+    var hash = window.location.hash;
 
-    $(".nav-tabs").find("li a").each(function (key, val) {
-        if (hash == $(val).attr('href')) {
-            $(val).click();
+    $('.nav-tabs').find('li a').each(function (key, tabLinkItem) {
+        var $tabLinkItem = $(tabLinkItem);
+        if (hash === tabLinkItem.getAttribute('href')) {
+            $tabLinkItem.click();
         }
-        $(val).click(function () {
-            location.hash = $(this).attr('href');
+        $tabLinkItem.click(function () {
+            window.location.hash = this.getAttribute('href');
         });
     });
 };
@@ -738,7 +739,7 @@ function updateIframeSize(sFieldName, iHeight) {
     }
 }
 
-CHAMELEON.CORE.MTTableEditor.inputFields = function () {
+CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
     $('[data-datetimepicker-option]').each(function () {
         $(this).datetimepicker($(this).data("datetimepicker-option"));
     });
@@ -746,22 +747,26 @@ CHAMELEON.CORE.MTTableEditor.inputFields = function () {
     $('.datetimepicker-input').each(function () {
         var id = $(this).attr('id');
 
-        // This custom-event of the datetimepicker only works with the id of the element.
+        // This custom-event of the datetimepicker only works with the ID of the element.
         $('#' + id).on("change.datetimepicker", function (e) {
             var moment = e.date;
 
-            if (moment !== undefined) {
-                if ($(this).hasClass('format-L')) {
-                    var cmsDate = moment.format('YYYY-MM-DD');
-                } else {
-                    var cmsDate = moment.format('YYYY-MM-DD HH:mm:ss');
-                }
-                // We need a sql-date-format for BC reasons.
-                $('input[name=' + id + ']').val(cmsDate);
+            if (moment === undefined) {
+                return;
             }
+
+            if ($(this).hasClass('format-L')) {
+                var cmsDate = moment.format('YYYY-MM-DD');
+            } else {
+                var cmsDate = moment.format('YYYY-MM-DD HH:mm:ss');
+            }
+            // We need a SQL date format for BC reasons.
+            $('input[name=' + id + ']').val(cmsDate);
         });
     });
+};
 
+CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     $('[data-select2-option]').each(function () {
         $(this).select2($(this).data("select2-option"));
     });
@@ -769,10 +774,10 @@ CHAMELEON.CORE.MTTableEditor.inputFields = function () {
     $('.lookup-container-field-types select').on('select2:select', function (e) {
         var data = e.params.data;
         var fieldName = $(this).attr('name');
-        var fieldID = '#fieldTypeHelp' + data.id;
-        var helpText = $(fieldID).html();
+        var fieldId = '#fieldTypeHelp' + data.id;
+        var helpText = $(fieldId).html();
 
-        if (helpText == '') {
+        if (helpText === '') {
             $("#" + fieldName + "-helpContainer").html("&nbsp;");
         } else {
             $("#" + fieldName + "-helpContainer").html(helpText);
@@ -794,11 +799,20 @@ CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent = function (selector) {
     });
 };
 
-$(document).ready(function () {
-    $('.noChangesWarning').click(function () {
-        window.onbeforeunload = function () {
-        };
+CHAMELEON.CORE.MTTableEditor.initInputChangeObservation = function () {
+    $("input:text,input:checkbox,input:radio,textarea,select,input:hidden",$("#cmseditform")).not(".cmsdisablechangemessage").one("change",function() {
+        CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
     });
+};
 
+/**
+ * @deprecated since 6.3.0 - use CHAMELEON.CORE.MTTableEditor.initInputChangeObservation(); instead
+ */
+function SetChangedDataMessage() {
+    CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
+}
+
+$(document).ready(function () {
+    CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
     CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent('label.switch input[type=checkbox]');
 });

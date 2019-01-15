@@ -38,7 +38,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         $oMenuItem->sItemKey = 'editpagetree';
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor_portal.action_edit_tree');
         $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/page_navigation.gif');
-        $oMenuItem->sOnClick = "javascript:var navId = '".TGlobal::OutHTML($this->oTable->sqlData['main_node_tree'])."';if (document.cmseditform.main_node_tree) navId = document.cmseditform.main_node_tree.value; if (navId>0 || (navId != '' && naviId != '0')) CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=CMSModulePageTreePlain&table=cms_tpl_page&noassign=1&rootID='+navId,700,600); else alert('".TGlobal::Translate('chameleon_system_core.table_editor_portal.error_navigation_node_required')."');";
+        $oMenuItem->sOnClick = "javascript:var navId = '".TGlobal::OutHTML($this->oTable->sqlData['main_node_tree'])."';if (document.cmseditform.main_node_tree) navId = document.cmseditform.main_node_tree.value; if (navId>0 || (navId != '' && naviId != '0')) CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=CMSModulePageTreePlain&table=cms_tpl_page&noassign=1&rootID='+navId); else alert('".TGlobal::Translate('chameleon_system_core.table_editor_portal.error_navigation_node_required')."');";
         $this->oMenuItems->AddItem($oMenuItem);
 
         // Add language activator

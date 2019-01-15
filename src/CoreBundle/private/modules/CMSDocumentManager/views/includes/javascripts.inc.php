@@ -6,7 +6,7 @@
     function CreateNode(obj) {
         var id = obj.attr("id").replace("node", "");
         var url = '<?=PATH_CMS_CONTROLLER; ?>?tableid=<?=$data['treeTableID']; ?>&amp;pagedef=tableeditorPopup&amp;module_fnc%5Bcontentmodule%5D=Insert&amp;parent_id=' + id;
-        CreateModalIFrameDialogCloseButton(url, 500, 300);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     /*
@@ -15,7 +15,7 @@
      */
     function editFileDetails(id, row) {
         url = '<?=PATH_CMS_CONTROLLER; ?>?tableid=<?=$data['id']; ?>&pagedef=tableeditorPopup&id=' + id;
-        CreateModalIFrameDialogCloseButton(url, 900, 630);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     function RefreshOpenerHeader() {
@@ -117,7 +117,7 @@
 
 
     function ShowConnectionDialog(index) {
-        CreateModalIFrameDialogFromContentWithoutClose(_connectedDataHTML[index], 700, 600, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.delete_document'));
+        CreateModalIFrameDialogFromContent(_connectedDataHTML[index], 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.delete_document'));
     }
 
     function CloseDeleteCheckDialog() {

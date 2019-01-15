@@ -4,15 +4,10 @@ use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManag
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
 $translator = ServiceLocator::get('translator');
-
-$sLogoLink = PATH_CMS_CONTROLLER;
-if (isset($oUser)) {
-    $sLogoLink .= '?pagedef=main';
-}
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" role="navigation" id="header-nav">
     <div class="container-fluid">
-        <a href="<?=$sLogoLink; ?>" class="navbar-brand"><img src="<?=TGlobal::OutHTML($sLogoURL); ?>" /></a>
+        <a href="<?=PATH_CMS_CONTROLLER; ?>?_rmhist=true&_histid=0" class="navbar-brand"><img src="<?=TGlobal::OutHTML($sLogoURL); ?>" /></a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#cmsTopNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -24,12 +19,11 @@ if (isset($oUser)) {
             <?php
             if (isset($data['check_messages'])) {
                 ?>
-                <div class="btn-group float-left">
-                    <button type="button" class="btn btn-sm dropdown-toggle navbar-item btn-secondary" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-warning-sign"></span> <?php echo TGlobal::OutHTML('Achtung'); ?>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm dropdown-toggle navbar-btn btn-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+                        <span class="glyphicon glyphicon-warning-sign"></span> <?=TGlobal::OutHTML($translator->trans('chameleon_system_core.admin_message.button_title')); ?>
                     </button>
-                    <div class="dropdown-menu" role="search" style="min-width: 370px;">
-
+                    <div class="dropdown-menu" aria-labelledby="adminMessagesDropDown" style="min-width: 370px;">
                         <div class="row">
                             <div class="col-lg-12">
                                 <ul>
@@ -40,11 +34,11 @@ if (isset($oUser)) {
                                 </ul>
                             </div>
                         </div>
-
                     </div>
                 </div>
-            <?php
-            } ?>
+                <?php
+            }
+            ?>
             <ul class="navbar-nav mr-auto">
                 <?php
                 if ($data['showWebsiteEditNavi'] && $data['show_template_engine']) {
@@ -52,7 +46,7 @@ if (isset($oUser)) {
                         $windowTitle = $translator->trans('chameleon_system_core.cms_module_page_tree.headline');
                         $fieldName = 'mainNavNavi';
                         $url = PATH_CMS_CONTROLLER.'?pagedef=CMSModulePageTreePlain&table=cms_tpl_page&noassign=1&rootID='.$data['startTreeID'];
-                        $naviJS = "CreateModalIFrameDialogCloseButton('".$url."',950,690,'".$windowTitle."');"; ?>
+                        $naviJS = "CreateModalIFrameDialogCloseButton('".$url."',0,0,'".$windowTitle."');"; ?>
                         <li class="nav-item"><a href="javascript:<?=$naviJS; ?>" class="nav-link" data-toggle="tooltip" data-placement="bottom" title="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_edit_navigation_help')); ?>"><span class="glyphicon glyphicon-leaf"></span> &nbsp;<?php echo TGlobal::Translate('chameleon_system_core.cms_module_header.action_edit_navigation'); ?></a></li>
                     <?php
                     } ?>
@@ -101,7 +95,10 @@ if (isset($oUser)) {
                 <?php
             }
 
-            $viewRenderer = new ViewRenderer();
+            /**
+             * @var ViewRenderer $viewRenderer
+             */
+            $viewRenderer = ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
             $viewRenderer->AddSourceObject('aPortalLinks', $aPortalLinks);
             echo $viewRenderer->Render('MTHeader/portalLinks.html.twig');
 
@@ -127,10 +124,10 @@ if (isset($oUser)) {
                 <li class="nav-item"><a href="<?=PATH_CMS_CONTROLLER; ?>?pagedef=CMSModuleHelp" class="nav-link" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> &nbsp;<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_help')); ?></a></li>
             </ul>
                     <?php
-                    /**
-                     * @var ViewRenderer $viewRenderer
-                     */
-                    $viewRenderer = ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+            /**
+             * @var ViewRenderer $viewRenderer
+             */
+            $viewRenderer = ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
             $viewRenderer->addMapperFromIdentifier('chameleon_system_core.mapper.update_recorder');
             $viewRenderer->AddSourceObject('sModuleSpotName', $sModuleSpotName);
             echo $viewRenderer->Render('MTUpdateRecorder/flyout.html.twig');

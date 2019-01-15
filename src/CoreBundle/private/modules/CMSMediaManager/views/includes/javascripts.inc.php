@@ -12,7 +12,7 @@
     function CreateNode(obj) {
         var id = obj.attr("id").replace("node", "");
         var url = '<?=PATH_CMS_CONTROLLER; ?>?tableid=<?=$data['mediaTreeTableID']; ?>&amp;pagedef=tableeditorPopup&amp;module_fnc%5Bcontentmodule%5D=Insert&amp;parent_id=' + id;
-        CreateModalIFrameDialogCloseButton(url, 500, 300);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     /**
@@ -108,7 +108,7 @@
     */
     function editFileDetails(id, row) {
         url = '<?=PATH_CMS_CONTROLLER; ?>?tableid=<?=$data['id']; ?>&pagedef=tableeditorPopup&id=' + id;
-        CreateModalIFrameDialogCloseButton(url, 900, 630);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
 </script>

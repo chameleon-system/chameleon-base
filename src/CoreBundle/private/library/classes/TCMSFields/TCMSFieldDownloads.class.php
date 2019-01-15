@@ -68,7 +68,7 @@ class TCMSFieldDownloads extends TCMSMLTField
 
             if (!$bReadOnly) {
                 $html .= '<td width="20"><img src="'.URL_CMS.'/images/icons/page_delete.gif" alt="'.TGlobal::Translate('chameleon_system_core.field_download.remove')."\" border=\"0\" style=\"cursor: pointer; cursor: hand;\" onClick=\"if(confirm('".TGlobal::Translate('chameleon_system_core.field_download.confirm_removal')."')){removeDocument('".$this->name."','".$oDownload->id."','".$this->recordId."','".$this->oTableConf->id."')};\" /></td>\n";
-                $html .= '<td width="20"><img src="'.URL_CMS.'/images/icons/page_edit.gif" alt="'.TGlobal::Translate('chameleon_system_core.field_download.document_details')."\" border=\"0\" style=\"cursor: pointer; cursor: hand;\" onClick=\"CreateModalIFrameDialog('".PATH_CMS_CONTROLLER.'?tableid='.TGlobal::OutHTML($oDocumentTableConf->id).'&pagedef=tableeditorPopup&id='.TGlobal::OutHTML($oDownload->id)."', 1000, 800, '".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_download.document_details'))."', true, true);\" /></td>\n";
+                $html .= '<td width="20"><img src="'.URL_CMS.'/images/icons/page_edit.gif" alt="'.TGlobal::Translate('chameleon_system_core.field_download.document_details')."\" border=\"0\" style=\"cursor: pointer; cursor: hand;\" onClick=\"CreateModalIFrameDialog('".PATH_CMS_CONTROLLER.'?tableid='.TGlobal::OutHTML($oDocumentTableConf->id).'&pagedef=tableeditorPopup&id='.TGlobal::OutHTML($oDownload->id)."', 0, 0, '".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_download.document_details'))."');\" /></td>\n";
             }
             $html .= '</tr>
             </table>

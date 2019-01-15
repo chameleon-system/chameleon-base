@@ -12,7 +12,7 @@ if (isset($data['oUser'])) {
     $totalCount = count($data['breadcrumb']);
     foreach ($data['breadcrumb'] as $histid => $item) {
         ++$count;
-        // skip older entries if we have more than 10 nodes
+        // Skip older entries if we have more than $maxCount nodes
         if ($totalCount <= $maxCount || ($totalCount > $maxCount && $count > ($totalCount - $maxCount))) {
             $sBreadcrumbNodeName = $item['name'];
             if ($sBreadcrumbNodeName != $sMainMenuText) {

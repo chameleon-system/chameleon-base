@@ -150,8 +150,7 @@ class CMSMediaManager extends TCMSModelBase
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
         // first the includes that are needed for the all fields
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-form-4.2.2/jquery.form.min.js').'" type="text/javascript"></script>';
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />'; // we need this for the list of connections by delete events
         $aIncludes[] = '<script type="text/javascript">
       var messageNewFolder = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.action_new_folder')).'\';
@@ -168,7 +167,6 @@ class CMSMediaManager extends TCMSModelBase
       var messageErrorPasteNoFiles = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.error_no_past_source_selected')).'\';
       var messageUploadSuccessSingle = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.msg_single_file_upload_success')).'\';
       </script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/modules/mediaManager.js').'" type="text/javascript"></script>';
 
         $aTreeIncludes = $this->oTreeWidget->GetHtmlHeadIncludes();

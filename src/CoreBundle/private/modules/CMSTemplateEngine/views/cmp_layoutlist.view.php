@@ -28,7 +28,7 @@ if (null === $editLanguage) {
 </form>
 <div class="p-2 mb-4">
 
-    <h4><?=TGlobal::Translate('chameleon_system_core.template_engine.headline_layout'); ?></h4>
+    <h1 class="display-4"><?=TGlobal::Translate('chameleon_system_core.template_engine.headline_layout'); ?></h1>
     <?php
     while ($oPageLayout = $data['oMasterDefs']->Next()) {
         /** @var $oPageLayout TdbCmsMasterPagedef */

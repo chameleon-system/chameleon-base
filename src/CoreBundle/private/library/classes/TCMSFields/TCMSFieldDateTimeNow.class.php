@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TCMSFieldDateTimeNow extends TCMSFieldDateTime
 {
     /**
@@ -33,7 +35,7 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
     {
         $fieldValue = parent::_GetHTMLValue();
         if ('' === $fieldValue || '0000-00-00 00:00:00' === $fieldValue) {
-            $fieldValue = date('Y-m-d H:i').':00'; //datetimepicker crashs if you give him seconds != "00", but for saving we need it
+            $fieldValue = date('Y-m-d H:i').':00'; // datetimepicker crashes if we pass seconds != "00"
         }
 
         return $fieldValue;
@@ -62,5 +64,10 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
         }
 
         return $html;
+    }
+
+    private function getViewRenderer(): ViewRenderer
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }

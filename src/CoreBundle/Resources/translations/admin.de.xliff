@@ -875,6 +875,11 @@
                 <source>chameleon_system_core.record_lock.lock_owner_phone</source>
                 <target>Tel.</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.record_lock.lock_owner_fax">
+                <source>chameleon_system_core.record_lock.lock_owner_fax</source>
+                <target>Fax</target>
+                 <note>@deprecated since 6.3.0 - no longer used.</note>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.record_lock.locked_by">
                 <source>chameleon_system_core.record_lock.locked_by</source>
                 <target>gesperrt durch</target>
@@ -2494,6 +2499,10 @@
             <trans-unit id="chameleon_system_core.field_lookup_multi_select_restriction.check_help">
                 <source>chameleon_system_core.field_lookup_multi_select_restriction.check_help</source>
                 <target>Wenn dieses Häkchen gesetzt ist, dann bedeutet eine leere Liste, dass die Einschränkung niemals erfüllt wird - der Datensatz ist also effektiv deaktiviert. Wenn das Häkchen nicht gesetzt ist, bedeutet eine leere Liste hingegen "keine Einschränkung".</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.admin_message.button_title">
+                <source>chameleon_system_core.admin_message.button_title</source>
+                <target>Achtung</target>
             </trans-unit>
         </body>
     </file>

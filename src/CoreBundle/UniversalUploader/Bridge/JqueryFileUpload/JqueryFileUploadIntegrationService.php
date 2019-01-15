@@ -23,7 +23,6 @@ class JqueryFileUploadIntegrationService implements UploaderPluginIntegrationSer
         $includes = array();
 
         $includes[] = '<link href="'.\TGlobal::GetStaticURLToWebLib('/components/jqueryFileUpload/css/jquery.fileupload.css').'" rel="stylesheet" type="text/css" />';
-
         $includes[] = '<link href="'.\TGlobal::GetStaticURLToWebLib('/universalUploader/jqueryFileUpload/uploader.css').'" rel="stylesheet" type="text/css" />';
 
         //The Iframe Transport is required for browsers without support for XHR file uploads
@@ -44,9 +43,7 @@ class JqueryFileUploadIntegrationService implements UploaderPluginIntegrationSer
         //Chameleon integration plugin
         $includes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/universalUploader/jqueryFileUpload/uploader.js').'" type="text/javascript"></script>';
 
-        $includes[] = '<script src="'.\TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-
-        $includes[] = '<script type="text/javascript" src="'.\TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jQueryUI/ui.widget.js').'"></script>';
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
 
         return $includes;
     }

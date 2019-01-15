@@ -162,7 +162,6 @@ class CMSDocumentManager extends TCMSModelBase
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/modules/DocumentManager.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />'; // we need this for the list of connections by delete events
 

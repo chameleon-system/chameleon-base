@@ -73,9 +73,6 @@ class CMSGMap extends TCMSModelBase
     public function GetHtmlHeadIncludes()
     {
         $includes = parent::GetHtmlHeadIncludes();
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-form-4.2.2/jquery.form.min.js').'" type="text/javascript"></script>'; // ajax form plugin
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/fields/TCMSFieldGMapCoordinate/TCMSFieldGMapCoordinate.js').'" type="text/javascript"></script>';
 
         if (count($this->aGMapIncludes) > 0) {

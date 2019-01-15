@@ -61,6 +61,11 @@ Note that ONLY BC breaking changes are listed, according to our backwards compat
 - New method `getDomainDataByName()`.
 - New method `getPortalPrefixListForDomain()`.
 
+## TCMSFieldDate/TCMSFieldDateToday
+
+The field classes now use the language independent SQL date format in frontend rendering instead of always using a german date format. 
+For backwards compatibility reasons they work with the german date format, too. 
+
 # Deprecated Code Entities
 
 It is recommended that all references to the classes, interfaces, properties, constants, methods and services in the
@@ -90,6 +95,7 @@ None.
 
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$sGeneratedPage
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$postRenderVariables
+- \TCMSFieldLookupFieldTypes::sFieldHelpTextHTML
 
 ## Methods
 
@@ -103,6 +109,7 @@ None.
 - \ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::getModules()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
+- \TCMSFieldLookup::enableComboBox()
 - \TTools::AddStaticPageVariables()
 - \TCMSFieldColorPicker::isFirstInstance()
 
@@ -111,7 +118,37 @@ None.
 - $.blockUI();
 - $.unblockUI();
 
-Use CHAMELEON.CORE.processingDialog('show') and CHAMELEON.CORE.processingDialog('hide') instead.
+Use CHAMELEON.CORE.showProcessingModal() and CHAMELEON.CORE.hideProcessingModal() instead.
+
+- SetChangedDataMessage()
+
+Use CHAMELEON.CORE.MTTableEditor.initInputChangeObservation() instead.
+
+- CreateModalIFrameDialogFromContentWithoutClose
+
+Use CreateModalIFrameDialogFromContent() instead. (modals always show a header and close button)
+
+All CreateModal... methods now call a bootstrap modal using CHAMELEON.CORE.showModal().
+The modal uses CSS classes for the size. If not really necessary the modal is always opened in xxl size (90% screensize).
+To be backwards compatible the size classes are determined using CHAMELEON.CORE.getModalSizeClassByPixel().
+You should remove all width/height settings in CreateModalXY calls if it does not necessarily render smaller.
+
+- $.jBreadCrumb()
+- $.bgiframe()
+- $.jqM() (jqModal)
+- $.jqDnR() (part of jqModal)
+- $.addOption() (jquery.selectboxes plugin)
+
+## jQueryUi
+
+jQueryUi is replaced everywhere in the code.
+The only exception is drag&drop functionality in the template engine for module spot placing and reordering of elements
+using TCMSFieldPosition.
+
+Deprecated is every jquery plugin in: 
+
+/Resources/public/javascript/jquery/jQueryUI/
+
 
 - jquery.form.js was updated to version 4.2.2 and is now located in Resources/public/javascript/jquery-form-4.2.2/jquery.form.min.js.
 - jquery library was upgraded to 3.3.1. To be backwards compatible jquery.migrate is included in version 1.4.1.
@@ -127,6 +164,8 @@ Use CHAMELEON.CORE.processingDialog('show') and CHAMELEON.CORE.processingDialog(
 
 - chameleon_system_core.field_options.option_value_true
 - chameleon_system_core.field_options.option_value_false
+- chameleon_system_core.record_lock.lock_owner_fax
+- chameleon_system_core.fields.lookup.no_matches
 
 ## Database Tables
 

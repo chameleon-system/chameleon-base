@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * ReloadOnChange=true.
  *
@@ -45,43 +47,70 @@ class TCMSFieldLookup extends TCMSField
     public function GetHTML()
     {
         $this->GetOptions();
-        $oConnectedRecord = $this->getConnectedRecordObject();
+        $connectedRecord = $this->getConnectedRecordObject();
 
-        if (!empty($this->data) && (!isset($this->options[$this->data]) && false !== $oConnectedRecord)) {
+        if (!empty($this->data) && (!isset($this->options[$this->data]) && false !== $connectedRecord)) {
             return $this->GetReadOnly();
-        } else {
-            $sClass = '';
-            $sOnChangeAttr = '';
-            if ($this->GetReloadOnChangeParam()) {
-                $sOnChangeAttr = "OnChange=\"CHAMELEON.CORE.MTTableEditor.bCmsContentChanged=false;CHAMELEON.CORE.processingDialog('show');document.cmseditform.elements['module_fnc[contentmodule]'].value='Save';document.cmseditform.submit();\"";
-                $sClass .= 'cmsdisablechangemessage';
-            }
-
-            $viewRenderer = $this->getViewRenderer();
-            $viewRenderer->AddSourceObject('fieldName', $this->name);
-            $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
-            $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
-
-            $viewRenderer->AddSourceObject('sClass', $sClass);
-
-            $viewRenderer->AddSourceObject('onchangeAttr', $sOnChangeAttr);
-            $viewRenderer->AddSourceObject('options', $this->options);
-            $viewRenderer->AddSourceObject('allowEmptySelection', $this->allowEmptySelection);
-
-            $foreignTableName = $this->GetConnectedTableName();
-            $viewRenderer->AddSourceObject('foreignTableName', $foreignTableName);
-            $oGlobal = TGlobal::instance();
-            if ($oGlobal->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
-                $viewRenderer->AddSourceObject('buttonLink', $this->GoToRecordJS());
-            }
-            $viewRenderer->AddSourceObject('connectedRecordId', $this->data);
-            // current ID is an orphan, show message
-            if (!empty($this->data) && false === $oConnectedRecord) {
-                $viewRenderer->AddSourceObject('showErrorMessage', true);
-            }
-
-            return $viewRenderer->Render('TCMSFieldLookup/fieldLookup.html.twig', null, false);
         }
+
+        $viewRenderer = $this->getViewRenderer();
+        $this->addFieldRenderVariables($viewRenderer);
+
+        // current ID is an orphan, show message
+        if (!empty($this->data) && false === $connectedRecord) {
+            $viewRenderer->AddSourceObject('showErrorMessage', true);
+        }
+
+        return $viewRenderer->Render('TCMSFieldLookup/fieldLookup.html.twig', null, false);
+    }
+
+    private function addFieldRenderVariables(ViewRenderer $viewRenderer): void
+    {
+        $sClass = '';
+        $sOnChangeAttr = '';
+        if ($this->GetReloadOnChangeParam()) {
+            $sOnChangeAttr = "OnChange=\"CHAMELEON.CORE.MTTableEditor.bCmsContentChanged=false;CHAMELEON.CORE.showProcessingModal();document.cmseditform.elements['module_fnc[contentmodule]'].value='Save';document.cmseditform.submit();\"";
+            $sClass .= 'cmsdisablechangemessage';
+        }
+
+        $viewRenderer->AddSourceObject('fieldName', $this->name);
+        $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
+        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('sClass', $sClass);
+        $viewRenderer->AddSourceObject('onchangeAttr', $sOnChangeAttr);
+        $viewRenderer->AddSourceObject('options', $this->options);
+        $viewRenderer->AddSourceObject('allowEmptySelection', $this->allowEmptySelection);
+
+        $foreignTableName = $this->GetConnectedTableName();
+        $viewRenderer->AddSourceObject('foreignTableName', $foreignTableName);
+        $oGlobal = TGlobal::instance();
+        if ($oGlobal->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
+            $viewRenderer->AddSourceObject('buttonLink', $this->GoToRecordJS());
+        }
+        $viewRenderer->AddSourceObject('connectedRecordId', $this->data);
+    }
+
+    /**
+     * comboBox is enabled on 30 elements or more
+     * you may disable the combobox using "disableComboBox=true" in field config or by extending this method.
+     *
+     * @deprecated sind 6.3.0 - no longer used
+     *
+     * @return bool
+     */
+    protected function enableComboBox()
+    {
+        $bReturnVal = true;
+        if (count($this->options) < 30) {
+            $bReturnVal = false;
+        }
+
+        $disableComboBox = $this->oDefinition->GetFieldtypeConfigKey('disableComboBox');
+        if (!empty($disableComboBox) && ('1' == $disableComboBox || 'true' == $disableComboBox)) {
+            $bReturnVal = false;
+        }
+
+        return $bReturnVal;
     }
 
     public function GetOptions()
@@ -524,11 +553,8 @@ class TCMSFieldLookup extends TCMSField
         return implode(', ', $aRetValueArray);
     }
 
-    /**
-     * @return ViewRenderer
-     */
-    private function getViewRenderer()
+    private function getViewRenderer(): ViewRenderer
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }
