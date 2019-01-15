@@ -5,9 +5,9 @@
 
     <parameters>
         <parameter key="vendor_dir">%kernel.root_dir%/../vendors</parameter>
-        <parameter key="chameleon_system_core.pdo.mysql_attr_init_command" type="constant">\PDO::MYSQL_ATTR_INIT_COMMAND</parameter>
-        <parameter key="chameleon_system_core.pdo.mysql_attr_compression_name" type="constant">\PDO::MYSQL_ATTR_COMPRESS</parameter>
-        <parameter key="chameleon_system_core.pdo.enable_mysql_compression">false</parameter>
+        <parameter key="chameleon_system_core.pdo.mysql_attr_init_command" type="constant">\PDO::MYSQL_ATTR_INIT_COMMAND</parameter> <!-- deprecated since 6.3.0 - no longer used -->
+        <parameter key="chameleon_system_core.pdo.mysql_attr_compression_name" type="constant">\PDO::MYSQL_ATTR_COMPRESS</parameter> <!-- deprecated since 6.3.0 - see below -->
+        <parameter key="chameleon_system_core.pdo.enable_mysql_compression">false</parameter> <!-- deprecated since 6.3.0 - use the configuration key "doctrine: dbal: options: 1006: 1" instead -->
         <parameter key="chameleon_system_core.database.estimation_lower_limit">0</parameter>
         <parameter key="chameleon_system_core.controller_invoke_listener.class">ChameleonSystem\CoreBundle\Controller\ChameleonControllerInvokeListener</parameter>
         <parameter key="chameleon_system_core.tpl_page_controller.class">TPkgCmsRouteControllerCmsTplPage</parameter>
@@ -16,29 +16,12 @@
 
     <services>
         <service id="chameleon_system_core.pdo" class="PDO" public="false">
-            <argument>mysql:dbname=%database_name%;host=%database_host%;port=%database_port%;charset=utf8</argument>
-            <argument>%database_user%</argument>
-            <argument>%database_password%</argument>
-            <argument type="collection">
-                <argument key="%chameleon_system_core.pdo.mysql_attr_init_command%">SET NAMES utf8</argument>
-                <argument key="%chameleon_system_core.pdo.mysql_attr_compression_name%">%chameleon_system_core.pdo.enable_mysql_compression%</argument>
-            </argument>
-            <call method="setAttribute">
-                <argument type="constant">\PDO::ATTR_ERRMODE</argument>
-                <argument type="constant">\PDO::ERRMODE_EXCEPTION</argument>
-            </call>
+            <factory service="database_connection" method="getWrappedConnection" />
+            <deprecated>The %service_id% service is deprecated since Chameleon 6.3.0. Use database_connection::getWrappedConnection() instead instead.</deprecated>
         </service>
 
-        <service id="chameleon_system_core.sessionPdo" alias="chameleon_system_core.pdo" />
-
-        <service id="database_connection" class="Doctrine\DBAL\Connection" public="true">
-            <factory class="Doctrine\DBAL\DriverManager" method="getConnection" />
-            <argument type="collection">
-                <argument key="driver">pdo_mysql</argument>
-                <argument key="pdo" type="service" id="chameleon_system_core.pdo" />
-                <argument key="charset">UTF8</argument>
-                <argument key="logging" type="service" id="cmsPkgCore.logChannel.dbal" />
-            </argument>
+        <service id="chameleon_system_core.sessionPdo" class="PDO">
+            <factory service="database_connection" method="getWrappedConnection" />
         </service>
 
         <service id="chameleon_system_core.global" class="TGlobal" public="true">

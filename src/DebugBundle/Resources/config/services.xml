@@ -4,20 +4,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-
-        <service id="chameleon_system_debug.profiler_database_connection" class="ChameleonSystem\DebugBundle\Connection\ProfilerDatabaseConnection" decorates="database_connection">
-            <argument type="service" id="chameleon_system_debug.profiler_database_connection.inner" />
-        </service>
-
-        <service id="chameleon_system_debug.database_collector" class="ChameleonSystem\DebugBundle\Collector\DatabaseDataCollector">
-            <argument type="service" id="chameleon_system_debug.profiler_database_connection" />
-            <tag name="data_collector" template="ChameleonSystemDebugBundle:Profiler:layout" id="chameleon.database" />
-        </service>
-
         <service id="chameleon_system_debug.debug_test_session_locking_controller" class="ChameleonSystem\DebugBundle\Controller\DebugTestSessionLockingController">
             <argument type="service" id="session" />
             <argument type="service" id="router" />
         </service>
-
     </services>
 </container>
