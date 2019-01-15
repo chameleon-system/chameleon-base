@@ -127,6 +127,11 @@ Use CHAMELEON.CORE.MTTableEditor.initInputChangeObservation() instead.
 
 Use CreateModalIFrameDialogFromContent() instead. (modals always show a header and close button)
 
+All CreateModal... methods now call a bootstrap modal using CHAMELEON.CORE.showModal().
+The modal uses CSS classes for the size. If not really necessary the modal is always opened in xxl size (90% screensize).
+To be backwards compatible the size classes are determined using CHAMELEON.CORE.getModalSizeClassByPixel().
+You should remove all width/height settings in CreateModalXY calls if it does not necessarily render smaller.
+
 ## Translations
 
 - chameleon_system_core.field_options.option_value_true
