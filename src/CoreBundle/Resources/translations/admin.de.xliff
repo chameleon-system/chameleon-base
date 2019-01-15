@@ -200,7 +200,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cronjob.error_cronjobs_disabled">
                 <source>chameleon_system_core.cronjob.error_cronjobs_disabled</source>
-                <target>Cronjob-Ausführung nicht gestartet, weil alle Cronjobs deaktiviert sind.</target>
+                <target>Cronjob-Ausführung nicht gestartet, weil Cronjobs deaktiviert sind.</target>
             </trans-unit>
 
 
