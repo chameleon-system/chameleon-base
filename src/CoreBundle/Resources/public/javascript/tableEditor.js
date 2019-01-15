@@ -378,7 +378,7 @@ function loadPositionList(tableID, tableSQLName, fieldName, recordID, sRestricti
     url += '&sRestriction=' + sRestriction;
     url += '&sRestrictionField=' + sRestrictionField;
 
-    CreateModalIFrameDialogCloseButton(url, 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
+    CreateModalIFrameDialogCloseButton(url, 700, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
 }
 
 /*
