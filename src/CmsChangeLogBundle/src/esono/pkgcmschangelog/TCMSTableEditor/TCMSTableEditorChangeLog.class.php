@@ -379,6 +379,11 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      */
     private function getOldFields(): array
     {
+        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+        if (null !== $editLanguage) {
+            $this->oTablePreChangeData->SetLanguage($editLanguage->id);
+        }
+
         return $this->oTablePreChangeData->getFieldsIndexed();
     }
 
