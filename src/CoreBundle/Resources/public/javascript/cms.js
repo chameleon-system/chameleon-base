@@ -14,13 +14,7 @@ CHAMELEON.CORE.showProcessingModal = function () {
 };
 
 CHAMELEON.CORE.hideProcessingModal = function () {
-    // $("#processingModal").dialog('hide'); is not working, so this is the fix.
-    var processingDialogContainer = $("#processingModal");
-    processingDialogContainer.removeClass("in");
-    $(".modal-backdrop").remove();
-    $('body').removeClass('modal-open');
-    $('body').css('padding-right', ''); // Needed because bootstrap adds a 15px padding to the body on modal dialog init.
-    processingDialogContainer.hide();
+    $("#processingModal").modal('hide');
 };
 
 /**
