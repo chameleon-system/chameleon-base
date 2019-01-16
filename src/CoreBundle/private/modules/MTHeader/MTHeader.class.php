@@ -408,7 +408,7 @@ class MTHeader extends TCMSModelBase
         if (null === $currentUser) {
             return;
         }
-        $userImage = TGlobal::GetPathTheme().'/images/nav_icons/user.gif';
+        $userImage = TGlobal::GetPathTheme().'/images/icons/user.png';
 
         $imageID = TCMSUser::GetActiveUser()->fieldImages;
         if ($imageID >= 1000 || !is_numeric($imageID)) {
