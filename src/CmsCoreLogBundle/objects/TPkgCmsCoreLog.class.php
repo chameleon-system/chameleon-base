@@ -11,6 +11,9 @@
 
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 
+/**
+ * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface in conjunction with Monolog logging instead
+ */
 class TPkgCmsCoreLog implements IPkgCmsCoreLog
 {
     /**

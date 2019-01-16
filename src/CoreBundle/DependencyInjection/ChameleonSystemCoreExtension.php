@@ -38,7 +38,6 @@ class ChameleonSystemCoreExtension extends Extension
             $this->loadConfigFile($container, $sConfigDir, 'services.xml');
             $this->loadConfigFile($container, $sConfigDir, 'mail.xml');
             $this->loadConfigFile($container, $sConfigDir, 'data_access.xml');
-            $this->loadConfigFile($container, $sConfigDir, 'logging.xml');
             $this->loadConfigFile($container, $sConfigDir, 'checks.xml');
             $this->loadConfigFile($container, $sConfigDir, 'urlnormalization.xml');
             $this->loadConfigFile($container, $sConfigDir, 'universal_uploader.xml');

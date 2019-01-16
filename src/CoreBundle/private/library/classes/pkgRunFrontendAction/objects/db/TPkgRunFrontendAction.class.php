@@ -60,9 +60,9 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
     public static function CreateAction($sClass, $sPortalId = null, $aParameter = null, $sLanguageId = null)
     {
         $oAction = null;
-        $oLogger = \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
+        $logger = \ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
         if (!class_exists($sClass)) {
-            $oLogger->warning('Class '.$sClass.' doesn\'t exist', __FILE__, __LINE__);
+            $logger->warning(sprintf('Class %s doesn\'t exist.', $sClass));
         } else {
             $aData = array('class' => $sClass);
             $aData['expire_date'] = date('Y-m-d H:i:s', time() + TdbPkgRunFrontendAction::TIMEOUT_IN_SECONDS);
