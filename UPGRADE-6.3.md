@@ -57,6 +57,7 @@ Project code should also be adapted to this. See below for a migration example.
 
 Note that log messages are no longer written to database.
 You can still configure this if needed with the service `cmsPkgCore.logHandler.database` (TPkgCmsCoreLogMonologHandler_Database).
+If you use this without channel restriction you must at least explicitly exclude the channel "doctrine".
 Also note that the standard logging channel is not configured as "fingerscrossed" anymore. All messages there will simply
 be logged everytime.
 See below for the full legacy config.
@@ -135,7 +136,7 @@ monolog:
        type: stream
        path: "%kernel.logs_dir%/dbal.log"
        channels:
-         - "core_dbal"
+         - "doctrine"
        level: warning
 ```
 
