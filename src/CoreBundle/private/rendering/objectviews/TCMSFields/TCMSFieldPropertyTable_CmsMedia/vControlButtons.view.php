@@ -17,7 +17,7 @@ if (false != $oCategory->Load($oField->ConfigGetDefaultCategoryId()) || $oField-
                 $sSelectedId = $oCategory->id;
             }
 
-            echo '<select class="form-control" name="'.TGlobal::OutHTML($oField->name).'__cms_media_tree_id" id="'.TGlobal::OutHTML($oField->name).'__cms_media_tree_id" class="form-control input-sm">';
+            echo '<select class="form-control" name="'.TGlobal::OutHTML($oField->name).'__cms_media_tree_id" id="'.TGlobal::OutHTML($oField->name).'__cms_media_tree_id" class="form-control form-control-sm">';
             echo $oTreeSelect->GetTreeOptions($sSelectedId, true);
             echo '</select>';
         } elseif ($oCategory) {

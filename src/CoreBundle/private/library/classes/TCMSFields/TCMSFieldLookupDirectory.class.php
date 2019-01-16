@@ -25,7 +25,7 @@ class TCMSFieldLookupDirectory extends TCMSField
     {
         $this->GetOptions();
 
-        $html = '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name)."\" class=\"form-control input-sm\">\n";
+        $html = '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name)."\" class=\"form-control form-control-sm\">\n";
         $chooseMessage = TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected');
         $html .= '<option value="">'.TGlobal::OutHTML($chooseMessage)."</option>\n";
         $html .= '<option value="">'.TGlobal::OutHTML('-------------------------------------------')."</option>\n";

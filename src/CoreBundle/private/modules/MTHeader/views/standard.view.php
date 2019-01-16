@@ -4,10 +4,10 @@ require_once 'navigation.inc.php';
 if (isset($data['oUser'])) {
     $sMainMenuText = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_main_menu')); ?>
 <div id="cmsbreadcrumb">
-    <ol class="breadcrumb cmsBoxBorder">
-        <li><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;<a href="<?=PATH_CMS_CONTROLLER; ?>?pagedef=main&amp;_rmhist=true&amp;_histid=0"><?=$sMainMenuText; ?></a></li>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;<a href="<?=PATH_CMS_CONTROLLER; ?>?pagedef=main&amp;_rmhist=true&amp;_histid=0"><?=$sMainMenuText; ?></a></li>
         <?php
-        $maxCount = 10;
+        $maxCount = 8;
     $count = 0;
     $totalCount = count($data['breadcrumb']);
     foreach ($data['breadcrumb'] as $histid => $item) {
@@ -24,12 +24,12 @@ if (isset($data['oUser'])) {
                 if (empty($sBreadcrumbNodeName)) {
                     $sBreadcrumbNodeName = TGlobal::Translate('chameleon_system_core.text.unnamed_record');
                 } ?>
-                    <li>
-                        <a href="<?=TGlobal::OutHTML($item['url']); ?>"<?=$atagID; ?>>
-                            <?=$sBreadcrumbNodeName; ?>
-                        </a>
-                    </li>
-                    <?php
+                        <li class="breadcrumb-item">
+                            <a href="<?=TGlobal::OutHTML($item['url']); ?>"<?=$atagID; ?>>
+                                <?=$sBreadcrumbNodeName; ?>
+                            </a>
+                        </li>
+                        <?php
             }
         }
     } ?>

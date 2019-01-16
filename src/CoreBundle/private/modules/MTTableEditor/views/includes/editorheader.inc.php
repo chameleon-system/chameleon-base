@@ -142,7 +142,7 @@ $oController = TGlobal::GetController();
         ?>
         <td>
             <div style="width: 180px;">
-                <div id="quicklookuplistBG" class="right-inner-addon"><i class="glyphicon glyphicon-search"></i><input id="quicklookuplist" class="form-control input-sm" type="search" name="quicklookuplist" value="" class="ac_input" autocomplete="off" placeholder="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')); ?>" /></div>
+                <div id="quicklookuplistBG" class="right-inner-addon"><i class="glyphicon glyphicon-search"></i><input id="quicklookuplist" class="form-control form-control-sm" type="search" name="quicklookuplist" value="" class="ac_input" autocomplete="off" placeholder="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')); ?>" /></div>
                 <?php
                 $sRestrictionField = '';
         $sRestriction = '';

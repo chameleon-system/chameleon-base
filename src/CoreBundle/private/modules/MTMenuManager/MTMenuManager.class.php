@@ -65,17 +65,6 @@ class MTMenuManager extends TCMSModelBase
     /**
      * {@inheritdoc}
      */
-    public function GetHtmlHeadIncludes()
-    {
-        $aIncludes = parent::GetHtmlHeadIncludes();
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contentbox.css" rel="stylesheet" type="text/css" />';
-
-        return $aIncludes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function _AllowCache()
     {
         return true;

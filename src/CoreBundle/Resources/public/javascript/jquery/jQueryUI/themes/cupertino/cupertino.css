@@ -147,10 +147,7 @@
 .ui-widget .ui-widget {
     font-size: 11px;
 }
-.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size: inherit;
-}
+
 .ui-widget-content {
     background: url("images/ui-bg_glass_75_ffffff_1x400.png") repeat-x scroll 50% 50% #FFFFFF;
     border: 1px solid #AAAAAA;
@@ -1810,27 +1807,6 @@ body .ui-tooltip {
     height: 100%;
     transition: width 0.6s ease 0s;
 }
-input, textarea {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
-    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
-}
-input:focus, textarea:focus {
-    border-color: rgba(82, 168, 236, 0.8);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-    outline: 0 none;
-}
-input[type="file"]:focus, input[type="checkbox"]:focus, select:focus {
-    box-shadow: none;
-    outline: 1px dotted #666666;
-}
-input[type="text"], input[type="email"], input[type="tel"], input[type="search"], input[type="url"], input[type="password"], .ui-autocomplete-input, textarea, .uneditable-input {
-    border: 1px solid #CCCCCC;
-    border-radius: 3px 3px 3px 3px;
-    color: #555555;
-    display: inline-block;
-    font-size: 13px;
-    padding: 4px;
-}
 .ui-toolbar {
     background-color: #F5F5F5;
     background-image: -moz-linear-gradient(center top , #FFFFFF, #F5F5F5);
@@ -1865,127 +1841,7 @@ input[type="text"], input[type="email"], input[type="tel"], input[type="search"]
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
     transition: all 0.1s linear 0s;
 }
-div.wijmo-wijmenu {
-    background-color: #222222;
-    background-image: -moz-linear-gradient(center top , #333333, #222222);
-    background-repeat: repeat-x;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
-    padding: 0 20px;
-}
-.wijmo-wijmenu .ui-state-default {
-    box-shadow: none;
-    color: #BFBFBF;
-}
-.wijmo-wijmenu .ui-state-default .wijmo-wijmenu-text {
-    color: #BFBFBF;
-}
-.wijmo-wijmenu .ui-state-hover {
-    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.05);
-}
-.wijmo-wijmenu .ui-state-hover .wijmo-wijmenu-text {
-    color: #FFFFFF;
-}
-div.wijmo-wijmenu .ui-widget-header h3 {
-    margin-top: 1px;
-    padding: 0;
-    position: relative;
-}
-.wijmo-wijmenu h3 a {
-    color: #FFFFFF;
-    display: block;
-    float: left;
-    font-size: 20px;
-    font-weight: 200;
-    line-height: 1;
-    margin-left: -20px;
-    margin-top: 1px;
-    padding: 8px 20px 12px;
-}
-.wijmo-wijmenu h3 a:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: #FFFFFF;
-    text-decoration: none;
-}
-.wijmo-wijmenu .ui-widget-header {
-    border: 0 none;
-}
-.wijmo-wijmenu .wijmo-wijmenu-parent .wijmo-wijmenu-child {
-    padding: 0.3em 0;
-}
-div.wijmo-wijmenu .wijmo-wijmenu-item .wijmo-wijmenu-child {
-    background: none repeat scroll 0 0 #333333;
-    border: 0 none;
-    border-radius: 0 0 6px 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    margin: 0;
-    padding: 6px 0;
-    width: 160px;
-}
-div.wijmo-wijmenu .wijmo-wijmenu-item {
-    border: 0 none;
-    margin: 0;
-}
-.wijmo-wijmenu a.wijmo-wijmenu-link {
-    border: 0 none;
-    border-radius: 0 0 0 0;
-    line-height: 19px;
-    margin: 0;
-    padding: 10px 10px 11px;
-}
-div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-link {
-    display: block;
-    float: none;
-    padding: 4px 15px;
-    width: auto;
-}
-div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
-    float: none;
-}
-.wijmo-wijmenu .wijmo-wijmenu-item .wijmo-wijmenu-child .ui-state-hover {
-    background: none repeat scroll 0 0 #191919;
-}
-.wijmo-wijmenu .wijmo-wijmenu-item .wijmo-wijmenu-separator {
-    background-color: #222222;
-    background-image: none;
-    border-color: #444444 -moz-use-text-color -moz-use-text-color;
-    border-style: solid none none;
-    border-width: 1px 0 0;
-    padding: 5px 0;
-}
-.wijmo-wijmenu .wijmo-wijmenu-item input {
-    background-color: rgba(255, 255, 255, 0.3);
-    border: 1px solid #111111;
-    border-radius: 4px 4px 4px 4px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset, 0 1px 0 rgba(255, 255, 255, 0.25);
-    color: rgba(255, 255, 255, 0.75);
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    line-height: 1;
-    margin: 5px 10px 0;
-    padding: 4px 9px;
-    transition: none 0s ease 0s;
-    width: 100px;
-}
-.wijmo-wijmenu .wijmo-wijmenu-item input:hover {
-    background-color: rgba(255, 255, 255, 0.5);
-    color: #FFFFFF;
-}
-.wijmo-wijmenu .wijmo-wijmenu-item input:focus {
-    background-color: #FFFFFF;
-    border: 0 none;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
-    color: #404040;
-    outline: 0 none;
-    padding: 5px 10px;
-    text-shadow: 0 1px 0 #FFFFFF;
-}
-.wijmo-wijmenu .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
-    text-shadow: none;
-}
-.wijmo-wijmenu .ui-state-default {
-    box-shadow: none;
-    color: #BFBFBF;
-    filter: none;
-}
+
 .ui-button-icon-primary.ui-icon[class^="icon-"]:before, .ui-button-icon-primary.ui-icon[class*=" icon-"]:before, .ui-button-icon-secondary.ui-icon[class^="icon-"]:before, .ui-button-icon-secondary.ui-icon[class*=" icon-"]:before {
     color: inherit;
     display: inline;

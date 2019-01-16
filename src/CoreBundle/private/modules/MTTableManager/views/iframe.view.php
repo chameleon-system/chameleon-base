@@ -56,7 +56,7 @@ $fieldName = $oGlobal->GetUserData('fieldName'); /* if called through a field, t
 </form>
 <?php if ($data['permission_new']) {
         ?>
-    <nav class="navbar navbar-default navbar-xs-iframe" role="navigation">
+    <nav class="navbar navbar-light navbar-xs-iframe" role="navigation">
         <div class="btn-group">
                 <?php
                 $data['oMenuItems']->GoToStart();

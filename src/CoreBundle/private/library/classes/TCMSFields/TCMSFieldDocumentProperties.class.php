@@ -26,7 +26,7 @@ class TCMSFieldDocumentProperties extends TCMSField
         $sDownloadURL = $oDownloadItem->getBackendDownloadLink(true);
 
         $html = '<input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($this->data).'" />';
-        $html .= '<table border="0" class="table table-condensed table-striped">
+        $html .= '<table border="0" class="table table-sm table-striped">
         <tr>
           <td width="60">ID:</td>
           <td>'.$oDownloadItem->id.'</td>
@@ -49,10 +49,10 @@ class TCMSFieldDocumentProperties extends TCMSField
         </tr>
         <tr>
           <td>
-          '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.open_document'), $sShowDownloadURL, TGlobal::GetStaticURLToWebLib('/images/icons/drive_disk.png'), 'pull-left', null, null, null, '_blank').'
+          '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.open_document'), $sShowDownloadURL, TGlobal::GetStaticURLToWebLib('/images/icons/drive_disk.png'), 'float-left', null, null, null, '_blank').'
           </td>
           <td >
-          '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.download'), $sDownloadURL, TGlobal::GetStaticURLToWebLib('/images/icons/drive_disk.png'), 'pull-left').'
+          '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.download'), $sDownloadURL, TGlobal::GetStaticURLToWebLib('/images/icons/drive_disk.png'), 'float-left').'
           </td>
         </tr>';
 

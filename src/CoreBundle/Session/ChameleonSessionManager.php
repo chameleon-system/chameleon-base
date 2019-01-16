@@ -102,7 +102,6 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
                     'db_time_col' => '`time`',
                     'lock_mode' => PdoSessionHandler::LOCK_NONE,
                 );
-                /** @var PDO $sessionPdo */
                 $this->sessionPdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $sessionHandler = new PdoSessionHandler($this->sessionPdo, $options);
             }
@@ -184,10 +183,7 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         return $this->requestStack->getCurrentRequest();
     }
 
-    /**
-     * @param SessionInterface $session
-     */
-    private function registerSessionInContainer(SessionInterface $session)
+    private function registerSessionInContainer(SessionInterface $session): void
     {
         $this->container->set('session', $session);
     }

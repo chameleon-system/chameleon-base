@@ -12,9 +12,12 @@
 use ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface;
 use ChameleonSystem\CoreBundle\Exception\ModuleException;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
+use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
+use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgCmsCache\CacheInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -339,30 +342,24 @@ class TModelBase
      * sends module output as plaintext
      * it`s possible to set a callback function via GET/POST 'callback' as wrapper.
      *
-     * @param string $parameter
+     * @param string $content
      * @param bool   $bPreventPreOutputInjection - disable the pre output variable injection (messages, vars, authenticity token...)
      */
-    protected function _OutputForAjaxPlain(&$parameter, $bPreventPreOutputInjection = false)
+    protected function _OutputForAjaxPlain(&$content, $bPreventPreOutputInjection = false)
     {
-        // now clear the output. notice that we need the @ since the function throws a notice once the buffer is cleared
-        $this->SetHTMLDivWrappingStatus(false);
-        while (@ob_end_clean()) {
-        }
-        header('Content-Type: text/plain');
-        header('X-Robots-Tag: noindex, nofollow', true); //never index json responses
-        // inject messages (replace [{CMSMSG-*}])
         if (!$bPreventPreOutputInjection) {
-            $parameter = $this->getController()->PreOutputCallbackFunctionReplaceCustomVars($parameter);
-        }
-        // allow using a JS callback function
-        if ($this->global->UserDataExists('callback')) {
-            $sParam = $this->global->GetUserData('callback');
-            if (!empty($sParam)) {
-                trigger_error('callback parameter no longer supported', E_USER_NOTICE);
+            try {
+                $content = $this->getResponseVariableReplacer()->replaceVariables($content);
+            } catch (TokenInjectionFailedException $exception) {
+                $this->getLogger()->error(sprintf('Cannot render AJAX output plain %s', $exception->getMessage()));
+
+                http_response_code(500);
+
+                exit;
             }
         }
-        echo $parameter;
-        exit(0);
+
+        $this->outputForAjaxAndExit($content, 'text/plain');
     }
 
     /**
@@ -370,14 +367,49 @@ class TModelBase
      * on the client side. it will clear all previously generated content, send the ajax header,
      * the encoded data, and terminate(!) no further processing will take place.
      *
-     * @param object|array|string $parameter
+     * @param object|array|string $content
      */
-    protected function _OutputForAjax(&$parameter)
+    protected function _OutputForAjax(&$content)
     {
+        try {
+            $content = $this->getResponseVariableReplacer()->replaceVariables($content);
+        } catch (TokenInjectionFailedException $exception) {
+            $this->getLogger()->error(sprintf('Cannot render AJAX output %s', $exception->getMessage()));
+
+            http_response_code(500);
+
+            exit;
+        }
+        $jsonContent = \json_encode($content);
+
+        $this->outputForAjaxAndExit($jsonContent, 'application/json');
+    }
+
+    /**
+     * @param object|array|string $content
+     * @param string              $contentType
+     */
+    private function outputForAjaxAndExit($content, string $contentType): void
+    {
+        // now clear the output. notice that we need the @ since the function throws a notice once the buffer is cleared
         $this->SetHTMLDivWrappingStatus(false);
-        $parameter = $this->getController()->PreOutputCallbackFunctionReplaceCustomVars($parameter);
-        $encodedData = json_encode($parameter);
-        $this->_OutputForAjaxPlain($encodedData, true);
+        while (@ob_end_clean()) {
+        }
+        header(sprintf('Content-Type: %s', $contentType));
+        //never index ajax responses
+        header('X-Robots-Tag: noindex, nofollow', true);
+
+        // allow using a JS callback function
+        if ($this->global->UserDataExists('callback')) {
+            $sParam = $this->global->GetUserData('callback');
+            if (!empty($sParam)) {
+                trigger_error('callback parameter no longer supported', E_USER_NOTICE);
+            }
+        }
+
+        echo $content;
+
+        exit;
     }
 
     /**
@@ -896,5 +928,16 @@ class TModelBase
     private function getViewRenderer()
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+    }
+
+    private function getResponseVariableReplacer(): ResponseVariableReplacerInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.response.response_variable_replacer');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('cmsPkgCore.logChannel.standard'); // TODO this needs to use monolog.logger.chameleon once #92 is finished
+        // TODO also add the exception to the log context on error above
     }
 }

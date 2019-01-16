@@ -69,7 +69,7 @@
 
         <div class="form-group pull-right form-inline TFullGroupTablePerPageSelect">
             <label>{{ 'chameleon_system_media_manager.paging.per_page' | trans }}
-                <select class="page-size-selection form-control input-sm">
+                <select class="page-size-selection form-control form-control-sm">
                     {% for label, value in pageSizes %}
                         <option value="{{ value | e('html_attr') }}"{% if value == listState.pageSize %} selected{% endif %}>{{ label }}</option>
                     {% endfor %}

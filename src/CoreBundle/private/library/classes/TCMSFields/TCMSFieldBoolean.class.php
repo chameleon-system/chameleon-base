@@ -33,7 +33,7 @@ class TCMSFieldBoolean extends TCMSFieldOption
     public function GetHTML()
     {
         $this->GetOptions();
-        $html = '<div class="btn-group btn-group-sm TCMSFieldBoolean" data-toggle="buttons">';
+        $html = '<div class="btn-group btn-group-sm btn-group-toggle TCMSFieldBoolean" data-toggle="buttons">';
         foreach ($this->options as $key => $value) {
             $key = (string) $key;
 
@@ -50,7 +50,7 @@ class TCMSFieldBoolean extends TCMSFieldOption
                 $sClass .= ' button-off';
             }
 
-            $html .= '<label class="btn btn-default '.$sClass.'">
+            $html .= '<label class="btn btn-secondary '.$sClass.'">
                         <input type="radio" class="radio" autocomplete="off" id="'.TGlobal::OutHTML($this->name.$key).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($key).'"'.$selected.' /> '.TGlobal::OutHTML($value)."
                       </label>\n";
         }
@@ -114,21 +114,6 @@ class TCMSFieldBoolean extends TCMSFieldOption
     public function HasContent()
     {
         return '0' == $this->data || false === empty($this->data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function GetCMSHtmlHeadIncludes()
-    {
-        $aIncludes = parent::GetCMSHtmlHeadIncludes();
-        $aIncludes[] = '<script type="text/javascript">
-        $(document).ready(function() {
-            $(".TCMSFieldBoolean .btn").bootstrapBtn();
-        });
-        </script>';
-
-        return $aIncludes;
     }
 
     /**

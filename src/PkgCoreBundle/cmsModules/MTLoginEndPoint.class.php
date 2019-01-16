@@ -169,14 +169,6 @@ class MTLoginEndPoint extends TCMSModelBase
         }
     }
 
-    public function GetHtmlHeadIncludes()
-    {
-        $aIncludes = parent::GetHtmlHeadIncludes();
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contentbox.css" rel="stylesheet" type="text/css" />';
-
-        return $aIncludes;
-    }
-
     private function redirectOnPendingUpdates()
     {
         try {
