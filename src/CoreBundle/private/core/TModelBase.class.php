@@ -351,7 +351,10 @@ class TModelBase
             try {
                 $content = $this->getResponseVariableReplacer()->replaceVariables($content);
             } catch (TokenInjectionFailedException $exception) {
-                $this->getLogger()->error(sprintf('Cannot render AJAX output plain %s', $exception->getMessage()));
+                $this->getLogger()->error(
+                    sprintf('Cannot render AJAX output plain %s', $exception->getMessage()),
+                    ['exception' => $exception]
+                );
 
                 http_response_code(500);
 
@@ -374,7 +377,10 @@ class TModelBase
         try {
             $content = $this->getResponseVariableReplacer()->replaceVariables($content);
         } catch (TokenInjectionFailedException $exception) {
-            $this->getLogger()->error(sprintf('Cannot render AJAX output %s', $exception->getMessage()));
+            $this->getLogger()->error(
+                sprintf('Cannot render AJAX output %s', $exception->getMessage()),
+                ['exception' => $exception]
+            );
 
             http_response_code(500);
 
@@ -937,7 +943,6 @@ class TModelBase
 
     private function getLogger(): LoggerInterface
     {
-        return ServiceLocator::get('cmsPkgCore.logChannel.standard'); // TODO this needs to use monolog.logger.chameleon once #92 is finished
-        // TODO also add the exception to the log context on error above
+        return ServiceLocator::get('logger');
     }
 }
