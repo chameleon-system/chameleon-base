@@ -211,7 +211,7 @@ Note that ONLY BC breaking changes are listed, according to our backwards compat
 ## TCMSFieldDate/TCMSFieldDateToday
 
 The field classes now use the language independent SQL date format in frontend rendering instead of always using a german date format. 
-For backwards compatibility reasons they work with the german date format, too.
+For backwards compatibility reasons they work with the German date format, too.
 
 ## \TTools
 
@@ -344,10 +344,10 @@ Deprecated is every jquery plugin in:
 
 ## Translations
 
-- chameleon_system_core.field_options.option_value_true
 - chameleon_system_core.field_options.option_value_false
-- chameleon_system_core.record_lock.lock_owner_fax
+- chameleon_system_core.field_options.option_value_true
 - chameleon_system_core.fields.lookup.no_matches
+- chameleon_system_core.record_lock.lock_owner_fax
 
 ## Database Tables
 
