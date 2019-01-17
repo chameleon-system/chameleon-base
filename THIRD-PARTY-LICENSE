@@ -28,6 +28,8 @@ MIT License
 - jQuery - http://jquery.com
 - jQuery UI - http://jqueryui.com
 - jQuery GoogleMapsV3OverviewControl plugin - https://github.com/drcoen/Google-Maps-API-V3-Overview-Control
+- jQuery-bgiframe plugin - https://github.com/brandonaaron/bgiframe
+- jQuery-blockUI plugin - http://malsup.com/jquery/block/
 - jQuery Chosen plugin - http://harvesthq.github.io/chosen/
 - jQuery ContextMenu plugin - http://medialize.github.io/jQuery-contextMenu/
 - jQuery Cookie plugin - https://github.com/js-cookie/js-cookie
@@ -37,9 +39,10 @@ MIT License
 - jQuery Form plugin - http://malsup.com/jquery/form/
 - jQuery Hotkeys plugin - https://github.com/jeresig/jquery.hotkeys
 - jQuery jBreadCrumb plugin - http://www.comparenetworks.com/developers/jqueryplugins/jbreadcrumb.html
-- jQuery Modal plugin
+- jQuery jqDnR - part of jqModal - https://github.com/briceburg/jqModal
 - jQuery jsTree plugin - https://www.jstree.com/
 - jQuery Masked Input plugin - http://digitalbush.com/projects/masked-input-plugin/
+- jQuery Modal plugin
 - jQuery Select2 - https://github.com/select2/select2/
 - jQuery Tag Input modified by ESONO AG - http://roberto.open-lab.com/2010/02/10/a-delicious-javascript-tagging-input-field/
 - jQuery Wayfarer Tooltip plugin - http://www.wayfarerweb.com/wtooltip.php
