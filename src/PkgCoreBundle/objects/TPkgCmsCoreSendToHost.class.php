@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Class TPkgCmsCoreSendToHost
  * use the class to send http requests to a remote server.
@@ -351,18 +355,13 @@ class TPkgCmsCoreSendToHost
 
         $this->parseResponseHeader($sHeader);
 
-        $iLogLevel = 4;
-        if (true === $this->logRequest) {
-            $iLogLevel = 1;
+        $msg = 'REQUEST: '.$this->getLastRequest().' RESPONSE: '.$this->getLastResponseHeader().$this->getLastResponseBody();
+        $msg = str_replace(["\r", "\n"], ['', '\n'], $msg);
+        if (Response::HTTP_OK === $this->getLastResponseCode()) {
+            $this->getLogger()->info($msg);
+        } else {
+            $this->getLogger()->error($msg);
         }
-        TTools::WriteLogEntry(
-            "REQUEST:\n".$this->getLastRequest()."\n\nRESPONSE:\n".$this->getLastResponseHeader(
-            ).$this->getLastResponseBody(),
-            $iLogLevel,
-            __FILE__,
-            __LINE__,
-            '/logs/sendtohost.log'
-        );
 
         return $this->lastResponseBody;
     }
@@ -493,12 +492,14 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * when enabled, then all transactions will be written to /logs/sendtohost.log"
+     * When enabled, all transactions will be written to /logs/sendtohost.log"
      * otherweise we only write them to the log in log level 4.
      *
      * @param bool $logRequest
      *
      * @return $this
+     *
+     * @deprecated since 6.3.0 - not supported anymore: Logging is always enabled
      */
     public function setLogRequest($logRequest)
     {
@@ -523,5 +524,10 @@ class TPkgCmsCoreSendToHost
     public function getLastResponseCodeRaw()
     {
         return $this->lastResponseCodeRaw;
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
     }
 }

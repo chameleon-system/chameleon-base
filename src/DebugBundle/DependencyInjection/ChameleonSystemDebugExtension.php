@@ -25,10 +25,34 @@ class ChameleonSystemDebugExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('services.xml');
 
-        foreach (array($container->getDefinition('chameleon_system_debug.database_collector'),
-                    $container->getDefinition('chameleon_system_debug.profiler_database_connection'), ) as $definition) {
-            $definition->addMethodCall('setBacktraceEnabled', array($config['backtrace_enabled']));
-            $definition->addMethodCall('setBacktraceLimit', array($config['backtrace_limit']));
+        $this->handleLegacyConfig($config);
+        $this->configureDatabaseProfiler($container, $config['database_profiler'], $loader);
+    }
+
+    private function handleLegacyConfig(array &$config): void
+    {
+        if (isset($config['backtrace_enabled'])) {
+            $config['database_profiler']['backtrace_enabled'] = $config['backtrace_enabled'];
+        }
+        if (isset($config['backtrace_limit'])) {
+            $config['database_profiler']['backtrace_limit'] = $config['backtrace_limit'];
+        }
+    }
+
+    private function configureDatabaseProfiler(ContainerBuilder $container, array $config, XmlFileLoader $loader): void
+    {
+        if (false === $config['enabled']) {
+            return;
+        }
+
+        $loader->load('database_profiler.xml');
+
+        foreach ([
+            $container->getDefinition('chameleon_system_debug.database_collector'),
+            $container->getDefinition('chameleon_system_debug.profiler_database_connection'),
+         ] as $definition) {
+            $definition->addMethodCall('setBacktraceEnabled', [$config['backtrace_enabled']]);
+            $definition->addMethodCall('setBacktraceLimit', [$config['backtrace_limit']]);
         }
     }
 }

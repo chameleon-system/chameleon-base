@@ -14,8 +14,8 @@ namespace ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder;
 use ChameleonSystem\DatabaseMigration\Constant\MigrationRecorderConstants;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use Doctrine\DBAL\Connection;
-use IPkgCmsCoreLog;
 use MapperException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use TPkgSnippetRenderer_SnippetRenderingException;
 use ViewRenderer;
@@ -35,7 +35,7 @@ class MigrationRecorder
      */
     private $queryWriter;
     /**
-     * @var IPkgCmsCoreLog
+     * @var LoggerInterface
      */
     private $logger;
     /**
@@ -47,10 +47,10 @@ class MigrationRecorder
      * @param ContainerInterface $container
      * @param Connection         $databaseConnection
      * @param QueryWriter        $queryWriter
-     * @param IPkgCmsCoreLog     $logger
+     * @param LoggerInterface    $logger
      * @param string             $logFilePath
      */
-    public function __construct(ContainerInterface $container, Connection $databaseConnection, QueryWriter $queryWriter, IPkgCmsCoreLog $logger, $logFilePath)
+    public function __construct(ContainerInterface $container, Connection $databaseConnection, QueryWriter $queryWriter, LoggerInterface $logger, $logFilePath)
     {
         $this->container = $container; // used to get the non-shared snippet renderer service
         $this->databaseConnection = $databaseConnection;
@@ -89,8 +89,10 @@ class MigrationRecorder
                 fwrite($filePointer, $head, strlen($head));
             }
         } else {
-            $sMessage = 'file '.$sLogFileName.' is not writable (check path constant: PATH_CMS_CHANGE_LOG, and missing rights for file writes)';
-            $this->logger->error($sMessage, __FILE__, __LINE__, array('originalMessage' => $sMessage));
+            $this->logger->error(
+                sprintf('File %s is not writable (check path constant: PATH_CMS_CHANGE_LOG, and missing rights for file writes).', $sLogFileName)
+            );
+
             exit(); // we want to break the ajax call to get the warning
         }
 

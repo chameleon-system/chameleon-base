@@ -202,13 +202,23 @@
             </trans-unit>
 
 
-            <trans-unit id="chameleon_system_core.error.tree_path_nothing_assigned">
-                <source>chameleon_system_core.error.tree_path_nothing_assigned</source>
-                <target>Not assigned</target>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.cronjob.mail_subject_collected_form_data">
                 <source>chameleon_system_core.cronjob.mail_subject_collected_form_data</source>
                 <target>collected form data from "%formName%"</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cronjob.error_cronjob_still_locked">
+                <source>chameleon_system_core.cronjob.error_cronjob_still_locked</source>
+                <target>Cronjob not executed. It is still locked.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cronjob.error_cronjobs_disabled">
+                <source>chameleon_system_core.cronjob.error_cronjobs_disabled</source>
+                <target>Cronjob execution not started because cronjobs are disabled.</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.error.tree_path_nothing_assigned">
+                <source>chameleon_system_core.error.tree_path_nothing_assigned</source>
+                <target>Not assigned</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.link.open_media_manager">
                 <source>chameleon_system_core.link.open_media_manager</source>

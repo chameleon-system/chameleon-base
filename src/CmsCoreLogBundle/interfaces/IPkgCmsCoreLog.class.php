@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface instead
+ */
 interface IPkgCmsCoreLog
 {
     public function __construct(Psr\Log\LoggerInterface $oLogger);

@@ -10,7 +10,9 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorInterface;
+use Psr\Log\LoggerInterface;
 
 class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
 {
@@ -272,19 +274,15 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
             $sPlaintext = $this->ReplaceVariablesInTextHook($sPlaintext, $oNewsletterUser);
             $sGeneratedNewsletter = $this->ReplaceVariablesInTextHook($sGeneratedNewsletter, $oNewsletterUser);
 
-            // $oMailObject->AltBody($sPlaintext);
+            $logger = $this->getLogger();
             if (false === $this->isNewsletterAlreadySent($oNewsletterUser)) {
                 if (!$oMailObject->Send(array('sBody' => $sGeneratedNewsletter, 'sTextBody' => $sPlaintext))) {
-                    $sMessage = 'Unable to sen Newsletter: '.$oMailObject->ErrorInfo;
-                    $oLogger = \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
-                    $oLogger->warning($sMessage, __FILE__, __LINE__);
+                    $logger->warning(sprintf('Unable to send Newsletter: %s', $oMailObject->ErrorInfo));
                 } else {
                     $bSend = true;
                 }
             } else {
-                $sMessage = 'mail to newsletter queue entry with e-mail '.$oNewsletterUser->fieldEmail.' already sent';
-                $oLogger = \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
-                $oLogger->warning($sMessage, __FILE__, __LINE__, array('originalMessage' => $sMessage));
+                $logger->warning(sprintf('Mail to newsletter queue entry with e-mail %s already sent.', $oNewsletterUser->fieldEmail));
             }
         }
 
@@ -394,7 +392,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      */
     private function getMailer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.mailer');
+        return ServiceLocator::get('chameleon_system_core.mailer');
     }
 
     /**
@@ -402,7 +400,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      */
     protected function getPostProcessorCollector()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_newsletter.post_processor_collector');
+        return ServiceLocator::get('chameleon_system_newsletter.post_processor_collector');
     }
 
     /**
@@ -410,7 +408,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      */
     private function getNewsletterUserDataFactory()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_newsletter.user_data_factory');
+        return ServiceLocator::get('chameleon_system_newsletter.user_data_factory');
     }
 
     /**
@@ -418,6 +416,11 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
     }
 }
