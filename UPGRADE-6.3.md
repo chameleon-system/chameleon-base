@@ -54,6 +54,8 @@ its interfaces (like `HandlerInterface`, `ProcessorInterface`, ...).
 This is already done in most places in Chameleon itself (chameleon-base and chameleon-shop).
 
 Project code should also be adapted to this. See below for a migration example.
+Note that if there is no handler configuration in your project nothing will be written.
+A minimum config could be a stream handler logging to `%kernel.logs_dir%/%kernel.environment%.log`.
 
 Note that log messages are no longer written to database.
 You can still configure this if needed with the service `cmsPkgCore.logHandler.database` (TPkgCmsCoreLogMonologHandler_Database).
