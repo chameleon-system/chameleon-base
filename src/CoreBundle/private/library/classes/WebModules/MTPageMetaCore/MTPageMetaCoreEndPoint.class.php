@@ -10,12 +10,14 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
 
 /**
  * include page header data like title, and meta tags.
- *
-/**/
+ */
 class MTPageMetaCoreEndPoint extends TUserModelBase
 {
     /**
@@ -95,6 +97,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
         $this->data['aMetaData'] = $this->TrimMetaKeywords($this->data['aMetaData']);
         $this->data['aLangList'] = $this->GetLanguageList();
         $this->data['sCanonical'] = $this->GetMetaCanonical();
+        $this->data['language-alternatives'] = $this->getLanguageAlternatives(); // TODO this is not cached in any way at the moment
 
         return $this->data;
     }
@@ -647,18 +650,82 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
     protected function GetMetaCanonical()
     {
         $activePage = $this->getActivePageService()->getActivePage();
-        if ($this->isNotFoundPage($activePage)) {
+        $activePortal = $this->getPortalDomainService()->getActivePortal();
+
+        if (null === $activePage || null === $activePortal) {
+            return '';
+        }
+
+        if (true === $this->isNotFoundPage($activePage, $activePortal)) {
             return '';
         }
 
         return $activePage->GetRealURLPlain(array(), true);
     }
 
-    private function isNotFoundPage($activePage)
+    private function isNotFoundPage(?TCMSActivePage $activePage, ?TdbCmsPortal $activePortal): bool
     {
-        $activePortal = $this->getPortalDomainService()->getActivePortal();
+        if (null === $activePage || null === $activePortal) {
+            return false;
+        }
 
         return $activePage->fieldPrimaryTreeIdHidden === $activePortal->fieldPageNotFoundNode;
+    }
+
+    private function getLanguageAlternatives(): array
+    {
+        // TODO move to (which?) service? Also maybe change/move GetTranslatedPageURL() there.
+
+        $activePortal = $this->getPortalDomainService()->getActivePortal();
+        if (null === $activePortal) {
+            return [];
+        }
+
+        $activeLanguages = $activePortal->GetActiveLanguages();
+
+        if ($activeLanguages->Length() < 2) {
+            return [];
+        }
+
+        $languageService = $this->getLanguageService();
+        $activeLanguage = $languageService->getActiveLanguage();
+
+        if (null === $activeLanguage) {
+            return [];
+        }
+
+        $activePage = $this->getActivePageService()->getActivePage();
+
+        if (true === $this->isNotFoundPage($activePage, $activePortal)) {
+            return [];
+        }
+
+        $alternatives = [];
+        while (false !== ($alternativeLanguage = $activeLanguages->Next())) {
+            // TODO consider "x-default"? -> that would be the catch all page (language)
+
+            if ($alternativeLanguage->id !== $activeLanguage->id) {
+                $iso = $alternativeLanguage->fieldIso6391;
+                try {
+                    $url = $alternativeLanguage->GetTranslatedPageURL();
+                    $alternatives[$iso] = $url;
+                } catch (Exception $exception) {
+                    $id = '';
+                    $name = '';
+                    if (null !== $activePage) {
+                        $id = $activePage->id;
+                        $name = $activePage->GetName();
+                    }
+
+                    $this->getLogger()->error(
+                        sprintf('Cannot generate alternative language urls for page %s/%s.', $id, $name),
+                        ['exception' => $exception]
+                    );
+                }
+            }
+        }
+
+        return $alternatives;
     }
 
     /**
@@ -666,7 +733,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -674,6 +741,17 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
+    }
+
+    private function getLanguageService(): LanguageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        // TODO already use this with 6.2?
+        return ServiceLocator::get('logger');
     }
 }
