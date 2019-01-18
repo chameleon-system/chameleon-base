@@ -17,7 +17,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ActiveCronjobCommand extends Command
+class GetCronjobsStateCommand extends Command
 {
     /**
      * @var CronjobEnablingServiceInterface
@@ -26,7 +26,7 @@ class ActiveCronjobCommand extends Command
 
     public function __construct(CronjobEnablingServiceInterface $cronjobEnablingService)
     {
-        parent::__construct('chameleon_system:cronjobs:active_check');
+        parent::__construct('chameleon_system:cronjobs:state_check');
 
         $this->cronjobEnablingService = $cronjobEnablingService;
     }
@@ -39,7 +39,7 @@ class ActiveCronjobCommand extends Command
         $this
             ->setDescription('Checks if any cron job is running')
             ->setHelp(<<<EOF
-The <info>%command.name%</info> command outputs "true" if a cron job is currently running. Otherwise "false".
+The <info>%command.name%</info> command outputs "running" if a cron job is currently running. Otherwise "idle".
 EOF
             )
         ;
@@ -52,12 +52,12 @@ EOF
     {
         try {
             if (true === $this->cronjobEnablingService->isOneCronjobRunning()) {
-                $output->writeln('true');
+                $output->writeln('running');
             } else {
-                $output->writeln('false');
+                $output->writeln('idle');
             }
         } catch (CronjobHandlingException $exception) {
-            $output->writeln(sprintf('Cron job execution could not be checked: %s', $exception->getMessage()));
+            $output->writeln(sprintf('Cron job running state could not be checked: %s', $exception->getMessage()));
 
             return 1;
         }

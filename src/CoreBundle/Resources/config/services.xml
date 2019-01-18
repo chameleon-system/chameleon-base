@@ -815,7 +815,7 @@
             <tag name="console.command"/>
         </service>
 
-        <service id="chameleon_system_core.command.active_cronjob_check" class="ChameleonSystem\CoreBundle\Command\ActiveCronjobCommand">
+        <service id="chameleon_system_core.command.active_cronjob_check" class="ChameleonSystem\CoreBundle\Command\GetCronjobsStateCommand">
             <argument type="service" id="chameleon_system_core.cronjob.cronjob_enabling_service"/>
             <tag name="console.command"/>
         </service>
