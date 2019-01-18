@@ -748,6 +748,10 @@
             <argument type="service" id="chameleon_system_cms_cache.cache"/>
         </service>
 
+        <service id="chameleon_system_core.cronjob.cronjob_state_service" class="ChameleonSystem\CoreBundle\CronJob\CronjobStateService" public="true">
+            <argument type="service" id="database_connection"/>
+        </service>
+
         <service id="security.csrf.token_storage" class="ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenStorage" public="false">
             <argument type="service" id="request_stack"/>
         </service>
@@ -816,7 +820,7 @@
         </service>
 
         <service id="chameleon_system_core.command.active_cronjob_check" class="ChameleonSystem\CoreBundle\Command\GetCronjobsStateCommand">
-            <argument type="service" id="chameleon_system_core.cronjob.cronjob_enabling_service"/>
+            <argument type="service" id="chameleon_system_core.cronjob.cronjob_state_service"/>
             <tag name="console.command"/>
         </service>
 

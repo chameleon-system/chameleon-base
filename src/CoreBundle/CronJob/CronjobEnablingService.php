@@ -67,16 +67,4 @@ class CronjobEnablingService implements CronjobEnablingServiceInterface
             throw new CronjobHandlingException('Cannot reset cron jobs enable flag in database.', 0, $exception);
         }
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isOneCronjobRunning(): bool
-    {
-        try {
-            return $this->connection->fetchColumn("SELECT COUNT(*) FROM `cms_cronjobs` WHERE `lock` = '1'") > 0;
-        } catch (DBALException $exception) {
-            throw new CronjobHandlingException('Cannot check for cron jobs in database.', 0, $exception);
-        }
-    }
 }

@@ -34,9 +34,4 @@ interface CronjobEnablingServiceInterface
      * @throws CronjobHandlingException
      */
     public function disableCronjobExecution(): void;
-
-    /**
-     * @throws CronjobHandlingException
-     */
-    public function isOneCronjobRunning(): bool;
 }

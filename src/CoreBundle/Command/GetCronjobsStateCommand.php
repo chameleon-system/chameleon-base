@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Command;
 
-use ChameleonSystem\CoreBundle\CronJob\CronjobEnablingServiceInterface;
+use ChameleonSystem\CoreBundle\CronJob\CronjobStateServiceInterface;
 use ChameleonSystem\CoreBundle\Exception\CronjobHandlingException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,15 +20,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class GetCronjobsStateCommand extends Command
 {
     /**
-     * @var CronjobEnablingServiceInterface
+     * @var CronjobStateServiceInterface
      */
-    private $cronjobEnablingService;
+    private $cronjobStateService;
 
-    public function __construct(CronjobEnablingServiceInterface $cronjobEnablingService)
+    public function __construct(CronjobStateServiceInterface $cronjobStateService)
     {
         parent::__construct('chameleon_system:cronjobs:state_check');
 
-        $this->cronjobEnablingService = $cronjobEnablingService;
+        $this->cronjobStateService = $cronjobStateService;
     }
 
     /**
@@ -51,7 +51,7 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            if (true === $this->cronjobEnablingService->isOneCronjobRunning()) {
+            if (true === $this->cronjobStateService->isCronjobRunning()) {
                 $output->writeln('running');
             } else {
                 $output->writeln('idle');
