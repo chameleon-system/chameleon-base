@@ -951,7 +951,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * Returns all module function definitions of the request specified by either POST or GET
      * in the form 'spot name' => 'method name'. POST has precedence (first in the array).
      *
-     * @return array|string
+     * @return array
      */
     private function getRequestedModuleFunctions(): array
     {
