@@ -220,6 +220,103 @@ German date format. For backwards compatibility reasons they work with German da
 - Changed method `WriteLogEntry()`: parameter `$sLogFileName` is now ignored.
 - Changed method `WriteLogEntrySimple()`: parameter `$sLogFileName` is now ignored.
 
+## Backend Theme Library
+
+The Backend was upgraded to Bootstrap 4.1.3.
+
+See the [Bootstrap Migration Guide](https://getbootstrap.com/docs/4.1/migration/) for needed changes to your backend modules.
+
+During the upgrade to Bootstrap 4 the following styles where checked and these are our findings:
+
+.img-responsive -> .img-fluid
+- TCMSFieldMedia
+- TCSMFieldFMapCoordinate
+
+btn-default -> btn-secondary
+- Some TCMSField types and TCMSTableEditors so check yours.
+
+.pull-left -> .float-left
+- TCMSFieldDocument
+- TCMSFieldDocumentProperties
+- TCMSFieldMediaProperties
+- TCMSFieldModuleInstance
+- MTHeader
+- header navigation
+- footer
+- Added CSS class migration in TCMSRender::DrawButton method for backwards compatibility
+
+.input-sm -> .form-control-sm
+- Almost all TCMSField classes and Twig templates
+- Some list managers
+- Some TCMSTableEditor classes
+
+.table-condensed -> .table-sm
+- TCMSFieldDocumentProperties
+- TCMSFieldMediaProperties
+- TFullGroupTable
+
+New: .page-item + .page-link
+- Pagination in TFullGroupTable
+
+.pull-rigt -> .float-right
+- TFullGroupTable
+- MTHeader
+- MTTableditor
+
+.input-group-addon -> .input-group-append
+- Field types using the text length counter addon (varchar)
+
+.navbar-default -> .navbar-light
+- TCMSTableManager and the layout manager iframes
+
+.navbar-toggle -> .navbar-toggler
+- header navbar
+
+.col-md-* -> .col-lg-*
+- header
+- login
+
+Not found anywhere (so you might want to skip this search, too):
+- well
+- thumbnail
+- list-line
+- page-header
+- dl-horizontal
+- blockquote
+- btn-xs
+- btn-group-justified
+- btn-group-xs
+- breadcrumb
+- center-block
+- img-responsive
+- img-rounded
+- form-horizontal
+- radio
+- checkbox
+- input-lg
+- control-label
+- hidden/visible-xs, sm, md, lg
+- label
+- navbar-form
+- navbar-btn
+- progress-bar*
+
+## Backend JQuery
+
+JQuery that is used in the Chameleon backend was upgraded to version 3.3.1. For backwards compatibility
+jquery.migrate 1.4.1 was added, but will be removed in a future Chameleon version.
+
+## Backend Modals
+
+To open modals in the backend, use `CHAMELEON.CORE.showModal()` now, which expects a CSS class that determines the
+modal size (one of `modal-sm`, `modal-md`, `modal-lg`, `modal-xl`, `modal-xxl`). This function will then open a
+Bootstrap modal.
+
+All `CreateModal...` JavaScript methods now call this method internally, determining the respective classes in a
+backwards-compatible way from the `width` argument (if in doubt, `modal-xxl` is used).
+
+Please check custom calls of `CreateModal...` methods and remove width/height settings where possible.
+
 # Deprecated Code Entities
 
 It is recommended that all references to the classes, interfaces, properties, constants, methods and services in the
@@ -298,6 +395,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
 - \MTTableManager::getAutocompleteRecordList()
 - \TCMSCronJob::getLogger()
+- \TCMSFieldColorPicker::isFirstInstance()
 - \TCMSFieldLookup::enableComboBox()
 - \TCMSLogChange::getUpdateLogger()
 - \TPkgCmsCoreSendToHost::setLogRequest()
@@ -305,54 +403,28 @@ is recommended (although this tool may not find database-related deprecations).
 - \TPkgCsv2Sql::CreateLogFileName()
 - \TPkgCsv2Sql::GetLogFile()
 - \TTools::AddStaticPageVariables()
-- \TCMSFieldColorPicker::isFirstInstance()
 
 ## JavaScript Files and Functions
 
-- $.blockUI();
-- $.unblockUI();
-
-Use CHAMELEON.CORE.showProcessingModal() and CHAMELEON.CORE.hideProcessingModal() instead.
-
-- SetChangedDataMessage()
-
-Use CHAMELEON.CORE.MTTableEditor.initInputChangeObservation() instead.
-
-- CreateModalIFrameDialogFromContentWithoutClose
-
-Use CreateModalIFrameDialogFromContent() instead. (modals always show a header and close button)
-
-All CreateModal... methods now call a bootstrap modal using CHAMELEON.CORE.showModal().
-The modal uses CSS classes for the size. If not really necessary the modal is always opened in xxl size (90% screensize).
-To be backwards compatible the size classes are determined using CHAMELEON.CORE.getModalSizeClassByPixel().
-You should remove all width/height settings in CreateModalXY calls if it does not necessarily render smaller.
-
-- $.jBreadCrumb()
-- $.bgiframe()
-- $.jqM() (jqModal)
-- $.jqDnR() (part of jqModal)
-- $.addOption() (jquery.selectboxes plugin)
-
-## jQueryUi
-
-jQueryUi is replaced everywhere in the code.
-The only exception is drag&drop functionality in the template engine for module spot placing and reordering of elements
-using TCMSFieldPosition.
-
-Deprecated is every jquery plugin in: 
-
-/Resources/public/javascript/jquery/jQueryUI/
-
-
-- jquery.form.js was updated to version 4.2.2 and is now located in Resources/public/javascript/jquery-form-4.2.2/jquery.form.min.js.
-- jquery library was upgraded to 3.3.1. To be backwards compatible jquery.migrate is included in version 1.4.1.
-- bootstrap-colorpicker was upgraded to 3.0.3 and the directory name changed to bootstrap-colorpicker-3.0.3. The old directory is deprecated.
+- bootstrap-colorpicker (new version 3.0.3 located in src/CoreBundle/Resources/public/javascript/jquery/bootstrap-colorpicker-3.0.3).
 - chosen.jquery.js
 - jqModal.js 
 - jqDnR.js
+- jquery.form.js (new version 4.2.2 located in src/CoreBundle/Resources/public/javascript/jquery/jquery-form-4.2.2/jquery.form.min.js).
 - jquery.selectboxes.js
-- respond.min.js
+- jQueryUI (everything in path src/CoreBundle/Resources/public/javascript/jquery/jQueryUI; drag and drop still used in the template engine).
 - pngForIE.htc
+- respond.min.js
+
+- $.addOption() (jquery.selectboxes plugin)
+- $.bgiframe()
+- $.blockUI();
+- $.jBreadCrumb()
+- $.jqDnR() (part of jqModal)
+- $.jqM() (jqModal)
+- $.unblockUI();
+- CreateModalIFrameDialogFromContentWithoutClose
+- SetChangedDataMessage()
 
 ## Translations
 
@@ -368,84 +440,3 @@ None.
 ## Database Fields
 
 None.
-
-## Backend Theme Library
-
-The Backend was upgraded to Bootstrap 4.1.3.
-
-See the [Bootstrap Migration Guide](https://getbootstrap.com/docs/4.1/migration/) for needed changes to your backend modules.
-
-During the upgrade to Bootstrap 4 the following styles where checked and these are our findings:
-
-.img-responsive -> .img-fluid
-- TCMSFieldMedia
-- TCSMFieldFMapCoordinate
-
-btn-default -> btn-secondary
-- Some TCMSField types and TCMSTableEditors so check yours.
-
-.pull-left -> .float-left
-- TCMSFieldDocument
-- TCMSFieldDocumentProperties
-- TCMSFieldMediaProperties
-- TCMSFieldModuleInstance
-- MTHeader
-- header navigation
-- footer
-- Added CSS class migration in TCMSRender::DrawButton method for backwards compatibility
-
-.input-sm -> .form-control-sm
-- Almost all TCMSField classes and Twig templates
-- Some list managers
-- Some TCMSTableEditor classes
-
-.table-condensed -> .table-sm
-- TCMSFieldDocumentProperties
-- TCMSFieldMediaProperties
-- TFullGroupTable
-
-New: .page-item + .page-link
-- Pagination in TFullGroupTable
-
-.pull-rigt -> .float-right
-- TFullGroupTable
-- MTHeader
-- MTTableditor
-
-.input-group-addon -> .input-group-append
-- Field types using the text length counter addon (varchar)
-
-.navbar-default -> .navbar-light
-- TCMSTableManager and the layout manager iframes
-
-.navbar-toggle -> .navbar-toggler
-- header navbar
-
-.col-md-* -> .col-lg-*
-- header
-- login
-
-Not found anywhere (so you might want to skip this search, too):
-- well
-- thumbnail
-- list-line
-- page-header
-- dl-horizontal
-- blockquote
-- btn-xs
-- btn-group-justified
-- btn-group-xs
-- breadcrumb
-- center-block
-- img-responsive
-- img-rounded
-- form-horizontal
-- radio
-- checkbox
-- input-lg
-- control-label 
-- hidden/visible-xs, sm, md, lg
-- label
-- navbar-form
-- navbar-btn
-- progress-bar*

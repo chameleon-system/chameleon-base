@@ -274,7 +274,6 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
         // reset content
         var modalBody = document.querySelectorAll('#modalDialog .modal-body')[0];
         modalBody.innerHTML = '';
-
     }
 
     // set title
@@ -310,7 +309,7 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
 function CreateModalIFrameDialog(url, width, height, title, isDraggable, isResizable) {
     url = CMSAddGlobalParametersToURL(url);
     var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="99%" height="100%" frameborder="0"></iframe>';
-    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
+    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
 }
 
 /*
@@ -319,14 +318,14 @@ function CreateModalIFrameDialog(url, width, height, title, isDraggable, isResiz
 function CreateModalIFrameDialogCloseButton(url, width, height, title, isDraggable, isResizable) {
     url = CMSAddGlobalParametersToURL(url);
     var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="100%" height="100%" frameborder="0"></iframe>';
-    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
+    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
 }
 
 /*
  * creates a ModalDialog with close button from content string
  */
 function CreateModalIFrameDialogFromContent(content, width, height, title, isDraggable, isResizable) {
-    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
+    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
 }
 
 /*
@@ -337,7 +336,7 @@ function CreateModalDialogFromContainer(contentID, width, height, title, isDragg
     $('#' + contentID).html('');
     top.sLastDialogID = contentID;
     var dialogContent = '<div style="width:100%;height:100%;" id="modal_dialog_content">' + content + '</div>';
-    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
+    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
 }
 
 /*

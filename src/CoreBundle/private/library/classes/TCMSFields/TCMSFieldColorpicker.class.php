@@ -69,9 +69,7 @@ class TCMSFieldColorpicker extends TCMSField
     }
 
     /**
-     * @deprecated since 6.3.0.
-     *
-     * Not used anywhere in the core or shop bundle (looks like this is an orphan which was used by an older color picker).
+     * @deprecated since 6.3.0 - no longer used in Chameleon (looks like this is an orphan which was used by an older color picker).
      *
      * @return bool
      */
