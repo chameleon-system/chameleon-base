@@ -94,7 +94,7 @@ class TCMSFieldLookup extends TCMSField
      * comboBox is enabled on 30 elements or more
      * you may disable the combobox using "disableComboBox=true" in field config or by extending this method.
      *
-     * @deprecated sind 6.3.0 - no longer used
+     * @deprecated since 6.3.0 - no longer used
      *
      * @return bool
      */

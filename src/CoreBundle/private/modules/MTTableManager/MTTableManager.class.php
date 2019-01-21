@@ -351,9 +351,7 @@ class MTTableManager extends TCMSModelBase
     }
 
     /**
-     * @deprecated - since 6.3
-     *
-     * Use getAutocompleteRecordList instead.
+     * @deprecated since 6.3.0 - use getAutocompleteRecordList() instead
      *
      * @return array
      */
