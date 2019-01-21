@@ -87,7 +87,7 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
         $request->query->set('pagedef', $exceptionPageDef);
 
         // Do not execute (original) module_fnc for error pages
-        $request->attributes->remove('module_fnc');
+        $request->request->remove('module_fnc');
         $request->query->remove('module_fnc');
 
         return $this->mainController->__invoke();
