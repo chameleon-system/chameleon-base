@@ -248,9 +248,14 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
     var modalDialog = document.getElementById('modalDialog');
 
     if (null === modalDialog) {
-        document.body.innerHTML += '<div class="modal fade" id="modalDialog" tabindex="-1" role="dialog" aria-labelledby="modalDialog"\n' +
-            '         aria-hidden="true">\n' +
-            '        <div class="modal-dialog modal-dialog-centered '+sizeClass+'">\n' +
+        var newModal = document.createElement('div');
+        newModal.id = 'modalDialog';
+        newModal.className = 'modal fade';
+        newModal.setAttribute('tabindex', '-1');
+        newModal.setAttribute('role', 'dialog');
+        newModal.setAttribute('aria-labelledby', 'modalDialog');
+        newModal.setAttribute('aria-hidden', 'true');
+        newModal.innerHTML = '<div class="modal-dialog modal-dialog-centered ' + sizeClass + '">\n' +
             '            <div class="modal-content">      ' +
             '                <div class="modal-header" id="modalHeader">\n' +
             '                    <h5 class="modal-title" id="modalDialogLabel"></h5>\n' +
@@ -263,7 +268,7 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
             '            </div>\n' +
             '        </div>\n' +
             '    </div>';
-
+        document.body.appendChild(newModal);
         modalDialog = document.getElementById('modalDialog');
     } else {
         // set dialog size
@@ -274,7 +279,6 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
         // reset content
         var modalBody = document.querySelectorAll('#modalDialog .modal-body')[0];
         modalBody.innerHTML = '';
-
     }
 
     // set title
