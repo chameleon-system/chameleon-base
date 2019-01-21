@@ -346,7 +346,7 @@ Deprecated is every jquery plugin in:
 
 - jquery.form.js was updated to version 4.2.2 and is now located in Resources/public/javascript/jquery-form-4.2.2/jquery.form.min.js.
 - jquery library was upgraded to 3.3.1. To be backwards compatible jquery.migrate is included in version 1.4.1.
-- bootstrap-colorpicker was upgraded to 3.0.3 and the directory name changed to bootstrap-colorpicker-3.0.3. The old dirrectory is deprecated.
+- bootstrap-colorpicker was upgraded to 3.0.3 and the directory name changed to bootstrap-colorpicker-3.0.3. The old directory is deprecated.
 - chosen.jquery.js
 - jqModal.js 
 - jqDnR.js
