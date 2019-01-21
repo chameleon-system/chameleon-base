@@ -97,7 +97,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
         $this->data['aMetaData'] = $this->TrimMetaKeywords($this->data['aMetaData']);
         $this->data['aLangList'] = $this->GetLanguageList();
         $this->data['sCanonical'] = $this->GetMetaCanonical();
-        $this->data['language-alternatives'] = $this->getLanguageAlternatives(); // TODO this is not cached in any way at the moment
+        $this->data['language-alternatives'] = $this->getLanguageAlternatives();
 
         return $this->data;
     }
@@ -674,36 +674,29 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
 
     private function getLanguageAlternatives(): array
     {
-        // TODO move to (which?) service? Also maybe change/move GetTranslatedPageURL() there.
-
         $activePortal = $this->getPortalDomainService()->getActivePortal();
         if (null === $activePortal) {
             return [];
         }
 
-        $activeLanguages = $activePortal->GetActiveLanguages();
-
-        if ($activeLanguages->Length() < 2) {
-            return [];
-        }
-
         $languageService = $this->getLanguageService();
         $activeLanguage = $languageService->getActiveLanguage();
-
         if (null === $activeLanguage) {
             return [];
         }
 
-        $activePage = $this->getActivePageService()->getActivePage();
+        $activeLanguages = $activePortal->GetActiveLanguages();
+        if ($activeLanguages->Length() < 2) {
+            return [];
+        }
 
+        $activePage = $this->getActivePageService()->getActivePage();
         if (true === $this->isNotFoundPage($activePage, $activePortal)) {
             return [];
         }
 
         $alternatives = [];
         while (false !== ($alternativeLanguage = $activeLanguages->Next())) {
-            // TODO consider "x-default"? -> that would be the catch all page (language)
-
             if ($alternativeLanguage->id !== $activeLanguage->id) {
                 $iso = $alternativeLanguage->fieldIso6391;
                 try {
