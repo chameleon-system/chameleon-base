@@ -182,7 +182,7 @@ The `backtrace_enabled` and `backtrace_limit` keys
 were moved under the `database_profiler` key (e.g. `chameleon_system_debug: database_profiler: backtrace_enabled`
 instead of `chameleon_system_debug: backtrace_enabled`). Existing configuration should be adjusted.
 
-## Access denied page
+## Access-denied Page
 
 The access denied page should now support an additionally mapped parameter `loginFormAction` as a target action for the shown 
 login form. This avoids the second unexpected AccessDeniedException.
