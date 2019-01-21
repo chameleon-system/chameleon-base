@@ -20,7 +20,7 @@ class TCMSFieldURL extends TCMSFieldVarchar
         $html .= "<div style=\"padding-top: 3px;\">\n";
 
         $buttonTitle = TGlobal::Translate('chameleon_system_core.field_url.open');
-        $html .= TCMSRender::DrawButton($buttonTitle, "javascript:CreateModalIFrameDialogCloseButton(document.getElementById('".TGlobal::OutHTML($this->name)."').value,770,550,'".$buttonTitle."')", URL_CMS.'/images/icons/icon_world.gif', 'urlZoom');
+        $html .= TCMSRender::DrawButton($buttonTitle, "javascript:CreateModalIFrameDialogCloseButton(document.getElementById('".TGlobal::OutHTML($this->name)."').value,0,0,'".$buttonTitle."')", URL_CMS.'/images/icons/icon_world.gif', 'urlZoom');
 
         $html .= "</div>\n";
 

@@ -198,7 +198,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                         'listCacheKey' => $this->GetListCacheKey(),
                     );
 
-                    $js = "CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParameters)."',780,350,'".TGlobal::Translate('chameleon_system_core.action.export')."');";
+                    $js = "CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParameters)."',0,0,'".TGlobal::Translate('chameleon_system_core.action.export')."');";
 
                     $oMenuItem->sOnClick = $js;
                     $this->oMenuItems->AddItem($oMenuItem);

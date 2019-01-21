@@ -75,7 +75,7 @@ $rowCount = 0;
         if ($bRevisionManagementActive) {
             ?>
         function AddNewRevision() {
-            CreateModalDialogFromContainer('addNewRevisionDialog', 550, 350);
+            CreateModalDialogFromContainer('addNewRevisionDialog');
             $('#cmsrevisionname').val(sCurrentRecordName);
         }
 

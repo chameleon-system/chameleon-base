@@ -612,7 +612,7 @@ class TCMSTableEditorEndPoint
                             $oMenuItem->sItemKey = 'revisionManagementLoad';
                             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.record_revision.action_load_revision');
                             $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/database_go.png');
-                            $oMenuItem->sOnClick = "CreateModalIFrameDialogCloseButton('".$sRevisionListURL."',850,500);";
+                            $oMenuItem->sOnClick = "CreateModalIFrameDialogCloseButton('".$sRevisionListURL."');";
                             $this->oMenuItems->AddItem($oMenuItem);
                         }
                     }

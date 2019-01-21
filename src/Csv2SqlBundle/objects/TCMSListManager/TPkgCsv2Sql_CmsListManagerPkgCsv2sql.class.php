@@ -57,7 +57,7 @@ class TPkgCsv2Sql_CmsListManagerPkgCsv2sql extends TCMSListManagerFullGroupTable
         $aIncludes[] = "<script type=\"text/javascript\">
       function TPkgCsv2SqlShowInfo(data,statusText) {
         CloseModalIFrameDialog();
-        CreateModalIFrameDialogFromContent(data,800,600,'Result',true,true);
+        CreateModalIFrameDialogFromContent(data,0,0,'Result');
       }
       </script>";
         $aIncludes[] = '<link href="'.TGlobal::GetStaticURL('/static2/TPkgCsv2Sql/markup.css').'" media="screen" rel="stylesheet" type="text/css" />';

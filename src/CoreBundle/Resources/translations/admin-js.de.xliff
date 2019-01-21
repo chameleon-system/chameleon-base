@@ -6,6 +6,7 @@
             <trans-unit id="chameleon_system_core.fields.lookup.no_matches">
                 <source>chameleon_system_core.fields.lookup.no_matches</source>
                 <target>Keine Treffer für</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.universal_uploader.invalid_file_type">
@@ -210,7 +211,7 @@
 
             <trans-unit id="chameleon_system_core.js.ajax_error">
                 <source>chameleon_system_core.js.ajax_error</source>
-                <target>Fehler! Ajax-Antwort:\n%s1</target>
+                <target>Fehler! Ajax-Antwort: %s1</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.missing_node">
@@ -336,6 +337,11 @@
             <trans-unit id="chameleon_system_core.js.notice">
                 <source>chameleon_system_core.js.notice</source>
                 <target>Hinweis</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.ajax_parse_error">
+                <source>chameleon_system_core.js.ajax_parse_error</source>
+                <target>Die Ajax-Antwort konnte nicht dekodiert werden.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.confirm_page_delete">

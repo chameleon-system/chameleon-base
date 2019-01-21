@@ -392,7 +392,7 @@ div.grippie {
 }
 
 .app-body .main {
-    background-color: #A9C4E7;
+    background-color: #d9edf7;
 }
 
 /**
@@ -440,3 +440,19 @@ div.grippie {
 .select2-selection.select2-selection--single {
     border: 1px solid #e4e7ea;
 }
+
+/**
+Bootstrap 4 addons.
+ */
+@media (min-width: 992px) {
+    .modal-xl {
+        width: 90%;
+        max-width: 1140px;
+    }
+
+    .modal-xxl {
+        width: 90%;
+        max-width: 1900px;
+    }
+}
+

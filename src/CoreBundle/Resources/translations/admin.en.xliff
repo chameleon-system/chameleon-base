@@ -202,13 +202,23 @@
             </trans-unit>
 
 
-            <trans-unit id="chameleon_system_core.error.tree_path_nothing_assigned">
-                <source>chameleon_system_core.error.tree_path_nothing_assigned</source>
-                <target>Not assigned</target>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.cronjob.mail_subject_collected_form_data">
                 <source>chameleon_system_core.cronjob.mail_subject_collected_form_data</source>
                 <target>collected form data from "%formName%"</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cronjob.error_cronjob_still_locked">
+                <source>chameleon_system_core.cronjob.error_cronjob_still_locked</source>
+                <target>Cronjob not executed. It is still locked.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cronjob.error_cronjobs_disabled">
+                <source>chameleon_system_core.cronjob.error_cronjobs_disabled</source>
+                <target>Cronjob execution not started because cronjobs are disabled.</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_core.error.tree_path_nothing_assigned">
+                <source>chameleon_system_core.error.tree_path_nothing_assigned</source>
+                <target>Not assigned</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.link.open_media_manager">
                 <source>chameleon_system_core.link.open_media_manager</source>
@@ -874,6 +884,11 @@
             <trans-unit id="chameleon_system_core.record_lock.lock_owner_phone">
                 <source>chameleon_system_core.record_lock.lock_owner_phone</source>
                 <target>Tel.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_lock.lock_owner_fax">
+                <source>chameleon_system_core.record_lock.lock_owner_fax</source>
+                <target>Fax</target>
+                 <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_lock.locked_by">
                 <source>chameleon_system_core.record_lock.locked_by</source>
@@ -2494,6 +2509,10 @@
             <trans-unit id="chameleon_system_core.field_lookup_multi_select_restriction.check_help">
                 <source>chameleon_system_core.field_lookup_multi_select_restriction.check_help</source>
                 <target>If checked, an empty list actually means that the restriction is never satisfied - so the record is effectively disabled. If not checked, an empty list means "no restriction".</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.admin_message.button_title">
+                <source>chameleon_system_core.admin_message.button_title</source>
+                <target>Attention</target>
             </trans-unit>
         </body>
     </file>

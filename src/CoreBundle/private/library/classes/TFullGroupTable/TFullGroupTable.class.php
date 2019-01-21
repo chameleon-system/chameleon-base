@@ -526,7 +526,7 @@ class TFullGroupTable extends TGroupTable
                 $sTable .= $this->sPagingSection;
             }
         } else {
-            $notfoundRow = '<div class="alert alert-info">
+            $notfoundRow = '<div class="alert alert-warning mb-0 rounded-0 mt-0">
             '.$this->notFoundText.'</div>';
             $sTable .= $notfoundRow;
         }
@@ -745,10 +745,11 @@ class TFullGroupTable extends TGroupTable
         }
 
         $hitText = str_replace(array('$startRecord$', '$endRecord$', '$totalFound$'), array(($this->startRecord + 1), $next_startValue, $this->recordCount), $this->hitText);
-        $tableNavigation .= "<div id=\"{$this->listName}_navi\">
+        $tableNavigation .= '
+                    <div id="'.TGlobal::OutHTML($this->listName).'_navi">
         <script>
         function switchPage(startRecord) {
-            document.".$this->listName.'._startRecord.value = startRecord;
+            document.'.$this->listName.'._startRecord.value = startRecord;
             document.'.$this->listName.'.submit();
         }
         </script>
@@ -811,7 +812,7 @@ class TFullGroupTable extends TGroupTable
         $tableNavigation .= '</nav>';
 
         if ($this->showRowsPerPageChooser) {
-            $tableNavigation .= '<div class="col-auto form-group TFullGroupTablePerPageSelect">
+            $tableNavigation .= '<div class="col-auto form-group mb-auto TFullGroupTablePerPageSelect">
             <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_records_per_page')).'</span></div>
                 <select name="_limit" class="form-control" onChange="document.'.$this->listName.'._startRecord.value=0;document.'.$this->listName.'.submit();">

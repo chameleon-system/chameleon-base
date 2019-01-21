@@ -110,7 +110,7 @@ if (!empty($sTmpFormTabsContent)) {
     } else {
         $sFormTabsContent .= '<div id="tab-base">';
     }
-    $sFormTabsContent .= '<table class="table table-responsive-sm table-striped table-sm">';
+    $sFormTabsContent .= '<table class="table table-responsive-sm table-striped table-sm mb-0">';
     $sFormTabsContent .= $sTmpFormTabsContent;
     $sFormTabsContent .= '</table>
       </div>

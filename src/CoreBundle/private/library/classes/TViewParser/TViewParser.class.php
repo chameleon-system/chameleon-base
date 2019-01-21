@@ -250,7 +250,7 @@ class TViewParser
         $sTemplatePath = realpath($sTemplatePath);
         if (false === $sTemplatePath) {
             if (_DEVELOPMENT_MODE) {
-                $content = '<div style="background: #ffcccc url(/chameleon/blackbox/images/nav_icons/error.png) no-repeat 5px 9px; color: #900; border: 2px solid #c00; padding-left: 45px; margin-bottom: 8px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error! view is missing: '.$orgPath.'</div>';
+                $content = '<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; margin-bottom: 8px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error! view is missing: '.TGlobal::OutHTML($orgPath).'</div>';
             } else {
                 $content = '<!-- MISSING VIEW - see log for details -->';
                 TTools::WriteLogEntry('Error! view is missing: '.$orgPath, 1, __FILE__, __LINE__);
@@ -268,7 +268,7 @@ class TViewParser
                 ob_end_clean();
             } else {
                 if (_DEVELOPMENT_MODE) {
-                    $content = '<div style="background: #ffcccc url(/chameleon/blackbox/images/nav_icons/error.png) no-repeat 5px 9px; color: #900; border: 2px solid #c00; padding-left: 45px; margin-bottom: 8px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error! view is missing: '.$orgPath.'</div>';
+                    $content = '<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; margin-bottom: 8px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error! view is missing: '.TGlobal::OutHTML($orgPath).'</div>';
                 } else {
                     $content = '<!-- MISSING VIEW - see log for details -->';
                     TTools::WriteLogEntry("Error! view is missing: {$sTemplatePath} [org: {$orgPath}]", 1, __FILE__, __LINE__);

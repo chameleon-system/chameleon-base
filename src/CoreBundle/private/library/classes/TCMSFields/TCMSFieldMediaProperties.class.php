@@ -126,7 +126,7 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
         $url = PATH_CMS_CONTROLLER.'?pagedef=CMSUniversalUploader&mode=media&callback=_ReloadPage&singleMode=1&showMetaFields=0&recordID='.$this->oTableRow->sqlData['id'];
         $html = "<script type=\"text/javascript\">
       function OpenMediaUploadWindow() {
-        CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."',450,480);
+        CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."');
       }
 
       function _ReloadPage(serverData) {
