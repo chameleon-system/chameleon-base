@@ -212,8 +212,8 @@ Note that ONLY BC breaking changes are listed, according to our backwards compat
 
 ## TCMSFieldDate/TCMSFieldDateToday
 
-The field classes now use the language independent SQL date format in frontend rendering instead of always using a german date format. 
-For backwards compatibility reasons they work with the German date format, too.
+The field classes now use the language independent SQL date format in frontend rendering instead of always using
+German date format. For backwards compatibility reasons they work with German date format too.
 
 ## \TTools
 
