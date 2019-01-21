@@ -778,7 +778,7 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
         var helpText = $(fieldId).html();
 
         if (helpText === '') {
-            $('#'' + fieldName + '-helpContainer').html('&nbsp;');
+            $('#' + fieldName + '-helpContainer').html('&nbsp;');
         } else {
             $('#' + fieldName + '-helpContainer').html(helpText);
         }
