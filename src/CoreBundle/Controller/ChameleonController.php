@@ -955,14 +955,12 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private function getRequestedModuleFunctions(): array
     {
-        $moduleFunctions = $this->inputFilterUtil->getFilteredPostInput('module_fnc', null);
-        if (null !== $moduleFunctions && false === is_array($moduleFunctions)) {
-            // TODO show/log error?
+        $moduleFunctions = $this->inputFilterUtil->getFilteredPostInput('module_fnc');
+        if (null === $moduleFunctions || false === \is_array($moduleFunctions)) {
             $moduleFunctions = [];
         }
-        $moduleFunctionsGet = $this->inputFilterUtil->getFilteredGetInput('module_fnc', null);
-        if (null !== $moduleFunctionsGet && false === is_array($moduleFunctionsGet)) {
-            // TODO show/log error?
+        $moduleFunctionsGet = $this->inputFilterUtil->getFilteredGetInput('module_fnc');
+        if (null === $moduleFunctionsGet || false === \is_array($moduleFunctionsGet)) {
             $moduleFunctionsGet = [];
         }
 
