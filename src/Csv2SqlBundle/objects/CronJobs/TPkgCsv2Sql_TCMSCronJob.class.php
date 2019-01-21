@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+
 /**
  * install this job if you want to run the csv imports via cron job.
 /**/
@@ -22,6 +25,16 @@ class TPkgCsv2Sql_TCMSCronJob extends TdbCmsCronjobs
         $aData = TPkgCsv2SqlManager::ProcessAll();
         $oView->AddVarArray($aData);
         $sResult = $oView->RenderObjectPackageView('vResult', 'pkgCsv2Sql/views/TCMSListManager/TPkgCsv2Sql_CmsListManagerPkgCsv2sql', 'Customer');
-        TTools::WriteLogEntry('Run cron-job result for: '.$this->sqlData['name']."\n".$sResult, 2, __FILE__, __LINE__, self::LOG_FILE);
+
+        /**
+         * @var $logger LoggerInterface
+         */
+        $logger = $this->getCsv2SqlLogger();
+        $logger->info('Run cron-job result for: '.$this->sqlData['name']."\n".$sResult);
+    }
+
+    private function getCsv2SqlLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.csv2sql');
     }
 }

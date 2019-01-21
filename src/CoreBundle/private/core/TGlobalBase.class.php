@@ -1024,8 +1024,7 @@ class TGlobalBase
     public static function TableExists($sTableName)
     {
         $databaseConnection = self::getDatabaseConnection();
-        $databaseName = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('database_name');
-        $quotedDatabaseName = $databaseConnection->quoteIdentifier($databaseName);
+        $quotedDatabaseName = $databaseConnection->quoteIdentifier($databaseConnection->getDatabase());
         $query = "SHOW TABLES FROM $quotedDatabaseName LIKE :tableName";
         $tRes = $databaseConnection->executeQuery($query, array('tableName' => $sTableName));
 

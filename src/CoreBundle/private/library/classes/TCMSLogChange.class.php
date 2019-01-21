@@ -16,10 +16,10 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\UpdateManager\StripVirtualFieldsFromQuery;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
-use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Counter\MigrationCounterManagerInterface;
-use ChameleonSystem\DatabaseMigration\Query\QueryInterface;
+use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use ChameleonSystem\DatabaseMigration\Query\QueryInterface;
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorder;
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
 use ChameleonSystem\ViewRenderer\Exception\DataAccessException;
@@ -27,11 +27,12 @@ use ChameleonSystem\ViewRenderer\SnippetChain\SnippetChainModifier;
 use Doctrine\Common\Collections\ExpressionBuilder;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Statement;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Provides a facade for operations required for recording and executing migration scripts.
-/**/
+ */
 class TCMSLogChange
 {
     const INFO_MESSAGE_LEVEL_INFO = 'INFO';
@@ -189,23 +190,15 @@ class TCMSLogChange
             $fieldID = $tmp['id'];
         }
         if (empty($fieldID)) {
-            /** @var IPkgCmsCoreLog $oLogger */
-            $oLogger = self::getUpdateLogger();
-            if (null !== $oLogger) {
-                //ob_start();
-                //debug_print_backtrace(false);
-                //$backtrace = ob_get_clean();
-                $oLogger->critical(
-                    "UNABLE TO FIND FIELD '{$sFieldName}' for TABLE [{$tableId}]",
-                    __FILE__,
-                    __LINE__,
-                    array(
-                         'sFieldName' => $sFieldName,
-                         'tableId' => $tableId,
-                         'trace' => 'backtrace disabled due to OOM problem',
-                    )
-                );
-            }
+            $logger = self::getLogger();
+            $logger->critical(
+                sprintf('UNABLE TO FIND FIELD %s for TABLE %s', $sFieldName, $tableId),
+                [
+                    'sFieldName' => $sFieldName,
+                    'tableId' => $tableId,
+                ]
+            );
+
             trigger_error(self::escapeJSOutput("UNABLE TO FIND FIELD '{$sFieldName}' for TABLE [{$tableId}] in FILE [".__FILE__.'] ON LINE: '.__LINE__), E_USER_ERROR);
         }
 
@@ -238,10 +231,7 @@ class TCMSLogChange
      */
     public static function DisplayErrorMessage($sMessage)
     {
-        $oLogger = self::getUpdateLogger();
-        if (null !== $oLogger) {
-            $oLogger->warning($sMessage, __FILE__, __LINE__, array('backtrace' => 'backtrace disabled due to OOM problem'));
-        }
+        self::getLogger()->warning($sMessage);
 
         self::addInfoMessage($sMessage, self::INFO_MESSAGE_LEVEL_ERROR);
     }
@@ -274,20 +264,15 @@ class TCMSLogChange
             $fieldID = $tmp['id'];
         }
         if (empty($fieldID)) {
-            $oLogger = self::getUpdateLogger();
-            if (null !== $oLogger) {
-                $oLogger->critical(
-                    "UNABLE TO FIND FIELD '{$sFieldName}' for TABLE [{$tableId}]",
-                    __FILE__,
-                    __LINE__,
-                    array(
-                         'sFieldName' => $sFieldName,
-                         'tableId' => $tableId,
-                         'trace' => 'backtrace disabled due to OOM problem',
-                    )
-                );
-            }
-            trigger_error(self::escapeJSOutput("UNABLE TO FIND DISPLAY FIELD '{$sFieldName}' for TABLE [{$tableId}] in FILE [".__FILE__.'] ON LINE: '.__LINE__), E_USER_ERROR);
+            $logger = self::getLogger();
+            $logger->critical(
+                sprintf('UNABLE TO FIND FIELD %s for TABLE %s', $sFieldName, $tableId),
+                [
+                    'sFieldName' => $sFieldName,
+                    'tableId' => $tableId,
+                ]
+            );
+            trigger_error(self::escapeJSOutput("UNABLE TO FIND FIELD '{$sFieldName}' for TABLE [{$tableId}] in FILE [".__FILE__.'] ON LINE: '.__LINE__), E_USER_ERROR);
         }
 
         return $fieldID;
@@ -310,18 +295,15 @@ class TCMSLogChange
             $fieldID = $tmp['id'];
         }
         if (empty($fieldID)) {
-            $oLogger = self::getUpdateLogger();
-            if (null !== $oLogger) {
-                $oLogger->critical(
-                    "UNABLE TO FIND DISPLAY FIELD '{$sFieldAlias}' for TABLE [{$sTableid}]",
-                    __FILE__,
-                    __LINE__,
-                    array(
-                         'sFieldAlias' => $sFieldAlias,
-                         'trace' => 'backtrace disabled due to OOM problem',
-                    )
-                );
-            }
+            $logger = self::getLogger();
+            $logger->critical(
+                sprintf('UNABLE TO FIND DISPLAY FIELD %s for TABLE %s', $sFieldAlias, $sTableid),
+                [
+                    'sFieldName' => $sFieldAlias,
+                    'tableId' => $sTableid,
+                ]
+            );
+
             trigger_error(self::escapeJSOutput("UNABLE TO FIND DISPLAY FIELD '{$sFieldAlias}' for TABLE [{$sTableid}] in FILE [".__FILE__.'] ON LINE: '.__LINE__), E_USER_ERROR);
         }
 
@@ -401,31 +383,25 @@ class TCMSLogChange
         }
         $res = MySqlLegacySupport::getInstance()->query($query);
         $err = MySqlLegacySupport::getInstance()->error();
-        /** @var IPkgCmsCoreLog $oLogger */
-        $oLogger = self::getUpdateLogger();
+        $logger = self::getLogger();
         if (!empty($err)) {
-            if (null !== $oLogger) {
-                $oLogger->error(
-                    'sql error in line '.$line.': '.$err,
-                    __FILE__,
-                    __LINE__,
-                    array(
-                         'originalQuery' => $sOriginalQuery,
-                         'queryUsed' => $query,
-                         'bInsertId' => $bInsertId,
-                    )
-                );
-            }
+            $logger->error(
+                sprintf('SQL error in line %s: %s (Query %s)', $line, $err, $query),
+                [
+                    'originalQuery' => $sOriginalQuery,
+                    'queryUsed' => $query,
+                    'bInsertId' => $bInsertId,
+                ]
+            );
             TCMSUpdateManager::GetInstance()->addErrorQuery($query, $line, $err);
         } else {
-            if (null !== $oLogger) {
-                $oLogger->info(
-                    'Query Successfully executed in line '.$line.': '.$query,
-                    __FILE__,
-                    __LINE__,
-                    array('originalQuery' => $sOriginalQuery, 'bInsertId' => $bInsertId)
-                );
-            }
+            $logger->info(
+                sprintf('Query Successfully executed in line %s: %s', $line, $query),
+                [
+                    'originalQuery' => $sOriginalQuery,
+                    'bInsertId' => $bInsertId,
+                ]
+            );
         }
 
         return $res;
@@ -441,7 +417,7 @@ class TCMSLogChange
     {
         $db = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
-        $oLogger = self::getUpdateLogger();
+        $logger = self::getLogger();
         try {
             $stm = $db->prepare($sql);
             foreach ($parameter as $name => $value) {
@@ -449,28 +425,24 @@ class TCMSLogChange
                 $stm->bindValue($name, $value, $type);
             }
             $stm->execute();
-            if (null !== $oLogger) {
-                $oLogger->info(
-                    'Query Successfully executed in line '.$line.': '.$sql.' with '.print_r($parameter, true),
-                    __FILE__,
-                    __LINE__,
-                    array('originalQuery' => $sql, 'parameter' => $parameter)
-                );
-            }
+            $logger->info(
+                sprintf('Query Successfully executed in line %s: %s with %s', $line, $sql, print_r($parameter, true)),
+                [
+                    'originalQuery' => $sql,
+                    'parameter' => $parameter,
+                ]
+            );
+
             self::outputSuccess($line, $sql, $parameter);
         } catch (DBALException $e) {
-            /** @var IPkgCmsCoreLog $oLogger */
-            if (null !== $oLogger) {
-                $oLogger->error(
-                    'sql error in line '.$line.': '.(string) $e,
-                    __FILE__,
-                    __LINE__,
-                    array(
-                        'originalQuery' => $sql,
-                        'parameter' => $parameter,
-                    )
-                );
-            }
+            $logger->error(
+                sprintf('Sql error in line %s: %s', $line, (string) $e),
+                [
+                    'originalQuery' => $sql,
+                    'parameter' => $parameter,
+                ]
+            );
+
             self::outputError($line, $e);
         }
     }
@@ -1730,21 +1702,17 @@ class TCMSLogChange
             if (self::RecordExists($sTable, 'id', $sRecordId)) {
                 $sQuery .= ' WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTable)."`.`id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sRecordId)."'";
             } else {
-                $oLogger = self::getUpdateLogger();
-                if (null !== $oLogger) {
-                    $oLogger->critical(
-                        "UNABLE TO FIND RECORD '{$sRecordId}' FOR TABLE [{$sTable}]",
-                        __FILE__,
-                        __LINE__,
-                        array(
-                             'sTable' => $sTable,
-                             'sTargetTable' => $sTargetTable,
-                             'aFields' => $aFields,
-                             'sRecordId' => $sRecordId,
-                             'trace' => 'backtrace disabled due to OOM problem',
-                        )
-                    );
-                }
+                $logger = self::getLogger();
+                $logger->critical(
+                    sprintf('UNABLE TO FIND RECORD %s for TABLE %s', $sRecordId, $sTable),
+                    [
+                        'sTable' => $sTable,
+                        'sTargetTable' => $sTargetTable,
+                        'aFields' => $aFields,
+                        'sRecordId' => $sRecordId,
+                    ]
+                );
+
                 trigger_error(self::escapeJSOutput("UNABLE TO FIND RECORD '{$sRecordId}' FOR TABLE [{$sTable}] in FILE [".__FILE__.'] ON LINE: '.__LINE__), E_USER_ERROR);
             }
         }
@@ -1905,10 +1873,17 @@ class TCMSLogChange
 
     /**
      * @return IPkgCmsCoreLog
+     *
+     * @deprecated since 6.3.0 - use getLogger()
      */
     public static function getUpdateLogger()
     {
         return  \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.cmsUpdates');
+    }
+
+    public static function getLogger(): LoggerInterface
+    {
+        return  \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.cms_update');
     }
 
     /**
@@ -2409,15 +2384,14 @@ class TCMSLogChange
      */
     private static function logSuccess($line, $query, $queryParams)
     {
-        $logger = self::getUpdateLogger();
-        if (null !== $logger) {
-            $logger->info(
-                'Query successfully executed in line '.$line.': '.$query.' with '.print_r($queryParams, true),
-                __FILE__,
-                __LINE__,
-                array('originalQuery' => $query, 'parameters' => $queryParams)
-            );
-        }
+        $logger = self::getLogger();
+        $logger->info(
+            sprintf('Query successfully executed in line %s: %s with %s', $line, $query, print_r($queryParams, true)),
+            [
+                'originalQuery' => $query,
+                'parameters' => $queryParams,
+            ]
+        );
     }
 
     /**
@@ -2426,15 +2400,8 @@ class TCMSLogChange
      */
     private static function logError($line, $exception)
     {
-        $logger = self::getUpdateLogger();
-        if (null !== $logger) {
-            $logger->error(
-                'sql error in line '.$line.': '.(string) $exception,
-                __FILE__,
-                __LINE__,
-                array()
-            );
-        }
+        $logger = self::getLogger();
+        $logger->error(sprintf('SQL error in line %s: %s', $line, (string) $exception));
     }
 
     /**

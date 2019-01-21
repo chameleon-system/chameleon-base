@@ -569,6 +569,11 @@ class TCMSFieldDefinition extends TCMSRecord
         return $tableName;
     }
 
+    public function isTranslatable(): bool
+    {
+        return '1' === $this->sqlData['is_translatable'];
+    }
+
     /**
      * returns the field name - respects the current language setting.
      *
@@ -580,9 +585,10 @@ class TCMSFieldDefinition extends TCMSRecord
     {
         $sTargetFieldName = $this->sqlData['name'];
 
-        if ('0' === $this->sqlData['is_translatable']) {
+        if (false === $this->isTranslatable()) {
             return $sTargetFieldName;
         }
+
         $language = null;
         if (null === $sLanguageID) {
             $oUser = &TCMSUser::GetActiveUser();
@@ -612,9 +618,10 @@ class TCMSFieldDefinition extends TCMSRecord
      */
     public function GetEditFieldNameForLanguage($oLanguage)
     {
-        if ('0' === $this->sqlData['is_translatable']) {
+        if (false === $this->isTranslatable()) {
             return false;
         }
+
         if (TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId === $oLanguage->id) {
             return $this->sqlData['name'];
         } else {

@@ -14,9 +14,9 @@ function gcf_GetPublishedIcon($value, $row)
     $returnVal = '';
 
     if ('1' == $value) {
-        $returnVal = '<img src="/chameleon/blackbox/images/nav_icons/success.png" title="freigegeben" />';
+        $returnVal = '<img src="'.TGlobal::GetPathTheme().'/images/icons/accept.png" />';
     } else {
-        $returnVal = '<img src="/chameleon/blackbox/images/nav_icons/error.png" title="nicht freigegeben" />';
+        $returnVal = '<img src="'.TGlobal::GetPathTheme().'/images/icons/delete.png" />';
     }
 
     return $returnVal;

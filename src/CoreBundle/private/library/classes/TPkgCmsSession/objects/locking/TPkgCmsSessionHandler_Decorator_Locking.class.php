@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+
 class TPkgCmsSessionHandler_Decorator_Locking extends \Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy
 {
     // **************************************************************************
@@ -66,7 +69,8 @@ class TPkgCmsSessionHandler_Decorator_Locking extends \Symfony\Component\HttpFou
         } else {
             // unable to obtain lock. Log error and redirect to maintenance page
             if (!defined('TESTSUITE')) {
-                TTools::WriteLogEntrySimple('Unable to obtain session lock for id '.$sSessionId, 1, __FILE__, __LINE__, 'session.log');
+                $logger = $this->getLogger();
+                $logger->error('Unable to obtain session lock for id '.$sSessionId);
             }
             throw new TPkgCmsSessionStorageLockException('Unable to obtain session lock for id '.$sSessionId);
         }
@@ -85,7 +89,8 @@ class TPkgCmsSessionHandler_Decorator_Locking extends \Symfony\Component\HttpFou
             return $rResult;
         } else {
             if (!defined('TESTSUITE')) {
-                TTools::WriteLogEntrySimple('unable to write '.$sSessionId.' because the session was locked by another thread', 2, __FILE__, __LINE__, 'session.log');
+                $logger = $this->getLogger();
+                $logger->warning('unable to write '.$sSessionId.' because the session was locked by another thread');
             }
         }
 
@@ -103,5 +108,10 @@ class TPkgCmsSessionHandler_Decorator_Locking extends \Symfony\Component\HttpFou
             unset($_SESSION);
         }
         $this->bDisableSessionWrite = false;
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
     }
 }

@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+
 class TPkgCsv2SqlManager
 {
     /**
@@ -17,6 +20,8 @@ class TPkgCsv2SqlManager
     const IMPORT_ERROR_LOG_MAIL = 'shop-import-data';
     /**
      * error-log filename.
+     *
+     * @deprecated since 6.3.0 - not used anymore
      */
     const IMPORT_ERROR_LOG_FILE = 'TPkgCsv2SqlManager.log';
 
@@ -35,15 +40,17 @@ class TPkgCsv2SqlManager
         $aData['oImportName'] = 'CSV-2-SQL Datenimport:';
         $aData['successMessage'] = '';
 
-        TTools::WriteLogEntry('TPkgCsv2SqlManager: ProcessAll Start', 4, __FILE__, __LINE__, self::IMPORT_ERROR_LOG_FILE);
+        $logger = self::getLogger();
+
+        $logger->info('TPkgCsv2SqlManager: ProcessAll Start');
         $aValidationErrors = self::ValidateAll();
-        TTools::WriteLogEntry('TPkgCsv2SqlManager: ValidateAll end', 4, __FILE__, __LINE__, self::IMPORT_ERROR_LOG_FILE);
+        $logger->info('TPkgCsv2SqlManager: ValidateAll end');
         if (0 == count($aValidationErrors)) {
             // all good, import
             $aImportErrors = self::ImportAll();
             $aData['successMessage'] = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_csv2sql.msg.import_completed'));
         }
-        TTools::WriteLogEntry('TPkgCsv2SqlManager: ImportAll end', 4, __FILE__, __LINE__, self::IMPORT_ERROR_LOG_FILE);
+        $logger->info('TPkgCsv2SqlManager: ImportAll end');
 
         $aAllErr = TPkgCsv2Sql::ArrayConcat($aAllErr, $aValidationErrors);
         $aAllErr = TPkgCsv2Sql::ArrayConcat($aAllErr, $aImportErrors);
@@ -51,7 +58,7 @@ class TPkgCsv2SqlManager
             //send all errors by email
             self::SendErrorNotification($aAllErr);
         }
-        TTools::WriteLogEntry('TPkgCsv2SqlManager: SendErrorNotification end', 4, __FILE__, __LINE__, self::IMPORT_ERROR_LOG_FILE);
+        $logger->info('TPkgCsv2SqlManager: SendErrorNotification end');
 
         //View vars
         $aData['aValidationErrors'] = (array) $aValidationErrors;
@@ -71,13 +78,15 @@ class TPkgCsv2SqlManager
      */
     public static function ImportAll()
     {
+        $logger = self::getLogger();
+
         $aErrors = array();
         // get list of import handler
         /** @var $oCsv2SqlList TdbPkgCsv2sqlList */
         $oCsv2SqlList = TdbPkgCsv2sqlList::GetList();
         $oCsv2SqlList->GoToStart();
         while ($oListItem = $oCsv2SqlList->Next()) {
-            TTools::WriteLogEntry('TPkgCsv2SqlManager: Import '.$oListItem->fieldName, 4, __FILE__, __LINE__, self::IMPORT_ERROR_LOG_FILE);
+            $logger->info('TPkgCsv2SqlManager: Import '.$oListItem->fieldName);
 
             $aItemErrors = $oListItem->Import();
             $aErrors = TPkgCsv2Sql::ArrayConcat($aErrors, $aItemErrors);
@@ -103,6 +112,8 @@ class TPkgCsv2SqlManager
      */
     public static function ValidateAll()
     {
+        $logger = self::getLogger();
+
         $aErrors = array();
 
         //get list of import handler
@@ -110,7 +121,7 @@ class TPkgCsv2SqlManager
         $oCsv2SqlList = TdbPkgCsv2sqlList::GetList();
         $oCsv2SqlList->GoToStart();
         while ($oListItem = $oCsv2SqlList->Next()) {
-            TTools::WriteLogEntry('TPkgCsv2SqlManager: Validating '.$oListItem->fieldName, 4, __FILE__, __LINE__, self::IMPORT_ERROR_LOG_FILE);
+            $logger->info('TPkgCsv2SqlManager: Validating '.$oListItem->fieldName);
             $aItemErrors = $oListItem->Validate();
             $aErrors = TPkgCsv2Sql::ArrayConcat($aErrors, $aItemErrors);
         }
@@ -120,28 +131,11 @@ class TPkgCsv2SqlManager
 
     /**
      * Merge all logs to big one.
+     *
+     * @deprecated since 6.3.0 - not supported anymore
      */
     protected static function MergeLogs()
     {
-        $sLogSourcePath = ERROR_LOG_FOLDER;
-        $sMainLogFile = $sLogSourcePath.self::IMPORT_ERROR_LOG_FILE;
-
-        /** @var $oCsv2SqlList TdbPkgCsv2sqlList */
-        $oCsv2SqlList = TdbPkgCsv2sqlList::GetList();
-        while ($oListItem = $oCsv2SqlList->Next()) {
-            $sLog = $sLogSourcePath.$oListItem->fieldDestinationTableName.'.log';
-            if (file_exists($sLog)) {
-                $sfp = fopen($sLog, 'rb');
-                $fp = fopen($sMainLogFile, 'wb');
-                $sStrTmp = "\r\n\r\n*******************************".$oListItem->fieldDestinationTableName."*******************************\r\n\r\n";
-                fwrite($fp, $sStrTmp, strlen($sStrTmp));
-                while ($string = fread($sfp, 4096)) {
-                    fwrite($fp, $string, strlen($string));
-                }
-                fclose($sfp);
-                fclose($fp);
-            }
-        }
     }
 
     /**
@@ -151,19 +145,7 @@ class TPkgCsv2SqlManager
      */
     public static function SendErrorNotification($aErrors)
     {
-        self::MergeLogs();
-
-        $sLogSourcePath = ERROR_LOG_FOLDER;
-        $sLogAchivePath = $sLogSourcePath.'/import-archiv/';
-
-        //check archive-path
-        $bArchivePathOK = false;
-        if (file_exists($sLogAchivePath) && is_dir($sLogAchivePath) && is_writeable($sLogAchivePath)) {
-            $bArchivePathOK = true;
-        }
-
         $sMailBody = __CLASS__.'-Report'."\r\n\r\n";
-        //$sErrorLines = implode("\r\n",$aErrors);
         $sErrorLines = '';
         if (is_array($aErrors) && count($aErrors)) {
             foreach ($aErrors as $iK => $mVal) {
@@ -178,46 +160,18 @@ class TPkgCsv2SqlManager
 
         //send report by mail
         $oMailProfile = TdbDataMailProfile::GetProfile(self::IMPORT_ERROR_LOG_MAIL);
-        if (count($aErrors)) {
+        if (\count($aErrors) > 0) {
             $oMailProfile->SetSubject('FEHLER: '.$oMailProfile->sqlData['subject']);
-        }
-
-        $aAttachFiles = null;
-        $sLogFile = $sLogSourcePath.self::IMPORT_ERROR_LOG_FILE;
-        if (count($aErrors)) {
-            //attach error-log as mail-attachment
-            if (file_exists($sLogFile)) {
-                $aAttachFiles[] = $sLogFile;
-            } else {
-                //we have errors but no error file? report!
-                $sMailBody .= "\r\nACHTUNG: \r\nEs sind Fehler aufgetreten, aber es wurde kein Logfile gefunden in:".$sLogFile." !\r\n";
-            }
-
-            //check if Archive-Path exists (if not report!)
-            if (!$bArchivePathOK) {
-                $sMailBody .= "\r\nACHTUNG: \r\nArchiv-Pfad für Logs existiert nicht oder ist nicht beschreibbar!\r\nLogs können nicht verschoben werden nach: ".$sLogAchivePath."\r\n";
-            }
+            $sMailBody .= "\r\nACHTUNG: \r\nEs sind Fehler aufgetreten. Überprüfen Sie auch Log-Informationen.\r\n";
         }
 
         $aMailData = array('sReport' => '<pre>'.$sMailBody.'</pre>');
         $oMailProfile->AddDataArray($aMailData);
-        $oMailProfile->SendUsingObjectView('emails', 'Customer', $aAttachFiles);
+        $oMailProfile->SendUsingObjectView('emails', 'Customer');
+    }
 
-        if (is_array($aAttachFiles) && $bArchivePathOK) {
-            //move files to import-archive
-            foreach ($aAttachFiles as $iFKey => $sFilePath) {
-                $sNewPath = $sLogAchivePath.date('y-m-d-H-i-s').basename($sFilePath);
-                if (!@rename($sFilePath, $sNewPath)) {
-                    if (copy($sFilePath, $sNewPath)) {
-                        if (!@unlink($sFilePath)) {
-                            echo 'Das Log wurde in das Archiv-Verzeichnis kopiert. Es konnte jedoch nicht entfernt werden!';
-                            //try to clear file
-                            $f = fopen($sFilePath, 'w+');
-                            fclose($f);
-                        }
-                    }
-                }
-            }
-        }
+    private static function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.csv2sql');
     }
 }

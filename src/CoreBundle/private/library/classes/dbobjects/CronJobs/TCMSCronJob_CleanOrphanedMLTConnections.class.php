@@ -11,6 +11,9 @@
 
 class TCMSCronJob_CleanOrphanedMLTConnections extends TCMSCronJob
 {
+    /**
+     * @deprecated since 6.3.0 - not used anymore
+     */
     const MLT_DELETE_LOG_FILE = 'mlt_delete_log';
 
     protected function _ExecuteCron()
@@ -64,11 +67,11 @@ class TCMSCronJob_CleanOrphanedMLTConnections extends TCMSCronJob
 
         if (count($aDeleteList) > 0) {
             foreach ($aDeleteList as $sTableName => $aDeletes) {
-                $this->getLogger()->warning(
-                    'removed '.count($aDeletes).' MLT orphaned mlt entries from '.$sTableName,
-                    __FILE__,
-                    __LINE__,
-                    array('deletelist' => $aDeletes)
+                $this->getCronjobLogger()->warning(
+                    sprintf('Removed %s MLT orphaned mlt entries from %s.', \count($aDeletes), $sTableName),
+                    [
+                        'deletelist' => $aDeletes,
+                    ]
                 );
             }
         }
