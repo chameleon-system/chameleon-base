@@ -36,6 +36,10 @@ class RequestInfoService implements RequestInfoServiceInterface
      * @var UrlPrefixGeneratorInterface
      */
     private $urlPrefixGenerator;
+    /**
+     * @var null|string
+     */
+    private $requestId;
 
     /**
      * Cache of request type.
@@ -146,5 +150,17 @@ class RequestInfoService implements RequestInfoServiceInterface
         }
 
         return $this->pathInfoWithoutPortalAndLanguagePrefix;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequestId(): string
+    {
+        if (null === $this->requestId) {
+            $this->requestId = \TTools::GetUUID();
+        }
+
+        return $this->requestId;
     }
 }

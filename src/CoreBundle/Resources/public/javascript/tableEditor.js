@@ -378,7 +378,7 @@ function loadPositionList(tableID, tableSQLName, fieldName, recordID, sRestricti
     url += '&sRestriction=' + sRestriction;
     url += '&sRestrictionField=' + sRestrictionField;
 
-    CreateModalIFrameDialogCloseButton(url, 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
+    CreateModalIFrameDialogCloseButton(url, 700, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
 }
 
 /*
@@ -720,7 +720,7 @@ $(document).ready(function () {
 
 CHAMELEON.CORE.MTTableEditor.initTabs = function () {
     var url = document.URL;
-    var hash = window.location.hash.substr(0);
+    var hash = window.location.hash;
 
     $('.nav-tabs').find('li a').each(function (key, tabLinkItem) {
         var $tabLinkItem = $(tabLinkItem);
@@ -760,7 +760,7 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
             } else {
                 var cmsDate = moment.format('YYYY-MM-DD HH:mm:ss');
             }
-            // We need a SQL-date-format for BC reasons.
+            // We need a SQL date format for BC reasons.
             $('input[name=' + id + ']').val(cmsDate);
         });
     });

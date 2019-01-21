@@ -148,7 +148,7 @@ class MTTableManager extends TCMSModelBase
         parent::DefineInterface();
         $externalFunctions = array(
             'ClearNaviCache',
-            'GetAutoCompleteAjaxList',
+            'getAutocompleteRecordList',
             'DeleteSelected',
         );
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
@@ -351,16 +351,73 @@ class MTTableManager extends TCMSModelBase
     }
 
     /**
-     * Generates the record list for the ajax autocomplete widget.
+     * @deprecated since 6.3.0 - use getAutocompleteRecordList() instead
      *
      * @return array
      */
     public function GetAutoCompleteAjaxList()
     {
         $inputFilterUtil = $this->getInputFilterUtil();
-
-        $searchKey = $inputFilterUtil->getFilteredInput('term');
         $recordID = $inputFilterUtil->getFilteredInput('recordID');
+        $autoClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->fieldName);
+
+        /** @var $recordList TCMSRecordList */
+        $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $this->getAutocompleteListQuery());
+
+        $returnVal = array();
+
+        /** @var $record TCMSRecord */
+        while ($record = $recordList->Next()) {
+            $name = $record->GetName();
+            if (!empty($name)) {
+                $tmp = new stdClass();
+                if ($record->id == $recordID) {
+                    $name = $name.' <---';
+                }
+                $tmp->label = $name;
+                $tmp->value = $record->id;
+                $returnVal[] = $tmp;
+            }
+        }
+
+        return $returnVal;
+    }
+
+    /**
+     * Generates the record list for the ajax autocomplete select boxes in table editor and record lists.
+     *
+     * @return string|false JSON with id, text, html elements.
+     */
+    public function getAutocompleteRecordList()
+    {
+        $inputFilterUtil = $this->getInputFilterUtil();
+        $recordID = $inputFilterUtil->getFilteredInput('recordID');
+        $autoClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->fieldName);
+
+        /** @var $recordList TCMSRecordList */
+        $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $this->getAutocompleteListQuery());
+
+        $returnVal = array();
+
+        /** @var $record TCMSRecord */
+        while ($record = $recordList->Next()) {
+            $name = $record->GetName();
+            if (!empty($name)) {
+                $html = $name;
+                if ($record->id == $recordID) {
+                    $html = '<strong>'.$name.'</strong>';
+                }
+                $returnVal[] = ['id' => $record->id, 'text' => $name, 'html' => $html];
+            }
+        }
+
+        return json_encode($returnVal);
+    }
+
+    private function getAutocompleteListQuery(): string
+    {
+        $inputFilterUtil = $this->getInputFilterUtil();
+        $searchKey = $inputFilterUtil->getFilteredInput('term');
 
         $listClass = null;
         // allow custom list class overwriting (defined in pagedef)
@@ -406,24 +463,7 @@ class MTTableManager extends TCMSModelBase
 
         $query .= ' LIMIT 0,50';
 
-        /** @var $recordList TCMSRecordList */
-        $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $query);
-
-        $returnVal = array();
-
-        /** @var $record TCMSRecord */
-        while ($record = $recordList->Next()) {
-            $name = $record->GetName();
-            if (!empty($name)) {
-                $html = $name;
-                if ($record->id == $recordID) {
-                    $html = '<strong>'.$name.'</strong>';
-                }
-                $returnVal[] = ['id' => $record->id, 'text' => $name, 'html' => $html];
-            }
-        }
-
-        return json_encode($returnVal);
+        return $query;
     }
 
     /**
@@ -439,10 +479,7 @@ class MTTableManager extends TCMSModelBase
     public function GetHtmlHeadIncludes()
     {
         $includeLines = parent::GetHtmlHeadIncludes();
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-form-4.2.2/jquery.form.min.js').'" type="text/javascript"></script>';
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         $includeLines[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />';
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/table.js').'" type="text/javascript"></script>';
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/WayfarerTooltip/WayfarerTooltip.js').'" type="text/javascript"></script>';

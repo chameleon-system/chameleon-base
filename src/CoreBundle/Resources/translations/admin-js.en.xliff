@@ -211,7 +211,7 @@
 
             <trans-unit id="chameleon_system_core.js.ajax_error">
                 <source>chameleon_system_core.js.ajax_error</source>
-                <target>Error! Ajax response:\n%s1</target>
+                <target>Error! Ajax response: %s1</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.missing_node">
@@ -337,6 +337,11 @@
             <trans-unit id="chameleon_system_core.js.notice">
                 <source>chameleon_system_core.js.notice</source>
                 <target>Notice</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.js.ajax_parse_error">
+                <source>chameleon_system_core.js.ajax_parse_error</source>
+                <target>Wasn't able to parse ajax response.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.js.confirm_page_delete">

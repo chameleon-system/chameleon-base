@@ -4,7 +4,7 @@
 $layoutTemplate = 'popup_iframe';
 
 // modules...
-$moduleList = array('pagetitle' => array('model' => 'MTHeader', 'view' => 'title'), 'contentmodule' => array('model' => 'CMSGMap', 'view' => 'standard', 'iconPath' => '/images/nav_icons/'));
+$moduleList = array('pagetitle' => array('model' => 'MTHeader', 'view' => 'title'), 'contentmodule' => array('model' => 'CMSGMap', 'view' => 'standard'));
 
 // this line needs to be included... do not touch
 if (!is_array($moduleList)) {

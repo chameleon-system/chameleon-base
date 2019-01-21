@@ -23,6 +23,7 @@ use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationR
 use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -245,11 +246,14 @@ class MTHeader extends TCMSModelBase
                 }
             } catch (Exception $e) {
                 $this->getFlashMessages()->addBackendToasterMessage('chameleon_system_core.cms_module_header.error_generate_portal_links');
-                $this->getLogger()->error('Error while generating portal links', __FILE__, __LINE__, array(
-                    'e.message' => $e->getMessage(),
-                    'e.file' => $e->getFile(),
-                    'e.line' => $e->getLine(),
-                ));
+                $this->getLogger()->error(
+                    sprintf('Error while generating portal links: %s', $e->getMessage()),
+                    [
+                        'e.message' => $e->getMessage(),
+                        'e.file' => $e->getFile(),
+                        'e.line' => $e->getLine(),
+                    ]
+                );
             }
         }
 
@@ -404,7 +408,7 @@ class MTHeader extends TCMSModelBase
         if (null === $currentUser) {
             return;
         }
-        $userImage = TGlobal::GetPathTheme().'/images/nav_icons/user.gif';
+        $userImage = TGlobal::GetPathTheme().'/images/icons/user.png';
 
         $imageID = TCMSUser::GetActiveUser()->fieldImages;
         if ($imageID >= 1000 || !is_numeric($imageID)) {
@@ -734,7 +738,6 @@ class MTHeader extends TCMSModelBase
     {
         $includes = parent::GetHtmlHeadIncludes();
         $includes[] = '<link href="'.TGlobal::GetPathTheme().'/images/favicon.ico" rel="shortcut icon" />';
-        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/themes/cupertino/cupertino.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $includes[] = '<link href="/chameleon/blackbox/bootstrap/css/glyph-icons.css?v4.1" media="screen" rel="stylesheet" type="text/css" />';
         $includes[] = '<link href="/chameleon/blackbox/iconFonts/fontawesome-free-5.5.0/css/all.css" media="screen" rel="stylesheet" type="text/css" />';
 
@@ -752,8 +755,6 @@ class MTHeader extends TCMSModelBase
             return $includes;
         }
 
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-form-4.2.2/jquery.form.min.js').'" type="text/javascript"></script>'; // ajax form plugin
         $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
         $includes[] = '<link href="/chameleon/blackbox/iconFonts/foundation/foundation-icons.css" media="screen" rel="stylesheet" type="text/css" />';
         $includes[] = '<link href="/chameleon/blackbox/iconFonts/ionicons/ionicons.css" media="screen" rel="stylesheet" type="text/css" />';
@@ -856,12 +857,9 @@ class MTHeader extends TCMSModelBase
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
-    /**
-     * @return IPkgCmsCoreLog
-     */
-    private function getLogger()
+    private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmspkgcore.logchannel.standard');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
     }
 
     /**

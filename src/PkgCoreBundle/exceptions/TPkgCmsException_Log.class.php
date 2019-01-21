@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+
 /**
  * @deprecated since 6.2.0 - this class contradicts the concept of exceptions as it is not only a passive data object
  *                           but handles the error itself by logging unconditionally. Avoid using it, but let code that
@@ -41,8 +44,6 @@ class TPkgCmsException_Log extends TPkgCmsException
 
     private function writeMessageToLog()
     {
-        $log = $this->getLogger();
-
         $level = $this->getLogLevel();
         switch ($level) {
             case 1:
@@ -61,12 +62,23 @@ class TPkgCmsException_Log extends TPkgCmsException
                 $level = \Monolog\Logger::DEBUG;
                 break;
         }
-        $log->log($level, (string) $this, $this->getFile(), $this->getLine(), array($this->getContextData()));
+
+        $this->getExceptionLogger()->log($level, (string) $this, [$this->getContextData()]);
     }
 
+    /**
+     * @return IPkgCmsCoreLog
+     *
+     * @deprecated since 6.3.0 - use getExceptionLogger()
+     */
     protected function getLogger()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
+        return ServiceLocator::get('cmsPkgCore.logChannel.standard');
+    }
+
+    private function getExceptionLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
     }
 
     public function getLogLevel()

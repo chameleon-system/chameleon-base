@@ -14,13 +14,7 @@ CHAMELEON.CORE.showProcessingModal = function () {
 };
 
 CHAMELEON.CORE.hideProcessingModal = function () {
-    // $("#processingModal").dialog('hide'); is not working, so this is the fix.
-    var processingDialogContainer = $("#processingModal");
-    processingDialogContainer.removeClass("in");
-    $(".modal-backdrop").remove();
-    $('body').removeClass('modal-open');
-    $('body').css('padding-right', ''); // Needed because bootstrap adds a 15px padding to the body on modal dialog init.
-    processingDialogContainer.hide();
+    $("#processingModal").modal('hide');
 };
 
 /**
@@ -77,21 +71,29 @@ function GetAjaxCallTransparent(url, functionName) {
 }
 
 function AjaxError(XMLHttpRequest, textStatus, errorThrown) {
+    window.parent.CHAMELEON.CORE.hideProcessingModal();
+    CHAMELEON.CORE.hideProcessingModal();
+
+    var errorMessage = "Error";
+
+    if (XMLHttpRequest.responseText !== "" || XMLHttpRequest.statusText !== "") {
+        var responseError = XMLHttpRequest.responseText;
+
+        if (responseError.length > 1024) {
+            responseError = responseError.substr(0, 1024);
+        }
+
+        if (responseError.indexOf('<title>') !== -1) {
+            responseError = XMLHttpRequest.statusText;
+        }
+
+        errorMessage = CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.ajax_error', responseError);
+    }
+
     if (textStatus === 'parsererror') {
-        window.parent.CHAMELEON.CORE.hideProcessingModal();
-        CHAMELEON.CORE.hideProcessingModal();
-        toasterMessage('Error! Wasn`t able to parse ajax response.', 'ERROR');
+        toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.ajax_parse_error'), 'ERROR');
+
         if (XMLHttpRequest.responseText !== '') {
-            var sError = XMLHttpRequest.responseText;
-
-            if (sError.length > 1024) {
-                sError = sError.substr(0, 1024);
-            }
-
-            if (sError.indexOf('<title>') !== -1) sError = '';
-
-            var sMessage = CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.ajax_error', sError);
-
             // check if response is the login page, so we need to redirect the user
             if (XMLHttpRequest.responseText.indexOf('<input type="hidden" name="pagedef" value="login" />') !== -1) {
                 var sLogoutMessage = CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.permission_error_with_logout');
@@ -99,9 +101,11 @@ function AjaxError(XMLHttpRequest, textStatus, errorThrown) {
                     top.document.location.href = window.location.pathname;
                 }
             } else {
-                alert(sMessage);
+                alert(errorMessage);
             }
         }
+    } else {
+        toasterMessage(errorMessage, "ERROR");
     }
 }
 
@@ -286,8 +290,6 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
         $('#modalDialog .modal-body').html(content);
     });
 
-    console.log(height);
-
     if (typeof height === 'undefined' || height < 300) {
         height = window.innerHeight-150;
     }
@@ -307,7 +309,7 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
  */
 function CreateModalIFrameDialog(url, width, height, title, isDraggable, isResizable) {
     url = CMSAddGlobalParametersToURL(url);
-    var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="100%" height="100%" frameborder="0"></iframe>';
+    var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="99%" height="100%" frameborder="0"></iframe>';
     CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
 }
 

@@ -427,7 +427,7 @@ class TCMSTableWriter extends TCMSTableEditor
 
         $databaseConnection = $this->getDatabaseConnection();
         $engine = $databaseConnection->fetchColumn($query, [
-            'databaseName' => ServiceLocator::getParameter('database_name'),
+            'databaseName' => $databaseConnection->getDatabase(),
             'tableName' => $tableName,
         ]);
         if (false === $engine) {
