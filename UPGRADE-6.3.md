@@ -184,7 +184,7 @@ instead of `chameleon_system_debug: backtrace_enabled`). Existing configuration 
 
 ## Access-denied Page
 
-The access denied page should now support an additionally mapped parameter `loginFormAction` as a target action for the shown 
+The access-denied page should now support an additionally mapped parameter `loginFormAction` as a target action for the shown 
 login form. This avoids the second unexpected AccessDeniedException.
 If you use your own theme check the files `webModules/MTExtranet/accessDenied.view.php` and `snippets/common/userInput/form/formLoginStandard.html.twig`
 and adapt them according to the changes in **chameleon-shop-theme-bundle**. 
