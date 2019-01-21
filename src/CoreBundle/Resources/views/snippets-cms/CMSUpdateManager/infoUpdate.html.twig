@@ -1,10 +1,23 @@
-<div id="infoMessageContainer-{{ bundleName }}-{{ buildNumber }}" class="infoMessageContainer">
-    <div class="head">
-        <span class="message">{{ 'chameleon_system_core.cms_module_update.info_messages'|trans }}</span> (<span class="count">{{ messages|length }}</span>)
+<div id="infoMessageContainer-{{ bundleName }}-{{ buildNumber }}" class="card card-accent-info">
+    <div class="card-header">
+        {{ 'chameleon_system_core.cms_module_update.info_messages'|trans }}
+        <span class="badge badge-pill badge-info float-right">{{ messages|length }}</span>
     </div>
-    <ul class="messageList">
-        {% for message in messages %}
-            <li><a name="info-{{ bundleName }}-{{ buildNumber }}-{{ loop.index0 }}"></a><b>{{ message.level }}:</b><br />{{ message.text }}</li>
-        {% endfor %}
-    </ul>
+    <div class="card-body">
+        <ul class="list-group">
+            {% for message in messages %}
+                {% if message.level == 'TODO' %}
+                    {% set messageType = 'success' %}
+                {% elseif message.level == 'ERROR' %}
+                    {% set messageType = 'danger' %}
+                {% else %}
+                    {% set messageType = message.level|lower %}
+                {% endif %}
+
+                <li class="list-group-item list-group-item-{{ messageType }}"><a
+                            name="info-{{ bundleName }}-{{ buildNumber }}-{{ loop.index0 }}"></a><b>{{ message.level }}
+                        :</b><br/>{{ message.text }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>

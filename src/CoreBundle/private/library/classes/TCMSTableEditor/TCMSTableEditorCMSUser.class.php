@@ -399,7 +399,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
 
         $aIncludes[] = "<script type=\"text/javascript\">
       function openCopyUserRightsDialog() {
-        CreateModalDialogFromContainer('copyUserRightsDialog',700,650);
+        CreateModalDialogFromContainer('copyUserRightsDialog');
       }
 
       function ActivateUser()

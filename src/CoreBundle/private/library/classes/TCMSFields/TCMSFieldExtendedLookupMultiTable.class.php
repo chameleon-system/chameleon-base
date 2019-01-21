@@ -165,7 +165,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParams);
         $sWindowTitle = TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected');
 
-        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sURL)."','780','550','".$sWindowTitle."');return false;";
+        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sURL)."',0,0,'".$sWindowTitle."');return false;";
 
         return $js;
     }

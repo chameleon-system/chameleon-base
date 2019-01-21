@@ -1,0 +1,44 @@
+
+{% set selectOptions -%}
+    {"placeholder": "{{ 'chameleon_system_core.form.select_box_nothing_selected'|trans }}", "allowClear": true, "width": "100%" }
+{%- endset %}
+
+<div class="fieldDocument">
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info" id="{{ fieldName }}currentFile">
+                {{ currentFile|raw }}
+            </div>
+        </div>
+
+        <div class="col-12">
+            <button type="button" class="btn btn-sm btn-secondary" onclick="{{ onClickDocument }}">
+                <i class="fas fa-paperclip"></i> {{ 'chameleon_system_core.field_document.select'|trans }}
+            </button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="{{ onClickReset }}" >
+                <i class="far fa-times-circle"></i> {{ 'chameleon_system_core.action.reset'|trans }}
+            </button>
+
+        </div>
+    </div>
+
+    <div class="row align-items-end">
+        <div class="col-12 col-lg-8 mt-2">
+            <input type="hidden" id="{{ fieldName |e('html_attr') }}" name="{{ fieldName |e('html_attr') }}" value="{{ fieldValue }}" />
+            <div class="form-group mb-0">
+                <label>{{ 'chameleon_system_core.field_document.upload'|trans }}</label>
+                <select name="documentTreeId_{{ fieldName |e('html_attr') }}" id="documentTreeId_{{ fieldName |e('html_attr') }}" class="{{ sClass |e('html_attr') }}" data-select2-option='{{ selectOptions }}' >
+                    <option></option>
+                    {{ optionsHTML|raw }}
+                </select>
+            </div>
+        </div>
+        <div class="col-12 pt-2 col-lg-4 pt-lg-0 align-bottom">
+            <button type="button" class="btn btn-sm btn-secondary" onclick="{{ onClickNewFile |e('html_attr') }}">
+                <i class="fas fa-plus-circle"></i> {{ 'chameleon_system_core.field_document.upload'|trans }}
+            </button>
+        </div>
+    </div>
+
+    <div class="cmsdocumentfieldcontainer"></div>
+</div>

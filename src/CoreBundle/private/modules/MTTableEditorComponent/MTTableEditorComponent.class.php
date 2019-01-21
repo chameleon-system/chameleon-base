@@ -34,16 +34,4 @@ class MTTableEditorComponent extends MTTableEditor
 
         $this->controller->HeaderRedirect($parameter);
     }
-
-    public function GetHtmlHeadIncludes()
-    {
-        $aIncludes = parent::GetHtmlHeadIncludes();
-        $aIncludes[] = '<style>
-      .tableeditcontainer .leftTD {
-        padding-right: 0px;
-      }
-      </style>';
-
-        return $aIncludes;
-    }
 }

@@ -1,49 +1,5 @@
-body {
-  margin:0;
-  padding:0px;
-}
-
 .backgroundcolor {
   background-color: #ffffff;
-}
-
-#cmscontainer{
-  width: 100%;
-  background-color: #A9C4E7;
-}
-
-#cmscontentcontainer {
-  margin-top:10px;
-  margin-left: 15px;
-  margin-right: 15px;
-  background-color: #A9C4E7;
-  padding-bottom: 20px;
-  min-height: 500px;
-}
-
-#footer {
-  padding-right:20px;
-  padding-bottom:20px;
-  margin:0px;
-  height:30px;
-  vertical-align: middle;
-  background-image: url(../images/footer_bg.gif);
-  background-repeat: repeat-x;
-  background-color: #6C83AC;
-  margin-top: 20px;
-}
-
-#footer div {
-  color: white;
-  padding-left:5px;
-  padding-right:5px;
-  margin-top:5px;
-  font-size:11px;
-  float: right;
-}
-
-#footer a {
-  color: white;
 }
 
 #headerLine {
@@ -51,10 +7,6 @@ body {
   height: 90px;
   background-image: url(../images/header_bg.gif);
 }
-
-/*#headerLine.hidden {
-  height: 26px;
-}*/
 
 .listBoxTop {
   cursor: hand;
@@ -97,16 +49,16 @@ body {
 }
 
 #portalChooser {
-  position: absolute;
+    position: absolute;
 	left: 200px;
 	top: 78px;
 	width: 200px;
 	height: 75px;
 	display: none;
 	z-index: 15;
-  padding: 5px;
-  background: #F8F2AA;
-  border: 2px solid #FFB608;
+    padding: 5px;
+    background: #F8F2AA;
+    border: 2px solid #FFB608;
 }
 
 #activePortalID {

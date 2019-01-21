@@ -208,6 +208,11 @@ Note that ONLY BC breaking changes are listed, according to our backwards compat
 - New method `getDomainDataByName()`.
 - New method `getPortalPrefixListForDomain()`.
 
+## TCMSFieldDate/TCMSFieldDateToday
+
+The field classes now use the language independent SQL date format in frontend rendering instead of always using a german date format. 
+For backwards compatibility reasons they work with the German date format, too.
+
 ## \TTools
 
 - Changed method `WriteLogEntry()`: parameter `$sLogFileName` is now ignored.
@@ -275,6 +280,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$sGeneratedPage
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$postRenderVariables
 - \TPkgCsv2Sql::$sLogFileName
+- \TCMSFieldLookupFieldTypes::sFieldHelpTextHTML
 
 ## Methods
 
@@ -288,22 +294,60 @@ is recommended (although this tool may not find database-related deprecations).
 - \ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::getModules()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
+- \MTTableManager::getAutocompleteRecordList()
 - \TCMSCronJob::getLogger()
+- \TCMSFieldLookup::enableComboBox()
 - \TCMSLogChange::getUpdateLogger()
 - \TPkgCmsCoreSendToHost::setLogRequest()
 - \TPkgCmsException_Log::getLogger()
 - \TPkgCsv2Sql::CreateLogFileName()
 - \TPkgCsv2Sql::GetLogFile()
 - \TTools::AddStaticPageVariables()
+ 
 
 ## JavaScript Files and Functions
 
-None.
+- $.blockUI();
+- $.unblockUI();
+
+Use CHAMELEON.CORE.showProcessingModal() and CHAMELEON.CORE.hideProcessingModal() instead.
+
+- SetChangedDataMessage()
+
+Use CHAMELEON.CORE.MTTableEditor.initInputChangeObservation() instead.
+
+- CreateModalIFrameDialogFromContentWithoutClose
+
+Use CreateModalIFrameDialogFromContent() instead. (modals always show a header and close button)
+
+All CreateModal... methods now call a bootstrap modal using CHAMELEON.CORE.showModal().
+The modal uses CSS classes for the size. If not really necessary the modal is always opened in xxl size (90% screensize).
+To be backwards compatible the size classes are determined using CHAMELEON.CORE.getModalSizeClassByPixel().
+You should remove all width/height settings in CreateModalXY calls if it does not necessarily render smaller.
+
+- $.jBreadCrumb()
+- $.bgiframe()
+- $.jqM() (jqModal)
+- $.jqDnR() (part of jqModal)
+- $.addOption() (jquery.selectboxes plugin)
+
+## jQueryUi
+
+jQueryUi is replaced everywhere in the code.
+The only exception is drag&drop functionality in the template engine for module spot placing and reordering of elements
+using TCMSFieldPosition.
+
+Deprecated is every jquery plugin in: 
+
+/Resources/public/javascript/jquery/jQueryUI/
+
 
 ## Translations
 
-- chameleon_system_core.field_options.option_value_true
 - chameleon_system_core.field_options.option_value_false
+- chameleon_system_core.field_options.option_value_true
+- chameleon_system_core.fields.lookup.no_matches
+- chameleon_system_core.record_lock.lock_owner_fax
 
 ## Database Tables
 
@@ -320,6 +364,10 @@ The Backend was upgraded to Bootstrap 4.1.3.
 See the [Bootstrap Migration Guide](https://getbootstrap.com/docs/4.1/migration/) for needed changes to your backend modules.
 
 During the upgrade to Bootstrap 4 the following styles where checked and these are our findings:
+
+.img-responsive -> .img-fluid
+- TCMSFieldMedia
+- TCSMFieldFMapCoordinate
 
 btn-default -> btn-secondary
 - Some TCMSField types and TCMSTableEditors so check yours.

@@ -142,7 +142,19 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.action_use_page_template">
                 <source>chameleon_system_core.template_engine.action_use_page_template</source>
-                <target>Seitenvorlage verwenden</target>
+                <target>Verwenden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.action_preview_template">
+                <source>chameleon_system_core.template_engine.action_preview_template</source>
+                <target>Vorschau</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.headline_layout">
+                <source>chameleon_system_core.template_engine.headline_layout</source>
+                <target>Seitenvorlagen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.template_engine.active">
+                <source>chameleon_system_core.template_engine.active</source>
+                <target>aktiv</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.error_instance_locked">
                 <source>chameleon_system_core.template_engine.error_instance_locked</source>
@@ -876,6 +888,11 @@
             <trans-unit id="chameleon_system_core.record_lock.lock_owner_fax">
                 <source>chameleon_system_core.record_lock.lock_owner_fax</source>
                 <target>Fax</target>
+                 <note>@deprecated since 6.3.0 - no longer used.</note>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.record_lock.locked_by">
+                <source>chameleon_system_core.record_lock.locked_by</source>
+                <target>gesperrt durch</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_lock.lock_owner_city">
                 <source>chameleon_system_core.record_lock.lock_owner_city</source>
@@ -2492,6 +2509,10 @@
             <trans-unit id="chameleon_system_core.field_lookup_multi_select_restriction.check_help">
                 <source>chameleon_system_core.field_lookup_multi_select_restriction.check_help</source>
                 <target>Wenn dieses Häkchen gesetzt ist, dann bedeutet eine leere Liste, dass die Einschränkung niemals erfüllt wird - der Datensatz ist also effektiv deaktiviert. Wenn das Häkchen nicht gesetzt ist, bedeutet eine leere Liste hingegen "keine Einschränkung".</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.admin_message.button_title">
+                <source>chameleon_system_core.admin_message.button_title</source>
+                <target>Achtung</target>
             </trans-unit>
         </body>
     </file>

@@ -140,13 +140,6 @@
     position: absolute;
     z-index: 100;
 }
-.ui-widget {
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size: 11px;
-}
-.ui-widget .ui-widget {
-    font-size: 11px;
-}
 
 .ui-widget-content {
     background: url("images/ui-bg_glass_75_ffffff_1x400.png") repeat-x scroll 50% 50% #FFFFFF;

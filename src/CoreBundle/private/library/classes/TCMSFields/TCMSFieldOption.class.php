@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Symfony\Component\Translation\TranslatorInterface;
+
 /**
  * an enum field.
 /**/
@@ -42,12 +45,12 @@ class TCMSFieldOption extends TCMSField
 
         if (count($this->options) >= 3) {
             // show as select box
-            $html = '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name).'" class="form-control form-control-sm" style="width: 363px; float: left;">';
+            $html = '<div class="row"><div class="col-12 col-lg-8">';
+            $html .= '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name).'" class="form-control form-control-sm" data-select2-option=\'{"width": "100%"}\'>';
             if ($this->allowEmptySelection) {
                 $chooseMessage = TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected');
 
                 $html .= '<option value="">'.TGlobal::OutHTML($chooseMessage)."</option>\n";
-                $html .= '<option value="">'.TGlobal::OutHTML('-------------------------------------------')."</option>\n";
             }
             foreach ($this->options as $key => $value) {
                 $selected = '';
@@ -57,10 +60,9 @@ class TCMSFieldOption extends TCMSField
                 $html .= '<option value="'.TGlobal::OutHTML($key)."\"{$selected}>".TGlobal::OutHTML($value)."</option>\n";
             }
             $html .= "</select>
-        <div class=\"switchToRecordBox\">\n";
+                <div class=\"col-12 col-lg-4 switchToRecordBox\"></div>\n";
 
-            $html .= "<div class=\"cleardiv\">&nbsp;</div>
-        </div>\n";
+            $html .= "</div>\n";
         } else {
             // show as radio button
             $html = '';
@@ -217,7 +219,7 @@ class TCMSFieldOption extends TCMSField
             return $value;
         }
         $key = $this->createEnumTranslationKey($value);
-        $translatedValue = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans($key, array(), \ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND_ENUM);
+        $translatedValue = $this->getTranslator()->trans($key, array(), \ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND_ENUM);
         if ($translatedValue === $key) {
             return $value;
         }
@@ -235,5 +237,32 @@ class TCMSFieldOption extends TCMSField
     private function createEnumTranslationKey($value)
     {
         return $this->sTableName.'.'.$this->name.'.'.$value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetCMSHtmlHeadIncludes()
+    {
+        $includes = parent::GetCMSHtmlHeadIncludes();
+        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
+
+        return $includes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetCMSHtmlFooterIncludes()
+    {
+        $includes = parent::GetCMSHtmlFooterIncludes();
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
+
+        return $includes;
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
     }
 }

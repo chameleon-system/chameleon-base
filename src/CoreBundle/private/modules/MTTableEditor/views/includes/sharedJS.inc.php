@@ -1,7 +1,7 @@
 <script type="text/javascript">
     if (!parent.framestosave) parent.framestosave = new Array();
 </script>
-<div style="position: relative; top: 4px;">
+<div>
 <?php
 if ($data['aPermission']['showlist'] && '1' == $data['only_one_record_tbl'] && array_key_exists('bIsLoadedFromIFrame', $data) && $data['bIsLoadedFromIFrame']) {
     ?>
@@ -75,7 +75,7 @@ $rowCount = 0;
         if ($bRevisionManagementActive) {
             ?>
         function AddNewRevision() {
-            CreateModalDialogFromContainer('addNewRevisionDialog', 550, 350);
+            CreateModalDialogFromContainer('addNewRevisionDialog');
             $('#cmsrevisionname').val(sCurrentRecordName);
         }
 
@@ -91,7 +91,6 @@ $rowCount = 0;
 
 
         function ActivateRecordRevision(id) {
-            $("#pleaseWaitMessage").append('<div id="dialog-confirm" title="<?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.record_revision.action_restore_revision')); ?>"><p><?=TGlobal::Translate('chameleon_system_core.record_revision.confirm_restore_revision'); ?></p></div>');
             $("#dialog-confirm").dialog({
                 resizable:false,
                 height:180,

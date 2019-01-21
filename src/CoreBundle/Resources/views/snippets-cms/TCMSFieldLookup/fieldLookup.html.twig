@@ -1,0 +1,35 @@
+{% set selectOptions -%}
+    {"placeholder": "{{ 'chameleon_system_core.form.select_box_nothing_selected'|trans }}"{% if allowEmptySelection %}, "allowClear": true{% endif %}, "width": "100%" }
+{%- endset %}
+
+<div class="fieldLookup row">
+    <div class="col-12 col-lg-8">
+        <select name="{{ fieldName|e('html_attr') }}" id="{{ fieldName|e('html_attr') }}"
+                class="{{ sClass|e('html_attr') }}" data-select2-option='{{ selectOptions }}'>
+            {% if allowEmptySelection %}
+                <option></option>
+            {% endif %}
+            {% for key, option in options %}
+                {% if key == connectedRecordId %}
+                    {% set selected = 'selected' %}
+                {% else %}
+                    {% set selected = '' %}
+                {% endif %}
+                <option {{ selected|e('html_attr') }}
+                        value="{{ key|e('html_attr') }}">{{ option|e('html_attr') }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-12 pt-2 col-lg-4 pt-lg-0">
+        {% if buttonLink is defined %}
+            <button type="button" class="btn btn-sm btn-secondary" onclick="{{ buttonLink|e('html_attr') }}"><i
+                        class="fas fa-edit"></i> {{ 'chameleon_system_core.field_lookup.switch_to'|trans }}</button>
+        {% endif %}
+    </div>
+</div>
+{% if showErrorMessage %}     {# current ID is an orphan, show message #}
+    <div class="error mt-2">
+        {{ 'chameleon_system_core.field_lookup.error_assigned_id_does_not_exists'|trans({'%id%': connectedRecordId }) }}
+    </div>
+{% endif %}

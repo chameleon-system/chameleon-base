@@ -95,7 +95,7 @@ class TCMSFieldDocumentProperties extends TCMSField
         $url = PATH_CMS_CONTROLLER.'?pagedef=CMSUniversalUploader&mode=document&callback=_ReloadPage&singleMode=1&recordID='.$this->oTableRow->sqlData['id'];
         $html = "<script type=\"text/javascript\">
       function OpenDocumentUploadWindow() {
-        CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."',450,480);
+        CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."');
       }
 
       function _ReloadPage(serverData) {

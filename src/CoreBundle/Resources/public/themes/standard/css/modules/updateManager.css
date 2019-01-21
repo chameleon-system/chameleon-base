@@ -2,126 +2,14 @@
     margin: 20px;
 }
 
-#updatemanager h1 {
-  background-color: #D2D2D2;
-  border:1px solid #9A9A9A;
-  padding: 5px;
-  color: #EFEFEF;
-  font-weight: bold;
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: 1px;
-  background-image: url(../../images/table_bg.gif);
-  background-position: 50%;
-}
-
-#updatemanager h2 {
-  font-weight: bold;
-  font-size: 11px;
-}
-
-#infoContainer {
-    background-color: #f5f5f5;
-    border: 1px solid #cccccc;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-#updateInfoList, #updateCountInfo {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-#updateInfoList li, #updateCountInfo li {
-    padding: 5px 0;
-}
-#updateInfoList li span, #updateCountInfo li span {
-    margin-right: 5px;
-}
-
-.updateMessageContainer {
-    padding: 5px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    color: #ffffff;
-}
-
 #updateFatalErrorContainer {
     color: #000000;
 }
 
-#updateErrorContainer {
-    background-color: #da4f49;
-    border-color: #bd362f;
-}
-
-#updateInfoContainer {
-    background-color: #363636;
-    border-color: #222222;
-}
-
-.updateMessageContainer h4 {
-    font-size: 14px;
-    margin: 0;
-    font-weight: normal;
-}
-.updateMessageList {
-    list-style-type: none;
-    padding-left: 0;
-}
-.updateMessageList li {
-    padding: 5px;
-}
-.updateMessageList li ul {
-    list-style-type: none;
-    padding-left: 10px;
-}
-.updateMessageList li ul li.info-message-type {
-    border-width: 1px 1px 1px 20px;
-    border-style: solid;
-    border-color: #adadad;
-    padding: 5px;
-}
-#updateInfoContainer #updateInfoList li ul li.info-message-type.info-message-type-info {
-    border-color: #269abc;
-}
-#updateInfoContainer #updateInfoList li ul li.info-message-type.info-message-type-warning {
-    border-color: #f89406;
-}
-#updateInfoContainer #updateInfoList li ul li.info-message-type.info-message-type-error {
-    border-color: #bd362f;
-}
-
-@-webkit-keyframes infoMessageTodoAnimation {
-    0%, 100% {
-        border-color: yellow;
-    }
-    60% {
-        border-color: mediumvioletred;
-    }
-}
-@-moz-keyframes infoMessageTodoAnimation {
-    0%, 100% {
-        border-color: yellow;
-    }
-    60% {
-        border-color: mediumvioletred;
-    }
-}
-@-o-keyframes infoMessageTodoAnimation {
-    0%, 100% {
-        border-color: yellow;
-    }
-    60% {
-        border-color: mediumvioletred;
-    }
-}
-@keyframes infoMessageTodoAnimation {
-    0%, 100% {
-        border-color: yellow;
-    }
-    60% {
-        border-color: mediumvioletred;
-    }
+@keyframes gradientAnimation {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
 }
 
 #updateFatalError {
@@ -129,54 +17,18 @@
     overflow: scroll;
 }
 
-#updateInfoContainer #updateInfoList li ul li.info-message-type.info-message-type-todo {
-    -webkit-animation: infoMessageTodoAnimation 3s infinite; /* Safari 4+ */
-    -moz-animation:    infoMessageTodoAnimation 3s infinite; /* Fx 5+ */
-    -o-animation:      infoMessageTodoAnimation 3s infinite; /* Opera 12+ */
-    animation:         infoMessageTodoAnimation 3s infinite; /* IE 10+ */
-}
-#updateErrorList li,
-#updateInfoList li {
-    margin: 3px 0;
+#updatemanager li.list-group-item-success {
+    background: linear-gradient(270deg, #90ff7e, #2bc313);
+    background-size: 400% 400%;
+
+    -webkit-animation: gradientAnimation 4s ease infinite;
+    -moz-animation: gradientAnimation 4s ease infinite;
+    -o-animation: gradientAnimation 4s ease infinite;
+    animation: gradientAnimation 4s ease infinite;
 }
 
-.updateMessageList li a {
-    text-decoration: underline;
-}
-#updateInfoList li a {
-    color: #ffffff;
-}
-
-#updatemanager a#btnGoBack {
-    margin-right: 10px;
-}
-
-#updatemanager a.button {
-    text-decoration: none;
-    padding: 3px 8px;
-    font-size: 12px;
-    border-width: 1px;
-    border-style: solid;
-    color: #ffffff;
-    float: left;
-}
-#updatemanager a.button.green {
-    background-color: #5bb75b;
-    border-color: #51a351;
-}
-#updatemanager a.button.red {
-    background-color: #da4f49;
-    border-color: #bd362f;
-}
-#updatemanager a.button.disabled {
-    background-color: #f5f5f5;
-    color: #cccccc;
-    cursor: not-allowed;
-}
-#updatemanager a.button.running {
-    background-color: #f5f5f5;
-    color: #cccccc;
-    cursor: wait;
+#updateProgressBarContainer {
+    height: 30px;
 }
 
 #updatemanager #ajaxTimeoutContainer {
@@ -186,204 +38,10 @@
     text-decoration: underline;
 }
 
-#updateProgressBarContainer {
-    position: relative;
-    height: 26px;
-    border: 1px solid #cccccc;
-    margin: 10px 0;
-}
-#updateProgressBarInner {
-    text-align: center;
-    width: 100%;
-    line-height: 20px;
-    margin: 3px 0;
-    z-index: 102;
-    position: absolute;
-}
-#updateProgressBar {
-    position: absolute;
-    height: 20px;
-    z-index: 101;
-    margin: 3px 0;
-}
-#updateProgressBar.orange {
-    background-color: #f89406;
-}
-#updateProgressBar.green {
-    background-color: #51a351;
-}
-
-#updateManagerOutput {
-    background-color: #f5f5f5;
-    border: 1px solid #cccccc;
-    padding: 10px;
-    margin-bottom: 5px;
-}
-#updateManagerOutput .head {
-    border: 1px solid #cccccc;
-    padding: 7px;
-}
-#updateManagerOutput .head h2 {
-    margin: 0;
-}
-#updateManagerOutput .head ul {
-    float: right;
-    list-style: none outside none;
-    margin: 0;
-}
-#updateManagerOutput .head ul li {
-    float: left;
-    margin-left: 10px;
-    font-size: 12px;
-}
-#updateManagerOutput .head ul li span,
-#updateInfoList li span, #updateCountInfo .update-count {
-    font-size: 12px;
-    font-weight: bold;
-    padding: 2px 3px;
-}
-#updateManagerOutput .head ul li span.orange,
-#updateInfoList li span.orange, #updateCountInfo .orange {
-    color: #fff;
-    background-color: #f89406;
-}
-#updateManagerOutput .head ul li span.green,
-#updateInfoList li span.green, #updateCountInfo .green {
-    color: #fff;
-    background-color: #51a351;
-}
-#updateManagerOutput .body {
-    background-color: #fff;
-    padding: 10px;
-}
-#updateManagerOutput .body .waiting {
-    text-align: center;
-}
-
-#updateManagerOutput .body .changelog {
-    background-color: #fbb450;
-    color: #000000;
-    border: 2px solid #f89406;
-    padding: 10px;
-    font-weight: bold;
-    font-size: 11px;
-    display: block;
-    clear: both;
-    margin: 10px 0 !important;
-}
-#updateManagerOutput .body .info {
-    background-color: #f5f5f5;
-    color: #000000;
-    border: 2px solid #cccccc;
-    padding: 10px;
-    font-weight: bold;
-    font-size: 11px;
-    display: block;
-    clear: both;
-    margin: 10px 0 !important;
-}
-#updateManagerOutput .body .fileInfo {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 4px;
-    margin: 10px 0 4px 0;
-    color: #ccc;
-    font-style: italic;
-}
-#updateManagerOutput .body h1 {
-    background: #5bc0de none !important;
-    padding: 5px 20px 5px 5px;
-    color: #000000;
-    font-size: 12px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    float: left;
-    line-height: 1.2em;
-    margin: 0;
-    border: 0 !important;
-}
-#updateManagerOutput .body h2 {
-    background-color: #5bc0de;
-    padding: 5px;
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    line-height: 1.2em;
-    margin: 0;
-}
-#updateManagerOutput .body .successQueryContainer {
-    border: 1px solid #51a351;
-}
-#updateManagerOutput .body .successQueryContainer .head {
-    background-color: #5bb75b;
-    color: #ffffff;
-    font-weight: bold;
-    cursor: pointer;
-    text-align: center;
-}
 #updateManagerOutput .body .successQueryContainer .queryList {
     display: none;
 }
 
-#updateManagerOutput .body .errorQueryContainer {
-    border: 1px solid #bd362f;
-    margin: 5px 0;
-}
-#updateManagerOutput .body .errorQueryContainer .head {
-    background-color: #da4f49;
-    color: #ffffff;
-    font-weight: bold;
-    text-align: center;
-}
-
-#updateManagerOutput .body .infoMessageContainer {
-    border: 1px solid #222222;
-    margin: 5px 0;
-}
-#updateManagerOutput .body .infoMessageContainer .head {
-    background-color: #363636;
-    color: #ffffff;
-    font-weight: bold;
-    text-align: center;
-}
-
 #singleUpdateSelectContainer {
     padding-bottom: 20px;
-}
-
-.singleUpdateSelectChoices {
-    display: table;
-}
-
-.singleUpdateSelectChoices > div {
-    display: table-row;
-}
-
-.singleUpdateSelectChoices > div >div {
-    display: table-cell;
-}
-
-#updateCountInfo {
-    display: table;
-}
-
-#updateCountInfo > div {
-    display: table-row;
-}
-
-#updateCountInfo > div >div {
-    display: table-cell;
-    padding: 1px;
-}
-
-.update-count {
-    text-align: right;
-}
-
-.singleUpdateSelectChoices select {
-    width: 100%;
-}
-
-.clear {
-    clear: both;
 }

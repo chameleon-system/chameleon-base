@@ -618,19 +618,13 @@ class CMSModulePageTree extends TCMSModelBase
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/form/jquery.form.js').'" type="text/javascript"></script>'; // ajax form plugin
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/BlockUI/jquery.blockUI.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqDnR.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.css').'" media="screen" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/simpleTree/jquery.simple.tree.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/tree/jqueryTree.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/simpleTree.css" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/contextmenu/contextmenu.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/contextmenu/contextmenu.css').'" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<style type="text/css">@import url(/chameleon/blackbox/javascript/jquery/jQueryUI/themes/cupertino/cupertino.css);</style>';
 
         return $aIncludes;
     }

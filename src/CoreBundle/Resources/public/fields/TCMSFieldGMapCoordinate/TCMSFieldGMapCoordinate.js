@@ -46,7 +46,7 @@ CHAMELEON.CORE.TCMSFieldGMapCoordinate =
      * @param {string} moduleUrl
      */
     openMap: function (fieldName, moduleUrl) {
-        CreateModalIFrameDialogCloseButton(moduleUrl + '&lat=' + $('#' + fieldName + '_lat').val() + '&lng=' + $('#' + fieldName + '_lng').val() + '&sFieldName=' + fieldName, 810, 640);
+        CreateModalIFrameDialogCloseButton(moduleUrl + '&lat=' + $('#' + fieldName + '_lat').val() + '&lng=' + $('#' + fieldName + '_lng').val() + '&sFieldName=' + fieldName);
     },
 
     /**

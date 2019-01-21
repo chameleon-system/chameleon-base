@@ -73,13 +73,6 @@ class CMSGMap extends TCMSModelBase
     public function GetHtmlHeadIncludes()
     {
         $includes = parent::GetHtmlHeadIncludes();
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/form/jquery.form.js').'" type="text/javascript"></script>'; // ajax form plugin
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/BlockUI/jquery.blockUI.js').'" type="text/javascript"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.js').'" type="text/javascript"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqDnR.js').'" type="text/javascript"></script>';
-        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.css').'" media="screen" rel="stylesheet" type="text/css" />';
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/fields/TCMSFieldGMapCoordinate/TCMSFieldGMapCoordinate.js').'" type="text/javascript"></script>';
 
         if (count($this->aGMapIncludes) > 0) {

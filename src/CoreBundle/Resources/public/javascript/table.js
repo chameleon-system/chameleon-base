@@ -67,7 +67,7 @@ function DeleteRecord(id) {
     var message = CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.confirm_delete');
 
     if (confirm(message)) {
-        PleaseWait();
+        CHAMELEON.CORE.showProcessingModal();
         document.cmsformdel.elements['module_fnc[contentmodule]'].value = 'Delete';
         document.cmsformdel.id.value = id;
         document.cmsformdel.submit();
@@ -114,5 +114,9 @@ $(document).ready(function () {
     $('.TCMSListManagerFullGroupTable tr.TGroupTableItemRow').each(function () {
         var TRHeight = $(this).innerHeight() - 13; // - TD padding and borders
         $(this).find('a.TGroupTableLink').css('height', TRHeight);
+    });
+
+    $('[data-select2-option]').each(function () {
+        $(this).select2($(this).data("select2-option"));
     });
 });

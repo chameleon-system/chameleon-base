@@ -52,7 +52,7 @@
             <div class="alert alert-info">{{ 'chameleon_system_core.field_google_map.missing_api_key_error'|trans|nl2br }}</div>
         {% else %}
             {% if latitude and longitude %}
-                <img border="0" id="staticMap" class="img-responsive" src="//maps.googleapis.com/maps/api/staticmap?size=500x250&amp;zoom=11&amp;maptype=roadmap&amp;markers=color:blue%7Clabel:S%7C{{ latitude|e('html_attr') }},{{ longitude|e('html_attr') }}&amp;key={{ googleMapsApiKey|e('html_attr') }}">
+                <img border="0" id="staticMap" class="img-fluid" src="//maps.googleapis.com/maps/api/staticmap?size=500x250&amp;zoom=11&amp;maptype=roadmap&amp;markers=color:blue%7Clabel:S%7C{{ latitude|e('html_attr') }},{{ longitude|e('html_attr') }}&amp;key={{ googleMapsApiKey|e('html_attr') }}">
             {% endif %}
         {% endif %}
     </div>

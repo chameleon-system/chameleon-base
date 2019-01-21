@@ -1,5 +1,5 @@
 <form name="cmseditform" id="cmseditform" method="post" action="<?=PATH_CMS_CONTROLLER; ?>" style="margin 0; padding 0;"
-      accept-charset="UTF-8" onsubmit="PleaseWait();">
+      accept-charset="UTF-8" onsubmit="CHAMELEON.CORE.showProcessingModal();">
     <input type="hidden" name="pagedef" value="<?=$data['pagedef']; ?>"/>
     <input type="hidden" name="tableid" value="<?=TGlobal::OutHTML($data['tableid']); ?>"/>
     <input type="hidden" name="id" value="<?=TGlobal::OutHTML($data['id']); ?>"/>
@@ -14,7 +14,7 @@
     <?php
 } ?>
 
-    <div id="formTabs" style="border: none; float:none; max-width: 100%; overflow-x: hidden;">
+    <div id="tabs-wrapper">
         <?php
         $sFormTabsContent = '';
 
@@ -41,13 +41,13 @@
                 require dirname(__FILE__).'/fields.inc.php';
             }
             if (!empty($sFormTabsTitles)) {
-                echo '<ul>'.$sFormTabsTitles."\n</ul>";
+                echo '<ul class="nav nav-tabs" role="tablist">'.$sFormTabsTitles."\n</ul>";
             }
         } else {
             $iTabCount = 0;
             require dirname(__FILE__).'/fields.inc.php';
         }
-        echo $sFormTabsContent;
+        echo '<div class="tab-content">'.$sFormTabsContent.'</div>';
         ?>
     </div>
 </form>

@@ -53,7 +53,7 @@ class TCMSFieldTreeNode extends TCMSField
     public function _GetOpenWindowJS()
     {
         $url = PATH_CMS_CONTROLLER.'?pagedef=treenodeselect&fieldName='.urlencode($this->name).'&id='.urlencode($this->data);
-        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."',400,500)";
+        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."')";
 
         return $js;
     }

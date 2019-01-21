@@ -28,7 +28,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         $html = $this->_GetHiddenField();
 
         $html .= '<div class="input-group input-group-sm">';
-        $html .= '<input type="text" id="'.TGlobal::OutHTML($this->name).'CurrentSelection" class="form-control form-control-sm" value="'.TGlobal::OutHTML($value).'" readonly>';
+        $html .= '<div id="'.TGlobal::OutHTML($this->name).'CurrentSelection" class="form-control form-control-sm">'.$value.'</div>';
 
         $goToRecordButtonHtml = $this->GetGoToRecordButton();
 
@@ -115,8 +115,10 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         $oCmsTblConf = TdbCmsTblConf::GetNewInstance();
         $oCmsTblConf->LoadFromField('name', $sTableName);
 
-        $sHTML = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.select_item'), 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf), URL_CMS.'/images/icons/box.gif', 'float-left');
-        $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:resetExtendedListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected'))."')", URL_CMS.'/images/icons/action_stop.gif', 'float-left button-spacing');
+        $sHTML = '<div class="btn-group mt-1">';
+        $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.select_item'), 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf), URL_CMS.'/images/icons/box.gif', 'float-left');
+        $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:resetExtendedListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected'))."')", URL_CMS.'/images/icons/action_stop.gif', '');
+        $sHTML .= '</div>';
 
         return $sHTML;
     }
@@ -141,7 +143,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         $translator = $this->getTranslationService();
         $sWindowTitle = $translator->trans('chameleon_system_core.field_lookup.select_item', array(), 'admin');
 
-        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sURL)."','780','550','".$sWindowTitle."');return false;";
+        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sURL)."',0,0,'".$sWindowTitle."');return false;";
 
         return $js;
     }

@@ -1,13 +1,21 @@
-<div id="successQueryContainer-{{ bundleName }}-{{ buildNumber }}" class="successQueryContainer">
-    <div class="head">
-        <span class="message">{{ 'chameleon_system_core.cms_module_update.show_successful_queries'|trans }}</span> (<span class="count">{{ messages|length }}</span>)
+<div id="successQueryContainer-{{ bundleName }}-{{ buildNumber }}" class="card card-accent-success">
+    <div class="card-header">
+        <button class="btn btn-success collapsed" type="button" data-toggle="collapse"
+                data-target="#queryList-{{ bundleName }}-{{ buildNumber }}" aria-expanded="false"
+                aria-controls="queryList-{{ bundleName }}-{{ buildNumber }}">
+            {{ 'chameleon_system_core.cms_module_update.show_successful_queries'|trans }}
+        </button>
+        <span class="badge badge-pill badge-success float-right">{{ messages|length }}</span>
     </div>
-    <ul class="queryList">
-        {% for message in messages %}
-            <li>
-                {{ 'chameleon_system_core.cms_module_update.query'|trans }} <pre>{{ message.query }}</pre><br />
-                {{ 'chameleon_system_core.cms_module_update.line'|trans }} {{ message.line }}
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="card-body">
+        <ul class="list-group queryList collapse" id="queryList-{{ bundleName }}-{{ buildNumber }}">
+            {% for message in messages %}
+                <li class="list-group-item">
+                    <span class="badge badge-pill badge-success float-right">{{ 'chameleon_system_core.cms_module_update.line'|trans }} {{ message.line }}</span>
+                    <h4>{{ 'chameleon_system_core.cms_module_update.query'|trans }}</h4>
+                    <pre class="alert alert-secondary">{{ message.query }}</pre>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>

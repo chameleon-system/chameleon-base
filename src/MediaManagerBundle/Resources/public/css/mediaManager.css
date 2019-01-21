@@ -244,15 +244,8 @@
     margin: 0;
     list-style: none;
     width: 100%;
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-flow: row wrap;
     justify-content: space-between;
     align-items: stretch;
-    flex-wrap: wrap;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .image-row:after {
@@ -268,15 +261,15 @@
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .image-row .image-col .inner {
-    border: 2px solid #fff;
-    box-shadow: 0 0 10px #fff;
+    border: 2px solid #c8ced3;
+    box-shadow: 0 0 10px #c8ced3;
     box-sizing: border-box;
     height: 100%;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .image-row .image-col .inner.xselectable-selected {
-    border: 2px solid #f77878;
-    box-shadow: 0 0 10px #fd8e8e;
+    border: 2px solid #20a8d8;
+    box-shadow: 0 0 10px #20a8d8;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .image-row .image-col .image-container {
@@ -285,6 +278,7 @@
     text-align: center;
     min-height: 100px;
     display: flex;
+    border-bottom: 1px solid #c8ced3;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .image-row .image-col .image-container img {
@@ -375,7 +369,7 @@
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList {
-    padding-bottom: 50px;
+    padding-bottom: 10px;
     padding-right: 15px;
 }
 
@@ -398,14 +392,10 @@
     padding: 0 5px;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .image-col {
-    box-sizing: border-box;
-    padding: 10px 15px 10px 7px;
-}
-
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .image-col .image-container {
     text-align: center;
     background: transparent url('../img/transparency.png') repeat;
+    border: 1px solid #c8ced3;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .image-col .image-container img {
@@ -506,12 +496,6 @@
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListPaging .pagination {
     margin-top: 0;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListPaging .TFullGroupTablePerPageSelect select {
-    margin-left: 8px;
-    position: relative;
-    top: -1px;
 }
 
 .snippetMediaManagerBackendModuleStandard .media-manager-layover .title {

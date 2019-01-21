@@ -11,8 +11,6 @@
 
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 
-require_once PATH_LIBRARY.'/functions/ConvertDate.fun.php';
-
 /**
  * {@inheritdoc}
  */
@@ -31,24 +29,11 @@ class TCMSFieldDate extends TCMSField
         $viewRenderer = $this->getViewRenderer();
         $viewRenderer->AddSourceObject('fieldName', $this->name);
         $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
-        $viewRenderer->AddSourceObject('fieldIconUrl', TGlobal::GetStaticURL('/chameleon/blackbox/images/icons/calendar.gif'));
+        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('datetimepickerFormat', 'L');
+        $viewRenderer->AddSourceObject('datetimepickerSideBySide', 'false');
 
-        return $viewRenderer->Render('TCMSFieldDate/dateInput.html.twig', null, false);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function _GetHTMLValue()
-    {
-        $data = parent::_GetHTMLValue();
-
-        $htmlDate = ConvertDate($data, 'sql2g');
-        if ('00.00.0000' === $htmlDate) {
-            return '';
-        }
-
-        return $htmlDate;
+        return $viewRenderer->Render('TCMSFieldDate/datetimeInput.html.twig', null, false);
     }
 
     /**
@@ -59,13 +44,17 @@ class TCMSFieldDate extends TCMSField
      */
     public function ConvertPostDataToSQL()
     {
-        if (!empty($this->data) && !$this->IsSQLDate($this->data)) {
-            return ConvertDate($this->data, 'g2sql');
-        } elseif (!empty($this->data) && $this->IsSQLDate($this->data)) {
-            return $this->data;
+        if ('' === $this->data) {
+            return '';
         }
 
-        return '';
+        if (false === $this->IsSQLDate($this->data)) {
+            $dateTime = new \DateTime($this->data);
+
+            return $dateTime->format('Y-m-d');
+        }
+
+        return $this->data;
     }
 
     /**
@@ -73,7 +62,9 @@ class TCMSFieldDate extends TCMSField
      */
     public function GetReadOnly()
     {
-        return TGlobal::OutHTML(ConvertDate($this->data, 'sql2g'));
+        $dateTime = new \DateTime($this->data);
+
+        return TGlobal::OutHTML($dateTime->format('d.m.Y'));
     }
 
     /**
@@ -89,41 +80,22 @@ class TCMSFieldDate extends TCMSField
      */
     public function GetCMSHtmlHeadIncludes()
     {
-        $aIncludes = array();
-        $aIncludes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jQueryUI/ui.core.js'));
-        $aIncludes[] = sprintf('<link href="%s" media="screen" rel="stylesheet" type="text/css" />', TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/themes/cupertino/cupertino.css'));
-        $aIncludes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jQueryUI/datepicker/ui.datepicker.js'));
+        $includes = parent::GetCMSHtmlHeadIncludes();
+        $includes[] = sprintf('<link href="%s" media="screen" rel="stylesheet" type="text/css" />', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.1.2/css/tempusdominus-bootstrap-4.min.css')); //datetimepicker
 
-        $backendUser = TCMSUser::GetActiveUser();
-        $currentLanguage = $backendUser->GetCurrentEditLanguage();
-        if ('en' === $currentLanguage) {
-            $currentLanguage .= '-GB';
-        } // specify the EN version
+        return $includes;
+    }
 
-        $aIncludes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL(
-            '/chameleon/blackbox/javascript/jquery/jQueryUI/datepicker/i18n/ui.datepicker-'.$currentLanguage.'.js'
-        ));
+    /**
+     * {@inheritdoc}
+     */
+    public function GetCMSHtmlFooterIncludes()
+    {
+        $includes = parent::GetCMSHtmlFooterIncludes();
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/moment-2.23.0/js/moment-with-locales.min.js')); //moment.js for datetimepicker
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.1.2/js/tempusdominus-bootstrap-4.min.js')); //datetimepicker
 
-        $init = "
-      <script type=\"text/javascript\">
-      $(document).ready(function() {
-        $.datepicker.setDefaults({
-          showOn: 'button',
-          buttonImageOnly: true,
-          firstDay: 1,
-          showWeek: true,
-          dateFormat: 'dd.mm.yy',
-          changeMonth: true,
-          changeYear: true          
-        });
-      });
-      </script>
-      ";
-
-        $aIncludes[] = $init;
-        $aIncludes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/maskedinput/maskedinput.js'));
-
-        return $aIncludes;
+        return $includes;
     }
 
     /**
@@ -132,18 +104,17 @@ class TCMSFieldDate extends TCMSField
     public function GetRTFExport()
     {
         $date = $this->_GetFieldValue();
-        $dateArray = explode('-', $date);
-
-        $germanDate = ConvertDate($date, 'sql2g');
 
         setlocale(LC_TIME, 'de_DE@euro', 'de_DE', 'de', 'ge', 'de_DE.ISO8859-1');
 
+        $dateArray = explode('-', $date);
         $timeStamp = mktime(0, 0, 0, $dateArray[1], $dateArray[2], $dateArray[0]);
         $dayString = strftime('%a', $timeStamp);
 
         setlocale(LC_TIME, 0);
 
-        $returnString = $dayString.' '.$germanDate;
+        $dateTime = new \DateTime($date);
+        $returnString = $dayString.' '.$dateTime->format('d.m.Y');
 
         return $returnString;
     }
@@ -158,7 +129,7 @@ class TCMSFieldDate extends TCMSField
             return false;
         }
 
-        if ($this->HasContent() && !$this->CheckValidDate($this->data)) {
+        if ($this->HasContent() && false === $this->CheckValidDate($this->data)) {
             $dataIsValid = false;
             $flashMessageService = $this->getFlashMessageService();
             $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
@@ -188,12 +159,12 @@ class TCMSFieldDate extends TCMSField
         }
 
         $patternGermanDate = '/^(0[1-9]|[12][0-9]|3[01]|[1-9])[\.\/](0[1-9]|1[012]|[1-9])[\.\/](\d{4}|\d{2})$/';
-        $patternUsDate = '/^(\d{4}|\d{2})[.|-](0[1-9]|1[012]|[1-9])[-|-](0[1-9]|[12][0-9]|3[01]|[1-9])$/';
-        if (preg_match($patternGermanDate, $sSqlDateTime) || preg_match($patternUsDate, $sSqlDateTime)) {
+        $patternSqlDate = '/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/';
+        if (preg_match($patternGermanDate, $sSqlDateTime) || preg_match($patternSqlDate, $sSqlDateTime)) {
             $timeStamp = strtotime($sSqlDateTime);
             $checkDateTime = date('d.m.Y', $timeStamp);
-            $checkDateTimeUs = date('Y-m-d', $timeStamp);
-            if ($sSqlDateTime === $checkDateTime || $sSqlDateTime === $checkDateTimeUs) {
+            $checkDateTimeSql = date('Y-m-d', $timeStamp);
+            if ($sSqlDateTime === $checkDateTime || $sSqlDateTime === $checkDateTimeSql) {
                 return true;
             }
         }
@@ -243,30 +214,6 @@ class TCMSFieldDate extends TCMSField
         }
 
         return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getHtmlHeadIncludes()
-    {
-        $aIncludes = parent::getHtmlHeadIncludes();
-
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/chameleon/javascript/jquery/maskedinput/maskedinput.js'
-            ).'" type="text/javascript"></script>';
-
-        $aIncludes[] = "<script type=\"text/javascript\">
-          $(document).ready(function() {
-              initDateFields();
-          });
-
-          function initDateFields() {
-             $('.dateMask').mask('99.99.9999');
-          }
-        </script>";
-
-        return $aIncludes;
     }
 
     /**

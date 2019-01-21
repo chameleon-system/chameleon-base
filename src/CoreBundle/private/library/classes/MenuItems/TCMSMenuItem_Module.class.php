@@ -32,10 +32,9 @@ class TCMSMenuItem_Module extends TCMSMenuItem
         }
 
         $iconStyle = '';
-        $rightIconStyle = 'display: block; background-image: url('.URL_CMS.'/images/icon_enter.gif); background-repeat: no-repeat; background-position: right center; padding-right: 16px;';
+        $rightIconStyle = 'padding-left: 20px;';
         if (array_key_exists('icon_list', $this->data) && !empty($this->data['icon_list'])) {
             $iconStyle = ' style="background-image: url('.URL_CMS.'/images/icons/'.$this->data['icon_list'].'); background-repeat: no-repeat; background-position: left center; line-height: 17px;"';
-            $rightIconStyle .= ' padding-left: 20px;';
         }
 
         return '<a class="nav-link" href="'.$url.'" title="'.$this->data['name']."\"{$iconStyle}><span style=\"{$rightIconStyle}\">".$this->data['name'].'</span></a>';

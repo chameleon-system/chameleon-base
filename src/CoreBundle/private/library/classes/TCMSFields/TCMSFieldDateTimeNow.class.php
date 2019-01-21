@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TCMSFieldDateTimeNow extends TCMSFieldDateTime
 {
     /**
@@ -18,68 +20,25 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
 
     public function GetHTML()
     {
-        // info: the date is converted to german format only at the moment
-        $aDateParts = explode(' ', $this->_GetHTMLValue());
-        $date = $aDateParts[0];
-        if ('0000-00-00' == $date) {
-            $date = ConvertDate(date('Y-m-d'), 'sql2g');
-            $hour = date('H');
-            $minutes = date('i');
-        } else {
-            $date = ConvertDate($date, 'sql2g');
-            $aTimeParts = explode(':', $aDateParts[1]);
-            $hour = $aTimeParts[0];
-            $minutes = $aTimeParts[1];
+        $viewRenderer = $this->getViewRenderer();
+        $viewRenderer->AddSourceObject('fieldName', $this->name);
+        $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
+        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('datetimepickerFormat', '');
+        $viewRenderer->AddSourceObject('datetimepickerSideBySide', 'true');
+        $viewRenderer->AddSourceObject('datetimepickerWithIcon', false);
+
+        return $viewRenderer->Render('TCMSFieldDate/datetimeInput.html.twig', null, false);
+    }
+
+    public function _GetHTMLValue()
+    {
+        $fieldValue = parent::_GetHTMLValue();
+        if ('' === $fieldValue || '0000-00-00 00:00:00' === $fieldValue) {
+            $fieldValue = date('Y-m-d H:i').':00'; // datetimepicker crashes if we pass seconds != "00"
         }
 
-        $html = '<input type="hidden" name="'.TGlobal::OutHTML($this->name).'" value="" />
-      <input type="text" id="'.TGlobal::OutHTML($this->name).'_date" name="'.TGlobal::OutHTML($this->name).'_date" value="'.TGlobal::OutHTML($date).'" class="form-control form-control-sm" style="width: 80px; display: inline;" />
-      &nbsp;&nbsp;
-      <select id="'.TGlobal::OutHTML($this->name).'_hour"  name="'.TGlobal::OutHTML($this->name)."_hour\" class=\"form-control form-control-sm\" style=\"width: 65px; display: inline;\">\n";
-
-        for ($i = 0; $i <= 23; ++$i) {
-            $hourTmp = $i;
-            if (1 == strlen($i)) {
-                $hourTmp = '0'.$i;
-            }
-            $selected = '';
-            if ($hourTmp == $hour) {
-                $selected = ' selected="selected"';
-            }
-
-            $html .= "<option value=\"{$hourTmp}\"{$selected}>{$hourTmp}</option>\n";
-        }
-
-        $html .= '
-      </select> :
-      <select id="'.TGlobal::OutHTML($this->name).'_min"  name="'.TGlobal::OutHTML($this->name)."_min\" class=\"form-control form-control-sm\" style=\"width: 65px; display: inline;\">\n";
-
-        for ($i = 0; $i <= 59; ++$i) {
-            $minTmp = $i;
-            if (1 == strlen($i)) {
-                $minTmp = '0'.$i;
-            }
-            $selected = '';
-            if ($minTmp == $minutes) {
-                $selected = ' selected="selected"';
-            }
-
-            $html .= "<option value=\"{$minTmp}\"{$selected}>{$minTmp}</option>\n";
-        }
-
-        $html .= '
-      </select>
-       '.TGlobal::Translate('chameleon_system_core.field_date_time.time')."
-      <script type=\"text/javascript\">
-      \$(document).ready(function() {
-          \$('#".TGlobal::OutJS($this->name)."_date').datepicker();
-          \$(function(\$){
-            \$('#".TGlobal::OutJS($this->name)."_date').mask('99.99.9999');
-          });
-      });
-      </script>";
-
-        return $html;
+        return $fieldValue;
     }
 
     public function GetReadOnly()
@@ -105,5 +64,10 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
         }
 
         return $html;
+    }
+
+    private function getViewRenderer(): ViewRenderer
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }

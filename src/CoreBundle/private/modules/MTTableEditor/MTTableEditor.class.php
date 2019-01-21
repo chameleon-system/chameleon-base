@@ -512,28 +512,16 @@ class MTTableEditor extends TCMSModelBase
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
         // first the includes that are needed for all fields
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/form/jquery.form.js').'" type="text/javascript"></script>'; // ajax form plugin
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/BlockUI/jquery.blockUI.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqDnR.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
-
-        // autocomplete field
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/bgiframe/jquery.bgiframe.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.menu.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.autocomplete.js').'" type="text/javascript"></script>';
 
         // right click contextmenu
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/contextmenu/contextmenu.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contextmenu.css" rel="stylesheet" type="text/css" />';
-
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tableeditcontainer.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/tableEditor.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/WayfarerTooltip/WayfarerTooltip.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tooltip.css" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
         if (!$this->IsRecordLocked() && array_key_exists('locking_active', $this->oTableManager->oTableConf->sqlData) && '1' == $this->oTableManager->oTableConf->sqlData['locking_active'] && !$this->bIsReadOnlyMode && CHAMELEON_ENABLE_RECORD_LOCK) {
             $aIncludes[] = '<script type="text/javascript">
@@ -545,18 +533,9 @@ class MTTableEditor extends TCMSModelBase
 
         // onbeforeunload message
         $aIncludes[] = '<script type="text/javascript">
-        $(document).ready(function(){
-           SetChangedDataMessage();
-        });
-
-        function SetChangedDataMessage() {
-          $("input:text,input:checkbox,input:radio,textarea,select,input:hidden",$("#cmseditform")).not(".cmsdisablechangemessage").one("change",function() {
-            CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
-          });
-        }
         window.onbeforeunload = function () {
           if (CHAMELEON.CORE.MTTableEditor.bCmsContentChanged) {
-            $.unblockUI();
+            CHAMELEON.CORE.hideProcessingModal();
             return \''.TGlobal::Translate('chameleon_system_core.cms_module_table_editor.confirm_discard_changes').'\';
           }
         }
@@ -584,91 +563,13 @@ class MTTableEditor extends TCMSModelBase
             }
         }
 
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib().'/javascript/jquery/jQueryUI/ui.dialog.js" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib().'/javascript/jquery/jQueryUI/themes/cupertino/cupertino.css" media="screen" rel="stylesheet" type="text/css" />';
-
-        // content tabs
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib().'/javascript/jquery/jQueryUI/ui.tabs.js" type="text/javascript"></script>';
-
-        if (array_key_exists('oTabs', $this->data) && is_object($this->data['oTabs']) && $this->data['oTabs']->Length() > 0) {
-            $breadcrumb = $this->global->GetURLHistory()->GetBreadcrumb();
-            $lastHistNode = end($breadcrumb);
-            $lastHistNodeUrl = str_replace('_rmhist=true', '_rmhist=false', $lastHistNode['url']);
-            $addUrlToHistoryUrl = $lastHistNodeUrl.'&'.urlencode('module_fnc[headerimage]').'=ExecuteAjaxCall&_fnc=addTabToUrlHistory';
-
-            $_url_params = array();
-            $_url_params['pagedef'] = $this->global->GetUserData('pagedef');
-            $_url_params['id'] = $this->oTableManager->sId;
-            $_url_params['tableid'] = $this->oTableManager->sTableId;
-
-            $_url_aAdditionalParams = $this->GetHiddenFieldsHook();
-            if (is_array($_url_aAdditionalParams) && count($_url_aAdditionalParams) > 0) {
-                $_url_params = array_merge($_url_params, $_url_aAdditionalParams);
-            }
-
-            $currentElementUrl = PATH_CMS_CONTROLLER.'?'.http_build_query($_url_params);
-
-            $aIncludes[] = '<script type="text/javascript">
-
-                $(document).ready(function(){
-
-                    var windowIsIFrame = (window.location != window.parent.location) ? true : false;
-
-                    if(!windowIsIFrame){
-
-                        $(window).on("hashchange", function(e){
-                            e.preventDefault();
-                            /*
-                            * check the initial hash of the url
-                            * if it is one of the tabs -> select it
-                            */
-                            if($("#formTabs").tabs().find(window.location.hash).length > 0){
-                                $("#formTabs").tabs("select", window.location.hash);
-                            }
-                        });
-
-                        $("#formTabs").tabs({
-                            activate: function(event, ui){
-                                if(0 == ui.index){
-                                	window.location.hash = "";
-                                }
-                                else {
-                                	window.location.hash = ui.tab.hash;
-                                }
-
-                                var url = "'.$addUrlToHistoryUrl.'";
-                                url += "&url='.urlencode($currentElementUrl).'";
-                                url += encodeURIComponent(window.location.hash);
-                                url += "&name="+encodeURIComponent($(ui.tab).data("fullname"));
-
-                                GetAjaxCallTransparent(url, function(data){
-                                    if(data.length > 0){
-                                        $("#cmsbreadcrumb ol").empty();
-                                            $.map(data, function(item, index) {
-
-                                            var breadcrumNodeHTML = \'<li><a href="\'+item.url+\'">\'+item.name+\'</a></li>\';
-                                            if(item.name == "'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_main_menu')).'") {
-                                                breadcrumNodeHTML = \'<li><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;<a href="\'+item.url+\'">\'+item.name+\'</a></li>\';
-                                            }
-                                            $("#cmsbreadcrumb ol").append(breadcrumNodeHTML)
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                      $("#formTabs").tabs();
-                    }
-                });
-            </script>';
-        }
-
         return $aIncludes;
     }
 
     public function GetHtmlFooterIncludes()
     {
         $aIncludes = array();
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
 
         // get the tableEditor specific footer includes
         $aTableEditIncludes = $this->oTableManager->oTableEditor->GetHtmlFooterIncludes();

@@ -6,7 +6,7 @@
         var treeNodeID = document.getElementById('treeNodeUploadFormTreeID').options[document.getElementById('treeNodeUploadFormTreeID').options.selectedIndex].value;
         if (treeNodeID != '') {
             var url = '{{ pathCmsController }}?pagedef=CMSUniversalUploader&amp;mode=media&amp;treeNodeID=' + treeNodeID + '&amp;queueCompleteCallback=queueCompleteCallback';
-            CreateModalIFrameDialogCloseButton(url, 650, 550);
+            CreateModalIFrameDialogCloseButton(url);
         } else {
             alert('{{'chameleon_system_core.cms_module_wysiwyg_image.error_missing_target_folder'|trans}}');
         }

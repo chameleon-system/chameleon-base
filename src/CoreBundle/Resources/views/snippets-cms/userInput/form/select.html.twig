@@ -5,6 +5,12 @@
         - aValueList (array with each element having  sValue and sName)
         - onChange (JS event)
 #}
+{% if autoWidth is not defined %}
+    {% set options -%}
+        {"width": "100%"}
+    {%- endset %}
+{% endif %}
+
 {% extends "/userInput/form/text.html.twig" %}
 {% block field %}
     <select
@@ -13,6 +19,7 @@
             {% if onChange is defined %} onchange="{{onChange}}" {% endif %}
             name="{{sName}}"
             {% if bRequired == true%} required {%endif%}
+            data-select2-option='{{ options }}'
     >
         {% for aValue in aValueList %}
             <option value="{{aValue.sValue}}" {% if sValue == aValue.sValue %}selected="selected"{% endif %}>{{aValue.sName}}</option>

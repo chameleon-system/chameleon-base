@@ -136,7 +136,8 @@ class TCMSGroupedStatisticsGroup
     /**
      * init the object.
      *
-     * @param string $sGroupTitle - name of the group
+     * @param string $sGroupTitle     - name of the group
+     * @param string $sSubGroupColumn
      */
     public function Init($sGroupTitle, $sSubGroupColumn = '')
     {
@@ -200,11 +201,6 @@ class TCMSGroupedStatisticsGroup
     protected function AddDataColumn($aDataRow)
     {
         $sColumnName = $aDataRow['sColumnName'];
-        /*      $sColumnName = $aDataRow['sColumnName'];
-        $sColumnValue = $aDataRow['dColumnValue'];
-        if (!array_key_exists($sColumnName,$this->aDataColumns)) $this->aDataColumns[$sColumnName] = array();
-        $this->aDataColumns[$sColumnName][] = $sColumnValue;
-        */
         if (!in_array($sColumnName, $this->aColumnNames)) {
             $this->aColumnNames[] = $sColumnName;
         }

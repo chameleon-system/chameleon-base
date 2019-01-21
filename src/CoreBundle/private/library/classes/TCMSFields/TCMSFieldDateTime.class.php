@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 require_once PATH_LIBRARY.'/functions/ConvertDate.fun.php';
 
 class TCMSFieldDateTime extends TCMSField
@@ -20,81 +22,15 @@ class TCMSFieldDateTime extends TCMSField
 
     public function GetHTML()
     {
-        $aDateParts = explode(' ', $this->_GetHTMLValue());
-        $date = $aDateParts[0];
-        if ('0000-00-00' == $date) {
-            $date = '';
-        } else {
-            $date = ConvertDate($date, 'sql2g');
-        }
+        $viewRenderer = $this->getViewRenderer();
+        $viewRenderer->AddSourceObject('fieldName', $this->name);
+        $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
+        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('datetimepickerFormat', '');
+        $viewRenderer->AddSourceObject('datetimepickerSideBySide', 'true');
+        $viewRenderer->AddSourceObject('datetimepickerWithIcon', false);
 
-        $hour = '00';
-        $minutes = '00';
-        if (count($aDateParts) > 1) {
-            $aTimeParts = explode(':', $aDateParts[1]);
-            $hour = $aTimeParts[0];
-            $minutes = $aTimeParts[1];
-        }
-
-        $html = '';
-        $sUTCDateTime = $this->showUTCDateTime();
-        if (!empty($sUTCDateTime)) {
-            $html .= '<strong>UTC</strong>&nbsp;&nbsp;';
-        }
-
-        $html .= '
-        <input type="hidden" name="'.TGlobal::OutHTML($this->name).'" value="" />
-        <input type="text" id="'.TGlobal::OutHTML($this->name).'_date" name="'.TGlobal::OutHTML($this->name).'_date" class="form-control form-control-sm" value="'.TGlobal::OutHTML($date).'" style="width: 80px; display: inline;" />
-      &nbsp;&nbsp;
-      <select id="'.TGlobal::OutHTML($this->name).'_hour" name="'.TGlobal::OutHTML($this->name)."_hour\" class=\"form-control form-control-sm\" style=\"width: 65px; display: inline;\">\n";
-
-        for ($i = 0; $i <= 23; ++$i) {
-            $hourTmp = $i;
-            if (1 == strlen($i)) {
-                $hourTmp = '0'.$i;
-            }
-            $selected = '';
-            if ($hourTmp == $hour) {
-                $selected = ' selected="selected"';
-            }
-
-            $html .= "<option value=\"{$hourTmp}\"{$selected}>{$hourTmp}</option>\n";
-        }
-
-        $html .= '
-      </select> :
-      <select id="'.TGlobal::OutHTML($this->name).'_min"  name="'.TGlobal::OutHTML($this->name)."_min\" class=\"form-control form-control-sm\" style=\"width: 65px; display: inline;\">\n";
-
-        for ($i = 0; $i <= 59; ++$i) {
-            $minTmp = $i;
-            if (1 == strlen($i)) {
-                $minTmp = '0'.$i;
-            }
-            $selected = '';
-            if ($minTmp == $minutes) {
-                $selected = ' selected="selected"';
-            }
-
-            $html .= "<option value=\"{$minTmp}\"{$selected}>{$minTmp}</option>\n";
-        }
-
-        $html .= '
-          </select>
-           '.TGlobal::Translate('chameleon_system_core.field_date_time.time')."
-          <script type=\"text/javascript\">
-          \$(document).ready(function() {
-              \$('#".TGlobal::OutJS($this->name)."_date').datepicker();
-              \$(function(\$){
-                \$('#".TGlobal::OutJS($this->name)."_date').mask('99.99.9999');
-              });
-          });
-          </script>";
-
-        if (!empty($sUTCDateTime)) {
-            $html .= $sUTCDateTime;
-        }
-
-        return $html;
+        return $viewRenderer->Render('TCMSFieldDate/datetimeInput.html.twig', null, false);
     }
 
     protected function showUTCDateTime()
@@ -146,23 +82,6 @@ class TCMSFieldDateTime extends TCMSField
         return $html;
     }
 
-    public function _GetHiddenField()
-    {
-        $aDateParts = explode(' ', $this->_GetHTMLValue());
-        $date = $aDateParts[0];
-        $date = ConvertDate($date, 'sql2g');
-
-        $aTimeParts = explode(':', $aDateParts[1]);
-        $hour = $aTimeParts[0];
-        $minutes = $aTimeParts[1];
-
-        $html = '<input type="hidden" name="'.TGlobal::OutHTML($this->name).'_date" id="'.TGlobal::OutHTML($this->name).'_date" value="'.TGlobal::OutHTML($date)."\" />\n";
-        $html .= '<input type="hidden" name="'.TGlobal::OutHTML($this->name).'_hour" id="'.TGlobal::OutHTML($this->name).'_hour" value="'.TGlobal::OutHTML($hour)."\" />\n";
-        $html .= '<input type="hidden" name="'.TGlobal::OutHTML($this->name).'_min" id="'.TGlobal::OutHTML($this->name).'_min" value="'.TGlobal::OutHTML($minutes)."\" />\n";
-
-        return $html;
-    }
-
     /**
      * this method converts post data like datetime (3 fields with date, hours, minutes in human readable format)
      * to sql format.
@@ -172,21 +91,9 @@ class TCMSFieldDateTime extends TCMSField
     public function ConvertPostDataToSQL()
     {
         $returnVal = '';
-        $bDatePassed = (false !== $this->oTableRow->sqlData && array_key_exists($this->name.'_date', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name.'_date']));
-        $bHourPassed = (false !== $this->oTableRow->sqlData && array_key_exists($this->name.'_hour', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name.'_hour']));
-        $bMinPassed = (false !== $this->oTableRow->sqlData && array_key_exists($this->name.'_min', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name.'_min']));
-        if (!empty($bDatePassed) && !empty($bHourPassed) && !empty($bMinPassed)) {
-            $sTmpDate = $this->oTableRow->sqlData[$this->name.'_date'];
-            if (empty($sTmpDate)) {
-                $sTmpDate = '0000.00.00';
-            }
-            $date = ConvertDate($sTmpDate, 'g2sql');
-            $returnVal = $date.' '.$this->oTableRow->sqlData[$this->name.'_hour'].':'.$this->oTableRow->sqlData[$this->name.'_min'].':00';
-        } else {
-            $bCompleteDatePassed = (false !== $this->oTableRow->sqlData && array_key_exists($this->name, $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name]));
-            if ($bCompleteDatePassed) {
-                $returnVal = $this->oTableRow->sqlData[$this->name];
-            }
+        $bCompleteDatePassed = (false !== $this->oTableRow->sqlData && array_key_exists($this->name, $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name]));
+        if ($bCompleteDatePassed) {
+            $returnVal = $this->oTableRow->sqlData[$this->name];
         }
         $this->data = $returnVal;
 
@@ -194,45 +101,26 @@ class TCMSFieldDateTime extends TCMSField
     }
 
     /**
-     * return an array of all js, css, or other header includes that are required
-     * in the cms for this field. each include should be in one line, and they
-     * should always be typed the same way so that no includes are included mor than once.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function GetCMSHtmlHeadIncludes()
     {
-        $aIncludes = array();
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/themes/cupertino/cupertino.css').'" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/themes/cupertino/cupertino.css').'" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jQueryUI/datepicker/ui.datepicker.js').'" type="text/javascript"></script>';
+        $includes = parent::GetCMSHtmlHeadIncludes();
+        $includes[] = sprintf('<link href="%s" media="screen" rel="stylesheet" type="text/css" />', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.1.2/css/tempusdominus-bootstrap-4.min.css')); //datetimepicker
 
-        $oGlobal = TGlobal::instance();
-        $currentLanguage = $oGlobal->oUser->GetCurrentEditLanguage();
-        if ('en' == $currentLanguage) {
-            $currentLanguage = $currentLanguage.'-GB';
-        } // specify the EN version
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jQueryUI/datepicker/i18n/ui.datepicker-'.$currentLanguage.'.js').'" type="text/javascript"></script>';
+        return $includes;
+    }
 
-        $init = "
-      <script type=\"text/javascript\">
-      $(document).ready(function() {
-        $.datepicker.setDefaults({
-          showOn: 'both',
-          buttonImageOnly: true,
-          buttonImage: '".TGlobal::GetStaticURLToWebLib('/images/icons/calendar.gif')."',
-          firstDay: 1,
-          dateFormat: 'dd.mm.yy'
-        });
-      });
-      </script>
-      ";
+    /**
+     * {@inheritdoc}
+     */
+    public function GetCMSHtmlFooterIncludes()
+    {
+        $includes = parent::GetCMSHtmlFooterIncludes();
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/moment-2.23.0/js/moment-with-locales.min.js')); //moment.js for datetimepicker
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.1.2/js/tempusdominus-bootstrap-4.min.js')); //datetimepicker
 
-        $aIncludes[] = $init;
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/maskedinput/maskedinput.js').'" type="text/javascript"></script>';
-
-        return $aIncludes;
+        return $includes;
     }
 
     /**
@@ -347,5 +235,10 @@ class TCMSFieldDateTime extends TCMSField
         }
 
         return $date;
+    }
+
+    private function getViewRenderer(): ViewRenderer
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }

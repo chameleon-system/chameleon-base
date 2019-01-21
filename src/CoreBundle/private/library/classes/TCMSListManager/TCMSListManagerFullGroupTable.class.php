@@ -198,7 +198,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                         'listCacheKey' => $this->GetListCacheKey(),
                     );
 
-                    $js = "CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParameters)."',780,350,'".TGlobal::Translate('chameleon_system_core.action.export')."');";
+                    $js = "CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParameters)."',0,0,'".TGlobal::Translate('chameleon_system_core.action.export')."');";
 
                     $oMenuItem->sOnClick = $js;
                     $this->oMenuItems->AddItem($oMenuItem);
@@ -241,9 +241,9 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $this->tableObj->showRecordCount = $oCMSConfig->sqlData['entry_per_page'];
 
         // style of every field
-        $this->tableObj->style->group = 'groupCell';
+        $this->tableObj->style->group = 'bg-secondary';
         $this->tableObj->style->groupSpacer = 'groupSpacer';
-        $this->tableObj->style->header = 'tblHeader';
+        $this->tableObj->style->header = 'bg-primary';
         $this->tableObj->style->navigation = 'tblNav';
         $this->tableObj->style->filter = 'tblfilter';
         $this->tableObj->style->search = 'tblsearch';

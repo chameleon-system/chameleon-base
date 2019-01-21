@@ -27,7 +27,7 @@
         var nodeID = $(node).attr('esrealid');
         currentNodeID = nodeID; // save node ID in global var
         var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('tableid' => $data['treeTableID'], 'pagedef' => 'tableeditorPopup')); ?>&id=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url, 850, 610);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     /**
@@ -38,7 +38,7 @@
         var nodeID = $(node).attr('esrealid');
         currentNodeID = nodeID; // save node ID in global var
         var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('tableid' => $data['treeTableID'], 'pagedef' => 'tableeditorPopup', 'module_fnc' => array('contentmodule' => 'Insert'))); ?>&parent_id=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url, 850, 610);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     /**
@@ -46,13 +46,7 @@
      */
     function moveNode(nodeID, parentNodeID, position) {
         if (typeof parentNodeID != 'undefined' && typeof nodeID != 'undefined') {
-
-            /**
-             * block parent window so the modal can't be closed.
-             */
-            window.parent.$.blockUI.defaults.css = {};
-            window.parent.$.blockUI({message: $('#pleaseWaitMessage').html(), css: { width:	'12%', top: '48%', left:'44%'}, baseZ: 1031, draggable: false, ignoreIfBlocked: true });
-
+            CHAMELEON.CORE.showProcessingModal();
             var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('module' => 'ExecuteAjaxCall'), '_fnc' => 'MoveNode', 'tableid' => $data['treeTableID'])); ?>&nodeID=' + nodeID + '&parentNodeID=' + parentNodeID + '&position=' + position;
             GetAjaxCallTransparent(url, moveNodeSuccess);
         }
@@ -62,7 +56,7 @@
      * unblocks the UI
      */
     function moveNodeSuccess(nodeID, responseMessage) {
-        window.parent.$.unblockUI();
+        window.parent.CHAMELEON.CORE.hideProcessingModal();
     }
 
     /**
@@ -82,7 +76,7 @@
     function openPageConnectionList(node) {
         var nodeID = $(node).attr('esrealid');
         var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('id' => $data['treeNodeTableID'], 'pagedef' => 'tablemanagerframe', 'sRestrictionField' => 'cms_tree_id')); ?>&sRestriction=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url, 820, 660);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     function assignPage(node) {
@@ -91,7 +85,7 @@
     echo $data['dataID'];
 } ?>';
         var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('tableid' => $data['treeNodeTableID'], 'pagedef' => 'tableeditorPopup', 'sRestrictionField' => 'cms_tree_id', 'module_fnc' => array('contentmodule' => 'Insert'), 'active' => '1', 'preventTemplateEngineRedirect' => '1')); ?>&sRestriction=' + nodeID + '&contid=' + assignedDataID + '&cms_tree_id=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url, 820, 660);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     /**
@@ -99,7 +93,7 @@
      */
     function TreeNodeAssignFormResponse(data, responseMessage) {
         if (data) {
-            $('#treeNodeAssignDialog').jqmHide();
+            CloseModalIFrameDialog();
             if (data.assigned) {
                 $('#' + data.treeNodeID + ' span').addClass('activeConnectedNode');
             } else {
@@ -121,15 +115,7 @@
 		if(confirm(confirmMessage)){
 			var nodeID = $(node).attr('esrealid');
 			var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('module' => 'ExecuteAjaxCall'), '_fnc' => 'DeleteNode', 'tableid' => $data['treeTableID'], 'tbl' => 'cms_tpl_page')); ?>&nodeID=' + nodeID;
-
-			/**
-			 * block parent window so the modal can't be closed.
-			 *
-			 * if the frame is opened in a separate window the blocking will also work,
-			 * as parent refers to the current window, if not parent is present
-			*/
-			window.parent.$.blockUI.defaults.css = {};
-			window.parent.$.blockUI({message: $('#pleaseWaitMessage').html(), css: { width:	'12%', top: '48%', left:'44%'}, baseZ: 1031, draggable: false, ignoreIfBlocked: true });
+            CHAMELEON.CORE.showProcessingModal();
 
 			GetAjaxCallTransparent(url, deleteNodeSuccess);
 		}
@@ -146,7 +132,7 @@
 		/**
 		 * see "deleteNode" method for explanation why "window.parent" is used here
 		 */
-		window.parent.$.unblockUI();
+		window.parent.CHAMELEON.CORE.hideProcessingModal();
 
     }
 
@@ -370,19 +356,6 @@
 
     });
 </script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#treeNodeAssignDialog')
-            .jqm({
-                zIndex:600,
-                overlay:15
-            })
-            .jqDrag('.jqDrag')
-            .jqResize('.jqResize')
-    });
-</script>
-
-
 <ul class="simpleTree">
     <?php
         echo $data['sTreeHTML'];
@@ -390,10 +363,10 @@
 </ul>
 
 <div id="treelegend" style="position: absolute; top: 10px; right: 30px;">
-    <h1>
+    <h3>
         <span class="nodeIndicatorIcon"></span>
         <?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_header'); ?>
-    </h1>
+    </h3>
 
     <div class="text">
         <span class="nodeIndicatorIcon"></span>

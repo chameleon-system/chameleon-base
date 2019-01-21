@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * ReloadOnChange=true.
  *
@@ -45,70 +47,54 @@ class TCMSFieldLookup extends TCMSField
     public function GetHTML()
     {
         $this->GetOptions();
-        $oConnectedRecord = $this->getConnectedRecordObject();
+        $connectedRecord = $this->getConnectedRecordObject();
 
-        if (!empty($this->data) && (!isset($this->options[$this->data]) && false !== $oConnectedRecord)) {
-            $html = $this->GetReadOnly();
-        } else {
-            $sClass = '';
-
-            $comboboxEnabled = $this->enableComboBox();
-            if ($comboboxEnabled) {
-                $sClass = 'comboboxContainer ';
-            }
-
-            $foreignTableName = $this->GetConnectedTableName();
-            $sOnChangeAttr = '';
-            if ($this->GetReloadOnChangeParam()) {
-                $sOnChangeAttr = "OnChange=\"CHAMELEON.CORE.MTTableEditor.bCmsContentChanged=false;PleaseWait();document.cmseditform.elements['module_fnc[contentmodule]'].value='Save';document.cmseditform.submit();\"";
-                $sClass .= ' cmsdisablechangemessage';
-            }
-
-            $sWidgetClass = '';
-            if ($comboboxEnabled) {
-                $sWidgetClass = 'ui-widget';
-            }
-
-            $html = '<div class="'.$sWidgetClass.'" style="float: left;">
-            <select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name).'" '.$sOnChangeAttr.'  class="'.TGlobal::OutHTML($sClass).'form-control form-control-sm" style="width: 363px; float: left;">';
-            if ($this->allowEmptySelection) {
-                $chooseMessage = TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected');
-
-                $html .= '<option value="">'.TGlobal::OutHTML($chooseMessage)."</option>\n";
-                $html .= '<option value="">'.TGlobal::OutHTML('-------------------------------------------')."</option>\n";
-            }
-            foreach ($this->options as $key => $value) {
-                $selected = '';
-                if (0 == strcmp($this->data, $key)) {
-                    $selected = 'selected="selected"';
-                }
-                $html .= '<option value="'.TGlobal::OutHTML($key)."\" {$selected}>".TGlobal::OutHTML($value)."</option>\n";
-            }
-            $html .= "</select>
-            </div>
-          <div class=\"switchToRecordBox\">\n";
-
-            $oGlobal = TGlobal::instance();
-            if ($oGlobal->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
-                $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), 'javascript:'.$this->GoToRecordJS().';', URL_CMS.'/images/icons/page_edit.gif');
-            }
-
-            $html .= "<div class=\"cleardiv\">&nbsp;</div>
-          </div>
-          <div class=\"cleardiv\">&nbsp;</div>\n";
-
-            // current ID is an orphan, show message
-            if (!empty($this->data) && false === $oConnectedRecord) {
-                $html .= '<div class="error" style="margin-top: 10px;">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup.error_assigned_id_does_not_exists', array('%id%' => $this->data))).'<div>';
-            }
+        if (!empty($this->data) && (!isset($this->options[$this->data]) && false !== $connectedRecord)) {
+            return $this->GetReadOnly();
         }
 
-        return $html;
+        $viewRenderer = $this->getViewRenderer();
+        $this->addFieldRenderVariables($viewRenderer);
+
+        // current ID is an orphan, show message
+        if (!empty($this->data) && false === $connectedRecord) {
+            $viewRenderer->AddSourceObject('showErrorMessage', true);
+        }
+
+        return $viewRenderer->Render('TCMSFieldLookup/fieldLookup.html.twig', null, false);
+    }
+
+    private function addFieldRenderVariables(ViewRenderer $viewRenderer): void
+    {
+        $sClass = '';
+        $sOnChangeAttr = '';
+        if ($this->GetReloadOnChangeParam()) {
+            $sOnChangeAttr = "OnChange=\"CHAMELEON.CORE.MTTableEditor.bCmsContentChanged=false;CHAMELEON.CORE.showProcessingModal();document.cmseditform.elements['module_fnc[contentmodule]'].value='Save';document.cmseditform.submit();\"";
+            $sClass .= 'cmsdisablechangemessage';
+        }
+
+        $viewRenderer->AddSourceObject('fieldName', $this->name);
+        $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
+        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('sClass', $sClass);
+        $viewRenderer->AddSourceObject('onchangeAttr', $sOnChangeAttr);
+        $viewRenderer->AddSourceObject('options', $this->options);
+        $viewRenderer->AddSourceObject('allowEmptySelection', $this->allowEmptySelection);
+
+        $foreignTableName = $this->GetConnectedTableName();
+        $viewRenderer->AddSourceObject('foreignTableName', $foreignTableName);
+        $oGlobal = TGlobal::instance();
+        if ($oGlobal->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
+            $viewRenderer->AddSourceObject('buttonLink', $this->GoToRecordJS());
+        }
+        $viewRenderer->AddSourceObject('connectedRecordId', $this->data);
     }
 
     /**
      * comboBox is enabled on 30 elements or more
      * you may disable the combobox using "disableComboBox=true" in field config or by extending this method.
+     *
+     * @deprecated sind 6.3.0 - no longer used
      *
      * @return bool
      */
@@ -516,15 +502,10 @@ class TCMSFieldLookup extends TCMSField
      */
     public function GetCMSHtmlHeadIncludes()
     {
-        $aIncludes = parent::GetCMSHtmlHeadIncludes();
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.tooltip.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.button.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.autocomplete.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.menu.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/chosen/chosen.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/chosen/chosen.jquery.min.js').'" type="text/javascript"></script>';
+        $includes = parent::GetCMSHtmlHeadIncludes();
+        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
-        return $aIncludes;
+        return $includes;
     }
 
     /**
@@ -533,20 +514,7 @@ class TCMSFieldLookup extends TCMSField
     public function GetCMSHtmlFooterIncludes()
     {
         $includes = parent::GetCMSHtmlFooterIncludes();
-        /*
-         * The width in the following call is needed for boxes that are invisible on page load (e.g. on inactive tabs).
-         * This is a limitation of the used jQuery plugin (see http://harvesthq.github.io/chosen/options.html)
-         */
-        $includes[] = '<script type="text/javascript">
-        $(function()
-         {
-            $(".comboboxContainer").chosen({
-                no_results_text: CHAMELEON.CORE.i18n.Translate("chameleon_system_core.fields.lookup.no_matches"),
-                width: "363px",
-                inherit_select_classes: true
-            });
-         });
-         </script>';
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
 
         return $includes;
     }
@@ -583,5 +551,10 @@ class TCMSFieldLookup extends TCMSField
         }
 
         return implode(', ', $aRetValueArray);
+    }
+
+    private function getViewRenderer(): ViewRenderer
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }
