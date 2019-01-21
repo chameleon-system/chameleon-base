@@ -437,7 +437,7 @@ class TFullGroupTable extends TGroupTable
             '_rmhist' => 'false',
             'sOutputMode' => 'Ajax',
             'module_fnc[contentmodule]' => 'ExecuteAjaxCall',
-            '_fnc' => 'GetAutoCompleteAjaxList',
+            '_fnc' => 'getAutocompleteRecordList',
             'sRestrictionField' => '',
             'sRestriction' => '',
             'recordID' => ''
