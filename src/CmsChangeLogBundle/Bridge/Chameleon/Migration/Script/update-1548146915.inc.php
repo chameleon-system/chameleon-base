@@ -2,6 +2,7 @@
 <h2>Date: 2019-01-22</h2>
 <div class="changelog">
     - Introsuce version history boolean field to field type table configuration (disabled by default).<br />
+    - Enable version history for base field type "WYSIWYG".<br />
 </div>
 <?php
 
@@ -52,3 +53,15 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
         'id' => '84003022-e235-caf6-81ba-4fca4f2a95ed',
     ]);
 TCMSLogChange::update(__LINE__, $data);
+
+// Enable version history for base WYSIWYG field type.
+
+$data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'en')
+    ->setFields([
+        'version_history' => '1',
+    ])
+    ->setWhereEquals([
+        'id' => '42',
+    ]);
+TCMSLogChange::update(__LINE__, $data);
+
