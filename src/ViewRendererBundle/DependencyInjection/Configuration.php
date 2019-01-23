@@ -22,6 +22,9 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('chameleon/outbox/static/less')
                     ->info('Path used as working and output directory for the less compiler, relative to the web root directory. CAUTION: All files in this directory are deleted on cache clear.')
                 ->end()
+                ->scalarNode('static_content_url')
+                    ->defaultValue('')
+                    ->info('URL for static content (images, fonts, ...) if served from a different location (i. e. a CDN). Can be omitted. Default is empty.')
             ->end();
 
         return $treeBuilder;

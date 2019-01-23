@@ -28,10 +28,11 @@ class TPkgViewRendererLessCompiler
      */
     private $resourceCollectionRefreshPrefix;
 
-    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix)
+    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix, array $additionalVariables)
     {
         $this->cssDir = trim($cssDirRelativeToWebRoot, '/');
         $this->resourceCollectionRefreshPrefix = $resourceCollectionRefreshPrefix;
+        $this->additionalVariables = $additionalVariables;
     }
 
     /**
@@ -198,7 +199,7 @@ class TPkgViewRendererLessCompiler
 
             \Less_Cache::SetCacheDir($cachedLessDir);
             try {
-                $cssFile = \Less_Cache::Get($filesForLessParsing, $options);
+                $cssFile = \Less_Cache::Get($filesForLessParsing, $options, $this->additionalVariables);
             } catch (Exception $exc) {
                 if (false !== strpos($exc->getMessage(), 'stat failed')) {
                     // Consider this as a 'File removed! Halp!' and clear the cache and try again

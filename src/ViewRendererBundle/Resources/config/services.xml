@@ -60,6 +60,7 @@
         <service id="chameleon_system_view_renderer.less_compiler" class="ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler">
             <argument/> <!-- will be replaced by ChameleonSystemViewRendererExtension -->
             <argument>%chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix%</argument>
+            <argument/> <!-- will be replaced by ChameleonSystemViewRendererExtension -->
         </service>
 
         <service id="chameleon_system_view_renderer.routing.generate_css_route_collection_generator"
