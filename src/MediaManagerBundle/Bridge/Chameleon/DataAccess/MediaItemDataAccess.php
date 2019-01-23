@@ -341,11 +341,17 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
             ++$i;
             $tagParts[] = '`cms_tags`.'.$this->databaseConnection->quoteIdentifier($tagNameFieldName).' LIKE :term'.(string) $i;
         }
+        $tagMatch = '';
+        if (count($terms) > 1) {
+            $params['termCount'] = count($terms);
+            $paramTypes['termCount'] = \PDO::PARAM_INT;
+            $tagMatch = 'GROUP BY source_id HAVING count(source_id) = :termCount';
+        }
 
         $parts[] = '`id` IN (SELECT `source_id` FROM `cms_media_cms_tags_mlt` INNER JOIN `cms_tags` ON `cms_media_cms_tags_mlt`.`target_id` = `cms_tags`.`id` WHERE '.implode(
                 ' OR ',
                 $tagParts
-            ).')';
+            ).' '.$tagMatch.')';
 
         $queryRestrictions[] = implode(' OR ', $parts);
     }
