@@ -10,9 +10,11 @@
     $.extend(Plugin.prototype, {
         init: function () {
             const self = this,
-                  filterElement = this.$baseElement.find('.sidebar-filter-input')
+                  filterElement = this.$baseElement.find('.sidebar-filter-input'),
+                  sidebarMinimizerElement = this.$baseElement.find('.sidebar-minimizer')
             ;
             filterElement.on('keyup', self.filter.bind(this));
+            sidebarMinimizerElement.on('click', self.onSidebarToggle.bind(this));
 
             $.extend($.expr[':'], {
                 'chameleonContainsCaseInsensitive': function(elem, i, match, array) {
@@ -41,6 +43,19 @@
             $matchingNavItems.prev('.nav-title').removeClass('d-none');
             // Find title for further matching nav items.
             $matchingNavItems.prevUntil('.nav-title').prev('.nav-title').removeClass('d-none');
+        },
+        onSidebarToggle: function () {
+            const url = this.$baseElement.data('toggle-notification-url');
+            let state;
+            // The following condition is inverted, as this handler will be executed before the actual class change.
+            if (document.body.classList.contains('sidebar-minimized')) {
+                state = 'shown';
+            } else {
+                state = 'minimized';
+            }
+            $.post(url, {
+                state: state
+            });
         }
     });
 
