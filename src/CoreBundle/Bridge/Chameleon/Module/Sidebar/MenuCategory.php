@@ -18,10 +18,14 @@ class MenuCategory
      */
     private $name;
     /**
-     * @var array
+     * @var MenuItem[]
      */
     private $menuItems;
 
+    /**
+     * @param string     $name
+     * @param MenuItem[] $menuItems
+     */
     public function __construct(string $name, array $menuItems)
     {
         $this->name = $name;

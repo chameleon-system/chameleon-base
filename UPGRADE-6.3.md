@@ -153,7 +153,7 @@ done by adding the following line after the module list definition:
 ```
 
 There are additional helper methods to simplify adding typical backend modules, but it is optional to use these methods.
-See `src/CoreBundle/private/library/classes/pagedefFunctions.php` for reference.
+See `src/CoreBundle/private/library/classes/pagedefFunctions.inc.php` for reference.
 
 ## Mailer Peer Security
 
