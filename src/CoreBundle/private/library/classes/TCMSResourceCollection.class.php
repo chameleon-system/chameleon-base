@@ -47,13 +47,13 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     private $eventDispatcher;
 
     public function __construct(
-        IPkgCmsFileManager $cmsFileManager,
-        PortalDomainServiceInterface $portalDomainService,
-        EventDispatcherInterface $eventDispatcher
+        ?IPkgCmsFileManager $cmsFileManager = null,
+        ?PortalDomainServiceInterface $portalDomainService = null,
+        ?EventDispatcherInterface $eventDispatcher = null
     ) {
-        $this->cmsFileManager = $cmsFileManager;
-        $this->portalDomainService = $portalDomainService;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->cmsFileManager = $cmsFileManager ?? ServiceLocator::get('chameleon_system_core.filemanager');
+        $this->portalDomainService = $portalDomainService ?? ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        $this->eventDispatcher = $eventDispatcher ?? ServiceLocator::get('event_dispatcher');
     }
 
     /**
