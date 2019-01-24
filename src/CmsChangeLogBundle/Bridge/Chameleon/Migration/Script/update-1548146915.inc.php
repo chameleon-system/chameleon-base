@@ -1,7 +1,7 @@
 <h1>Build #1548146915</h1>
 <h2>Date: 2019-01-22</h2>
 <div class="changelog">
-    - Introsuce version history boolean field to field type table configuration (disabled by default).<br />
+    - Introduce version history boolean field to field type table configuration (initialized with value 'false' by default).<br />
     - Enable version history for base field type "WYSIWYG".<br />
 </div>
 <?php
