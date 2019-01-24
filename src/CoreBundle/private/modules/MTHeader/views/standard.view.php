@@ -5,7 +5,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 
 $translator = ServiceLocator::get('translator');
 ?>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" role="navigation" id="header-nav">
+<nav class="navbar navbar-expand-lg" role="navigation" id="header-nav">
     <div class="container-fluid">
         <a href="<?=PATH_CMS_CONTROLLER; ?>?_rmhist=true&_histid=0" class="navbar-brand"><img src="<?=TGlobal::OutHTML($sLogoURL); ?>" /></a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#cmsTopNavbar">

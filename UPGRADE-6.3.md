@@ -142,6 +142,19 @@ monolog:
        level: warning
 ```
 
+## Backend Pagedef Configuration
+
+The backend now provides a new sidebar menu which will replace the classic main menu in a future version.
+If your project uses custom pagedef files (`*.pagedef.php`), consider adding the sidebar to these files. This is
+done by adding the following line after the module list definition:
+
+```php
+    addDefaultSidebar($moduleList);
+```
+
+There are additional helper methods to simplify adding typical backend modules, but it is optional to use these methods.
+See `src/CoreBundle/private/library/classes/pagedefFunctions.php` for reference.
+
 ## Mailer Peer Security
 
 The default value of config key `chameleon_system_core: mailer: peer_security` was changed from "permissive" to "strict".
@@ -275,6 +288,9 @@ is recommended (although this tool may not find database-related deprecations).
 ## Classes and Interfaces
 
 - \IPkgCmsCoreLog
+- \TCMSMenuItem
+- \TCMSMenuItem_Module
+- \TCMSMenuItem_Table
 - \TPkgCmsCoreLog
 
 ## Properties
@@ -367,7 +383,7 @@ None.
 
 ## Database Fields
 
-None.
+- cms_module.show_as_popup
 
 ## Backend Theme Library
 

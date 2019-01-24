@@ -10,8 +10,10 @@
  */
 
 /**
- * a Table item.
-/**/
+ * A table item.
+ *
+ * @deprecated since 6.3.0 - only used for deprecated classic main menu
+ */
 class TCMSMenuItem_Table extends TCMSMenuItem
 {
     /**
