@@ -831,5 +831,9 @@
 
         <service id="cmsPkgCore.tableEditorListFieldState" class="TTableEditorListFieldState" public="true" />
 
+        <service id="chameleon_system_core.module.sidebar.sidebar_backend_module" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\SidebarBackendModule" shared="false">
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <tag name="chameleon_system.module" />
+        </service>
     </services>
 </container>

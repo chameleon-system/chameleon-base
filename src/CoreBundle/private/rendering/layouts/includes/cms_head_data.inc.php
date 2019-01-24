@@ -1,14 +1,20 @@
 <?php
+/**
+ * @var TModuleLoader $modules
+ */
+
 if (false === headers_sent()) {
     header('Content-Type: text/html; charset=UTF-8');
 }
-include dirname(__FILE__).'/cms_page_header.inc.php';
-include dirname(__FILE__).'/global-php-vars.inc.php';
+include __DIR__.'/cms_page_header.inc.php';
+include __DIR__.'/global-php-vars.inc.php';
 
 if (false === isset($cssClasses)) {
-    $cssClasses = 'app header-fixed';
-} else {
-    $cssClasses .= 'app header-fixed';
+    $cssClasses = '';
+}
+$cssClasses .= ' app header-fixed';
+if (true === $modules->hasModule('sidebar')) {
+    $cssClasses .= ' sidebar-fixed sidebar-lg-show';
 }
 
 if (false === isset($bodyAttributes)) {
