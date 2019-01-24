@@ -824,6 +824,10 @@
 
         <service id="chameleon_system_core.module.sidebar.sidebar_backend_module" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\SidebarBackendModule" shared="false">
             <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.util.url"/>
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="chameleon_system_core.util.input_filter"/>
+            <argument type="service" id="chameleon_system_core.response.response_variable_replacer"/>
             <tag name="chameleon_system.module" />
         </service>
     </services>

@@ -11,19 +11,45 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar;
 
+use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
+    private const SIDEBAR_STATE_SESSION_KEY = 'chameleonSidebarBackendModuleState';
+
     /**
      * @var LanguageServiceInterface
      */
     private $languageService;
+    /**
+     * @var UrlUtil
+     */
+    private $urlUtil;
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+    /**
+     * @var InputFilterUtilInterface
+     */
+    private $inputFilterUtil;
+    /**
+     * @var ResponseVariableReplacerInterface
+     */
+    private $responseVariableReplacer;
 
-    public function __construct(LanguageServiceInterface $languageService)
+    public function __construct(LanguageServiceInterface $languageService, UrlUtil $urlUtil, RequestStack $requestStack, InputFilterUtilInterface $inputFilterUtil, ResponseVariableReplacerInterface $responseVariableReplacer)
     {
         parent::__construct();
         $this->languageService = $languageService;
+        $this->urlUtil = $urlUtil;
+        $this->requestStack = $requestStack;
+        $this->inputFilterUtil = $inputFilterUtil;
+        $this->responseVariableReplacer = $responseVariableReplacer;
     }
 
     /**
@@ -31,7 +57,40 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     public function Accept(\IMapperVisitorRestricted $oVisitor, $bCachingEnabled, \IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
+        $this->setSidebarState();
+        $oVisitor->SetMappedValue('sidebarToggleNotificationUrl', $this->getSidebarToggleNotificationUrl());
         $oVisitor->SetMappedValue('menuItems', $this->getMenuItems());
+    }
+
+    private function setSidebarState(): void
+    {
+        $session = $this->requestStack->getCurrentRequest()->getSession();
+        $state = $session->get(self::SIDEBAR_STATE_SESSION_KEY, '');
+        if ('minimized' === $state) {
+            $value = 'sidebar-minimized';
+        } else {
+            $value = '';
+        }
+        $this->responseVariableReplacer->addVariable('sidebarState', $value);
+    }
+
+    private function getSidebarToggleNotificationUrl(): string
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $baseUri = $request->getRequestUri();
+        if (false === \strpos($baseUri, '?')) {
+            $baseUri .= '?';
+        } else {
+            $baseUri .= '&';
+        }
+
+        return $this->urlUtil->getArrayAsUrl([
+            'pagedef' => 'tablemanager',
+            'module_fnc' => [
+                $this->sModuleSpotName => 'ExecuteAjaxCall',
+            ],
+            '_fnc' => 'toggleSidebar',
+        ], $baseUri, '&');
     }
 
     private function getMenuItems(): array
@@ -162,5 +221,25 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             \TGlobal::GetStaticURLToWebLib('/javascript/modules/sidebar/sidebar.js'));
 
         return $includes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function DefineInterface()
+    {
+        parent::DefineInterface();
+        $this->methodCallAllowed[] = 'toggleSidebar';
+    }
+
+    public function toggleSidebar(): void
+    {
+        $state = $this->inputFilterUtil->getFilteredPostInput('state');
+        if (false === \in_array($state, ['minimized', 'shown'])) {
+            return;
+        }
+
+        $session = $this->requestStack->getCurrentRequest()->getSession();
+        $session->set(self::SIDEBAR_STATE_SESSION_KEY, $state);
     }
 }

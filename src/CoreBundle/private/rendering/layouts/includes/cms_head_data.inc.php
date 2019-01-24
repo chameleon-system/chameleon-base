@@ -14,7 +14,7 @@ if (false === isset($cssClasses)) {
 }
 $cssClasses .= ' app header-fixed';
 if (true === $modules->hasModule('sidebar')) {
-    $cssClasses .= ' sidebar-fixed sidebar-lg-show';
+    $cssClasses .= ' sidebar-fixed sidebar-lg-show [{sidebarState}]';
 }
 
 if (false === isset($bodyAttributes)) {

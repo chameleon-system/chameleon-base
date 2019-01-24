@@ -1,21 +1,23 @@
-<nav class="sidebar-nav">
-    <input
-            type="text"
-            class="sidebar-filter-input form-control"
-            placeholder="{{ 'chameleon_system_core.sidebar.filter_menu'|trans }}"
-            autocomplete="off"
-    />
-    <ul class="nav">
-        {% for category in menuItems %}
-            <li class="nav-title">{{ category.name }}</li>
-            {% for menuItem in category.menuItems %}
-                <li class="nav-item">
-                    <a href="{{ menuItem.url }}" class="nav-link">
-                        <i class="nav-icon icon-drop"></i>{{ menuItem.name }}
-                    </a>
-                </li>
+<div class="sidebar" data-toggle-notification-url="{{ sidebarToggleNotificationUrl|e('html_attr') }}">
+    <nav class="sidebar-nav">
+        <input
+                type="text"
+                class="sidebar-filter-input form-control"
+                placeholder="{{ 'chameleon_system_core.sidebar.filter_menu'|trans }}"
+                autocomplete="off"
+        />
+        <ul class="nav">
+            {% for category in menuItems %}
+                <li class="nav-title">{{ category.name }}</li>
+                {% for menuItem in category.menuItems %}
+                    <li class="nav-item">
+                        <a href="{{ menuItem.url }}" class="nav-link">
+                            <i class="nav-icon icon-drop"></i>{{ menuItem.name }}
+                        </a>
+                    </li>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </ul>
-</nav>
-<button class="sidebar-minimizer brand-minimizer" type="button" /></button>
+        </ul>
+    </nav>
+    <button class="sidebar-minimizer brand-minimizer" type="button" /></button>
+</div>
