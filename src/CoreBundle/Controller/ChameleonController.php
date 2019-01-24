@@ -138,7 +138,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         PortalDomainServiceInterface $portalDomainService,
-        ResourceCollectorInterface $resourceCollector,
         TModuleLoader $moduleLoader,
         IViewPathManager $viewPathManager = null
     ) {
@@ -148,7 +147,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->viewPathManager = $viewPathManager;
         $this->eventDispatcher = $eventDispatcher;
         $this->portalDomainService = $portalDomainService;
-        $this->resourceCollector = $resourceCollector;
     }
 
     /**
@@ -948,5 +946,10 @@ abstract class ChameleonController implements ChameleonControllerInterface
     public function setInputFilterUtil(InputFilterUtilInterface $inputFilterUtil)
     {
         $this->inputFilterUtil = $inputFilterUtil;
+    }
+
+    public function setResourceCollector(ResourceCollectorInterface $resourceCollector): void
+    {
+        $this->resourceCollector = $resourceCollector;
     }
 }

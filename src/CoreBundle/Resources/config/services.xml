@@ -167,7 +167,6 @@
             <argument type="service" id="request_stack"/>
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
-            <argument type="service" id="chameleon_system_core.resource_collector"/>
             <call method="setCache">
                 <argument type="service" id="chameleon_system_cms_cache.cache" />
             </call>
@@ -188,6 +187,9 @@
             </call>
             <call method="setAuthenticityTokenManager">
                 <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager" />
+            </call>
+            <call method="setResourceCollector">
+                <argument type="service" id="chameleon_system_core.resource_collector" />
             </call>
         </service>
 
