@@ -40,13 +40,12 @@ class ChameleonFrontendController extends ChameleonController
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         PortalDomainServiceInterface $portalDomainService,
-        ResourceCollectorInterface $resourceCollector,
         TModuleLoader $moduleLoader,
         $viewPathManager,
         ContainerInterface $container,
         TPkgViewRendererConfigToLessMapper $configToLessMapper
     ) {
-        parent::__construct($requestStack, $eventDispatcher, $portalDomainService, $resourceCollector, $moduleLoader, $viewPathManager);
+        parent::__construct($requestStack, $eventDispatcher, $portalDomainService, $moduleLoader, $viewPathManager);
         $this->container = $container; // for ViewRenderer instantiation
         $this->configToLessMapper = $configToLessMapper;
     }
