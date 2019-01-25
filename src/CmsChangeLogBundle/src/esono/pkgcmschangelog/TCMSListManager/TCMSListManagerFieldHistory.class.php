@@ -34,6 +34,10 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
         $changeLogFieldConfigurationId = $this->sRestriction;
         $recordIds = $this->getRestrictionRecordIds($changeLogFieldConfigurationId);
 
+        if (0 === count($recordIds)) {
+            return '';
+        }
+
         return sprintf(' %s.`id` IN (%s)', $this->getQuotedTableName(), $this->getQuotedElements($recordIds));
     }
 
