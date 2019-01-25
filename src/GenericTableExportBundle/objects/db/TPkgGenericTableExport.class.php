@@ -47,19 +47,22 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
             $sOutput = utf8_decode($sOutput);
         }
 
-        $sFilePath = $this->getExportFilePath($sId);
+        $this->createExportDirectoryIfNeeded();
+
+        $exportFilePath = $this->getExportFilePath($sId);
 
         // please please please don't do it like that. This is a very very rare moment, where it is necessary due to missing infrastructure.
         /** @var IPkgCmsFileManager $fileManager */
         $fileManager = ServiceLocator::get('chameleon_system_core.filemanager');
 
-        if ($pFile = $fileManager->fopen($sFilePath, 'wb')) {
+        if ($pFile = $fileManager->fopen($exportFilePath, 'wb')) {
             if ($fileManager->fwrite($pFile, $sOutput)) {
                 $bSuccess = true;
             }
             $fileManager->fclose($pFile);
         } else {
-            trigger_error("Can't open '{$sFilePath}' for writing - check directory and rights", E_USER_WARNING);
+            // TODO use same error mechanism as for createExportDirectoryIfNeeded()
+            trigger_error("Can't open '{$exportFilePath}' for writing - check directory and rights", E_USER_WARNING);
         }
 
         return $bSuccess;
@@ -67,11 +70,10 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
 
     public function getExportFilePath($sId = null)
     {
-        $sFileName = self::GetFileName($sId);
-        $sPath = PATH_CMS_CUSTOMER_DATA.'/'.$this->sExportPath.'/';
-        $sFilePath = $sPath.$sFileName;
+        $sFileName = $this->GetFileName($sId);
+        $sPath = $this->getExportDirectoryPath();
 
-        return $sFilePath;
+        return $sPath.$sFileName;
     }
 
     /**
@@ -299,5 +301,23 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
         }
 
         return $oGenericTableExport;
+    }
+
+    private function getExportDirectoryPath(): string
+    {
+        return PATH_CMS_CUSTOMER_DATA.'/'.$this->sExportPath.'/';
+    }
+
+    private function createExportDirectoryIfNeeded(): void
+    {
+        $dir = $this->getExportDirectoryPath();
+
+        if (false === \is_dir($dir)) {
+            if (false === \mkdir($dir, 0777, true) && false === \is_dir($dir)) {
+
+                // TODO what kind of exception?
+                //throw new ViewRenderException(sprintf('Cannot create directory %s', $dir));
+            }
+        }
     }
 }
