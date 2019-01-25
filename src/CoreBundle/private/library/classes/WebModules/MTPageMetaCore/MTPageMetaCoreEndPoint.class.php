@@ -711,7 +711,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
                     }
 
                     $this->getLogger()->error(
-                        sprintf('Cannot generate alternative language urls for page %s/%s.', $id, $name),
+                        sprintf('Cannot generate alternative language urls for page %s/%s with language %s.', $id, $name, $iso),
                         ['exception' => $exception]
                     );
                 }
