@@ -415,22 +415,12 @@ class TFullGroupTable extends TGroupTable
         return $inline;
     }
 
-    private function getTableEditorPagedef($pagedef): string
-    {
-        $inputFilterUtil = $this->getInputFilterUtil();
-        $customTableEditor = $inputFilterUtil->getFilteredInput('sTableEditorPagdef');
-        if (null !== $customTableEditor && '' !== $customTableEditor) {
-            $pagedef = $customTableEditor;
-        }
-        return $pagedef;
-    }
-
-    private function getAjaxRecordsUrl(): string
+    private function getRecordAutocompleteUrl(): string
     {
         $pagedef = $this->getTableEditorPagedef('tablemanager');
         $inputFilterUtil = $this->getInputFilterUtil();
         $tableId = $inputFilterUtil->getFilteredInput('id');
-        $urlUtil = ServiceLocator::get('chameleon_system_core.util.url');
+        $urlUtil = $this->getUrlUtil();
         $sAjaxURL = $urlUtil->getArrayAsUrl([
             'id' => $tableId,
             'pagedef' => $pagedef,
@@ -451,7 +441,7 @@ class TFullGroupTable extends TGroupTable
         $pagedef = $this->getTableEditorPagedef('tableeditor');
         $inputFilterUtil = $this->getInputFilterUtil();
         $tableId = $inputFilterUtil->getFilteredInput('id');
-        $urlUtil = ServiceLocator::get('chameleon_system_core.util.url');
+        $urlUtil = $this->getUrlUtil();
         $recordUrl = $urlUtil->getArrayAsUrl([
             'pagedef' => $pagedef,
             'tableid' => $tableId,
@@ -468,6 +458,16 @@ class TFullGroupTable extends TGroupTable
                     }
                 } 
                 </script>';
+    }
+
+    private function getTableEditorPagedef($pagedef): string
+    {
+        $inputFilterUtil = $this->getInputFilterUtil();
+        $customTableEditor = $inputFilterUtil->getFilteredInput('sTableEditorPagdef', '');
+        if ('' !== $customTableEditor) {
+            $pagedef = $customTableEditor;
+        }
+        return $pagedef;
     }
 
     /**
@@ -922,18 +922,23 @@ class TFullGroupTable extends TGroupTable
         if ($this->showSearchBox) {
             $this->somethingToShow = true;
 
+
             $filterContent .= '<div class="form-group mr-2">';
-            $filterContent .= '<select id="searchLookup" name="_search_word" data-listname="'. TGlobal::OutHTML($this->listName) .'" class="form-control" data-select2-placeholder="';
-            $filterContent .= $this->searchFieldText;
-            $filterContent .= '" data-select2-ajax="'. $this->getAjaxRecordsUrl() .'">';
+
+            $formatString =  '<select id="searchLookup" name="_search_word" data-listname="%s" class="form-control" data-select2-placeholder="%s" data-select2-ajax="%s">';
+            $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->listName), TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->getRecordAutocompleteUrl()));
 
             if ('' !== $this->_postData['_search_word']) {
-                $filterContent .= '<option value="'.TGlobal::OutHTML($this->_postData['_search_word']).'" selected>'.TGlobal::OutHTML($this->_postData['_search_word']).'</option>';
+                $formatString = '<option value="%1$s">%1$s</option>';
+                $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->_postData['_search_word']));
             }
             $filterContent .= '</select></div>';
 
             $filterContent .= '<div class="form-group">';
-            $filterContent .= '<input type="button" class="form-control form-control-sm btn-sm btn-primary" value="'.$this->searchButtonText.'" onClick="document.'.$this->listName.'._startRecord.value=0;document.'.$this->listName.'.submit();" class="btn btn-sm btn-primary">';
+
+            $formatString = '<input type="button" class="form-control form-control-sm btn btn-sm btn-primary" value="%1$s" onClick="document.%2$s._startRecord.value=0;document.%2$s.submit();">';
+            $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchButtonText), TGlobal::OutHTML($this->listName));
+
             $filterContent .= '</div>';
 
             $filterContent .= $this->switchToSelectedRecord();
@@ -973,5 +978,10 @@ class TFullGroupTable extends TGroupTable
     private function getInputFilterUtil()
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getUrlUtil()
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }
