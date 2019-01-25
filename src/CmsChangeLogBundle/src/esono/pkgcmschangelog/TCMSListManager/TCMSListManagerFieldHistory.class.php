@@ -6,6 +6,30 @@ use Doctrine\DBAL\Connection;
 class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
 {
 
+    public function AddFields(): void
+    {
+        $linkField = ['id'];
+
+        ++$this->columnCount;
+        $this->tableObj->AddHeaderField('pkg_cms_changelog_set_change_type', 'left', null, 1, false);
+        $this->tableObj->AddColumn('pkg_cms_changelog_set_change_type', 'left', null, $linkField);
+    }
+
+    public function GetCustomRestriction(): string
+    {
+        $connection = $this->getDatabaseConnection();
+        $changeLogFieldConfigurationId = $this->sRestriction;
+
+        try {
+            $stmt = $connection->executeQuery($this->getIdRestrictionQuery(), ['fieldConfigurationId' => $changeLogFieldConfigurationId]);
+            $recordIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            $query = sprintf(' %s.`id` IN (%s)', $this->getQuotedTableName($connection), $this->getQuotedRestrictionIds($connection, $recordIds));
+
+            return $query;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            return '';
+        }
+    }
 
     // Query Form
 
