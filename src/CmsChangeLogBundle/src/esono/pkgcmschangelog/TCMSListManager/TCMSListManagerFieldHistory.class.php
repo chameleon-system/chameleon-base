@@ -13,6 +13,14 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
         ++$this->columnCount;
         $this->tableObj->AddHeaderField('pkg_cms_changelog_set_change_type', 'left', null, 1, false);
         $this->tableObj->AddColumn('pkg_cms_changelog_set_change_type', 'left', null, $linkField);
+
+        ++$this->columnCount;
+        $this->tableObj->AddHeaderField('pkg_cms_changelog_set_modify_date', 'left', null, 1, false);
+        $this->tableObj->AddColumn('pkg_cms_changelog_set_modify_date', 'left', null, $linkField);
+
+        ++$this->columnCount;
+        $this->tableObj->AddHeaderField('value_old', 'left', null, 1, false);
+        $this->tableObj->AddColumn('value_old', 'left', null, $linkField);
     }
 
     public function GetCustomRestriction(): string
