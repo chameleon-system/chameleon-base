@@ -564,17 +564,21 @@ class TCMSFieldLookup extends TCMSField
             return '';
         }
         $tableName = $this->GetConnectedTableName();
-        $nameColumn = 'name';
+        $identifyingColumnName = 'name';
+
+        if (false === TCMSTableConf::FieldExists($tableName, $identifyingColumnName)) {
+            $identifyingColumnName = 'id';
+        }
 
         $databaseConnection = $this->getDatabaseConnection();
         $quotedTableName = $databaseConnection->quoteIdentifier($tableName);
-        $quotedNameColumn = $databaseConnection->quoteIdentifier($nameColumn);
+        $quotedIdentifierColumn = $databaseConnection->quoteIdentifier($identifyingColumnName);
         if (is_array($this->data)) {
             $idList = join(',', array_map(array($databaseConnection, 'quote'), $this->data));
         } else {
             $idList = $databaseConnection->quote($this->data);
         }
-        $sQuery = "SELECT `id`, $quotedNameColumn FROM $quotedTableName WHERE `id` in ($idList) ORDER BY $quotedNameColumn";
+        $sQuery = "SELECT `id`, $quotedIdentifierColumn FROM $quotedTableName WHERE `id` in ($idList) ORDER BY $quotedIdentifierColumn";
 
         $result = $databaseConnection->query($sQuery);
         if (!$result) {
@@ -583,7 +587,7 @@ class TCMSFieldLookup extends TCMSField
 
         $aRetValueArray = array();
         while ($row = $result->fetch(\PDO::FETCH_ASSOC)) {
-            $aRetValueArray[] = $row['name'];
+            $aRetValueArray[] = $row[$identifyingColumnName];
         }
 
         return implode(', ', $aRetValueArray);
