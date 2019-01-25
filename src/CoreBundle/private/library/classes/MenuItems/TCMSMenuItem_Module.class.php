@@ -21,17 +21,17 @@ class TCMSMenuItem_Module extends TCMSMenuItem
     {
         $pagedefType = $this->data['module_location'];
         $url = PATH_CMS_CONTROLLER.'?pagedef='.urlencode($this->data['module']);
-        if (!empty($this->data['parameter'])) {
+        if ('' !== $this->data['parameter']) {
             $url .= '&'.$this->data['parameter'];
         }
-        if (!empty($pagedefType)) {
+        if ('' !== $pagedefType) {
             $url .= '&_pagedefType='.$pagedefType;
         }
         if ('1' == $this->data['show_as_popup']) {
             $url = "javascript:CreateModalIFrameDialogCloseButton('".$url."',".TGlobal::OutHTML($this->data['width']).','.TGlobal::OutHTML($this->data['height']).');';
         }
 
-        if (array_key_exists('icon_font_awesome', $this->data) && !empty($this->data['icon_font_awesome'])) {
+        if (array_key_exists('icon_font_awesome', $this->data) && '' !== $this->data['icon_font_awesome']) {
             $icon = $this->data['icon_font_awesome'];
         } else {
             $icon = 'fas fa-sign-out-alt'; //standard icon

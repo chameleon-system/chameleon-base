@@ -246,7 +246,7 @@ foreach ($iconMapping as $tableName => $iconName) {
 }
 
 
-//set new incons for modules
+//set new icons for modules
 $iconMapping = array(
     'cmsupdatemanager' => 'far fa-play-circle',
     'Interface' => 'fas fa-play',
@@ -277,19 +277,10 @@ if (false === $statement->execute()) {
 
 $tablesWithEmptyIcon = [];
 while (false !== $row = $statement->fetch()) {
-    $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'en')
-        ->setFields([
-            'icon_font_awesome' => 'fas fa-sign-out-alt'  //standard icon
-        ])
-        ->setWhereEquals([
-            'id' => $row['id']
-        ])
-    ;
-    TCMSLogChange::update(__LINE__, $data);
     $tablesWithEmptyIcon[] = $row['name'];
 }
 
-if (sizeOf($tablesWithEmptyIcon) > 0) {
+if (count($tablesWithEmptyIcon) > 0) {
     TCMSLogChange::addInfoMessage('Some of your custom table icons were replaced with a standard icon. Please refer to font awesome and select a matching icon. Tables: '.implode(', ',$tablesWithEmptyIcon));
 }
 
@@ -302,19 +293,10 @@ if (false === $statement->execute()) {
 
 $modulesWithEmptyIcon = [];
 while (false !== $row = $statement->fetch()) {
-    $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'en')
-        ->setFields([
-            'icon_font_awesome' => 'fas fa-sign-out-alt'  //standard icon
-        ])
-        ->setWhereEquals([
-            'id' => $row['id']
-        ])
-    ;
-    TCMSLogChange::update(__LINE__, $data);
     $modulesWithEmptyIcon[] = $row['name'];
 }
 
-if (sizeOf($modulesWithEmptyIcon) > 0) {
+if (count($modulesWithEmptyIcon) > 0) {
     TCMSLogChange::addInfoMessage('Some of your module icons were replaced with a standard icon. Please refer to font awesome and select a matching icon. Modules: '.implode(', ',$modulesWithEmptyIcon));
 }
 

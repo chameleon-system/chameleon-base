@@ -449,3 +449,13 @@ Not found anywhere (so you might want to skip this search, too):
 - navbar-form
 - navbar-btn
 - progress-bar*
+
+
+## Font Awesome Icons
+
+The icons of Font Awesome have been added.
+They will replace all file icons and the glyphicons of Bootstrap3.
+
+Especially the icons of the main navigation have been replaced. During the update you will get a list of all navigation nodes that cannot be replaced automatically.
+
+If you do not manually assign a Font Awesome icon to these navigation nodes, the default icon will be "fas fa-sign-out-alt".
