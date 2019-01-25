@@ -44,7 +44,8 @@ class TCMSListManagerMLTList extends TCMSListManagerFullGroupTable
     /**
      * any custom restrictions can be added to the query by overwriting this function.
      *
-     * @param string $query
+     * @return string
+     * @throws TPkgCmsException_Log
      */
     public function GetCustomRestriction()
     {
