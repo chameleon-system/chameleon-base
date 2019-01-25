@@ -42,8 +42,8 @@ while ($oField = $data['oFields']->Next()) {
                 $oFieldConfig->Load($oField->oDefinition->id);
 
                 if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
-                    $sTmpFormTabsContent .= '<span class="help-badge badge badge-info float-right" role="button" data-toggle="popover" data-placement="right" data-content="'.TGlobal::OutHTML(nl2br($oField->oDefinition->sqlData['049_helptext'])).'" data-original-title="'.TGlobal::OutHTML($oFieldConfig->fieldTranslation).'">
-                        <span class="glyphicon glyphicon-info-sign" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'"></span>
+                    $sTmpFormTabsContent .= '<span class="float-right help-text-button" data-helptextId="'.TGlobal::OutHTML($oField->name).'">
+                        <i class="fas fa-info-circle" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'"></i>
                     </span>';
                 }
 
@@ -84,8 +84,12 @@ while ($oField = $data['oFields']->Next()) {
             </div>
     	    </th>
           <td class="rightTD col-10">';
+                if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
+                    $sTmpFormTabsContent .= '<div class="tooltipContainer alert alert-info" id="tooltip-'.TGlobal::OutHTML($oField->name).'">'.TGlobal::OutHTML(nl2br($oField->oDefinition->sqlData['049_helptext'])).'</div>';
+                }
                 $sTmpFormTabsContent .= $oField->GetContent();
-                $sTmpFormTabsContent .= '</td>
+                $sTmpFormTabsContent .= '
+           </td>
         </tr>
         ';
             }
