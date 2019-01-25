@@ -6,6 +6,9 @@ use Doctrine\DBAL\Connection;
 class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
 {
 
+    /**
+     * {@inheritDoc}
+     */
     public function AddFields(): void
     {
         $linkField = ['id'];
@@ -23,19 +26,30 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
         $this->tableObj->AddColumn('value_old', 'left', null, $linkField);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function GetCustomRestriction(): string
     {
-        $connection = $this->getDatabaseConnection();
         $changeLogFieldConfigurationId = $this->sRestriction;
+        $recordIds = $this->getRestrictionRecordIds($changeLogFieldConfigurationId);
+
+        return sprintf(' %s.`id` IN (%s)', $this->getQuotedTableName(), $this->getQuotedElements($recordIds));
+    }
+
+    /**
+     * @param string $fieldConfigurationId
+     * @return string[]
+     */
+    private function getRestrictionRecordIds(string $fieldConfigurationId): array
+    {
+        $connection = $this->getDatabaseConnection();
 
         try {
-            $stmt = $connection->executeQuery($this->getIdRestrictionQuery(), ['fieldConfigurationId' => $changeLogFieldConfigurationId]);
-            $recordIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
-            $query = sprintf(' %s.`id` IN (%s)', $this->getQuotedTableName($connection), $this->getQuotedRestrictionIds($connection, $recordIds));
-
-            return $query;
+            $stmt = $connection->executeQuery($this->getIdRestrictionQuery(), ['fieldConfigurationId' => $fieldConfigurationId]);
+            return $stmt->fetchAll(PDO::FETCH_COLUMN);
         } catch (\Doctrine\DBAL\DBALException $e) {
-            return '';
+            return [];
         }
     }
 
@@ -55,24 +69,24 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
     // String Form
 
     /**
-     * @param Connection $connection
      * @return string
      */
-    private function getQuotedTableName(Connection $connection): string
+    private function getQuotedTableName(): string
     {
-        return $connection->quoteIdentifier($this->oTableConf->sqlData['name']);
+        return $this->getDatabaseConnection()->quoteIdentifier($this->oTableConf->sqlData['name']);
     }
 
     /**
-     * @param Connection $connection
-     * @param string[] $ids
+     * @param string[] $elements
      * @return string
      */
-    private function getQuotedRestrictionIds(Connection $connection, array $ids): string
+    private function getQuotedElements(array $elements): string
     {
+        $connection = $this->getDatabaseConnection();
+
         return implode(',', array_map(function(string $id) use ($connection) {
             return $connection->quote($id);
-        }, $ids));
+        }, $elements));
     }
 
     // Dependencies
