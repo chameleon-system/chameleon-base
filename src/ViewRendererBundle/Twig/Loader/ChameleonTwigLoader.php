@@ -39,10 +39,10 @@ class ChameleonTwigLoader extends \Twig_Loader_Filesystem
         $this->initialized = true;
     }
 
-    protected function findTemplate($name)
+    protected function findTemplate($name, $throw = true)
     {
         $this->init();
 
-        return parent::findTemplate($name);
+        return parent::findTemplate($name, $throw);
     }
 }
