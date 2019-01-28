@@ -46,8 +46,8 @@ $translator = ServiceLocator::get('translator');
                         $windowTitle = $translator->trans('chameleon_system_core.cms_module_page_tree.headline');
                         $fieldName = 'mainNavNavi';
                         $url = PATH_CMS_CONTROLLER.'?pagedef=CMSModulePageTreePlain&table=cms_tpl_page&noassign=1&rootID='.$data['startTreeID'];
-                        $naviJS = "CreateModalIFrameDialogCloseButton('".$url."',0,0,'".$windowTitle."');"; ?>
-                        <li class="nav-item"><a href="javascript:<?=$naviJS; ?>" class="nav-link" data-toggle="tooltip" data-placement="bottom" title="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_edit_navigation_help')); ?>"><span class="glyphicon glyphicon-leaf"></span> &nbsp;<?php echo TGlobal::Translate('chameleon_system_core.cms_module_header.action_edit_navigation'); ?></a></li>
+                    ?>
+                        <li class="nav-item"><a href="<?= TGlobal::OutHTML($url) ?>" class="nav-link" data-toggle="tooltip" data-placement="bottom" title="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_edit_navigation_help')); ?>"><span class="glyphicon glyphicon-leaf"></span> &nbsp;<?php echo TGlobal::Translate('chameleon_system_core.cms_module_header.action_edit_navigation'); ?></a></li>
                     <?php
                     } ?>
                     <li class="nav-item"><a href="<?=PATH_CMS_CONTROLLER; ?>?pagedef=tablemanager&amp;id=<?=$data['table_id_cms_tpl_page']; ?>" class="nav-link" data-toggle="tooltip" data-placement="bottom" title="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_open_website_list_help')); ?>"><span class="glyphicon glyphicon-folder-open"></span> &nbsp;<?php echo TGlobal::Translate('chameleon_system_core.cms_module_header.action_open_website_list'); ?></a></li>
@@ -67,7 +67,7 @@ $translator = ServiceLocator::get('translator');
 
             if ($data['showDocumentManagerNavi']) {
                 ?>
-                    <li class="nav-item"><a href="javascript:loadStandaloneDocumentManager();" class="nav-link" data-toggle="tooltip" data-placement="bottom" title="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_open_document_manager_help')); ?>"><span class="glyphicon glyphicon-hdd"></span> &nbsp;<?php echo TGlobal::Translate('chameleon_system_core.cms_module_header.action_open_document_manager'); ?></a></li>
+                    <li class="nav-item"><a href="/cms?pagedef=CMSDocumentManagerFull" class="nav-link" data-toggle="tooltip" data-placement="bottom" title="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_open_document_manager_help')); ?>"><span class="glyphicon glyphicon-hdd"></span> &nbsp;<?php echo TGlobal::Translate('chameleon_system_core.cms_module_header.action_open_document_manager'); ?></a></li>
                 <?php
             }
 
