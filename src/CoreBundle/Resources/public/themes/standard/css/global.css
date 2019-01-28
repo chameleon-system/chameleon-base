@@ -317,6 +317,14 @@ div.grippie {
     background-repeat: no-repeat;
     padding: 1px 0px 1px 20px;
 }
+.button-element {
+    margin-left: -3px!important;
+    margin-right: -3px!important;
+}
+
+.button-element .button-item {
+    padding: 0 3px 6px 3px;
+}
 
 .dropdown-menu .dropdown-icon, .dropdown-menu .dropdown-icon:hover {
     background-position: 5px center;

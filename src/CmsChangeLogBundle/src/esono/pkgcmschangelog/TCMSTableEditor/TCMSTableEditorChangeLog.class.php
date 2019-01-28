@@ -50,7 +50,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sItemKey = 'getdisplayvalue';
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_cms_change_log.action.show_changes');
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/page_edit.png');
+            $oMenuItem->sIcon = 'far fa-edit';
             $oMenuItem->sOnClick = "document.location.href='".$this->getUrlUtil()->getArrayAsUrl($aParam, '?')."'";
             $this->oMenuItems->AddItem($oMenuItem);
         }

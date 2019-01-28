@@ -48,7 +48,7 @@ $sSortUrl = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($sortUrlParameters);
                             $oViewRenderer->AddSourceObject('sOnClick', "parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."',0,0,'".TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.action_connect_records')."');");
                             $oViewRenderer->AddSourceObject('sIconURL', TGlobal::GetStaticURLToWebLib('/images/icons/link.png'));
                             $oViewRenderer->AddSourceObject('sButtonStyle', '');
-                            echo $oViewRenderer->Render('MTTableEditor/singleMenuButton.html.twig', null, false);
+                            echo $oViewRenderer->Render('MTTableEditor/singleButton.html.twig', null, false);
 
                             $data['oMenuItems']->GoToStart();
                             /** @var $oMenuItem TCMSTableEditorMenuItem */
@@ -64,7 +64,7 @@ $sSortUrl = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($sortUrlParameters);
                                 $oViewRenderer->AddSourceObject('sOnClick', "parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sSortUrl)."',0,0,'".TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.action_sort_connections')."');");
                                 $oViewRenderer->AddSourceObject('sIconURL', TGlobal::GetStaticURLToWebLib('/images/icons/application_cascade.png'));
                                 $oViewRenderer->AddSourceObject('sButtonStyle', '');
-                                echo $oViewRenderer->Render('MTTableEditor/singleMenuButton.html.twig', null, false);
+                                echo $oViewRenderer->Render('MTTableEditor/singleButton.html.twig', null, false);
                             } ?>
                     </div>
                 </div>

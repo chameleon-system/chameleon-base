@@ -58,7 +58,7 @@ class TCMSListManagerWebpages extends TCMSListManagerFullGroupTable
         if ($userIsInWebsiteEditGroup && $userHasWebsiteEditRight && $userHasNaviEditRight) {
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.pages_regenerate_page_path');
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/action_refresh_blue.gif');
+            $oMenuItem->sIcon = 'fas fa-sync';
             $js = "document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'tablemanager', 'id' => $this->oTableConf->id, 'module_fnc' => array('contentmodule' => 'ClearNaviCache'), '_rmhist' => 'false'))."';";
             $oMenuItem->sOnClick = $js;
             $this->oMenuItems->AddItem($oMenuItem);

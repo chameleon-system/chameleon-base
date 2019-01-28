@@ -56,7 +56,7 @@ class TCMSRender
      */
     public static function DrawButton($title = null, $link = null, $imgPath = null, $linkClass = null, $onMouseOver = null, $id = null, $onclick = null, $sTarget = null)
     {
-        $sTemplate = 'singleMenuButton';
+        $sTemplate = 'singleButton';
 
         // migrate BS3 to BS4 float class name
         if ('pull-left' === $linkClass) {

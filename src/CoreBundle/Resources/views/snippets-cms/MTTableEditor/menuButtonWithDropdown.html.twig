@@ -1,18 +1,23 @@
-<div class="dropdown show">
-    <a class="btn btn-sm btn-secondary dropdown-toggle {{ sButtonStyle }} {% if sItemKey %} item{{ sItemKey }}{% endif %} {{ sCSSClass }}" href="#" {% if sOnClick -%}
+<div class="dropdown show w-100">
+    <a class="btn btn-sm btn-secondary dropdown-toggle w-100 {{ sButtonStyle }} {% if sItemKey %} item{{ sItemKey }}{% endif %} {{ sCSSClass }}" href="#" {% if sOnClick -%}
         onclick="{{ sOnClick|raw }}"
     {%- endif -%} role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-    {%- if sIconURL -%}
-        <span class="btn-icon" style="background-image: url({{ sIconURL }});">
+    {%- if sIconURL is defined -%}
+        <span class="btn-icon" style="background-image: url({{ sIconURL }});">{{ sTitle }}</span>
     {%- else -%}
-        <span>
+        {%- if sIcon|length > 0 %}<i class="{{ sIcon }} pr-2"></i>{% endif -%}
+        {{ sTitle }}
     {%- endif -%}
-    {{ sTitle }}</span>
+
     </a>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         {% for aSubItem in aSubItems %}
-            <a class="dropdown-icon dropdown-item" style="background-image: url({{ aSubItem.sIconURL }});" href="javascript:{{ aSubItem.sOnClick }}">{{ aSubItem.sTitle }}</a>
+            {%- if aSubItem.sIconURL is defined -%}
+                <a class="dropdown-icon dropdown-item" style="background-image: url({{ aSubItem.sIconURL }});" href="javascript:{{ aSubItem.sOnClick }}">{{ aSubItem.sTitle }}</a>
+            {%- else -%}
+                <a class="dropdown-item p-2" href="javascript:{{ aSubItem.sOnClick }}"><span class="{{ sIcon }} pr-2"></span>{{ aSubItem.sTitle }}</a>
+            {%- endif -%}
         {% endfor %}
     </div>
 </div>
