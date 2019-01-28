@@ -82,7 +82,7 @@ class CMSModuleHelp extends TCMSModelBase
                     $oFieldList = TdbCmsFieldConfList::GetList($sQuery);
                     while ($oField = $oFieldList->Next()) {
                         $sTableHTML .= '<tr>';
-                        $sTableHTML .= '<td>&nbsp;</td><td><h2>Feld: '.TGlobal::OutHTML($oField->GetName())."</h2></td>\n";
+                        $sTableHTML .= '<td>&nbsp;</td><td>Feld: '.TGlobal::OutHTML($oField->GetName())."</td>\n";
                         if (!empty($oField->field049Helptext)) {
                             $sTableHTML .= '<td>'.nl2br(TGlobal::OutHTML($oField->field049Helptext))."</td>\n";
                         } else {
@@ -101,7 +101,7 @@ class CMSModuleHelp extends TCMSModelBase
                                 while ($oTabField = $oTabFieldList->Next()) {
                                     $sTableHTML .= '<tr>';
                                     $sTableHTML .= '<td>&nbsp;</td>
-                                    <td><h2>Feld: '.TGlobal::OutHTML($oTabField->GetName())."</h2></td>\n";
+                                    <td>Feld: '.TGlobal::OutHTML($oTabField->GetName())."</td>\n";
                                     $sTableHTML .= '<td>';
 
                                     if (!empty($oTabField->field049Helptext)) {
