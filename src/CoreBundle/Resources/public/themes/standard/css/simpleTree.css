@@ -111,34 +111,40 @@
 	width: 28px;
 	height: 11px;
 	cursor:pointer;
-	cursor:hand;
-}
-#treelegend {
-  width: 350px;
 }
 
-#treelegend .nodeIndicatorIcon {
+.navigationTreeContainer {
+	display: table;
+	width: 100%;
+}
+
+.navigationTreeContainer .simpleTree {
+	display: table-cell;
+}
+
+.navigationTreeContainer .treelegend {
+	display: table-cell;
+	width: 350px;
+}
+
+.navigationTreeContainer .treelegend .nodeIndicatorIcon {
 	padding-left: 20px;
 }
 
-.simpleTree .text, #treelegend .text {
+.navigationTreeContainer .simpleTree .text {
 	cursor: pointer;
-	cursor: hand;
 	font-style: italic;
 }
 .simpleTree .active
 {
-	cursor: default;
 	background-color:#ddf9bc;
 	padding:0px 2px;
 	border: 1px solid #3c660b;
-	cursor:pointer;
-	cursor:hand;
+	cursor: pointer;
 }
 
 .simpleTree .rootContextMenu {
-	cursor:pointer;
-	cursor:hand;
+	cursor: pointer;
 }
 
 .nodeIndicatorIcon {
@@ -156,12 +162,12 @@
 	background-size: 13px;
 }
 
-.simpleTree .otherConnectedNode, #treelegend .otherConnectedNode {
+.navigationTreeContainer .otherConnectedNode {
   font-style: normal;
   font-weight: bold;
 }
 
-.simpleTree span.rightClickMenuDisabled, #treelegend .rightClickMenuDisabled {
+.navigationTreeContainer span.rightClickMenuDisabled {
   font-style: normal;
   font-weight: bold;
 }
@@ -170,7 +176,7 @@
   border: 1px solid #FF0000;
   padding: 0 2px;
 }
-#treelegend .rightClickMenuDisabled {
+.navigationTreeContainer .treelegend .rightClickMenuDisabled {
   color: #FF0000;
 }
 
