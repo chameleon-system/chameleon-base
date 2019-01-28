@@ -348,6 +348,8 @@ You should remove all width/height settings in CreateModalXY calls if it does no
 - $.jqM() (jqModal)
 - $.jqDnR() (part of jqModal)
 - $.addOption() (jquery.selectboxes plugin)
+- loadStandaloneDocumentManager
+- src/CoreBundle/Resources/public/javascript/mainNav.js
 
 ## jQueryUi
 
