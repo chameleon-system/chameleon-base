@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 /**
  * class TFullGroupTable extends TGroupTable to add a header, sorting, and searching.
@@ -971,7 +972,7 @@ class TFullGroupTable extends TGroupTable
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
-    private function getUrlUtil()
+    private function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
     }
