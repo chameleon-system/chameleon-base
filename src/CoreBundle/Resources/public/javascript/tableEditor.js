@@ -550,7 +550,7 @@ function SaveViaAjaxCallback(data, statusText) {
                 // messages do have a reference to field (e.g. mail-field not valid)
                 if (oMessage.sMessageRefersToField) {
                     // add the class to field
-                    $('#fieldname_' + oMessage.sMessageRefersToField).addClass('fieldMsg ' + oMessage.sMessageType);
+                    $('#fieldname_' + oMessage.sMessageRefersToField).parents('tr').addClass('table-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(oMessage.sMessageType));
                 }
 
                 if (oMessage.sMessageType != 'ERROR' && !bOnLoadResetted) {
@@ -712,8 +712,6 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
     }
 };
 
-
-
 CHAMELEON.CORE.MTTableEditor.initTabs = function () {
     var url = document.URL;
     var hash = window.location.hash;
@@ -727,6 +725,20 @@ CHAMELEON.CORE.MTTableEditor.initTabs = function () {
             window.location.hash = this.getAttribute('href');
         });
     });
+};
+
+CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle = function (chameleonMessageTypeName) {
+    chameleonMessageTypeName = chameleonMessageTypeName.toLowerCase();
+
+    if ('error' === chameleonMessageTypeName) {
+        return 'danger'
+    }
+
+    if ('message' === chameleonMessageTypeName) {
+        return 'success'
+    }
+
+    return chameleonMessageTypeName;
 };
 
 function updateIframeSize(sFieldName, iHeight) {

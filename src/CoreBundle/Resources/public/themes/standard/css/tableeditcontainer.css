@@ -112,61 +112,11 @@
     width: auto;
 }
 
-.fieldMsg {
-    font-weight: bold;
-    border-style: solid;
-    border-width: 1px;
-    padding: 5px;
-    padding-right: 45px;
-    min-height: 30px;
-    height: auto !important;
-    height: 30px
-}
-
-.fieldMsg.MESSAGE {
-    border-color: #d6e9c6;
-    color: #468847;
-    background: #dff0d8 url(../images/nav_icons/success.png) no-repeat scroll right center;
-}
-
-.fieldMsg.WARNING {
-    border-color: #FFB608;
-    color: #0B224B;
-    background: #F8F2AA url(../images/nav_icons/notice.png) no-repeat scroll right center;
-}
-
-.fieldMsg.ERROR {
-    border-color: #DF7D7D;
-    color: #AF4C4C;
-    background: #FFBFBF url(../images/nav_icons/error.png) no-repeat scroll right center;
-}
-
-.requiredfieldfocus {
-    font-weight: bold;
-    border-color: #DF7D7D;
-    border-style: solid;
-    border-width: 1px;
-    color: #AF4C4C;
-    padding: 5px;
-    padding-right: 45px;
-    background: #FFBFBF url(../images/nav_icons/error.png) no-repeat 5px 2px;
-    background-position: right;
-    min-height: 30px;
-    height: auto !important;
-    height: 30px
-}
-
 .requiredfield {
     font-weight: bolder;
     color: #DF7D7D;
     border: none;
     font-size: 14px;
-}
-
-.quickLookupListName {
-    color: #717880;
-    font-size: 12px;
-    font-weight: bold;
 }
 
 #quicklookuplist {
