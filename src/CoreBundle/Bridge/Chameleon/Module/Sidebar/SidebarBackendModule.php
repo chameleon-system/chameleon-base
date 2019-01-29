@@ -121,7 +121,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             }
             $aMenuItemsTemp[$tableObject->fieldCmsContentBoxId][] = new MenuItem(
                 $tableObject->fieldTranslation,
-                $tableObject->fieldIconList,
+                $tableObject->fieldIconFontCssClass,
                 $this->getTableTargetUrl($tableObject->id)
             );
         }
@@ -154,7 +154,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             }
             $menuItemsRaw[$cmsModule->fieldCmsContentBoxId][] = new MenuItem(
                 $cmsModule->fieldName,
-                $cmsModule->fieldIconList,
+                $cmsModule->fieldIconFontCssClass,
                 $this->getModuleTargetUrl($cmsModule)
             );
         }
@@ -209,6 +209,18 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         return $names;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetHtmlHeadIncludes()
+    {
+        $includes = parent::GetHtmlHeadIncludes();
+        $includes[] = sprintf('<link rel="stylesheet" href="%s/coreui/css/perfect-scrollbar.css" type="text/css" />',
+            \TGlobal::GetPathTheme());
+
+        return $includes;
     }
 
     /**

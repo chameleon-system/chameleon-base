@@ -458,6 +458,13 @@ div.grippie {
     width: 30px;
 }
 
+.sidebar-filter-input {
+    border-radius: 0;
+    font-family: FontAwesome;
+    padding-top: 1.4rem;
+    padding-bottom: 1.3rem;
+}
+
 /**
 Bootstrap 4 addons.
  */
