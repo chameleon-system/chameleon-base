@@ -56,7 +56,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor_user.action_login_as_user');
             $oMenuItem->sItemKey = 'changeuser';
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/user_go.png');
+            $oMenuItem->sIcon = 'fas fa-user-check';
 
             $aParam = array(
                 'pagedef' => TGlobal::instance()->GetUserData('pagedef'),
@@ -74,7 +74,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor_cms_user.clone_permissions');
             $oMenuItem->sItemKey = 'copyUserRights';
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/group_go.png');
+            $oMenuItem->sIcon = 'fas fa-user-plus';
             $oMenuItem->sOnClick = 'openCopyUserRightsDialog();';
             $this->oMenuItems->AddItem($oMenuItem);
         }
@@ -82,7 +82,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor_cms_user.mail_login_data');
             $oMenuItem->sItemKey = 'activateUser';
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/tick.png');
+            $oMenuItem->sIcon = 'fas fa-check';
             $oMenuItem->sOnClick = 'ActivateUser();';
             $this->oMenuItems->AddItem($oMenuItem);
         }
