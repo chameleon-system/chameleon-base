@@ -281,7 +281,7 @@ while (false !== $row = $statement->fetch()) {
 }
 
 if (count($tablesWithEmptyIcon) > 0) {
-    TCMSLogChange::addInfoMessage('Some of your custom table icons were replaced with a standard icon. Please refer to font awesome and select a matching icon. Tables: '.implode(', ',$tablesWithEmptyIcon));
+    TCMSLogChange::addInfoMessage('Table icons were replaced with CSS icon classes, but for some tables no fitting icon could be found. Please refer to the upgrade guide for Chameleon 6.3 on what to do (section "Font Awesome Icons"). Tables: '.implode(', ',$tablesWithEmptyIcon));
 }
 
 
