@@ -30,6 +30,10 @@
     margin-right: 5px;
 }
 
+.TFullGroupTable .form-inline #searchLookup {
+    width: 400px;
+}
+
 .TFullGroupTablePagination {
     margin-top: 5px;
     margin-bottom: 0px;

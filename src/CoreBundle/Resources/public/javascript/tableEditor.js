@@ -737,14 +737,14 @@ function updateIframeSize(sFieldName, iHeight) {
 
 CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
     $('[data-datetimepicker-option]').each(function () {
-        $(this).datetimepicker($(this).data("datetimepicker-option"));
+        $(this).datetimepicker($(this).data('datetimepicker-option'));
     });
 
     $('.datetimepicker-input').each(function () {
         var id = $(this).attr('id');
 
         // This custom-event of the datetimepicker only works with the ID of the element.
-        $('#' + id).on("change.datetimepicker", function (e) {
+        $('#' + id).on('change.datetimepicker', function (e) {
             var moment = e.date;
 
             if (moment === undefined) {
@@ -764,7 +764,7 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
 
 CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     $('[data-select2-option]').each(function () {
-        $(this).select2($(this).data("select2-option"));
+        $(this).select2($(this).data('select2-option'));
     });
 
     $('.lookup-container-field-types select').on('select2:select', function (e) {
@@ -774,10 +774,28 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
         var helpText = $(fieldId).html();
 
         if (helpText === '') {
-            $("#" + fieldName + "-helpContainer").html("&nbsp;");
+            $('#' + fieldName + '-helpContainer').html('&nbsp;');
         } else {
-            $("#" + fieldName + "-helpContainer").html(helpText);
+            $('#' + fieldName + '-helpContainer').html(helpText);
         }
+    });
+
+    var quicklookuplist = $('#quicklookuplist');
+    quicklookuplist.select2({
+        placeholder: quicklookuplist.data('select2-placeholder'),
+        ajax: {
+            url: quicklookuplist.data('select2-ajax'),
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+            return {
+                results: JSON.parse(data)
+            };
+        }
+    }
+    }).on('select2:select', function (e) {
+        var id = e.params.data.id;
+        switchRecord(id);
     });
 };
 
