@@ -18,14 +18,16 @@ while ($oField = $data['oFields']->Next()) {
             if ($oField->completeRow) { // Headline row
                 $sTmpFormTabsContent .= "<tr><td colspan=\"2\"{$rowColorStyle}>";
                 $sTmpFormTabsContent .= '<div class="fieldSeperator">';
-                if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
-                    $sTmpFormTabsContent .= '<div id="tooltip'.$oField->name.'" style="float:left;" class="badge"><img src="'.TGlobal::GetPathTheme()."/images/icons/icon_info.gif\" width=\"16\" height=\"16\" alt=\"\" onclick=\"$('#tooltip".$oField->name."_content').toggle();\"></div>&nbsp;&nbsp;";
-                }
                 $sTmpFormTabsContent .= $oField->GetContent();
+                if ('' !== $oField->oDefinition->sqlData['049_helptext']) {
+                    $sTmpFormTabsContent .= '<span class="help-text-button" data-helptextId="'.TGlobal::OutHTML($oField->name).'">
+                        <i class="fas fa-info-circle" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'"></i>
+                    </span>';
+                }
                 $sTmpFormTabsContent .= '</div>';
 
-                if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
-                    $sTmpFormTabsContent .= '<div style="display: none;" id="tooltip'.$oField->name.'_content" class="tooltipContainer">'.nl2br($oField->oDefinition->sqlData['049_helptext']).'</div>';
+                if ('' !== $oField->oDefinition->sqlData['049_helptext']) {
+                    $sTmpFormTabsContent .= '<div class="helptextContainer alert alert-info" id="helptext-'.TGlobal::OutHTML($oField->name).'">'.TGlobal::OutHTML(nl2br($oField->oDefinition->sqlData['049_helptext'])).'</div>';
                 }
                 $sTmpFormTabsContent .= '</td></tr>';
             } else {
@@ -84,8 +86,8 @@ while ($oField = $data['oFields']->Next()) {
             </div>
     	    </th>
           <td class="rightTD col-10">';
-                if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
-                    $sTmpFormTabsContent .= '<div class="tooltipContainer alert alert-info" id="tooltip-'.TGlobal::OutHTML($oField->name).'">'.TGlobal::OutHTML(nl2br($oField->oDefinition->sqlData['049_helptext'])).'</div>';
+                if ('' !== $oField->oDefinition->sqlData['049_helptext']) {
+                    $sTmpFormTabsContent .= '<div class="helptextContainer alert alert-info" id="helptext-'.TGlobal::OutHTML($oField->name).'">'.TGlobal::OutHTML(nl2br($oField->oDefinition->sqlData['049_helptext'])).'</div>';
                 }
                 $sTmpFormTabsContent .= $oField->GetContent();
                 $sTmpFormTabsContent .= '

@@ -810,7 +810,7 @@ function SetChangedDataMessage() {
 
 CHAMELEON.CORE.MTTableEditor.initHelpTexts = function () {
     $(".help-text-button").click(function () {
-        var helpTextId = '#tooltip-' + $(this).attr("data-helptextId");
+        var helpTextId = '#helptext-' + $(this).attr("data-helptextId");
         $(helpTextId).toggle();
     });
 };
