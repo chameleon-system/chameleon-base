@@ -5,27 +5,34 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
+ * @var string $activeEditLanguageIso
+ * @var array  $aPortalLinks
+ * @var string $clearCacheURL
+ * @var string $sLogoURL
+ * @var string $sModuleSpotName
+ */
+
+/**
  * @var TranslatorInterface $translator
  */
 $translator = ServiceLocator::get('translator');
+
+if (false === isset($data['oUser'])) {
+    echo '<span class="navbar-brand"><img src="'.TGlobal::OutHTML($sLogoURL).'" alt="" /></span>';
+
+    return;
+}
+
 ?>
         <button type="button" class="navbar-toggler sidebar-toggler d-lg-none" data-toggle="sidebar-show">
             <span class="navbar-toggler-icon"></span>
         </button>
         <a href="<?=PATH_CMS_CONTROLLER; ?>?_rmhist=true&_histid=0" class="navbar-brand d-sm-down-none">
-            <img src="<?= TGlobal::OutHTML($sLogoURL) ?>" />
+            <img src="<?= TGlobal::OutHTML($sLogoURL) ?>" alt="" />
         </a>
         <button type="button" class="navbar-toggler sidebar-toggler d-md-down-none" data-toggle="sidebar-lg-show">
             <span class="navbar-toggler-icon"></span>
         </button>
-
-        <?php
-        if (false === isset($data['oUser'])) {
-            return;
-        }
-
-            ?>
-
             <ul class="nav navbar-nav">
                 <?php
                 if (true === isset($data['check_messages'])) {
