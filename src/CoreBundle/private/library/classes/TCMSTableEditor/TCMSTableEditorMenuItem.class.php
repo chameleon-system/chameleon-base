@@ -178,7 +178,7 @@ class TCMSTableEditorMenuItem
         $oViewRenderer->AddSourceObject('sOnClick', $this->sOnClick);
         $oViewRenderer->AddSourceObject('sButtonStyle', $this->getButtonStyle());
 
-        if ($this->iconIsURL($this->sIcon)) {
+        if ($this->isIconUrl($this->sIcon)) {
             $oViewRenderer->AddSourceObject('sIconURL', $this->sIcon);
         } else {
             $oViewRenderer->AddSourceObject('sIcon', $this->sIcon);
@@ -199,7 +199,7 @@ class TCMSTableEditorMenuItem
         $oViewRenderer->AddSourceObject('sItemKey', $this->sItemKey);
         $oViewRenderer->AddSourceObject('sCSSClass', $this->sCSSClass);
         $oViewRenderer->AddSourceObject('sOnClick', $this->sOnClick);
-        if ($this->iconIsURL($this->sIcon)) {
+        if ($this->isIconUrl($this->sIcon)) {
             $oViewRenderer->AddSourceObject('sIconURL', $this->sIcon);
         } else {
             $oViewRenderer->AddSourceObject('sIcon', $this->sIcon);
@@ -217,7 +217,7 @@ class TCMSTableEditorMenuItem
             $aSubItemData['sItemKey'] = $oSubItem->sItemKey;
             $aSubItemData['sCSSClass'] = $oSubItem->sCSSClass;
             $aSubItemData['sOnClick'] = $oSubItem->sOnClick;
-            if ($this->iconIsURL($oSubItem->sIcon)) {
+            if ($this->isIconUrl($oSubItem->sIcon)) {
                 $aSubItemData['sIconURL'] = $oSubItem->sIcon;
             } else {
                 $aSubItemData['sIcon'] = $oSubItem->sIcon;
@@ -229,7 +229,11 @@ class TCMSTableEditorMenuItem
         return $oViewRenderer->Render('MTTableEditor/menuButtonWithDropdown.html.twig', null, false);
     }
 
-    private function iconIsURL($icon) {
+    /**
+     * @return bool
+     */
+    private function isIconUrl($icon)
+    {
         if (substr_count($icon, '/') > 0 || substr_count($icon, '.') > 0) {
             return true;
         }
