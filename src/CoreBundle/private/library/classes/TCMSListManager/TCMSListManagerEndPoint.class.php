@@ -460,7 +460,7 @@ class TCMSListManagerEndPoint
                     // new
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.new');
-                    $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/page_new.gif');
+                    $oMenuItem->sIcon = 'fas fa-plus';
                     $oMenuItem->sItemKey = 'new';
                     $oMenuItem->sOnClick = "document.cmsform.elements['module_fnc[contentmodule]'].value='Insert';document.cmsform.submit();";
                     $this->oMenuItems->AddItem($oMenuItem);
@@ -474,7 +474,7 @@ class TCMSListManagerEndPoint
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sItemKey = 'edittableconf';
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.open_table_configuration');
-                    $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/application_form_edit.png');
+                    $oMenuItem->sIcon = 'far fa-edit';
 
                     $aParameter = array('pagedef' => 'tableeditor', 'id' => $this->oTableConf->id, 'tableid' => $oTableEditorConf->id);
                     $aAdditionalParams = $this->GetHiddenFieldsHook();

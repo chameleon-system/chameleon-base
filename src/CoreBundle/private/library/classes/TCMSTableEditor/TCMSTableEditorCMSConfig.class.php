@@ -34,7 +34,7 @@ class TCMSTableEditorCMSConfig extends TCMSTableEditor
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'updateTranslationFields';
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor.regenerate_translatable_fields');
-        $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/file_font_truetype.gif');
+        $oMenuItem->sIcon = 'fas fa-font';
 
         $sCallURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'tableeditor', 'id' => $this->sId, 'tableid' => $this->oTableConf->id, 'module_fnc' => array('contentmodule' => 'UpdateTranslationFields'), '_noModuleFunction' => 'true'));
 
