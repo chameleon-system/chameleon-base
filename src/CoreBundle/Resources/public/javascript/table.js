@@ -170,4 +170,11 @@ $(document).ready(function () {
         document[listname]._startRecord.value=0;
         document[listname].submit();
     });
+
+    function switchRecord(id) {
+        if ('' !== id) {
+            var url = searchLookup.data('record-url') + '&id=' + id;
+            document.location.href = url;
+        }
+    }
 });

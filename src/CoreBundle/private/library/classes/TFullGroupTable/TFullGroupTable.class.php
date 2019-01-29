@@ -415,61 +415,6 @@ class TFullGroupTable extends TGroupTable
         return $inline;
     }
 
-    private function getRecordAutocompleteUrl(): string
-    {
-        $pagedef = $this->getTableEditorPagedef('tablemanager');
-        $inputFilterUtil = $this->getInputFilterUtil();
-        $tableId = $inputFilterUtil->getFilteredInput('id');
-        $urlUtil = $this->getUrlUtil();
-        $sAjaxURL = $urlUtil->getArrayAsUrl([
-            'id' => $tableId,
-            'pagedef' => $pagedef,
-            '_rmhist' => 'false',
-            'sOutputMode' => 'Ajax',
-            'module_fnc[contentmodule]' => 'ExecuteAjaxCall',
-            '_fnc' => 'getAutocompleteRecordList',
-            'sRestrictionField' => '',
-            'sRestriction' => '',
-            'recordID' => ''
-        ], PATH_CMS_CONTROLLER.'?', '&');
-
-        return $sAjaxURL;
-    }
-
-    private function switchToSelectedRecord(): string
-    {
-        $pagedef = $this->getTableEditorPagedef('tableeditor');
-        $inputFilterUtil = $this->getInputFilterUtil();
-        $tableId = $inputFilterUtil->getFilteredInput('id');
-        $urlUtil = $this->getUrlUtil();
-        $recordUrl = $urlUtil->getArrayAsUrl([
-            'pagedef' => $pagedef,
-            'tableid' => $tableId,
-            'sRestriction' => '',
-            'sRestrictionField' => '',
-            'popLastURL' => '1'
-        ], PATH_CMS_CONTROLLER.'?', '&');
-
-        return '<script type="text/javascript">
-                function switchRecord(id) {
-                    if (id !== "") {
-                        var url = "' . $recordUrl . '&id=" + id;
-                        document.location.href = url;
-                    }
-                } 
-                </script>';
-    }
-
-    private function getTableEditorPagedef($pagedef): string
-    {
-        $inputFilterUtil = $this->getInputFilterUtil();
-        $customTableEditor = $inputFilterUtil->getFilteredInput('sTableEditorPagdef', '');
-        if ('' !== $customTableEditor) {
-            $pagedef = $customTableEditor;
-        }
-        return $pagedef;
-    }
-
     /**
      * returns the table as string.
      *
@@ -925,8 +870,8 @@ class TFullGroupTable extends TGroupTable
 
             $filterContent .= '<div class="form-group mr-2">';
 
-            $formatString =  '<select id="searchLookup" name="_search_word" data-listname="%s" class="form-control" data-select2-placeholder="%s" data-select2-ajax="%s">';
-            $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->listName), TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->getRecordAutocompleteUrl()));
+            $formatString =  '<select id="searchLookup" name="_search_word" data-listname="%s" class="form-control" data-select2-placeholder="%s" data-select2-ajax="%s" data-record-url="%s">';
+            $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->listName), TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->getRecordAutocompleteUrl()), TGlobal::OutHTML($this->getRecordUrl()));
 
             if ('' !== $this->_postData['_search_word']) {
                 $formatString = '<option value="%1$s">%1$s</option>';
@@ -940,8 +885,6 @@ class TFullGroupTable extends TGroupTable
             $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchButtonText), TGlobal::OutHTML($this->listName));
 
             $filterContent .= '</div>';
-
-            $filterContent .= $this->switchToSelectedRecord();
         }
 
         // use callback function if one was defined
@@ -962,6 +905,54 @@ class TFullGroupTable extends TGroupTable
         }
 
         return $filter;
+    }
+
+    private function getRecordAutocompleteUrl(): string
+    {
+        $pagedef = $this->getTableEditorPagedef('tablemanager');
+        $inputFilterUtil = $this->getInputFilterUtil();
+        $tableId = $inputFilterUtil->getFilteredInput('id');
+        $urlUtil = $this->getUrlUtil();
+        $sAjaxURL = $urlUtil->getArrayAsUrl([
+            'id' => $tableId,
+            'pagedef' => $pagedef,
+            '_rmhist' => 'false',
+            'sOutputMode' => 'Ajax',
+            'module_fnc[contentmodule]' => 'ExecuteAjaxCall',
+            '_fnc' => 'getAutocompleteRecordList',
+            'sRestrictionField' => '',
+            'sRestriction' => '',
+            'recordID' => ''
+        ], PATH_CMS_CONTROLLER.'?', '&');
+
+        return $sAjaxURL;
+    }
+
+    private function getRecordUrl(): string
+    {
+        $pagedef = $this->getTableEditorPagedef('tableeditor');
+        $inputFilterUtil = $this->getInputFilterUtil();
+        $tableId = $inputFilterUtil->getFilteredInput('id');
+        $urlUtil = $this->getUrlUtil();
+        $recordUrl = $urlUtil->getArrayAsUrl([
+            'pagedef' => $pagedef,
+            'tableid' => $tableId,
+            'sRestriction' => '',
+            'sRestrictionField' => '',
+            'popLastURL' => '1'
+        ], PATH_CMS_CONTROLLER.'?', '&');
+
+        return $recordUrl;
+    }
+
+    private function getTableEditorPagedef($pagedef): string
+    {
+        $inputFilterUtil = $this->getInputFilterUtil();
+        $customTableEditor = $inputFilterUtil->getFilteredInput('sTableEditorPagdef', '');
+        if ('' !== $customTableEditor) {
+            $pagedef = $customTableEditor;
+        }
+        return $pagedef;
     }
 
     /**
