@@ -3,7 +3,7 @@ if (isset($data['oUser'])) {
     $sMainMenuText = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_main_menu')); ?>
     <div id="cmsbreadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;<a
+            <li class="breadcrumb-item"><i class="fas fa-home"></i>&nbsp;&nbsp;<a
                         href="<?= PATH_CMS_CONTROLLER; ?>?pagedef=main&amp;_rmhist=true&amp;_histid=0"><?= $sMainMenuText; ?></a>
             </li>
             <?php
