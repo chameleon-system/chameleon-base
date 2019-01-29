@@ -297,7 +297,7 @@ while (false !== $row = $statement->fetch()) {
 }
 
 if (count($modulesWithEmptyIcon) > 0) {
-    TCMSLogChange::addInfoMessage('Some of your module icons were replaced with a standard icon. Please refer to font awesome and select a matching icon. Modules: '.implode(', ',$modulesWithEmptyIcon));
+    TCMSLogChange::addInfoMessage('Backend module icons were replaced with CSS icon classes, but for some modules no fitting icon could be found. Please refer to the upgrade guide for Chameleon 6.3 on what to do (section "Font Awesome Icons").. Modules: '.implode(', ',$modulesWithEmptyIcon));
 }
 
 
