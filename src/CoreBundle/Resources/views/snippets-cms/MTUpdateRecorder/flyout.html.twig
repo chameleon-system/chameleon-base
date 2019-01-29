@@ -8,11 +8,9 @@
         DisplayAjaxMessage(jsonresponse['toasterMessage']);
         var enabled = jsonresponse['enabled'];
         if(enabled) {
-            $('#dbLoggerButton').removeClass('btn-secondary');
-            $('#dbLoggerButton').addClass('btn-danger');
+            $('#dbLoggerButton').addClass('text-danger');
         } else {
-            $('#dbLoggerButton').removeClass('btn-danger');
-            $('#dbLoggerButton').addClass('btn-secondary');
+            $('#dbLoggerButton').removeClass('text-danger');
         }
         $('#toggleDbRecordingButton').attr('value', enabled ? '{{'chameleon_system_core.db_logger.stop_recording'|trans({}, 'admin')}}' : '{{'chameleon_system_core.db_logger.start_recording'|trans({}, 'admin')}}');
     }
@@ -57,30 +55,38 @@
 
 </script>
 
-    <div class="btn-group float-right">
-        <button type="button" class="btn btn-sm dropdown-toggle navbar-btn {% if loggingActive %}btn-danger{% else %}btn-secondary{% endif %}" id="dbLoggerButton" data-toggle="dropdown">
-            <span class="glyphicon glyphicon-record"></span> {{"chameleon_system_core.action.db_logger"|trans({}, 'admin') }}
-        </button>
+    <li class="nav-item px-2 dropdown">
+        <a
+            class="nav-link dropdown-toggle {% if loggingActive %}text-danger{% endif %}"
+            id="dbLoggerButton"
+            data-toggle="dropdown"
+            href="#"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+        >
+            <i class="fas fa-database"></i>
+            <span class="d-md-down-none">
+                {{"chameleon_system_core.action.db_logger"|trans({}, 'admin') }}
+            </span>
+        </a>
         <div class="dropdown-menu dropdown-menu-right" id="dbLoggerDropdown">
-                <div class="row">
-                    <div class="col-md-12">
-                            <form class="form-inline" action="" method="POST" accept-charset="UTF-8" id="UnixTimeStamp" onsubmit="return false;">
-                                <input type="hidden" name="module_fnc[{{ sModuleSpotName }}]" value="ExecuteAjaxCall"/>
-                                <input type="hidden" name="_fnc" value="UpdateUnixTimeStamp"/>
-                                <input type="hidden" id="timestampFormField" name="timestamp" value="" />
-                                <div class="input-group input-group-sm">
-                                    <div class="form-control">{{ activeDbCounter }}-<span id="currentTimestamp">{{ currentUnixTimestamp }}</span>.inc.php</div>
-                                    <input class="btn btn-sm input-group-append" type="button" value="{{ 'chameleon_system_core.action.new'|trans }}" onclick="PostAjaxForm('UnixTimeStamp', handleTimestampUpdate);return false;" />
-                                </div>
-                            </form>
-                            <form class="form-inline" action="" method="POST" accept-charset="UTF-8" id="ToggleRecording">
-                                <input type="hidden" name="module_fnc[{{ sModuleSpotName }}]" value="ExecuteAjaxCall"/>
-                                <input type="hidden" name="_fnc" value="SwitchLoggingState"/>
-                                <input class="btn btn-primary btn-sm" id="toggleDbRecordingButton" type="submit" value="{% if recordingActive %}{{ "chameleon_system_core.db_logger.stop_recording"|trans }}{% else %}{{ "chameleon_system_core.db_logger.start_recording"|trans }}{% endif %}" onclick="javascript:PostAjaxForm('ToggleRecording', handleDbToggle);return false;" />
-                            </form>
+            <div class="dropdown-item">
+                <form class="form-inline" action="" method="POST" accept-charset="UTF-8" id="UnixTimeStamp" onsubmit="return false;">
+                    <input type="hidden" name="module_fnc[{{ sModuleSpotName }}]" value="ExecuteAjaxCall"/>
+                    <input type="hidden" name="_fnc" value="UpdateUnixTimeStamp"/>
+                    <input type="hidden" id="timestampFormField" name="timestamp" value="" />
+                    <div class="input-group input-group-sm">
+                        <div class="form-control">{{ activeDbCounter }}-<span id="currentTimestamp">{{ currentUnixTimestamp }}</span>.inc.php</div>
+                        <input class="btn btn-sm input-group-append" type="button" value="{{ 'chameleon_system_core.action.new'|trans }}" onclick="PostAjaxForm('UnixTimeStamp', handleTimestampUpdate);return false;" />
                     </div>
-                </div>
-
+                </form>
+                <form class="form-inline" action="" method="POST" accept-charset="UTF-8" id="ToggleRecording">
+                    <input type="hidden" name="module_fnc[{{ sModuleSpotName }}]" value="ExecuteAjaxCall"/>
+                    <input type="hidden" name="_fnc" value="SwitchLoggingState"/>
+                    <input class="btn btn-primary btn-sm" id="toggleDbRecordingButton" type="submit" value="{% if recordingActive %}{{ "chameleon_system_core.db_logger.stop_recording"|trans }}{% else %}{{ "chameleon_system_core.db_logger.start_recording"|trans }}{% endif %}" onclick="javascript:PostAjaxForm('ToggleRecording', handleDbToggle);return false;" />
+                </form>
+            </div>
         </div>
-    </div>
+    </li>
 {% endif %}

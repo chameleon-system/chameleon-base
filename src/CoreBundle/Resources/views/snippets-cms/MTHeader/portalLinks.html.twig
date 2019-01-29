@@ -3,15 +3,38 @@
 {% if aPortalLinks %}
     {% if aPortalLinks|length == 1 %}
         {% for aPortal in aPortalLinks %}
-            <li class="nav-item"><a href="{{ aPortal.url }}" class="nav-link" target="_blank"><span class="glyphicon glyphicon-globe"></span> &nbsp;{{ 'chameleon_system_core.cms_module_header.action_open_website'|trans }}</a></li>
+            <li class="nav-item px-2">
+                <a href="{{ aPortal.url }}" class="nav-link" target="_blank">
+                    <i class="fas fa-globe"></i>
+                    <span class="d-md-down-none">
+                        {{ 'chameleon_system_core.cms_module_header.action_open_website'|trans }}
+                    </span>
+                </a>
+            </li>
         {% endfor %}
     {% else %}
-        <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownWebsites" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-globe"></span> &nbsp;{{ 'chameleon_system_core.cms_module_header.action_open_website'|trans }}</a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownWebsites">
-        {% for aPortal in aPortalLinks %}
-            <a href="{{ aPortal.url }}" class="dropwdown-item" target="_blank"><span class="glyphicon glyphicon-globe"></span> {{ aPortal.name }}</a>
-        {% endfor %}
-        </div>
+        <li class="nav-item px-2 dropdown">
+            <a
+                id="navbarDropdownWebsites"
+                class="nav-link dropdown-toggle"
+                data-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false"
+            >
+                <i class="fas fa-globe"></i>
+                <span class="d-md-down-none">
+                    {{ 'chameleon_system_core.cms_module_header.action_open_website'|trans }}
+                </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-left">
+            {% for aPortal in aPortalLinks %}
+                <a class="dropdown-item" href="{{ aPortal.url }}" target="_blank">
+                    <i class="fas fa-globe"></i>
+                    {{ aPortal.name }}
+                </a>
+            {% endfor %}
+            </div>
     {% endif %}
 {% endif %}
