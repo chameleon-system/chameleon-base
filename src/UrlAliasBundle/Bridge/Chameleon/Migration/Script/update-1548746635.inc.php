@@ -10,7 +10,7 @@ $sourceUrlFieldId = TCMSLogChange::GetTableFieldId(TCMSLogChange::GetTableId('cm
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
       'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_STRING'),
-      '049_helptext' => 'The URL of the client request. A full relative path must be given - so starting with a /. This may include parameters.',
+      '049_helptext' => 'The source URL of the client request. A full relative path must be given - so starting with a /. This may include parameters.',
   ])
   ->setWhereEquals([
       'id' => $sourceUrlFieldId,
@@ -39,8 +39,8 @@ $targetUrlFieldId = TCMSLogChange::GetTableFieldId(TCMSLogChange::GetTableId('cm
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields([
-        '049_helptext' => 'If a request url is matched this is the resulting redirect url. It can also include parameters.
-Only mapped parameters will be further added to it.',
+        '049_helptext' => 'If a source url is matched this is the resulting redirect target url. It can also include parameters.
+Only mapped parameters will still be added to it.',
     ])
     ->setWhereEquals([
         'id' => $targetUrlFieldId,
@@ -53,9 +53,9 @@ $ignoreParameterFieldId = TCMSLogChange::GetTableFieldId(TCMSLogChange::GetTable
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields([
-        '049_helptext' => 'The presence of any of these parameters in the requested url will not prohibit matching. They will be removed before the redirect.
+        '049_helptext' => 'The presence of any of these parameters in the source url will not prohibit matching. They will be removed before the redirect.
 Separate multiple parameters with commas or breaks.
-Enter a star (*) if you want to ignore all parameters that are not listed in the source url.',
+Enter a single star (*) if you want to ignore all parameters in the source url during matching.',
     ])
     ->setWhereEquals([
         'id' => $ignoreParameterFieldId,
@@ -68,8 +68,10 @@ $parameterMappingFieldId = TCMSLogChange::GetTableFieldId(TCMSLogChange::GetTabl
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields([
-        '049_helptext' => 'Specifies additional parameters that if present in the requested url will add a mapped parameter to the target url.
+        '049_helptext' => 'Specifies additional parameters that if present in the source url will add a mapped parameter to the target url.
 These parameters are automatically included in the parameters to be ignored. Separate multiple mappings with breaks.
+
+Note: parameters also specified for the parameters to be ignored will not be mapped.
 
 Example:
 id = item_id
@@ -83,6 +85,5 @@ redirected: /new_url//?item_id=5',
 TCMSLogChange::update(__LINE__, $data);
 // TODO commas above, breaks here
 
-// TODO request url vs source url
+// TODO request(ed) url vs source url
 // TODO what if a target parameter of a mapping is also in the source url?
-// TODO a parameter to be ignored occurs also in the ones to be mapped?
