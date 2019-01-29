@@ -229,15 +229,9 @@ class TCMSTableEditorMenuItem
         return $oViewRenderer->Render('MTTableEditor/menuButtonWithDropdown.html.twig', null, false);
     }
 
-    /**
-     * @return bool
-     */
-    private function isIconUrl($icon)
+    private function isIconUrl($icon): bool
     {
-        if (substr_count($icon, '/') > 0 || substr_count($icon, '.') > 0) {
-            return true;
-        }
-        return false;
+        return false !== \strpos($icon, '/') || false !== \strpos($icon, '.');
     }
 
 
