@@ -11,24 +11,24 @@
 
 namespace ChameleonSystem\CoreBundle\Command;
 
-use ChameleonSystem\CoreBundle\CronJob\CronjobEnablingServiceInterface;
+use ChameleonSystem\CoreBundle\CronJob\CronjobStateServiceInterface;
 use ChameleonSystem\CoreBundle\Exception\CronjobHandlingException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DisableCronjobsCommand extends Command
+class GetCronjobsStateCommand extends Command
 {
     /**
-     * @var CronjobEnablingServiceInterface
+     * @var CronjobStateServiceInterface
      */
-    private $cronjobEnablingService;
+    private $cronjobStateService;
 
-    public function __construct(CronjobEnablingServiceInterface $cronjobEnablingService)
+    public function __construct(CronjobStateServiceInterface $cronjobStateService)
     {
-        parent::__construct('chameleon_system:cronjobs:disable');
+        parent::__construct('chameleon_system:cronjobs:state_check');
 
-        $this->cronjobEnablingService = $cronjobEnablingService;
+        $this->cronjobStateService = $cronjobStateService;
     }
 
     /**
@@ -37,9 +37,9 @@ class DisableCronjobsCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Disables the cron job execution')
+            ->setDescription('Checks if any cron job is running')
             ->setHelp(<<<EOF
-The <info>%command.name%</info> command disables all cronjob execution.
+The <info>%command.name%</info> command outputs "running" if a cron job is currently running. Otherwise "idle".
 EOF
             )
         ;
@@ -51,9 +51,13 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $this->cronjobEnablingService->disableCronjobExecution();
+            if (true === $this->cronjobStateService->isCronjobRunning()) {
+                $output->writeln('running');
+            } else {
+                $output->writeln('idle');
+            }
         } catch (CronjobHandlingException $exception) {
-            $output->writeln(sprintf('Cron job execution could not be disabled: %s', $exception->getMessage()));
+            $output->writeln(sprintf('Cron job running state could not be checked: %s', $exception->getMessage()));
 
             return 1;
         }
