@@ -712,11 +712,7 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
     }
 };
 
-$(document).ready(function () {
-    CHAMELEON.CORE.MTTableEditor.initTabs();
-    CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
-    CHAMELEON.CORE.MTTableEditor.initSelectBoxes();
-});
+
 
 CHAMELEON.CORE.MTTableEditor.initTabs = function () {
     var url = document.URL;
@@ -812,7 +808,19 @@ function SetChangedDataMessage() {
     CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
 }
 
+CHAMELEON.CORE.MTTableEditor.initHelpTexts = function () {
+    $(".help-text-button").click(function () {
+        var helpTextId = '#helptext-' + $(this).attr("data-helptextId");
+        $(helpTextId).toggle();
+    });
+};
+
+
 $(document).ready(function () {
+    CHAMELEON.CORE.MTTableEditor.initTabs();
+    CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
+    CHAMELEON.CORE.MTTableEditor.initSelectBoxes();
     CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
     CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent('label.switch input[type=checkbox]');
+    CHAMELEON.CORE.MTTableEditor.initHelpTexts();
 });
