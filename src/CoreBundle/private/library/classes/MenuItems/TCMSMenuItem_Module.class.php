@@ -31,8 +31,8 @@ class TCMSMenuItem_Module extends TCMSMenuItem
             $url = "javascript:CreateModalIFrameDialogCloseButton('".$url."',".TGlobal::OutHTML($this->data['width']).','.TGlobal::OutHTML($this->data['height']).');';
         }
 
-        if (array_key_exists('icon_font_awesome', $this->data) && '' !== $this->data['icon_font_awesome']) {
-            $icon = $this->data['icon_font_awesome'];
+        if (array_key_exists('icon_font_css_class', $this->data) && '' !== $this->data['icon_font_css_class']) {
+            $icon = $this->data['icon_font_css_class'];
         } else {
             $icon = 'fas fa-sign-out-alt'; //standard icon
         }

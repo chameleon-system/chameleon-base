@@ -116,7 +116,7 @@ $iconMapping = array(
 foreach ($iconMapping as $oldIconName => $iconName) {
     $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'en')
         ->setFields([
-            'icon_font_awesome' => $iconName
+            'icon_font_css_class' => $iconName
         ])
         ->setWhereEquals([
             'icon_list' => $oldIconName
@@ -236,7 +236,7 @@ $iconMapping = array(
 foreach ($iconMapping as $tableName => $iconName) {
     $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'en')
         ->setFields([
-            'icon_font_awesome' => $iconName
+            'icon_font_css_class' => $iconName
         ])
         ->setWhereEquals([
             'name' => $tableName
@@ -258,7 +258,7 @@ $iconMapping = array(
 foreach ($iconMapping as $moduleName => $iconName) {
     $data = TCMSLogChange::createMigrationQueryData('cms_module', 'en')
         ->setFields([
-            'icon_font_awesome' => $iconName
+            'icon_font_css_class' => $iconName
         ])
         ->setWhereEquals([
             'uniquecmsname' => $moduleName
@@ -269,7 +269,7 @@ foreach ($iconMapping as $moduleName => $iconName) {
 
 // set standard icon for all missing mappings
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
-$statement = $databaseConnection->executeQuery("SELECT * FROM `cms_tbl_conf` WHERE `icon_font_awesome` = '' AND `cms_content_box_id` != '' AND `cms_content_box_id` !='0'");
+$statement = $databaseConnection->executeQuery("SELECT * FROM `cms_tbl_conf` WHERE `icon_font_css_class` = '' AND `cms_content_box_id` != '' AND `cms_content_box_id` !='0'");
 
 if (false === $statement->execute()) {
     return;
@@ -286,7 +286,7 @@ if (count($tablesWithEmptyIcon) > 0) {
 
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
-$statement = $databaseConnection->executeQuery("SELECT * FROM `cms_module` WHERE `icon_font_awesome` = '' AND `cms_content_box_id` != '' AND `cms_content_box_id` !='0'");
+$statement = $databaseConnection->executeQuery("SELECT * FROM `cms_module` WHERE `icon_font_css_class` = '' AND `cms_content_box_id` != '' AND `cms_content_box_id` !='0'");
 if (false === $statement->execute()) {
     return;
 }

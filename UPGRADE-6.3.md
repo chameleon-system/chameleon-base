@@ -456,6 +456,6 @@ Not found anywhere (so you might want to skip this search, too):
 The icons of Font Awesome have been added.
 They will replace all file icons and the glyphicons of Bootstrap3 in the backend.
 
-Especially the icons of the main navigation have been replaced. During the update you will get a list of all navigation nodes that cannot be replaced automatically.
+During migration, icons for main menu items will be replaced with matching Font Awesome icons. 
 
-If you do not manually assign a Font Awesome icon to these navigation nodes, the default icon will be "fas fa-sign-out-alt".
+Where icons cannot be matched, a default icon will be used; the database migrations will tell which icons could not be assigned. To manually assign an icon to a menu item representing a table, navigate to the table settings of this table and fill out the field "Icon Font CSS class". To manually assign an icon to a menu item representing a backend module, do this in the "CMS modules" menu respectively. See other menu items on what to write into these fields.

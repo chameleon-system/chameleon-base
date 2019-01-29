@@ -25,8 +25,8 @@ class TCMSMenuItem_Table extends TCMSMenuItem
             $titleAttribute = ' title="'.TGlobal::OutHTML($this->data['notes']).'"';
         }
 
-        if (array_key_exists('icon_font_awesome', $this->data) && '' !== $this->data['icon_font_awesome']) {
-            $icon = $this->data['icon_font_awesome'];
+        if (array_key_exists('icon_font_css_class', $this->data) && '' !== $this->data['icon_font_css_class']) {
+            $icon = $this->data['icon_font_css_class'];
         } else {
             $icon = 'fas fa-sign-out-alt'; //standard icon
         }
