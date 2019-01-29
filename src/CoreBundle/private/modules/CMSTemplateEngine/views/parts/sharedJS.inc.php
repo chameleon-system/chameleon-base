@@ -24,6 +24,9 @@ $rowCount = 0;
         ?>
     $(document).ready(function () {
         <?php
+        /**
+         * @deprecated since 6.3.0 - this message handling is a relict and the template engine has no fields, so this code does nothing.
+         */
         if (isset($aMessages) && is_array($aMessages) && count($aMessages) > 0) {
             foreach ($aMessages as $sFieldName => $sMessage) {
                 echo "document.getElementById('fieldname_".$sFieldName."').className = 'requiredfieldfocus';";
