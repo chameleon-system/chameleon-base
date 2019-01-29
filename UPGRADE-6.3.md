@@ -454,7 +454,7 @@ Not found anywhere (so you might want to skip this search, too):
 ## Font Awesome Icons
 
 The icons of Font Awesome have been added.
-They will replace all file icons and the glyphicons of Bootstrap3.
+They will replace all file icons and the glyphicons of Bootstrap3 in the backend.
 
 Especially the icons of the main navigation have been replaced. During the update you will get a list of all navigation nodes that cannot be replaced automatically.
 
