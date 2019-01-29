@@ -201,18 +201,12 @@
     padding-top: 3px;
 }
 
-.tooltipContainer {
-    background-color: #F8F2AA;
-    color: #0B224B;
-    padding: 8px;
-    z-index: 10;
-    display: block;
-    font-family: Arial, helvetica, sans-serif;
-    font-size: 11px;
-    border: 2px solid #FFB608;
-    line-height: 16px;
-    width: 70%;
-    margin-bottom: 20px;
+.help-text-button i {
+    color: #999;
+}
+
+.helptextContainer {
+    display: none;
 }
 
 #tableEditorHeader th, #tableEditorHeader td, #tableEditorHeader td span, #tableEditorHeader td div {
