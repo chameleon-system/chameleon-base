@@ -1,15 +1,7 @@
-.tableeditID {
-    font-size: 14px;
-    font-weight: bold;
-    margin-left: 5px;
-    display: inline;
-    color: #419BDE;
-}
-
 .tableeditcontainer h1,
 .tableeditcontainer h2,
 .tableeditcontainer h3 {
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 .tableeditcontainer .fieldName {
@@ -58,23 +50,6 @@
 
 .cmsimagefielditemimage img {
     max-height: 150px;
-}
-
-#datepickeriframe {
-    background-color: transparent;
-}
-
-.passwordStrengthMeter {
-    width: 246px;
-    height: 35px;
-    background: url(../images/progressMeterColorFull.gif);
-}
-
-.passwordStrengthMeterArrow {
-    width: 10px;
-    height: 12px;
-    margin-top: 4px;
-    margin-left: 12px;
 }
 
 /* the breadcrumb in treeNode fields */
@@ -169,123 +144,13 @@
     margin-left: 20px;
 }
 
-.description {
-    padding: 5px;
-}
-
-.descriptionContainer {
-    padding: 0px;
-    min-height: 3px;
-    height: auto !important;
-    height: 3px;
-    margin-bottom: 7px;
-    -webkit-box-shadow: 3px 3px 8px #1f1f1f;
-    -moz-box-shadow: 3px 3px 8px #1f1f1f;
-    box-shadow: 3px 3px 8px #1f1f1f;
-    margin-top: -11px;
-    background-color: #EFF0F3;
-}
-
 .translationStateIcon {
     float: right;
     padding-right: 5px;
 }
 
-.custom-combobox {
-    position: relative;
-    display: inline-block;
-}
-
-.custom-combobox-toggle {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    margin-left: -1px;
-    padding: 0;
-}
-
-.custom-combobox-input {
-    margin: 0;
-    padding: 0.3em;
-}
-
-.ui-autocomplete {
-    max-height: 250px;
-    overflow-y: auto;
-}
-
 .button-spacing {
     margin-left: 10px;
-}
-
-/**
-* search field
-*/
-.right-inner-addon {
-    position: relative;
-}
-.right-inner-addon input {
-    padding-right: 30px;
-}
-.right-inner-addon i {
-    position: absolute;
-    right: 0px;
-    padding: 8px 10px;
-    pointer-events: none;
-}
-
-.dateInput .ui-datepicker-trigger {
-    display: none;
-}
-
-.helpText {
-    background: url(../images/icons/icon_info.gif) no-repeat 2px 0px;
-    font-size: 11px;
-    color: #7B96BD;
-    margin-top: 8px;
-    display: block;
-    padding-left: 25px;
-}
-
-.helpText ul {
-    margin: 0 0 5px 0;
-    padding: 0;
-}
-
-.helpText ul li {
-    list-style: none;
-}
-
-.helpText li.head {
-    font-weight:bold;
-}
-
-.helpText ul ul,
-.helpText ul.info {
-    margin: 0;
-    padding: 0 0 0 30px;
-}
-
-.helpText ul li ul li,
-.helpText ul.info li {
-    list-style: disc;
-}
-
-.helpText ul.info li.no-icon {
-    list-style: none;
-}
-
-.helpText span.strike-through {
-    text-decoration: line-through;
-}
-
-.helpText div.important strong,
-.helpText strong.important {
-    color: #900;
-}
-
-.dateInput .ui-datepicker-trigger {
-    display: none;
 }
 
 .translation-badge, .help-badge {
