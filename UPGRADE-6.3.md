@@ -301,8 +301,6 @@ is recommended (although this tool may not find database-related deprecations).
 - \TCMSFieldColorPicker::isFirstInstance()
 - \TCMSFieldLookup::enableComboBox()
 - \TCMSLogChange::getUpdateLogger()
-- \TCMSRender::DrawBoxHeader()
-- \TCMSRender::DrawBoxFooter()
 - \TPkgCmsCoreSendToHost::setLogRequest()
 - \TPkgCmsException_Log::getLogger()
 - \TPkgCsv2Sql::CreateLogFileName()

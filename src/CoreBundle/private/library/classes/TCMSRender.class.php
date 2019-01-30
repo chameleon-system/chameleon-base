@@ -15,8 +15,6 @@
 class TCMSRender
 {
     /**
-     * @deprecated since 6.3.0
-     *
      * @param string   $sTitle
      * @param string   $boxIcon - not used anymore
      * @param null|int $width
@@ -31,9 +29,6 @@ class TCMSRender
         echo "      <div class=\"card-body p-0\">\n";
     }
 
-    /**
-     * @deprecated since 6.3.0
-     */
     public static function DrawBoxFooter()
     {
         echo "    </div>\n";
