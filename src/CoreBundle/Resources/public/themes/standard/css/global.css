@@ -460,7 +460,7 @@ div.grippie {
 
 .sidebar-filter-input {
     border-radius: 0;
-    font-family: FontAwesome;
+    font-family: FontAwesome,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     padding-top: 1.4rem;
     padding-bottom: 1.3rem;
 }
