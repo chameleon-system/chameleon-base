@@ -18,6 +18,8 @@ class TCMSRender
      * @param string   $sTitle
      * @param string   $boxIcon - not used anymore
      * @param null|int $width
+     *
+     * @deprecated since 6.3.0 - only used for deprecated classic main menu
      */
     public static function DrawBoxHeader($sTitle, $boxIcon, $width = null)
     {
@@ -29,6 +31,9 @@ class TCMSRender
         echo "      <div class=\"card-body p-0\">\n";
     }
 
+    /**
+     * @deprecated since 6.3.0 - only used for deprecated classic main menu
+     */
     public static function DrawBoxFooter()
     {
         echo "    </div>\n";

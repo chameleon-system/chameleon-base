@@ -288,6 +288,9 @@ is recommended (although this tool may not find database-related deprecations).
 ## Classes and Interfaces
 
 - \IPkgCmsCoreLog
+- \MTMenuManager
+- \TCMSContentBox
+- \TCMSContentBoxItem
 - \TCMSMenuItem
 - \TCMSMenuItem_Module
 - \TCMSMenuItem_Table
@@ -351,6 +354,7 @@ You should remove all width/height settings in CreateModalXY calls if it does no
 - $.jqDnR() (part of jqModal)
 - $.addOption() (jquery.selectboxes plugin)
 - loadStandaloneDocumentManager
+- PublishViaAjaxCallback()
 - src/CoreBundle/Resources/public/javascript/mainNav.js
 
 ## jQueryUi
@@ -383,7 +387,7 @@ Deprecated is every jquery plugin in:
 
 ## Database Tables
 
-None.
+- cms_content_box
 
 ## Database Fields
 

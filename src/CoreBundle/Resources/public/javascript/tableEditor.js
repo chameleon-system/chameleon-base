@@ -458,6 +458,9 @@ function CheckRefreshReturn(data) {
     window.setTimeout("RefreshRecordEditLock()", 30000);
 }
 
+/*
+ * @deprecated since 6.3.0 - workflow is not supported anymore
+ */
 function PublishViaAjaxCallback(data, statusText) {
     CloseModalIFrameDialog();
 
