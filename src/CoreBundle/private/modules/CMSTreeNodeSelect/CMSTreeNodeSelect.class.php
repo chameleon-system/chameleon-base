@@ -91,8 +91,8 @@ class CMSTreeNodeSelect extends TCMSModelBase
 
             ++$level;
 
-            $path .= '<li><div class="treesubpath">'.$oNode->fieldName."</div></li>\n";
-            $this->data['treePathHTML'] .= '<div id="'.$fieldName.'_tmp_path_'.$oNode->id.'" style="display:none;"><div class="treeField"><ul>'.$path.'</ul></div></div>'."\n";
+            $path .= '<div class="breadcrumb-item">'.$oNode->fieldName."</div>\n";
+            $this->data['treePathHTML'] .= '<div id="'.$fieldName.'_tmp_path_'.$oNode->id.'" style="display:none;"><div class="breadcrumb bg-light">'.$path.'</div></div>'."\n";
 
             $this->data['treeHTML'] .= $spacer.'<li id="node'.$oNode->sqlData['cmsident'].'">';
 
