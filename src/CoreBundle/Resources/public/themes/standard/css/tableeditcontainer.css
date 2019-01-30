@@ -77,33 +77,6 @@
     margin-left: 12px;
 }
 
-.posListUL {
-    margin-left: 0px;
-    padding-left: 0px;
-}
-
-.positionList {
-    background-color: #F8F2AA;
-    color: #616974;
-    border: 1px solid #FFB608;
-    padding: 3px;
-    font-size: 11px;
-    display: block;
-    margin-bottom: 2px;
-    cursor: move;
-}
-
-.positionListActive {
-    background-color: #E3F8D8;
-    color: #0B224B;
-    border: 1px solid #217C21;
-    padding: 3px;
-    font-size: 11px;
-    display: block;
-    margin-bottom: 2px;
-    cursor: move;
-}
-
 /* the breadcrumb in treeNode fields */
 .fieldPreview {
     padding: 5px;
