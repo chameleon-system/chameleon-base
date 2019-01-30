@@ -22,7 +22,7 @@
             echo $oMenuItem->GetRightClickMenuItemHTML();
         }
         ?>
-        <li><a href="#" onclick="$('#cmscontentcontainer').unbind('contextmenu');$('#jqContextMenu').hide();"><img
+        <li><a href="#" onclick="$('#tableEditorContainer').unbind('contextmenu');$('#jqContextMenu').hide();"><img
             src="<?=URL_CMS; ?>/images/icons/application_form_delete.png" border="0"
             alt=""/><?=TGlobalBase::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.right_click_disable')); ?></a></li>
     </ul>
@@ -30,7 +30,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#cmscontentcontainer').contextMenu('rightClickMenuContainer', {
+        $('#tableEditorContainer').contextMenu('rightClickMenuContainer', {
 
             onContextMenu:function (e) {
                 if ($(e.target).attr('class') == 'contextMenuDisabled') return false;
