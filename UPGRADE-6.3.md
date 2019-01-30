@@ -298,14 +298,16 @@ is recommended (although this tool may not find database-related deprecations).
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
 - \MTTableManager::getAutocompleteRecordList()
 - \TCMSCronJob::getLogger()
+- \TCMSFieldColorPicker::isFirstInstance()
 - \TCMSFieldLookup::enableComboBox()
 - \TCMSLogChange::getUpdateLogger()
+- \TCMSRender::DrawBoxHeader()
+- \TCMSRender::DrawBoxFooter()
 - \TPkgCmsCoreSendToHost::setLogRequest()
 - \TPkgCmsException_Log::getLogger()
 - \TPkgCsv2Sql::CreateLogFileName()
 - \TPkgCsv2Sql::GetLogFile()
 - \TTools::AddStaticPageVariables()
-- \TCMSFieldColorPicker::isFirstInstance()
 
 ## JavaScript Files and Functions
 
