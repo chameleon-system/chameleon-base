@@ -129,7 +129,11 @@ class TCMSTableEditorMenuItem
             $html .= ' class="'.$this->sCSSClass.'"';
         }
 
-        $html .= '><img src="'.$this->sIcon.'" border="0" style="float: left; padding-right: 5px;" alt="" />'.$this->getTitle().'</a>';
+        if (true === $this->isIconUrl($this->sIcon)) {
+            $html .= '><img src="'.$this->sIcon.'" border="0" style="float: left; padding-right: 5px;" alt="" />'.$this->getTitle().'</a>';
+        } else {
+            $html .= '><i class="'.$this->sIcon.'"></i> '.$this->getTitle().'</a>';
+        }
 
         if (count($this->aSubMenuItems) > 0) {
             $html .= '<ul>';

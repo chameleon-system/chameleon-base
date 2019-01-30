@@ -1,16 +1,12 @@
 <div id="rightClickMenuContainer" style="display: none;">
     <ul>
-        <li class="firstnode haschildren"><a href="javascript:void(0);" class="haschildren"><img
-            src="<?=TGlobal::GetPathTheme(); ?>/images/icons/page_navigation.gif" border="0"
-            alt=""/><?=TGlobalBase::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_edit_navigation')); ?></a>
+        <li class="firstnode haschildren"><a href="javascript:void(0);" class="haschildren"><i class="fas fa-leaf"></i> <?=TGlobalBase::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_edit_navigation')); ?></a>
             <ul>
                 <?php
                 foreach ($data['breadcrumb'] as $histid => $item) {
                     ?>
                     <li><a href="#"
-                           onclick="document.location.href='<?=TGlobalBase::OutHTML($item['url']); ?>"><img
-                        src="<?=TGlobal::GetPathTheme(); ?>/images/icons/page_navigation.gif" border="0"
-                        alt=""/><?=$item['name']; ?></a></li>
+                           onclick="document.location.href='<?=TGlobalBase::OutHTML($item['url']); ?>"><i class="fas fa-leaf"></i> <?=$item['name']; ?></a></li>
                     <?php
                 }
                 ?>
@@ -22,9 +18,7 @@
             echo $oMenuItem->GetRightClickMenuItemHTML();
         }
         ?>
-        <li><a href="#" onclick="$('#tableEditorContainer').unbind('contextmenu');$('#jqContextMenu').hide();"><img
-            src="<?=URL_CMS; ?>/images/icons/application_form_delete.png" border="0"
-            alt=""/><?=TGlobalBase::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.right_click_disable')); ?></a></li>
+        <li><a href="#" onclick="$('#tableEditorContainer').unbind('contextmenu');$('#jqContextMenu').hide();"><i class="fas fa-toggle-off"></i> <?=TGlobalBase::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.right_click_disable')); ?></a></li>
     </ul>
     <div class="cleardiv">&nbsp;</div>
 </div>
