@@ -1,3 +1,8 @@
+<?php
+/**
+ * @deprecated since 6.3.0 - classic main menu will be removed in a future Chameleon release
+ */
+?>
 <div class="row">
 
     <div class="col-sm">
