@@ -731,11 +731,11 @@ CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle = function 
     chameleonMessageTypeName = chameleonMessageTypeName.toLowerCase();
 
     if ('error' === chameleonMessageTypeName) {
-        return 'danger'
+        return 'danger';
     }
 
     if ('message' === chameleonMessageTypeName) {
-        return 'success'
+        return 'success';
     }
 
     return chameleonMessageTypeName;
