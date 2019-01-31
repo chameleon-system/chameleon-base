@@ -52,14 +52,10 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->responseVariableReplacer = $responseVariableReplacer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function Accept(\IMapperVisitorRestricted $oVisitor, $bCachingEnabled, \IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Init()
     {
+        parent::Init();
         $this->restoreDisplayState();
-        $oVisitor->SetMappedValue('sidebarToggleNotificationUrl', $this->getSidebarToggleNotificationUrl());
-        $oVisitor->SetMappedValue('menuItems', $this->getMenuItems());
     }
 
     private function restoreDisplayState(): void
@@ -72,6 +68,20 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $value = '';
         }
         $this->responseVariableReplacer->addVariable('sidebarDisplayState', $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
+    {
+        $visitor->SetMappedValue('sidebarToggleNotificationUrl', $this->getSidebarToggleNotificationUrl());
+        $visitor->SetMappedValue('menuItems', $this->getMenuItems());
+
+        $cmsUser = \TCMSUser::GetActiveUser();
+        $cacheTriggerManager->addTrigger('cms_tbl_conf', null);
+        $cacheTriggerManager->addTrigger('cms_module', null);
+        $cacheTriggerManager->addTrigger('cms_user', null === $cmsUser ? null : $cmsUser->id);
     }
 
     private function getSidebarToggleNotificationUrl(): string
@@ -253,5 +263,29 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $session = $this->requestStack->getCurrentRequest()->getSession();
         $session->set(self::DISPLAY_STATE_SESSION_KEY, $displayState);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function _AllowCache()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function _GetCacheParameters()
+    {
+        $parameters = parent::_GetCacheParameters();
+
+        $cmsUser = \TCMSUser::GetActiveUser();
+        if (null !== $cmsUser) {
+            $parameters['cmsUserId'] = $cmsUser->id;
+            $parameters['backendLanguageId'] = $cmsUser->fieldCmsLanguageId;
+        }
+
+        return $parameters;
     }
 }

@@ -778,7 +778,7 @@ class TModelBase
                 if (true === _DEVELOPMENT_MODE) {
                     $response->setContent($errorMessage);
                 }
-                $this->getLogger()->warning($errorMessage);
+                $this->getLogger()->error($errorMessage);
 
                 return $response;
             }
