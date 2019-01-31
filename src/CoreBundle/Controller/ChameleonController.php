@@ -964,7 +964,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
             $moduleFunctionsGet = [];
         }
 
-        $moduleFunctions = \array_merge($moduleFunctions ?? [], $moduleFunctionsGet ?? []);
+        $moduleFunctions = \array_merge($moduleFunctions, $moduleFunctionsGet);
 
         return $moduleFunctions;
     }
