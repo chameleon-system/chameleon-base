@@ -11,6 +11,9 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
+/**
+ * @deprecated since 6.3.0 - no longer used
+ */
 class TCMSFieldMediaProperties extends TCMSFieldNumber
 {
     /** @var bool */

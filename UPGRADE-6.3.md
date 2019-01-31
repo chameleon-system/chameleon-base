@@ -295,6 +295,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \TCMSMenuItem_Module
 - \TCMSMenuItem_Table
 - \TPkgCmsCoreLog
+- \TCMSFieldMediaProperties
 - \TPkgSnippetRenderer_TranslationNode
 - \TPkgSnippetRenderer_TranslationTokenParser
 
