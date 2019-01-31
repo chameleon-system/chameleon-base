@@ -650,7 +650,7 @@ function markCheckboxes(fieldname) {
         }
     }
 
-    var elements = document.forms['cmseditform'].elements[fieldname + "[]"];
+    var elements = document.querySelectorAll('[name="cmseditform"] input[name^="' + fieldname + '"]');
     for (i = 0; i < elements.length; i++) {
         var element = elements[i];
         if (false === element.disabled) {
@@ -660,7 +660,7 @@ function markCheckboxes(fieldname) {
 }
 
 function invertCheckboxes(fieldname) {
-    var elements = document.forms['cmseditform'].elements[fieldname + "[]"];
+    var elements = document.querySelectorAll('[name="cmseditform"] input[name^="' + fieldname + '"]');
     for (i = 0; i < elements.length; i++) {
         var element = elements[i];
         if (false === element.disabled) {
