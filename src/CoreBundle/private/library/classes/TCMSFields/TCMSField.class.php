@@ -282,7 +282,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $edititem = TCMSRender::DrawButton(
             $translator->trans('chameleon_system_core.link.edit'),
             "javascript:{$openWindow}",
-            URL_CMS.'/images/icons/page_edit.gif'
+            'far fa-edit'
         );
         $edititem .= '<div class="cleardiv" style="margin-bottom: 10px;">&nbsp;</div>';
 

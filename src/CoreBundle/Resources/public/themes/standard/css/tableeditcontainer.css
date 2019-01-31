@@ -38,8 +38,11 @@
     margin-bottom:10px;
 }
 
-.cmsimagefielditemtitle img {
-    margin-left: 5px;
+.cmsimagefielditemtitle .btn {
+    padding: 0;
+    font-size: 1rem;
+    background: none;
+    border: none;
 }
 .SnippetmediaUploader {
     margin-top:10px;
@@ -95,7 +98,6 @@
     float: left;
     height: 20px;
     line-height: 18px;
-    padding-left: 20px;
     padding-top: 3px;
 }
 

@@ -56,7 +56,7 @@ $fieldName = $oGlobal->GetUserData('fieldName'); /* if called through a field, t
 </form>
 <?php if ($data['permission_new']) {
         ?>
-        <div class="btn-group1 row button-element p-2">
+        <div class="row button-element p-2">
                 <?php
                 $data['oMenuItems']->GoToStart();
         /** @var $oMenuItem TCMSTableEditorMenuItem */

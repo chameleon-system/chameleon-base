@@ -145,7 +145,7 @@ if ($bRevisionManagementActive) {
                     <tr class="evenrow">
                         <td class="leftTD">&nbsp;</td>
                         <td class="rightTD"><?php
-                            echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.record_revision.action_new_revision'), 'javascript:SaveNewRevision()', URL_CMS.'/images/icons/control_fastforward_blue.png'); ?>
+                            echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.record_revision.action_new_revision'), 'javascript:SaveNewRevision()', 'fas fa-plus'); ?>
                         </td>
                     </tr>
                 </table>

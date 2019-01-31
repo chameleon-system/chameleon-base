@@ -48,7 +48,7 @@ class TCMSRender
      *
      * @param string $title
      * @param string $link
-     * @param string $imgPath
+     * @param string $icon
      * @param string $linkClass
      * @param string $onMouseOver
      * @param string $id
@@ -57,7 +57,7 @@ class TCMSRender
      *
      * @return string
      */
-    public static function DrawButton($title = null, $link = null, $imgPath = null, $linkClass = null, $onMouseOver = null, $id = null, $onclick = null, $sTarget = null)
+    public static function DrawButton($title = null, $link = null, $icon = null, $linkClass = null, $onMouseOver = null, $id = null, $onclick = null, $sTarget = null)
     {
         $sTemplate = 'singleButton';
 
@@ -83,7 +83,12 @@ class TCMSRender
         $oViewRenderer->AddSourceObject('sTitle', $title);
         $oViewRenderer->AddSourceObject('sCSSClass', $linkClass);
         $oViewRenderer->AddSourceObject('sOnClick', $onclick);
-        $oViewRenderer->AddSourceObject('sIconURL', $imgPath);
+
+        if (strpos($icon, '/') > 0 || strpos($icon, '.') > 0) {
+            $oViewRenderer->AddSourceObject('sIconURL', $icon);
+        } else {
+            $oViewRenderer->AddSourceObject('sIcon', $icon);
+        }
         $oViewRenderer->AddSourceObject('sButtonStyle', 'btn-secondary');
         $oViewRenderer->AddSourceObject('onMouseOver', $onMouseOver);
         $oViewRenderer->AddSourceObject('cssID', $id);
