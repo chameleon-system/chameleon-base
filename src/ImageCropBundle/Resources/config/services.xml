@@ -1,0 +1,99 @@
+<?xml version="1.0" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="chameleon_system_image_crop.image_crop_preset_data_access"
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\DataAccess\ImageCropPresetDataAccess"/>
+
+        <service id="chameleon_system_image_crop.cms_media_data_access"
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\DataAccess\CmsMediaDataAccess"/>
+
+        <service id="chameleon_system_image_crop.image_crop_data_access"
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\DataAccess\ImageCropDataAccess">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_image_crop.image_crop_preset_data_access"/>
+            <argument type="service" id="chameleon_system_core.tools"/>
+            <argument type="service" id="chameleon_system_image_crop.cms_media_data_access"/>
+        </service>
+
+        <service id="chameleon_system_image_crop.crop_image_service"
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Service\CropImageService">
+            <argument type="service" id="chameleon_system_image_crop.cms_media_data_access"/>
+            <argument type="service" id="chameleon_system_image_crop.image_crop_preset_data_access"/>
+            <argument type="service" id="chameleon_system_image_crop.image_crop_data_access"/>
+        </service>
+
+        <service id="chameleon_system_image_crop.twig.crop_image"
+                 class="ChameleonSystem\ImageCropBundle\Twig\CropImageExtension">
+            <argument type="service" id="chameleon_system_image_crop.image_crop_preset_data_access"/>
+            <argument type="service" id="chameleon_system_image_crop.crop_image_service"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.request_info_service"/>
+            <tag name="twig.extension"/>
+        </service>
+
+        <service id="chameleon_system_image_crop.media_manager_usages.crop_image_fields_finder"
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\UsageFinder\ImageCropFieldsUsageFinder"
+                 parent="chameleon_system_media_manager.usages.abstract_image_fields_usage_finder"
+        >
+            <tag name="chameleon_system_media_manager.usage_finder"/>
+        </service>
+
+        <service id="chameleon_system_image_crop.media_manager_usages.crop_image_usage_delete_service"
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\UsageDeleteService\ImageCropUsageDeleteService">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.util.field_translation"/>
+            <tag name="chameleon_system_media_manager.usage_delete_service"/>
+        </service>
+
+        <service id="chameleon_system_image_crop.backend_module.image_crop"
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\BackendModule\ImageCropEditorModule"
+                 shared="false">
+            <argument type="service" id="chameleon_system_image_crop.image_crop_preset_data_access"/>
+            <argument type="service" id="chameleon_system_image_crop.cms_media_data_access"/>
+            <argument type="service" id="chameleon_system_image_crop.image_crop_data_access"/>
+            <argument type="service" id="chameleon_system_image_crop.crop_image_service"/>
+            <argument type="service" id="chameleon_system_core.util.url"/>
+            <argument type="service" id="chameleon_system_core.redirect"/>
+            <argument type="service" id="chameleon_system_core.util.input_filter"/>
+            <argument type="service" id="chameleon_system_core.translator"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.flash_messages"/>
+            <tag name="chameleon_system.module"/>
+        </service>
+
+        <service id="chameleon_system_image_crop.mapper.media_field_image_box_with_crop"
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Mapper\ImageCropMediaFieldImageBoxMapper">
+            <argument type="service" id="chameleon_system_core.media_manager.url_generator"/>
+        </service>
+
+        <service id="chameleon_system_image_crop.mapper.media_manager_media_item_crops"
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper\MediaManagerMediaItemCropsMapper">
+            <argument type="service" id="chameleon_system_image_crop.image_crop_data_access"/>
+            <argument type="service" id="chameleon_system_image_crop.cms_media_data_access"/>
+        </service>
+
+        <service id="chameleon_system_image_crop.mapper.media_manager_image_crop_editor_url"
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper\ImageCropEditorUrlMapper">
+            <argument type="service" id="chameleon_system_core.util.url"/>
+        </service>
+
+        <service id="chameleon_system_image_crop.mapper.media_manager_image_crop_access_rights"
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper\ImageCropAccessRightsMapper">
+            <argument type="service" id="chameleon_system_core.util.url"/>
+        </service>
+
+        <service id="chameleon_system_image_crop.media_manager_extension"
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Extension\MediaManagerImageCropExtension">
+            <tag name="chameleon_system_media_manager.extension"/>
+        </service>
+
+        <service id="chameleon_system_image_crop.mapper.usages_add_crops_mapper"
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper\MediaManagerMediaItemUsagesAddCropsMapper"/>
+
+    </services>
+</container>

@@ -1,0 +1,14 @@
+<div class="snippetImageCropImageCropEditorPresetList">
+    {% if presetList|length > 0 or customCropList|length > 0 %}
+        <ul>
+            {% for preset in presetList %}
+                <li{% if preset.active %} class="active"{% endif %}><a href="{{ preset.url }}">{{ preset.name }}</a>
+                </li>
+            {% endfor %}
+            {% for customCrop in customCropList %}
+                <li{% if customCrop.active %} class="active"{% endif %}><a
+                            href="{{ customCrop.url }}">{{ customCrop.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>

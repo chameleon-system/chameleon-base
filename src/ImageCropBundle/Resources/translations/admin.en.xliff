@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="admin.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_image_crop.editor.custom_crop_new">
+                <source>chameleon_system_image_crop.editor.custom_crop_new</source>
+                <target>Custom cutout: New</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.chosen_custom_crop">
+                <source>chameleon_system_image_crop.editor.chosen_custom_crop</source>
+                <target>Chosen custom cutout</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.edit_crop_window_title">
+                <source>chameleon_system_image_crop.editor.edit_crop_window_title</source>
+                <target>Cutout: %cropName%</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.save">
+                <source>chameleon_system_image_crop.editor.save</source>
+                <target>Save</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.crop_name_placeholder">
+                <source>chameleon_system_image_crop.editor.crop_name_placeholder</source>
+                <target>Enter name</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.field.edit_crop">
+                <source>chameleon_system_image_crop.field.edit_crop</source>
+                <target>Edit cutout</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.field.selected_crop">
+                <source>chameleon_system_image_crop.field.selected_crop</source>
+                <target>Selected cutout:</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.field.reset_crop">
+                <source>chameleon_system_image_crop.field.reset_crop</source>
+                <target>Reset cutout</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.crop_list_could_not_be_loaded">
+                <source>chameleon_system_image_crop.editor.crop_list_could_not_be_loaded</source>
+                <target>Cutouts could not be loaded.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.image_or_crop_not_found">
+                <source>chameleon_system_image_crop.editor.image_or_crop_not_found</source>
+                <target>Image or cutout not found.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.select">
+                <source>chameleon_system_image_crop.editor.select</source>
+                <target>Select</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.media_manager_crops.no_crops_yet">
+                <source>chameleon_system_image_crop.media_manager_crops.no_crops_yet</source>
+                <target>No cutouts yet.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.media_manager_crops.edit">
+                <source>chameleon_system_image_crop.media_manager_crops.edit</source>
+                <target>Edit cutout</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.media_manager_crops.create">
+                <source>chameleon_system_image_crop.media_manager_crops.create</source>
+                <target>Cutout</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.media_manager_crops.headline">
+                <source>chameleon_system_image_crop.media_manager_crops.headline</source>
+                <target>Cutouts</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>
