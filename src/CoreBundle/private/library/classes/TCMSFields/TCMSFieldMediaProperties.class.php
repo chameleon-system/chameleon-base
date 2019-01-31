@@ -12,7 +12,7 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
- * @deprecated since 6.3.0 - it is a very old mangling of a "number"
+ * @deprecated since 6.3.0 - no longer used
  */
 class TCMSFieldMediaProperties extends TCMSFieldNumber
 {
