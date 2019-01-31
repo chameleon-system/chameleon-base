@@ -3,6 +3,7 @@
     <?php $modules->GetModule('headerimage'); ?>
 </header>
 <div id="cmscontainer" class="app-body">
+    <?php $modules->GetModule('sidebar') ?>
     <main class="main" id="cmscontentcontainer">
         <?php $modules->GetModule('breadcrumb'); ?>
         <?php $modules->GetModule('templateengine'); ?>

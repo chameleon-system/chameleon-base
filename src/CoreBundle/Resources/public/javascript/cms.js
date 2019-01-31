@@ -452,9 +452,11 @@ function OpenModule(url, width, height) {
 
 /*
  * open standalone document manager popup
+ *
+ * @deprecated since 6.3.0 - use URL directly
  */
 function loadStandaloneDocumentManager() {
-    _standAloneDocumentManagerWindow = window.open('/cms?pagedef=CMSDocumentManager','documentManager','width=1200,height=800,resizable=yes,scrollbars=no');
+    window.location.href = '/cms?pagedef=CMSDocumentManagerFull';
 }
 
 $(document).ready(function () {

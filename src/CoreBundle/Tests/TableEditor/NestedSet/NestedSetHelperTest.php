@@ -188,7 +188,7 @@ class NestedSetHelperTest extends TestCase
     }
 
     /**
-     * @param $nodeName
+     * @param string $nodeName
      *
      * @return NestedSetHelperTestNodeMock
      */
@@ -205,7 +205,7 @@ class NestedSetHelperTest extends TestCase
         $node = $this->getNodeData($this->nodeName);
         $this->nestedSetHelper->deleteNode($node->getId());
 
-        // now we need to delete the node and all it's children
+        // Now we need to delete the node and all children
         $this->deleteRecursive($node->getId());
     }
 

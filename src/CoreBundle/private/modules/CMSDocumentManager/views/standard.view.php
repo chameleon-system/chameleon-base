@@ -1,5 +1,9 @@
 <?php
 
+if (false === isset($view)) {
+    $view = 'CMSDocumentManager/standard.html.twig';
+}
+
 $oViewRenderer = new ViewRenderer();
 $oViewRenderer->AddSourceObject('id', $id);
 $oViewRenderer->AddSourceObject('recordID', (false != $recordID) ? $recordID : (''));
@@ -16,6 +20,6 @@ $oViewRenderer->AddSourceObject('sStaticUrlToWebLibActionRefresh', TGlobal::GetS
 $oViewRenderer->AddSourceObject('CKEditorFuncNum', $CKEditorFuncNum);
 $oViewRenderer->AddSourceObject('pathCmsController', PATH_CMS_CONTROLLER);
 
-echo $oViewRenderer->Render('CMSDocumentManager/standard.html.twig');
+echo $oViewRenderer->Render($view);
 
 require_once dirname(__FILE__).'/includes/javascripts.inc.php';

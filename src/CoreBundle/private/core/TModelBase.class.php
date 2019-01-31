@@ -773,6 +773,15 @@ class TModelBase
             $sViewPathReference = &$this->viewTemplate;
         } else {
             $oModule = $this->getModuleObject($this->aModuleConfig['model'], 'classname');
+            if (null === $oModule) {
+                $errorMessage = sprintf('Error: Module "%s" not found', $this->aModuleConfig['model']);
+                if (true === _DEVELOPMENT_MODE) {
+                    $response->setContent($errorMessage);
+                }
+                $this->getLogger()->error($errorMessage);
+
+                return $response;
+            }
 
             $oRenderer->AddMapper($this);
             $oRenderer->AddSourceObject('instanceID', $this->instanceID);

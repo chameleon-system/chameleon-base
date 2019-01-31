@@ -142,6 +142,19 @@ monolog:
        level: warning
 ```
 
+## Backend Pagedef Configuration
+
+The backend now provides a new sidebar menu which will replace the classic main menu in a future version.
+If your project uses custom pagedef files (`*.pagedef.php`), consider adding the sidebar to these files. This is
+done by adding the following line after the module list definition:
+
+```php
+    addDefaultSidebar($moduleList);
+```
+
+There are additional helper methods to simplify adding typical backend modules, but it is optional to use these methods.
+See `src/CoreBundle/private/library/classes/pagedefFunctions.inc.php` for reference.
+
 ## Mailer Peer Security
 
 The default value of config key `chameleon_system_core: mailer: peer_security` was changed from "permissive" to "strict".
@@ -275,6 +288,12 @@ is recommended (although this tool may not find database-related deprecations).
 ## Classes and Interfaces
 
 - \IPkgCmsCoreLog
+- \MTMenuManager
+- \TCMSContentBox
+- \TCMSContentBoxItem
+- \TCMSMenuItem
+- \TCMSMenuItem_Module
+- \TCMSMenuItem_Table
 - \TPkgCmsCoreLog
 - \TPkgSnippetRenderer_TranslationNode
 - \TPkgSnippetRenderer_TranslationTokenParser
@@ -334,6 +353,9 @@ You should remove all width/height settings in CreateModalXY calls if it does no
 - $.jqM() (jqModal)
 - $.jqDnR() (part of jqModal)
 - $.addOption() (jquery.selectboxes plugin)
+- loadStandaloneDocumentManager
+- PublishViaAjaxCallback()
+- src/CoreBundle/Resources/public/javascript/mainNav.js
 
 ## jQueryUi
 
@@ -365,11 +387,11 @@ Deprecated is every jquery plugin in:
 
 ## Database Tables
 
-None.
+- cms_content_box
 
 ## Database Fields
 
-None.
+- cms_module.show_as_popup
 
 ## Backend Theme Library
 

@@ -13,6 +13,8 @@
  * holds a list of menus for the CMS (category boxes). the category boxes are split into
  * three columns (left, middle, and right). Use the property $sLocation to load
  * one of the menu columns.
+ *
+ * @deprecated since 6.3.0 - only used for deprecated classic main menu
 /**/
 class TCMSContentBox extends TAdbCmsContentBoxList
 {

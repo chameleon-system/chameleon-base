@@ -213,6 +213,7 @@ class TCMSPageDefinitionFile
         $pageLoaded = false;
         $file = $this->sPageDefPath.'/'.$sPagedef.'.pagedef.php';
         if (file_exists($file)) {
+            include_once __DIR__.'/pagedefFunctions.inc.php';
             include $file;
             if (isset($templateName)) {
                 $this->templateName = $templateName;

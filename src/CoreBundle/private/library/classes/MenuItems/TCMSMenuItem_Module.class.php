@@ -10,8 +10,10 @@
  */
 
 /**
- * a standard CMS Module.
-/**/
+ * A standard CMS Module.
+ *
+ * @deprecated since 6.3.0 - only used for deprecated classic main menu
+ */
 class TCMSMenuItem_Module extends TCMSMenuItem
 {
     /**

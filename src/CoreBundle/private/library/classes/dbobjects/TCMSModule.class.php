@@ -35,9 +35,6 @@ class TCMSModule extends TCMSRecord
             $url .= '&amp;_pagedefType='.$pagedefType;
         }
         $url = TGlobal::OutHTML($url).$urlParams;
-        if ('1' == $this->sqlData['show_as_popup']) {
-            $url = "javascript:CreateModalIFrameDialogCloseButton('{$url}',".TGlobal::OutHTML($this->sqlData['width']).','.TGlobal::OutHTML($this->sqlData['height']).');';
-        }
 
         return $url;
     }
