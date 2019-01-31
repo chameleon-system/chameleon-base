@@ -46,15 +46,15 @@
         },
         onSidebarToggle: function () {
             const url = this.$baseElement.data('toggle-notification-url');
-            let state;
+            let displayState;
             // The following condition is inverted, as this handler will be executed before the actual class change.
             if (document.body.classList.contains('sidebar-minimized')) {
-                state = 'shown';
+                displayState = 'shown';
             } else {
-                state = 'minimized';
+                displayState = 'minimized';
             }
             $.post(url, {
-                state: state
+                displayState: displayState
             });
         }
     });
