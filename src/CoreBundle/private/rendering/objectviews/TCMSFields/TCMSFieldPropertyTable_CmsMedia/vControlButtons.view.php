@@ -26,7 +26,7 @@ if (false != $oCategory->Load($oField->ConfigGetDefaultCategoryId()) || $oField-
     </div>
     <div class="form-group">
 <?php
-    echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_property_media.action_upload_and_assign'), 'javascript:'.$oField->_GetOpenUploadWindowJS(), URL_CMS.'/images/icons/add.png'); ?>
+    echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_property_media.action_upload_and_assign'), 'javascript:'.$oField->_GetOpenUploadWindowJS(), 'fas fa-file-upload'); ?>
     </div>
 <?php
 }

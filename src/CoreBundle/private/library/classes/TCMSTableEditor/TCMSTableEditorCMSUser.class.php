@@ -420,7 +420,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
 
         $oGlobal = TGlobal::instance();
 
-        $sSubmitButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.table_editor_cms_user.action_copy_permissions'), "javascript:$('#copyUserRightsForm').submit();", URL_CMS.'/images/icons/group_go.png');
+        $sSubmitButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.table_editor_cms_user.action_copy_permissions'), "javascript:$('#copyUserRightsForm').submit();", 'far fa-clone');
 
         $sDialogContent = '<div id="copyUserRightsDialog" style="display:none;">
       <h2>'.TGlobal::Translate('chameleon_system_core.table_editor_cms_user.select_source_user').'</h2>

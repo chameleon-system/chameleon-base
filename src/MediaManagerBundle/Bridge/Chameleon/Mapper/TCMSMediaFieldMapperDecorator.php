@@ -60,7 +60,7 @@ class TCMSMediaFieldMapperDecorator implements \IViewMapper
         $mediaManagerUrl = $this->mediaManagerUrlGenerator->getStandaloneMediaManagerUrl();
         $buttonTitle = $this->translator->trans('chameleon_system_core.link.open_media_manager');
 
-        return \TCMSRender::DrawButton($buttonTitle, $mediaManagerUrl, URL_CMS.'/images/icons/image.gif', null, null, null, null, '_blank');
+        return \TCMSRender::DrawButton($buttonTitle, $mediaManagerUrl, 'far fa-image', null, null, null, null, '_blank');
     }
 
     /**

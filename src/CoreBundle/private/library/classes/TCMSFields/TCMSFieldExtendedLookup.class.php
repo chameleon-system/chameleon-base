@@ -54,7 +54,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
 
         $oGlobal = TGlobal::instance();
         if ($this->bShowSwitchToRecord && $oGlobal->oUser->oAccessManager->HasNewPermission($sForeignTableName)) {
-            $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), 'javascript:'.$this->GoToRecordJS().';', URL_CMS.'/images/icons/page_edit.gif');
+            $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), 'javascript:'.$this->GoToRecordJS().';', 'far fa-edit');
         }
 
         return $sHTML;
@@ -115,9 +115,13 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         $oCmsTblConf = TdbCmsTblConf::GetNewInstance();
         $oCmsTblConf->LoadFromField('name', $sTableName);
 
-        $sHTML = '<div class="btn-group mt-1">';
-        $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.select_item'), 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf), URL_CMS.'/images/icons/box.gif', 'float-left');
-        $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:resetExtendedListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected'))."')", URL_CMS.'/images/icons/action_stop.gif', '');
+        $sHTML = '<div class="row button-element mt-1">';
+        $sHTML .= '<div class="button-item col-auto">';
+        $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.select_item'), 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf), 'far fa-check-circle', 'float-left');
+        $sHTML .= '</div>';
+        $sHTML .= '<div class="button-item col-auto">';
+        $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:resetExtendedListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected'))."')", 'far fa-times-circle', '');
+        $sHTML .= '</div>';
         $sHTML .= '</div>';
 
         return $sHTML;

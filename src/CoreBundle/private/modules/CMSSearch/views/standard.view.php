@@ -17,7 +17,7 @@
     </form>
 </div>
 
-<?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_cms_search.action_start_index'), 'javascript:document.searchbuildform.submit();', URL_CMS.'/images/icons/action_go.gif'); ?>
+<?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_cms_search.action_start_index'), 'javascript:document.searchbuildform.submit();', 'far fa-play-circle'); ?>
 <div class="cleardiv">&nbsp;</div>
 <div id="searchStatus" style="display: none;">
     <h2 id="searchStatusLoader"><img
