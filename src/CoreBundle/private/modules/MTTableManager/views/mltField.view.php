@@ -39,33 +39,40 @@ $sSortUrl = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($sortUrlParameters);
         <tr>
             <td>
                 <div style="padding-left: 2px;">
-                    <div class="btn-group">
+                    <div class="row button-element">
+                        <div class="button-item col-12 col-sm-6 col-md-4 col-lg-auto">
                             <?php
                             $oViewRenderer = new ViewRenderer();
                             $oViewRenderer->AddSourceObject('sTitle', TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.action_connect_records'));
                             $oViewRenderer->AddSourceObject('sItemKey', 'chooseItems');
                             $oViewRenderer->AddSourceObject('sCSSClass', 'btn btn-sm btn-success');
                             $oViewRenderer->AddSourceObject('sOnClick', "parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."',0,0,'".TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.action_connect_records')."');");
-                            $oViewRenderer->AddSourceObject('sIconURL', TGlobal::GetStaticURLToWebLib('/images/icons/link.png'));
+                            $oViewRenderer->AddSourceObject('sIcon', 'fas fa-link');
                             $oViewRenderer->AddSourceObject('sButtonStyle', '');
-                            echo $oViewRenderer->Render('MTTableEditor/singleButton.html.twig', null, false);
-
+                            echo $oViewRenderer->Render('MTTableEditor/singleMenuButton.html.twig', null, false);
+                            ?>
+                        </div>
+                            <?php
                             $data['oMenuItems']->GoToStart();
                             /** @var $oMenuItem TCMSTableEditorMenuItem */
                             while ($oMenuItem = $data['oMenuItems']->Next()) {
+                                echo '<div class="button-item col-12 col-sm-6 col-md-4 col-lg-auto">';
                                 echo $oMenuItem->GetMenuItemHTML();
+                                echo '</div>';
                             }
                             ?>
+                        <div class="button-item col-12 col-sm-6 col-md-4 col-lg-auto">
                             <?php if (!empty($data['bShowCustomSort'])) {
                                 $oViewRenderer = new ViewRenderer();
                                 $oViewRenderer->AddSourceObject('sTitle', TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.action_sort_connections'));
                                 $oViewRenderer->AddSourceObject('sItemKey', 'sortItems');
                                 $oViewRenderer->AddSourceObject('sCSSClass', 'btn btn-sm btn-info');
                                 $oViewRenderer->AddSourceObject('sOnClick', "parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sSortUrl)."',0,0,'".TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.action_sort_connections')."');");
-                                $oViewRenderer->AddSourceObject('sIconURL', TGlobal::GetStaticURLToWebLib('/images/icons/application_cascade.png'));
+                                $oViewRenderer->AddSourceObject('sIcon', 'fas fa-sort-amount-down');
                                 $oViewRenderer->AddSourceObject('sButtonStyle', '');
-                                echo $oViewRenderer->Render('MTTableEditor/singleButton.html.twig', null, false);
+                                echo $oViewRenderer->Render('MTTableEditor/singleMenuButton.html.twig', null, false);
                             } ?>
+                        </div>
                     </div>
                 </div>
             </td>

@@ -22,13 +22,13 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
       <span id="'.TGlobalBase::OutHTML($this->name).'posDummy"></span>';
         $html .= '<h1>'.TGlobal::Translate('chameleon_system_core.field_page_tree_node.primary_node').':</h1><div id="'.TGlobalBase::OutHTML($this->name).'_path">'.$sPath.'</div>';
         $html .= '<div class="cleardiv">&nbsp;</div>';
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_primary_node'), "javascript:loadTreeNodeSelection('".TGlobal::OutJS($this->name)."',document.cmseditform.".TGlobalBase::OutHTML($this->name).'.value);', URL_CMS.'/images/icons/page_navigation.gif');
+        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_primary_node'), "javascript:loadTreeNodeSelection('".TGlobal::OutJS($this->name)."',document.cmseditform.".TGlobalBase::OutHTML($this->name).'.value);', 'fas fa-check');
         $html .= '<div class="cleardiv">&nbsp;</div>';
 
         $html .= '<h1>'.TGlobal::Translate('chameleon_system_core.field_page_tree_node.secondary_nodes').':</h1><div id="'.TGlobalBase::OutHTML($this->name).'_additional_paths">'.$sAdditionalPaths.'</div>';
         $html .= '<div class="cleardiv">&nbsp;</div>';
 
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes'), 'javascript:openFullTree();', URL_CMS.'/images/icons/page_navigation.gif');
+        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes'), 'javascript:openFullTree();', 'fas fa-check-double');
         $html .= '<div class="cleardiv">&nbsp;</div>';
 
         return $html;
