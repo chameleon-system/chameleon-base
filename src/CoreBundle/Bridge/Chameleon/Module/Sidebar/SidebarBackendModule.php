@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
-    private const SIDEBAR_STATE_SESSION_KEY = 'chameleonSidebarBackendModuleState';
+    private const DISPLAY_STATE_SESSION_KEY = 'chameleonSidebarBackendModuleDisplayState';
 
     /**
      * @var LanguageServiceInterface
@@ -57,21 +57,21 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     public function Accept(\IMapperVisitorRestricted $oVisitor, $bCachingEnabled, \IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        $this->setSidebarState();
+        $this->restoreDisplayState();
         $oVisitor->SetMappedValue('sidebarToggleNotificationUrl', $this->getSidebarToggleNotificationUrl());
         $oVisitor->SetMappedValue('menuItems', $this->getMenuItems());
     }
 
-    private function setSidebarState(): void
+    private function restoreDisplayState(): void
     {
         $session = $this->requestStack->getCurrentRequest()->getSession();
-        $state = $session->get(self::SIDEBAR_STATE_SESSION_KEY, '');
-        if ('minimized' === $state) {
+        $displayState = $session->get(self::DISPLAY_STATE_SESSION_KEY, '');
+        if ('minimized' === $displayState) {
             $value = 'sidebar-minimized';
         } else {
             $value = '';
         }
-        $this->responseVariableReplacer->addVariable('sidebarState', $value);
+        $this->responseVariableReplacer->addVariable('sidebarDisplayState', $value);
     }
 
     private function getSidebarToggleNotificationUrl(): string
@@ -85,7 +85,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         return $this->urlUtil->getArrayAsUrl([
-            'pagedef' => 'tablemanager',
+            'pagedef' => 'main',
             'module_fnc' => [
                 $this->sModuleSpotName => 'ExecuteAjaxCall',
             ],
@@ -95,24 +95,24 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     private function getMenuItems(): array
     {
-        $activeLanguageId = $this->languageService->getActiveLanguageId();
         $activeUser = \TCMSUser::GetActiveUser();
         if (null === $activeUser) {
             return [];
         }
 
+        $activeLanguageId = $this->languageService->getActiveLanguageId();
         $menuItemsRaw = [];
         $this->addTableMenuItems($menuItemsRaw, $activeUser, $activeLanguageId);
         $this->addModuleMenuItems($menuItemsRaw, $activeUser, $activeLanguageId);
 
-        return $this->mergeMenuItems($menuItemsRaw);
+        return $this->createMenuCategories($menuItemsRaw);
     }
 
     private function addTableMenuItems(array &$aMenuItemsTemp, \TCMSUser $activeUser, string $activeLanguageId): void
     {
         $query = "SELECT * FROM `cms_tbl_conf` WHERE `cms_content_box_id` <> '' AND `cms_content_box_id` <> '0'";
         $tableList = \TdbCmsTblConfList::GetList($query, $activeLanguageId);
-        while ($tableObject = $tableList->Next()) {
+        while (false !== $tableObject = $tableList->Next()) {
             if (false === $this->isTableAccessAllowed($activeUser, $tableObject)) {
                 continue;
             }
@@ -129,11 +129,11 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     private function isTableAccessAllowed(\TCMSUser $activeUser, \TdbCmsTblConf $tableObject): bool
     {
-        $tableInUserGroup = $activeUser->oAccessManager->user->IsInGroups($tableObject->fieldCmsUsergroupId);
+        $isUserInTableUserGroup = $activeUser->oAccessManager->user->IsInGroups($tableObject->fieldCmsUsergroupId);
         $isEditAllowed = $activeUser->oAccessManager->HasEditPermission($tableObject->fieldName);
         $isShowAllReadonlyAllowed = $activeUser->oAccessManager->HasShowAllReadOnlyPermission($tableObject->fieldName);
 
-        return (true === $tableInUserGroup && (true === $isEditAllowed || true === $isShowAllReadonlyAllowed));
+        return (true === $isUserInTableUserGroup && (true === $isEditAllowed || true === $isShowAllReadonlyAllowed));
     }
 
     private function getTableTargetUrl(string $tableId): string
@@ -145,7 +145,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     {
         $query = "SELECT * FROM `cms_module` WHERE `active` = '1'";
         $cmsModuleList = \TdbCmsModuleList::GetList($query, $activeLanguageId);
-        while ($cmsModule = $cmsModuleList->Next()) {
+        while (false !== $cmsModule = $cmsModuleList->Next()) {
             if (false === $this->isModuleAccessAllowed($activeUser, $cmsModule)) {
                 continue;
             }
@@ -178,7 +178,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $url;
     }
 
-    private function mergeMenuItems(array $menuItemsRaw): array
+    private function createMenuCategories(array $menuItemsRaw): array
     {
         $categoryNames = $this->getCategoryNames();
         $menuItems = [];
@@ -246,12 +246,12 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     public function toggleSidebar(): void
     {
-        $state = $this->inputFilterUtil->getFilteredPostInput('state');
-        if (false === \in_array($state, ['minimized', 'shown'])) {
+        $displayState = $this->inputFilterUtil->getFilteredPostInput('displayState');
+        if (false === \in_array($displayState, ['minimized', 'shown'])) {
             return;
         }
 
         $session = $this->requestStack->getCurrentRequest()->getSession();
-        $session->set(self::SIDEBAR_STATE_SESSION_KEY, $state);
+        $session->set(self::DISPLAY_STATE_SESSION_KEY, $displayState);
     }
 }
