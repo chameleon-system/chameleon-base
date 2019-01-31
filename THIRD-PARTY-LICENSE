@@ -24,7 +24,6 @@ MIT License
 - LessPHP, modified by ESONO AG - http://leafo.net/lessphp/
 - SWFObject - https://github.com/swfobject/swfobject
 
-- Bootstrap - http://getbootstrap.com/
 - jQuery - http://jquery.com
 - jQuery UI - http://jqueryui.com
 - jQuery GoogleMapsV3OverviewControl plugin - https://github.com/drcoen/Google-Maps-API-V3-Overview-Control
@@ -47,18 +46,19 @@ MIT License
 - jQuery Tag Input modified by ESONO AG - http://roberto.open-lab.com/2010/02/10/a-delicious-javascript-tagging-input-field/
 - jQuery Wayfarer Tooltip plugin - http://www.wayfarerweb.com/wtooltip.php
 
+- Bootstrap - http://getbootstrap.com/
+- Cookie Consent https://cookieconsent.insites.com/
 - CoreUI - https://http://coreui.io
+- Cropper.js - https://github.com/fengyuanchen/cropperjs
+- HTML5 Shiv - https://github.com/afarkas/html5shiv
 - moment.js - https://github.com/moment/moment/
 - perfect-scrollbar - https://github.com/utatti/perfect-scrollbar/
-- Tempus Dominus - https://github.com/tempusdominus/bootstrap-4/
-
-- HTML5 Shiv - https://github.com/afarkas/html5shiv
 - pnotify - http://sciactive.com/pnotify/
 - Respond - https://github.com/scottjehl/Respond
 - RWD Images - https://github.com/stowball/jQuery-rwdImageMaps
-- Thickbox modified by ESONO AG - http://codylindley.com/thickbox/
 - SocialSharePrivacy - http://panzi.github.io/SocialSharePrivacy/
-- Cookie Consent https://cookieconsent.insites.com/
+- Tempus Dominus - https://github.com/tempusdominus/bootstrap-4/
+- Thickbox modified by ESONO AG - http://codylindley.com/thickbox/
 
 - Font Awesome - https://fontawesome.com/
 - Foundation Icon Font - https://github.com/zurb/foundation-icons
