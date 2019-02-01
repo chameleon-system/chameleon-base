@@ -8,12 +8,13 @@ class VersionHistoryOverlay {
     }
 
     init() {
-        this.injectButton(this.element)
+        const injectedElement = this.inject(this.element)
+        this.attach(injectedElement);
     }
 
     // Element Manipulation
 
-    injectButton(element) {
+    inject(element) {
         const parentElement = element.querySelector(".cke .cke_inner .cke_toolbox")
         if (!parentElement) {
             return
@@ -27,18 +28,35 @@ class VersionHistoryOverlay {
         const injectedElement = VersionHistoryElementProvider.element({
             enabled: this.attributes.fieldHasVersionHistory,
             title: this.attributes.fieldVersionHistoryTitle,
-            numberOfFieldVersions: this.attributes.fieldNumberOfFieldVersions,
-            historyViewUrl: this.attributes.fieldVersionHistoryViewUrl
+            numberOfFieldVersions: this.attributes.fieldNumberOfFieldVersions
         })
 
+        const elementReference = injectedElement.firstChild
         parentElement.insertBefore(injectedElement, firstLineElement.nextElementSibling)
+
+        return elementReference
+    }
+
+    attach(injectedElement) {
+        const anchorElement = injectedElement.querySelector("a.cke_button")
+        if (!anchorElement) {
+            return
+        }
+
+        anchorElement.addEventListener("click", event => {
+            this.overlay()
+        })
+    }
+
+    overlay() {
+        CreateModalIFrameDialogCloseButton(this.attributes.fieldVersionHistoryViewUrl , 0, 0)
     }
 
 }
 
 class VersionHistoryOverlayLoader {
 
-    attach() {
+    init() {
         const modules = []
 
         for (const element of this.elements) {
@@ -73,9 +91,9 @@ class VersionHistoryElementProvider {
         return fragment
     }
 
-    static elementInnerHTML({enabled, title, numberOfFieldVersions, historyViewUrl}) {
+    static elementInnerHTML({enabled, title, numberOfFieldVersions}) {
         return `<span class="cke_toolgroup" role="presentation">
-            <a id="cke_11" class="cke_button cke_button__version_history cke_button_off" href="${ historyViewUrl }" title="${ title }" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_11_label" aria-describedby="cke_11_description" aria-haspopup="false" ${ !enabled ? "disabled" : "" }>
+            <a id="cke_11" class="cke_button cke_button__version_history cke_button_off" href="#" title="${ title }" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_11_label" aria-describedby="cke_11_description" aria-haspopup="false" ${ !enabled ? "disabled" : "" }>
                 <!--<span class="cke_button_icon cke_button__source_icon" style="background-image: url('/chameleon/blackbox/components/versionHistory/restore.svg');">&nbsp;</span>-->
                 <span id="cke_11_label" class="cke_button_label cke_button__source_label" aria-hidden="false">${ title } (${ numberOfFieldVersions })</span>
                 <span id="cke_11_description" class="cke_button_label" aria-hidden="false"></span>
@@ -88,6 +106,6 @@ class VersionHistoryElementProvider {
 (() => {
     document.addEventListener("DOMContentLoaded", event => {
         const loader = new VersionHistoryOverlayLoader()
-        const modules = loader.attach()
+        const modules = loader.init()
     })
 })()
