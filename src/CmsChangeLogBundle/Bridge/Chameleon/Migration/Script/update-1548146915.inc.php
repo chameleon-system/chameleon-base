@@ -59,7 +59,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'en')
         'version_history' => '1',
     ])
     ->setWhereEquals([
-        'id' => '42',
+        'constname' => 'CMSFIELD_WYSIWYG',
     ]);
 TCMSLogChange::update(__LINE__, $data);
 
