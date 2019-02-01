@@ -549,6 +549,10 @@
                 }
             });
 
+            $('[data-select2-option]').each(function () {
+                $(this).select2($(this).data('select2-option'));
+            });
+
             self.handleAutoCompleteOnSearchFields();
 
         },

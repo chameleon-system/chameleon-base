@@ -2,77 +2,121 @@
 {# listState \ChameleonSystem\MediaManager\MediaManagerListState #}
 {# accessRightsMedia \ChameleonSystem\MediaManager\AccessRightsModel #}
 {# accessRightsMediaTree \ChameleonSystem\MediaManager\AccessRightsModel #}
-<div class="snippetMediaManagerListHeader cancel-unselect">
-    <div class="top-bar">
-        <h2 class="h3 headline">{{ mediaTreeNode.name | default('chameleon_system_media_manager.tree.untitled_tree_item_placeholder' | trans) }}
-            {% if accessRightsMediaTree.edit %}
-                <a href="{{ mediaTreeNodeEditUrl }}" class="edit-media-tree-node" data-id="{{ mediaTreeNode.id }}"><span
-                            class="glyphicon glyphicon-cog"></span></a>
-            {% endif %}
-        </h2>
-        <div class="subtree-options checkbox">
-            <label>
-                <input type="checkbox"
-                       class="show-subtree"{% if listState.showSubtree == '1' %} checked{% endif %}> {{ 'chameleon_system_media_manager.list.show_images_from_subtree' | trans }}
-            </label>
+<div class="snippetMediaManagerListHeader cancel-unselect mt-2 mb-2">
+    <div class="row top-bar">
+        <div class="col-12">
+            <h2 class="h3 headline">{{ mediaTreeNode.name | default('chameleon_system_media_manager.tree.untitled_tree_item_placeholder' | trans) }}
+                {% if accessRightsMediaTree.edit %}
+                    <a href="{{ mediaTreeNodeEditUrl }}" class="edit-media-tree-node" data-id="{{ mediaTreeNode.id }}">
+                        <i class="fas fa-cog"></i>
+                    </a>
+                {% endif %}
+            </h2>
         </div>
-        {% if accessRightsMedia.delete %}
-            <div class="delete-with-usage-search-option checkbox">
-                <label>
-                    <input type="checkbox"
-                           class="delete-with-usage-search"{% if listState.deleteWithUsageSearch == '1' %} checked{% endif %}> {{ 'chameleon_system_media_manager.list.delete_with_usage_search' | trans }}
-                </label>
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 col-lg-6">
+                    <div class="d-flex align-items-center">
+                        <label class="switch switch-sm switch-label switch-pill switch-success mb-0 mr-2">
+                            <input type="checkbox" class="switch-input show-subtree" {% if listState.showSubtree == '1' %} checked{% endif %}>
+                            <span class="switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                        </label>
+                        <div>
+                            {{ 'chameleon_system_media_manager.list.show_images_from_subtree' | trans }}
+                        </div>
+                    </div>
+                    {% if accessRightsMedia.delete %}
+                        <div class="d-flex align-items-center mt-1">
+                            <label class="switch switch-sm switch-label switch-pill switch-success mb-0 mr-2">
+                                <input type="checkbox" class="switch-input delete-with-usage-search"{% if listState.deleteWithUsageSearch == '1' %} checked{% endif %}>
+                                <span class="switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                            </label>
+                            <div>
+                                {{ 'chameleon_system_media_manager.list.delete_with_usage_search' | trans }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-12 col-lg-6">
+                    <form class="search-box mt-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control search-category autocomplete-search form-control-sm"
+                                   value="{{ listState.searchTerm }}"
+                                   placeholder="{{ 'chameleon_system_media_manager.list.search_in_tree_node_placeholder' | trans({'%treeNodeName%': mediaTreeNode.name}) }}"
+                                   data-target="search-category-auto-complete">
+                            <span class="input-group-append">
+                        <button type="submit" class="btn btn-sm btn-secondary search-button"><span class="glyphicon glyphicon-search"></span></button>
+                    </span>
+                            <div id="search-category-auto-complete"></div>
+                        </div>
+                    </form>
+                </div>
             </div>
-        {% endif %}
-        {% if sortColumns | length > 0 %}
-            <select name="sort-order" class="sort-order" class="form-control form-control-sm">
-                <option>{{ 'chameleon_system_media_manager.sort.choose' | trans }}</option>
-                {% for sortColumn in sortColumns %}
-                    {# sortColumn \ChameleonSystem\MediaManager\Interfaces\SortColumnInterface #}
-                    {% set transName = 'chameleon_system_media_manager.sort.' ~ sortColumn.systemName %}
-                    <option value="{{ sortColumn.systemName | e('html_attr') }}"{% if sortColumn.systemName == listState.sortColumn %} selected{% endif %}>{{ transName | trans }}</option>
-                {% endfor %}
-            </select>
-        {% endif %}
-
+        </div>
     </div>
-    <div class="action-bar">
-        <form class="search-box">
-            <input type="text" class="form-control search-category autocomplete-search form-control-sm"
-                   value="{{ listState.searchTerm }}"
-                   placeholder="{{ 'chameleon_system_media_manager.list.search_in_tree_node_placeholder' | trans({'%treeNodeName%': mediaTreeNode.name}) }}"
-                   data-target="search-category-auto-complete">
-            <button type="submit" class="search-button"><span class="glyphicon glyphicon-search"></span></button>
-            <div id="search-category-auto-complete"></div>
-        </form>
-        {% if accessRightsMedia.new %}
-            <a class="upload" data-id="{{ mediaTreeNode.id }}"><span
-                        class="glyphicon glyphicon-upload"></span> {{ 'chameleon_system_media_manager.list.upload' | trans }}
-            </a>
-        {% endif %}
-        {% if accessRightsMedia.delete %}
-            <a class="delete"><span
-                        class="glyphicon glyphicon-remove"></span> {{ 'chameleon_system_media_manager.list.delete_selected' | trans }}
-            </a>
-        {% endif %}
-        <a class="select-all"><span
-                    class="glyphicon glyphicon-check"></span> {{ 'chameleon_system_media_manager.list.select_all' | trans }}
-        </a>
+    <div class="row mt-2 justify-content-end">
+        <div class="col-12 col-lg-6">
+            {% set selectOptions -%}
+                {"placeholder": "{{ 'chameleon_system_media_manager.sort.choose' | trans }}", "width": "100%" }
+            {%- endset %}
+            {% if sortColumns | length > 0 %}
+                <select name="sort-order" class="sort-order form-control form-control-sm" data-select2-option='{{ selectOptions }}'>
+                    {% for sortColumn in sortColumns %}
+                        {# sortColumn \ChameleonSystem\MediaManager\Interfaces\SortColumnInterface #}
+                        {% set transName = 'chameleon_system_media_manager.sort.' ~ sortColumn.systemName %}
+                        <option value="{{ sortColumn.systemName | e('html_attr') }}"{% if sortColumn.systemName == listState.sortColumn %} selected{% endif %}>{{ transName | trans }}</option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+        </div>
     </div>
-    <div class="list-view-selector">
-        <a class="list-view grid{% if listState.listView == 'grid' %} active{% endif %}" data-view="grid"><span
-                    class="glyphicon glyphicon-th"></span></a>
-        <a class="list-view grid-large{% if listState.listView == 'gridLarge' %} active{% endif %}"
-           data-view="gridLarge"><span class="glyphicon glyphicon-th-large"></span></a>
-        <a class="list-view list{% if listState.listView == 'list' %} active{% endif %}" data-view="list"><span
-                    class="glyphicon glyphicon-th-list"></span></a>
-        {#
-            Deactivated as the list is always displayed empty and is therefore of no use.
-            See https://github.com/chameleon-system/chameleon-system/issues/3
-            and https://github.com/chameleon-system/chameleon-system/issues/28
-        #}
-        {#<a class="list-view list{% if listState.listView == 'tableList' %} active{% endif %}"
-           data-view="tableList"><span
-                    class="glyphicon glyphicon-list-alt"></span></a>#}
+    <div class="row align-items-center">
+        <div class="action-bar col-12 mt-2 col-md-9 order-md-2">
+            <div class="d-flex flex-column flex-md-row justify-content-end">
+                <div class="mr-2">
+                    <a class="select-all">
+                        <i class="far fa-check-square mr-1"></i>
+                        {{ 'chameleon_system_media_manager.list.select_all' | trans }}
+                    </a>
+                </div>
+                {% if accessRightsMedia.delete %}
+                    <div class="mr-2">
+                        <a class="delete">
+                            <i class="far fa-trash-alt mr-1"></i>
+                            {{ 'chameleon_system_media_manager.list.delete_selected' | trans }}
+                        </a>
+                    </div>
+                {% endif %}
+                {% if accessRightsMedia.new %}
+                    <div class="">
+                        <a class="upload" data-id="{{ mediaTreeNode.id }}">
+                            <i class="fas fa-upload mr-1"></i>
+                            {{ 'chameleon_system_media_manager.list.upload' | trans }}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-12 mt-2 col-md-3 order-md-1">
+            <div class="list-view-selector ml-1 ml-md-0">
+                <a class="list-view grid{% if listState.listView == 'grid' %} active{% endif %}" data-view="grid">
+                    <i class="fas fa-th"></i>
+                </a>
+                <a class="list-view grid-large{% if listState.listView == 'gridLarge' %} active{% endif %}" data-view="gridLarge">
+                    <i class="fas fa-th-large"></i>
+                </a>
+                <a class="list-view list{% if listState.listView == 'list' %} active{% endif %}" data-view="list">
+                    <i class="fas fa-th-list"></i>
+                </a>
+                {#
+                    Deactivated as the list is always displayed empty and is therefore of no use.
+                    See https://github.com/chameleon-system/chameleon-system/issues/3
+                    and https://github.com/chameleon-system/chameleon-system/issues/28
+                #}
+                {#<a class="list-view list{% if listState.listView == 'tableList' %} active{% endif %}"
+                   data-view="tableList"><span
+                            class="glyphicon glyphicon-list-alt"></span></a>#}
+            </div>
+        </div>
     </div>
 </div>

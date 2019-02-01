@@ -1,54 +1,54 @@
 {# accessRightsMedia \ChameleonSystem\MediaManager\AccessRightsModel #}
-<div class="snippetMediaManagerListList">
-    <table class="table table-sm">
-        <thead class="">
-        <tr>
-            <th colspan="2">{{ 'chameleon_system_media_manager.list.table_header_image' | trans }}</th>
-            <th>{{ 'chameleon_system_media_manager.list.table_header_name' | trans }}</th>
-            <th>{{ 'chameleon_system_media_manager.list.table_header_tags' | trans }}</th>
-            <th>{{ 'chameleon_system_media_manager.list.table_header_info' | trans }}</th>
-            <th class="actions">{{ 'chameleon_system_media_manager.list.table_header_actions' | trans }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% set mediaItems = listResult.items %}
-        {% for mediaItem in mediaItems %}
-            {# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
-            <tr class="cms-media-item" data-id="{{ mediaItem.id }}" data-name="{{ mediaItem.name }}">
-                <td class="selection-box">
-                    <input type="checkbox" class="select-row">
-                </td>
-                <td class="image">
-                    <div class="image-col">
-                        <div class="image-container">
-                            <img src="{{ mediaItem.id | cmsthumb(500, 100) }}" alt="">
-                        </div>
+<div class="snippetMediaManagerListList mb-4">
+    <div class="row list-header pt-2 pb-2">
+        <div class="col-1"></div>
+        <div class="col-2">{{ 'chameleon_system_media_manager.list.table_header_image' | trans }}</div>
+        <div class="col-2">{{ 'chameleon_system_media_manager.list.table_header_name' | trans }}</div>
+        <div class="col-2">{{ 'chameleon_system_media_manager.list.table_header_tags' | trans }}</div>
+        <div class="col-4">{{ 'chameleon_system_media_manager.list.table_header_info' | trans }}</div>
+        <div class="col-1 actions">{{ 'chameleon_system_media_manager.list.table_header_actions' | trans }}</div>
+    </div>
+
+    {% set mediaItems = listResult.items %}
+    {% for mediaItem in mediaItems %}
+        {# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
+        <div class="row pt-2 pb-2 cms-media-item" data-id="{{ mediaItem.id }}" data-name="{{ mediaItem.name }}">
+            <div class="col-1 selection-box">
+                <label class="switch switch-sm switch-label switch-pill switch-secondary">
+                    <input class="switch-input select-row" type="checkbox">
+                    <span class="switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                </label>
+            </div>
+            <div class="col-2 image">
+                <div class="image-col">
+                    <div class="image-container">
+                        <img src="{{ mediaItem.id | cmsthumb(500, 100) }}" alt="">
                     </div>
-                </td>
-                <td>
-                    <div class="caption{% if accessRightsMedia.edit %} editable{% endif %}"
-                         data-type="description">{{ mediaItem.name }}</div>
-                </td>
-                <td>
-                    <span class="glyphicon glyphicon-tag"></span>
-                    <div class="tags{% if accessRightsMedia.edit %} editable{% endif %}"
-                         data-type="tags">{{ mediaItem.tags | join(', ') }}</div>
-                </td>
-                <td class="info">
-                    {% if mediaItem.type|lower in ['jpg', 'png', 'gif'] %}<img
-                        src="/chameleon/blackbox/images/filetype_icons/16x16/{{ mediaItem.type|lower }}.png"
-                        alt="">{% endif %} {{ mediaItem.type }}<br>
-                    <span class="glyphicon glyphicon-resize-full"></span> {{ mediaItem.width }} x {{ mediaItem.height }}
-                    px<br>
-                    <span class="glyphicon glyphicon-info-sign"></span> ID {{ mediaItem.id }}
-                    {% if mediaItem.dateChanged %}<br><span
-                            class="glyphicon glyphicon-time"></span> {{ 'chameleon_system_media_manager.changed_date' | trans }} {{ mediaItem.dateChanged | date('d.m.Y H:i:s') }}{% endif %}
-                </td>
-                <td>
-                    {% include('mediaManager/list/actions.html.twig') with {'mediaItem': mediaItem, 'pickImageMode': pickImageMode, 'pickImageCallback': pickImageCallback, 'pickImageWithCrop': pickImageWithCrop, 'accessRightsMedia': accessRightsMedia} %}
-                </td>
-            </tr>
-        </tbody>
-        {% endfor %}
-    </table>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="caption{% if accessRightsMedia.edit %} editable{% endif %}" data-type="description">
+                    {{ mediaItem.name }}
+                </div>
+            </div>
+            <div class="col-2 tags">
+                <span class="glyphicon glyphicon-tag"></span>
+                <div class="tags{% if accessRightsMedia.edit %} editable{% endif %}"
+                     data-type="tags">{{ mediaItem.tags | join(', ') }}</div>
+            </div>
+            <div class="col-4 info">
+                {% if mediaItem.type|lower in ['jpg', 'png', 'gif'] %}<img
+                    src="/chameleon/blackbox/images/filetype_icons/16x16/{{ mediaItem.type|lower }}.png"
+                    alt="">{% endif %} {{ mediaItem.type }}<br>
+                <span class="glyphicon glyphicon-resize-full"></span> {{ mediaItem.width }} x {{ mediaItem.height }}
+                px<br>
+                <span class="glyphicon glyphicon-info-sign"></span> ID {{ mediaItem.id }}
+                {% if mediaItem.dateChanged %}<br><span
+                        class="glyphicon glyphicon-time"></span> {{ 'chameleon_system_media_manager.changed_date' | trans }} {{ mediaItem.dateChanged | date('d.m.Y H:i:s') }}{% endif %}
+            </div>
+            <div class="col-1">
+                {% include('mediaManager/list/actions.html.twig') with {'mediaItem': mediaItem, 'pickImageMode': pickImageMode, 'pickImageCallback': pickImageCallback, 'pickImageWithCrop': pickImageWithCrop, 'accessRightsMedia': accessRightsMedia} %}
+            </div>
+        </div>
+    {% endfor %}
 </div>

@@ -1,13 +1,3 @@
-.checkbox,
-.radio {
-    padding: 0 !important;
-    margin: 10px 0 !important;
-    line-height: 20px !important;
-    font-size: 14px !important;
-    border: 0 !important;
-    display: block !important;
-    min-height: 0 !important;
-}
 
 .snippetMediaManagerBackendModuleStandard {
     background: #fff;
@@ -109,86 +99,19 @@
     min-height: 500px;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader {
-    margin-bottom: 20px;
-    padding: 0 15px 0 5px;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .top-bar {
-    margin-top: 10px;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .top-bar .headline {
-    margin-top: 0;
-    float: left;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .top-bar .headline .glyphicon {
-    font-size: 16px;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .top-bar .subtree-options {
-    float: right;
-    margin-top: 0 !important;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .top-bar .delete-with-usage-search-option {
-    float: right;
-    margin-top: 0 !important;
-    margin-right: 20px !important;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .top-bar:after {
-    content: " ";
-    clear: both;
-    display: block;
-    visibility: hidden;
-    height: 0;
-    line-height: 0;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .action-bar {
-    float: left;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .action-bar .search-box {
-    display: inline-block;
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .top-bar .headline i {
     position: relative;
-    width: 240px;
+    top: -5px;
+    font-size: 1rem;
+
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .action-bar .search-box input {
-    padding-right: 24px;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .action-bar .search-box .search-button {
-    position: absolute;
-    top: 7px;
-    right: 0;
-    border: medium none;
-    background: none;
-    font-size: 14px;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .action-bar > a {
-    font-size: 16px;
-    display: inline-block;
-    margin-left: 15px;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .action-bar > a .glyphicon {
-    font-size: 14px;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .action-bar > a.delete .glyphicon {
-    color: #cc0000;
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .top-bar .switch .switch-slider {
+    width: 40px;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .list-view-selector {
-    float: right;
-    font-size: 16px;
+    font-size: 20px;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .list-view-selector .list-view {
@@ -204,24 +127,13 @@
     color: #000;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader:after {
-    content: " ";
-    clear: both;
-    display: block;
-    visibility: hidden;
-    height: 0;
-    line-height: 0;
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .action-bar a {
+    cursor: pointer;
+    color: #555;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .sort-order {
-    float: right;
-    border: 1px solid #ccc;
-    background: #fff;
-    height: 28px;
-    line-height: 28px;
-    margin-right: 20px;
-    position: relative;
-    top: -3px;
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListHeader .action-bar a:hover {
+    color: #000;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid {
@@ -369,8 +281,18 @@
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList {
-    padding-bottom: 10px;
-    padding-right: 15px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .list-header {
+    border-top: 2px solid #8b8b8b;
+    border-bottom: 2px solid #8b8b8b;
+    font-weight: bold;
+}
+
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .cms-media-item {
+    border-bottom: 1px solid #8b8b8b;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .xselectable-selected {
@@ -378,8 +300,7 @@
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .caption {
-    font-size: 14px;
-    line-height: 1.4;
+    font-weight: bold;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .caption form input {
@@ -412,33 +333,6 @@
     line-height: 0;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table {
-    width: 100%;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table td {
-    font-size: 14px;
-    line-height: 1.4;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table td div {
-    font-size: 14px;
-    line-height: 1.4;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table tr th {
-    padding-bottom: 7px;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table tr th:first-child {
-    padding-left: 7px;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table td.image,
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table th.image {
-    width: 20%;
-}
-
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table td.selection-box,
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table th.selection-box {
     padding-left: 15px;
@@ -465,11 +359,11 @@
     margin-right: 7px;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table .tags {
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .tags {
     display: inline-block;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table .tags .glyphicon {
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .tags .glyphicon {
     margin-right: 1px;
     position: relative;
     top: 2px;
