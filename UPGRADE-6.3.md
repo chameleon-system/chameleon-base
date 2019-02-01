@@ -155,6 +155,28 @@ done by adding the following line after the module list definition:
 There are additional helper methods to simplify adding typical backend modules, but it is optional to use these methods.
 See `src/CoreBundle/private/library/classes/pagedefFunctions.inc.php` for reference.
 
+## New ImageCropBundle
+
+Chameleon now ships with a bundle that provides support for image cutouts. Install it as follows (this is required if
+the ChameleonShopThemeBundle is used, otherwise this step is optional):
+
+- Add `new \ChameleonSystem\ImageCropBundle\ChameleonSystemImageCropBundle()` to the AppKernel.
+- In a terminal, navigate to `<project root>/src/extensions/snippets-cms/` and create a symlink:
+
+  ```bash
+  ln -s ../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/snippets-cms/imageCrop
+  ```
+
+- Navigate to `<project root>/src/extensions/objectviews/TCMSFields` (create directory if it doesn't exist yet and
+  create a symlink:
+  ```bash
+  ln -s ../../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/objectviews/TCMSFields/TCMSFieldMediaWithImageCrop
+  ```
+
+- Run updates in the Chameleon backend.
+- Run assets:install console command.
+- Clear Symfony cache.
+
 ## Mailer Peer Security
 
 The default value of config key `chameleon_system_core: mailer: peer_security` was changed from "permissive" to "strict".

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="admin.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_image_crop.editor.custom_crop_new">
+                <source>chameleon_system_image_crop.editor.custom_crop_new</source>
+                <target>Eigener Ausschnitt: Neu</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.chosen_custom_crop">
+                <source>chameleon_system_image_crop.editor.chosen_custom_crop</source>
+                <target>Gewählter eigener Ausschnitt</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.edit_crop_window_title">
+                <source>chameleon_system_image_crop.editor.edit_crop_window_title</source>
+                <target>Bildausschnitt: %cropName%</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.save">
+                <source>chameleon_system_image_crop.editor.save</source>
+                <target>Speichern</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.crop_name_placeholder">
+                <source>chameleon_system_image_crop.editor.crop_name_placeholder</source>
+                <target>Name vergeben</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.field.edit_crop">
+                <source>chameleon_system_image_crop.field.edit_crop</source>
+                <target>Bild-Ausschnitt anpassen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.field.selected_crop">
+                <source>chameleon_system_image_crop.field.selected_crop</source>
+                <target>Gewählter Ausschnitt:</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.field.reset_crop">
+                <source>chameleon_system_image_crop.field.reset_crop</source>
+                <target>Ausschnitt zurücksetzen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.crop_list_could_not_be_loaded">
+                <source>chameleon_system_image_crop.editor.crop_list_could_not_be_loaded</source>
+                <target>Ausschnitte konnten nicht geladen werden.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.image_or_crop_not_found">
+                <source>chameleon_system_image_crop.editor.image_or_crop_not_found</source>
+                <target>Bild oder Bildausschnitt nicht gefunden.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.select">
+                <source>chameleon_system_image_crop.editor.select</source>
+                <target>Auswählen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.media_manager_crops.no_crops_yet">
+                <source>chameleon_system_image_crop.media_manager_crops.no_crops_yet</source>
+                <target>Noch keine Ausschnitte vorhanden.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.media_manager_crops.edit">
+                <source>chameleon_system_image_crop.media_manager_crops.edit</source>
+                <target>Ausschnitt anpassen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.media_manager_crops.create">
+                <source>chameleon_system_image_crop.media_manager_crops.create</source>
+                <target>Ausschnitt</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.media_manager_crops.headline">
+                <source>chameleon_system_image_crop.media_manager_crops.headline</source>
+                <target>Ausschnitte</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
