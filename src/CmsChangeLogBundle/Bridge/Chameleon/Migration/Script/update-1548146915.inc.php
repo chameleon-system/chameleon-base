@@ -8,10 +8,12 @@
 
 // Establish version history boolean field to field type table configuration.
 
+$fieldConfigurationId = TCMSLogChange::createUnusedRecordId('cms_field_conf');
+
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields([
         'name' => 'version_history',
-        'translation' => 'Versionshistorie',
+        'translation' => 'Version History',
         'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_BOOLEAN'),
         'cms_tbl_field_tab' => '',
         'isrequired' => '0',
@@ -23,16 +25,26 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
         'restrict_to_groups' => '0',
         'field_width' => '0',
         'position' => '2175',
-        '049_helptext' => 'Erlaubt bei aktivierter Versionierung der Tabelle die Auflistung und Wiederherstellung bisheriger Versionen des Feldwerts.',
+        '049_helptext' => "With enabled versioning, allows listing and restoring previous revisions of the field's value.",
         'row_hexcolor' => '',
         'is_translatable' => '0',
         'validation_regex' => '',
         'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_field_type'),
         'fieldclass_subtype' => '',
         'class_type' => 'Core',
-        'id' => '84003022-e235-caf6-81ba-4fca4f2a95ed',
+        'id' => $fieldConfigurationId,
     ]);
 TCMSLogChange::insert(__LINE__, $data);
+
+$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
+    ->setFields([
+        'name' => 'version_history',
+        'translation' => 'Versionshistorie',
+        '049_helptext' => 'Erlaubt bei aktivierter Versionierung der Tabelle die Auflistung und Wiederherstellung bisheriger Versionen des Feldwerts.', '',
+    ])->setWhereEquals([
+        'id' => $fieldConfigurationId
+    ]);
+TCMSLogChange::update(__LINE__, $data);
 
 $query = "ALTER TABLE `cms_field_type`
                         ADD `version_history` ENUM('0','1') DEFAULT '0' NOT NULL COMMENT 'Versionshistorie: Erlaubt bei aktivierter Versionierung der Tabelle die Auflistung und Wiederherstellung bisheriger Versionen des Feldwerts.'";
@@ -50,7 +62,17 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
         '049_helptext' => 'If table versioning is enabled, allows listing and restoration of previous versions of a field\'s value.',
     ])
     ->setWhereEquals([
-        'id' => '84003022-e235-caf6-81ba-4fca4f2a95ed',
+        'id' => $fieldConfigurationId,
+    ]);
+TCMSLogChange::update(__LINE__, $data);
+
+$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
+    ->setFields([
+        'translation' => 'Versionshistorie',
+        '049_helptext' => 'Erlaubt die Auflistung und Wiederherstellung von vorherigen Revisionen des Feldwertes, wenn Tabellenversionierung aktiviert ist.',
+    ])
+    ->setWhereEquals([
+        'id' => $fieldConfigurationId,
     ]);
 TCMSLogChange::update(__LINE__, $data);
 
