@@ -25,7 +25,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
         'restrict_to_groups' => '0',
         'field_width' => '0',
         'position' => '0',
-        '049_helptext' => "With enabled versioning, allows listing and restoring previous revisions of the field's value.",
+        '049_helptext' => "Allows listing and restoring previous revisions of the field's value if table versioning is enabled",
         'row_hexcolor' => '',
         'is_translatable' => '0',
         'validation_regex' => '',
@@ -49,28 +49,8 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
 TCMSLogChange::update(__LINE__, $data);
 
 $query = "ALTER TABLE `cms_field_type`
-                        ADD `version_history` ENUM('0','1') DEFAULT '0' NOT NULL COMMENT 'Version History: With enabled versioning, allows listing and restoring previous revisions of the field's value.'";
+                        ADD `version_history` ENUM('0','1') DEFAULT '0' NOT NULL COMMENT 'Version History: Allows listing and restoring previous revisions of the field's value if table versioning is enabled.'";
 TCMSLogChange::RunQuery(__LINE__, $query);
-
-$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
-    ->setFields([
-        'translation' => 'Version History',
-        '049_helptext' => 'If table versioning is enabled, allows listing and restoration of previous versions of a field\'s value.',
-    ])
-    ->setWhereEquals([
-        'id' => $fieldConfigurationId,
-    ]);
-TCMSLogChange::update(__LINE__, $data);
-
-$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
-    ->setFields([
-        'translation' => 'Versionshistorie',
-        '049_helptext' => 'Erlaubt die Auflistung und Wiederherstellung von vorherigen Revisionen des Feldwertes, wenn Tabellenversionierung aktiviert ist.',
-    ])
-    ->setWhereEquals([
-        'id' => $fieldConfigurationId,
-    ]);
-TCMSLogChange::update(__LINE__, $data);
 
 // Enable version history for base WYSIWYG field type.
 
