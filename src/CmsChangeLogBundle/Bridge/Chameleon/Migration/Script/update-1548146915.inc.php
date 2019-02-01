@@ -24,7 +24,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
         'fieldtype_config' => '',
         'restrict_to_groups' => '0',
         'field_width' => '0',
-        'position' => '2175',
+        'position' => '0',
         '049_helptext' => "With enabled versioning, allows listing and restoring previous revisions of the field's value.",
         'row_hexcolor' => '',
         'is_translatable' => '0',
@@ -35,6 +35,8 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
         'id' => $fieldConfigurationId,
     ]);
 TCMSLogChange::insert(__LINE__, $data);
+
+TCMSLogChange::SetDisplayFieldPosition(TCMSLogChange::GetTableId('cms_field_conf'), 'version_history', 'validation_regex');
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields([
