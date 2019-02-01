@@ -52,12 +52,6 @@ $query = "ALTER TABLE `cms_field_type`
                         ADD `version_history` ENUM('0','1') DEFAULT '0' NOT NULL COMMENT 'Version History: With enabled versioning, allows listing and restoring previous revisions of the field's value.'";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
-/*$query ="ALTER TABLE `cms_field_type`
-                     CHANGE `version_history`
-                            `version_history` ENUM('0','1') DEFAULT '0' NOT NULL COMMENT 'Version History: If table versioning is enabled, allows listing and restoration of previous versions of a field\\'s value.'";
-TCMSLogChange::RunQuery(__LINE__, $query);*/
-// TODO: Clarify content language of table's own comment, use either German or English help text.
-
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields([
         'translation' => 'Version History',
