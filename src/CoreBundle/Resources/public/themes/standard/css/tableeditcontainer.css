@@ -74,6 +74,13 @@
     width: 350px;
 }
 
+.checkboxGroupTitle {
+    clear:both;
+    padding-top:10px;
+    font-weight:bold;
+    border-bottom: 1px solid black;
+}
+
 .checkboxDIV {
     width: 250px;
     float: left;

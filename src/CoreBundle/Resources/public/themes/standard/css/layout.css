@@ -8,29 +8,9 @@
   background-image: url(../images/header_bg.gif);
 }
 
-.listBoxTop {
+.card-action {
   cursor: hand;
   cursor: pointer;
-  margin-left: 4px;
-  margin-right: 4px;
-  line-height: 22px;
-  heigth: 22px;
-  background: url(../images/boxTitleBg.gif);
-}
-
-.listBoxTopTitleRight {
-  float: right;
-  width: 4px;
-}
-
-.listBoxTopTitleLeft {
-  color: #151C55;
-  float: left;
-  width: 4px;
-}
-
-.listBoxBorder {
-  border: 1px solid #A9C4E7;
 }
 
 .fieldMltInverseEmpty {
