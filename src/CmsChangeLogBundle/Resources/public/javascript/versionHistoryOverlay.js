@@ -1,3 +1,5 @@
+window.versionHistoryOverlayEventReceiver = undefined
+
 class VersionHistoryOverlay {
 
     // Init
@@ -8,13 +10,47 @@ class VersionHistoryOverlay {
     }
 
     init() {
-        const injectedElement = this.inject(this.element)
-        this.attach(injectedElement);
+        const injectedElement = this.injectElement(this.element)
+        this.attachEvents(injectedElement);
+        this.initMessageListener()
+    }
+
+    // Message Listening
+
+    initMessageListener() {
+        window.addEventListener("message", event => {
+            // TODO: Match field configuration id of current module against document instead of using global receiver reference.
+            // If a proper id for the *field* can not be passed around, resigning to a global "lastSpeaker" is required.
+
+            if (window.versionHistoryOverlayEventReceiver !== this) {
+                return
+            }
+
+            const message = this.getMessageFromEvent(event)
+
+            if (!message || message.type !== "restoreFieldValueVersion") {
+                return undefined
+            }
+
+            this.setFieldValue(message.valueContents)
+        }, false)
+    }
+
+    getMessageFromEvent(event) {
+        let message = undefined
+
+        try {
+            message = JSON.parse(event.data)
+        } catch {
+            return undefined
+        }
+
+        return message
     }
 
     // Element Manipulation
 
-    inject(element) {
+    injectElement(element) {
         const parentElement = element.querySelector(".cke .cke_inner .cke_toolbox")
         if (!parentElement) {
             return
@@ -37,32 +73,45 @@ class VersionHistoryOverlay {
         return elementReference
     }
 
-    attach(injectedElement) {
+    attachEvents(injectedElement) {
         const anchorElement = injectedElement.querySelector("a.cke_button")
         if (!anchorElement) {
             return
         }
 
         anchorElement.addEventListener("click", event => {
-            this.overlay()
+            event.stopImmediatePropagation()
+            this.showOverlay()
+            return false
         })
     }
 
-    overlay() {
-        CreateModalIFrameDialogCloseButton(this.attributes.fieldVersionHistoryViewUrl , 0, 0)
+    // Overlay
+
+    showOverlay() {
+        window.versionHistoryOverlayEventReceiver = this
+        CreateModalIFrameDialogCloseButton(this.attributes.fieldVersionHistoryViewUrl, 0, 0)
+    }
+
+    // Handling
+
+    setFieldValue(contents) {
+        debugger
     }
 
 }
 
 class VersionHistoryOverlayLoader {
 
-    init() {
-        const modules = []
+    constructor() {
+        this.modules = []
+    }
 
+    init() {
         for (const element of this.elements) {
             let moduleIsInitialized = false
             const module = new VersionHistoryOverlay({element})
-            modules.push(module)
+            this.modules.push(module)
 
             const observer = new MutationObserver((mutationsList, observer) => {
                 if (!moduleIsInitialized) {
@@ -70,10 +119,9 @@ class VersionHistoryOverlayLoader {
                     module.init()
                 }
             })
+
             observer.observe(element, {attributes: false, childList: true, subtree: false})
         }
-
-        return modules
     }
 
     get elements() {
@@ -86,17 +134,14 @@ class VersionHistoryElementProvider {
 
     static element(args) {
         const innerHTML = VersionHistoryElementProvider.elementInnerHTML(args)
-        const fragment = document.createRange().createContextualFragment(innerHTML)
-
-        return fragment
+        return document.createRange().createContextualFragment(innerHTML)
     }
 
     static elementInnerHTML({enabled, title, numberOfFieldVersions}) {
-        return `<span class="cke_toolgroup" role="presentation">
-            <a id="cke_11" class="cke_button cke_button__version_history cke_button_off" href="#" title="${ title }" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_11_label" aria-describedby="cke_11_description" aria-haspopup="false" ${ !enabled ? "disabled" : "" }>
-                <!--<span class="cke_button_icon cke_button__source_icon" style="background-image: url('/chameleon/blackbox/components/versionHistory/restore.svg');">&nbsp;</span>-->
-                <span id="cke_11_label" class="cke_button_label cke_button__source_label" aria-hidden="false">${ title } (${ numberOfFieldVersions })</span>
-                <span id="cke_11_description" class="cke_button_label" aria-hidden="false"></span>
+        return `<span class="cke_toolgroup">
+            <a class="cke_button cke_button_off" href="#" title="${ title }" tabindex="-1" hidefocus="true" role="button" ${ !enabled ? "disabled" : "" }>
+                <span class="cke_button_label cke_button__source_label">${ title } (${ numberOfFieldVersions })</span>
+                <span class="cke_button_label"></span>
             </a>
         </span>`
     }
@@ -106,6 +151,6 @@ class VersionHistoryElementProvider {
 (() => {
     document.addEventListener("DOMContentLoaded", event => {
         const loader = new VersionHistoryOverlayLoader()
-        const modules = loader.init()
+        loader.init()
     })
 })()
