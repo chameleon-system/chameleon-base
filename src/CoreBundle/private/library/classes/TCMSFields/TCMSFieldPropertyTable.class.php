@@ -49,7 +49,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'),
             '_fnc' => 'changeListFieldState',
         );
-        $sStateURL = '?' . TTools::GetArrayAsURLForJavascript($aStateURL);
+        $sStateURL = '?'.TTools::GetArrayAsURLForJavascript($aStateURL);
 
         $html = '';
         $sPropertyTableName = $this->GetPropertyTableName();
@@ -63,19 +63,19 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
 
             $sEscapedName = TGlobal::OutHTML($this->name);
 
-            $html .= '<input type="hidden" id="' . TGlobal::OutHTML($this->name) . '" name="' . TGlobal::OutHTML($this->name) . '" value="' . TGlobal::OutHTML($sPropertyTableName) . '" />';
+            $html .= '<input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($sPropertyTableName).'" />';
             $html .= '<div class="card">
             <div class="card-header p-1">
                 <div class="card-action" 
-                data-fieldstate="' . $stateContainer->getState($this->sTableName, $this->name) . '" 
-                id="mltListControllButton' . $sEscapedName . '" 
-                onClick="setTableEditorListFieldState(this, \'' . $sStateURL . '\'); ' . $sOnClickEvent . '">
-                <i class="fas fa-eye"></i> ' . TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_property.open_or_close_list')) . '
+                data-fieldstate="'.TGlobal::OutHTML($stateContainer->getState($this->sTableName, $this->name)).'" 
+                id="mltListControllButton'.$sEscapedName.'" 
+                onClick="setTableEditorListFieldState(this, \''.$sStateURL.'\'); '.$sOnClickEvent.'">
+                <i class="fas fa-eye"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_property.open_or_close_list')).'
                 </div>
             </div>
             <div class="card-body p-0">
-                <div id="' . $sEscapedName . '_iframe_block\">
-                    <iframe id="' . $sEscapedName . '_iframe" width="100%" height="470" frameborder="0" class="d-none"></iframe>
+                <div id="'.$sEscapedName.'_iframe_block\">
+                    <iframe id="'.$sEscapedName.'_iframe" width="100%" height="470" frameborder="0" class="d-none"></iframe>
                 </div>
             </div>
             </div>';
@@ -122,7 +122,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
                 $aEditorRequest['sTableEditorPagdef'] = 'tableeditorPopup';
             }
         }
-        $sOnClickEvent = "CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState('" . TGlobal::OutJS($this->name) . "_iframe','" . PATH_CMS_CONTROLLER . '?' . TTools::GetArrayAsURLForJavascript($aEditorRequest) . "');";
+        $sOnClickEvent = "CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState('".TGlobal::OutJS($this->name)."_iframe','".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aEditorRequest)."');";
 
         return $sOnClickEvent;
     }
@@ -159,10 +159,10 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
     {
         $tableName = $this->data;
         if (!empty($tableName)) {
-            $targetField = $tableName . '_id';
+            $targetField = $tableName.'_id';
 
-            $query = 'DELETE FROM `' . MySqlLegacySupport::getInstance()->real_escape_string($tableName) . '`
-                        WHERE `' . MySqlLegacySupport::getInstance()->real_escape_string($targetField) . "` = '" . MySqlLegacySupport::getInstance()->real_escape_string($this->recordId) . "'";
+            $query = 'DELETE FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($tableName).'`
+                        WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($targetField)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->recordId)."'";
             MySqlLegacySupport::getInstance()->query($query);
 
             $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
@@ -193,10 +193,10 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
 
         if (!empty($sOwningField)) {
             $aMethodData = $this->GetFieldMethodBaseDataArray();
-            $aMethodData['sMethodName'] = '&' . $this->GetFieldMethodName();
-            $aMethodData['sReturnType'] = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->GetPropertyTableName()) . 'List';
+            $aMethodData['sMethodName'] = '&'.$this->GetFieldMethodName();
+            $aMethodData['sReturnType'] = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->GetPropertyTableName()).'List';
 
-            $aMethodData['sCallMethodName'] = 'GetListFor' . TCMSTableToClass::GetClassName('', $sOwningField);
+            $aMethodData['sCallMethodName'] = 'GetListFor'.TCMSTableToClass::GetClassName('', $sOwningField);
 
             $oViewParser = new TViewParser();
             /** @var $oViewParser TViewParser */
@@ -228,7 +228,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
                     FROM `cms_field_conf`
               INNER JOIN `cms_tbl_conf` ON `cms_field_conf`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
               INNER JOIN `cms_field_type` ON `cms_field_conf`.`cms_field_type_id` = `cms_field_type`.`id`
-                   WHERE `cms_tbl_conf`.`name` = '" . MySqlLegacySupport::getInstance()->real_escape_string($this->GetPropertyTableName()) . "'
+                   WHERE `cms_tbl_conf`.`name` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->GetPropertyTableName())."'
                      AND  `cms_field_type`.`constname` IN ('CMSFIELD_PROPERTY_PARENT_ID','CMSFIELD_TABLELIST')
                  ";
 
@@ -245,7 +245,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             }
         }
         if (null === $sOwningField) {
-            $sOwningField = $this->sTableName . '_id';
+            $sOwningField = $this->sTableName.'_id';
         }
 
         return $sOwningField;
@@ -346,12 +346,12 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             }
         } elseif (!empty($this->oTableRow->id)) {
             $oFields = $this->GetFieldsTargetTableFrontend();
-            $sSql = 'SELECT * FROM `' . MySqlLegacySupport::getInstance()->real_escape_string($sForeignTableName) . '`
-                  WHERE `' . MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName) . '_id' . "`='" . MySqlLegacySupport::getInstance()->real_escape_string($this->oTableRow->id) . "'";
+            $sSql = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sForeignTableName).'`
+                  WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'_id'."`='".MySqlLegacySupport::getInstance()->real_escape_string($this->oTableRow->id)."'";
             $rRes = MySqlLegacySupport::getInstance()->query($sSql);
             while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($rRes)) {
                 while ($oField = $oFields->Next()) {
-                    if ($oField->fieldName != $this->sTableName . '_id') {
+                    if ($oField->fieldName != $this->sTableName.'_id') {
                         $aData[$iCounter][$oField->fieldName] = $aRow[$oField->fieldName];
                     }
                 }
@@ -376,7 +376,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             $oTblConf = TdbCmsTblConf::GetNewInstance();
             $oTblConf->LoadFromField('name', $sForeignTableName);
             $oTmpFields = TdbCmsFieldConfList::GetList();
-            $oTmpFields->AddFilterString("`cms_tbl_conf_id`='" . MySqlLegacySupport::getInstance()->real_escape_string($oTblConf->id) . "'");
+            $oTmpFields->AddFilterString("`cms_tbl_conf_id`='".MySqlLegacySupport::getInstance()->real_escape_string($oTblConf->id)."'");
             while ($oTmpField = $oTmpFields->Next()) {
                 $oFields->AddItem($oTmpField);
             }
@@ -393,11 +393,11 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             unset($this->data['x']);
         }
         $sForeignTableName = $this->GetPropertyTableNameFrontend();
-        if (!empty($sForeignTableName) && TTools::FieldExists($sForeignTableName, $this->sTableName . '_id')) {
+        if (!empty($sForeignTableName) && TTools::FieldExists($sForeignTableName, $this->sTableName.'_id')) {
             $aConnectedRecordIdsToDelete = array();
             if (!empty($this->oTableRow->id)) {
-                $sSql = 'SELECT * FROM `' . MySqlLegacySupport::getInstance()->real_escape_string($sForeignTableName) . '`
-                      WHERE `' . MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName) . '_id' . "`='" . MySqlLegacySupport::getInstance()->real_escape_string($this->oTableRow->id) . "'";
+                $sSql = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sForeignTableName).'`
+                      WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'_id'."`='".MySqlLegacySupport::getInstance()->real_escape_string($this->oTableRow->id)."'";
                 $rRes = MySqlLegacySupport::getInstance()->query($sSql);
                 while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($rRes)) {
                     $aConnectedRecordIdsToDelete[$aRow['id']] = $aRow['id'];
@@ -406,14 +406,14 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             if (is_array($this->data) && count($this->data) > 0) {
                 foreach ($this->data as $aRow) {
                     $sRecordId = null;
-                    if (array_key_exists('id', $aRow) && TTools::RecordExistsArray($sForeignTableName, array('id' => $aRow['id'], $this->sTableName . '_id' => $sId))) {
+                    if (array_key_exists('id', $aRow) && TTools::RecordExistsArray($sForeignTableName, array('id' => $aRow['id'], $this->sTableName.'_id' => $sId))) {
                         unset($aConnectedRecordIdsToDelete[$aRow['id']]);
                         $sRecordId = $aRow['id'];
                     } else {
                         unset($aRow['id']);
                     }
                     $oTableEditor = TTools::GetTableEditorManager($sForeignTableName, $sRecordId);
-                    $aRow[$this->sTableName . '_id'] = $sId;
+                    $aRow[$this->sTableName.'_id'] = $sId;
                     $oTableEditor->AllowEditByAll(true);
                     $oTableEditor->Save($aRow);
                     $oTableEditor->AllowEditByAll(false);

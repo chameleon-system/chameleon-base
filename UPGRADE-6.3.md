@@ -378,8 +378,8 @@ You should remove all width/height settings in CreateModalXY calls if it does no
 - $.addOption() (jquery.selectboxes plugin)
 - loadStandaloneDocumentManager
 - PublishViaAjaxCallback()
-- src/CoreBundle/Resources/public/javascript/mainNav.js
 - showMLTField() - use CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(iFrameId, url) instead.
+- src/CoreBundle/Resources/public/javascript/mainNav.js
 
 ## jQueryUi
 
