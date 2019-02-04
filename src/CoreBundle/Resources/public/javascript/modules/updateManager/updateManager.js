@@ -317,7 +317,7 @@ CHAMELEON.UPDATE_MANAGER = {
         var self = this;
 
         if(iIndex in this._aPostUpdateCommands){
-            $('#updateProgressBarInner').text(this._aPostUpdateCommands[iIndex].sMessage);
+            $('#updateProgressBarText').text(this._aPostUpdateCommands[iIndex].sMessage);
 
             $.ajax({
                 type: 'POST',
@@ -342,7 +342,7 @@ CHAMELEON.UPDATE_MANAGER = {
     {
         $(this.config.sRunUpdatesButtonId).unbind();
         $(this.config.sGoBackButtonId).unbind().removeAttr('disabled');
-        $('#updateProgressBarInner').text(this.config.text.progressBarFinished);
+        $('#updateProgressBarText').text(this.config.text.progressBarFinished);
     },
     addPostUpdateCommand: function(sCommand, sMessage)
     {
