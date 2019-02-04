@@ -152,24 +152,11 @@
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .image-row {
-    padding: 0 5px 0 0;
-    margin: 0;
-    list-style: none;
-    width: 100%;
-    justify-content: space-between;
-    align-items: stretch;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .image-row:after {
-    content: " ";
-    flex: auto;
+    margin: 0 -4px;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .image-row .image-col {
-    width: 16.666666667%;
-    padding: 10px 5px;
-    box-sizing: border-box;
-    text-align: center;
+    padding: 4px;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .image-row .image-col .inner {
@@ -203,7 +190,7 @@
     text-align: center;
     font-size: 14px;
     line-height: 1.4;
-    margin: 7px 0 0;
+    margin: 0;
     padding: 10px 0 0 0;
     text-overflow: ellipsis;
     width: 100%;
@@ -223,8 +210,8 @@
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .image-row .image-col .actions {
     font-size: 14px;
     line-height: 1;
-    margin-bottom: 7px;
-    margin-top: 7px;
+    margin-bottom: 4px;
+    margin-top: 4px;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .image-row .image-col .actions > a {
@@ -247,52 +234,24 @@
     padding: 0 5px;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .editable {
-    position: relative;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .editable:after {
-    content: "\270f";
-    font-family: 'Glyphicons Halflings';
-    font-style: normal;
-    font-weight: 400;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
-    font-size: 10px;
-    position: absolute;
-    right: 2px;
-    top: 4px;
-    cursor: pointer;
-    z-index: 2;
-    display: none;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGrid .editable form {
-    position: relative;
-    z-index: 3;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGridLarge .image-row .image-col {
-    width: 25%;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListGridLarge .image-row .image-col .image-container {
-    min-height: 200px;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList {
+.snippetMediaManagerBackendModuleStandard {
     font-size: 14px;
     line-height: 1.4;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .list-header {
-    border-top: 2px solid #8b8b8b;
-    border-bottom: 2px solid #8b8b8b;
+.snippetMediaManagerBackendModuleStandard .list-header {
+    border-top: 1px solid #c8ced3;
+    border-bottom: 1px solid #c8ced3;
+    background: #f2f2f2;
     font-weight: bold;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .cms-media-item {
-    border-bottom: 1px solid #8b8b8b;
+.snippetMediaManagerBackendModuleStandard .cms-media-item {
+    border-bottom: 1px solid #c8ced3;
+}
+
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .cms-media-item .actions > a {
+    padding: 3px 6px;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .xselectable-selected {
@@ -305,12 +264,6 @@
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .caption form input {
     width: 100% !important;
-    height: 30px !important;
-    font-size: 14px;
-    line-height: 20px;
-    background: #FFFFFF !important;
-    border: 1px solid #A9C4E7 !important;
-    padding: 0 5px;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .image-col .image-container {
@@ -324,64 +277,39 @@
     max-width: 100%;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .image-col:after {
-    content: " ";
-    clear: both;
-    display: block;
-    visibility: hidden;
-    height: 0;
-    line-height: 0;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table td.selection-box,
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table th.selection-box {
-    padding-left: 15px;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table td.info,
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table th.info {
-    line-height: 26px;
-    font-size: 13px;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table td.info img,
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table th.info img,
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table td.info .glyphicon,
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table th.info .glyphicon {
-    margin-right: 2px;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table .actions {
-    text-align: right;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table .actions > a {
-    margin-right: 7px;
-}
-
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .tags {
-    display: inline-block;
+    display: flex;
+    align-items: flex-start;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .tags .glyphicon {
-    margin-right: 1px;
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .tags .fa-tag {
     position: relative;
     top: 2px;
-    margin-left: 4px;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table .tags .glyphicon:first-child {
-    margin-left: 0;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList table .tags form input {
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .tag.editable {
     width: 100% !important;
-    height: 30px !important;
-    font-size: 14px;
-    line-height: 20px;
-    background: #FFFFFF !important;
-    border: 1px solid #A9C4E7 !important;
-    padding: 0 5px;
+}
+
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerDeleteConfirmDelete .item-to-delete-name {
+    font-weight: bold;
+}
+
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerDeleteConfirmDelete .title-usages {
+    font-weight: bold;
+}
+
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerDeleteConfirmDelete .img-usages .usages-header {
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerDeleteConfirmDelete .img-usages .usage-item {
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerDeleteConfirmDelete .img-usages .usage-item:last-child {
+    border-bottom: none;
 }
 
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListPaging {
@@ -404,11 +332,6 @@
     cursor: pointer;
     float: right;
     left: -10px;
-}
-
-.snippetMediaManagerBackendModuleStandard .media-manager-layover .close-button span {
-    position: relative;
-    top: 1px;
 }
 
 .snippetMediaManagerBackendModuleStandard .loading-animation {
@@ -435,7 +358,6 @@
 .xselectable-glass {
     background-color: transparent;
     z-index: 100;
-    cursor: hand;
     cursor: pointer;
 }
 

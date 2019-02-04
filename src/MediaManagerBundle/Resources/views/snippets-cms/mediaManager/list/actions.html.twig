@@ -1,14 +1,17 @@
 {# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
 {# accessRightsMedia \ChameleonSystem\MediaManager\AccessRightsModel #}
-<div class="actions">
+<div class="actions d-flex justify-content-between align-items-end">
     {% if accessRightsMedia.delete %}
-        <a href="#" class="delete-item" title="{{ 'chameleon_system_media_manager.list_actions.delete' | trans }}"><span
-                    class="glyphicon glyphicon-trash"></span></a>
+        <a href="#" class="btn btn-danger btn-sm delete-item" title="{{ 'chameleon_system_media_manager.list_actions.delete' | trans }}">
+            <i class="far fa-trash-alt"></i>
+        </a>
     {% endif %}
     {% if pickImageMode %}
-        <a class="pick-image" title="{{ 'chameleon_system_media_manager.list_actions.select' | trans }}"><span
-                    class="glyphicon glyphicon-ok-circle"></span></a>
+        <a class="btn btn-primary btn-sm pick-image" title="{{ 'chameleon_system_media_manager.list_actions.select' | trans }}">
+            <i class="far fa-check-circle"></i>
+        </a>
     {% endif %}
-    <a href="#" class="show-details" title="{{ 'chameleon_system_media_manager.list_actions.edit' | trans }}"><span
-                class="glyphicon glyphicon-edit"></span></a>
+    <a href="#" class="btn btn-primary btn-sm show-details" title="{{ 'chameleon_system_media_manager.list_actions.edit' | trans }}">
+        <i class="far fa-edit"></i>
+    </a>
 </div>
