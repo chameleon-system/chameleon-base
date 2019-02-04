@@ -112,6 +112,35 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
+     * @return int
+     * @throws DataAccessException
+     */
+    private function getNumberOfFieldVersions(): int
+    {
+        $fieldConfigurationId = $this->oDefinition->id;
+        $numberOfChangeLogItems = null;
+
+        try {
+            $query = ' SELECT
+                        COUNT(`pkg_cms_changelog_item`.`id`) AS `number_of_items`
+                         FROM `pkg_cms_changelog_item`
+                    LEFT JOIN `pkg_cms_changelog_set`
+                           ON `pkg_cms_changelog_set`.`id` = `pkg_cms_changelog_item`.`pkg_cms_changelog_set_id`
+                        WHERE `pkg_cms_changelog_item`.`cms_field_conf` = :fieldConfigurationId';
+            $columnValue = $this->getDatabaseConnection()->fetchColumn($query, ['fieldConfigurationId' => $fieldConfigurationId]);
+
+            if (false !== $columnValue) {
+                $numberOfChangeLogItems = (int)$columnValue;
+            }
+        } catch(DBALException $e) {
+            throw new DataAccessException(
+                sprintf('Failed to execute query to retrieve number of change log items for field \'%s\'.', $fieldConfigurationId), 0, $e
+            );
+        }
+
+        return $numberOfChangeLogItems ?? 0;
+    }
+    /**
      * @return string
      */
     protected function getCustomConfigPath()
