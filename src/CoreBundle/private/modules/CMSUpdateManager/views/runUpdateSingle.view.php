@@ -57,8 +57,6 @@ $bundlesWithUpdates = array_keys($updatesByBundle);
                         (0%)</h4>
                 </div>
 
-                <a class="btn btn-warning" id="btnGoBack"
-                   href="<?= PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'main')); ?>"><?= $translator->trans('chameleon_system_core.action.return_to_main_menu'); ?></a>
                 <a class="btn btn-success disabled" href="#" id="btnRunUpdates"
                    data-loading-text="<?= $translator->trans('chameleon_system_core.cms_module_update.action_update'); ?>"><?= $translator->trans('chameleon_system_core.cms_module_update.action_update'); ?></a>
                 <div id="ajaxTimeoutContainer">
