@@ -9,8 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Exception\DataAccessException;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\CoreBundle\Wysiwyg\CkEditorConfigProviderInterface;
+use Doctrine\DBAL\DBALException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -36,12 +38,16 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     public function GetHTML()
     {
         parent::GetHTML();
+
         $oViewRenderer = new ViewRenderer();
+
         $oViewRenderer->AddSourceObject('sEditorName', 'fieldcontent_'.$this->sTableName.'_'.$this->name);
         $oViewRenderer->AddSourceObject('sFieldName', $this->name);
         $oViewRenderer->AddSourceObject('extraPluginsConfiguration', $this->getExtraPluginsConfiguration());
         $oViewRenderer->AddSourceObject('aEditorSettings', $this->getEditorSettings());
+
         $sUserCssUrl = $this->getEditorCSSUrl();
+
         if ('' !== $sUserCssUrl) {
             $aStyles = array();
             try {
@@ -53,7 +59,9 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
 
             $oViewRenderer->AddSourceObject('aStyles', $aStyles);
         }
+
         $oViewRenderer->AddSourceObject('data', $this->data);
+        $this->mapVersionHistoryParameters($oViewRenderer);
 
         return $oViewRenderer->Render('TCMSFieldWYSIWYG/cKEditor/editor.html.twig', null, false);
     }
@@ -69,6 +77,26 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         $html = $this->GetHTML();
 
         return $html;
+    }
+
+    /**
+     * @param ViewRenderer $viewRenderer
+     * @throws DataAccessException
+     */
+    private function mapVersionHistoryParameters(ViewRenderer $viewRenderer): void
+    {
+        $fieldHasVersionHistory = true;
+        $fieldIsReadOnly = $this->bReadOnlyMode;
+        $numberOfFieldVersions = $this->getNumberOfFieldVersions();
+
+        if (true === $fieldIsReadOnly || 0 === $numberOfFieldVersions) {
+            $fieldHasVersionHistory = false;
+        }
+
+        $viewRenderer->AddSourceObject('fieldConfigurationId', $this->oDefinition->id);
+        $viewRenderer->AddSourceObject('fieldHasVersionHistory', $fieldHasVersionHistory ? '1' : '0');
+        $viewRenderer->AddSourceObject('fieldVersionHistoryNumberOfVersions', $numberOfFieldVersions);
+        $viewRenderer->AddSourceObject('fieldVersionHistoryViewUrl', $this->getFieldVersionHistoryViewUrl());
     }
 
     /**
