@@ -268,8 +268,8 @@ class CMSMediaManager extends TCMSModelBase
         if (empty($sNodeId) && !empty($returnVal)) {
             $returnVal .= '
                 <div style="padding-top: 25px;">
-                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.confirm_none_empty_folder_delete'), "javascript:DeleteMediaDir('".TGlobal::OutJS($sDeleteNodeID)."');", TGlobal::GetPathTheme().'/images/icons/accept.png', 'DeleteMediaDirComplete').'
-                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.abort'), 'javascript:CloseDeleteCheckDialog();', TGlobal::GetPathTheme().'/images/icons/action_stop.gif').'
+                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.confirm_none_empty_folder_delete'), "javascript:DeleteMediaDir('".TGlobal::OutJS($sDeleteNodeID)."');", 'fas fa-check', 'DeleteMediaDirComplete').'
+                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.abort'), 'javascript:CloseDeleteCheckDialog();', 'fas fa-times').'
                 </div>
               ';
             $returnVal = array($sDeleteNodeID, $returnVal);
@@ -337,15 +337,15 @@ class CMSMediaManager extends TCMSModelBase
             if ($bRenderDeleteButton) {
                 $foundConnectionsHTML .= '
                 <div style="padding-top: 25px;">
-                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.confirm_used_image'), "javascript:SendDeleteForm('".$sFileId."');", TGlobal::GetPathTheme().'/images/icons/accept.png').'
-                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.abort'), 'javascript:CloseDeleteCheckDialog();', TGlobal::GetPathTheme().'/images/icons/action_stop.gif').'
+                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.confirm_used_image'), "javascript:SendDeleteForm('".$sFileId."');", 'fas fa-check').'
+                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.abort'), 'javascript:CloseDeleteCheckDialog();', 'fas fa-times').'
                 </div>
             </div>
               ';
             } else {
                 $foundConnectionsHTML .= '
                   <div style="padding-top: 25px;">
-                  '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.close'), 'javascript:CloseModalIFrameDialog();', TGlobal::GetPathTheme().'/images/icons/action_stop.gif').'
+                  '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.close'), 'javascript:CloseModalIFrameDialog();', 'fas fa-times').'
                   </div>
               </div>';
             }

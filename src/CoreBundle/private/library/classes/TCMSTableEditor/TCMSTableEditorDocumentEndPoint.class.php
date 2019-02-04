@@ -627,7 +627,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
             if ($oGlobal->oUser->oAccessManager->HasEditPermission($this->oTableConf->sqlData['name'])) {
                 $oMenuItem = new TCMSTableEditorMenuItem();
                 $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save_and_return');
-                $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/action_save.gif');
+                $oMenuItem->sIcon = 'far fa-save';
                 $oMenuItem->sOnClick = 'SaveViaAjaxCustomCallback(postSaveHook, true);';
                 $this->oMenuItems->AddItem($oMenuItem);
             }
@@ -636,7 +636,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor_document.action_use');
             $oMenuItem->sItemKey = 'usage';
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/application_view_gallery.png');
+            $oMenuItem->sIcon = 'far fa-list-alt';
             $oMenuItem->sOnClick = "GetUsages('".$this->oTable->id."', 'document');";
             $this->oMenuItems->AddItem($oMenuItem);
             // now add custom items

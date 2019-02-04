@@ -748,6 +748,10 @@
             <argument type="service" id="chameleon_system_cms_cache.cache"/>
         </service>
 
+        <service id="chameleon_system_core.cronjob.cronjob_state_service" class="ChameleonSystem\CoreBundle\CronJob\CronjobStateService" public="true">
+            <argument type="service" id="database_connection"/>
+        </service>
+
         <service id="security.csrf.token_storage" class="ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenStorage" public="false">
             <argument type="service" id="request_stack"/>
         </service>
@@ -815,6 +819,11 @@
             <tag name="console.command"/>
         </service>
 
+        <service id="chameleon_system_core.command.active_cronjob_check" class="ChameleonSystem\CoreBundle\Command\GetCronjobsStateCommand">
+            <argument type="service" id="chameleon_system_core.cronjob.cronjob_state_service"/>
+            <tag name="console.command"/>
+        </service>
+
         <service id="chameleon_system_core.response.response_variable_replacer" class="ChameleonSystem\CoreBundle\Response\ResponseVariableReplacer" public="true">
             <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager"/>
             <argument type="service" id="chameleon_system_core.flash_messages"/>
@@ -822,5 +831,13 @@
 
         <service id="cmsPkgCore.tableEditorListFieldState" class="TTableEditorListFieldState" public="true" />
 
+        <service id="chameleon_system_core.module.sidebar.sidebar_backend_module" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\SidebarBackendModule" shared="false">
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.util.url"/>
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="chameleon_system_core.util.input_filter"/>
+            <argument type="service" id="chameleon_system_core.response.response_variable_replacer"/>
+            <tag name="chameleon_system.module" />
+        </service>
     </services>
 </container>

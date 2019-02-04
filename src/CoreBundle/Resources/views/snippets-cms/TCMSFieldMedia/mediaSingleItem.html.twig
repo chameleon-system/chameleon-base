@@ -8,23 +8,23 @@
                     <button type="button" onclick="{{ sOpenWindowJSMediaDetail|e('html_attr') }}"
                             class="btn btn-secondary rounded-0"
                             data-toggle="tooltip" data-placement="top"
-                            title="{{ 'chameleon_system_core.field_media.action_show_details'|trans|e('html_attr') }}"><img
-                                src="{{ sImageIconURL|e('html_attr') }}/images/icons/image_link.png" width="16" alt=""
-                                height="16"/></button>
+                            title="{{ 'chameleon_system_core.field_media.action_show_details'|trans|e('html_attr') }}">
+                        <i class="fas fa-external-link-alt"></i>
+                    </button>
 
                     <button type="button" onclick="window.open('{{ sImageURL|e('js') }}')"
                             class="btn btn-secondary rounded-0"
                             data-toggle="tooltip" data-placement="top"
-                            title="{{ "chameleon_system_core.field_media.action_download_image"|trans|e('html_attr') }}"><img
-                                src="{{ sImageIconURL|e('html_attr') }}/images/icons/disk.png" width="16" alt=""
-                                height="16"/></button>
+                            title="{{ "chameleon_system_core.field_media.action_download_image"|trans|e('html_attr') }}">
+                        <i class="far fa-save"></i>
+                    </button>
                 {% endif %}
 
                 <button type="button" onclick="{{ sOpenWindowJSSetImage|e('html_attr') }}" class="btn btn-secondary rounded-0"
                         data-toggle="tooltip" data-placement="top"
-                        title="{{ 'chameleon_system_core.field_media.action_assign_image'|trans|e('html_attr') }}"><img
-                            src="{{ sImageIconURL|e('html_attr') }}/images/icons/image.gif" width="16" alt=""
-                            height="16"/></button>
+                        title="{{ 'chameleon_system_core.field_media.action_assign_image'|trans|e('html_attr') }}">
+                    <i class="far fa-image"></i>
+                </button>
 
                 <button type="button"
                         onclick="ClearImage('{{ sTableId|e('js') }}','{{ sRecordId|e('js') }}','{{ sFieldName|e('js') }}','{{ iPosition|e('js') }}')"
@@ -32,9 +32,9 @@
                         id="cmsimagefielditem_clearbutton_{{ sFieldName|e('html_attr') }}{{ iPosition|e('html_attr') }}"
                         class="btn btn-secondary rounded-0"
                         data-toggle="tooltip" data-placement="top"
-                        title="{{ 'chameleon_system_core.field_media.action_assign_image'|trans|e('html_attr') }}"><img
-                            src="{{ sImageIconURL|e('html_attr') }}/images/icons/image_delete.gif" width="16" alt=""
-                            height="16"/></button>
+                        title="{{ 'chameleon_system_core.field_media.action_reset_image_assignment'|trans|e('html_attr') }}">
+                    <i class="far fa-trash-alt"></i>
+                </button>
             {% endif %}
         </div>
     </div>

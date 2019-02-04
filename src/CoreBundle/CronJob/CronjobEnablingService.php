@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\CronJob;
 
-use ChameleonSystem\CoreBundle\Exception\CronjobEnableException;
+use ChameleonSystem\CoreBundle\Exception\CronjobHandlingException;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use esono\pkgCmsCache\CacheInterface;
@@ -43,7 +43,7 @@ class CronjobEnablingService implements CronjobEnablingServiceInterface
     }
 
     /**
-     * @throws CronjobEnableException
+     * @throws CronjobHandlingException
      */
     public function enableCronjobExecution(): void
     {
@@ -51,12 +51,12 @@ class CronjobEnablingService implements CronjobEnablingServiceInterface
             $this->connection->executeUpdate("UPDATE `cms_config` SET `cronjobs_enabled` = '1'");
             $this->cache->callTrigger('cms_config');
         } catch (DBALException $exception) {
-            throw new CronjobEnableException('Cannot save cron jobs enable flag in database.', 0, $exception);
+            throw new CronjobHandlingException('Cannot save cron jobs enable flag in database.', 0, $exception);
         }
     }
 
     /**
-     * @throws CronjobEnableException
+     * @throws CronjobHandlingException
      */
     public function disableCronjobExecution(): void
     {
@@ -64,7 +64,7 @@ class CronjobEnablingService implements CronjobEnablingServiceInterface
             $this->connection->executeUpdate("UPDATE `cms_config` SET `cronjobs_enabled` = '0'");
             $this->cache->callTrigger('cms_config');
         } catch (DBALException $exception) {
-            throw new CronjobEnableException('Cannot reset cron jobs enable flag in database.', 0, $exception);
+            throw new CronjobHandlingException('Cannot reset cron jobs enable flag in database.', 0, $exception);
         }
     }
 }

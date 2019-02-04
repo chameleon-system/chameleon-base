@@ -2514,6 +2514,11 @@
                 <source>chameleon_system_core.admin_message.button_title</source>
                 <target>Attention</target>
             </trans-unit>
+
+            <trans-unit id="chameleon_system_core.sidebar.filter_menu">
+                <source>chameleon_system_core.sidebar.filter_menu</source>
+                <target>Filter menu</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

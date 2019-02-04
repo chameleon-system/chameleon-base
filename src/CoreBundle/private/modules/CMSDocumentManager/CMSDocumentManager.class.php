@@ -372,10 +372,10 @@ class CMSDocumentManager extends TCMSModelBase
                       </div>
                       <div class="cleardiv">&nbsp;</div>';
             if ($bInfoOnFileDelete) {
-                $foundConnectionsHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.document_manager.confirm_delete_with_connections'), "javascript:SendDelete('".$sFileId."');", TGlobal::GetPathTheme().'/images/icons/accept.png').'
-                                      '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.document_manager.abort_delete'), 'javascript:CloseDeleteCheckDialog();', TGlobal::GetPathTheme().'/images/icons/action_stop.gif');
+                $foundConnectionsHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.document_manager.confirm_delete_with_connections'), "javascript:SendDelete('".$sFileId."');", 'far fa-check-circle').'
+                                      '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.document_manager.abort_delete'), 'javascript:CloseDeleteCheckDialog();', 'far fa-times-circle');
             } else {
-                $foundConnectionsHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.document_manager.close'), 'javascript:CloseModalIFrameDialog();', TGlobal::GetPathTheme().'/images/icons/action_stop.gif');
+                $foundConnectionsHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.document_manager.close'), 'javascript:CloseModalIFrameDialog();', 'far fa-times-circle');
             }
             $foundConnectionsHTML .= '  </div>
                                        </div>';

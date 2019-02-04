@@ -1,0 +1,63 @@
+{# cmsImage \ChameleonSystem\ImageCrop\DataModel\CmsMediaDataModel #}
+{# existingCrop \ChameleonSystem\ImageCrop\DataModel\ImageCropDataModel #}
+{# preset \ChameleonSystem\ImageCrop\DataModel\ImageCropPresetDataModel #}
+<form action="{{ formAction | e('html_attr') }}" method="post"
+      class="snippetImageCropImageCropEditorImageCropEditorForm">
+
+    {% for urlParameterKey, urlParameterValue in urlParameters %}
+        <input type="hidden" name="{{ urlParameterKey | e('html_attr') }}"
+               value="{{ urlParameterValue | e('html_attr') }}">
+    {% endfor %}
+
+    <input type="hidden" name="module_fnc[contentmodule]" value="saveCrop">
+
+    {% if existingCrop.id %}
+        <input type="hidden"
+               name="{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_CROP_ID') }}"
+               value="{{ existingCrop.id }}">
+    {% endif %}
+
+    <input type="hidden" name="pos_x" id="pos_x" value="">
+    <input type="hidden" name="pos_y" id="pos_y" value="">
+    <input type="hidden" name="width" id="width" value="">
+    <input type="hidden" name="height" id="height" value="">
+
+    <input type="text" name="name" value="{{ existingCrop.name }}" class="form-control crop-name"
+           placeholder="{{ 'chameleon_system_image_crop.editor.crop_name_placeholder' | trans }}"{% if not aspectRatio %} required{% endif %}>
+
+    <button type="submit" class="btn btn-success">
+        <span class="glyphicon glyphicon-floppy-saved"></span> {{ 'chameleon_system_image_crop.editor.save' | trans }}
+    </button>
+
+    {% if enableCallback and existingCrop.id %}
+        <button type="submit" class="btn btn-default">
+            <span class="glyphicon glyphicon-ok-circle"></span> {{ 'chameleon_system_image_crop.editor.select' | trans }}
+        </button>
+    {% endif %}
+
+</form>
+
+{% if not aspectRatio %}
+    {% set aspectRatio = '"NaN"' %}
+{% endif %}
+
+<div class="snippetImageCropImageCropEditorImageCropEditor">
+    <img src="{{ cmsImage.imageUrl }}" id="imageToCrop"
+         data-cropper-aspect-ratio="{{ aspectRatio|e('html_attr') }}"
+            {% if existingCrop %}
+                data-cropper-crop-x="{{ existingCrop.posX|e('html_attr') }}"
+                data-cropper-crop-y="{{ existingCrop.posY|e('html_attr') }}"
+                data-cropper-crop-width="{{ existingCrop.width|e('html_attr') }}"
+                data-cropper-crop-height="{{ existingCrop.height|e('html_attr') }}"
+            {% elseif preset %}
+                data-cropper-crop-width="{{ preset.width|e('html_attr') }}"
+                data-cropper-crop-height="{{ preset.height|e('html_attr') }}"
+            {% endif %}
+            {% if saved and enableCallback %}
+                data-callback-field-name="{{ fieldName|e('html_attr') }}"
+                data-callback-existing-crop-id="{{ existingCrop.id|e('html_attr') }}"
+                data-callback-cms-image-id="{{ cmsImage.id|e('html_attr') }}"
+                data-callback-url-to-get-image="{{  urlToGetImage|e('html_attr') }}"
+            {% endif %}
+    >
+</div>

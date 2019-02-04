@@ -44,7 +44,7 @@ class TCMSFieldCMSUser extends TCMSFieldExtendedLookup
         $oTableConf->LoadFromField('name', $tblName);
 
         $sButtonText = TGlobal::Translate('chameleon_system_core.field_cms_user.select_user');
-        $html = TCMSRender::DrawButton($sButtonText, 'javascript:'.$this->_GetOpenWindowJS($oTableConf).';', URL_CMS.'/images/icons/box.gif');
+        $html = TCMSRender::DrawButton($sButtonText, 'javascript:'.$this->_GetOpenWindowJS($oTableConf).';', 'fas fa-user-check');
 
         return $html;
     }

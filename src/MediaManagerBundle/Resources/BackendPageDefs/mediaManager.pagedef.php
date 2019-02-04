@@ -8,12 +8,13 @@ if ($urlGenerator->openStandaloneMediaManagerInNewWindow()) {
     $layoutTemplate = 'popup_iframe';
 }
 
-$moduleList = array(
-    'pagetitle' => array('model' => 'MTHeader', 'view' => 'title'),
-    'headerimage' => array('model' => 'MTHeader', 'view' => 'standard'),
-    'contentmodule' => array(
+$moduleList = [
+    'contentmodule' => [
         'model' => 'chameleon_system_media_manager.backend_module.media_manager',
         'moduleType' => '@ChameleonSystemMediaManagerBundle',
         'view' => 'full',
-    ),
-);
+    ],
+];
+addDefaultPageTitle($moduleList);
+addDefaultHeader($moduleList);
+addDefaultSidebar($moduleList);

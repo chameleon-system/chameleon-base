@@ -30,7 +30,7 @@ class TCMSFieldDownloads extends TCMSMLTField
         $html = '<input type="hidden" id="'.TGlobalBase::OutHTML($this->name).'" name="'.TGlobalBase::OutHTML($this->name).'" value="'.TGlobalBase::OutHTML($this->data).'" />
       <div>';
 
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.link.open_document_manager'), "javascript:loadDocumentManager('".$this->recordId."','".$this->oTableConf->id."','".$this->name."');", URL_CMS.'/images/icons/page_attachment.gif');
+        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.link.open_document_manager'), "javascript:loadDocumentManager('".$this->recordId."','".$this->oTableConf->id."','".$this->name."');", 'fas fa-file');
         $html .= '</div>
       <div class="cleardiv">&nbsp;</div>';
 

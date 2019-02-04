@@ -9,8 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace ChameleonSystem\CoreBundle\Exception;
+namespace ChameleonSystem\ImageCropBundle;
 
-class CronjobEnableException extends \Exception
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+class ChameleonSystemImageCropBundle extends Bundle
 {
 }

@@ -29,7 +29,7 @@ class TPkgCsv2Sql_CmsListManagerPkgCsv2sql extends TCMSListManagerFullGroupTable
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'ProcessImport';
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_csv2sql.action.run_import');
-        $oMenuItem->sIcon = TGlobal::GetStaticURL('/chameleon/blackbox/images/icons/application_get.png');
+        $oMenuItem->sIcon = 'fas fa-upload';
 
         $aCallParams = array('pagedef' => 'tablemanager', //tableeditor
             //'id'=>$this->sId,

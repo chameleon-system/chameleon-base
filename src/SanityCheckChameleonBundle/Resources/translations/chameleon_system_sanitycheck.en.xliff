@@ -16,7 +16,7 @@
       </trans-unit>
       <trans-unit id="label.perform_single_check">
         <source>label.perform_single_check</source>
-        <target>Perfom single check</target>
+        <target>Perform single check</target>
       </trans-unit>
     </body>
   </file>

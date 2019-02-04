@@ -142,6 +142,41 @@ monolog:
        level: warning
 ```
 
+## Backend Pagedef Configuration
+
+The backend now provides a new sidebar menu which will replace the classic main menu in a future version.
+If your project uses custom pagedef files (`*.pagedef.php`), consider adding the sidebar to these files. This is
+done by adding the following line after the module list definition:
+
+```php
+    addDefaultSidebar($moduleList);
+```
+
+There are additional helper methods to simplify adding typical backend modules, but it is optional to use these methods.
+See `src/CoreBundle/private/library/classes/pagedefFunctions.inc.php` for reference.
+
+## New ImageCropBundle
+
+Chameleon now ships with a bundle that provides support for image cutouts. Install it as follows (this is required if
+the ChameleonShopThemeBundle is used, otherwise this step is optional):
+
+- Add `new \ChameleonSystem\ImageCropBundle\ChameleonSystemImageCropBundle()` to the AppKernel.
+- In a terminal, navigate to `<project root>/src/extensions/snippets-cms/` and create a symlink:
+
+  ```bash
+  ln -s ../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/snippets-cms/imageCrop
+  ```
+
+- Navigate to `<project root>/src/extensions/objectviews/TCMSFields` (create directory if it doesn't exist yet and
+  create a symlink:
+  ```bash
+  ln -s ../../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/objectviews/TCMSFields/TCMSFieldMediaWithImageCrop
+  ```
+
+- Run updates in the Chameleon backend.
+- Run assets:install console command.
+- Clear Symfony cache.
+
 ## Mailer Peer Security
 
 The default value of config key `chameleon_system_core: mailer: peer_security` was changed from "permissive" to "strict".
@@ -275,7 +310,16 @@ is recommended (although this tool may not find database-related deprecations).
 ## Classes and Interfaces
 
 - \IPkgCmsCoreLog
+- \MTMenuManager
+- \TCMSContentBox
+- \TCMSContentBoxItem
+- \TCMSMenuItem
+- \TCMSMenuItem_Module
+- \TCMSMenuItem_Table
 - \TPkgCmsCoreLog
+- \TCMSFieldMediaProperties
+- \TPkgSnippetRenderer_TranslationNode
+- \TPkgSnippetRenderer_TranslationTokenParser
 
 ## Properties
 
@@ -305,7 +349,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \TPkgCsv2Sql::CreateLogFileName()
 - \TPkgCsv2Sql::GetLogFile()
 - \TTools::AddStaticPageVariables()
- 
+- \TCMSFieldColorPicker::isFirstInstance()
 
 ## JavaScript Files and Functions
 
@@ -332,6 +376,9 @@ You should remove all width/height settings in CreateModalXY calls if it does no
 - $.jqM() (jqModal)
 - $.jqDnR() (part of jqModal)
 - $.addOption() (jquery.selectboxes plugin)
+- loadStandaloneDocumentManager
+- PublishViaAjaxCallback()
+- src/CoreBundle/Resources/public/javascript/mainNav.js
 
 ## jQueryUi
 
@@ -344,6 +391,16 @@ Deprecated is every jquery plugin in:
 /Resources/public/javascript/jquery/jQueryUI/
 
 
+- jquery.form.js was updated to version 4.2.2 and is now located in Resources/public/javascript/jquery-form-4.2.2/jquery.form.min.js.
+- jquery library was upgraded to 3.3.1. To be backwards compatible jquery.migrate is included in version 1.4.1.
+- bootstrap-colorpicker was upgraded to 3.0.3 and the directory name changed to bootstrap-colorpicker-3.0.3. The old directory is deprecated.
+- chosen.jquery.js
+- jqModal.js 
+- jqDnR.js
+- jquery.selectboxes.js
+- respond.min.js
+- pngForIE.htc
+
 ## Translations
 
 - chameleon_system_core.field_options.option_value_false
@@ -353,11 +410,11 @@ Deprecated is every jquery plugin in:
 
 ## Database Tables
 
-None.
+- cms_content_box
 
 ## Database Fields
 
-None.
+- cms_module.show_as_popup
 
 ## Backend Theme Library
 
@@ -439,3 +496,13 @@ Not found anywhere (so you might want to skip this search, too):
 - navbar-form
 - navbar-btn
 - progress-bar*
+
+
+## Font Awesome Icons
+
+The icons of Font Awesome have been added.
+They will replace all file icons and the glyphicons of Bootstrap3 in the backend.
+
+During migration, icons for main menu items will be replaced with matching Font Awesome icons. 
+
+Where icons cannot be matched, a default icon will be used; the database migrations will tell which icons could not be assigned. To manually assign an icon to a menu item representing a table, navigate to the table settings of this table and fill out the field "Icon Font CSS class". To manually assign an icon to a menu item representing a backend module, do this in the "CMS modules" menu respectively. See other menu items on what to write into these fields.
