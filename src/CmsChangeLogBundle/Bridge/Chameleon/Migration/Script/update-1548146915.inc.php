@@ -36,7 +36,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ]);
 TCMSLogChange::insert(__LINE__, $data);
 
-TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_field_conf'), 'version_history', 'validation_regex');
+TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_field_type'), 'version_history', 'validation_regex');
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields([
