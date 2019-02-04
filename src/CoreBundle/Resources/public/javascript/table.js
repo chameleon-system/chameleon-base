@@ -108,27 +108,19 @@ function ChangeListMarking(fieldValue, formName) {
 }
 
 function restoreFieldValueVersion(id) {
-    const form = document.cmsformAjaxCall;
+    const valueColumnElement = document.querySelector(`table tr[data-record-id='${ id }'] td:last-child *[data-field-restorable-value]`);
+    if (!valueColumnElement) {
+        return;
+    }
 
-    const tableIdInput = form.querySelector("[name='id']");
-    const functionInput = form.querySelector("[name='_fnc']");
-    const pagedefInput = form.querySelector("[name='pagedef']");
+    const encodedRestorableValue = valueColumnElement.dataset["fieldRestorableValue"];
+    const restorableValue = atob(encodedRestorableValue);
 
-    const listManagerMethodInput = document.createElement("input");
-    listManagerMethodInput.name = "callListManagerMethod";
-    listManagerMethodInput.value = "1";
-    form.appendChild(listManagerMethodInput);
-
-    const recordIdInput = document.createElement("input");
-    recordIdInput.name = "recordId";
-    recordIdInput.value = id;
-    form.appendChild(recordIdInput);
-
-    tableIdInput.value = document.cmsformworkonlist.querySelector("[name='id']").value || "";
-    pagedefInput.value = "changeLogFieldHistory";
-    functionInput.value = "restoreFieldValueVersion";
-
-    PostAjaxForm('cmsformAjaxCall', response => {});
+    parent.postMessage(JSON.stringify({
+        type: "restoreFieldValueVersion",
+        valueId: id,
+        valueContents: restorableValue
+    }));
 }
 
 /**
