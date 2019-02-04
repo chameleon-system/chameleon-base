@@ -146,6 +146,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     private function getFieldVersionHistoryViewUrl(): string
     {
+        // TODO: Acquire table configuration id from appropriate service.
         $changeLogItemTableConfigurationId = '031e0f8e-dc04-a3a8-dd03-0b7d04a67a54';
         $fieldConfigurationId = $this->oDefinition->id;
 
