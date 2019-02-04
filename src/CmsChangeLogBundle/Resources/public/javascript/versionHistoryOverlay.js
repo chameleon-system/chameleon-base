@@ -6,13 +6,27 @@ class VersionHistoryOverlay {
 
     constructor({element}) {
         this.element = element
+        this.editor = this.getEditorFromElement(element)
         this.attributes = element.dataset
+
+        if (!this.editor) {
+            throw new TypeError(`Could not locate an instance of CKEditor to hook into.`)
+        }
     }
 
     init() {
         const injectedElement = this.injectElement(this.element)
         this.attachEvents(injectedElement);
         this.initMessageListener()
+    }
+
+    getEditorFromElement(element) {
+        const textareaElement = element.querySelector("textarea")
+        if (!textareaElement) {
+            return undefined
+        }
+
+        return CKEDITOR.instances[textareaElement.id]
     }
 
     // Message Listening
@@ -48,7 +62,7 @@ class VersionHistoryOverlay {
         return message
     }
 
-    // Element Manipulation
+    // Set Up
 
     injectElement(element) {
         const parentElement = element.querySelector(".cke .cke_inner .cke_toolbox")
@@ -93,10 +107,11 @@ class VersionHistoryOverlay {
         CreateModalIFrameDialogCloseButton(this.attributes.fieldVersionHistoryViewUrl, 0, 0)
     }
 
-    // Handling
+    // Value
 
     setFieldValue(contents) {
-        debugger
+        CloseModalIFrameDialog()
+        this.editor.setData(contents)
     }
 
 }
