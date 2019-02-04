@@ -140,6 +140,18 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
 
         return $numberOfChangeLogItems ?? 0;
     }
+
+    /**
+     * @return string
+     */
+    private function getFieldVersionHistoryViewUrl(): string
+    {
+        $changeLogItemTableConfigurationId = '031e0f8e-dc04-a3a8-dd03-0b7d04a67a54';
+        $fieldConfigurationId = $this->oDefinition->id;
+
+        return PATH_CMS_CONTROLLER . '?id=' . $changeLogItemTableConfigurationId . '&pagedef=changeLogFieldHistory&sRestrictionField=cms_field_conf&sRestriction=' . $fieldConfigurationId;
+    }
+
     /**
      * @return string
      */
