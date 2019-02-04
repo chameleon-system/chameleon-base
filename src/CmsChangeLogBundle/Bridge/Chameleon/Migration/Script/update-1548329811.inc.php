@@ -32,6 +32,6 @@ LEFT JOIN `pkg_cms_changelog_set`
 ON `pkg_cms_changelog_set`.`id` = `pkg_cms_changelog_item`.`pkg_cms_changelog_set_id`',
     ])
     ->setWhereEquals([
-        'name' => 'pkg_cms_changelog_item',
+        'id' => TCMSLogChange::GetTableId('pkg_cms_changelog_item'),
     ]);
 TCMSLogChange::update(__LINE__, $data);
