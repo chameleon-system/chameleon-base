@@ -1,6 +1,7 @@
 <?php
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Translation\ChameleonTranslator;
 use Doctrine\DBAL\Connection;
 
 class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
@@ -25,18 +26,19 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
      */
     public function AddFields(): void
     {
+        $translator = $this->getTranslator();
         $linkField = ['id'];
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField('pkg_cms_changelog_set_change_type', 'left', null, 1, false);
+        $this->tableObj->AddHeaderField($translator->trans('chameleon_system_cms_change_log.column.change_type'), 'left', null, 1, false);
         $this->tableObj->AddColumn('pkg_cms_changelog_set_change_type', 'left', null, $linkField);
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField('pkg_cms_changelog_set_modify_date', 'left', null, 1, false);
+        $this->tableObj->AddHeaderField($translator->trans('chameleon_system_cms_change_log.column.changed_on'), 'left', null, 1, false);
         $this->tableObj->AddColumn('pkg_cms_changelog_set_modify_date', 'left', null, $linkField);
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField('value_old', 'left', null, 1, false);
+        $this->tableObj->AddHeaderField($translator->trans('chameleon_system_cms_change_log.column.old_value'), 'left', null, 1, false);
         $this->tableObj->AddColumn('value_old', 'left', null, $linkField);
     }
 
@@ -125,6 +127,14 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
     private function getDatabaseConnection(): Connection
     {
         return ServiceLocator::get('database_connection');
+    }
+
+    /**
+     * @return ChameleonTranslator
+     */
+    private function getTranslator(): ChameleonTranslator
+    {
+        return ServiceLocator::get('chameleon_system_core.translator');
     }
 
 }
