@@ -112,15 +112,18 @@ function restoreFieldValueVersion(id) {
     if (!valueColumnElement) {
         return;
     }
-
     const encodedRestorableValue = valueColumnElement.dataset["fieldRestorableValue"];
-    const restorableValue = atob(encodedRestorableValue);
-
-    parent.postMessage(JSON.stringify({
-        type: "restoreFieldValueVersion",
-        valueId: id,
-        valueContents: restorableValue
-    }));
+    
+    try {
+        const restorableValue = JSON.parse(encodedRestorableValue).value
+        parent.postMessage(JSON.stringify({
+            type: "restoreFieldValueVersion",
+            valueId: id,
+            valueContents: restorableValue
+        }));
+    } catch {
+        console.error(`Failed to retrieve restorable value from attribute, can not post message.`)
+    }
 }
 
 /**

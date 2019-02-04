@@ -3,7 +3,8 @@
 function gcf_changeLogItemAttributes($field, $row, $fieldName)
 {
     $originalFieldValue = unserialize($row[$fieldName], ['allowed_classes' => []]);
-    $encodedPayload = base64_encode($originalFieldValue);
+    $serializedFieldPayload = json_encode(['value' => $originalFieldValue], JSON_UNESCAPED_UNICODE);
+    $encodedFieldPayload = htmlspecialchars($serializedFieldPayload, ENT_QUOTES);
 
-    return sprintf('<span data-field-restorable-value="%s">%s</span>', $encodedPayload, $originalFieldValue);
+    return sprintf('<span data-field-restorable-value="%s">%s</span>', $encodedFieldPayload, $originalFieldValue);
 }
