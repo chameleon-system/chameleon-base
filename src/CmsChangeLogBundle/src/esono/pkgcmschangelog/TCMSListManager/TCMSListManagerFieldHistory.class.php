@@ -9,20 +9,6 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
     /**
      * {@inheritDoc}
      */
-    protected function DefineInterface(): void
-    {
-        $this->methodCallAllowed = ['restoreFieldValueVersion'];
-    }
-
-    public function restoreFieldValueVersion(): void
-    {
-        // TODO: Implement service or inline functionality to restore selected revision.
-        // Selected id is supplied at "recordId" parameter in request body.
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function AddFields(): void
     {
         $linkField = ['id'];
