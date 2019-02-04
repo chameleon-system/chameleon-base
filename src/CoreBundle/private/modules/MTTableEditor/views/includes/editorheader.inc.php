@@ -104,32 +104,13 @@ $oController = TGlobal::GetController();
                 'sRestrictionField' => $sRestrictionField,
                 'sRestriction' => $sRestriction,
                 'recordID' => $data['id'],
-            ], PATH_CMS_CONTROLLER.'?', '&'); ?>
+            ], PATH_CMS_CONTROLLER.'?', '&');
+            ?>
 
             <div class="mt-2">
-                <select id="quicklookuplist" class="form-control"></select>
+                <select id="quicklookuplist" class="form-control" data-select2-placeholder='<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')) ?>' data-select2-ajax='<?= $sAjaxURL ?>'></select>
             </div>
 
-            <script type="text/javascript">
-                $(document).ready(function () {
-                    $("#quicklookuplist").select2({
-                        placeholder: '<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')); ?>',
-                        ajax: {
-                            url: '<?= $sAjaxURL; ?>',
-                            dataType: 'json',
-                            delay: 250,
-                            processResults: function (data) {
-                                return {
-                                  results: JSON.parse(data)
-                                };
-                            }
-                        }
-                    }).on('select2:select', function (e) {
-                        var id = e.params.data.id;
-                        switchRecord(id);
-                    });
-                });
-            </script>
         <?php
         }
         ?>

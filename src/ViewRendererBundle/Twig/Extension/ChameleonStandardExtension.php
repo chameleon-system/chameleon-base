@@ -12,7 +12,6 @@
 namespace ChameleonSystem\ViewRendererBundle\Twig\Extension;
 
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
-use TPkgSnippetRenderer_TranslationTokenParser;
 use Twig_Environment;
 use Twig_SimpleFilter;
 
@@ -53,13 +52,6 @@ class ChameleonStandardExtension extends \Twig_Extension
                 '\ChameleonSystem\ViewRendererBundle\Twig\Extension\ChameleonStandardExtension::sanitizeUrl',
                 array('needs_environment' => true, 'is_safe_callback' => 'twig_escape_filter_is_safe')
             ),
-        );
-    }
-
-    public function getTokenParsers()
-    {
-        return array(
-            new TPkgSnippetRenderer_TranslationTokenParser(),
         );
     }
 

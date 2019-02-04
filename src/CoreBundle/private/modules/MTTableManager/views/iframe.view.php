@@ -56,16 +56,16 @@ $fieldName = $oGlobal->GetUserData('fieldName'); /* if called through a field, t
 </form>
 <?php if ($data['permission_new']) {
         ?>
-    <nav class="navbar navbar-light" role="navigation">
-        <div class="btn-group">
+        <div class="row button-element p-2">
                 <?php
                 $data['oMenuItems']->GoToStart();
         /** @var $oMenuItem TCMSTableEditorMenuItem */
         while ($oMenuItem = $data['oMenuItems']->Next()) {
-            echo $oMenuItem->GetMenuItemHTML();
+            echo '<div class="button-item col-12 col-sm-6 col-md-auto">';
+                echo $oMenuItem->GetMenuItemHTML();
+            echo '</div>';
         } ?>
         </div>
-    </nav>
 <?php
     } ?>
 <div class="iframeInnerSpacing">

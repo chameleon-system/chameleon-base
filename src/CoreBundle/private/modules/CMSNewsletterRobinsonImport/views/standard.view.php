@@ -35,7 +35,7 @@
             <td valign="top">&nbsp;</td>
             <td colspan="2">
                 <?php
-                echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_newsletter_robinson_import.action_import'), 'javascript:document.import.submit();', URL_CMS.'/images/icons/action_go.gif', 'import');
+                echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_newsletter_robinson_import.action_import'), 'javascript:document.import.submit();', 'far fa-play-circle', 'import');
                 ?>
             </td>
         </tr>

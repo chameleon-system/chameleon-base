@@ -78,7 +78,7 @@ TCMSLogChange::SetDisplayFieldPositionByAlias(TCMSLogChange::GetTableId('cms_tbl
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_list_fields', 'de')
     ->setFields([
-        'translation' => 'Aktiv',
+        'title' => 'Aktiv',
     ])
     ->setWhereEquals([
         'id' => $listFieldId,

@@ -11,6 +11,8 @@
 
 /**
  * holds one Menu (category) for the CMS, including icon, title, and menu items.
+ *
+ * @deprecated since 6.3.0 - only used for deprecated classic main menu
 /**/
 class TCMSContentBoxItem extends TAdbCmsContentBox
 {

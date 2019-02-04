@@ -23,17 +23,12 @@ try {
 $blacklistedUpdates = $oUpdateManager->getUpdateBlacklist();
 ?>
 <script type="text/javascript">
-
-    CHAMELEON.UPDATE_MANAGER.setUpdateFiles(<?=json_encode($updatesByBundle); ?>);
-
-    <?php include __DIR__.'/updateManagerConfig.inc.php'; ?>
-
-    CHAMELEON.UPDATE_MANAGER.addPostUpdateCommand('ajaxProxyClearCache', "<?=TGlobal::OutJS($translator->trans('chameleon_system_core.cms_module_update.clearing_cache')); ?>");
-
     $(document).ready(function () {
+        CHAMELEON.UPDATE_MANAGER.setUpdateFiles(<?=json_encode($updatesByBundle); ?>);
+        <?php include __DIR__.'/updateManagerConfig.inc.php'; ?>
+        CHAMELEON.UPDATE_MANAGER.addPostUpdateCommand('ajaxProxyClearCache', "<?=TGlobal::OutJS($translator->trans('chameleon_system_core.cms_module_update.clearing_cache')); ?>");
         CHAMELEON.UPDATE_MANAGER.init();
     });
-
 </script>
 
 <?php

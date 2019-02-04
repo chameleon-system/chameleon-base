@@ -286,13 +286,13 @@ class TModuleLoader
     }
 
     /**
-     * @param string $name
+     * @param string $spotName
      *
      * @return bool
      */
-    public function hasModule($name)
+    public function hasModule($spotName)
     {
-        return array_key_exists($name, $this->modules);
+        return array_key_exists($spotName, $this->modules);
     }
 
     /**

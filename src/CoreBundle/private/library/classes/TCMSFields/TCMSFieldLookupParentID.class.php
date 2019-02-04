@@ -53,7 +53,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
             if ($global->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
                 $html = "<div style=\"float: left; \">{$html}</div>";
                 $html .= "<div class=\"switchToRecordBox\">\n";
-                $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), "javascript:document.location.href='".$this->GetEditLinkForParentRecord()."';", URL_CMS.'/images/icons/page_edit.gif');
+                $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), "javascript:document.location.href='".$this->GetEditLinkForParentRecord()."';", 'fas fa-download');
                 $html .= "</div><div class=\"cleardiv\">&nbsp;</div>\n";
             }
         }

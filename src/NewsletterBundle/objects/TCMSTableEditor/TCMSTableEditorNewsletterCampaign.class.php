@@ -210,7 +210,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sItemKey = 'DeleteCampaignQueue';
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_newsletter.action.clear_queue');
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/group_delete.png');
+            $oMenuItem->sIcon = 'fas fa-user-slash';
 
             $oGlobal = TGlobal::instance();
             $oExecutingModulePointer = &$oGlobal->GetExecutingModulePointer();

@@ -1,14 +1,7 @@
 <?php
 
-// main layout
 $layoutTemplate = 'frame';
-
-// modules...
 $moduleList = array(
-    'pagetitle' => array(
-        'model' => 'MTHeader',
-        'view' => 'title',
-    ),
     'contentmodule' => array(
         'model' => 'MTTableManager',
         'view' => 'wysiwygImageChooser',
@@ -17,7 +10,4 @@ $moduleList = array(
     ),
 );
 
-// this line needs to be included... do not touch
-if (!is_array($moduleList)) {
-    $layoutTemplate = '';
-}
+addDefaultPageTitle($moduleList);

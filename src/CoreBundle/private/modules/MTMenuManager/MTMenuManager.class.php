@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @deprecated since 6.3.0 - classic main menu will be removed in a future Chameleon release
+ */
 class MTMenuManager extends TCMSModelBase
 {
     /**
