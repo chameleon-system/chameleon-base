@@ -219,6 +219,14 @@ The `backtrace_enabled` and `backtrace_limit` keys
 were moved under the `database_profiler` key (e.g. `chameleon_system_debug: database_profiler: backtrace_enabled`
 instead of `chameleon_system_debug: backtrace_enabled`). Existing configuration should be adjusted.
 
+## Access-denied Page
+
+The access-denied page should now support an additionally mapped parameter `loginFormAction` as a target action for the shown 
+login form. This avoids another and then unexpected AccessDeniedException when logging in from the access-denied page.
+Login still worked in that case however.
+If you use your own theme check the files `webModules/MTExtranet/accessDenied.view.php` and `snippets/common/userInput/form/formLoginStandard.html.twig`
+and adapt them according to the changes in **chameleon-shop-theme-bundle**. 
+
 ## TTools::GetModuleLoaderObject Returns New Object
 
 The method `TTools::GetModuleLoaderObject` now returns a new `TModuleLoader` instance instead of the global module
@@ -403,6 +411,7 @@ Deprecated is every jquery plugin in:
 
 ## Translations
 
+- chameleon_system_core.action.return_to_main_menu
 - chameleon_system_core.field_options.option_value_false
 - chameleon_system_core.field_options.option_value_true
 - chameleon_system_core.fields.lookup.no_matches

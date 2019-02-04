@@ -2094,6 +2094,7 @@
             <trans-unit id="chameleon_system_core.action.return_to_main_menu">
                 <source>chameleon_system_core.action.return_to_main_menu</source>
                 <target>Zurück zum Hauptmenü</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
 
 
