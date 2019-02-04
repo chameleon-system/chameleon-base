@@ -86,10 +86,9 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     private function mapVersionHistoryParameters(ViewRenderer $viewRenderer): void
     {
         $fieldHasVersionHistory = true;
-        $fieldIsReadOnly = $this->bReadOnlyMode;
         $numberOfFieldVersions = $this->getNumberOfFieldVersions();
 
-        if (true === $fieldIsReadOnly || 0 === $numberOfFieldVersions) {
+        if (0 === $numberOfFieldVersions || false === $this->fieldHasVersionHistory()) {
             $fieldHasVersionHistory = false;
         }
 
@@ -137,6 +136,19 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         }
 
         return $aEditorSettings;
+    }
+
+    /**
+     * @return bool
+     */
+    private function fieldHasVersionHistory(): bool
+    {
+        $fieldIsReadOnly = $this->bReadOnlyMode;
+        if (true === $fieldIsReadOnly || false === $this->oDefinition->GetFieldType()->fieldVersionHistory) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
