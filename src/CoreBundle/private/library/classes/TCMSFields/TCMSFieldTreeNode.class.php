@@ -20,8 +20,8 @@ class TCMSFieldTreeNode extends TCMSField
         $html = '<input type="hidden" id="'.TGlobalBase::OutHTML($this->name).'" name="'.TGlobalBase::OutHTML($this->name).'" value="'.TGlobalBase::OutHTML($this->data).'" />';
         $html .= '<div id="'.TGlobalBase::OutHTML($this->name).'_path">'.$path.'</div>';
         $html .= '<div class="cleardiv">&nbsp;</div>';
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_tree_node.assign_node'), 'javascript:'.$this->_GetOpenWindowJS().';', URL_CMS.'/images/icons/page_navigation.gif');
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:ResetTreeNodeSelection('".TGlobalBase::OutHTML($this->name)."');", URL_CMS.'/images/icons/action_stop.gif');
+        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_tree_node.assign_node'), 'javascript:'.$this->_GetOpenWindowJS().';', 'fas fa-check');
+        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:ResetTreeNodeSelection('".TGlobalBase::OutHTML($this->name)."');", 'fas fa-undo');
 
         return $html;
     }

@@ -6,15 +6,11 @@ $bundlesWithUpdates = array_keys($updatesByBundle);
 
 ?>
 <script type="text/javascript">
-
-    CHAMELEON.UPDATE_MANAGER.setUpdateFiles(<?=json_encode($updatesByBundle); ?>);
-
-    <?php include __DIR__.'/updateManagerConfig.inc.php'; ?>
-
     $(document).ready(function () {
+        CHAMELEON.UPDATE_MANAGER.setUpdateFiles(<?=json_encode($updatesByBundle); ?>);
+        <?php include __DIR__.'/updateManagerConfig.inc.php'; ?>
         CHAMELEON.UPDATE_MANAGER.initSingleUpdate();
     });
-
 </script>
 <div id="updatemanager">
     <div class="card">

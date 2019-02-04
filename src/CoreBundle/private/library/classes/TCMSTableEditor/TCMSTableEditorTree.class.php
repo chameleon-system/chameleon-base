@@ -245,7 +245,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
                 if ($oGlobal->oUser->oAccessManager->HasEditPermission($this->oTableConf->sqlData['name'])) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save');
-                    $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/action_save.gif');
+                    $oMenuItem->sIcon = 'far fa-save';
                     $oMenuItem->sOnClick = 'SaveTreeNodeAjax();';
                     $this->oMenuItems->AddItem($oMenuItem);
                 }

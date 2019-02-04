@@ -71,7 +71,7 @@ $oPkgNewsletterGroupList = $data['oPkgNewsletterGroupList'];
             <td valign="top">&nbsp;</td>
             <td colspan="2">
                 <?php
-                echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_newsletter_import.action_import'), 'javascript:CheckReplacement();', URL_CMS.'/images/icons/action_go.gif', 'importCSV');
+                echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_newsletter_import.action_import'), 'javascript:CheckReplacement();', 'fas fa-file-import', 'importCSV');
                 ?>
             </td>
         </tr>
@@ -97,7 +97,7 @@ $oPkgNewsletterGroupList = $data['oPkgNewsletterGroupList'];
     <br \>
     <br \>
     <?php
-    echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_newsletter_import.action_confirm_replace'), 'javascript:StartCSVImport();', URL_CMS.'/images/icons/action_go.gif', 'importCSVFinal');
+    echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_newsletter_import.action_confirm_replace'), 'javascript:StartCSVImport();', 'fas fa-file-import', 'importCSVFinal');
     ?>
 </div>
 

@@ -74,7 +74,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 
         $oGlobal = TGlobal::instance();
         if (!empty($sForeignTableName) && $this->bShowSwitchToRecord && $oGlobal->oUser->oAccessManager->HasNewPermission($sForeignTableName)) {
-            $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), 'javascript:'.$this->GoToRecordJS().';', URL_CMS.'/images/icons/page_edit.gif');
+            $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), 'javascript:'.$this->GoToRecordJS().';', 'far fa-edit');
         }
 
         return $sHTML;
@@ -125,12 +125,12 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
                 }
                 $oGlobal = TGlobal::instance();
                 if (!$oCmsTblConf->fieldOnlyOneRecordTbl && ($oGlobal->oUser->oAccessManager->HasShowAllPermission($sTableName) || $oGlobal->oUser->oAccessManager->HasShowAllReadOnlyPermission($sTableName))) {
-                    $sHTML .= TCMSRender::DrawButton($sTableDisplayName, 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf).';', URL_CMS.'/images/icons/box.gif');
+                    $sHTML .= TCMSRender::DrawButton($sTableDisplayName, 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf).';', 'fas fa-th-list');
                     $sHTML .= '<input type="hidden" name="'.TGlobal::OutHTML('aTableNames['.$oCmsTblConf->id).']" id="'.TGlobal::OutHTML('aTableNames['.$oCmsTblConf->id).']" value="'.TGlobal::OutHTML($oCmsTblConf->fieldTranslation).'" />'."\n";
                 }
             }
             $sHTML .= '<div>';
-            $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:resetExtendedMultiTableListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected'))."');", URL_CMS.'/images/icons/action_stop.gif');
+            $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:resetExtendedMultiTableListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected'))."');", 'fas fa-undo');
             $sHTML .= '</div>';
         } else {
             $sHTML = parent::GetExtendedListButtons();

@@ -180,7 +180,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 if (MySqlLegacySupport::getInstance()->num_rows($result) > 0) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.export');
-                    $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/database_save.png');
+                    $oMenuItem->sIcon = 'far fa-save';
 
                     $sListClass = 'TCMSListManager';
 
@@ -210,7 +210,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 $oMenuItem = new TCMSTableEditorMenuItem();
                 $oMenuItem->sItemKey = 'deleteall';
                 $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.list.delete_selected');
-                $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/cross.png');
+                $oMenuItem->sIcon = 'far fa-trash-alt';
                 $oMenuItem->sOnClick = "DeleteSelectedRecords('{$sFormName}');";
                 $this->oMenuItems->AddItem($oMenuItem);
             }

@@ -1,7 +1,9 @@
 <?php
 
-// main layout
 $layoutTemplate = 'templateengine';
+$moduleList = array('templateengine' => array('model' => 'CMSTemplateEngine', 'view' => 'main'));
 
-// modules...
-$moduleList = array('pagetitle' => array('model' => 'MTHeader', 'view' => 'title'), 'headerimage' => array('model' => 'MTHeader', 'view' => 'standard'), 'templateengine' => array('model' => 'CMSTemplateEngine', 'view' => 'main'), 'breadcrumb' => array('model' => 'MTHeader', 'view' => 'breadcrumb'));
+addDefaultPageTitle($moduleList);
+addDefaultHeader($moduleList);
+addDefaultBreadcrumb($moduleList);
+addDefaultSidebar($moduleList);

@@ -317,6 +317,14 @@ div.grippie {
     background-repeat: no-repeat;
     padding: 1px 0px 1px 20px;
 }
+.button-element {
+    margin-left: -3px!important;
+    margin-right: -3px!important;
+}
+
+.button-element .button-item {
+    padding: 0 3px 6px 3px;
+}
 
 .dropdown-menu .dropdown-icon, .dropdown-menu .dropdown-icon:hover {
     background-position: 5px center;
@@ -334,6 +342,10 @@ div.grippie {
 
 #cmsbreadcrumb .breadcrumb {
     border-radius: 0;
+}
+
+#cmsbreadcrumb .breadcrumb i {
+    color: #098dba;
 }
 
 .cmsNavIcon {
@@ -391,10 +403,6 @@ div.grippie {
     border-color: #856404 transparent transparent transparent;
 }
 
-.app-body .main {
-    background-color: #d9edf7;
-}
-
 /**
 * Animated Spinner.
 * https://loading.io/css/
@@ -439,6 +447,22 @@ div.grippie {
 
 .select2-selection.select2-selection--single {
     border: 1px solid #e4e7ea;
+}
+
+.nav-link-fa {
+    display: block;
+    padding: .5rem 0;
+}
+.nav-link-fa i {
+    color: #098dba;
+    width: 30px;
+}
+
+.sidebar-filter-input {
+    border-radius: 0;
+    font-family: FontAwesome,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    padding-top: 1.4rem;
+    padding-bottom: 1.3rem;
 }
 
 /**

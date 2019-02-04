@@ -141,6 +141,64 @@ $(document).ready(function () {
     });
 
     $('[data-select2-option]').each(function () {
-        $(this).select2($(this).data("select2-option"));
+        $(this).select2($(this).data('select2-option'));
     });
+
+    var searchLookup = $("#searchLookup");
+
+    searchLookup.select2({
+        placeholder: searchLookup.data('select2-placeholder'),
+        allowClear: true,
+        ajax: {
+            url: searchLookup.data('select2-ajax'),
+            dataType: 'json',
+            delay: 150,
+            processResults: function (data) {
+                return {
+                    results: JSON.parse(data)
+                };
+            }
+        },
+        escapeMarkup: function(markup) {
+            return markup;
+        },
+        templateResult: function(data) {
+            return data.html;
+        },
+        tags: true,
+        createTag: function (params) {
+            return {
+                id: params.term,
+                text: params.term,
+                newOption: true
+            }
+        }
+    }).on('select2:select', function (e) {
+        if (e.params.data.newOption) {
+            var listname = searchLookup.data('listname');
+            document[listname]._startRecord.value=0;
+            document[listname].submit();
+        } else {
+            var id = e.params.data.id;
+            switchRecord(id);
+        }
+    }).on('select2:unselect', function (e) {
+        //:unselect and submit() doesn't transmit the empty searchlookup-Field. Therefore, the value of
+        // _search_word is not overwritten (not reset) in the session. With an additional hidden field it works.
+        var input = document.createElement('input');
+        input.setAttribute('type', 'hidden');
+        input.setAttribute('name', '_search_word');
+
+        var listname = searchLookup.data('listname');
+        document[listname].appendChild(input);
+        document[listname]._startRecord.value=0;
+        document[listname].submit();
+    });
+
+    function switchRecord(id) {
+        if ('' !== id) {
+            var url = searchLookup.data('record-url') + '&id=' + id;
+            document.location.href = url;
+        }
+    }
 });

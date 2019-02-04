@@ -37,7 +37,7 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
 
         ++$this->columnCount;
         $this->tableObj->AddHeaderField('value_old', 'left', null, 1, false);
-        $this->tableObj->AddColumn('value_old', 'left', null, $linkField);
+        $this->tableObj->AddColumn('value_old', 'left', 'gcf_changeLogItemAttributes', $linkField);
     }
 
     /**

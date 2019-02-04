@@ -75,7 +75,7 @@ class TCMSListManagerTreeNode extends TCMSListManagerFullGroupTable
                 // add new button
                 $oMenuItem = new TCMSTableEditorMenuItem();
                 $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.new');
-                $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/page_new.gif');
+                $oMenuItem->sIcon = 'fas fa-plus';
                 $oMenuItem->sItemKey = 'new';
 
                 $aParameter = array('pagedef' => 'tableeditorPopup', 'id' => $this->oTableConf->id, 'tableid' => $this->sTreeNodeTableID, 'module_fnc' => array('contentmodule' => 'Insert'));

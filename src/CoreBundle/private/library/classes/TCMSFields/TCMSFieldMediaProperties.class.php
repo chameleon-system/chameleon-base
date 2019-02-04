@@ -11,6 +11,9 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
+/**
+ * @deprecated since 6.3.0 - no longer used
+ */
 class TCMSFieldMediaProperties extends TCMSFieldNumber
 {
     /** @var bool */
@@ -61,7 +64,7 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
 
         $html .= '<tr>
             <td colspan="2">
-            '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.download'), $oImage->GetFullURL(), TGlobal::GetStaticURLToWebLib('/images/icons/drive_disk.png'), 'float-left').'
+            '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.download'), $oImage->GetFullURL(), 'fas fa-download', 'float-left').'
             <div style="padding-left: 10px; float: left;">('.TGlobal::Translate('chameleon_system_core.field_document.right_click_download').')</div>
             </td>
           </tr>';
@@ -69,7 +72,7 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
         if (!$this->bIsReadOnlyMode && empty($this->oTableRow->sqlData['external_video_id'])) {
             $html .= '<tr>
             <td colspan="2">
-            '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.replace'), 'javascript:OpenMediaUploadWindow();', TGlobal::GetStaticURLToWebLib('/images/icons/action_refresh_blue.gif')).'
+            '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.replace'), 'javascript:OpenMediaUploadWindow();', 'fas fa-sync').'
             </td>
           </tr>';
         }

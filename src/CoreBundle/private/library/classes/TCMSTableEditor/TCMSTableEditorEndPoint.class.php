@@ -524,7 +524,7 @@ class TCMSTableEditorEndPoint
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sItemKey = 'save';
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save');
-                    $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/action_save.gif');
+                    $oMenuItem->sIcon = 'fas fa-save';
 
                     $sOnSaveViaAjaxHookMethods = '';
                     /** @var $oFields TIterator */
@@ -549,7 +549,7 @@ class TCMSTableEditorEndPoint
                             $oMenuItem = new TCMSTableEditorMenuItem();
                             $oMenuItem->sItemKey = 'copy';
                             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.copy');
-                            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/page_copy.png');
+                            $oMenuItem->sIcon = 'far fa-clone';
                             $oMenuItem->sOnClick = "if(confirm('".TGlobalBase::OutJS(TGlobal::Translate('chameleon_system_core.action.confirm_copy'))."')){ExecutePostCommand('DatabaseCopy');}";
                             $this->oMenuItems->AddItem($oMenuItem);
 
@@ -557,7 +557,7 @@ class TCMSTableEditorEndPoint
                             $oMenuItem = new TCMSTableEditorMenuItem();
                             $oMenuItem->sItemKey = 'new';
                             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.new');
-                            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/page_new.gif');
+                            $oMenuItem->sIcon = 'fas fa-plus';
                             $oMenuItem->sOnClick = "ExecutePostCommand('Insert');";
                             $this->oMenuItems->AddItem($oMenuItem);
                         }
@@ -567,7 +567,7 @@ class TCMSTableEditorEndPoint
                             $oMenuItem = new TCMSTableEditorMenuItem();
                             $oMenuItem->sItemKey = 'delete';
                             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.delete');
-                            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/page_delete.gif');
+                            $oMenuItem->sIcon = 'far fa-trash-alt';
                             $oMenuItem->sOnClick = 'DeleteRecord();';
                             $oMenuItem->setButtonStyle('btn-danger');
                             $this->oMenuItems->AddItem($oMenuItem);
@@ -579,7 +579,7 @@ class TCMSTableEditorEndPoint
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'previewPage';
                         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.preview');
-                        $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/eye.png');
+                        $oMenuItem->sIcon = 'far fa-eye';
 
                         $ajaxURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'tableeditor', 'id' => $this->sId, 'tableid' => $this->oTableConf->id, 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'AjaxGetPreviewURL'));
                         $oMenuItem->sOnClick = "GetAjaxCallTransparent('".$ajaxURL."', OpenPreviewURL);";
@@ -591,7 +591,7 @@ class TCMSTableEditorEndPoint
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'revisionManagement';
                         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.record_revision.action_new_revision');
-                        $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/database_add.png');
+                        $oMenuItem->sIcon = 'fas fa-folder-plus';
                         $oMenuItem->sOnClick = 'AddNewRevision();';
                         $this->oMenuItems->AddItem($oMenuItem);
 
@@ -611,7 +611,7 @@ class TCMSTableEditorEndPoint
                             $oMenuItem = new TCMSTableEditorMenuItem();
                             $oMenuItem->sItemKey = 'revisionManagementLoad';
                             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.record_revision.action_load_revision');
-                            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/database_go.png');
+                            $oMenuItem->sIcon = 'fas fa-file-export';
                             $oMenuItem->sOnClick = "CreateModalIFrameDialogCloseButton('".$sRevisionListURL."');";
                             $this->oMenuItems->AddItem($oMenuItem);
                         }
@@ -625,7 +625,7 @@ class TCMSTableEditorEndPoint
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'edittableconf';
                         $oMenuItem->setTitle(TGlobal::Translate('chameleon_system_core.action.open_table_configuration'));
-                        $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/application_form_edit.png');
+                        $oMenuItem->sIcon = 'far fa-edit';
                         $oMenuItem->setButtonStyle('btn-warning');
 
                         $aParameter = array('pagedef' => 'tableeditor', 'id' => $this->oTableConf->id, 'tableid' => $oTableEditorConf->id);

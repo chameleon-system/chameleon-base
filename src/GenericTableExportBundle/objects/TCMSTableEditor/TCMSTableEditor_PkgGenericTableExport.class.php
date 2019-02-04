@@ -25,7 +25,7 @@ class TCMSTableEditor_PkgGenericTableExport extends TCMSTableEditor
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'runexporttofilesystem';
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_generic_table_export.action.export_to_server');
-        $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/database_go.png');
+        $oMenuItem->sIcon = 'fas fa-file-export';
         $oMenuItem->sOnClick = "document.location.href='?".TTools::GetArrayAsURL($aParam)."'";
         $this->oMenuItems->AddItem($oMenuItem);
 
@@ -36,7 +36,7 @@ class TCMSTableEditor_PkgGenericTableExport extends TCMSTableEditor
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'runexporttodownload';
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_generic_table_export.action.export_and_download');
-        $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/database_go.png');
+        $oMenuItem->sIcon = 'fas fa-file-export';
         $oMenuItem->sOnClick = "document.location.href='?".TTools::GetArrayAsURL($aParam)."'";
         $this->oMenuItems->AddItem($oMenuItem);
     }

@@ -1,12 +1,6 @@
 <?php
 
-// main layout
 $layoutTemplate = 'frame';
+$moduleList = array('contentmodule' => array('model' => 'MTTableManager', 'view' => 'iframe', '_suppressHistory' => true));
 
-// modules...
-$moduleList = array('pagetitle' => array('model' => 'MTHeader', 'view' => 'title'), 'contentmodule' => array('model' => 'MTTableManager', 'view' => 'iframe', '_suppressHistory' => true));
-
-// this line needs to be included... do not touch
-if (!is_array($moduleList)) {
-    $layoutTemplate = '';
-}
+addDefaultPageTitle($moduleList);

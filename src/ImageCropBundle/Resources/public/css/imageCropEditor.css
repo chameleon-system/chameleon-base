@@ -1,0 +1,44 @@
+.snippetImageCropImageCropEditorImageCropEditor img {
+    max-width: 100%;
+}
+
+.snippetImageCropImageCropEditorPresetList, .snippetImageCropImageCropEditorImageCropEditorForm {
+    display: inline-block;
+}
+
+.snippetImageCropImageCropEditorPresetList ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.snippetImageCropImageCropEditorPresetList ul > li {
+    display: inline-block;
+    background: #eeeeee;
+    padding: 0 10px;
+    margin-right: 10px;
+    line-height: 30px;
+    margin-bottom: 10px;
+}
+
+.snippetImageCropImageCropEditorPresetList ul > li a {
+    display: block;
+    text-decoration: none;
+}
+
+.snippetImageCropImageCropEditorPresetList ul > li:hover {
+    background: rgba(220, 220, 220, 0.8);
+}
+
+.snippetImageCropImageCropEditorPresetList ul > li.active {
+    background: rgb(179, 232, 255);
+}
+
+.snippetImageCropImageCropEditorImageCropEditorForm {
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.snippetImageCropImageCropEditorImageCropEditorForm input.crop-name {
+    width: 200px;
+}

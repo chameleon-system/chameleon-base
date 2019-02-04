@@ -1,0 +1,12 @@
+<button type="button" {% if sItemKey %}data-table-function="{{ sItemKey }}"{% endif %}class="btn btn-sm {{ sButtonStyle }}{% if sItemKey is defined %} item{{ sItemKey }}{% endif %} {{ sCSSClass }}"
+{%- if sOnClick %} onclick="{{ sOnClick|raw }}" {% endif -%}
+{%- if cssID is defined and '' != cssID %} id="{{ cssID }}" {% endif -%}
+{%- if onMouseOver is defined %} onmouseover="{{ onMouseOver }}" {% endif -%}
+>
+{%- if sIconURL is defined -%}
+    <span class="btn-icon" style="background-image: url({{ sIconURL }});">{{ sTitle }}</span>
+{%- else -%}
+    {%- if sIcon|length > 0 %}<i class="{{ sIcon }} pr-2"></i>{% endif -%}
+    {{ sTitle }}
+{%- endif -%}
+</button>

@@ -7,8 +7,7 @@ if (TGlobal::CMSUserDefined()) {
         });
     </script>
 
-    <div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingDialog"
-         aria-hidden="true">
+    <div class="modal" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingDialog" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
                 <div class="alert alert-warning mb-0" role="alert">
@@ -33,6 +32,8 @@ if (TGlobal::CMSUserDefined()) {
     <script src="<?= TGlobal::GetStaticURLToWebLib('/javascript/jquery-form-4.2.2/jquery.form.min.js') ?>"
             type="text/javascript"></script>
     <script src="<?= TGlobal::GetStaticURLToWebLib('/javascript/cms.js'); ?>" type="text/javascript"></script>
+    <?php // Scrollbar JS needs to be loaded before CoreUI ?>
+    <script src="<?= TGlobal::GetPathTheme() ?>/coreui/js/perfect-scrollbar.min.js" type="text/javascript"></script>
     <script src="<?= TGlobal::GetPathTheme() ?>/coreui/js/coreui.min.js" type="text/javascript"></script>
     <script src="<?= TGlobal::GetPathTheme() ?>/coreui/js/coreui-utilities.min.js" type="text/javascript"></script>
     <?php

@@ -1,0 +1,9 @@
+{{ renderedTableEditorMessages | raw }}
+
+{% if errorMessage %}
+    <div class="alert alert-danger">{{ errorMessage }}</div>
+{% else %}
+    {% include 'imageCrop/imageCropEditor/presetList.html.twig' with {'presetList': presetList} %}
+
+    {% include 'imageCrop/imageCropEditor/imageCropEditor.html.twig' %}
+{% endif %}
