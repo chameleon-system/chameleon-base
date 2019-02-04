@@ -17,9 +17,6 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tbl_list_class', 'en')
     ]);
 TCMSLogChange::insert(__LINE__, $data);
 
-$query = "ALTER TABLE `pkg_cms_changelog_item` COMMENT = 'Änderung:\\n'";
-TCMSLogChange::RunQuery(__LINE__, $query);
-
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'de')
     ->setFields([
         'list_query' => 'SELECT
@@ -35,6 +32,6 @@ LEFT JOIN `pkg_cms_changelog_set`
 ON `pkg_cms_changelog_set`.`id` = `pkg_cms_changelog_item`.`pkg_cms_changelog_set_id`',
     ])
     ->setWhereEquals([
-        'id' => '031e0f8e-dc04-a3a8-dd03-0b7d04a67a54',
+        'name' => 'pkg_cms_changelog_item',
     ]);
 TCMSLogChange::update(__LINE__, $data);
