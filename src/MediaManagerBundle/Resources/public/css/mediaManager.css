@@ -316,14 +316,6 @@
     border-bottom: none;
 }
 
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListPaging {
-    padding: 0 10px 0 5px;
-}
-
-.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListPaging .pagination {
-    margin-top: 0;
-}
-
 .snippetMediaManagerBackendModuleStandard .media-manager-layover .title {
     margin-top: 5px;
 }
