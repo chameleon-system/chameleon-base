@@ -194,7 +194,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
             'pagedef' => 'changeLogFieldHistory',
             'sRestrictionField' => 'cms_field_conf',
             'sRestriction' => $fieldConfigurationId
-        ], PATH_CMS_CONTROLLER.'?');
+        ], PATH_CMS_CONTROLLER.'?', '&');
     }
 
     /**
