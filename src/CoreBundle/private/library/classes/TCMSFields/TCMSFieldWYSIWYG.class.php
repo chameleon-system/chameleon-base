@@ -189,12 +189,12 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         $tableConfigurationId = TTools::GetCMSTableId(self::CHANGE_LOG_ITEM_TABLE_NAME);
         $fieldConfigurationId = $this->oDefinition->id;
 
-        return sprintf(
-            '%s?id=%s&pagedef=changeLogFieldHistory&sRestrictionField=cms_field_conf&sRestriction=%s',
-            PATH_CMS_CONTROLLER,
-            $tableConfigurationId,
-            $fieldConfigurationId
-        );
+        return $this->getUrlUtilService()->getArrayAsUrl([
+            'id' => $tableConfigurationId,
+            'pagedef' => 'changeLogFieldHistory',
+            'sRestrictionField' => 'cms_field_conf',
+            'sRestriction' => $fieldConfigurationId
+        ], PATH_CMS_CONTROLLER.'?');
     }
 
     /**
