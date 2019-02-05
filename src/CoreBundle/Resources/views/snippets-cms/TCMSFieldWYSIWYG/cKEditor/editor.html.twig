@@ -1,4 +1,11 @@
-<div>
+<div
+    data-field-version-history-managed
+    data-field-configuration-id="{{ fieldConfigurationId | e('html_attr') }}"
+    data-field-has-version-history="{{ fieldHasVersionHistory | e('html_attr') }}"
+    data-field-version-history-title="Versionshistorie"
+    data-field-number-of-field-versions="{{ fieldVersionHistoryNumberOfVersions | e('html_attr') }}"
+    data-field-version-history-view-url="{{ fieldVersionHistoryViewUrl | e('html_attr') }}"
+>
     {% if couldNotLoadCustomCss %}
         <div class="alert alert-info">{{ 'chameleon_system_core.field_wysiwyg.custom_css_loading_error'|trans({'%url%': customCssUrl}) }}</div>
     {% endif %}

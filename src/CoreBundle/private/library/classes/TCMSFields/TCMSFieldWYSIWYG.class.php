@@ -9,8 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Exception\DataAccessException;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\CoreBundle\Wysiwyg\CkEditorConfigProviderInterface;
+use Doctrine\DBAL\DBALException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -33,15 +35,21 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
 
     private $sEditorWidth = null;
 
+    const CHANGE_LOG_ITEM_TABLE_NAME = 'pkg_cms_changelog_item';
+
     public function GetHTML()
     {
         parent::GetHTML();
+
         $oViewRenderer = new ViewRenderer();
+
         $oViewRenderer->AddSourceObject('sEditorName', 'fieldcontent_'.$this->sTableName.'_'.$this->name);
         $oViewRenderer->AddSourceObject('sFieldName', $this->name);
         $oViewRenderer->AddSourceObject('extraPluginsConfiguration', $this->getExtraPluginsConfiguration());
         $oViewRenderer->AddSourceObject('aEditorSettings', $this->getEditorSettings());
+
         $sUserCssUrl = $this->getEditorCSSUrl();
+
         if ('' !== $sUserCssUrl) {
             $aStyles = array();
             try {
@@ -53,7 +61,9 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
 
             $oViewRenderer->AddSourceObject('aStyles', $aStyles);
         }
+
         $oViewRenderer->AddSourceObject('data', $this->data);
+        $this->mapVersionHistoryParameters($oViewRenderer);
 
         return $oViewRenderer->Render('TCMSFieldWYSIWYG/cKEditor/editor.html.twig', null, false);
     }
@@ -69,6 +79,25 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         $html = $this->GetHTML();
 
         return $html;
+    }
+
+    /**
+     * @param ViewRenderer $viewRenderer
+     * @throws DataAccessException
+     */
+    private function mapVersionHistoryParameters(ViewRenderer $viewRenderer): void
+    {
+        $fieldHasVersionHistory = true;
+        $numberOfFieldVersions = $this->getNumberOfFieldVersions();
+
+        if (0 === $numberOfFieldVersions || false === $this->fieldHasVersionHistory()) {
+            $fieldHasVersionHistory = false;
+        }
+
+        $viewRenderer->AddSourceObject('fieldConfigurationId', $this->oDefinition->id);
+        $viewRenderer->AddSourceObject('fieldHasVersionHistory', $fieldHasVersionHistory ? '1' : '0');
+        $viewRenderer->AddSourceObject('fieldVersionHistoryNumberOfVersions', $numberOfFieldVersions);
+        $viewRenderer->AddSourceObject('fieldVersionHistoryViewUrl', $this->getFieldVersionHistoryViewUrl());
     }
 
     /**
@@ -109,6 +138,63 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         }
 
         return $aEditorSettings;
+    }
+
+    /**
+     * @return bool
+     */
+    private function fieldHasVersionHistory(): bool
+    {
+        $fieldIsReadOnly = $this->bReadOnlyMode;
+        if (true === $fieldIsReadOnly || false === $this->oDefinition->GetFieldType()->fieldVersionHistory) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return int
+     * @throws DataAccessException
+     */
+    private function getNumberOfFieldVersions(): int
+    {
+        $fieldConfigurationId = $this->oDefinition->id;
+        $numberOfChangeLogItems = null;
+
+        try {
+            $query = ' SELECT
+                        COUNT(`pkg_cms_changelog_item`.`id`) AS `number_of_items`
+                         FROM `pkg_cms_changelog_item`
+                        WHERE `pkg_cms_changelog_item`.`cms_field_conf` = :fieldConfigurationId';
+            $columnValue = $this->getDatabaseConnection()->fetchColumn($query, ['fieldConfigurationId' => $fieldConfigurationId]);
+
+            if (false !== $columnValue) {
+                $numberOfChangeLogItems = (int)$columnValue;
+            }
+        } catch(DBALException $e) {
+            throw new DataAccessException(
+                sprintf('Failed to execute query to retrieve number of change log items for field \'%s\'.', $fieldConfigurationId), 0, $e
+            );
+        }
+
+        return $numberOfChangeLogItems ?? 0;
+    }
+
+    /**
+     * @return string
+     */
+    private function getFieldVersionHistoryViewUrl(): string
+    {
+        $tableConfigurationId = TTools::GetCMSTableId(self::CHANGE_LOG_ITEM_TABLE_NAME);
+        $fieldConfigurationId = $this->oDefinition->id;
+
+        return $this->getUrlUtilService()->getArrayAsUrl([
+            'id' => $tableConfigurationId,
+            'pagedef' => 'changeLogFieldHistory',
+            'sRestrictionField' => 'cms_field_conf',
+            'sRestriction' => $fieldConfigurationId
+        ], PATH_CMS_CONTROLLER.'?', '&');
     }
 
     /**
@@ -161,6 +247,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
             $aIncludes = array();
         }
         $aIncludes[] = '<script src="'.URL_CMS.'/components/ckEditor/ckeditor/ckeditor.js" type="text/javascript"></script>';
+        $aIncludes[] = '<script src="'.URL_CMS.'/javascript/versionHistoryOverlay.js" type="text/javascript"></script>';
         $aIncludes[] = '<script type="text/javascript" src="'.TGlobal::GetStaticURL(
                 '/chameleon/blackbox/javascript/CKEditor/chameleon.ckeditor.js'
             ).'"></script>';
@@ -735,4 +822,5 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.wysiwyg.ckeditor_config_provider');
     }
+
 }
