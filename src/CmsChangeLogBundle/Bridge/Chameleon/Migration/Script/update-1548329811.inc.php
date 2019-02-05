@@ -8,8 +8,8 @@
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_list_class', 'en')
     ->setFields([
-        'name' => 'TCMSListManagerFieldHistory.class',
-        'classname' => 'TCMSListManagerFieldHistory.class',
+        'name' => 'TCMSListManagerFieldHistory',
+        'classname' => 'TCMSListManagerFieldHistory',
         'cms_tbl_conf_id' => TCMSLogChange::GetTableId('pkg_cms_changelog_set'),
         'class_subtype' => '',
         'classlocation' => 'Core',
