@@ -53,7 +53,7 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
 
         return sprintf(
             '`pkg_cms_changelog_item`.`cms_field_conf` = %s',
-            $this->getDatabaseConnection()->quote($changeLogFieldConfigurationId),
+            $this->getDatabaseConnection()->quote($changeLogFieldConfigurationId)
         );
     }
 
