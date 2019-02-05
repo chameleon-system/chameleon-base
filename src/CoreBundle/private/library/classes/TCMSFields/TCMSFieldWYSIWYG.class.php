@@ -164,8 +164,6 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
             $query = ' SELECT
                         COUNT(`pkg_cms_changelog_item`.`id`) AS `number_of_items`
                          FROM `pkg_cms_changelog_item`
-                    LEFT JOIN `pkg_cms_changelog_set`
-                           ON `pkg_cms_changelog_set`.`id` = `pkg_cms_changelog_item`.`pkg_cms_changelog_set_id`
                         WHERE `pkg_cms_changelog_item`.`cms_field_conf` = :fieldConfigurationId';
             $columnValue = $this->getDatabaseConnection()->fetchColumn($query, ['fieldConfigurationId' => $fieldConfigurationId]);
 
