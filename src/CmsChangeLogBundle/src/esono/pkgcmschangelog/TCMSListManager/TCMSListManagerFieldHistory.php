@@ -52,13 +52,11 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
     public function GetCustomRestriction(): string
     {
         $changeLogFieldConfigurationId = $this->sRestriction;
-        $recordIds = $this->getRestrictionRecordIds($changeLogFieldConfigurationId, self::FIELD_HISTORY_VERSION_LIST_LIMIT);
 
-        if (0 === count($recordIds)) {
-            return '';
-        }
-
-        return sprintf(' %s.`id` IN (%s)', $this->getQuotedTableName(), $this->getQuotedElements($recordIds));
+        return sprintf(
+            '`pkg_cms_changelog_item`.`cms_field_conf` = %s',
+            $this->getDatabaseConnection()->quote($changeLogFieldConfigurationId),
+        );
     }
 
     /**
@@ -67,66 +65,6 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
     protected function _GetRecordClickJavaScriptFunctionName(): string
     {
         return 'restoreFieldValueVersion';
-    }
-
-    // Subquery
-
-    /**
-     * @param string $fieldConfigurationId
-     * @param int $limit
-     * @return string[]
-     */
-    private function getRestrictionRecordIds(string $fieldConfigurationId, int $limit): array
-    {
-        $connection = $this->getDatabaseConnection();
-
-        try {
-            $stmt = $connection->executeQuery(
-                $this->getIdRestrictionQuery(),
-                ['fieldConfigurationId' => $fieldConfigurationId, 'limit' => $limit],
-                ['fieldConfigurationId' => \PDO::PARAM_STR, 'limit' => \PDO::PARAM_INT]
-            );
-            return $stmt->fetchAll(PDO::FETCH_COLUMN);
-        } catch (\Doctrine\DBAL\DBALException $e) {
-            return [];
-        }
-    }
-
-    // Query Form
-
-    private function getIdRestrictionQuery(): string
-    {
-        return 'SELECT
-                    `pkg_cms_changelog_item`.`id`
-               FROM `pkg_cms_changelog_item`
-          LEFT JOIN `pkg_cms_changelog_set`
-                 ON `pkg_cms_changelog_set`.`id` = `pkg_cms_changelog_item`.`pkg_cms_changelog_set_id`
-	          WHERE `pkg_cms_changelog_item`.`cms_field_conf` = :fieldConfigurationId
-           ORDER BY `pkg_cms_changelog_set`.`modify_date` DESC
-              LIMIT :limit';
-    }
-
-    // String Form
-
-    /**
-     * @return string
-     */
-    private function getQuotedTableName(): string
-    {
-        return $this->getDatabaseConnection()->quoteIdentifier($this->oTableConf->sqlData['name']);
-    }
-
-    /**
-     * @param string[] $elements
-     * @return string
-     */
-    private function getQuotedElements(array $elements): string
-    {
-        $connection = $this->getDatabaseConnection();
-
-        return implode(',', array_map(function(string $id) use ($connection) {
-            return $connection->quote($id);
-        }, $elements));
     }
 
     // Dependencies
