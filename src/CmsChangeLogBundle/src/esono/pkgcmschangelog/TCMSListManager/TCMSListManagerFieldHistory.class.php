@@ -23,7 +23,7 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
 
         ++$this->columnCount;
         $this->tableObj->AddHeaderField('value_old', 'left', null, 1, false);
-        $this->tableObj->AddColumn('value_old', 'left', 'gcf_changeLogItemAttributes', $linkField);
+        $this->tableObj->AddColumn('value_old', 'left', [$this, 'getFieldTextWithAttributes'], $linkField);
     }
 
     /**
@@ -101,6 +101,23 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
         return implode(',', array_map(function(string $id) use ($connection) {
             return $connection->quote($id);
         }, $elements));
+    }
+
+    // Formatting Callback
+
+    /**
+     * @param $field
+     * @param array $row
+     * @param string $fieldName
+     * @return string
+     */
+    public function getFieldTextWithAttributes($field, array $row, string $fieldName): string
+    {
+        $originalFieldValue = unserialize($row[$fieldName], ['allowed_classes' => []]);
+        $serializedFieldPayload = json_encode(['value' => $originalFieldValue], JSON_UNESCAPED_UNICODE);
+        $encodedFieldPayload = htmlspecialchars($serializedFieldPayload, ENT_QUOTES);
+
+        return sprintf('<span data-field-restorable-value="%s">%s</span>', $encodedFieldPayload, $originalFieldValue);
     }
 
     // Dependencies
