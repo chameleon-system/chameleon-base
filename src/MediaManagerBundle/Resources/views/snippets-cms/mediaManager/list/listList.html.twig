@@ -52,12 +52,30 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-10 col-xl-5 info">
-                        {% if mediaItem.type|lower in ['jpg', 'png', 'gif'] %}
-                            <img class="mr-1" src="/chameleon/blackbox/images/filetype_icons/16x16/{{ mediaItem.type|lower }}.png" alt="">
-                        {% endif %}{{ mediaItem.type }}<br>
-                        <i class="fas fa-expand-arrows-alt mr-2"></i>{{ mediaItem.width }} x {{ mediaItem.height }} px<br>
-                        <i class="fas fa-info-circle mr-2"></i>ID {{ mediaItem.id }}
-                        {% if mediaItem.dateChanged %}<br><i class="far fa-clock mr-2"></i>{{ 'chameleon_system_media_manager.changed_date' | trans }} {{ mediaItem.dateChanged | date('d.m.Y H:i:s') }}{% endif %}
+                        <table>
+                            <tr>
+                                <td>
+                                    {% if mediaItem.type|lower in ['jpg', 'png', 'gif'] %}
+                                        <img class="mr-1" src="/chameleon/blackbox/images/filetype_icons/16x16/{{ mediaItem.type|lower }}.png" alt="">
+                                    {% endif %}
+                                </td>
+                                <td>{{ mediaItem.type }}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-expand-arrows-alt mr-2"></i></td>
+                                <td>{{ mediaItem.width }} x {{ mediaItem.height }} px</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-info-circle mr-2"></i></td>
+                                <td>ID {{ mediaItem.id }}</td>
+                            </tr>
+                            {% if mediaItem.dateChanged %}
+                                <tr>
+                                    <td><i class="far fa-clock mr-2"></i></td>
+                                    <td>{{ 'chameleon_system_media_manager.changed_date' | trans }} {{ mediaItem.dateChanged | date('d.m.Y H:i:s') }}</td>
+                                </tr>
+                            {% endif %}
+                        </table>
                     </div>
                     <div class="col-12 col-md-2 col-xl-1 text-right align-self-end">
                         {% include('mediaManager/list/actionsInList.html.twig') with {'mediaItem': mediaItem, 'pickImageMode': pickImageMode, 'pickImageCallback': pickImageCallback, 'pickImageWithCrop': pickImageWithCrop, 'accessRightsMedia': accessRightsMedia} %}

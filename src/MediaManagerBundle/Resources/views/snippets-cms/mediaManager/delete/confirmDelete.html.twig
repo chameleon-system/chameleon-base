@@ -22,7 +22,7 @@
             {# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
             <div class="row item-to-delete cms-media-item pt-2 pb-2" data-id="{{ mediaItem.id }}">
                 <div class="col-4 col-sm-3 col-lg-2"><img class="img-fluid" src="{{ mediaItem.id | cmsthumb(100, 100) }}" alt="{{ mediaItem.altTag }}"></div>
-                <div class="col-5 col-sm-7 col-md-7 col-lg-8 col-xl-9"><span class="item-to-delete-name">{{ mediaItem.name }}</span><br/>({{ mediaItem.id }})</div>
+                <div class="col-5 col-sm-7 col-md-7 col-lg-8 col-xl-9 mb-2"><span class="item-to-delete-name">{{ mediaItem.name }}</span><br/>({{ mediaItem.id }})</div>
                 <div class="col-3 col-sm-2 col-md-2 col-xl-1 text-right">
                     <a class="btn btn-secondary btn-sm revoke-delete" title="{{ 'chameleon_system_media_manager.delete.action_revoke_delete' | trans }}">
                         <i class="fas fa-times"></i>

@@ -291,6 +291,10 @@
     width: 100% !important;
 }
 
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .info td {
+    vertical-align: top;
+}
+
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerDeleteConfirmDelete .item-to-delete-name {
     font-weight: bold;
 }
@@ -421,24 +425,10 @@
     background-color: #dedede;
 }
 
-.snippetMediaManagerDetail .details {
-    display: flex;
-}
-
-.snippetMediaManagerDetail .details .image {
-    width: 40%;
-}
-
 .snippetMediaManagerDetail .details .image img.preview {
     max-width: 100%;
     display: block;
     margin: 0 auto;
-    margin-bottom: 20px;
-}
-
-.snippetMediaManagerDetail .details .edit-form {
-    width: 60%;
-    padding-left: 20px;
 }
 
 .snippetMediaManagerDetail .details .edit-form iframe {
@@ -449,10 +439,8 @@
     overflow-x: hidden;
 }
 
-.snippetMediaManagerDetail .details .info {
-    line-height: 24px;
-    font-size: 14px;
-    margin-top: 20px;
+.snippetMediaManagerDetail .details .info td {
+    vertical-align: top;
 }
 
 .snippetMediaManagerDetail .version-list .name {
