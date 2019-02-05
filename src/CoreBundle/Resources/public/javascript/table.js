@@ -108,10 +108,11 @@ function ChangeListMarking(fieldValue, formName) {
 }
 
 function restoreFieldValueVersion(id) {
-    const valueColumnElement = document.querySelector(`table tr[data-record-id='${ id }'] td:last-child *[data-field-restorable-value]`);
+    const valueColumnElement = document.querySelector(`table tr[data-record-id='${ id }'] *[data-field-restorable-value]`);
     if (!valueColumnElement) {
         return;
     }
+
     const encodedRestorableValue = valueColumnElement.dataset["fieldRestorableValue"];
     
     try {
