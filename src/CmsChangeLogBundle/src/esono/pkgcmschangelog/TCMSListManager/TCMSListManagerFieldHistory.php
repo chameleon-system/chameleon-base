@@ -7,6 +7,8 @@ use Doctrine\DBAL\Connection;
 class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
 {
 
+    const FIELD_HISTORY_VERSION_LIST_LIMIT = 25;
+
     /**
      * {@inheritDoc}
      */
@@ -48,7 +50,7 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
     public function GetCustomRestriction(): string
     {
         $changeLogFieldConfigurationId = $this->sRestriction;
-        $recordIds = $this->getRestrictionRecordIds($changeLogFieldConfigurationId);
+        $recordIds = $this->getRestrictionRecordIds($changeLogFieldConfigurationId, self::FIELD_HISTORY_VERSION_LIST_LIMIT);
 
         if (0 === count($recordIds)) {
             return '';
@@ -69,14 +71,19 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
 
     /**
      * @param string $fieldConfigurationId
+     * @param int $limit
      * @return string[]
      */
-    private function getRestrictionRecordIds(string $fieldConfigurationId): array
+    private function getRestrictionRecordIds(string $fieldConfigurationId, int $limit): array
     {
         $connection = $this->getDatabaseConnection();
 
         try {
-            $stmt = $connection->executeQuery($this->getIdRestrictionQuery(), ['fieldConfigurationId' => $fieldConfigurationId]);
+            $stmt = $connection->executeQuery(
+                $this->getIdRestrictionQuery(),
+                ['fieldConfigurationId' => $fieldConfigurationId, 'limit' => $limit],
+                ['fieldConfigurationId' => \PDO::PARAM_STR, 'limit' => \PDO::PARAM_INT]
+            );
             return $stmt->fetchAll(PDO::FETCH_COLUMN);
         } catch (\Doctrine\DBAL\DBALException $e) {
             return [];
@@ -93,7 +100,8 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
           LEFT JOIN `pkg_cms_changelog_set`
                  ON `pkg_cms_changelog_set`.`id` = `pkg_cms_changelog_item`.`pkg_cms_changelog_set_id`
 	          WHERE `pkg_cms_changelog_item`.`cms_field_conf` = :fieldConfigurationId
-           ORDER BY `pkg_cms_changelog_set`.`modify_date` DESC';
+           ORDER BY `pkg_cms_changelog_set`.`modify_date` DESC
+              LIMIT :limit';
     }
 
     // String Form
