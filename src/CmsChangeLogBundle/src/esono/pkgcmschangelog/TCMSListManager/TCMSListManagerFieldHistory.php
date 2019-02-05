@@ -28,6 +28,8 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
      */
     public function AddFields(): void
     {
+        // Only fields necessary for a comprehensive listing of field value changes are defined, default fields from parent are explicitly excluded.
+
         $translator = $this->getTranslator();
         $linkField = ['id'];
 
