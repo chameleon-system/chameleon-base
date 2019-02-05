@@ -107,6 +107,30 @@ function ChangeListMarking(fieldValue, formName) {
     );
 }
 
+function restoreFieldValueVersion(id) {
+    const form = document.cmsformAjaxCall;
+
+    const tableIdInput = form.querySelector("[name='id']");
+    const functionInput = form.querySelector("[name='_fnc']");
+    const pagedefInput = form.querySelector("[name='pagedef']");
+
+    const listManagerMethodInput = document.createElement("input");
+    listManagerMethodInput.name = "callListManagerMethod";
+    listManagerMethodInput.value = "1";
+    form.appendChild(listManagerMethodInput);
+
+    const recordIdInput = document.createElement("input");
+    recordIdInput.name = "recordId";
+    recordIdInput.value = id;
+    form.appendChild(recordIdInput);
+
+    tableIdInput.value = document.cmsformworkonlist.querySelector("[name='id']").value || "";
+    pagedefInput.value = "changeLogFieldHistory";
+    functionInput.value = "restoreFieldValueVersion";
+
+    PostAjaxForm('cmsformAjaxCall', response => {});
+}
+
 /**
  * force links inside table cells to fixed height based on TR height
  */
