@@ -7,8 +7,6 @@ use Doctrine\DBAL\Connection;
 class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
 {
 
-    const FIELD_HISTORY_VERSION_LIST_LIMIT = 25;
-
     /**
      * {@inheritDoc}
      */
