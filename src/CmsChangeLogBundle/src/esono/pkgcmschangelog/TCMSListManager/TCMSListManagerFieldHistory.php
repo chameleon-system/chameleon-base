@@ -41,7 +41,7 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
 
         ++$this->columnCount;
         $this->tableObj->AddHeaderField($translator->trans('chameleon_system_cms_change_log.column.old_value'), 'left', null, 1, false);
-        $this->tableObj->AddColumn('value_old', 'left', null, $linkField);
+        $this->tableObj->AddColumn('value_old', 'left', [$this, 'getFieldTextWithAttributes'], $linkField);
     }
 
     /**
@@ -63,6 +63,23 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
     protected function _GetRecordClickJavaScriptFunctionName(): string
     {
         return 'restoreFieldValueVersion';
+    }
+
+    // Formatting
+
+    /**
+     * @param $field
+     * @param array $row
+     * @param string $fieldName
+     * @return string
+     */
+    public function getFieldTextWithAttributes($field, array $row, string $fieldName): string
+    {
+        $originalFieldValue = unserialize($row[$fieldName], ['allowed_classes' => []]);
+        $serializedFieldPayload = json_encode(['value' => $originalFieldValue], JSON_UNESCAPED_UNICODE);
+        $encodedFieldPayload = htmlspecialchars($serializedFieldPayload, ENT_QUOTES);
+
+        return sprintf('<span data-field-restorable-value="%s">%s</span>', $encodedFieldPayload, $originalFieldValue);
     }
 
     // Dependencies
