@@ -13,7 +13,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tbl_list_class', 'en')
         'cms_tbl_conf_id' => TCMSLogChange::GetTableId('pkg_cms_changelog_set'),
         'class_subtype' => '',
         'classlocation' => 'Core',
-        'id' => 'b1afbe25-56e8-e7a1-8c18-6129b2abd564',
+        'id' => TCMSLogChange::createUnusedRecordId('cms_tbl_list_class'),
     ]);
 TCMSLogChange::insert(__LINE__, $data);
 
