@@ -230,7 +230,8 @@ $iconMapping = array(
     'shop_search_cloud_word' => 'fas fa-cloud',
     'cms_locals' => 'fas fa-map-marked-alt',
     'cms_portal' => 'fas fa-home',
-    'shop_manufacturer' => 'fas fa-industry'
+    'shop_manufacturer' => 'fas fa-industry',
+    'cms_dark_site_content' => 'fas fa-sign-out-alt',
 );
 
 foreach ($iconMapping as $tableName => $iconName) {
