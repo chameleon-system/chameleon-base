@@ -35,6 +35,8 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
 
     private $sEditorWidth = null;
 
+    const CHANGE_LOG_ITEM_TABLE_NAME = 'pkg_cms_changelog_item';
+
     public function GetHTML()
     {
         parent::GetHTML();
@@ -184,11 +186,10 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     private function getFieldVersionHistoryViewUrl(): string
     {
-        // TODO: Acquire table configuration id from appropriate service.
-        $changeLogItemTableConfigurationId = '031e0f8e-dc04-a3a8-dd03-0b7d04a67a54';
+        $tableConfigurationId = TTools::GetCMSTableId(self::CHANGE_LOG_ITEM_TABLE_NAME);
         $fieldConfigurationId = $this->oDefinition->id;
 
-        return PATH_CMS_CONTROLLER . '?id=' . $changeLogItemTableConfigurationId . '&pagedef=changeLogFieldHistory&sRestrictionField=cms_field_conf&sRestriction=' . $fieldConfigurationId;
+        return PATH_CMS_CONTROLLER . '?id=' . $tableConfigurationId . '&pagedef=changeLogFieldHistory&sRestrictionField=cms_field_conf&sRestriction=' . $fieldConfigurationId;
     }
 
     /**
