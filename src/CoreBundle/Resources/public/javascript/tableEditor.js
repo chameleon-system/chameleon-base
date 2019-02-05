@@ -394,19 +394,21 @@ function loadMltPositionList(tableSQLName, sRestriction, sRestrictionField) {
     CreateModalIFrameDialogCloseButton(url, 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
 }
 
-/*
+/**
+ * @deprecated since 6.3.0
+ * use: CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(iFrameId, url) instead.
+ *
  * MLT field: show/hide MLT content
  */
 function showMLTField(objID, outerObjID, url) {
     var mltID = document.getElementById(objID);
-    top.currentMltId = mltID.id;
 
-    var $objID = jQuery('#' + objID);
+    var $objID = $('#' + objID);
     if ($objID.is(':hidden')) {
         mltID.src = url;
-        $objID.show();
+        $objID.removeClass('d-none');
     } else {
-        $objID.hide();
+        $objID.addClass('d-none');
     }
 }
 
@@ -553,7 +555,7 @@ function SaveViaAjaxCallback(data, statusText) {
                 // messages do have a reference to field (e.g. mail-field not valid)
                 if (oMessage.sMessageRefersToField) {
                     // add the class to field
-                    $('#fieldname_' + oMessage.sMessageRefersToField).addClass('fieldMsg ' + oMessage.sMessageType);
+                    $('#fieldname_' + oMessage.sMessageRefersToField).parents('tr').addClass('table-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(oMessage.sMessageType));
                 }
 
                 if (oMessage.sMessageType != 'ERROR' && !bOnLoadResetted) {
@@ -715,8 +717,6 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
     }
 };
 
-
-
 CHAMELEON.CORE.MTTableEditor.initTabs = function () {
     var url = document.URL;
     var hash = window.location.hash;
@@ -730,6 +730,20 @@ CHAMELEON.CORE.MTTableEditor.initTabs = function () {
             window.location.hash = this.getAttribute('href');
         });
     });
+};
+
+CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle = function (chameleonMessageTypeName) {
+    chameleonMessageTypeName = chameleonMessageTypeName.toLowerCase();
+
+    if ('error' === chameleonMessageTypeName) {
+        return 'danger';
+    }
+
+    if ('message' === chameleonMessageTypeName) {
+        return 'success';
+    }
+
+    return chameleonMessageTypeName;
 };
 
 function updateIframeSize(sFieldName, iHeight) {
@@ -836,6 +850,24 @@ CHAMELEON.CORE.MTTableEditor.initHelpTexts = function () {
     });
 };
 
+/*
+ * multi linked table (MLT)/property field: show/hide list in iframe.
+ */
+CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState = function (iFrameId, url) {
+    var iFrameElement = document.getElementById(iFrameId);
+    var cardBodyElement = iFrameElement.parentElement;
+
+    if (iFrameElement.classList.contains('d-none')) {
+        iFrameElement.src = url;
+        iFrameElement.classList.remove('d-none');
+        cardBodyElement.classList.remove('p-0');
+        cardBodyElement.classList.add('p-1');
+    } else {
+        iFrameElement.classList.add('d-none');
+        cardBodyElement.classList.remove('p-1');
+        cardBodyElement.classList.add('p-0');
+    }
+};
 
 $(document).ready(function () {
     CHAMELEON.CORE.MTTableEditor.initTabs();

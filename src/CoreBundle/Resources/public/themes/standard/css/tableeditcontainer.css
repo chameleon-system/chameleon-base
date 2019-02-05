@@ -1,15 +1,7 @@
-.tableeditID {
-    font-size: 14px;
-    font-weight: bold;
-    margin-left: 5px;
-    display: inline;
-    color: #419BDE;
-}
-
 .tableeditcontainer h1,
 .tableeditcontainer h2,
 .tableeditcontainer h3 {
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 .tableeditcontainer .fieldName {
@@ -63,100 +55,12 @@
     max-height: 150px;
 }
 
-#datepickeriframe {
-    background-color: transparent;
-}
-
-.passwordStrengthMeter {
-    width: 246px;
-    height: 35px;
-    background: url(../images/progressMeterColorFull.gif);
-}
-
-.passwordStrengthMeterArrow {
-    width: 10px;
-    height: 12px;
-    margin-top: 4px;
-    margin-left: 12px;
-}
-
-.posListUL {
-    margin-left: 0px;
-    padding-left: 0px;
-}
-
-.positionList {
-    background-color: #F8F2AA;
-    color: #616974;
-    border: 1px solid #FFB608;
-    padding: 3px;
-    font-size: 11px;
-    display: block;
-    margin-bottom: 2px;
-    cursor: move;
-}
-
-.positionListActive {
-    background-color: #E3F8D8;
-    color: #0B224B;
-    border: 1px solid #217C21;
-    padding: 3px;
-    font-size: 11px;
-    display: block;
-    margin-bottom: 2px;
-    cursor: move;
-}
-
 /* the breadcrumb in treeNode fields */
 .fieldPreview {
     padding: 5px;
     border: 1px solid #ABBDCD;
     margin-bottom: 10px;
     width: auto;
-}
-
-.fieldMsg {
-    font-weight: bold;
-    border-style: solid;
-    border-width: 1px;
-    padding: 5px;
-    padding-right: 45px;
-    min-height: 30px;
-    height: auto !important;
-    height: 30px
-}
-
-.fieldMsg.MESSAGE {
-    border-color: #d6e9c6;
-    color: #468847;
-    background: #dff0d8 url(../images/nav_icons/success.png) no-repeat scroll right center;
-}
-
-.fieldMsg.WARNING {
-    border-color: #FFB608;
-    color: #0B224B;
-    background: #F8F2AA url(../images/nav_icons/notice.png) no-repeat scroll right center;
-}
-
-.fieldMsg.ERROR {
-    border-color: #DF7D7D;
-    color: #AF4C4C;
-    background: #FFBFBF url(../images/nav_icons/error.png) no-repeat scroll right center;
-}
-
-.requiredfieldfocus {
-    font-weight: bold;
-    border-color: #DF7D7D;
-    border-style: solid;
-    border-width: 1px;
-    color: #AF4C4C;
-    padding: 5px;
-    padding-right: 45px;
-    background: #FFBFBF url(../images/nav_icons/error.png) no-repeat 5px 2px;
-    background-position: right;
-    min-height: 30px;
-    height: auto !important;
-    height: 30px
 }
 
 .requiredfield {
@@ -166,14 +70,15 @@
     font-size: 14px;
 }
 
-.quickLookupListName {
-    color: #717880;
-    font-size: 12px;
-    font-weight: bold;
-}
-
 #quicklookuplist {
     width: 350px;
+}
+
+.checkboxGroupTitle {
+    clear:both;
+    padding-top:10px;
+    font-weight:bold;
+    border-bottom: 1px solid black;
 }
 
 .checkboxDIV {
@@ -248,123 +153,13 @@
     margin-left: 20px;
 }
 
-.description {
-    padding: 5px;
-}
-
-.descriptionContainer {
-    padding: 0px;
-    min-height: 3px;
-    height: auto !important;
-    height: 3px;
-    margin-bottom: 7px;
-    -webkit-box-shadow: 3px 3px 8px #1f1f1f;
-    -moz-box-shadow: 3px 3px 8px #1f1f1f;
-    box-shadow: 3px 3px 8px #1f1f1f;
-    margin-top: -11px;
-    background-color: #EFF0F3;
-}
-
 .translationStateIcon {
     float: right;
     padding-right: 5px;
 }
 
-.custom-combobox {
-    position: relative;
-    display: inline-block;
-}
-
-.custom-combobox-toggle {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    margin-left: -1px;
-    padding: 0;
-}
-
-.custom-combobox-input {
-    margin: 0;
-    padding: 0.3em;
-}
-
-.ui-autocomplete {
-    max-height: 250px;
-    overflow-y: auto;
-}
-
 .button-spacing {
     margin-left: 10px;
-}
-
-/**
-* search field
-*/
-.right-inner-addon {
-    position: relative;
-}
-.right-inner-addon input {
-    padding-right: 30px;
-}
-.right-inner-addon i {
-    position: absolute;
-    right: 0px;
-    padding: 8px 10px;
-    pointer-events: none;
-}
-
-.dateInput .ui-datepicker-trigger {
-    display: none;
-}
-
-.helpText {
-    background: url(../images/icons/icon_info.gif) no-repeat 2px 0px;
-    font-size: 11px;
-    color: #7B96BD;
-    margin-top: 8px;
-    display: block;
-    padding-left: 25px;
-}
-
-.helpText ul {
-    margin: 0 0 5px 0;
-    padding: 0;
-}
-
-.helpText ul li {
-    list-style: none;
-}
-
-.helpText li.head {
-    font-weight:bold;
-}
-
-.helpText ul ul,
-.helpText ul.info {
-    margin: 0;
-    padding: 0 0 0 30px;
-}
-
-.helpText ul li ul li,
-.helpText ul.info li {
-    list-style: disc;
-}
-
-.helpText ul.info li.no-icon {
-    list-style: none;
-}
-
-.helpText span.strike-through {
-    text-decoration: line-through;
-}
-
-.helpText div.important strong,
-.helpText strong.important {
-    color: #900;
-}
-
-.dateInput .ui-datepicker-trigger {
-    display: none;
 }
 
 .translation-badge, .help-badge {

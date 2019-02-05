@@ -28,7 +28,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#cmscontentcontainer').contextMenu('rightClickMenuContainer', {
+        $('#tableEditorContainer').contextMenu('rightClickMenuContainer', {
 
             onContextMenu:function (e) {
                 if ($(e.target).attr('class') == 'contextMenuDisabled') return false;

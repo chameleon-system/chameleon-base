@@ -350,6 +350,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
 - \MTTableManager::getAutocompleteRecordList()
 - \TCMSCronJob::getLogger()
+- \TCMSFieldColorPicker::isFirstInstance()
 - \TCMSFieldLookup::enableComboBox()
 - \TCMSLogChange::getUpdateLogger()
 - \TPkgCmsCoreSendToHost::setLogRequest()
@@ -357,7 +358,6 @@ is recommended (although this tool may not find database-related deprecations).
 - \TPkgCsv2Sql::CreateLogFileName()
 - \TPkgCsv2Sql::GetLogFile()
 - \TTools::AddStaticPageVariables()
-- \TCMSFieldColorPicker::isFirstInstance()
 
 ## JavaScript Files and Functions
 
@@ -386,6 +386,7 @@ You should remove all width/height settings in CreateModalXY calls if it does no
 - $.addOption() (jquery.selectboxes plugin)
 - loadStandaloneDocumentManager
 - PublishViaAjaxCallback()
+- showMLTField() - use CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(iFrameId, url) instead.
 - src/CoreBundle/Resources/public/javascript/mainNav.js
 
 ## jQueryUi

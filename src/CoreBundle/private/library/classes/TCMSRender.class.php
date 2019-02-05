@@ -26,10 +26,9 @@ class TCMSRender
         if (!is_null($width)) {
             $width = 'style="width:'.htmlspecialchars($width).'"';
         }
-        echo "<div {$width} class=\"contentbox\">\n";
-        echo "    <div class=\"contentcontainer\">\n";
-        echo '      <div class="header">'.TGlobal::OutHTML($sTitle)."</div>\n";
-        echo "      <div class=\"content\">\n";
+        echo "<div {$width} class=\"card mb-3\">\n";
+        echo '      <div class="card-header"><h5 class="card-title mb-0">'.TGlobal::OutHTML($sTitle)."</h5></div>\n";
+        echo "      <div class=\"card-body p-0\">\n";
     }
 
     /**
@@ -37,7 +36,6 @@ class TCMSRender
      */
     public static function DrawBoxFooter()
     {
-        echo "      </div>\n";
         echo "    </div>\n";
         echo "</div>\n";
     }
