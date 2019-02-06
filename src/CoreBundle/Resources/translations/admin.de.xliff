@@ -481,7 +481,10 @@
                 <source>chameleon_system_core.field_media.active_upload_folder</source>
                 <target>Bilder werden in Kategorie %sDefaultCategory% hochgeladen</target>
             </trans-unit>
-
+            <trans-unit id="chameleon_system_core.field_media.select_dialog_title">
+                <source>chameleon_system_core.field_media.select_dialog_title</source>
+                <target>Bitte wählen Sie ein Bild aus</target>
+            </trans-unit>
 
             <trans-unit id="chameleon_system_core.field_property_media.error_missing_target">
                 <source>chameleon_system_core.field_property_media.error_missing_target</source>

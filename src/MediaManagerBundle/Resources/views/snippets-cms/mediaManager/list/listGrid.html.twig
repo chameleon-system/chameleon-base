@@ -14,7 +14,7 @@
                 {# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
                 <div class="{{ columns }} image-col">
                     <div class="inner cms-media-item" data-id="{{ mediaItem.id }}" data-name="{{ mediaItem.name }}">
-                        <div class="image-container">
+                        <div class="image-container {% if false == pickImageMode %}selectable{% endif %}">
                             <img src="{{ mediaItem.id | cmsthumb(500, 100) }}" alt="">
                         </div>
 

@@ -772,7 +772,7 @@
                     self.bindDragging();
                 });
 
-                $('.image-container', self.editContainer).on('click', function (evt) {
+                $('.image-container.selectable', self.editContainer).on('click', function (evt) {
                     var selectionParent = $(this).parents('.cms-media-item');
                     var wasSelected = $(this).parents('.cms-media-item').hasClass('xselectable-selected');
                     var numberOfElementsSelected = $('.xselectable-selected', self.editContainer).length;
