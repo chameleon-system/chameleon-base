@@ -549,6 +549,10 @@
                 }
             });
 
+            $('[data-select2-option]').each(function () {
+                $(this).select2($(this).data('select2-option'));
+            });
+
             self.handleAutoCompleteOnSearchFields();
 
         },
@@ -1033,7 +1037,7 @@
                 self.lastDetailPageShown = null;
             }
 
-            var closeButton = $('<span class="close-button">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.close_button_text') + ' <span class="glyphicon glyphicon-remove"></span></span>');
+            var closeButton = $('<span class="close-button">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.close_button_text') + ' <i class="fas fa-times"></i></span>');
             var layover = $('<div class="media-manager-layover"><div class="title h3">' + title + '</div></div>');
 
             closeButton.on('click', function (evt) {
