@@ -723,7 +723,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     {
         $label = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.action.edit'));
 
-        return '<span onclick="document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();" title="'.$label.'" class="glyphicon glyphicon-pencil"></span>';
+        return '<span onclick="document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();" title="'.$label.'" class="fas fa-edit"></span>';
     }
 
     /**
@@ -739,7 +739,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $label = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.action.copy'));
 
         if ((array_key_exists('cms_translation_parent_id', $row) && array_key_exists('cms_translationparentid', $row) && '' == $row['cms_translationparentid']) || !array_key_exists('cms_translation_parent_id', $row)) {
-            return '<span onclick="document.cmsform.elements[\'module_fnc[contentmodule]\'].value=\'DatabaseCopy\';document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();" title="'.$label.'" class="glyphicon glyphicon-file"></span>';
+            return '<span onclick="document.cmsform.elements[\'module_fnc[contentmodule]\'].value=\'DatabaseCopy\';document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();" title="'.$label.'" class="fas fa-copy"></span>';
         }
 
         return '';
@@ -757,7 +757,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     {
         $label = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.action.delete'));
 
-        return '<span onclick="DeleteRecord(\''.$row['id'].'\')" title="'.$label.'" class="glyphicon glyphicon-remove"></span>';
+        return '<span onclick="DeleteRecord(\''.$row['id'].'\')" title="'.$label.'" class="fas fa-trash-alt"></span>';
     }
 
     /**
