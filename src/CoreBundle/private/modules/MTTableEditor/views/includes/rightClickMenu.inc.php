@@ -20,7 +20,7 @@
             echo $oMenuItem->GetRightClickMenuItemHTML();
         }
         ?>
-        <li><a href="#" onclick="$('#cmscontentcontainer').unbind('contextmenu');$('#jqContextMenu').hide();">
+        <li><a href="#" onclick="$('#tableEditorContainer').unbind('contextmenu');$('#jqContextMenu').hide();">
             <i class="fas fa-times-circle pr-2"></i>
             <?=TGlobalBase::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.right_click_disable')); ?></a></li>
     </ul>
