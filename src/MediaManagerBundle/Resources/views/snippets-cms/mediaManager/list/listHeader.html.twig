@@ -73,19 +73,21 @@
     <div class="row align-items-center">
         <div class="action-bar col-12 mt-2 col-md-9 order-md-2">
             <div class="d-flex flex-column flex-sm-row justify-content-md-end">
+                {% if false == pickImageMode %}
                 <div class="mb-1 mb-sm-0 mr-sm-1">
                     <button class="btn btn-primary btn-sm select-all">
                         <i class="far fa-check-square mr-1"></i>
                         {{ 'chameleon_system_media_manager.list.select_all' | trans }}
                     </button>
                 </div>
-                {% if accessRightsMedia.delete %}
-                    <div class="mb-1 mb-sm-0 mr-sm-1">
-                        <button class="btn btn-danger btn-sm delete">
-                            <i class="far fa-trash-alt mr-1"></i>
-                            {{ 'chameleon_system_media_manager.list.delete_selected' | trans }}
-                        </button>
-                    </div>
+                    {% if accessRightsMedia.delete %}
+                        <div class="mb-1 mb-sm-0 mr-sm-1">
+                            <button class="btn btn-danger btn-sm delete">
+                                <i class="far fa-trash-alt mr-1"></i>
+                                {{ 'chameleon_system_media_manager.list.delete_selected' | trans }}
+                            </button>
+                        </div>
+                    {% endif %}
                 {% endif %}
                 {% if accessRightsMedia.new %}
                     <div class="mb-1 mb-sm-0">
