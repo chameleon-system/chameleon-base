@@ -125,7 +125,7 @@
                         if (self.settings.accessRightsMediaTree.edit) {
                             contextMenu.renameItem = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.rename'),
-                                icon: "glyphicon glyphicon-pencil",
+                                icon: "fas fa-edit",
                                 action: function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);
@@ -138,7 +138,7 @@
                         if (self.settings.accessRightsMediaTree.delete) {
                             contextMenu.deleteItem = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.delete_folder'),
-                                icon: "glyphicon glyphicon-trash",
+                                icon: "fas fa-trash-alt",
                                 action: function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);
@@ -152,7 +152,7 @@
                         if (self.settings.accessRightsMedia.new) {
                             contextMenu.upload = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.upload'),
-                                icon: "glyphicon glyphicon-upload",
+                                icon: "fas fa-upload",
                                 action: function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);
@@ -166,7 +166,7 @@
                         if (self.settings.accessRightsMediaTree.edit) {
                             contextMenu.properties = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.edit_properties'),
-                                icon: "glyphicon glyphicon-cog",
+                                icon: "fas fa-cog",
                                 action: function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);

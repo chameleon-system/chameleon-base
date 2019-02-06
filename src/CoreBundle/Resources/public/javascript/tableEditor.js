@@ -313,7 +313,7 @@ function addMLTConnectionResponse(data, responseMessage) {
         if (chooserIframeObj) {
             chooserIframeObj.src = chooserIframeObj.src;
         }
-        jQuery.unblockUI();
+        CHAMELEON.CORE.hideProcessingModal();
         return true;
     } else {
         CloseModalIFrameDialog();

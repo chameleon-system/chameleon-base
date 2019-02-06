@@ -174,7 +174,7 @@ $(document).ready(function () {
     function switchRecord(id) {
         if ('' !== id) {
             var url = searchLookup.data('record-url') + '&id=' + id;
-            document.location.href = url;
+            top.document.location.href = url;
         }
     }
 });

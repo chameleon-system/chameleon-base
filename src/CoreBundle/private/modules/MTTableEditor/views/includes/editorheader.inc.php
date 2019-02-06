@@ -25,7 +25,7 @@ $oController = TGlobal::GetController();
         if ('' === $sRecordName) {
             $sRecordName = TGlobal::Translate('chameleon_system_core.text.unnamed_record');
         } else {
-            $length = 50;
+            $length = 100;
             $sRecordName = strip_tags($sRecordName);
             if (mb_strlen($sRecordName) > $length) {
                 $sRecordName = mb_substr($sRecordName, 0, $length);
