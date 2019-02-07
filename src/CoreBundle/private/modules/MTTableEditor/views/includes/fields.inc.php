@@ -45,7 +45,7 @@ while ($oField = $data['oFields']->Next()) {
                 $oFieldConfig->Load($oField->oDefinition->id);
 
                 if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
-                    $sTmpFormTabsContent .= '<span class="float-right help-text-button" data-helptextId="'.TGlobal::OutHTML($oField->name).'">
+                    $sTmpFormTabsContent .= '<span class="float-right help-text-button mt-1" data-helptextId="'.TGlobal::OutHTML($oField->name).'">
                         <i class="fas fa-info-circle" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'"></i>
                     </span>';
                 }
@@ -66,12 +66,14 @@ while ($oField = $data['oFields']->Next()) {
                             $sPrefix = $oBaseLanguage->fieldIso6391;
                         }
 
-                        $sTmpFormTabsContent .= '<span class="badge badge-secondary float-right translation-badge">'.$sPrefix."</span>\n";
+                        $sTmpFormTabsContent .= '<span class="badge badge-secondary float-right translation-badge mt-1 mr-1">'.$sPrefix."</span>\n";
 
                         // show icon if record is not translated yet (disabled for MLT fields)
                         if ($oFieldType->fieldBaseType = 'standard' && isset($oTable->sqlData[$oFieldConfig->fieldName.'__'.$sPrefix])) {
                             if ('' == $oTable->sqlData[$oFieldConfig->fieldName.'__'.$sPrefix]) {
-                                $sTmpFormTabsContent .= '<img class="translationStateIcon" src="'.TGlobal::GetStaticURLToWebLib('/images/icons/comment_edit.png').'" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.not_translated')).'" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.not_translated')).'" />';
+                                $sTmpFormTabsContent .= '<span class="badge badge-secondary translationStateIcon float-right mt-1 mr-1 bg-danger">
+                                                              <i class="fas fa-language" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.not_translated')).'" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.not_translated')).'"></i>
+                                                         </span>';
                             }
                         }
                     }
