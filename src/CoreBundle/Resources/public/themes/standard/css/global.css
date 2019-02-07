@@ -458,11 +458,27 @@ div.grippie {
     width: 30px;
 }
 
-.sidebar-filter-input {
+.sidebar-filter-input, .sidebar-filter-input:focus {
     border-radius: 0;
-    font-family: FontAwesome,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     padding-top: 1.4rem;
     padding-bottom: 1.3rem;
+    padding-left: 2.5em;
+    position: relative;
+    background: transparent;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+
+.sidebar-filter-input-wrapper {
+    margin: 0;
+    background-color: #fff;
+}
+
+.sidebar-filter-input-wrapper:before {
+    position: absolute;
+    left: 1.2em;
+    top: 1.1em;
+    content: "\f002";
+    color: #576873;
 }
 
 /**
