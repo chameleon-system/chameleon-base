@@ -183,6 +183,10 @@
     text-transform: uppercase;
 }
 
+#cmseditform .card {
+    margin-bottom: 0;
+}
+
 /**
  * TCMSFieldBoolean: Add icons and custom styling for coreUI switches.
  */
