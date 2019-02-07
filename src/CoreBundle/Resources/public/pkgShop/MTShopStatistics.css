@@ -1,14 +1,5 @@
 /* Basic */
-.module-shop-statistic .standard .module-headline {
-  background: url('../images/icons/chart_pie.png') transparent no-repeat 0 0;
-  font-size: 14px;
-  padding-left: 21px;
-  margin-bottom:10px;
-}
 
-.module-shop-statistic .standard .filter input, .module-shop-statistic .standard .filter select {
-  margin-right:10px;
-}
 /* Table */
 .TCMSGroupedStatistics .html-table .statsTable {
   border-collapse:collapse;
