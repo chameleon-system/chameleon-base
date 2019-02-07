@@ -4,7 +4,7 @@
     <div>
         <?php foreach ($data['aMessages'] as $sMessage) {
         ?>
-        <div class="alert alert-warning"><?=$sMessage?></div>
+        <div class="alert alert-warning"><?=$sMessage; ?></div>
         <?php
     } ?>
     </div>
