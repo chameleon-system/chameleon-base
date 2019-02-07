@@ -208,9 +208,8 @@ if (false === isset($data['oUser'])) {
                     </li>
                 <?php
             } ?>
-
                 <li class="nav-item px-2">
-                    <a href="<?=PATH_CMS_CONTROLLER; ?>?pagedef=CMSModuleHelp" class="nav-link" target="_blank">
+                    <a href="<?=PATH_CMS_CONTROLLER; ?>?pagedef=CMSModuleHelp" class="nav-link" onclick="CreateModalIFrameDialog(this.href,0,0,'<?=TGlobal::OutJS($translator->trans('chameleon_system_core.cms_module_header.action_help')); ?>');return false;" target="_blank">
                         <i class="fas fa-question-circle"></i>
                         <span class="d-md-down-none">
                             <?=TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.action_help')); ?>
