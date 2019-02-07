@@ -74,6 +74,11 @@
     width: 350px;
 }
 
+.row.table-editor-form-group {
+    margin-left: 0;
+    margin-right: 0;
+}
+
 .checkboxGroupTitle {
     clear:both;
     padding-top:10px;

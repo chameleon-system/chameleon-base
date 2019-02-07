@@ -539,11 +539,13 @@ function SaveViaAjax() {
 function SaveViaAjaxCallback(data, statusText) {
     CloseModalIFrameDialog();
 
-    // remove all message-classes from the fields
-    $('*[id^="fieldname_"]').removeClass();
+    // remove all message background classes from field containers.
+    $('*[id^="fieldname_"]').removeClass(function (index, className) {
+        return (className.match (/(^|\s)bg-\S+/g) || []).join(' ');
+    });
 
     var returnVal = false;
-    if (data != false && data != null) {
+    if (data !== false && data != null) {
 
         returnVal = true;
 
@@ -555,10 +557,10 @@ function SaveViaAjaxCallback(data, statusText) {
                 // messages do have a reference to field (e.g. mail-field not valid)
                 if (oMessage.sMessageRefersToField) {
                     // add the class to field
-                    $('#fieldname_' + oMessage.sMessageRefersToField).parents('tr').addClass('table-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(oMessage.sMessageType));
+                    $('#fieldname_' + oMessage.sMessageRefersToField).addClass('bg-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(oMessage.sMessageType));
                 }
 
-                if (oMessage.sMessageType != 'ERROR' && !bOnLoadResetted) {
+                if (oMessage.sMessageType !== 'ERROR' && !bOnLoadResetted) {
                     // remove "something changed" message, because now the data was saved
                     bOnLoadResetted = true;
                     window.onbeforeunload = function () {
@@ -575,12 +577,12 @@ function SaveViaAjaxCallback(data, statusText) {
             };
             // reattach the message binding
             CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
-            if (data.message && data.message != '') {
+            if (data.message && data.message !== '') {
                 toasterMessage(data.message, 'MESSAGE');
             }
 
             // add saved record to breadcrumb
-            if (data.name && data.name != '' && document.getElementById('breadcrumbLastNode')) {
+            if (data.name && data.name !== '' && document.getElementById('breadcrumbLastNode')) {
                 document.getElementById('breadcrumbLastNode').innerHTML = data.name;
                 sCurrentRecordName = data.name;
             }
