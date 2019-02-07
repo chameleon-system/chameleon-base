@@ -9,9 +9,13 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use Symfony\Component\Translation\TranslatorInterface;
+
 /**
  * shows help texts from all table fields.
-/**/
+ */
 class CMSModuleHelp extends TCMSModelBase
 {
     protected $listParams = null;
@@ -25,23 +29,37 @@ class CMSModuleHelp extends TCMSModelBase
     protected $oTableConf = null;
     protected $oTableList = null;
 
-    public function Init()
-    {
-    }
-
     public function &Execute()
     {
         $this->data = parent::Execute();
 
+        $translator = $this->getTranslator();
+
+        $this->data['translator'] = $translator;
+        $this->data['isInIFrame'] = false;
+        $isInIFrame = $this->getInputFilter()->getFilteredInput('isInIFrame');
+
+        if (null !== $isInIFrame) {
+            $this->data['isInIFrame'] = true;
+        }
+
+        $this->data['sHtml'] = $this->getRenderedHelpTable();
+
+        return $this->data;
+    }
+
+    private function getRenderedHelpTable(): string
+    {
         $oCMSUser = TCMSUser::GetActiveUser();
         $aTableBlackList = array();
 
-        $sTableHTML = '<table class="table table-striped table-bordered table-sm">
-        <thead>
+        $translator = $this->getTranslator();
+
+        $sTableHTML = '<table class="table table-striped table-sm">
+        <thead class="thead-dark">
             <tr>
-                <th>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_help_text.header_table')).'</th>
-                <th>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_help_text.header_field')).'</th>
-                <th>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_help_text.header_field_description')).'</th>
+                <th>'.TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_help_text.header_field')).'</th>
+                <th>'.TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_help_text.header_field_description')).'</th>
             </tr>
         </thead>
         <tbody>';
@@ -55,34 +73,43 @@ class CMSModuleHelp extends TCMSModelBase
                 $bRightShowAllReadOnly = $oCMSUser->oAccessManager->HasShowAllReadOnlyPermission($oTable->fieldName);
 
                 if ($tableInUserGroup && ($bRightAllowEdit || $bRightShowAllReadOnly)) {
-                    $sTableHTML .= '<tr class="headline"><td colspan="3">';
-                    $sTableHTML .= '<h2 style="font-size: 16px;">';
+                    $sTableHTML .= '<tr class="table-primary">
+                                        <td colspan="2">
+                                        <div class="d-flex align-items-baseline">
+                                        <h4>'.TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_help_text.header_table')).': ';
 
                     if (!empty($oTable->fieldCmsContentBoxId)) {
                         $sURL = PATH_CMS_CONTROLLER.'?pagedef=tablemanager&id='.$oTable->id;
-                        $sTableHTML .= '<a href="'.$sURL.'" style="float:left; color: #841313;">';
+                        $sTableHTML .= '<a href="'.$sURL.'" class="" target="_top"><i class="fas fa-th-list"></i> ';
                     }
 
                     $sTableHTML .= TGlobal::OutHTML($oTable->GetName()).' <span>['.TGlobal::OutHTML($oTable->fieldName).']</span>';
 
                     if (!empty($oTable->fieldCmsContentBoxId)) {
-                        $sTableHTML .= '</a><img src="'.URL_CMS.'/images/icons/application_view_detail.png" style="float: left; margin-left: 10px; margin-top: 5px;" /><div class="cleardiv"></div>';
+                        $sTableHTML .= '</a>';
                     }
 
-                    $sTableHTML .= '</h2>';
-
-                    $sTableHTML .= '</td></tr>';
+                    $sTableHTML .= '   </h4>
+                                      </div>
+                                    </td>
+                                  </tr>';
                     if (!empty($oTable->fieldNotes)) {
-                        $sTableHTML .= '<tr><td colspan="3">'.TGlobal::OutHTML($oTable->fieldNotes)."</td></tr>\n";
+                        $sTableHTML .= '<tr>
+                                            <td colspan="2">'.TGlobal::OutHTML($oTable->fieldNotes).'</td>
+                                        </tr>';
                     }
 
                     // get base Data first
-                    $sTableHTML .= '<tr><td>&nbsp;</td><td colspan="2"><h3>'.TGlobal::Translate('chameleon_system_core.cms_module_help_text.header_tables').'</h3></td></tr>';
+                    $sTableHTML .= '<tr>
+                                       <td colspan="2">
+                                            <h3>'.TGlobal::Translate('chameleon_system_core.cms_module_help_text.header_tables').'</h3>
+                                       </td>
+                                    </tr>';
                     $sQuery = "SELECT * FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = '".$oTable->id."' AND `cms_tbl_field_tab` = ''";
                     $oFieldList = TdbCmsFieldConfList::GetList($sQuery);
                     while ($oField = $oFieldList->Next()) {
                         $sTableHTML .= '<tr>';
-                        $sTableHTML .= '<td>&nbsp;</td><td>Feld: '.TGlobal::OutHTML($oField->GetName())."</td>\n";
+                        $sTableHTML .= '<td>'.TGlobal::OutHTML($oField->GetName())."</td>\n";
                         if (!empty($oField->field049Helptext)) {
                             $sTableHTML .= '<td>'.nl2br(TGlobal::OutHTML($oField->field049Helptext))."</td>\n";
                         } else {
@@ -97,11 +124,13 @@ class CMSModuleHelp extends TCMSModelBase
                             $sQuery = "SELECT * FROM `cms_field_conf` WHERE `cms_field_conf`.`cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oTable->id)."' AND `cms_field_conf`.`cms_tbl_field_tab` = '".MySqlLegacySupport::getInstance()->real_escape_string($oTab->id)."'";
                             $oTabFieldList = TdbCmsFieldConfList::GetList($sQuery);
                             if ($oTabFieldList->Length() > 0) {
-                                $sTableHTML .= '<tr><td>&nbsp;</td><td colspan="2"><h3>'.TGlobal::OutHTML($oTab->fieldName).'</h3></td></tr>';
+                                $sTableHTML .= '<tr>
+                                                    <td colspan="2"><h3>'.TGlobal::OutHTML($oTab->fieldName).'</h3></td>
+                                                </tr>';
                                 while ($oTabField = $oTabFieldList->Next()) {
                                     $sTableHTML .= '<tr>';
-                                    $sTableHTML .= '<td>&nbsp;</td>
-                                    <td>Feld: '.TGlobal::OutHTML($oTabField->GetName())."</td>\n";
+                                    $sTableHTML .= '
+                                    <td>'.TGlobal::OutHTML($oTabField->GetName())."</td>\n";
                                     $sTableHTML .= '<td>';
 
                                     if (!empty($oTabField->field049Helptext)) {
@@ -122,9 +151,7 @@ class CMSModuleHelp extends TCMSModelBase
         </tbody>
         </table>';
 
-        $this->data['sHtml'] = $sTableHTML;
-
-        return $this->data;
+        return $sTableHTML;
     }
 
     public function GetHtmlHeadIncludes()
@@ -132,5 +159,15 @@ class CMSModuleHelp extends TCMSModelBase
         $aIncludes = parent::GetHtmlHeadIncludes();
 
         return $aIncludes;
+    }
+
+    private function getInputFilter(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
     }
 }
