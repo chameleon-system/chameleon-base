@@ -1,10 +1,10 @@
 <div class="sidebar" data-toggle-notification-url="{{ sidebarToggleNotificationUrl|e('html_attr') }}">
-    <input
+    <p class="sidebar-filter-input-wrapper fas"><input
             type="text"
             class="sidebar-filter-input form-control"
-            placeholder="&#xf002; {{ 'chameleon_system_core.sidebar.filter_menu'|trans }}"
+            placeholder="{{ 'chameleon_system_core.sidebar.filter_menu'|trans }}"
             autocomplete="off"
-    />
+        /></p>
     <nav class="sidebar-nav">
         <ul class="nav">
             {% for category in menuItems %}
