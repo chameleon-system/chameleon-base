@@ -19,12 +19,12 @@
                             </div>
                             {% if accessRightsCrop.edit %}<a class="btn btn-xs btn-default edit-version"
                                                              href="{{ createCropUrl }}&{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_CROP_ID') }}={{ crop.id }}">
-                                <span class="glyphicon glyphicon-retweet"></span> {{ 'chameleon_system_image_crop.media_manager_crops.edit' | trans }}
+                                <span class="fas fa-plus-square"></span> {{ 'chameleon_system_image_crop.media_manager_crops.edit' | trans }}
                                 </a>{% endif %}
 
                             {% if pickImageMode and pickImageWithCrop %}
                                 <a class="btn btn-xs btn-default pick-version" data-crop-id="{{ crop.id }}"><span
-                                            class="glyphicon glyphicon-ok-circle"></span> {{ 'chameleon_system_media_manager.list_actions.select' | trans }}
+                                            class="fas fa-check-circle"></span> {{ 'chameleon_system_media_manager.list_actions.select' | trans }}
                                 </a>
                             {% endif %}
 

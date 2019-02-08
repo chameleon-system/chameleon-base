@@ -45,7 +45,7 @@
                                    placeholder="{{ 'chameleon_system_media_manager.list.search_in_tree_node_placeholder' | trans({'%treeNodeName%': mediaTreeNode.name}) }}"
                                    data-target="search-category-auto-complete">
                             <span class="input-group-append">
-                        <button type="submit" class="btn btn-sm btn-secondary search-button"><span class="glyphicon glyphicon-search"></span></button>
+                        <button type="submit" class="btn btn-sm btn-secondary search-button"><i class="fas fa-search"></i></button>
                     </span>
                             <div id="search-category-auto-complete"></div>
                         </div>
@@ -110,14 +110,6 @@
                 <a class="list-view list{% if listState.listView == 'list' %} active{% endif %}" data-view="list">
                     <i class="fas fa-th-list"></i>
                 </a>
-                {#
-                    Deactivated as the list is always displayed empty and is therefore of no use.
-                    See https://github.com/chameleon-system/chameleon-system/issues/3
-                    and https://github.com/chameleon-system/chameleon-system/issues/28
-                #}
-                {#<a class="list-view list{% if listState.listView == 'tableList' %} active{% endif %}"
-                   data-view="tableList"><span
-                            class="glyphicon glyphicon-list-alt"></span></a>#}
             </div>
         </div>
     </div>
