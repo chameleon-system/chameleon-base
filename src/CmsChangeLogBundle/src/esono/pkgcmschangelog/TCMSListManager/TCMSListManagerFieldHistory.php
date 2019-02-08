@@ -52,9 +52,6 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
         );
     }
 
-    /**
-     * @return string
-     */
     protected function _GetRecordClickJavaScriptFunctionName(): string
     {
         return 'restoreFieldValueVersion';
