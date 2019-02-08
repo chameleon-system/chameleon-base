@@ -74,6 +74,19 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
         return sprintf('<span data-field-restorable-value="%s">%s</span>', $encodedFieldPayload, $originalFieldValue);
     }
 
+    // Includes
+
+    /**
+     * {@inheritDoc}
+     */
+    public function GetHtmlHeadIncludes(): array
+    {
+        $includePaths = parent::GetHtmlHeadIncludes();
+        $includePaths[] = '<script src="bundles/chameleonsystemchangelog/javascript/versionHistoryActions.js" type="text/javascript"></script>';
+
+        return $includePaths;
+    }
+
     // Dependencies
 
     /**
