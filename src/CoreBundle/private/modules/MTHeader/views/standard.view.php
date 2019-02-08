@@ -67,7 +67,7 @@ if (false === isset($data['oUser'])) {
                     if ($data['showNaviManager']) {
                         $windowTitle = $translator->trans('chameleon_system_core.cms_module_page_tree.headline');
                         $fieldName = 'mainNavNavi';
-                        $url = PATH_CMS_CONTROLLER.'?pagedef=CMSModulePageTreePlain&table=cms_tpl_page&noassign=1&rootID='.$data['startTreeID'];
+                        $url = PATH_CMS_CONTROLLER.'?pagedef=CMSModulePageTree&table=cms_tpl_page&noassign=1&rootID='.$data['startTreeID'];
                     ?>
                         <li class="nav-item px-2">
                             <a href="<?= TGlobal::OutHTML($url) ?>" class="nav-link" title="<?=TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.action_edit_navigation_help')); ?>">
