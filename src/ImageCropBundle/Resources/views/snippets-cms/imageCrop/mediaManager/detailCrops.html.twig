@@ -19,7 +19,7 @@
                             </div>
                             {% if accessRightsCrop.edit %}<a class="btn btn-xs btn-default edit-version"
                                                              href="{{ createCropUrl }}&{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_CROP_ID') }}={{ crop.id }}">
-                                <span class="fas fa-plus-square"></span> {{ 'chameleon_system_image_crop.media_manager_crops.edit' | trans }}
+                                <span class="fas fa-expand"></span> {{ 'chameleon_system_image_crop.media_manager_crops.edit' | trans }}
                                 </a>{% endif %}
 
                             {% if pickImageMode and pickImageWithCrop %}
