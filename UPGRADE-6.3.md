@@ -409,6 +409,7 @@ Deprecated is every jquery plugin in:
 - jquery.selectboxes.js
 - respond.min.js
 - pngForIE.htc
+- pNotify was upgraded to 3.2.0 and the old library is deprecated. new path: /javascript/pnotify-3.2.0/.
 
 ## Translations
 
