@@ -11,8 +11,10 @@
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ChangeNavigationTreeNodeEvent;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperFactoryInterface;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -85,6 +87,7 @@ class CMSModulePageTree extends TCMSModelBase
     {
         parent::Execute();
 
+        $inputFilterUtil = $this->getInputFilterUtil();
         $this->data['rootNodeName'] = 'Root';
 
         $sPageTableId = TTools::GetCMSTableId('cms_tpl_page');
@@ -101,20 +104,18 @@ class CMSModulePageTree extends TCMSModelBase
             $this->data['dataID'] = $this->global->GetUserData('id');
         }
 
-        if ($this->global->UserDataExists('rootID')) {
-            $nodeID = $this->global->GetUserData('rootID');
-            $this->data['rootID'] = $nodeID;
-            $this->iRootNode = $nodeID;
-            $this->GetRootNodeName($nodeID);
-            $this->LoadTreeState();
-            $this->aRestrictedNodes = $this->GetPortalNavigationStartNodes();
+        $nodeID = $inputFilterUtil->getFilteredGetInput('rootID', '99');
+        $this->data['rootID'] = $nodeID;
+        $this->iRootNode = $nodeID;
+        $this->GetRootNodeName($nodeID);
+        $this->LoadTreeState();
+        $this->aRestrictedNodes = $this->GetPortalNavigationStartNodes();
 
-            // check if we have more then 3 portals (needed because of performance issues in pre rendering the tree)
-            $oPortalList = TdbCmsPortalList::GetList();
-            $this->iPortalCount = $oPortalList->Length();
+        // Check if we have more than 3 portals (needed because of performance issues in tree pre-rendering)
+        $oPortalList = TdbCmsPortalList::GetList();
+        $this->iPortalCount = $oPortalList->Length();
 
-            $this->RenderTree($this->oRootNode->id, $this->oRootNode, 0);
-        }
+        $this->RenderTree($this->oRootNode->id, $this->oRootNode, 0);
 
         if ($this->global->UserDataExists('table')) {
             $this->data['table'] = $this->global->GetUserData('table');
@@ -717,5 +718,10 @@ COMMAND;
     private function getEventDispatcher()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('event_dispatcher');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

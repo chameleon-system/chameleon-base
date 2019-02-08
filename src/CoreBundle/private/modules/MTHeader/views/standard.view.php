@@ -60,66 +60,6 @@ if (false === isset($data['oUser'])) {
                     </li>
                     <?php
                 }
-                ?>
-
-                <?php
-                if ($data['showWebsiteEditNavi'] && $data['show_template_engine']) {
-                    if ($data['showNaviManager']) {
-                        $windowTitle = $translator->trans('chameleon_system_core.cms_module_page_tree.headline');
-                        $fieldName = 'mainNavNavi';
-                        $url = PATH_CMS_CONTROLLER.'?pagedef=CMSModulePageTreePlain&table=cms_tpl_page&noassign=1&rootID='.$data['startTreeID'];
-                    ?>
-                        <li class="nav-item px-2">
-                            <a href="<?= TGlobal::OutHTML($url) ?>" class="nav-link" title="<?=TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.action_edit_navigation_help')); ?>">
-                                <i class="fas fa-leaf"></i>
-                                <span class="d-md-down-none">
-                                    <?= $translator->trans('chameleon_system_core.cms_module_header.action_edit_navigation') ?>
-                                </span>
-                            </a>
-                        </li>
-                    <?php
-                    } ?>
-                    <li class="nav-item px-2">
-                        <a href="<?= PATH_CMS_CONTROLLER; ?>?pagedef=tablemanager&amp;id=<?=$data['table_id_cms_tpl_page']; ?>" class="nav-link" title="<?=TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.action_open_website_list_help')); ?>">
-                            <i class="fas fa-folder-open"></i>
-                            <span class="d-md-down-none">
-                                <?= $translator->trans('chameleon_system_core.cms_module_header.action_open_website_list') ?>
-                            </span>
-                        </a>
-                    </li>
-                    <?php
-                } ?>
-
-                <?php
-                if ($data['showImageManagerNavi']) {
-                    $mediaManagerUrlGenerator = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.media_manager.url_generator');
-                    $onClickEvent = '';
-                    if ($mediaManagerUrlGenerator->openStandaloneMediaManagerInNewWindow()) {
-                        $onClickEvent = 'onclick="window.open(\''.$mediaManagerUrlGenerator->getStandaloneMediaManagerUrl().'\',\'mediaManager\',\'_blank\'); return false;"';
-                    } ?>
-                    <li class="nav-item px-2">
-                        <a href="<?=$mediaManagerUrlGenerator->getStandaloneMediaManagerUrl(); ?>" <?=$onClickEvent; ?> class="nav-link" title="<?=TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.action_open_media_manager_help')); ?>">
-                            <i class="far fa-image"></i>
-                            <span class="d-md-down-none">
-                                <?= $translator->trans('chameleon_system_core.cms_module_header.action_open_media_manager') ?>
-                            </span>
-                        </a>
-                    </li>
-                <?php
-                }
-
-            if ($data['showDocumentManagerNavi']) {
-                ?>
-                    <li class="nav-item px-2">
-                        <a href="/cms?pagedef=CMSDocumentManagerFull" class="nav-link" title="<?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.action_open_document_manager_help')) ?>">
-                            <i class="fas fa-file-alt"></i>
-                            <span class="d-md-down-none">
-                                <?= $translator->trans('chameleon_system_core.cms_module_header.action_open_document_manager') ?>
-                            </span>
-                        </a>
-                    </li>
-                <?php
-            }
 
             if (isset($editLanguages) && count($editLanguages) > 1) {
                 $urlToActiveLanguageFlag = TGlobal::GetPathTheme().'/images/icons/language-flags/'.strtolower($activeEditLanguageIso).'.png'; ?>
