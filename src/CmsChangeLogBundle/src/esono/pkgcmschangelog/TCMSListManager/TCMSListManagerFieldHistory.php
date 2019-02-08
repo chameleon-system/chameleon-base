@@ -10,8 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\CoreBundle\Translation\ChameleonTranslator;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
 {
@@ -85,11 +85,11 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
     }
 
     /**
-     * @return ChameleonTranslator
+     * @return TranslatorInterface
      */
-    private function getTranslator(): ChameleonTranslator
+    private function getTranslator(): TranslatorInterface
     {
-        return ServiceLocator::get('chameleon_system_core.translator');
+        return ServiceLocator::get('translator');
     }
 
 }
