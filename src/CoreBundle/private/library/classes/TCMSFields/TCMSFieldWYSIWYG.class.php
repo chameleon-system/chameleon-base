@@ -192,6 +192,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         return $this->getUrlUtilService()->getArrayAsUrl([
             'id' => $tableConfigurationId,
             'pagedef' => 'changeLogFieldHistory',
+            '_pagedefType' => '@ChameleonSystemCmsChangeLogBundle',
             'sRestrictionField' => 'cms_field_conf',
             'sRestriction' => $fieldConfigurationId
         ], PATH_CMS_CONTROLLER.'?', '&');
