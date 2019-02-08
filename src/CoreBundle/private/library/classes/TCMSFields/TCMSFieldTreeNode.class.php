@@ -104,6 +104,8 @@ class TCMSFieldTreeNode extends TCMSField
     }
 
     /**
+     * @deprecate since 6.3.0 - date related tree nodes are not working anymore functionality will be removed.
+     *
      * Get page tree connection date information as rendered html.
      *
      * @param string $sTreeId
@@ -113,41 +115,6 @@ class TCMSFieldTreeNode extends TCMSField
      */
     protected function GetPageTreeConnectionDateInformationHTML($sTreeId, $sPageId)
     {
-        $oCmsTree = TdbCmsTree::GetNewInstance();
-        $oCmsTree->Load($sTreeId);
-        $oCurrentActiveTreeConnection = $oCmsTree->GetActivePageTreeConnectionForTree();
-        $oLocal = TCMSLocal::GetActive();
-        $sPageTreeConnectionDateInformation = '';
-        $sQuery = "SELECT * FROM `cms_tree_node`
-                         WHERE `cms_tree_node`.`cms_tree_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTreeId)."'
-                           AND `cms_tree_node`.`tbl` = 'cms_tpl_page'
-                           AND `cms_tree_node`.`contid` = '".MySqlLegacySupport::getInstance()->real_escape_string($sPageId)."'";
-        $oPageTreeConnectionList = TdbCmsTreeNodeList::GetList($sQuery);
-        while ($oPageTreeConnection = $oPageTreeConnectionList->Next()) {
-            if ($oCurrentActiveTreeConnection && $oPageTreeConnection->id == $oCurrentActiveTreeConnection->id) {
-                $sPageTreeConnectionClass = 'dateinfo_inner_active';
-            } else {
-                $sPageTreeConnectionClass = 'dateinfo_inner_none_active';
-            }
-
-            $sStartDate = $oLocal->FormatDate($oPageTreeConnection->fieldStartDate);
-            $sEndDate = $oLocal->FormatDate($oPageTreeConnection->fieldEndDate);
-
-            $sDateText = '';
-            if (!empty($sStartDate)) {
-                $sDateText .= TGlobal::Translate('chameleon_system_core.field_tree_node.date_starting_on').' '.$sStartDate.' ';
-            }
-            if (!empty($sEndDate)) {
-                $sDateText .= TGlobal::Translate('chameleon_system_core.field_tree_node.date_ending_on').' '.$sEndDate;
-            }
-
-            if (empty($sStartDate) && empty($sEndDate)) {
-                $sDateText = TGlobal::Translate('chameleon_system_core.field_tree_node.date_unrestricted');
-            }
-
-            $sPageTreeConnectionDateInformation .= '<div class="dateinfo_inner '.$sPageTreeConnectionClass.'">'.$sDateText.'</div>';
-        }
-
-        return $sPageTreeConnectionDateInformation;
+        return '';
     }
 }
