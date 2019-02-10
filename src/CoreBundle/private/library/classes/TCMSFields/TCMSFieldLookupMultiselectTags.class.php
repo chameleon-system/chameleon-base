@@ -9,7 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 /**
  * {@inheritdoc}
@@ -17,11 +20,13 @@ use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
 {
     /**
+     * @note not working at the moment using select2
+     *
      * if true, the field tries to load tag suggestions.
      *
-     * @var bool - default true
+     * @var bool - default false
      */
-    protected $bShowSuggestions = true;
+    protected $bShowSuggestions = false;
 
     /**
      * list object of all currently connected tags.
@@ -54,21 +59,20 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
 
     public function GetHTML()
     {
-        $tags = '';
-        if (is_null($this->oConnectedMLTRecords)) {
+        if (null === $this->oConnectedMLTRecords) {
             $this->oConnectedMLTRecords = $this->FetchConnectedMLTRecords();
         }
+
+        $selectBox = '<select id="%s" name="%s[]" data-select2-ajax="%s" class="form-control form-control-sm" data-tags="true" multiple="multiple">';
+        $html = sprintf($selectBox, TGlobal::OutHTML($this->name), TGlobal::OutHTML($this->name), $this->getTagAutocompleteUrl());
+
         $this->oConnectedMLTRecords->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
         while ($oMLTRecord = $this->oConnectedMLTRecords->Next()) {
-            $tags .= $oMLTRecord->GetDisplayValue().', ';
+            $html .= '<option selected="selected">'.TGlobal::OutHTML($oMLTRecord->GetDisplayValue()).'</option>';
         }
 
-        if (', ' === substr($tags, -2, 2)) {
-            $tags = substr($tags, 0, -2);
-        }
+        $html .= '</select>';
 
-        $html = '<div style="">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_tag.separator_hint')).'</div>
-      <div style="padding-right: 27px;"><textarea id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" class="form-control form-control-sm">'.TGlobal::OutHTML($tags)."</textarea></div>\n";
         if ($this->bShowSuggestions) {
             $html .= '<div id="'.TGlobal::OutHTML($this->name).'_suggested" class="tagInputSuggestedTags"><span class="label">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_tag.suggestions')).": </span><span class=\"tagInputSuggestedTagList\"></span></div>\n";
         }
@@ -76,10 +80,44 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         return $html;
     }
 
+    private function getAjaxUrlParameter(): array
+    {
+        $tableConf = $this->oTableRow->GetTableConf();
+
+        return array(
+            'pagedef' => 'tableeditor',
+            '_rmhist' => 'false',
+            'module_fnc[contentmodule]' => 'ExecuteAjaxCall',
+            'callFieldMethod' => '1',
+            'id' => $this->recordId,
+            'tableid' => $tableConf->id,
+            '_fieldName' => $this->name
+        );
+    }
+
+    private function getTagAutocompleteUrl(): string
+    {
+        $urlParameter = $this->getAjaxUrlParameter();
+        $urlParameter['_fnc'] = 'getAutocompleteTagList';
+
+        return $this->getUrlUtil()->getArrayAsUrl($urlParameter, PATH_CMS_CONTROLLER.'?', '&');
+    }
+
+    /*
+     * @todo not used at the moment. Needs to be implemented with select2.
+     */
+    private function getTagSuggestionsUrl(): string
+    {
+        $urlParameter = $this->getAjaxUrlParameter();
+        $urlParameter['_fnc'] = 'GetTagSuggestions';
+
+        return $this->getUrlUtil()->getArrayAsUrl($urlParameter, PATH_CMS_CONTROLLER.'?', '&');
+    }
+
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('GetTagList', 'GetTagSuggestions');
+        $externalFunctions = array('GetTagList', 'GetTagSuggestions', 'getAutocompleteTagList');
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -91,21 +129,36 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
      */
     protected function GetLanguageSuffix()
     {
-        if (null === $this->sLanguageIsoName) {
-            $sLanguageIsoName = '';
-            if (TdbCmsTags::CMSFieldIsTranslated('name')) {
-                $oCMSConfig = TdbCmsConfig::GetInstance();
-                $sBaseLanguageID = $oCMSConfig->fieldTranslationBaseLanguageId;
-                $sActiveLanguageId = TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID();
-                if ($sBaseLanguageID !== $sActiveLanguageId) {
-                    $sLanguageIsoName = '__'.$this->getLanguageService()->getLanguageIsoCode($sActiveLanguageId);
-                }
-            }
-
-            $this->sLanguageIsoName = $sLanguageIsoName;
+        if (null !== $this->sLanguageIsoName) {
+            return $this->sLanguageIsoName;
         }
 
-        return $this->sLanguageIsoName;
+
+        if (false === TdbCmsTags::CMSFieldIsTranslated('name')) {
+            return '';
+        }
+
+        $cmsConfig = TdbCmsConfig::GetInstance();
+        $baseLanguageId = $cmsConfig->fieldTranslationBaseLanguageId;
+        $activeLanguageId = TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID();
+        if ($baseLanguageId !== $activeLanguageId) {
+            return '__'.$this->getLanguageService()->getLanguageIsoCode($activeLanguageId);
+        }
+
+        return '';
+    }
+
+    public function getAutocompleteTagList()
+    {
+        $returnVal = [];
+
+        $tagList = $this->GetTagList();
+        foreach ($tagList as $tagItem) {
+            $tag = $tagItem['tag'];
+            $returnVal[] = ['id' => $tag, 'text' => $tag];
+        }
+
+        return $returnVal;
     }
 
     /**
@@ -118,80 +171,71 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         $aFoundTags = array();
         $oGlobal = TGlobal::instance();
 
-        if ($oGlobal->UserDataExists('search')) {
-            $sLanguageIsoName = $this->GetLanguageSuffix();
-            $sTagBlackListQueryPart = '';
-            if ($oGlobal->UserDataExists('currentTags')) {
-                $sCurrentTags = $oGlobal->GetUserData('currentTags');
-                $aCurrentTags = explode(',', $sCurrentTags);
-                if (count($aCurrentTags) > 0) {
-                    $sTagBlackList = '';
-                    foreach ($aCurrentTags as $sCurrentTag) {
-                        $sTagBlackList .= "'".MySqlLegacySupport::getInstance()->real_escape_string(trim(strtolower($sCurrentTag)))."',";
-                    }
-                    $sTagBlackList = substr($sTagBlackList, 0, -1);
+        $inputFilter = $this->getInputFilterUtil();
 
-                    $sTagBlackListQueryPart = ' AND `name'.$sLanguageIsoName.'` NOT IN ('.$sTagBlackList.')';
+        $searchTerm = $inputFilter->getFilteredInput('q');
+
+        if (null === $searchTerm) {
+            return [];
+        }
+
+        $searchTerm = strtolower(trim($searchTerm));
+
+        $sLanguageIsoName = $this->GetLanguageSuffix();
+        $sTagBlackListQueryPart = '';
+
+        $currentTags = $inputFilter->getFilteredInput('currentTags');
+
+        if (null !== $currentTags && '' !== $currentTags) {
+            $currentTagsList = explode(',', $currentTags);
+            if (count($currentTagsList) > 0) {
+                $tagBlackList = '';
+                foreach ($currentTagsList as $currentTag) {
+                    $tagBlackList .= "'".MySqlLegacySupport::getInstance()->real_escape_string(trim(strtolower($currentTag)))."',";
                 }
-            }
+                $tagBlackList = substr($tagBlackList, 0, -1);
 
-            $query = 'SELECT DISTINCT *
-                  FROM `cms_tags`
-                  WHERE `name'.MySqlLegacySupport::getInstance()->real_escape_string($sLanguageIsoName)."` LIKE '".MySqlLegacySupport::getInstance()->real_escape_string(strtolower($oGlobal->GetUserData('search')))."%' ".$sTagBlackListQueryPart;
-
-            $query .= ' ORDER BY `name` ASC';
-            $iLimit = $this->iMaxAutocompleteTags;
-            if ($oGlobal->UserDataExists('limit')) {
-                $iLimit = $oGlobal->GetUserData('limit');
-            }
-            $query .= ' LIMIT '.MySqlLegacySupport::getInstance()->real_escape_string($iLimit);
-            $oRecordList = TdbCmsTagsList::GetList($query);
-            $oRecordList->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
-
-            while ($oRecord = $oRecordList->Next()) {
-                $iTagUsageCount = $oRecord->fieldCount;
-                $name = $oRecord->GetName();
-                if (!empty($name)) {
-                    $aFoundTags[] = array('tag' => $name, 'freq' => $iTagUsageCount);
-                }
+                $sTagBlackListQueryPart = ' AND `name'.$sLanguageIsoName.'` NOT IN ('.$tagBlackList.')';
             }
         }
+
+        $query = 'SELECT DISTINCT *
+              FROM `cms_tags`
+              WHERE `name'.MySqlLegacySupport::getInstance()->real_escape_string($sLanguageIsoName)."` LIKE '".MySqlLegacySupport::getInstance()->real_escape_string($searchTerm)."%' ".$sTagBlackListQueryPart;
+
+        $query .= ' ORDER BY `name` ASC';
+        $iLimit = $this->iMaxAutocompleteTags;
+        if ($oGlobal->UserDataExists('limit')) {
+            $iLimit = $oGlobal->GetUserData('limit');
+        }
+        $query .= ' LIMIT '.MySqlLegacySupport::getInstance()->real_escape_string($iLimit);
+        $oRecordList = TdbCmsTagsList::GetList($query);
+        $oRecordList->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+
+        while ($oRecord = $oRecordList->Next()) {
+            $iTagUsageCount = $oRecord->fieldCount;
+            $name = $oRecord->GetName();
+            if (!empty($name)) {
+                $aFoundTags[] = array('tag' => $name, 'freq' => $iTagUsageCount);
+            }
+        }
+
 
         return $aFoundTags;
     }
 
     /**
-     * called on each field after the record is saved (NOT on insert, only on save).
-     *
-     * @param int $iRecordId - the id of the record
+     * {@inheritdoc}
      */
     public function PostSaveHook($iRecordId)
     {
-        // save tags
-        $oRecord = new TCMSRecord();
-        /** @var $oRecord TCMSRecord */
-        $oRecord->table = $this->sTableName;
-        $oRecord->Load($iRecordId);
-        $tags = $this->data;
-        $aTags = explode(',', $tags);
-        if (0 === $tags || '0' === $tags) {
-            /** @var $oTableEditor TCMSTableEditorManager */
-            $sDBTableName = 'Tdb'.TCMSTableToClass::GetClassName('', $this->sTableName);
-            $oTableRecord = call_user_func(array($sDBTableName, 'GetNewInstance'));
-            /** @var $oTableRecord TCMSRecord */
-            $oTableRecord->Load($this->recordId);
-            $aCmsTagIDs = $oTableRecord->GetMLTIdList('cms_tags');
-            if (is_array($aCmsTagIDs) && count($aCmsTagIDs) > 0) {
-                $databaseConnection = $this->getDatabaseConnection();
-                $cmsTagIdString = implode(',', array_map(array($databaseConnection, 'quote'), $aCmsTagIDs));
+        $currentRecord = $this->oTableRow;
 
-                $query = "SELECT * FROM `cms_tags` WHERE `id` IN ($cmsTagIdString)";
-                $oCmsTagList = TdbCmsTagsList::GetList($query);
-                $aTags = array();
-                while ($oCmsTag = $oCmsTagList->Next()) {
-                    $aTags[] = $oCmsTag->fieldName;
-                }
-            }
+        // save tags
+        $tags = $this->data;
+
+        if (false === is_array($tags)) {
+            $tags = [];
         }
 
         $oTagTableConf = new TCMSTableConf();
@@ -199,16 +243,16 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
 
         // loop through tags and insert missing tags to database
         $aTagIDs = array();
-        foreach ($aTags as $tag) {
+        foreach ($tags as $tag) {
             $cleanTag = trim(strtolower($tag));
-            if ('' != $cleanTag) {
+            if ('' !== $cleanTag) {
                 // perform case insensitive search for existing tag
                 $sLanguageIsoName = $this->GetLanguageSuffix();
                 $checkQuery = 'SELECT * FROM `cms_tags` WHERE `name'.MySqlLegacySupport::getInstance()->real_escape_string($sLanguageIsoName)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($cleanTag)."'";
                 $checkResult = MySqlLegacySupport::getInstance()->query($checkQuery);
-                if (MySqlLegacySupport::getInstance()->num_rows($checkResult) < 1) { // tag not yet in database, so perform an insert
+                if (MySqlLegacySupport::getInstance()->num_rows($checkResult) < 1) {
+                    // tag not yet in database, so perform an insert
                     $oTableManager = new TCMSTableEditorManager();
-                    /** @var $oTableManager TCMSTableEditorManager */
                     $oTableManager->Init($oTagTableConf->id, null);
                     $aDefaultData = array('name' => $cleanTag, 'urlname' => $this->getUrlNormalizationUtil()->normalizeUrl($cleanTag));
                     $oTableManager->Save($aDefaultData);
@@ -221,8 +265,8 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         }
 
         // perform mlt changes
-        if (is_array($oRecord->sqlData) && array_key_exists('id', $oRecord->sqlData) && !empty($oRecord->sqlData['id'])) {
-            $recordId = $oRecord->sqlData['id'];
+        if (is_array($currentRecord->sqlData) && array_key_exists('id', $currentRecord->sqlData) && !empty($currentRecord->sqlData['id'])) {
+            $recordId = $currentRecord->sqlData['id'];
             $mltTableName = $this->GetMLTTableName();
 
             $oTableConf = new TCMSTableConf();
@@ -257,48 +301,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
 
     public function GetSQL()
     {
-        return false; // prevent saving of sql
-    }
-
-    /**
-     * return an array of all js, css, or other header includes that are required
-     * in the cms for this field. each include should be in one line, and they
-     * should always be typed the same way so that no includes are included mor than once.
-     *
-     * @return array
-     */
-    public function GetCMSHtmlHeadIncludes()
-    {
-        parent::GetCMSHtmlHeadIncludes();
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/timers/jQuery.timers.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/tagInput/jQuery.tagInput.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tags.css" rel="stylesheet" type="text/css" />';
-
-        $oTableConf = &$this->oTableRow->GetTableConf();
-        $sAutoCompleteURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'tableeditor', '_rmhist' => 'false', 'module_fnc[contentmodule]' => 'ExecuteAjaxCall', 'callFieldMethod' => '1', 'id' => $this->recordId, 'tableid' => $oTableConf->id, '_fieldName' => $this->name, '_fnc' => 'GetTagList'));
-        $sSuggestedTagsURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'tableeditor', '_rmhist' => 'false', 'module_fnc[contentmodule]' => 'ExecuteAjaxCall', 'callFieldMethod' => '1', 'id' => $this->recordId, 'tableid' => $oTableConf->id, '_fieldName' => $this->name, '_fnc' => 'GetTagSuggestions'));
-
-        $sTaggingJS = '<script type="text/javascript">
-        $(function(){
-          $("#'.TGlobal::OutJS($this->name).'").tagInput({
-            jsonUrl:"'.$sAutoCompleteURL.'",
-            sortBy:"frequency",';
-
-        if ($this->bShowSuggestions) {
-            $sTaggingJS .= 'loadSuggestedTagsFromJSON:true,
-              jsonUrlSuggestedTags:"'.$sSuggestedTagsURL.'",
-              suggestedTagsPlaceHolder:$("#'.TGlobal::OutJS($this->name).'_suggested"),'."\n";
-        }
-
-        $sTaggingJS .= 'autoFilter:false,
-            autoStart:false
-          })
-        })
-      </script>';
-
-        $aIncludes[] = $sTaggingJS;
-
-        return $aIncludes;
+        return $this->ConvertDataToFieldBasedData($this->ConvertPostDataToSQL());
     }
 
     /**
@@ -390,10 +393,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
     }
 
     /**
-     * returns true if field data is not empty
-     * overwrite this method for mlt and property fields.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function HasContent()
     {
@@ -406,7 +406,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         return $bHasContent;
     }
 
-    protected function GetCleanedTagString()
+    protected function GetCleanedTagString(): string
     {
         $sReturnTags = '';
         $aTagData = explode(',', $this->data);
@@ -423,11 +423,18 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         return $sReturnTags;
     }
 
-    /**
-     * @return UrlNormalizationUtil
-     */
-    private function getUrlNormalizationUtil()
+    private function getUrlNormalizationUtil(): UrlNormalizationUtil
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ServiceLocator::get('chameleon_system_core.util.url_normalization');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getUrlUtil(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

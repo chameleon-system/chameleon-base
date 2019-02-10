@@ -814,6 +814,41 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
         var id = e.params.data.id;
         switchRecord(id);
     });
+
+    $('[data-tags]').each(function () {
+        $(this).select2({
+            tags: true,
+            tokenSeparators: [',', ' ', ';'],
+            ajax: {
+                url: $(this).data('select2-ajax'),
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        currentTags: $(this).val().join(','),
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    }
+                }
+            },
+
+            createTag: function (params) {
+                var term = $.trim(params.term);
+
+                if ('' === term) {
+                    return null;
+                }
+
+                return {
+                    id: term,
+                    text: term
+                };
+            }
+        });
+    });
 };
 
 CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent = function (selector) {
