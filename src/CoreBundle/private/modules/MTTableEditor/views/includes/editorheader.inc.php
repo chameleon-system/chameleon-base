@@ -43,7 +43,7 @@ $oController = TGlobal::GetController();
         <button class="btn btn-outline-info btn-sm mt-2 mr-2" type="button" role="button" data-toggle="popover"
                 data-placement="bottom"
                 data-content="<?= TGlobal::OutHTML($idsPopoverText); ?>" data-original-title="IDs">
-            IDs
+            <i class="fas fa-database"></i> IDs
         </button>
 
         <?php
@@ -70,11 +70,11 @@ $oController = TGlobal::GetController();
             }
 
             $sData .= '<div class="callout callout-danger mt-0 mb-1">'.$oCmsLock->GetDateField('time_stamp').'</div>'; ?>
-            <button class="btn btn-danger mt-2 mr-2" type="button" role="button" data-toggle="popover"
+            <button class="btn btn-danger btn-sm mt-2 mr-2" type="button" role="button" data-toggle="popover"
                     data-placement="bottom"
                     data-content="<?= TGlobal::OutHTML($sData); ?>"
                     data-original-title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.record_lock.locked_by')); ?>">
-                <?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.header_lock')); ?>
+                <i class="fas fa-user-lock"></i> <?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.header_lock')); ?>
             </button>
             <?php
         }

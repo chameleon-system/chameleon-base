@@ -385,6 +385,7 @@ You should remove all width/height settings in CreateModalXY calls if it does no
 - $.jqM() (jqModal)
 - $.jqDnR() (part of jqModal)
 - $.addOption() (jquery.selectboxes plugin)
+- $.wTooltip() - use Bootstrap tooltip instead.
 - loadStandaloneDocumentManager
 - PublishViaAjaxCallback()
 - showMLTField() - use CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(iFrameId, url) instead.
