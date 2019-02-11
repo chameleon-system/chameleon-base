@@ -36,20 +36,10 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ]);
 TCMSLogChange::insert(__LINE__, $data);
 
-TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_field_type'), 'version_history', 'validation_regex');
-
-$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
-    ->setFields([
-        'name' => 'version_history',
-        'translation' => 'Versionshistorie',
-        '049_helptext' => 'Erlaubt bei aktivierter Versionierung der Tabelle die Auflistung und Wiederherstellung bisheriger Versionen des Feldwerts.', '',
-    ])->setWhereEquals([
-        'id' => $fieldConfigurationId
-    ]);
-TCMSLogChange::update(__LINE__, $data);
+TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_field_type'), 'version_history', 'fieldclass');
 
 $query = "ALTER TABLE `cms_field_type`
-                        ADD `version_history` ENUM('0','1') DEFAULT '0' NOT NULL COMMENT 'Version History: Allows listing and restoring previous revisions of the field's value if table versioning is enabled.'";
+                        ADD `version_history` ENUM('0','1') DEFAULT '0' NOT NULL COMMENT 'Version History: Allows listing and restoring previous revisions of the field\'s value if table versioning is enabled.'";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
 // Enable version history for base WYSIWYG field type.
@@ -63,3 +53,14 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'en')
     ]);
 TCMSLogChange::update(__LINE__, $data);
 
+// Supplement translation
+
+$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
+    ->setFields([
+        'name' => 'version_history',
+        'translation' => 'Versionshistorie',
+        '049_helptext' => 'Erlaubt bei aktivierter Versionierung der Tabelle die Auflistung und Wiederherstellung bisheriger Versionen des Feldwerts.', '',
+    ])->setWhereEquals([
+        'id' => $fieldConfigurationId
+    ]);
+TCMSLogChange::update(__LINE__, $data);
