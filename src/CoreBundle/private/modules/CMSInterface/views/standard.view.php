@@ -1,10 +1,10 @@
-<div class="CMSInterfacePopup">
+<div>
     <?php if (count($data['aMessages']) > 0) {
     ?>
     <div>
         <?php foreach ($data['aMessages'] as $sMessage) {
         ?>
-        <div><?=$sMessage; ?></div>
+        <div class="alert alert-warning"><?=$sMessage; ?></div>
         <?php
     } ?>
     </div>
@@ -13,25 +13,29 @@
     <form method="post" action="<?=PATH_CMS_CONTROLLER; ?>" accept-charset="UTF-8">
         <input type="hidden" name="pagedef" value="<?=TGlobal::OutHTML($data['pagedef']); ?>"/>
         <input type="hidden" name="module_fnc[<?=TGlobal::OutHTML($data['sModuleSpotName']); ?>]" value=""/>
+
+        <div class="list-group">
         <?php
+        $checked = 'checked';
         while ($oInterface = $data['oInterfaces']->Next()) {
-            echo '<div style="padding: 15px; padding-bottom: 0px;">
-                    <div style="float:left;">
-                      <input type="radio" value="'.$oInterface->id.'" id="'.$oInterface->id.'" name="iInterfaceId" />
-                    </div>
-                    <div>
-                      <label for="'.$oInterface->id.'">
-                        <strong>'.$oInterface->GetName().'</strong><br />
-                        '.$oInterface->sqlData['description'].'
+            echo '    <label for="'.$oInterface->id.'" class="list-group-item list-group-item-action">
+                        <div class="d-flex">
+                            <input type="radio" value="'.$oInterface->id.'" '.$checked.' id="'.$oInterface->id.'" name="iInterfaceId" class="mr-2" />
+                            <div>
+                                <h5>'.$oInterface->GetName().'</h5>
+                                <p class="mb-1">'.$oInterface->sqlData['description'].'</p>
+                            </div>
+                        </div>
                       </label>
-                    </div>
-                    <div class="cleardiv">&nbsp;</div>
-                  </div>';
+                      ';
+            $checked = '';
         }
         ?>
+        </div>
+        <div class="mt-3">
         <input
-            style="margin-top: 20px;"
             type="submit"
+            class="btn btn-primary"
             value="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_interface.action_run')); ?>"
             onClick="if (confirm('<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_interface.action_run_confirm')); ?>')) {
                 return true
@@ -39,5 +43,6 @@
                 return false
                 }"
             />
+        </div>
     </form>
 </div>

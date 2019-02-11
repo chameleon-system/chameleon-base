@@ -1,6 +1,9 @@
 <?php
 
-$layoutTemplate = 'popup_window_iframe';
+$layoutTemplate = 'default';
 $moduleList = array('contentmodule' => array('model' => 'CMSInterface', 'view' => 'standard', '_suppressHistory' => true));
 
 addDefaultPageTitle($moduleList);
+addDefaultHeader($moduleList);
+addDefaultBreadcrumb($moduleList);
+addDefaultSidebar($moduleList);
