@@ -731,9 +731,4 @@ COMMAND;
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
-
-    private function getInputFilterUtil(): InputFilterUtilInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.util.input_filter');
-    }
 }
