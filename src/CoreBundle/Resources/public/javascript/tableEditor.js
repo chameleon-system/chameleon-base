@@ -818,6 +818,7 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     $('[data-tags]').each(function () {
         $(this).select2({
             tags: true,
+            width: '100%',
             tokenSeparators: [',', ' ', ';'],
             ajax: {
                 url: $(this).data('select2-ajax'),
