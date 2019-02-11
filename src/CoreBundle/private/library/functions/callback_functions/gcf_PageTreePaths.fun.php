@@ -28,10 +28,8 @@ function gcf_PageTreePaths($sTreePathCache, $row)
             reset($aAllPaths);
             foreach ($aAllPaths as $key => $value) {
                 $value = TGlobal::OutHTML($value);
-                $sTreePaths .= '<div class="treeField">
-                  <ul><li><div class="treesubpath">'.str_replace('/', '</div></li><li><div class="treesubpath">', $value).'</div></li></ul>
-          </div>
-          <div class="cleardiv">&nbsp;</div>';
+                $sTreePaths .= '
+                  <ol class="breadcrumb m-0 p-1"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i>'.str_replace('/', '</li><li class="breadcrumb-item">', $value).'</li></ol>';
             }
         }
     }

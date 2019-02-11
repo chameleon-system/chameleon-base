@@ -539,11 +539,13 @@ function SaveViaAjax() {
 function SaveViaAjaxCallback(data, statusText) {
     CloseModalIFrameDialog();
 
-    // remove all message-classes from the fields
-    $('*[id^="fieldname_"]').removeClass();
+    // remove all message background classes from field containers.
+    $('*[id^="fieldname_"]').removeClass(function (index, className) {
+        return (className.match (/(^|\s)bg-\S+/g) || []).join(' ');
+    });
 
     var returnVal = false;
-    if (data != false && data != null) {
+    if (data !== false && data != null) {
 
         returnVal = true;
 
@@ -555,10 +557,10 @@ function SaveViaAjaxCallback(data, statusText) {
                 // messages do have a reference to field (e.g. mail-field not valid)
                 if (oMessage.sMessageRefersToField) {
                     // add the class to field
-                    $('#fieldname_' + oMessage.sMessageRefersToField).parents('tr').addClass('table-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(oMessage.sMessageType));
+                    $('#fieldname_' + oMessage.sMessageRefersToField).addClass('bg-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(oMessage.sMessageType));
                 }
 
-                if (oMessage.sMessageType != 'ERROR' && !bOnLoadResetted) {
+                if (oMessage.sMessageType !== 'ERROR' && !bOnLoadResetted) {
                     // remove "something changed" message, because now the data was saved
                     bOnLoadResetted = true;
                     window.onbeforeunload = function () {
@@ -575,12 +577,12 @@ function SaveViaAjaxCallback(data, statusText) {
             };
             // reattach the message binding
             CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
-            if (data.message && data.message != '') {
+            if (data.message && data.message !== '') {
                 toasterMessage(data.message, 'MESSAGE');
             }
 
             // add saved record to breadcrumb
-            if (data.name && data.name != '' && document.getElementById('breadcrumbLastNode')) {
+            if (data.name && data.name !== '' && document.getElementById('breadcrumbLastNode')) {
                 document.getElementById('breadcrumbLastNode').innerHTML = data.name;
                 sCurrentRecordName = data.name;
             }
@@ -635,7 +637,7 @@ function ShowAjaxSaveResultAndClose(data, statusText) {
 
 function ResetTreeNodeSelection(fieldName) {
     document.getElementById(fieldName).value = '';
-    document.getElementById(fieldName + '_path').innerHTML = '<div class="treeField"><ul><li>' + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.nothing_assigned') + '</li></ul></div>';
+    document.getElementById(fieldName + '_path').innerHTML = '<ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li><li class="breadcrumb-item text-warning">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.nothing_assigned') + '</li></ol>';
 }
 
 function markCheckboxes(fieldname) {
@@ -813,6 +815,62 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     }).on('select2:select', function (e) {
         var id = e.params.data.id;
         switchRecord(id);
+    });
+
+    $('[data-tags]').each(function () {
+        $(this).select2({
+            tags: true,
+            width: '100%',
+            tokenSeparators: [',', ' ', ';'],
+            ajax: {
+                url: $(this).data('select2-ajax'),
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        currentTags: $(this).val().join(','),
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    }
+                }
+            },
+
+            createTag: function (params) {
+                var term = $.trim(params.term);
+
+                if ('' === term) {
+                    return null;
+                }
+
+                return {
+                    id: term,
+                    text: term
+                };
+            }
+        }).on('change', function (e) {
+            var currentTags = $(this).val().join(',');
+            var suggestionsUrl = $(this).data('ajax-suggestions-url')+'&currentTags='+currentTags;
+
+            $.ajax({
+                url: suggestionsUrl,
+                context: this,
+            }).done(function( data ) {
+                var suggestionsHtml = '';
+                $(data).each(function (dataKey, dataItem) {
+                    suggestionsHtml += '<span class="badge badge-secondary mr-2" data-tag-id="'+dataItem.id+'"><i class="far fa-plus-square"></i> '+dataItem.name+'</span>';
+                });
+
+                var that = $(this);
+
+                $('#'+$(this).attr('id')+'_suggestions .tagSuggestionList').html(suggestionsHtml).find('.badge').on('click', function(e) {
+                    var newOption = new Option($(this).data('tag-id'), $(this).data('tag-id'), false, true);
+                    that.append(newOption).trigger('change');
+                });
+            });
+        });
     });
 };
 

@@ -353,6 +353,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \TCMSFieldColorPicker::isFirstInstance()
 - \TCMSFieldLookup::enableComboBox()
 - \TCMSLogChange::getUpdateLogger()
+- \TCMSTreeNode::GetPageTreeConnectionDateInformationHTML()
 - \TPkgCmsCoreSendToHost::setLogRequest()
 - \TPkgCmsException_Log::getLogger()
 - \TPkgCsv2Sql::CreateLogFileName()
@@ -379,15 +380,21 @@ The modal uses CSS classes for the size. If not really necessary the modal is al
 To be backwards compatible the size classes are determined using CHAMELEON.CORE.getModalSizeClassByPixel().
 You should remove all width/height settings in CreateModalXY calls if it does not necessarily render smaller.
 
-- $.jBreadCrumb()
+- $.addOption() (jquery.selectboxes plugin)
 - $.bgiframe()
+- $.everyTime()
+- $.jBreadCrumb()
 - $.jqM() (jqModal)
 - $.jqDnR() (part of jqModal)
-- $.addOption() (jquery.selectboxes plugin)
+- $.oneTime()
+- $.stopTime()
+- $.tagInput()
+- $.wTooltip() - use Bootstrap tooltip instead.
 - loadStandaloneDocumentManager
 - PublishViaAjaxCallback()
 - showMLTField() - use CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(iFrameId, url) instead.
 - src/CoreBundle/Resources/public/javascript/mainNav.js
+)
 
 ## jQueryUi
 
@@ -409,6 +416,7 @@ Deprecated is every jquery plugin in:
 - jquery.selectboxes.js
 - respond.min.js
 - pngForIE.htc
+- pNotify was upgraded to 3.2.0 and the old library is deprecated. new path: /javascript/pnotify-3.2.0/.
 
 ## Translations
 
@@ -507,6 +515,12 @@ Not found anywhere (so you might want to skip this search, too):
 - navbar-btn
 - progress-bar*
 
+
+## Backend Tree Path Rendering
+
+Tree paths are now rendered using Bootstrap 4 breadcrumb styles.
+Check your code for the CSS class "treeField" and if found, change the HTML to ol/li list with breadcrumb classes.
+See TCMSTreeNode::GetTreeNodePathAsBackendHTML() for an example. 
 
 ## Font Awesome Icons
 

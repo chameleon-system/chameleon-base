@@ -136,10 +136,11 @@ function toasterMessage(message,type) {
         opacity: 1,
         insert_brs: true,
         text: message,
-        animate_speed: "normal",
+        animate_speed: 'normal',
         styling: 'bootstrap3',
+        icons: 'fontawesome5',
         hide: true,
-        addclass: "stack-bottomright",
+        addclass: 'stack-bottomright',
         delay: 6000,
         stack: stack_bottomright
     });
@@ -147,7 +148,11 @@ function toasterMessage(message,type) {
 
 window.alert = function(message) {
     new PNotify({
-        title: "Alert",
+        title: 'Alert',
+        type: 'error',
+        opacity: 1,
+        styling: 'bootstrap3',
+        icons: 'fontawesome5',
         text: message
     });
 };
