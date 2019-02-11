@@ -605,41 +605,14 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
     public function CallBackLockingStatus($field, $row, $name)
     {
-        $sStatus = '';
-        $oCmsLock = TTools::IsRecordLocked($_SESSION['_tmpCurrentTableID'], $row['id']);
-        if ($oCmsLock) {
-            $oController = TGlobal::GetController();
-            $oLockUser = $oCmsLock->GetFieldCmsUser();
-            $sStatus = '<div data-record-lock-status="locked" class="locked user'.$oLockUser->id.'">&nbsp;</div>';
-            $sData = $oLockUser->GetUserIcon(false).'<div class="name"><strong>'.TGlobal::Translate('chameleon_system_core.record_lock.lock_owner_name').': </strong>'.TGlobal::OutJS($oLockUser->GetName()).'</div>';
-            if (!empty($oLockUser->fieldEmail)) {
-                $sData .= '<div class="email"><strong>'.TGlobal::Translate('chameleon_system_core.record_lock.lock_owner_mail').': </strong>'.TGlobal::OutJS($oLockUser->fieldEmail).'</div>';
-            }
-            if (!empty($oLockUser->fieldTel)) {
-                $sData .= '<div class="tel"><strong>'.TGlobal::Translate('chameleon_system_core.record_lock.lock_owner_phone').': </strong>'.TGlobal::OutJS($oLockUser->fieldTel).'</div>';
-            }
-            if (!empty($oLockUser->fieldCity)) {
-                $sData .= '<div class="city"><strong>'.TGlobal::Translate('chameleon_system_core.record_lock.lock_owner_city').': </strong>'.TGlobal::OutJS($oLockUser->fieldCity).'</div>';
-            }
-
-            $oController->AddHTMLHeaderLine('
-          <script type="text/javascript">
-            $(document).ready(function() {
-              $(".user'.$oLockUser->id.'").wTooltip({
-                content: \''.$sData.'\',
-                offsetY: 15,
-                offsetX: -8,
-                className: "lockUserinfo chameleonTooltip",
-                style: false
-              });
-            });
-          </script>
-        ');
-        } else {
-            $sStatus = '<div data-record-lock-status="unlocked" class="unlocked">&nbsp;</div>';
+        $userLock = TTools::IsRecordLocked($_SESSION['_tmpCurrentTableID'], $row['id']);
+        if (false === $userLock) {
+            return '<i class="fas fa-lock-open text-success" data-record-lock-status="unlocked"></i>';
         }
 
-        return $sStatus;
+        $lockUser = $userLock->GetFieldCmsUser();
+
+        return '<i class="fas fa-user-lock text-danger" data-record-lock-status="locked" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.header_lock')).': '.TGlobal::OutHTML($lockUser->GetName()).'"></i>';
     }
 
     /**

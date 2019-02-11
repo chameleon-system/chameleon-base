@@ -389,6 +389,7 @@ You should remove all width/height settings in CreateModalXY calls if it does no
 - $.oneTime()
 - $.stopTime()
 - $.tagInput()
+- $.wTooltip() - use Bootstrap tooltip instead.
 - loadStandaloneDocumentManager
 - PublishViaAjaxCallback()
 - showMLTField() - use CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(iFrameId, url) instead.
