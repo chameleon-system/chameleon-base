@@ -674,19 +674,20 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      */
     public function GetTreeNodePathAsBackendHTML()
     {
-        $path = '<div class="breadcrumb bg-light">';
+        $path = '<ol class="breadcrumb pl-0">
+                    <li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>';
         if (is_array($this->sqlData)) { // record loaded
             $aPath = $this->GetPath();
             foreach (array_keys($aPath) as $key) {
-                $path .= '<div class="breadcrumb-item">';
+                $path .= '<li class="breadcrumb-item">';
                 $path .= TGlobal::OutHTML($aPath[$key]->fieldName);
-                $path .= "</div>\n";
+                $path .= "</li>\n";
             }
         } else {
-            $path .= '<div class="breadcrumb-item">'.TGlobal::Translate('chameleon_system_core.error.tree_path_nothing_assigned').'</div>';
+            $path .= '<li class="breadcrumb-item">'.TGlobal::Translate('chameleon_system_core.error.tree_path_nothing_assigned').'</li>';
         }
 
-        $path .= '</div>';
+        $path .= '</ol>';
 
         return $path;
     }

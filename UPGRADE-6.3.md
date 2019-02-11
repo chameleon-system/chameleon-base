@@ -353,6 +353,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \TCMSFieldColorPicker::isFirstInstance()
 - \TCMSFieldLookup::enableComboBox()
 - \TCMSLogChange::getUpdateLogger()
+- \TCMSTreeNode::GetPageTreeConnectionDateInformationHTML()
 - \TPkgCmsCoreSendToHost::setLogRequest()
 - \TPkgCmsException_Log::getLogger()
 - \TPkgCsv2Sql::CreateLogFileName()
@@ -508,6 +509,12 @@ Not found anywhere (so you might want to skip this search, too):
 - navbar-btn
 - progress-bar*
 
+
+## Backend Tree Path Rendering
+
+Tree paths are now rendered using Bootstrap 4 breadcrumb styles.
+Check your code for the CSS class "treeField" and if found, change the HTML to ol/li list with breadcrumb classes.
+See TCMSTreeNode::GetTreeNodePathAsBackendHTML() for an example. 
 
 ## Font Awesome Icons
 

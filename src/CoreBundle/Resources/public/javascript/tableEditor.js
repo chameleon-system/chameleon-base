@@ -637,7 +637,7 @@ function ShowAjaxSaveResultAndClose(data, statusText) {
 
 function ResetTreeNodeSelection(fieldName) {
     document.getElementById(fieldName).value = '';
-    document.getElementById(fieldName + '_path').innerHTML = '<div class="treeField"><ul><li>' + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.nothing_assigned') + '</li></ul></div>';
+    document.getElementById(fieldName + '_path').innerHTML = '<ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li><li class="breadcrumb-item text-warning">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.nothing_assigned') + '</li></ol>';
 }
 
 function markCheckboxes(fieldname) {
