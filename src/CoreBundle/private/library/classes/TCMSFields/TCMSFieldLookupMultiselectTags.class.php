@@ -20,13 +20,11 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
 {
     /**
-     * @note not working at the moment using select2
-     *
      * if true, the field tries to load tag suggestions.
      *
      * @var bool - default false
      */
-    protected $bShowSuggestions = false;
+    protected $bShowSuggestions = true;
 
     /**
      * list object of all currently connected tags.
@@ -63,8 +61,13 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
             $this->oConnectedMLTRecords = $this->FetchConnectedMLTRecords();
         }
 
-        $selectBox = '<select id="%s" name="%s[]" data-select2-ajax="%s" class="form-control form-control-sm" data-tags="true" multiple="multiple">';
-        $html = sprintf($selectBox, TGlobal::OutHTML($this->name), TGlobal::OutHTML($this->name), $this->getTagAutocompleteUrl());
+        $dataAjaxSuggestionsUrl = '';
+        if (true === $this->bShowSuggestions) {
+            $dataAjaxSuggestionsUrl = 'data-ajax-suggestions-url="'.$this->getTagSuggestionsUrl().'"';
+        }
+
+        $selectBox = '<select id="%s" name="%s[]" data-select2-ajax="%s" class="form-control form-control-sm" data-tags="true" multiple="multiple" %s>';
+        $html = sprintf($selectBox, TGlobal::OutHTML($this->name), TGlobal::OutHTML($this->name), $this->getTagAutocompleteUrl(), $dataAjaxSuggestionsUrl);
 
         $this->oConnectedMLTRecords->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
         while ($oMLTRecord = $this->oConnectedMLTRecords->Next()) {
@@ -74,7 +77,10 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         $html .= '</select>';
 
         if ($this->bShowSuggestions) {
-            $html .= '<div id="'.TGlobal::OutHTML($this->name).'_suggested" class="tagInputSuggestedTags"><span class="label">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_tag.suggestions')).": </span><span class=\"tagInputSuggestedTagList\"></span></div>\n";
+            $html .= '<p id="'.TGlobal::OutHTML($this->name).'_suggestions" class="mt-2 tagSuggestions">
+<span class="label">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_tag.suggestions')).': </span>
+<span class="tagSuggestionList"></span>
+</p>';
         }
 
         return $html;
@@ -103,9 +109,6 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         return $this->getUrlUtil()->getArrayAsUrl($urlParameter, PATH_CMS_CONTROLLER.'?', '&');
     }
 
-    /*
-     * @todo not used at the moment. Needs to be implemented with select2.
-     */
     private function getTagSuggestionsUrl(): string
     {
         $urlParameter = $this->getAjaxUrlParameter();
@@ -385,7 +388,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
                 if ($i == $this->iMaxTagSuggestions) {
                     break;
                 }
-                $aTagSuggestionsFinal[] = array('tag' => $sTag, 'count' => $iCount); // note: count is not yet used
+                $aTagSuggestionsFinal[] = array('id' => $sTag, 'name' => $sTag);
             }
         }
 

@@ -847,6 +847,26 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
                     text: term
                 };
             }
+        }).on('change', function (e) {
+            var currentTags = $(this).val().join(',');
+            var suggestionsUrl = $(this).data('ajax-suggestions-url')+'&currentTags='+currentTags;
+
+            $.ajax({
+                url: suggestionsUrl,
+                context: this,
+            }).done(function( data ) {
+                var suggestionsHtml = '';
+                $(data).each(function (dataKey, dataItem) {
+                    suggestionsHtml += '<span class="badge badge-secondary mr-2" data-tag-id="'+dataItem.id+'"><i class="far fa-plus-square"></i> '+dataItem.name+'</span>';
+                });
+
+                var that = $(this);
+
+                $('#'+$(this).attr('id')+'_suggestions .tagSuggestionList').html(suggestionsHtml).find('.badge').on('click', function(e) {
+                    var newOption = new Option($(this).data('tag-id'), $(this).data('tag-id'), false, true);
+                    that.append(newOption).trigger('change');
+                });
+            });
         });
     });
 };

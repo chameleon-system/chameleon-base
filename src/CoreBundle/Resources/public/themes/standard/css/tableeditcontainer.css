@@ -148,6 +148,14 @@
     background-color: #f4f5f7;
 }
 
+.tagSuggestions .badge {
+    font-size: 1em;
+    font-weight: normal;
+    padding: 5px;
+    cursor: pointer;
+    cursor: hand;
+}
+
 .switchToRecordBox {
     float: left;
     margin-left: 20px;
