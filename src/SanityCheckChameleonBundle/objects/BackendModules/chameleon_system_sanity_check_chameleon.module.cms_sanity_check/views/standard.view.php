@@ -8,7 +8,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 $translator = ServiceLocator::get('translator');
 ?>
-<div class="card CMSInterfacePopup">
+<div class="card">
     <div class="card-header">
         <h3 class="mb-0"><i class="fas fa-bug mr-2"></i>SanityCheck<h3>
     </div>
