@@ -816,6 +816,62 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
         var id = e.params.data.id;
         switchRecord(id);
     });
+
+    $('[data-tags]').each(function () {
+        $(this).select2({
+            tags: true,
+            width: '100%',
+            tokenSeparators: [',', ' ', ';'],
+            ajax: {
+                url: $(this).data('select2-ajax'),
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        currentTags: $(this).val().join(','),
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    }
+                }
+            },
+
+            createTag: function (params) {
+                var term = $.trim(params.term);
+
+                if ('' === term) {
+                    return null;
+                }
+
+                return {
+                    id: term,
+                    text: term
+                };
+            }
+        }).on('change', function (e) {
+            var currentTags = $(this).val().join(',');
+            var suggestionsUrl = $(this).data('ajax-suggestions-url')+'&currentTags='+currentTags;
+
+            $.ajax({
+                url: suggestionsUrl,
+                context: this,
+            }).done(function( data ) {
+                var suggestionsHtml = '';
+                $(data).each(function (dataKey, dataItem) {
+                    suggestionsHtml += '<span class="badge badge-secondary mr-2" data-tag-id="'+dataItem.id+'"><i class="far fa-plus-square"></i> '+dataItem.name+'</span>';
+                });
+
+                var that = $(this);
+
+                $('#'+$(this).attr('id')+'_suggestions .tagSuggestionList').html(suggestionsHtml).find('.badge').on('click', function(e) {
+                    var newOption = new Option($(this).data('tag-id'), $(this).data('tag-id'), false, true);
+                    that.append(newOption).trigger('change');
+                });
+            });
+        });
+    });
 };
 
 CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent = function (selector) {

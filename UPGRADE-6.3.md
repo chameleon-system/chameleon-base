@@ -380,15 +380,20 @@ The modal uses CSS classes for the size. If not really necessary the modal is al
 To be backwards compatible the size classes are determined using CHAMELEON.CORE.getModalSizeClassByPixel().
 You should remove all width/height settings in CreateModalXY calls if it does not necessarily render smaller.
 
-- $.jBreadCrumb()
+- $.addOption() (jquery.selectboxes plugin)
 - $.bgiframe()
+- $.everyTime()
+- $.jBreadCrumb()
 - $.jqM() (jqModal)
 - $.jqDnR() (part of jqModal)
-- $.addOption() (jquery.selectboxes plugin)
+- $.oneTime()
+- $.stopTime()
+- $.tagInput()
 - loadStandaloneDocumentManager
 - PublishViaAjaxCallback()
 - showMLTField() - use CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(iFrameId, url) instead.
 - src/CoreBundle/Resources/public/javascript/mainNav.js
+)
 
 ## jQueryUi
 
