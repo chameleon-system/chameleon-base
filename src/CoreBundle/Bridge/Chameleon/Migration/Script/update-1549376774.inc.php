@@ -249,7 +249,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_right', 'de')
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-// Assign the new right to all users that currently have
+// Assign the new right to all users that currently have the right to edit pages.
 
 $query = 'SELECT `target_id` FROM `cms_tbl_conf_cms_role1_mlt` WHERE `source_id` = ?';
 $databaseConnection = TCMSLogChange::getDatabaseConnection();

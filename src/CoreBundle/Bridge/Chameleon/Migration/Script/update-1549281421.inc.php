@@ -192,7 +192,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
         'restrict_to_groups' => '0',
         'field_width' => '',
         'position' => '0',
-        '049_helptext' => 'TODO',
+        '049_helptext' => 'The system name allows to reference this category in code. It is recommended to only use lowercase letters and underscore letters for this field. Once set, it should be left unchanged.',
         'row_hexcolor' => '',
         'is_translatable' => '0',
         'validation_regex' => '',
@@ -208,7 +208,7 @@ TCMSLogChange::RunQuery(__LINE__, $query);
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields([
         'translation' => 'Systemname',
-        '049_helptext' => 'TODO',
+        '049_helptext' => 'Der Systemname erlaubt es, diese Kategorie im Code zu referenzieren. Es wird empfohlen, in diesem Feld nur Kleinbuchstaben und den Unterstrich zu verwenden. Wenn dieser Wert einmal gesetzt wurde, sollte er nicht mehr geändert werden.',
     ])
     ->setWhereEquals([
         'id' => $systemNameFieldId,

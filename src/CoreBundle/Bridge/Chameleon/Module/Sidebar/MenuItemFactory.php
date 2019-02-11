@@ -18,9 +18,9 @@ class MenuItemFactory implements MenuItemFactoryInterface
      */
     private $menuItemProviders = [];
 
-    public function addMenuItemProvider(string $identifier, MenuItemProviderInterface $menuItemProvider): void
+    public function addMenuItemProvider(string $type, MenuItemProviderInterface $menuItemProvider): void
     {
-        $this->menuItemProviders[$identifier] = $menuItemProvider;
+        $this->menuItemProviders[$type] = $menuItemProvider;
     }
 
     /**

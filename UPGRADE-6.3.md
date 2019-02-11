@@ -162,15 +162,15 @@ called "classic main menu" is deprecated and will be removed in a future release
 menu items were renamed to improve comprehensibility of the menu structure.
 
 The content boxes of the classic main menu are unchanged to give users time to get accustomed to the new menu. It
-didn't make sense to keep old menu item names, though, so be aware that some menu items were changed. The changes
+didn't make sense to keep old menu item names though, so be aware that some menu items were changed. The changes
 should be quite straightforward.
 
-Also, some menu items that were located in the top bar were now moved to the sidebar. Finally, the backend modules that
+Also some menu items that were located in the top bar were now moved to the sidebar. Finally the backend modules that
 were called in a popup window, like navigation, product search index generation and sanity check, now open inline.
 
 From a technical point no changes are required if the project is a shop system. Projects that are pure CMS systems
 should consider removing menu categories that are nevertheless created during migration. Note that there will be some
-update messages that complain about missing shop tables and modules in this case, which can be ignored. 
+error messages during migration that complain about missing shop tables and modules in this case, which can be ignored. 
 
 ## New ImageCropBundle
 

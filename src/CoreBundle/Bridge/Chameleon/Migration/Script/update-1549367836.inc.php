@@ -61,7 +61,7 @@ TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'de')
   ->setFields([
-      'translation' => 'CMS Hauptmenüpunkt',
+      'translation' => 'CMS Hauptmenüpunkte',
   ])
   ->setWhereEquals([
       'id' => $cmsMenuItemTableId,
