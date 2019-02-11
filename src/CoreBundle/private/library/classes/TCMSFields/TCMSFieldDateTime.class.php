@@ -26,7 +26,7 @@ class TCMSFieldDateTime extends TCMSField
         $viewRenderer->AddSourceObject('fieldName', $this->name);
         $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
         $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
-        $viewRenderer->AddSourceObject('datetimepickerFormat', '');
+        $viewRenderer->AddSourceObject('datetimepickerFormat', 'L LTS');
         $viewRenderer->AddSourceObject('datetimepickerSideBySide', 'true');
         $viewRenderer->AddSourceObject('datetimepickerWithIcon', false);
 
