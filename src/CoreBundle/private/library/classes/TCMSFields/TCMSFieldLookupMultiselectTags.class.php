@@ -22,7 +22,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
     /**
      * if true, the field tries to load tag suggestions.
      *
-     * @var bool - default false
+     * @var bool
      */
     protected $bShowSuggestions = true;
 
@@ -86,7 +86,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         return $html;
     }
 
-    private function getAjaxUrlParameter(): array
+    private function getAjaxUrlParameters(): array
     {
         $tableConf = $this->oTableRow->GetTableConf();
 
@@ -103,7 +103,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
 
     private function getTagAutocompleteUrl(): string
     {
-        $urlParameter = $this->getAjaxUrlParameter();
+        $urlParameter = $this->getAjaxUrlParameters();
         $urlParameter['_fnc'] = 'getAutocompleteTagList';
 
         return $this->getUrlUtil()->getArrayAsUrl($urlParameter, PATH_CMS_CONTROLLER.'?', '&');
@@ -111,7 +111,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
 
     private function getTagSuggestionsUrl(): string
     {
-        $urlParameter = $this->getAjaxUrlParameter();
+        $urlParameter = $this->getAjaxUrlParameters();
         $urlParameter['_fnc'] = 'GetTagSuggestions';
 
         return $this->getUrlUtil()->getArrayAsUrl($urlParameter, PATH_CMS_CONTROLLER.'?', '&');
@@ -151,7 +151,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         return '';
     }
 
-    public function getAutocompleteTagList()
+    public function getAutocompleteTagList(): array
     {
         $returnVal = [];
 
@@ -176,9 +176,9 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
 
         $inputFilter = $this->getInputFilterUtil();
 
-        $searchTerm = $inputFilter->getFilteredInput('q');
+        $searchTerm = $inputFilter->getFilteredGetInput('q', '');
 
-        if (null === $searchTerm) {
+        if ('' === $searchTerm) {
             return [];
         }
 
@@ -187,9 +187,9 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         $sLanguageIsoName = $this->GetLanguageSuffix();
         $sTagBlackListQueryPart = '';
 
-        $currentTags = $inputFilter->getFilteredInput('currentTags');
+        $currentTags = $inputFilter->getFilteredGetInput('currentTags', '');
 
-        if (null !== $currentTags && '' !== $currentTags) {
+        if ('' !== $currentTags) {
             $currentTagsList = explode(',', $currentTags);
             if (count($currentTagsList) > 0) {
                 $tagBlackList = '';
@@ -409,7 +409,10 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         return $bHasContent;
     }
 
-    protected function GetCleanedTagString(): string
+    /**
+     * @return string
+     */
+    protected function GetCleanedTagString()
     {
         $sReturnTags = '';
         $aTagData = explode(',', $this->data);
