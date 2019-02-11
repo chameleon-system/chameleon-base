@@ -1,0 +1,31 @@
+{% trans_default_domain constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND') %}
+
+<input type="hidden" id="{{ fieldName|e('html_attr') }}" name="{{ fieldName|e('html_attr') }}" value="{{ fieldValue|e('html_attr') }}" />
+<span id="{{ fieldName|e('html_attr') }}posDummy"></span>
+<div class="card">
+    <div class="card-header p-1">
+        {{ 'chameleon_system_core.field_page_tree_node.primary_node'|trans }}
+    </div>
+    <div class="card-body p-1">
+        <div class="mb-1">
+            <div id="{{ fieldName|e('html_attr') }}_path" class="w-100">{{ primaryPath|raw }}</div>
+        </div>
+        <div class="mt-2">
+            {{ selectPrimaryTreeNodeButton|raw }}
+        </div>
+    </div>
+</div>
+
+<div class="card mt-2">
+    <div class="card-header p-1">
+        {{ 'chameleon_system_core.field_page_tree_node.secondary_nodes'|trans }}
+    </div>
+    <div class="card-body p-1">
+        <div class="mb-1">
+            <div id="{{ fieldName|e('html_attr') }}_additional_paths">{{ additionalPaths|raw }}</div>
+        </div>
+        <div class="mt-2">
+            {{ selectAdditionalTreeNodesButton|raw }}
+        </div>
+    </div>
+</div>

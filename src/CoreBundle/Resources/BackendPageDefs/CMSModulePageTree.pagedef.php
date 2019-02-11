@@ -1,7 +1,7 @@
 <?php
 
 $layoutTemplate = 'default';
-$moduleList = array('contentmodule' => array('model' => 'CMSInterface', 'view' => 'standard', '_suppressHistory' => true));
+$moduleList = array('contentmodule' => array('model' => 'CMSModulePageTree', 'view' => 'standard'));
 
 addDefaultPageTitle($moduleList);
 addDefaultHeader($moduleList);

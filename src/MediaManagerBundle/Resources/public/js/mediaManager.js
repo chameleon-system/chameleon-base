@@ -84,7 +84,7 @@
                         if (self.settings.accessRightsMediaTree.new) {
                             contextMenu.createItem = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.new_folder'),
-                                icon: "glyphicon glyphicon-folder-open",
+                                icon: "fas fa-folder-open",
                                 action: function (data) {
 
                                     var inst = $.jstree.reference(data.reference),

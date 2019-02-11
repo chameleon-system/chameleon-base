@@ -25,7 +25,14 @@
         <input type="hidden" name="_fieldName" value="<?= TGlobal::OutHTML($data['_fieldName']); ?>"/>
         <input type="hidden" name="_fnc" value="AjaxSaveField"/>
         <input type="hidden" name="module_fnc[contentmodule]" value="ExecuteAjaxCall"/>
-        <?php foreach ($data['aHiddenFields'] as $key => $value) {
+        <?php
+        if (null !== $sForeignField) {
+        ?>
+            <input type="hidden" name="field" value="<?= TGlobal::OutHTML($sForeignField); ?>"/>
+        <?php
+        }
+
+        foreach ($data['aHiddenFields'] as $key => $value) {
             ?>
             <input type="hidden" name="<?= TGlobal::OutHTML($key); ?>" value="<?= TGlobal::OutHTML($value); ?>"/>
         <?php

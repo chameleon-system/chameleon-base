@@ -274,7 +274,7 @@ $navigationMenuItemId = TCMSLogChange::createUnusedRecordId('cms_menu_custom_ite
 $data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item', 'en')
   ->setFields([
       'name' => 'Navigation',
-      'url' => '/cms?pagedef=CMSModulePageTreePlain&table=cms_tpl_page&noassign=1',
+      'url' => '/cms?pagedef=CMSModulePageTree&table=cms_tpl_page&noassign=1',
       'id' => $navigationMenuItemId,
   ])
 ;

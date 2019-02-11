@@ -80,7 +80,7 @@ class TCMSListManagerWebpages extends TCMSListManagerFullGroupTable
         $oGlobal = TGlobal::instance();
 
         if ($oGlobal->oUser->oAccessManager->PermitFunction('cms_page_property')) {
-            $aItems['pageConfig'] = '<a title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.page_settings')).'" href="javascript:document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();"><span class="glyphicon glyphicon-wrench"></span></a>';
+            $aItems['pageConfig'] = '<a title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.page_settings')).'" href="javascript:document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();"><i class="fas fa-cog"></i></a>';
         }
 
         return $aItems;

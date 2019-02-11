@@ -88,6 +88,13 @@ class CMSModulePageTree extends TCMSModelBase
         parent::Execute();
 
         $inputFilterUtil = $this->getInputFilterUtil();
+        $this->data['isInIframe'] = false;
+
+        $isInIframe = $inputFilterUtil->getFilteredInput('isInIframe');
+        if (null !== $isInIframe) {
+            $this->data['isInIframe'] = true;
+        }
+
         $this->data['rootNodeName'] = 'Root';
 
         $sPageTableId = TTools::GetCMSTableId('cms_tpl_page');
@@ -625,7 +632,7 @@ class CMSModulePageTree extends TCMSModelBase
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/simpleTree.css" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/contextmenu/contextmenu.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/contextmenu/contextmenu.css').'" media="screen" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contextmenu.css" rel="stylesheet" type="text/css" />';
 
         return $aIncludes;
     }
@@ -699,7 +706,7 @@ COMMAND;
     protected function getNestedSetHelper()
     {
         /** @var $factory NestedSetHelperFactoryInterface */
-        $factory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.table_editor_nested_set_helper_factory');
+        $factory = ServiceLocator::get('chameleon_system_core.table_editor_nested_set_helper_factory');
 
         return $factory->createNestedSetHelper($this->treeTable, 'parent_id', 'entry_sort');
     }
@@ -709,7 +716,7 @@ COMMAND;
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
     /**
@@ -717,7 +724,12 @@ COMMAND;
      */
     private function getEventDispatcher()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('event_dispatcher');
+        return ServiceLocator::get('event_dispatcher');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     private function getInputFilterUtil(): InputFilterUtilInterface

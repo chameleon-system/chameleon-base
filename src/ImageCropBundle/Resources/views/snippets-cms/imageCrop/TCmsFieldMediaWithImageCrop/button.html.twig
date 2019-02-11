@@ -1,5 +1,5 @@
 <a href="#" id="{{ fieldName }}-crop-button"
    class="btn btn-sm btn-default"{% if not imageIsSet %} style="display:none;"{% endif %}
    onclick="openImageCropEditor('{{ cropEditorUrl }}&{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_IMAGE_ID') }}='+$('#{{ fieldName }}').val()+'&{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_ENABLE_CALLBACK') }}=1&{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_FIELD_NAME') }}={{ fieldName }}&{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_CROP_ID') }}='+$('#{{ fieldName }}_image_crop_id').val()); return false;">
-    <span class="glyphicon glyphicon-retweet"></span> {{ 'chameleon_system_image_crop.field.edit_crop' | trans }}
+    <span class="fas fa-expand"></span> {{ 'chameleon_system_image_crop.field.edit_crop' | trans }}
 </a>
