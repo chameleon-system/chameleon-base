@@ -104,7 +104,7 @@ class TCMSFieldTreeNode extends TCMSField
     }
 
     /**
-     * @deprecate since 6.3.0 - date related tree nodes are not working anymore functionality will be removed.
+     * @deprecated since 6.3.0 - date related tree nodes are not working anymore, functionality will be removed.
      *
      * Get page tree connection date information as rendered html.
      *
