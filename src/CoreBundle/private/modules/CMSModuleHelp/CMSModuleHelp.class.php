@@ -35,7 +35,7 @@ class CMSModuleHelp extends TCMSModelBase
 
         $translator = $this->getTranslator();
 
-        $this->data['translator'] = $translator;
+        $this->data['title'] = $translator->trans('chameleon_system_core.cms_module_header.action_help');
         $this->data['isInIFrame'] = false;
         $isInIFrame = $this->getInputFilter()->getFilteredInput('isInIFrame');
 
