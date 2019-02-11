@@ -1,4 +1,4 @@
-<div class="CMSInterfacePopup">
+<div>
     <?php if (count($data['aMessages']) > 0) {
     ?>
     <div>
