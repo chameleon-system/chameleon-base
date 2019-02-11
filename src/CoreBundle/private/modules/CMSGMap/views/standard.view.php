@@ -15,7 +15,7 @@ if (array_key_exists('sMessage', $data) && !empty($data['sMessage'])) {
         <div class="input-group">
         <input type="text" class="form-control" name="place" id="place" placeholder="<?=TGlobal::OutHTML($translator->trans('chameleon_system_core.google_map.address')); ?>">
             <div class="input-group-prepend">
-                <button class="btn btn-secondary" type="button" id="btnFindAddress"><i class="glyphicon glyphicon-search" title="<?=TGlobal::OutHTML($translator->trans('chameleon_system_core.google_map.find_coordinates')); ?>"></i></button>
+                <button class="btn btn-secondary" type="button" id="btnFindAddress"><i class="fas fa-search" title="<?=TGlobal::OutHTML($translator->trans('chameleon_system_core.google_map.find_coordinates')); ?>"></i></button>
             </div>
         </div>
     </div>

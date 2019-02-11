@@ -46,7 +46,7 @@ class TCMSFieldVarchar extends TCMSField
         }
         $html .= sprintf(' value="%s"', $this->_GetHTMLValue());
         $html .= ' /><span class="input-group-append"><span class="input-group-text charCounter alert alert-warning mb-0">
-              <span id="'.TGlobal::OutHTML($this->name).'Count" class="mr-1">'.$count."</span> <i class=\"glyphicon glyphicon-text-width\"></i></span>
+              <span id="'.TGlobal::OutHTML($this->name).'Count" class="mr-1">'.$count."</span> <i class=\"fas fa-text-width\"></i></span>
             </span>
         </div>
       <script type=\"text/javascript\">
