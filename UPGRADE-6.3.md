@@ -359,6 +359,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \TPkgCsv2Sql::CreateLogFileName()
 - \TPkgCsv2Sql::GetLogFile()
 - \TTools::AddStaticPageVariables()
+- \CMSTemplateEngine::GetMainNavigation() - splitted in getActiveModuleLayout and filterMainNavigation
 
 ## JavaScript Files and Functions
 

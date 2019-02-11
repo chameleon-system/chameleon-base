@@ -152,15 +152,30 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
 
         $oCmsTplPageList = TdbCmsTplPageList::GetList($query);
         while ($oCmsTplPage = $oCmsTplPageList->Next()) {
-            $sPath = $oCmsTplPage->fieldTreePathSearchString;
-            if (empty($sPath)) {
-                $sPath = TGlobal::Translate('chameleon_system_core.list_module_instance.no_usages_found_in_navigation_node');
+            $path = $this->getBreadcrumbsFromPaths($oCmsTplPage->fieldTreePathSearchString);
+            if (empty($path)) {
+                $path = TGlobal::Translate('chameleon_system_core.list_module_instance.no_usages_found_in_navigation_node');
             }
-            $pageString .= '<div style="white-space: nowrap;"><h2 style="margin: 0px 0px 5px 0px;">'.TGlobal::OutHTML($oCmsTplPage->fieldName).' (ID '.TGlobal::OutHTML($oCmsTplPage->id).'):</h2>
-        '.$sPath.'</div>';
+            $pageString .= '<div class="font-weight-bold">'.TGlobal::OutHTML($oCmsTplPage->fieldName).' (ID '.TGlobal::OutHTML($oCmsTplPage->id).'):</div>
+            <div>'.$path.'</div>';
         }
 
         return $pageString;
+    }
+
+    private function getBreadcrumbsFromPaths($paths): string
+    {
+        $renderedPaths = '';
+        $pathElementList = explode(' ', $paths);
+        foreach($pathElementList as $path) {
+            if ('/' === substr($paths,0,1)) {
+                $path = substr($path,1);
+            }
+            $treeSubPath = str_replace('/', '</li><li class="breadcrumb-item">', $path);
+            $renderedPaths .= sprintf('<ol class="breadcrumb p-1 mb-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li><li class="breadcrumb-item">%s</li></ol>', $treeSubPath);
+        }
+
+        return $renderedPaths;
     }
 
     /**
