@@ -107,7 +107,7 @@ CHAMELEON.UPDATE_MANAGER = {
     addUpdateSuccessQueries: function (currentUpdate, successQueries, renderedSuccessQueriesUpdate)
     {
         var self = this;
-        this._getMessageContainerForUpdate(currentUpdate).append(renderedSuccessQueriesUpdate);
+        this._getMessageContainerForUpdate(currentUpdate).find('.runFilesInfo').html(renderedSuccessQueriesUpdate);
     },
     addUpdateErrors: function (currentUpdate, errorQueries, renderedErrorQueriesGlobal, renderedErrorQueriesUpdate)
     {
@@ -115,7 +115,7 @@ CHAMELEON.UPDATE_MANAGER = {
             $globalErrorCountContainer = $('#count-errors');
 
         $globalErrorListContainer.append(renderedErrorQueriesGlobal);
-        this._getMessageContainerForUpdate(currentUpdate).append(renderedErrorQueriesUpdate);
+        this._getMessageContainerForUpdate(currentUpdate).find('.runFilesInfo').html(renderedErrorQueriesUpdate);
 
         $globalErrorCountContainer.text(parseInt($globalErrorCountContainer.text()) + errorQueries.length);
         $('#updateErrorContainer').removeClass('d-none');
@@ -126,7 +126,7 @@ CHAMELEON.UPDATE_MANAGER = {
             $globalInfoCountContainer = $('#count-info');
 
         $globalInfoListContainer.append(renderedMessagesGlobal);
-        this._getMessageContainerForUpdate(currentUpdate).append(renderedMessagesUpdate);
+        this._getMessageContainerForUpdate(currentUpdate).find('.runFilesInfo').html(renderedMessagesUpdate);
 
         $globalInfoCountContainer.text(parseInt($globalInfoCountContainer.text()) + messages.length);
         $('#updateInfoContainer').removeClass('d-none');
@@ -143,7 +143,8 @@ CHAMELEON.UPDATE_MANAGER = {
             '<div id="update-' + currentUpdate.bundleName + '-' + currentUpdate.buildNumber + '">' +
                 '<div class="card card-accent-info mb-3">\n' +
                 '  <div class="card-header fileInfo"></div>\n' +
-                '  <div class="card-body"><div class="callout callout-info updateBody"></div></div>\n' +
+                '  <div class="card-body"><div class="callout callout-info updateBody"></div><div class="runFilesInfo"></div>\n' +
+                '  </div>\n' +
               '  </div>\n' +
             '</div>'
         );
