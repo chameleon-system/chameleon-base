@@ -46,3 +46,44 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'en')
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
+
+$data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'de')
+    ->setFields([
+        'help_text' => '<div class="field-name"><strong>Feldname:</strong> beliebig</div>
+
+<div class="php-class"><strong>PHP Klasse:</strong> TCMSFieldDownloads extends TCMSFieldLookupMultiselect</div>
+
+<div>Erzeugt einen Button, der das Verbinden mehrerer Dokumente mit dem Datensatz ermöglicht.</div>
+
+<div>Die Dokumente müssen vorher über den Dokumenten-Manager hochgeladen werden.</div>
+
+<div>&nbsp;</div>
+
+<div>
+<ul>
+	<li class="parameter required head">Pflicht-Parameter:</li>
+	<li>
+	<ul>
+		<li class="parameter required">n/a</li>
+	</ul>
+	</li>
+	<li>&nbsp;</li>
+	<li class="parameter optional head">Optionale Parameter:</li>
+	<li>
+	<ul>
+		<li class="parameter optional">n/a</li>
+	</ul>
+	</li>
+	<li>
+	<ul>
+	</ul>
+	</li>
+</ul>
+</div>
+',
+    ])
+    ->setWhereEquals([
+        'fieldclass' => 'TCMSFieldDownloads',
+    ])
+;
+TCMSLogChange::update(__LINE__, $data);
