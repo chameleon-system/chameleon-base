@@ -224,13 +224,13 @@ German date format. For backwards compatibility reasons they work with German da
 
 The Backend was upgraded to Bootstrap 4.1.3.
 
-See the [Bootstrap Migration Guide](https://getbootstrap.com/docs/4.1/migration/) for needed changes to your backend modules.
-
-During the upgrade to Bootstrap 4 the following styles where checked and these are our findings:
+See the [Bootstrap Migration Guide](https://getbootstrap.com/docs/4.1/migration/) for required changes to your backend modules.
+To give an impression on which style changes might be required in project code, the following list contains CSS class
+changes we performed during the upgrade to Bootstrap 4:
 
 .img-responsive -> .img-fluid
 - TCMSFieldMedia
-- TCSMFieldFMapCoordinate
+- TCMSFieldGMapCoordinate
 
 btn-default -> btn-secondary
 - Some TCMSField types and TCMSTableEditors so check yours.
@@ -258,7 +258,7 @@ btn-default -> btn-secondary
 New: .page-item + .page-link
 - Pagination in TFullGroupTable
 
-.pull-rigt -> .float-right
+.pull-right -> .float-right
 - TFullGroupTable
 - MTHeader
 - MTTableditor
