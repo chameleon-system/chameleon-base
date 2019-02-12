@@ -224,8 +224,8 @@ label.switch .switch-slider::after {
     transition: inherit;
 }
 
-/**
- * TCMSFieldDateTime with seconds. Overwrite of an styling-error comes from the plugin datetimepicker.
+/*
+ * TCMSFieldDateTime with seconds. Overwriting a styling error that comes from the datetimepicker plugin.
  */
 .bootstrap-datetimepicker-widget.dropdown-menu.wider {
     width: 38em !important;
