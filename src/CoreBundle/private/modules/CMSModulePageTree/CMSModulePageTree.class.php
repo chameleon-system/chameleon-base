@@ -87,9 +87,10 @@ class CMSModulePageTree extends TCMSModelBase
     {
         parent::Execute();
 
+        $inputFilterUtil = $this->getInputFilterUtil();
         $this->data['isInIframe'] = false;
 
-        $isInIframe = $this->getInputFilterUtil()->getFilteredInput('isInIframe');
+        $isInIframe = $inputFilterUtil->getFilteredInput('isInIframe');
         if (null !== $isInIframe) {
             $this->data['isInIframe'] = true;
         }
@@ -110,20 +111,18 @@ class CMSModulePageTree extends TCMSModelBase
             $this->data['dataID'] = $this->global->GetUserData('id');
         }
 
-        if ($this->global->UserDataExists('rootID')) {
-            $nodeID = $this->global->GetUserData('rootID');
-            $this->data['rootID'] = $nodeID;
-            $this->iRootNode = $nodeID;
-            $this->GetRootNodeName($nodeID);
-            $this->LoadTreeState();
-            $this->aRestrictedNodes = $this->GetPortalNavigationStartNodes();
+        $nodeID = $inputFilterUtil->getFilteredGetInput('rootID', TCMSTreeNode::TREE_ROOT_ID);
+        $this->data['rootID'] = $nodeID;
+        $this->iRootNode = $nodeID;
+        $this->GetRootNodeName($nodeID);
+        $this->LoadTreeState();
+        $this->aRestrictedNodes = $this->GetPortalNavigationStartNodes();
 
-            // check if we have more then 3 portals (needed because of performance issues in pre rendering the tree)
-            $oPortalList = TdbCmsPortalList::GetList();
-            $this->iPortalCount = $oPortalList->Length();
+        // Check if we have more than 3 portals (needed because of performance issues in tree pre-rendering)
+        $oPortalList = TdbCmsPortalList::GetList();
+        $this->iPortalCount = $oPortalList->Length();
 
-            $this->RenderTree($this->oRootNode->id, $this->oRootNode, 0);
-        }
+        $this->RenderTree($this->oRootNode->id, $this->oRootNode, 0);
 
         if ($this->global->UserDataExists('table')) {
             $this->data['table'] = $this->global->GetUserData('table');

@@ -262,7 +262,13 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
     {
         $aIncludes = parent::GetCMSHtmlHeadIncludes();
 
-        $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'table' => 'cms_tpl_page', 'rootID' => '99', 'id' => $this->oTableRow->id, 'isInIframe' => '1'));
+        $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript([
+            'pagedef' => 'CMSModulePageTreePlain',
+            'table' => 'cms_tpl_page',
+            'rootID' => TCMSTreeNode::TREE_ROOT_ID,
+            'id' => $this->oTableRow->id,
+            'isInIframe' => '1'
+        ]);
         $aIncludes[] = "<script type=\"text/javascript\">
         function loadTreeNodeSelection(fieldName,id) {
           if(document.getElementById('cms_portal_id').options != undefined) {

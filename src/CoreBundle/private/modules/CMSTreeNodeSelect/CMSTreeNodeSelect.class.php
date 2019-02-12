@@ -30,7 +30,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
      *
      * @var string
      */
-    protected $rootTreeID = '99';
+    protected $rootTreeID = TCMSTreeNode::TREE_ROOT_ID;
 
     /**
      * nodes that should not be assignable or that should have only a

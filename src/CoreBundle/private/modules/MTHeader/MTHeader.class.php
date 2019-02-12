@@ -54,8 +54,6 @@ class MTHeader extends TCMSModelBase
      */
     public function Init()
     {
-        $this->data['startTreeID'] = 99;
-
         $this->CheckTemplateEngineStatus();
 
         $this->data['oUser'] = TCMSUser::GetActiveUser();
@@ -305,34 +303,16 @@ class MTHeader extends TCMSModelBase
     }
 
     /**
-     * checks the user rights for header shortcut links to document manager, media manager, navigation...
+     * checks the user rights for header shortcut links
      */
     protected function CheckNavigationRights()
     {
-        $userIsInWebsiteEditGroup = false;
-        $userHasWebsiteEditRight = false;
-
-        $currentUser = &TCMSUser::GetActiveUser();
-        if (null === $currentUser) {
-            $this->data['showWebsiteEditNavi'] = false;
-
+        $activeUser = TCMSUser::GetActiveUser();
+        if (null === $activeUser) {
             return;
         }
 
-        $databaseConnection = $this->getDatabaseConnection();
-        $query = "SELECT `id` FROM `cms_usergroup` WHERE `internal_identifier` = 'website_editor'";
-        $websiteEditorGroupId = $databaseConnection->fetchColumn($query);
-
-        if (false !== $websiteEditorGroupId) {
-            $userIsInWebsiteEditGroup = $currentUser->oAccessManager->user->IsInGroups($websiteEditorGroupId);
-            $userHasWebsiteEditRight = $currentUser->oAccessManager->HasEditPermission('cms_tpl_page');
-        }
-
-        $this->data['showWebsiteEditNavi'] = $userIsInWebsiteEditGroup && $userHasWebsiteEditRight;
-        $this->data['showImageManagerNavi'] = ($currentUser->oAccessManager->PermitFunction('cms_image_pool_upload') || $currentUser->oAccessManager->PermitFunction('cms_image_pool_delete'));
-        $this->data['showDocumentManagerNavi'] = ($currentUser->oAccessManager->PermitFunction('cms_data_pool_upload') || $currentUser->oAccessManager->PermitFunction('cms_datei_pool_delete'));
-        $this->data['showCacheButton'] = $currentUser->oAccessManager->PermitFunction('flush_cms_cache');
-        $this->data['showNaviManager'] = $currentUser->oAccessManager->HasEditPermission('cms_tree');
+        $this->data['showCacheButton'] = $activeUser->oAccessManager->PermitFunction('flush_cms_cache');
     }
 
     public function DefineInterface()

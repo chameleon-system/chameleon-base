@@ -24,7 +24,7 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
         $viewRenderer->AddSourceObject('fieldName', $this->name);
         $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
         $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
-        $viewRenderer->AddSourceObject('datetimepickerFormat', '');
+        $viewRenderer->AddSourceObject('datetimepickerFormat', 'L LTS');
         $viewRenderer->AddSourceObject('datetimepickerSideBySide', 'true');
         $viewRenderer->AddSourceObject('datetimepickerWithIcon', false);
 
@@ -35,7 +35,7 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
     {
         $fieldValue = parent::_GetHTMLValue();
         if ('' === $fieldValue || '0000-00-00 00:00:00' === $fieldValue) {
-            $fieldValue = date('Y-m-d H:i').':00'; // datetimepicker crashes if we pass seconds != "00"
+            $fieldValue = date('Y-m-d H:i:s');
         }
 
         return $fieldValue;
