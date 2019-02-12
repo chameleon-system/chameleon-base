@@ -163,14 +163,13 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
         return $pageString;
     }
 
-    private function getBreadcrumbsFromPaths($paths): string
+    private function getBreadcrumbsFromPaths(string $paths): string
     {
         $renderedPaths = '';
         $pathElementList = explode(' ', $paths);
         foreach($pathElementList as $path) {
-            if ('/' === substr($paths,0,1)) {
-                $path = substr($path,1);
-            }
+            $path = ltrim($path,'/');
+
             $treeSubPath = str_replace('/', '</li><li class="breadcrumb-item">', $path);
             $renderedPaths .= sprintf('<ol class="breadcrumb p-1 mb-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li><li class="breadcrumb-item">%s</li></ol>', $treeSubPath);
         }

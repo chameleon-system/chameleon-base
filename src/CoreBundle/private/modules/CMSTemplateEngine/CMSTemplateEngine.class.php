@@ -464,18 +464,39 @@ class CMSTemplateEngine extends TCMSModelBase
     }
 
     /**
-     * @deprecated since 6.3.0 - renamed and splitted to 2 methods: filterMainNavigation and getActiveModuleLayout.
+     * @deprecated since 6.3.0 - renamed and split into 2 methods: filterMainNavigation and getActiveModuleLayout.
      */
     protected function GetMainNavigation()
     {
-        return '';
+        $this->data['oMenuItems'] = $this->oTableManager->oTableEditor->GetMenuItems();
+        $this->data['oMenuItems']->RemoveItem('sItemKey', 'save');
+        $this->data['oMenuItems']->RemoveItem('sItemKey', 'copy');
+        $this->data['oMenuItems']->RemoveItem('sItemKey', 'new');
+        $this->data['oMenuItems']->RemoveItem('sItemKey', 'delete');
+        $this->data['oMenuItems']->RemoveItem('sItemKey', 'copy_translation');
+
+        $view = 'layout_selection';
+
+        // check if pagedef exists and switch to edit mode
+        if (!empty($this->oPage->iMasterPageDefId)) {
+            $view = 'edit_content';
+        }
+
+        // now activate the current navi item
+        if (!$this->bPageDefinitionAssigned) {
+            $view = 'layout_selection';
+        } else {
+            if (!is_null($this->sMode) && !empty($this->sMode)) {
+                $view = $this->sMode;
+            }
+        }
+
+        return $view;
     }
 
     /**
-     * Switches the module view to layout_selection if the page has no layout yet.
-     * (Otherwise the page is not viewable).
-     *
-     * @return string
+     * Switches the module view to layout_selection if the page has no layout yet
+     * (otherwise the page is not viewable).
      */
     protected function getActiveModuleLayout(): string
     {
