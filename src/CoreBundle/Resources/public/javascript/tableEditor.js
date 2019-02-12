@@ -930,18 +930,20 @@ CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState = function (iFrameId, ur
 CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe = function () {
     var webpageiFrame = $('#userwebpageiframe');
 
-    if (webpageiFrame.length) {
-        var bodyHeight = parseInt($(window).height());
-        var iFramePos = $('#templateengine .card-body').position();
-        var additionPaddings = 235;
-        var iFrameHeight = bodyHeight - iFramePos.top - additionPaddings;
-
-        if (iFrameHeight < 450){
-            iFrameHeight = 450;
-        }
-
-        webpageiFrame.css('height', iFrameHeight);
+    if (0 === webpageiFrame.length) {
+        return;
     }
+
+    var bodyHeight = parseInt($(window).height());
+    var iFramePos = $('#templateengine .card-body').position();
+    var additionPaddings = 235;
+    var iFrameHeight = bodyHeight - iFramePos.top - additionPaddings;
+
+    if (iFrameHeight < 450){
+        iFrameHeight = 450;
+    }
+
+    webpageiFrame.css('height', iFrameHeight);
 };
 
 $(document).ready(function () {
