@@ -32,7 +32,7 @@ while ($oField = $data['oFields']->Next()) {
                     </div>';
 
                 if ('' !== $oField->oDefinition->sqlData['049_helptext']) {
-                    $sTmpFormTabsContent .= '<div class="helptextContainer alert alert-info" id="helptext-'.TGlobal::OutHTML($oField->name).'">'.TGlobal::OutHTML(nl2br($oField->oDefinition->sqlData['049_helptext'])).'</div>';
+                    $sTmpFormTabsContent .= '<div class="helptextContainer alert alert-info" id="helptext-'.TGlobal::OutHTML($oField->name).'">'.nl2br(TGlobal::OutHTML($oField->oDefinition->sqlData['049_helptext'])).'</div>';
                 }
             } else {
                 if (true === $isReadOnly) { // overwrite field type with readonly (e.g. record is locked by another cms user)
@@ -90,7 +90,7 @@ while ($oField = $data['oFields']->Next()) {
                 $sTmpFormTabsContent .= '</div>
                 <div class="col-sm-10">';
                 if ('' !== $oField->oDefinition->sqlData['049_helptext']) {
-                    $sTmpFormTabsContent .= '<div class="helptextContainer alert alert-info" id="helptext-'.TGlobal::OutHTML($oField->name).'">'.TGlobal::OutHTML(nl2br($oField->oDefinition->sqlData['049_helptext'])).'</div>';
+                    $sTmpFormTabsContent .= '<div class="helptextContainer alert alert-info" id="helptext-'.TGlobal::OutHTML($oField->name).'">'.nl2br(TGlobal::OutHTML($oField->oDefinition->sqlData['049_helptext'])).'</div>';
                 }
                 $sTmpFormTabsContent .= $oField->GetContent();
                 $sTmpFormTabsContent .= '</div></div>';
