@@ -146,7 +146,10 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         /** @var $oTreeNodeEditor TCMSTableEditorTree */
         $oTreeNodeEditor = new TCMSTableEditorManager();
         $oTreeNodeEditor->Init($oTreeTableConf->id);
-        $aTreeNodeData = array('parent_id' => '99', 'name' => $this->GetNewRootNodeName());
+        $aTreeNodeData = [
+            'parent_id' => TCMSTreeNode::TREE_ROOT_ID,
+            'name' => $this->GetNewRootNodeName()
+        ];
         $oTreeNodeEditor->ForceHiddenFieldWriteOnSave(true);
         $oTreeNodeEditor->Save($aTreeNodeData);
 

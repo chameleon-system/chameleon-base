@@ -832,12 +832,24 @@
         <service id="cmsPkgCore.tableEditorListFieldState" class="TTableEditorListFieldState" public="true" />
 
         <service id="chameleon_system_core.module.sidebar.sidebar_backend_module" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\SidebarBackendModule" shared="false">
-            <argument type="service" id="chameleon_system_core.language_service"/>
             <argument type="service" id="chameleon_system_core.util.url"/>
             <argument type="service" id="request_stack"/>
             <argument type="service" id="chameleon_system_core.util.input_filter"/>
             <argument type="service" id="chameleon_system_core.response.response_variable_replacer"/>
+            <argument type="service" id="chameleon_system_core.bridge.chameleon.module.sidebar.menu_item_factory"/>
             <tag name="chameleon_system.module" />
+        </service>
+
+        <service id="chameleon_system_core.bridge.chameleon.module.sidebar.menu_item_factory" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItemFactory" />
+
+        <service id="chameleon_system_core.bridge.chameleon.module.sidebar.table_menu_item_provider" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\TableMenuItemProvider">
+            <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsTblConf" />
+        </service>
+        <service id="chameleon_system_core.bridge.chameleon.module.sidebar.module_menu_item_provider" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\ModuleMenuItemProvider">
+            <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsModule" />
+        </service>
+        <service id="chameleon_system_core.bridge.chameleon.module.sidebar.custom_item_provider" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\CustomMenuItemProvider">
+            <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsMenuCustomItem" />
         </service>
     </services>
 </container>

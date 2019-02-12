@@ -104,7 +104,7 @@ class TCMSUser extends TCMSRecord
         $aId = array();
         $oPortals = &$this->GetMLT('cms_portal_mlt', 'TCMSPortal');
         while ($oPortal = &$oPortals->Next()) {
-            if ('99' != $oPortal->sqlData['main_node_tree']) {
+            if (TCMSTreeNode::TREE_ROOT_ID != $oPortal->sqlData['main_node_tree']) {
                 $aId[] = $oPortal->sqlData['main_node_tree'];
             }
         }

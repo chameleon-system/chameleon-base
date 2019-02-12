@@ -10,7 +10,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tree', 'en')
         'name' => 'Websites',
     ])
     ->setWhereEquals([
-        'id' => '99', // ID can be hard-coded, because we rely on this ID anyway in CMSTreeNodeSelect.
+        'id' => TCMSTreeNode::TREE_ROOT_ID,
         'name' => '',
     ]);
 TCMSLogChange::update(__LINE__, $data);
