@@ -7,6 +7,10 @@
 
 // Define menu items in human-readably format (first column is c = custom menu item, t = table menu item, m = module menu item),
 
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
+
 $menuItemDef = <<<EOT
 c Navigation                            contents
 t cms_tpl_page                          contents
@@ -169,9 +173,22 @@ if (false === $statement) {
     return;
 }
 
+/**
+ * @var FieldTranslationUtil $fieldTranslationUtil
+ */
+$fieldTranslationUtil = ServiceLocator::get('chameleon_system_core.util.field_translation');
+/**
+ * @var LanguageServiceInterface $languageService
+ */
+$languageService = ServiceLocator::get('chameleon_system_core.language_service');
+$nameFieldNameEn = $fieldTranslationUtil->getTranslatedFieldName(
+        'main_menu_custom_item',
+        'name',
+        $languageService->getLanguageFromIsoCode('en')
+);
 $customMenuItemList = [];
 while (false !== $row = $statement->fetch()) {
-    $customMenuItemList[$row['name']] = $row;
+    $customMenuItemList[$row[$nameFieldNameEn]] = $row;
 }
 $statement->closeCursor();
 
@@ -317,7 +334,7 @@ if (\count($invalidModuleNames)) {
 }
 
 if (\count($invalidCustomMenuItemNames)) {
-    $customMenuItemNameString = \implode(', ', $customMenuItemNameString);
+    $customMenuItemNameString = \implode(', ', $invalidCustomMenuItemNames);
     TCMSLogChange::addInfoMessage(
         "While creating menu items, some custom menu items could not be found. No menu items were created for these custom menu items: $customMenuItemNameString",
         TCMSLogChange::INFO_MESSAGE_LEVEL_WARNING

@@ -259,3 +259,16 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ])
 ;
 TCMSLogChange::update(__LINE__, $data);
+
+// Add sort field
+
+$data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_orderfields', 'en')
+    ->setFields([
+        'name' => '`cms_menu_category`.`position`',
+        'sort_order_direction' => 'ASC',
+        'position' => '0',
+        'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_menu_category'),
+        'id' => TCMSLogChange::createUnusedRecordId('cms_tbl_display_orderfields'),
+    ])
+;
+TCMSLogChange::insert(__LINE__, $data);
