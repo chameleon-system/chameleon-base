@@ -86,7 +86,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
       'cms_tbl_conf_id' => $cmsMenuItemTableId,
       'name' => 'name',
-      'translation' => '',
+      'translation' => 'Name',
       'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_STRING'),
       'cms_tbl_field_tab' => '',
       'isrequired' => '0',
@@ -133,7 +133,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
       'cms_tbl_conf_id' => $cmsMenuItemTableId,
       'name' => 'target',
-      'translation' => '',
+      'translation' => 'Target',
       'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_EXTENDEDMULTITABLELIST'),
       'cms_tbl_field_tab' => '',
       'isrequired' => '0',
@@ -188,7 +188,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
       'cms_tbl_conf_id' => $cmsMenuItemTableId,
       'name' => 'icon_font_css_class',
-      'translation' => '',
+      'translation' => 'Icon font CSS class',
       'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_STRING'),
       'cms_tbl_field_tab' => '',
       'isrequired' => '0',

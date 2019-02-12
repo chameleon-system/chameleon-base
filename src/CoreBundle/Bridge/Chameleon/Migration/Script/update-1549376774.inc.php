@@ -104,7 +104,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
       'row_hexcolor' => '',
       'is_translatable' => '0',
       'validation_regex' => '',
-      'id' => '8a491278-7137-2f36-b8bf-c1bd87c29ea1',
+      'id' => $nameFieldId,
   ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
