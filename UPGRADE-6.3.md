@@ -375,6 +375,22 @@ done by adding the following line after the module list definition:
 There are additional helper methods to simplify adding typical backend modules, but it is optional to use these methods.
 See `src/CoreBundle/private/library/classes/pagedefFunctions.inc.php` for reference.
 
+## Main Menu Changes
+
+This release of Chameleon System features a new main menu that is displayed as a sidebar while the old main menu (now
+called "classic main menu" is deprecated and will be removed in a future release. The new menu was restructured and some
+menu items were renamed to improve comprehensibility of the menu structure.
+
+The content boxes of the classic main menu are unchanged to give users time to get accustomed to the new menu. It
+didn't make sense to keep old menu item names though, so be aware that some menu items were changed. The changes
+should be quite straightforward.
+
+Also some menu items that were located in the top bar were now moved to the sidebar. Finally the backend modules that
+were called in a popup window, like navigation, product search index generation and sanity check, now open inline.
+
+From a technical point no changes are required if the project is a shop system. Projects that are pure CMS systems
+should consider removing menu categories that are nevertheless created during migration. Note that there will be some
+error messages during migration that complain about missing shop tables and modules in this case, which can be ignored. 
 
 # Deprecated Code Entities
 
@@ -518,4 +534,8 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Database Fields
 
+- cms_module.cms_content_box_id
+- cms_module.icon_font_css_class
 - cms_module.show_as_popup
+- cms_tbl_conf.cms_content_box_id
+- cms_tbl_conf.icon_font_css_class
