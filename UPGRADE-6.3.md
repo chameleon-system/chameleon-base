@@ -450,11 +450,11 @@ is recommended (although this tool may not find database-related deprecations).
 - \MTMenuManager
 - \TCMSContentBox
 - \TCMSContentBoxItem
+- \TCMSFieldMediaProperties
 - \TCMSMenuItem
 - \TCMSMenuItem_Module
 - \TCMSMenuItem_Table
 - \TPkgCmsCoreLog
-- \TCMSFieldMediaProperties
 - \TPkgSnippetRenderer_TranslationNode
 - \TPkgSnippetRenderer_TranslationTokenParser
 
@@ -463,7 +463,8 @@ is recommended (although this tool may not find database-related deprecations).
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$sGeneratedPage
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$postRenderVariables
 - \TPkgCsv2Sql::$sLogFileName
-- \TCMSFieldLookupFieldTypes::sFieldHelpTextHTML
+- \TCMSFieldLookupFieldTypes::$sFieldHelpTextHTML
+- \TCMSTableEditorChangeLog::$oOldFields
 
 ## Methods
 
@@ -488,6 +489,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \TPkgCsv2Sql::CreateLogFileName()
 - \TPkgCsv2Sql::GetLogFile()
 - \TTools::AddStaticPageVariables()
+- \TCMSTableEditorChangeLog::savePreSaveValues()
 
 ## JavaScript Files and Functions
 
