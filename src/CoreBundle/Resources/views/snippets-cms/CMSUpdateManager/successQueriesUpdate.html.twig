@@ -3,11 +3,11 @@
         <button class="btn btn-success collapsed" type="button" data-toggle="collapse"
                 data-target="#queryList-{{ bundleName }}-{{ buildNumber }}" aria-expanded="false"
                 aria-controls="queryList-{{ bundleName }}-{{ buildNumber }}">
-            {{ 'chameleon_system_core.cms_module_update.show_successful_queries'|trans }}
+            <i class="fas fa-plus-square"></i> {{ 'chameleon_system_core.cms_module_update.show_successful_queries'|trans }}
         </button>
         <span class="badge badge-pill badge-success float-right">{{ messages|length }}</span>
     </div>
-    <div class="card-body">
+    <div class="card-body p-0">
         <ul class="list-group queryList collapse" id="queryList-{{ bundleName }}-{{ buildNumber }}">
             {% for message in messages %}
                 <li class="list-group-item">
