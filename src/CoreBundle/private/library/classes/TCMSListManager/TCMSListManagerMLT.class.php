@@ -133,11 +133,7 @@ class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
      */
     public function CallBackMLTFunctionBlock($id, $row)
     {
-        $returnValue = '<i class="fas fa-unlink" onclick="deleteConnection(\''.$row['id'].'\');" onMouseOver="$(\'#functionTitle_\'+'.$row['cmsident'].').html(\''.TGlobal::Translate('chameleon_system_core.action.remove_connection').'\');" onMouseOut="$(\'#functionTitle_\'+'.$row['cmsident'].').html(\'\');" /></i>';
-        $returnValue .= '<div id="functionTitle_'.$row['cmsident'].'" class="functionTitle"></div>';
-        $returnValue .= '</div>';
-
-        return $returnValue;
+        return '<i class="fas fa-unlink action" onclick="deleteConnection(\''.TGlobal::OutJS($row['id']).'\');" title="'.TGlobal::Translate('chameleon_system_core.action.remove_connection').'"></i>';
     }
 
     /**
