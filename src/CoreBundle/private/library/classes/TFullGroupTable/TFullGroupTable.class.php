@@ -819,7 +819,7 @@ class TFullGroupTable extends TGroupTable
             }
         }
 
-        $filterHeader = "<div class=\"row TFullGroupTable\"><div class='form-inline'>\n";
+        $filterHeader = "<div class=\"TFullGroupTable\"><div class='form-inline'>\n";
         $filterContent = '';
         // now add group selector (if activated)
         if (null !== $this->groupByCell && $this->showGroupSelector) {
