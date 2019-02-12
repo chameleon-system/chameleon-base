@@ -219,7 +219,52 @@ TCMSLogChange::update(__LINE__, $data);
 $query = 'ALTER TABLE `cms_menu_category` ADD INDEX ( `position` )';
 TCMSLogChange::RunQuery(__LINE__, $query);
 
-// Add field cms_menu_item
+// Add icon_font_css_class field.
+
+$iconFontCssClassFieldId = TCMSLogChange::createUnusedRecordId('cms_field_conf');
+
+$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
+    ->setFields([
+        'cms_tbl_conf_id' => $cmsMenuCategoryTableId,
+        'name' => 'icon_font_css_class',
+        'translation' => '',
+        'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_STRING'),
+        'cms_tbl_field_tab' => '',
+        'isrequired' => '0',
+        'fieldclass' => '',
+        'fieldclass_subtype' => '',
+        'class_type' => 'Core',
+        'modifier' => 'none',
+        'field_default_value' => '',
+        'length_set' => '',
+        'fieldtype_config' => '',
+        'restrict_to_groups' => '0',
+        'field_width' => '',
+        'position' => '0',
+        '049_helptext' => '',
+        'row_hexcolor' => '',
+        'is_translatable' => '0',
+        'validation_regex' => '',
+        'id' => $iconFontCssClassFieldId,
+    ])
+;
+TCMSLogChange::insert(__LINE__, $data);
+
+$query ="ALTER TABLE `cms_menu_category`
+                        ADD `icon_font_css_class` VARCHAR(255) NOT NULL";
+TCMSLogChange::RunQuery(__LINE__, $query);
+
+$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
+    ->setFields([
+        'translation' => 'Icon-Font CSS-Klasse',
+    ])
+    ->setWhereEquals([
+        'id' => $iconFontCssClassFieldId,
+    ])
+;
+TCMSLogChange::update(__LINE__, $data);
+
+// Add cms_menu_item field.
 
 $cmsMenuItemFieldId = TCMSLogChange::createUnusedRecordId('cms_field_conf');
 

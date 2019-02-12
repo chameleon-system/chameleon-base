@@ -128,7 +128,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 }
             }
             if (\count($menuItems) > 0) {
-                $menuCategories[] = new MenuCategory($tdbCategory->fieldName, $menuItems);
+                $menuCategories[] = new MenuCategory($tdbCategory->fieldName, $tdbCategory->fieldIconFontCssClass, $menuItems);
             }
         }
 

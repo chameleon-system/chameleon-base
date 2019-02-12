@@ -25,24 +25,22 @@
         filter: function (event) {
             const searchTerm = event.target.value;
             if ('' === searchTerm) {
-                this.$navTitles.removeClass('d-none');
+                this.$navTitles.removeClass('d-none open');
                 this.$navItems.removeClass('d-none');
 
                 return;
             }
             if ('undefined' === typeof this.$navItems) {
-                this.$navTitles = this.$baseElement.find('.nav-title');
-                this.$navItems = this.$baseElement.find('.nav-item');
+                this.$navTitles = this.$baseElement.find('.nav-dropdown');
+                this.$navItems = this.$baseElement.find('.nav-dropdown-items .nav-item');
             }
 
-            this.$navTitles.addClass('d-none');
+            this.$navTitles.addClass('d-none').removeClass('open');
             this.$navItems.addClass('d-none');
+
             const $matchingNavItems = this.$navItems.find(":chameleonContainsCaseInsensitive('" + searchTerm + "')").closest('.nav-item');
             $matchingNavItems.removeClass('d-none');
-            // Find title for matching nav items directly after title.
-            $matchingNavItems.prev('.nav-title').removeClass('d-none');
-            // Find title for further matching nav items.
-            $matchingNavItems.prevUntil('.nav-title').prev('.nav-title').removeClass('d-none');
+            $matchingNavItems.parents('.nav-item').addClass('open').removeClass('d-none');
         },
         onSidebarToggle: function () {
             const url = this.$baseElement.data('toggle-notification-url');
