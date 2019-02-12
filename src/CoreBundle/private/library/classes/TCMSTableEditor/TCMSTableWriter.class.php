@@ -258,7 +258,7 @@ class TCMSTableWriter extends TCMSTableEditor
         /** @var $oMenuItem TCMSTableEditorMenuItem */
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sDisplayName = 'SQL Export';
-        $oMenuItem->sIcon = TGlobal::GetStaticURL('/chameleon/blackbox/images/icons/database_save.png');
+        $oMenuItem->sIcon = 'fas fa-file-export';
         $aParams = array();
         $aParams['pagedef'] = 'tableeditor';
         $aParams['tableid'] = $this->oTableConf->id;

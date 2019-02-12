@@ -13,7 +13,7 @@ use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 
 /**
- * renders a list of languages per portal to allow language specific selections
+ * Renders a list of languages per portal to allow language specific selections.
  * you can call the filtered selection using the function: TdbYourTable::GetListForPortalLanguage();.
  */
 class TCMSFieldPortalLanguageMatrix extends TCMSField
@@ -35,30 +35,28 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField
     public function GetHTML()
     {
         $sEscapedNameField = TGlobal::OutHTML($this->name);
-        $html = '';
+        $html = '<input type="hidden" name="'.$sEscapedNameField.'[x]" value="-" id="'.$sEscapedNameField.'[]" />
+      <div class="card">
+        <div class="card-header p-1">
+          ';
 
         if (!$this->bReadOnlyMode) {
-            $html .= "
-            <div style=\"border-bottom: 1px solid #A9C4E7;\">
-                <input type=\"hidden\" name=\"{$sEscapedNameField}[x]\" value=\"-\" id=\"{$sEscapedNameField}[]\" />
-                <div style=\"float: right; width: 4px;\"><img src=\"".URL_CMS.'/images/boxTitleBgRight.gif" alt="" width="4" height="22" border="0" hspace="0" vspace="0" /></div>
-                <div style="color: #151C55; float: left; width: 4px;"><img src="'.URL_CMS."/images/boxTitleBgLeft.gif\" alt=\"\" width=\"4\" height=\"22\" border=\"0\" hspace=\"0\" vspace=\"0\" /></div>
-                <div class=\"listBoxTop\" style=\"cursor: default;\"><a href=\"javascript:markCheckboxes('".TGlobal::OutJS($this->name)."');\" class=\"checkBoxHeaderActionLink\" style=\"background: url(".URL_CMS.'/images/icons/accept.png) 0px 3px no-repeat;">'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_checkboxes.select_deselect_all')."</a>
-                    <a href=\"javascript:invertCheckboxes('".TGlobal::OutJS($this->name)."')\" class=\"checkBoxHeaderActionLink\" style=\"margin-left: 10px; background: url(".URL_CMS.'/images/icons/arrow_switch.png) 0px 3px no-repeat;">'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_checkboxes.invert_selection').'</a>
-                    <div class="cleardiv">&nbsp;</div>
-                </div>
-                <div class="cleardiv">&nbsp;</div>
-            </div>
-            <div style="padding: 5px; border: 1px solid #A9C4E7;">
-              ';
+            $html .= '<a href="javascript:markCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink"><i class="fas fa-check pr-2"></i>'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_checkboxes.select_deselect_all').'</a>
+          <a href="javascript:invertCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-random pr-2"></i>'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_checkboxes.invert_selection').'</a>
+          ';
         }
+
+        $html .= '
+        </div>  
+        <div class="card-body p1">  
+          ';
 
         $oTableConfig = $this->oTableRow->GetTableConf();
         $sRecordID = $this->oTableRow->sqlData['id'];
         $oPortalList = TdbCmsPortalList::GetList();
 
         while ($oPortal = $oPortalList->Next()) {
-            $html .= '<div style="clear:both;padding-top:10px;font-weight:bold;border-bottom:1px solid black" class="groupfield">'.TGlobal::OutHTML($oPortal->fieldName)."</div>\n";
+            $html .= '<div class="checkboxGroupTitle">'.TGlobal::OutHTML($oPortal->fieldName)."</div>\n";
 
             // load base language
             $oBaseLanguage = $oPortal->GetFieldCmsLanguage();
@@ -131,11 +129,8 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField
         }
 
         $html .= '<div class="cleardiv">&nbsp;</div>
+            </div>
         </div>';
-
-        if (!$this->bReadOnlyMode) {
-            $html .= '</div>';
-        }
 
         return $html;
     }

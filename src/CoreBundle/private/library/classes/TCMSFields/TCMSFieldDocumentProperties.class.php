@@ -49,10 +49,10 @@ class TCMSFieldDocumentProperties extends TCMSField
         </tr>
         <tr>
           <td>
-          '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.open_document'), $sShowDownloadURL, TGlobal::GetStaticURLToWebLib('/images/icons/drive_disk.png'), 'float-left', null, null, null, '_blank').'
+          '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.open_document'), $sShowDownloadURL, 'far fa-file', 'float-left', null, null, null, '_blank').'
           </td>
           <td >
-          '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.download'), $sDownloadURL, TGlobal::GetStaticURLToWebLib('/images/icons/drive_disk.png'), 'float-left').'
+          '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.download'), $sDownloadURL, 'fas fa-download', 'float-left').'
           </td>
         </tr>';
 
@@ -60,7 +60,7 @@ class TCMSFieldDocumentProperties extends TCMSField
         if ('readonly' != $sDisplayType && 'hidden' != $sDisplayType) {
             $html .= '<tr>
               <td colspan="2">
-              '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.replace'), 'javascript:OpenDocumentUploadWindow();', TGlobal::GetStaticURLToWebLib('/images/icons/action_refresh_blue.gif')).'
+              '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.replace'), 'javascript:OpenDocumentUploadWindow();', 'fas fa-file').'
               </td>
             </tr>
           </table>';

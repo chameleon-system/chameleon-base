@@ -61,11 +61,11 @@
                         var row = o.options.filesContainer.parent().find('.queue-header').clone();
                         row.removeClass('queue-header').addClass('queue-element');
 
-                        row.addClass('template-upload fade');
+                        row.addClass('template-upload fade show');
                         row.find('.filename').text(file.name);
                         row.find('.size').text(o.formatFileSize(file.size));
                         row.find('.state').html('<div class="progress"></div>' +
-                        (!index ? '<a class="cancel" title="Abbrechen"><span class="glyphicon glyphicon-remove-circle"></span></a>' : ''));
+                        (!index ? '<a class="cancel" title="Abbrechen"><i class="far fa-times-circle"></i></a>' : ''));
                         if (file.error) {
                             row.append('<div class="error-container"><div class="alert alert-danger">' + file.error + '</div></div>');
                         }
@@ -83,7 +83,7 @@
                         row.addClass('template-download fade');
                         row.find('.filename').text(file.name);
                         row.find('.size').text(o.formatFileSize(file.size));
-                        row.find('.state').html('<span class="glyphicon glyphicon-ok"></span>');
+                        row.find('.state').html('<i class="fas fa-check"></i>');
                         if (file.error) {
                             row.append('<div class="error-container"><div class="alert alert-danger">' + file.error + '</div></div>');
                         }

@@ -365,6 +365,10 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         );
         $includes[] = sprintf(
             '<link rel="stylesheet" href="%s">',
+            TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css')
+        );
+        $includes[] = sprintf(
+            '<link rel="stylesheet" href="%s">',
             TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/css/mediaManager.css')
         );
 
@@ -399,6 +403,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $includes[] = '<script src="'.TGlobal::GetStaticURL(
                 '/bundles/chameleonsystemmediamanager/lib/Jeditable/jquery.jeditable.js'
             ).'"></script>';
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
         $includes[] = '<script src="'.TGlobal::GetStaticURL(
                 '/bundles/chameleonsystemmediamanager/js/mediaManager.js'
             ).'"></script>';

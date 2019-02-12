@@ -1,4 +1,4 @@
-<div class="snippetMediaManagerDeleteConfirmDelete items-to-delete">
+<div class="snippetMediaManagerDeleteConfirmDelete items-to-delete ">
 
     {% if errorMessage %}
         <div class="alert alert-danger">{{ errorMessage }}</div>
@@ -7,43 +7,47 @@
         <div class="alert alert-danger">{{ usagesErrorMessage }}</div>
     {% endif %}
 
-    <p>{{ 'chameleon_system_media_manager.delete.the_following_items_will_be_permanently_deleted' | trans }}</p>
-    <table class="table table-striped">
-        <tr>
-            <th>{{ 'chameleon_system_media_manager.delete.table_header_image' | trans }}</th>
-            <th>{{ 'chameleon_system_media_manager.delete.table_header_info' | trans }}</th>
-            <th>{{ 'chameleon_system_media_manager.delete.table_header_usages' | trans }}</th>
-            <th>{{ 'chameleon_system_media_manager.delete.table_header_revoke_delete' | trans }}</th>
-        </tr>
+    <div>{{ 'chameleon_system_media_manager.delete.the_following_items_will_be_permanently_deleted' | trans }}</div>
+
+    <div class="pt-2 pb-4">
+        <div class="row list-header pb-2 pt-2">
+            <div class="col-5 col-sm-3 col-md-3 col-lg-2">{{ 'chameleon_system_media_manager.delete.table_header_image' | trans }}</div>
+            <div class="col-7 col-sm-9 col-md-3 col-lg-4">{{ 'chameleon_system_media_manager.delete.table_header_info' | trans }}</div>
+            <div class="col-12 col-md-6 text-right">{{ 'chameleon_system_media_manager.delete.table_header_revoke_delete' | trans }}</div>
+        </div>
 
         {% for mediaItemArray in mediaItems %}
             {% set mediaItem = mediaItemArray.mediaItem %}
             {% set usages = mediaItemArray.usages %}
             {# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
-            <tr class="item-to-delete" data-id="{{ mediaItem.id }}">
-                <td><img src="{{ mediaItem.id | cmsthumb(100, 100) }}" alt="{{ mediaItem.altTag }}"></td>
-                <td>{{ mediaItem.name }} ({{ mediaItem.id }})</td>
-                <td>
+            <div class="row item-to-delete cms-media-item pt-2 pb-2" data-id="{{ mediaItem.id }}">
+                <div class="col-4 col-sm-3 col-lg-2"><img class="img-fluid" src="{{ mediaItem.id | cmsthumb(100, 100) }}" alt="{{ mediaItem.altTag }}"></div>
+                <div class="col-5 col-sm-7 col-md-7 col-lg-8 col-xl-9 mb-2"><span class="item-to-delete-name">{{ mediaItem.name }}</span><br/>({{ mediaItem.id }})</div>
+                <div class="col-3 col-sm-2 col-md-2 col-xl-1 text-right">
+                    <a class="btn btn-secondary btn-sm revoke-delete" title="{{ 'chameleon_system_media_manager.delete.action_revoke_delete' | trans }}">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </div>
+                <div class="d-none d-xl-block col-xl-2"></div>
+                <div class="col-12 col-xl-10">
                     {% if usages | length > 0 %}
+                        <div class="title-usages">{{ 'chameleon_system_media_manager.delete.table_header_usages' | trans }}</div>
                         {% include 'mediaManager/usages/usageTable.html.twig' with {'usages': usages} %}
                     {% else %}
-                        {% if enableUsageSearch %}
-                            {{ 'chameleon_system_media_manager.delete.table_no_usages' | trans }}
-                        {% else %}
-                            {{ 'chameleon_system_media_manager.delete.usage_search_disabled' | trans }}
-                        {% endif %}
+                        <div class="title-usages">
+                            {% if enableUsageSearch %}
+                                    {{ 'chameleon_system_media_manager.delete.table_no_usages' | trans }}
+                            {% else %}
+                                {{ 'chameleon_system_media_manager.delete.usage_search_disabled' | trans }}
+                            {% endif %}
+                        </div>
                     {% endif %}
-                </td>
-                <td>
-                    <a class="revoke-delete"
-                       title="{{ 'chameleon_system_media_manager.delete.action_revoke_delete' | trans }}"><span
-                                class="glyphicon glyphicon-minus-sign"></span></a>
-                </td>
-            </tr>
+                </div>
+            </div>
         {% endfor %}
-    </table>
+
+    </div>
 
     <a class="confirm-delete btn btn-danger">{{ 'chameleon_system_media_manager.delete.action_confirm_delete' | trans }}</a>
     <a class="cancel-delete btn btn-secondary">{{ 'chameleon_system_media_manager.delete.action_cancel_delete' | trans }}</a>
-
 </div>

@@ -313,7 +313,7 @@ function addMLTConnectionResponse(data, responseMessage) {
         if (chooserIframeObj) {
             chooserIframeObj.src = chooserIframeObj.src;
         }
-        jQuery.unblockUI();
+        CHAMELEON.CORE.hideProcessingModal();
         return true;
     } else {
         CloseModalIFrameDialog();
@@ -394,19 +394,21 @@ function loadMltPositionList(tableSQLName, sRestriction, sRestrictionField) {
     CreateModalIFrameDialogCloseButton(url, 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
 }
 
-/*
+/**
+ * @deprecated since 6.3.0
+ * use: CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(iFrameId, url) instead.
+ *
  * MLT field: show/hide MLT content
  */
 function showMLTField(objID, outerObjID, url) {
     var mltID = document.getElementById(objID);
-    top.currentMltId = mltID.id;
 
-    var $objID = jQuery('#' + objID);
+    var $objID = $('#' + objID);
     if ($objID.is(':hidden')) {
         mltID.src = url;
-        $objID.show();
+        $objID.removeClass('d-none');
     } else {
-        $objID.hide();
+        $objID.addClass('d-none');
     }
 }
 
@@ -458,6 +460,9 @@ function CheckRefreshReturn(data) {
     window.setTimeout("RefreshRecordEditLock()", 30000);
 }
 
+/*
+ * @deprecated since 6.3.0 - workflow is not supported anymore
+ */
 function PublishViaAjaxCallback(data, statusText) {
     CloseModalIFrameDialog();
 
@@ -534,11 +539,13 @@ function SaveViaAjax() {
 function SaveViaAjaxCallback(data, statusText) {
     CloseModalIFrameDialog();
 
-    // remove all message-classes from the fields
-    $('*[id^="fieldname_"]').removeClass();
+    // remove all message background classes from field containers.
+    $('*[id^="fieldname_"]').removeClass(function (index, className) {
+        return (className.match (/(^|\s)bg-\S+/g) || []).join(' ');
+    });
 
     var returnVal = false;
-    if (data != false && data != null) {
+    if (data !== false && data != null) {
 
         returnVal = true;
 
@@ -550,10 +557,10 @@ function SaveViaAjaxCallback(data, statusText) {
                 // messages do have a reference to field (e.g. mail-field not valid)
                 if (oMessage.sMessageRefersToField) {
                     // add the class to field
-                    $('#fieldname_' + oMessage.sMessageRefersToField).addClass('fieldMsg ' + oMessage.sMessageType);
+                    $('#fieldname_' + oMessage.sMessageRefersToField).addClass('bg-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(oMessage.sMessageType));
                 }
 
-                if (oMessage.sMessageType != 'ERROR' && !bOnLoadResetted) {
+                if (oMessage.sMessageType !== 'ERROR' && !bOnLoadResetted) {
                     // remove "something changed" message, because now the data was saved
                     bOnLoadResetted = true;
                     window.onbeforeunload = function () {
@@ -570,12 +577,12 @@ function SaveViaAjaxCallback(data, statusText) {
             };
             // reattach the message binding
             CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
-            if (data.message && data.message != '') {
+            if (data.message && data.message !== '') {
                 toasterMessage(data.message, 'MESSAGE');
             }
 
             // add saved record to breadcrumb
-            if (data.name && data.name != '' && document.getElementById('breadcrumbLastNode')) {
+            if (data.name && data.name !== '' && document.getElementById('breadcrumbLastNode')) {
                 document.getElementById('breadcrumbLastNode').innerHTML = data.name;
                 sCurrentRecordName = data.name;
             }
@@ -630,7 +637,7 @@ function ShowAjaxSaveResultAndClose(data, statusText) {
 
 function ResetTreeNodeSelection(fieldName) {
     document.getElementById(fieldName).value = '';
-    document.getElementById(fieldName + '_path').innerHTML = '<div class="treeField"><ul><li>' + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.nothing_assigned') + '</li></ul></div>';
+    document.getElementById(fieldName + '_path').innerHTML = '<ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li><li class="breadcrumb-item text-warning">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.nothing_assigned') + '</li></ol>';
 }
 
 function markCheckboxes(fieldname) {
@@ -650,7 +657,7 @@ function markCheckboxes(fieldname) {
         }
     }
 
-    var elements = document.forms['cmseditform'].elements[fieldname + "[]"];
+    var elements = document.querySelectorAll('[name="cmseditform"] input[name^="' + fieldname + '"]');
     for (i = 0; i < elements.length; i++) {
         var element = elements[i];
         if (false === element.disabled) {
@@ -660,7 +667,7 @@ function markCheckboxes(fieldname) {
 }
 
 function invertCheckboxes(fieldname) {
-    var elements = document.forms['cmseditform'].elements[fieldname + "[]"];
+    var elements = document.querySelectorAll('[name="cmseditform"] input[name^="' + fieldname + '"]');
     for (i = 0; i < elements.length; i++) {
         var element = elements[i];
         if (false === element.disabled) {
@@ -712,12 +719,6 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
     }
 };
 
-$(document).ready(function () {
-    CHAMELEON.CORE.MTTableEditor.initTabs();
-    CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
-    CHAMELEON.CORE.MTTableEditor.initSelectBoxes();
-});
-
 CHAMELEON.CORE.MTTableEditor.initTabs = function () {
     var url = document.URL;
     var hash = window.location.hash;
@@ -733,6 +734,20 @@ CHAMELEON.CORE.MTTableEditor.initTabs = function () {
     });
 };
 
+CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle = function (chameleonMessageTypeName) {
+    chameleonMessageTypeName = chameleonMessageTypeName.toLowerCase();
+
+    if ('error' === chameleonMessageTypeName) {
+        return 'danger';
+    }
+
+    if ('message' === chameleonMessageTypeName) {
+        return 'success';
+    }
+
+    return chameleonMessageTypeName;
+};
+
 function updateIframeSize(sFieldName, iHeight) {
     if (sFieldName != '') {
         $('#' + sFieldName + '_iframe').height(iHeight + 'px');
@@ -741,14 +756,14 @@ function updateIframeSize(sFieldName, iHeight) {
 
 CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
     $('[data-datetimepicker-option]').each(function () {
-        $(this).datetimepicker($(this).data("datetimepicker-option"));
+        $(this).datetimepicker($(this).data('datetimepicker-option'));
     });
 
     $('.datetimepicker-input').each(function () {
         var id = $(this).attr('id');
 
         // This custom-event of the datetimepicker only works with the ID of the element.
-        $('#' + id).on("change.datetimepicker", function (e) {
+        $('#' + id).on('change.datetimepicker', function (e) {
             var moment = e.date;
 
             if (moment === undefined) {
@@ -768,7 +783,7 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
 
 CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     $('[data-select2-option]').each(function () {
-        $(this).select2($(this).data("select2-option"));
+        $(this).select2($(this).data('select2-option'));
     });
 
     $('.lookup-container-field-types select').on('select2:select', function (e) {
@@ -778,10 +793,84 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
         var helpText = $(fieldId).html();
 
         if (helpText === '') {
-            $("#" + fieldName + "-helpContainer").html("&nbsp;");
+            $('#' + fieldName + '-helpContainer').html('&nbsp;');
         } else {
-            $("#" + fieldName + "-helpContainer").html(helpText);
+            $('#' + fieldName + '-helpContainer').html(helpText);
         }
+    });
+
+    var quicklookuplist = $('#quicklookuplist');
+    quicklookuplist.select2({
+        placeholder: quicklookuplist.data('select2-placeholder'),
+        ajax: {
+            url: quicklookuplist.data('select2-ajax'),
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+            return {
+                results: JSON.parse(data)
+            };
+        }
+    }
+    }).on('select2:select', function (e) {
+        var id = e.params.data.id;
+        switchRecord(id);
+    });
+
+    $('[data-tags]').each(function () {
+        $(this).select2({
+            tags: true,
+            width: '100%',
+            tokenSeparators: [',', ' ', ';'],
+            ajax: {
+                url: $(this).data('select2-ajax'),
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        currentTags: $(this).val().join(','),
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    }
+                }
+            },
+
+            createTag: function (params) {
+                var term = $.trim(params.term);
+
+                if ('' === term) {
+                    return null;
+                }
+
+                return {
+                    id: term,
+                    text: term
+                };
+            }
+        }).on('change', function (e) {
+            var currentTags = $(this).val().join(',');
+            var suggestionsUrl = $(this).data('ajax-suggestions-url')+'&currentTags='+currentTags;
+
+            $.ajax({
+                url: suggestionsUrl,
+                context: this,
+            }).done(function( data ) {
+                var suggestionsHtml = '';
+                $(data).each(function (dataKey, dataItem) {
+                    suggestionsHtml += '<span class="badge badge-secondary mr-2" data-tag-id="'+dataItem.id+'"><i class="far fa-plus-square"></i> '+dataItem.name+'</span>';
+                });
+
+                var that = $(this);
+
+                $('#'+$(this).attr('id')+'_suggestions .tagSuggestionList').html(suggestionsHtml).find('.badge').on('click', function(e) {
+                    var newOption = new Option($(this).data('tag-id'), $(this).data('tag-id'), false, true);
+                    that.append(newOption).trigger('change');
+                });
+            });
+        });
     });
 };
 
@@ -812,7 +901,37 @@ function SetChangedDataMessage() {
     CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
 }
 
+CHAMELEON.CORE.MTTableEditor.initHelpTexts = function () {
+    $(".help-text-button").click(function () {
+        var helpTextId = '#helptext-' + $(this).attr("data-helptextId");
+        $(helpTextId).toggle();
+    });
+};
+
+/*
+ * multi linked table (MLT)/property field: show/hide list in iframe.
+ */
+CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState = function (iFrameId, url) {
+    var iFrameElement = document.getElementById(iFrameId);
+    var cardBodyElement = iFrameElement.parentElement;
+
+    if (iFrameElement.classList.contains('d-none')) {
+        iFrameElement.src = url;
+        iFrameElement.classList.remove('d-none');
+        cardBodyElement.classList.remove('p-0');
+        cardBodyElement.classList.add('p-1');
+    } else {
+        iFrameElement.classList.add('d-none');
+        cardBodyElement.classList.remove('p-1');
+        cardBodyElement.classList.add('p-0');
+    }
+};
+
 $(document).ready(function () {
+    CHAMELEON.CORE.MTTableEditor.initTabs();
+    CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
+    CHAMELEON.CORE.MTTableEditor.initSelectBoxes();
     CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
     CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent('label.switch input[type=checkbox]');
+    CHAMELEON.CORE.MTTableEditor.initHelpTexts();
 });

@@ -1,12 +1,6 @@
 <?php
 
-// main layout
 $layoutTemplate = 'popup_iframe';
+$moduleList = array('contentmodule' => array('model' => 'CMSGMap', 'view' => 'standard'));
 
-// modules...
-$moduleList = array('pagetitle' => array('model' => 'MTHeader', 'view' => 'title'), 'contentmodule' => array('model' => 'CMSGMap', 'view' => 'standard'));
-
-// this line needs to be included... do not touch
-if (!is_array($moduleList)) {
-    $layoutTemplate = '';
-}
+addDefaultPageTitle($moduleList);

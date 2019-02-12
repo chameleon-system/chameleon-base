@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 
 /**
  * ReloadOnChange=true.
@@ -213,7 +214,6 @@ class TCMSFieldLookup extends TCMSField
         $oTableConf = new TCMSTableConf();
         /** @var $oTableConf TCMSTableConf */
         $oTableConf->LoadFromField('name', $tblName);
-        $sNameField = $oTableConf->GetNameColumn();
 
         $sCustomQuery = trim($oTableConf->sqlData['list_query']);
         if (!empty($sCustomQuery) && stristr($sCustomQuery, 'SELECT ')) {
@@ -274,7 +274,9 @@ class TCMSFieldLookup extends TCMSField
                 }
             }
         } else {
-            $query .= ' ORDER BY '.MySqlLegacySupport::getInstance()->real_escape_string($sNameField);
+            $nameField = $oTableConf->GetNameColumn();
+            $nameField = $this->getFieldTranslationUtil()->getTranslatedFieldName($tblName, $nameField, $this->getLanguageService()->getActiveLanguage());
+            $query .= ' ORDER BY '.MySqlLegacySupport::getInstance()->real_escape_string($nameField);
         }
 
         return $query;
@@ -551,6 +553,11 @@ class TCMSFieldLookup extends TCMSField
         }
 
         return implode(', ', $aRetValueArray);
+    }
+
+    private function getFieldTranslationUtil(): FieldTranslationUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 
     private function getViewRenderer(): ViewRenderer

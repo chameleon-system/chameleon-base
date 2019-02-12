@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 /**
  * class TFullGroupTable extends TGroupTable to add a header, sorting, and searching.
@@ -701,14 +702,14 @@ class TFullGroupTable extends TGroupTable
         <div class="row">';
         $tableNavigation .= '<nav class="col-auto mr-auto">';
         $tableNavigation .= '<ul class="pagination pagination-md TFullGroupTablePagination">';
-        $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><span class="glyphicon glyphicon-list" aria-hidden="true" style="margin-right: 5px;"></span>'.$hitText.'</a></li>';
+        $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><span class="fas fa-list-ul" aria-hidden="true" style="margin-right: 5px;"></span>'.$hitText.'</a></li>';
 
         if ($this->startRecord > 0 && -1 != $this->showRecordCount) {
-            $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\'0\');" class="page-link"><span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span></a></li>';
-            $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\''.$back_startValue.'\');" class="page-link"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></a></li>';
+            $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\'0\');" class="page-link"><i class="fas fa-fast-backward" aria-hidden="true"></i></a></li>';
+            $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\''.$back_startValue.'\');" class="page-link"><i class="fas fa-backward" aria-hidden="true"></i></a></li>';
         } else {
-            $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span></a></li>';
-            $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></a></li>';
+            $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><i class="fas fa-fast-backward" aria-hidden="true"></i></a></li>';
+            $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><i class="fas fa-backward" aria-hidden="true"></i></a></li>';
         }
 
         $recordsPerPage = $this->showRecordCount;
@@ -745,11 +746,11 @@ class TFullGroupTable extends TGroupTable
         }
 
         if (($this->startRecord + $this->showRecordCount) < $this->recordCount && -1 != $this->showRecordCount) {
-            $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\''.$next_startValue.'\');" class="page-link"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></a></li>';
-            $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\''.(($pageCount - 1) * $recordsPerPage).'\');" class="page-link"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span></a></li>';
+            $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\''.$next_startValue.'\');" class="page-link"><i class="fas fa-forward" aria-hidden="true"></i></a></li>';
+            $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\''.(($pageCount - 1) * $recordsPerPage).'\');" class="page-link"><i class="fas fa-fast-forward" aria-hidden="true"></i></a></li>';
         } else {
-            $tableNavigation .= '<li class="page-item disabled"><a href="#" class="page-link"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></a></li>';
-            $tableNavigation .= '<li class="page-item disabled"><a href="#" class="page-link"><span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span></a></li>';
+            $tableNavigation .= '<li class="page-item disabled"><a href="#" class="page-link"><i class="fas fa-forward" aria-hidden="true"></i></a></li>';
+            $tableNavigation .= '<li class="page-item disabled"><a href="#" class="page-link"><i class="fas fa-fast-forward" aria-hidden="true"></i></a></li>';
         }
 
         $tableNavigation .= '
@@ -866,10 +867,25 @@ class TFullGroupTable extends TGroupTable
 
         if ($this->showSearchBox) {
             $this->somethingToShow = true;
+
+
+            $filterContent .= '<div class="form-group mr-2">';
+
+            $formatString =  '<select id="searchLookup" name="_search_word" data-listname="%s" class="form-control" data-select2-placeholder="%s" data-select2-ajax="%s" data-record-url="%s">';
+            $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->listName), TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->getRecordAutocompleteUrl()), TGlobal::OutHTML($this->getRecordUrl()));
+
+            if ('' !== $this->_postData['_search_word']) {
+                $formatString = '<option value="%1$s">%1$s</option>';
+                $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->_postData['_search_word']));
+            }
+            $filterContent .= '</select></div>';
+
             $filterContent .= '<div class="form-group">';
-            $filterContent .= '<input type="text" class="form-control form-control-sm" name="_search_word" value="'.TGlobal::OutHTML($this->_postData['_search_word'])."\" onKeyDown=\"if (window.event && window.event.keyCode == 13) document.{$this->listName}._startRecord.value=0\" onChange=\"document.{$this->listName}._startRecord.value=0;document.{$this->listName}.submit();\" placeholder=\"".$this->searchFieldText."\">\n";
-            $filterContent .= "<input type=\"button\" class=\"form-control form-control-sm btn-sm btn-primary\" value=\"{$this->searchButtonText}\" onClick=\"document.{$this->listName}._startRecord.value=0;document.{$this->listName}.submit();\" class=\"btn btn-sm btn-primary\">
-            </div>";
+
+            $formatString = '<input type="button" class="form-control form-control-sm btn btn-sm btn-primary" value="%1$s" onClick="document.%2$s._startRecord.value=0;document.%2$s.submit();">';
+            $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchButtonText), TGlobal::OutHTML($this->listName));
+
+            $filterContent .= '</div>';
         }
 
         // use callback function if one was defined
@@ -892,6 +908,54 @@ class TFullGroupTable extends TGroupTable
         return $filter;
     }
 
+    private function getRecordAutocompleteUrl(): string
+    {
+        $pagedef = $this->getTableEditorPagedef('tablemanager');
+        $inputFilterUtil = $this->getInputFilterUtil();
+        $tableId = $inputFilterUtil->getFilteredInput('id');
+        $urlUtil = $this->getUrlUtil();
+        $sAjaxURL = $urlUtil->getArrayAsUrl([
+            'id' => $tableId,
+            'pagedef' => $pagedef,
+            '_rmhist' => 'false',
+            'sOutputMode' => 'Ajax',
+            'module_fnc[contentmodule]' => 'ExecuteAjaxCall',
+            '_fnc' => 'getAutocompleteRecordList',
+            'sRestrictionField' => '',
+            'sRestriction' => '',
+            'recordID' => ''
+        ], PATH_CMS_CONTROLLER.'?', '&');
+
+        return $sAjaxURL;
+    }
+
+    private function getRecordUrl(): string
+    {
+        $pagedef = $this->getTableEditorPagedef('tableeditor');
+        $inputFilterUtil = $this->getInputFilterUtil();
+        $tableId = $inputFilterUtil->getFilteredInput('id');
+        $urlUtil = $this->getUrlUtil();
+        $recordUrl = $urlUtil->getArrayAsUrl([
+            'pagedef' => $pagedef,
+            'tableid' => $tableId,
+            'sRestriction' => '',
+            'sRestrictionField' => '',
+            'popLastURL' => '1'
+        ], PATH_CMS_CONTROLLER.'?', '&');
+
+        return $recordUrl;
+    }
+
+    private function getTableEditorPagedef($pagedef): string
+    {
+        $inputFilterUtil = $this->getInputFilterUtil();
+        $customTableEditor = $inputFilterUtil->getFilteredInput('sTableEditorPagdef', '');
+        if ('' !== $customTableEditor) {
+            $pagedef = $customTableEditor;
+        }
+        return $pagedef;
+    }
+
     /**
      * @return AuthenticityTokenManagerInterface
      */
@@ -906,5 +970,10 @@ class TFullGroupTable extends TGroupTable
     private function getInputFilterUtil()
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getUrlUtil(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

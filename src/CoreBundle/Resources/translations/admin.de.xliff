@@ -481,7 +481,10 @@
                 <source>chameleon_system_core.field_media.active_upload_folder</source>
                 <target>Bilder werden in Kategorie %sDefaultCategory% hochgeladen</target>
             </trans-unit>
-
+            <trans-unit id="chameleon_system_core.field_media.select_dialog_title">
+                <source>chameleon_system_core.field_media.select_dialog_title</source>
+                <target>Bitte wählen Sie ein Bild aus</target>
+            </trans-unit>
 
             <trans-unit id="chameleon_system_core.field_property_media.error_missing_target">
                 <source>chameleon_system_core.field_property_media.error_missing_target</source>
@@ -2094,6 +2097,7 @@
             <trans-unit id="chameleon_system_core.action.return_to_main_menu">
                 <source>chameleon_system_core.action.return_to_main_menu</source>
                 <target>Zurück zum Hauptmenü</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
 
 
@@ -2513,6 +2517,11 @@
             <trans-unit id="chameleon_system_core.admin_message.button_title">
                 <source>chameleon_system_core.admin_message.button_title</source>
                 <target>Achtung</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.sidebar.filter_menu">
+                <source>chameleon_system_core.sidebar.filter_menu</source>
+                <target>Menü filtern</target>
             </trans-unit>
         </body>
     </file>

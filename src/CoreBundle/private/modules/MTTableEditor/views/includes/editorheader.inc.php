@@ -25,7 +25,7 @@ $oController = TGlobal::GetController();
         if ('' === $sRecordName) {
             $sRecordName = TGlobal::Translate('chameleon_system_core.text.unnamed_record');
         } else {
-            $length = 50;
+            $length = 100;
             $sRecordName = strip_tags($sRecordName);
             if (mb_strlen($sRecordName) > $length) {
                 $sRecordName = mb_substr($sRecordName, 0, $length);
@@ -43,7 +43,7 @@ $oController = TGlobal::GetController();
         <button class="btn btn-outline-info btn-sm mt-2 mr-2" type="button" role="button" data-toggle="popover"
                 data-placement="bottom"
                 data-content="<?= TGlobal::OutHTML($idsPopoverText); ?>" data-original-title="IDs">
-            IDs
+            <i class="fas fa-database"></i> IDs
         </button>
 
         <?php
@@ -70,11 +70,11 @@ $oController = TGlobal::GetController();
             }
 
             $sData .= '<div class="callout callout-danger mt-0 mb-1">'.$oCmsLock->GetDateField('time_stamp').'</div>'; ?>
-            <button class="btn btn-danger mt-2 mr-2" type="button" role="button" data-toggle="popover"
+            <button class="btn btn-danger btn-sm mt-2 mr-2" type="button" role="button" data-toggle="popover"
                     data-placement="bottom"
                     data-content="<?= TGlobal::OutHTML($sData); ?>"
                     data-original-title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.record_lock.locked_by')); ?>">
-                <?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.header_lock')); ?>
+                <i class="fas fa-user-lock"></i> <?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.header_lock')); ?>
             </button>
             <?php
         }
@@ -104,32 +104,13 @@ $oController = TGlobal::GetController();
                 'sRestrictionField' => $sRestrictionField,
                 'sRestriction' => $sRestriction,
                 'recordID' => $data['id'],
-            ], PATH_CMS_CONTROLLER.'?', '&'); ?>
+            ], PATH_CMS_CONTROLLER.'?', '&');
+            ?>
 
             <div class="mt-2">
-                <select id="quicklookuplist" class="form-control"></select>
+                <select id="quicklookuplist" class="form-control" data-select2-placeholder='<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')) ?>' data-select2-ajax='<?= $sAjaxURL ?>'></select>
             </div>
 
-            <script type="text/javascript">
-                $(document).ready(function () {
-                    $("#quicklookuplist").select2({
-                        placeholder: '<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')); ?>',
-                        ajax: {
-                            url: '<?= $sAjaxURL; ?>',
-                            dataType: 'json',
-                            delay: 250,
-                            processResults: function (data) {
-                                return {
-                                  results: JSON.parse(data)
-                                };
-                            }
-                        }
-                    }).on('select2:select', function (e) {
-                        var id = e.params.data.id;
-                        switchRecord(id);
-                    });
-                });
-            </script>
         <?php
         }
         ?>

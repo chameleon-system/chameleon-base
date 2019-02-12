@@ -23,17 +23,12 @@ try {
 $blacklistedUpdates = $oUpdateManager->getUpdateBlacklist();
 ?>
 <script type="text/javascript">
-
-    CHAMELEON.UPDATE_MANAGER.setUpdateFiles(<?=json_encode($updatesByBundle); ?>);
-
-    <?php include __DIR__.'/updateManagerConfig.inc.php'; ?>
-
-    CHAMELEON.UPDATE_MANAGER.addPostUpdateCommand('ajaxProxyClearCache', "<?=TGlobal::OutJS($translator->trans('chameleon_system_core.cms_module_update.clearing_cache')); ?>");
-
     $(document).ready(function () {
+        CHAMELEON.UPDATE_MANAGER.setUpdateFiles(<?=json_encode($updatesByBundle); ?>);
+        <?php include __DIR__.'/updateManagerConfig.inc.php'; ?>
+        CHAMELEON.UPDATE_MANAGER.addPostUpdateCommand('ajaxProxyClearCache', "<?=TGlobal::OutJS($translator->trans('chameleon_system_core.cms_module_update.clearing_cache')); ?>");
         CHAMELEON.UPDATE_MANAGER.init();
     });
-
 </script>
 
 <?php
@@ -49,9 +44,6 @@ if (0 === \count($updatesByBundle)) {
                 <div class="alert alert-info">
                     <?= $translator->trans('chameleon_system_core.cms_module_update.update_info_no_updates'); ?>
                 </div>
-
-                <a class="btn btn-warning" id="btnGoBack"
-                   href="<?= PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'main')); ?>"><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.return_to_main_menu')); ?></a>
             </div>
         </div>
     <?php
@@ -127,8 +119,6 @@ if (0 === \count($updatesByBundle)) {
                 <?php
 } ?>
 
-            <a class="btn btn-warning" id="btnGoBack"
-               href="<?= PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'main')); ?>"><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.return_to_main_menu')); ?></a>
             <a class="btn btn-success" href="#" id="btnRunUpdates"
                data-loading-text="<?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.action_update')); ?>"><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.action_update')); ?></a>
             <div id="ajaxTimeoutContainer">

@@ -1,0 +1,42 @@
+{# crop \ChameleonSystem\CoreBundle\MediaManager\LibraryDataModel\ImageCropDataModel #}
+<input type="hidden" name="{{ fieldName }}_image_crop_id" id="{{ fieldName }}_image_crop_id" value="{{ crop.id }}">
+<br>
+<div id="label_{{ fieldName }}_image_crop_id"
+     class="label-image-crop-field">{{ 'chameleon_system_image_crop.field.selected_crop' | trans }}
+    <span>{% if crop %}{{ crop.name | default(crop.imageCropPreset.name) }}{% if crop.name and crop.imageCropPreset.name %} ({{ crop.imageCropPreset.name }}){% endif %}{% else %}-{% endif %}</span>
+</div><br>
+<a class="btn btn-sm btn-default"
+   id="{{ fieldName }}_image_crop_id_reset_button"{% if not crop %} style="display: none;"{% endif %}
+   data-field-name="{{ fieldName }}"><span
+            class="fas fa-trash-alt"></span> {{ 'chameleon_system_image_crop.field.reset_crop' | trans }}
+</a>
+{% if crop %}
+    <script type="text/javascript">
+        (function ($, window) {
+            $('#{{ fieldName }}_image_crop_id_reset_button').on('click', window.imageCropResetButtonCallBack);
+            $.ajax({
+                type: "GET",
+                async: true,
+                data: {
+                    imageId: '{{ crop.cmsMedia.id }}',
+                    cropId: '{{ crop.id }}',
+                    _fieldName: '{{ fieldName }}'
+                },
+                url: '{{ urlToGetImage | raw }}',
+                success: function (jsonData) {
+                    $('#cmsimagefielditem_imagediv_{{ fieldName }}0 img').attr('src', jsonData.imageUrl);
+                    CloseModalIFrameDialog();
+                },
+                dataType: 'json'
+            });
+        })(jQuery, window);
+    </script>
+{% endif %}
+
+<script type="text/javascript">
+    (function ($, window) {
+        window.returnUrlToGetCroppedImageForImageCropField = function () {
+            return '{{ urlToGetImage | raw }}';
+        };
+    })(jQuery, window);
+</script>

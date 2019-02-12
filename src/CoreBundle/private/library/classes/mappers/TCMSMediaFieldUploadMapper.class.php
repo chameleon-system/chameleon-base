@@ -38,7 +38,7 @@ class TCMSMediaFieldUploadMapper extends AbstractViewMapper
         }
         $oVisitor->SetMappedValue('bShowCategorySelector', $bShowCategorySelector);
         $oVisitor->SetMappedValue('sCategorySelectOptionsHtml', $this->getCategorySelectOptionsHtml($oCategory, $bShowCategorySelector));
-        $oVisitor->SetMappedValue('sUploadButton', TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.link.upload_and_assign_media'), 'javascript:'.$this->getOpenUploadWindowJS($sFieldName), URL_CMS.'/images/icons/add.png'));
+        $oVisitor->SetMappedValue('sUploadButton', TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.link.upload_and_assign_media'), 'javascript:'.$this->getOpenUploadWindowJS($sFieldName), 'fas fa-upload'));
     }
 
     /**

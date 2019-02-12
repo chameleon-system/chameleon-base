@@ -217,6 +217,12 @@ class AuthenticityTokenManagerTest extends TestCase
         $this->whenIsTokenValidIsCalled();
 
         $this->thenTheExpectedResultShouldBeReturned($expectedResult);
+
+        if (null === $submittedToken) {
+            $this->thenFilteredGetInputShouldHaveBeenCalled();
+        } else {
+            $this->thenFilteredGetInputShouldNotHaveBeenCalled();
+        }
     }
 
     public function provideDataForTestIsAuthenticityTokenValid(): array
@@ -287,12 +293,23 @@ class AuthenticityTokenManagerTest extends TestCase
         if (null === $this->inputFilterUtilMock) {
             $this->inputFilterUtilMock = $this->prophesize(InputFilterUtilInterface::class);
         }
-        $this->inputFilterUtilMock->getFilteredInput('cmsauthenticitytoken')->willReturn($tokenValue);
+        $this->inputFilterUtilMock->getFilteredPostInput('cmsauthenticitytoken')->willReturn($tokenValue);
+        $this->inputFilterUtilMock->getFilteredGetInput('cmsauthenticitytoken')->willReturn(null);
     }
 
     private function whenIsTokenValidIsCalled(): void
     {
         $this->actualResult = $this->subject->isTokenValid();
+    }
+
+    private function thenFilteredGetInputShouldHaveBeenCalled(): void
+    {
+        $this->inputFilterUtilMock->getFilteredGetInput('cmsauthenticitytoken')->shouldHaveBeenCalled();
+    }
+
+    private function thenFilteredGetInputShouldNotHaveBeenCalled(): void
+    {
+        $this->inputFilterUtilMock->getFilteredGetInput('cmsauthenticitytoken')->shouldNotHaveBeenCalled();
     }
 
     public function testRefreshToken(): void

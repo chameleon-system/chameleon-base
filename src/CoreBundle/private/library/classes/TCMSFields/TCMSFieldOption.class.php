@@ -45,7 +45,7 @@ class TCMSFieldOption extends TCMSField
 
         if (count($this->options) >= 3) {
             // show as select box
-            $html = '<div class="row"><div class="col-12 col-lg-8">';
+            $html = '<div>';
             $html .= '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name).'" class="form-control form-control-sm" data-select2-option=\'{"width": "100%"}\'>';
             if ($this->allowEmptySelection) {
                 $chooseMessage = TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected');
@@ -59,8 +59,7 @@ class TCMSFieldOption extends TCMSField
                 }
                 $html .= '<option value="'.TGlobal::OutHTML($key)."\"{$selected}>".TGlobal::OutHTML($value)."</option>\n";
             }
-            $html .= "</select>
-                <div class=\"col-12 col-lg-4 switchToRecordBox\"></div>\n";
+            $html .= '</select>';
 
             $html .= "</div>\n";
         } else {

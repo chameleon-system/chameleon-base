@@ -29,7 +29,7 @@
             },
 
             successCallback: function (url) {
-                parent.jQuery.unblockUI();
+                parent.CHAMELEON.CORE.hideProcessingModal();
             },
             httpMethod: "GET",
             data: $('#'+formName).serialize()

@@ -136,10 +136,11 @@ function toasterMessage(message,type) {
         opacity: 1,
         insert_brs: true,
         text: message,
-        animate_speed: "normal",
+        animate_speed: 'normal',
         styling: 'bootstrap3',
+        icons: 'fontawesome5',
         hide: true,
-        addclass: "stack-bottomright",
+        addclass: 'stack-bottomright',
         delay: 6000,
         stack: stack_bottomright
     });
@@ -147,7 +148,11 @@ function toasterMessage(message,type) {
 
 window.alert = function(message) {
     new PNotify({
-        title: "Alert",
+        title: 'Alert',
+        type: 'error',
+        opacity: 1,
+        styling: 'bootstrap3',
+        icons: 'fontawesome5',
         text: message
     });
 };
@@ -248,9 +253,14 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
     var modalDialog = document.getElementById('modalDialog');
 
     if (null === modalDialog) {
-        document.body.innerHTML += '<div class="modal fade" id="modalDialog" tabindex="-1" role="dialog" aria-labelledby="modalDialog"\n' +
-            '         aria-hidden="true">\n' +
-            '        <div class="modal-dialog modal-dialog-centered '+sizeClass+'">\n' +
+        var newModal = document.createElement('div');
+        newModal.id = 'modalDialog';
+        newModal.className = 'modal fade';
+        newModal.setAttribute('tabindex', '-1');
+        newModal.setAttribute('role', 'dialog');
+        newModal.setAttribute('aria-labelledby', 'modalDialog');
+        newModal.setAttribute('aria-hidden', 'true');
+        newModal.innerHTML = '<div class="modal-dialog modal-dialog-centered ' + sizeClass + '">\n' +
             '            <div class="modal-content">      ' +
             '                <div class="modal-header" id="modalHeader">\n' +
             '                    <h5 class="modal-title" id="modalDialogLabel"></h5>\n' +
@@ -263,7 +273,7 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
             '            </div>\n' +
             '        </div>\n' +
             '    </div>';
-
+        document.body.appendChild(newModal);
         modalDialog = document.getElementById('modalDialog');
     } else {
         // set dialog size
@@ -447,9 +457,11 @@ function OpenModule(url, width, height) {
 
 /*
  * open standalone document manager popup
+ *
+ * @deprecated since 6.3.0 - use URL directly
  */
 function loadStandaloneDocumentManager() {
-    _standAloneDocumentManagerWindow = window.open('/cms?pagedef=CMSDocumentManager','documentManager','width=1200,height=800,resizable=yes,scrollbars=no');
+    window.location.href = '/cms?pagedef=CMSDocumentManagerFull';
 }
 
 $(document).ready(function () {

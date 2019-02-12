@@ -13,9 +13,9 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 
-/****************************************************************************
- * MLT field
-/***************************************************************************/
+/**
+ * multi linked table field (MLT)
+ */
 class TCMSFieldLookupMultiselect extends TCMSMLTField
 {
     /**
@@ -41,20 +41,31 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         $sStateURL = '?'.TTools::GetArrayAsURLForJavascript($aStateURL);
 
         $sEscapedName = TGlobal::OutHTML($this->name);
-        $html = "
-      <div style=\"border-bottom: 1px solid #A9C4E7;\">
-        <input type=\"hidden\" name=\"{$sEscapedName}[x]\" value=\"-\" id=\"{$sEscapedName}[]\" />
-        <div class=\"listBoxTopTitleRight\"><img src=\"".URL_CMS.'/images/boxTitleBgRight.gif" alt="" width="4" height="22" border="0" hspace="0" vspace="0" /></div>
-        <div class="listBoxTopTitleLeft"><img src="'.URL_CMS.'/images/boxTitleBgLeft.gif" alt="" width="4" height="22" border="0" hspace="0" vspace="0" /></div>
-        <div class="listBoxTop" data-fieldstate="'.$stateContainer->getState($this->sTableName, $this->name)."\" id=\"mltListControllButton{$sEscapedName}\" onClick=\"setTableEditorListFieldState(this, '{$sStateURL}');showMLTField('{$sEscapedName}_iframe','{$sEscapedName}_iframe_block','".$this->GetSelectListURL()."');\"><img src=\"".URL_CMS.'/images/icon_show_hide_list.gif" border="0" hspace="0" vspace="0" align="left" style="padding-top: 3px; padding-right: 8px; padding-left: 4px; ">'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.open_or_close_list')."</div>
-        <div class=\"cleardiv\">&nbsp;</div>
-      </div>
-      <div id=\"{$sEscapedName}_iframe_block\" class=\"listBoxBorder\"><iframe id=\"{$sEscapedName}_iframe\" width=\"100%\" height=\"470\" frameborder=\"0\" style=\"display: none;\"></iframe></div>";
-        if ('true' == $this->oDefinition->GetFieldtypeConfigKey('bOpenOnLoad') || $stateContainer->getState($this->sTableName, $this->name) === $stateContainer::STATE_OPEN) {
+
+        $html = '<input type="hidden" name="'.$sEscapedName.'[x]" value="-" id="'.$sEscapedName.'[]" />';
+        $html .= '<div class="card">
+        <div class="card-header p-1">
+            <div class="card-action" 
+            data-fieldstate="'.TGlobal::OutHTML($stateContainer->getState($this->sTableName, $this->name)).'" 
+            id="mltListControllButton'.$sEscapedName.'" 
+            onClick="setTableEditorListFieldState(this, \''.$sStateURL.'\'); CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(\''.$sEscapedName.'_iframe\',\''.$this->GetSelectListURL().'\');">
+            <i class="fas fa-eye"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.open_or_close_list')).'
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div id="'.$sEscapedName.'_iframe_block\">
+                <iframe id="'.$sEscapedName.'_iframe" width="100%" height="470" frameborder="0" class="d-none"></iframe>
+            </div>
+        </div>
+        </div>';
+
+        if ('true' === $this->oDefinition->GetFieldtypeConfigKey('bOpenOnLoad') || $stateContainer->getState($this->sTableName, $this->name) === $stateContainer::STATE_OPEN) {
             $html .= "
-            <script type=\"text/javascript\"> $(document).ready(function() {
-              showMLTField('{$sEscapedName}_iframe','{$sEscapedName}_iframe_block','".str_replace('&amp;', '&', $this->GetSelectListURL())."')
-            }); </script>
+            <script type=\"text/javascript\">
+            $(document).ready(function() {
+              CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState('".$sEscapedName."_iframe','".str_replace('&amp;', '&', $this->GetSelectListURL())."');
+            });
+            </script>
           ";
         }
 
@@ -68,15 +79,16 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
     {
         $html = $this->_GetHiddenField();
         $html .= '
-      <div style="padding: 5px; border: 1px solid #A9C4E7;">';
+      <div class="card">
+          <div class="card-body p-1">';
 
         $oMLTRecords = $this->FetchConnectedMLTRecords();
-
-        while ($oMLTRecord = $oMLTRecords->Next()) { //@var $oFile TCMSRecord
+        while ($oMLTRecord = $oMLTRecords->Next()) {
             $html .= '<div class="checkboxDIV">'.TGlobal::OutHTML($oMLTRecord->GetDisplayValue()).'</div>';
         }
 
         $html .= '<div class="cleardiv">&nbsp;</div>
+          </div>
       </div>';
 
         return $html;
@@ -170,8 +182,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         $oForeignTableConfig = new TCMSTableConf();
         $oForeignTableConfig->LoadFromField('name', $sForeignTableName);
         $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(array('_isiniframe' => 'true', 'pagedef' => 'mltfield', 'name' => $this->name, 'sRestriction' => $this->recordId, 'sRestrictionField' => $this->sTableName.'_mlt', 'id' => $oForeignTableConfig->id, 'table' => $this->sTableName, 'recordid' => $this->recordId, 'field' => $this->name,
-        ));
-        //$url = PATH_CMS_CONTROLLER."?_isiniframe=true&pagedef=mltfield&name=".$this->name."&sRestriction=".urlencode($this->recordId)."&sRestrictionField=".urlencode($this->sTableName.'_mlt')."&id=".urlencode($oForeignTableConfig->id)."&table=".urlencode($this->sTableName)."&recordid=".urlencode($this->recordId)."&field=".urlencode($this->name)."&fieldCount=".$iFieldCount;
+            ));
         return $url;
     }
 
@@ -330,7 +341,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
     {
         $sTableName = $this->oDefinition->GetFieldtypeConfigKey('connectedTableName');
 
-        return  $this->GetClearedTableName($sTableName);
+        return $this->GetClearedTableName($sTableName);
     }
 
     /**

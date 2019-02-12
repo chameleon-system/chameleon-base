@@ -555,7 +555,7 @@ class CMSTemplateEngine extends TCMSModelBase
             $returnVal = array();
             $returnVal['bIsTableLocked'] = $oEditor->IsRecordLocked();
 
-            $sSubmitButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.select_instance'), "javascript:$('#loadmoduleclass').submit();", URL_CMS.'/images/icons/tick.png');
+            $sSubmitButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.select_instance'), "javascript:$('#loadmoduleclass').submit();", 'fas fa-check');
 
             $sDialogContent .= '<form name="loadmoduleclass" id="loadmoduleclass" method="post" action="'.URL_WEB_CONTROLLER.'" accept-charset="UTF-8">'."\n".'
     <input type="hidden" name="pagedef" value="'.$this->sPageId.'"/>  '."\n".'

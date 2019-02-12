@@ -1,15 +1,7 @@
-.tableeditID {
-    font-size: 14px;
-    font-weight: bold;
-    margin-left: 5px;
-    display: inline;
-    color: #419BDE;
-}
-
 .tableeditcontainer h1,
 .tableeditcontainer h2,
 .tableeditcontainer h3 {
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 .tableeditcontainer .fieldName {
@@ -46,8 +38,11 @@
     margin-bottom:10px;
 }
 
-.cmsimagefielditemtitle img {
-    margin-left: 5px;
+.cmsimagefielditemtitle .btn {
+    padding: 0;
+    font-size: 1rem;
+    background: none;
+    border: none;
 }
 .SnippetmediaUploader {
     margin-top:10px;
@@ -60,100 +55,12 @@
     max-height: 150px;
 }
 
-#datepickeriframe {
-    background-color: transparent;
-}
-
-.passwordStrengthMeter {
-    width: 246px;
-    height: 35px;
-    background: url(../images/progressMeterColorFull.gif);
-}
-
-.passwordStrengthMeterArrow {
-    width: 10px;
-    height: 12px;
-    margin-top: 4px;
-    margin-left: 12px;
-}
-
-.posListUL {
-    margin-left: 0px;
-    padding-left: 0px;
-}
-
-.positionList {
-    background-color: #F8F2AA;
-    color: #616974;
-    border: 1px solid #FFB608;
-    padding: 3px;
-    font-size: 11px;
-    display: block;
-    margin-bottom: 2px;
-    cursor: move;
-}
-
-.positionListActive {
-    background-color: #E3F8D8;
-    color: #0B224B;
-    border: 1px solid #217C21;
-    padding: 3px;
-    font-size: 11px;
-    display: block;
-    margin-bottom: 2px;
-    cursor: move;
-}
-
 /* the breadcrumb in treeNode fields */
 .fieldPreview {
     padding: 5px;
     border: 1px solid #ABBDCD;
     margin-bottom: 10px;
     width: auto;
-}
-
-.fieldMsg {
-    font-weight: bold;
-    border-style: solid;
-    border-width: 1px;
-    padding: 5px;
-    padding-right: 45px;
-    min-height: 30px;
-    height: auto !important;
-    height: 30px
-}
-
-.fieldMsg.MESSAGE {
-    border-color: #d6e9c6;
-    color: #468847;
-    background: #dff0d8 url(../images/nav_icons/success.png) no-repeat scroll right center;
-}
-
-.fieldMsg.WARNING {
-    border-color: #FFB608;
-    color: #0B224B;
-    background: #F8F2AA url(../images/nav_icons/notice.png) no-repeat scroll right center;
-}
-
-.fieldMsg.ERROR {
-    border-color: #DF7D7D;
-    color: #AF4C4C;
-    background: #FFBFBF url(../images/nav_icons/error.png) no-repeat scroll right center;
-}
-
-.requiredfieldfocus {
-    font-weight: bold;
-    border-color: #DF7D7D;
-    border-style: solid;
-    border-width: 1px;
-    color: #AF4C4C;
-    padding: 5px;
-    padding-right: 45px;
-    background: #FFBFBF url(../images/nav_icons/error.png) no-repeat 5px 2px;
-    background-position: right;
-    min-height: 30px;
-    height: auto !important;
-    height: 30px
 }
 
 .requiredfield {
@@ -163,14 +70,20 @@
     font-size: 14px;
 }
 
-.quickLookupListName {
-    color: #717880;
-    font-size: 12px;
-    font-weight: bold;
-}
-
 #quicklookuplist {
     width: 350px;
+}
+
+.row.table-editor-form-group {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.checkboxGroupTitle {
+    clear:both;
+    padding-top:10px;
+    font-weight:bold;
+    border-bottom: 1px solid black;
 }
 
 .checkboxDIV {
@@ -197,22 +110,15 @@
     float: left;
     height: 20px;
     line-height: 18px;
-    padding-left: 20px;
     padding-top: 3px;
 }
 
-.tooltipContainer {
-    background-color: #F8F2AA;
-    color: #0B224B;
-    padding: 8px;
-    z-index: 10;
-    display: block;
-    font-family: Arial, helvetica, sans-serif;
-    font-size: 11px;
-    border: 2px solid #FFB608;
-    line-height: 16px;
-    width: 70%;
-    margin-bottom: 20px;
+.help-text-button i {
+    color: #999;
+}
+
+.helptextContainer {
+    display: none;
 }
 
 #tableEditorHeader th, #tableEditorHeader td, #tableEditorHeader td span, #tableEditorHeader td div {
@@ -247,140 +153,46 @@
     background-color: #f4f5f7;
 }
 
+.tagSuggestions .badge {
+    font-size: 1em;
+    font-weight: normal;
+    padding: 5px;
+    cursor: pointer;
+    cursor: hand;
+}
+
 .switchToRecordBox {
     float: left;
     margin-left: 20px;
 }
 
-.description {
-    padding: 5px;
+.badge.translationStateIcon {
+    font-size: 1.1em;
+    padding: 0 .2em;
 }
 
-.descriptionContainer {
-    padding: 0px;
-    min-height: 3px;
-    height: auto !important;
-    height: 3px;
-    margin-bottom: 7px;
-    -webkit-box-shadow: 3px 3px 8px #1f1f1f;
-    -moz-box-shadow: 3px 3px 8px #1f1f1f;
-    box-shadow: 3px 3px 8px #1f1f1f;
-    margin-top: -11px;
-    background-color: #EFF0F3;
+.badge.translationStateIcon i {
+    font-size: 1.5em;
 }
 
-.translationStateIcon {
-    float: right;
-    padding-right: 5px;
-}
-
-.custom-combobox {
-    position: relative;
-    display: inline-block;
-}
-
-.custom-combobox-toggle {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    margin-left: -1px;
-    padding: 0;
-}
-
-.custom-combobox-input {
-    margin: 0;
-    padding: 0.3em;
-}
-
-.ui-autocomplete {
-    max-height: 250px;
-    overflow-y: auto;
+.help-text-button i {
+    font-size: 1.6em;
+    cursor: pointer;
+    cursor: hand;
 }
 
 .button-spacing {
     margin-left: 10px;
 }
 
-/**
-* search field
-*/
-.right-inner-addon {
-    position: relative;
-}
-.right-inner-addon input {
-    padding-right: 30px;
-}
-.right-inner-addon i {
-    position: absolute;
-    right: 0px;
-    padding: 8px 10px;
-    pointer-events: none;
-}
-
-.dateInput .ui-datepicker-trigger {
-    display: none;
-}
-
-.helpText {
-    background: url(../images/icons/icon_info.gif) no-repeat 2px 0px;
-    font-size: 11px;
-    color: #7B96BD;
-    margin-top: 8px;
-    display: block;
-    padding-left: 25px;
-}
-
-.helpText ul {
-    margin: 0 0 5px 0;
-    padding: 0;
-}
-
-.helpText ul li {
-    list-style: none;
-}
-
-.helpText li.head {
-    font-weight:bold;
-}
-
-.helpText ul ul,
-.helpText ul.info {
-    margin: 0;
-    padding: 0 0 0 30px;
-}
-
-.helpText ul li ul li,
-.helpText ul.info li {
-    list-style: disc;
-}
-
-.helpText ul.info li.no-icon {
-    list-style: none;
-}
-
-.helpText span.strike-through {
-    text-decoration: line-through;
-}
-
-.helpText div.important strong,
-.helpText strong.important {
-    color: #900;
-}
-
-.dateInput .ui-datepicker-trigger {
-    display: none;
-}
-
-.translation-badge, .help-badge {
+.badge.translation-badge {
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 1.1em;
     text-transform: uppercase;
 }
 
-.help-badge {
-    font-size: 1.1em;
-    cursor: pointer;
-    margin-left: 8px;
+#cmseditform .card {
+    margin-bottom: 0;
 }
 
 /**
@@ -410,4 +222,11 @@ label.switch .switch-slider::after {
     text-align: center;
     content: attr(data-inactive);
     transition: inherit;
+}
+
+/*
+ * TCMSFieldDateTime with seconds. Overwriting a styling error that comes from the datetimepicker plugin.
+ */
+.bootstrap-datetimepicker-widget.dropdown-menu.wider {
+    width: 38em !important;
 }

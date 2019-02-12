@@ -142,6 +142,28 @@ monolog:
        level: warning
 ```
 
+## New ImageCropBundle
+
+Chameleon now ships with a bundle that provides support for image cutouts. Install it as follows (this is required if
+the ChameleonShopThemeBundle is used, otherwise this step is optional):
+
+- Add `new \ChameleonSystem\ImageCropBundle\ChameleonSystemImageCropBundle()` to the AppKernel.
+- In a terminal, navigate to `<project root>/src/extensions/snippets-cms/` and create a symlink:
+
+  ```bash
+  ln -s ../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/snippets-cms/imageCrop
+  ```
+
+- Navigate to `<project root>/src/extensions/objectviews/TCMSFields` (create directory if it doesn't exist yet and
+  create a symlink:
+  ```bash
+  ln -s ../../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/objectviews/TCMSFields/TCMSFieldMediaWithImageCrop
+  ```
+
+- Run updates in the Chameleon backend.
+- Run assets:install console command.
+- Clear Symfony cache.
+
 ## Mailer Peer Security
 
 The default value of config key `chameleon_system_core: mailer: peer_security` was changed from "permissive" to "strict".
@@ -183,6 +205,14 @@ disabled by default, as its main benefit is now the backtrace feature. To enable
 The `backtrace_enabled` and `backtrace_limit` keys
 were moved under the `database_profiler` key (e.g. `chameleon_system_debug: database_profiler: backtrace_enabled`
 instead of `chameleon_system_debug: backtrace_enabled`). Existing configuration should be adjusted.
+
+## Access-denied Page
+
+The access-denied page should now support an additionally mapped parameter `loginFormAction` as a target action for the shown 
+login form. This avoids another and then unexpected AccessDeniedException when logging in from the access-denied page.
+Login still worked in that case however.
+If you use your own theme check the files `webModules/MTExtranet/accessDenied.view.php` and `snippets/common/userInput/form/formLoginStandard.html.twig`
+and adapt them according to the changes in **chameleon-shop-theme-bundle**. 
 
 ## TTools::GetModuleLoaderObject Returns New Object
 
@@ -317,6 +347,35 @@ backwards-compatible way from the `width` argument (if in doubt, `modal-xxl` is 
 
 Please check custom calls of `CreateModal...` methods and remove width/height settings where possible.
 
+## Backend Tree Path Rendering
+
+Tree paths are now rendered using Bootstrap 4 breadcrumb styles.
+Check your code for the CSS class "treeField" and if found, change the HTML to ol/li list with breadcrumb classes.
+See TCMSTreeNode::GetTreeNodePathAsBackendHTML() for an example. 
+
+## Font Awesome Icons
+
+The icons of Font Awesome have been added.
+They will replace all file icons and the glyphicons of Bootstrap3 in the backend.
+
+During migration, icons for main menu items will be replaced with matching Font Awesome icons. 
+
+Where icons cannot be matched, a default icon will be used; the database migrations will tell which icons could not be assigned. To manually assign an icon to a menu item representing a table, navigate to the table settings of this table and fill out the field "Icon Font CSS class". To manually assign an icon to a menu item representing a backend module, do this in the "CMS modules" menu respectively. See other menu items on what to write into these fields.
+
+## Backend Pagedef Configuration
+
+The backend now provides a new sidebar menu which will replace the classic main menu in a future version.
+If your project uses custom pagedef files (`*.pagedef.php`), consider adding the sidebar to these files. This is
+done by adding the following line after the module list definition:
+
+```php
+    addDefaultSidebar($moduleList);
+```
+
+There are additional helper methods to simplify adding typical backend modules, but it is optional to use these methods.
+See `src/CoreBundle/private/library/classes/pagedefFunctions.inc.php` for reference.
+
+
 # Deprecated Code Entities
 
 It is recommended that all references to the classes, interfaces, properties, constants, methods and services in the
@@ -372,7 +431,16 @@ is recommended (although this tool may not find database-related deprecations).
 ## Classes and Interfaces
 
 - \IPkgCmsCoreLog
+- \MTMenuManager
+- \TCMSContentBox
+- \TCMSContentBoxItem
+- \TCMSMenuItem
+- \TCMSMenuItem_Module
+- \TCMSMenuItem_Table
 - \TPkgCmsCoreLog
+- \TCMSFieldMediaProperties
+- \TPkgSnippetRenderer_TranslationNode
+- \TPkgSnippetRenderer_TranslationTokenParser
 
 ## Properties
 
@@ -398,6 +466,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \TCMSFieldColorPicker::isFirstInstance()
 - \TCMSFieldLookup::enableComboBox()
 - \TCMSLogChange::getUpdateLogger()
+- \TCMSTreeNode::GetPageTreeConnectionDateInformationHTML()
 - \TPkgCmsCoreSendToHost::setLogRequest()
 - \TPkgCmsException_Log::getLogger()
 - \TPkgCsv2Sql::CreateLogFileName()
@@ -414,20 +483,30 @@ is recommended (although this tool may not find database-related deprecations).
 - jquery.selectboxes.js
 - jQueryUI (everything in path src/CoreBundle/Resources/public/javascript/jquery/jQueryUI; drag and drop still used in the template engine).
 - pngForIE.htc
+- pNotify (new version 3.2.0 located in src/CoreBundle/Resources/public/javascript/pnotify-3.2.0/)
 - respond.min.js
+- src/CoreBundle/Resources/public/javascript/mainNav.js
 
 - $.addOption() (jquery.selectboxes plugin)
 - $.bgiframe()
 - $.blockUI();
+- $.everyTime()
 - $.jBreadCrumb()
 - $.jqDnR() (part of jqModal)
 - $.jqM() (jqModal)
+- $.oneTime()
+- $.stopTime()
+- $.tagInput()
 - $.unblockUI();
-- CreateModalIFrameDialogFromContentWithoutClose
+- $.wTooltip()
+- CreateModalIFrameDialogFromContentWithoutClose()
+- PublishViaAjaxCallback()
 - SetChangedDataMessage()
+- showMLTField()
 
 ## Translations
 
+- chameleon_system_core.action.return_to_main_menu
 - chameleon_system_core.field_options.option_value_false
 - chameleon_system_core.field_options.option_value_true
 - chameleon_system_core.fields.lookup.no_matches
@@ -435,8 +514,8 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Database Tables
 
-None.
+- cms_content_box
 
 ## Database Fields
 
-None.
+- cms_module.show_as_popup
