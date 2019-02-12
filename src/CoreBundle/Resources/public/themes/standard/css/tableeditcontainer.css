@@ -161,11 +161,6 @@
     cursor: hand;
 }
 
-.switchToRecordBox {
-    float: left;
-    margin-left: 20px;
-}
-
 .badge.translationStateIcon {
     font-size: 1.1em;
     padding: 0 .2em;
