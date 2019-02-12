@@ -111,7 +111,7 @@ class CMSModulePageTree extends TCMSModelBase
             $this->data['dataID'] = $this->global->GetUserData('id');
         }
 
-        $nodeID = $inputFilterUtil->getFilteredGetInput('rootID', '99');
+        $nodeID = $inputFilterUtil->getFilteredGetInput('rootID', TCMSTreeNode::TREE_ROOT_ID);
         $this->data['rootID'] = $nodeID;
         $this->iRootNode = $nodeID;
         $this->GetRootNodeName($nodeID);

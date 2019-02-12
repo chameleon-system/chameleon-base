@@ -23,6 +23,12 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
 {
     /**
+     * Hard-coded ID of the root tree node.
+     * This is a legacy value, please do not take it as an example on how to do things right.
+     */
+    public const TREE_ROOT_ID = '99';
+
+    /**
      * class internal cache array.
      *
      * @var array
