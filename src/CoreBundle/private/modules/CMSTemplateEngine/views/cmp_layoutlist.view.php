@@ -28,7 +28,7 @@ if (null === $editLanguage) {
 </form>
 <div class="p-2 mb-4">
 
-    <h1 class="display-4"><?=TGlobal::Translate('chameleon_system_core.template_engine.headline_layout'); ?></h1>
+    <div class="font-weight-bold mb-2"><?=TGlobal::Translate('chameleon_system_core.template_engine.headline_layout'); ?></div>
     <?php
     while ($oPageLayout = $data['oMasterDefs']->Next()) {
         /** @var $oPageLayout TdbCmsMasterPagedef */
@@ -71,7 +71,7 @@ if (null === $editLanguage) {
                 ?>
             <div class="card-footer p-2">
                 <div class="btn-group">
-                    <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:parent.document.getElementById('userwebpageiframe').src=\''.$url.'\';", 'far fa-eye'); ?>
+                    <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:parent.document.getElementById('userwebpageiframe').src='".$url."';", 'far fa-eye'); ?>
                     <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_use_page_template'), "javascript:document.setpagedef.sourcepagedef.value='".TGlobal::OutHTML($oPageLayout->id)."';document.setpagedef.submit();", 'far fa-check-circle'); ?>
                 </div>
             </div>
@@ -79,7 +79,7 @@ if (null === $editLanguage) {
             } else {
                 ?>
             <div class="card-footer p-2 bg-success">
-                <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:parent.document.getElementById('userwebpageiframe').src=\''.$url.'\';", 'far fa-eye'); ?>
+                <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:parent.document.getElementById('userwebpageiframe').src='".$url."';", 'far fa-eye'); ?>
             </div>
             <?php
             } ?>

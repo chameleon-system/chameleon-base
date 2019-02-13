@@ -478,6 +478,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::getModules()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
+- \CMSTemplateEngine::GetMainNavigation()
 - \MTTableManager::getAutocompleteRecordList()
 - \TCMSCronJob::getLogger()
 - \TCMSFieldColorPicker::isFirstInstance()

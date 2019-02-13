@@ -927,6 +927,25 @@ CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState = function (iFrameId, ur
     }
 };
 
+CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe = function () {
+    var webpageiFrame = $('#userwebpageiframe');
+
+    if (0 === webpageiFrame.length) {
+        return;
+    }
+
+    var bodyHeight = parseInt($(window).height());
+    var iFramePos = $('#templateengine .card-body').position();
+    var additionPaddings = 235;
+    var iFrameHeight = bodyHeight - iFramePos.top - additionPaddings;
+
+    if (iFrameHeight < 450){
+        iFrameHeight = 450;
+    }
+
+    webpageiFrame.css('height', iFrameHeight);
+};
+
 $(document).ready(function () {
     CHAMELEON.CORE.MTTableEditor.initTabs();
     CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
@@ -934,4 +953,5 @@ $(document).ready(function () {
     CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
     CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent('label.switch input[type=checkbox]');
     CHAMELEON.CORE.MTTableEditor.initHelpTexts();
+    CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe();
 });
