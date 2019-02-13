@@ -488,6 +488,7 @@ This bundle is not supported anymore and needs to be removed from the AppKernel.
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
 - \CMSTemplateEngine::GetLastRevisionNumber()
+- \CMSTemplateEngine::GetMainNavigation()
 - \CMSTemplateEngine::LoadRevisionData()
 - \MTTableEditor::ActivateRevision()
 - \MTTableEditor::AddNewRevision()

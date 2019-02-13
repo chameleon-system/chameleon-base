@@ -215,10 +215,11 @@ class CMSTemplateEngine extends TCMSModelBase
         $this->IsRecordLocked();
         $this->GetPermissionSettings();
 
+        $this->data['only_one_record_tbl'] = '0';
+        $this->data['oTableDefinition'] = $this->oTableManager->oTableConf;
         $this->data['tableid'] = $this->sTableID;
 
         $this->data['oTable'] = $this->oTableManager->oTableEditor->oTable;
-        $tableName = $this->oTableManager->oTableConf->sqlData['name'];
         $sTableTitle = $this->oTableManager->oTableConf->GetName();
         $this->data['sTableTitle'] = $sTableTitle;
 
@@ -240,7 +241,8 @@ class CMSTemplateEngine extends TCMSModelBase
         }
 
         if (is_null($this->sMode) || 'layout_selection' == $this->sMode || 'edit_content' == $this->sMode || 'preview_content' == $this->sMode) {
-            $view = $this->GetMainNavigation(); // container call
+            $this->filterMainNavigation();
+            $view = $this->getActiveModuleLayout();
             $this->SetTemplate('CMSTemplateEngine', $view);
             $this->data['sPreviewURL'] = $this->oTableManager->oTableEditor->GetPreviewURL();
         } else {
@@ -453,22 +455,24 @@ class CMSTemplateEngine extends TCMSModelBase
     }
 
     /**
-     * loads the navi into $data and returns the active menuItem.
-     *
-     * @return string
+     * Filters the main navigation items.
      */
-    protected function GetMainNavigation()
+    protected function filterMainNavigation(): void
     {
         $this->data['oMenuItems'] = $this->oTableManager->oTableEditor->GetMenuItems();
         $this->data['oMenuItems']->RemoveItem('sItemKey', 'save');
         $this->data['oMenuItems']->RemoveItem('sItemKey', 'copy');
         $this->data['oMenuItems']->RemoveItem('sItemKey', 'new');
         $this->data['oMenuItems']->RemoveItem('sItemKey', 'delete');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'revisionManagement');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'revisionManagementLoad');
         $this->data['oMenuItems']->RemoveItem('sItemKey', 'copy_translation');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'edittableconf');
+    }
 
+    /**
+     * Switches the module view to layout_selection if the page has no layout yet
+     * (otherwise the page is not viewable).
+     */
+    protected function getActiveModuleLayout(): string
+    {
         $view = 'layout_selection';
 
         // check if pagedef exists and switch to edit mode
@@ -488,6 +492,16 @@ class CMSTemplateEngine extends TCMSModelBase
         return $view;
     }
 
+    /**
+     * @deprecated since 6.3.0 - renamed and split into 2 methods: filterMainNavigation and getActiveModuleLayout.
+     */
+    protected function GetMainNavigation()
+    {
+        $this->filterMainNavigation();
+
+        return $this->getActiveModuleLayout();
+    }
+
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = array();
@@ -496,8 +510,7 @@ class CMSTemplateEngine extends TCMSModelBase
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tableeditcontainer.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/tableEditor.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/WayfarerTooltip/WayfarerTooltip.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tooltip.css" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
         if (!$this->IsRecordLocked() && array_key_exists('locking_active', $this->oTableManager->oTableConf->sqlData) && '1' == $this->oTableManager->oTableConf->sqlData['locking_active'] && !$this->bIsReadOnlyMode && CHAMELEON_ENABLE_RECORD_LOCK) {
             $aIncludes[] = '<script type="text/javascript">
@@ -526,6 +539,8 @@ class CMSTemplateEngine extends TCMSModelBase
     public function GetHtmlFooterIncludes()
     {
         $aIncludes = parent::GetHtmlFooterIncludes();
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
+
         if ('cmp_loadmoduleinstance' == $this->aModuleConfig['view']) {
             $aChooseModuleViewDialog = $this->getChooseModuleViewDialog();
             if (is_array($aChooseModuleViewDialog) && isset($aChooseModuleViewDialog['html'])) {

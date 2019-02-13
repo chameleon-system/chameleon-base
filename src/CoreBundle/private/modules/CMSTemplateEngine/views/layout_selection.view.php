@@ -1,8 +1,8 @@
 <?php require __DIR__.'/parts/navi.inc.php'; ?>
-<div class="card" id="templateengine">
-    <div class="card-header">
+<div class="card card-accent-primary mb-2" id="templateengine">
+    <div class="card-header p-1">
         <?php
-        require dirname(__FILE__).'/parts/header.inc.php';
+        require_once dirname(__FILE__).'/../../MTTableEditor/views/includes/editorheader.inc.php';
         ?>
     </div>
     <div class="card-body p-0">
