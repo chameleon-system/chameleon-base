@@ -32,7 +32,7 @@ class TCMSTableEditorEndPoint
     const DELETE_BLACKLIST_SESSION_VAR = 'aDeleteBlacklist';
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * session variable name for whitelists of all record revisions that will be loaded and may be
      * deleted in DeleteRecordReferences
@@ -589,7 +589,7 @@ class TCMSTableEditorEndPoint
                     }
 
                     /**
-                     * @deprecated since 6.3.0
+                     * @deprecated since 6.3.0 - revision management is no longer supported
                      *
                      * revision management.
                      */
@@ -1987,7 +1987,7 @@ class TCMSTableEditorEndPoint
      * called by the DeleteRecordReferences method on every property field for the current record being deleted.
      *
      * @param TCMSFieldDefinition $oPropertyField
-     * @param $bRevisionActivationMode bool - (@deprecated since 6.3.0)
+     * @param $bRevisionActivationMode bool - (@deprecated since 6.3.0 - revision management is no longer supported)
      */
     protected function DeleteRecordReferencesProperties(&$oPropertyField, $bRevisionActivationMode = false)
     {
@@ -2005,7 +2005,7 @@ class TCMSTableEditorEndPoint
 
             $sRecordIdWhiteList = '';
             /**
-             * @deprecated since 6.3.0
+             * @deprecated since 6.3.0 - revision management is no longer supported
              */
             if ($bRevisionActivationMode && $bAllowRecordReferenceDeletion) {
                 $sTableID = TTools::GetCMSTableId($propertyTable);
@@ -2158,7 +2158,7 @@ class TCMSTableEditorEndPoint
      * deletes all references from the deleted record to other records
      * property records and mlt connections.
      *
-     * @param bool $bRevisionActivationMode (@deprecated since 6.3.0)
+     * @param bool $bRevisionActivationMode (@deprecated since 6.3.0 - revision management is no longer supported)
      */
     public function DeleteRecordReferencesFromSource($bRevisionActivationMode = false)
     {
@@ -2549,7 +2549,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * checks for the last revision number for this record,
      * if no revisions are found it returns 0.
@@ -2572,7 +2572,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * saves the record with data from database.
      *
@@ -2589,7 +2589,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * saves the record with $postData
      * checks if postdata is valid and calls PostSaveHook after save.
@@ -2619,7 +2619,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * save record inc. mlt connections and properties.
      *
@@ -2665,7 +2665,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * Get array with field name as key and field value.
      *
@@ -2687,7 +2687,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * Get connected record ids.
      *
@@ -2707,7 +2707,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * save revision for connected properties.
      *
@@ -2741,7 +2741,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * save revision.
      *
@@ -2788,7 +2788,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * returns true if revision managament is activated for the CMS and the current table.
      *
@@ -2802,7 +2802,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * loads record revision and saves it as the current record.
      *
@@ -2901,7 +2901,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * loads revision and saves it as the current record.
      *
@@ -2946,7 +2946,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * get all child revisions recursively.
      *
@@ -2970,7 +2970,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * get mlt target ids for mlt fields.
      *
@@ -2996,7 +2996,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * Get connected record ids.
      *
@@ -3023,7 +3023,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * returns the revision number the current record is based on
      * if no revisions are found it returns 1.
@@ -3043,7 +3043,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * returns the revision object the current record is based on
      * if no revisions are found it returns null.
@@ -3062,7 +3062,7 @@ class TCMSTableEditorEndPoint
         return $oCmsRecordRevision;
     }
 
-    /*
+    /**
      * change position of current record
      * currently expects a list of ids to sort via get/post aPosOrder
 

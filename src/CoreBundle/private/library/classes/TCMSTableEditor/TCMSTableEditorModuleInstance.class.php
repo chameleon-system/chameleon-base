@@ -69,7 +69,7 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
      *
      * @param TdbCmsTblConf           $oModuleTableConf
      * @param TdbCmsTplModuleInstance $oCmsTplModuleInstance
-     * @param bool                    $bRevisionActivationMode (@deprecated since 6.3.0)
+     * @param bool                    $bRevisionActivationMode (@deprecated since 6.3.0 - revision management is no longer supported)
      *
      * @return TCMSRecordList $oModuleContentRecordList
      */
@@ -82,7 +82,7 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
         $sQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($oModuleTableConf->fieldName)."` WHERE `cms_tpl_module_instance_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sModuleInstanceID)."'";
 
         /**
-         * @deprecated since 6.3.0
+         * @deprecated since 6.3.0 - revision management is no longer supported
          */
         if ($bRevisionActivationMode) {
             $sTableID = $oModuleTableConf->id;
@@ -164,7 +164,7 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
      * deletes all references from the deleted record to other records
      * property records and mlt connections.
      *
-     * @param bool $bRevisionActivationMode (@deprecated since 6.3.0)
+     * @param bool $bRevisionActivationMode (@deprecated since 6.3.0 - revision management is no longer supported)
      */
     public function DeleteRecordReferencesFromSource($bRevisionActivationMode = false)
     {
@@ -175,7 +175,7 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
     /**
      * deleted references to this module instance in all tables with a cms_tpl_module_instance_id field.
      *
-     * @param bool $bRevisionActivationMode (@deprecated since 6.3.0)
+     * @param bool $bRevisionActivationMode (@deprecated since 6.3.0 - revision management is no longer supported)
      */
     protected function DeleteRecordReferenceModuleContent($bRevisionActivationMode = false)
     {

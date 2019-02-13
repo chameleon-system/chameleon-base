@@ -601,7 +601,7 @@ class TCMSTableEditorManager
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      */
     public function AddNewRevision(&$postData, $bPreventMessage = false)
     {
@@ -609,7 +609,7 @@ class TCMSTableEditorManager
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      */
     public function AddNewRevisionFromDatabase($oFields, $oProperty, $postData, $sParentId = '')
     {
@@ -617,7 +617,7 @@ class TCMSTableEditorManager
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * returns true if revision managament is activated for the CMS and the current table.
      *
@@ -629,7 +629,7 @@ class TCMSTableEditorManager
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * loads record revision and saves it as the current record.
      *
@@ -644,7 +644,7 @@ class TCMSTableEditorManager
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * returns the revision number the current record is based on
      * if no revisions are found it returns 0.

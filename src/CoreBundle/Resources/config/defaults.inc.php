@@ -336,7 +336,7 @@ if (!defined('CMS_SHOW_TASKS_INFORMATION')) {
 */
 if (!defined('CMS_ACTIVE_REVISION_MANAGEMENT')) {
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      */
     define('CMS_ACTIVE_REVISION_MANAGEMENT', false);
 }

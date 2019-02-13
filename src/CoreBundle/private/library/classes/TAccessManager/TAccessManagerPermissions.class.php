@@ -74,7 +74,7 @@ class TAccessManagerPermissions
     public $readonly = false;
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * is allowed to create and load record revisions.
      *
@@ -332,7 +332,7 @@ class TAccessManagerPermissions
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * get the permission status for the revision management right
      * note we assume that the user is in the same group as the table.

@@ -438,7 +438,7 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * loads revision management relevant data if active.
      */
@@ -683,7 +683,7 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * add new record revision using the postdata
      * executes Save() before saving the revision.
@@ -695,7 +695,7 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      */
     public function ActivateRevision()
     {
@@ -1047,7 +1047,7 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * checks for the last revision number for this record,
      * if no revisions are found it returns 0.

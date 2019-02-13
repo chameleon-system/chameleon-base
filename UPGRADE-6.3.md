@@ -439,6 +439,9 @@ is recommended (although this tool may not find database-related deprecations).
 
 - RevisionManagementBundle
 
+This bundle is not supported anymore and needs to be removed from the AppKernel.
+
+
 ## Log channels
 
 - Three newly defined log channels are deprecated and only necessary for backwards compatibility: chameleon_security, chameleon_dbal, chameleon_api
@@ -530,13 +533,13 @@ is recommended (although this tool may not find database-related deprecations).
 - $.tagInput()
 - $.unblockUI();
 - $.wTooltip()
+- ActivateRecordRevision()
+- AddNewRevision()
 - CreateModalIFrameDialogFromContentWithoutClose()
 - PublishViaAjaxCallback()
+- SaveNewRevision()
 - SetChangedDataMessage()
 - showMLTField()
-- AddNewRevision()
-- SaveNewRevision()
-- ActivateRecordRevision()
 
 ## Translations
 
@@ -545,23 +548,23 @@ is recommended (although this tool may not find database-related deprecations).
 - chameleon_system_core.field_options.option_value_true
 - chameleon_system_core.fields.lookup.no_matches
 - chameleon_system_core.record_lock.lock_owner_fax
-- chameleon_system_core.template_engine.header_revision
+- chameleon_system_core.record_revision.action_confirm_restore_revision
+- chameleon_system_core.record_revision.action_create_page_revision
+- chameleon_system_core.record_revision.action_new_revision
+- chameleon_system_core.record_revision.action_load_page_revision
+- chameleon_system_core.record_revision.action_load_revision
+- chameleon_system_core.record_revision.action_restore_revision
 - chameleon_system_core.record_revision.based_on
-- chameleon_system_core.record_revision.revision_number
+- chameleon_system_core.record_revision.confirm_restore_revision
+- chameleon_system_core.record_revision.description
+- chameleon_system_core.record_revision.header_new_revision
 - chameleon_system_core.record_revision.last_used_date
 - chameleon_system_core.record_revision.name
-- chameleon_system_core.record_revision.description
-- chameleon_system_core.record_revision.no_revision_exists
-- chameleon_system_core.record_revision.action_restore_revision
-- chameleon_system_core.record_revision.confirm_restore_revision
-- chameleon_system_core.record_revision.action_confirm_restore_revision
-- chameleon_system_core.record_revision.header_new_revision
 - chameleon_system_core.record_revision.new_revision_help
 - chameleon_system_core.record_revision.new_revision_number
-- chameleon_system_core.record_revision.action_new_revision
-- chameleon_system_core.record_revision.action_load_revision
-- chameleon_system_core.record_revision.action_create_page_revision
-- chameleon_system_core.record_revision.action_load_page_revision
+- chameleon_system_core.record_revision.no_revision_exists
+- chameleon_system_core.record_revision.revision_number
+- chameleon_system_core.template_engine.header_revision
 
 ## Database Tables
 

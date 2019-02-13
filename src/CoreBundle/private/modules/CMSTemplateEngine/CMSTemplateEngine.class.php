@@ -260,7 +260,7 @@ class CMSTemplateEngine extends TCMSModelBase
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * loads revision management relevant data if active.
      */
@@ -279,7 +279,7 @@ class CMSTemplateEngine extends TCMSModelBase
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * checks for the last revision number for this record,
      * if no revisions are found it returns 0.

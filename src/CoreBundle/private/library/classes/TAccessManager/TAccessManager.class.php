@@ -218,7 +218,7 @@ class TAccessManager
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * checks if the user has the permission to create and load record revisions.
      *

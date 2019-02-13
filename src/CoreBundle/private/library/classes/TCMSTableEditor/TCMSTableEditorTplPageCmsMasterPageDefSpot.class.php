@@ -40,7 +40,7 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * {@inheritdoc}
      */
@@ -55,7 +55,7 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * load module from spot and make revisions of the module instance and the connected module tables.
      *
@@ -77,7 +77,7 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * Make new revision from tables connected to given module.
      *
@@ -123,7 +123,7 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * Check if we can make a revision for the given table.
      * Revision is allowed when table field RevisionManagementActive is ture and
@@ -148,7 +148,7 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * Make new revision for given table record.
      *
@@ -165,7 +165,7 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      *
      * Make new revision for given module instance.
      *

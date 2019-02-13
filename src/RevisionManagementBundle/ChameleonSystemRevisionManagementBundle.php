@@ -14,7 +14,7 @@ namespace ChameleonSystem\RevisionManagementBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * @deprecated since 6.3.0
+ * @deprecated since 6.3.0 - revision management is no longer supported
  */
 class ChameleonSystemRevisionManagementBundle extends Bundle
 {

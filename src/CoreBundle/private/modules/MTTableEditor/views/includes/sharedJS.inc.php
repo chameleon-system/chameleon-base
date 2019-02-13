@@ -73,12 +73,12 @@ $rowCount = 0;
 
         <?php
         /**
-         * @deprecated since 6.3.0
+         * @deprecated since 6.3.0 - revision management is no longer supported
          */
         if ($bRevisionManagementActive) {
             ?>
         /**
-         * @deprecated since 6.3.0
+         * @deprecated since 6.3.0 - revision management is no longer supported
          */
         function AddNewRevision() {
             CreateModalDialogFromContainer('addNewRevisionDialog');
@@ -86,7 +86,7 @@ $rowCount = 0;
         }
 
         /**
-         * @deprecated since 6.3.0
+         * @deprecated since 6.3.0 - revision management is no longer supported
          */
         function SaveNewRevision() {
             document.cmseditform.elements['module_fnc[contentmodule]'].value = 'AddNewRevision';
@@ -99,7 +99,7 @@ $rowCount = 0;
         }
 
         /**
-         * @deprecated since 6.3.0
+         * @deprecated since 6.3.0 - revision management is no longer supported
          */
         function ActivateRecordRevision(id) {
             $("#dialog-confirm").dialog({
@@ -126,7 +126,7 @@ $rowCount = 0;
     </script>
 <?php
 /**
- * @deprecated since 6.3.0
+ * @deprecated since 6.3.0 - revision management is no longer supported
  */
 if ($bRevisionManagementActive) {
             ?>

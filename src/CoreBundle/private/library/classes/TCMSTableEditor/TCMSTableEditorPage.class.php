@@ -145,7 +145,7 @@ class TCMSTableEditorPage extends TCMSTableEditor
         $oMenuItemSave->sOnClick = "CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage('$deleteMessage');";
 
         /**
-         * @deprecated since 6.3.0
+         * @deprecated since 6.3.0 - revision management is no longer supported
          */
         if ($this->IsRevisionManagementActive() && $oGlobal->oUser->oAccessManager->HasRevisionManagementPermission($this->oTableConf->sqlData['name'])) {
             $oMenuItem = $this->oMenuItems->FindItemWithProperty('sItemKey', 'revisionManagement');

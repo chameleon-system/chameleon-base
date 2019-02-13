@@ -27,7 +27,7 @@ $oController = TGlobal::GetController();
     }
 
     /**
-     * @deprecated since 6.3.0
+     * @deprecated since 6.3.0 - revision management is no longer supported
      */
     if ($bRevisionManagementActive) {
         ?>
