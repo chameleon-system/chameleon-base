@@ -144,6 +144,9 @@ class TCMSTableEditorPage extends TCMSTableEditor
         $deleteMessage = addslashes(TGlobal::Translate('chameleon_system_core.template_engine.confirm_page_delete'));
         $oMenuItemSave->sOnClick = "CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage('$deleteMessage');";
 
+        /**
+         * @deprecated since 6.3.0
+         */
         if ($this->IsRevisionManagementActive() && $oGlobal->oUser->oAccessManager->HasRevisionManagementPermission($this->oTableConf->sqlData['name'])) {
             $oMenuItem = $this->oMenuItems->FindItemWithProperty('sItemKey', 'revisionManagement');
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.record_revision.action_create_page_revision');

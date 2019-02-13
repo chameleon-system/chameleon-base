@@ -218,6 +218,8 @@ class TAccessManager
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * checks if the user has the permission to create and load record revisions.
      *
      * @param string $table - name of the db-table

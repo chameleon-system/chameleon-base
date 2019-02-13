@@ -40,6 +40,8 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * {@inheritdoc}
      */
     protected function AddNewRevision_Execute($oFields, $oPostTable, $postData, $sParentId = '')
@@ -53,6 +55,8 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * load module from spot and make revisions of the module instance and the connected module tables.
      *
      * @param TCMSRecord $oRecordShortInfoData
@@ -73,6 +77,8 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * Make new revision from tables connected to given module.
      *
      * @param TdbCmsTplModule         $oCmsTplModule
@@ -117,6 +123,8 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * Check if we can make a revision for the given table.
      * Revision is allowed when table field RevisionManagementActive is ture and
      * the value of field name was cms_tpl_module_instance_id.
@@ -140,6 +148,8 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * Make new revision for given table record.
      *
      * @param TdbCmsTblConf $oModuleTableConf
@@ -155,6 +165,8 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * Make new revision for given module instance.
      *
      * @param TdbCmsTplModuleInstance $oCmsTplModuleInstance

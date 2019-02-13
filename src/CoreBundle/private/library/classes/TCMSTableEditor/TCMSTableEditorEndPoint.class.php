@@ -32,6 +32,8 @@ class TCMSTableEditorEndPoint
     const DELETE_BLACKLIST_SESSION_VAR = 'aDeleteBlacklist';
 
     /**
+     * @deprecated since 6.3.0
+     *
      * session variable name for whitelists of all record revisions that will be loaded and may be
      * deleted in DeleteRecordReferences
      * holds an TIterator object of all record revisions.
@@ -586,7 +588,11 @@ class TCMSTableEditorEndPoint
                         $this->oMenuItems->AddItem($oMenuItem);
                     }
 
-                    // revision management
+                    /**
+                     * @deprecated since 6.3.0
+                     *
+                     * revision management.
+                     */
                     if ($this->IsRevisionManagementActive() && $oGlobal->oUser->oAccessManager->HasRevisionManagementPermission($this->oTableConf->sqlData['name'])) {
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'revisionManagement';
@@ -1981,7 +1987,7 @@ class TCMSTableEditorEndPoint
      * called by the DeleteRecordReferences method on every property field for the current record being deleted.
      *
      * @param TCMSFieldDefinition $oPropertyField
-     * @param $bRevisionActivationMode bool
+     * @param $bRevisionActivationMode bool - (@deprecated since 6.3.0)
      */
     protected function DeleteRecordReferencesProperties(&$oPropertyField, $bRevisionActivationMode = false)
     {
@@ -1998,6 +2004,9 @@ class TCMSTableEditorEndPoint
             $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($propertyTable).'` WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($foreignKeyName)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'";
 
             $sRecordIdWhiteList = '';
+            /**
+             * @deprecated since 6.3.0
+             */
             if ($bRevisionActivationMode && $bAllowRecordReferenceDeletion) {
                 $sTableID = TTools::GetCMSTableId($propertyTable);
 
@@ -2149,7 +2158,7 @@ class TCMSTableEditorEndPoint
      * deletes all references from the deleted record to other records
      * property records and mlt connections.
      *
-     * @param bool $bRevisionActivationMode
+     * @param bool $bRevisionActivationMode (@deprecated since 6.3.0)
      */
     public function DeleteRecordReferencesFromSource($bRevisionActivationMode = false)
     {
@@ -2540,6 +2549,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * checks for the last revision number for this record,
      * if no revisions are found it returns 0.
      *
@@ -2561,6 +2572,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * saves the record with data from database.
      *
      * @param TIterator  $oFields
@@ -2576,6 +2589,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * saves the record with $postData
      * checks if postdata is valid and calls PostSaveHook after save.
      *
@@ -2604,6 +2619,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * save record inc. mlt connections and properties.
      *
      * @param TIterator  $oFields
@@ -2648,6 +2665,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * Get array with field name as key and field value.
      *
      * @param array     $aRevisionData
@@ -2668,6 +2687,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * Get connected record ids.
      *
      * @param TCMSField  $oField
@@ -2686,6 +2707,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * save revision for connected properties.
      *
      * @param TCMSField $oField
@@ -2718,6 +2741,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * save revision.
      *
      * @param array  $postData
@@ -2763,6 +2788,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * returns true if revision managament is activated for the CMS and the current table.
      *
      * @return bool
@@ -2775,6 +2802,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * loads record revision and saves it as the current record.
      *
      * @param string|null $sRevisionID
@@ -2872,6 +2901,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * loads revision and saves it as the current record.
      *
      * @param TdbCmsRecordRevision $oCMSRevisionToActivate
@@ -2915,6 +2946,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * get all child revisions recursively.
      *
      * @param string $sCmsRecordRevisionId
@@ -2937,6 +2970,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * get mlt target ids for mlt fields.
      *
      * @param TIterator $oFields
@@ -2961,6 +2996,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * Get connected record ids.
      *
      * @param TIterator  $oFields
@@ -2986,6 +3023,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * returns the revision number the current record is based on
      * if no revisions are found it returns 1.
      *
@@ -3004,6 +3043,8 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * returns the revision object the current record is based on
      * if no revisions are found it returns null.
      *

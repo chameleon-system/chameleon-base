@@ -175,6 +175,7 @@
             <trans-unit id="chameleon_system_core.template_engine.header_revision">
                 <source>chameleon_system_core.template_engine.header_revision</source>
                 <target>Version</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.header_navigation">
                 <source>chameleon_system_core.template_engine.header_navigation</source>
@@ -905,66 +906,82 @@
             <trans-unit id="chameleon_system_core.record_revision.based_on">
                 <source>chameleon_system_core.record_revision.based_on</source>
                 <target>basiert auf Rev.</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.revision_number">
                 <source>chameleon_system_core.record_revision.revision_number</source>
                 <target>Revision</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.last_used_date">
                 <source>chameleon_system_core.record_revision.last_used_date</source>
                 <target>zuletzt aktiviert</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.name">
                 <source>chameleon_system_core.record_revision.name</source>
                 <target>Titel</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.description">
                 <source>chameleon_system_core.record_revision.description</source>
                 <target>Beschreibung</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.no_revision_exists">
                 <source>chameleon_system_core.record_revision.no_revision_exists</source>
                 <target>unversioniert</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.action_restore_revision">
                 <source>chameleon_system_core.record_revision.action_restore_revision</source>
                 <target>Datensatzversion wiederherstellen</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.confirm_restore_revision">
                 <source>chameleon_system_core.record_revision.confirm_restore_revision</source>
                 <target><![CDATA[Sind Sie sicher, dass der aktuelle Datensatz mit einer älteren Version überschrieben werden soll?<br/>Legen Sie im Zweifelsfall eine neue Version des<br/>aktuellen Stands an.]]></target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.action_confirm_restore_revision">
                 <source>chameleon_system_core.record_revision.action_confirm_restore_revision</source>
                 <target>OK</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.header_new_revision">
                 <source>chameleon_system_core.record_revision.header_new_revision</source>
                 <target>Version anlegen</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.new_revision_help">
                 <source>chameleon_system_core.record_revision.new_revision_help</source>
                 <target>Hinweis: Zum jetzigen Zeitpunkt noch nicht gespeicherte Daten werden nicht mit versioniert und sind verloren.</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.new_revision_number">
                 <source>chameleon_system_core.record_revision.new_revision_number</source>
                 <target>Neue Version</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.action_new_revision">
                 <source>chameleon_system_core.record_revision.action_new_revision</source>
                 <target>Version anlegen</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.action_load_revision">
                 <source>chameleon_system_core.record_revision.action_load_revision</source>
                 <target>Version laden</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.action_create_page_revision">
                 <source>chameleon_system_core.record_revision.action_create_page_revision</source>
                 <target>Seitenversion anlegen</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.action_load_page_revision">
                 <source>chameleon_system_core.record_revision.action_load_page_revision</source>
                 <target>Seitenversion laden</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
 
 

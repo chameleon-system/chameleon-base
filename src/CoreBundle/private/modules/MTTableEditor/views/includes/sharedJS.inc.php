@@ -72,13 +72,22 @@ $rowCount = 0;
         var sCurrentRecordName = '<?=str_replace("'", "\'", htmlspecialchars_decode($oTable->GetName())); ?>';
 
         <?php
+        /**
+         * @deprecated since 6.3.0
+         */
         if ($bRevisionManagementActive) {
             ?>
+        /**
+         * @deprecated since 6.3.0
+         */
         function AddNewRevision() {
             CreateModalDialogFromContainer('addNewRevisionDialog');
             $('#cmsrevisionname').val(sCurrentRecordName);
         }
 
+        /**
+         * @deprecated since 6.3.0
+         */
         function SaveNewRevision() {
             document.cmseditform.elements['module_fnc[contentmodule]'].value = 'AddNewRevision';
             $("#cmseditform").prepend('<div id="hiddenTmpFormFields" style="display:none;"></div>');
@@ -89,7 +98,9 @@ $rowCount = 0;
             $('#cmseditform').submit();
         }
 
-
+        /**
+         * @deprecated since 6.3.0
+         */
         function ActivateRecordRevision(id) {
             $("#dialog-confirm").dialog({
                 resizable:false,
@@ -114,6 +125,9 @@ $rowCount = 0;
         ?>
     </script>
 <?php
+/**
+ * @deprecated since 6.3.0
+ */
 if ($bRevisionManagementActive) {
             ?>
     <div id="addNewRevisionDialog" style="display:none;">

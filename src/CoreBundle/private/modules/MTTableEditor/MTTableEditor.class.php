@@ -438,6 +438,8 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * loads revision management relevant data if active.
      */
     protected function LoadRevisionData()
@@ -681,6 +683,8 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * add new record revision using the postdata
      * executes Save() before saving the revision.
      */
@@ -690,6 +694,9 @@ class MTTableEditor extends TCMSModelBase
         $this->oTableManager->AddNewRevision($postData);
     }
 
+    /**
+     * @deprecated since 6.3.0
+     */
     public function ActivateRevision()
     {
         $sRecordRevisionId = $this->global->GetUserData('sRecordRevisionId');
@@ -1040,6 +1047,8 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * checks for the last revision number for this record,
      * if no revisions are found it returns 0.
      *

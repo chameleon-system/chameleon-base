@@ -26,6 +26,9 @@ $oController = TGlobal::GetController();
         <?php
     }
 
+    /**
+     * @deprecated since 6.3.0
+     */
     if ($bRevisionManagementActive) {
         ?>
         <th><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.template_engine.header_revision')); ?></th>
@@ -103,6 +106,9 @@ if ($oCmsLock) {
     <?php
         }
 
+/**
+ * @deprecated since 6.3.0
+ */
 if ($bRevisionManagementActive) {
     ?>
 <td class="revision<?=$iBaseRevisionNumber; ?>" style="cursor:pointer;">

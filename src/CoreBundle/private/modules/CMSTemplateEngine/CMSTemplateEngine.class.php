@@ -260,6 +260,8 @@ class CMSTemplateEngine extends TCMSModelBase
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * loads revision management relevant data if active.
      */
     protected function LoadRevisionData()
@@ -277,6 +279,8 @@ class CMSTemplateEngine extends TCMSModelBase
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * checks for the last revision number for this record,
      * if no revisions are found it returns 0.
      *

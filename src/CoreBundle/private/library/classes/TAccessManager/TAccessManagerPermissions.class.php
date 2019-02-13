@@ -74,6 +74,8 @@ class TAccessManagerPermissions
     public $readonly = false;
 
     /**
+     * @deprecated since 6.3.0
+     *
      * is allowed to create and load record revisions.
      *
      * @var bool
@@ -330,11 +332,13 @@ class TAccessManagerPermissions
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * get the permission status for the revision management right
      * note we assume that the user is in the same group as the table.
      *
      * @param TAccessManagerUser $oAccessManagerUser
-     * @param string             $table_id
+     * @param string $table_id
      *
      * @return bool
      */

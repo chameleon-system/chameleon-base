@@ -600,17 +600,25 @@ class TCMSTableEditorManager
         return $this->oTableEditor->IsRecordLocked();
     }
 
+    /**
+     * @deprecated since 6.3.0
+     */
     public function AddNewRevision(&$postData, $bPreventMessage = false)
     {
         return $this->oTableEditor->AddNewRevision($postData, $bPreventMessage);
     }
 
+    /**
+     * @deprecated since 6.3.0
+     */
     public function AddNewRevisionFromDatabase($oFields, $oProperty, $postData, $sParentId = '')
     {
         return $this->oTableEditor->AddNewRevisionFromDatabase($oFields, $oProperty, $postData, $sParentId);
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * returns true if revision managament is activated for the CMS and the current table.
      *
      * @return bool
@@ -621,6 +629,8 @@ class TCMSTableEditorManager
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * loads record revision and saves it as the current record.
      *
      * @param string $sRevisionID
@@ -634,10 +644,12 @@ class TCMSTableEditorManager
     }
 
     /**
+     * @deprecated since 6.3.0
+     *
      * returns the revision number the current record is based on
      * if no revisions are found it returns 0.
      *
-     * @return unknown
+     * @return int
      */
     public function GetLastActivatedRevision()
     {
