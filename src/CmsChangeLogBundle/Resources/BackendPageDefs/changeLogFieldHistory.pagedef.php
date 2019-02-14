@@ -3,10 +3,6 @@
 $layoutTemplate = 'frame';
 
 $moduleList = [
-    'pagetitle' => [
-        'model' => 'MTHeader',
-        'view' => 'title',
-    ],
     'contentmodule' => [
         'model' => 'MTTableManager',
         'view' => 'iframe',
