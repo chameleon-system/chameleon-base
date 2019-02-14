@@ -170,9 +170,9 @@ class Configuration implements ConfigurationInterface
         $subTree = $tree->root('backend');
         $subTree->addDefaultsIfNotSet();
         $subTree->children()
-            ->scalarNode('main_pagedef')
+            ->scalarNode('home_pagedef')
                 ->defaultValue('welcome')
-                ->info('The pagedef that is displayed after login and when clicking any "to main" button.')
+                ->info('The pagedef that is displayed after login and when clicking any "to home" button.')
             ->end();
 
         return $subTree;

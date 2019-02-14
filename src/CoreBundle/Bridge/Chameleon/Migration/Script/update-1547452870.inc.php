@@ -232,6 +232,7 @@ $iconMapping = array(
     'cms_portal' => 'fas fa-home',
     'shop_manufacturer' => 'fas fa-industry',
     'cms_dark_site_content' => 'fas fa-sign-out-alt',
+    'cms_image_crop_preset' => 'fas fa-sign-out-alt',
 );
 
 foreach ($iconMapping as $tableName => $iconName) {

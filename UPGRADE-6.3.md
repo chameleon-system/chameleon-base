@@ -396,7 +396,7 @@ error messages during migration that complain about missing shop tables and modu
 
 As the main menu is now displayed in the sidebar, the classic main menu was replaced by a welcome screen (which we plan
 to replace by a dashboard in a future Chameleon release). If users would like to keep the classic main menu yet, it can
-be restored by setting the config value `chameleon_system_core: backend: main_pagedef: 'main'` in `config.yml`.
+be restored by setting the config value `chameleon_system_core: backend: home_pagedef: 'main'` in `config.yml`.
 
 # Deprecated Code Entities
 

@@ -22,7 +22,7 @@ class ChameleonBackendController extends ChameleonController
     /**
      * @var string
      */
-    private $mainPagedef;
+    private $homePagedef;
 
     /**
      * {@inheritdoc}
@@ -30,7 +30,7 @@ class ChameleonBackendController extends ChameleonController
     public function getResponse()
     {
         $request = $this->getRequest();
-        $pagedef = $this->getInputFilterUtil()->getFilteredInput('pagedef', $this->mainPagedef);
+        $pagedef = $this->getInputFilterUtil()->getFilteredInput('pagedef', $this->homePagedef);
         $request->attributes->set('pagedef', $pagedef);
         $request->query->set('pagedef', $pagedef);
 
@@ -73,8 +73,8 @@ class ChameleonBackendController extends ChameleonController
         $this->backendAccessCheck = $backendAccessCheck;
     }
 
-    public function setMainPagedef(string $mainPagedef): void
+    public function setHomePagedef(string $homePagedef): void
     {
-        $this->mainPagedef = $mainPagedef;
+        $this->homePagedef = $homePagedef;
     }
 }
