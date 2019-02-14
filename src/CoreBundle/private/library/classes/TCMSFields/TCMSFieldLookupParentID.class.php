@@ -46,13 +46,13 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
         $showLinkToParentRecord = $this->oDefinition->GetFieldtypeConfigKey('bShowLinkToParentRecord');
 
         $html = $this->_GetHiddenField();
-        $itemName = $item->GetName();
 
         if ('true' == $showLinkToParentRecord && '' !== $this->data) {
             $foreignTableName = $this->GetConnectedTableName();
             $global = TGlobal::instance();
             if ($global->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
                 $html .= '<div class="d-flex align-items-center">';
+                $itemName = $item->GetName();
                 if ('' !== $itemName) {
                     $html .= '<div class="mr-2">' . $itemName . '</div>';
                 }
