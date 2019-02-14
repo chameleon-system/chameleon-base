@@ -82,7 +82,7 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
     public function GetHtmlHeadIncludes(): array
     {
         $includePaths = parent::GetHtmlHeadIncludes();
-        $includePaths[] = '<script src="bundles/chameleonsystemchangelog/javascript/versionHistoryActions.js" type="text/javascript"></script>';
+        $includePaths[] = '<script src="bundles/chameleonsystemchangelog/javascript/versionHistoryActions.dist.js" type="text/javascript"></script>';
 
         return $includePaths;
     }

@@ -248,7 +248,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
             $aIncludes = array();
         }
         $aIncludes[] = '<script src="'.URL_CMS.'/components/ckEditor/ckeditor/ckeditor.js" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="bundles/chameleonsystemchangelog/javascript/versionHistoryOverlay.js" type="text/javascript"></script>';
+        $aIncludes[] = '<script src="bundles/chameleonsystemchangelog/javascript/versionHistoryOverlay.dist.js" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURL(
                 '/chameleon/blackbox/javascript/CKEditor/chameleon.ckeditor.js'
             ).'" type="text/javascript"></script>';
