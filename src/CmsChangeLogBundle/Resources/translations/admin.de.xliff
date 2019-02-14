@@ -54,6 +54,10 @@
                 <source>chameleon_system_cms_change_log.action.version_history</source>
                 <target>Versionshistorie</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_change_log.version_history_error">
+                <source>chameleon_system_cms_change_log.version_history_error</source>
+                <target>Versionshistorie konnte nicht geladen werden.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
