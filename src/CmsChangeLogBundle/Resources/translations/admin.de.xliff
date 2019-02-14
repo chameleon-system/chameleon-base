@@ -50,8 +50,10 @@
                 <source>chameleon_system_cms_change_log.action.show_changes</source>
                 <target>Änderungen anzeigen</target>
             </trans-unit>
-
-
+            <trans-unit id="chameleon_system_cms_change_log.action.version_history">
+                <source>chameleon_system_cms_change_log.action.version_history</source>
+                <target>Versionshistorie</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
