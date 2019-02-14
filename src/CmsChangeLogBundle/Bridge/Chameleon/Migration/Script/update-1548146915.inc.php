@@ -36,7 +36,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ]);
 TCMSLogChange::insert(__LINE__, $data);
 
-TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_field_type'), 'version_history', 'fieldclass');
+TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_field_type'), 'version_history', 'base_type');
 
 $query = "ALTER TABLE `cms_field_type`
                         ADD `version_history` ENUM('0','1') DEFAULT '0' NOT NULL COMMENT 'Version History: Allows listing and restoring previous revisions of the field\'s value if table versioning is enabled.'";
