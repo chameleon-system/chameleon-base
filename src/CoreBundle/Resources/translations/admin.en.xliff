@@ -431,7 +431,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_lookup_multi_select.action_sort_connections">
                 <source>chameleon_system_core.field_lookup_multi_select.action_sort_connections</source>
-                <target>Order records</target>
+                <target>Sort records</target>
             </trans-unit>
 
 
@@ -539,7 +539,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_lookup_multi_select.sort">
                 <source>chameleon_system_core.field_lookup_multi_select.sort</source>
-                <target>Order records</target>
+                <target>Sort records</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_lookup_multi_select.connect_elements">
                 <source>chameleon_system_core.field_lookup_multi_select.connect_elements</source>
@@ -1846,7 +1846,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_header.action_main_menu">
                 <source>chameleon_system_core.cms_module_header.action_main_menu</source>
-                <target>Main menu</target>
+                <target>Home</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.cms_module_login.form_user_name">
@@ -2096,7 +2096,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.action.return_to_main_menu">
                 <source>chameleon_system_core.action.return_to_main_menu</source>
-                <target>Return to main menu</target>
+                <target>Return to home</target>
                 <note>@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
 

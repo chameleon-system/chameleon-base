@@ -4,7 +4,7 @@ if (isset($data['oUser'])) {
     <div id="cmsbreadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><i class="fas fa-home"></i>&nbsp;&nbsp;<a
-                        href="<?= PATH_CMS_CONTROLLER; ?>?pagedef=main&amp;_rmhist=true&amp;_histid=0"><?= $sMainMenuText; ?></a>
+                        href="<?= PATH_CMS_CONTROLLER; ?>?_rmhist=true&amp;_histid=0"><?= $sMainMenuText; ?></a>
             </li>
             <?php
     $maxCount = 8;

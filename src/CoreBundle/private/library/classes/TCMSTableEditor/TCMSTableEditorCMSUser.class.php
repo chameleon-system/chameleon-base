@@ -296,7 +296,6 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         TCMSUser::ReleaseOpenLocks(TCMSUser::GetActiveUser()->id);
         $oUser->SetAsActiveUser();
         $this->getRedirect()->redirectToActivePage(array(
-            'pagedef' => 'main',
             '_rmhist' => 'true',
             '_histid' => '0',
         ));
