@@ -6,6 +6,10 @@
     data-field-number-of-field-versions="{{ fieldVersionHistoryNumberOfVersions | e('html_attr') }}"
     data-field-version-history-view-url="{{ fieldVersionHistoryViewUrl | e('html_attr') }}"
 >
+    {% if fieldVersionHistoryError %}
+        <div class="alert alert-info">{{ 'chameleon_system_cms_change_log.version_history_error'|trans }}</div>
+    {% endif %}
+
     {% if couldNotLoadCustomCss %}
         <div class="alert alert-info">{{ 'chameleon_system_core.field_wysiwyg.custom_css_loading_error'|trans({'%url%': customCssUrl}) }}</div>
     {% endif %}
