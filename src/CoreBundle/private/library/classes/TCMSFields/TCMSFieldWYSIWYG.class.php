@@ -100,46 +100,6 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         $viewRenderer->AddSourceObject('fieldVersionHistoryViewUrl', $this->getFieldVersionHistoryViewUrl());
     }
 
-    /**
-     * @return array
-     */
-    private function getDefaultEditorSettings()
-    {
-        $aEditorSettings = array();
-
-        $sReadOnlyMode = 'false';
-        if ($this->bReadOnlyMode) {
-            $sReadOnlyMode = 'true';
-        }
-        $aEditorSettings['readOnly'] = $sReadOnlyMode;
-        $aEditorSettings['height'] = "'".$this->getEditorHeight()."'";
-        $aEditorSettings['width'] = "'".$this->getEditorWidth()."'";
-        $aEditorSettings['customConfig'] = "'".$this->getCustomConfigPath()."'";
-
-        $configProvider = $this->getCkeditorConfigProvider();
-        $settings = $this->bReadOnlyMode ? $configProvider->getSettingsReadonlyMode() : $configProvider->getSettingsEditableMode();
-
-        $aEditorSettings = array_merge($settings, $aEditorSettings);
-        if (false === $this->bReadOnlyMode) {
-            $aEditorSettings['toolbar_ChameleonDefault'] = $this->convertToolbar($this->getToolbar());
-            $aEditorSettings['extraPlugins'] = "'".implode(',', $this->getExtraPlugins())."'";
-            $aEditorSettings['fillEmptyBlocks'] = 'true';
-        }
-        $aEditorSettings['removePlugins'] = $this->convertDisabledPlugins($this->getDisabledPlugins());
-
-        $aEditorSettings['language'] = "'".$this->getLanguageCode()."'";
-
-        $aEditorSettings['enterMode'] = $this->getEnterMode();
-
-        $sUserCssUrl = $this->getEditorCSSUrl();
-        if ('' !== $sUserCssUrl) {
-            $aEditorSettings['contentsCss'] = "'".$sUserCssUrl."'";
-            $aEditorSettings['stylesSet'] = "'".$this->getUniqueStylesSetName($sUserCssUrl)."'";
-        }
-
-        return $aEditorSettings;
-    }
-    
     private function fieldHasVersionHistory(): bool
     {
         $fieldIsReadOnly = $this->bReadOnlyMode;
@@ -190,6 +150,46 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
             'sRestrictionField' => 'cms_field_conf',
             'sRestriction' => $fieldConfigurationId
         ], PATH_CMS_CONTROLLER.'?', '&');
+    }
+
+    /**
+     * @return array
+     */
+    private function getDefaultEditorSettings()
+    {
+        $aEditorSettings = array();
+
+        $sReadOnlyMode = 'false';
+        if ($this->bReadOnlyMode) {
+            $sReadOnlyMode = 'true';
+        }
+        $aEditorSettings['readOnly'] = $sReadOnlyMode;
+        $aEditorSettings['height'] = "'".$this->getEditorHeight()."'";
+        $aEditorSettings['width'] = "'".$this->getEditorWidth()."'";
+        $aEditorSettings['customConfig'] = "'".$this->getCustomConfigPath()."'";
+
+        $configProvider = $this->getCkeditorConfigProvider();
+        $settings = $this->bReadOnlyMode ? $configProvider->getSettingsReadonlyMode() : $configProvider->getSettingsEditableMode();
+
+        $aEditorSettings = array_merge($settings, $aEditorSettings);
+        if (false === $this->bReadOnlyMode) {
+            $aEditorSettings['toolbar_ChameleonDefault'] = $this->convertToolbar($this->getToolbar());
+            $aEditorSettings['extraPlugins'] = "'".implode(',', $this->getExtraPlugins())."'";
+            $aEditorSettings['fillEmptyBlocks'] = 'true';
+        }
+        $aEditorSettings['removePlugins'] = $this->convertDisabledPlugins($this->getDisabledPlugins());
+
+        $aEditorSettings['language'] = "'".$this->getLanguageCode()."'";
+
+        $aEditorSettings['enterMode'] = $this->getEnterMode();
+
+        $sUserCssUrl = $this->getEditorCSSUrl();
+        if ('' !== $sUserCssUrl) {
+            $aEditorSettings['contentsCss'] = "'".$sUserCssUrl."'";
+            $aEditorSettings['stylesSet'] = "'".$this->getUniqueStylesSetName($sUserCssUrl)."'";
+        }
+
+        return $aEditorSettings;
     }
 
     /**
