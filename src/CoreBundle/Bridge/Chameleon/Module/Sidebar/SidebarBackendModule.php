@@ -94,7 +94,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         return $this->urlUtil->getArrayAsUrl([
-            'pagedef' => 'main',
             'module_fnc' => [
                 $this->sModuleSpotName => 'ExecuteAjaxCall',
             ],
