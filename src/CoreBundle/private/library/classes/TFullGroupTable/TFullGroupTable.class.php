@@ -692,15 +692,15 @@ class TFullGroupTable extends TGroupTable
 
         $hitText = str_replace(array('$startRecord$', '$endRecord$', '$totalFound$'), array(($this->startRecord + 1), $next_startValue, $this->recordCount), $this->hitText);
         $tableNavigation .= '
-                    <div id="'.TGlobal::OutHTML($this->listName).'_navi">
+                    <div id="'.TGlobal::OutHTML($this->listName).'_navi" class="p-2">
         <script>
         function switchPage(startRecord) {
             document.'.$this->listName.'._startRecord.value = startRecord;
             document.'.$this->listName.'.submit();
         }
         </script>
-        <div class="row">';
-        $tableNavigation .= '<nav class="col-auto mr-auto">';
+        <div class="d-flex justify-content-between">';
+        $tableNavigation .= '<nav>';
         $tableNavigation .= '<ul class="pagination pagination-md TFullGroupTablePagination">';
         $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><span class="fas fa-list-ul" aria-hidden="true" style="margin-right: 5px;"></span>'.$hitText.'</a></li>';
 
@@ -758,7 +758,7 @@ class TFullGroupTable extends TGroupTable
         $tableNavigation .= '</nav>';
 
         if ($this->showRowsPerPageChooser) {
-            $tableNavigation .= '<div class="col-auto form-group mb-auto TFullGroupTablePerPageSelect">
+            $tableNavigation .= '<div class="TFullGroupTablePerPageSelect">
             <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_records_per_page')).'</span></div>
                 <select name="_limit" class="form-control" onChange="document.'.$this->listName.'._startRecord.value=0;document.'.$this->listName.'.submit();">
@@ -819,7 +819,7 @@ class TFullGroupTable extends TGroupTable
             }
         }
 
-        $filterHeader = "<div class=\"row TFullGroupTable\"><div class='form-inline'>\n";
+        $filterHeader = '<div class="d-flex TFullGroupTable">';
         $filterContent = '';
         // now add group selector (if activated)
         if (null !== $this->groupByCell && $this->showGroupSelector) {
@@ -897,7 +897,7 @@ class TFullGroupTable extends TGroupTable
         if (!is_null($this->searchBoxRow)) {
             $filterFooter .= $this->searchBoxRow;
         }
-        $filterFooter .= '</div></div>';
+        $filterFooter .= '</div>';
 
         if ($this->somethingToShow) {
             $filter .= $filterHeader;

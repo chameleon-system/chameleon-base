@@ -402,6 +402,14 @@ div.grippie {
     color: #576873;
 }
 
+.sidebar .nav-dropdown-items .nav-item {
+    background-color: #FFFFFF;
+}
+
+.sidebar .nav-dropdown-items .nav-link {
+    color: #000000 !important;
+}
+
 /**
 Bootstrap 4 addons.
  */

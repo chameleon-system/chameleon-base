@@ -202,7 +202,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
       'restrict_to_groups' => '0',
       'field_width' => '',
       'position' => '0',
-      '049_helptext' => '',
+      '049_helptext' => 'The field is used to display a font icon next to the menu item. Fill in the class name here, for example for Font Awesome: fas fa-check',
       'row_hexcolor' => '',
       'is_translatable' => '0',
       'validation_regex' => '',
@@ -218,6 +218,7 @@ TCMSLogChange::RunQuery(__LINE__, $query);
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
   ->setFields([
       'translation' => 'Icon Font CSS-Klasse',
+      '049_helptext' => 'In diesem Feld kann ein Font-Icon angegeben werden, das neben dem Menüeintrag dargestellt wird. Tragen Sie hier den Klassennamen ein, z.B. für Font Awesome: fas fa-check',
   ])
   ->setWhereEquals([
       'id' => $iconFontCssClassFieldId,
