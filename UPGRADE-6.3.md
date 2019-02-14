@@ -392,6 +392,12 @@ From a technical point no changes are required if the project is a shop system. 
 should consider removing menu categories that are nevertheless created during migration. Note that there will be some
 error messages during migration that complain about missing shop tables and modules in this case, which can be ignored. 
 
+## Home Page Changes
+
+As the main menu is now displayed in the sidebar, the classic main menu was replaced by a welcome screen (which we plan
+to replace by a dashboard in a future Chameleon release). If users would like to keep the classic main menu yet, it can
+be restored by setting the config value `chameleon_system_core: backend: main_pagedef: 'main'` in `config.yml`.
+
 # Deprecated Code Entities
 
 It is recommended that all references to the classes, interfaces, properties, constants, methods and services in the

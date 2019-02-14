@@ -485,7 +485,7 @@ function PublishViaAjaxCallback(data, statusText) {
 }
 
 function ReloadMainPage() {
-    window.parent.location.href = window.location.pathname + '?pagedef=main';
+    window.parent.location.href = window.location.pathname;
 }
 
 /*

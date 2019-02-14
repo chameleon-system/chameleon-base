@@ -19,6 +19,10 @@ class ChameleonBackendController extends ChameleonController
      * @var BackendAccessCheck
      */
     private $backendAccessCheck;
+    /**
+     * @var string
+     */
+    private $mainPagedef;
 
     /**
      * {@inheritdoc}
@@ -26,7 +30,7 @@ class ChameleonBackendController extends ChameleonController
     public function getResponse()
     {
         $request = $this->getRequest();
-        $pagedef = $this->getInputFilterUtil()->getFilteredInput('pagedef', 'main');
+        $pagedef = $this->getInputFilterUtil()->getFilteredInput('pagedef', $this->mainPagedef);
         $request->attributes->set('pagedef', $pagedef);
         $request->query->set('pagedef', $pagedef);
 
@@ -67,5 +71,10 @@ class ChameleonBackendController extends ChameleonController
     public function setBackendAccessCheck($backendAccessCheck)
     {
         $this->backendAccessCheck = $backendAccessCheck;
+    }
+
+    public function setMainPagedef(string $mainPagedef): void
+    {
+        $this->mainPagedef = $mainPagedef;
     }
 }
