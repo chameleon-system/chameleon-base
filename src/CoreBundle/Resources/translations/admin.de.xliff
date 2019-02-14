@@ -1236,7 +1236,6 @@
                 <source>chameleon_system_core.cms_module_media_manager.image_size</source>
                 <target>Bildgröße</target>
             </trans-unit>
-
             <trans-unit id="chameleon_system_core.table_editor_media.media_usage">
                 <source>chameleon_system_core.table_editor_media.media_usage</source>
                 <target>Verwendungen</target>
@@ -2201,6 +2200,10 @@
             <trans-unit id="chameleon_system_core.image_chooser.tree_node">
                 <source>chameleon_system_core.image_chooser.tree_node</source>
                 <target>Ordner</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.folder">
+                <source>chameleon_system_core.document_manager.folder</source>
+                <target>Verzeichnisse</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.insert_into_text">
                 <source>chameleon_system_core.document_manager.insert_into_text</source>

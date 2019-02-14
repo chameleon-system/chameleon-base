@@ -2202,6 +2202,10 @@
                 <source>chameleon_system_core.image_chooser.tree_node</source>
                 <target>Directory</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.folder">
+                <source>chameleon_system_core.document_manager.folder</source>
+                <target>Folder</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.insert_into_text">
                 <source>chameleon_system_core.document_manager.insert_into_text</source>
                 <target>Insert into text</target>
