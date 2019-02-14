@@ -46,15 +46,15 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
         $showLinkToParentRecord = $this->oDefinition->GetFieldtypeConfigKey('bShowLinkToParentRecord');
 
         $html = $this->_GetHiddenField();
-        $parentName = $item->GetName();
+        $itemName = $item->GetName();
 
         if ('true' == $showLinkToParentRecord && '' !== $this->data) {
             $foreignTableName = $this->GetConnectedTableName();
             $global = TGlobal::instance();
             if ($global->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
                 $html .= '<div class="d-flex align-items-center">';
-                if ('' !== $parentName) {
-                    $html .= '<div class="mr-2">' . $parentName . '</div>';
+                if ('' !== $itemName) {
+                    $html .= '<div class="mr-2">' . $itemName . '</div>';
                 }
                 $html .= '<div class="switchToRecordBox">' . TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), "javascript:document.location.href='".$this->GetEditLinkForParentRecord()."';", 'fas fa-download') . '</div>';
                 $html .= '</div>';
