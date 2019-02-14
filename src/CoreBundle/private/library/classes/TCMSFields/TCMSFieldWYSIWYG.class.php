@@ -139,10 +139,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
 
         return $aEditorSettings;
     }
-
-    /**
-     * @return bool
-     */
+    
     private function fieldHasVersionHistory(): bool
     {
         $fieldIsReadOnly = $this->bReadOnlyMode;
@@ -181,9 +178,6 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         return $numberOfChangeLogItems ?? 0;
     }
 
-    /**
-     * @return string
-     */
     private function getFieldVersionHistoryViewUrl(): string
     {
         $tableConfigurationId = TTools::GetCMSTableId(self::CHANGE_LOG_ITEM_TABLE_NAME);

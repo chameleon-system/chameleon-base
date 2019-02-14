@@ -59,12 +59,6 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
 
     // Formatting
 
-    /**
-     * @param $field
-     * @param array $row
-     * @param string $fieldName
-     * @return string
-     */
     public function getFieldTextWithAttributes($field, array $row, string $fieldName): string
     {
         $originalFieldValue = unserialize($row[$fieldName], ['allowed_classes' => []]);
@@ -89,17 +83,11 @@ class TCMSListManagerFieldHistory extends TCMSListManagerFullGroupTable
 
     // Dependencies
 
-    /**
-     * @return Connection
-     */
     private function getDatabaseConnection(): Connection
     {
         return ServiceLocator::get('database_connection');
     }
 
-    /**
-     * @return TranslatorInterface
-     */
     private function getTranslator(): TranslatorInterface
     {
         return ServiceLocator::get('translator');
