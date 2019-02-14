@@ -51,8 +51,6 @@ var VersionHistoryOverlay =
                 var _this = this;
 
                 window.addEventListener("message", function (event) {
-                    // TODO: Match field configuration id of current module against document instead of using global receiver reference.
-                    // If a proper id for the *field* can not be passed around, resigning to a global "lastSpeaker" is required.
                     if (window.versionHistoryOverlayEventReceiver !== _this) {
                         return;
                     }
