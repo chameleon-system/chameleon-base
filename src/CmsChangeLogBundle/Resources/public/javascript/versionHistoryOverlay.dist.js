@@ -67,15 +67,11 @@ var VersionHistoryOverlay =
         }, {
             key: "getMessageFromEvent",
             value: function getMessageFromEvent(event) {
-                var message = undefined;
-
                 try {
-                    message = JSON.parse(event.data);
+                    return JSON.parse(event.data);
                 } catch (_unused) {
                     return undefined;
                 }
-
-                return message;
             } // Set Up
 
         }, {

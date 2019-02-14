@@ -48,15 +48,11 @@ class VersionHistoryOverlay {
     }
 
     getMessageFromEvent(event) {
-        let message = undefined
-
         try {
-            message = JSON.parse(event.data)
+            return JSON.parse(event.data)
         } catch {
             return undefined
         }
-
-        return message
     }
 
     // Set Up
