@@ -59,7 +59,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields([
         'name' => 'version_history',
         'translation' => 'Versionshistorie',
-        '049_helptext' => 'Erlaubt bei aktivierter Versionierung der Tabelle die Auflistung und Wiederherstellung bisheriger Versionen des Feldwerts.', '',
+        '049_helptext' => 'Erlaubt bei aktivierter Versionierung der Tabelle die Auflistung und Wiederherstellung bisheriger Versionen des Feldwerts.',
     ])->setWhereEquals([
         'id' => $fieldConfigurationId
     ]);
