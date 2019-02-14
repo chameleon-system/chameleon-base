@@ -8,8 +8,8 @@
 </script>
 
 <div{% if displayFull is not defined or displayFull == false %} class="p-4"{% endif %}>
-    <div class="row" style="height: 100%; margin-right: 0px;">
-        <div class="col-12 col-xl-3 mb-4" style="height: 100%;">
+    <div class="row">
+        <div class="col-12 col-xl-3 mb-4">
             {% if displayFull is not defined or displayFull == false %}
                 <h3>
                     {{'chameleon_system_core.cms_module_media_manager.folder'|trans}}
@@ -18,7 +18,7 @@
             <div id="treePlacer"></div>
         </div>
 
-        <div style="height: 100%; padding-right: 0px" class="col-12 col-xl-9 mb-4">
+        <div class="col-12 col-xl-9 mb-4">
             <div class="row button-element">
                 {% if wysiwygMode != '' %}
                     <div class="button-item col">
@@ -48,17 +48,13 @@
             </div>
 
             {% set url = pathCmsController ~ '?pagedef=tableManagerDocumentManager&id='~id~'&CKEditorFuncNum='~CKEditorFuncNum %}
-            {% set height = '95%' %}
-            {% set iFrameHeight = '100%' %}
+            {% set iFrameHeight = '660px' %}
             {% if recordID != '' %}
                 {% set url = url~'&mltTable='~mltTable~'&recordID='~recordID %}
-                {% set height = '50%' %}
-                {% set iFrameHeight = '100%' %}
+                {% set iFrameHeight = '300px' %}
             {% endif %}
 
-            <div style="height: {{ height }}; background-color: #fff;">
-                <iframe id="fileList" src="{{url}}" frameborder="0" style="width:100%; height: {{ iFrameHeight }};"></iframe>
-            </div>
+            <iframe id="fileList" src="{{url}}" frameborder="0" style="width:100%; height: {{ iFrameHeight }};"></iframe>
 
             {% if recordID != '' %}
                 <hr />
@@ -79,9 +75,7 @@
                     </div>
                 </div>
 
-                <div style="height: {{ height }}; background-color: #fff;">
-                    <iframe id="selectedFileList" src="{{ pathCmsController }}?pagedef=tableManagerDocumentManagerSelected&id={{id}}&sRestrictionField={{tableName}}_mlt&sRestriction={{recordID}}&fieldName={{fieldName}}" frameborder="0" style="width:100%; height: {{ iFrameHeight }};"></iframe>
-                </div>
+                <iframe id="selectedFileList" src="{{ pathCmsController }}?pagedef=tableManagerDocumentManagerSelected&id={{id}}&sRestrictionField={{tableName}}_mlt&sRestriction={{recordID}}&fieldName={{fieldName}}" frameborder="0" style="width:100%; height: {{ iFrameHeight }};"></iframe>
             {% endif %}
         </div>
     </div>

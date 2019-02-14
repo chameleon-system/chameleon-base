@@ -17,20 +17,25 @@
     float: right;
 }
 
-.row.TFullGroupTable {
-    margin: 5px 0px 5px 5px;
+.TFullGroupTable {
+    margin: .5rem 0;
 }
 
-.TFullGroupTable .form-inline label {
+.TFullGroupTable .form-group {
+    padding: .5rem;
+    margin-bottom: 0;
+}
+
+.TFullGroupTable label {
     margin-right: 5px;
     margin-bottom: 0px;
 }
 
-.TFullGroupTable .form-inline .form-control {
+.TFullGroupTable .form-control {
     margin-right: 5px;
 }
 
-.TFullGroupTable .form-inline #searchLookup {
+.TFullGroupTable #searchLookup {
     width: 400px;
 }
 
