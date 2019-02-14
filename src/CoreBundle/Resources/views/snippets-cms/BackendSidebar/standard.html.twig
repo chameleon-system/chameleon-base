@@ -8,14 +8,21 @@
     <nav class="sidebar-nav">
         <ul class="nav">
             {% for category in menuItems %}
-                <li class="nav-title">{{ category.name }}</li>
-                {% for menuItem in category.menuItems %}
-                    <li class="nav-item">
-                        <a href="{{ menuItem.url }}" class="nav-link">
-                            <i class="nav-icon {{ menuItem.icon|e('html_attr') }}"></i>{{ menuItem.name }}
-                        </a>
-                    </li>
-                {% endfor %}
+                <li class="nav-item nav-dropdown">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                        <i class="nav-icon {{ category.iconFontCssClass|default('fas fa-sign-out-alt') }}"></i>
+                        {{ category.name }}
+                    </a>
+                    <ul class="nav-dropdown-items">
+                        {% for menuItem in category.menuItems %}
+                            <li class="nav-item">
+                                <a href="{{ menuItem.url }}" class="nav-link">
+                                    <i class="nav-icon {{ menuItem.icon|e('html_attr') }}"></i>{{ menuItem.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
             {% endfor %}
         </ul>
         <div class="ps__rail-x">

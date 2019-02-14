@@ -6,24 +6,24 @@
 <?php
 
 $categoryDef = <<<EOT
-contents # Contents # Inhalte
-products # Products & categories # Produkte & Kategorien
-productlists # Product lists # Produktlisten
-discounts # Discounts & vouchers # Rabatte & Gutscheine
-orders # Orders # Bestellungen
-checkout # Checkout # Checkout
-externalusers # Customers / users # Kunden / Benutzer
-ratings # Shop ratings # Shop-Bewertungen
-search # Search # Suche
-analytics # Analytics # Analyse
-communication # Communication # Kommunikation
-dataexchange # Data exchange # Datenaustausch
-layout # Layout # Layout
-internationalization # Internationalization # Internationalisierung
-internalusers # Internal users # Interne Benutzer
-logs # Logs # Logs
-routing # Routing # Routing
-system # System # System
+contents             # Contents              # Inhalte               # fas fa-file-alt
+products             # Products & categories # Produkte & Kategorien # fas fa-cubes
+productlists         # Product lists         # Produktlisten         # fas fa-boxes
+discounts            # Discounts & vouchers  # Rabatte & Gutscheine  # fas fa-gift
+orders               # Orders                # Bestellungen          # fas fa-shopping-basket
+checkout             # Checkout              # Checkout              # fas fa-truck-monster
+externalusers        # Customers / users     # Kunden / Benutzer     # fas fa-user
+ratings              # Shop ratings          # Shop-Bewertungen      # fas fa-star
+search               # Search                # Suche                 # fas fa-search
+analytics            # Analytics             # Analyse               # fas fa-chart-pie
+communication        # Communication         # Kommunikation         # fas fa-at
+dataexchange         # Data exchange         # Datenaustausch        # fas fa-exchange-alt
+layout               # Layout                # Layout                # far fa-address-card
+internationalization # Internationalization  # Internationalisierung # fas fa-flag
+internalusers        # Internal users        # Interne Benutzer      # fas fa-user-lock
+logs                 # Logs                  # Logs                  # fas fa-clipboard-list
+routing              # Routing               # Routing               # fas fa-random
+system               # System                # System                # fas fa-cog
 EOT;
 
 $categoryLines = \explode(PHP_EOL, $categoryDef);
@@ -31,7 +31,7 @@ $position = 0;
 
 foreach ($categoryLines as $categoryLine) {
     $id = TCMSLogChange::createUnusedRecordId('cms_menu_category');
-    [$systemName, $nameEn, $nameDe] = \explode(' # ', $categoryLine);
+    [$systemName, $nameEn, $nameDe, $iconFontCssClass] = \preg_split('/\s+#\s+/', $categoryLine);
 
     $data = TCMSLogChange::createMigrationQueryData('cms_menu_category', 'en')
         ->setFields([
@@ -39,6 +39,7 @@ foreach ($categoryLines as $categoryLine) {
             'name' => $nameEn,
             'position' => $position,
             'system_name' => $systemName,
+            'icon_font_css_class' => $iconFontCssClass,
         ])
     ;
     TCMSLogChange::insert(__LINE__, $data);

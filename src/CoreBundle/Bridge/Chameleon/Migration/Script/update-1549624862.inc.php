@@ -33,7 +33,7 @@ $fieldId = TCMSLogChange::GetTableFieldId(TCMSLogChange::GetTableId('cms_tbl_con
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
-      '049_helptext' => 'The field is used to display a font icon to the menu item of the table. Fill in the class name here, for example for Font Awesome: fas fa-check
+      '049_helptext' => 'The field is used to display a font icon next to the menu item of the table. Fill in the class name here, for example for Font Awesome: fas fa-check
 
 @deprecated since 6.3.0 - configure CSS classes in the main menu item configuration instead.',
   ])
@@ -83,7 +83,7 @@ $fieldId = TCMSLogChange::GetTableFieldId(TCMSLogChange::GetTableId('cms_module'
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields([
-        '049_helptext' => 'The field is used to display a font icon to the menu item of the module. Fill in the class name here, for example for Font Awesome: fas fa-check
+        '049_helptext' => 'The field is used to display a font icon next to the menu item of the module. Fill in the class name here, for example for Font Awesome: fas fa-check
 
 @deprecated since 6.3.0 - configure CSS classes in the main menu item configuration instead.',
     ])
