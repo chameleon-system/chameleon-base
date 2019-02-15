@@ -67,7 +67,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         try {
             $this->mapVersionHistoryParameters($oViewRenderer);
         } catch (DataAccessException $e) {
-            $oViewRenderer->AddSourceObject('fieldVersionHistoryError', $e->getMessage())
+            $oViewRenderer->AddSourceObject('fieldVersionHistoryError', $e->getMessage());
         }
 
         return $oViewRenderer->Render('TCMSFieldWYSIWYG/cKEditor/editor.html.twig', null, false);
