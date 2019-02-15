@@ -740,7 +740,6 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
 
     private function getLogger(): LoggerInterface
     {
-        // TODO already use this with 6.2?
         return ServiceLocator::get('logger');
     }
 }
