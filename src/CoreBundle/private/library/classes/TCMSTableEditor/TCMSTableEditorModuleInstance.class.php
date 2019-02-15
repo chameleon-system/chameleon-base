@@ -80,31 +80,6 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
         /** @var $oModuleContentRecordList TCMSRecordList */
         $oModuleContentRecordList = new $sClassName();
         $sQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($oModuleTableConf->fieldName)."` WHERE `cms_tpl_module_instance_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sModuleInstanceID)."'";
-
-        /**
-         * @deprecated since 6.3.0 - revision management is no longer supported
-         */
-        if ($bRevisionActivationMode) {
-            $sTableID = $oModuleTableConf->id;
-
-            if (array_key_exists(self::DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR, $_SESSION)) {
-                /** @var $oRevisionDataIterator TIterator */
-                $oRevisionDataIterator = $_SESSION[self::DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR];
-
-                /** @var $oMatchingRevisions TIterator */
-                $oMatchingRevisions = $oRevisionDataIterator->FindItemsWithProperty('fieldCmsTblConfId', $sTableID);
-                $aIDs = array();
-                while ($oMatchingRevision = $oMatchingRevisions->Next()) {
-                    $aIDs[] = $oMatchingRevision->fieldRecordid;
-                }
-
-                if (count($aIDs) > 0) {
-                    $sRecordIdWhiteList = "'".implode("','", TTools::MysqlRealEscapeArray($aIDs))."'";
-                    $sQuery .= ' AND `'.MySqlLegacySupport::getInstance()->real_escape_string($oModuleTableConf->fieldName).'`.`id` IN ('.$sRecordIdWhiteList.')';
-                }
-            }
-        }
-
         $oModuleContentRecordList->Load($sQuery);
 
         return $oModuleContentRecordList;

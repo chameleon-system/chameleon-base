@@ -268,16 +268,6 @@ class CMSTemplateEngine extends TCMSModelBase
      */
     protected function LoadRevisionData()
     {
-        $this->data['bRevisionManagementActive'] = false;
-        $bRevisionManagementActive = $this->oTableManager->IsRevisionManagementActive();
-        if ($bRevisionManagementActive) {
-            $this->data['bRevisionManagementActive'] = $bRevisionManagementActive;
-            $sLastRevisionNumber = $this->GetLastRevisionNumber();
-            $this->data['iLastRevisionNumber'] = $sLastRevisionNumber;
-            $iBaseRevisionNumber = $this->oTableManager->oTableEditor->GetLastActivatedRevision();
-            $this->data['iBaseRevisionNumber'] = $iBaseRevisionNumber;
-            $this->data['oLastRevision'] = $this->oTableManager->oTableEditor->GetLastActivatedRevisionObject();
-        }
     }
 
     /**
@@ -290,9 +280,7 @@ class CMSTemplateEngine extends TCMSModelBase
      */
     protected function GetLastRevisionNumber()
     {
-        $iLastRevisionNumber = $this->oTableManager->oTableEditor->GetLastRevisionNumber();
-
-        return $iLastRevisionNumber;
+        return 0;
     }
 
     /**

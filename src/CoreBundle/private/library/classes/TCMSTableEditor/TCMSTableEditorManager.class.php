@@ -605,7 +605,7 @@ class TCMSTableEditorManager
      */
     public function AddNewRevision(&$postData, $bPreventMessage = false)
     {
-        return $this->oTableEditor->AddNewRevision($postData, $bPreventMessage);
+        return false;
     }
 
     /**
@@ -613,7 +613,7 @@ class TCMSTableEditorManager
      */
     public function AddNewRevisionFromDatabase($oFields, $oProperty, $postData, $sParentId = '')
     {
-        return $this->oTableEditor->AddNewRevisionFromDatabase($oFields, $oProperty, $postData, $sParentId);
+        return false;
     }
 
     /**
@@ -625,7 +625,7 @@ class TCMSTableEditorManager
      */
     public function IsRevisionManagementActive()
     {
-        return $this->oTableEditor->IsRevisionManagementActive();
+        return false;
     }
 
     /**
@@ -636,11 +636,11 @@ class TCMSTableEditorManager
      * @param string $sRevisionID
      * @param bool   $bIsChildRevision
      *
-     * @return TCMSstdClass
+     * @return TCMSstdClass|null
      */
     public function ActivateRecordRevision($sRevisionID = null, $bIsChildRevision = false)
     {
-        return $this->oTableEditor->ActivateRecordRevision($sRevisionID, $bIsChildRevision);
+        return null;
     }
 
     /**
@@ -653,7 +653,7 @@ class TCMSTableEditorManager
      */
     public function GetLastActivatedRevision()
     {
-        return $this->oTableEditor->GetLastActivatedRevision();
+        return 0;
     }
 
     /**

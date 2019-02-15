@@ -228,16 +228,7 @@ class TAccessManager
      */
     public function HasRevisionManagementPermission($table)
     {
-        if (is_null($this->user)) {
-            trigger_error('User needs to be Initiated before you can get table permissions', E_USER_ERROR);
-
-            return false;
-        } else {
-            // get permissions...
-            $permission = $this->GetTablePermissions($table);
-
-            return $permission->revisionManagement;
-        }
+        return false;
     }
 
     /**

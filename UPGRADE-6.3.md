@@ -225,6 +225,10 @@ loader. This instance will therefore only contain the module passed as argument,
 
 Log output is no longer collected and no longer sent as attachments with the notification email.
 
+## RevisionManagementBundle
+
+This bundle is not supported anymore.
+
 ## RequestInfoService
 
 - New method `getRequestId()`.
@@ -434,13 +438,6 @@ is recommended (although this tool may not find database-related deprecations).
 
 - chameleon_system_debug: backtrace_enabled
 - chameleon_system_debug: backtrace_limit
-
-## Bundles
-
-- RevisionManagementBundle
-
-This bundle is not supported anymore and needs to be removed from the AppKernel.
-
 
 ## Log channels
 

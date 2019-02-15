@@ -46,12 +46,7 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
      */
     protected function AddNewRevision_Execute($oFields, $oPostTable, $postData, $sParentId = '')
     {
-        $oRecordShortInfoData = parent::AddNewRevision_Execute($oFields, $oPostTable, $postData, $sParentId);
-        if (false !== $oRecordShortInfoData) {
-            $this->AddNewRevisionForModuleInstances($oRecordShortInfoData, $postData);
-        }
-
-        return $oRecordShortInfoData;
+        return false;
     }
 
     /**
@@ -64,16 +59,6 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
      */
     protected function AddNewRevisionForModuleInstances($oRecordShortInfoData, $postDataFromParentRevision)
     {
-        $oCmsTplModuleInstance = $this->oTable->GetFieldCmsTplModuleInstance();
-        if (is_object($oCmsTplModuleInstance) && property_exists($oCmsTplModuleInstance, 'id') && !empty($oCmsTplModuleInstance->id)) {
-            $oCmsTplModule = $oCmsTplModuleInstance->GetFieldCmsTplModule();
-            if (!is_null($oCmsTplModule) && is_object($oCmsTplModule)) {
-                $this->AddNewRevisionModuleInstance($oCmsTplModuleInstance, $postDataFromParentRevision, $oRecordShortInfoData);
-                if ($oCmsTplModule->fieldRevisionManagementActive) {
-                    $this->AddNewRevisionModuleConnectedTables($oCmsTplModule, $oCmsTplModuleInstance, $postDataFromParentRevision, $oRecordShortInfoData);
-                }
-            }
-        }
     }
 
     /**
@@ -88,18 +73,6 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
      */
     protected function AddNewRevisionModuleConnectedTables($oCmsTplModule, $oCmsTplModuleInstance, $postDataFromParentRevision, $oRecordShortInfoData)
     {
-        $oModuleTableConfList = $oCmsTplModule->GetFieldCmsTblConfList();
-        $oModuleConnectedTableEditor = new TCMSTableEditorManager();
-        /** @var $oTableEditor TCMSTableEditorManager */
-        while ($oModuleTableConf = $oModuleTableConfList->Next()) {
-            if ($this->IsRevisonAllowedConnectedTable($oModuleTableConf)) {
-                $oModuleContentRecordList = $this->GetConnectedTableRecords($oModuleTableConf, $oCmsTplModuleInstance);
-                while ($oModuleContentRecord = $oModuleContentRecordList->Next()) {
-                    /** @var $oModuleContentRecord TCMSRecord */
-                    $this->AddNewRevisionModuleConnectedTableRecord($oModuleConnectedTableEditor, $oModuleTableConf, $oModuleContentRecord, $postDataFromParentRevision, $oRecordShortInfoData);
-                }
-            }
-        }
     }
 
     /**
@@ -135,16 +108,7 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
      */
     protected function IsRevisonAllowedConnectedTable($oModuleTableConf)
     {
-        $bIsRevisionAllowedConnectedTable = false;
-        if ('1' == $oModuleTableConf->fieldRevisionManagementActive) {
-            $query = "SELECT * FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oModuleTableConf->id)."' AND `name` = 'cms_tpl_module_instance_id'";
-            $result = MySqlLegacySupport::getInstance()->query($query);
-            if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
-                $bIsRevisionAllowedConnectedTable = true;
-            }
-        }
-
-        return $bIsRevisionAllowedConnectedTable;
+        return false;
     }
 
     /**
@@ -159,9 +123,6 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
      */
     protected function AddNewRevisionModuleConnectedTableRecord($oModuleConnectedTableEditor, $oModuleTableConf, $oModuleContentRecord, $postDataFromParentRevision, $oRecordShortInfoData)
     {
-        $oModuleConnectedTableEditor->Init($oModuleTableConf->id, $oModuleContentRecord->id);
-        $oModuleFields = $oModuleTableConf->GetFields($oModuleContentRecord);
-        $oModuleConnectedTableEditor->AddNewRevisionFromDatabase($oModuleFields, $oModuleContentRecord, $postDataFromParentRevision, $oRecordShortInfoData->id);
     }
 
     /**
@@ -177,18 +138,7 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
      */
     protected function AddNewRevisionModuleInstance($oCmsTplModuleInstance, $postDataFromParentRevision, $oRecordShortInfoData)
     {
-        $iCmsTplModuleInstanceTableID = TTools::GetCMSTableId('cms_tpl_module_instance');
-        $oCmsTplModuleInstanceTableEditor = new TCMSTableEditorManager();
-        /** @var $oTableEditor TCMSTableEditorManager */
-        $oCmsTplModuleInstanceTableEditor->Init($iCmsTplModuleInstanceTableID, $oCmsTplModuleInstance->id);
-        $oCmsTplModuleInstanceTableConf = $oCmsTplModuleInstance->GetTableConf();
-        /** @var $oPropetyTableConf TCMSTableConf */
-        $oFields = $oCmsTplModuleInstanceTableConf->GetFields($oCmsTplModuleInstance);
-        /** @var $oFields TIterator */
-        $oFields->RemoveItem('name', 'cms_tpl_page_cms_master_pagedef_spot');
-        $bSuccess = $oCmsTplModuleInstanceTableEditor->AddNewRevisionFromDatabase($oFields, $oCmsTplModuleInstance, $postDataFromParentRevision, $oRecordShortInfoData->id);
-
-        return $bSuccess;
+        return false;
     }
 
     /**

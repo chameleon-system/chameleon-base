@@ -588,41 +588,6 @@ class TCMSTableEditorEndPoint
                         $this->oMenuItems->AddItem($oMenuItem);
                     }
 
-                    /**
-                     * @deprecated since 6.3.0 - revision management is no longer supported
-                     *
-                     * revision management.
-                     */
-                    if ($this->IsRevisionManagementActive() && $oGlobal->oUser->oAccessManager->HasRevisionManagementPermission($this->oTableConf->sqlData['name'])) {
-                        $oMenuItem = new TCMSTableEditorMenuItem();
-                        $oMenuItem->sItemKey = 'revisionManagement';
-                        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.record_revision.action_new_revision');
-                        $oMenuItem->sIcon = 'fas fa-folder-plus';
-                        $oMenuItem->sOnClick = 'AddNewRevision();';
-                        $this->oMenuItems->AddItem($oMenuItem);
-
-                        $sRecordRevisionTableID = TTools::GetCMSTableId('cms_record_revision');
-
-                        $aParameter = array('pagedef' => 'tablemanagerframe', 'id' => $sRecordRevisionTableID, 'tableid' => $this->oTableConf->id);
-                        $aAdditionalParams = $this->GetHiddenFieldsHook();
-                        if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
-                            $aParameter = array_merge($aParameter, $aAdditionalParams);
-                        }
-                        $aParameter['sRestrictionField'] = 'recordid';
-                        $aParameter['sRestriction'] = $this->sId;
-                        $sRevisionListURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter);
-
-                        // check if revision is available
-                        if ($this->GetLastActivatedRevision() > 0) {
-                            $oMenuItem = new TCMSTableEditorMenuItem();
-                            $oMenuItem->sItemKey = 'revisionManagementLoad';
-                            $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.record_revision.action_load_revision');
-                            $oMenuItem->sIcon = 'fas fa-file-export';
-                            $oMenuItem->sOnClick = "CreateModalIFrameDialogCloseButton('".$sRevisionListURL."');";
-                            $this->oMenuItems->AddItem($oMenuItem);
-                        }
-                    }
-
                     // if we have edit access to the table editor, then we also show a link to it
                     if ($oGlobal->oUser->oAccessManager->HasEditPermission('cms_tbl_conf')) {
                         /** @var $oTableEditorConf TCMSTableConf */
@@ -2004,28 +1969,6 @@ class TCMSTableEditorEndPoint
             $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($propertyTable).'` WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($foreignKeyName)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'";
 
             $sRecordIdWhiteList = '';
-            /**
-             * @deprecated since 6.3.0 - revision management is no longer supported
-             */
-            if ($bRevisionActivationMode && $bAllowRecordReferenceDeletion) {
-                $sTableID = TTools::GetCMSTableId($propertyTable);
-
-                if (array_key_exists(self::DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR, $_SESSION)) {
-                    $oRevisionDataIteraror = $_SESSION[self::DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR];
-                    /** @var $oRevisionDataIteraror TIterator */
-                    $oMatchingRevisions = $oRevisionDataIteraror->FindItemsWithProperty('fieldCmsTblConfId', $sTableID);
-                    /** @var $oMatchingRevisions TIterator */
-                    $aIDs = array();
-                    while ($oMatchingRevision = $oMatchingRevisions->Next()) {
-                        $aIDs[] = $oMatchingRevision->fieldRecordid;
-                    }
-
-                    if (count($aIDs) > 0) {
-                        $sRecordIdWhiteList = "'".implode("','", TTools::MysqlRealEscapeArray($aIDs))."'";
-                        $query .= ' AND `'.MySqlLegacySupport::getInstance()->real_escape_string($propertyTable).'`.`id` IN ('.$sRecordIdWhiteList.')';
-                    }
-                }
-            }
 
             if (!$bRevisionActivationMode || ($bRevisionActivationMode && !empty($sRecordIdWhiteList))) {
                 $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $propertyTable).'List';
@@ -2558,17 +2501,7 @@ class TCMSTableEditorEndPoint
      */
     public function GetLastRevisionNumber()
     {
-        $iLastRevisionNumber = 0;
-
-        $query = "SELECT * FROM `cms_record_revision` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sTableId)."' AND recordid = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."' ORDER BY `revision_nr` DESC";
-        $oCmsRecordRevisionList = TdbCmsRecordRevisionList::GetList($query);
-        if ($oCmsRecordRevisionList->Length() > 0) {
-            /** @var $oCmsRecordRevision TdbCmsRecordRevision */
-            $oCmsRecordRevision = $oCmsRecordRevisionList->Current();
-            $iLastRevisionNumber = (int) $oCmsRecordRevision->fieldRevisionNr;
-        }
-
-        return $iLastRevisionNumber;
+        return 0;
     }
 
     /**
@@ -2585,7 +2518,7 @@ class TCMSTableEditorEndPoint
      */
     public function AddNewRevisionFromDatabase($oFields, $oTablerecord, $postData, $sParentId = '')
     {
-        return $this->AddNewRevision_Execute($oFields, $oTablerecord, $postData, $sParentId);
+        return false;
     }
 
     /**
@@ -2597,25 +2530,11 @@ class TCMSTableEditorEndPoint
      * @param array $postData
      * @param bool  $bPreventMessage - if true the save success message will be suppressed
      *
-     * @return TCMSstdClass - stdclass from GetObjectShortInfo - returns false if revision could not be saved
+     * @return TCMSstdClass|bool - stdclass from GetObjectShortInfo - returns false if revision could not be saved
      */
     public function AddNewRevision(&$postData, $bPreventMessage = false)
     {
-        $postData = $this->PrepareDataForSave($postData);
-        $oPostTable = $this->GetNewTableObjectForEditor();
-        $oPostTable->Load($this->sId);
-        $iLastRevNr = $this->GetLastRevisionNumber();
-        $iNewRevNr = ($iLastRevNr + 1);
-        $oFields = &$this->oTableConf->GetFields($oPostTable);
-        $returnVal = $this->AddNewRevision_Execute($oFields, $oPostTable, $postData);
-        if (!empty($returnVal) && !$bPreventMessage) {
-            /** @var $oMessageManager TCMSMessageManager */
-            $oMessageManager = TCMSMessageManager::GetInstance();
-            $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
-            $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_REVISION_SAVED', array('sRevNr' => $iNewRevNr));
-        }
-
-        return $returnVal;
+        return false;
     }
 
     /**
@@ -2632,36 +2551,7 @@ class TCMSTableEditorEndPoint
      */
     protected function AddNewRevision_Execute($oFields, $oPostTable, $postData, $sParentId = '')
     {
-        $returnVal = false;
-        $this->PrepareFieldsForSave($oFields);
-        $aRevisionData = array();
-        $aPropertyFields = array();
-        $oFields->GoToStart();
-        /** @var $oField TCMSField */
-        while ($oField = $oFields->Next()) {
-            if ($oField->isMLTField) {
-                $aRevisionData = $this->AddNewRevisionForMLTConnectedRecords($aRevisionData, $oField, $oPostTable);
-            } elseif ($oField->isPropertyField) {
-                $aRevisionData[$oField->name] = $oField->name;
-                $aPropertyFields[] = $oField;
-            } else {
-                $aRevisionData = $this->AddNewRevisionForSingleFields($aRevisionData, $oField);
-            }
-        }
-        if (count($aRevisionData) > 0) {
-            $oRecordData = $this->SaveNewRevision($postData, $aRevisionData, $sParentId);
-            if ($oRecordData) {
-                $returnVal = $oRecordData;
-
-                if (count($aPropertyFields) && !empty($oRecordData->id)) {
-                    foreach ($aPropertyFields as $oPropertyField) {
-                        $this->AddNewRevisionForConnectedPropertyRecords($oPropertyField, $postData, $oRecordData->id);
-                    }
-                }
-            }
-        }
-
-        return $returnVal;
+        return false;
     }
 
     /**
@@ -2676,13 +2566,6 @@ class TCMSTableEditorEndPoint
      */
     protected function AddNewRevisionForSingleFields($aRevisionData, $oField)
     {
-        $sqlValue = $oField->ConvertPostDataToSQL(); // do format conversion if needed (e.g. date fields or fields that are as more than one field in postdata, like "datetime")
-        $writeField = $oField->PreGetSQLHook();
-        if (false !== $sqlValue && false !== $writeField) {
-            $sTargetFieldName = $oField->oDefinition->GetRealEditFieldName();
-            $aRevisionData[$sTargetFieldName] = $sqlValue;
-        }
-
         return $aRevisionData;
     }
 
@@ -2699,10 +2582,6 @@ class TCMSTableEditorEndPoint
      */
     protected function AddNewRevisionForMLTConnectedRecords($aRevisionData, $oField, $oPostTable)
     {
-        $aConnectedIdList = $oPostTable->GetMLTIdList($oField->name, $oField->name, $oField);
-        $sTargetFieldName = $oField->name;
-        $aRevisionData[$sTargetFieldName] = $aConnectedIdList;
-
         return $aRevisionData;
     }
 
@@ -2719,25 +2598,7 @@ class TCMSTableEditorEndPoint
      */
     protected function AddNewRevisionForConnectedPropertyRecords($oField, $postData, $sRevisionRecordId)
     {
-        $returnVal = true;
-        $sTableClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $oField->oDefinition->fieldName);
-        $oPropertyList = $oField->oTableRow->GetProperties($oField->name, $sTableClassName);
-
-        $iTableID = TTools::GetCMSTableId($oField->data);
-        $oTableEditor = new TCMSTableEditorManager();
-        if ($oPropertyList->Length() > 0) {
-            while ($oProperty = &$oPropertyList->Next()) {
-                $oTableEditor->Init($iTableID, $oProperty->id);
-                $oPropetyTableConf = $oProperty->GetTableConf();
-                $oFields = $oPropetyTableConf->GetFields($oProperty);
-                $oRecordData = $oTableEditor->AddNewRevisionFromDatabase($oFields, $oProperty, $postData, $sRevisionRecordId);
-                if (false === $oRecordData) {
-                    $returnVal = false;
-                }
-            }
-        }
-
-        return $returnVal;
+        return false;
     }
 
     /**
@@ -2753,38 +2614,7 @@ class TCMSTableEditorEndPoint
      */
     protected function SaveNewRevision($postData, $aRevisionData, $sParentId = '')
     {
-        $oGlobal = TGlobal::instance();
-        $iTableID = TTools::GetCMSTableId('cms_record_revision');
-        $oTableEditor = new TCMSTableEditorManager();
-        $oTableEditor->Init($iTableID, null);
-
-        $aData = array();
-        $aData['name'] = $postData['cmsrevisionname'];
-        $aData['description'] = $postData['cmsrevisiondescription'];
-
-        if (!empty($sParentId)) {
-            $aData['cms_record_revision_id'] = $sParentId;
-        }
-
-        $iLastRevNr = $this->GetLastRevisionNumber();
-        $iNewRevNr = ($iLastRevNr + 1);
-        $aData['revision_nr'] = $iNewRevNr;
-        $aData['last_active_timestamp'] = date('Y-m-d H:i:s');
-        $aData['cms_tbl_conf_id'] = $this->sTableId;
-        $aData['recordid'] = $this->sId;
-        if (array_key_exists('cms_workflow_action_id', $aRevisionData)) {
-            $aRevisionData['cms_workflow_action_id'] = '';
-        }
-        if (array_key_exists('cms_workflow_actiontype_id', $aRevisionData)) {
-            $aRevisionData['cms_workflow_actiontype_id'] = '';
-        }
-        $sSerializedData = TTools::mb_safe_serialize($aRevisionData);
-        $aData['data'] = $sSerializedData;
-        $aData['cms_user_id'] = $oGlobal->oUser->id;
-
-        $oTableEditor->AllowEditByAll(true);
-
-        return $oTableEditor->Save($aData);
+        return false;
     }
 
     /**
@@ -2796,9 +2626,7 @@ class TCMSTableEditorEndPoint
      */
     public function IsRevisionManagementActive()
     {
-        $bRevisionManagementActive = (CMS_ACTIVE_REVISION_MANAGEMENT && '1' == $this->oTableConf->sqlData['revision_management_active']);
-
-        return $bRevisionManagementActive;
+        return false;
     }
 
     /**
@@ -2813,42 +2641,7 @@ class TCMSTableEditorEndPoint
      */
     public function ActivateRecordRevision($sRevisionID = null, $bIsChildRevision = false)
     {
-        $oReturnData = null;
-        if (!$this->IsRecordLocked()) {
-            if (!is_null($sRevisionID) && !empty($sRevisionID)) {
-                $oCmsRecordRevision = TdbCmsRecordRevision::GetNewInstance();
-                /** @var $oCmsRecordRevision TdbCmsRecordRevision */
-                $oCmsRecordRevision->Load($sRevisionID);
-
-                $aCMSRevisionsToActivateList = $this->GetRecordChildRevisions($sRevisionID);
-                if (false === $bIsChildRevision) {
-                    $oRevisionIterator = new TIterator();
-                    /** @var $oRevisionIterator TIterator */
-                    foreach ($aCMSRevisionsToActivateList as $oCMSRevisionToActivate) {
-                        $oRevisionIterator->AddItem($oCMSRevisionToActivate);
-                    }
-
-                    $_SESSION[self::DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR] = $oRevisionIterator;
-                }
-
-                $this->DeleteRecordReferencesFromSource(true);
-                $this->ActivateRecordRevision_Execute($oCmsRecordRevision);
-
-                reset($aCMSRevisionsToActivateList);
-                foreach ($aCMSRevisionsToActivateList as $oCMSRevisionToActivate) {
-                    $oTableEditor = new TCMSTableEditorManager();
-                    /** @var $oTableEditor TCMSTableEditorManager */
-                    $oTableEditor->Init($oCMSRevisionToActivate->fieldCmsTblConfId, $oCMSRevisionToActivate->fieldRecordid);
-                    $oReturnData = $oTableEditor->oTableEditor->ActivateRecordRevision($oCMSRevisionToActivate->id, true);
-                }
-            }
-            if (false === $bIsChildRevision) {
-                unset($_SESSION[self::DELETE_BLACKLIST_SESSION_VAR]);
-                unset($_SESSION[self::DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR]);
-            }
-        }
-
-        return $oReturnData;
+        return null;
     }
 
     /**
@@ -2911,38 +2704,7 @@ class TCMSTableEditorEndPoint
      */
     protected function ActivateRecordRevision_Execute($oCMSRevisionToActivate)
     {
-        $aRevisionPostData = TTools::mb_safe_unserialize($oCMSRevisionToActivate->fieldData);
-        $oDBRecordTable = $this->oTableConf->GetTableObjectInstance();
-        $aRevisionPostData['id'] = $oCMSRevisionToActivate->fieldRecordid;
-        $oDBRecordTable->LoadFromRow($aRevisionPostData);
-        $oFields = $this->oTableConf->GetFields($oDBRecordTable);
-        $this->PrepareFieldsForSave($oFields);
-        $aMLTRevisionIds = $this->GetMLTRevisionIds($oFields);
-
-        $oOriginalDBRecordTable = $this->oTableConf->GetTableObjectInstance();
-        $oOriginalDBRecordTable->Load($oCMSRevisionToActivate->fieldRecordid);
-
-        $oFields->GoToStart();
-        /** @var $oField TCMSField */
-        while ($oField = &$oFields->Next()) {
-            $oField->oDefinition->sqlData['modifier'] = 'none';
-        }
-        $oFields->GoToStart();
-
-        if ($this->_WriteDataToDatabase($oFields, $oDBRecordTable, false, false, true)) {
-            $this->PostSaveHook($oFields, $oDBRecordTable);
-            $this->SetDeleteBlackList($oCMSRevisionToActivate->fieldCmsTblConfId, $oDBRecordTable->id);
-            $this->ActivateMLTRecordRevisions($oFields, $oDBRecordTable, $aMLTRevisionIds);
-
-            // save current timestamp to record revision
-            $iTableID = TTools::GetCMSTableId('cms_record_revision');
-            $oTableEditor = new TCMSTableEditorManager();
-            $oTableEditor->Init($iTableID, $oCMSRevisionToActivate->id);
-            $oTableEditor->AllowEditByAll(true);
-            $oTableEditor->SaveField('last_active_timestamp', date('Y-m-d H:i:s'));
-        }
-
-        return $this->GetObjectShortInfo($aRevisionPostData);
+        return new TCMSstdClass();
     }
 
     /**
@@ -2957,16 +2719,7 @@ class TCMSTableEditorEndPoint
      */
     protected function GetRecordChildRevisions($sCmsRecordRevisionId, $aCMSChildRevisions = array())
     {
-        $sQuery = "SELECT * FROM `cms_record_revision` WHERE `cms_record_revision_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sCmsRecordRevisionId)."'";
-        $oCMSRecordRevisionChildList = TdbCmsRecordRevisionList::GetList($sQuery);
-        if ($oCMSRecordRevisionChildList->Length() > 0) {
-            while ($oCMSRecordRevisionChild = &$oCMSRecordRevisionChildList->Next()) {
-                $aCMSChildRevisions[] = $oCMSRecordRevisionChild;
-                $aCMSChildRevisions = $this->GetRecordChildRevisions($oCMSRecordRevisionChild->id, $aCMSChildRevisions);
-            }
-        }
-
-        return $aCMSChildRevisions;
+        return [];
     }
 
     /**
@@ -2980,19 +2733,7 @@ class TCMSTableEditorEndPoint
      */
     protected function GetMLTRevisionIds(&$oFields)
     {
-        $aMLTRevisionIds = array();
-        $oFields->GoToStart();
-        while ($oField = $oFields->Next()) {
-            /**
-             * @var TCMSField $oField
-             */
-            if ($oField->isMLTField) {
-                $aMLTRevisionIds[$oField->name] = $oField->data;
-                $oField->data = '';
-            }
-        }
-
-        return $aMLTRevisionIds;
+        return [];
     }
 
     /**
@@ -3006,20 +2747,6 @@ class TCMSTableEditorEndPoint
      */
     protected function ActivateMLTRecordRevisions($oFields, $oDBRecordTable, $aMLTRevisionIds)
     {
-        $oFields->GoToStart();
-        while ($oField = $oFields->Next()) {
-            /**
-             * @var TCMSField $oField
-             */
-            if ($oField->isMLTField) {
-                if (array_key_exists($oField->name, $aMLTRevisionIds) && is_array($aMLTRevisionIds[$oField->name]) && count($aMLTRevisionIds[$oField->name]) > 0) {
-                    foreach ($aMLTRevisionIds[$oField->name] as $sTargetId) {
-                        $this->AddMLTConnection($oField->name, $sTargetId);
-                    }
-                }
-            }
-        }
-        $oFields->GoToStart();
     }
 
     /**
@@ -3032,14 +2759,7 @@ class TCMSTableEditorEndPoint
      */
     public function GetLastActivatedRevision()
     {
-        $iLastActivatedRevisionNumber = 0;
-
-        $oCmsRecordRevision = $this->GetLastActivatedRevisionObject();
-        if (!is_null($oCmsRecordRevision)) {
-            $iLastActivatedRevisionNumber = (int) $oCmsRecordRevision->fieldRevisionNr;
-        }
-
-        return $iLastActivatedRevisionNumber;
+        return 0;
     }
 
     /**
@@ -3048,18 +2768,11 @@ class TCMSTableEditorEndPoint
      * returns the revision object the current record is based on
      * if no revisions are found it returns null.
      *
-     * @return TdbCmsRecordRevision - returns null if no revision was found
+     * @return TdbCmsRecordRevision|null - returns null if no revision was found
      */
     public function GetLastActivatedRevisionObject()
     {
-        $oCmsRecordRevision = null;
-        $query = "SELECT * FROM `cms_record_revision` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sTableId)."' AND recordid = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."' ORDER BY `last_active_timestamp` DESC";
-        $oCmsRecordRevisionList = TdbCmsRecordRevisionList::GetList($query);
-        if ($oCmsRecordRevisionList->Length() > 0) {
-            $oCmsRecordRevision = $oCmsRecordRevisionList->Current();
-        }
-
-        return $oCmsRecordRevision;
+        return null;
     }
 
     /**
