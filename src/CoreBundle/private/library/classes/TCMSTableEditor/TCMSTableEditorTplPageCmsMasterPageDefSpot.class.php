@@ -42,16 +42,6 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     /**
      * @deprecated since 6.3.0 - revision management is no longer supported
      *
-     * {@inheritdoc}
-     */
-    protected function AddNewRevision_Execute($oFields, $oPostTable, $postData, $sParentId = '')
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
      * load module from spot and make revisions of the module instance and the connected module tables.
      *
      * @param TCMSRecord $oRecordShortInfoData

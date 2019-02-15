@@ -268,6 +268,7 @@ class CMSTemplateEngine extends TCMSModelBase
      */
     protected function LoadRevisionData()
     {
+        $this->data['bRevisionManagementActive'] = false;
     }
 
     /**

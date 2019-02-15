@@ -447,6 +447,7 @@ is recommended (although this tool may not find database-related deprecations).
 
 - \CMS_ACTIVE_REVISION_MANAGEMENT
 - \TCMSCronJob_CleanOrphanedMLTConnections::MLT_DELETE_LOG_FILE
+- \TCMSTableEditorEndPoint::DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR
 - \TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE
 
 ## Classes and Interfaces
@@ -581,3 +582,6 @@ is recommended (although this tool may not find database-related deprecations).
 - cms_tbl_conf.icon_font_css_class
 - cms_tpl_module.revision_management_active
 
+## Flash Messages
+
+- TABLEEDITOR_REVISION_SAVED

@@ -52,9 +52,7 @@ $rowCount = 0;
     });
     ";
         }
-        ?>
 
-        <?php
         if (isset($aMessages) && is_array($aMessages) && count($aMessages) > 0) {
             ?>
         $(document).ready(function () {
@@ -69,14 +67,4 @@ $rowCount = 0;
             <?php
         }
         ?>
-        var sCurrentRecordName = '<?=str_replace("'", "\'", htmlspecialchars_decode($oTable->GetName())); ?>';
-
-        /**
-         * @deprecated since 6.3.0 - revision management is no longer supported
-         */
-        function AddNewRevision() {};
-
-        function SaveNewRevision() {};
-
-        function ActivateRecordRevision() {};
     </script>
