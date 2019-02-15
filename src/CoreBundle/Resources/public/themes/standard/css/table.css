@@ -28,7 +28,7 @@
 
 .TFullGroupTable label {
     margin-right: 5px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .TFullGroupTable .form-control {
@@ -41,7 +41,7 @@
 
 .TFullGroupTablePagination {
     margin-top: 5px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .TFullGroupTablePerPageSelect {
@@ -59,12 +59,6 @@
     padding-left: 3px;
     padding-right: 3px;
     background-color: #ffffff;
-}
-
-.tblGroupSelector {
-    max-width: 170px;
-    margin-left: 10px;
-    margin-right: 10px;
 }
 
 .tblSearchButtonTDstyle {
@@ -116,7 +110,7 @@
 }
 
 .tblsearch .row .form-group label {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .TGroupTableLink {

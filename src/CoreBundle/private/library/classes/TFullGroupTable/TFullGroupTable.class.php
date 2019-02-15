@@ -797,7 +797,7 @@ class TFullGroupTable extends TGroupTable
      */
     protected function _BuildFilterSection()
     {
-        $filter = "<form name=\"{$this->listName}\" id=\"{$this->listName}\" method=\"{$this->formActionType}\" action=\"\" accept-charset=\"UTF-8\">
+        $filter = "<form name=\"{$this->listName}\" class='form-inline' id=\"{$this->listName}\" method=\"{$this->formActionType}\" action=\"\" accept-charset=\"UTF-8\">
       <input type=\"hidden\" name=\"_user_data\" value=\"\">
       <input type=\"hidden\" name=\"_sort_order\" value=\"\">
       <input type=\"hidden\" name=\"_listName\" value=\"{$this->listName}\">\n";
@@ -825,10 +825,10 @@ class TFullGroupTable extends TGroupTable
         if (null !== $this->groupByCell && $this->showGroupSelector) {
             $this->somethingToShow = true;
 
-            $sGroupSelectorHTML = '<div class="form-group">
-            <label>'.$this->showGroupSelectorText;
+            $sGroupSelectorHTML = '<div class="form-group mr-2">
+            <label>'.$this->showGroupSelectorText.'</label>';
 
-            $sGroupSelectorHTML .= "<select name=\"{$this->groupByCell->name}\" onChange=\"document.{$this->listName}._startRecord.value=0; document.{$this->listName}.submit();\" ".$this->style->GetGroupSelector().">\n";
+            $sGroupSelectorHTML .= "<select name=\"{$this->groupByCell->name}\" data-select2-option=\"{}\" onChange=\"document.{$this->listName}._startRecord.value=0; document.{$this->listName}.submit();\" ".$this->style->GetGroupSelector().">\n";
             // add "show all" option to group selector
             $sGroupSelectorHTML .= '<option value=""';
             if (empty($this->_postData[$this->groupByCell->name])) {
@@ -860,7 +860,6 @@ class TFullGroupTable extends TGroupTable
                 }
             }
             $sGroupSelectorHTML .= '</select>
-            </label>
             </div>';
             $filterContent .= $sGroupSelectorHTML;
         }
