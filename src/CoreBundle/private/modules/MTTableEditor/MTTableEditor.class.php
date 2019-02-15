@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
@@ -257,8 +259,10 @@ class MTTableEditor extends TCMSModelBase
     protected function AddURLHistory()
     {
         if ($this->AllowAddingURLToHistory()) {
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+
             if ($this->global->UserDataExists('popLastURL')) {
-                $this->global->GetURLHistory()->PopURL();
+                $breadcrumb->PopURL();
             }
 
             $params = array();
@@ -275,7 +279,7 @@ class MTTableEditor extends TCMSModelBase
             if (null !== $this->oTableManager->oTableEditor->oTable) {
                 $sRecordName = $this->oTableManager->oTableEditor->oTable->GetName();
             }
-            $this->global->GetURLHistory()->AddItem($params, $sRecordName);
+            $breadcrumb->AddItem($params, $sRecordName);
         }
     }
 
@@ -320,7 +324,8 @@ class MTTableEditor extends TCMSModelBase
 
             $this->data['oBaseLanguage'] = $this->oBaseLanguage;
 
-            $this->data['breadcrumb'] = $this->global->GetURLHistory()->GetBreadcrumb(true);
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+            $this->data['breadcrumb'] = $breadcrumb->GetBreadcrumb(true);
             if ($this->isEditFieldMode()) {
                 $editFieldName = $this->global->GetUserData('_fieldName');
                 $this->oTableManager->oTableEditor->setActiveEditField($editFieldName);
@@ -384,7 +389,7 @@ class MTTableEditor extends TCMSModelBase
      */
     protected function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -831,7 +836,8 @@ class MTTableEditor extends TCMSModelBase
 
         if (($insertObject && null !== $insertObject->id) || (!$insertObject && isset($this->oTableManager) && isset($this->oTableManager->oTableEditor) && isset($this->oTableManager->oTableEditor->oTable))) {
             // Remove last history stamp.
-            $this->global->GetURLHistory()->PopURL();
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+            $breadcrumb->PopURL();
 
             $parameters = array(
                 'pagedef' => $inputFilterUtil->getFilteredInput('pagedef'),
@@ -873,6 +879,8 @@ class MTTableEditor extends TCMSModelBase
             $parameter['_isiniframe'] = $isInIFrame;
             $parameter['id'] = $this->oTableManager->sTableId;
 
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+
             if ('true' === $isInIFrame) {
                 $aAdditionalParams = $this->GetHiddenFieldsHook();
                 if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
@@ -895,7 +903,7 @@ class MTTableEditor extends TCMSModelBase
                         $parameter['sourceRecordID'] = $this->global->GetUserData('sourceRecordID');
                     }
 
-                    $this->global->GetURLHistory()->PopURL();
+                    $breadcrumb->PopURL();
                     $this->controller->HeaderRedirect($parameter);
                 } else {
                     /** @var $oRestrictionTableConf TCMSTableConf */
@@ -914,18 +922,18 @@ class MTTableEditor extends TCMSModelBase
                         $parameter['sourceRecordID'] = $sourceRecordId;
                     }
 
-                    $this->global->GetURLHistory()->PopURL();
+                    $breadcrumb->PopURL();
                     $this->controller->HeaderRedirect($parameter);
                 }
             } else {
                 //remove last item from url history
-                $this->global->GetURLHistory()->PopURL();
+                $breadcrumb->PopURL();
                 //search for id in the url we want to redirect now
                 //if the id equals to the current id of the record that is deleted remove this item too
-                while (preg_match('#id='.$this->sId.'#', $this->global->GetURLHistory()->GetURL()) > 0) {
-                    $this->global->GetURLHistory()->PopURL();
+                while (preg_match('#id='.$this->sId.'#', $breadcrumb->GetURL()) > 0) {
+                    $breadcrumb->PopURL();
                 }
-                $parentURL = $this->global->GetURLHistory()->GetURL().'&_histid='.($this->global->GetURLHistory()->index - 1);
+                $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->index - 1);
             }
 
             if (!empty($parentURL)) {
@@ -954,7 +962,9 @@ class MTTableEditor extends TCMSModelBase
     {
         $postData = $this->global->GetUserData(null);
         $this->oTableManager->Copy($postData);
-        $this->global->GetURLHistory()->PopURL();
+
+        $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+        $breadcrumb->PopURL();
 
         if ('_mlt' === substr($this->oTableManager->sRestrictionField, -4)) {
             $targetTable = $this->oTableManager->oTableConf->sqlData['name'];
@@ -980,7 +990,9 @@ class MTTableEditor extends TCMSModelBase
     public function DatabaseCopy()
     {
         $this->oTableManager->DatabaseCopy(false, array(), true);
-        $this->global->GetURLHistory()->PopURL();
+
+        $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+        $breadcrumb->PopURL();
 
         if ('_mlt' === substr($this->oTableManager->sRestrictionField, -4)) {
             $targetTable = $this->oTableManager->oTableConf->sqlData['name'];
@@ -1113,7 +1125,7 @@ class MTTableEditor extends TCMSModelBase
             $state = $inputFilterUtil->getFilteredInput('state');
         }
         /** @var TTableEditorListFieldState $stateContainer */
-        $stateContainer = \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.tableEditorListFieldState');
+        $stateContainer = ServiceLocator::get('cmsPkgCore.tableEditorListFieldState');
         $stateContainer->setState($this->oTableManager->oTableConf->sqlData['name'], $fieldName, $state);
     }
 
@@ -1122,6 +1134,11 @@ class MTTableEditor extends TCMSModelBase
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getBreadcrumbService(): BackendBreadcrumbService
+    {
+        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }

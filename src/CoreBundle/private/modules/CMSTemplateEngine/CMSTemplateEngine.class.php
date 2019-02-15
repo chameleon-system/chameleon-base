@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -184,22 +185,29 @@ class CMSTemplateEngine extends TCMSModelBase
 
     public function AddURLHistory()
     {
-        if ($this->AllowAddingURLToHistory()) {
-            $params = array();
-            $params['pagedef'] = $this->global->GetUserData('pagedef');
-            $params['id'] = $this->global->GetUserData('id');
-
-            if ($this->global->UserDataExists('sRestriction')) {
-                $params['sRestriction'] = $this->global->GetUserData('sRestriction');
-            }
-            if ($this->global->UserDataExists('sRestrictionField')) {
-                $params['sRestrictionField'] = $this->global->GetUserData('sRestrictionField');
-            }
-            $breadcrumbTitle = TGlobal::Translate('chameleon_system_core.template_engine.breadcrumb_title_page').': '.$this->oPage->sqlData['name'];
-            if (is_null($this->sMode)) {
-                $this->global->GetURLHistory()->AddItem($params, $breadcrumbTitle);
-            }
+        if (false === $this->AllowAddingURLToHistory()) {
+            return;
         }
+
+        $params = [];
+        $params['pagedef'] = $this->global->GetUserData('pagedef');
+        $params['id'] = $this->global->GetUserData('id');
+
+        if ($this->global->UserDataExists('sRestriction')) {
+            $params['sRestriction'] = $this->global->GetUserData('sRestriction');
+        }
+        if ($this->global->UserDataExists('sRestrictionField')) {
+            $params['sRestrictionField'] = $this->global->GetUserData('sRestrictionField');
+        }
+
+        $breadcrumbTitle = TGlobal::Translate('chameleon_system_core.template_engine.breadcrumb_title_page').': '.$this->oPage->sqlData['name'];
+
+        if ('preview_content' === $this->sMode || 'layout_selection' === $this->sMode || 'layoutlist' === $this->sMode) {
+            return;
+        }
+
+        $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+        $breadcrumb->AddItem($params, $breadcrumbTitle);
     }
 
     public function &Execute()
@@ -240,25 +248,44 @@ class CMSTemplateEngine extends TCMSModelBase
             $this->data['sActivePageDef'] = '';
         }
 
-        if (is_null($this->sMode) || 'layout_selection' == $this->sMode || 'edit_content' == $this->sMode || 'preview_content' == $this->sMode) {
-            $this->filterMainNavigation();
-            $view = $this->getActiveModuleLayout();
-            $this->SetTemplate('CMSTemplateEngine', $view);
-            $this->data['sPreviewURL'] = $this->oTableManager->oTableEditor->GetPreviewURL();
-        } else {
-            if ('layoutlist' == $this->sMode) {
+        $this->switchTemplate();
+
+        return $this->data;
+    }
+
+    /**
+     * Switches the template according to the current active template submodule mode and loads additional needed content.
+     */
+    private function switchTemplate(): void
+    {
+        $viewName = $this->getActiveModuleLayout();
+
+        switch ($this->sMode) {
+            case 'layout_selection':
+            case 'edit_content':
+            case 'preview_content':
+            default:
+                $this->filterMainNavigation();
+                $this->data['sPreviewURL'] = $this->oTableManager->oTableEditor->GetPreviewURL();
+
+                break;
+            case 'layoutlist':
                 $this->_GetLayoutList();
-                $this->SetTemplate('CMSTemplateEngine', 'cmp_layoutlist');
-            } elseif ('load_module' == $this->sMode) {
-                $bLoadCopy = $this->global->GetUserData('bLoadCopy');
+                $viewName = 'cmp_layoutlist';
+
+                break;
+            case 'load_module':
+                $inputFilter = $this->getInputFilter();
+                $bLoadCopy = $inputFilter->getFilteredGetInput('bLoadCopy');
                 $this->data['bLoadCopy'] = $bLoadCopy;
 
                 $this->_GetModuleInstanceList();
-                $this->SetTemplate('CMSTemplateEngine', 'cmp_loadmoduleinstance');
-            }
+                $viewName = 'cmp_loadmoduleinstance';
+
+                break;
         }
 
-        return $this->data;
+        $this->SetTemplate('CMSTemplateEngine', $viewName);
     }
 
     /**
@@ -668,5 +695,10 @@ class CMSTemplateEngine extends TCMSModelBase
     private function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    private function getBreadcrumbService(): BackendBreadcrumbService
+    {
+        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }

@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\SanityCheck\MessageCheckOutput;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -24,6 +25,7 @@ use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -57,27 +59,6 @@ class MTHeader extends TCMSModelBase
         $this->CheckTemplateEngineStatus();
 
         $this->data['oUser'] = TCMSUser::GetActiveUser();
-
-        $sRemoveCommand = $this->global->GetUserData('_rmhist');
-
-        $this->data['pagedef'] = $this->global->GetUserData('pagedef');
-
-        if ('true' == $sRemoveCommand) {
-            // if no _histid is given, then we will need to search for one given the current parameters
-
-            if (!$this->global->UserDataExists('_histid')) {
-                $parameters = $this->global->GetUserData();
-                unset($parameters['_rmhist']);
-                $histid = $this->global->GetURLHistory()->FindHistoryId($parameters);
-            } else {
-                $histid = $this->global->GetUserData('_histid');
-            }
-            if (false !== $histid) {
-                $this->global->GetURLHistory()->Clear($histid);
-            } else {
-                trigger_error('lookup history id failed in MTHeader. Parameters: '.print_r($parameters, true), E_USER_WARNING);
-            }
-        }
 
         $migrationRecorderStateHandler = $this->getMigrationRecorderStateHandler();
         if (null === $migrationRecorderStateHandler->getCurrentBuildNumber()) {
@@ -116,7 +97,8 @@ class MTHeader extends TCMSModelBase
             $this->data['bHeaderIsHidden'] = false;
 
             if (TGlobal::CMSUserDefined()) {
-                $this->data['breadcrumb'] = $this->global->GetURLHistory()->GetBreadcrumb(true);
+                $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+                $this->data['breadcrumb'] = $breadcrumb->GetBreadcrumb(true);
 
                 $lastHistNode = end($this->data['breadcrumb']);
                 reset($this->data['breadcrumb']);
@@ -303,7 +285,7 @@ class MTHeader extends TCMSModelBase
     }
 
     /**
-     * checks the user rights for header shortcut links
+     * checks the user rights for header shortcut links.
      */
     protected function CheckNavigationRights()
     {
@@ -372,10 +354,10 @@ class MTHeader extends TCMSModelBase
                 $_params['fragment'] = $urlParts['fragment'];
             }
 
-            $urlHistory = $this->global->GetURLHistory();
-            $urlHistory->AddItem($_params, $name);
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+            $breadcrumb->AddItem($_params, $name);
 
-            return $urlHistory->GetBreadcrumb(true);
+            return $breadcrumb->GetBreadcrumb(true);
         }
     }
 
@@ -745,7 +727,7 @@ class MTHeader extends TCMSModelBase
             $includes[] = '
       <script type="text/javascript">
         $(document).ready(function() {
-          setTimeout("window.location = \'' . PATH_CMS_CONTROLLER . '?' . TTools::GetArrayAsURL(array('pagedef' => 'login', 'module_fnc' => array('contentmodule' => 'Logout'))) . '\'",' . $sessionTimeout . ');
+          setTimeout("window.location = \''.PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(array('pagedef' => 'login', 'module_fnc' => array('contentmodule' => 'Logout'))).'\'",'.$sessionTimeout.');
         });
       </script>';
         }
@@ -781,117 +763,83 @@ class MTHeader extends TCMSModelBase
         return $parameters;
     }
 
-    /**
-     * @return Connection
-     */
-    private function getDatabaseConnection()
+    private function getDatabaseConnection(): Connection
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
-    /**
-     * @return InputFilterUtilInterface
-     */
-    private function getInputFilterUtil()
+    private function getInputFilterUtil(): InputFilterUtilInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
-    /**
-     * @return null|\Symfony\Component\HttpFoundation\Request
-     */
-    private function getCurrentRequest()
+    private function getCurrentRequest(): ?Request
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
-    /**
-     * @return UrlUtil
-     */
-    private function getUrlUtil()
+    private function getUrlUtil(): UrlUtil
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 
-    /**
-     * @return IcmsCoreRedirect
-     */
-    private function getRedirect()
+    private function getRedirect(): IcmsCoreRedirect
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 
-    /**
-     * @return PageServiceInterface
-     */
-    private function getPageService()
+    private function getPageService(): PageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ServiceLocator::get('chameleon_system_core.page_service');
     }
 
-    /**
-     * @return FlashMessageServiceInterface
-     */
-    private function getFlashMessages()
+    private function getFlashMessages(): FlashMessageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
     private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
+        return ServiceLocator::get('logger');
     }
 
-    /**
-     * @return LanguageServiceInterface
-     */
-    private function getLanguageService()
+    private function getLanguageService(): LanguageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
-    /**
-     * @return IPkgCmsFileManager
-     */
-    private function getFileManager()
+    private function getFileManager(): IPkgCmsFileManager
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.filemanager');
+        return ServiceLocator::get('chameleon_system_core.filemanager');
     }
 
-    /**
-     * @return CacheInterface
-     */
-    private function getCache()
+    private function getCache(): CacheInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_cache.cache');
+        return ServiceLocator::get('chameleon_system_cms_cache.cache');
     }
 
-    /**
-     * @return string
-     */
-    private function getCacheDir()
+    private function getCacheDir(): string
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('kernel.cache_dir');
+        return ServiceLocator::getParameter('kernel.cache_dir');
     }
 
-    /**
-     * @return MigrationRecorderStateHandler
-     */
-    private function getMigrationRecorderStateHandler()
+    private function getMigrationRecorderStateHandler(): MigrationRecorderStateHandler
     {
         return ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');
     }
 
-    /**
-     * @return TranslatorInterface
-     */
-    private function getTranslator()
+    private function getTranslator(): TranslatorInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
     }
 
     private function getLessCompiler(): TPkgViewRendererLessCompiler
     {
         return ServiceLocator::get('chameleon_system_view_renderer.less_compiler');
+    }
+
+    private function getBreadcrumbService(): BackendBreadcrumbService
+    {
+        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }

@@ -10,16 +10,18 @@
  */
 
 /**
- * used to manage the navigation in CMS backend.
-/**/
+ * Used to manage the breadcrumb navigation in CMS backend.
+ */
 class TCMSURLHistory
 {
+    /**
+     * the list of history objects.
+     *
+     * @var array
+     */
     public $aHistory = array();
-    public $index = 0;
 
-    public function __construct()
-    {
-    }
+    public $index = 0;
 
     /**
      * adds item to the breadcrumb array.
@@ -29,40 +31,44 @@ class TCMSURLHistory
      */
     public function AddItem($aParameter, $name = '')
     {
-        $urlWithFragment = $this->EncodeParameters($aParameter);
-        $urlWithoutFragment = $this->EncodeParameters($aParameter, false);
+        $foundHistoryElementIndex = $this->getSimilarHistoryElementIndex($aParameter);
 
-        if ($this->index > 0) {
-            /*
-             * check if last element has the same url -> update it
-             * the check excludes the fragment (= same url; different fragment)
-             */
-            $lastElement = &$this->aHistory[$this->index - 1];
-            $urlLastElementWithoutFragment = $this->EncodeParameters($lastElement['params'], false);
-
-            // compare without fragment
-            if ($urlLastElementWithoutFragment == $urlWithoutFragment) {
-                $lastElement['name'] = TGlobal::OutHTML($name);
-                $lastElement['params'] = $aParameter;
-                $lastElement['url'] = $urlWithFragment; // add with fragment
-            } else {
-                // last element is not the same -> add new
-                $this->aHistory[$this->index++] = array(
-                    'name' => TGlobal::OutHTML($name),
-                    'url' => $urlWithFragment,
-                    'params' => $aParameter,
-                );
-                //$this->index++;
-            }
+        if (null !== $foundHistoryElementIndex) {
+            // element found, so remove it and add the new one at the end.
+            $this->removeHistoryElementByIndex($foundHistoryElementIndex);
         } else {
-            // no item in history -> add it
-            $this->aHistory[$this->index] = array(
-                'name' => TGlobal::OutHTML($name),
-                'url' => $urlWithFragment,
-                'params' => $aParameter,
-            );
-            ++$this->index;
+            // the history has an internal item count, which needs to be decreased if we don't replace an item.
+            $this->index++;
         }
+
+        // add the new item
+        $this->aHistory[] = array(
+            'name' => $name,
+            'url' => $this->EncodeParameters($aParameter),
+            'params' => $aParameter,
+        );
+    }
+
+    private function removeHistoryElementByIndex(int $index): void
+    {
+        unset($this->aHistory[$index]);
+        // reset the index
+        $this->aHistory = array_values($this->aHistory);
+    }
+
+    public function getSimilarHistoryElementIndex(array $newElementParameters): ?int
+    {
+        $newElementUrl = $this->EncodeParameters($newElementParameters, false);
+
+        reset($this->aHistory);
+        foreach ($this->aHistory as $key => $historyElement) {
+            if ($this->EncodeParameters($historyElement['params'], false) === $newElementUrl) {
+                return $key;
+            }
+        }
+        reset($this->aHistory);
+
+        return null;
     }
 
     /**
@@ -119,7 +125,7 @@ class TCMSURLHistory
                     'params' => $item['params'],
                 );
                 $_item['params']['_histid'] = $key;
-                $_item['params']['_rmhist'] = 'true';
+                // $_item['params']['_rmhist'] = 'true';
                 $_item['url'] = $this->EncodeParameters($_item['params']);
                 $return[] = $_item;
             }
@@ -164,35 +170,42 @@ class TCMSURLHistory
     public function Clear($id)
     {
         $this->index = $id;
-        $endpoint = count($this->aHistory);
+        $endpoint = count($this->aHistory)-1;
         if ($endpoint > 0) {
-            for ($i = ($endpoint - 1); $i >= $id; --$i) {
+            for ($i = $endpoint; $i > $id; --$i) {
                 unset($this->aHistory[$i]);
             }
         }
     }
 
     /**
+     * resets the history to zero entries.
+     */
+    public function reset()
+    {
+        $this->index = 0;
+        $this->aHistory = [];
+    }
+
+    /**
+     * @deprecated since 6.3.0 - use getSimilarHistoryElementIndex() instead.
+     *
      * use this function to find the LAST matching history url for a set of
      * parameters.
      *
      * @param array $aParameters
      *
-     * @return string
+     * @return int|bool (array key or false, if not found)
      */
     public function FindHistoryId($aParameters)
     {
-        $sUrl = $this->EncodeParameters($aParameters);
-        $histid = false;
-        reset($this->aHistory);
-        foreach ($this->aHistory as $key => $item) {
-            if ($item['url'] === $sUrl) {
-                $histid = $key;
-            }
-        }
-        reset($this->aHistory);
+        $foundIndex = $this->getSimilarHistoryElementIndex($aParameters);
 
-        return $histid;
+        if (null === $foundIndex) {
+            return false;
+        }
+
+        return $foundIndex;
     }
 
     /**
@@ -203,14 +216,14 @@ class TCMSURLHistory
      */
     public function paramsParameterExists()
     {
-        if (!empty($this->aHistory)) {
-            if (false === isset($this->aHistory[0])) {
-                $this->aHistory = array_values($this->aHistory); // rearrange elements
-            }
-
-            return array_key_exists('params', $this->aHistory[0]);
-        } else {
+        if (0 === count($this->aHistory)) {
             return true;
         }
+
+        if (false === isset($this->aHistory[0])) {
+            $this->aHistory = array_values($this->aHistory); // rearrange elements
+        }
+
+        return array_key_exists('params', $this->aHistory[0]);
     }
 }

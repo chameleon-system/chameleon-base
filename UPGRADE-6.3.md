@@ -491,6 +491,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \TCMSFieldLookup::enableComboBox()
 - \TCMSLogChange::getUpdateLogger()
 - \TCMSTreeNode::GetPageTreeConnectionDateInformationHTML()
+- \TGlobal::GetURLHistory()
 - \TPkgCmsCoreSendToHost::setLogRequest()
 - \TPkgCmsException_Log::getLogger()
 - \TPkgCsv2Sql::CreateLogFileName()
@@ -514,7 +515,7 @@ is recommended (although this tool may not find database-related deprecations).
 
 - $.addOption() (jquery.selectboxes plugin)
 - $.bgiframe()
-- $.blockUI();
+- $.blockUI()
 - $.everyTime()
 - $.jBreadCrumb()
 - $.jqDnR() (part of jqModal)
@@ -522,7 +523,7 @@ is recommended (although this tool may not find database-related deprecations).
 - $.oneTime()
 - $.stopTime()
 - $.tagInput()
-- $.unblockUI();
+- $.unblockUI()
 - $.wTooltip()
 - CreateModalIFrameDialogFromContentWithoutClose()
 - PublishViaAjaxCallback()
