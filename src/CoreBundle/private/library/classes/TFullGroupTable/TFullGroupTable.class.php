@@ -248,6 +248,14 @@ class TFullGroupTable extends TGroupTable
      */
     protected $tableCSS = 'table table-sm table-striped table-hover TCMSListManagerFullGroupTable';
 
+    /**
+     * Enables a rich select component with autocomplete.
+     * This is only available if record edit is possible.
+     *
+     * @var bool
+     */
+    private $isAutoCompleteEnabled = false;
+
     public function TFullGroupTable($postData = array())
     {
         parent::TGroupTable();
@@ -264,6 +272,11 @@ class TFullGroupTable extends TGroupTable
     {
         $this->style = new TFullGroupTableStyle();
         $this->_postData = $postData;
+    }
+
+    public function setAutoCompleteState(bool $state)
+    {
+        $this->isAutoCompleteEnabled = $state;
     }
 
     /**
@@ -829,7 +842,7 @@ class TFullGroupTable extends TGroupTable
             $sGroupSelectorHTML = '<div class="form-group mr-2">
             <label>'.$this->showGroupSelectorText.'</label>';
 
-            $sGroupSelectorHTML .= "<select name=\"{$this->groupByCell->name}\" data-select2-option=\"{}\" onChange=\"document.{$this->listName}._startRecord.value=0; document.{$this->listName}.submit();\" ".$this->style->GetGroupSelector().">\n";
+            $sGroupSelectorHTML .= "<select class=\"form-control form-control-sm\" name=\"{$this->groupByCell->name}\" data-select2-option=\"{}\" onChange=\"document.{$this->listName}._startRecord.value=0; document.{$this->listName}.submit();\" ".$this->style->GetGroupSelector().">\n";
             // add "show all" option to group selector
             $sGroupSelectorHTML .= '<option value=""';
             if (empty($this->_postData[$this->groupByCell->name])) {
@@ -868,20 +881,25 @@ class TFullGroupTable extends TGroupTable
         if ($this->showSearchBox) {
             $this->somethingToShow = true;
 
-
             $filterContent .= '<div class="form-group mr-2">';
 
-            $formatString =  '<select id="searchLookup" name="_search_word" data-listname="%s" class="form-control" data-select2-placeholder="%s" data-select2-ajax="%s" data-record-url="%s">';
-            $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->listName), TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->getRecordAutocompleteUrl()), TGlobal::OutHTML($this->getRecordUrl()));
+            if (true === $this->isAutoCompleteEnabled) {
+                $formatString =  '<select id="searchLookup" name="_search_word" data-listname="%s" class="form-control form-control-sm" data-select2-placeholder="%s" data-select2-ajax="%s" data-record-url="%s">';
+                $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->listName), TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->getRecordAutocompleteUrl()), TGlobal::OutHTML($this->getRecordUrl()));
 
-            if ('' !== $this->_postData['_search_word']) {
-                $formatString = '<option value="%1$s">%1$s</option>';
-                $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->_postData['_search_word']));
+                if ('' !== $this->_postData['_search_word']) {
+                    $formatString = '<option value="%1$s">%1$s</option>';
+                    $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->_postData['_search_word']));
+                }
+
+                $filterContent .= '</select>';
+            } else {
+                $formatString =  '<input id="searchLookup" name="_search_word" class="form-control form-control-sm" placeholder="%s" value="%s">';
+                $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->_postData['_search_word']));
             }
 
-            $filterContent .= '</select></div>';
-
-            $filterContent .= '<div class="form-group">';
+            $filterContent .= '</div>
+                                <div class="form-group">';
 
             $formatString = '<input type="button" class="form-control form-control-sm btn btn-sm btn-primary" value="%1$s" onClick="document.%2$s._startRecord.value=0;document.%2$s.submit();">';
             $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchButtonText), TGlobal::OutHTML($this->listName));

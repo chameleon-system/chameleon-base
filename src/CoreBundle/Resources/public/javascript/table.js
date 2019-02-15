@@ -120,7 +120,7 @@ $(document).ready(function () {
         $(this).select2($(this).data('select2-option'));
     });
 
-    var searchLookup = $('#searchLookup');
+    var searchLookup = $('select#searchLookup');
 
     searchLookup.select2({
         placeholder: searchLookup.data('select2-placeholder'),
