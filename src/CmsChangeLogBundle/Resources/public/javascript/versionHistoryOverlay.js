@@ -5,6 +5,7 @@ class VersionHistoryOverlay {
     // Init
 
     constructor({element}) {
+        this.isLoaded = false;
         this.element = element
         this.editor = this.getEditorFromElement(element)
         this.attributes = element.dataset
@@ -15,6 +16,8 @@ class VersionHistoryOverlay {
     }
 
     init() {
+        this.isLoaded = true
+
         const injectedElement = this.injectElement(this.element)
         this.attachEvents(injectedElement);
         this.initMessageListener()
@@ -117,13 +120,11 @@ class VersionHistoryOverlayLoader {
 
     init() {
         for (const element of this.elements) {
-            let moduleIsInitialized = false
             const module = new VersionHistoryOverlay({element})
             this.modules.push(module)
 
             const observer = new MutationObserver((mutationsList, observer) => {
-                if (!moduleIsInitialized) {
-                    moduleIsInitialized = true
+                if (!module.isLoaded) {
                     module.init()
                 }
             })

@@ -17,6 +17,7 @@ var VersionHistoryOverlay =
 
             _classCallCheck(this, VersionHistoryOverlay);
 
+            this.isLoaded = false;
             this.element = element;
             this.editor = this.getEditorFromElement(element);
             this.attributes = element.dataset;
@@ -29,6 +30,7 @@ var VersionHistoryOverlay =
         _createClass(VersionHistoryOverlay, [{
             key: "init",
             value: function init() {
+                this.isLoaded = true;
                 var injectedElement = this.injectElement(this.element);
                 this.attachEvents(injectedElement);
                 this.initMessageListener();
@@ -159,7 +161,6 @@ var VersionHistoryOverlayLoader =
                 try {
                     var _loop = function _loop() {
                         var element = _step.value;
-                        var moduleIsInitialized = false;
                         var module = new VersionHistoryOverlay({
                             element: element
                         });
@@ -167,8 +168,7 @@ var VersionHistoryOverlayLoader =
                         _this3.modules.push(module);
 
                         var observer = new MutationObserver(function (mutationsList, observer) {
-                            if (!moduleIsInitialized) {
-                                moduleIsInitialized = true;
+                            if (!module.isLoaded) {
                                 module.init();
                             }
                         });
