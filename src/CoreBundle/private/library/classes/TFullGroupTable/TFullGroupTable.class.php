@@ -797,10 +797,11 @@ class TFullGroupTable extends TGroupTable
      */
     protected function _BuildFilterSection()
     {
-        $filter = "<form name=\"{$this->listName}\" class='form-inline' id=\"{$this->listName}\" method=\"{$this->formActionType}\" action=\"\" accept-charset=\"UTF-8\">
-      <input type=\"hidden\" name=\"_user_data\" value=\"\">
-      <input type=\"hidden\" name=\"_sort_order\" value=\"\">
-      <input type=\"hidden\" name=\"_listName\" value=\"{$this->listName}\">\n";
+        $filter = '<form name="'.TGlobal::OutHTML($this->listName).'" id="'.TGlobal::OutHTML($this->listName).'" method="'.TGlobal::OutHTML($this->formActionType).'" action="" accept-charset="UTF-8">
+      <input type="hidden" name="_user_data" value="">
+      <input type="hidden" name="_sort_order" value="">
+      <input type="hidden" name="_listName" value="'.TGlobal::OutHTML($this->listName).'">
+';
         reset($this->_postData);
         foreach ($this->_postData as $key => $value) {
             if ($key != session_name() && ('_search_word' != $key || !$this->showSearchBox) && '_listName' != $key && '_limit' != $key && '_sort_order' != $key && '_user_data' != $key && !in_array($key, $this->aHiddenFieldIgnoreList)) {
@@ -819,7 +820,7 @@ class TFullGroupTable extends TGroupTable
             }
         }
 
-        $filterHeader = '<div class="d-flex TFullGroupTable">';
+        $filterHeader = '<div class="d-flex TFullGroupTable form-inline">';
         $filterContent = '';
         // now add group selector (if activated)
         if (null !== $this->groupByCell && $this->showGroupSelector) {
@@ -877,6 +878,7 @@ class TFullGroupTable extends TGroupTable
                 $formatString = '<option value="%1$s">%1$s</option>';
                 $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->_postData['_search_word']));
             }
+
             $filterContent .= '</select></div>';
 
             $filterContent .= '<div class="form-group">';
