@@ -21,4 +21,9 @@ class MTTableManagerComponent extends MTTableManager
     public function AddURLHistory()
     {
     }
+
+    protected function isInFrame(): bool
+    {
+        return true;
+    }
 }

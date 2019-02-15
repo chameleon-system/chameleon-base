@@ -265,12 +265,11 @@
         </service>
 
         <service id="chameleon_system_core.listener.backend_breadcrumb" class="ChameleonSystem\CoreBundle\EventListener\BackendBreadcrumbListener">
-            <argument type="service" id="service_container" />
             <argument type="service" id="request_stack"/>
             <argument type="service" id="chameleon_system_core.request_info_service"/>
             <argument type="service" id="chameleon_system_core.util.input_filter" />
             <argument type="service" id="chameleon_system_core.service.backend_breadcrumb" />
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="249" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
         </service>
 
         <service id="chameleon_system_core.listener.request_type" class="ChameleonSystem\CoreBundle\EventListener\RequestTypeListener">

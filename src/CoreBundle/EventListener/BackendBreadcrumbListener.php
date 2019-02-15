@@ -14,18 +14,11 @@ namespace ChameleonSystem\CoreBundle\EventListener;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
-class BackendBreadcrumbListener implements ContainerAwareInterface
+class BackendBreadcrumbListener
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
     /**
      * @var RequestStack
      */
@@ -47,23 +40,18 @@ class BackendBreadcrumbListener implements ContainerAwareInterface
     private $inputFilterUtil;
 
     public function __construct(
-        ContainerInterface $container,
         RequestStack $requestStack,
         RequestInfoServiceInterface $requestInfoService,
         InputFilterUtilInterface $inputFilterUtil,
         BackendBreadcrumbService $backendBreadcrumbService
     )
     {
-        $this->container = $container;
         $this->requestStack = $requestStack;
         $this->requestInfoService = $requestInfoService;
         $this->inputFilterUtil = $inputFilterUtil;
         $this->backendBreadcrumbService = $backendBreadcrumbService;
     }
 
-    /**
-     * @param GetResponseEvent $event
-     */
     public function onKernelRequest(GetResponseEvent $event)
     {
         if (false === $event->isMasterRequest()) {
@@ -77,7 +65,7 @@ class BackendBreadcrumbListener implements ContainerAwareInterface
         $this->handleBreadcrumbHistory();
     }
 
-    private function handleBreadcrumbHistory()
+    private function handleBreadcrumbHistory(): void
     {
         $breadCrumb = $this->backendBreadcrumbService->getBreadcrumb();
 
@@ -85,16 +73,16 @@ class BackendBreadcrumbListener implements ContainerAwareInterface
             return;
         }
 
-        if ('true' === $this->inputFilterUtil->getFilteredInput('_rmhist')) {
+        if ('true' === $this->inputFilterUtil->getFilteredGetInput('_rmhist')) {
             $breadCrumb->reset();
 
             return;
         }
 
-        $historyItemId = $this->inputFilterUtil->getFilteredInput('_histid');
+        $historyItemId = $this->inputFilterUtil->getFilteredGetInput('_histid');
 
         if (null === $historyItemId) {
-            $parameters = $this->getAllParametersFromRequest();
+            $parameters = $this->getAllParametersFromGetRequest();
             unset($parameters['_rmhist']);
             $historyItemId = $breadCrumb->getSimilarHistoryElementIndex($parameters);
         }
@@ -104,30 +92,18 @@ class BackendBreadcrumbListener implements ContainerAwareInterface
         }
     }
 
-    private function getAllParametersFromRequest(): array
+    private function getAllParametersFromGetRequest(): array
     {
-        $parameter = [];
+        $parameters = [];
 
         $request = $this->requestStack->getCurrentRequest();
 
         $keys = $request->query->keys();
         foreach ($keys as $key) {
-            $parameter[$key] = $this->inputFilterUtil->getFilteredInput($key);
+            $parameters[$key] = $this->inputFilterUtil->getFilteredInput($key);
         }
 
-        $keys = $request->request->keys();
-        foreach ($keys as $key) {
-            $parameter[$key] = $this->inputFilterUtil->getFilteredInput($key);
-        }
-
-        return $parameter;
+        return $parameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
 }

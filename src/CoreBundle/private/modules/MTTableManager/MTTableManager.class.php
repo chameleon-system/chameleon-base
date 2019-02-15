@@ -342,7 +342,6 @@ class MTTableManager extends TCMSModelBase
 
         // If list was opened within a frame, url should not be added to history. The parameter field "sRestrictionField" can be used as an indicator.
         if (false === $this->isInFrame()) {
-
             $tableName = $this->oTableConf->GetName();
 
             $iconCssClass = trim($this->getIconCssClassForTable($this->oTableConf->id));
@@ -361,7 +360,7 @@ class MTTableManager extends TCMSModelBase
         $menuItem = \TdbCmsMenuItem::GetNewInstance();
         if (false === $menuItem->LoadFromFields(array(
             'target' => $tableId,
-            'target_table_name' => 'cms_tbl_conf')
+            'target_table_name' => 'cms_tbl_conf', )
         )) {
             return '';
         }
@@ -369,7 +368,7 @@ class MTTableManager extends TCMSModelBase
         return $menuItem->fieldIconFontCssClass;
     }
 
-    protected function isInFrame()
+    protected function isInFrame(): bool
     {
         $inputFilterUtil = $this->getInputFilterUtil();
 
@@ -387,10 +386,9 @@ class MTTableManager extends TCMSModelBase
 
         $pageDefinition = $inputFilterUtil->getFilteredInput('pagedef');
 
-        if (false !== strpos($pageDefinition,'plain')) {
+        if (false !== strpos($pageDefinition, 'plain')) {
             return true;
         }
-
 
         return false;
     }
@@ -431,7 +429,7 @@ class MTTableManager extends TCMSModelBase
     /**
      * Generates the record list for the ajax autocomplete select boxes in table editor and record lists.
      *
-     * @return string|false JSON with id, text, html elements.
+     * @return string|false JSON with id, text, html elements
      */
     public function getAutocompleteRecordList()
     {

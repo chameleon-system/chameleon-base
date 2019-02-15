@@ -13,10 +13,8 @@ namespace ChameleonSystem\CoreBundle\Service;
 
 
 use Symfony\Component\HttpFoundation\RequestStack;
-use TCMSURLHistory;
-use TCMSUser;
 
-class BackendBreadcrumbService
+class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
 {
     CONST BREADCRUMB_SESSION_KEY = '_cmsurlhistory';
 
@@ -39,20 +37,20 @@ class BackendBreadcrumbService
         $this->requestInfoService = $requestInfoService;
     }
 
-    public function getBreadcrumb(): ?TCMSURLHistory
+    public function getBreadcrumb(): ?\TCMSURLHistory
     {
         // prevent possible information disclosure to frontend modules
         if (false === $this->requestInfoService->isBackendMode()) {
             return null;
         }
 
-        $backendUser = TCMSUser::GetActiveUser();
+        $backendUser = \TCMSUser::GetActiveUser();
         if (null === $backendUser || false === $backendUser->bLoggedIn) {
             return null;
         }
 
         /**
-         * @var $breadCrumbHistory TCMSURLHistory
+         * @var $breadCrumbHistory \TCMSURLHistory
          */
         $breadCrumbHistory = $this->getBreadcrumbFromSession();
 
@@ -67,7 +65,7 @@ class BackendBreadcrumbService
         return $this->getBreadcrumbFromSession();
     }
 
-    private function getBreadcrumbFromSession(): ?TCMSURLHistory
+    private function getBreadcrumbFromSession(): ?\TCMSURLHistory
     {
         if (false === isset($_SESSION[self::BREADCRUMB_SESSION_KEY])) {
             $this->reset();
@@ -81,6 +79,6 @@ class BackendBreadcrumbService
      */
     private function reset(): void
     {
-        $_SESSION[self::BREADCRUMB_SESSION_KEY] = new TCMSURLHistory();
+        $_SESSION[self::BREADCRUMB_SESSION_KEY] = new \TCMSURLHistory();
     }
 }

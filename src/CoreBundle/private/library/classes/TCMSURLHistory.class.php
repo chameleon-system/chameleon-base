@@ -125,7 +125,6 @@ class TCMSURLHistory
                     'params' => $item['params'],
                 );
                 $_item['params']['_histid'] = $key;
-                // $_item['params']['_rmhist'] = 'true';
                 $_item['url'] = $this->EncodeParameters($_item['params']);
                 $return[] = $_item;
             }
