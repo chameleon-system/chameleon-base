@@ -663,12 +663,8 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
         return $activePage->GetRealURLPlain(array(), true);
     }
 
-    private function isNotFoundPage(?TCMSActivePage $activePage, ?TdbCmsPortal $activePortal): bool
+    private function isNotFoundPage(TCMSActivePage $activePage, TdbCmsPortal $activePortal): bool
     {
-        if (null === $activePage || null === $activePortal) {
-            return false;
-        }
-
         return $activePage->fieldPrimaryTreeIdHidden === $activePortal->fieldPageNotFoundNode;
     }
 
@@ -691,7 +687,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
         }
 
         $activePage = $this->getActivePageService()->getActivePage();
-        if (true === $this->isNotFoundPage($activePage, $activePortal)) {
+        if (null === $activePage || true === $this->isNotFoundPage($activePage, $activePortal)) {
             return [];
         }
 
@@ -703,15 +699,13 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
                     $url = $alternativeLanguage->GetTranslatedPageURL();
                     $alternatives[$iso] = $url;
                 } catch (Exception $exception) {
-                    $id = '';
-                    $name = '';
-                    if (null !== $activePage) {
-                        $id = $activePage->id;
-                        $name = $activePage->GetName();
-                    }
-
                     $this->getLogger()->error(
-                        sprintf('Cannot generate alternative language urls for page %s/%s with language %s.', $id, $name, $iso),
+                        sprintf(
+                            'Cannot generate alternative language urls for page %s/%s with language %s.',
+                            $activePage->id,
+                            $activePage->GetName(),
+                            $iso
+                        ),
                         ['exception' => $exception]
                     );
                 }
