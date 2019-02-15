@@ -693,22 +693,24 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
 
         $alternatives = [];
         while (false !== ($alternativeLanguage = $activeLanguages->Next())) {
-            if ($alternativeLanguage->id !== $activeLanguage->id) {
-                $iso = $alternativeLanguage->fieldIso6391;
-                try {
-                    $url = $alternativeLanguage->GetTranslatedPageURL();
-                    $alternatives[$iso] = $url;
-                } catch (Exception $exception) {
-                    $this->getLogger()->error(
-                        sprintf(
-                            'Cannot generate alternative language urls for page %s/%s with language %s.',
-                            $activePage->id,
-                            $activePage->GetName(),
-                            $iso
-                        ),
-                        ['exception' => $exception]
-                    );
-                }
+            if ($alternativeLanguage->id === $activeLanguage->id) {
+                continue;
+            }
+
+            $iso = $alternativeLanguage->fieldIso6391;
+            try {
+                $url = $alternativeLanguage->GetTranslatedPageURL();
+                $alternatives[$iso] = $url;
+            } catch (Exception $exception) {
+                $this->getLogger()->error(
+                    sprintf(
+                        'Cannot generate alternative language urls for page %s/%s with language %s.',
+                        $activePage->id,
+                        $activePage->GetName(),
+                        $iso
+                    ),
+                    ['exception' => $exception]
+                );
             }
         }
 
