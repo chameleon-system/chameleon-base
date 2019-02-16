@@ -229,6 +229,12 @@ Log output is no longer collected and no longer sent as attachments with the not
 
 - New method `getRequestId()`.
 
+## ckEditor
+
+The custom skin moonocolor is deprecated.
+If you have an extension of chameleonConfig.js please be sure, that you change the skin to 
+`config.skin = 'moono-lisa';` and the color to: `config.uiColor = '#f0f3f5';`
+
 # Changed Interfaces and Method Signatures
 
 This section contains information on interface and method signature changes which affect backwards compatibility (BC).
