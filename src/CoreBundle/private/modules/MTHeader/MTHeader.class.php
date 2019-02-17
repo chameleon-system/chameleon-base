@@ -96,8 +96,6 @@ class MTHeader extends TCMSModelBase
         if (stristr($this->viewTemplate, 'title.view.php')) {
             $this->data['sBackendTitle'] = $this->GetBackendTitle();
         } else {
-            $this->_LoadUserImage();
-
             if (ACTIVE_TRANSLATION || ACTIVE_BACKEND_TRANSLATION) {
                 $this->GetEditLanguagesHTML();
             }
@@ -380,6 +378,8 @@ class MTHeader extends TCMSModelBase
     }
 
     /**
+     * @deprecated since 6.3.0 - not used anymore, we don't show a user icon in the header toolbar anymore.
+     *
      * loads the user image or a default icon.
      */
     protected function _LoadUserImage()

@@ -28,7 +28,7 @@ legend {
 }
 
 .error, .errorMessage {
-    background: #ffcccc url(../images/nav_icons/error.png) no-repeat 5px 9px;
+    background-color: #ffcccc;
     color: #900;
     border: 2px solid #c00;
     padding-left: 45px;
@@ -42,7 +42,7 @@ legend {
 }
 
 .notice, .warningMessage, .noticeMessage, span.invalid, span.missing {
-    background: #F8F2AA url(../images/nav_icons/notice.png) no-repeat 5px 9px;
+    background-color: #F8F2AA;
     color: #0B224B;
     border: 2px solid #FFB608;
     padding-left: 45px;
@@ -57,7 +57,7 @@ legend {
 }
 
 div.success, span.success, .successMessage {
-    background: #E3F8D8 url(../images/nav_icons/success.png) no-repeat 5px 9px;
+    background-color: #E3F8D8;
     color: #0B224B;
     border: 2px solid #217C21;
     padding-left: 45px;
@@ -88,8 +88,6 @@ div.success, span.success, .successMessage {
 .tinyNotice {
     color: #0B224B;
     padding-left: 20px;
-    background-image: url(/chameleon/blackbox/images/icons/information.png);
-    background-repeat: no-repeat;
     font-size: 12px;
     line-height: 16px;
 }
@@ -97,8 +95,6 @@ div.success, span.success, .successMessage {
 .tinyError {
     color: #900;
     padding-left: 20px;
-    background-image: url(/chameleon/blackbox/images/icons/exclamation.png);
-    background-repeat: no-repeat;
     font-size: 12px;
     line-height: 16px;
 }
@@ -179,17 +175,6 @@ div.success, span.success, .successMessage {
     background-color: #21618c;
     color: #fff;
     border-color: #083c63;
-}
-
-/* textarea/iFrame resize jquery plugin */
-div.grippie {
-    background: #EEEEEE url(/chameleon/blackbox/images/grippie.png) no-repeat scroll center 2px;
-    border-color: #DDDDDD;
-    border-style: solid;
-    border-width: 0pt 1px 1px;
-    cursor: s-resize;
-    height: 9px;
-    overflow: hidden;
 }
 
 .resizable-textarea textarea {
@@ -317,7 +302,6 @@ div.grippie {
 .card.bg-success .card-footer {
     border-color: #379457;
 }
-
 
 .alert-warning .lds-ring div {
     border: 6px solid #856404;

@@ -730,7 +730,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     {
         $label = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.action.delete'));
 
-        return '<span onclick="DeleteRecord(\''.$row['id'].'\')" title="'.$label.'" class="fas fa-trash-alt"></span>';
+        return '<span onclick="DeleteRecord(\''.$row['id'].'\')" title="'.$label.'" class="fas fa-trash-alt text-danger"></span>';
     }
 
     /**

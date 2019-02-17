@@ -5,6 +5,8 @@
 <script>
 
 /*
+ * @deprecated since 6.3.0 - not used anywhere since years.
+ *
  * PNG Behavior
  *
  * This script was created by Erik Arvidsson (http://webfx.eae.net/contact.html#erik)

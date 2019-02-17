@@ -9,9 +9,14 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @deprecated since 6.3.0 - view should use twig and twig filters instead.
+ */
 class TTemplateTools
 {
     /**
+     * @deprecated since 6.3.0 - use twig templates instead.
+     *
      * @param string      $sName
      * @param string|null $sValue
      * @param int         $iWidth
@@ -42,6 +47,8 @@ class TTemplateTools
     }
 
     /**
+     * @deprecated since 6.3.0 - use twig templates instead.
+     *
      * Creates a select field. You have to specify the select's name,
      * an array of values, an array of descriptors, the width in pixels and
      * which entry to select (optional)
@@ -77,6 +84,8 @@ class TTemplateTools
     }
 
     /**
+     * @deprecated since 6.3.0 - use twig templates instead.
+     *
      * @param string         $sName
      * @param TCMSRecordList $oList
      * @param string         $sValue
@@ -112,6 +121,8 @@ class TTemplateTools
     }
 
     /**
+     * @deprecated since 6.3.0 - use twig templates instead.
+     *
      * @param string $sContent
      *
      * @return string
@@ -130,6 +141,8 @@ class TTemplateTools
     }
 
     /**
+     * @deprecated since 6.3.0 - use twig templates instead.
+     *
      * opens a div box that can be opend/closed using javascript
      * you will need to close the box with 2 single divs.
      *
@@ -177,6 +190,8 @@ class TTemplateTools
     }
 
     /**
+     * @deprecated since 6.3.0 - use twig templates instead.
+     *
      * @param string $sText
      * @param string $sOnClick
      * @param string $sClass

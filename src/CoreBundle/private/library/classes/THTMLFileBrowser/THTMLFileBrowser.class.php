@@ -12,8 +12,10 @@
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 /**
+ * @deprecated since 6.3.0 - not used anywhere.
+ *
  * NOTE: requires sessions to work!
-/**/
+ */
 class THTMLFileBrowser
 {
     const SESSION_PARAM_NAME = 'THTMLFileBrowser';

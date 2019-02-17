@@ -9,15 +9,10 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @deprecated since 6.3.0 - was used by workflow bundle
+ */
 function gcf_GetPublishedIcon($value, $row)
 {
-    $returnVal = '';
-
-    if ('1' == $value) {
-        $returnVal = '<img src="'.TGlobal::GetPathTheme().'/images/icons/accept.png" />';
-    } else {
-        $returnVal = '<img src="'.TGlobal::GetPathTheme().'/images/icons/delete.png" />';
-    }
-
-    return $returnVal;
+    return $value;
 }

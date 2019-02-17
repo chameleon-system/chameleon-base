@@ -480,7 +480,7 @@ class TCMSUser extends TCMSRecord
      */
     public function GetUserIcon($bWithZoom = true, $iThumbWidthHeight = 32)
     {
-        $imageTag = '<img src="'.TGlobal::GetPathTheme().'/images/icons/user.png" hspace="0" vspace="0" border="0" style="margin-right:10px" align="left" width="'.$iThumbWidthHeight.'" height="'.$iThumbWidthHeight.'" />';
+        $imageTag = '<i class="fas fa-user"></i>';
         $sImageID = $this->sqlData['images'];
         if ($sImageID >= 1000 || !is_numeric($sImageID)) {
             $oImage = new TCMSImage();

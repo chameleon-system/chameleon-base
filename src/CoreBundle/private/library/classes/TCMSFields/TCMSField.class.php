@@ -1516,7 +1516,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $buttonItem = new TCMSTableEditorMenuItem();
         $buttonItem->sItemKey = 'saveandclose';
         $buttonItem->setTitle($translator->trans('chameleon_system_core.action.save_and_return'));
-        $buttonItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/accept.png');
+        $buttonItem->sIcon = 'far fa-save';
         $buttonItem->setButtonStyle('btn-success');
 
         $onClickMethod = 'SaveFieldViaAjaxCustomCallback(ShowAjaxSaveResultAndClose); return false;';

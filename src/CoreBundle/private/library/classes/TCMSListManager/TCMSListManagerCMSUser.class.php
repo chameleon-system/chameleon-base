@@ -69,7 +69,7 @@ class TCMSListManagerCMSUser extends TCMSListManagerFullGroupTable
         }
         $translator = $this->getTranslator();
 
-        return sprintf('<span title="%s" class="fas fa-trash-alt" style="color: #d9534f; opacity: .5;"></span>',
+        return sprintf('<span title="%s" class="fas fa-trash-alt text-danger" style="color: #d9534f; opacity: .5;"></span>',
             TGlobal::OutJS($translator->trans('chameleon_system_core.list.system_entry_delete_not_allowed'))
         );
     }
