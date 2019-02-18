@@ -259,8 +259,6 @@ class TCMSTableWriter extends TCMSTableEditor
      *
      * @param string $sOldTableName
      * @param string $sNewTableName
-     *
-     * @throws TPkgCmsException_Log
      */
     protected function RenameRelatedTablesTarget($sOldTableName, $sNewTableName)
     {
@@ -342,8 +340,6 @@ class TCMSTableWriter extends TCMSTableEditor
 
     /**
      * overwrite the insert to create the actual table.
-     *
-     * @throws TPkgCmsException_Log
      */
     public function Insert()
     {
@@ -395,8 +391,6 @@ class TCMSTableWriter extends TCMSTableEditor
      * still be required in some other context (a table may be a property of more than one parent for example).
      *
      * @param int|null $sId
-     *
-     * @throws TPkgCmsException_Log
      */
     public function Delete($sId = null)
     {
