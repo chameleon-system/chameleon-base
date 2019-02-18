@@ -199,12 +199,12 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         /**
          * @var $newField TCMSField
          */
-        $newField = &$this->oTable->GetFieldObject();
+        $newField = $this->oTable->GetFieldObject();
 
         $newField->name = $newName;
         $newField->sTableName = $this->_oParentRecord->sqlData['name'];
         $newField->recordId = $this->sId;
-        $newField->oDefinition = &$this->oTable;
+        $newField->oDefinition = $this->oTable;
         if (true === $isTypeChange) {
             $newField->ChangeFieldTypePostHook();
         }
