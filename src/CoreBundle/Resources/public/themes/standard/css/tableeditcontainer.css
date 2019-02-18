@@ -191,6 +191,13 @@
 }
 
 /**
+ * Overwrite CKEditor theme 'moono-lisa'
+ */
+.cke {
+    border-radius: .2rem;
+}
+
+/**
  * TCMSFieldBoolean: Add icons and custom styling for coreUI switches.
  */
 
