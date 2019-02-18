@@ -335,7 +335,7 @@ function CreateModalIFrameDialogCloseButton(url, width, height, title, isDraggab
  * creates a ModalDialog with close button from content string
  */
 function CreateModalIFrameDialogFromContent(content, width, height, title, isDraggable, isResizable) {
-    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
+    CHAMELEON.CORE.showModal(title, content, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
 }
 
 /*

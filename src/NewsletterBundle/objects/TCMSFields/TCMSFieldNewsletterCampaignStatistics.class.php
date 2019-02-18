@@ -28,23 +28,23 @@ class TCMSFieldNewsletterCampaignStatistics extends TCMSFieldText
         $sShowData = $this->data;
         if ('' == $sShowData) {
             $sShowData = TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.no_queue');
-            $html = '<div style="height:20px;background-image: url(/chameleon/blackbox//images/icons/newspaper_delete.png); background-position: 0px 2px; background-repeat: no-repeat; padding-left: 20px;" >'.TGlobal::OutHTML($sShowData).'</div><br />';
+            $html = '<div class="alert alert-info"><i class="fas fa-minus-circle"></i> '.TGlobal::OutHTML($sShowData).'</div>';
         } else {
             $sShowData = TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.subscriber_count').': '.$sShowData;
             $iAlreadySentCont = $this->getAlreadySentCount();
             $iToSendCount = $this->data - $iAlreadySentCont;
             if (0 == $iToSendCount) {
-                $html = '<div style="height:20px;background-image: url(/chameleon/blackbox//images/icons/tick.png); background-position: 0px 2px; background-repeat: no-repeat; padding-left: 20px;" >'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.queue_processed')).'</div><br />';
+                $html = '<i class="far fa-check-square"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.queue_processed')).'<br />';
             } else {
                 if (0 == $iAlreadySentCont) {
-                    $html = '<div style="height:20px;background-image: url(/chameleon/blackbox//images/icons/time.png); background-position: 0px 2px; background-repeat: no-repeat; padding-left: 20px;" >'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.queue_not_started')).'</div><br />';
+                    $html = '<i class="far fa-clock"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.queue_not_started')).'<br />';
                 } else {
-                    $html = '<div style="height:20px;background-image: url(/chameleon/blackbox//images/icons/time_go.png); background-position: 0px 2px; background-repeat: no-repeat; padding-left: 20px;" >'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.queue_processing')).'</div><br />';
+                    $html = '<i class="fas fa-clock"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.queue_processing')).'<br />';
                 }
             }
-            $html .= '<div style="height:20px;background-image: url(/chameleon/blackbox//images/icons/newspaper_link.png); background-position: 0px 2px; background-repeat: no-repeat; padding-left: 20px;" >'.TGlobal::OutHTML($sShowData).'</div>';
-            $html .= '<div style="height:20px;background-image: url(/chameleon/blackbox//images/icons/newspaper_add.png); background-position: 0px 2px; background-repeat: no-repeat; padding-left: 20px;" >'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.already_sent').': '.$this->getAlreadySentCount()).'</div>';
-            $html .= '<div style="height:20px;background-image: url(/chameleon/blackbox//images/icons/newspaper_go.png); background-position: 0px 2px; background-repeat: no-repeat; padding-left: 20px;" >'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.still_to_process', array('%count%' => $iToSendCount))).'</div><br />';
+            $html .= '<i class="fas fa-link"></i> '.TGlobal::OutHTML($sShowData).'<br>';
+            $html .= '<i class="fas fa-plus-circle"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.already_sent').': '.$this->getAlreadySentCount()).'<br>';
+            $html .= '<i class="fas fa-play-circle"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.still_to_process', array('%count%' => $iToSendCount))).'<br />';
         }
 
         return $html;

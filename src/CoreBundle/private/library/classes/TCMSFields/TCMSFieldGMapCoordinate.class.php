@@ -63,7 +63,6 @@ class TCMSFieldGMapCoordinate extends TCMSField
         $viewRenderer->AddSourceObject('longitude', $lng);
         $viewRenderer->AddSourceObject('googleMapsApiKey', $this->getGoogleMapsApiKey());
         $viewRenderer->AddSourceObject('isMandatoryField', $this->IsMandatoryField());
-        $viewRenderer->AddSourceObject('backendImageBaseUrl', URL_CMS);
 
         return $viewRenderer->Render('TCMSFieldGMapCoordinate/inputFieldsWithStaticMap.html.twig', null, false);
     }

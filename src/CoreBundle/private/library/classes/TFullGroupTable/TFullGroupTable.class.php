@@ -68,6 +68,8 @@ class TFullGroupTable extends TGroupTable
     public $pageingLocation = 'top_and_bottom';
 
     /**
+     * @deprecated since 6.3.0 - We don`t need to configure an icon URL anymore. We use an icon font.
+     *
      * path to the image to display for sorting in ASC order (default: NULL).
      *
      * @var mixed - string or null if no image path set
@@ -75,6 +77,8 @@ class TFullGroupTable extends TGroupTable
     public $iconSortASC = null;
 
     /**
+     * @deprecated since 6.3.0 - We don`t need to configure an icon URL anymore. We use an icon font.
+     *
      * path to the image to display for sorting in DESC order (default: NULL).
      *
      * @var mixed - string or null if no image path set
@@ -636,9 +640,9 @@ class TFullGroupTable extends TGroupTable
                         }
 
                         if ('ASC' == $tmpOrderList[$cellObj->name]) {
-                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<img src="'.$this->iconSortDESC.'" border="0" align="middle" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_asc')).'" />';
+                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-up" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_asc')).'"></i>';
                         } else {
-                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<img src="'.$this->iconSortASC.'" border="0" align="middle" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_desc')).'" />';
+                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-down" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_desc')).'"></i>';
                         }
 
                         $row[$cellObj->name] = '<nobr>'.$row[$cellObj->name].$orderImage;

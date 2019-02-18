@@ -33,7 +33,7 @@ class TCMSFieldDateToday extends TCMSFieldDate
         $html = parent::GetHTML();
 
         if ($this->currentDateIsEmpty) {
-            $html .= '<span class="tinyNotice">'.TGlobal::Translate('chameleon_system_core.field_date_time.not_set').'</span>';
+            $html .= '<span class="alert alert-info">'.TGlobal::Translate('chameleon_system_core.field_date_time.not_set').'</span>';
         }
 
         return $html;

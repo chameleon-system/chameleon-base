@@ -138,7 +138,7 @@
                         if (self.settings.accessRightsMediaTree.delete) {
                             contextMenu.deleteItem = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.delete_folder'),
-                                icon: "fas fa-trash-alt",
+                                icon: "fas fa-trash-alt text-danger",
                                 action: function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);

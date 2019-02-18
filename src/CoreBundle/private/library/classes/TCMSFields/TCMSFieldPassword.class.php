@@ -36,10 +36,10 @@ class TCMSFieldPassword extends TCMSFieldVarchar
         $value = $this->_GetHTMLValue();
         if (!empty($value)) {
             $passwordMessage = 'chameleon_system_core.field_password.has_password';
-            $sMessageClass = 'tinyNotice';
+            $sMessageClass = 'alert alert-info';
         } else {
             $passwordMessage = 'chameleon_system_core.field_password.has_no_password';
-            $sMessageClass = 'tinyError';
+            $sMessageClass = 'alert alert-danger';
         }
 
         $viewRenderer = $this->getViewRenderer();

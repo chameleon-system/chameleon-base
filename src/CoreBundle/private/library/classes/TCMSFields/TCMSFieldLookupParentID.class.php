@@ -56,7 +56,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
                 if ('' !== $itemName) {
                     $html .= '<div class="mr-2">' . $itemName . '</div>';
                 }
-                $html .= '<div class="switchToRecordBox">' . TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), "javascript:document.location.href='".$this->GetEditLinkForParentRecord()."';", 'fas fa-download') . '</div>';
+                $html .= '<div class="switchToRecordBox">' . TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), "javascript:document.location.href='".$this->GetEditLinkForParentRecord()."';", 'fas fa-location-arrow') . '</div>';
                 $html .= '</div>';
             }
         }
