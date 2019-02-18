@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\Service;
 
-
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
@@ -25,8 +24,7 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
 
     public function __construct(
         RequestStack $requestStack
-    )
-    {
+    ) {
         $this->requestStack = $requestStack;
     }
 
