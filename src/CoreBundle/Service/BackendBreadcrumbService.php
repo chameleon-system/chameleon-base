@@ -16,50 +16,32 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
 {
-    CONST BREADCRUMB_SESSION_KEY = '_cmsurlhistory';
+    private const BREADCRUMB_SESSION_KEY = '_cmsurlhistory';
 
     /**
      * @var RequestStack
      */
     private $requestStack;
 
-    /**
-     * @var RequestInfoServiceInterface
-     */
-    private $requestInfoService;
-
     public function __construct(
-        RequestStack $requestStack,
-        RequestInfoServiceInterface $requestInfoService
+        RequestStack $requestStack
     )
     {
         $this->requestStack = $requestStack;
-        $this->requestInfoService = $requestInfoService;
     }
 
     public function getBreadcrumb(): ?\TCMSURLHistory
     {
-        // prevent possible information disclosure to frontend modules
-        if (false === $this->requestInfoService->isBackendMode()) {
-            return null;
-        }
-
         $backendUser = \TCMSUser::GetActiveUser();
         if (null === $backendUser || false === $backendUser->bLoggedIn) {
             return null;
         }
 
-        /**
-         * @var $breadCrumbHistory \TCMSURLHistory
-         */
         $breadCrumbHistory = $this->getBreadcrumbFromSession();
 
-        if (null === $breadCrumbHistory) {
+        if (null === $breadCrumbHistory ||
+           (null !== $breadCrumbHistory && false === $breadCrumbHistory->paramsParameterExists())) {
             $this->reset();
-        } else {
-            if (false === $breadCrumbHistory->paramsParameterExists()) {
-                $this->reset();
-            }
         }
 
         return $this->getBreadcrumbFromSession();

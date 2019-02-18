@@ -867,7 +867,6 @@
 
         <service id="chameleon_system_core.service.backend_breadcrumb" class="ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService">
             <argument type="service" id="request_stack"/>
-            <argument type="service" id="chameleon_system_core.request_info_service"/>
         </service>
     </services>
 </container>
