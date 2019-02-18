@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
-use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
+use Doctrine\DBAL\DBALException;
 
 /**
  * manages creation and deletion of tables.
@@ -30,6 +31,11 @@ class TCMSTableWriter extends TCMSTableEditor
 
     protected $aOldData = null;
 
+    /**
+     * @var string|null
+     */
+    private $oldTableComment;
+
     protected function LoadDataFromDatabase()
     {
         parent::LoadDataFromDatabase();
@@ -43,40 +49,42 @@ class TCMSTableWriter extends TCMSTableEditor
      */
     public function Save(&$postData, $bDataIsInSQLForm = false)
     {
-        $this->sOldTblName = $this->oTable->sqlData['name'];
-
-        $sOldComment = substr($this->oTable->sqlData['translation'].': '.$this->oTable->sqlData['notes'], 0, 255);
-        $sNewComment = substr($postData['translation'].":\n".$postData['notes'], 0, 255);
-
         $this->aOldData = $this->oTable->sqlData;
-        if ($this->sOldTblName != $postData['name']) {
-            $postData['name'] = $this->GetValidTableName($postData['name']);
+        $this->sOldTblName = $this->aOldData['name'];
+        $this->oldTableComment = $this->getTableComment($this->aOldData['translation'], $this->aOldData['notes']);
+
+        // NOTE this is doubled in PrepareDataForSave() but necessary for backwards compatibility (field was set before Save()).
+        $this->_sqlTableName = $this->getNewNormalizedTableName($this->sOldTblName, $postData['name']);
+
+        parent::Save($postData);
+    }
+
+    private function getTableComment(string $translation, string $notes): string
+    {
+        return substr($translation.': '.$notes, 0, 255);
+    }
+
+    private function getNewNormalizedTableName(string $oldName, string $desiredName): string
+    {
+        $name = strtolower($desiredName);
+
+        if ($oldName !== $name) {
+            $name = $this->GetValidTableName($name);
         }
 
-        $sRealTableName = $this->sOldTblName; // set current table name for ALTER statement
+        return $name;
+    }
 
-        if ($this->sOldTblName != $postData['name']) {
-            $sRealTableName = $postData['name']; // set new table name
-            $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->oTable->sqlData['name']).'` RENAME `'.MySqlLegacySupport::getInstance()->real_escape_string($postData['name']).'`';
-            MySqlLegacySupport::getInstance()->query($query);
-            $aQuery = array(new LogChangeDataModel($query));
-            TCMSLogChange::WriteTransaction($aQuery);
+    /**
+     * {@inheritdoc}
+     */
+    protected function PrepareDataForSave($postData)
+    {
+        $postData = parent::PrepareDataForSave($postData);
 
-            $this->_sqlTableName = $postData['name'];
-            // we need to rename any related tables as well
-            $this->_RenameRelatedTables($this->sOldTblName, $sRealTableName);
-        }
+        $postData['name'] = $this->getNewNormalizedTableName($this->sOldTblName, $postData['name']);
 
-        if ($sOldComment != $sNewComment) {
-            $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($sRealTableName)."` COMMENT = '".MySqlLegacySupport::getInstance()->real_escape_string($sNewComment)."'";
-            MySqlLegacySupport::getInstance()->query($query);
-            $aQuery = array(new LogChangeDataModel($query));
-            TCMSLogChange::WriteTransaction($aQuery);
-        }
-
-        $oRecordData = parent::Save($postData);
-
-        return $oRecordData;
+        return $postData;
     }
 
     /**
@@ -127,6 +135,8 @@ class TCMSTableWriter extends TCMSTableEditor
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
+        $newTableName = $oPostTable->sqlData['name'];
+
         // reset table list cache
         if (array_key_exists('_listObjCache', $_SESSION)) {
             $_SESSION['_listObjCache'] = array();
@@ -134,13 +144,60 @@ class TCMSTableWriter extends TCMSTableEditor
 
         $this->getAutoclassesCacheWarmer()->updateTableById($this->sId);
 
-        // check table engine
-        $realEngine = $this->getRealTableEngine($oPostTable->sqlData['name']);
+        $this->changeTableName($this->sOldTblName, $newTableName);
         $requestedEngine = $this->getTableEngine($oPostTable->sqlData);
-        if (strtolower($realEngine) !== strtolower($requestedEngine)) {
-            $this->changeTableEngine($oPostTable->sqlData['name'], $requestedEngine);
-            $this->SaveField('engine', $this->getRealTableEngine($oPostTable->sqlData['name']), false);
+        $this->changeTableEngine($newTableName, $requestedEngine);
+        $this->changeTableComment($newTableName, $this->oldTableComment);
+    }
+
+    /**
+     * @param string $oldTableName
+     * @param string $newTableName
+     *
+     * @throws DBALException
+     */
+    private function changeTableName(string $oldTableName, string $newTableName): void
+    {
+        if ($oldTableName === $newTableName) {
+            return;
         }
+
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $query = sprintf(
+            'ALTER TABLE %s RENAME %s',
+            $databaseConnection->quoteIdentifier($oldTableName),
+            $databaseConnection->quoteIdentifier($newTableName)
+        );
+        $databaseConnection->executeQuery($query);
+
+        $aQuery = array(new LogChangeDataModel($query));
+        TCMSLogChange::WriteTransaction($aQuery);
+
+        $this->_RenameRelatedTables($oldTableName, $newTableName);
+    }
+
+    /**
+     * @param string $tableName
+     * @param string $oldTableComment
+     *
+     * @throws DBALException
+     */
+    private function changeTableComment(string $tableName, string $oldTableComment): void
+    {
+        $newTableComment = $this->getTableComment($this->oTable->sqlData['translation'], $this->oTable->sqlData['notes']);
+
+        if ($oldTableComment === $newTableComment) {
+            return;
+        }
+
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $query = sprintf('ALTER TABLE %s COMMENT %s', $databaseConnection->quoteIdentifier($tableName), $databaseConnection->quote($newTableComment));
+        $databaseConnection->executeQuery($query);
+
+        $aQuery = array(new LogChangeDataModel($query));
+        TCMSLogChange::WriteTransaction($aQuery);
     }
 
     /**
@@ -417,6 +474,8 @@ class TCMSTableWriter extends TCMSTableEditor
      * @param string $tableName
      *
      * @return string
+     *
+     * @throws DBALException
      */
     protected function getRealTableEngine($tableName)
     {
@@ -441,14 +500,21 @@ class TCMSTableWriter extends TCMSTableEditor
      * @param string $tableName
      * @param string $newEngine
      *
-     * @throws ErrorException
-     * @throws TPkgCmsException_Log
+     * @throws DBALException
      */
     protected function changeTableEngine($tableName, $newEngine)
     {
-        $query = 'ALTER TABLE  `'.MySqlLegacySupport::getInstance()->real_escape_string($tableName)."` ENGINE = {$newEngine}";
-        MySqlLegacySupport::getInstance()->query($query);
-        TCMSLogChange::WriteTransaction(array(new LogChangeDataModel($query)));
+        $realEngine = $this->getRealTableEngine($tableName);
+        if (strtolower($realEngine) !== strtolower($newEngine)) {
+            $databaseConnection = $this->getDatabaseConnection();
+            $query = sprintf('ALTER TABLE %s ENGINE %s', $databaseConnection->quoteIdentifier($tableName), $newEngine);
+            $databaseConnection->executeQuery($query);
+
+            TCMSLogChange::WriteTransaction(array(new LogChangeDataModel($query)));
+
+            $newTableEngine = $this->getRealTableEngine($tableName);
+            $this->SaveField('engine', $newTableEngine, false);
+        }
     }
 
     /**

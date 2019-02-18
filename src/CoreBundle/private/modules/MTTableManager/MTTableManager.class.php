@@ -397,7 +397,8 @@ class MTTableManager extends TCMSModelBase
         /** @var $recordList TCMSRecordList */
         $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $this->getAutocompleteListQuery());
 
-        $returnVal = array();
+        $returnVal = [];
+        $returnVal[] = ['id' => ' ', 'text' => ' '];
 
         /** @var $record TCMSRecord */
         while ($record = $recordList->Next()) {

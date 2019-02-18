@@ -27,8 +27,8 @@ if (false === isset($data['oUser'])) {
         <button type="button" class="navbar-toggler sidebar-toggler d-lg-none" data-toggle="sidebar-show">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a href="<?=PATH_CMS_CONTROLLER; ?>?_rmhist=true&_histid=0" class="navbar-brand d-sm-down-none">
-            <img src="<?= TGlobal::OutHTML($sLogoURL); ?>" alt="" />
+        <a href="<?=PATH_CMS_CONTROLLER; ?>?_rmhist=true&_histid=0" class="navbar-brand d-sm-down-none" style="background-image: url('<?= TGlobal::OutHTML($sLogoURL); ?>');">
+&nbsp;
         </a>
         <button type="button" class="navbar-toggler sidebar-toggler d-md-down-none" data-toggle="sidebar-lg-show">
             <span class="navbar-toggler-icon"></span>
