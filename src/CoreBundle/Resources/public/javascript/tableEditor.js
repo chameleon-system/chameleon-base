@@ -296,7 +296,7 @@ function editDocument(fieldName, documentID, html) {
  * document manager field: opens document manager popup
  */
 function loadDocumentManager(recordID, tableID, fieldName) {
-    _documentManagerWindow = window.open(window.location.pathname + '?pagedef=CMSDocumentManager&recordID=' + recordID + '&tableID=' + tableID + '&fieldName=' + fieldName, '_blank', 'width=1000,height=700,resizable=yes,scrollbars=no');
+    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSDocumentManager&recordID=' + recordID + '&tableID=' + tableID + '&fieldName=' + fieldName);
 }
 
 function addMLTConnectionResponse(data, responseMessage) {

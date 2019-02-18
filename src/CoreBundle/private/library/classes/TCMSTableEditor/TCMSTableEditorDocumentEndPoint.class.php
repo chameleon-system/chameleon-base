@@ -680,12 +680,12 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
             parent.reloadSelectedFilesList();
             if(typeof window.parent.editDocument == 'function' || typeof window.parent.editDocument == 'object') {
               var assignedDocumentHTML = '<div id=\"documentManager_' + parent._fieldName  + '_' + data.id + '\">';
-              assignedDocumentHTML += '<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"400\"><tr>';
-              assignedDocumentHTML += '<td width=\"*\">';
+              assignedDocumentHTML += '<table class=\"table table-striped\"><tr>';
+              assignedDocumentHTML += '<td>';
               assignedDocumentHTML += data.downloadHTML;
               assignedDocumentHTML += '</td>';
-              assignedDocumentHTML += '<td width=\"20\">';
-              assignedDocumentHTML += '<img src=\"".URL_CMS.'/images/icons/page_delete.gif" alt="'.TGlobal::Translate('chameleon_system_core.table_editor_document.action_remove')."\" border=\"0\" style=\"cursor: pointer; cursor: hand;\" onclick=\"if(confirm(\'".TGlobal::Translate('chameleon_system_core.table_editor_document.action_remove_confirm')."?\')){removeDocument(parent._fieldName,data.id,parent._recordID,parent._tableID)};\" />';
+              assignedDocumentHTML += '<td>';
+              assignedDocumentHTML += '<button class=\"btn btn-danger btn-sm\" type=\"button\" onclick=\"if(confirm(\'".TGlobal::Translate('chameleon_system_core.table_editor_document.action_remove_confirm')."?\')){removeDocument(parent._fieldName,data.id,parent._recordID,parent._tableID)};\"><i class=\"far fa-trash-alt mr-2\"></i>".TGlobal::Translate('chameleon_system_core.table_editor_document.action_remove')."';
               assignedDocumentHTML += '</td>';
               assignedDocumentHTML += '</tr>';
               assignedDocumentHTML += '</table>';

@@ -70,35 +70,6 @@ div.success, span.success, .successMessage {
     display: block;
 }
 
-/* message for uploads etc. */
-.indicator {
-    background: #F8F2AA url(../images/indicator_medium.gif) no-repeat 5px 9px;
-    color: #0B224B;
-    border: 2px solid #FFB608;
-    padding-left: 45px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-weight: bold;
-    font-size: 11px;
-    min-height: 40px;
-    display: block;
-}
-
-.tinyNotice {
-    color: #0B224B;
-    padding-left: 20px;
-    font-size: 12px;
-    line-height: 16px;
-}
-
-.tinyError {
-    color: #900;
-    padding-left: 20px;
-    font-size: 12px;
-    line-height: 16px;
-}
-
 .cleardiv {
     clear: both;
     font-size: 0px;
@@ -106,55 +77,14 @@ div.success, span.success, .successMessage {
     height: 0px;
 }
 
-.contentboxHeadline {
-    height: 28px;
-    color: #841313;
-    font-weight: bold;
-    font-size: 13px;
-    letter-spacing: 3px;
-    line-height: 18px;
-}
-
-.contentMessageBox {
-    padding-left: 5px;
-    padding-right: 5px;
-    height: 23px;
-    border: 1px solid #ABBDCD;
-    margin-bottom: 10px;
-    padding-top: 5px;
-}
-
 .pageNavigationTreeSelectBox .treeField ul li .treesubpath {
     line-height: 20px;
     height: 20px;
 }
 
-.modalCloseButton, .modalCloseButton:hover {
-    background: url(../images/icons/action_stop.gif) no-repeat 0px 0px;
-    padding-left: 20px;
-    color: #0B224B;
-    display: block;
-    width: 70px;
-}
-
 /* jquery.flash alt Text */
 .flash-replaced .alt {
     display: none;
-}
-
-.dialogHeadline {
-    padding: 5px;
-    color: #EFEFEF;
-    font-weight: bold;
-    font-size: 12px;
-    line-height: 20px;
-    letter-spacing: 2px;
-    background-image: url(/chameleon/blackbox/images/table_bg.gif);
-    background-position: 50%;
-}
-
-.dialogContent {
-    padding: 3px;
 }
 
 .actionButton, .actionButton:hover {
@@ -191,12 +121,6 @@ div.success, span.success, .successMessage {
     font-size: 12px;
     color: #0B224B;
     background-color: #F8F2AA;
-}
-
-.externalLink {
-    padding-left: 20px;
-    background-image: url(/chameleon/blackbox/images/icon_external_link.gif);
-    background-repeat: no-repeat;
 }
 
 .contentbox .evenrow:hover, .contentbox .oddrow:hover, .shadow {

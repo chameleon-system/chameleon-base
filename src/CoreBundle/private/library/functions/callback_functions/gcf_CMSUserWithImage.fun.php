@@ -14,7 +14,7 @@
  */
 function gcf_CMSUserWithImage($name, $row, $fieldName)
 {
-    $imageTag = '<i class="fas fa-user"></i>';
+    $imageTag = '<i class="fas fa-user"></i> ';
 
     $imageId = $row['images'];
     if ($imageId >= 1000 || !is_numeric($imageId)) {
