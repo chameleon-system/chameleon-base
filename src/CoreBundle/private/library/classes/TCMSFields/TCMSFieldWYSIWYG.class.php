@@ -14,8 +14,6 @@ use ChameleonSystem\CoreBundle\Wysiwyg\CkEditorConfigProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @copyright 2013 by ESONO AG
- *
  * WYSIWYG text field
  *
  * you may set the field config variable "disableButtons" in CMS field configuration
