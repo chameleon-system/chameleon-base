@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\EventListener;
 
-use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService;
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -30,7 +30,7 @@ class BackendBreadcrumbListener
     private $requestInfoService;
 
     /**
-     * @var BackendBreadcrumbService
+     * @var BackendBreadcrumbServiceInterface
      */
     private $backendBreadcrumbService;
 
@@ -43,9 +43,8 @@ class BackendBreadcrumbListener
         RequestStack $requestStack,
         RequestInfoServiceInterface $requestInfoService,
         InputFilterUtilInterface $inputFilterUtil,
-        BackendBreadcrumbService $backendBreadcrumbService
-    )
-    {
+        BackendBreadcrumbServiceInterface $backendBreadcrumbService
+    ) {
         $this->requestStack = $requestStack;
         $this->requestInfoService = $requestInfoService;
         $this->inputFilterUtil = $inputFilterUtil;
@@ -105,5 +104,4 @@ class BackendBreadcrumbListener
 
         return $parameters;
     }
-
 }

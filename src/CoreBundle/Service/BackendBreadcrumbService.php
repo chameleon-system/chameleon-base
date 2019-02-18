@@ -37,8 +37,7 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
 
         $breadCrumbHistory = $this->getBreadcrumbFromSession();
 
-        if (null === $breadCrumbHistory ||
-           (null !== $breadCrumbHistory && false === $breadCrumbHistory->paramsParameterExists())) {
+        if (null === $breadCrumbHistory || false === $breadCrumbHistory->paramsParameterExists()) {
             $this->reset();
         }
 
