@@ -310,7 +310,9 @@ div.grippie {
 }
 
 .app-header .navbar-brand {
-    width: auto;
+    width: 200px;
+    background-repeat: no-repeat;
+    background-position-y: 7px;
 }
 
 /** fix for missing border color, looks like a bootstrap bug */
