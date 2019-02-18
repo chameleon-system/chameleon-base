@@ -168,7 +168,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         $newTypeId = $postData['cms_field_type_id'];
         $newName = $this->oTable->sqlData['name'];
 
-        $bTypeChanged = $oldTypeId !== $newTypeId;
+        $isTypeChange = $oldTypeId !== $newTypeId;
         $currentFieldTypeRow = $this->getFieldTypeDefinition($oldTypeId);
         $newFieldTypeRow = $this->getFieldTypeDefinition($newTypeId);
 
@@ -180,7 +180,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         $oldField->sTableName = $this->oldTableName;
         $oldField->name = $this->oldData['name'];
 
-        if (true === $bTypeChanged) {
+        if (true === $isTypeChange) {
             $oldField->ChangeFieldTypePreHook();
         }
 
@@ -205,7 +205,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         $newField->sTableName = $this->_oParentRecord->sqlData['name'];
         $newField->recordId = $this->sId;
         $newField->oDefinition = &$this->oTable;
-        if (true === $bTypeChanged) {
+        if (true === $isTypeChange) {
             $newField->ChangeFieldTypePostHook();
         }
 
