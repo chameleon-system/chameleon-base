@@ -222,7 +222,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
             }
         }
 
-        // NOTE here was Save() before the reorganization - hence the method names
+        // NOTE Save() was called here before the code was reorganized - hence the method names
 
         if (false === $this->isChangeFromTable && true === $newField->AllowCreateRelatedTablesAfterFieldSave($this->oldData, $currentFieldTypeRow, $newFieldTypeRow)) {
             $newField->CreateRelatedTables();
