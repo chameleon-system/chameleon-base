@@ -237,17 +237,23 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     /**
      * @param string $typeId
      *
-     * @return array|bool
+     * @return array|null
      *
      * @throws DBALException
      */
-    private function getFieldTypeDefinition(string $typeId)
+    private function getFieldTypeDefinition(string $typeId): ?array
     {
         $databaseConnection = $this->getDatabaseConnection();
 
         $query = 'SELECT * FROM `cms_field_type` WHERE `id` = :typeId';
 
-        return $databaseConnection->fetchAssoc($query, ['typeId' => $typeId]);
+        $fieldTypeData = $databaseConnection->fetchAssoc($query, ['typeId' => $typeId]);
+
+        if (false === $fieldTypeData) {
+            return null;
+        }
+
+        return $fieldTypeData;
     }
 
     /**
