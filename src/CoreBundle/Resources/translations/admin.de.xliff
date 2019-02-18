@@ -2218,6 +2218,10 @@
                 <source>chameleon_system_core.image_chooser.tree_node</source>
                 <target>Ordner</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.title">
+                <source>chameleon_system_core.document_manager.title</source>
+                <target>Dokumente</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.folders">
                 <source>chameleon_system_core.document_manager.folders</source>
                 <target>Verzeichnisse</target>
