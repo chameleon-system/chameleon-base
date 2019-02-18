@@ -32,7 +32,7 @@
 <div style="position: relative; top: 2px;">
     <div style="padding-left: 20px;">
         <div data-table-function-bar class="btn-group">
-            <button type="button" class="btn btn-sm btn-primary" onclick="document.cmsform.elements['module_fnc[contentmodule]'].value='Insert';document.cmsform.submit();"><span class="btn-icon" style="background-image: url(<?=TGlobal::GetStaticURLToWebLib(); ?>/images/icons/page-new.gif);"><?php echo TGlobal::Translate('chameleon_system_core.action.new'); ?></span></button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="document.cmsform.elements['module_fnc[contentmodule]'].value='Insert';document.cmsform.submit();"><i class="fas fa-plus pr-2"></i><?php echo TGlobal::Translate('chameleon_system_core.action.new'); ?></button>
         </div>
     </div>
 </div>

@@ -42,7 +42,7 @@ class TCMSListManagerExtranetUser extends TCMSListManagerFullGroupTable
 
         $oUser = &TCMSUser::GetActiveUser();
         if ($oUser && $oUser->oAccessManager && $oUser->oAccessManager->PermitFunction('allow-login-as-extranet-user')) {
-            $sReturnValue .= "<a href=\"{$sURL}\" target=\"_blank\"><img src=\"".URL_CMS."/images/icons/action_go.gif\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".TGlobal::Translate('chameleon_system_extranet.action.login_as_extranet_user')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" /></a>";
+            $sReturnValue .= "<a href=\"{$sURL}\" target=\"_blank\"><i class=\"fas fa-user-check\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".TGlobal::Translate('chameleon_system_extranet.action.login_as_extranet_user')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\"></i></a>";
         }
 
         $sReturnValue .= '<div id="functionTitle_'.$row['cmsident'].'" class="functionTitle"></div>';

@@ -455,7 +455,7 @@ class TGroupTableField
             } else {
                 $cellValue = $this->EscapeCellValue($row[$this->sOriginalField]);
             }
-            $cellValue .= ' <img src="'.TGlobal::GetStaticURL('chameleon/blackbox/images/icons/comment_edit.png').'" border="0" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.default_language')).'" />';
+            $cellValue .= ' <i class="fas fa-language" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.default_language')).'"></i>';
         }
 
         return $cellValue;

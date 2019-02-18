@@ -1,4 +1,7 @@
 <?php
+/**
+ * @deprecated since 6.3.0 - not used anymore.
+ */
 /** @var $oTable THTMLFileBrowser */
 /** @var $aActions array */
 $oLocal = &TCMSLocal::GetActive();

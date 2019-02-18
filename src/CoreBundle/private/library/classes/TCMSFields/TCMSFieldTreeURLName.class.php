@@ -39,7 +39,7 @@ class TCMSFieldTreeURLName extends TCMSFieldVarchar
 
         $url = $this->GetTreeNodeLink();
         if (!empty($url)) {
-            $html .= '<div style="padding-top: 5px;"><a class="externalLink" href="'.TGlobal::OutHTML($url).'" target="_blank">'.TGlobal::Translate('chameleon_system_core.field_tree_url_name.open').'</a></div>';
+            $html .= '<div class="pt-1"><a href="'.TGlobal::OutHTML($url).'" target="_blank"><i class="fas fa-external-link-alt pr-2"></i>'.TGlobal::Translate('chameleon_system_core.field_tree_url_name.open').'</a></div>';
         }
 
         return $html;

@@ -1,13 +1,3 @@
-.backgroundcolor {
-  background-color: #ffffff;
-}
-
-#headerLine {
-  width: 100%;
-  height: 90px;
-  background-image: url(../images/header_bg.gif);
-}
-
 .card-action {
   cursor: hand;
   cursor: pointer;

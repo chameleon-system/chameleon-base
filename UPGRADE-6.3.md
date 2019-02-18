@@ -255,6 +255,10 @@ Note that ONLY BC breaking changes are listed, according to our backwards compat
 The field classes now use the language independent SQL date format in frontend rendering instead of always using
 German date format. For backwards compatibility reasons they work with German date format too.
 
+## \TCMSTableWriter
+
+- Method `changeTableEngine()` now also changes the table config accordingly.
+
 ## \TTools
 
 - Changed method `WriteLogEntry()`: parameter `$sLogFileName` is now ignored.
@@ -469,18 +473,24 @@ is recommended (although this tool may not find database-related deprecations).
 - \TCMSContentBox
 - \TCMSContentBoxItem
 - \TCMSFieldMediaProperties
+- \TCMSFontImage
+- \TCMSFontImageList
 - \TCMSMenuItem
 - \TCMSMenuItem_Module
 - \TCMSMenuItem_Table
+- \THTMLFileBrowser
 - \TPkgCmsCoreLog
 - \TPkgSnippetRenderer_TranslationNode
 - \TPkgSnippetRenderer_TranslationTokenParser
+- \TTemplateTools
 
 ## Properties
 
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$sGeneratedPage
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$postRenderVariables
 - \TAccessManagerPermissions::$revisionManagement
+- \TFullGroupTable::$iconSortASC
+- \TFullGroupTable::$iconSortDESC
 - \TPkgCsv2Sql::$sLogFileName
 - \TCMSFieldLookupFieldTypes::$sFieldHelpTextHTML
 - \TCMSTableEditorChangeLog::$oOldFields
@@ -500,6 +510,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \CMSTemplateEngine::GetLastRevisionNumber()
 - \CMSTemplateEngine::GetMainNavigation()
 - \CMSTemplateEngine::LoadRevisionData()
+- \MTHeader::addTabToUrlHistory()
 - \MTTableEditor::ActivateRevision()
 - \MTTableEditor::AddNewRevision()
 - \MTTableEditor::GetLastRevisionNumber()
@@ -518,6 +529,8 @@ is recommended (although this tool may not find database-related deprecations).
 - \TPkgCsv2Sql::GetLogFile()
 - \TTools::AddStaticPageVariables()
 - \TCMSTableEditorChangeLog::savePreSaveValues()
+- gcf_CMSUserWithImage()
+- gcf_GetPublishedIcon()
 
 ## JavaScript Files and Functions
 
@@ -532,6 +545,8 @@ is recommended (although this tool may not find database-related deprecations).
 - pNotify (new version 3.2.0 located in src/CoreBundle/Resources/public/javascript/pnotify-3.2.0/)
 - respond.min.js
 - src/CoreBundle/Resources/public/javascript/mainNav.js
+- THTMLFileBrowser.js
+- THTMLTable.js
 
 - $.addOption() (jquery.selectboxes plugin)
 - $.bgiframe()
@@ -581,6 +596,7 @@ is recommended (although this tool may not find database-related deprecations).
 ## Database Tables
 
 - cms_content_box
+- cms_font_image
 - cms_record_revision
 - cms_tbl_conf_cms_role7_mlt
 

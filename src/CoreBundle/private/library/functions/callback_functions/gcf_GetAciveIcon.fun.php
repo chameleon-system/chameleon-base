@@ -11,13 +11,9 @@
 
 function gcf_GetAciveIcon($value, $row)
 {
-    $returnVal = '';
-
     if ('1' == $value) {
-        $returnVal = '<img src="/chameleon/blackbox/images/icons/accept.png" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_boolean.yes')).'" />';
-    } else {
-        $returnVal = '<img src="/chameleon/blackbox/images/icons/cancel.png" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_boolean.no')).'" />';
+        return '<i class="fas fa-check-circle text-success" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_boolean.yes')).'"></i>';
     }
 
-    return $returnVal;
+    return '<i class="fas fa-times-circle text-danger" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_boolean.no')).'"></i>';
 }
