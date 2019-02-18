@@ -41,9 +41,9 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
         parent::Init($tableConf);
     }
 
-    /* ------------------------------------------------------------------------
-     * generates the tableobj. assumes that all parameters are in post
-    /* ----------------------------------------------------------------------*/
+    /**
+     * {@inheritdoc}
+     */
     public function CreateTableObj()
     {
         parent::CreateTableObj();
@@ -51,10 +51,16 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
         $this->tableObj->searchBoxContent = '';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function _AddFunctionColumn()
     {
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function _GetRecordClickJavaScriptFunctionName()
     {
         return 'parent._SetImage';
@@ -103,7 +109,6 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
      */
     public function GetCustomRestriction()
     {
-        $query = '';
         $query = parent::GetCustomRestriction();
 
         $cms_media_tree_id = $this->oGlobal->GetUserData('cms_media_tree_id');

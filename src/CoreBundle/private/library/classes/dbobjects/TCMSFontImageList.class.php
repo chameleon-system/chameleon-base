@@ -10,7 +10,7 @@
  */
 
 /**
- * @deprecated since 6.3.0 - unusable since decades.
+ * @deprecated since 6.3.0 - unusable for decades.
  */
 class TCMSFontImageList extends TAdbCmsFontImageList
 {

@@ -10,7 +10,7 @@
  */
 
 /**
- * @deprecated since 6.3.0
+ * @deprecated since 6.3.0 - method moved to TCMSListManagerCMSUser::callbackCmsUserWithImage(). Use 'callbackCmsUserWithImage' for field callback configuration.
  */
 function gcf_CMSUserWithImage($name, $row, $fieldName)
 {

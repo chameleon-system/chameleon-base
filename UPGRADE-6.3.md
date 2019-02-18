@@ -472,6 +472,8 @@ is recommended (although this tool may not find database-related deprecations).
 
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$sGeneratedPage
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$postRenderVariables
+- \TFullGroupTable::$iconSortASC
+- \TFullGroupTable::$iconSortDESC
 - \TPkgCsv2Sql::$sLogFileName
 - \TCMSFieldLookupFieldTypes::$sFieldHelpTextHTML
 - \TCMSTableEditorChangeLog::$oOldFields
@@ -489,6 +491,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
 - \CMSTemplateEngine::GetMainNavigation()
+- \MTHeader::addTabToUrlHistory()
 - \MTTableManager::getAutocompleteRecordList()
 - \TCMSCronJob::getLogger()
 - \TCMSFieldColorPicker::isFirstInstance()
@@ -548,6 +551,7 @@ is recommended (although this tool may not find database-related deprecations).
 ## Database Tables
 
 - cms_content_box
+- cms_font_image
 
 ## Database Fields
 

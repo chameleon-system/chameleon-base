@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
+
 /**
  * shows the CMS Document Manager component.
 /**/
@@ -299,12 +301,12 @@ class CMSDocumentManager extends TCMSModelBase
                                     <i class="far fa-trash-alt mr-2"></i>%s
                                 </button>';
         $deleteButton = sprintf($deleteButtonTemplate,
-            TGlobal::OutJS($translator->trans('chameleon_system_core.field_download.confirm_removal', [], \ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND)),
+            TGlobal::OutJS($translator->trans('chameleon_system_core.field_download.confirm_removal', [], TranslationConstants::DOMAIN_BACKEND)),
             TGlobal::OutJS($this->fieldName),
             TGlobal::OutJS($documentID),
             TGlobal::OutJS($this->recordID),
             TGlobal::OutJS($this->tableID),
-            TGlobal::OutHTML($translator->trans('chameleon_system_core.field_download.remove', [], \ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND))
+            TGlobal::OutHTML($translator->trans('chameleon_system_core.field_download.remove', [], TranslationConstants::DOMAIN_BACKEND))
         );
 
         $html = '

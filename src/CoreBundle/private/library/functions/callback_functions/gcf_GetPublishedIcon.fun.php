@@ -10,7 +10,7 @@
  */
 
 /**
- * @deprecated since 6.3.0 - was used by workflow bundle
+ * @deprecated since 6.3.0 - was only used by deprecated workflow bundle
  */
 function gcf_GetPublishedIcon($value, $row)
 {
