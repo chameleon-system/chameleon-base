@@ -68,6 +68,8 @@ class TFullGroupTable extends TGroupTable
     public $pageingLocation = 'top_and_bottom';
 
     /**
+     * @deprecated since 6.3.0 - We don`t need to configure an icon URL anymore. We use an icon font.
+     *
      * path to the image to display for sorting in ASC order (default: NULL).
      *
      * @var mixed - string or null if no image path set
@@ -75,6 +77,8 @@ class TFullGroupTable extends TGroupTable
     public $iconSortASC = null;
 
     /**
+     * @deprecated since 6.3.0 - We don`t need to configure an icon URL anymore. We use an icon font.
+     *
      * path to the image to display for sorting in DESC order (default: NULL).
      *
      * @var mixed - string or null if no image path set
@@ -248,6 +252,14 @@ class TFullGroupTable extends TGroupTable
      */
     protected $tableCSS = 'table table-sm table-striped table-hover TCMSListManagerFullGroupTable';
 
+    /**
+     * Enables a rich select component with autocomplete.
+     * This is only available if record edit is possible.
+     *
+     * @var bool
+     */
+    private $isAutoCompleteEnabled = false;
+
     public function TFullGroupTable($postData = array())
     {
         parent::TGroupTable();
@@ -264,6 +276,11 @@ class TFullGroupTable extends TGroupTable
     {
         $this->style = new TFullGroupTableStyle();
         $this->_postData = $postData;
+    }
+
+    public function setAutoCompleteState(bool $state)
+    {
+        $this->isAutoCompleteEnabled = $state;
     }
 
     /**
@@ -623,9 +640,9 @@ class TFullGroupTable extends TGroupTable
                         }
 
                         if ('ASC' == $tmpOrderList[$cellObj->name]) {
-                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<img src="'.$this->iconSortDESC.'" border="0" align="middle" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_asc')).'" />';
+                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-up" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_asc')).'"></i>';
                         } else {
-                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<img src="'.$this->iconSortASC.'" border="0" align="middle" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_desc')).'" />';
+                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-down" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_desc')).'"></i>';
                         }
 
                         $row[$cellObj->name] = '<nobr>'.$row[$cellObj->name].$orderImage;
@@ -797,10 +814,11 @@ class TFullGroupTable extends TGroupTable
      */
     protected function _BuildFilterSection()
     {
-        $filter = "<form name=\"{$this->listName}\" id=\"{$this->listName}\" method=\"{$this->formActionType}\" action=\"\" accept-charset=\"UTF-8\">
-      <input type=\"hidden\" name=\"_user_data\" value=\"\">
-      <input type=\"hidden\" name=\"_sort_order\" value=\"\">
-      <input type=\"hidden\" name=\"_listName\" value=\"{$this->listName}\">\n";
+        $filter = '<form name="'.TGlobal::OutHTML($this->listName).'" id="'.TGlobal::OutHTML($this->listName).'" method="'.TGlobal::OutHTML($this->formActionType).'" action="" accept-charset="UTF-8">
+      <input type="hidden" name="_user_data" value="">
+      <input type="hidden" name="_sort_order" value="">
+      <input type="hidden" name="_listName" value="'.TGlobal::OutHTML($this->listName).'">
+';
         reset($this->_postData);
         foreach ($this->_postData as $key => $value) {
             if ($key != session_name() && ('_search_word' != $key || !$this->showSearchBox) && '_listName' != $key && '_limit' != $key && '_sort_order' != $key && '_user_data' != $key && !in_array($key, $this->aHiddenFieldIgnoreList)) {
@@ -819,16 +837,16 @@ class TFullGroupTable extends TGroupTable
             }
         }
 
-        $filterHeader = '<div class="d-flex TFullGroupTable">';
+        $filterHeader = '<div class="d-flex TFullGroupTable form-inline">';
         $filterContent = '';
         // now add group selector (if activated)
         if (null !== $this->groupByCell && $this->showGroupSelector) {
             $this->somethingToShow = true;
 
-            $sGroupSelectorHTML = '<div class="form-group">
-            <label>'.$this->showGroupSelectorText;
+            $sGroupSelectorHTML = '<div class="form-group mr-2">
+            <label>'.$this->showGroupSelectorText.'</label>';
 
-            $sGroupSelectorHTML .= "<select name=\"{$this->groupByCell->name}\" onChange=\"document.{$this->listName}._startRecord.value=0; document.{$this->listName}.submit();\" ".$this->style->GetGroupSelector().">\n";
+            $sGroupSelectorHTML .= "<select class=\"form-control form-control-sm\" name=\"{$this->groupByCell->name}\" data-select2-option=\"{}\" onChange=\"document.{$this->listName}._startRecord.value=0; document.{$this->listName}.submit();\" ".$this->style->GetGroupSelector().">\n";
             // add "show all" option to group selector
             $sGroupSelectorHTML .= '<option value=""';
             if (empty($this->_postData[$this->groupByCell->name])) {
@@ -860,7 +878,6 @@ class TFullGroupTable extends TGroupTable
                 }
             }
             $sGroupSelectorHTML .= '</select>
-            </label>
             </div>';
             $filterContent .= $sGroupSelectorHTML;
         }
@@ -868,19 +885,25 @@ class TFullGroupTable extends TGroupTable
         if ($this->showSearchBox) {
             $this->somethingToShow = true;
 
-
             $filterContent .= '<div class="form-group mr-2">';
 
-            $formatString =  '<select id="searchLookup" name="_search_word" data-listname="%s" class="form-control" data-select2-placeholder="%s" data-select2-ajax="%s" data-record-url="%s">';
-            $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->listName), TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->getRecordAutocompleteUrl()), TGlobal::OutHTML($this->getRecordUrl()));
+            if (true === $this->isAutoCompleteEnabled) {
+                $formatString =  '<select id="searchLookup" name="_search_word" data-listname="%s" class="form-control form-control-sm" data-select2-placeholder="%s" data-select2-ajax="%s" data-record-url="%s">';
+                $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->listName), TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->getRecordAutocompleteUrl()), TGlobal::OutHTML($this->getRecordUrl()));
 
-            if ('' !== $this->_postData['_search_word']) {
-                $formatString = '<option value="%1$s">%1$s</option>';
-                $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->_postData['_search_word']));
+                if ('' !== $this->_postData['_search_word']) {
+                    $formatString = '<option value="%1$s">%1$s</option>';
+                    $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->_postData['_search_word']));
+                }
+
+                $filterContent .= '</select>';
+            } else {
+                $formatString =  '<input id="searchLookup" name="_search_word" class="form-control form-control-sm" placeholder="%s" value="%s">';
+                $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->_postData['_search_word']));
             }
-            $filterContent .= '</select></div>';
 
-            $filterContent .= '<div class="form-group">';
+            $filterContent .= '</div>
+                                <div class="form-group">';
 
             $formatString = '<input type="button" class="form-control form-control-sm btn btn-sm btn-primary" value="%1$s" onClick="document.%2$s._startRecord.value=0;document.%2$s.submit();">';
             $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchButtonText), TGlobal::OutHTML($this->listName));

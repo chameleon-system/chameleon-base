@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @deprecated since 6.3.0 - not used anymore.
+ */
 /** @var $oOwningTable THTMLTable */
 /** @var $oColumn THTMLTableColumn */
 /** @var $aCallTimeVars array */

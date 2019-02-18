@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @deprecated since 6.3.0 - not used anymore.
+ */
 /** @var $oHTMLTable THTMLTable */
 /** @var $oRecordList TCMSRecordList */
 /** @var $oColumns TIterator */

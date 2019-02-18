@@ -28,7 +28,7 @@ legend {
 }
 
 .error, .errorMessage {
-    background: #ffcccc url(../images/nav_icons/error.png) no-repeat 5px 9px;
+    background-color: #ffcccc;
     color: #900;
     border: 2px solid #c00;
     padding-left: 45px;
@@ -42,7 +42,7 @@ legend {
 }
 
 .notice, .warningMessage, .noticeMessage, span.invalid, span.missing {
-    background: #F8F2AA url(../images/nav_icons/notice.png) no-repeat 5px 9px;
+    background-color: #F8F2AA;
     color: #0B224B;
     border: 2px solid #FFB608;
     padding-left: 45px;
@@ -57,7 +57,7 @@ legend {
 }
 
 div.success, span.success, .successMessage {
-    background: #E3F8D8 url(../images/nav_icons/success.png) no-repeat 5px 9px;
+    background-color: #E3F8D8;
     color: #0B224B;
     border: 2px solid #217C21;
     padding-left: 45px;
@@ -70,39 +70,6 @@ div.success, span.success, .successMessage {
     display: block;
 }
 
-/* message for uploads etc. */
-.indicator {
-    background: #F8F2AA url(../images/indicator_medium.gif) no-repeat 5px 9px;
-    color: #0B224B;
-    border: 2px solid #FFB608;
-    padding-left: 45px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-weight: bold;
-    font-size: 11px;
-    min-height: 40px;
-    display: block;
-}
-
-.tinyNotice {
-    color: #0B224B;
-    padding-left: 20px;
-    background-image: url(/chameleon/blackbox/images/icons/information.png);
-    background-repeat: no-repeat;
-    font-size: 12px;
-    line-height: 16px;
-}
-
-.tinyError {
-    color: #900;
-    padding-left: 20px;
-    background-image: url(/chameleon/blackbox/images/icons/exclamation.png);
-    background-repeat: no-repeat;
-    font-size: 12px;
-    line-height: 16px;
-}
-
 .cleardiv {
     clear: both;
     font-size: 0px;
@@ -110,55 +77,14 @@ div.success, span.success, .successMessage {
     height: 0px;
 }
 
-.contentboxHeadline {
-    height: 28px;
-    color: #841313;
-    font-weight: bold;
-    font-size: 13px;
-    letter-spacing: 3px;
-    line-height: 18px;
-}
-
-.contentMessageBox {
-    padding-left: 5px;
-    padding-right: 5px;
-    height: 23px;
-    border: 1px solid #ABBDCD;
-    margin-bottom: 10px;
-    padding-top: 5px;
-}
-
 .pageNavigationTreeSelectBox .treeField ul li .treesubpath {
     line-height: 20px;
     height: 20px;
 }
 
-.modalCloseButton, .modalCloseButton:hover {
-    background: url(../images/icons/action_stop.gif) no-repeat 0px 0px;
-    padding-left: 20px;
-    color: #0B224B;
-    display: block;
-    width: 70px;
-}
-
 /* jquery.flash alt Text */
 .flash-replaced .alt {
     display: none;
-}
-
-.dialogHeadline {
-    padding: 5px;
-    color: #EFEFEF;
-    font-weight: bold;
-    font-size: 12px;
-    line-height: 20px;
-    letter-spacing: 2px;
-    background-image: url(/chameleon/blackbox/images/table_bg.gif);
-    background-position: 50%;
-}
-
-.dialogContent {
-    padding: 3px;
 }
 
 .actionButton, .actionButton:hover {
@@ -181,17 +107,6 @@ div.success, span.success, .successMessage {
     border-color: #083c63;
 }
 
-/* textarea/iFrame resize jquery plugin */
-div.grippie {
-    background: #EEEEEE url(/chameleon/blackbox/images/grippie.png) no-repeat scroll center 2px;
-    border-color: #DDDDDD;
-    border-style: solid;
-    border-width: 0pt 1px 1px;
-    cursor: s-resize;
-    height: 9px;
-    overflow: hidden;
-}
-
 .resizable-textarea textarea {
     display: block;
     margin-bottom: 0pt;
@@ -206,12 +121,6 @@ div.grippie {
     font-size: 12px;
     color: #0B224B;
     background-color: #F8F2AA;
-}
-
-.externalLink {
-    padding-left: 20px;
-    background-image: url(/chameleon/blackbox/images/icon_external_link.gif);
-    background-repeat: no-repeat;
 }
 
 .contentbox .evenrow:hover, .contentbox .oddrow:hover, .shadow {
@@ -310,14 +219,15 @@ div.grippie {
 }
 
 .app-header .navbar-brand {
-    width: auto;
+    width: 200px;
+    background-repeat: no-repeat;
+    background-position-y: 7px;
 }
 
 /** fix for missing border color, looks like a bootstrap bug */
 .card.bg-success .card-footer {
     border-color: #379457;
 }
-
 
 .alert-warning .lds-ring div {
     border: 6px solid #856404;

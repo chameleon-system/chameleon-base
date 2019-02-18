@@ -1,8 +1,6 @@
 <div class="contentRoundedBox">
 <div class="rightCorner">
 <div class="topBorder">
-<img width="12" vspace="0" hspace="0" height="15" border="0" style="float:left; z-index:100;" alt="" src="/chameleon/blackbox//themes/standard/images/box/top_left_corner.gif">
-<img width="12" vspace="0" hspace="0" height="15" border="0" style="float:right; z-index:100;" alt="" src="/chameleon/blackbox//themes/standard/images/box/top_right_corner.gif">
 </div>
 <div class="leftBorder">
 <div style="padding-left: 10px; padding-right: 10px;">
@@ -61,8 +59,6 @@
 </div>
 </div>
 <div class="bottomBorder">
-<img width="12" vspace="0" hspace="0" height="15" border="0" style="float:left;z-index:100;" alt="" src="/chameleon/blackbox//themes/standard/images/box/bottom_left_corner.gif">
-<img width="12" vspace="0" hspace="0" height="15" border="0" style="float:right;z-index:100;" alt="" src="/chameleon/blackbox//themes/standard/images/box/bottom_right_corner.gif">
 </div>
 <div class="cleardiv">&nbsp;</div>
 </div>

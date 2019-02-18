@@ -117,16 +117,16 @@ class TCMSListManagerTreeNode extends TCMSListManagerFullGroupTable
         $oTree->Load($row['cms_tree_id']);
         $oCurrentActiveTreeConnection = $oTree->GetActivePageTreeConnectionForTree();
 
-        $html = '<img src="/chameleon/blackbox/images/icons/disconnect.png" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_disabled')).'" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_disabled')).'" style="float: right;" /> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_disabled'));
+        $html = '<i class="fas fa-unlink" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_disabled')).'"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_disabled'));
         if (false !== $oCurrentActiveTreeConnection && $oCurrentActiveTreeConnection->id == $row['id']) {
             if ('1' == $row['active']) {
-                $html = '<img src="/chameleon/blackbox/images/icons/accept.png" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_active_and_live')).'" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_active_and_live')).'" style="float: right;" />';
+                $html = '<i class="fas fa-check-square text-success" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_active_and_live')).'"></i>';
             } else {
-                $html = '<img src="/chameleon/blackbox/images/icons/delete.png" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_active_but_not_live')).'" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_active_but_not_live')).'" style="float: right;" />';
+                $html = '<i class="far fa-trash-alt text-danger" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_active_but_not_live')).'"></i>';
             }
         } else {
             if ('1' == $row['active']) {
-                $html = '<img src="/chameleon/blackbox/images/icons/delete.png" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_active_but_not_live')).'" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_active_but_not_live')).'" style="float: right;" />';
+                $html = '<i class="far fa-trash-alt text-danger" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_active_but_not_live')).'"></i>';
             }
         }
 

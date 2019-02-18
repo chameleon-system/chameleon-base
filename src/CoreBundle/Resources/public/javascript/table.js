@@ -120,7 +120,7 @@ $(document).ready(function () {
         $(this).select2($(this).data('select2-option'));
     });
 
-    var searchLookup = $("#searchLookup");
+    var searchLookup = $('select#searchLookup');
 
     searchLookup.select2({
         placeholder: searchLookup.data('select2-placeholder'),
@@ -152,14 +152,19 @@ $(document).ready(function () {
     }).on('select2:select', function (e) {
         if (e.params.data.newOption) {
             var listname = searchLookup.data('listname');
-            document[listname]._startRecord.value=0;
+            document[listname]._startRecord.value = 0;
             document[listname].submit();
         } else {
-            var id = e.params.data.id;
+            var id = e.params.data.id.trim();
+
+            if ('' === id) {
+                return;
+            }
+
             switchRecord(id);
         }
     }).on('select2:unselect', function (e) {
-        //:unselect and submit() doesn't transmit the empty searchlookup-Field. Therefore, the value of
+        // :unselect and submit() doesn't transmit the empty searchlookup-Field. Therefore, the value of
         // _search_word is not overwritten (not reset) in the session. With an additional hidden field it works.
         var input = document.createElement('input');
         input.setAttribute('type', 'hidden');
@@ -167,7 +172,7 @@ $(document).ready(function () {
 
         var listname = searchLookup.data('listname');
         document[listname].appendChild(input);
-        document[listname]._startRecord.value=0;
+        document[listname]._startRecord.value = 0;
         document[listname].submit();
     });
 

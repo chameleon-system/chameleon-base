@@ -335,6 +335,9 @@ if (!defined('CMS_SHOW_TASKS_INFORMATION')) {
 * you need to set revision management active for every table manually in table configuration also
 */
 if (!defined('CMS_ACTIVE_REVISION_MANAGEMENT')) {
+    /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     */
     define('CMS_ACTIVE_REVISION_MANAGEMENT', false);
 }
 

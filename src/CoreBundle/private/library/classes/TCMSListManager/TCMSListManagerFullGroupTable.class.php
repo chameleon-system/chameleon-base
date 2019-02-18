@@ -106,6 +106,11 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         }
     }
 
+    protected function isRecordEditPossible(): bool
+    {
+        return (null === $this->_GetRecordClickJavaScriptFunctionName());
+    }
+
     /**
      * @return \Symfony\Component\HttpFoundation\Request
      */
@@ -252,9 +257,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $this->tableObj->style->searchButtonTDstyle = 'tblSearchButtonTDstyle';
         $this->tableObj->style->searchFieldTDstyle = 'tblSearchFieldTDstyle';
 
-        $this->tableObj->iconSortASC = URL_CMS.'/images/icon_sort_asc.gif';
-        $this->tableObj->iconSortDESC = URL_CMS.'/images/icon_sort_desc.gif';
-
         $this->tableObj->hitText = TGlobal::Translate('chameleon_system_core.list.current_page_details');
         $this->tableObj->searchFieldText = TGlobal::Translate('chameleon_system_core.list.search_term');
         $this->tableObj->searchButtonText = TGlobal::Translate('chameleon_system_core.list.perform_search');
@@ -268,6 +270,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         $this->tableObj->showRowsPerPageChooser = true;
         $this->AddRowCallback();
+
+        if (true === $this->isRecordEditPossible()) {
+            $this->tableObj->setAutoCompleteState(true);
+        }
 
         $this->PostCreateTableObjectHook();
     }
@@ -730,7 +736,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     {
         $label = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.action.delete'));
 
-        return '<span onclick="DeleteRecord(\''.$row['id'].'\')" title="'.$label.'" class="fas fa-trash-alt"></span>';
+        return '<span onclick="DeleteRecord(\''.$row['id'].'\')" title="'.$label.'" class="fas fa-trash-alt text-danger"></span>';
     }
 
     /**

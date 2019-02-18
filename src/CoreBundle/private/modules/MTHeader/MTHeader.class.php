@@ -96,8 +96,6 @@ class MTHeader extends TCMSModelBase
         if (stristr($this->viewTemplate, 'title.view.php')) {
             $this->data['sBackendTitle'] = $this->GetBackendTitle();
         } else {
-            $this->_LoadUserImage();
-
             if (ACTIVE_TRANSLATION || ACTIVE_BACKEND_TRANSLATION) {
                 $this->GetEditLanguagesHTML();
             }
@@ -118,11 +116,7 @@ class MTHeader extends TCMSModelBase
             if (TGlobal::CMSUserDefined()) {
                 $this->data['breadcrumb'] = $this->global->GetURLHistory()->GetBreadcrumb(true);
 
-                $lastHistNode = end($this->data['breadcrumb']);
-                reset($this->data['breadcrumb']);
-                $lastHistNode = str_replace('_rmhist=true', '_rmhist=false', $lastHistNode['url']);
-                $this->data['clearCacheURL'] = $lastHistNode.'&'.urlencode('module_fnc['.$this->sModuleSpotName.']').'=ExecuteAjaxCall&_fnc=ClearCache';
-
+                $this->mapCacheClearUrl();
                 $this->FetchCounterInformation();
 
                 if (array_key_exists('chameleon_header', $_COOKIE) && 'hidden' === $_COOKIE['chameleon_header']) {
@@ -142,6 +136,22 @@ class MTHeader extends TCMSModelBase
         }
 
         return $this->data;
+    }
+
+    private function mapCacheClearUrl(): void
+    {
+        $request = $this->getCurrentRequest();
+        $baseUri = $request->getRequestUri();
+        if (false === \strpos($baseUri, '?')) {
+            $prefix = '?';
+        } else {
+            $prefix = '&';
+        }
+
+        $this->data['clearCacheURL'] = $this->getUrlUtil()->getArrayAsUrl([
+            'module_fnc['.$this->sModuleSpotName.']' => 'ExecuteAjaxCall',
+            '_fnc' => 'ClearCache',
+        ], $baseUri.$prefix, '&');
     }
 
     /**
@@ -380,6 +390,8 @@ class MTHeader extends TCMSModelBase
     }
 
     /**
+     * @deprecated since 6.3.0 - not used anymore, we don't show a user icon in the header toolbar anymore.
+     *
      * loads the user image or a default icon.
      */
     protected function _LoadUserImage()

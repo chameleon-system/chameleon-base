@@ -151,7 +151,7 @@ class TCMSListManagerDocumentChooser extends TCMSListManagerFullGroupTable
     }
 
     /**
-     * returns the filetype as remdered html.
+     * returns the filetype as rendered html.
      *
      * @param string $id
      * @param array  $row

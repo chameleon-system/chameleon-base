@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
+
 /**
  * shows the CMS Document Manager component.
 /**/
@@ -290,22 +292,35 @@ class CMSDocumentManager extends TCMSModelBase
      */
     protected function GetDocumentRowHTML($documentID)
     {
-        $oFileDownload = new TCMSDownloadFile();
-        /** @var $oFileDownload TCMSDownloadFile */
-        $oFileDownload->Load($documentID);
+        $downloadDocument = new TCMSDownloadFile();
+        $downloadDocument->Load($documentID);
 
         $translator = $this->getTranslator();
 
+        $deleteButtonTemplate = '<button type="button" class="btn btn-danger btn-sm" onClick="if(confirm(\'%s\')){removeDocument(\'%s\',\'%s\',\'%s\',\'%s\')}">
+                                    <i class="far fa-trash-alt mr-2"></i>%s
+                                </button>';
+        $deleteButton = sprintf($deleteButtonTemplate,
+            TGlobal::OutJS($translator->trans('chameleon_system_core.field_download.confirm_removal', [], TranslationConstants::DOMAIN_BACKEND)),
+            TGlobal::OutJS($this->fieldName),
+            TGlobal::OutJS($documentID),
+            TGlobal::OutJS($this->recordID),
+            TGlobal::OutJS($this->tableID),
+            TGlobal::OutHTML($translator->trans('chameleon_system_core.field_download.remove', [], TranslationConstants::DOMAIN_BACKEND))
+        );
+
         $html = '
          <div id="documentManager_'.$this->fieldName.'_'.$documentID.'">
-           <table border="0" cellpadding="0" cellspacing="0" width="400">
+           <table class="table table-striped">
             <tr>
-             <td width="*">'.$oFileDownload->GetDownloadLink().'</td>
-             <td width="20"><img src="'.TGlobal::GetPathTheme().'/images/icons/page_delete.gif" alt="'.TGlobal::Translate('chameleon_system_core.document_manager.action_delete')."\" border=\"0\" style=\"cursor: pointer; cursor: hand;\" onClick=\"if(confirm('".$translator->trans('chameleon_system_core.document_manager.action_delete_confirm', array(), \ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND)."')){removeDocument('".$this->fieldName."','".$documentID."','".$this->recordID."','".$this->tableID."')};\" /></td>
+             <td>'.$downloadDocument->GetDownloadLink().'</td>
+             <td>
+             '.$deleteButton.'
+             </td>
            </tr>
           </table>
          </div>
-          ";
+          ';
 
         return $html;
     }
@@ -319,58 +334,59 @@ class CMSDocumentManager extends TCMSModelBase
             $oFile->Load($sFileId);
             if ($bInfoOnFileDelete) {
                 $sTitle = 'chameleon_system_core.document_manager.delete_document';
-                $sNotice = '<div class="notice">'.TGlobal::Translate('chameleon_system_core.document_manager.attention').'<br />'.TGlobal::Translate('chameleon_system_core.document_manager.action_delete_confirm_connections').'</div>';
+                $sNotice = '<div class="alert alert-warning">'.TGlobal::Translate('chameleon_system_core.document_manager.attention').'<br />'.TGlobal::Translate('chameleon_system_core.document_manager.action_delete_confirm_connections').'</div>';
             } else {
                 $sTitle = 'chameleon_system_core.document_manager.document_id';
-                $sNotice = '<div class="notice">'.TGlobal::Translate('chameleon_system_core.document_manager.attention').'<br />'.TGlobal::Translate('chameleon_system_core.document_manager.connection_list').'</div>';
+                $sNotice = '<div class="alert alert-info">'.TGlobal::Translate('chameleon_system_core.document_manager.attention').'<br />'.TGlobal::Translate('chameleon_system_core.document_manager.connection_list').'</div>';
             }
             $foundConnectionsHTML = '
-        <div class="dialogHeadline">
-        '.TGlobal::Translate($sTitle, array(
+        <div class="card">
+            <div class="card-header">
+                '.TGlobal::Translate($sTitle, array(
                     '%id%' => $sFileId,
                 )).'
-        </div>
-        <div class="dialogContent">
-          <div>
-            <div style="float: left; width: 30px;">'.$oFile->GetPlainFileTypeIcon().'</div>
-            <div style="float: left; width: 520px;">
-            '.$oFile->GetName().'
             </div>
-            <div class="cleardiv">&nbsp;</div>
-          <div>'.$sNotice.'<table cellpadding="0" cellspacing="0" width="100%">
-             <tr class="bg-primary">
-               <td>ID</td>
-               <td>'.TGlobal::Translate('chameleon_system_core.document_manager.connected_item_column_name').'</td>
-               <td>'.TGlobal::Translate('chameleon_system_core.document_manager.connected_item_column_table').'</td>
-               <td>'.TGlobal::Translate('chameleon_system_core.document_manager.connected_item_column_field').'</td>
-             </tr>';
+            <div class="card-body">
+                <div>
+                  <span class="pr-2">'.$oFile->GetPlainFileTypeIcon().'</span>
+                  <span class="">'.$oFile->GetName().'</span>
+                </div>
+                '.$sNotice.'
+               <table class="table table-bordered">
+                    <tr class="bg-primary">
+                        <th>ID</th>
+                        <th>'.TGlobal::Translate('chameleon_system_core.document_manager.connected_item_column_name').'</th>
+                        <th>'.TGlobal::Translate('chameleon_system_core.document_manager.connected_item_column_table').'</th>
+                        <th>'.TGlobal::Translate('chameleon_system_core.document_manager.connected_item_column_field').'</th>
+                    </tr>';
 
-            $count = 0;
-            foreach ($aFoundConnections as $tableName => $aFields) {
-                foreach ($aFields as $field => $value) {
-                    /** @var $oTableRecordList TCMSRecordList */
-                    $oTableRecordList = $value;
-                    /** @var $oRecord TCMSRecord */
-                    while ($oRecord = $oTableRecordList->Next()) {
-                        if ($count % 2) {
-                            $class = 'evenRowStyleNoHand';
-                        } else {
-                            $class = 'oddRowStyleNoHand';
+                    $count = 0;
+                    foreach ($aFoundConnections as $tableName => $aFields) {
+                        foreach ($aFields as $field => $value) {
+                            /** @var $oTableRecordList TCMSRecordList */
+                            $oTableRecordList = $value;
+                            /** @var $oRecord TCMSRecord */
+                            while ($oRecord = $oTableRecordList->Next()) {
+                                if ($count % 2) {
+                                    $class = 'evenRowStyleNoHand';
+                                } else {
+                                    $class = 'oddRowStyleNoHand';
+                                }
+
+                                $foundConnectionsHTML .= "<tr class=\"{$class}\">
+                         <td>".$oRecord->id.'</td>
+                         <td>'.$oRecord->GetName().'</td>
+                         <td>'.$tableName.'</td>
+                         <td>'.$field."</td>
+                        </tr>\n";
+                            }
                         }
-
-                        $foundConnectionsHTML .= "<tr class=\"{$class}\">
-                 <td>".$oRecord->id.'</td>
-                 <td>'.$oRecord->GetName().'</td>
-                 <td>'.$tableName.'</td>
-                 <td>'.$field."</td>
-                </tr>\n";
+                        ++$count;
                     }
-                }
-                ++$count;
-            }
-            $foundConnectionsHTML .= '</table>
-                      </div>
-                      <div class="cleardiv">&nbsp;</div>';
+            $foundConnectionsHTML .= '
+                </table>
+                      
+                     ';
             if ($bInfoOnFileDelete) {
                 $foundConnectionsHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.document_manager.confirm_delete_with_connections'), "javascript:SendDelete('".$sFileId."');", 'far fa-check-circle').'
                                       '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.document_manager.abort_delete'), 'javascript:CloseDeleteCheckDialog();', 'far fa-times-circle');
