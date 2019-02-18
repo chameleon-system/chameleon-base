@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService;
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -1137,7 +1137,7 @@ class MTTableEditor extends TCMSModelBase
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
-    private function getBreadcrumbService(): BackendBreadcrumbService
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }

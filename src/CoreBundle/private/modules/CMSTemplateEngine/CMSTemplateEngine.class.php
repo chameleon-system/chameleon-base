@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService;
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -690,7 +690,7 @@ class CMSTemplateEngine extends TCMSModelBase
         return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
-    private function getBreadcrumbService(): BackendBreadcrumbService
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }

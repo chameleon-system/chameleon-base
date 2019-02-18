@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService;
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -183,7 +183,7 @@ class TGlobal extends TGlobalBase
         return ServiceLocator::get('translator');
     }
 
-    private function getBreadcrumbService(): BackendBreadcrumbService
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }

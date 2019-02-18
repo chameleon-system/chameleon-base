@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService;
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use Doctrine\DBAL\Connection;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -671,7 +671,7 @@ class MTTableManager extends TCMSModelBase
         return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
-    private function getBreadcrumbService(): BackendBreadcrumbService
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }

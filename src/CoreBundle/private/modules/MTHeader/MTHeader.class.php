@@ -12,7 +12,7 @@
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\SanityCheck\MessageCheckOutput;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
-use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService;
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -850,7 +850,7 @@ class MTHeader extends TCMSModelBase
         return ServiceLocator::get('chameleon_system_view_renderer.less_compiler');
     }
 
-    private function getBreadcrumbService(): BackendBreadcrumbService
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }

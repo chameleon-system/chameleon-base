@@ -12,7 +12,7 @@
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\BackendModule;
 
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService;
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -608,7 +608,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         return $existingCrop;
     }
 
-    private function getBreadcrumbService(): BackendBreadcrumbService
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
