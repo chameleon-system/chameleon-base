@@ -225,9 +225,19 @@ loader. This instance will therefore only contain the module passed as argument,
 
 Log output is no longer collected and no longer sent as attachments with the notification email.
 
+## RevisionManagementBundle
+
+This bundle is not supported anymore.
+
 ## RequestInfoService
 
 - New method `getRequestId()`.
+
+## ckEditor
+
+The custom skin moonocolor is deprecated.
+If you have an extension of chameleonConfig.js please be sure to change the skin to 
+`config.skin = 'moono-lisa';` and the color to: `config.uiColor = '#f0f3f5';`
 
 # Changed Interfaces and Method Signatures
 
@@ -447,7 +457,9 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Constants
 
+- \CMS_ACTIVE_REVISION_MANAGEMENT
 - \TCMSCronJob_CleanOrphanedMLTConnections::MLT_DELETE_LOG_FILE
+- \TCMSTableEditorEndPoint::DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR
 - \TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE
 
 ## Classes and Interfaces
@@ -468,6 +480,7 @@ is recommended (although this tool may not find database-related deprecations).
 
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$sGeneratedPage
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$postRenderVariables
+- \TAccessManagerPermissions::$revisionManagement
 - \TPkgCsv2Sql::$sLogFileName
 - \TCMSFieldLookupFieldTypes::$sFieldHelpTextHTML
 - \TCMSTableEditorChangeLog::$oOldFields
@@ -484,8 +497,15 @@ is recommended (although this tool may not find database-related deprecations).
 - \ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::getModules()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
+- \CMSTemplateEngine::GetLastRevisionNumber()
 - \CMSTemplateEngine::GetMainNavigation()
+- \CMSTemplateEngine::LoadRevisionData()
+- \MTTableEditor::ActivateRevision()
+- \MTTableEditor::AddNewRevision()
+- \MTTableEditor::GetLastRevisionNumber()
+- \MTTableEditor::LoadRevisionData()
 - \MTTableManager::getAutocompleteRecordList()
+- \TAccessManager::HasRevisionManagementPermission()
 - \TCMSCronJob::getLogger()
 - \TCMSFieldColorPicker::isFirstInstance()
 - \TCMSFieldLookup::enableComboBox()
@@ -525,8 +545,11 @@ is recommended (although this tool may not find database-related deprecations).
 - $.tagInput()
 - $.unblockUI()
 - $.wTooltip()
+- ActivateRecordRevision()
+- AddNewRevision()
 - CreateModalIFrameDialogFromContentWithoutClose()
 - PublishViaAjaxCallback()
+- SaveNewRevision()
 - SetChangedDataMessage()
 - showMLTField()
 
@@ -537,10 +560,29 @@ is recommended (although this tool may not find database-related deprecations).
 - chameleon_system_core.field_options.option_value_true
 - chameleon_system_core.fields.lookup.no_matches
 - chameleon_system_core.record_lock.lock_owner_fax
+- chameleon_system_core.record_revision.action_confirm_restore_revision
+- chameleon_system_core.record_revision.action_create_page_revision
+- chameleon_system_core.record_revision.action_new_revision
+- chameleon_system_core.record_revision.action_load_page_revision
+- chameleon_system_core.record_revision.action_load_revision
+- chameleon_system_core.record_revision.action_restore_revision
+- chameleon_system_core.record_revision.based_on
+- chameleon_system_core.record_revision.confirm_restore_revision
+- chameleon_system_core.record_revision.description
+- chameleon_system_core.record_revision.header_new_revision
+- chameleon_system_core.record_revision.last_used_date
+- chameleon_system_core.record_revision.name
+- chameleon_system_core.record_revision.new_revision_help
+- chameleon_system_core.record_revision.new_revision_number
+- chameleon_system_core.record_revision.no_revision_exists
+- chameleon_system_core.record_revision.revision_number
+- chameleon_system_core.template_engine.header_revision
 
 ## Database Tables
 
 - cms_content_box
+- cms_record_revision
+- cms_tbl_conf_cms_role7_mlt
 
 ## Database Fields
 
@@ -548,4 +590,11 @@ is recommended (although this tool may not find database-related deprecations).
 - cms_module.icon_font_css_class
 - cms_module.show_as_popup
 - cms_tbl_conf.cms_content_box_id
+- cms_tbl_conf.cms_record_revision_id
+- cms_tbl_conf.cms_role7_mlt
 - cms_tbl_conf.icon_font_css_class
+- cms_tpl_module.revision_management_active
+
+## Flash Messages
+
+- TABLEEDITOR_REVISION_SAVED

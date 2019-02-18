@@ -100,11 +100,7 @@ class MTHeader extends TCMSModelBase
                 $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
                 $this->data['breadcrumb'] = $breadcrumb->GetBreadcrumb(true);
 
-                $lastHistNode = end($this->data['breadcrumb']);
-                reset($this->data['breadcrumb']);
-                $lastHistNode = str_replace('_rmhist=true', '_rmhist=false', $lastHistNode['url']);
-                $this->data['clearCacheURL'] = $lastHistNode.'&'.urlencode('module_fnc['.$this->sModuleSpotName.']').'=ExecuteAjaxCall&_fnc=ClearCache';
-
+                $this->mapCacheClearUrl();
                 $this->FetchCounterInformation();
 
                 if (array_key_exists('chameleon_header', $_COOKIE) && 'hidden' === $_COOKIE['chameleon_header']) {
@@ -124,6 +120,22 @@ class MTHeader extends TCMSModelBase
         }
 
         return $this->data;
+    }
+
+    private function mapCacheClearUrl(): void
+    {
+        $request = $this->getCurrentRequest();
+        $baseUri = $request->getRequestUri();
+        if (false === \strpos($baseUri, '?')) {
+            $prefix = '?';
+        } else {
+            $prefix = '&';
+        }
+
+        $this->data['clearCacheURL'] = $this->getUrlUtil()->getArrayAsUrl([
+            'module_fnc['.$this->sModuleSpotName.']' => 'ExecuteAjaxCall',
+            '_fnc' => 'ClearCache',
+        ], $baseUri.$prefix, '&');
     }
 
     /**

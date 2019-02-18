@@ -106,6 +106,11 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         }
     }
 
+    protected function isRecordEditPossible(): bool
+    {
+        return (null === $this->_GetRecordClickJavaScriptFunctionName());
+    }
+
     /**
      * @return \Symfony\Component\HttpFoundation\Request
      */
@@ -268,6 +273,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         $this->tableObj->showRowsPerPageChooser = true;
         $this->AddRowCallback();
+
+        if (true === $this->isRecordEditPossible()) {
+            $this->tableObj->setAutoCompleteState(true);
+        }
 
         $this->PostCreateTableObjectHook();
     }

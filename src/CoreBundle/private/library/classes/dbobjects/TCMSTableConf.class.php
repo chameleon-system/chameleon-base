@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
-
 /**
  * the Table metadata manager.
  * db table: cms_tbl_conf.
