@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use Doctrine\DBAL\Connection;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -261,8 +262,9 @@ class MTTableManager extends TCMSModelBase
                 $this->controller->HeaderRedirect($parameter);
             }
         } else {
-            $urlHistory = $this->global->GetURLHistory();
-            $parentURL = $urlHistory->GetURL().'&_histid='.($urlHistory->index - 1);
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+
+            $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->index - 1);
         }
 
         $this->controller->HeaderURLRedirect($parentURL);
@@ -328,7 +330,6 @@ class MTTableManager extends TCMSModelBase
         }
 
         $inputFilterUtil = $this->getInputFilterUtil();
-        $preventHistoryEntry = false;
 
         $params = array();
         $params['pagedef'] = $inputFilterUtil->getFilteredInput('pagedef');
@@ -340,14 +341,56 @@ class MTTableManager extends TCMSModelBase
         }
 
         // If list was opened within a frame, url should not be added to history. The parameter field "sRestrictionField" can be used as an indicator.
-        if (array_key_exists('sRestriction', $params) && array_key_exists('sRestrictionField', $params)) {
-            $preventHistoryEntry = true;
+        if (false === $this->isInFrame()) {
+            $tableName = $this->oTableConf->GetName();
+
+            $iconCssClass = trim($this->getIconCssClassForTable($this->oTableConf->id));
+
+            if ('' !== $iconCssClass) {
+                $tableName = '<i class="'.TGlobal::OutHTML($iconCssClass).'"></i> '.$tableName;
+            }
+
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+            $breadcrumb->AddItem($params, $tableName);
+        }
+    }
+
+    private function getIconCssClassForTable(string $tableId): string
+    {
+        $menuItem = \TdbCmsMenuItem::GetNewInstance();
+        if (false === $menuItem->LoadFromFields(array(
+            'target' => $tableId,
+            'target_table_name' => 'cms_tbl_conf', )
+        )) {
+            return '';
         }
 
-        $sTableName = strip_tags(preg_replace('/(\r\n|\n|\r)/', ' ', $this->oTableConf->sqlData['translation']));
-        if (!$preventHistoryEntry) {
-            $this->global->GetURLHistory()->AddItem($params, $sTableName);
+        return $menuItem->fieldIconFontCssClass;
+    }
+
+    protected function isInFrame(): bool
+    {
+        $inputFilterUtil = $this->getInputFilterUtil();
+
+        $isInIFrame = $inputFilterUtil->getFilteredInput('isInIFrame');
+
+        if (null !== $isInIFrame) {
+            return true;
         }
+
+        $isInIFrame = $inputFilterUtil->getFilteredInput('_isiniframe');
+
+        if (null !== $isInIFrame) {
+            return true;
+        }
+
+        $pageDefinition = $inputFilterUtil->getFilteredInput('pagedef');
+
+        if (false !== strpos($pageDefinition, 'plain')) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -386,7 +429,7 @@ class MTTableManager extends TCMSModelBase
     /**
      * Generates the record list for the ajax autocomplete select boxes in table editor and record lists.
      *
-     * @return string|false JSON with id, text, html elements.
+     * @return string|false JSON with id, text, html elements
      */
     public function getAutocompleteRecordList()
     {
@@ -626,5 +669,10 @@ class MTTableManager extends TCMSModelBase
     private function getFlashMessageService()
     {
         return ServiceLocator::get('chameleon_system_core.flash_messages');
+    }
+
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }
