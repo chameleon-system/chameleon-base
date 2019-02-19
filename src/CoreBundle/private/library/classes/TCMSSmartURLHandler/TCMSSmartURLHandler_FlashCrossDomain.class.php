@@ -53,20 +53,6 @@ class TCMSSmartURLHandler_FlashCrossDomain extends TCMSSmartURLHandler
 <!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd">
   <cross-domain-policy>
 ';
-        $oPortal = TTools::GetActivePortal();
-        $oPortalDomainList = $oPortal->GetFieldCmsPortalDomainsList();
-        while ($oPortalDomain = $oPortalDomainList->Next()) {
-            $sDomain = $oPortalDomain->fieldName;
-            if (!_DEVELOPMENT_MODE) {
-                if (!$oPortalDomain->IsDevelopmentDomain()) {
-                    $sXML .= '    <allow-access-from domain="'.TGlobal::OutHTML($sDomain).'" />'."\n";
-                    $sXML .= '    <allow-access-from domain="*.'.TGlobal::OutHTML($sDomain).'" />'."\n";
-                }
-            } else {
-                $sXML .= '    <allow-access-from domain="'.TGlobal::OutHTML($sDomain).'" />'."\n";
-                $sXML .= '    <allow-access-from domain="*.'.TGlobal::OutHTML($sDomain).'" />'."\n";
-            }
-        }
         $aStaticURLs = TGlobal::GetStaticURLPrefix();
         if (!is_array($aStaticURLs)) {
             $aStaticURLs = array($aStaticURLs);

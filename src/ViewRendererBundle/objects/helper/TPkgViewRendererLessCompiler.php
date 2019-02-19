@@ -23,10 +23,15 @@ class TPkgViewRendererLessCompiler
      * @var string
      */
     private $cssDir;
+    /**
+     * @var string
+     */
+    private $resourceCollectionRefreshPrefix;
 
-    public function __construct(string $cssDirRelativeToWebRoot)
+    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix)
     {
         $this->cssDir = trim($cssDirRelativeToWebRoot, '/');
+        $this->resourceCollectionRefreshPrefix = $resourceCollectionRefreshPrefix;
     }
 
     /**
@@ -56,7 +61,7 @@ class TPkgViewRendererLessCompiler
     {
         $path = $this->getLessDirUrlPath();
         $filename = $this->getCompiledCssFilename($portal);
-        $versionSuffix = '?'.ENABLE_EXTERNAL_RESOURCE_COLLECTION_REFRESH_PREFIX;
+        $versionSuffix = '?'.$this->resourceCollectionRefreshPrefix;
 
         return $path.'/'.$filename.$versionSuffix;
     }
