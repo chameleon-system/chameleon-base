@@ -5,5 +5,6 @@
 </div>
 <?php
 
-TCMSLogChange::addInfoMessage('hreflang: MTPageMeta provides now the array "language-alternatives" with URLs to the current page in other languages.
-If you want to support that in your theme see chameleon-shop-theme-bundle/.../MTPageMeta/standard.view.php for an example usage.', TCMSLogChange::INFO_MESSAGE_LEVEL_TODO);
+TCMSLogChange::addInfoMessage('MTPageMeta now provides an additional variable "language-alternatives" that allows to add URLs to alternative languages of the same page using hreflang meta tags.
+ See the view MTPageMeta/standard.view.php in chameleon-shop-theme-bundle for an example.', TCMSLogChange::INFO_MESSAGE_LEVEL_INFO);
+
