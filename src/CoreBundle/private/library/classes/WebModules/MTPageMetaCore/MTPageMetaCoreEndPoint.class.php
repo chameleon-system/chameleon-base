@@ -691,6 +691,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             return [];
         }
 
+
         $alternatives = [];
         while (false !== ($alternativeLanguage = $activeLanguages->Next())) {
             if ($alternativeLanguage->id === $activeLanguage->id) {
@@ -698,23 +699,35 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             }
 
             $iso = $alternativeLanguage->fieldIso6391;
-            try {
-                $url = $alternativeLanguage->GetTranslatedPageURL();
-                $alternatives[$iso] = $url;
-            } catch (Exception $exception) {
-                $this->getLogger()->error(
-                    sprintf(
-                        'Cannot generate alternative language URLs for page with ID "%s" and name "%s" for language "%s".',
-                        $activePage->id,
-                        $activePage->GetName(),
-                        $iso
-                    ),
-                    ['exception' => $exception]
-                );
-            }
+            $alternatives = $this->addTranslatedPageUrlForLanguage($alternatives, $alternativeLanguage, $iso, $activePage);
+        }
+
+        $standardLanguage = $languageService->getLanguage($activePortal->fieldCmsLanguageId);
+        if (null !== $standardLanguage) {
+            $alternatives = $this->addTranslatedPageUrlForLanguage($alternatives, $standardLanguage, 'x-default', $activePage);
         }
 
         return $alternatives;
+    }
+
+    private function addTranslatedPageUrlForLanguage(array $pageUrls, TdbCmsLanguage $language, string $isoArrayKey, TCMSActivePage $activePage): array
+    {
+        try {
+            $url = $language->GetTranslatedPageURL();
+            $pageUrls[$isoArrayKey] = $url;
+        } catch (Exception $exception) {
+            $this->getLogger()->error(
+                sprintf(
+                    'Cannot generate alternative language URLs for page with ID "%s" and name "%s" for language "%s".',
+                    $activePage->id,
+                    $activePage->GetName(),
+                    $isoArrayKey
+                ),
+                ['exception' => $exception]
+            );
+        }
+
+        return $pageUrls;
     }
 
     /**
