@@ -693,10 +693,6 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
 
         $alternatives = [];
         while (false !== ($alternativeLanguage = $activeLanguages->Next())) {
-            if ($alternativeLanguage->id === $activeLanguage->id) {
-                continue;
-            }
-
             $iso = $alternativeLanguage->fieldIso6391;
             try {
                 $url = $alternativeLanguage->GetTranslatedPageURL();
