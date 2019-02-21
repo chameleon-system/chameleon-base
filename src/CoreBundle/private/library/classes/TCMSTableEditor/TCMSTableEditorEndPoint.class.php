@@ -600,7 +600,11 @@ class TCMSTableEditorEndPoint
                         $oMenuItem->sIcon = 'far fa-edit';
                         $oMenuItem->setButtonStyle('btn-warning');
 
-                        $aParameter = array('pagedef' => 'tableeditor', 'id' => $this->oTableConf->id, 'tableid' => $oTableEditorConf->id);
+                        $aParameter = array(
+                            'pagedef' => $this->getInputFilterUtil()->getFilteredGetInput('pagedef'),
+                            'id' => $this->oTableConf->id,
+                            'tableid' => $oTableEditorConf->id
+                        );
                         $aAdditionalParams = $this->GetHiddenFieldsHook();
                         if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
                             $aParameter = array_merge($aParameter, $aAdditionalParams);
