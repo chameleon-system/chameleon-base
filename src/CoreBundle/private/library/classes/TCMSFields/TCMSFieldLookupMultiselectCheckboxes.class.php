@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 /**
@@ -95,10 +96,12 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
                       </div>';
 
             if ($hasEditPermissionForForeignTable) {
+
                 $url = $urlUtil->getArrayAsUrl(
                     array(
                         'tableid' => $oTargetTableConf->sqlData['id'],
-                        'pagedef' => 'tableeditor', 'id' => $recordId,
+                        'pagedef' => $this->getInputFilterUtil()->getFilteredGetInput('pagedef'),
+                        'id' => $recordId,
                     ),
                     PATH_CMS_CONTROLLER.'?'
                 );
@@ -324,11 +327,13 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         return $bHasContent;
     }
 
-    /**
-     * @return UrlUtil
-     */
-    private function getUrlUtil()
+    private function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }
