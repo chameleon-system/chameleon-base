@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\Event\RecordChangeEvent;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use Doctrine\DBAL\Connection;
@@ -652,8 +653,11 @@ class TCMSTableEditorEndPoint
         if (false === is_array($translatedFields) || 0 === count($translatedFields)) {
             return $menuItems;
         }
+
+        $inputFilter = $this->getInputFilterUtil();
+
         $aParameter = array(
-            'pagedef' => 'tableeditor',
+            'pagedef' => $inputFilter->getFilteredGetInput('pagedef'),
             'id' => $this->oTable->id,
             'tableid' => $this->oTableConf->id,
             'module_fnc' => array(
@@ -2989,11 +2993,13 @@ class TCMSTableEditorEndPoint
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    /**
-     * @return Request|null
-     */
-    private function getCurrentRequest()
+    private function getCurrentRequest(): ?Request
     {
         return ServiceLocator::get('request_stack')->getCurrentRequest();
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }
