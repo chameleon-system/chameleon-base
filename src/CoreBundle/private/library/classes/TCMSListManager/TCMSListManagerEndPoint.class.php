@@ -475,6 +475,7 @@ class TCMSListManagerEndPoint
                     $oMenuItem->sItemKey = 'edittableconf';
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.open_table_configuration');
                     $oMenuItem->sIcon = 'far fa-edit';
+                    $oMenuItem->setButtonStyle('btn-warning');
 
                     $aParameter = array('pagedef' => 'tableeditor', 'id' => $this->oTableConf->id, 'tableid' => $oTableEditorConf->id);
                     $aAdditionalParams = $this->GetHiddenFieldsHook();

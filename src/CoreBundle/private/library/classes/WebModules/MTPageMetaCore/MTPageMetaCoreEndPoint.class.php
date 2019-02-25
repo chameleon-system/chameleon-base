@@ -10,12 +10,14 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
 
 /**
  * include page header data like title, and meta tags.
- *
-/**/
+ */
 class MTPageMetaCoreEndPoint extends TUserModelBase
 {
     /**
@@ -95,6 +97,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
         $this->data['aMetaData'] = $this->TrimMetaKeywords($this->data['aMetaData']);
         $this->data['aLangList'] = $this->GetLanguageList();
         $this->data['sCanonical'] = $this->GetMetaCanonical();
+        $this->data['language-alternatives'] = $this->getLanguageAlternatives();
 
         return $this->data;
     }
@@ -647,18 +650,67 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
     protected function GetMetaCanonical()
     {
         $activePage = $this->getActivePageService()->getActivePage();
-        if ($this->isNotFoundPage($activePage)) {
+        $activePortal = $this->getPortalDomainService()->getActivePortal();
+
+        if (null === $activePage || null === $activePortal) {
+            return '';
+        }
+
+        if (true === $this->isNotFoundPage($activePage, $activePortal)) {
             return '';
         }
 
         return $activePage->GetRealURLPlain(array(), true);
     }
 
-    private function isNotFoundPage($activePage)
+    private function isNotFoundPage(TCMSActivePage $activePage, TdbCmsPortal $activePortal): bool
+    {
+        return $activePage->fieldPrimaryTreeIdHidden === $activePortal->fieldPageNotFoundNode;
+    }
+
+    private function getLanguageAlternatives(): array
     {
         $activePortal = $this->getPortalDomainService()->getActivePortal();
+        if (null === $activePortal) {
+            return [];
+        }
 
-        return $activePage->fieldPrimaryTreeIdHidden === $activePortal->fieldPageNotFoundNode;
+        $languageService = $this->getLanguageService();
+        $activeLanguage = $languageService->getActiveLanguage();
+        if (null === $activeLanguage) {
+            return [];
+        }
+
+        $activeLanguages = $activePortal->GetActiveLanguages();
+        if ($activeLanguages->Length() < 2) {
+            return [];
+        }
+
+        $activePage = $this->getActivePageService()->getActivePage();
+        if (null === $activePage || true === $this->isNotFoundPage($activePage, $activePortal)) {
+            return [];
+        }
+
+        $alternatives = [];
+        while (false !== ($alternativeLanguage = $activeLanguages->Next())) {
+            $iso = $alternativeLanguage->fieldIso6391;
+            try {
+                $url = $alternativeLanguage->GetTranslatedPageURL();
+                $alternatives[$iso] = $url;
+            } catch (Exception $exception) {
+                $this->getLogger()->error(
+                    sprintf(
+                        'Cannot generate alternative language URLs for page with ID "%s" and name "%s" for language "%s".',
+                        $activePage->id,
+                        $activePage->GetName(),
+                        $iso
+                    ),
+                    ['exception' => $exception]
+                );
+            }
+        }
+
+        return $alternatives;
     }
 
     /**
@@ -666,7 +718,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -674,6 +726,16 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
+    }
+
+    private function getLanguageService(): LanguageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
     }
 }
