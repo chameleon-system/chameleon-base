@@ -559,7 +559,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         parent::PrepareFieldsForSave($oFields);
 
         $roleField = $oFields->FindItemWithProperty('name', 'cms_role_mlt');
-        if (false === $roleField) {
+        if (false === $roleField || '' === $roleField->data) {
             return;
         }
 

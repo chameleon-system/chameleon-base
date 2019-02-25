@@ -175,6 +175,9 @@
             <call method="setAuthenticityTokenManager">
                 <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager" />
             </call>
+            <call method="setResourceCollector">
+                <argument type="service" id="chameleon_system_core.resource_collector" />
+            </call>
             <call method="setResponseVariableReplacer">
                 <argument type="service" id="chameleon_system_core.response.response_variable_replacer" />
             </call>
@@ -796,6 +799,12 @@
         >
             <argument id="chameleon_system_core.request_state_hash_provider_cache.inner" type="service"/>
             <argument type="service" id="request_stack"/>
+        </service>
+
+        <service id="chameleon_system_core.resource_collector" class="TCMSResourceCollection" shared="false">
+            <argument type="service" id="chameleon_system_core.filemanager"/>
+            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
+            <argument type="service" id="event_dispatcher"/>
         </service>
 
         <service id="chameleon_system_core.command.update.count" class="ChameleonSystem\CoreBundle\Command\CountUpdateCommand">
