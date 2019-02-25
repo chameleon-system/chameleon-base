@@ -166,7 +166,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $session->get(self::ACTIVE_CATEGORY_SESSION_KEY);
     }
 
-    public function saveActiveCategory(): void
+    protected function saveActiveCategory(): void
     {
         $activeCategory = $this->inputFilterUtil->getFilteredPostInput('categoryId');
         if ('' === $activeCategory) {
@@ -211,7 +211,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->methodCallAllowed[] = 'saveActiveCategory';
     }
 
-    public function toggleSidebar(): void
+    protected function toggleSidebar(): void
     {
         $displayState = $this->inputFilterUtil->getFilteredPostInput('displayState');
         if (false === \in_array($displayState, ['minimized', 'shown'])) {
