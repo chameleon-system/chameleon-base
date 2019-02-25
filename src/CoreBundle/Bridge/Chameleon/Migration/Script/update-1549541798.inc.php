@@ -21,8 +21,9 @@ shop_article_marker # Product characteristics # Produktmerkmale
 shop_contributor # Contributors # Beitragende Personen
 shop_contributor_type # Contributor types # Arten von beitragenden Personen
 shop_article_document_type # Document types for products # Dokumentarten bei Produkten
+pkg_shop_listfilter # List filters # Listenfilter
 pkg_shop_listfilter_item_type # Filter types # Filtertypen
-shop_module_article_list_filter # Product selection # Produktauswahl
+shop_module_article_list_filter # Product selection filters # Produktauswahlfilter
 shop_module_articlelist_orderby # Sort order for product lists # Produktlistensortierung
 pkg_shop_payment_transaction_type # Financial transaction types # Finanztransaktionstypen
 shop_shipping_type # Shipping types # Versandkostenarten
@@ -42,7 +43,7 @@ pkg_newsletter_group # Newsletter subscriber lists # Newsletter-Empfängerlisten
 shop # Shop configuration # Shop-Konfiguration
 cms_portal # Portals / Websites # Portale / Websites
 pkg_cms_counter # System counters # Systemzähler
-cms_interface_manager # Configure imports / exports # Importe / Exporte ausführen
+cms_interface_manager # Configure imports / exports # Importe / Exporte konfigurieren
 pkg_csv2sql # Import from CSV # Von CSV importieren
 pkg_generic_table_export # Generic table export # Generischer Tabellenexport
 pkg_cms_theme # Website themes # Website Themes
