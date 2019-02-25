@@ -216,6 +216,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 $oMenuItem->sItemKey = 'deleteall';
                 $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.list.delete_selected');
                 $oMenuItem->sIcon = 'far fa-trash-alt';
+                $oMenuItem->setButtonStyle('btn-danger');
                 $oMenuItem->sOnClick = "DeleteSelectedRecords('{$sFormName}');";
                 $this->oMenuItems->AddItem($oMenuItem);
             }
