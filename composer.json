@@ -86,7 +86,6 @@
             "src/PkgCoreBundle/interfaces",
             "src/PkgCoreBundle/mappers",
             "src/PkgCoreBundle/objects",
-            "src/RevisionManagementBundle/objects",
             "src/SnippetRendererBundle/Filter",
             "src/SnippetRendererBundle/interfaces",
             "src/SnippetRendererBundle/objects",
