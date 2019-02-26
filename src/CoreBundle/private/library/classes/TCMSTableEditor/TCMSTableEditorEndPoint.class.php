@@ -937,6 +937,10 @@ class TCMSTableEditorEndPoint
      */
     public function SaveField($sFieldName, $sFieldContent, $bTriggerPostSaveHook = false)
     {
+        if (!is_null($this->oTable)) {
+            $this->oTablePreChangeData = clone $this->oTable;
+        }
+
         $oPostTable = $this->GetNewTableObjectForEditor();
         $postData = array($sFieldName => $sFieldContent, 'id' => $this->sId);
         $oPostTable->DisablePostLoadHook(true);
@@ -974,6 +978,10 @@ class TCMSTableEditorEndPoint
      */
     public function SaveFields($aFieldData, $bTriggerPostSaveHook = false)
     {
+        if (!is_null($this->oTable)) {
+            $this->oTablePreChangeData = clone $this->oTable;
+        }
+
         $oPostTable = $this->GetNewTableObjectForEditor();
         $postData = $aFieldData;
         $postData['id'] = $this->sId;
@@ -2880,6 +2888,10 @@ class TCMSTableEditorEndPoint
      */
     protected function ActivateRecordRevision_Execute($oCMSRevisionToActivate)
     {
+        if (!is_null($this->oTable)) {
+            $this->oTablePreChangeData = clone $this->oTable;
+        }
+
         $aRevisionPostData = TTools::mb_safe_unserialize($oCMSRevisionToActivate->fieldData);
         $oDBRecordTable = $this->oTableConf->GetTableObjectInstance();
         $aRevisionPostData['id'] = $oCMSRevisionToActivate->fieldRecordid;
