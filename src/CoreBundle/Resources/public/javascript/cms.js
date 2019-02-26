@@ -409,7 +409,11 @@ function initLightBox(){
 }
 
 CHAMELEON.CORE.handleFormAndLinkTargetsInModals = function () {
-    if (false === $('#modal_dialog').dialog('isOpen')) {
+    if (self === top) {
+        return;
+    }
+
+    if (false === $('#modal_dialog', top.document).dialog('isOpen')) {
         return;
     }
 
