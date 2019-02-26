@@ -694,6 +694,8 @@ $(document).ready(function () {
         window.onbeforeunload = function () {
         };
     });
+
+    CHAMELEON.CORE.handleFormAndLinkTargetsInModals();
 });
 
 /** needed for backwards compatibility */
@@ -714,7 +716,7 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
         document.cmseditform.elements['module_fnc[contentmodule]'].value = 'Delete';
         document.cmseditform.submit();
     }
-}
+};
 
 function updateIframeSize(sFieldName,iHeight){
     if (sFieldName != '') {

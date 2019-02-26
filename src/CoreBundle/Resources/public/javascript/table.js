@@ -115,4 +115,6 @@ $(document).ready(function () {
         var TRHeight = $(this).innerHeight() - 13; // - TD padding and borders
         $(this).find('a.TGroupTableLink').css('height', TRHeight);
     });
+
+    CHAMELEON.CORE.handleFormAndLinkTargetsInModals();
 });
