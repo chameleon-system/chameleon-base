@@ -954,4 +954,5 @@ $(document).ready(function () {
     CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent('label.switch input[type=checkbox]');
     CHAMELEON.CORE.MTTableEditor.initHelpTexts();
     CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe();
+    CHAMELEON.CORE.handleFormAndLinkTargetsInModals();
 });
