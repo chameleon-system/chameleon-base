@@ -65,6 +65,9 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         $mltRecords = $this->getMltRecordData($oTargetTableConf->sqlData['list_group_field_column']);
         $activeGroup = '';
         $hasEditPermissionForForeignTable = $this->isRecordChangingAllowed($foreignTableName);
+
+        $inputFilter = $this->getInputFilterUtil();
+
         foreach ($mltRecords as $mltRecord) {
             $recordId = $mltRecord['id'];
             $currentGroup = $mltRecord['group'];
@@ -95,12 +98,11 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
                           <label class="form-check-label" for="'.$escapedId.'">'.TGlobal::OutHTML($displayValue).'</label>
                       </div>';
 
-            if ($hasEditPermissionForForeignTable) {
-
+            if (true === $hasEditPermissionForForeignTable) {
                 $url = $urlUtil->getArrayAsUrl(
                     array(
                         'tableid' => $oTargetTableConf->sqlData['id'],
-                        'pagedef' => $this->getInputFilterUtil()->getFilteredGetInput('pagedef'),
+                        'pagedef' => $inputFilter->getFilteredGetInput('pagedef', 'tableeditor'),
                         'id' => $recordId,
                     ),
                     PATH_CMS_CONTROLLER.'?'
