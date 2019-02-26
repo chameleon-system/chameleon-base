@@ -484,3 +484,23 @@ function initLightBox(){
     });
 }
 
+CHAMELEON.CORE.handleFormAndLinkTargetsInModals = function () {
+    if (self === top) {
+        return;
+    }
+
+    if (false === $('#modalDialog', top.document).hasClass('show')) {
+        return;
+    }
+
+    $("form[target='_top']").each(function() {
+        $(this).attr('target', '');
+        $(this).find("input[name='pagedef'][value='tableeditor']").each(function() {
+            $(this).val('tableeditorPopup');
+        });
+
+        $(this).find("input[name='pagedef'][value='tablemanager']").each(function() {
+            $(this).val('tablemanagerframe');
+        });
+    });
+};

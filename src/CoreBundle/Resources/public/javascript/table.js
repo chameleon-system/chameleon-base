@@ -111,6 +111,8 @@ function ChangeListMarking(fieldValue, formName) {
  * force links inside table cells to fixed height based on TR height
  */
 $(document).ready(function () {
+    CHAMELEON.CORE.handleFormAndLinkTargetsInModals();
+
     $('.TCMSListManagerFullGroupTable tr.TGroupTableItemRow').each(function () {
         var TRHeight = $(this).innerHeight() - 13; // - TD padding and borders
         $(this).find('a.TGroupTableLink').css('height', TRHeight);
