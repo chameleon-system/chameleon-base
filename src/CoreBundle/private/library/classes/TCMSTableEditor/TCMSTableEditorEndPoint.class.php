@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\Event\RecordChangeEvent;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use Doctrine\DBAL\Connection;
@@ -599,7 +600,11 @@ class TCMSTableEditorEndPoint
                         $oMenuItem->sIcon = 'far fa-edit';
                         $oMenuItem->setButtonStyle('btn-warning');
 
-                        $aParameter = array('pagedef' => 'tableeditor', 'id' => $this->oTableConf->id, 'tableid' => $oTableEditorConf->id);
+                        $aParameter = array(
+                            'pagedef' => $this->getInputFilterUtil()->getFilteredGetInput('pagedef', 'tableeditor'),
+                            'id' => $this->oTableConf->id,
+                            'tableid' => $oTableEditorConf->id
+                        );
                         $aAdditionalParams = $this->GetHiddenFieldsHook();
                         if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
                             $aParameter = array_merge($aParameter, $aAdditionalParams);
@@ -652,8 +657,11 @@ class TCMSTableEditorEndPoint
         if (false === is_array($translatedFields) || 0 === count($translatedFields)) {
             return $menuItems;
         }
+
+        $inputFilter = $this->getInputFilterUtil();
+
         $aParameter = array(
-            'pagedef' => 'tableeditor',
+            'pagedef' => $inputFilter->getFilteredGetInput('pagedef','tableeditor'),
             'id' => $this->oTable->id,
             'tableid' => $this->oTableConf->id,
             'module_fnc' => array(
@@ -2989,11 +2997,13 @@ class TCMSTableEditorEndPoint
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    /**
-     * @return Request|null
-     */
-    private function getCurrentRequest()
+    private function getCurrentRequest(): ?Request
     {
         return ServiceLocator::get('request_stack')->getCurrentRequest();
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }
