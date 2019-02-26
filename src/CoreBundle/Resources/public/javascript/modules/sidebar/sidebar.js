@@ -15,6 +15,7 @@
             ;
             filterElement.on('keyup', self.filter.bind(this));
             sidebarMinimizerElement.on('click', self.onSidebarToggle.bind(this));
+            this.$baseElement.find('.nav-dropdown-toggle').on('click', self.onCategoryToggle.bind(this));
 
             $.extend($.expr[':'], {
                 'chameleonContainsCaseInsensitive': function(elem, i, match, array) {
@@ -41,6 +42,21 @@
             const $matchingNavItems = this.$navItems.find(":chameleonContainsCaseInsensitive('" + searchTerm + "')").closest('.nav-item');
             $matchingNavItems.removeClass('d-none');
             $matchingNavItems.parents('.nav-item').addClass('open').removeClass('d-none');
+        },
+        onCategoryToggle: function (event) {
+            const $category = $(event.target).parent('.nav-dropdown');
+            this.$baseElement.find('.nav-dropdown.open').not($category).removeClass('open');
+
+            let categoryId = null;
+            // The following condition is inverted, as this handler will be executed before the actual class change.
+            if (false === $category.hasClass('open')) {
+                categoryId = $category.data('categoryid');
+            }
+
+            const url = this.$baseElement.data('save-active-category-notification-url');
+            $.post(url, {
+                categoryId: categoryId
+            });
         },
         onSidebarToggle: function () {
             const url = this.$baseElement.data('toggle-notification-url');

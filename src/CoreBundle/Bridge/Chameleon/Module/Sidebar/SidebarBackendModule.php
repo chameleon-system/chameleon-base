@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
+    private const ACTIVE_CATEGORY_SESSION_KEY = 'chameleonSidebarBackendModuleActiveCategory';
     private const DISPLAY_STATE_SESSION_KEY = 'chameleonSidebarBackendModuleDisplayState';
 
     /**
@@ -75,6 +76,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
         $visitor->SetMappedValue('sidebarToggleNotificationUrl', $this->getSidebarToggleNotificationUrl());
+        $visitor->SetMappedValue('sidebarSaveActiveCategoryNotificationUrl', $this->getActiveCategoryNotificationUrl());
         $visitor->SetMappedValue('menuItems', $this->getMenuItems());
 
         $cmsUser = \TCMSUser::GetActiveUser();
@@ -85,6 +87,16 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     private function getSidebarToggleNotificationUrl(): string
     {
+        return $this->urlUtil->getArrayAsUrl([
+            'module_fnc' => [
+                $this->sModuleSpotName => 'ExecuteAjaxCall',
+            ],
+            '_fnc' => 'toggleSidebar',
+        ], $this->getBaseUri(), '&');
+    }
+
+    private function getBaseUri(): string
+    {
         $request = $this->requestStack->getCurrentRequest();
         $baseUri = $request->getRequestUri();
         if (false === \strpos($baseUri, '?')) {
@@ -93,12 +105,17 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $baseUri .= '&';
         }
 
+        return $baseUri;
+    }
+
+    private function getActiveCategoryNotificationUrl(): string
+    {
         return $this->urlUtil->getArrayAsUrl([
             'module_fnc' => [
                 $this->sModuleSpotName => 'ExecuteAjaxCall',
             ],
-            '_fnc' => 'toggleSidebar',
-        ], $baseUri, '&');
+            '_fnc' => 'saveActiveCategory',
+        ], $this->getBaseUri(), '&');
     }
 
     private function getMenuItems(): array
@@ -107,6 +124,8 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         if (null === $activeUser) {
             return [];
         }
+
+        $activeCategoryId = $this->getActiveCategory();
 
         $tdbCategoryList = \TdbCmsMenuCategoryList::GetList();
         $tdbCategoryList->ChangeOrderBy([
@@ -127,11 +146,35 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 }
             }
             if (\count($menuItems) > 0) {
-                $menuCategories[] = new MenuCategory($tdbCategory->fieldName, $tdbCategory->fieldIconFontCssClass, $menuItems);
+                $menuCategories[] = new MenuCategory(
+                    $tdbCategory->id,
+                    $tdbCategory->fieldName,
+                    $tdbCategory->fieldIconFontCssClass,
+                    $activeCategoryId === $tdbCategory->id,
+                    $menuItems
+                );
             }
         }
 
         return $menuCategories;
+    }
+
+    private function getActiveCategory(): ?string
+    {
+        $session = $this->requestStack->getCurrentRequest()->getSession();
+
+        return $session->get(self::ACTIVE_CATEGORY_SESSION_KEY);
+    }
+
+    protected function saveActiveCategory(): void
+    {
+        $activeCategory = $this->inputFilterUtil->getFilteredPostInput('categoryId');
+        if ('' === $activeCategory) {
+            $activeCategory = null;
+        }
+
+        $session = $this->requestStack->getCurrentRequest()->getSession();
+        $session->set(self::ACTIVE_CATEGORY_SESSION_KEY, $activeCategory);
     }
 
     /**
@@ -165,9 +208,10 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     {
         parent::DefineInterface();
         $this->methodCallAllowed[] = 'toggleSidebar';
+        $this->methodCallAllowed[] = 'saveActiveCategory';
     }
 
-    public function toggleSidebar(): void
+    protected function toggleSidebar(): void
     {
         $displayState = $this->inputFilterUtil->getFilteredPostInput('displayState');
         if (false === \in_array($displayState, ['minimized', 'shown'])) {
