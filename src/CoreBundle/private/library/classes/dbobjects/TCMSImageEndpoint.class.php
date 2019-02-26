@@ -139,16 +139,6 @@ class TCMSImageEndpoint
     public $sFlashPlayerSkinURL = '';
 
     /**
-     * indicates that the workflow engine is activated for the cms_media table and the current image was changed
-     * and needs to be loaded from workflow temp dir.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected $iShowImageFromWorkflow = false;
-
-    /**
      * if this static property is set to true the image urls will be forced to http even on https websites.
      *
      * @var bool

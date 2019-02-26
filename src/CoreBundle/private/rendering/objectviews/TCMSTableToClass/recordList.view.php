@@ -44,17 +44,6 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
     }
 
     /**
-     * returns true if this table is handled by the workflow
-     * @return boolean
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public static function IsTableWithActiveWorkflow()
-    {
-        return false;
-    }
-
-    /**
      * return an instance for the query passed
      *
      * @param string $sQuery - custom query instead of default query
@@ -107,18 +96,6 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
         $sDefaultQuery = "<?=$sCMSListQuery; ?>";
         $sDefaultQuery = str_replace('[{sFilterConditions}]',$sFilterString,$sDefaultQuery);
         return $sDefaultQuery;
-    }
-
-    /**
-     * copies edited records to temp table and returns true if edited records where found
-     *
-     * @return boolean
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function EditedRecordsAvailable()
-    {
-        return false;
     }
 
     /**

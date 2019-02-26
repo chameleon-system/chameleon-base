@@ -460,30 +460,6 @@ function CheckRefreshReturn(data) {
     window.setTimeout("RefreshRecordEditLock()", 30000);
 }
 
-/*
- * @deprecated since 6.3.0 - workflow is not supported anymore
- */
-function PublishViaAjaxCallback(data, statusText) {
-    CloseModalIFrameDialog();
-
-    if (data != false && data != null) {
-        if (data.error) {
-            top.toasterMessage('Fehler: ' + data.error, 'ERROR');
-        } else {
-            if (data.message && data.message != '') {
-                top.toasterMessage(data.message, 'MESSAGE');
-            } else {
-                top.toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.msg_published'), 'MESSAGE');
-                setTimeout('ReloadMainPage()', 2000);
-
-            }
-            if (data.name && data.name != '' && document.getElementById('breadcrumbLastNode')) document.getElementById('breadcrumbLastNode').innerHTML = data.name;
-        }
-    } else {
-        top.toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_publish'), 'ERROR');
-    }
-}
-
 function ReloadMainPage() {
     window.parent.location.href = window.location.pathname;
 }

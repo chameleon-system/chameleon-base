@@ -196,23 +196,6 @@ class CMSModuleImageManager extends TCMSModelBase
         return $viewRenderer->Render('/common/media/pkgCmsTextFieldImageResponsive.html.twig', null, false);
     }
 
-    /**
-     * Add messages to return data if active user cant use media file because media file was in
-     * workflow transaction.
-     * Returns true is user can use image and false otherwise.
-     *
-     * @param array $returnData
-     * @param array $aImageData
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function HandleWorkflowOnSetImage(&$returnData, $aImageData)
-    {
-        return true;
-    }
-
     protected function _LoadData($tableId, $recordId, $imageFieldName)
     {
         $this->oTableConf = new TCMSTableConf();

@@ -58,29 +58,11 @@ class TAccessManagerPermissions
     public $newLanguage = false;
 
     /**
-     * is allowed to publish records of this table.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public $workflowPublish = false;
-
-    /**
      * is allowed to see all records in readonly mode.
      *
      * @var bool
      */
     public $readonly = false;
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * is allowed to create and load record revisions.
-     *
-     * @var bool
-     */
-    public $revisionManagement = false;
 
     /**
      * gets permission bits for a given table and user.
@@ -258,7 +240,6 @@ class TAccessManagerPermissions
      */
     public function GetShowAllReadOnlyPermissionStatus($oAccessManagerUser, $table_id)
     {
-        $hasRight = false;
         static $requestCache = array();
         if (array_key_exists($table_id, $requestCache)) {
             $role_array = $requestCache[$table_id];
@@ -290,8 +271,6 @@ class TAccessManagerPermissions
      */
     public function GetNewLanguagePermissionStatus($oAccessManagerUser, $table_id)
     {
-        $returnVal = false;
-
         static $requestCache = array();
         if (array_key_exists($table_id, $requestCache)) {
             $role_array = $requestCache[$table_id];
@@ -311,37 +290,5 @@ class TAccessManagerPermissions
         $returnVal = $oAccessManagerUser->IsInRoles($role_array);
 
         return $returnVal;
-    }
-
-    /**
-     * get the permission status for the workflow publish right
-     * note we assume that the user is in the same group as the table.
-     *
-     * @param TAccessManagerUser $oAccessManagerUser
-     * @param string             $table_id
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function GetWorkflowPublishStatus($oAccessManagerUser, $table_id)
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * get the permission status for the revision management right
-     * note we assume that the user is in the same group as the table.
-     *
-     * @param TAccessManagerUser $oAccessManagerUser
-     * @param string $table_id
-     *
-     * @return bool
-     */
-    public function GetRevisionManagementPermissionStatus($oAccessManagerUser, $table_id)
-    {
-        return false;
     }
 }

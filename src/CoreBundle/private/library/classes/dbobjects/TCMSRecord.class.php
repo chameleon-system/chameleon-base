@@ -68,32 +68,12 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     public $_oTableConf = null;
 
     /**
-     * indicates if the record was overloaded with changes from the workflow and does NOT hold the current record.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public $bDataLoadedFromWorkflow = false;
-
-    /**
      * sets the state of field based translation overload fallback
      * e.g. if __en field is empty should it return the value from base language de?
      *
      * @var null|bool
      */
     private $bFieldBasedTranslationFallbackActive = null;
-
-    /**
-     * indicates if the record data will be overwritten with data from a
-     * workflow transaction in PostLoadHook
-     * (needed for publishing a record).
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected $bBypassWorkflow = false;
 
     /**
      * can be set to false using $this->DisablePostLoadHook(true);.
@@ -242,18 +222,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-     * sets the workflow bypass switch
-     * don`t forget to reset the switch after use.
-     *
-     * @param bool $bBypassWorkflow
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function SetWorkflowByPass($bBypassWorkflow = false)
-    {
-    }
-
-    /**
      * this method will return a query string to restrict to the id value of this record.
      *
      * @param string $sTableName - name of the table on which the restriction acts
@@ -264,18 +232,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     protected static function GetIdRestrictionQueryString($sTableName, $iIdValue)
     {
         return "`{$sTableName}`.`id` = ".ServiceLocator::get('database_connection')->quote($iIdValue);
-    }
-
-    /**
-     * returns query part to filter inserts and deletes if workflow is activated for the table.
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function GetWorkflowRestrictionQuery()
-    {
-        return '';
     }
 
     /**
@@ -1061,20 +1017,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $oCmsDocumentList = TdbCmsDocumentList::GetList($sQuery);
 
         return $oCmsDocumentList;
-    }
-
-    /**
-     * returns a filter query for mlt/document lookups to handle the workflow.
-     *
-     * @param string $mltTable
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function GetWorkflowMLTFilterQuery($mltTable)
-    {
-        return '';
     }
 
     /**
@@ -2042,20 +1984,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         }
 
         return $aTmpData;
-    }
-
-    /**
-     * returns true if table is marked for publishing workflow handling.
-     *
-     * @param string $sTableName
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public static function IsTableWithWorkflow($sTableName)
-    {
-        return false;
     }
 
     /**

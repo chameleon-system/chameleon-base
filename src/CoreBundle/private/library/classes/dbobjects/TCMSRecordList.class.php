@@ -128,38 +128,16 @@ class TCMSRecordList extends TIterator
     protected $iLimitResultSet = -1;
 
     /**
-     * set this to true if you want to activate the workflow filter in the query in the cms backend mode.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public $bForceWorkflow = false;
-
-    /**
-     * set this to true if you want to activate the workflow filter with all actions
-     * instead of only the actions that are currently marked for preview.
-     *
-     * this if needed for example in TCMSTableEditorMedia on image delete checks
-     * to get all records currently in workflow
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public $bUseGlobalFilterInsteadOfPreviewFilter = false;
-
-    /**
      * @var EntityList
      */
-    private $entityList = null;
+    private $entityList;
 
     /**
      * @var Connection
      */
     private $databaseConnection;
 
-    protected $estimationLowerLimit = null;
+    protected $estimationLowerLimit;
     private $queryParameters;
     private $queryParameterTypes;
 

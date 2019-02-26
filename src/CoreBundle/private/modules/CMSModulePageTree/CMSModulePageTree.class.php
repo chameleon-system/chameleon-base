@@ -609,18 +609,6 @@ class CMSModulePageTree extends TCMSModelBase
     }
 
     /**
-     * loads workflow transaction infos to show them in toaster messages.
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function GetTransactionDetails()
-    {
-        return '';
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function GetHtmlHeadIncludes()

@@ -328,19 +328,6 @@ class TCMSListManagerEndPoint
         return $query;
     }
 
-    /**
-     * Get restriction for none workflow user.
-     * None workflow user are not allowed to see deleted or new workflow data.
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function GetWorkflowRestrictions()
-    {
-        return '';
-    }
-
     public function CreateRestriction($fieldname, $operatorAndValue)
     {
         return "`{$this->oTableConf->sqlData['name']}`.`".MySqlLegacySupport::getInstance()->real_escape_string($fieldname).'` '.$operatorAndValue;

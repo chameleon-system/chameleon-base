@@ -734,15 +734,6 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
     }
 
     /**
-     * copy uploaded workflow temp image to document repository.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function MoveWorkflowDocumentToDocumentPool()
-    {
-    }
-
-    /**
      * @return InputFilterUtilInterface
      */
     private function getInputFilterUtil()

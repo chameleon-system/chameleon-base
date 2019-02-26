@@ -748,18 +748,6 @@ class MTHeader extends TCMSModelBase
     }
 
     /**
-     * loads the active workflow transaction object and returns an object used for ajax calls.
-     *
-     * @return stdClass
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function GetCurrentTransactionInfo()
-    {
-        return new stdClass();
-    }
-
-    /**
      * return an assoc array of parameters that describe the state of the module.
      *
      * @return array
