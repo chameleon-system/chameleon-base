@@ -870,7 +870,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     public function &GetTableConf()
     {
         if (is_null($this->_oTableConf)) {
-            $this->_oTableConf = TdbCmsTblConf::GetNewInstance();
+            $this->_oTableConf = TdbCmsTblConf::GetNewInstance(null, $this->iLanguageId);
 
             // fallback to base class - needed during DB autoClass generation
             if (null === $this->_oTableConf) {
@@ -884,11 +884,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             } else {
                 $this->_oTableConf->LoadFromFieldWithCaching('name', $this->table);
             }
-
-            // TODO alternative 2 - but probably too late ($this->_oTableConf is cached)
-            if (null !== $this->iLanguageId) {
-                $this->_oTableConf->SetLanguage($this->iLanguageId);
-            }
         }
 
         return $this->_oTableConf;
@@ -899,12 +894,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function getFieldsIndexed(): array
     {
-        $tableConf = $this->GetTableConf();
-        if (null !== $this->iLanguageId) {
-            $tableConf->SetLanguage($this->iLanguageId);
-        }
-
-        $fieldsIterator = $tableConf->GetFields($this);
+        $fieldsIterator = $this->GetTableConf()->GetFields($this);
 
         $fields = [];
         /**
