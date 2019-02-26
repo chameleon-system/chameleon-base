@@ -287,9 +287,8 @@ class TCMSListManagerEndPoint
                     if ($portalMLTFieldExists) {
                         // mlt connection (record may be in many portals)
 
-                        $mltSubSelect = "SELECT DISTINCT $quotedTableName.`id` FROM $quotedTableName";
-                        $mltSubSelect .= $this->GetPortalRestrictionJoin();
-                        $mltSubSelect .= " WHERE $quotedMltTable.`target_id` IN ($portalRestriction) OR $quotedMltTable.`target_id` IS NULL";
+                        $mltSubSelect = $this->getSubselectForMlt($quotedTableName, $quotedMltTable);
+                        $mltSubSelect .= " OR $quotedMltTable.`target_id` IN ($portalRestriction)";
 
                         $restriction .= " `id` IN ($mltSubSelect)";
                     }
@@ -303,9 +302,7 @@ class TCMSListManagerEndPoint
                     if ($portalMLTFieldExists) {
                         // mlt connection (record may be in many portals)
 
-                        $mltSubSelect = "SELECT DISTINCT $quotedTableName.`id` FROM $quotedTableName";
-                        $mltSubSelect .= $this->GetPortalRestrictionJoin();
-                        $mltSubSelect .= " WHERE $quotedMltTable.`target_id` IS NULL";
+                        $mltSubSelect = $this->getSubselectForMlt($quotedTableName, $quotedMltTable);
 
                         $restriction .= " `id` IN ($mltSubSelect)";
                     }
@@ -332,6 +329,15 @@ class TCMSListManagerEndPoint
         $query = $oRecordList->GetListManagerPortalRestriction($this, $query);
 
         return $query;
+    }
+
+    private function getSubselectForMlt(string $quotedTableName, string $quotedMltTableName): string
+    {
+        $mltSubSelect = "SELECT DISTINCT $quotedTableName.`id` FROM $quotedTableName";
+        $mltSubSelect .= $this->GetPortalRestrictionJoin();
+        $mltSubSelect .= " WHERE $quotedMltTableName.`target_id` IS NULL";
+
+        return $mltSubSelect;
     }
 
     /**
