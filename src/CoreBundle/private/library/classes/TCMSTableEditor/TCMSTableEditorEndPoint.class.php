@@ -601,7 +601,7 @@ class TCMSTableEditorEndPoint
                         $oMenuItem->setButtonStyle('btn-warning');
 
                         $aParameter = array(
-                            'pagedef' => $this->getInputFilterUtil()->getFilteredGetInput('pagedef'),
+                            'pagedef' => $this->getInputFilterUtil()->getFilteredGetInput('pagedef', 'tableeditor'),
                             'id' => $this->oTableConf->id,
                             'tableid' => $oTableEditorConf->id
                         );
@@ -661,7 +661,7 @@ class TCMSTableEditorEndPoint
         $inputFilter = $this->getInputFilterUtil();
 
         $aParameter = array(
-            'pagedef' => $inputFilter->getFilteredGetInput('pagedef'),
+            'pagedef' => $inputFilter->getFilteredGetInput('pagedef','tableeditor'),
             'id' => $this->oTable->id,
             'tableid' => $this->oTableConf->id,
             'module_fnc' => array(
