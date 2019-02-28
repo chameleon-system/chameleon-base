@@ -159,11 +159,11 @@ class InitialBackendUserCreator
             'show_as_rights_template' => '1',
         ]);
 
-        $this->addLanguageLinks($userId);
-        $this->addPortalLinks($userId);
+        $this->connectUserToLanguages($userId);
+        $this->connectUserToPortals($userId);
     }
 
-    private function addLanguageLinks(string $userId): void
+    private function connectUserToLanguages(string $userId): void
     {
         $languageList = \TdbCmsLanguageList::GetList();
         $position = 0;
@@ -176,7 +176,7 @@ class InitialBackendUserCreator
         }
     }
 
-    private function addPortalLinks(string $userId): void
+    private function connectUserToPortals(string $userId): void
     {
         $portalList = \TdbCmsPortalList::GetList();
         $position = 0;
