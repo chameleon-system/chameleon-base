@@ -231,6 +231,7 @@ unset($statement);
 // Create menu items.
 
 $menuItemLines = \explode(PHP_EOL, $menuItemDef);
+$handledTables = [];
 $lastCategory = null;
 $invalidTableNames = [];
 $invalidModuleNames = [];
@@ -249,6 +250,7 @@ foreach ($menuItemLines as $menuItemLine) {
                 $invalidTableNames[] = $identifier;
                 continue 2;
             }
+            $handledTables[$identifier] = true;
             $tableData = $tableList[$identifier];
             $menuItemData = [
                 'id' => $menuItemId,
@@ -337,4 +339,182 @@ if (\count($invalidCustomMenuItemNames)) {
         "While creating menu items, some custom menu items could not be found. No menu items were created for these custom menu items: $customMenuItemNameString",
         TCMSLogChange::INFO_MESSAGE_LEVEL_WARNING
     );
+}
+
+/*
+ * Add remaining tables to "other" category, excluding all standard tables that are not intended to be accessed directly.
+ * This is intended as a fallback for project-specific and third-party bundle so that menu items do not disappear
+ * completely after migration.
+ */
+
+$excludeList = [
+    'amazon_payment_id_mapping' => true,
+    'cms_config_cmsmodule_extensions' => true,
+    'cms_config_imagemagick' => true,
+    'cms_config_parameter' => true,
+    'cms_dark_site_content' => true,
+    'cms_division' => true,
+    'cms_document' => true,
+    'cms_document_security_hash' => true,
+    'cms_document_tree' => true,
+    'cms_export_profiles_fields' => true,
+    'cms_field_conf' => true,
+    'cms_image_crop' => true,
+    'cms_image_crop_preset' => true,
+    'cms_interface_manager_parameter' => true,
+    'cms_ip_whitelist' => true,
+    'cms_language' => true,
+    'cms_lock' => true,
+    'cms_master_pagedef_spot' => true,
+    'cms_master_pagedef_spot_access' => true,
+    'cms_master_pagedef_spot_parameter' => true,
+    'cms_media' => true,
+    'cms_media_tree' => true,
+    'cms_menu_item' => true,
+    'cms_message_manager_backend_message' => true,
+    'cms_message_manager_message' => true,
+    'cms_migration_file' => true,
+    'cms_portal_domains' => true,
+    'cms_portal_navigation' => true,
+    'cms_portal_system_page' => true,
+    'cms_record_revision' => true,
+    'cms_tags' => true,
+    'cms_tbl_conf_index' => true,
+    'cms_tbl_conf_restrictions' => true,
+    'cms_tbl_display_list_fields' => true,
+    'cms_tbl_display_orderfields' => true,
+    'cms_tbl_extension' => true,
+    'cms_tbl_field_tab' => true,
+    'cms_tbl_list_class' => true,
+    'cms_tpl_module_instance' => true,
+    'cms_tpl_page_cms_master_pagedef_spot' => true,
+    'cms_tree' => true,
+    'cms_tree_node' => true,
+    'cms_wizard_config' => true,
+    'cms_wizard_step' => true,
+    'data_atomic_lock' => true,
+    'data_extranet_module_my_account' => true,
+    'data_extranet_user_address' => true,
+    'data_extranet_user_login_history' => true,
+    'data_extranet_user_shop_article_history' => true,
+    'data_img_teaser' => true,
+    'module_cms_search' => true,
+    'module_customlist_config' => true,
+    'module_customlist_config_sortfields' => true,
+    'module_feedback' => true,
+    'module_list' => true,
+    'module_list_cat' => true,
+    'module_list_config' => true,
+    'module_text' => true,
+    'pkg_cms_changelog_item' => true,
+    'pkg_cms_class_manager_extension' => true,
+    'pkg_cms_core_log' => true,
+    'pkg_cms_core_log_channel' => true,
+    'pkg_cms_result_cache' => true,
+    'pkg_cms_theme_block_layout' => true,
+    'pkg_comment_module_config' => true,
+    'pkg_image_hotspot' => true,
+    'pkg_image_hotspot_item' => true,
+    'pkg_image_hotspot_item_marker' => true,
+    'pkg_image_hotspot_item_spot' => true,
+    'pkg_multi_module_module_config' => true,
+    'pkg_multi_module_set_item' => true,
+    'pkg_newsletter_confirmation' => true,
+    'pkg_newsletter_module_signout_config' => true,
+    'pkg_newsletter_module_signup_config' => true,
+    'pkg_newsletter_module_signup_teaser' => true,
+    'pkg_newsletter_queue' => true,
+    'pkg_run_frontend_action' => true,
+    'pkg_shop_affiliate' => true,
+    'pkg_shop_affiliate_parameter' => true,
+    'pkg_shop_article_review_module_shop_article_review_configuration' => true,
+    'pkg_shop_footer_category' => true,
+    'pkg_shop_listfilter_item' => true,
+    'pkg_shop_listfilter_module_config' => true,
+    'pkg_shop_payment_ipn_status' => true,
+    'pkg_shop_payment_ipn_trigger' => true,
+    'pkg_shop_payment_transaction' => true,
+    'pkg_shop_payment_transaction_position' => true,
+    'pkg_shop_rating_service_teaser_cnf' => true,
+    'pkg_shop_wishlist' => true,
+    'pkg_shop_wishlist_article' => true,
+    'pkg_shop_wishlist_mail_history' => true,
+    'pkg_shop_wishlist_order_item' => true,
+    'pkg_track_object' => true,
+    'pkg_track_object_history' => true,
+    'shop_article_catalog_conf' => true,
+    'shop_article_catalog_conf_default_order' => true,
+    'shop_article_contributor' => true,
+    'shop_article_document' => true,
+    'shop_article_image' => true,
+    'shop_article_image_size' => true,
+    'shop_article_preview_image' => true,
+    'shop_article_stats' => true,
+    'shop_article_stock' => true,
+    'shop_attribute_value' => true,
+    'shop_bank_account' => true,
+    'shop_bundle_article' => true,
+    'shop_category_tab' => true,
+    'shop_manufacturer_module_conf' => true,
+    'shop_module_article_list' => true,
+    'shop_module_article_list_article' => true,
+    'shop_order_bundle_article' => true,
+    'shop_order_discount' => true,
+    'shop_order_item' => true,
+    'shop_order_payment_method_parameter' => true,
+    'shop_order_shipping_group_parameter' => true,
+    'shop_order_status' => true,
+    'shop_order_status_item' => true,
+    'shop_order_vat' => true,
+    'shop_payment_handler' => true,
+    'shop_payment_handler_group_config' => true,
+    'shop_payment_handler_parameter' => true,
+    'shop_payment_method' => true,
+    'shop_search_cache' => true,
+    'shop_search_cache_item' => true,
+    'shop_search_field_weight' => true,
+    'shop_search_ignore_word' => true,
+    'shop_search_keyword_article' => true,
+    'shop_stock_message' => true,
+    'shop_stock_message_trigger' => true,
+    'shop_suggest_article_log' => true,
+    'shop_system_info' => true,
+    'shop_system_info_module_config' => true,
+    'shop_system_page' => true,
+    'shop_user_notice_list' => true,
+    'shop_user_purchased_voucher' => true,
+    'shop_variant_type' => true,
+    'shop_variant_type_value' => true,
+    'shop_voucher' => true,
+    'shop_voucher_use' => true,
+    't_country' => true,
+];
+
+$position = 0;
+foreach ($tableList as $tableName => $tableData) {
+    if (true === \array_key_exists($tableName, $handledTables)) {
+        continue;
+    }
+    if (true === \array_key_exists($tableName, $excludeList)) {
+        continue;
+    }
+
+    $menuItemId = TCMSLogChange::createUnusedRecordId('cms_menu_item');
+    $menuItemData = [
+        'id' => $menuItemId,
+        'name' => $tableData['translation'],
+        'target' => $tableData['id'],
+        'target_table_name' => 'cms_tbl_conf',
+        'icon_font_css_class' => $tableData['icon_font_css_class'],
+        'position' => $position,
+        'cms_menu_category_id' => $categoryList['other']['id'],
+    ];
+    foreach ($languageList as $language) {
+        if (true === \array_key_exists("translation__$language", $tableData)) {
+            $menuItemData["name__$language"] = $tableData["translation__$language"];
+        }
+    }
+    $databaseConnection->insert('cms_menu_item', $menuItemData);
+
+    $position++;
 }

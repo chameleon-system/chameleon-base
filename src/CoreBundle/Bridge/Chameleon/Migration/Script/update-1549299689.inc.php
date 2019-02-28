@@ -24,6 +24,7 @@ internalusers        # Internal users        # Interne Benutzer      # fas fa-us
 logs                 # Logs                  # Logs                  # fas fa-clipboard-list
 routing              # Routing               # Routing               # fas fa-random
 system               # System                # System                # fas fa-cog
+other                # Other                 # Sonstige              # fas fa-question
 EOT;
 
 $categoryLines = \explode(PHP_EOL, $categoryDef);

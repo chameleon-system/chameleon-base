@@ -93,7 +93,7 @@ Old in service.xml:
 ```
 
 New in config.yml - changed the channel name slightly:
-```
+```yaml
 monolog:
    handlers:
        cms_updates:
@@ -104,15 +104,15 @@ monolog:
            level: info
 ```
 
-This is then used in that service.xml as two service arguments instead of a reference to `cmsPkgCore.logChannel.cmsUpdates`:
-```
+This is then used in that services.xml as two service arguments instead of a reference to `cmsPkgCore.logChannel.cmsUpdates`:
+```xml
     <argument type="service" id="logger"/>
     <tag name="monolog.logger" channel="cms_updates"/>
 ```
 
 The full config (in config.yml) that would replicate the legacy logging behavior of Chameleon 6.2 looks like this:
 
-```
+```yaml
 monolog:
    handlers:
      database:
@@ -174,6 +174,16 @@ Using this setting SMTP connections verify SSL/TLS certificate validity so that 
 We now use the DoctrineBundle. While we do not use many of its features yet (especially no ORM mapping), initializing
 the database connection is now handled by Doctrine. In practice the most noticeable difference is that the connection
 is opened lazily, so that more console commands can be executed without a working database connection.
+
+Add the DoctrineBundle to the AppKernel:
+
+```php
+    $bundles = array(
+    ...
+    new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+    ...
+    );
+```
 
 This change requires to add the following configuration to `/app/config/config.yml`:
 
@@ -402,7 +412,10 @@ should be quite straightforward.
 Also some menu items that were located in the top bar were now moved to the sidebar. Finally the backend modules that
 were called in a popup window, like navigation, product search index generation and sanity check, now open inline.
 
-From a technical point no changes are required if the project is a shop system. Projects that are pure CMS systems
+If the project uses custom tables or backend modules, menu items for these will be created in the "Other" menu category.
+Revise these items and move them to a fitting "real" category and delete unnecessary menu items.
+
+From a technical point no further changes are required if the project is a shop system. Projects that are pure CMS systems
 should consider removing menu categories that are nevertheless created during migration. Note that there will be some
 error messages during migration that complain about missing shop tables and modules in this case, which can be ignored. 
 
