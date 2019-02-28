@@ -367,9 +367,13 @@ Tree paths are now rendered using Bootstrap 4 breadcrumb styles.
 Check your code for the CSS class "treeField" and if found, change the HTML to ol/li list with breadcrumb classes.
 See TCMSTreeNode::GetTreeNodePathAsBackendHTML() for an example. 
 
-## Font Awesome Icons
+## Icons
 
-The icons of Font Awesome have been added.
+The famfamfam icon library is deprecated.
+Please check your code to any reference to the directory "/icons/".
+The folder exists twice, globally and inside a theme directory and both are deprecated.
+
+The icons of Font Awesome have been added as a replacement.
 They will replace all file icons and the glyphicons of Bootstrap3 in the backend.
 
 During migration, icons for main menu items will be replaced with matching Font Awesome icons. 
@@ -536,14 +540,18 @@ is recommended (although this tool may not find database-related deprecations).
 
 - bootstrap-colorpicker (new version 3.0.3 located in src/CoreBundle/Resources/public/javascript/jquery/bootstrap-colorpicker-3.0.3).
 - chosen.jquery.js
+- flash.js
+- html5shiv.js
 - jqModal.js 
 - jqDnR.js
 - jquery.form.js (new version 4.2.2 located in src/CoreBundle/Resources/public/javascript/jquery/jquery-form-4.2.2/jquery.form.min.js).
 - jquery.selectboxes.js
 - jQueryUI (everything in path src/CoreBundle/Resources/public/javascript/jquery/jQueryUI; drag and drop still used in the template engine).
+- maskedinput.js
 - pngForIE.htc
 - pNotify (new version 3.2.0 located in src/CoreBundle/Resources/public/javascript/pnotify-3.2.0/)
 - respond.min.js
+- rwd.images.js
 - src/CoreBundle/Resources/public/javascript/mainNav.js
 - THTMLFileBrowser.js
 - THTMLTable.js
@@ -567,6 +575,20 @@ is recommended (although this tool may not find database-related deprecations).
 - SaveNewRevision()
 - SetChangedDataMessage()
 - showMLTField()
+- SwitchEditPortal()
+- SwitchEditPortalCallback()
+
+## Frontend Assets
+
+There are some frontend styles, images and javascript helpers located in the core, 
+that are deprecated because they are outdated and replaced by frontend themes or will move to the bundle.
+
+- web_modules/MTConfigurableFeedbackCore (will be moved to bundle)
+- web_modules/MTExtranet
+- web_modules/MTFAQListCore
+- web_modules/MTFeedbackCore
+- web_modules/MTGlobalListCore
+- web_modules/MTNewsletterSignupCore
 
 ## Translations
 
