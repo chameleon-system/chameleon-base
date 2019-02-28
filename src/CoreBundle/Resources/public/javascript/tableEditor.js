@@ -770,10 +770,10 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
                 return;
             }
 
-            if ($(this).hasClass('format-L')) {
-                var cmsDate = moment.format('YYYY-MM-DD');
-            } else {
+            if ($(this).hasClass('format-L') && $(this).hasClass('LTS')) {
                 var cmsDate = moment.format('YYYY-MM-DD HH:mm:ss');
+            } else {
+                var cmsDate = moment.format('YYYY-MM-DD');
             }
             // We need a SQL date format for BC reasons.
             $('input[name=' + id + ']').val(cmsDate);
