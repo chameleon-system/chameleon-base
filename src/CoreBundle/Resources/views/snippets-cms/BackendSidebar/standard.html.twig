@@ -2,6 +2,7 @@
         class="sidebar"
         data-toggle-notification-url="{{ sidebarToggleNotificationUrl|e('html_attr') }}"
         data-save-active-category-notification-url="{{ sidebarSaveActiveCategoryNotificationUrl|e('html_attr') }}"
+        data-active-category="[{sidebarActiveCategory}]"
 >
     <p class="sidebar-filter-input-wrapper fas"><input
             type="text"
@@ -12,7 +13,7 @@
     <nav class="sidebar-nav">
         <ul class="nav">
             {% for category in menuItems %}
-                <li class="nav-item nav-dropdown {% if category.active %}open{% endif %}" data-categoryid="{{ category.id }}">
+                <li class="nav-item nav-dropdown" data-categoryid="{{ category.id }}">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                         <i class="nav-icon {{ category.iconFontCssClass|default('fas fa-sign-out-alt') }}"></i>
                         {{ category.name }}
