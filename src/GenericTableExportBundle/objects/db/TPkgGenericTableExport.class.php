@@ -61,7 +61,6 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
             }
             $fileManager->fclose($pFile);
         } else {
-            // TODO use same error mechanism as for createExportDirectoryIfNeeded()
             trigger_error("Can't open '{$exportFilePath}' for writing - check directory and rights", E_USER_WARNING);
         }
 
@@ -313,11 +312,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
         $dir = $this->getExportDirectoryPath();
 
         if (false === \is_dir($dir)) {
-            if (false === \mkdir($dir, 0777, true) && false === \is_dir($dir)) {
-
-                // TODO what kind of exception?
-                //throw new ViewRenderException(sprintf('Cannot create directory %s', $dir));
-            }
+            \mkdir($dir, 0777, true);
         }
     }
 }
