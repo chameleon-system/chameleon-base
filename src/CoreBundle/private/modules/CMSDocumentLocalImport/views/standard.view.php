@@ -1,6 +1,6 @@
 <?php
 if (!empty($data['errorMessage'])) {
-    echo '<div class="errorMessage">'.$data['errorMessage'].'</div>';
+    echo '<div class="alert alert-info">'.$data['errorMessage'].'</div>';
 } else {
     if (count($data['dirListing']) > 0) {
         ?>
@@ -49,7 +49,7 @@ if (!empty($data['errorMessage'])) {
 
     if (isset($data['fileErrors'])) {
         foreach ($data['fileErrors'] as $errorMessage) {
-            echo '<div class="errorMessage">'.$errorMessage.'</div>';
+            echo '<div class="alert alert-danger">'.$errorMessage.'</div>';
         }
     }
 
