@@ -12,7 +12,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
         <div id="moduleheaderline_<?=$menuPrefix; ?>">
             <a id="launch<?=$menuPrefix; ?>" class="cmsModuleMenuLauncher" href="javascript:void(0);"
                onclick="return false;"
-               style="display: block; font-weight: bold; color: #fff; background: #81A6DD url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/layout_edit.png'); ?>) no-repeat scroll 5px center"><span><?=$translator->trans('chameleon_system_core.template_engine.spot_menu_headline', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+               style="display: block; font-weight: bold; color: #fff; background: #20a8d8 url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/layout_edit.png'); ?>) no-repeat scroll 5px center"><span><?=$translator->trans('chameleon_system_core.template_engine.spot_menu_headline', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
         </div>
         <?php if (!is_null($data['oModule'])) {
     ?>
@@ -23,7 +23,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     } else {
         $sViewName = $data['oModuleInstance']->sqlData['template'];
     } ?>
-        <div style="background-image: url(/chameleon/blackbox/images/header_bg.gif);">
+        <div style="background-color: #63c2de">
             <div class="moduleType"
                  style="background: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/'.TGlobal::OutHTML($data['oModule']->sqlData['icon_list'])); ?>); background-repeat: no-repeat; background-position: 3px;"><?=TGlobal::OutHTML($data['oModule']->sqlData['name']); ?></div>
         </div>
@@ -31,7 +31,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
             :</strong> <?=TGlobal::OutHTML(str_replace('_', ' ', $sViewName)); ?></div>
         <div class="moduleInfo"><strong><?=$translator->trans('chameleon_system_core.template_engine.slot_content', array(), TranslationConstants::DOMAIN_BACKEND); ?>
             : </strong><?=TGlobal::OutHTML($data['oModuleInstance']->sqlData['name']); ?></div>
-        <div style="background-color:#81A6DD;text-align:right;">
+        <div style="background-color:#20a8d8; text-align:right;">
             <span style="font-size:10px;color:#FFFFFF;font-weight:bold;"><?= $translator->trans('chameleon_system_core.template_engine.action_move_slot_content', array(), TranslationConstants::DOMAIN_BACKEND); ?></span>
 
             <div class="CMSModuleChooserCrosshair" data-spotname="<?=TGlobal::OutHTML($data['sModuleSpotName']); ?>"
@@ -41,7 +41,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
         <?php
 } else {
         ?>
-        <div style="background-image: url(/chameleon/blackbox/images/header_bg.gif);">
+        <div style="background-color: #63c2de">
             <div class="moduleType"
                  style="background: url(<?=TGlobal::GetPathTheme(); ?>/images/icons/cross.png); background-repeat: no-repeat; background-position: 3px;"><?php echo $translator->trans('chameleon_system_core.template_engine.slot_is_empty', array(), TranslationConstants::DOMAIN_BACKEND); ?></div>
         </div>
