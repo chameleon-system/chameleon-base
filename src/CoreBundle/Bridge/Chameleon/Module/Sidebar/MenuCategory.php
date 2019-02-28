@@ -26,10 +26,6 @@ class MenuCategory
      */
     private $iconFontCssClass;
     /**
-     * @var bool
-     */
-    private $isActive;
-    /**
      * @var MenuItem[]
      */
     private $menuItems;
@@ -38,15 +34,13 @@ class MenuCategory
      * @param string     $id
      * @param string     $name
      * @param string     $iconFontCssClass
-     * @param bool       $isActive
      * @param MenuItem[] $menuItems
      */
-    public function __construct(string $id, string $name, string $iconFontCssClass, bool $isActive, array $menuItems)
+    public function __construct(string $id, string $name, string $iconFontCssClass, array $menuItems)
     {
         $this->id = $id;
         $this->name = $name;
         $this->iconFontCssClass = $iconFontCssClass;
-        $this->isActive = $isActive;
         $this->menuItems = $menuItems;
     }
 
@@ -63,11 +57,6 @@ class MenuCategory
     public function getIconFontCssClass(): string
     {
         return $this->iconFontCssClass;
-    }
-
-    public function isActive(): bool
-    {
-        return $this->isActive;
     }
 
     public function getMenuItems(): array
