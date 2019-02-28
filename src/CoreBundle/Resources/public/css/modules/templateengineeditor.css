@@ -3,6 +3,7 @@
   font-family: Arial, helvetica, sans-serif !important;
   color: white !important;
   padding: 3px 3px 3px 23px !important;
+  color: #23282c !important;
 }
 
 .moduleInfo {
@@ -10,12 +11,12 @@
   font-size: 10px !important;
   font-family: Arial, helvetica, sans-serif !important;
   background-color: #63c2de !important;
-  color: white !important;
+  color: #23282c !important;
   border-top: 1px solid #fff;
 }
 
 .moduleInfo strong {
-  color: white !important;
+  color: #23282c !important;
 }
 
 #cmsModuleMenu {
