@@ -17,6 +17,8 @@
             sidebarMinimizerElement.on('click', self.onSidebarToggle.bind(this));
             this.$baseElement.find('.nav-dropdown-toggle').on('click', self.onCategoryToggle.bind(this));
 
+            this.$baseElement.find('[data-categoryid="' + this.$baseElement.data('active-category') + '"]').addClass('open');
+
             $.extend($.expr[':'], {
                 'chameleonContainsCaseInsensitive': function(elem, i, match, array) {
                     return (elem.textContent || elem.innerText || '').toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
