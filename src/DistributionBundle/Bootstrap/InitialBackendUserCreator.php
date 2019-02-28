@@ -19,8 +19,6 @@ use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use TdbCmsLanguageList;
-use TdbCmsPortalList;
 
 class InitialBackendUserCreator
 {
@@ -185,7 +183,7 @@ class InitialBackendUserCreator
     private function getAllLanguages(): array
     {
         $languages = [];
-        $languageList = TdbCmsLanguageList::GetList();
+        $languageList = \TdbCmsLanguageList::GetList();
         while (false !== $languageObject = $languageList->Next()) {
             $languages[] = $languageObject->id;
         }
@@ -196,7 +194,7 @@ class InitialBackendUserCreator
     private function getAllPortals(): array
     {
         $portals = [];
-        $portalList = TdbCmsPortalList::GetList();
+        $portalList = \TdbCmsPortalList::GetList();
         while (false !== $portalObject = $portalList->Next()) {
             $portals[] = $portalObject->id;
         }
