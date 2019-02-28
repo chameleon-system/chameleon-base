@@ -422,12 +422,17 @@ function addslashes(str) {
 
 
 /**
+ * @deprecated since 6.3.0 - not used anywhere.
+ *
  * switches the edit portal which will used as default portal while editing
  */
 function SwitchEditPortal() {
     PostAjaxFormTransparent('portalChooserForm', SwitchEditPortalCallback);
 }
 
+/**
+ * @deprecated since 6.3.0 - not used anywhere.
+ */
 function SwitchEditPortalCallback() {
     $('#portalChooser').slideToggle('fast');
     $('#portalContentBoxNameSpan').html(document.getElementById('activePortalID').options[document.getElementById('activePortalID').options.selectedIndex].text);
