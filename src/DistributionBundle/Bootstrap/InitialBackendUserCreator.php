@@ -19,6 +19,8 @@ use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
+use TdbCmsLanguageList;
+use TdbCmsPortalList;
 
 class InitialBackendUserCreator
 {
@@ -159,11 +161,47 @@ class InitialBackendUserCreator
             'show_as_rights_template' => '1',
         ]);
 
-        $this->databaseConnection->insert('cms_user_cms_language_mlt', [
-            'source_id' => $userId,
-            'target_id' => $languageEn->id,
-            'entry_sort' => 1,
-        ]);
+        $allLanguages = $this->getAllLanguages();
+        $position = 0;
+        foreach ($allLanguages as $languageId) {
+            $this->databaseConnection->insert('cms_user_cms_language_mlt', [
+                'source_id' => $userId,
+                'target_id' => $languageId,
+                'entry_sort' => ++$position,
+            ]);
+        }
+
+        $allPortals = $this->getAllPortals();
+        $position = 0;
+        foreach ($allPortals as $portalId) {
+            $this->databaseConnection->insert('cms_user_cms_portal_mlt', [
+                'source_id' => $userId,
+                'target_id' => $portalId,
+                'entry_sort' => ++$position,
+            ]);
+        }
+    }
+
+    private function getAllLanguages(): array
+    {
+        $languages = [];
+        $languageList = TdbCmsLanguageList::GetList();
+        while (false !== $languageObject = $languageList->Next()) {
+            $languages[] = $languageObject->id;
+        }
+
+        return $languages;
+    }
+
+    private function getAllPortals(): array
+    {
+        $portals = [];
+        $portalList = TdbCmsPortalList::GetList();
+        while (false !== $portalObject = $portalList->Next()) {
+            $portals[] = $portalObject->id;
+        }
+
+        return $portals;
     }
 
     private function addUserRoles(string $userId): void
