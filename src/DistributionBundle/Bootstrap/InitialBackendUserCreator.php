@@ -159,47 +159,34 @@ class InitialBackendUserCreator
             'show_as_rights_template' => '1',
         ]);
 
-        $allLanguages = $this->getAllLanguages();
+        $this->addLanguageLinks($userId);
+        $this->addPortalLinks($userId);
+    }
+
+    private function addLanguageLinks(string $userId): void
+    {
+        $languageList = \TdbCmsLanguageList::GetList();
         $position = 0;
-        foreach ($allLanguages as $languageId) {
+        while (false !== $language = $languageList->Next()) {
             $this->databaseConnection->insert('cms_user_cms_language_mlt', [
                 'source_id' => $userId,
-                'target_id' => $languageId,
+                'target_id' => $language->id,
                 'entry_sort' => ++$position,
             ]);
         }
+    }
 
-        $allPortals = $this->getAllPortals();
+    private function addPortalLinks(string $userId): void
+    {
+        $portalList = \TdbCmsPortalList::GetList();
         $position = 0;
-        foreach ($allPortals as $portalId) {
+        while (false !== $portal = $portalList->Next()) {
             $this->databaseConnection->insert('cms_user_cms_portal_mlt', [
                 'source_id' => $userId,
-                'target_id' => $portalId,
+                'target_id' => $portal->id,
                 'entry_sort' => ++$position,
             ]);
         }
-    }
-
-    private function getAllLanguages(): array
-    {
-        $languages = [];
-        $languageList = \TdbCmsLanguageList::GetList();
-        while (false !== $languageObject = $languageList->Next()) {
-            $languages[] = $languageObject->id;
-        }
-
-        return $languages;
-    }
-
-    private function getAllPortals(): array
-    {
-        $portals = [];
-        $portalList = \TdbCmsPortalList::GetList();
-        while (false !== $portalObject = $portalList->Next()) {
-            $portals[] = $portalObject->id;
-        }
-
-        return $portals;
     }
 
     private function addUserRoles(string $userId): void
