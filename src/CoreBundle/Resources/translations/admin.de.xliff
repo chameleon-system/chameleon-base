@@ -270,7 +270,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_timestamp.last_change">
                 <source>chameleon_system_core.field_timestamp.last_change</source>
-                <target>letzte Änderung: %timestamp% Uhr"</target>
+                <target>letzte Änderung: %timestamp% Uhr</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_timestamp.will_be_set_to">
                 <source>chameleon_system_core.field_timestamp.will_be_set_to</source>
