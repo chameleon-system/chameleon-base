@@ -498,14 +498,17 @@ function SaveViaAjaxCustomCallback(customCallbackFunction, closeAfterSave) {
     document.cmseditform._fnc.value = 'AjaxSave';
 
     PostAjaxForm('cmseditform', eval(customCallbackFunction));
-    if (closeAfterSave == true && typeof parent != 'undefined') parent.setTimeout("parent.CloseModalIFrameDialog()", 3000);
+
+    if (closeAfterSave == true && typeof parent != 'undefined') {
+        parent.setTimeout("parent.CloseModalIFrameDialog()", 3000);
+    }
 }
 
 /*
  * tableEditor: save table single field via ajax
  */
 function SaveFieldViaAjaxCustomCallback(customCallbackFunction) {
-    if (customCallbackFunction == 'undefined') {
+    if ('undefined' === customCallbackFunction) {
         customCallbackFunction = SaveViaAjaxCallback;
     }
 
@@ -568,8 +571,6 @@ function SaveViaAjaxCallback(data, statusText) {
                     // reattach the message binding
                     CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
                 }
-
-
             });
         } else {
             // remove "something changed" message, because now the data was saved
@@ -580,13 +581,10 @@ function SaveViaAjaxCallback(data, statusText) {
             if (data.message && data.message !== '') {
                 toasterMessage(data.message, 'MESSAGE');
             }
-
-            // add saved record to breadcrumb
-            if (data.name && data.name !== '' && document.getElementById('breadcrumbLastNode')) {
-                document.getElementById('breadcrumbLastNode').innerHTML = data.name;
-                sCurrentRecordName = data.name;
-            }
         }
+
+        $('#tableEditorContainer .navbar-brand').html(data.name);
+        $('#cmsbreadcrumb .breadcrumb-item:last').html(data.name);
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_save'), 'ERROR');
     }
@@ -705,11 +703,10 @@ function DeleteRecord() {
 }
 
 CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sConfirmText) {
-    if (sCurrentRecordName != '') {
-        sConfirmText += "\n\n " + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.record') + ": \"" + sCurrentRecordName + '"';
-    } else {
-        sConfirmText += "\n\n " + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.record') + ": \"" + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.unnamed') + '"';
-    }
+    var currentRecordName = $('#tableEditorContainer .navbar-brand').text();
+
+    sConfirmText += "\n\n " + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.record') + ": \"" + currentRecordName + '"';
+
     if (confirm(sConfirmText)) {
         window.onbeforeunload = function () {
         };
@@ -720,7 +717,6 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
 };
 
 CHAMELEON.CORE.MTTableEditor.initTabs = function () {
-    var url = document.URL;
     var hash = window.location.hash;
 
     $('.nav-tabs').find('li a').each(function (key, tabLinkItem) {
