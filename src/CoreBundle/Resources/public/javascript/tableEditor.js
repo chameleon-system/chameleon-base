@@ -583,7 +583,6 @@ function SaveViaAjaxCallback(data, statusText) {
             }
         }
 
-        sCurrentRecordName = data.name;
         $('#tableEditorContainer .navbar-brand').html(data.name);
         $('#cmsbreadcrumb .breadcrumb-item:last').html(data.name);
     } else {
