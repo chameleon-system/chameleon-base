@@ -2375,7 +2375,7 @@ class TCMSImageEndpoint
      */
     public function GetPlainFileTypeIcon()
     {
-        return '<span class="'.$this->getFileTypeIconCssStyle().TGlobalBase::OutHTML($this->_imageType).'"></span>';
+        return '<span class="'.$this->getFileTypeIconCssStyle().TGlobalBase::OutHTML($this->GetImageType()).'"></span>';
     }
 
     protected function getFileTypeIconCssStyle(): string
