@@ -1,0 +1,22 @@
+{# @var downloadLinkDataModel \ChameleonSystem\CoreBundle\DataModel\DownloadLink #}
+
+{% if downloadLinkDataModel.backendLink %}
+    {% set internalAtribute -%}
+        cmsdocument="{{ downloadLinkDataModel.id|e('html_attr') }}"
+    {%- endset %}
+{% endif %}
+
+ {% set fileName = downloadLinkDataModel.fileName|e('html') %}
+{% if not downloadLinkDataModel.showFilename %}
+    {% set fileName = '&nbsp;' %}
+{% endif %}
+
+<span class="cmsdownloaditem" {{ internalAtribute|raw }}>
+    <a style="{{ downloadLinkDataModel.linkStyle|e('html_attr') }}" target="_blank" href="{{ downloadLinkDataModel.downloadUrl|e('html_attr') }}"
+       onclick="window.open('{{ downloadLinkDataModel.downloadUrl|e('html_attr') }}','downloaddetail','width=600,height=600,directories=no,location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes'); return false;">
+    <span class="{{ downloadLinkDataModel.iconCssClass|e('html_attr') }}"></span> {{ fileName|raw }}
+    </a>
+    {% if downloadLinkDataModel.showSize %}
+        <span class="downloadsize">[{{ downloadLinkDataModel.humanReadableFileSize }}]</span>
+    {% endif %}
+</span>

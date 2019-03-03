@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\DataModel\DownloadLink;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -146,12 +147,14 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
     }
 
     /**
+     * @deprecated - since 6.3.0, use getDownloadHtmlTag() instead
+     *
      * returns full URL to the file (inc. image and file size).
      *
      * @param bool                 $dummyLink            - prevent output of download url
      * @param bool                 $bHideName            - hide the filename
      * @param bool                 $bHideSize            - hide the size
-     * @param bool                 $bCreateLinkWithToken @deprecated! - if set to true, the method will return a link with a token
+     * @param bool                 $bCreateLinkWithToken @deprecated - if set to true, the method will return a link with a token
      * @param bool                 $bHideIcon            set to true if you want to hide file icon
      * @param string               $sDownloadLinkName    use this to set link title other than real file name
      * @param TdbDataExtranet|null $oExtranetUser        optional user object for downloads with tokens
@@ -160,46 +163,58 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
      */
     public function GetDownloadLink($dummyLink = false, $bHideName = false, $bHideSize = false, $bCreateLinkWithToken = false, $bHideIcon = false, $sDownloadLinkName = '', $oExtranetUser = null)
     {
-        if (!array_key_exists('sFullURL', $this->_cacheParameter)) {
-            $sLink = $this->GetPlainDownloadLink($dummyLink, $bCreateLinkWithToken, false, $oExtranetUser);
+        return $this->getDownloadHtmlTag($dummyLink, $bHideName, $bHideSize, $bHideIcon, $sDownloadLinkName);
+    }
 
-            $mediaIdTag = '';
-            if ($dummyLink) {
-                $mediaIdTag = ' cmsdocument="'.$this->id.'"';
-            }
-
-            $humanReadableFileSize = self::GetHumanReadableFileSize($this->sqlData['filesize']);
-
-            $sName = TGlobalBase::OutHTML($this->GetName());
-            if (!empty($sDownloadLinkName)) {
-                $sName = TGlobal::OutHTML($sDownloadLinkName, false);
-            }
-
-            $extraStyle = '';
-            if ($bHideName) {
-                $sName = '&nbsp;';
-                $extraStyle .= 'style="text-decoration:none"';
-            }
-
-            $sSizeHTML = '';
-            if (!$bHideSize) {
-                $sSizeHTML = '<span class="downloadsize">['.TGlobalBase::OutHTML($humanReadableFileSize).']</span>';
-            }
-
-            if ($bHideIcon) {
-                $sIconClass = 'nofileicon';
-            } else {
-                $oFileType = &$this->GetFileType();
-                $sIconClass = TGlobalBase::OutHTML($oFileType->sqlData['file_extension']);
-            }
-            $url = "<span class=\"cmsdownloaditem\"{$mediaIdTag}><a {$extraStyle} class=\"".$sIconClass."\" target=\"_blank\" href=\"{$sLink}\"
-        onclick=\"window.open('{$sLink}','downloaddetail','width=600,height=600,directories=no,location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes'); return false;\">{$sName}</a>
-        ".$sSizeHTML.'</span>';
-
-            $this->_cacheParameter['sFullURL'] = $url;
+    /**
+     * Renders HTML tag of download with icon and size.
+     */
+    public function getDownloadHtmlTag(
+        bool $isWysiwygBackendLink = false,
+        bool $hideName = false,
+        bool $hideSize = false,
+        bool $hideIcon = false,
+        string $downloadLinkName = ''): string
+    {
+        if (array_key_exists('downloadHtmlTag', $this->_cacheParameter)) {
+            return $this->_cacheParameter['downloadHtmlTag'];
         }
 
-        return $this->_cacheParameter['sFullURL'];
+        $viewRenderer = new \ViewRenderer();
+
+        $downloadUrl = $this->GetPlainDownloadLink($isWysiwygBackendLink);
+
+        $fileName = TGlobalBase::OutHTML($this->GetName());
+        if ('' !== $downloadLinkName) {
+            $fileName = TGlobal::OutHTML($downloadLinkName, false);
+        }
+
+        $downloadLinkDataModel = new DownloadLink($this->id, $downloadUrl, $fileName);
+        $downloadLinkDataModel->setIsBackendLink($isWysiwygBackendLink);
+        $downloadLinkDataModel->setHumanReadableFileSize(self::GetHumanReadableFileSize($this->sqlData['filesize']));
+        $downloadLinkDataModel->setShowSize(!$hideSize);
+
+        if (true === $hideName) {
+            $downloadLinkDataModel->setShowFilename(false);
+            $downloadLinkDataModel->setLinkStyle('text-decoration:none');
+        }
+
+        if (false === $hideIcon) {
+            $fileType = $this->GetFileType();
+            $iconClass = $this->getFileTypeIconCssStyle().TGlobalBase::OutHTML($fileType->sqlData['file_extension']);
+            $downloadLinkDataModel->setIconCssClass($iconClass);
+        }
+
+        $viewRenderer->AddSourceObject('downloadLinkDataModel', $downloadLinkDataModel);
+
+        $this->_cacheParameter['downloadHtmlTag'] = $viewRenderer->Render('common/download/download.html.twig');
+
+        return $this->_cacheParameter['downloadHtmlTag'];
+    }
+
+    protected function getFileTypeIconCssStyle(): string
+    {
+        return 'fiv-sqo fiv-icon-';
     }
 
     /**
@@ -482,10 +497,9 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
      */
     public function GetPlainFileTypeIcon()
     {
-        $oImageType = &$this->GetFileType();
-        $icon = '<img src="'.TGlobal::GetStaticURLToWebLib(URL_FILETYPE_ICONS_LOW_QUALITY.$oImageType->sqlData['file_extension'].'.png').'" border="0" />';
+        $fileType = $this->GetFileType();
 
-        return $icon;
+        return '<span class="'.$this->getFileTypeIconCssStyle().TGlobalBase::OutHTML($fileType->sqlData['file_extension']).'"></span>';
     }
 
     /**
