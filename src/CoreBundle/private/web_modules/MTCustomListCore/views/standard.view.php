@@ -43,7 +43,7 @@
                         $oDownloads = &$oItem->GetDownloads('cms_document_mlt');
                         while ($oDownload = $oDownloads->Next()) {
                             ?>
-                            <div style="padding-bottom:3px"><?=$oDownload->GetDownloadLink(); ?></div>
+                            <div style="padding-bottom:3px"><?=$oDownload->getDownloadHtmlTag(); ?></div>
                             <?php
                         }
                     } ?>
