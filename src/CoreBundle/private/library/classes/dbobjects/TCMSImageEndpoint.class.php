@@ -1705,7 +1705,7 @@ class TCMSImageEndpoint
      *
      * @return string
      */
-    protected function renderImage($maxThumbWidth, $maxThumbHeight, $maxZoomWidth = null, $maxZoomHeight = null, $sCSSClass = '', $sNameOfSeries = null, $caption = null, $bForceSquare = false, $sZoomHTMLTag = '')
+    public function renderImage($maxThumbWidth, $maxThumbHeight, $maxZoomWidth = null, $maxZoomHeight = null, $sCSSClass = '', $sNameOfSeries = null, $caption = null, $bForceSquare = false, $sZoomHTMLTag = '')
     {
         if (is_null($maxZoomWidth)) {
             $maxZoomWidth = CMS_MAX_IMAGE_ZOOM_WIDTH;
@@ -2375,7 +2375,12 @@ class TCMSImageEndpoint
      */
     public function GetPlainFileTypeIcon()
     {
-        return '<img src="'.TGlobal::GetStaticURLToWebLib(PATH_FILETYPE_ICONS_LOW_QUALITY.$this->_imageType.'.png').'" />';
+        return '<span class="'.$this->getFileTypeIconCssStyle().TGlobalBase::OutHTML($this->_imageType).'"></span>';
+    }
+
+    protected function getFileTypeIconCssStyle(): string
+    {
+        return 'fiv-sqo fiv-icon-';
     }
 
     /**
