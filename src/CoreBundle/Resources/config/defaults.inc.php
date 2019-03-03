@@ -90,24 +90,28 @@ if (!defined('PATH_MEDIA_LIBRARY')) {
 }
 
 /**
+ * @deprecated since 6.3.0
  * Path to filetype icons.
  */
 if (!defined('PATH_FILETYPE_ICONS')) {
     define('PATH_FILETYPE_ICONS', PATH_USER_CMS_PUBLIC.'/blackbox/images/filetype_icons/');
 }
 /**
+ * @deprecated since 6.3.0
  * Path to low-quality filetype icons.
  */
 if (!defined('PATH_FILETYPE_ICONS_LOW_QUALITY')) {
     define('PATH_FILETYPE_ICONS_LOW_QUALITY', PATH_FILETYPE_ICONS.'16x16/');
 }
 /**
+ * @deprecated since 6.3.0
  * URL path to filetype icons relative to TGlobal::GetStaticURLToWebLib().
  */
 if (!defined('URL_FILETYPE_ICONS')) {
     define('URL_FILETYPE_ICONS', '/images/filetype_icons/');
 }
 /**
+ * @deprecated since 6.3.0
  * URL path to low-quality filetype icons relative to TGlobal::GetStaticURLToWebLib().
  */
 if (!defined('URL_FILETYPE_ICONS_LOW_QUALITY')) {

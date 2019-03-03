@@ -11,6 +11,9 @@
 
 class CMSModuleWYSIWYGImage extends TCMSModelBase
 {
+    /**
+     * @deprecated since 6.3.0 - not used anymore
+     */
     protected $oMediaTreeNode = null;
 
     /**
@@ -21,17 +24,11 @@ class CMSModuleWYSIWYGImage extends TCMSModelBase
     protected $directoryID = null;
 
     /**
-     * called before the constructor, and before any external functions get called, but
-     * after the constructor.
+     * {@inheritdoc}
      */
     public function Init()
     {
         $this->directoryID = $this->global->GetUserData('directoryID');
-        if (!empty($this->directoryID)) {
-            $this->oMediaTreeNode = new TCMSMediaTreeNode();
-            /** @var $oImage TCMSMediaTreeNode */
-            $this->oMediaTreeNode->Load($this->directoryID);
-        }
     }
 
     public function &Execute()
@@ -61,7 +58,7 @@ class CMSModuleWYSIWYGImage extends TCMSModelBase
     protected function GetMediaTreeSelectBox()
     {
         $html = '';
-        $oTreeSelect = new TCMRenderMediaTreeSelectBox(); // TCMRenderMediaTreeSelectBox();
+        $oTreeSelect = new TCMRenderMediaTreeSelectBox();
         $html .= $oTreeSelect->GetTreeOptions(null, true);
 
         $this->data['mediaTreeSelectBox'] = $html;

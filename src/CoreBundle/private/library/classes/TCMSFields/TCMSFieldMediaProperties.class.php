@@ -21,11 +21,9 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
 
     public function GetHTML()
     {
-        $sFileTypeIconPath = '';
         if (!empty($this->oTableRow->sqlData['cms_filetype_id'])) {
             $oImageType = TdbCmsFiletype::GetNewInstance();
             $oImageType->Load($this->oTableRow->sqlData['cms_filetype_id']);
-            $sFileTypeIconPath = TGlobal::GetStaticURLToWebLib(URL_FILETYPE_ICONS_LOW_QUALITY.$oImageType->sqlData['file_extension'].'.png');
         }
         $fileSize = TCMSDownloadFile::GetHumanReadableFileSize($this->oTableRow->sqlData['filesize']);
 
@@ -37,7 +35,7 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
         $html .= '
       <div style="float: right;">';
 
-        $html .= $oImage->GetThumbnailTag(200, 140, 400, 400);
+        $html .= $oImage->renderImage(200, 140, 400, 400);
 
         $html .= '</div>
       <table border="0" style="float: left; width: 50%" class="table table-sm table-striped">
@@ -46,12 +44,10 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
           <td>'.TGlobal::OutHTML($this->oTableRow->sqlData['id']).'</td>
         </tr>';
 
-        if (!empty($sFileTypeIconPath)) {
-            $html .= '<tr>
+        $html .= '<tr>
           <td width="60">'.TGlobal::Translate('chameleon_system_core.text.file_type').':</td>
-                <td><img src ="'.$sFileTypeIconPath.'" width="16" height="16" style="float: left; margin-right: 10px;" /><div style="float: left;">'.TGlobal::OutHTML($oImageType->GetName()).'</div></td>
+                <td><span class="float-left">'.$oImage->GetPlainFileTypeIcon().'</span><div class="float-left">'.TGlobal::OutHTML($oImageType->GetName()).'</div></td>
         </tr>';
-        }
 
         $html .= '<tr>
           <td>'.TGlobal::Translate('chameleon_system_core.text.image_dimensions').':</td>
