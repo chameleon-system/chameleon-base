@@ -380,7 +380,7 @@ During migration, icons for main menu items will be replaced with matching Font 
 
 Where icons cannot be matched, a default icon will be used; the database migrations will tell which icons could not be assigned. To manually assign an icon to a menu item representing a table, navigate to the table settings of this table and fill out the field "Icon Font CSS class". To manually assign an icon to a menu item representing a backend module, do this in the "CMS modules" menu respectively. See other menu items on what to write into these fields.
 
-## File Type Icons
+## File Type Icons in WYSIWYG
 
 The image based file type icons where replaced by ["dmhendricks/file-icon-vectors"](https://github.com/dmhendricks/dmhendricks/file-icon-vectors).
 If you replaced the old icons with custom icons, you should check the CSS for that, because the HTML for the downloads changed slightly.
