@@ -19,7 +19,7 @@ $oDownloadList = &$oSingleDynPage->GetDownloads('data_pool');
     <div class="downloadsheadline">Downloads</div>
     <?php while ($oDownload = $oDownloadList->Next()) {
             /** @var $oDownload TCMSDownloadFile */ ?>
-    <div style="padding-bottom:3px"><?=$oDownload->GetDownloadLink(); ?></div>
+    <div style="padding-bottom:3px"><?=$oDownload->getDownloadHtmlTag(); ?></div>
     <?php
         } ?>
 </div>

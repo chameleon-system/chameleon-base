@@ -21,7 +21,7 @@ if (!empty($sForeignTableName)) {
                 $oDocument = TdbCmsDocument::GetNewInstance();
                 $oDocument->Load($aRow['id']);
 
-                $sConnectedRecordsHTML .= $oDocument->GetDownloadLink();
+                $sConnectedRecordsHTML .= $oDocument->getDownloadHtmlTag();
 
                 if (is_array($aAdditionalFields) && count($aAdditionalFields) > 0) {
                     foreach ($aAdditionalFields as $sFieldName) {

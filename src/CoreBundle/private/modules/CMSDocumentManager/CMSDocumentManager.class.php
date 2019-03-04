@@ -313,7 +313,7 @@ class CMSDocumentManager extends TCMSModelBase
          <div id="documentManager_'.$this->fieldName.'_'.$documentID.'">
            <table class="table table-striped">
             <tr>
-             <td>'.$downloadDocument->GetDownloadLink().'</td>
+             <td>'.$downloadDocument->getDownloadHtmlTag().'</td>
              <td>
              '.$deleteButton.'
              </td>
@@ -360,29 +360,29 @@ class CMSDocumentManager extends TCMSModelBase
                         <th>'.TGlobal::Translate('chameleon_system_core.document_manager.connected_item_column_field').'</th>
                     </tr>';
 
-                    $count = 0;
-                    foreach ($aFoundConnections as $tableName => $aFields) {
-                        foreach ($aFields as $field => $value) {
-                            /** @var $oTableRecordList TCMSRecordList */
-                            $oTableRecordList = $value;
-                            /** @var $oRecord TCMSRecord */
-                            while ($oRecord = $oTableRecordList->Next()) {
-                                if ($count % 2) {
-                                    $class = 'evenRowStyleNoHand';
-                                } else {
-                                    $class = 'oddRowStyleNoHand';
-                                }
+            $count = 0;
+            foreach ($aFoundConnections as $tableName => $aFields) {
+                foreach ($aFields as $field => $value) {
+                    /** @var $oTableRecordList TCMSRecordList */
+                    $oTableRecordList = $value;
+                    /** @var $oRecord TCMSRecord */
+                    while ($oRecord = $oTableRecordList->Next()) {
+                        if ($count % 2) {
+                            $class = 'evenRowStyleNoHand';
+                        } else {
+                            $class = 'oddRowStyleNoHand';
+                        }
 
-                                $foundConnectionsHTML .= "<tr class=\"{$class}\">
+                        $foundConnectionsHTML .= "<tr class=\"{$class}\">
                          <td>".$oRecord->id.'</td>
                          <td>'.$oRecord->GetName().'</td>
                          <td>'.$tableName.'</td>
                          <td>'.$field."</td>
                         </tr>\n";
-                            }
-                        }
-                        ++$count;
                     }
+                }
+                ++$count;
+            }
             $foundConnectionsHTML .= '
                 </table>
                       

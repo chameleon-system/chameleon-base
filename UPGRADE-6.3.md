@@ -380,6 +380,16 @@ During migration, icons for main menu items will be replaced with matching Font 
 
 Where icons cannot be matched, a default icon will be used; the database migrations will tell which icons could not be assigned. To manually assign an icon to a menu item representing a table, navigate to the table settings of this table and fill out the field "Icon Font CSS class". To manually assign an icon to a menu item representing a backend module, do this in the "CMS modules" menu respectively. See other menu items on what to write into these fields.
 
+## File Type Icons in WYSIWYG
+
+The image based file type icons where replaced by ["dmhendricks/file-icon-vectors"](https://github.com/dmhendricks/dmhendricks/file-icon-vectors).
+If you replaced the old icons with custom icons, you should check the CSS for that, because the HTML for the downloads changed slightly.
+The new icon is a SPAN with CSS classes, instead of a background image of the download link.
+If you have no custom icons the new icons should fit without any changes.
+
+Now you are able to overwrite a twig template which renders the download link: "/common/download/download.html.twig"
+(backend and frontend)
+
 ## Backend Pagedef Configuration
 
 The backend now provides a new sidebar menu which will replace the classic main menu in a future version.
@@ -466,9 +476,13 @@ is recommended (although this tool may not find database-related deprecations).
 ## Constants
 
 - \CMS_ACTIVE_REVISION_MANAGEMENT
+- \PATH_FILETYPE_ICONS
+- \PATH_FILETYPE_ICONS_LOW_QUALITY
 - \TCMSCronJob_CleanOrphanedMLTConnections::MLT_DELETE_LOG_FILE
 - \TCMSTableEditorEndPoint::DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR
 - \TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE
+- \URL_FILETYPE_ICONS
+- \URL_FILETYPE_ICONS_LOW_QUALITY
 
 ## Classes and Interfaces
 
@@ -479,6 +493,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \TCMSFieldMediaProperties
 - \TCMSFontImage
 - \TCMSFontImageList
+- \TCMSMediaTreeNode
 - \TCMSMenuItem
 - \TCMSMenuItem_Module
 - \TCMSMenuItem_Table
@@ -497,6 +512,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \TFullGroupTable::$iconSortDESC
 - \TPkgCsv2Sql::$sLogFileName
 - \TCMSFieldLookupFieldTypes::$sFieldHelpTextHTML
+- \TCMSFile::sTypeIcon
 - \TCMSTableEditorChangeLog::$oOldFields
 
 ## Methods
@@ -522,6 +538,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \MTTableManager::getAutocompleteRecordList()
 - \TAccessManager::HasRevisionManagementPermission()
 - \TCMSCronJob::getLogger()
+- \TCMSDownloadFileEndPoint::GetDownloadLink()
 - \TCMSFieldColorPicker::isFirstInstance()
 - \TCMSFieldLookup::enableComboBox()
 - \TCMSLogChange::getUpdateLogger()

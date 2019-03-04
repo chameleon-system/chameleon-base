@@ -1,5 +1,5 @@
-{# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
-{# accessRightsMedia \ChameleonSystem\MediaManager\AccessRightsModel #}
+{# @var mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
+{# @var accessRightsMedia \ChameleonSystem\MediaManager\AccessRightsModel #}
 <div class="snippetMediaManagerDetail cms-media-item" data-id="{{ mediaItem.id }}" data-name="{{ mediaItem.name }}">
     <div class="row details">
         <div class="col-12 mb-4 col-xl-5 mb-xl-0 image mb-2">
@@ -23,9 +23,7 @@
             <table class="info mt-4">
                 <tr>
                     <td>
-                        {% if mediaItem.type|lower in ['jpg', 'png', 'gif'] %}
-                            <img src="/chameleon/blackbox/images/filetype_icons/16x16/{{ mediaItem.type|lower }}.png" alt="">
-                        {% endif %}
+                       {{ mediaItem.iconHtml|raw }}
                     </td>
                     <td>{{ mediaItem.type }}</td>
                 </tr>

@@ -95,6 +95,6 @@ class TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads extends TPkgCmsS
      */
     protected function getLink($oItem, $dummyLink = false, $bHideName = false, $bHideSize = false, $bCreateTmpLink = false, $bHideIcon = false, $sDownloadLinkName = '')
     {
-        return $oItem->GetDownloadLink($dummyLink, $bHideName, $bHideSize, $bCreateTmpLink, $bHideIcon, ($sDownloadLinkName != $oItem->GetName()) ? ($sDownloadLinkName) : (''));
+        return $oItem->getDownloadHtmlTag($dummyLink, $bHideName, $bHideSize, $bHideIcon, ($sDownloadLinkName != $oItem->GetName()) ? $sDownloadLinkName : '');
     }
 }
