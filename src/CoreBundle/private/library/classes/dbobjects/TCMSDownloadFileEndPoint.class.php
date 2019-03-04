@@ -205,7 +205,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
             $downloadLinkDataModel->setIconCssClass($iconClass);
         }
 
-        $viewRenderer->AddSourceObject('downloadLinkDataModel', $downloadLinkDataModel);
+        $viewRenderer->AddSourceObject('downloadLink', $downloadLinkDataModel);
 
         $this->_cacheParameter['downloadHtmlTag'] = $viewRenderer->Render('common/download/download.html.twig');
 

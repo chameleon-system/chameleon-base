@@ -1,22 +1,22 @@
-{# @var downloadLinkDataModel \ChameleonSystem\CoreBundle\DataModel\DownloadLink #}
+{# @var downloadLink \ChameleonSystem\CoreBundle\DataModel\DownloadLink #}
 
-{% if downloadLinkDataModel.backendLink %}
+{% if downloadLink.backendLink %}
     {% set internalAttribute -%}
-        cmsdocument="{{ downloadLinkDataModel.id|e('html_attr') }}"
+        cmsdocument="{{ downloadLink.id|e('html_attr') }}"
     {%- endset %}
 {% endif %}
 
- {% set fileName = downloadLinkDataModel.fileName|e('html') %}
-{% if not downloadLinkDataModel.showFilename %}
+ {% set fileName = downloadLink.fileName|e('html') %}
+{% if not downloadLink.showFilename %}
     {% set fileName = '&nbsp;' %}
 {% endif %}
 
 <span class="cmsdownloaditem" {{ internalAttribute|raw }}>
-    <a style="{{ downloadLinkDataModel.linkStyle|e('html_attr') }}" target="_blank" href="{{ downloadLinkDataModel.downloadUrl|e('html_attr') }}"
-       onclick="window.open('{{ downloadLinkDataModel.downloadUrl|e('html_attr') }}','downloaddetail','width=600,height=600,directories=no,location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes'); return false;">
-    <span class="{{ downloadLinkDataModel.iconCssClass|e('html_attr') }}"></span> {{ fileName|raw }}
+    <a style="{{ downloadLink.linkStyle|e('html_attr') }}" target="_blank" href="{{ downloadLink.downloadUrl|e('html_attr') }}"
+       onclick="window.open('{{ downloadLink.downloadUrl|e('html_attr') }}','downloaddetail','width=600,height=600,directories=no,location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes'); return false;">
+    <span class="{{ downloadLink.iconCssClass|e('html_attr') }}"></span> {{ fileName|raw }}
     </a>
-    {% if downloadLinkDataModel.showSize %}
-        <span class="downloadsize">[{{ downloadLinkDataModel.humanReadableFileSize }}]</span>
+    {% if downloadLink.showSize %}
+        <span class="downloadsize">[{{ downloadLink.humanReadableFileSize }}]</span>
     {% endif %}
 </span>
