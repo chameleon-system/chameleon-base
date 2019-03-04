@@ -413,7 +413,7 @@ CHAMELEON.CORE.handleFormAndLinkTargetsInModals = function () {
         return;
     }
 
-    if (false === $('#modal_dialog', top.document).dialog('isOpen')) {
+    if (0 === $('#modal_dialog', top.document).length) {
         return;
     }
 
