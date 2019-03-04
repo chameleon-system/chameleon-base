@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\DataModel;
 
-class DownloadLink
+class DownloadLinkDataModel
 {
     /**
      * @var null|string

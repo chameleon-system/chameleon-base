@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\DataModel\DownloadLink;
+use ChameleonSystem\CoreBundle\DataModel\DownloadLinkDataModel;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -189,7 +189,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
             $fileName = TGlobal::OutHTML($downloadLinkName, false);
         }
 
-        $downloadLinkDataModel = new DownloadLink($this->id, $downloadUrl, $fileName);
+        $downloadLinkDataModel = new DownloadLinkDataModel($this->id, $downloadUrl, $fileName);
         $downloadLinkDataModel->setIsBackendLink($isWysiwygBackendLink);
         $downloadLinkDataModel->setHumanReadableFileSize(self::GetHumanReadableFileSize($this->sqlData['filesize']));
         $downloadLinkDataModel->setShowSize(!$hideSize);
