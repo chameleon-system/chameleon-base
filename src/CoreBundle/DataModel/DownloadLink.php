@@ -13,7 +13,6 @@ namespace ChameleonSystem\CoreBundle\DataModel;
 
 class DownloadLink
 {
-
     /**
      * @var null|string
      */
@@ -71,141 +70,88 @@ class DownloadLink
         $this->fileName = $fileName;
     }
 
-    /**
-     * @return string
-     */
     public function getId(): ?string
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getHumanReadableFileSize(): string
     {
         return $this->humanReadableFileSize;
     }
 
-    /**
-     * @param string $humanReadableFileSize
-     */
     public function setHumanReadableFileSize(string $humanReadableFileSize): void
     {
         $this->humanReadableFileSize = $humanReadableFileSize;
     }
 
-    /**
-     * @return bool
-     */
     public function isBackendLink(): bool
     {
         return $this->isBackendLink;
     }
 
-    /**
-     * @param bool $isBackendLink
-     */
     public function setIsBackendLink(bool $isBackendLink): void
     {
         $this->isBackendLink = $isBackendLink;
     }
 
-    /**
-     * @return string
-     */
     public function getFileName(): string
     {
         return $this->fileName;
     }
 
-    /**
-     * @param string $fileName
-     */
     public function setFileName(string $fileName): void
     {
         $this->fileName = $fileName;
     }
 
-    /**
-     * @return bool
-     */
     public function showSize(): bool
     {
         return $this->showSize;
     }
 
-    /**
-     * @param bool $showSize
-     */
     public function setShowSize(bool $showSize): void
     {
         $this->showSize = $showSize;
     }
 
-    /**
-     * @return string
-     */
     public function getIconCssClass(): string
     {
         return $this->iconCssClass;
     }
 
-    /**
-     * @param string $iconCssClass
-     */
     public function setIconCssClass(string $iconCssClass): void
     {
         $this->iconCssClass = $iconCssClass;
     }
 
-    /**
-     * @return string
-     */
     public function getLinkStyle(): string
     {
         return $this->linkStyle;
     }
 
-    /**
-     * @param string $linkStyle
-     */
     public function setLinkStyle(string $linkStyle): void
     {
         $this->linkStyle = $linkStyle;
     }
 
-    /**
-     * @return string
-     */
     public function getDownloadUrl(): string
     {
         return $this->downloadUrl;
     }
 
-    /**
-     * @param string $downloadUrl
-     */
     public function setDownloadUrl(string $downloadUrl): void
     {
         $this->downloadUrl = $downloadUrl;
     }
 
-    /**
-     * @return bool
-     */
     public function showFilename(): bool
     {
         return $this->showFilename;
     }
 
-    /**
-     * @param bool $showFilename
-     */
     public function setShowFilename(bool $showFilename): void
     {
         $this->showFilename = $showFilename;
     }
-
-
 }
