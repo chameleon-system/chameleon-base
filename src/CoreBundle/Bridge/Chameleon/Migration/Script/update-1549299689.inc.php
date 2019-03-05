@@ -7,13 +7,7 @@
 
 $categoryDef = <<<EOT
 contents             # Contents              # Inhalte               # fas fa-file-alt
-products             # Products & categories # Produkte & Kategorien # fas fa-cubes
-productlists         # Product lists         # Produktlisten         # fas fa-boxes
-discounts            # Discounts & vouchers  # Rabatte & Gutscheine  # fas fa-gift
-orders               # Orders                # Bestellungen          # fas fa-shopping-basket
-checkout             # Checkout              # Checkout              # fas fa-truck-monster
 externalusers        # Customers / users     # Kunden / Benutzer     # fas fa-user
-ratings              # Shop ratings          # Shop-Bewertungen      # fas fa-star
 search               # Search                # Suche                 # fas fa-search
 analytics            # Analytics             # Analyse               # fas fa-chart-pie
 communication        # Communication         # Kommunikation         # fas fa-at
