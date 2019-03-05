@@ -118,14 +118,10 @@ $fieldTranslationUtil = ServiceLocator::get('chameleon_system_core.util.field_tr
  * @var LanguageServiceInterface $languageService
  */
 $languageService = ServiceLocator::get('chameleon_system_core.language_service');
-$nameFieldNameEn = $fieldTranslationUtil->getTranslatedFieldName(
-        'main_menu_custom_item',
-        'name',
-        $languageService->getLanguageFromIsoCode('en')
-);
+
 $customMenuItemList = [];
 while (false !== $row = $statement->fetch()) {
-    $customMenuItemList[$row[$nameFieldNameEn]] = $row;
+    $customMenuItemList[$row['name__en']] = $row;
 }
 $statement->closeCursor();
 
