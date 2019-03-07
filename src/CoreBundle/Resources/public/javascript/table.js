@@ -148,10 +148,8 @@ $(document).ready(function () {
         allowClear: true,
         minimumInputLength: 1,
         ajax: {
-            debug: true,
             url: searchLookup.data('select2-ajax'),
             dataType: 'json',
-            // delay: 150,
             processResults: function (data) {
                 return {
                     results: JSON.parse(data)
