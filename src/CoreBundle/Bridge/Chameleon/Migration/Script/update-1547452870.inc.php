@@ -6,8 +6,11 @@
 </div>
 
 <?php
-// load icon mapping from external file
-include __DIR__.'/includes/iconMapping.inc.php';
+/**
+ * @var ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\Migrator63 $migration63Service
+ */
+$migration63Service = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.service.migrator63');
+$iconMapping = $migration63Service->getIconMapping();
 
 foreach ($iconMapping as $oldIconName => $iconName) {
     $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'en')
@@ -20,7 +23,6 @@ foreach ($iconMapping as $oldIconName => $iconName) {
     ;
     TCMSLogChange::update(__LINE__, $data);
 }
-
 
 // replace explicit table icons with new font icons based on the table names
 $iconMapping = array(
@@ -142,7 +144,6 @@ foreach ($iconMapping as $tableName => $iconName) {
     ;
     TCMSLogChange::update(__LINE__, $data);
 }
-
 
 //set new icons for modules
 $iconMapping = array(
