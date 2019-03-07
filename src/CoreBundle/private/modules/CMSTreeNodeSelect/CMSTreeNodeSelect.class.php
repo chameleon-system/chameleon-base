@@ -30,7 +30,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
      *
      * @var string
      */
-    protected $rootTreeID = '99';
+    protected $rootTreeID = TCMSTreeNode::TREE_ROOT_ID;
 
     /**
      * nodes that should not be assignable or that should have only a
@@ -91,15 +91,15 @@ class CMSTreeNodeSelect extends TCMSModelBase
 
             ++$level;
 
-            $path .= '<div class="breadcrumb-item">'.$oNode->fieldName."</div>\n";
-            $this->data['treePathHTML'] .= '<div id="'.$fieldName.'_tmp_path_'.$oNode->id.'" style="display:none;"><div class="breadcrumb bg-light">'.$path.'</div></div>'."\n";
+            $path .= '<li class="breadcrumb-item">'.$oNode->fieldName."</li>\n";
+            $this->data['treePathHTML'] .= '<div id="'.$fieldName.'_tmp_path_'.$oNode->id.'" style="display:none;"><ol class="breadcrumb ml-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
 
             $this->data['treeHTML'] .= $spacer.'<li id="node'.$oNode->sqlData['cmsident'].'">';
 
             $this->data['treeHTML'] .= '<a href="#" onClick="'.$this->getOnClick($fieldName, $oNode).'">'.$sNodeName;
 
             if ($activeID == $oNode->id) {
-                $this->data['treeHTML'] .= '<span style="background: url('.TGlobal::GetPathTheme().'/images/icons/tick.png); height: 16px; background-repeat: no-repeat;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+                $this->data['treeHTML'] .= '<i class="fas fa-check"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
             }
 
             $this->data['treeHTML'] .= '</a>';

@@ -296,7 +296,7 @@ function editDocument(fieldName, documentID, html) {
  * document manager field: opens document manager popup
  */
 function loadDocumentManager(recordID, tableID, fieldName) {
-    _documentManagerWindow = window.open(window.location.pathname + '?pagedef=CMSDocumentManager&recordID=' + recordID + '&tableID=' + tableID + '&fieldName=' + fieldName, '_blank', 'width=1000,height=700,resizable=yes,scrollbars=no');
+    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSDocumentManager&recordID=' + recordID + '&tableID=' + tableID + '&fieldName=' + fieldName);
 }
 
 function addMLTConnectionResponse(data, responseMessage) {
@@ -313,7 +313,7 @@ function addMLTConnectionResponse(data, responseMessage) {
         if (chooserIframeObj) {
             chooserIframeObj.src = chooserIframeObj.src;
         }
-        jQuery.unblockUI();
+        CHAMELEON.CORE.hideProcessingModal();
         return true;
     } else {
         CloseModalIFrameDialog();
@@ -485,7 +485,7 @@ function PublishViaAjaxCallback(data, statusText) {
 }
 
 function ReloadMainPage() {
-    window.parent.location.href = window.location.pathname + '?pagedef=main';
+    window.parent.location.href = window.location.pathname;
 }
 
 /*
@@ -498,14 +498,17 @@ function SaveViaAjaxCustomCallback(customCallbackFunction, closeAfterSave) {
     document.cmseditform._fnc.value = 'AjaxSave';
 
     PostAjaxForm('cmseditform', eval(customCallbackFunction));
-    if (closeAfterSave == true && typeof parent != 'undefined') parent.setTimeout("parent.CloseModalIFrameDialog()", 3000);
+
+    if (closeAfterSave == true && typeof parent != 'undefined') {
+        parent.setTimeout("parent.CloseModalIFrameDialog()", 3000);
+    }
 }
 
 /*
  * tableEditor: save table single field via ajax
  */
 function SaveFieldViaAjaxCustomCallback(customCallbackFunction) {
-    if (customCallbackFunction == 'undefined') {
+    if ('undefined' === customCallbackFunction) {
         customCallbackFunction = SaveViaAjaxCallback;
     }
 
@@ -539,11 +542,13 @@ function SaveViaAjax() {
 function SaveViaAjaxCallback(data, statusText) {
     CloseModalIFrameDialog();
 
-    // remove all message-classes from the fields
-    $('*[id^="fieldname_"]').removeClass();
+    // remove all message background classes from field containers.
+    $('*[id^="fieldname_"]').removeClass(function (index, className) {
+        return (className.match (/(^|\s)bg-\S+/g) || []).join(' ');
+    });
 
     var returnVal = false;
-    if (data != false && data != null) {
+    if (data !== false && data != null) {
 
         returnVal = true;
 
@@ -555,10 +560,10 @@ function SaveViaAjaxCallback(data, statusText) {
                 // messages do have a reference to field (e.g. mail-field not valid)
                 if (oMessage.sMessageRefersToField) {
                     // add the class to field
-                    $('#fieldname_' + oMessage.sMessageRefersToField).parents('tr').addClass('table-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(oMessage.sMessageType));
+                    $('#fieldname_' + oMessage.sMessageRefersToField).addClass('bg-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(oMessage.sMessageType));
                 }
 
-                if (oMessage.sMessageType != 'ERROR' && !bOnLoadResetted) {
+                if (oMessage.sMessageType !== 'ERROR' && !bOnLoadResetted) {
                     // remove "something changed" message, because now the data was saved
                     bOnLoadResetted = true;
                     window.onbeforeunload = function () {
@@ -566,8 +571,6 @@ function SaveViaAjaxCallback(data, statusText) {
                     // reattach the message binding
                     CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
                 }
-
-
             });
         } else {
             // remove "something changed" message, because now the data was saved
@@ -575,16 +578,13 @@ function SaveViaAjaxCallback(data, statusText) {
             };
             // reattach the message binding
             CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
-            if (data.message && data.message != '') {
+            if (data.message && data.message !== '') {
                 toasterMessage(data.message, 'MESSAGE');
             }
-
-            // add saved record to breadcrumb
-            if (data.name && data.name != '' && document.getElementById('breadcrumbLastNode')) {
-                document.getElementById('breadcrumbLastNode').innerHTML = data.name;
-                sCurrentRecordName = data.name;
-            }
         }
+
+        $('#tableEditorContainer .navbar-brand').html(data.name);
+        $('#cmsbreadcrumb .breadcrumb-item:last').html(data.name);
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_save'), 'ERROR');
     }
@@ -635,7 +635,7 @@ function ShowAjaxSaveResultAndClose(data, statusText) {
 
 function ResetTreeNodeSelection(fieldName) {
     document.getElementById(fieldName).value = '';
-    document.getElementById(fieldName + '_path').innerHTML = '<div class="treeField"><ul><li>' + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.nothing_assigned') + '</li></ul></div>';
+    document.getElementById(fieldName + '_path').innerHTML = '<ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li><li class="breadcrumb-item text-warning">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.nothing_assigned') + '</li></ol>';
 }
 
 function markCheckboxes(fieldname) {
@@ -703,11 +703,10 @@ function DeleteRecord() {
 }
 
 CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sConfirmText) {
-    if (sCurrentRecordName != '') {
-        sConfirmText += "\n\n " + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.record') + ": \"" + sCurrentRecordName + '"';
-    } else {
-        sConfirmText += "\n\n " + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.record') + ": \"" + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.unnamed') + '"';
-    }
+    var currentRecordName = $('#tableEditorContainer .navbar-brand').text();
+
+    sConfirmText += "\n\n " + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.record') + ": \"" + currentRecordName + '"';
+
     if (confirm(sConfirmText)) {
         window.onbeforeunload = function () {
         };
@@ -718,7 +717,6 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
 };
 
 CHAMELEON.CORE.MTTableEditor.initTabs = function () {
-    var url = document.URL;
     var hash = window.location.hash;
 
     $('.nav-tabs').find('li a').each(function (key, tabLinkItem) {
@@ -768,10 +766,10 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
                 return;
             }
 
-            if ($(this).hasClass('format-L')) {
-                var cmsDate = moment.format('YYYY-MM-DD');
-            } else {
+            if ($(this).hasClass('format-L') && $(this).hasClass('LTS')) {
                 var cmsDate = moment.format('YYYY-MM-DD HH:mm:ss');
+            } else {
+                var cmsDate = moment.format('YYYY-MM-DD');
             }
             // We need a SQL date format for BC reasons.
             $('input[name=' + id + ']').val(cmsDate);
@@ -813,6 +811,62 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     }).on('select2:select', function (e) {
         var id = e.params.data.id;
         switchRecord(id);
+    });
+
+    $('[data-tags]').each(function () {
+        $(this).select2({
+            tags: true,
+            width: '100%',
+            tokenSeparators: [',', ' ', ';'],
+            ajax: {
+                url: $(this).data('select2-ajax'),
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        currentTags: $(this).val().join(','),
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    }
+                }
+            },
+
+            createTag: function (params) {
+                var term = $.trim(params.term);
+
+                if ('' === term) {
+                    return null;
+                }
+
+                return {
+                    id: term,
+                    text: term
+                };
+            }
+        }).on('change', function (e) {
+            var currentTags = $(this).val().join(',');
+            var suggestionsUrl = $(this).data('ajax-suggestions-url')+'&currentTags='+currentTags;
+
+            $.ajax({
+                url: suggestionsUrl,
+                context: this,
+            }).done(function( data ) {
+                var suggestionsHtml = '';
+                $(data).each(function (dataKey, dataItem) {
+                    suggestionsHtml += '<span class="badge badge-secondary mr-2" data-tag-id="'+dataItem.id+'"><i class="far fa-plus-square"></i> '+dataItem.name+'</span>';
+                });
+
+                var that = $(this);
+
+                $('#'+$(this).attr('id')+'_suggestions .tagSuggestionList').html(suggestionsHtml).find('.badge').on('click', function(e) {
+                    var newOption = new Option($(this).data('tag-id'), $(this).data('tag-id'), false, true);
+                    that.append(newOption).trigger('change');
+                });
+            });
+        });
     });
 };
 
@@ -869,6 +923,25 @@ CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState = function (iFrameId, ur
     }
 };
 
+CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe = function () {
+    var webpageiFrame = $('#userwebpageiframe');
+
+    if (0 === webpageiFrame.length) {
+        return;
+    }
+
+    var bodyHeight = parseInt($(window).height());
+    var iFramePos = $('#templateengine .card-body').position();
+    var additionPaddings = 235;
+    var iFrameHeight = bodyHeight - iFramePos.top - additionPaddings;
+
+    if (iFrameHeight < 450){
+        iFrameHeight = 450;
+    }
+
+    webpageiFrame.css('height', iFrameHeight);
+};
+
 $(document).ready(function () {
     CHAMELEON.CORE.MTTableEditor.initTabs();
     CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
@@ -876,4 +949,6 @@ $(document).ready(function () {
     CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
     CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent('label.switch input[type=checkbox]');
     CHAMELEON.CORE.MTTableEditor.initHelpTexts();
+    CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe();
+    CHAMELEON.CORE.handleFormAndLinkTargetsInModals();
 });

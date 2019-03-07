@@ -17,26 +17,31 @@
     float: right;
 }
 
-.row.TFullGroupTable {
-    margin: 5px 0px 5px 5px;
+.TFullGroupTable {
+    margin: .5rem 0;
 }
 
-.TFullGroupTable .form-inline label {
+.TFullGroupTable .form-group {
+    padding: .5rem;
+    margin-bottom: 0;
+}
+
+.TFullGroupTable label {
     margin-right: 5px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
-.TFullGroupTable .form-inline .form-control {
+.TFullGroupTable .form-control {
     margin-right: 5px;
 }
 
-.TFullGroupTable .form-inline #searchLookup {
-    width: 400px;
+.TFullGroupTable #searchLookup {
+    width: 300px;
 }
 
 .TFullGroupTablePagination {
     margin-top: 5px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .TFullGroupTablePerPageSelect {
@@ -54,12 +59,6 @@
     padding-left: 3px;
     padding-right: 3px;
     background-color: #ffffff;
-}
-
-.tblGroupSelector {
-    max-width: 170px;
-    margin-left: 10px;
-    margin-right: 10px;
 }
 
 .tblSearchButtonTDstyle {
@@ -111,7 +110,7 @@
 }
 
 .tblsearch .row .form-group label {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .TGroupTableLink {
@@ -153,10 +152,6 @@
 
 .table-function-bar ul li:last-child {
     padding-right: 0;
-}
-
-.table-function-bar ul li.table-function-delete {
-    color: #d9534f;
 }
 
 table.table-condensed tbody tr td, table.table-condensed thead tr th {

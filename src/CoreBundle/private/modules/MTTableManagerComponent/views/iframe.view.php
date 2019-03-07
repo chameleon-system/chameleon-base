@@ -52,7 +52,7 @@ $oCMSUser = $data['oCMSUser']; /** @var $oCMSUser TCMSUser */
             <td>
                 <div style="padding-left: 2px;">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-primary" onclick="document.cmsform.elements['module_fnc[contentmodule]'].value='Insert';document.cmsform.submit();"><span class="btn-icon" style="background-image: url(<?=TGlobal::GetStaticURLToWebLib(); ?>/images/icons/page-new.gif);"><?php echo TGlobal::Translate('chameleon_system_core.action.new'); ?></span></button>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="document.cmsform.elements['module_fnc[contentmodule]'].value='Insert';document.cmsform.submit();"><i class="fas fa-plus pr-2"></i><?php echo TGlobal::Translate('chameleon_system_core.action.new'); ?></button>
                     </div>
                 </div>
             </td>
@@ -60,18 +60,5 @@ $oCMSUser = $data['oCMSUser']; /** @var $oCMSUser TCMSUser */
     </table>
 </div>
 <?php
-    } ?>
-<style>
-    .tblsearch {
-        background-image: url(<?php echo TGlobal::GetPathTheme(); ?>/images/table_bg.gif);
-        border-top: 1px solid #9A9A9A;
-        width: 100%;
-        padding: 5px;
-        color: #841313;
-        font-weight: bold;
-        font-size: 13px;
-        line-height: 20px;
     }
-</style>
-
-<?php echo $data['sTable']; ?>
+    echo $data['sTable']; ?>

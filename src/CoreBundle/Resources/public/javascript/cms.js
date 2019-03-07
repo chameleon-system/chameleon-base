@@ -136,10 +136,11 @@ function toasterMessage(message,type) {
         opacity: 1,
         insert_brs: true,
         text: message,
-        animate_speed: "normal",
+        animate_speed: 'normal',
         styling: 'bootstrap3',
+        icons: 'fontawesome5',
         hide: true,
-        addclass: "stack-bottomright",
+        addclass: 'stack-bottomright',
         delay: 6000,
         stack: stack_bottomright
     });
@@ -147,7 +148,11 @@ function toasterMessage(message,type) {
 
 window.alert = function(message) {
     new PNotify({
-        title: "Alert",
+        title: 'Alert',
+        type: 'error',
+        opacity: 1,
+        styling: 'bootstrap3',
+        icons: 'fontawesome5',
         text: message
     });
 };
@@ -314,7 +319,7 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
 function CreateModalIFrameDialog(url, width, height, title, isDraggable, isResizable) {
     url = CMSAddGlobalParametersToURL(url);
     var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="99%" height="100%" frameborder="0"></iframe>';
-    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
+    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
 }
 
 /*
@@ -323,14 +328,14 @@ function CreateModalIFrameDialog(url, width, height, title, isDraggable, isResiz
 function CreateModalIFrameDialogCloseButton(url, width, height, title, isDraggable, isResizable) {
     url = CMSAddGlobalParametersToURL(url);
     var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="100%" height="100%" frameborder="0"></iframe>';
-    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
+    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
 }
 
 /*
  * creates a ModalDialog with close button from content string
  */
 function CreateModalIFrameDialogFromContent(content, width, height, title, isDraggable, isResizable) {
-    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
+    CHAMELEON.CORE.showModal(title, content, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
 }
 
 /*
@@ -341,7 +346,7 @@ function CreateModalDialogFromContainer(contentID, width, height, title, isDragg
     $('#' + contentID).html('');
     top.sLastDialogID = contentID;
     var dialogContent = '<div style="width:100%;height:100%;" id="modal_dialog_content">' + content + '</div>';
-    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
+    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
 }
 
 /*
@@ -417,12 +422,17 @@ function addslashes(str) {
 
 
 /**
+ * @deprecated since 6.3.0 - not used anywhere.
+ *
  * switches the edit portal which will used as default portal while editing
  */
 function SwitchEditPortal() {
     PostAjaxFormTransparent('portalChooserForm', SwitchEditPortalCallback);
 }
 
+/**
+ * @deprecated since 6.3.0 - not used anywhere.
+ */
 function SwitchEditPortalCallback() {
     $('#portalChooser').slideToggle('fast');
     $('#portalContentBoxNameSpan').html(document.getElementById('activePortalID').options[document.getElementById('activePortalID').options.selectedIndex].text);
@@ -479,3 +489,23 @@ function initLightBox(){
     });
 }
 
+CHAMELEON.CORE.handleFormAndLinkTargetsInModals = function () {
+    if (self === top) {
+        return;
+    }
+
+    if (false === $('#modalDialog', top.document).hasClass('show')) {
+        return;
+    }
+
+    $("form[target='_top']").each(function() {
+        $(this).attr('target', '');
+        $(this).find("input[name='pagedef'][value='tableeditor']").each(function() {
+            $(this).val('tableeditorPopup');
+        });
+
+        $(this).find("input[name='pagedef'][value='tablemanager']").each(function() {
+            $(this).val('tablemanagerframe');
+        });
+    });
+};

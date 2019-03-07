@@ -106,6 +106,11 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         }
     }
 
+    protected function isRecordEditPossible(): bool
+    {
+        return (null === $this->_GetRecordClickJavaScriptFunctionName());
+    }
+
     /**
      * @return \Symfony\Component\HttpFoundation\Request
      */
@@ -211,6 +216,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 $oMenuItem->sItemKey = 'deleteall';
                 $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.list.delete_selected');
                 $oMenuItem->sIcon = 'far fa-trash-alt';
+                $oMenuItem->setButtonStyle('btn-danger');
                 $oMenuItem->sOnClick = "DeleteSelectedRecords('{$sFormName}');";
                 $this->oMenuItems->AddItem($oMenuItem);
             }
@@ -252,9 +258,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $this->tableObj->style->searchButtonTDstyle = 'tblSearchButtonTDstyle';
         $this->tableObj->style->searchFieldTDstyle = 'tblSearchFieldTDstyle';
 
-        $this->tableObj->iconSortASC = URL_CMS.'/images/icon_sort_asc.gif';
-        $this->tableObj->iconSortDESC = URL_CMS.'/images/icon_sort_desc.gif';
-
         $this->tableObj->hitText = TGlobal::Translate('chameleon_system_core.list.current_page_details');
         $this->tableObj->searchFieldText = TGlobal::Translate('chameleon_system_core.list.search_term');
         $this->tableObj->searchButtonText = TGlobal::Translate('chameleon_system_core.list.perform_search');
@@ -268,6 +271,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         $this->tableObj->showRowsPerPageChooser = true;
         $this->AddRowCallback();
+
+        if (true === $this->isRecordEditPossible()) {
+            $this->tableObj->setAutoCompleteState(true);
+        }
 
         $this->PostCreateTableObjectHook();
     }
@@ -605,41 +612,14 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
     public function CallBackLockingStatus($field, $row, $name)
     {
-        $sStatus = '';
-        $oCmsLock = TTools::IsRecordLocked($_SESSION['_tmpCurrentTableID'], $row['id']);
-        if ($oCmsLock) {
-            $oController = TGlobal::GetController();
-            $oLockUser = $oCmsLock->GetFieldCmsUser();
-            $sStatus = '<div data-record-lock-status="locked" class="locked user'.$oLockUser->id.'">&nbsp;</div>';
-            $sData = $oLockUser->GetUserIcon(false).'<div class="name"><strong>'.TGlobal::Translate('chameleon_system_core.record_lock.lock_owner_name').': </strong>'.TGlobal::OutJS($oLockUser->GetName()).'</div>';
-            if (!empty($oLockUser->fieldEmail)) {
-                $sData .= '<div class="email"><strong>'.TGlobal::Translate('chameleon_system_core.record_lock.lock_owner_mail').': </strong>'.TGlobal::OutJS($oLockUser->fieldEmail).'</div>';
-            }
-            if (!empty($oLockUser->fieldTel)) {
-                $sData .= '<div class="tel"><strong>'.TGlobal::Translate('chameleon_system_core.record_lock.lock_owner_phone').': </strong>'.TGlobal::OutJS($oLockUser->fieldTel).'</div>';
-            }
-            if (!empty($oLockUser->fieldCity)) {
-                $sData .= '<div class="city"><strong>'.TGlobal::Translate('chameleon_system_core.record_lock.lock_owner_city').': </strong>'.TGlobal::OutJS($oLockUser->fieldCity).'</div>';
-            }
-
-            $oController->AddHTMLHeaderLine('
-          <script type="text/javascript">
-            $(document).ready(function() {
-              $(".user'.$oLockUser->id.'").wTooltip({
-                content: \''.$sData.'\',
-                offsetY: 15,
-                offsetX: -8,
-                className: "lockUserinfo chameleonTooltip",
-                style: false
-              });
-            });
-          </script>
-        ');
-        } else {
-            $sStatus = '<div data-record-lock-status="unlocked" class="unlocked">&nbsp;</div>';
+        $userLock = TTools::IsRecordLocked($_SESSION['_tmpCurrentTableID'], $row['id']);
+        if (false === $userLock) {
+            return '<i class="fas fa-lock-open text-success" data-record-lock-status="unlocked"></i>';
         }
 
-        return $sStatus;
+        $lockUser = $userLock->GetFieldCmsUser();
+
+        return '<i class="fas fa-user-lock text-danger" data-record-lock-status="locked" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.header_lock')).': '.TGlobal::OutHTML($lockUser->GetName()).'"></i>';
     }
 
     /**
@@ -723,7 +703,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     {
         $label = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.action.edit'));
 
-        return '<span onclick="document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();" title="'.$label.'" class="glyphicon glyphicon-pencil"></span>';
+        return '<span onclick="document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();" title="'.$label.'" class="fas fa-edit"></span>';
     }
 
     /**
@@ -739,7 +719,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $label = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.action.copy'));
 
         if ((array_key_exists('cms_translation_parent_id', $row) && array_key_exists('cms_translationparentid', $row) && '' == $row['cms_translationparentid']) || !array_key_exists('cms_translation_parent_id', $row)) {
-            return '<span onclick="document.cmsform.elements[\'module_fnc[contentmodule]\'].value=\'DatabaseCopy\';document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();" title="'.$label.'" class="glyphicon glyphicon-file"></span>';
+            return '<span onclick="document.cmsform.elements[\'module_fnc[contentmodule]\'].value=\'DatabaseCopy\';document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();" title="'.$label.'" class="fas fa-copy"></span>';
         }
 
         return '';
@@ -757,7 +737,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     {
         $label = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.action.delete'));
 
-        return '<span onclick="DeleteRecord(\''.$row['id'].'\')" title="'.$label.'" class="glyphicon glyphicon-remove"></span>';
+        return '<span onclick="DeleteRecord(\''.$row['id'].'\')" title="'.$label.'" class="fas fa-trash-alt text-danger"></span>';
     }
 
     /**

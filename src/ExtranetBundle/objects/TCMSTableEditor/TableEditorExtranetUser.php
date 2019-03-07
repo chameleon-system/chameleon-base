@@ -42,7 +42,7 @@ class TableEditorExtranetUser extends TCMSTableEditor
         $menuItem = new TCMSTableEditorMenuItem();
         $menuItem->sItemKey = 'ExtranetUserLogin';
         $menuItem->setTitle($this->getTranslator()->trans('chameleon_system_extranet.action.login_as_extranet_user', array(), TranslationConstants::DOMAIN_BACKEND));
-        $menuItem->sIcon = TGlobal::GetStaticURL('/chameleon/blackbox/images/icons/action_go.gif');
+        $menuItem->sIcon = 'fas fa-user-check';
 
         $executingModulePointer = $this->getGlobal()->GetExecutingModulePointer();
         $pagedef = $this->getInputFilterUtil()->getFilteredInput('pagedef');

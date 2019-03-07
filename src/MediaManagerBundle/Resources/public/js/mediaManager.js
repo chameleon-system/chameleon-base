@@ -84,7 +84,7 @@
                         if (self.settings.accessRightsMediaTree.new) {
                             contextMenu.createItem = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.new_folder'),
-                                icon: "glyphicon glyphicon-folder-open",
+                                icon: "fas fa-folder-open",
                                 action: function (data) {
 
                                     var inst = $.jstree.reference(data.reference),
@@ -125,7 +125,7 @@
                         if (self.settings.accessRightsMediaTree.edit) {
                             contextMenu.renameItem = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.rename'),
-                                icon: "glyphicon glyphicon-pencil",
+                                icon: "fas fa-edit",
                                 action: function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);
@@ -138,7 +138,7 @@
                         if (self.settings.accessRightsMediaTree.delete) {
                             contextMenu.deleteItem = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.delete_folder'),
-                                icon: "glyphicon glyphicon-trash",
+                                icon: "fas fa-trash-alt text-danger",
                                 action: function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);
@@ -152,7 +152,7 @@
                         if (self.settings.accessRightsMedia.new) {
                             contextMenu.upload = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.upload'),
-                                icon: "glyphicon glyphicon-upload",
+                                icon: "fas fa-upload",
                                 action: function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);
@@ -166,7 +166,7 @@
                         if (self.settings.accessRightsMediaTree.edit) {
                             contextMenu.properties = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.edit_properties'),
-                                icon: "glyphicon glyphicon-cog",
+                                icon: "fas fa-cog",
                                 action: function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);
@@ -549,6 +549,10 @@
                 }
             });
 
+            $('[data-select2-option]').each(function () {
+                $(this).select2($(this).data('select2-option'));
+            });
+
             self.handleAutoCompleteOnSearchFields();
 
         },
@@ -768,7 +772,7 @@
                     self.bindDragging();
                 });
 
-                $('.image-container', self.editContainer).on('click', function (evt) {
+                $('.image-container.selectable', self.editContainer).on('click', function (evt) {
                     var selectionParent = $(this).parents('.cms-media-item');
                     var wasSelected = $(this).parents('.cms-media-item').hasClass('xselectable-selected');
                     var numberOfElementsSelected = $('.xselectable-selected', self.editContainer).length;
@@ -1033,7 +1037,7 @@
                 self.lastDetailPageShown = null;
             }
 
-            var closeButton = $('<span class="close-button">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.close_button_text') + ' <span class="glyphicon glyphicon-remove"></span></span>');
+            var closeButton = $('<span class="close-button">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.close_button_text') + ' <i class="fas fa-times"></i></span>');
             var layover = $('<div class="media-manager-layover"><div class="title h3">' + title + '</div></div>');
 
             closeButton.on('click', function (evt) {

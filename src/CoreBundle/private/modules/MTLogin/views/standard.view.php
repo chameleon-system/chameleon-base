@@ -23,7 +23,7 @@
                             ?>
                             <div class="form-group">
                                 <div class="input-group">
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="glyphicon glyphicon-user"></i></span></div>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
                                     <input class="form-control" placeholder="<?php echo TGlobal::Translate('chameleon_system_core.cms_module_login.form_user_name'); ?>" name="username" type="text" value="<?php if (array_key_exists('username', $data)) {
                                 echo $data['username'];
                             }?>">
@@ -31,7 +31,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="glyphicon glyphicon-lock"></i></span></div>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-unlock-alt"></i></span></div>
                                     <input class="form-control" placeholder="<?php echo TGlobal::Translate('chameleon_system_core.cms_module_login.form_password'); ?>" name="password" type="password" value="">
                                 </div>
                             </div>

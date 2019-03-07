@@ -29,9 +29,6 @@ class TCMSMenuItem_Module extends TCMSMenuItem
         if ('' !== $pagedefType) {
             $url .= '&_pagedefType='.$pagedefType;
         }
-        if ('1' == $this->data['show_as_popup']) {
-            $url = "javascript:CreateModalIFrameDialogCloseButton('".$url."',".TGlobal::OutHTML($this->data['width']).','.TGlobal::OutHTML($this->data['height']).');';
-        }
 
         if (array_key_exists('icon_font_css_class', $this->data) && '' !== $this->data['icon_font_css_class']) {
             $icon = $this->data['icon_font_css_class'];

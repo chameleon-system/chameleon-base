@@ -45,7 +45,8 @@ class Configuration implements ConfigurationInterface
                 ->append($this->getMailTargetTransformationServiceConfig())
                 ->append($this->getMailerConfig())
                 ->append($this->getGoogleMapsApiConfig())
-                ->append($this->getModuleExecutionConfig());
+                ->append($this->getModuleExecutionConfig())
+                ->append($this->getBackendConfig());
 
         return $treeBuilder;
     }
@@ -154,7 +155,24 @@ class Configuration implements ConfigurationInterface
             ->enumNode('strategy')
                 ->values(['inline', 'subrequest'])
                 ->defaultValue('inline')
-                ->info('Set to "subrequest" to execute modules as Symfony subrequests; set to "inline" to abstain from subrequests and improve performance')
+                ->info('Set to "subrequest" to execute modules as Symfony subrequests; set to "inline" to abstain from subrequests and improve performance.')
+            ->end();
+
+        return $subTree;
+    }
+
+    /**
+     * @return ArrayNodeDefinition|NodeDefinition
+     */
+    private function getBackendConfig()
+    {
+        $tree = new TreeBuilder();
+        $subTree = $tree->root('backend');
+        $subTree->addDefaultsIfNotSet();
+        $subTree->children()
+            ->scalarNode('home_pagedef')
+                ->defaultValue('welcome')
+                ->info('The pagedef that is displayed after login and when clicking any "to home" button.')
             ->end();
 
         return $subTree;

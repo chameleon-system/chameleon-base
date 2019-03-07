@@ -39,7 +39,7 @@ class MTLoginEndPoint extends TCMSModelBase
         }
 
         if ($this->global->CMSUserDefined()) {
-            $this->controller->HeaderRedirect(array('pagedef' => 'main'));
+            $this->controller->HeaderRedirect([]);
         }
 
         return $this->data;
@@ -108,7 +108,7 @@ class MTLoginEndPoint extends TCMSModelBase
 
     protected function postLoginRedirect($bIsRefreshLogin)
     {
-        $aRedirectParams = array('pagedef' => 'main');
+        $aRedirectParams = [];
 
         if ($bIsRefreshLogin) {
             $sRedirectURL = $_SERVER['HTTP_REFERER'];

@@ -14,8 +14,8 @@ use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 
 /**
- * Treemanagement Module for the CMS Navigation tree.
-/**/
+ * Reorder position module for MLT records.
+ */
 class CMSFieldMLTRPC extends TCMSModelBase
 {
     public $rpcData = null;
@@ -174,7 +174,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
         }
         $sMltTableName = $this->GetMLTTableName();
 
-        $sReturnData = "<ul id=\"posList\" class=\"posListUL\">\n";
+        $sReturnData = "<table id=\"posList\" class=\"table table-hover\">\n";
 
         $oTableConf = TdbCmsTblConf::GetNewInstance();
         $oTableConf->LoadFromField('name', $sTableSQLName);
@@ -185,19 +185,24 @@ class CMSFieldMLTRPC extends TCMSModelBase
         $oPositionList->ChangeOrderBy(array("`{$sMltTableName}`.`entry_sort`" => 'ASC'));
 
         $count = 0;
-        $sTabId = '';
-        $oTab = TdbCmsTblFieldTab::GetNewInstance();
-
-        while ($oPositionRow = $oPositionList->Next()) { //@var $oFile TCMSRecord
-            if (0 == $count) {
-                $sReturnData .= $this->GetRecordDataRow($sTableSQLName, $oPositionRow, $count);
+        while ($oPositionRow = $oPositionList->Next()) {
+            if (0 === $count) {
+                $sReturnData .= '<thead class="thead-dark"><tr class="disabled"><th></th>
+                        '.$this->GetRecordDataRow($sTableSQLName, $oPositionRow, $count).
+                    '</tr>
+                        </thead>
+                        <tbody>';
             }
             ++$count;
-            $activeRecord = 'positionList';
-            $sReturnData .= '<li id="item'.$oPositionRow->id.'" rel="'.$count."\" class=\"{$activeRecord}\"><input type=\"hidden\" name=\"aPosOrder[]\" value=\"".$oPositionRow->id.'" />'.$this->GetRecordDataRow($sTableSQLName, $oPositionRow, $count)."</li>\n";
+
+            $sReturnData .= '<tr id="item'.$oPositionRow->id.'" rel="'.$count.'" class="w-100">
+            <input type="hidden" name="aPosOrder[]" value="'.$oPositionRow->id.'" />
+            '.$this->GetRecordDataRow($sTableSQLName, $oPositionRow, $count)."
+            </tr>\n";
         }
 
-        $sReturnData .= "</ul>\n";
+        $sReturnData .= '</tbody>
+            </table>';
 
         $this->data['list'] = $sReturnData;
         $this->data['tableSQLName'] = $sTableSQLName;
@@ -219,11 +224,8 @@ class CMSFieldMLTRPC extends TCMSModelBase
     {
         $oTableConf = TdbCmsTblConf::GetNewInstance();
         $oTableConf->LoadFromField('name', $sTableSQLName);
-        $oTableEditorManager = new TCMSTableEditorManager();
-        /** @var $oTableEditor TCMSTableEditorManager */
-        $oTableEditorManager->Init($oTableConf->id, $oRecord->sqlData['id']);
         $oShowPropertiesList = $oTableConf->GetFieldPropertyListFieldsList();
-        if (0 == $sCount) {
+        if (0 === $sCount) {
             $sDataRow = $this->WriteFieldInfoLine($oShowPropertiesList, $oRecord, $oTableConf);
         } else {
             $sDataRow = $this->ListFieldsToString($oShowPropertiesList, $oRecord, $oTableConf);
@@ -243,26 +245,26 @@ class CMSFieldMLTRPC extends TCMSModelBase
      */
     protected function WriteFieldInfoLine($oListFieldsList, $oRecord, $oTableConf)
     {
-        $sFieldListString = '<div class=infoline style=\"position:relative;font-size:0px;height:0px;\">';
+        $sFieldListString = '';
         $bFindShowField = false;
         if (!is_null($oListFieldsList) && $oListFieldsList->Length() > 0) {
             while ($oListField = &$oListFieldsList->Next()) {
                 if ($oListField->fieldShowInSort) {
                     if (!empty($oListField->fieldTitle)) {
-                        $sFieldListString .= '<div id="'.$oListField->fieldDbAlias.'" class="infolineitem" style="display:none;position:absolute;background-color:#FFFFFF;border:1px solid #A9C4E7;padding:3px;">'.$oListField->fieldTitle.'</div>';
+                        $sFieldListString .= '<th scope="col" id="'.$oListField->fieldDbAlias.'" class="">'.$oListField->fieldTitle.'</th>';
                         $bFindShowField = true;
                     } else {
-                        $sFieldListString .= '<div id="'.$oListField->fieldDbAlias.'" class="infolineitem" style="display:none;position:absolute;background-color:#FFFFFF;border:1px solid #A9C4E7;padding:3px;">'.$oListField->fieldDbAlias.'</div>';
+                        $sFieldListString .= '<th scope="col" id="'.$oListField->fieldDbAlias.'" class="">'.$oListField->fieldDbAlias.'</th>';
                         $bFindShowField = true;
                     }
                 }
             }
         }
         if (false == $bFindShowField) {
-            $sFieldListString .= '<div id="getname" class="infolineitem" style="display:none;position:absolute;background-color:#FFFFFF;border:1px solid #A9C4E7;padding:3px;">'.TGlobal::Translate('chameleon_system_core.field_mltrpc.name').'</div>';
+            $sFieldListString .= '<th scope="col">'.TGlobal::Translate('chameleon_system_core.field_mltrpc.name').'</th>';
         }
 
-        return $sFieldListString.'</div>';
+        return $sFieldListString;
     }
 
     /**
@@ -276,88 +278,85 @@ class CMSFieldMLTRPC extends TCMSModelBase
      */
     protected function ListFieldsToString($oListFieldsList, $oRecord, $oTableConf)
     {
-        $sFieldListString = '<table cellpadding="3"><tr>';
+        $sFieldListString = '<td><i class="fas fa-sort pr-2"></i></td>';
         $bFindShowField = false;
         if (!is_null($oListFieldsList) && $oListFieldsList->Length() > 0) {
             while ($oListField = &$oListFieldsList->Next()) {
                 if ($oListField->fieldShowInSort) {
                     if (empty($oListField->fieldCallbackFnc)) {
-                        $sFieldListString .= "<td valign=\"top\" align=\"center\" class=\"$oListField->fieldDbAlias\">".$oRecord->sqlData[$oListField->fieldDbAlias].'</td>';
+                        $sFieldListString .= "<td class=\"$oListField->fieldDbAlias\">".$oRecord->sqlData[$oListField->fieldDbAlias].'</td>';
                         $bFindShowField = true;
                     } else {
                         if ($oListField->fieldUseCallback) {
-                            $sFieldListString .= "<td valign=\"top\" align=\"center\" class=\"$oListField->fieldDbAlias\">".call_user_func($oListField->fieldCallbackFnc, $oRecord->sqlData[$oListField->fieldDbAlias], $oRecord->sqlData, $oListField->fieldTitle).'</td>';
+                            $sFieldListString .= "<td class=\"$oListField->fieldDbAlias\">".call_user_func($oListField->fieldCallbackFnc, $oRecord->sqlData[$oListField->fieldDbAlias], $oRecord->sqlData, $oListField->fieldTitle).'</td>';
                             $bFindShowField = true;
                         }
                     }
                 }
             }
         }
+
         if (false == $bFindShowField) {
-            $sFieldListString .= '<td valign="top" align="center" class="getname">'.$oRecord->GetName().'</td>';
+            $sFieldListString .= '<td>'.$oRecord->GetName().'</td>';
         }
 
-        return $sFieldListString.'</tr></table>';
+        return $sFieldListString;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function GetHtmlHeadIncludes()
     {
-        $aIncludes = parent::GetHtmlHeadIncludes();
-        $sMltFieldName = $this->global->GetUserData('field').'_iframe';
+        $includes = parent::GetHtmlHeadIncludes();
+        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fontawesome-free-5.5.0/css/all.css').'" media="screen" rel="stylesheet" type="text/css" />';
+        $includes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tableeditcontainer.css" rel="stylesheet" type="text/css" />';
 
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tableeditcontainer.css" rel="stylesheet" type="text/css" />';
-        $sJavaString = '<script type="text/javascript">
-      $(document).ready(function(){
-        $(".positionList td ").hover(
-        function(){
-          //class = this.className;
-          offset=$(this).offset();
-          width=$(this).width();
-          $("#"+this.className).css({"top":(offset.top-1)+"px","left" : (offset.left+width+10)+"px"});
-          $("#"+this.className).show();
-        },
-        function(){
-          $("#"+this.className).hide();
-        });
+        return $includes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetHtmlFooterIncludes()
+    {
+        $includes = parent::GetHtmlFooterIncludes();
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
+
+        $javascript = '<script type="text/javascript">
+      $(document).ready(function() {
         $("#posList").sortable({
           smooth:	false,
           tolerance: "fit",
-          activeClass: "positionListActive",
           containment: "document",
           axis: "y",
           scroll: "true",
-          items: "li:not(.disabled)",
-          start:	function(e , el){
-            $(".positionList td ").hover(function(){},function(){});
-            $(".infolineitem").hide();
-            helper=el.helper;
-            $(el.helper).removeClass("positionList");
-            $(el.helper).addClass("positionListActive");
-            $(el.helper).css("width",$("#posList .positionList").width() +"px");
+          items: "tr:not(.disabled)",
+          start: function(e , el) {
+
           },
           update: function (e , el) {
-            // $("#posList").droppableDestroy();
-
-            var id = $(helper).attr("id").replace("item", "");
+            var id = $(el.item).attr("id").replace("item", "");
             $("#movedItemID").val(id);
-            $(".positionList td ").hover(function(){},function(){});
             PostAjaxForm("poslistform", sortAjaxCallback);
           }
         });
       });
 
       function sortAjaxCallback() {
-        CloseModalIFrameDialog();';
-        if (!empty($sMltFieldName)) {
-            $sJavaString .= 'parent.document.getElementById("'.$sMltFieldName.'").contentWindow.location.reload(true);';
+        CloseModalIFrameDialog();
+        ';
+
+        $sMltFieldName = $this->global->GetUserData('field').'_iframe';
+        if ('' !== $sMltFieldName) {
+            $javascript .= 'parent.document.getElementById("'.TGlobal::OutJS($sMltFieldName).'").contentWindow.location.reload(true);';
         }
-        $sJavaString .= '
+        $javascript .= '
       }
       </script>';
-        $aIncludes[] = $sJavaString;
+        $includes[] = $javascript;
 
-        return $aIncludes;
+        return $includes;
     }
 
     /**
@@ -369,7 +368,6 @@ class CMSFieldMLTRPC extends TCMSModelBase
     {
         $aPosOrder = $this->global->GetUserData('aPosOrder');
         $tableSQLName = $this->global->GetUserData('tableSQLName');
-        $movedItemID = $this->global->GetUserData('movedItemID');
         $sMltTableName = $this->global->GetUserData('sMltTableName');
         $sSourcerecordId = $this->global->GetUserData('sSourcerecordId');
         $sTargetTable = $this->global->GetUserData('sTargetTable');

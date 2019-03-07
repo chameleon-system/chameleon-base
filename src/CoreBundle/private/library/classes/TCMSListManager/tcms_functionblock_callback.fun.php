@@ -60,7 +60,7 @@ function tcms_GenerateDownloadLink_callback($id, $row)
     $oFile = new TCMSDownloadFile();
     /** @var $oFile TCMSDownloadFile */
     $oFile->Load($row['id']);
-    $sDownloadLink = $oFile->GetDownloadLink(false, true, true);
+    $sDownloadLink = $oFile->getDownloadHtmlTag(false, true, true);
 
     return $sDownloadLink;
 }

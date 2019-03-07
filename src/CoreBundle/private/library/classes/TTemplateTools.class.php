@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @deprecated since 6.3.0 - view should use twig and Twig filters instead.
+ */
 class TTemplateTools
 {
     /**
@@ -183,7 +186,6 @@ class TTemplateTools
      */
     public static function SubmitButton($sText, $sOnClick, $sClass = 'button')
     {
-        // ------------------------------------------------------------------------
         echo '<script type="text/javascript">/* <![CDATA[ */';
         echo 'document.write("<a href=\"javascript:void(0);\" class=\"'.$sClass.'\" onclick=\"'.$sOnClick.';return false;\">'.TGlobal::OutHTML(
                 $sText

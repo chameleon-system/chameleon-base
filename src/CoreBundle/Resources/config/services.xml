@@ -175,6 +175,9 @@
             <call method="setAuthenticityTokenManager">
                 <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager" />
             </call>
+            <call method="setResourceCollector">
+                <argument type="service" id="chameleon_system_core.resource_collector" />
+            </call>
             <call method="setResponseVariableReplacer">
                 <argument type="service" id="chameleon_system_core.response.response_variable_replacer" />
             </call>
@@ -262,6 +265,14 @@
                  decorates="chameleon_system_core.routing.domain_validator"
         >
             <argument type="service" id="chameleon_system_core.routing.domain_validator_request_level_cache_decorator.inner" />
+        </service>
+
+        <service id="chameleon_system_core.listener.backend_breadcrumb" class="ChameleonSystem\CoreBundle\EventListener\BackendBreadcrumbListener">
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="chameleon_system_core.request_info_service"/>
+            <argument type="service" id="chameleon_system_core.util.input_filter" />
+            <argument type="service" id="chameleon_system_core.service.backend_breadcrumb" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
         </service>
 
         <service id="chameleon_system_core.listener.request_type" class="ChameleonSystem\CoreBundle\EventListener\RequestTypeListener">
@@ -790,6 +801,12 @@
             <argument type="service" id="request_stack"/>
         </service>
 
+        <service id="chameleon_system_core.resource_collector" class="TCMSResourceCollection" shared="false">
+            <argument type="service" id="chameleon_system_core.filemanager"/>
+            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
         <service id="chameleon_system_core.command.update.count" class="ChameleonSystem\CoreBundle\Command\CountUpdateCommand">
             <tag name="console.command"/>
         </service>
@@ -832,12 +849,33 @@
         <service id="cmsPkgCore.tableEditorListFieldState" class="TTableEditorListFieldState" public="true" />
 
         <service id="chameleon_system_core.module.sidebar.sidebar_backend_module" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\SidebarBackendModule" shared="false">
-            <argument type="service" id="chameleon_system_core.language_service"/>
             <argument type="service" id="chameleon_system_core.util.url"/>
             <argument type="service" id="request_stack"/>
             <argument type="service" id="chameleon_system_core.util.input_filter"/>
             <argument type="service" id="chameleon_system_core.response.response_variable_replacer"/>
+            <argument type="service" id="chameleon_system_core.bridge.chameleon.module.sidebar.menu_item_factory"/>
             <tag name="chameleon_system.module" />
+        </service>
+
+        <service id="chameleon_system_core.bridge.chameleon.module.sidebar.menu_item_factory" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItemFactory" />
+
+        <service id="chameleon_system_core.bridge.chameleon.module.sidebar.table_menu_item_provider" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\TableMenuItemProvider">
+            <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsTblConf" />
+        </service>
+        <service id="chameleon_system_core.bridge.chameleon.module.sidebar.module_menu_item_provider" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\ModuleMenuItemProvider">
+            <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsModule" />
+        </service>
+        <service id="chameleon_system_core.bridge.chameleon.module.sidebar.custom_item_provider" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\CustomMenuItemProvider">
+            <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsMenuCustomItem" />
+        </service>
+
+        <service id="chameleon_system_core.module.static_view_module" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\StaticView\StaticViewModule" shared="false">
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <tag name="chameleon_system.module" />
+        </service>
+
+        <service id="chameleon_system_core.service.backend_breadcrumb" class="ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService">
+            <argument type="service" id="request_stack"/>
         </service>
     </services>
 </container>

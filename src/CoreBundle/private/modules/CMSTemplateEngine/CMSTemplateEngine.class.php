@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -184,22 +185,29 @@ class CMSTemplateEngine extends TCMSModelBase
 
     public function AddURLHistory()
     {
-        if ($this->AllowAddingURLToHistory()) {
-            $params = array();
-            $params['pagedef'] = $this->global->GetUserData('pagedef');
-            $params['id'] = $this->global->GetUserData('id');
-
-            if ($this->global->UserDataExists('sRestriction')) {
-                $params['sRestriction'] = $this->global->GetUserData('sRestriction');
-            }
-            if ($this->global->UserDataExists('sRestrictionField')) {
-                $params['sRestrictionField'] = $this->global->GetUserData('sRestrictionField');
-            }
-            $breadcrumbTitle = TGlobal::Translate('chameleon_system_core.template_engine.breadcrumb_title_page').': '.$this->oPage->sqlData['name'];
-            if (is_null($this->sMode)) {
-                $this->global->GetURLHistory()->AddItem($params, $breadcrumbTitle);
-            }
+        if (false === $this->AllowAddingURLToHistory()) {
+            return;
         }
+
+        $params = [];
+        $params['pagedef'] = $this->global->GetUserData('pagedef');
+        $params['id'] = $this->global->GetUserData('id');
+
+        if ($this->global->UserDataExists('sRestriction')) {
+            $params['sRestriction'] = $this->global->GetUserData('sRestriction');
+        }
+        if ($this->global->UserDataExists('sRestrictionField')) {
+            $params['sRestrictionField'] = $this->global->GetUserData('sRestrictionField');
+        }
+
+        $breadcrumbTitle = TGlobal::Translate('chameleon_system_core.template_engine.breadcrumb_title_page').': '.$this->oPage->sqlData['name'];
+
+        if ('preview_content' === $this->sMode || 'layout_selection' === $this->sMode || 'layoutlist' === $this->sMode) {
+            return;
+        }
+
+        $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+        $breadcrumb->AddItem($params, $breadcrumbTitle);
     }
 
     public function &Execute()
@@ -215,10 +223,11 @@ class CMSTemplateEngine extends TCMSModelBase
         $this->IsRecordLocked();
         $this->GetPermissionSettings();
 
+        $this->data['only_one_record_tbl'] = '0';
+        $this->data['oTableDefinition'] = $this->oTableManager->oTableConf;
         $this->data['tableid'] = $this->sTableID;
 
         $this->data['oTable'] = $this->oTableManager->oTableEditor->oTable;
-        $tableName = $this->oTableManager->oTableConf->sqlData['name'];
         $sTableTitle = $this->oTableManager->oTableConf->GetName();
         $this->data['sTableTitle'] = $sTableTitle;
 
@@ -239,44 +248,59 @@ class CMSTemplateEngine extends TCMSModelBase
             $this->data['sActivePageDef'] = '';
         }
 
-        if (is_null($this->sMode) || 'layout_selection' == $this->sMode || 'edit_content' == $this->sMode || 'preview_content' == $this->sMode) {
-            $view = $this->GetMainNavigation(); // container call
-            $this->SetTemplate('CMSTemplateEngine', $view);
-            $this->data['sPreviewURL'] = $this->oTableManager->oTableEditor->GetPreviewURL();
-        } else {
-            if ('layoutlist' == $this->sMode) {
-                $this->_GetLayoutList();
-                $this->SetTemplate('CMSTemplateEngine', 'cmp_layoutlist');
-            } elseif ('load_module' == $this->sMode) {
-                $bLoadCopy = $this->global->GetUserData('bLoadCopy');
-                $this->data['bLoadCopy'] = $bLoadCopy;
-
-                $this->_GetModuleInstanceList();
-                $this->SetTemplate('CMSTemplateEngine', 'cmp_loadmoduleinstance');
-            }
-        }
+        $this->switchTemplate();
 
         return $this->data;
     }
 
     /**
+     * Switches the template according to the current active template submodule mode and loads additional needed content.
+     */
+    private function switchTemplate(): void
+    {
+        $viewName = $this->getActiveModuleLayout();
+
+        switch ($this->sMode) {
+            case 'layout_selection':
+            case 'edit_content':
+            case 'preview_content':
+            default:
+                $this->filterMainNavigation();
+                $this->data['sPreviewURL'] = $this->oTableManager->oTableEditor->GetPreviewURL();
+
+                break;
+            case 'layoutlist':
+                $this->_GetLayoutList();
+                $viewName = 'cmp_layoutlist';
+
+                break;
+            case 'load_module':
+                $inputFilter = $this->getInputFilter();
+                $bLoadCopy = $inputFilter->getFilteredGetInput('bLoadCopy');
+                $this->data['bLoadCopy'] = $bLoadCopy;
+
+                $this->_GetModuleInstanceList();
+                $viewName = 'cmp_loadmoduleinstance';
+
+                break;
+        }
+
+        $this->SetTemplate('CMSTemplateEngine', $viewName);
+    }
+
+    /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * loads revision management relevant data if active.
      */
     protected function LoadRevisionData()
     {
         $this->data['bRevisionManagementActive'] = false;
-        $bRevisionManagementActive = $this->oTableManager->IsRevisionManagementActive();
-        if ($bRevisionManagementActive) {
-            $this->data['bRevisionManagementActive'] = $bRevisionManagementActive;
-            $sLastRevisionNumber = $this->GetLastRevisionNumber();
-            $this->data['iLastRevisionNumber'] = $sLastRevisionNumber;
-            $iBaseRevisionNumber = $this->oTableManager->oTableEditor->GetLastActivatedRevision();
-            $this->data['iBaseRevisionNumber'] = $iBaseRevisionNumber;
-            $this->data['oLastRevision'] = $this->oTableManager->oTableEditor->GetLastActivatedRevisionObject();
-        }
     }
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * checks for the last revision number for this record,
      * if no revisions are found it returns 0.
      *
@@ -284,9 +308,7 @@ class CMSTemplateEngine extends TCMSModelBase
      */
     protected function GetLastRevisionNumber()
     {
-        $iLastRevisionNumber = $this->oTableManager->oTableEditor->GetLastRevisionNumber();
-
-        return $iLastRevisionNumber;
+        return 0;
     }
 
     /**
@@ -449,22 +471,24 @@ class CMSTemplateEngine extends TCMSModelBase
     }
 
     /**
-     * loads the navi into $data and returns the active menuItem.
-     *
-     * @return string
+     * Filters the main navigation items.
      */
-    protected function GetMainNavigation()
+    protected function filterMainNavigation(): void
     {
         $this->data['oMenuItems'] = $this->oTableManager->oTableEditor->GetMenuItems();
         $this->data['oMenuItems']->RemoveItem('sItemKey', 'save');
         $this->data['oMenuItems']->RemoveItem('sItemKey', 'copy');
         $this->data['oMenuItems']->RemoveItem('sItemKey', 'new');
         $this->data['oMenuItems']->RemoveItem('sItemKey', 'delete');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'revisionManagement');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'revisionManagementLoad');
         $this->data['oMenuItems']->RemoveItem('sItemKey', 'copy_translation');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'edittableconf');
+    }
 
+    /**
+     * Switches the module view to layout_selection if the page has no layout yet
+     * (otherwise the page is not viewable).
+     */
+    protected function getActiveModuleLayout(): string
+    {
         $view = 'layout_selection';
 
         // check if pagedef exists and switch to edit mode
@@ -484,6 +508,16 @@ class CMSTemplateEngine extends TCMSModelBase
         return $view;
     }
 
+    /**
+     * @deprecated since 6.3.0 - renamed and split into 2 methods: filterMainNavigation and getActiveModuleLayout.
+     */
+    protected function GetMainNavigation()
+    {
+        $this->filterMainNavigation();
+
+        return $this->getActiveModuleLayout();
+    }
+
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = array();
@@ -492,8 +526,7 @@ class CMSTemplateEngine extends TCMSModelBase
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tableeditcontainer.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/tableEditor.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/WayfarerTooltip/WayfarerTooltip.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tooltip.css" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
         if (!$this->IsRecordLocked() && array_key_exists('locking_active', $this->oTableManager->oTableConf->sqlData) && '1' == $this->oTableManager->oTableConf->sqlData['locking_active'] && !$this->bIsReadOnlyMode && CHAMELEON_ENABLE_RECORD_LOCK) {
             $aIncludes[] = '<script type="text/javascript">
@@ -522,6 +555,8 @@ class CMSTemplateEngine extends TCMSModelBase
     public function GetHtmlFooterIncludes()
     {
         $aIncludes = parent::GetHtmlFooterIncludes();
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
+
         if ('cmp_loadmoduleinstance' == $this->aModuleConfig['view']) {
             $aChooseModuleViewDialog = $this->getChooseModuleViewDialog();
             if (is_array($aChooseModuleViewDialog) && isset($aChooseModuleViewDialog['html'])) {
@@ -653,5 +688,10 @@ class CMSTemplateEngine extends TCMSModelBase
     private function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }

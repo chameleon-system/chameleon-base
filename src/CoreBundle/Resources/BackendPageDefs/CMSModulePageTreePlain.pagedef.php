@@ -1,9 +1,6 @@
 <?php
 
-$layoutTemplate = 'default';
+$layoutTemplate = 'frame';
 $moduleList = array('contentmodule' => array('model' => 'CMSModulePageTree', 'view' => 'standard'));
 
 addDefaultPageTitle($moduleList);
-addDefaultHeader($moduleList);
-addDefaultBreadcrumb($moduleList);
-addDefaultSidebar($moduleList);

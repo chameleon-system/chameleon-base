@@ -16,25 +16,47 @@ class MenuCategory
     /**
      * @var string
      */
+    private $id;
+    /**
+     * @var string
+     */
     private $name;
+    /**
+     * @var string
+     */
+    private $iconFontCssClass;
     /**
      * @var MenuItem[]
      */
     private $menuItems;
 
     /**
+     * @param string     $id
      * @param string     $name
+     * @param string     $iconFontCssClass
      * @param MenuItem[] $menuItems
      */
-    public function __construct(string $name, array $menuItems)
+    public function __construct(string $id, string $name, string $iconFontCssClass, array $menuItems)
     {
+        $this->id = $id;
         $this->name = $name;
+        $this->iconFontCssClass = $iconFontCssClass;
         $this->menuItems = $menuItems;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getIconFontCssClass(): string
+    {
+        return $this->iconFontCssClass;
     }
 
     public function getMenuItems(): array

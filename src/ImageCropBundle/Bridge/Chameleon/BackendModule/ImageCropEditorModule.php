@@ -12,7 +12,9 @@
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\BackendModule;
 
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\Corebundle\Util\UrlUtil;
 use ChameleonSystem\ImageCrop\DataModel\CmsMediaDataModel;
@@ -203,7 +205,9 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
 
         $oVisitor->SetMappedValue('urlToGetImage', $this->generateUrlToGetImage($cmsImage));
 
-        $this->global->GetURLHistory()->AddItem(
+        $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+
+        $breadcrumb->AddItem(
             $parameters,
             $this->translator->trans(
                 'chameleon_system_image_crop.editor.edit_crop_window_title',
@@ -602,5 +606,10 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         }
 
         return $existingCrop;
+    }
+
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }

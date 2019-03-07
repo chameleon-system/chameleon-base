@@ -74,6 +74,11 @@
     width: 350px;
 }
 
+.row.table-editor-form-group {
+    margin-left: 0;
+    margin-right: 0;
+}
+
 .checkboxGroupTitle {
     clear:both;
     padding-top:10px;
@@ -148,30 +153,48 @@
     background-color: #f4f5f7;
 }
 
-.switchToRecordBox {
-    float: left;
-    margin-left: 20px;
+.tagSuggestions .badge {
+    font-size: 1em;
+    font-weight: normal;
+    padding: 5px;
+    cursor: pointer;
+    cursor: hand;
 }
 
-.translationStateIcon {
-    float: right;
-    padding-right: 5px;
+.badge.translationStateIcon {
+    font-size: 1.1em;
+    padding: 0 .2em;
+}
+
+.badge.translationStateIcon i {
+    font-size: 1.5em;
+}
+
+.help-text-button i {
+    font-size: 1.6em;
+    cursor: pointer;
+    cursor: hand;
 }
 
 .button-spacing {
     margin-left: 10px;
 }
 
-.translation-badge, .help-badge {
+.badge.translation-badge {
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 1.1em;
     text-transform: uppercase;
 }
 
-.help-badge {
-    font-size: 1.1em;
-    cursor: pointer;
-    margin-left: 8px;
+#cmseditform .card {
+    margin-bottom: 0;
+}
+
+/**
+ * Overwrite CKEditor theme 'moono-lisa'
+ */
+.cke {
+    border-radius: .2rem;
 }
 
 /**
@@ -201,4 +224,11 @@ label.switch .switch-slider::after {
     text-align: center;
     content: attr(data-inactive);
     transition: inherit;
+}
+
+/*
+ * TCMSFieldDateTime with seconds. Overwriting a styling error that comes from the datetimepicker plugin.
+ */
+.bootstrap-datetimepicker-widget.dropdown-menu.wider {
+    width: 38em !important;
 }

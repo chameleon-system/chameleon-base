@@ -142,19 +142,6 @@ monolog:
        level: warning
 ```
 
-## Backend Pagedef Configuration
-
-The backend now provides a new sidebar menu which will replace the classic main menu in a future version.
-If your project uses custom pagedef files (`*.pagedef.php`), consider adding the sidebar to these files. This is
-done by adding the following line after the module list definition:
-
-```php
-    addDefaultSidebar($moduleList);
-```
-
-There are additional helper methods to simplify adding typical backend modules, but it is optional to use these methods.
-See `src/CoreBundle/private/library/classes/pagedefFunctions.inc.php` for reference.
-
 ## New ImageCropBundle
 
 Chameleon now ships with a bundle that provides support for image cutouts. Install it as follows (this is required if
@@ -238,9 +225,19 @@ loader. This instance will therefore only contain the module passed as argument,
 
 Log output is no longer collected and no longer sent as attachments with the notification email.
 
+## RevisionManagementBundle
+
+This bundle is not supported anymore.
+
 ## RequestInfoService
 
 - New method `getRequestId()`.
+
+## ckEditor
+
+The custom skin moonocolor is deprecated.
+If you have an extension of chameleonConfig.js please be sure to change the skin to 
+`config.skin = 'moono-lisa';` and the color to: `config.uiColor = '#f0f3f5';`
 
 # Changed Interfaces and Method Signatures
 
@@ -258,10 +255,176 @@ Note that ONLY BC breaking changes are listed, according to our backwards compat
 The field classes now use the language independent SQL date format in frontend rendering instead of always using
 German date format. For backwards compatibility reasons they work with German date format too.
 
+## \TCMSTableWriter
+
+- Method `changeTableEngine()` now also changes the table config accordingly.
+
 ## \TTools
 
 - Changed method `WriteLogEntry()`: parameter `$sLogFileName` is now ignored.
 - Changed method `WriteLogEntrySimple()`: parameter `$sLogFileName` is now ignored.
+
+## Backend Theme Library
+
+The Backend was upgraded to Bootstrap 4.1.3.
+
+See the [Bootstrap Migration Guide](https://getbootstrap.com/docs/4.1/migration/) for required changes to your backend modules.
+To give an impression on which style changes might be required in project code, the following list contains CSS class
+changes we performed during the upgrade to Bootstrap 4:
+
+.img-responsive -> .img-fluid
+- TCMSFieldMedia
+- TCMSFieldGMapCoordinate
+
+btn-default -> btn-secondary
+- Some TCMSField types and TCMSTableEditors so check yours.
+
+.pull-left -> .float-left
+- TCMSFieldDocument
+- TCMSFieldDocumentProperties
+- TCMSFieldMediaProperties
+- TCMSFieldModuleInstance
+- MTHeader
+- header navigation
+- footer
+- Added CSS class migration in TCMSRender::DrawButton method for backwards compatibility
+
+.input-sm -> .form-control-sm
+- Almost all TCMSField classes and Twig templates
+- Some list managers
+- Some TCMSTableEditor classes
+
+.table-condensed -> .table-sm
+- TCMSFieldDocumentProperties
+- TCMSFieldMediaProperties
+- TFullGroupTable
+
+New: .page-item + .page-link
+- Pagination in TFullGroupTable
+
+.pull-right -> .float-right
+- TFullGroupTable
+- MTHeader
+- MTTableditor
+
+.input-group-addon -> .input-group-append
+- Field types using the text length counter addon (varchar)
+
+.navbar-default -> .navbar-light
+- TCMSTableManager and the layout manager iframes
+
+.navbar-toggle -> .navbar-toggler
+- header navbar
+
+.col-md-* -> .col-lg-*
+- header
+- login
+
+Not found anywhere (so you might want to skip this search, too):
+- well
+- thumbnail
+- list-line
+- page-header
+- dl-horizontal
+- blockquote
+- btn-xs
+- btn-group-justified
+- btn-group-xs
+- breadcrumb
+- center-block
+- img-responsive
+- img-rounded
+- form-horizontal
+- radio
+- checkbox
+- input-lg
+- control-label
+- hidden/visible-xs, sm, md, lg
+- label
+- navbar-form
+- navbar-btn
+- progress-bar*
+
+## Backend JQuery
+
+JQuery that is used in the Chameleon backend was upgraded to version 3.3.1. For backwards compatibility
+jquery.migrate 1.4.1 was added, but will be removed in a future Chameleon version.
+
+## Backend Modals
+
+To open modals in the backend, use `CHAMELEON.CORE.showModal()` now, which expects a CSS class that determines the
+modal size (one of `modal-sm`, `modal-md`, `modal-lg`, `modal-xl`, `modal-xxl`). This function will then open a
+Bootstrap modal.
+
+All `CreateModal...` JavaScript methods now call this method internally, determining the respective classes in a
+backwards-compatible way from the `width` argument (if in doubt, `modal-xxl` is used).
+
+Please check custom calls of `CreateModal...` methods and remove width/height settings where possible.
+
+## Backend Tree Path Rendering
+
+Tree paths are now rendered using Bootstrap 4 breadcrumb styles.
+Check your code for the CSS class "treeField" and if found, change the HTML to ol/li list with breadcrumb classes.
+See TCMSTreeNode::GetTreeNodePathAsBackendHTML() for an example. 
+
+## Icons
+
+The famfamfam icon library is deprecated.
+Please check your code to any reference to the directory "/icons/".
+The folder exists twice, globally and inside a theme directory and both are deprecated.
+
+The icons of Font Awesome have been added as a replacement.
+They will replace all file icons and the glyphicons of Bootstrap3 in the backend.
+
+During migration, icons for main menu items will be replaced with matching Font Awesome icons. 
+
+Where icons cannot be matched, a default icon will be used; the database migrations will tell which icons could not be assigned. To manually assign an icon to a menu item representing a table, navigate to the table settings of this table and fill out the field "Icon Font CSS class". To manually assign an icon to a menu item representing a backend module, do this in the "CMS modules" menu respectively. See other menu items on what to write into these fields.
+
+## File Type Icons in WYSIWYG
+
+The image based file type icons where replaced by ["dmhendricks/file-icon-vectors"](https://github.com/dmhendricks/dmhendricks/file-icon-vectors).
+If you replaced the old icons with custom icons, you should check the CSS for that, because the HTML for the downloads changed slightly.
+The new icon is a SPAN with CSS classes, instead of a background image of the download link.
+If you have no custom icons the new icons should fit without any changes.
+
+Now you are able to overwrite a twig template which renders the download link: "/common/download/download.html.twig"
+(backend and frontend)
+
+## Backend Pagedef Configuration
+
+The backend now provides a new sidebar menu which will replace the classic main menu in a future version.
+If your project uses custom pagedef files (`*.pagedef.php`), consider adding the sidebar to these files. This is
+done by adding the following line after the module list definition:
+
+```php
+    addDefaultSidebar($moduleList);
+```
+
+There are additional helper methods to simplify adding typical backend modules, but it is optional to use these methods.
+See `src/CoreBundle/private/library/classes/pagedefFunctions.inc.php` for reference.
+
+## Main Menu Changes
+
+This release of Chameleon System features a new main menu that is displayed as a sidebar while the old main menu (now
+called "classic main menu" is deprecated and will be removed in a future release. The new menu was restructured and some
+menu items were renamed to improve comprehensibility of the menu structure.
+
+The content boxes of the classic main menu are unchanged to give users time to get accustomed to the new menu. It
+didn't make sense to keep old menu item names though, so be aware that some menu items were changed. The changes
+should be quite straightforward.
+
+Also some menu items that were located in the top bar were now moved to the sidebar. Finally the backend modules that
+were called in a popup window, like navigation, product search index generation and sanity check, now open inline.
+
+From a technical point no changes are required if the project is a shop system. Projects that are pure CMS systems
+should consider removing menu categories that are nevertheless created during migration. Note that there will be some
+error messages during migration that complain about missing shop tables and modules in this case, which can be ignored. 
+
+## Home Page Changes
+
+As the main menu is now displayed in the sidebar, the classic main menu was replaced by a welcome screen (which we plan
+to replace by a dashboard in a future Chameleon release). If users would like to keep the classic main menu yet, it can
+be restored by setting the config value `chameleon_system_core: backend: home_pagedef: 'main'` in `config.yml`.
 
 # Deprecated Code Entities
 
@@ -312,8 +475,14 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Constants
 
+- \CMS_ACTIVE_REVISION_MANAGEMENT
+- \PATH_FILETYPE_ICONS
+- \PATH_FILETYPE_ICONS_LOW_QUALITY
 - \TCMSCronJob_CleanOrphanedMLTConnections::MLT_DELETE_LOG_FILE
+- \TCMSTableEditorEndPoint::DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR
 - \TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE
+- \URL_FILETYPE_ICONS
+- \URL_FILETYPE_ICONS_LOW_QUALITY
 
 ## Classes and Interfaces
 
@@ -321,20 +490,30 @@ is recommended (although this tool may not find database-related deprecations).
 - \MTMenuManager
 - \TCMSContentBox
 - \TCMSContentBoxItem
+- \TCMSFieldMediaProperties
+- \TCMSFontImage
+- \TCMSFontImageList
+- \TCMSMediaTreeNode
 - \TCMSMenuItem
 - \TCMSMenuItem_Module
 - \TCMSMenuItem_Table
+- \THTMLFileBrowser
 - \TPkgCmsCoreLog
-- \TCMSFieldMediaProperties
 - \TPkgSnippetRenderer_TranslationNode
 - \TPkgSnippetRenderer_TranslationTokenParser
+- \TTemplateTools
 
 ## Properties
 
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$sGeneratedPage
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$postRenderVariables
+- \TAccessManagerPermissions::$revisionManagement
+- \TFullGroupTable::$iconSortASC
+- \TFullGroupTable::$iconSortDESC
 - \TPkgCsv2Sql::$sLogFileName
-- \TCMSFieldLookupFieldTypes::sFieldHelpTextHTML
+- \TCMSFieldLookupFieldTypes::$sFieldHelpTextHTML
+- \TCMSFile::sTypeIcon
+- \TCMSTableEditorChangeLog::$oOldFields
 
 ## Methods
 
@@ -348,67 +527,85 @@ is recommended (although this tool may not find database-related deprecations).
 - \ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::getModules()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setEnableTransformation()
 - \ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService::setSubjectPrefix()
+- \CMSTemplateEngine::GetLastRevisionNumber()
+- \CMSTemplateEngine::GetMainNavigation()
+- \CMSTemplateEngine::LoadRevisionData()
+- \MTHeader::addTabToUrlHistory()
+- \MTTableEditor::ActivateRevision()
+- \MTTableEditor::AddNewRevision()
+- \MTTableEditor::GetLastRevisionNumber()
+- \MTTableEditor::LoadRevisionData()
 - \MTTableManager::getAutocompleteRecordList()
+- \TAccessManager::HasRevisionManagementPermission()
 - \TCMSCronJob::getLogger()
+- \TCMSDownloadFileEndPoint::GetDownloadLink()
 - \TCMSFieldColorPicker::isFirstInstance()
 - \TCMSFieldLookup::enableComboBox()
 - \TCMSLogChange::getUpdateLogger()
+- \TCMSTreeNode::GetPageTreeConnectionDateInformationHTML()
+- \TGlobal::GetURLHistory()
 - \TPkgCmsCoreSendToHost::setLogRequest()
 - \TPkgCmsException_Log::getLogger()
 - \TPkgCsv2Sql::CreateLogFileName()
 - \TPkgCsv2Sql::GetLogFile()
 - \TTools::AddStaticPageVariables()
+- \TCMSTableEditorChangeLog::savePreSaveValues()
+- gcf_CMSUserWithImage()
+- gcf_GetPublishedIcon()
 
 ## JavaScript Files and Functions
 
-- $.blockUI();
-- $.unblockUI();
-
-Use CHAMELEON.CORE.showProcessingModal() and CHAMELEON.CORE.hideProcessingModal() instead.
-
-- SetChangedDataMessage()
-
-Use CHAMELEON.CORE.MTTableEditor.initInputChangeObservation() instead.
-
-- CreateModalIFrameDialogFromContentWithoutClose
-
-Use CreateModalIFrameDialogFromContent() instead. (modals always show a header and close button)
-
-All CreateModal... methods now call a bootstrap modal using CHAMELEON.CORE.showModal().
-The modal uses CSS classes for the size. If not really necessary the modal is always opened in xxl size (90% screensize).
-To be backwards compatible the size classes are determined using CHAMELEON.CORE.getModalSizeClassByPixel().
-You should remove all width/height settings in CreateModalXY calls if it does not necessarily render smaller.
-
-- $.jBreadCrumb()
-- $.bgiframe()
-- $.jqM() (jqModal)
-- $.jqDnR() (part of jqModal)
-- $.addOption() (jquery.selectboxes plugin)
-- loadStandaloneDocumentManager
-- PublishViaAjaxCallback()
-- showMLTField() - use CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(iFrameId, url) instead.
-- src/CoreBundle/Resources/public/javascript/mainNav.js
-
-## jQueryUi
-
-jQueryUi is replaced everywhere in the code.
-The only exception is drag&drop functionality in the template engine for module spot placing and reordering of elements
-using TCMSFieldPosition.
-
-Deprecated is every jquery plugin in: 
-
-/Resources/public/javascript/jquery/jQueryUI/
-
-
-- jquery.form.js was updated to version 4.2.2 and is now located in Resources/public/javascript/jquery-form-4.2.2/jquery.form.min.js.
-- jquery library was upgraded to 3.3.1. To be backwards compatible jquery.migrate is included in version 1.4.1.
-- bootstrap-colorpicker was upgraded to 3.0.3 and the directory name changed to bootstrap-colorpicker-3.0.3. The old directory is deprecated.
+- bootstrap-colorpicker (new version 3.0.3 located in src/CoreBundle/Resources/public/javascript/jquery/bootstrap-colorpicker-3.0.3).
 - chosen.jquery.js
+- flash.js
+- html5shiv.js
 - jqModal.js 
 - jqDnR.js
+- jquery.form.js (new version 4.2.2 located in src/CoreBundle/Resources/public/javascript/jquery/jquery-form-4.2.2/jquery.form.min.js).
 - jquery.selectboxes.js
-- respond.min.js
+- jQueryUI (everything in path src/CoreBundle/Resources/public/javascript/jquery/jQueryUI; drag and drop still used in the template engine).
+- maskedinput.js
 - pngForIE.htc
+- pNotify (new version 3.2.0 located in src/CoreBundle/Resources/public/javascript/pnotify-3.2.0/)
+- respond.min.js
+- rwd.images.js
+- src/CoreBundle/Resources/public/javascript/mainNav.js
+- THTMLFileBrowser.js
+- THTMLTable.js
+
+- $.addOption() (jquery.selectboxes plugin)
+- $.bgiframe()
+- $.blockUI()
+- $.everyTime()
+- $.jBreadCrumb()
+- $.jqDnR() (part of jqModal)
+- $.jqM() (jqModal)
+- $.oneTime()
+- $.stopTime()
+- $.tagInput()
+- $.unblockUI()
+- $.wTooltip()
+- ActivateRecordRevision()
+- AddNewRevision()
+- CreateModalIFrameDialogFromContentWithoutClose()
+- PublishViaAjaxCallback()
+- SaveNewRevision()
+- SetChangedDataMessage()
+- showMLTField()
+- SwitchEditPortal()
+- SwitchEditPortalCallback()
+
+## Frontend Assets
+
+There are some frontend styles, images and javascript helpers located in the core, 
+that are deprecated because they are outdated and replaced by frontend themes or will move to the bundle.
+
+- web_modules/MTConfigurableFeedbackCore (will be moved to bundle)
+- web_modules/MTExtranet
+- web_modules/MTFAQListCore
+- web_modules/MTFeedbackCore
+- web_modules/MTGlobalListCore
+- web_modules/MTNewsletterSignupCore
 
 ## Translations
 
@@ -417,102 +614,42 @@ Deprecated is every jquery plugin in:
 - chameleon_system_core.field_options.option_value_true
 - chameleon_system_core.fields.lookup.no_matches
 - chameleon_system_core.record_lock.lock_owner_fax
+- chameleon_system_core.record_revision.action_confirm_restore_revision
+- chameleon_system_core.record_revision.action_create_page_revision
+- chameleon_system_core.record_revision.action_new_revision
+- chameleon_system_core.record_revision.action_load_page_revision
+- chameleon_system_core.record_revision.action_load_revision
+- chameleon_system_core.record_revision.action_restore_revision
+- chameleon_system_core.record_revision.based_on
+- chameleon_system_core.record_revision.confirm_restore_revision
+- chameleon_system_core.record_revision.description
+- chameleon_system_core.record_revision.header_new_revision
+- chameleon_system_core.record_revision.last_used_date
+- chameleon_system_core.record_revision.name
+- chameleon_system_core.record_revision.new_revision_help
+- chameleon_system_core.record_revision.new_revision_number
+- chameleon_system_core.record_revision.no_revision_exists
+- chameleon_system_core.record_revision.revision_number
+- chameleon_system_core.template_engine.header_revision
 
 ## Database Tables
 
 - cms_content_box
+- cms_font_image
+- cms_record_revision
+- cms_tbl_conf_cms_role7_mlt
 
 ## Database Fields
 
+- cms_module.cms_content_box_id
+- cms_module.icon_font_css_class
 - cms_module.show_as_popup
+- cms_tbl_conf.cms_content_box_id
+- cms_tbl_conf.cms_record_revision_id
+- cms_tbl_conf.cms_role7_mlt
+- cms_tbl_conf.icon_font_css_class
+- cms_tpl_module.revision_management_active
 
-## Backend Theme Library
+## Flash Messages
 
-The Backend was upgraded to Bootstrap 4.1.3.
-
-See the [Bootstrap Migration Guide](https://getbootstrap.com/docs/4.1/migration/) for needed changes to your backend modules.
-
-During the upgrade to Bootstrap 4 the following styles where checked and these are our findings:
-
-.img-responsive -> .img-fluid
-- TCMSFieldMedia
-- TCSMFieldFMapCoordinate
-
-btn-default -> btn-secondary
-- Some TCMSField types and TCMSTableEditors so check yours.
-
-.pull-left -> .float-left
-- TCMSFieldDocument
-- TCMSFieldDocumentProperties
-- TCMSFieldMediaProperties
-- TCMSFieldModuleInstance
-- MTHeader
-- header navigation
-- footer
-- Added CSS class migration in TCMSRender::DrawButton method for backwards compatibility
-
-.input-sm -> .form-control-sm
-- Almost all TCMSField classes and Twig templates
-- Some list managers
-- Some TCMSTableEditor classes
-
-.table-condensed -> .table-sm
-- TCMSFieldDocumentProperties
-- TCMSFieldMediaProperties
-- TFullGroupTable
-
-New: .page-item + .page-link
-- Pagination in TFullGroupTable
-
-.pull-rigt -> .float-right
-- TFullGroupTable
-- MTHeader
-- MTTableditor
-
-.input-group-addon -> .input-group-append
-- Field types using the text length counter addon (varchar)
-
-.navbar-default -> .navbar-light
-- TCMSTableManager and the layout manager iframes
-
-.navbar-toggle -> .navbar-toggler
-- header navbar
-
-.col-md-* -> .col-lg-*
-- header
-- login
-
-Not found anywhere (so you might want to skip this search, too):
-- well
-- thumbnail
-- list-line
-- page-header
-- dl-horizontal
-- blockquote
-- btn-xs
-- btn-group-justified
-- btn-group-xs
-- breadcrumb
-- center-block
-- img-responsive
-- img-rounded
-- form-horizontal
-- radio
-- checkbox
-- input-lg
-- control-label 
-- hidden/visible-xs, sm, md, lg
-- label
-- navbar-form
-- navbar-btn
-- progress-bar*
-
-
-## Font Awesome Icons
-
-The icons of Font Awesome have been added.
-They will replace all file icons and the glyphicons of Bootstrap3 in the backend.
-
-During migration, icons for main menu items will be replaced with matching Font Awesome icons. 
-
-Where icons cannot be matched, a default icon will be used; the database migrations will tell which icons could not be assigned. To manually assign an icon to a menu item representing a table, navigate to the table settings of this table and fill out the field "Icon Font CSS class". To manually assign an icon to a menu item representing a backend module, do this in the "CMS modules" menu respectively. See other menu items on what to write into these fields.
+- TABLEEDITOR_REVISION_SAVED

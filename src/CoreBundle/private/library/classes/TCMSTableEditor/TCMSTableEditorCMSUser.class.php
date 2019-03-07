@@ -296,7 +296,6 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         TCMSUser::ReleaseOpenLocks(TCMSUser::GetActiveUser()->id);
         $oUser->SetAsActiveUser();
         $this->getRedirect()->redirectToActivePage(array(
-            'pagedef' => 'main',
             '_rmhist' => 'true',
             '_histid' => '0',
         ));
@@ -560,7 +559,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         parent::PrepareFieldsForSave($oFields);
 
         $roleField = $oFields->FindItemWithProperty('name', 'cms_role_mlt');
-        if (false === $roleField) {
+        if (false === $roleField || '' === $roleField->data) {
             return;
         }
 

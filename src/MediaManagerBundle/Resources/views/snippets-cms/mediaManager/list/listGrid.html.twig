@@ -1,20 +1,26 @@
 {# accessRightsMedia \ChameleonSystem\MediaManager\AccessRightsModel #}
-<div class="snippetMediaManagerListGrid">
+
+{% if gridSize == 'large' %}
+    {% set columns = 'col-12 col-sm-6 col-md-4 col-xl-3' %}
+{% else %}
+    {% set columns = 'col-6 col-sm-4 col-md-3 col-xl-2' %}
+{% endif %}
+
+<div class="snippetMediaManagerListGrid {{ gridSize }}">
     {% set mediaItems = listResult.items %}
     {% if mediaItems | length > 0 %}
-        <div class="row image-row">
+        <div class="d-flex flex-wrap image-row">
             {% for mediaItem in mediaItems %}
                 {# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
-                <div class="image-col">
+                <div class="{{ columns }} image-col">
                     <div class="inner cms-media-item" data-id="{{ mediaItem.id }}" data-name="{{ mediaItem.name }}">
-
-                        <div class="image-container">
+                        <div class="image-container {% if false == pickImageMode %}selectable{% endif %}">
                             <img src="{{ mediaItem.id | cmsthumb(500, 100) }}" alt="">
                         </div>
+
                         <div class="no-drag">
+                            <div class="caption{% if accessRightsMedia.edit %} editable{% endif %}" data-type="description">{{ mediaItem.name }}</div>
                             {% include('mediaManager/list/actions.html.twig') with {'mediaItem': mediaItem, 'pickImageMode': pickImageMode, 'pickImageCallback': pickImageCallback, 'pickImageWithCrop': pickImageWithCrop, 'accessRightsMedia': accessRightsMedia} %}
-                            <div class="caption{% if accessRightsMedia.edit %} editable{% endif %}"
-                                 data-type="description">{{ mediaItem.name }}</div>
                         </div>
                     </div>
                 </div>

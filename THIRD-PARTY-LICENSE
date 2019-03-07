@@ -53,7 +53,6 @@ MIT License
 - HTML5 Shiv - https://github.com/afarkas/html5shiv
 - moment.js - https://github.com/moment/moment/
 - perfect-scrollbar - https://github.com/utatti/perfect-scrollbar/
-- pnotify - http://sciactive.com/pnotify/
 - Respond - https://github.com/scottjehl/Respond
 - RWD Images - https://github.com/stowball/jQuery-rwdImageMaps
 - SocialSharePrivacy - http://panzi.github.io/SocialSharePrivacy/
@@ -74,6 +73,7 @@ Apache License 2.0
 - Amazon Payments API - https://github.com/amzn/login-and-pay-with-amazon-sdk-php
 - Instaclick PHP-Webdriver - https://github.com/instaclick/php-webdriver
 - MarkerWithLabel for Google Maps API V3 - https://github.com/googlemaps/v3-utility-library
+- pnotify - http://sciactive.com/pnotify/
 
 
 BSD 3-Clause License
@@ -105,6 +105,7 @@ LGPLv2.1
 
 - HTMLPurifier - http://htmlpurifier.org/
 - PHPMailer - https://github.com/PHPMailer/PHPMailer
+- pnotify - http://sciactive.com/pnotify/ (up to version 2.0.1)
 - IDNA Convert - https://github.com/phpWhois/idna-convert
 
 

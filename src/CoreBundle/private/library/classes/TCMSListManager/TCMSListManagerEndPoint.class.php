@@ -9,7 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -475,14 +477,20 @@ class TCMSListManagerEndPoint
                     $oMenuItem->sItemKey = 'edittableconf';
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.open_table_configuration');
                     $oMenuItem->sIcon = 'far fa-edit';
+                    $oMenuItem->setButtonStyle('btn-warning');
 
-                    $aParameter = array('pagedef' => 'tableeditor', 'id' => $this->oTableConf->id, 'tableid' => $oTableEditorConf->id);
+                    $pagedef = 'tableeditor';
+                    if (true === $this->isLoadedInIframe()) {
+                        $pagedef = 'tableeditorPopup';
+                    }
+
+                    $aParameter = array('pagedef' => $pagedef, 'id' => $this->oTableConf->id, 'tableid' => $oTableEditorConf->id);
                     $aAdditionalParams = $this->GetHiddenFieldsHook();
                     if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
                         $aParameter = array_merge($aParameter, $aAdditionalParams);
                     }
 
-                    $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter)."'";
+                    $oMenuItem->sOnClick = "top.document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter)."'";
                     $this->oMenuItems->AddItem($oMenuItem);
                 }
 
@@ -494,6 +502,11 @@ class TCMSListManagerEndPoint
         }
 
         return $this->oMenuItems;
+    }
+
+    private function isLoadedInIframe(): bool
+    {
+        return '1' === $this->getInputFilterUtil()->getFilteredGetInput('_isiniframe');
     }
 
     /**
@@ -549,7 +562,7 @@ class TCMSListManagerEndPoint
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
     /**
@@ -557,6 +570,11 @@ class TCMSListManagerEndPoint
      */
     protected function getFieldTranslationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

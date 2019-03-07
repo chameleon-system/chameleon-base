@@ -10,14 +10,7 @@ iframe {
     border: none;
 }
 
-HR {
-    border: 0;
-    height: 1px;
-    color: #841313;
-    background-color: #841313;
-}
-
-label {
+label, .action, .card-action {
     cursor: pointer;
     cursor: hand;
 }
@@ -34,82 +27,6 @@ legend {
     font-size: 11px;
 }
 
-.error, .errorMessage {
-    background: #ffcccc url(../images/nav_icons/error.png) no-repeat 5px 9px;
-    color: #900;
-    border: 2px solid #c00;
-    padding-left: 45px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-weight: bold;
-    font-size: 13px;
-    min-height: 40px;
-    display: block;
-}
-
-.notice, .warningMessage, .noticeMessage, span.invalid, span.missing {
-    background: #F8F2AA url(../images/nav_icons/notice.png) no-repeat 5px 9px;
-    color: #0B224B;
-    border: 2px solid #FFB608;
-    padding-left: 45px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-
-    font-weight: bold;
-    font-size: 13px;
-    min-height: 40px;
-    display: block;
-}
-
-div.success, span.success, .successMessage {
-    background: #E3F8D8 url(../images/nav_icons/success.png) no-repeat 5px 9px;
-    color: #0B224B;
-    border: 2px solid #217C21;
-    padding-left: 45px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-weight: bold;
-    font-size: 13px;
-    min-height: 40px;
-    display: block;
-}
-
-/* message for uploads etc. */
-.indicator {
-    background: #F8F2AA url(../images/indicator_medium.gif) no-repeat 5px 9px;
-    color: #0B224B;
-    border: 2px solid #FFB608;
-    padding-left: 45px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-weight: bold;
-    font-size: 11px;
-    min-height: 40px;
-    display: block;
-}
-
-.tinyNotice {
-    color: #0B224B;
-    padding-left: 20px;
-    background-image: url(/chameleon/blackbox/images/icons/information.png);
-    background-repeat: no-repeat;
-    font-size: 12px;
-    line-height: 16px;
-}
-
-.tinyError {
-    color: #900;
-    padding-left: 20px;
-    background-image: url(/chameleon/blackbox/images/icons/exclamation.png);
-    background-repeat: no-repeat;
-    font-size: 12px;
-    line-height: 16px;
-}
-
 .cleardiv {
     clear: both;
     font-size: 0px;
@@ -117,127 +34,14 @@ div.success, span.success, .successMessage {
     height: 0px;
 }
 
-.contentboxHeadline {
-    height: 28px;
-    color: #841313;
-    font-weight: bold;
-    font-size: 13px;
-    letter-spacing: 3px;
-    line-height: 18px;
-}
-
-.contentMessageBox {
-    padding-left: 5px;
-    padding-right: 5px;
-    height: 23px;
-    border: 1px solid #ABBDCD;
-    margin-bottom: 10px;
-    padding-top: 5px;
-}
-
-/* the breadcrumb in treeNode fields */
-.treeField {
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-bottom: 2px;
-    float: left;
-    height: 100%;
-    border: 1px solid #ABBDCD;
-    margin-top: 5px;
-    background-image: url(/chameleon/blackbox/images/icons/page_navigation.gif);
-    background-position: 5px 3px;
-    background-repeat: no-repeat;
-}
-
-.treeField:first-child {
-    margin-top: 0px;
-}
-
-.treeField ul {
-    padding: 0px;
-    margin: 0;
-    list-style: none;
-    list-style-type: none;
-    list-style-image: none;
-    clear: both;
-    padding-left: 20px;
-}
-
-.treeField ul li {
-    display: block;
-    line-height: 21px;
-    color: #0B224B;
-    list-style: none;
-    list-style-type: none;
-    list-style-image: none;
-    line-height: 18px;
-    border: none;
-    float: left;
-}
-
-.treeField ul li .treesubpath {
-    position: relative;
-    top: 1px;
-    float: left;
-    background: url(../images/breadcrumb/arrow.gif) no-repeat;
-    background-position: left;
-    padding-left: 15px;
-    line-height: 21px;
-}
-
-.treeField .dateinfo {
-    float: left;
-    line-height: 21px;
-}
-
-.treeField .dateinfo .dateinfo_inner {
-    padding-left: 25px;
-    line-height: 21px;
-}
-
-.treeField .dateinfo .dateinfo_inner_active {
-    background-image: url(/chameleon/blackbox/images/icons/date_go.png);
-    background-position: 0 2px;
-    background-repeat: no-repeat;
-}
-
-.treeField .dateinfo .dateinfo_inner_none_active {
-    background-image: url(/chameleon/blackbox/images/icons/date_delete.png);
-    background-position: 0 2px;
-    background-repeat: no-repeat;
-}
-
 .pageNavigationTreeSelectBox .treeField ul li .treesubpath {
     line-height: 20px;
     height: 20px;
 }
 
-.modalCloseButton, .modalCloseButton:hover {
-    background: url(../images/icons/action_stop.gif) no-repeat 0px 0px;
-    padding-left: 20px;
-    color: #0B224B;
-    display: block;
-    width: 70px;
-}
-
 /* jquery.flash alt Text */
 .flash-replaced .alt {
     display: none;
-}
-
-.dialogHeadline {
-    padding: 5px;
-    color: #EFEFEF;
-    font-weight: bold;
-    font-size: 12px;
-    line-height: 20px;
-    letter-spacing: 2px;
-    background-image: url(/chameleon/blackbox/images/table_bg.gif);
-    background-position: 50%;
-}
-
-.dialogContent {
-    padding: 3px;
 }
 
 .actionButton, .actionButton:hover {
@@ -252,51 +56,6 @@ div.success, span.success, .successMessage {
     line-height: 22px;
     height: 22px;
     text-decoration: none;
-}
-
-.actionButton:hover {
-    background-color: #21618c;
-    color: #fff;
-    border-color: #083c63;
-}
-
-/* textarea/iFrame resize jquery plugin */
-div.grippie {
-    background: #EEEEEE url(/chameleon/blackbox/images/grippie.png) no-repeat scroll center 2px;
-    border-color: #DDDDDD;
-    border-style: solid;
-    border-width: 0pt 1px 1px;
-    cursor: s-resize;
-    height: 9px;
-    overflow: hidden;
-}
-
-.resizable-textarea textarea {
-    display: block;
-    margin-bottom: 0pt;
-    width: 95%;
-    height: 20%;
-}
-
-.cmsmessage {
-    margin-left: 10px;
-    border: 2px solid #FFB608;
-    padding: 3px;
-    font-size: 12px;
-    color: #0B224B;
-    background-color: #F8F2AA;
-}
-
-.externalLink {
-    padding-left: 20px;
-    background-image: url(/chameleon/blackbox/images/icon_external_link.gif);
-    background-repeat: no-repeat;
-}
-
-.contentbox .evenrow:hover, .contentbox .oddrow:hover, .shadow {
-    -moz-box-shadow: 0 0 4px #666;
-    -webkit-box-shadow: 0 0 4px #666;
-    box-shadow: 0 0 4px #666;
 }
 
 .cmsimage {
@@ -354,16 +113,6 @@ div.grippie {
     padding: 1px 0px 1px 20px;
 }
 
-#topNavSpacer {
-    padding-top: 50px;
-    line-height: 0px;
-    font-size: 0px;
-}
-
-.tabsContainer {
-    padding-left: 20px;
-}
-
 /**
 * needed because bootstrap fields use z-index: 2
 */
@@ -389,14 +138,15 @@ div.grippie {
 }
 
 .app-header .navbar-brand {
-    width: auto;
+    width: 200px;
+    background-repeat: no-repeat;
+    background-position-y: 7px;
 }
 
 /** fix for missing border color, looks like a bootstrap bug */
 .card.bg-success .card-footer {
     border-color: #379457;
 }
-
 
 .alert-warning .lds-ring div {
     border: 6px solid #856404;
@@ -458,11 +208,35 @@ div.grippie {
     width: 30px;
 }
 
-.sidebar-filter-input {
+.sidebar-filter-input, .sidebar-filter-input:focus {
     border-radius: 0;
-    font-family: FontAwesome,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     padding-top: 1.4rem;
     padding-bottom: 1.3rem;
+    padding-left: 2.5em;
+    position: relative;
+    background: transparent;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+
+.sidebar-filter-input-wrapper {
+    margin: 0;
+    background-color: #fff;
+}
+
+.sidebar-filter-input-wrapper:before {
+    position: absolute;
+    left: 1.2em;
+    top: 1.1em;
+    content: "\f002";
+    color: #576873;
+}
+
+.sidebar .nav-dropdown-items .nav-item {
+    background-color: #FFFFFF;
+}
+
+.sidebar .nav-dropdown-items .nav-link {
+    color: #000000 !important;
 }
 
 /**

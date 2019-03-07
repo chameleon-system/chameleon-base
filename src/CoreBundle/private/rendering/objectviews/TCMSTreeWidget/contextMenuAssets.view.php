@@ -23,7 +23,7 @@ obj['create'] = {
 "action"            : function (obj) { CreateNode(obj); },
 "separator_before"  : false,
 "separator_after"   : true,
-"icon"              : '<?= TGlobal::GetStaticURL(URL_CMS.'/images/icons/page_new.gif'); ?>'
+"icon"              : 'fas fa-plus'
 }
 }
 
@@ -34,14 +34,14 @@ obj['remove'] = {
 "action"            : function (obj) { this.remove(obj); },
 "separator_before"  : false,
 "separator_after"   : true,
-"icon"              : '<?= TGlobal::GetStaticURL(URL_CMS.'/images/icons/page_delete.gif'); ?>'
+"icon"              : 'far fa-trash-alt'
 }
 }
 
 if(bHasEditPermission) {
 obj['ccp'] = {
 "separator_before"    : true,
-"icon"        : '<?= TGlobal::GetStaticURL(URL_CMS.'/images/icons/page_copy.png'); ?>',
+"icon"        : 'fas fa-sign-out-alt',
 "separator_after"    : false,
 "label"                : "<?= TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_tree_widget.action_move')); ?>",
 "action"            : false,
@@ -51,7 +51,7 @@ obj['ccp'] = {
 "separator_before"    : false,
 "separator_after"    : false,
 "label"                : "<?= TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_tree_widget.action_cut')); ?>",
-"icon"        : '<?= TGlobal::GetStaticURL(URL_CMS.'/images/icons/cut.png'); ?>',
+"icon"        : 'fas fa-cut',
 "action"            : function (obj) { this.cut(obj); }
 },
 "paste" : {
@@ -59,7 +59,7 @@ obj['ccp'] = {
 "icon"                : false,
 "separator_after"    : false,
 "label"                : "<?= TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_tree_widget.action_paste')); ?>",
-"icon"        : '<?= TGlobal::GetStaticURL(URL_CMS.'/images/icons/page_paste.png'); ?>',
+"icon"        : 'fas fa-paste',
 "action"            : function (obj) { this.paste(obj); }
 }
 }
@@ -75,7 +75,7 @@ UploadFiles(sNodeID);
 },
 "separator_before"  : true,
 "separator_after"   : false,
-"icon"              : '<?= TGlobal::GetStaticURL(URL_CMS.'/images/icons/book_add.png'); ?>'
+"icon"              : 'fas fa-upload'
 }
 
 obj['uploadlocal'] = {
@@ -86,7 +86,7 @@ UploadFilesFromLocal(sNodeID);
 },
 "separator_before"  : false,
 "separator_after"   : false,
-"icon"              : '<?= TGlobal::GetStaticURL(URL_CMS.'/images/icons/folder_add.png'); ?>'
+"icon"              : 'fas fa-file-import'
 }
 }
 
@@ -99,7 +99,7 @@ PasteFiles(sNodeID);
 },
 "separator_before"  : false,
 "separator_after"   : true,
-"icon"              : '<?= TGlobal::GetStaticURL(URL_CMS.'/images/icons/paste.gif'); ?>'
+"icon"              : 'fas fa-sign-in-alt'
 }
 
 }
@@ -117,7 +117,7 @@ obj['rename'] = {
 "separator_before"  : false,
 "separator_after"   : true,
 // false or string - if does not contain `/` - used as classname
-"icon"              : '<?= TGlobal::GetStaticURL(URL_CMS.'/images/icons/page_edit.gif'); ?>'
+"icon"              : 'fas fa-edit'
 }
 }
 

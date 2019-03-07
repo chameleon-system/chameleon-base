@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @deprecated since 6.3.0 - not used anymore
+ */
 class TCMSMediaTreeNode extends TCMSTreeNode
 {
     public function TCMSMediaTreeNode($id = null)
@@ -28,7 +31,6 @@ class TCMSMediaTreeNode extends TCMSTreeNode
         if (is_null($limit)) {
             $limit = 20;
         }
-        $xmlData = '';
 
         if (!is_null($this->id)) {
             $query = "SELECT F.*
@@ -44,11 +46,6 @@ class TCMSMediaTreeNode extends TCMSTreeNode
             $aMediaList = array();
             while ($oFile = $oFileList->Next()) {
                 /** @var $oFile TCMSRecord */
-                $fileTypeQuery = "SELECT `file_extension` FROM `cms_filetype` WHERE `id` = '{$oFile->sqlData['cms_filetype_id']}'";
-                $fileTypeResult = MySqlLegacySupport::getInstance()->query($fileTypeQuery);
-                $fileTypeRow = MySqlLegacySupport::getInstance()->fetch_assoc($fileTypeResult);
-                $iconURL = TGlobal::GetStaticURLToWebLib(URL_FILETYPE_ICONS_LOW_QUALITY.$fileTypeRow['file_extension'].'.png');
-
                 $oImage = new TCMSImage();
                 /** @var $oImage TCMSImage */
                 $oImage->Load($oFile->sqlData['id']);
@@ -63,7 +60,7 @@ class TCMSMediaTreeNode extends TCMSTreeNode
                 $mediaObj->oThumb = $oThumb;
                 $mediaObj->dimensions = $dimensions;
                 $mediaObj->fileSize = $fileSize;
-                $mediaObj->iconURL = $iconURL;
+                $mediaObj->iconURL = '';
 
                 $aMediaList[] = $mediaObj;
             }

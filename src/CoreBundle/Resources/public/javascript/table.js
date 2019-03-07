@@ -111,6 +111,8 @@ function ChangeListMarking(fieldValue, formName) {
  * force links inside table cells to fixed height based on TR height
  */
 $(document).ready(function () {
+    CHAMELEON.CORE.handleFormAndLinkTargetsInModals();
+
     $('.TCMSListManagerFullGroupTable tr.TGroupTableItemRow').each(function () {
         var TRHeight = $(this).innerHeight() - 13; // - TD padding and borders
         $(this).find('a.TGroupTableLink').css('height', TRHeight);
@@ -141,7 +143,7 @@ $(document).ready(function () {
         return document[listname];
     }
 
-    var searchLookup = $("#searchLookup");
+    var searchLookup = $('select#searchLookup');
 
     searchLookup.select2({
         placeholder: searchLookup.data('select2-placeholder'),
@@ -173,14 +175,19 @@ $(document).ready(function () {
     }).on('select2:select', function (e) {
         if (e.params.data.newOption) {
             var listname = searchLookup.data('listname');
-            document[listname]._startRecord.value=0;
+            document[listname]._startRecord.value = 0;
             document[listname].submit();
         } else {
-            var id = e.params.data.id;
+            var id = e.params.data.id.trim();
+
+            if ('' === id) {
+                return;
+            }
+
             switchRecord(id);
         }
     }).on('select2:unselect', function (e) {
-        //:unselect and submit() doesn't transmit the empty searchlookup-Field. Therefore, the value of
+        // :unselect and submit() doesn't transmit the empty searchlookup-Field. Therefore, the value of
         // _search_word is not overwritten (not reset) in the session. With an additional hidden field it works.
         const form = createSearchWordInputWithValue();
         form.submit();
@@ -200,7 +207,7 @@ $(document).ready(function () {
 
         const select2SearchField = document.querySelector('.select2-search__field');
 
-        if (null === select2SearchField || '' === select2SearchField.value) {
+        if (null === select2SearchField || '' === select2SearchField.value ) {
             return;
         }
 
@@ -210,7 +217,7 @@ $(document).ready(function () {
     function switchRecord(id) {
         if ('' !== id) {
             var url = searchLookup.data('record-url') + '&id=' + id;
-            document.location.href = url;
+            top.document.location.href = url;
         }
     }
 });

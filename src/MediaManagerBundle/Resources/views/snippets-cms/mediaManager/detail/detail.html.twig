@@ -1,22 +1,15 @@
-{# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
-{# accessRightsMedia \ChameleonSystem\MediaManager\AccessRightsModel #}
+{# @var mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
+{# @var accessRightsMedia \ChameleonSystem\MediaManager\AccessRightsModel #}
 <div class="snippetMediaManagerDetail cms-media-item" data-id="{{ mediaItem.id }}" data-name="{{ mediaItem.name }}">
-    <div class="details">
-        <div class="image">
+    <div class="row details">
+        <div class="col-12 mb-4 col-xl-5 mb-xl-0 image mb-2">
             <img src="{{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}" alt="" class="preview">
-            <a href="{{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}" target="_blank"
-               class="btn btn-secondary"><span
-                        class="glyphicon glyphicon-download"></span> {{ 'chameleon_system_media_manager.details.download_button' | trans }}
-            </a>
+            <a href="{{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}" target="_blank" class="btn btn-success btn-sm mt-2"><i class="fas fa-download mr-2"></i>{{ 'chameleon_system_media_manager.details.download_button' | trans }}</a>
             {% if accessRightsMedia.edit %}
-                <a href="#" target="_blank" class="btn btn-secondary replace-image"><span
-                            class="glyphicon glyphicon-refresh"></span> {{ 'chameleon_system_media_manager.details.replace_button' | trans }}
-                </a>
+                <a href="#" target="_blank" class="btn btn-primary btn-sm mt-2 replace-image"><i class="fas fa-sync mr-2"></i>{{ 'chameleon_system_media_manager.details.replace_button' | trans }}</a>
             {% endif %}
             {% if accessRightsMedia.delete and not pickImageMode %}
-                <a href="#"
-                   class="btn btn-danger delete-item">{{ 'chameleon_system_media_manager.list_actions.delete' | trans }}
-                    <span class="glyphicon glyphicon-trash"></span></a>
+                <a href="#" class="btn btn-danger btn-sm mt-2 delete-item"><i class="far fa-trash-alt mr-2"></i>{{ 'chameleon_system_media_manager.list_actions.delete' | trans }}</a>
             {% endif %}
 
             {% for additionalButtonTemplate in additionalButtonTemplates %}
@@ -24,25 +17,38 @@
             {% endfor %}
 
             {% if pickImageMode %}
-                <a class="btn btn-secondary pick-image"><span
-                            class="glyphicon glyphicon-ok-circle"></span> {{ 'chameleon_system_media_manager.list_actions.select' | trans }}
-                </a>
+                <a class="btn btn-secondary btn-sm mt-2 pick-image"><i class="far fa-check-circle mr-2"></i>{{ 'chameleon_system_media_manager.list_actions.select' | trans }}</a>
             {% endif %}
 
-            <div class="info">
-                {% if mediaItem.type|lower in ['jpg', 'png', 'gif'] %}<img
-                    src="/chameleon/blackbox/images/filetype_icons/16x16/{{ mediaItem.type|lower }}.png"
-                    alt="">{% endif %} {{ mediaItem.type }}<br>
-                <span class="glyphicon glyphicon-resize-full"></span> {{ mediaItem.width }} x {{ mediaItem.height }}
-                px<br>
-                <span class="glyphicon glyphicon-info-sign"></span> ID {{ mediaItem.id }}<br>
-                <span class="glyphicon glyphicon-new-window"></span> {{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}
-                {% if mediaItem.dateChanged %}<br><span
-                        class="glyphicon glyphicon-time"></span> {{ 'chameleon_system_media_manager.changed_date' | trans }} {{ mediaItem.dateChanged | date('d.m.Y H:i:s') }}{% endif %}
-            </div>
+            <table class="info mt-4">
+                <tr>
+                    <td>
+                       {{ mediaItem.iconHtml|raw }}
+                    </td>
+                    <td>{{ mediaItem.type }}</td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-expand-arrows-alt mr-2"></i></td>
+                    <td>{{ mediaItem.width }} x {{ mediaItem.height }} px</td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-info-circle mr-2"></i></td>
+                    <td>ID {{ mediaItem.id }}</td>
+                </tr>
+                <tr>
+                    <td><i class="far fa-file mr-2"></i></td>
+                    <td>{{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}</td>
+                </tr>
+                {% if mediaItem.dateChanged %}
+                    <tr>
+                        <td><i class="far fa-clock mr-2"></i></td>
+                        <td>{{ 'chameleon_system_media_manager.changed_date' | trans }} {{ mediaItem.dateChanged | date('d.m.Y H:i:s') }}</td>
+                    </tr>
+                {% endif %}
+            </table>
         </div>
 
-        <div class="edit-form">
+        <div class="col-12 col-xl-7 edit-form">
             <iframe src="{{ tableEditorIframeUrl }}"></iframe>
         </div>
     </div>

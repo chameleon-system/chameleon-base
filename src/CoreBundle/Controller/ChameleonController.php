@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
+use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
@@ -126,9 +127,14 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private $inputFilterUtil;
     /**
+     * @var ResourceCollectorInterface
+     */
+    private $resourceCollector;
+    /**
      * @var ResponseVariableReplacerInterface
      */
     private $responseVariableReplacer;
+
 
     /**
      * @param RequestStack                 $requestStack
@@ -434,6 +440,28 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
+     * Returns all module function definitions of the request specified by either POST or GET
+     * in the form 'spot name' => 'method name'. POST has precedence (first in the array).
+     *
+     * @return array
+     */
+    private function getRequestedModuleFunctions(): array
+    {
+        $moduleFunctions = $this->inputFilterUtil->getFilteredPostInput('module_fnc');
+        if (false === \is_array($moduleFunctions)) {
+            $moduleFunctions = [];
+        }
+        $moduleFunctionsGet = $this->inputFilterUtil->getFilteredGetInput('module_fnc');
+        if (false === \is_array($moduleFunctionsGet)) {
+            $moduleFunctionsGet = [];
+        }
+
+        $moduleFunctions = \array_merge($moduleFunctions, $moduleFunctionsGet);
+
+        return $moduleFunctions;
+    }
+
+    /**
      * @param TModelBase $module
      * @param string     $method
      *
@@ -575,8 +603,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
             return $sPageContent; // no replace hooks - so skip process
         }
 
-        $oResourceCollection = new TCMSResourceCollection();
-
         if (null === $aCustomHeaderData) {
             $aCustomHeaderData = $this->_GetCustomHeaderData(true);
             $aCustomHeaderData = $this->splitHeaderDataIntoJSandOther($aCustomHeaderData);
@@ -589,7 +615,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         $sPageContent = str_replace('<!--#CMSHEADERCODE#-->', $sCustomHeaderData, $sPageContent);
 
-        if ($oResourceCollection->IsAllowed()) {
+        if ($this->resourceCollector->IsAllowed()) {
             // need to keep everything in the header since the resource collection looks for it there
             $sPageContent = str_replace('<!--#CMSHEADERCODE-CSS#-->', $sCustomHeaderData, $sPageContent);
         } else {
@@ -689,9 +715,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     protected function runExternalResourceCollectorOnPageContent($sPageContent)
     {
-        $oResourceCollection = new TCMSResourceCollection();
-
-        return $oResourceCollection->CollectExternalResources($sPageContent);
+        return $this->resourceCollector->CollectExternalResources($sPageContent);
     }
 
     /**
@@ -942,30 +966,13 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->inputFilterUtil = $inputFilterUtil;
     }
 
+    public function setResourceCollector(ResourceCollectorInterface $resourceCollector): void
+    {
+        $this->resourceCollector = $resourceCollector;
+    }
+
     public function setResponseVariableReplacer(ResponseVariableReplacerInterface $responseVariableReplacer): void
     {
         $this->responseVariableReplacer = $responseVariableReplacer;
-    }
-
-    /**
-     * Returns all module function definitions of the request specified by either POST or GET
-     * in the form 'spot name' => 'method name'. POST has precedence (first in the array).
-     *
-     * @return array
-     */
-    private function getRequestedModuleFunctions(): array
-    {
-        $moduleFunctions = $this->inputFilterUtil->getFilteredPostInput('module_fnc');
-        if (false === \is_array($moduleFunctions)) {
-            $moduleFunctions = [];
-        }
-        $moduleFunctionsGet = $this->inputFilterUtil->getFilteredGetInput('module_fnc');
-        if (false === \is_array($moduleFunctionsGet)) {
-            $moduleFunctionsGet = [];
-        }
-
-        $moduleFunctions = \array_merge($moduleFunctions, $moduleFunctionsGet);
-
-        return $moduleFunctions;
     }
 }

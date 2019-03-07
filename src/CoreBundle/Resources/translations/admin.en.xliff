@@ -175,6 +175,7 @@
             <trans-unit id="chameleon_system_core.template_engine.header_revision">
                 <source>chameleon_system_core.template_engine.header_revision</source>
                 <target>Version</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.header_navigation">
                 <source>chameleon_system_core.template_engine.header_navigation</source>
@@ -269,7 +270,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_timestamp.last_change">
                 <source>chameleon_system_core.field_timestamp.last_change</source>
-                <target>last change on: %timestamp% Uhr"</target>
+                <target>last change on: %timestamp% h</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_timestamp.will_be_set_to">
                 <source>chameleon_system_core.field_timestamp.will_be_set_to</source>
@@ -431,7 +432,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_lookup_multi_select.action_sort_connections">
                 <source>chameleon_system_core.field_lookup_multi_select.action_sort_connections</source>
-                <target>Order records</target>
+                <target>Sort records</target>
             </trans-unit>
 
 
@@ -481,7 +482,10 @@
                 <source>chameleon_system_core.field_media.active_upload_folder</source>
                 <target>Images will be uploaded to folder %sDefaultCategory%</target>
             </trans-unit>
-
+            <trans-unit id="chameleon_system_core.field_media.select_dialog_title">
+                <source>chameleon_system_core.field_media.select_dialog_title</source>
+                <target>Please choose an image</target>
+            </trans-unit>
 
             <trans-unit id="chameleon_system_core.field_property_media.error_missing_target">
                 <source>chameleon_system_core.field_property_media.error_missing_target</source>
@@ -536,7 +540,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_lookup_multi_select.sort">
                 <source>chameleon_system_core.field_lookup_multi_select.sort</source>
-                <target>Order records</target>
+                <target>Sort records</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_lookup_multi_select.connect_elements">
                 <source>chameleon_system_core.field_lookup_multi_select.connect_elements</source>
@@ -902,66 +906,82 @@
             <trans-unit id="chameleon_system_core.record_revision.based_on">
                 <source>chameleon_system_core.record_revision.based_on</source>
                 <target>based on rev.</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.revision_number">
                 <source>chameleon_system_core.record_revision.revision_number</source>
                 <target>Revision</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.last_used_date">
                 <source>chameleon_system_core.record_revision.last_used_date</source>
                 <target>last used</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.name">
                 <source>chameleon_system_core.record_revision.name</source>
                 <target>Title</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.description">
                 <source>chameleon_system_core.record_revision.description</source>
                 <target>Description</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.no_revision_exists">
                 <source>chameleon_system_core.record_revision.no_revision_exists</source>
                 <target>unversioned</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.action_restore_revision">
                 <source>chameleon_system_core.record_revision.action_restore_revision</source>
                 <target>restore record revision</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.confirm_restore_revision">
                 <source>chameleon_system_core.record_revision.confirm_restore_revision</source>
                 <target>The current record will be overwritten by an older revision, are you sure?&lt;br/&gt;You should create a new revision&lt;br/&gt;if you're not sure</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.action_confirm_restore_revision">
                 <source>chameleon_system_core.record_revision.action_confirm_restore_revision</source>
                 <target>OK</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.header_new_revision">
                 <source>chameleon_system_core.record_revision.header_new_revision</source>
                 <target>Create revision</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.new_revision_help">
                 <source>chameleon_system_core.record_revision.new_revision_help</source>
                 <target>Please note: All unsaved data will not be revisioned and therefore be lost.</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.new_revision_number">
                 <source>chameleon_system_core.record_revision.new_revision_number</source>
                 <target>New revision</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.action_new_revision">
                 <source>chameleon_system_core.record_revision.action_new_revision</source>
                 <target>Create revision</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.action_load_revision">
                 <source>chameleon_system_core.record_revision.action_load_revision</source>
                 <target>Load revision</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.action_create_page_revision">
                 <source>chameleon_system_core.record_revision.action_create_page_revision</source>
-                <target>Create page revisi</target>
+                <target>Create page revision</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.record_revision.action_load_page_revision">
                 <source>chameleon_system_core.record_revision.action_load_page_revision</source>
                 <target>Load page revision</target>
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
 
 
@@ -1843,7 +1863,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_header.action_main_menu">
                 <source>chameleon_system_core.cms_module_header.action_main_menu</source>
-                <target>Main menu</target>
+                <target>Home</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.cms_module_login.form_user_name">
@@ -2093,7 +2113,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.action.return_to_main_menu">
                 <source>chameleon_system_core.action.return_to_main_menu</source>
-                <target>Return to main menu</target>
+                <target>Return to home</target>
                 <note>@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
 
@@ -2198,6 +2218,14 @@
             <trans-unit id="chameleon_system_core.image_chooser.tree_node">
                 <source>chameleon_system_core.image_chooser.tree_node</source>
                 <target>Directory</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.title">
+                <source>chameleon_system_core.document_manager.title</source>
+                <target>Documents</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.folders">
+                <source>chameleon_system_core.document_manager.folders</source>
+                <target>Folders</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_manager.insert_into_text">
                 <source>chameleon_system_core.document_manager.insert_into_text</source>

@@ -78,7 +78,7 @@ $menuPrefix = $oField->name;
             for (var i = 0; i < data.length; i++) {
                 message += '<div style="padding-bottom: 10px;">';
                 message += data[i].tree;
-                message += '<a href="<?=$sPageEditURL; ?>&id=' + data[i].id + '" target="_parent" class="actionButton"><?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_page_tree.action_edit_page')); ?></a><hr width="95%" />';
+                message += '<a href="<?=$sPageEditURL; ?>&id=' + data[i].id + '" target="_parent" class="btn btn-danger"><?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_page_tree.action_edit_page')); ?></a><hr width="95%" />';
                 message += '</div>';
             }
             CreateModalIFrameDialogFromContent(message);

@@ -728,7 +728,7 @@ class TCMSLogChange
      * 4 = add new language
      * 5 = publish record using workflow (deprecated since 6.2.0 - do not use)
      * 6 = show all records
-     * 7 = revision management
+     * 7 = revision management (@deprecated since 6.3.0 - revision management is no longer supported)
      *
      * @param string     $sRoleName
      * @param string     $sTableName
