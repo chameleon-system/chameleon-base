@@ -120,15 +120,38 @@ $(document).ready(function () {
         $(this).select2($(this).data('select2-option'));
     });
 
+    function createSearchWordInputWithValue(value){
+        const listname = searchLookup.data('listname');
+
+        if ('' === listname) {
+            return;
+        }
+
+        const input = document.createElement('input');
+
+        input.setAttribute('type', 'hidden');
+        input.setAttribute('name', '_search_word');
+        if ('string' === typeof value && '' !== value) {
+            input.setAttribute('value', value);
+        }
+
+        document[listname].appendChild(input);
+        document[listname]._startRecord.value=0;
+
+        return document[listname];
+    }
+
     var searchLookup = $("#searchLookup");
 
     searchLookup.select2({
         placeholder: searchLookup.data('select2-placeholder'),
         allowClear: true,
+        minimumInputLength: 1,
         ajax: {
+            debug: true,
             url: searchLookup.data('select2-ajax'),
             dataType: 'json',
-            delay: 150,
+            // delay: 150,
             processResults: function (data) {
                 return {
                     results: JSON.parse(data)
@@ -161,14 +184,29 @@ $(document).ready(function () {
     }).on('select2:unselect', function (e) {
         //:unselect and submit() doesn't transmit the empty searchlookup-Field. Therefore, the value of
         // _search_word is not overwritten (not reset) in the session. With an additional hidden field it works.
-        var input = document.createElement('input');
-        input.setAttribute('type', 'hidden');
-        input.setAttribute('name', '_search_word');
+        const form = createSearchWordInputWithValue();
+        form.submit();
+    }).on('select2:closing', function(e, what) {
+        // If the select2 widget's autocomplete list is being closed without any selection made
+        // we will check whether a search term has been typed into the search field.
+        // If the search field contains a value an additional input field will be added to the form. After closing the
+        // autocomplete list by hitting the enter key the `select` listener will be triggered which will handle the
+        // input as `newOption`.
 
-        var listname = searchLookup.data('listname');
-        document[listname].appendChild(input);
-        document[listname]._startRecord.value=0;
-        document[listname].submit();
+        // Known drawback: The search field associated to the current select2 widget can not be directly determined as
+        // select2 does not expose any way to retrieve it. Therefore the DOM will be queried for the
+        // search field's selector.
+        // The query will return the first search field found in the DOM which might not be the desired one.
+        // Yet as select2 creates a new search field on activating the widget and removes it when unnecessary there
+        // should be only one search field present in the DOM.
+
+        const select2SearchField = document.querySelector('.select2-search__field');
+
+        if (null === select2SearchField || '' === select2SearchField.value) {
+            return;
+        }
+
+        createSearchWordInputWithValue(select2SearchField.value);
     });
 
     function switchRecord(id) {
