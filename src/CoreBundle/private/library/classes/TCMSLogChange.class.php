@@ -600,6 +600,37 @@ class TCMSLogChange
         }
     }
 
+    public static function moveMenuCategoryPositionAfterTarget(
+        string $sourceMenuCategorySystemName,
+        string $targetMenuCategorySystemName): bool
+    {
+        $databaseConnection = self::getDatabaseConnection();
+
+        $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
+        $sourceMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $sourceMenuCategorySystemName));
+
+        if (false === $sourceMenu) {
+            return false;
+        }
+
+        $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
+        $targetMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $targetMenuCategorySystemName));
+
+        if (false === $targetMenu) {
+            return false;
+        }
+
+        $newPosition = (int) $targetMenu['position'] + 1;
+
+        $query = 'UPDATE `cms_menu_category` SET `position` = `position`+1 WHERE `position` >= :newPosition';
+        $databaseConnection->executeQuery($query, array('newPosition' => $newPosition));
+
+        $query = 'UPDATE `cms_menu_category` SET `position` = :newPosition WHERE `id` = :sourceId';
+        $databaseConnection->executeQuery($query, array('newPosition' => $newPosition, 'sourceId' => $sourceMenu['id']));
+
+        return true;
+    }
+
     /**
      * fetches the id of a user role by given identifier e.g. 'chief_editor'.
      *
@@ -1369,7 +1400,7 @@ class TCMSLogChange
 
     /**
      * return id of the content-box with the name passed. return empty string, if the
-     * content box does n.
+     * content box does not exist.
      *
      * @static
      *
