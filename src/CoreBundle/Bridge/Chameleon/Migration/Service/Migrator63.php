@@ -272,7 +272,7 @@ class Migrator63
 
                 $this->createAllUnhandledOldMenuItemsForGroup($oldMenuGroupId, $newMenuGroupId);
             } else {
-                $newMenuGroupId = $this->createMenuCategory($row);
+                $newMenuGroupId = $this->createMenuCategoryFromOldMenuRecord($row);
                 $oldMenuGroupId = $row['id'];
 
                 $this->createAllUnhandledOldMenuItemsForGroup($oldMenuGroupId, $newMenuGroupId);
@@ -281,7 +281,18 @@ class Migrator63
         $statement->closeCursor();
     }
 
-    private function createMenuCategory(array $row): string
+    public function migrateTableMenuItemsByOldMenuGroupSystemName(string $oldMenuGroupSystemName): void
+    {
+        $query = 'SELECT * FROM `cms_content_box` WHERE `system_name` = :systemName';
+        $row = $this->databaseConnection->fetchAssoc($query, array('systemName' => $oldMenuGroupSystemName));
+
+        $newMenuGroupId = $this->createMenuCategoryFromOldMenuRecord($row);
+        $oldMenuGroupId = $row['id'];
+
+        $this->createAllUnhandledOldMenuItemsForGroup($oldMenuGroupId, $newMenuGroupId);
+    }
+
+    private function createMenuCategoryFromOldMenuRecord(array $row): string
     {
         $systemName = $row['system_name'];
 
