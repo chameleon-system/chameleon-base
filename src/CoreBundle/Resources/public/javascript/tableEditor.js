@@ -798,6 +798,14 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     var quicklookuplist = $('#quicklookuplist');
     quicklookuplist.select2({
         placeholder: quicklookuplist.data('select2-placeholder'),
+        templateResult: function (data, container) {
+            // transfer class to select2 element
+            if (data.class && '' !== data.class) {
+                $(container).addClass(data.class);
+            }
+
+            return data.text;
+        },
         ajax: {
             url: quicklookuplist.data('select2-ajax'),
             dataType: 'json',
@@ -809,7 +817,12 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
         }
     }
     }).on('select2:select', function (e) {
-        var id = e.params.data.id;
+        var id = e.params.data.id.trim();
+
+        if ('' === id) {
+            return;
+        }
+
         switchRecord(id);
     });
 

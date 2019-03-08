@@ -441,17 +441,19 @@ class MTTableManager extends TCMSModelBase
         $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $this->getAutocompleteListQuery());
 
         $returnVal = [];
-        $returnVal[] = ['id' => ' ', 'text' => ' '];
+        $returnVal[] = ['id' => ' ', 'text' => ' ', 'html' => ' ', 'class' => 'd-none'];
 
         /** @var $record TCMSRecord */
         while ($record = $recordList->Next()) {
             $name = $record->GetName();
             if (!empty($name)) {
-                $html = $name;
+
+                // highlight active record
+                $cssClass = '';
                 if ($record->id == $recordID) {
-                    $html = '<strong>'.$name.'</strong>';
+                    $cssClass = 'bg-success';
                 }
-                $returnVal[] = ['id' => $record->id, 'text' => $name, 'html' => $html];
+                $returnVal[] = ['id' => $record->id, 'text' => $name, 'html' => $name, 'class' => $cssClass];
             }
         }
 
