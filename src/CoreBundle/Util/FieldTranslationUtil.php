@@ -222,7 +222,9 @@ class FieldTranslationUtil
 
         $translatableString = $translatable ? '1' : '0';
         $tableEditorManager = TTools::GetTableEditorManager('cms_field_conf', $fieldId);
+        $tableEditorManager->AllowEditByAll(true);
         $tableEditorManager->SaveField('is_translatable', $translatableString);
+        $tableEditorManager->AllowEditByAll(false);
         $fieldConf->fieldIsTranslatable = $translatable;
         $fieldConf->sqlData['is_translatable'] = $translatableString;
 
