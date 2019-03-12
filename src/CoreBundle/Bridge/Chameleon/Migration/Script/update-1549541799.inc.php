@@ -18,14 +18,12 @@ c Media                                 contents
 c Documents                             contents
 t pkg_cms_text_block                    contents
 t pkg_multi_module_set                  contents
-t cms_tags                              contents
 t data_extranet_user                    externalusers
 t data_extranet_group                   externalusers
 t data_extranet                         externalusers
 t data_extranet_salutation              externalusers
 t data_country                          internationalization
 t cms_locals                            internationalization
-t cms_web_translation                   internationalization
 t cms_translation                       internationalization
 t pkg_cms_changelog_set                 analytics
 t data_mail_profile                     communication
