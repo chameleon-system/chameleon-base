@@ -600,24 +600,30 @@ class TCMSLogChange
         }
     }
 
-    public static function moveMenuCategoryPositionAfterTarget(
-        string $sourceMenuCategorySystemName,
-        string $targetMenuCategorySystemName): bool
+    public static function setMainMenuPosition(
+        string $mainMenuCategorySystemName,
+        string $afterThisMainMenuCategory): void
     {
         $databaseConnection = self::getDatabaseConnection();
 
         $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
-        $sourceMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $sourceMenuCategorySystemName));
+        $sourceMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $mainMenuCategorySystemName));
 
         if (false === $sourceMenu) {
-            return false;
+            $message = sprintf('Could not place main menu category: %s, because this category is missing.', $mainMenuCategorySystemName);
+            self::addInfoMessage($message, self::INFO_MESSAGE_LEVEL_WARNING);
+
+            return;
         }
 
         $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
-        $targetMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $targetMenuCategorySystemName));
+        $targetMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $afterThisMainMenuCategory));
 
         if (false === $targetMenu) {
-            return false;
+            $message = sprintf('Could not place main menu category: %s, behind %s because the target category is missing.', $mainMenuCategorySystemName, $afterThisMainMenuCategory);
+            self::addInfoMessage($message, self::INFO_MESSAGE_LEVEL_WARNING);
+
+            return;
         }
 
         $newPosition = (int) $targetMenu['position'] + 1;
@@ -627,8 +633,6 @@ class TCMSLogChange
 
         $query = 'UPDATE `cms_menu_category` SET `position` = :newPosition WHERE `id` = :sourceId';
         $databaseConnection->executeQuery($query, array('newPosition' => $newPosition, 'sourceId' => $sourceMenu['id']));
-
-        return true;
     }
 
     /**
