@@ -41,11 +41,11 @@ class MainMenuMigrator
         $this->databaseConnection = $databaseConnection;
         $this->tools = $tools;
 
-        $this->setIconMapping();
-        $this->setMainCategoryMapping();
+        $this->initIconMapping();
+        $this->initMainCategoryMapping();
     }
 
-    private function setIconMapping(): void
+    private function initIconMapping(): void
     {
         $this->iconMapping = array(
             'accept.png' => 'fas fa-check-circle',
@@ -199,7 +199,7 @@ class MainMenuMigrator
     }
 
     /**
-     * Returns map all table icons with new font icons based on the file names.
+     * Returns a mapping from old table icons based on file names to new icons based on an icon font.
      *
      * @return array
      */
@@ -209,9 +209,9 @@ class MainMenuMigrator
     }
 
     /**
-     * Returns mapping of old main category groups to new sidebar menu groups.
+     * Returns a mapping of old main menu content boxes to new sidebar menu categories.
      */
-    private function setMainCategoryMapping(): void
+    private function initMainCategoryMapping(): void
     {
         $this->mainCategoryMapping = array(
             'system_website' => 'contents',
@@ -236,13 +236,8 @@ class MainMenuMigrator
         );
     }
 
-    public function addMainCategoryMapping(array $mainCategoryMapping): void
-    {
-        $this->mainCategoryMapping = \array_merge($mainCategoryMapping, $this->mainCategoryMapping);
-    }
-
     /**
-     * Returns mapping of old main category groups to new sidebar menu groups.
+     * Returns a mapping of old main menu content boxes to new sidebar menu categories.
      */
     public function getMainCategoryMapping(): array
     {
@@ -251,7 +246,6 @@ class MainMenuMigrator
 
     public function migrateUnhandledTableMenuItems(array $additionalMainCategoryMapping = []): void
     {
-        // get all main categories
         $statement = $this->databaseConnection->executeQuery('SELECT * FROM `cms_content_box` ORDER BY `name` ASC');
 
         $mainCategoryMapping = $this->getMainCategoryMapping();
