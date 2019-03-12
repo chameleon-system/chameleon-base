@@ -441,7 +441,7 @@ class MTTableManager extends TCMSModelBase
         $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $this->getAutocompleteListQuery());
 
         $returnVal = [];
-        $returnVal[] = ['id' => ' ', 'text' => ' ', 'html' => ' ', 'class' => 'd-none'];
+        $returnVal[] = ['id' => ' ', 'text' => ' ', 'html' => ' ', 'cssClass' => 'd-none'];
 
         /** @var $record TCMSRecord */
         while ($record = $recordList->Next()) {
@@ -453,7 +453,7 @@ class MTTableManager extends TCMSModelBase
                 if ($record->id == $recordID) {
                     $cssClass = 'bg-success';
                 }
-                $returnVal[] = ['id' => $record->id, 'text' => $name, 'html' => $name, 'class' => $cssClass];
+                $returnVal[] = ['id' => $record->id, 'text' => $name, 'html' => $name, 'cssClass' => $cssClass];
             }
         }
 

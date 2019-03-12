@@ -800,8 +800,8 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
         placeholder: quicklookuplist.data('select2-placeholder'),
         templateResult: function (data, container) {
             // transfer class to select2 element
-            if (data.class && '' !== data.class) {
-                $(container).addClass(data.class);
+            if (data.cssClass && '' !== data.cssClass) {
+                $(container).addClass(data.cssClass);
             }
 
             return data.text;
