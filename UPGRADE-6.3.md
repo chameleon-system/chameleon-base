@@ -416,10 +416,6 @@ should be quite straightforward.
 Also some menu items that were located in the top bar were now moved to the sidebar. Finally the backend modules that
 were called in a popup window, like navigation, product search index generation and sanity check, now open inline.
 
-From a technical point no changes are required if the project is a shop system. Projects that are pure CMS systems
-should consider removing menu categories that are nevertheless created during migration. Note that there will be some
-error messages during migration that complain about missing shop tables and modules in this case, which can be ignored. 
-
 ## Home Page Changes
 
 As the main menu is now displayed in the sidebar, the classic main menu was replaced by a welcome screen (which we plan
