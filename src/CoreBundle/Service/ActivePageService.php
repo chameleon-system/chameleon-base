@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Service;
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ChangeActivePageEvent;
+use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
 use ChameleonSystem\CoreBundle\Service\Initializer\ActivePageServiceInitializerInterface;
 use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -24,9 +25,6 @@ use Symfony\Component\Routing\RouterInterface;
 use TCMSActivePage;
 use TdbCmsLanguage;
 
-/**
- * Class ActivePageService.
- */
 class ActivePageService implements ActivePageServiceInterface
 {
     /**
@@ -44,7 +42,11 @@ class ActivePageService implements ActivePageServiceInterface
     /**
      * @var RouterInterface
      */
-    private $router;
+    private $defaultRouter;
+    /**
+     * @var PortalAndLanguageAwareRouterInterface
+     */
+    private $frontendRouter;
     /**
      * @var TCMSActivePage
      */
@@ -66,22 +68,13 @@ class ActivePageService implements ActivePageServiceInterface
      */
     private $eventDispatcher;
 
-    /**
-     * @param LanguageServiceInterface              $languageService
-     * @param ActivePageServiceInitializerInterface $activePageServiceInitializer
-     * @param RequestStack                          $requestStack
-     * @param RouterInterface                       $router
-     * @param UrlUtil                               $urlUtil
-     * @param RequestInfoServiceInterface           $requestInfoService
-     * @param RoutingUtilInterface                  $routingUtil
-     * @param EventDispatcherInterface              $eventDispatcher
-     */
-    public function __construct(LanguageServiceInterface $languageService, ActivePageServiceInitializerInterface $activePageServiceInitializer, RequestStack $requestStack, RouterInterface $router, UrlUtil $urlUtil, RequestInfoServiceInterface $requestInfoService, RoutingUtilInterface $routingUtil, EventDispatcherInterface $eventDispatcher)
+    public function __construct(LanguageServiceInterface $languageService, ActivePageServiceInitializerInterface $activePageServiceInitializer, RequestStack $requestStack, RouterInterface $defaultRouter, PortalAndLanguageAwareRouterInterface $frontendRouter, UrlUtil $urlUtil, RequestInfoServiceInterface $requestInfoService, RoutingUtilInterface $routingUtil, EventDispatcherInterface $eventDispatcher)
     {
         $this->languageService = $languageService;
         $this->activePageServiceInitializer = $activePageServiceInitializer;
         $this->requestStack = $requestStack;
-        $this->router = $router;
+        $this->defaultRouter = $defaultRouter;
+        $this->frontendRouter = $frontendRouter;
         $this->urlUtil = $urlUtil;
         $this->requestInfoService = $requestInfoService;
         $this->routingUtil = $routingUtil;
@@ -149,12 +142,11 @@ class ActivePageService implements ActivePageServiceInterface
      * @param array               $additionalParameters
      * @param array               $excludeParameters
      * @param TdbCmsLanguage|null $language
-     * @param bool|string         $referenceType
-     * @param bool                $forceSecure
+     * @param bool|string|int     $referenceType
      *
      * @return string
      */
-    private function getLinkToActivePage(array $additionalParameters = array(), array $excludeParameters = array(), TdbCmsLanguage $language = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH, $forceSecure = false)
+    private function getLinkToActivePage(array $additionalParameters = array(), array $excludeParameters = array(), TdbCmsLanguage $language = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $request = $this->requestStack->getMasterRequest();
         $route = $request->attributes->get('_route');
@@ -169,24 +161,32 @@ class ActivePageService implements ActivePageServiceInterface
         if ('cms_pagedef' === $route) {
             return $this->urlUtil->getArrayAsUrl($finalParameterList, PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'?', '&');
         }
+
+        if (true === $this->requestInfoService->isBackendMode()) {
+            return $this->defaultRouter->generate($route, $finalParameterList);
+        }
+
         /*
          * The link may not contain a pagedef parameter. It is intended to solve this the "right" way by not adding
-         * the parameter to the query parameters in the first place (ticket #30278), but as long as the request contains
-         * this parameter, we need to deal with it manually.
+         * the parameter to the query parameters in the first place (https://github.com/chameleon-system/chameleon-system/issues/351),
+         * but as long as the request contains this parameter, we need to deal with it manually.
          */
-        if (isset($finalParameterList['pagedef'])
-            && !$this->requestInfoService->isBackendMode()) {
-            unset($finalParameterList['pagedef']);
-        }
+        unset($finalParameterList['pagedef']);
 
         /*
-         * Routes have the form "routeName" or "routeName-portalId-languageIso"
+         * Routes have the form "routeName" or "routeName-portalId-languageIso". We remove portalId and languageIso here
+         * because they will be re-added by the router.
          */
-        if (null !== $language && '-' === substr($route, -3, 1)) {
-            $route = substr($route, 0, -2).$language->fieldIso6391;
+        if ('-' === \substr($route, -3, 1)) {
+            $route = \substr($route, 0, -3);
+            $route = \substr($route, 0, \strrpos($route, '-'));
         }
 
-        return $this->router->generate($route, $finalParameterList, $referenceType);
+        /**
+         * We need to call the frontend router explicitly, as it contains logic that makes sure the correct domain is
+         * used (domain might e.g. be different if another language is requested).
+         */
+        return $this->frontendRouter->generateWithPrefixes($route, $finalParameterList, null, $language, $referenceType);
     }
 
     /**
@@ -215,22 +215,16 @@ class ActivePageService implements ActivePageServiceInterface
                 }
                 if (is_array($exclude)) {
                     foreach ($exclude as $excludeItem) {
-                        if (isset($parameters[$arrayName][$excludeItem])) {
-                            unset($parameters[$arrayName][$excludeItem]);
-                        }
+                        unset($parameters[$arrayName][$excludeItem]);
                     }
                 } else {
-                    if (isset($parameters[$arrayName][$exclude])) {
-                        unset($parameters[$arrayName][$exclude]);
-                    }
+                    unset($parameters[$arrayName][$exclude]);
                 }
                 if (empty($parameters[$arrayName])) {
                     unset($parameters[$arrayName]);
                 }
             } else {
-                if (isset($parameters[$exclude])) {
-                    unset($parameters[$exclude]);
-                }
+                unset($parameters[$exclude]);
             }
         }
         $parameters = array_merge($parameters, $additionalParameters);
