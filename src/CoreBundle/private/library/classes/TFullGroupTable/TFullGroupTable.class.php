@@ -962,8 +962,7 @@ class TFullGroupTable extends TGroupTable
             'pagedef' => $pagedef,
             'tableid' => $tableId,
             'sRestriction' => '',
-            'sRestrictionField' => '',
-            'popLastURL' => '1'
+            'sRestrictionField' => ''
         ], PATH_CMS_CONTROLLER.'?', '&');
 
         return $recordUrl;
