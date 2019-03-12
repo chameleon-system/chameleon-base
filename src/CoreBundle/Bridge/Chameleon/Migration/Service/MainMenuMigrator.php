@@ -10,6 +10,7 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service;
 
+use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use Doctrine\DBAL\Connection;
 
 class MainMenuMigrator
@@ -18,6 +19,16 @@ class MainMenuMigrator
      * @var Connection
      */
     private $databaseConnection;
+
+    /**
+     * @var \TTools
+     */
+    private $tools;
+
+    /**
+     * @var FieldTranslationUtil
+     */
+    private $fieldTranslationUtil;
 
     /**
      * @var array
@@ -29,17 +40,14 @@ class MainMenuMigrator
      */
     private $mainCategoryMapping = [];
 
-    /**
-     * @var \TTools
-     */
-    private $tools;
-
     public function __construct(
         Connection $databaseConnection,
-        \TTools $tools)
+        \TTools $tools,
+        FieldTranslationUtil $fieldTranslationUtil)
     {
         $this->databaseConnection = $databaseConnection;
         $this->tools = $tools;
+        $this->fieldTranslationUtil = $fieldTranslationUtil;
 
         $this->initIconMapping();
         $this->initMainCategoryMapping();
@@ -255,29 +263,29 @@ class MainMenuMigrator
             if (isset($mainCategoryMapping[$row['system_name']])) {
                 $sidebarCategorySystemName = $mainCategoryMapping[$row['system_name']];
                 $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
-                $newMenuGroupId = $this->databaseConnection->fetchColumn($query, ['systemName' => $sidebarCategorySystemName]);
-                $oldMenuGroupId = $row['id'];
+                $newCategoryId = $this->databaseConnection->fetchColumn($query, ['systemName' => $sidebarCategorySystemName]);
+                $oldContentBoxId = $row['id'];
 
-                $this->createAllUnhandledOldMenuItemsForGroup($oldMenuGroupId, $newMenuGroupId);
+                $this->createAllUnhandledOldMenuItemsForCategory($oldContentBoxId, $newCategoryId);
             } else {
-                $newMenuGroupId = $this->createMenuCategoryFromOldMenuRecord($row);
-                $oldMenuGroupId = $row['id'];
+                $newCategoryId = $this->createMenuCategoryFromOldMenuRecord($row);
+                $oldContentBoxId = $row['id'];
 
-                $this->createAllUnhandledOldMenuItemsForGroup($oldMenuGroupId, $newMenuGroupId);
+                $this->createAllUnhandledOldMenuItemsForCategory($oldContentBoxId, $newCategoryId);
             }
         }
         $statement->closeCursor();
     }
 
-    public function migrateTableMenuItemsByOldMenuGroupSystemName(string $oldMenuGroupSystemName): void
+    public function migrateTableMenuItemsByOldContentBoxSystemName(string $oldContentBoxSystemName): void
     {
-        $query = 'SELECT * FROM `cms_content_box` WHERE `system_name` = :systemName';
-        $row = $this->databaseConnection->fetchAssoc($query, array('systemName' => $oldMenuGroupSystemName));
+        $query = 'SELECT `id` FROM `cms_content_box` WHERE `system_name` = :systemName';
+        $row = $this->databaseConnection->fetchAssoc($query, array('systemName' => $oldContentBoxSystemName));
 
-        $newMenuGroupId = $this->createMenuCategoryFromOldMenuRecord($row);
-        $oldMenuGroupId = $row['id'];
+        $newCategoryId = $this->createMenuCategoryFromOldMenuRecord($row);
+        $oldContentBoxId = $row['id'];
 
-        $this->createAllUnhandledOldMenuItemsForGroup($oldMenuGroupId, $newMenuGroupId);
+        $this->createAllUnhandledOldMenuItemsForCategory($oldContentBoxId, $newCategoryId);
     }
 
     private function createMenuCategoryFromOldMenuRecord(array $row, array $additionalIconMapping = []): string
@@ -294,36 +302,41 @@ class MainMenuMigrator
 
         $iconFontClass = $this->getFontIconStyleByImage($row['icon_list'], $additionalIconMapping);
 
-        // create missing menu group
-        $menuGroupId = \TCMSLogChange::createUnusedRecordId('cms_menu_category');
+        $englishLanguage = \TdbCmsLanguage::GetNewInstance();
+        $englishLanguage->LoadFromField('iso_6391', 'en');
+
+        $menuCategoryId = \TCMSLogChange::createUnusedRecordId('cms_menu_category');
         $data = \TCMSLogChange::createMigrationQueryData('cms_menu_category', 'en')
             ->setFields([
-                'name' => \trim($row['name__en']),
+                'name' => \trim($row[$this->fieldTranslationUtil->getTranslatedFieldName('cms_menu_category', 'name', $englishLanguage)]),
                 'system_name' => $systemName,
                 'icon_font_css_class' => $iconFontClass,
                 'position' => $lastPosition,
-                'id' => $menuGroupId,
+                'id' => $menuCategoryId,
             ])
         ;
         \TCMSLogChange::insert(__LINE__, $data);
 
+        $germanLanguage = \TdbCmsLanguage::GetNewInstance();
+        $germanLanguage->LoadFromField('iso_6391', 'de');
+
         $data = \TCMSLogChange::createMigrationQueryData('cms_menu_category', 'de')
             ->setFields([
-                'name' => \trim($row['name']),
+                'name' => \trim($row[$this->fieldTranslationUtil->getTranslatedFieldName('cms_menu_category', 'name', $germanLanguage)]),
                 'system_name' => $systemName,
                 'icon_font_css_class' => $iconFontClass,
                 'position' => $lastPosition,
             ])
             ->setWhereEquals([
-                'id' => $menuGroupId,
+                'id' => $menuCategoryId,
             ])
         ;
         \TCMSLogChange::update(__LINE__, $data);
 
-        return $menuGroupId;
+        return $menuCategoryId;
     }
 
-    private function createAllUnhandledOldMenuItemsForGroup(string $oldMenuGroupId, string $newMenuGroupId, array $additionalIconMapping = []): void
+    private function createAllUnhandledOldMenuItemsForCategory(string $oldContentBoxId, string $newCategoryId, array $additionalIconMapping = []): void
     {
         $languageList = $this->getAllSupportedLanguages();
 
@@ -338,7 +351,7 @@ class MainMenuMigrator
                    )
             ORDER BY `cms_tbl_conf`.`translation` ASC
 ";
-        $statement = $this->databaseConnection->executeQuery($query, ['contentBoxId' => $oldMenuGroupId, '']);
+        $statement = $this->databaseConnection->executeQuery($query, ['contentBoxId' => $oldContentBoxId, '']);
 
         $position = 0;
         while (false !== $row = $statement->fetch()) {
@@ -357,11 +370,11 @@ class MainMenuMigrator
                 'target_table_name' => 'cms_tbl_conf',
                 'icon_font_css_class' => $iconFontClass,
                 'position' => $position,
-                'cms_menu_category_id' => $newMenuGroupId,
+                'cms_menu_category_id' => $newCategoryId,
             ];
             foreach ($languageList as $language) {
-                if (true === \array_key_exists("translation__$language", $row)) {
-                    $menuItemData["name__$language"] = \trim($row["translation__$language"]);
+                if (true === \array_key_exists("translation__".$language, $row)) {
+                    $menuItemData["name__".$language] = \trim($row["translation__".$language]);
                 }
             }
 
