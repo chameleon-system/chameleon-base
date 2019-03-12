@@ -885,7 +885,7 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     // catch arrow key keypress on select2 containers to open the select2 pulldown.
     $('.select2.select2-container').on('keydown', function(e) {
         if (40 === e.keyCode) {
-            $(e.target).closest('.select2.select2-container').siblings('select')[0].select2('open');
+            $($(e.target).closest('.select2.select2-container').siblings('select')[0]).select2('open');
         }
     });
 };
