@@ -45,11 +45,6 @@ class MainMenuMigrator
         $this->setMainCategoryMapping();
     }
 
-    public function addIconMapping(array $iconMapping): void
-    {
-        $this->iconMapping = \array_merge($iconMapping, $this->iconMapping);
-    }
-
     private function setIconMapping(): void
     {
         $this->iconMapping = array(
@@ -254,16 +249,17 @@ class MainMenuMigrator
         return $this->mainCategoryMapping;
     }
 
-    public function migrateUnhandledTableMenuItems(): void
+    public function migrateUnhandledTableMenuItems(array $additionalMainCategoryMapping = []): void
     {
         // get all main categories
         $statement = $this->databaseConnection->executeQuery('SELECT * FROM `cms_content_box` ORDER BY `name` ASC');
 
         $mainCategoryMapping = $this->getMainCategoryMapping();
+        $mainCategoryMapping = \array_merge($additionalMainCategoryMapping, $mainCategoryMapping);
 
         while (false !== $row = $statement->fetch()) {
             if (isset($mainCategoryMapping[$row['system_name']])) {
-                $sidebarCategorySystemName = $this->mainCategoryMapping[$row['system_name']];
+                $sidebarCategorySystemName = $mainCategoryMapping[$row['system_name']];
                 $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
                 $newMenuGroupId = $this->databaseConnection->fetchColumn($query, ['systemName' => $sidebarCategorySystemName]);
                 $oldMenuGroupId = $row['id'];
@@ -290,7 +286,7 @@ class MainMenuMigrator
         $this->createAllUnhandledOldMenuItemsForGroup($oldMenuGroupId, $newMenuGroupId);
     }
 
-    private function createMenuCategoryFromOldMenuRecord(array $row): string
+    private function createMenuCategoryFromOldMenuRecord(array $row, array $additionalIconMapping = []): string
     {
         $systemName = $row['system_name'];
 
@@ -302,7 +298,7 @@ class MainMenuMigrator
         $lastPosition = (int) $this->databaseConnection->fetchColumn($query);
         ++$lastPosition;
 
-        $iconFontClass = $this->getFontIconStyleByImage($row['icon_list']);
+        $iconFontClass = $this->getFontIconStyleByImage($row['icon_list'], $additionalIconMapping);
 
         // create missing menu group
         $menuGroupId = \TCMSLogChange::createUnusedRecordId('cms_menu_category');
@@ -333,7 +329,7 @@ class MainMenuMigrator
         return $menuGroupId;
     }
 
-    private function createAllUnhandledOldMenuItemsForGroup(string $oldMenuGroupId, string $newMenuGroupId): void
+    private function createAllUnhandledOldMenuItemsForGroup(string $oldMenuGroupId, string $newMenuGroupId, array $additionalIconMapping = []): void
     {
         $languageList = $this->getAllSupportedLanguages();
 
@@ -357,7 +353,7 @@ class MainMenuMigrator
             $iconFontClass = $row['icon_font_css_class'];
 
             if ('' === $iconFontClass) {
-                $iconFontClass = $this->getFontIconStyleByImage($row['icon_list']);
+                $iconFontClass = $this->getFontIconStyleByImage($row['icon_list'], $additionalIconMapping);
             }
 
             $menuItemData = [
@@ -380,13 +376,15 @@ class MainMenuMigrator
         }
     }
 
-    private function getFontIconStyleByImage(string $iconFilename): string
+    private function getFontIconStyleByImage(string $iconFilename, array $additionalIconMapping = []): string
     {
-        if ('' === $iconFilename || false === isset($this->iconMapping[$iconFilename])) {
+        $iconMapping = \array_merge($additionalIconMapping, $this->iconMapping);
+
+        if ('' === $iconFilename || false === isset($iconMapping[$iconFilename])) {
             return '';
         }
 
-        return $this->iconMapping[$iconFilename];
+        return $iconMapping[$iconFilename];
     }
 
     private function getAllSupportedLanguages(): array
