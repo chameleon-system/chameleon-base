@@ -878,7 +878,7 @@
             <argument type="service" id="request_stack"/>
         </service>
 
-        <service id="chameleon_system_core.service.migrator63" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\Migrator63">
+        <service id="chameleon_system_core.service.migrator63" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator">
             <argument id="database_connection" type="service"/>
             <argument id="chameleon_system_core.tools" type="service"/>
         </service>

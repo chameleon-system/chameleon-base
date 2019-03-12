@@ -7,9 +7,9 @@
 
 <?php
 /**
- * @var ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\Migrator63 $migration63Service
+ * @var ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator $migration63Service
  */
-$migration63Service = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.service.migrator63');
+$migration63Service = \ChameleonSystem\CoreBundle\ServiceLocator::get('MainMenuMigrator');
 $iconMapping = $migration63Service->getIconMapping();
 
 foreach ($iconMapping as $oldIconName => $iconName) {
@@ -183,9 +183,6 @@ while (false !== $row = $statement->fetch()) {
 if (count($tablesWithEmptyIcon) > 0) {
     TCMSLogChange::addInfoMessage('Table icons were replaced with CSS icon classes, but for some tables no fitting icon could be found. Please refer to the upgrade guide for Chameleon 6.3 on what to do (section "Font Awesome Icons"). Tables: '.implode(', ',$tablesWithEmptyIcon));
 }
-
-// set default icon for all tables that are not part of the main menu at the moment
-$databaseConnection->executeQuery("UPDATE `cms_tbl_conf` SET `icon_font_css_class` = 'fas fa-file' WHERE `icon_font_css_class` = '' AND (`cms_content_box_id` = '' OR `cms_content_box_id` ='0')");
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
 $statement = $databaseConnection->executeQuery("SELECT * FROM `cms_module` WHERE `icon_font_css_class` = '' AND `cms_content_box_id` != '' AND `cms_content_box_id` !='0'");

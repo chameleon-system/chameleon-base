@@ -12,10 +12,8 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service;
 
 use Doctrine\DBAL\Connection;
 
-class Migrator63
+class MainMenuMigrator
 {
-    const DEFAULT_ICON_CLASS = 'fas fa-file';
-
     /**
      * @var Connection
      */
@@ -385,7 +383,7 @@ class Migrator63
     private function getFontIconStyleByImage(string $iconFilename): string
     {
         if ('' === $iconFilename || false === isset($this->iconMapping[$iconFilename])) {
-            return self::DEFAULT_ICON_CLASS;
+            return '';
         }
 
         return $this->iconMapping[$iconFilename];
