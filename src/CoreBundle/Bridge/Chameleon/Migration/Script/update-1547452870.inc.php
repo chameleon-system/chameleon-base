@@ -7,10 +7,10 @@
 
 <?php
 /**
- * @var ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator $migration63Service
+ * @var ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator $mainMenuMigrator
  */
-$migration63Service = \ChameleonSystem\CoreBundle\ServiceLocator::get('MainMenuMigrator');
-$iconMapping = $migration63Service->getIconMapping();
+$mainMenuMigrator = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.service.main_menu_migrator');
+$iconMapping = $mainMenuMigrator->getIconMapping();
 
 foreach ($iconMapping as $oldIconName => $iconName) {
     $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'en')

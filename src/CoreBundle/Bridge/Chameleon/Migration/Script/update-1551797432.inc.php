@@ -6,7 +6,7 @@
 <?php
 
 /**
- * @var ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator $migration63Service
+ * @var ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator $mainMenuMigrator
  */
-$migration63Service = \ChameleonSystem\CoreBundle\ServiceLocator::get('MainMenuMigrator');
-$migration63Service->migrateUnhandledTableMenuItems();
+$mainMenuMigrator = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.service.main_menu_migrator');
+$mainMenuMigrator->migrateUnhandledTableMenuItems();
