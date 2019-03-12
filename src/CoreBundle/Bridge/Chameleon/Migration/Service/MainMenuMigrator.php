@@ -279,7 +279,7 @@ class MainMenuMigrator
 
     public function migrateTableMenuItemsByOldContentBoxSystemName(string $oldContentBoxSystemName): void
     {
-        $query = 'SELECT `id` FROM `cms_content_box` WHERE `system_name` = :systemName';
+        $query = 'SELECT * FROM `cms_content_box` WHERE `system_name` = :systemName';
         $row = $this->databaseConnection->fetchAssoc($query, array('systemName' => $oldContentBoxSystemName));
 
         $newCategoryId = $this->createMenuCategoryFromOldMenuRecord($row);
@@ -373,8 +373,8 @@ class MainMenuMigrator
                 'cms_menu_category_id' => $newCategoryId,
             ];
             foreach ($languageList as $language) {
-                if (true === \array_key_exists("translation__".$language, $row)) {
-                    $menuItemData["name__".$language] = \trim($row["translation__".$language]);
+                if (true === \array_key_exists('translation__'.$language, $row)) {
+                    $menuItemData['name__'.$language] = \trim($row['translation__'.$language]);
                 }
             }
 
