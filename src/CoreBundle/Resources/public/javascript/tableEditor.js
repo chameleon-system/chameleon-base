@@ -868,6 +868,14 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
             });
         });
     });
+
+    $('.select2.select2-container').on('keydown', function(e) {
+        if (40 === e.keyCode) {
+
+            var $selectBox = $(e.target).parent().parent().siblings('select')[0];
+            $($selectBox).select2('open');
+        }
+    });
 };
 
 CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent = function (selector) {
