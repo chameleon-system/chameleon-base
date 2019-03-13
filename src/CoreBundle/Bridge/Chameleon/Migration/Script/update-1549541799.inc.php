@@ -24,7 +24,6 @@ t data_extranet                         externalusers
 t data_extranet_salutation              externalusers
 t data_country                          internationalization
 t cms_locals                            internationalization
-t cms_translation                       internationalization
 t pkg_cms_changelog_set                 analytics
 t data_mail_profile                     communication
 t pkg_newsletter_user                   communication
