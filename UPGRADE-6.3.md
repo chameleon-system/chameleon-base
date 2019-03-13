@@ -47,33 +47,97 @@ not expected.
 
 ## Logging
 
-We are now using standard logging for Symfony applications using `Monolog` and `Psr\Log\LoggerInterface`.
-Desired differences in logging - like different log files - should be configured using Monolog or implemented using
-its interfaces (like `HandlerInterface`, `ProcessorInterface`, ...).
+Chameleon now logs messages similar to other Symfony applications, using `Psr\Log\LoggerInterface` and `Monolog`.
 
-This is already done in most places in Chameleon itself (chameleon-base and chameleon-shop).
+### Logging Configuration
 
-Project code should also be adapted to this. See below for a migration example.
-Note that if there is no handler configuration in your project nothing will be written.
-A minimum config could be a stream handler logging to `%kernel.logs_dir%/%kernel.environment%.log`.
+We recommend using the standard Symfony logging configuration as a base point from where to adjust to project needs.
+The application will then log to the logs dir (`app/logs/` by default).
 
-Note that log messages are no longer written to database.
-You can still configure this if needed with the service `cmsPkgCore.logHandler.database` (TPkgCmsCoreLogMonologHandler_Database).
-If you use this without channel restriction you must at least explicitly exclude the channel "doctrine".
-Also note that the standard logging channel is not configured as "fingerscrossed" anymore. All messages there will simply
-be logged everytime.
-See below for the full legacy config.
+Add the following lines to `app/config/config_dev.yml`:
 
-However deprecated service definitions for the old log (channel) handler classes still exist in 
-`vendor/chameleon-system/chameleon-base/src/CmsCoreLogBundle/Resources/config/services.xml`.
-These will be removed in a later release.
+```yaml
+monolog:
+  handlers:
+    main:
+      type: stream
+      path: "%kernel.logs_dir%/%kernel.environment%.log"
+      level: debug
+      channels: ["!event"]
+    # uncomment to get logging in your browser
+    # you may have to allow bigger header sizes in your Web server configuration
+    #firephp:
+    #    type: firephp
+    #    level: info
+    #chromephp:
+    #    type: chromephp
+    #    level: info
+    console:
+      type: console
+      process_psr_3_messages: false
+      channels: ["!event", "!doctrine", "!console"]
+```
 
-The menu entries in the backend ("logs", "log channel definition") are now hidden - that is: they are no longer 
-assigned to the category window ("Logs"). To show them again you can assign them again.
+Add the following lines to `app/config/config_prod.yml`:
 
-Migration example for changing/defining a log handler for a channel logging to a file:
+```yaml
+monolog:
+  handlers:
+    main:
+      type: fingers_crossed
+      action_level: error
+      handler: nested
+      excluded_404s:
+        # regex: exclude all 404 errors from the logs
+        - ^/
+    nested:
+      type: stream
+      path: "%kernel.logs_dir%/%kernel.environment%.log"
+      level: debug
+    console:
+      type: console
+      process_psr_3_messages: false
+      channels: ["!event", "!doctrine"]
+    deprecation:
+      type: stream
+      path: "%kernel.logs_dir%/%kernel.environment%.deprecations.log"
+    deprecation_filter:
+      type: filter
+      handler: deprecation
+      max_level: info
+      channels: ["php"]
+```
 
-Old in service.xml:
+Add the following lines to `app/config/config_test.yml`:
+
+```yaml
+monolog:
+  handlers:
+    main:
+      type: stream
+      path: "%kernel.logs_dir%/%kernel.environment%.log"
+      level: debug
+      channels: ["!event"]
+```
+
+See the Monolog documentation on how to change logging behaviour, e.g. logging to different files or modifying log
+entries with formatters and processors.
+
+### Adjust Logger Retrieval
+
+There is a number of classes and methods which were used for logging in previous Chameleon releases (and still work)
+but are now deprecated, especially `IPkgCmsCoreLog`, `TPkgCmsCoreLog`, `TTools::WriteLogEntry` and 
+`TTools::WriteLogEntrySimple`. It is recommended to switch to standard logging as soon as possible. Do this as follows:
+- Where dependency injection is possible, inject the `logger` service and typehint `Psr\Log\LoggerInterface`.
+- To use a specific channel, add a tag like this: `<tag name="monolog.logger" channel="order_payment_amazon"/>`
+- Where dependency injection cannot be used, retrieve the logger by service locator like this: `ChameleonSystem\CoreBundle\ServiceLocator::get('logger')`.
+  The return value can always be typehinted with `Psr\Log\LoggerInterface`.
+- To retrieve a specific log channel, use a call like this: `ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.custom_channel')`.
+
+Migration example:
+
+Old in services.xml (logger writing to a file):
+
 ```xml
 <service id="cmsPkgCore.logHandler.files" class="Monolog\Handler\StreamHandler" public="false">
     <argument>%kernel.logs_dir%/core.log</argument>
@@ -90,29 +154,31 @@ Old in service.xml:
 <service id="cmsPkgCore.logChannel.cmsUpdates" class="TPkgCmsCoreLog">
     <argument type="service" id="monolog.logger.cms_update"/>
 </service>
+
+<service id="myService" class="MyClass">
+    <argument type="service" id="cmsPkgCore.logChannel.cmsUpdates" />
+</service>
+
 ```
 
-New in config.yml - changed the channel name slightly:
-```
-monolog:
-   handlers:
-       cms_updates:
-           type: stream
-           path: "%kernel.logs_dir%/core.log"
-           channels:
-               - "cms_update"
-           level: info
-```
+New in services.xml:
 
-This is then used in that service.xml as two service arguments instead of a reference to `cmsPkgCore.logChannel.cmsUpdates`:
-```
+```xml
+<service id="myService" class="MyClass">
     <argument type="service" id="logger"/>
-    <tag name="monolog.logger" channel="cms_updates"/>
+    <tag name="monolog.logger" channel="cms_update"/>
+</service>
 ```
 
-The full config (in config.yml) that would replicate the legacy logging behavior of Chameleon 6.2 looks like this:
+So the service definition just states the channel in which to log. Directing log output to e.g. a file is then handled
+in the logging configuration in `config_<env>.yml`.
 
-```
+### Legacy: Restore Database Logging
+
+Log messages are no longer written to database and the old database logging infrastructure will be removed in
+a future Chameleon release. If database logging is still needed in the project, restore by using the following config:
+
+```yaml
 monolog:
    handlers:
      database:
@@ -141,6 +207,14 @@ monolog:
          - "doctrine"
        level: warning
 ```
+
+Note that the `doctrine` channel MUST be excluded from database logging.
+Also note that the standard logging channel is not configured as "fingerscrossed" anymore. All messages for this channel
+will simply be logged on every request.
+
+Log-related menu items in the backend ("logs", "log channel definition") are now hidden. To display these items in the
+new sidebar menu, create menu items assigned to the corresponding tables. To display these items in the classic main
+menu (which itself is no longer visible by default), assign the tables to the "Logs" content box.
 
 ## New ImageCropBundle
 
@@ -174,6 +248,16 @@ Using this setting SMTP connections verify SSL/TLS certificate validity so that 
 We now use the DoctrineBundle. While we do not use many of its features yet (especially no ORM mapping), initializing
 the database connection is now handled by Doctrine. In practice the most noticeable difference is that the connection
 is opened lazily, so that more console commands can be executed without a working database connection.
+
+Add the DoctrineBundle to the AppKernel:
+
+```php
+    $bundles = array(
+    ...
+    new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+    ...
+    );
+```
 
 This change requires to add the following configuration to `/app/config/config.yml`:
 
@@ -421,10 +505,6 @@ should be quite straightforward.
 Also some menu items that were located in the top bar were now moved to the sidebar. Finally the backend modules that
 were called in a popup window, like navigation, product search index generation and sanity check, now open inline.
 
-From a technical point no changes are required if the project is a shop system. Projects that are pure CMS systems
-should consider removing menu categories that are nevertheless created during migration. Note that there will be some
-error messages during migration that complain about missing shop tables and modules in this case, which can be ignored. 
-
 ## Home Page Changes
 
 As the main menu is now displayed in the sidebar, the classic main menu was replaced by a welcome screen (which we plan
@@ -442,6 +522,7 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Services
 
+- chameleon_system_cms_core_log.cronjob.cleanup_cronjob
 - chameleon_system_core.pdo
 - cmsPkgCore.logChannel.apilogger
 - cmsPkgCore.logChannel.cmsUpdates
@@ -455,6 +536,7 @@ is recommended (although this tool may not find database-related deprecations).
 - cmsPkgCore.logDriver.dbal
 - cmsPkgCore.logDriver.security
 - cmsPkgCore.logDriver.standard
+- cmsPkgCore.logHandler.database
 - cmsPkgCore.logHandler.dbal
 - cmsPkgCore.logHandler.files
 - cmsPkgCore.logHandler.fingerscrossed
@@ -483,6 +565,8 @@ is recommended (although this tool may not find database-related deprecations).
 - \CMS_ACTIVE_REVISION_MANAGEMENT
 - \PATH_FILETYPE_ICONS
 - \PATH_FILETYPE_ICONS_LOW_QUALITY
+- \PKG_CMS_CORE_LOG_DEFAULT_MAX_AGE_IN_SECONDS
+- \PKG_CMS_CORE_LOG_DEFAULT_MAX_AGE_IN_SECONDS_LEVEL_BELOW_WARNING
 - \TCMSCronJob_CleanOrphanedMLTConnections::MLT_DELETE_LOG_FILE
 - \TCMSTableEditorEndPoint::DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR
 - \TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE
@@ -491,6 +575,8 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Classes and Interfaces
 
+- \ChameleonSystem\CmsCoreLogBundle\Bridge\Chameleon\ListManager\TCMSListManagerLogEntries
+- \ChameleonSystem\CmsCoreLogBundle\Command\LogShowCommand
 - \IPkgCmsCoreLog
 - \MTMenuManager
 - \TCMSContentBox
@@ -504,6 +590,8 @@ is recommended (although this tool may not find database-related deprecations).
 - \TCMSMenuItem_Table
 - \THTMLFileBrowser
 - \TPkgCmsCoreLog
+- \TPkgCmsCoreLogCleanupCronJob
+- \TPkgCmsCoreLogMonologHandler_Database
 - \TPkgSnippetRenderer_TranslationNode
 - \TPkgSnippetRenderer_TranslationTokenParser
 - \TTemplateTools
@@ -636,6 +724,10 @@ that are deprecated because they are outdated and replaced by frontend themes or
 - chameleon_system_core.record_revision.no_revision_exists
 - chameleon_system_core.record_revision.revision_number
 - chameleon_system_core.template_engine.header_revision
+- pkg_cms_core_log.log_table.field_level
+- pkg_cms_core_log.log_table.select_level_all
+- pkg_cms_core_log.log_table.select_level_all_errors
+- pkg_cms_core_log.log_table.select_level_only
 
 ## Database Tables
 

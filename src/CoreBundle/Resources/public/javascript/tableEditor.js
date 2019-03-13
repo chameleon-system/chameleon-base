@@ -779,7 +779,9 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
 
 CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     $('[data-select2-option]').each(function () {
-        $(this).select2($(this).data('select2-option'));
+        var options = $(this).data('select2-option');
+        options.selectOnClose = true;
+        $(this).select2(options);
     });
 
     $('.lookup-container-field-types select').on('select2:select', function (e) {
@@ -798,6 +800,14 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     var quicklookuplist = $('#quicklookuplist');
     quicklookuplist.select2({
         placeholder: quicklookuplist.data('select2-placeholder'),
+        templateResult: function (data, container) {
+            // transfer class to select2 element
+            if (data.cssClass && '' !== data.cssClass) {
+                $(container).addClass(data.cssClass);
+            }
+
+            return data.text;
+        },
         ajax: {
             url: quicklookuplist.data('select2-ajax'),
             dataType: 'json',
@@ -809,7 +819,12 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
         }
     }
     }).on('select2:select', function (e) {
-        var id = e.params.data.id;
+        var id = e.params.data.id.trim();
+
+        if ('' === id) {
+            return;
+        }
+
         switchRecord(id);
     });
 
@@ -867,6 +882,13 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
                 });
             });
         });
+    });
+
+    // catch arrow key keypress on select2 containers to open the select2 pulldown.
+    $('.select2.select2-container').on('keydown', function(e) {
+        if (40 === e.keyCode) {
+            $($(e.target).closest('.select2.select2-container').siblings('select')[0]).select2('open');
+        }
     });
 };
 

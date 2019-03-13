@@ -13,6 +13,9 @@ use Doctrine\DBAL\Connection;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 
+/**
+ * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface in conjunction with Monolog logging instead
+ */
 class TPkgCmsCoreLogMonologHandler_Database extends AbstractProcessingHandler
 {
     /**
