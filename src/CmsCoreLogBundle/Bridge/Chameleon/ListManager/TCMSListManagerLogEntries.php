@@ -18,6 +18,9 @@ use Monolog\Logger;
 use TCMSListManagerFullGroupTable;
 use ViewRenderer;
 
+/**
+ * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface in conjunction with Monolog logging instead
+ */
 class TCMSListManagerLogEntries extends TCMSListManagerFullGroupTable
 {
     const ALL_SELECTION_VALUE = '0';

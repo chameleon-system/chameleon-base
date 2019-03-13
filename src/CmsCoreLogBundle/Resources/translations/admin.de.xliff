@@ -5,18 +5,22 @@
             <trans-unit id="pkg_cms_core_log.log_table.field_level">
                 <source>pkg_cms_core_log.log_table.field_level</source>
                 <target>Loglevel</target>
+                <note>@deprecated since 6.3.0 - only used in deprecated database logging.</note>
             </trans-unit>
             <trans-unit id="pkg_cms_core_log.log_table.select_level_all">
                 <source>pkg_cms_core_log.log_table.select_level_all</source>
                 <target>Alle</target>
+                <note>@deprecated since 6.3.0 - only used in deprecated database logging.</note>
             </trans-unit>
             <trans-unit id="pkg_cms_core_log.log_table.select_level_all_errors">
                 <source>pkg_cms_core_log.log_table.select_level_all_errors</source>
                 <target>Alle Fehler/Warnungen</target>
+                <note>@deprecated since 6.3.0 - only used in deprecated database logging.</note>
             </trans-unit>
             <trans-unit id="pkg_cms_core_log.log_table.select_level_only">
                 <source>pkg_cms_core_log.log_table.select_level_only</source>
                 <target>Nur</target>
+                <note>@deprecated since 6.3.0 - only used in deprecated database logging.</note>
             </trans-unit>
         </body>
     </file>
