@@ -262,7 +262,7 @@ class MainMenuMigrator
         while (false !== $row = $statement->fetch()) {
             if (isset($mainCategoryMapping[$row['system_name']])) {
                 $sidebarCategorySystemName = $mainCategoryMapping[$row['system_name']];
-                $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
+                $query = 'SELECT `id` FROM `cms_menu_category` WHERE `system_name` = :systemName';
                 $newCategoryId = $this->databaseConnection->fetchColumn($query, ['systemName' => $sidebarCategorySystemName]);
                 $oldContentBoxId = $row['id'];
 
