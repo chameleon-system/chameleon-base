@@ -184,14 +184,14 @@ class TCMSTableFieldWriter extends TCMSTableEditor
             $oldField->ChangeFieldTypePreHook();
         }
 
-        if (false === $this->prohibitChangesOnRelatedTables) {
+        if (true === $this->prohibitChangesOnRelatedTables) {
+            $oldField->RenameRelatedTables($postData);
+        } else {
             if (true === $oldField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $oldFieldTypeRow, $newFieldTypeRow)) {
                 $oldField->DeleteRelatedTables();
             } elseif (true === $oldField->AllowRenameRelatedTablesBeforeFieldSave($postData, $oldFieldTypeRow, $newFieldTypeRow)) {
                 $oldField->RenameRelatedTables($postData);
             }
-        } else {
-            $oldField->RenameRelatedTables($postData);
         }
         $oldField->RemoveFieldIndex();
 
