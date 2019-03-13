@@ -209,8 +209,6 @@ monolog:
 ```
 
 Note that the `doctrine` channel MUST be excluded from database logging.
-Also note that the standard logging channel is not configured as "fingerscrossed" anymore. All messages for this channel
-will simply be logged on every request.
 
 Log-related menu items in the backend ("logs", "log channel definition") are now hidden. To display these items in the
 new sidebar menu, create menu items assigned to the corresponding tables. To display these items in the classic main
