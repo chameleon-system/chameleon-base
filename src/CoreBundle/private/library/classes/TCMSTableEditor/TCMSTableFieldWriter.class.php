@@ -46,7 +46,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     /**
      * @var bool
      */
-    private $isChangeFromTable = false;
+    private $prohibitChangesOnRelatedTables = false;
 
     /**
      * @return TCMSStdClass
@@ -138,7 +138,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
 
         $this->oldData = $this->oTable->sqlData;
         $this->oldTableName = $this->_oParentRecord->sqlData['name'];
-        $this->isChangeFromTable = $postData['bTargetTableChangeForMLTField'] ?? false; // true (from TCMSTableWriter) prohibits target changes
+        $this->prohibitChangesOnRelatedTables = $postData['bTargetTableChangeForMLTField'] ?? false; // true (from TCMSTableWriter) prohibits target changes
 
         return parent::Save($postData);
     }
@@ -184,7 +184,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
             $oldField->ChangeFieldTypePreHook();
         }
 
-        if (false === $this->isChangeFromTable) {
+        if (false === $this->prohibitChangesOnRelatedTables) {
             if (true === $oldField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $oldFieldTypeRow, $newFieldTypeRow)) {
                 $oldField->DeleteRelatedTables();
             } elseif (true === $oldField->AllowRenameRelatedTablesBeforeFieldSave($postData, $oldFieldTypeRow, $newFieldTypeRow)) {
@@ -224,7 +224,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
 
         // NOTE Save() was called here before the code was reorganized - hence the method names
 
-        if (false === $this->isChangeFromTable && true === $newField->AllowCreateRelatedTablesAfterFieldSave($this->oldData, $oldFieldTypeRow, $newFieldTypeRow)) {
+        if (false === $this->prohibitChangesOnRelatedTables && true === $newField->AllowCreateRelatedTablesAfterFieldSave($this->oldData, $oldFieldTypeRow, $newFieldTypeRow)) {
             $newField->CreateRelatedTables();
         }
         $newField->CreateFieldIndex();
