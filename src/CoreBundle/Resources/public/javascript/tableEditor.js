@@ -779,7 +779,9 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
 
 CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     $('[data-select2-option]').each(function () {
-        $(this).select2($(this).data('select2-option'));
+        var options = $(this).data('select2-option');
+        options.selectOnClose = true;
+        $(this).select2(options);
     });
 
     $('.lookup-container-field-types select').on('select2:select', function (e) {
