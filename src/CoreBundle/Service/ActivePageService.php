@@ -173,14 +173,7 @@ class ActivePageService implements ActivePageServiceInterface
          */
         unset($finalParameterList['pagedef']);
 
-        /*
-         * Routes have the form "routeName" or "routeName-portalId-languageIso". We remove portalId and languageIso here
-         * because they will be re-added by the router.
-         */
-        if ('-' === \substr($route, -3, 1)) {
-            $route = \substr($route, 0, -3);
-            $route = \substr($route, 0, \strrpos($route, '-'));
-        }
+        $route = $this->getBaseRouteName($route);
 
         /**
          * We need to call the frontend router explicitly, as it contains logic that makes sure the correct domain is
@@ -263,6 +256,25 @@ class ActivePageService implements ActivePageServiceInterface
                 $parameters['pagePath'] = rtrim($allPageRoutes[$activePage->id]->getPrimaryPath(), '/');
             }
         }
+    }
+
+    /**
+     * Routes have the form "routeName" or "routeName-portalId-languageIso". We remove portalId and languageIso here
+     * because they will be re-added by the router.
+     *
+     * @param string $route
+     *
+     * @return string
+     */
+    private function getBaseRouteName(string $route): string
+    {
+        if (null === $this->activePage) {
+            return $route;
+        }
+
+        $activePortalId = $this->activePage->fieldCmsPortalId;
+
+        return \preg_replace("#-$activePortalId-..$#", '', $route);
     }
 
     /**
