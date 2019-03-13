@@ -169,7 +169,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         $newName = $this->oTable->sqlData['name'];
 
         $isTypeChange = $oldTypeId !== $newTypeId;
-        $currentFieldTypeRow = $this->getFieldTypeDefinition($oldTypeId);
+        $oldFieldTypeRow = $this->getFieldTypeDefinition($oldTypeId);
         $newFieldTypeRow = $this->getFieldTypeDefinition($newTypeId);
 
         /**
@@ -185,9 +185,9 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         }
 
         if (false === $this->isChangeFromTable) {
-            if (true === $oldField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
+            if (true === $oldField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $oldFieldTypeRow, $newFieldTypeRow)) {
                 $oldField->DeleteRelatedTables();
-            } elseif (true === $oldField->AllowRenameRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
+            } elseif (true === $oldField->AllowRenameRelatedTablesBeforeFieldSave($postData, $oldFieldTypeRow, $newFieldTypeRow)) {
                 $oldField->RenameRelatedTables($postData);
             }
         } else {
@@ -224,7 +224,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
 
         // NOTE Save() was called here before the code was reorganized - hence the method names
 
-        if (false === $this->isChangeFromTable && true === $newField->AllowCreateRelatedTablesAfterFieldSave($this->oldData, $currentFieldTypeRow, $newFieldTypeRow)) {
+        if (false === $this->isChangeFromTable && true === $newField->AllowCreateRelatedTablesAfterFieldSave($this->oldData, $oldFieldTypeRow, $newFieldTypeRow)) {
             $newField->CreateRelatedTables();
         }
         $newField->CreateFieldIndex();
