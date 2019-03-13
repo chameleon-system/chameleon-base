@@ -5,6 +5,7 @@
 
     <services>
         <service id="chameleon_system_cms_core_log.cronjob.cleanup_cronjob" class="TPkgCmsCoreLogCleanupCronJob" shared="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3.</deprecated>
             <tag name="chameleon_system.cronjob" />
         </service>
 
@@ -13,6 +14,7 @@
         </service>
 
         <service id="cmsPkgCore.logHandler.database" class="TPkgCmsCoreLogMonologHandler_Database" public="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3.</deprecated>
             <argument type="service" id="database_connection"/>
         </service>
 
