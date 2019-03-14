@@ -1253,6 +1253,7 @@
                 <source>chameleon_system_core.cms_module_media_manager.image_size</source>
                 <target>Bildgröße</target>
             </trans-unit>
+
             <trans-unit id="chameleon_system_core.table_editor_media.media_usage">
                 <source>chameleon_system_core.table_editor_media.media_usage</source>
                 <target>Verwendungen</target>
@@ -2113,7 +2114,6 @@
             <trans-unit id="chameleon_system_core.action.return_to_main_menu">
                 <source>chameleon_system_core.action.return_to_main_menu</source>
                 <target>Zurück zur Startseite</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
 
 

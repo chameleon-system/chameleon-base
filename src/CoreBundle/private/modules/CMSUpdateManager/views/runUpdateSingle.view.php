@@ -57,8 +57,15 @@ $bundlesWithUpdates = array_keys($updatesByBundle);
                         (0%)</h4>
                 </div>
 
+                <a class="btn btn-warning" id="btnGoBack" href="<?= PATH_CMS_CONTROLLER; ?>">
+                    <i class="fas fa-home"></i>
+                    <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.return_to_main_menu')); ?>
+                </a>
                 <a class="btn btn-success disabled" href="#" id="btnRunUpdates"
-                   data-loading-text="<?= $translator->trans('chameleon_system_core.cms_module_update.action_update'); ?>"><?= $translator->trans('chameleon_system_core.cms_module_update.action_update'); ?></a>
+                   data-loading-text="<?= $translator->trans('chameleon_system_core.cms_module_update.action_update'); ?>">
+                    <i class="far fa-play-circle"></i>
+                    <?= $translator->trans('chameleon_system_core.cms_module_update.action_update'); ?>
+                </a>
                 <div id="ajaxTimeoutContainer">
                     <label for="ajaxTimeoutSelect"><?= $translator->trans('chameleon_system_core.cms_module_update.select_ajax_timeout'); ?>
                         : </label>

@@ -44,6 +44,10 @@ if (0 === \count($updatesByBundle)) {
                 <div class="alert alert-info">
                     <?= $translator->trans('chameleon_system_core.cms_module_update.update_info_no_updates'); ?>
                 </div>
+                <a class="btn btn-warning" id="btnGoBack" href="<?= PATH_CMS_CONTROLLER; ?>">
+                    <i class="fas fa-home"></i>
+                    <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.return_to_main_menu')); ?>
+                </a>
             </div>
         </div>
     <?php
@@ -119,8 +123,15 @@ if (0 === \count($updatesByBundle)) {
                 <?php
 } ?>
 
+            <a class="btn btn-warning" id="btnGoBack" href="<?= PATH_CMS_CONTROLLER; ?>">
+                <i class="fas fa-home"></i>
+                <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.return_to_main_menu')); ?>
+            </a>
             <a class="btn btn-success" href="#" id="btnRunUpdates"
-               data-loading-text="<?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.action_update')); ?>"><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.action_update')); ?></a>
+               data-loading-text="<?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.action_update')); ?>">
+                <i class="far fa-play-circle"></i>
+                <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.action_update')); ?>
+            </a>
             <div id="ajaxTimeoutContainer">
                 <label for="ajaxTimeoutSelect"><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.select_ajax_timeout')); ?>
                     : </label>

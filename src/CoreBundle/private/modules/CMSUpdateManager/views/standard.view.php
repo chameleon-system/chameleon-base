@@ -15,13 +15,28 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
                 <?= $translator->trans('chameleon_system_core.cms_module_update.intro_text'); ?>
             </div>
             <div class="mt-2">
+                <a class="btn btn-secondary" onclick="document.getElementById('module_fnc').value='RunUpdates';document.getElementById('updateForm').submit();">
+                    <i class="far fa-eye"></i>
+                    <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.show_all')); ?>
+                </a>
             <?php
-            echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_update.show_all'), "javascript:document.getElementById('module_fnc').value='RunUpdates';document.getElementById('updateForm').submit();", 'far fa-eye');
             if (_DEVELOPMENT_MODE) {
-                echo '<br /><br />';
-                echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_update.select_single_update'), "javascript:document.getElementById('module_fnc').value='RunUpdateSingle';document.getElementById('updateForm').submit();", 'far fa-play-circle');
+                ?>
+                <br /><br />
+                <a class="btn btn-secondary" onclick="document.getElementById('module_fnc').value='RunUpdateSingle';document.getElementById('updateForm').submit();">
+                    <i class="far fa-play-circle"></i>
+                    <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.select_single_update')); ?>
+                </a>
+                <?php
             }
             ?>
+
+            <br />
+            <br />
+            <a class="btn btn-warning" id="btnGoBack" href="<?= PATH_CMS_CONTROLLER; ?>">
+                <i class="fas fa-home"></i>
+                <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.return_to_main_menu')); ?>
+            </a>
         </div>
     </div>
 </form>
