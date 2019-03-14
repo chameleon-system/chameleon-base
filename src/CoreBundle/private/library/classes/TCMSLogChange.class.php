@@ -602,7 +602,7 @@ class TCMSLogChange
 
     public static function setMainMenuPosition(
         string $mainMenuCategorySystemName,
-        string $afterThisMainMenuCategory): void
+        ?string $afterThisMainMenuCategory = null): void
     {
         $databaseConnection = self::getDatabaseConnection();
 
@@ -616,17 +616,21 @@ class TCMSLogChange
             return;
         }
 
-        $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
-        $targetMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $afterThisMainMenuCategory));
+        $newPosition = 0;
 
-        if (false === $targetMenu) {
-            $message = sprintf('Could not place main menu category: %s, behind %s because the target category is missing.', $mainMenuCategorySystemName, $afterThisMainMenuCategory);
-            self::addInfoMessage($message, self::INFO_MESSAGE_LEVEL_WARNING);
+        if (null !== $afterThisMainMenuCategory) {
+            $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
+            $targetMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $afterThisMainMenuCategory));
 
-            return;
+            if (false === $targetMenu) {
+                $message = sprintf('Could not place main menu category: %s, behind %s because the target category is missing.', $mainMenuCategorySystemName, $afterThisMainMenuCategory);
+                self::addInfoMessage($message, self::INFO_MESSAGE_LEVEL_WARNING);
+
+                return;
+            }
+
+            $newPosition = (int)$targetMenu['position'] + 1;
         }
-
-        $newPosition = (int) $targetMenu['position'] + 1;
 
         $query = 'UPDATE `cms_menu_category` SET `position` = `position`+1 WHERE `position` >= :newPosition';
         $databaseConnection->executeQuery($query, array('newPosition' => $newPosition));
