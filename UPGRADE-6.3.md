@@ -303,6 +303,11 @@ and adapt them according to the changes in **chameleon-shop-theme-bundle**.
 The method `TTools::GetModuleLoaderObject` now returns a new `TModuleLoader` instance instead of the global module
 loader. This instance will therefore only contain the module passed as argument, not all modules on the current page. 
 
+## TCMSLogChange
+
+TCMSLogChange got a new helper method: moveMenuCategoryPositionAfterTarget().
+Use this in your migration updates to move menu items to the right position.
+
 ## Csv2SqlBundle
 
 - `\TPkgCsv2SqlManager::SendErrorNotification()`
