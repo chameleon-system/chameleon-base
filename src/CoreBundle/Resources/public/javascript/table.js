@@ -161,7 +161,12 @@ $(document).ready(function () {
         escapeMarkup: function(markup) {
             return markup;
         },
-        templateResult: function(data) {
+        templateResult: function (data, container) {
+            // transfer class to select2 element
+            if (data.cssClass && '' !== data.cssClass) {
+                $(container).addClass(data.cssClass);
+            }
+
             return data.html;
         },
         tags: true,
