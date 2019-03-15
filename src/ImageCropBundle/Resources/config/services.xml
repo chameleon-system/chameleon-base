@@ -80,6 +80,7 @@
         <service id="chameleon_system_image_crop.mapper.media_manager_image_crop_editor_url"
                  class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper\ImageCropEditorUrlMapper">
             <argument type="service" id="chameleon_system_core.util.url"/>
+            <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager"/>
         </service>
 
         <service id="chameleon_system_image_crop.mapper.media_manager_image_crop_access_rights"

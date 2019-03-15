@@ -12,6 +12,7 @@
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper;
 
 use AbstractViewMapper;
+use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ImageCropBundle\Bridge\Chameleon\BackendModule\ImageCropEditorModule;
 use ChameleonSystem\MediaManager\DataModel\MediaItemDataModel;
@@ -26,10 +27,17 @@ class ImageCropEditorUrlMapper extends AbstractViewMapper
      */
     private $urlUtil;
 
+    /**
+     * @var AuthenticityTokenManagerInterface
+     */
+    private $authenticityTokenManager;
+
     public function __construct(
-        UrlUtil $urlUtil
+        UrlUtil $urlUtil,
+        AuthenticityTokenManagerInterface $authenticityTokenManager
     ) {
         $this->urlUtil = $urlUtil;
+        $this->authenticityTokenManager = $authenticityTokenManager;
     }
 
     /**
@@ -53,6 +61,7 @@ class ImageCropEditorUrlMapper extends AbstractViewMapper
          */
         $mediaItem = $oVisitor->GetSourceObject('mediaItem');
         $oVisitor->SetMappedValue('createCropUrl', $this->getCropEditorUrl($mediaItem->getId()));
+        $oVisitor->SetMappedValue('deleteCropUrl', $this->getDeleteCropUrl());
     }
 
     /**
@@ -66,6 +75,20 @@ class ImageCropEditorUrlMapper extends AbstractViewMapper
             'pagedef' => ImageCropEditorModule::PAGEDEF_NAME,
             '_pagedefType' => ImageCropEditorModule::PAGEDEF_TYPE,
             ImageCropEditorModule::URL_PARAM_IMAGE_ID => $mediaItemId,
+        );
+
+        return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');
+    }
+
+    /**
+     * @return string
+     */
+    private function getDeleteCropUrl()
+    {
+        $parameters = array(
+            'pagedef' => ImageCropEditorModule::PAGEDEF_NAME,
+            '_pagedefType' => ImageCropEditorModule::PAGEDEF_TYPE,
+            'module_fnc' => array('contentmodule' => 'deleteCrop'),
         );
 
         return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');

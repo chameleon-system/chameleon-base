@@ -76,6 +76,16 @@
                 <source>chameleon_system_image_crop.media_manager_crops.headline</source>
                 <target>Ausschnitte</target>
             </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.media_manager_crops.delete">
+                <source>chameleon_system_image_crop.media_manager_crops.delete</source>
+                <target>Ausschnitt löschen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.crop_not_deleted">
+                <source>chameleon_system_image_crop.editor.crop_not_deleted</source>
+                <target>Ausschnitt konnte nicht gelöscht werden.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
