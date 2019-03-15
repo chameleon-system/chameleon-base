@@ -21,7 +21,17 @@ class TCMSURLHistory
      */
     public $aHistory = array();
 
-    public $index = 0;
+    /**
+     * @deprecated since 6.3.0 - use getHistoryIndex() instead
+     */
+    // public $index = 0;
+
+    public function __get($parameterName)
+    {
+        if ('index' === $parameterName) {
+            return $this->getHistoryIndex();
+        }
+    }
 
     /**
      * adds item to the breadcrumb array.
@@ -36,9 +46,6 @@ class TCMSURLHistory
         if (null !== $foundHistoryElementIndex) {
             // element found, so remove it and add the new one at the end.
             $this->removeHistoryElementByIndex($foundHistoryElementIndex);
-        } else {
-            // the history has an internal item count, which needs to be decreased if we don't replace an item.
-            $this->index++;
         }
 
         // add the new item
@@ -78,13 +85,18 @@ class TCMSURLHistory
      */
     public function GetURL()
     {
-        if ($this->index > 0) {
-            $url = $this->aHistory[($this->index - 1)]['url'];
+        $historyIndex = $this->getHistoryIndex();
 
-            return $url;
+        if ($historyIndex > 0 && isset($this->aHistory[$historyIndex - 1])) {
+            return $this->aHistory[$historyIndex - 1]['url'];
         } else {
             return false;
         }
+    }
+
+    public function getHistoryIndex()
+    {
+        return count($this->aHistory);
     }
 
     /**
@@ -94,10 +106,14 @@ class TCMSURLHistory
      */
     public function PopURL()
     {
-        if ($this->index > 0) {
+        $historyIndex = $this->getHistoryIndex();
+
+        if ($historyIndex > 0) {
             $url = $this->GetURL();
-            unset($this->aHistory[($this->index - 1)]);
-            --$this->index;
+            unset($this->aHistory[$historyIndex - 1]);
+
+            // reset the keys to prevent key gaps
+            $this->aHistory = array_values($this->aHistory);
 
             return $url;
         } else {
@@ -168,13 +184,15 @@ class TCMSURLHistory
      */
     public function Clear($id)
     {
-        $this->index = $id;
-        $endpoint = count($this->aHistory)-1;
+        $endpoint = count($this->aHistory) - 1;
         if ($endpoint > 0) {
             for ($i = $endpoint; $i > $id; --$i) {
                 unset($this->aHistory[$i]);
             }
         }
+
+        // reset the keys to prevent key gaps
+        $this->aHistory = array_values($this->aHistory);
     }
 
     /**
@@ -182,7 +200,6 @@ class TCMSURLHistory
      */
     public function reset()
     {
-        $this->index = 0;
         $this->aHistory = [];
     }
 
@@ -220,7 +237,8 @@ class TCMSURLHistory
         }
 
         if (false === isset($this->aHistory[0])) {
-            $this->aHistory = array_values($this->aHistory); // rearrange elements
+            // reset the keys to prevent key gaps
+            $this->aHistory = array_values($this->aHistory);
         }
 
         return array_key_exists('params', $this->aHistory[0]);
