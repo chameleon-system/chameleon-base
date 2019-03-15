@@ -936,6 +936,8 @@ class TFullGroupTable extends TGroupTable
         $pagedef = $this->getTableEditorPagedef('tablemanager');
         $inputFilterUtil = $this->getInputFilterUtil();
         $tableId = $inputFilterUtil->getFilteredInput('id');
+        $restrictionField = $inputFilterUtil->getFilteredInput('sRestrictionField');
+        $restriction = $inputFilterUtil->getFilteredInput('sRestriction');
         $urlUtil = $this->getUrlUtil();
         $sAjaxURL = $urlUtil->getArrayAsUrl([
             'id' => $tableId,
@@ -944,8 +946,8 @@ class TFullGroupTable extends TGroupTable
             'sOutputMode' => 'Ajax',
             'module_fnc[contentmodule]' => 'ExecuteAjaxCall',
             '_fnc' => 'getAutocompleteRecordList',
-            'sRestrictionField' => '',
-            'sRestriction' => '',
+            'sRestrictionField' => $restrictionField,
+            'sRestriction' => $restriction,
             'recordID' => ''
         ], PATH_CMS_CONTROLLER.'?', '&');
 
