@@ -187,9 +187,10 @@ class CMSFieldMLTRPC extends TCMSModelBase
         $count = 0;
         while ($oPositionRow = $oPositionList->Next()) {
             if (0 === $count) {
-                $sReturnData .= '<thead class="thead-dark"><tr class="disabled"><th></th>
+                $sReturnData .= '<thead class="bg-primary"><tr class="disabled">
                         '.$this->GetRecordDataRow($sTableSQLName, $oPositionRow, $count).
-                    '</tr>
+                    '<th></th>
+                        </tr>
                         </thead>
                         <tbody>';
             }
@@ -278,17 +279,17 @@ class CMSFieldMLTRPC extends TCMSModelBase
      */
     protected function ListFieldsToString($oListFieldsList, $oRecord, $oTableConf)
     {
-        $sFieldListString = '<td><i class="fas fa-sort pr-2"></i></td>';
+        $sFieldListString = '';
         $bFindShowField = false;
         if (!is_null($oListFieldsList) && $oListFieldsList->Length() > 0) {
             while ($oListField = &$oListFieldsList->Next()) {
                 if ($oListField->fieldShowInSort) {
                     if (empty($oListField->fieldCallbackFnc)) {
-                        $sFieldListString .= "<td class=\"$oListField->fieldDbAlias\">".$oRecord->sqlData[$oListField->fieldDbAlias].'</td>';
+                        $sFieldListString .= '<td class="w-100 '.$oListField->fieldDbAlias.'">'.$oRecord->sqlData[$oListField->fieldDbAlias].'</td>';
                         $bFindShowField = true;
                     } else {
                         if ($oListField->fieldUseCallback) {
-                            $sFieldListString .= "<td class=\"$oListField->fieldDbAlias\">".call_user_func($oListField->fieldCallbackFnc, $oRecord->sqlData[$oListField->fieldDbAlias], $oRecord->sqlData, $oListField->fieldTitle).'</td>';
+                            $sFieldListString .= '<td class="w-100 '.$oListField->fieldDbAlias.'">'.call_user_func($oListField->fieldCallbackFnc, $oRecord->sqlData[$oListField->fieldDbAlias], $oRecord->sqlData, $oListField->fieldTitle).'</td>';
                             $bFindShowField = true;
                         }
                     }
@@ -297,8 +298,10 @@ class CMSFieldMLTRPC extends TCMSModelBase
         }
 
         if (false == $bFindShowField) {
-            $sFieldListString .= '<td>'.$oRecord->GetName().'</td>';
+            $sFieldListString .= '<td class="w-100">'.$oRecord->GetName().'</td>';
         }
+
+        $sFieldListString .= '<td><i class="fas fa-arrows-alt-v pr-2 float-right"></i></td>';
 
         return $sFieldListString;
     }
