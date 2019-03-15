@@ -748,3 +748,7 @@ that are deprecated because they are outdated and replaced by frontend themes or
 ## Flash Messages
 
 - TABLEEDITOR_REVISION_SAVED
+
+## Page Definitions
+
+- api.pagedef.php
