@@ -124,8 +124,10 @@ class TCMSURLHistory
      */
     public function PopURL()
     {
-        return array_pop($this->aHistory) ?? false;
+        $url = $this->GetURL();
+        array_pop($this->aHistory);
 
+        return $url;
     }
 
     /**
