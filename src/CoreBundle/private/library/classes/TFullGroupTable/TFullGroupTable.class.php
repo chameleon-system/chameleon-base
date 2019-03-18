@@ -716,10 +716,10 @@ class TFullGroupTable extends TGroupTable
             document.'.$this->listName.'.submit();
         }
         </script>
-        <div class="d-flex justify-content-between">';
+        <div class="d-flex justify-content-between flex-wrap">';
         $tableNavigation .= '<nav>';
-        $tableNavigation .= '<ul class="pagination pagination-md TFullGroupTablePagination">';
-        $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><span class="fas fa-list-ul" aria-hidden="true" style="margin-right: 5px;"></span>'.$hitText.'</a></li>';
+        $tableNavigation .= '<ul class="pagination pagination-md TFullGroupTablePagination flex-wrap">';
+        $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><i class="fas fa-list-ul d-none d-lg-inline pr-2"></i>'.$hitText.'</a></li>';
 
         if ($this->startRecord > 0 && -1 != $this->showRecordCount) {
             $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\'0\');" class="page-link"><i class="fas fa-fast-backward" aria-hidden="true"></i></a></li>';
