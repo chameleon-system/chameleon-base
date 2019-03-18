@@ -21,16 +21,34 @@ class TCMSURLHistory
      */
     public $aHistory = array();
 
-    /**
-     * @deprecated since 6.3.0 - use getHistoryIndex() instead
-     */
-    // public $index = 0;
-
-    public function __get($parameterName)
+    public function __get($name)
     {
-        if ('index' === $parameterName) {
-            return $this->getHistoryIndex();
+        if ('index' === $name) {
+            @trigger_error('The property TCMSURLHistory::$index is deprecated.', E_USER_DEPRECATED);
+
+            return $this->getHistoryCount();
         }
+
+        $trace = debug_backtrace();
+        trigger_error(sprintf('Undefined property via __get(): %s in %s on line %s',
+            $name,
+            $trace[0]['file'],
+            $trace[0]['line']),
+            E_USER_NOTICE);
+
+        return null;
+    }
+
+    public function __set($name, $val)
+    {
+        if ('index' === $name) {
+            throw new \LogicException('Invalid property: '.$name);
+        }
+    }
+
+    public function __isset($name)
+    {
+        return 'index' === $name;
     }
 
     /**
@@ -85,16 +103,16 @@ class TCMSURLHistory
      */
     public function GetURL()
     {
-        $historyIndex = $this->getHistoryIndex();
+        $historyCount = $this->getHistoryCount();
 
-        if ($historyIndex > 0 && isset($this->aHistory[$historyIndex - 1])) {
-            return $this->aHistory[$historyIndex - 1]['url'];
+        if ($historyCount > 0 && isset($this->aHistory[$historyCount - 1])) {
+            return $this->aHistory[$historyCount - 1]['url'];
         } else {
             return false;
         }
     }
 
-    public function getHistoryIndex()
+    public function getHistoryCount()
     {
         return count($this->aHistory);
     }
@@ -106,19 +124,8 @@ class TCMSURLHistory
      */
     public function PopURL()
     {
-        $historyIndex = $this->getHistoryIndex();
+        return array_pop($this->aHistory) ?? false;
 
-        if ($historyIndex > 0) {
-            $url = $this->GetURL();
-            unset($this->aHistory[$historyIndex - 1]);
-
-            // reset the keys to prevent key gaps
-            $this->aHistory = array_values($this->aHistory);
-
-            return $url;
-        } else {
-            return false;
-        }
     }
 
     /**
@@ -184,7 +191,13 @@ class TCMSURLHistory
      */
     public function Clear($id)
     {
-        $endpoint = count($this->aHistory) - 1;
+        $historyCount = $this->getHistoryCount();
+
+        if (0 === $historyCount) {
+            return;
+        }
+
+        $endpoint = $historyCount - 1;
         if ($endpoint > 0) {
             for ($i = $endpoint; $i > $id; --$i) {
                 unset($this->aHistory[$i]);
@@ -232,7 +245,7 @@ class TCMSURLHistory
      */
     public function paramsParameterExists()
     {
-        if (0 === count($this->aHistory)) {
+        if (0 === $this->getHistoryCount()) {
             return true;
         }
 
