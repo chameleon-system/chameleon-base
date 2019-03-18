@@ -1,7 +1,15 @@
 <?php
-
+/**
+ * @deprecated since 6.3.0 - not used anymore.
+ */
+// main layout
 $layoutTemplate = 'default';
-$moduleList = array('contentmodule' => array('model' => 'TPkgCmsLicenseManager_MTLicenseManager', 'view' => 'standard'));
 
-addDefaultPageTitle($moduleList);
-addDefaultHeader($moduleList);
+// modules...
+$moduleList = array('pagetitle' => array('model' => 'MTHeader', 'view' => 'title'), 'headerimage' => array('model' => 'MTHeader', 'view' => 'standard'),
+                    'contentmodule' => array('model' => 'TPkgCmsLicenseManager_MTLicenseManager', 'view' => 'standard'), );
+
+// this line needs to be included... do not touch
+if (!is_array($moduleList)) {
+    $layoutTemplate = '';
+}

@@ -1,3 +1,9 @@
+<?php
+/**
+ * @deprecated since 6.3.0 - not used anymore.
+ */
+?>
+
 <div class="contentRoundedBox">
 <div class="rightCorner">
 <div class="topBorder">
