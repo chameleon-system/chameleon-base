@@ -701,7 +701,6 @@ that are deprecated because they are outdated and replaced by frontend themes or
 
 ## Translations
 
-- chameleon_system_core.action.return_to_main_menu
 - chameleon_system_core.field_options.option_value_false
 - chameleon_system_core.field_options.option_value_true
 - chameleon_system_core.fields.lookup.no_matches
