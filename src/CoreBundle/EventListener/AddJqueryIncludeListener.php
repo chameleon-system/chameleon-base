@@ -22,7 +22,8 @@ class AddJqueryIncludeListener
     public function onGlobalHtmlHeaderInclude(HtmlIncludeEventInterface $event)
     {
         if (true === TGlobal::IsCMSMode()) {
-            $sInclude = '<script src="'.TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jquery.js').'" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->';
+            $sInclude = '<script src="'.TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jquery-3.3.1.min.js').'" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->';
+            $sInclude .= '<script src="'.TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jquery-migrate-1.4.1.js').'" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->';
         } else {
             if (defined('CHAMELEON_URL_GOOGLE_JQUERY') && CHAMELEON_URL_GOOGLE_JQUERY !== false) {
                 $sInclude = '<script src="'.CHAMELEON_URL_GOOGLE_JQUERY.'"></script>';

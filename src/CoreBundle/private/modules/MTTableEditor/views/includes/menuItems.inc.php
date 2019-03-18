@@ -1,17 +1,11 @@
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-    <tr>
-        <td>
-            <div class="tabsContainer">
-                <div class="btn-group">
-                        <?php
-                        $data['oMenuItems']->GoToStart();
-                        /** @var $oMenuItem TCMSTableEditorMenuItem */
-                        while ($oMenuItem = $data['oMenuItems']->Next()) {
-                            echo $oMenuItem->GetMenuItemHTML();
-                        }
-                        ?>
-                </div>
-            </div>
-        </td>
-    </tr>
-</table>
+<div class="row button-element">
+        <?php
+        $data['oMenuItems']->GoToStart();
+        /** @var $oMenuItem TCMSTableEditorMenuItem */
+        while ($oMenuItem = $data['oMenuItems']->Next()) {
+            echo '<div class="button-item col-12 col-sm-6 col-md-4 col-lg-auto">';
+                echo $oMenuItem->GetMenuItemHTML();
+            echo '</div>';
+        }
+        ?>
+</div>

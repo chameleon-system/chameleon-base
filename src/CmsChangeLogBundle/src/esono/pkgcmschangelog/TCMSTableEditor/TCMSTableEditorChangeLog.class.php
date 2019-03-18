@@ -20,8 +20,11 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      * the original data of the row before a save overwrites the data.
      *
      * @var TCMSField[]
+     *
+     * @deprecated since 6.3.0 - determined from $this->oTablePreChangeData
      */
     protected $oOldFields = array();
+
     /**
      * @var bool
      */
@@ -49,7 +52,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sItemKey = 'getdisplayvalue';
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_cms_change_log.action.show_changes');
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/page_edit.png');
+            $oMenuItem->sIcon = 'far fa-edit';
             $oMenuItem->sOnClick = "document.location.href='".$this->getUrlUtil()->getArrayAsUrl($aParam, '?')."'";
             $this->oMenuItems->AddItem($oMenuItem);
         }
@@ -62,7 +65,8 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     {
         if ($this->oTableConf->fieldChangelogActive) {
             $this->failOnForbiddenTables();
-            $this->savePreSaveValues($postData);
+
+            $this->bIsUpdate = isset($postData['id']);
         }
 
         return parent::Save($postData, $bDataIsInSQLForm);
@@ -70,6 +74,8 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
 
     /**
      * @param array $postData
+     *
+     * @deprecated since 6.3.0 - Not used anymore. Handled with $this->oTablePreChangeData.
      */
     protected function savePreSaveValues(array $postData)
     {
@@ -140,56 +146,66 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     /**
      * computes differences between new and old values.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator  $newFields  holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      *
      * @return array
      */
-    protected function computeDifferences(&$oFields, &$oPostTable)
+    protected function computeDifferences(&$newFields, &$oPostTable)
     {
-        $aRetValue = array();
+        $result = [];
 
-        $oFields->GoToStart();
-        /** @var TCMSField $oField */
-        while ($oField = $oFields->Next()) {
-            /** @var TCMSField $oOldField */
-            if (isset($this->oOldFields[$oField->name])) {
-                $oOldField = $this->oOldFields[$oField->name];
+        $oldFields = $this->getOldFields();
+
+        $newFields->GoToStart();
+        /** @var TCMSField $newField */
+        while ($newField = $newFields->next()) {
+            /** @var TCMSField $oldField */
+            if (isset($oldFields[$newField->name])) {
+                $oldField = $oldFields[$newField->name];
+
+                if ($oldField instanceof TCMSMLTField) {
+                    $oldField->data = $oldField->getMltValues();
+                }
             } else {
                 if ($this->bIsUpdate) {
                     continue;
                 }
-                $oOldField = clone $oField;
-                $oOldField->data = $oOldField->oDefinition->fieldFieldDefaultValue;
+                $oldField = clone $newField;
+                $oldField->data = $oldField->oDefinition->fieldFieldDefaultValue;
             }
 
-            $oField = clone $oField;
-            $oField->data = $oField->ConvertPostDataToSQL();
+            $newField = clone $newField;
+            if ($newField instanceof TCMSMLTField) {
+                $newField->data = $newField->getMltValues();
+            } else {
+                $newField->data = $newField->ConvertPostDataToSQL();
+            }
 
-            if (is_array($oOldField->data)) {
-                if (isset($oOldField->data['x']) && '-' === $oOldField->data['x']) {
-                    unset($oOldField->data['x']);
+            if (is_array($oldField->data)) {
+                if (isset($oldField->data['x']) && '-' === $oldField->data['x']) {
+                    unset($oldField->data['x']);
                 }
             }
-            if (is_array($oField->data)) {
-                if (isset($oField->data['x']) && '-' === $oField->data['x']) {
-                    unset($oField->data['x']);
+            if (is_array($newField->data)) {
+                if (isset($newField->data['x']) && '-' === $newField->data['x']) {
+                    unset($newField->data['x']);
                 }
             }
 
-            $oEqualsVisitor = new TCMSFieldEqualsVisitor($oOldField, $oField);
-            $bIsEqual = $oEqualsVisitor->check();
-            if (!$bIsEqual) {
-                $sFieldId = $oField->oDefinition->id;
-                if ($oField->getBEncryptedData()) {
-                    $aRetValue[] = array($sFieldId, '', '');
+            $equalsVisitor = new TCMSFieldEqualsVisitor($oldField, $newField);
+            $isEqual = $equalsVisitor->check();
+            if (!$isEqual) {
+                $fieldId = $newField->oDefinition->id;
+                if ($newField->getBEncryptedData()) {
+                    $result[] = array($fieldId, '', '');
                 } else {
-                    $aRetValue[] = array($sFieldId, $oOldField->data, $oField->data);
+                    $result[] = array($fieldId, $oldField->data, $newField->data);
                 }
             }
         }
 
-        return $aRetValue;
+        return $result;
     }
 
     /**
@@ -314,7 +330,8 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     {
         if ($this->oTableConf->fieldChangelogActive) {
             $this->failOnForbiddenTables();
-            $this->savePreSaveValues(array($sFieldName => $sFieldContent, 'id' => $this->sId));
+
+            $this->bIsUpdate = null !== $this->sId;
         }
 
         return parent::SaveField(
@@ -357,6 +374,14 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
             /** @var TCMSField $oField */
             $this->createChangeItems($sChangeSetId, array($change));
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getOldFields(): array
+    {
+        return $this->oTablePreChangeData->getFieldsIndexed();
     }
 
     /**

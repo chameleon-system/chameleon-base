@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use Doctrine\DBAL\Connection;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -148,7 +149,7 @@ class MTTableManager extends TCMSModelBase
         parent::DefineInterface();
         $externalFunctions = array(
             'ClearNaviCache',
-            'GetAutoCompleteAjaxList',
+            'getAutocompleteRecordList',
             'DeleteSelected',
         );
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
@@ -261,8 +262,9 @@ class MTTableManager extends TCMSModelBase
                 $this->controller->HeaderRedirect($parameter);
             }
         } else {
-            $urlHistory = $this->global->GetURLHistory();
-            $parentURL = $urlHistory->GetURL().'&_histid='.($urlHistory->index - 1);
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+
+            $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->index - 1);
         }
 
         $this->controller->HeaderURLRedirect($parentURL);
@@ -328,7 +330,6 @@ class MTTableManager extends TCMSModelBase
         }
 
         $inputFilterUtil = $this->getInputFilterUtil();
-        $preventHistoryEntry = false;
 
         $params = array();
         $params['pagedef'] = $inputFilterUtil->getFilteredInput('pagedef');
@@ -340,27 +341,129 @@ class MTTableManager extends TCMSModelBase
         }
 
         // If list was opened within a frame, url should not be added to history. The parameter field "sRestrictionField" can be used as an indicator.
-        if (array_key_exists('sRestriction', $params) && array_key_exists('sRestrictionField', $params)) {
-            $preventHistoryEntry = true;
-        }
+        if (false === $this->isInFrame()) {
+            $tableName = $this->oTableConf->GetName();
 
-        $sTableName = strip_tags(preg_replace('/(\r\n|\n|\r)/', ' ', $this->oTableConf->sqlData['translation']));
-        if (!$preventHistoryEntry) {
-            $this->global->GetURLHistory()->AddItem($params, $sTableName);
+            $iconCssClass = trim($this->getIconCssClassForTable($this->oTableConf->id));
+
+            if ('' !== $iconCssClass) {
+                $tableName = '<i class="'.TGlobal::OutHTML($iconCssClass).'"></i> '.$tableName;
+            }
+
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+            $breadcrumb->AddItem($params, $tableName);
         }
     }
 
+    private function getIconCssClassForTable(string $tableId): string
+    {
+        $menuItem = \TdbCmsMenuItem::GetNewInstance();
+        if (false === $menuItem->LoadFromFields(array(
+            'target' => $tableId,
+            'target_table_name' => 'cms_tbl_conf', )
+        )) {
+            return '';
+        }
+
+        return $menuItem->fieldIconFontCssClass;
+    }
+
+    protected function isInFrame(): bool
+    {
+        $inputFilterUtil = $this->getInputFilterUtil();
+
+        $isInIFrame = $inputFilterUtil->getFilteredInput('isInIFrame');
+
+        if (null !== $isInIFrame) {
+            return true;
+        }
+
+        $isInIFrame = $inputFilterUtil->getFilteredInput('_isiniframe');
+
+        if (null !== $isInIFrame) {
+            return true;
+        }
+
+        $pageDefinition = $inputFilterUtil->getFilteredInput('pagedef');
+
+        if (false !== strpos($pageDefinition, 'plain')) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
-     * Generates the record list for the ajax autocomplete widget.
+     * @deprecated since 6.3.0 - use getAutocompleteRecordList() instead
      *
      * @return array
      */
     public function GetAutoCompleteAjaxList()
     {
         $inputFilterUtil = $this->getInputFilterUtil();
-
-        $searchKey = $inputFilterUtil->getFilteredInput('term');
         $recordID = $inputFilterUtil->getFilteredInput('recordID');
+        $autoClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->fieldName);
+
+        /** @var $recordList TCMSRecordList */
+        $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $this->getAutocompleteListQuery());
+
+        $returnVal = array();
+
+        /** @var $record TCMSRecord */
+        while ($record = $recordList->Next()) {
+            $name = $record->GetName();
+            if (!empty($name)) {
+                $tmp = new stdClass();
+                if ($record->id == $recordID) {
+                    $name = $name.' <---';
+                }
+                $tmp->label = $name;
+                $tmp->value = $record->id;
+                $returnVal[] = $tmp;
+            }
+        }
+
+        return $returnVal;
+    }
+
+    /**
+     * Generates the record list for the ajax autocomplete select boxes in table editor and record lists.
+     *
+     * @return string|false JSON with id, text, html elements
+     */
+    public function getAutocompleteRecordList()
+    {
+        $inputFilterUtil = $this->getInputFilterUtil();
+        $recordID = $inputFilterUtil->getFilteredInput('recordID');
+        $autoClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->fieldName);
+
+        /** @var $recordList TCMSRecordList */
+        $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $this->getAutocompleteListQuery());
+
+        $returnVal = [];
+        $returnVal[] = ['id' => ' ', 'text' => ' ', 'html' => ' ', 'cssClass' => 'd-none'];
+
+        /** @var $record TCMSRecord */
+        while ($record = $recordList->Next()) {
+            $name = $record->GetName();
+            if (!empty($name)) {
+
+                // highlight active record
+                $cssClass = '';
+                if ($record->id == $recordID) {
+                    $cssClass = 'bg-success';
+                }
+                $returnVal[] = ['id' => $record->id, 'text' => $name, 'html' => $name, 'cssClass' => $cssClass];
+            }
+        }
+
+        return json_encode($returnVal);
+    }
+
+    private function getAutocompleteListQuery(): string
+    {
+        $inputFilterUtil = $this->getInputFilterUtil();
+        $searchKey = $inputFilterUtil->getFilteredInput('term');
 
         $listClass = null;
         // allow custom list class overwriting (defined in pagedef)
@@ -406,26 +509,7 @@ class MTTableManager extends TCMSModelBase
 
         $query .= ' LIMIT 0,50';
 
-        /** @var $recordList TCMSRecordList */
-        $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $query);
-
-        $returnVal = array();
-
-        /** @var $record TCMSRecord */
-        while ($record = $recordList->Next()) {
-            $name = $record->GetName();
-            if (!empty($name)) {
-                $tmp = new stdClass();
-                if ($record->id == $recordID) {
-                    $name = $name.' <---';
-                }
-                $tmp->label = $name;
-                $tmp->value = $record->id;
-                $returnVal[] = $tmp;
-            }
-        }
-
-        return $returnVal;
+        return $query;
     }
 
     /**
@@ -441,18 +525,11 @@ class MTTableManager extends TCMSModelBase
     public function GetHtmlHeadIncludes()
     {
         $includeLines = parent::GetHtmlHeadIncludes();
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/form/jquery.form.js').'" type="text/javascript"></script>'; // ajax form plugin
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/BlockUI/jquery.blockUI.js').'" type="text/javascript"></script>';
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.js').'" type="text/javascript"></script>';
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqDnR.js').'"> type="text/javascript"></script>';
-        $includeLines[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         $includeLines[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />';
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/table.js').'" type="text/javascript"></script>';
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/WayfarerTooltip/WayfarerTooltip.js').'" type="text/javascript"></script>';
         $includeLines[] = '<link href="'.TGlobal::GetPathTheme().'/css/tooltip.css" rel="stylesheet" type="text/css" />';
+        $includeLines[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
         $this->LoadMessages();
 
@@ -480,6 +557,17 @@ class MTTableManager extends TCMSModelBase
         $includeLines = array_merge($includeLines, $tableListIncludeLines);
 
         return $includeLines;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetHtmlFooterIncludes()
+    {
+        $includes = parent::GetHtmlFooterIncludes();
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
+
+        return $includes;
     }
 
     /**
@@ -583,5 +671,10 @@ class MTTableManager extends TCMSModelBase
     private function getFlashMessageService()
     {
         return ServiceLocator::get('chameleon_system_core.flash_messages');
+    }
+
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }

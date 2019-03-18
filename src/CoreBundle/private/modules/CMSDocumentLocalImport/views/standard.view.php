@@ -1,6 +1,6 @@
 <?php
 if (!empty($data['errorMessage'])) {
-    echo '<div class="errorMessage">'.$data['errorMessage'].'</div>';
+    echo '<div class="alert alert-info">'.$data['errorMessage'].'</div>';
 } else {
     if (count($data['dirListing']) > 0) {
         ?>
@@ -11,7 +11,7 @@ if (!empty($data['errorMessage'])) {
         <input type="hidden" name="pagedef" value="CMSDocumentLocalImport"/>
         <input type="hidden" name="nodeID" value="<?=$data['nodeID']; ?>"/>
         <input type="hidden" name="module_fnc[contentmodule]" value="ImportFiles"/>
-        <select name="directory">
+        <select name="directory" class="form-control form-control-sm">
             <?php
             foreach ($data['dirListing'] as $aDir) {
                 $sValue = $aDir['directory'];
@@ -41,7 +41,7 @@ if (!empty($data['errorMessage'])) {
             <input type="radio" name="private" value="0"> <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_boolean.no')); ?>
         </div>
         <div style="padding-top: 10px;"><?php
-            echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_media_local_media.action_import'), 'javascript:PleaseWait();document.importForm.submit();', URL_CMS.'/images/icons/database_add.png'); ?></div>
+            echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_media_local_media.action_import'), "javascript:CHAMELEON.CORE.showProcessingModal();document.importForm.submit();", 'fas fa-file-import'); ?></div>
     </form>
 
     <?php
@@ -49,7 +49,7 @@ if (!empty($data['errorMessage'])) {
 
     if (isset($data['fileErrors'])) {
         foreach ($data['fileErrors'] as $errorMessage) {
-            echo '<div class="errorMessage">'.$errorMessage.'</div>';
+            echo '<div class="alert alert-danger">'.$errorMessage.'</div>';
         }
     }
 

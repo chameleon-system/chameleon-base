@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Chameleon System (https://www.chameleonsystem.com).
+ *
+ * (c) ESONO AG (https://www.esono.de)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -57,17 +66,16 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
         $html = sprintf(
             '
             <div class="fieldMltInverseEmpty" >
-                <input type="checkbox" name="%s" id="fieldMltInverseEmptyCheckbox%s" %s value="1"  autocomplete="off">
+                <input type="checkbox" name="%s" id="fieldMltInverseEmptyCheckbox%s" %s value="1" autocomplete="off">
                 <label for="fieldMltInverseEmptyCheckbox%2$s">%s</label> 
-                <span class="toolTipButton toolTipButton%2$s"><img src="%s/images/icons/icon_info.gif" width="16" height="16" alt="%s"></span>
-                <div class="tooltipContainer">%s</div>
+                <span class="toolTipButton toolTipButton%2$s"><i class="fas fa-question-circle text-info" style="font-size: 1.3em; cursor: pointer; cursor: hand;" title="%s"></i></span>
+                <div class="tooltipContainer alert alert-info">%s</div>
             </div>
              ',
             $this->getInverseEmptyFieldName(),
             $this->name,
             $checked,
             $translator->trans('chameleon_system_core.field_lookup_multi_select_restriction.check_label'),
-            TGlobal::GetPathTheme(),
             $translator->trans('chameleon_system_core.cms_module_table_editor.field_help'),
             $translator->trans('chameleon_system_core.field_lookup_multi_select_restriction.check_help')
         );

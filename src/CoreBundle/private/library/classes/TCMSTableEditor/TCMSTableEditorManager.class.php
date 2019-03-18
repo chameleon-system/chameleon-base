@@ -600,48 +600,60 @@ class TCMSTableEditorManager
         return $this->oTableEditor->IsRecordLocked();
     }
 
+    /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     */
     public function AddNewRevision(&$postData, $bPreventMessage = false)
     {
-        return $this->oTableEditor->AddNewRevision($postData, $bPreventMessage);
-    }
-
-    public function AddNewRevisionFromDatabase($oFields, $oProperty, $postData, $sParentId = '')
-    {
-        return $this->oTableEditor->AddNewRevisionFromDatabase($oFields, $oProperty, $postData, $sParentId);
+        return false;
     }
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     */
+    public function AddNewRevisionFromDatabase($oFields, $oProperty, $postData, $sParentId = '')
+    {
+        return false;
+    }
+
+    /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * returns true if revision managament is activated for the CMS and the current table.
      *
      * @return bool
      */
     public function IsRevisionManagementActive()
     {
-        return $this->oTableEditor->IsRevisionManagementActive();
+        return false;
     }
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * loads record revision and saves it as the current record.
      *
      * @param string $sRevisionID
      * @param bool   $bIsChildRevision
      *
-     * @return TCMSstdClass
+     * @return TCMSstdClass|null
      */
     public function ActivateRecordRevision($sRevisionID = null, $bIsChildRevision = false)
     {
-        return $this->oTableEditor->ActivateRecordRevision($sRevisionID, $bIsChildRevision);
+        return null;
     }
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * returns the revision number the current record is based on
      * if no revisions are found it returns 0.
      *
-     * @return unknown
+     * @return int
      */
     public function GetLastActivatedRevision()
     {
-        return $this->oTableEditor->GetLastActivatedRevision();
+        return 0;
     }
 
     /**

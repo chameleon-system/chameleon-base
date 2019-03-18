@@ -40,14 +40,14 @@ class TCMSFieldVarchar extends TCMSField
 
         $count = $this->fieldWidth - mb_strlen($this->_GetHTMLValue());
 
-        $html = '<div class="input-group"><input';
+        $html = '<div class="input-group input-group-sm"><input';
         foreach ($attributes = $this->getInputFieldAttributes() as $key => $value) {
             $html .= sprintf(' %s="%s"', TGlobal::OutHTML($key), TGlobal::OutHTML($value));
         }
         $html .= sprintf(' value="%s"', $this->_GetHTMLValue());
-        $html .= ' />
-
-        <span class="input-group-addon charCounter"><span id="'.TGlobal::OutHTML($this->name).'Count">'.$count."</span> <i class=\"glyphicon glyphicon-text-width\"></i></span>
+        $html .= ' /><span class="input-group-append"><span class="input-group-text charCounter alert alert-warning mb-0">
+              <span id="'.TGlobal::OutHTML($this->name).'Count" class="mr-1">'.$count."</span> <i class=\"fas fa-text-width\"></i></span>
+            </span>
         </div>
       <script type=\"text/javascript\">
   			$(document).ready(function() {
@@ -76,13 +76,16 @@ class TCMSFieldVarchar extends TCMSField
     protected function getInputFieldAttributes()
     {
         $attributes = [
-            'class' => 'form-control input-sm',
+            'class' => 'form-control form-control-sm',
             'type' => $this->sFieldHTMLInputType,
             'id' => $this->name,
             'name' => $this->name,
-            'style' => "width: {$this->fieldCSSwidth}",
             'maxlength' => $this->fieldWidth,
         ];
+
+        if ('100%' !== $this->fieldCSSwidth) {
+            $attributes['style'] = 'width: '.$this->fieldCSSwidth;
+        }
 
         if (null !== $this->sFieldHTMLPlaceholder) {
             $attributes['placeholder'] = $this->sFieldHTMLPlaceholder;

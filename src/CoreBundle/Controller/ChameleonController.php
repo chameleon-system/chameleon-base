@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
+use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
@@ -126,9 +127,14 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private $inputFilterUtil;
     /**
+     * @var ResourceCollectorInterface
+     */
+    private $resourceCollector;
+    /**
      * @var ResponseVariableReplacerInterface
      */
     private $responseVariableReplacer;
+
 
     /**
      * @param RequestStack                 $requestStack
@@ -229,7 +235,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     {
         $pagedefData = $this->getPagedefData($pagedef);
         if (false === $pagedefData) {
-            return new Response("<div style=\"background: #ffcccc url(/chameleon/blackbox/images/nav_icons/error.png) no-repeat 5px 9px; color: #900; border: 2px solid #c00; padding-left: 45px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;\">Error: invalid page definition: {$pagedef}</div>", Response::HTTP_NOT_FOUND);
+            return new Response('<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error: invalid page definition: '.TGlobal::OutHTML($pagedef).'</div>', Response::HTTP_NOT_FOUND);
         }
 
         $this->moduleLoader->LoadModules($pagedefData['moduleList']);
@@ -244,7 +250,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         $templatePath = $this->LoadLayoutTemplate($pagedefData['sLayoutFile']);
         if (false === file_exists($templatePath)) {
-            $sErrorMessage = "<div style=\"background: #ffcccc url(/chameleon/blackbox/images/nav_icons/error.png) no-repeat 5px 9px; color: #900; border: 2px solid #c00; padding-left: 45px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;\">Error: Invalid template: {$templatePath} ({$pagedefData['sLayoutFile']})</div>\n";
+            $sErrorMessage = '<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error: Invalid template: '.TGlobal::OutHTML($templatePath).' ('.TGlobal::OutHTML($pagedefData['sLayoutFile']).")</div>\n";
             /** @noinspection CallableInLoopTerminationConditionInspection */
             /** @noinspection SuspiciousLoopInspection */
             for ($i = 0; ob_get_level() > $i; ++$i) {
@@ -387,35 +393,34 @@ abstract class ChameleonController implements ChameleonControllerInterface
         reset($this->moduleLoader->modules);
     }
 
-    /*
+    /**
      * a page can execute any number of functions in any module. which functions
-     * to execute, in which module, needs to be passed via post or get through
+     * to execute, in which module, needs to be passed via POST or GET through
      * the variable module_fnc. This function will fetch the contents of that
      * variable and loop through the resulting list of module->function sets. if the
      * function exists within the specified module it will be called. order of
      * execution is the same as the order in module_fnc array.
      *
      * @param TModuleLoader $modulesObject
-    */
+     */
     protected function ExecuteModuleMethod(&$modulesObject)
     {
-        $moduleFunctions = $this->inputFilterUtil->getFilteredInput('module_fnc', null);
-        if (null === $moduleFunctions || false === is_array($moduleFunctions) || 0 === count($moduleFunctions)) {
+        $moduleFunctions = $this->getRequestedModuleFunctions();
+
+        if (0 === \count($moduleFunctions)) {
             return;
         }
-        /**
-         * @var array $moduleFunctions
-         */
-        foreach ($moduleFunctions as $modulename => $method) {
+
+        foreach ($moduleFunctions as $spotName => $method) {
             $method = trim($method);
             if ('' === $method) {
                 continue;
             }
-            if (array_key_exists($modulename, $modulesObject->modules)) {
+            if (array_key_exists($spotName, $modulesObject->modules)) {
                 /**
                  * @var TModelBase $module
                  */
-                $module = $modulesObject->modules[$modulename];
+                $module = $modulesObject->modules[$spotName];
                 if ($this->isModuleMethodCallAllowed($module, $method)) {
                     $this->global->SetExecutingModulePointer($module);
                     $module->_CallMethod($method);
@@ -426,12 +431,34 @@ abstract class ChameleonController implements ChameleonControllerInterface
                 $oActivePage = $this->activePageService->getActivePage();
                 if ($oActivePage) {
                     $oActionPluginManager = new TPkgCmsActionPluginManager($oActivePage);
-                    if ($oActionPluginManager->actionPluginExists($modulename)) {
-                        $oActionPluginManager->callAction($modulename, $method, $this->global->GetUserData());
+                    if ($oActionPluginManager->actionPluginExists($spotName)) {
+                        $oActionPluginManager->callAction($spotName, $method, $this->global->GetUserData());
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Returns all module function definitions of the request specified by either POST or GET
+     * in the form 'spot name' => 'method name'. POST has precedence (first in the array).
+     *
+     * @return array
+     */
+    private function getRequestedModuleFunctions(): array
+    {
+        $moduleFunctions = $this->inputFilterUtil->getFilteredPostInput('module_fnc');
+        if (false === \is_array($moduleFunctions)) {
+            $moduleFunctions = [];
+        }
+        $moduleFunctionsGet = $this->inputFilterUtil->getFilteredGetInput('module_fnc');
+        if (false === \is_array($moduleFunctionsGet)) {
+            $moduleFunctionsGet = [];
+        }
+
+        $moduleFunctions = \array_merge($moduleFunctions, $moduleFunctionsGet);
+
+        return $moduleFunctions;
     }
 
     /**
@@ -537,7 +564,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
                 $sPattern = "/<script (?!.*blackbox.*).*\/javascript\/.*<\/script>/i";
                 $sPageContent = preg_replace($sPattern, '', $sPageContent);
 
-                $sPageContent = str_replace('@@jquery@@', '/chameleon/blackbox/javascript/jquery/jquery.js', $sPageContent);
+                $sPageContent = str_replace('@@jquery@@', '/chameleon/blackbox/javascript/jquery/jquery-3.3.1.min.js', $sPageContent);
 
                 $sPattern = "/<script>.*?<\/script>/si";
                 $sPageContent = preg_replace($sPattern, '', $sPageContent);
@@ -576,8 +603,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
             return $sPageContent; // no replace hooks - so skip process
         }
 
-        $oResourceCollection = new TCMSResourceCollection();
-
         if (null === $aCustomHeaderData) {
             $aCustomHeaderData = $this->_GetCustomHeaderData(true);
             $aCustomHeaderData = $this->splitHeaderDataIntoJSandOther($aCustomHeaderData);
@@ -590,7 +615,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         $sPageContent = str_replace('<!--#CMSHEADERCODE#-->', $sCustomHeaderData, $sPageContent);
 
-        if ($oResourceCollection->IsAllowed()) {
+        if ($this->resourceCollector->IsAllowed()) {
             // need to keep everything in the header since the resource collection looks for it there
             $sPageContent = str_replace('<!--#CMSHEADERCODE-CSS#-->', $sCustomHeaderData, $sPageContent);
         } else {
@@ -690,9 +715,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     protected function runExternalResourceCollectorOnPageContent($sPageContent)
     {
-        $oResourceCollection = new TCMSResourceCollection();
-
-        return $oResourceCollection->CollectExternalResources($sPageContent);
+        return $this->resourceCollector->CollectExternalResources($sPageContent);
     }
 
     /**
@@ -941,6 +964,11 @@ abstract class ChameleonController implements ChameleonControllerInterface
     public function setInputFilterUtil(InputFilterUtilInterface $inputFilterUtil)
     {
         $this->inputFilterUtil = $inputFilterUtil;
+    }
+
+    public function setResourceCollector(ResourceCollectorInterface $resourceCollector): void
+    {
+        $this->resourceCollector = $resourceCollector;
     }
 
     public function setResponseVariableReplacer(ResponseVariableReplacerInterface $responseVariableReplacer): void

@@ -10,8 +10,8 @@
  */
 
 /**
- * used to select a color.
-/**/
+ * Used to select a color.
+ */
 class TCMSFieldColorpicker extends TCMSField
 {
     public function GetHTML()
@@ -20,17 +20,14 @@ class TCMSFieldColorpicker extends TCMSField
         if (!empty($this->data)) {
             $value = '#'.$value;
         }
-        $html = '<div class="input-group" id="colorPickerCotainer'.TGlobal::OutHTML($this->name).'">
-    <span class="input-group-addon"><i></i></span>
+
+        return '<div class="input-group input-group-sm" id="colorPickerContainer'.TGlobal::OutHTML($this->name).'">
+    <span class="input-group-append">
+        <span class="input-group-text colorpicker-input-addon"><i></i></span>
+    </span>    
     <input type="text" value="'.TGlobal::OutHTML($value).'" class="form-control" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" />
 </div>
-<script>
-    $(function(){
-        $(\'#colorPickerCotainer'.TGlobal::OutHTML($this->name).'\').colorpicker({ format: \'hex\'} );
-    });
-</script>';
-
-        return $html;
+';
     }
 
     public function _GetHTMLValue()
@@ -45,21 +42,37 @@ class TCMSFieldColorpicker extends TCMSField
     }
 
     /**
-     * return an array of all js, css, or other header includes that are required
-     * in the cms for this field. each include should be in one line, and they
-     * should always be typed the same way so that no includes are included mor than once.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function GetCMSHtmlHeadIncludes()
     {
-        $aIncludes = array();
-        $aIncludes[] = '<link href="'.URL_CMS.'/javascript/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<script src="'.URL_CMS.'/javascript/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js" type="text/JavaScript"></script>';
+        $includes = parent::GetCMSHtmlHeadIncludes();
+        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/bootstrap-colorpicker-3.0.3/css/bootstrap-colorpicker.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
-        return $aIncludes;
+        return $includes;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function GetCMSHtmlFooterIncludes()
+    {
+        $includes = parent::GetCMSHtmlFooterIncludes();
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/bootstrap-colorpicker-3.0.3/js/bootstrap-colorpicker.min.js').'" type="text/javascript"></script>';
+        $includes[] = "<script>
+    $(function() {
+        $('#colorPickerContainer".TGlobal::OutHTML($this->name)."').colorpicker({ format: 'hex', useHashPrefix: true });
+    });
+    </script>";
+
+        return $includes;
+    }
+
+    /**
+     * @deprecated since 6.3.0 - no longer used in Chameleon (looks like this is an orphan which was used by an older color picker).
+     *
+     * @return bool
+     */
     public static function isFirstInstance()
     {
         static $isFirst;
@@ -73,18 +86,7 @@ class TCMSFieldColorpicker extends TCMSField
     }
 
     /**
-     * checks if field is mandatory and if field content is valid
-     * overwrite this method to add your field based validation
-     * you need to add a message to TCMSMessageManager for handling error messages
-     * <code>
-     * <?php
-     *   $oMessageManager = TCMSMessageManager::GetInstance();
-     *   $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
-     *   $oMessageManager->AddMessage($sConsumerName,'TABLEEDITOR_FIELD_IS_MANDATORY');
-     * ?>
-     * </code>.
-     *
-     * @return bool - returns false if field is mandatory and field content is empty or data is not valid
+     * {@inheritdoc}
      */
     public function DataIsValid()
     {
@@ -104,10 +106,7 @@ class TCMSFieldColorpicker extends TCMSField
     }
 
     /**
-     * returns true if field data is not empty
-     * overwrite this method for mlt and property fields.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function HasContent()
     {
@@ -120,10 +119,7 @@ class TCMSFieldColorpicker extends TCMSField
     }
 
     /**
-     * this method converts post data like datetime (3 fields with date, hours, minutes in human readable format)
-     * to sql format.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function ConvertPostDataToSQL()
     {

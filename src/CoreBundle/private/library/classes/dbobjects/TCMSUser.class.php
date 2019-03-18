@@ -104,7 +104,7 @@ class TCMSUser extends TCMSRecord
         $aId = array();
         $oPortals = &$this->GetMLT('cms_portal_mlt', 'TCMSPortal');
         while ($oPortal = &$oPortals->Next()) {
-            if ('99' != $oPortal->sqlData['main_node_tree']) {
+            if (TCMSTreeNode::TREE_ROOT_ID != $oPortal->sqlData['main_node_tree']) {
                 $aId[] = $oPortal->sqlData['main_node_tree'];
             }
         }
@@ -480,7 +480,7 @@ class TCMSUser extends TCMSRecord
      */
     public function GetUserIcon($bWithZoom = true, $iThumbWidthHeight = 32)
     {
-        $imageTag = '<img src="'.URL_CMS.'/images/nav_icons/user.gif" hspace="0" vspace="0" border="0" style="margin-right:10px" align="left" width="'.$iThumbWidthHeight.'" height="'.$iThumbWidthHeight.'" />';
+        $imageTag = '<i class="fas fa-user"></i>';
         $sImageID = $this->sqlData['images'];
         if ($sImageID >= 1000 || !is_numeric($sImageID)) {
             $oImage = new TCMSImage();

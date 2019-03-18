@@ -7,9 +7,12 @@
     <input type="hidden" name="tableSQLName" value="<?=$data['tableSQLName']; ?>"/>
     <input type="hidden" name="movedItemID" id="movedItemID" value=""/>
     <input type="hidden" name="activeItemId"  value="<?=TGlobal::OutHTML($recordID); ?>"/>
+
+    <div class="pt-1">
     <?php
     if (!empty($data['list'])) {
         echo $data['list'];
     }
     ?>
+    </div>
 </form>

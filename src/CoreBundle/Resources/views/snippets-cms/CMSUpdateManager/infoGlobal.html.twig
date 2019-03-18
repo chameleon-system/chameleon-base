@@ -1,6 +1,13 @@
 {% for message in messages %}
-    <li class="info-message-type info-message-type-{{ message.level|lower }}">
-        <a href="#info-{{ bundleName }}-{{ buildNumber }}-{{ loop.index0 }}">{{ 'chameleon_system_core.cms_module_update.go_to_message'|trans }}</a> <b>{{ message.level }}:</b><br />{{ message.text }}
+    {% if message.level == 'TODO' %}
+        {% set messageType = 'success' %}
+    {% elseif message.level == 'ERROR' %}
+        {% set messageType = 'danger' %}
+    {% else %}
+        {% set messageType = message.level|lower %}
+    {% endif %}
+    <li class="list-group-item list-group-item-{{ messageType }}">
+        <a href="#info-{{ bundleName }}-{{ buildNumber }}-{{ loop.index0 }}">{{ 'chameleon_system_core.cms_module_update.go_to_message'|trans }}</a>
+        <b>{{ message.level }}:</b><br/>{{ message.text }}
     </li>
 {% endfor %}
-

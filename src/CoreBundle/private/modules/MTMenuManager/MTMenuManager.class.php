@@ -9,6 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
+/**
+ * @deprecated since 6.3.0 - classic main menu will be removed in a future Chameleon release
+ */
 class MTMenuManager extends TCMSModelBase
 {
     /**
@@ -33,7 +39,8 @@ class MTMenuManager extends TCMSModelBase
     public function AddURLHistory()
     {
         if ($this->AllowAddingURLToHistory()) {
-            $this->global->GetURLHistory()->AddItem(array('pagedef' => $this->global->GetUserData('pagedef')), TGlobal::Translate('chameleon_system_core.cms_module_header.action_main_menu'));
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+            $breadcrumb->AddItem(array('pagedef' => $this->global->GetUserData('pagedef')), TGlobal::Translate('chameleon_system_core.cms_module_header.action_main_menu'));
         }
     }
 
@@ -60,17 +67,6 @@ class MTMenuManager extends TCMSModelBase
     {
         $externalFunctions = array('');
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function GetHtmlHeadIncludes()
-    {
-        $aIncludes = parent::GetHtmlHeadIncludes();
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contentbox.css" rel="stylesheet" type="text/css" />';
-
-        return $aIncludes;
     }
 
     /**
@@ -117,5 +113,10 @@ class MTMenuManager extends TCMSModelBase
         $aClearTriggers[] = array('table' => 'cms_widget_task', 'id' => '');
 
         return $aClearTriggers;
+    }
+
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }

@@ -4,7 +4,10 @@
 {%- if target %} target="{{ target }}" {% endif -%}
 {%- if onMouseOver %} onmouseover="{{ onMouseOver }}" {% endif -%}
 >
-{%- if sIconURL -%}
-<span class="btn-icon" style="background-image: url({{ sIconURL }});">
+{%- if sIconURL is defined -%}
+    <span class="btn-icon" style="background-image: url({{ sIconURL }});">{{ sTitle }}</span>
+{%- else -%}
+    {%- if sIcon|length > 0 %}<i class="{{ sIcon }} pr-2"></i>{% endif -%}
+    {{ sTitle }}
 {%- endif -%}
-{{ sTitle }}</span></a>
+</a>

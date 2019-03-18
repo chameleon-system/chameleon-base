@@ -17,7 +17,7 @@ class TCMSFieldTimezone extends TCMSField
     public function GetHTML()
     {
         $value = $this->_GetHTMLValue();
-        $html = '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name)."\" class=\"form-control input-sm\" style=\"width: 80px; display: inline;\">\n";
+        $html = '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name)."\" class=\"form-control form-control-sm\" style=\"width: 80px; display: inline;\">\n";
         $html .= '<option value=""';
         if ('' == $value) {
             $html .= ' selected>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected'))."</option>\n";

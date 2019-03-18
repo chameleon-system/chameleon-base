@@ -90,24 +90,28 @@ if (!defined('PATH_MEDIA_LIBRARY')) {
 }
 
 /**
+ * @deprecated since 6.3.0 - not used anymore
  * Path to filetype icons.
  */
 if (!defined('PATH_FILETYPE_ICONS')) {
     define('PATH_FILETYPE_ICONS', PATH_USER_CMS_PUBLIC.'/blackbox/images/filetype_icons/');
 }
 /**
+ * @deprecated since 6.3.0 - not used anymore
  * Path to low-quality filetype icons.
  */
 if (!defined('PATH_FILETYPE_ICONS_LOW_QUALITY')) {
     define('PATH_FILETYPE_ICONS_LOW_QUALITY', PATH_FILETYPE_ICONS.'16x16/');
 }
 /**
+ * @deprecated since 6.3.0 - not used anymore
  * URL path to filetype icons relative to TGlobal::GetStaticURLToWebLib().
  */
 if (!defined('URL_FILETYPE_ICONS')) {
     define('URL_FILETYPE_ICONS', '/images/filetype_icons/');
 }
 /**
+ * @deprecated since 6.3.0 - not used anymore
  * URL path to low-quality filetype icons relative to TGlobal::GetStaticURLToWebLib().
  */
 if (!defined('URL_FILETYPE_ICONS_LOW_QUALITY')) {
@@ -335,6 +339,9 @@ if (!defined('CMS_SHOW_TASKS_INFORMATION')) {
 * you need to set revision management active for every table manually in table configuration also
 */
 if (!defined('CMS_ACTIVE_REVISION_MANAGEMENT')) {
+    /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     */
     define('CMS_ACTIVE_REVISION_MANAGEMENT', false);
 }
 
@@ -1137,8 +1144,8 @@ if (!defined('CMS_SNIPPET_PATH')) {
     define('CMS_SNIPPET_PATH', 'snippets');
 }
 
-/** enables the less parser for snippets (requires less compiler on the server)
- *  to import snippet less files, add "@import "/chameleon/outbox/static/less/all.less";" to the chameleon.less file in /assets/less.
+/**
+ * enables the less parser for snippets (requires less compiler on the server).
  */
 if (!defined('CMS_PKG_VIEW_RENDERER_ENABLE_LESS_COMPILER')) {
     define('CMS_PKG_VIEW_RENDERER_ENABLE_LESS_COMPILER', false);
@@ -1192,12 +1199,17 @@ if (!defined('CHAMELEON_PKG_NEWSLETTER_NEW_MODULE')) {
 }
 
 /**
- * Path to the file that marks if maintenance mode is active. The current directory's hash is added to
- * distinguish multiple Chameleon instances on a shared host.
- * We use the SCRIPT_FILENAME variable because we do NOT want to resolve symlinks. Otherwise it would not be possible
- * to activate maintenance mode and then perform a deployment using atomic deploys, because the maintenance marker
- * would then change its name.
+ * Path to the file that marks if maintenance mode is active.
+ *
+ * The following properties should be true for this location:
+ * - It must survive deployment (if it was present before it should also be afterwards).
+ * - Different Chameleon installations on the same host must be distinguishable here (by generating some kind of
+ *   generated ID or using a path within the project directory).
+ * - The same physical marker should be present for all nodes of a multi-node installation.
+ *
+ * The default value under "cmsdata" fulfills these requirements if cmsdata is shared between nodes in a multi-node
+ * setup.
  */
 if (!defined('PATH_MAINTENANCE_MODE_MARKER')) {
-    define('PATH_MAINTENANCE_MODE_MARKER', sys_get_temp_dir().'/chameleon-maintenance-mode-'.md5(dirname($_SERVER['SCRIPT_FILENAME'])));
+    define('PATH_MAINTENANCE_MODE_MARKER', PATH_CMS_CUSTOMER_DATA.'/maintenance/chameleon-maintenance-mode-marker');
 }

@@ -20,12 +20,10 @@
  */
 function gcf_YesNoField($field, $row, $fieldName)
 {
-    $result = '';
+    $result = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_boolean.no'));
 
     if ('1' == $field) {
         $result = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_boolean.yes'));
-    } else {
-        $result = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_boolean.no'));
     }
 
     return $result;

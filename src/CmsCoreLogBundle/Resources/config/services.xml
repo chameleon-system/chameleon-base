@@ -5,7 +5,157 @@
 
     <services>
         <service id="chameleon_system_cms_core_log.cronjob.cleanup_cronjob" class="TPkgCmsCoreLogCleanupCronJob" shared="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3.</deprecated>
             <tag name="chameleon_system.cronjob" />
+        </service>
+
+        <service id="chameleon_system_cms_core_log.formatter_with_stacktraces" class="Monolog\Formatter\LineFormatter" public="false">
+            <call method="includeStacktraces"/>
+        </service>
+
+        <service id="cmsPkgCore.logHandler.database" class="TPkgCmsCoreLogMonologHandler_Database" public="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3.</deprecated>
+            <argument type="service" id="database_connection"/>
+        </service>
+
+        <service id="chameleon_system_cms_core_log.processor.web" class="Monolog\Processor\WebProcessor" public="false">
+            <tag name="monolog.processor"/>
+        </service>
+
+        <service id="chameleon_system_cms_core_log.processor.introspection" class="Monolog\Processor\IntrospectionProcessor" public="false">
+            <tag name="monolog.processor"/>
+        </service>
+
+        <service id="chameleon_system_cms_core_log.processor.request_id" class="ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\RequestIdProcessor" public="false">
+            <argument type="service" id="chameleon_system_core.request_info_service"/>
+            <tag name="monolog.processor"/>
+        </service>
+
+        <service id="chameleon_system_cms_core_log.processor.session_id" class="ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\SessionIdProcessor" public="false">
+            <argument type="service" id="request_stack"/>
+            <tag name="monolog.processor"/>
+        </service>
+
+        <service id="cmsPkgCore.logHandler.files" class="Monolog\Handler\StreamHandler" public="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument>%kernel.logs_dir%/core.log</argument>
+            <argument>200</argument>
+        </service>
+
+        <service id="cmsPkgCore.logHandler.fingerscrossed" class="Monolog\Handler\FingersCrossedHandler" public="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument type="service" id="cmsPkgCore.logHandler.database" />
+        </service>
+
+        <service id="cmsPkgCore.logDriver.standard" class="Monolog\Logger" public="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument>core.standard</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.fingerscrossed" />
+            </call>
+        </service>
+
+        <service id="cmsPkgCore.logChannel.standard" class="TPkgCmsCoreLog">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument type="service" id="logger"/>
+        </service>
+
+        <service id="cmsPkgCore.logDriver.security" class="Monolog\Logger" public="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument>core.security</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.database" />
+            </call>
+        </service>
+
+        <!-- use this logger to log any security related infos -->
+        <service id="cmsPkgCore.logChannel.security" class="TPkgCmsCoreLog">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument type="service" id="monolog.logger.security"/>
+        </service>
+
+        <service id="cmsPkgCore.logHandler.dbal" class="Monolog\Handler\StreamHandler" public="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument>%kernel.logs_dir%/dbal.log</argument>
+            <argument>300</argument>
+        </service>
+
+        <service id="cmsPkgCore.logDriver.dbal" class="Monolog\Logger" public="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument>core.dbal</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.dbal" />
+            </call>
+        </service>
+
+        <service id="cmsPkgCore.logChannel.dbal" class="TPkgCmsCoreLog">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument type="service" id="monolog.logger.dbal"/>
+        </service>
+
+        <service id="cmsPkgCore.logDriver.cmsUpdates" class="Monolog\Logger" public="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument>core.cmsUpdates</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.database" />
+            </call>
+        </service>
+
+        <service id="cmsPkgCore.logChannel.cmsUpdates" class="TPkgCmsCoreLog">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument type="service" id="monolog.logger.cms_update"/>
+        </service>
+
+        <service id="cmsPkgCore.logDriver.cronjobs" class="Monolog\Logger" public="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument>core.cronjobs</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.database" />
+            </call>
+        </service>
+
+        <service id="cmsPkgCore.logChannel.cronjobs" class="TPkgCmsCoreLog">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument type="service" id="monolog.logger.cronjob"/>
+        </service>
+
+        <service id="cmsPkgCore.logDriver.apilogger" class="Monolog\Logger" public="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument>core.api</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.database" />
+            </call>
+        </service>
+
+        <service id="cmsPkgCore.logChannel.apilogger" class="TPkgCmsCoreLog">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument type="service" id="monolog.logger.api"/>
+        </service>
+
+        <service id="pkgShopPaymentPayone.logDriver.apilogger" class="Monolog\Logger" public="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument>pkgShopPaymentPayone.apilogger</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.database" />
+            </call>
+        </service>
+
+        <service id="pkgShopPaymentPayone.logChannel.apilogger" class="TPkgCmsCoreLog">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument type="service" id="pkgShopPaymentPayone.logDriver.apilogger" />
+        </service>
+
+        <service id="pkgShopPaymentPayone.logDriver.standard" class="Monolog\Logger" public="false">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument>pkgShopPaymentPayone.standard</argument>
+            <call method="pushHandler">
+                <argument type="service" id="cmsPkgCore.logHandler.database" />
+            </call>
+        </service>
+
+        <service id="pkgShopPaymentPayone.logChannel.standard" class="TPkgCmsCoreLog">
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <argument type="service" id="pkgShopPaymentPayone.logDriver.standard" />
         </service>
     </services>
 </container>

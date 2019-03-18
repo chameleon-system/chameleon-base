@@ -10,28 +10,26 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
 {
     public function GetHTML()
     {
-        $sPath = $this->GetHTMLPrimaryTree();
-        $sAdditionalPaths = $this->GetHTMLSecondaryTree();
-        $html = '';
-        $html .= '<input type="hidden" id="'.TGlobalBase::OutHTML($this->name).'" name="'.TGlobalBase::OutHTML($this->name).'" value="'.TGlobalBase::OutHTML($this->data).'" />
-      <span id="'.TGlobalBase::OutHTML($this->name).'posDummy"></span>';
-        $html .= '<h1>'.TGlobal::Translate('chameleon_system_core.field_page_tree_node.primary_node').':</h1><div id="'.TGlobalBase::OutHTML($this->name).'_path">'.$sPath.'</div>';
-        $html .= '<div class="cleardiv">&nbsp;</div>';
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_primary_node'), "javascript:loadTreeNodeSelection('".TGlobal::OutJS($this->name)."',document.cmseditform.".TGlobalBase::OutHTML($this->name).'.value);', URL_CMS.'/images/icons/page_navigation.gif');
-        $html .= '<div class="cleardiv">&nbsp;</div>';
+        $primaryPath = $this->GetHTMLPrimaryTree();
+        $additionalPaths = $this->GetHTMLSecondaryTree();
+        $selectPrimaryTreeNodeButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_primary_node'), "javascript:loadTreeNodeSelection('".TGlobal::OutJS($this->name)."',document.cmseditform.".TGlobalBase::OutHTML($this->name).'.value);', 'fas fa-check');
+        $selectAdditionalTreeNodesButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes'), 'javascript:openFullTree();', 'fas fa-check-double');
 
-        $html .= '<h1>'.TGlobal::Translate('chameleon_system_core.field_page_tree_node.secondary_nodes').':</h1><div id="'.TGlobalBase::OutHTML($this->name).'_additional_paths">'.$sAdditionalPaths.'</div>';
-        $html .= '<div class="cleardiv">&nbsp;</div>';
+        $viewRenderer = $this->getViewRenderer();
+        $viewRenderer->AddSourceObject('fieldName', $this->name);
+        $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
+        $viewRenderer->AddSourceObject('primaryPath', $primaryPath);
+        $viewRenderer->AddSourceObject('additionalPaths', $additionalPaths);
+        $viewRenderer->AddSourceObject('selectPrimaryTreeNodeButton', $selectPrimaryTreeNodeButton);
+        $viewRenderer->AddSourceObject('selectAdditionalTreeNodesButton', $selectAdditionalTreeNodesButton);
 
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes'), 'javascript:openFullTree();', URL_CMS.'/images/icons/page_navigation.gif');
-        $html .= '<div class="cleardiv">&nbsp;</div>';
-
-        return $html;
+        return $viewRenderer->Render('TCMSFieldPageTreeNode/treeNodes.html.twig', null, false);
     }
 
     /**
@@ -91,13 +89,8 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
             $path = $portal->GetName().'/'.$path;
         }
         // Form rendered path from slash separated path string.
-        $treeSubPath = str_replace('/', '</div></li><li><div class="treesubpath">', $path);
-        $renderedPath = sprintf('<div class="treeField"><ul><li><div class="treesubpath">%s</div></li></ul>', $treeSubPath);
-        if (isset($tree)) {
-            $dateInformation = $this->GetPageTreeConnectionDateInformationHTML($tree->id, $this->oTableRow->id);
-            $renderedPath .= sprintf('<div class="dateinfo">%s</div>', $dateInformation);
-        }
-        $renderedPath .= '</div>';
+        $treeSubPath = str_replace('/', '</li><li class="breadcrumb-item">', $path);
+        $renderedPath = sprintf('<ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li><li class="breadcrumb-item">%s</li></ol>', $treeSubPath);
 
         return $renderedPath;
     }
@@ -269,7 +262,13 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
     {
         $aIncludes = parent::GetCMSHtmlHeadIncludes();
 
-        $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'table' => 'cms_tpl_page', 'rootID' => '99', 'id' => $this->oTableRow->id));
+        $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript([
+            'pagedef' => 'CMSModulePageTreePlain',
+            'table' => 'cms_tpl_page',
+            'rootID' => TCMSTreeNode::TREE_ROOT_ID,
+            'id' => $this->oTableRow->id,
+            'isInIframe' => '1'
+        ]);
         $aIncludes[] = "<script type=\"text/javascript\">
         function loadTreeNodeSelection(fieldName,id) {
           if(document.getElementById('cms_portal_id').options != undefined) {
@@ -286,7 +285,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
               $('#tooltipcms_portal_id_content').parent('td').prepend('<input type=\"hidden\" name=\"cms_portal_id\" id=\"cms_portal_id\" value=\"' + portalID + '\" />' + portalName);
               $('#tooltipcms_portal_id_content').siblings('.switchToRecordBox').remove();
             }
-            CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=treenodeselect&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID,400,500);
+            CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=treenodeselect&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID);
           } else {
             toasterMessage('".TGlobal::Translate('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
           }
@@ -300,14 +299,14 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
               $('#cms_portal_id').remove();
               $('#tooltipcms_portal_id_content').parent('td').prepend('<input type=\"hidden\" name=\"cms_portal_id\" id=\"cms_portal_id\" value=\"' + portalID + '\" />' + portalName);
               $('#tooltipcms_portal_id_content').siblings('.switchToRecordBox').remove();
-              CreateModalIFrameDialogCloseButton('".$url."',900,650,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
+              CreateModalIFrameDialogCloseButton('".$url."',0,0,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
             } else {
               toasterMessage('".TGlobal::Translate('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
             }
           } else {
             var portalID = document.getElementById('cms_portal_id').value;
             if(portalID != '0' && portalID != '') {
-              CreateModalIFrameDialogCloseButton('".$url."',900,650,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
+              CreateModalIFrameDialogCloseButton('".$url."',0,0,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
             } else {
               toasterMessage('".TGlobal::Translate('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
             }
@@ -318,11 +317,13 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
         return $aIncludes;
     }
 
-    /**
-     * @return TreeServiceInterface
-     */
-    private function getTreeService()
+    private function getTreeService(): TreeServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.tree_service');
+        return ServiceLocator::get('chameleon_system_core.tree_service');
+    }
+
+    private function getViewRenderer(): ViewRenderer
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }

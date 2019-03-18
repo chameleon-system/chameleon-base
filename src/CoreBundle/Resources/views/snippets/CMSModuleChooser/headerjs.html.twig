@@ -7,15 +7,11 @@
     var oldJQuery=window.jQuery;
     var oldCashSign=window.$;
 </script>
-<script src="{{ resourcePath }}/javascript/jquery/jquery.js" type="text/javascript"></script><script></script>
-<script src="{{ resourcePath }}/javascript/jquery/jQueryUI/ui.core.js" type="text/javascript"></script>
+<script src="{{ resourcePath }}/javascript/jquery/jquery-3.3.1.min.js" type="text/javascript"></script><script></script>
+<script src="{{ resourcePath }}/javascript/jquery-ui-1.12.1.custom/jquery-ui.js" type="text/javascript"></script>
 <script src="{{ resourcePath }}/javascript/jquery/bgiframe/jquery.bgiframe.js" type="text/javascript"></script>
-<script src="{{ resourcePath }}/javascript/jquery/jQueryUI/ui.mouse.js" type="text/javascript"></script>
-<script src="{{ resourcePath }}/javascript/jquery/jQueryUI/ui.draggable.js" type="text/javascript"></script>
-<script src="{{ resourcePath }}/javascript/jquery/jQueryUI/ui.droppable.js" type="text/javascript"></script>
 <script src="{{ resourcePath }}/javascript/modules/TemplateEngine.js" type="text/javascript"></script>
 {% if hasLockUser %}
-    <script src="{{ resourcePath }}/javascript/jquery/WayfarerTooltip/WayfarerTooltip.js" type="text/javascript"></script>
     <link href="{{ themePath }}/css/tooltip.css" rel="stylesheet" type="text/css" />
 {% endif %}
 
@@ -89,11 +85,4 @@
 
     window.jQuery =oldJQuery;
     window.$ = oldCashSign;
-</script>
-
-<script language="javascript" type="text/javascript">
-</script>
-
-<script type="text/javascript">
-
 </script>

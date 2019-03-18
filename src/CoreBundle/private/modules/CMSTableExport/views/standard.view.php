@@ -10,7 +10,7 @@
     <div style="float: left; line-height: 20px;"><?=TGlobal::Translate('chameleon_system_core.cms_module_table_export.form_select_profile'); ?>:
         &nbsp;</div>
     <div style="float: left;">
-        <select name="cms_export_profile_id">
+        <select name="cms_export_profile_id" class="form-control form-control-sm">
             <?php
             echo $data['profileOptions'];
             ?>
@@ -25,11 +25,11 @@
     function forceFileDownloadForm(formName) {
         $.fileDownload($('#'+formName).prop('action'), {
             prepareCallback: function (url) {
-                parent.PleaseWait();
+                parent.CHAMELEON.CORE.showProcessingModal();
             },
 
             successCallback: function (url) {
-                parent.jQuery.unblockUI();
+                parent.CHAMELEON.CORE.hideProcessingModal();
             },
             httpMethod: "GET",
             data: $('#'+formName).serialize()

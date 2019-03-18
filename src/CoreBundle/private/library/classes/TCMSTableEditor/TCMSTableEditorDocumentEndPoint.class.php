@@ -595,9 +595,9 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
                 $bHideName = true;
             }
             if ($sLinkName != $oItem->GetName()) {
-                $sResult = $oItem->GetDownloadLink(false, $bHideName, $bHideSize, false, $bHideIcon, $sLinkName);
+                $sResult = $oItem->getDownloadHtmlTag(false, $bHideName, $bHideSize, $bHideIcon, $sLinkName);
             } else {
-                $sResult = $oItem->GetDownloadLink(false, $bHideName, $bHideSize, false, $bHideIcon);
+                $sResult = $oItem->getDownloadHtmlTag(false, $bHideName, $bHideSize, $bHideIcon);
             }
         } else {
             $sResult = $aMatch[0];
@@ -627,7 +627,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
             if ($oGlobal->oUser->oAccessManager->HasEditPermission($this->oTableConf->sqlData['name'])) {
                 $oMenuItem = new TCMSTableEditorMenuItem();
                 $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save_and_return');
-                $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/action_save.gif');
+                $oMenuItem->sIcon = 'far fa-save';
                 $oMenuItem->sOnClick = 'SaveViaAjaxCustomCallback(postSaveHook, true);';
                 $this->oMenuItems->AddItem($oMenuItem);
             }
@@ -636,7 +636,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor_document.action_use');
             $oMenuItem->sItemKey = 'usage';
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/application_view_gallery.png');
+            $oMenuItem->sIcon = 'far fa-list-alt';
             $oMenuItem->sOnClick = "GetUsages('".$this->oTable->id."', 'document');";
             $this->oMenuItems->AddItem($oMenuItem);
             // now add custom items
@@ -658,7 +658,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
         $oDownloadFile = new TCMSDownloadFile();
         /** @var $oDownloadFile TCMSDownloadFile */
         $oDownloadFile->Load($this->sId);
-        $sDownLoadFileHTML = $oDownloadFile->GetDownloadLink();
+        $sDownLoadFileHTML = $oDownloadFile->getDownloadHtmlTag();
         $oRecordData->downloadHTML = $sDownLoadFileHTML;
 
         return $oRecordData;
@@ -680,12 +680,12 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
             parent.reloadSelectedFilesList();
             if(typeof window.parent.editDocument == 'function' || typeof window.parent.editDocument == 'object') {
               var assignedDocumentHTML = '<div id=\"documentManager_' + parent._fieldName  + '_' + data.id + '\">';
-              assignedDocumentHTML += '<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"400\"><tr>';
-              assignedDocumentHTML += '<td width=\"*\">';
+              assignedDocumentHTML += '<table class=\"table table-striped\"><tr>';
+              assignedDocumentHTML += '<td>';
               assignedDocumentHTML += data.downloadHTML;
               assignedDocumentHTML += '</td>';
-              assignedDocumentHTML += '<td width=\"20\">';
-              assignedDocumentHTML += '<img src=\"".URL_CMS.'/images/icons/page_delete.gif" alt="'.TGlobal::Translate('chameleon_system_core.table_editor_document.action_remove')."\" border=\"0\" style=\"cursor: pointer; cursor: hand;\" onclick=\"if(confirm(\'".TGlobal::Translate('chameleon_system_core.table_editor_document.action_remove_confirm')."?\')){removeDocument(parent._fieldName,data.id,parent._recordID,parent._tableID)};\" />';
+              assignedDocumentHTML += '<td>';
+              assignedDocumentHTML += '<button class=\"btn btn-danger btn-sm\" type=\"button\" onclick=\"if(confirm(\'".TGlobal::Translate('chameleon_system_core.table_editor_document.action_remove_confirm')."?\')){removeDocument(parent._fieldName,data.id,parent._recordID,parent._tableID)};\"><i class=\"far fa-trash-alt mr-2\"></i>".TGlobal::Translate('chameleon_system_core.table_editor_document.action_remove')."';
               assignedDocumentHTML += '</td>';
               assignedDocumentHTML += '</tr>';
               assignedDocumentHTML += '</table>';

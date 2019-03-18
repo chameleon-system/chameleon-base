@@ -7,7 +7,7 @@ $sLoadCopy = (isset($bLoadCopy) && '1' == $bLoadCopy) ? ('&bLoadCopy='.$bLoadCop
     var sModuleInstanceID = '';
     function LoadCMSInstance(id) {
         sModuleInstanceID = id;
-        GetAjaxCallTransparent('<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'templateengineplain',  'module_fnc' => array($sSpotName => 'ExecuteAjaxCall'), '_fnc' => 'getChooseModuleViewDialog')); ?>&instanceid=' + id+"&id=<?=$data['id']; ?>&spotName=<?=$data['spotname'].$sLoadCopy; ?>", LoadModuleInstanceCallback);
+        GetAjaxCallTransparent('<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'templateengine',  'module_fnc' => array($sSpotName => 'ExecuteAjaxCall'), '_fnc' => 'getChooseModuleViewDialog')); ?>&instanceid=' + id+"&id=<?=$data['id']; ?>&spotName=<?=$data['spotname'].$sLoadCopy; ?>", LoadModuleInstanceCallback);
     }
 
     function LoadModuleInstanceCallback(data) {

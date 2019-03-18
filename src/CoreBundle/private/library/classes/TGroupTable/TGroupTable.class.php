@@ -399,8 +399,12 @@ class TGroupTable
 
                 $groupContent .= '<tr data-record-id="'.$row['id'].'" '.$rowStyle." class=\"TGroupTableItemRow\">\n";
 
+                $cssClass = '';
+                if (null !== $this->onClick) {
+                    $cssClass = 'action';
+                }
                 foreach ($this->columnList as $columnNumber => $column) {
-                    $groupContent .= $column->Display($row, '', $this->onClick);
+                    $groupContent .= $column->Display($row, $cssClass, $this->onClick);
                 }
                 $groupContent .= "</tr>\n";
                 ++$rowCount;

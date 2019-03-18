@@ -59,9 +59,16 @@ class CMSUpdateManager extends TModelBase
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/modules/updateManager.css" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/modules/updateManager/updateManager.js').'" type="text/javascript"></script>';
 
         return $aIncludes;
+    }
+
+    public function GetHtmlFooterIncludes()
+    {
+        $includes = parent::GetHtmlFooterIncludes();
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/modules/updateManager/updateManager.js').'" type="text/javascript"></script>';
+
+        return $includes;
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @deprecated since 6.3.0 - not used anymore.
+ */
 /** @var $oOwningTable THTMLTable */
 /** @var $oColumn THTMLTableColumn */
 /** @var $aCallTimeVars array */
@@ -12,17 +14,17 @@ $sFilterPopupId = TGlobal::OutHTML("filter{$oOwningTable->sListIdentKey}{$oColum
             <input type="text"
                    name="<?=TGlobal::OutHTML($oOwningTable->sListIdentKey); ?>[<?=THTMLTable::URL_PARAM_SEARCH; ?>][<?=TGlobal::OutHTML($oColumn->sColumnAlias); ?>]"
                    value="<?=TGlobal::OutHTML($searchFilter); ?>"/>
-            <input type="submit" value="<?=TGlobal::Translate('Filter'); ?>"/>
+            <input type="submit" value="<?=TGlobal::OutHTML(TGlobal::Translate('Filter')); ?>"/>
         </form>
     </div>
     <span class="set"><a href="#" onclick="$('#<?=$sFilterPopupId; ?>').show()"><img
-        src="/chameleon/blackbox/images/icons/magnifier.png" alt="<?=TGlobal::Translate('Filter setzen'); ?>" border="0"/></a></span>
+        src="/chameleon/blackbox/images/icons/magnifier.png" alt="<?=TGlobal::OutHTML(TGlobal::Translate('Filter setzen')); ?>" border="0"/></a></span>
     <?php
     if (!empty($searchFilter)) {
         ?>
         <span class="term"><?=TGlobal::OutHTML($searchFilter); ?></span><span class="clear"><a
             href="<?=$oOwningTable->GetFilterURL($oColumn); ?>"><img src="/chameleon/blackbox/images/icons/bin_closed.png"
-                                                                   alt="<?=TGlobal::Translate('Filter zurücksetzen'); ?>"
+                                                                   alt="<?=TGlobal::OutHTML(TGlobal::Translate('Filter zurücksetzen')); ?>"
                                                                    border="0"/></a></span>
         <?php
     }

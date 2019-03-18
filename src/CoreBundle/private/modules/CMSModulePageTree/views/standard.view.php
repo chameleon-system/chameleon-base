@@ -27,7 +27,7 @@
         var nodeID = $(node).attr('esrealid');
         currentNodeID = nodeID; // save node ID in global var
         var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('tableid' => $data['treeTableID'], 'pagedef' => 'tableeditorPopup')); ?>&id=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url, 850, 610);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     /**
@@ -38,7 +38,7 @@
         var nodeID = $(node).attr('esrealid');
         currentNodeID = nodeID; // save node ID in global var
         var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('tableid' => $data['treeTableID'], 'pagedef' => 'tableeditorPopup', 'module_fnc' => array('contentmodule' => 'Insert'))); ?>&parent_id=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url, 850, 610);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     /**
@@ -46,14 +46,8 @@
      */
     function moveNode(nodeID, parentNodeID, position) {
         if (typeof parentNodeID != 'undefined' && typeof nodeID != 'undefined') {
-
-            /**
-             * block parent window so the modal can't be closed.
-             */
-            window.parent.$.blockUI.defaults.css = {};
-            window.parent.$.blockUI({message: $('#pleaseWaitMessage').html(), css: { width:	'12%', top: '48%', left:'44%'}, baseZ: 1031, draggable: false, ignoreIfBlocked: true });
-
-            var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('module' => 'ExecuteAjaxCall'), '_fnc' => 'MoveNode', 'tableid' => $data['treeTableID'])); ?>&nodeID=' + nodeID + '&parentNodeID=' + parentNodeID + '&position=' + position;
+            CHAMELEON.CORE.showProcessingModal();
+            var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'MoveNode', 'tableid' => $data['treeTableID'])); ?>&nodeID=' + nodeID + '&parentNodeID=' + parentNodeID + '&position=' + position;
             GetAjaxCallTransparent(url, moveNodeSuccess);
         }
     }
@@ -62,7 +56,7 @@
      * unblocks the UI
      */
     function moveNodeSuccess(nodeID, responseMessage) {
-        window.parent.$.unblockUI();
+        window.parent.CHAMELEON.CORE.hideProcessingModal();
     }
 
     /**
@@ -82,7 +76,7 @@
     function openPageConnectionList(node) {
         var nodeID = $(node).attr('esrealid');
         var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('id' => $data['treeNodeTableID'], 'pagedef' => 'tablemanagerframe', 'sRestrictionField' => 'cms_tree_id')); ?>&sRestriction=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url, 820, 660);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     function assignPage(node) {
@@ -91,7 +85,7 @@
     echo $data['dataID'];
 } ?>';
         var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('tableid' => $data['treeNodeTableID'], 'pagedef' => 'tableeditorPopup', 'sRestrictionField' => 'cms_tree_id', 'module_fnc' => array('contentmodule' => 'Insert'), 'active' => '1', 'preventTemplateEngineRedirect' => '1')); ?>&sRestriction=' + nodeID + '&contid=' + assignedDataID + '&cms_tree_id=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url, 820, 660);
+        CreateModalIFrameDialogCloseButton(url);
     }
 
     /**
@@ -99,7 +93,7 @@
      */
     function TreeNodeAssignFormResponse(data, responseMessage) {
         if (data) {
-            $('#treeNodeAssignDialog').jqmHide();
+            CloseModalIFrameDialog();
             if (data.assigned) {
                 $('#' + data.treeNodeID + ' span').addClass('activeConnectedNode');
             } else {
@@ -120,16 +114,8 @@
 
 		if(confirm(confirmMessage)){
 			var nodeID = $(node).attr('esrealid');
-			var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('module' => 'ExecuteAjaxCall'), '_fnc' => 'DeleteNode', 'tableid' => $data['treeTableID'], 'tbl' => 'cms_tpl_page')); ?>&nodeID=' + nodeID;
-
-			/**
-			 * block parent window so the modal can't be closed.
-			 *
-			 * if the frame is opened in a separate window the blocking will also work,
-			 * as parent refers to the current window, if not parent is present
-			*/
-			window.parent.$.blockUI.defaults.css = {};
-			window.parent.$.blockUI({message: $('#pleaseWaitMessage').html(), css: { width:	'12%', top: '48%', left:'44%'}, baseZ: 1031, draggable: false, ignoreIfBlocked: true });
+			var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'DeleteNode', 'tableid' => $data['treeTableID'], 'tbl' => 'cms_tpl_page')); ?>&nodeID=' + nodeID;
+            CHAMELEON.CORE.showProcessingModal();
 
 			GetAjaxCallTransparent(url, deleteNodeSuccess);
 		}
@@ -146,7 +132,7 @@
 		/**
 		 * see "deleteNode" method for explanation why "window.parent" is used here
 		 */
-		window.parent.$.unblockUI();
+		window.parent.CHAMELEON.CORE.hideProcessingModal();
 
     }
 
@@ -240,49 +226,79 @@
         <?php
         if (true == $data['showAssignDialog']) {
             ?>
-            <li class="firstnode" id="assignpage"><a href="javascript:void(0);"><img
-                src="<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_tick.gif'); ?>"
-                border="0"><?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.action_connect_page'); ?></a></li>
+            <li class="firstnode" id="assignpage">
+                <a href="javascript:void(0);">
+                    <i class="fas fa-link mr-2"></i>
+                    <?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.action_connect_page'); ?>
+                </a>
+            </li>
             <?php
         }
         ?>
-        <li id="editpageconnections"><a href="javascript:void(0);"><img
-            src="<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_edit.gif'); ?>"
-            border="0"><?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.connected_pages'); ?></a></li>
-        <li id="editpage"><a href="javascript:void(0);"><img
-            src="<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_edit.gif'); ?>"
-            border="0"><?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.action_edit_page'); ?></a></li>
-        <li id="editpageconfig"><a href="javascript:void(0);"><img
-            src="<?=TGlobal::GetStaticURLToWebLib('/images/icons/application_edit.png'); ?>"
-            border="0"><?php echo $translator->trans('chameleon_system_core.list.page_settings'); ?></a></li>
-        <li id="editnode"><a href="javascript:void(0);"><img
-            src="<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_edit.gif'); ?>"
-            border="0"><?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.action_edit_node'); ?></a></li>
-        <li id="newnode"><a href="javascript:void(0);"><img
-            src="<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_new.gif'); ?>"
-            border="0"><?php echo $translator->trans('chameleon_system_core.action.new'); ?></a></li>
-        <li id="deletenode"><a href="javascript:void(0);"><img
-            src="<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_delete.gif'); ?>"
-            border="0"><?php echo $translator->trans('chameleon_system_core.action.delete'); ?></a></li>
+        <li id="editpageconnections">
+            <a href="javascript:void(0);">
+                <i class="fas fa-link mr-2"></i>
+                <?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.connected_pages'); ?>
+            </a>
+        </li>
+        <li id="editpage">
+            <a href="javascript:void(0);">
+                <i class="far fa-edit mr-2"></i>
+                <?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.action_edit_page'); ?>
+            </a>
+        </li>
+        <li id="editpageconfig">
+            <a href="javascript:void(0);">
+                <i class="fas fa-cog mr-2"></i>
+                <?php echo $translator->trans('chameleon_system_core.list.page_settings'); ?>
+            </a>
+        </li>
+        <li id="editnode">
+            <a href="javascript:void(0);">
+                <i class="fas fa-sitemap mr-1"></i>
+                <?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.action_edit_node'); ?>
+            </a>
+        </li>
+        <li id="newnode">
+            <a href="javascript:void(0);">
+                <i class="fas fa-plus mr-2"></i>
+                <?php echo $translator->trans('chameleon_system_core.action.new'); ?>
+            </a>
+        </li>
+        <li id="deletenode">
+            <a href="javascript:void(0);">
+                <i class="far fa-trash-alt mr-2"></i>
+                <?php echo $translator->trans('chameleon_system_core.action.delete'); ?>
+            </a>
+        </li>
     </ul>
     <div class="cleardiv">&nbsp;</div>
 </div>
 <div id="RootNodeRightClickMenuContainer" style="display: none;">
     <ul>
-        <li id="newnode"><a href="javascript:void(0);"><img
-            src="<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_new.gif'); ?>"
-            border="0"><?php echo $translator->trans('chameleon_system_core.action.new'); ?></a></li>
+        <li id="newnode">
+            <a href="javascript:void(0);">
+                <i class="fas fa-plus mr-2"></i>
+                <?php echo $translator->trans('chameleon_system_core.action.new'); ?>
+            </a>
+        </li>
     </ul>
     <div class="cleardiv">&nbsp;</div>
 </div>
 <div id="RestrictedNodeRightClickMenuContainer" style="display: none;">
     <ul>
-        <li id="editnode"><a href="javascript:void(0);"><img
-            src="<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_edit.gif'); ?>"
-            border="0"><?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.action_edit_node'); ?></a></li>
-        <li id="newnode"><a href="javascript:void(0);"><img
-            src="<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_new.gif'); ?>"
-            border="0"><?php echo $translator->trans('chameleon_system_core.action.new'); ?></a></li>
+        <li id="editnode">
+            <a href="javascript:void(0);">
+                <i class="far fa-edit mr-2"></i>
+                <?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.action_edit_node'); ?>
+            </a>
+        </li>
+        <li id="newnode">
+            <a href="javascript:void(0);">
+                <i class="fas fa-plus mr-2"></i>
+                <?php echo $translator->trans('chameleon_system_core.action.new'); ?>
+            </a>
+        </li>
     </ul>
     <div class="cleardiv">&nbsp;</div>
 </div>
@@ -370,58 +386,67 @@
 
     });
 </script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#treeNodeAssignDialog')
-            .jqm({
-                zIndex:600,
-                overlay:15
-            })
-            .jqDrag('.jqDrag')
-            .jqResize('.jqResize')
-    });
-</script>
 
-
-<ul class="simpleTree">
-    <?php
-        echo $data['sTreeHTML'];
-    ?>
-</ul>
-
-<div id="treelegend" style="position: absolute; top: 10px; right: 30px;">
-    <h1>
-        <span class="nodeIndicatorIcon"></span>
-        <?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_header'); ?>
-    </h1>
-
-    <div class="text">
-        <span class="nodeIndicatorIcon"></span>
-        <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_node_has_no_page'); ?></span>
+<?php
+if (false === $isInIframe) {
+?>
+<div class="card">
+    <div class="card-header">
+        <h3>Navigation</h3>
     </div>
+    <div class="card-body simple-tree-card">
+<?php
+}
+?>
+        <div class="navigationTreeContainer">
+            <ul class="simpleTree">
+                <?php
+                echo $data['sTreeHTML'];
+                ?>
+            </ul>
 
-    <div class="otherConnectedNode">
-        <span class="nodeIndicatorIcon"></span>
-        <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_has_connected_pages'); ?></span>
-    </div>
+            <div class="treelegend">
+                <h3>
+                    <span class="nodeIndicatorIcon"></span>
+                    <?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_header'); ?>
+                </h3>
 
-    <div class="activeConnectedNode">
-        <span class="nodeIndicatorIcon"></span>
-        <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page'); ?></span>
-    </div>
+                <div class="text">
+                    <span class="nodeIndicatorIcon"></span>
+                    <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_node_has_no_page'); ?></span>
+                </div>
 
-    <div class="restrictedPage">
-        <span class="nodeIndicatorIcon iconRestricted" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/lock.png')); ?>');"></span>
-        <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page'); ?></span>
-    </div>
+                <div class="otherConnectedNode">
+                    <span class="nodeIndicatorIcon"></span>
+                    <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_has_connected_pages'); ?></span>
+                </div>
 
-    <div class="legendLine">
-        <span class="nodeIndicatorIcon iconHidden" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/hidden.png')); ?>');"></span>
-        <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_hidden'); ?></span>
-    </div>
+                <div class="activeConnectedNode">
+                    <span class="nodeIndicatorIcon"></span>
+                    <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page'); ?></span>
+                </div>
 
-    <div class="legendLine">
-        <span class="nodeIndicatorIcon iconExternalLink" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/icon_external_link.gif')); ?>');"></span>
-        <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_external_link'); ?></span>
+                <div class="restrictedPage">
+                    <span class="nodeIndicatorIcon iconRestricted" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/lock.png')); ?>');"></span>
+                    <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page'); ?></span>
+                </div>
+
+                <div class="legendLine">
+                    <span class="nodeIndicatorIcon iconHidden" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/hidden.png')); ?>');"></span>
+                    <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_hidden'); ?></span>
+                </div>
+
+                <div class="legendLine">
+                    <span class="nodeIndicatorIcon iconExternalLink" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/icon_external_link.gif')); ?>');"></span>
+                    <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_external_link'); ?></span>
+                </div>
+            </div>
+        </div>
+        <?php
+        if (false === $isInIframe) {
+        ?>
     </div>
 </div>
+<?php
+}
+

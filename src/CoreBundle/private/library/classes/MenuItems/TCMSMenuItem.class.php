@@ -10,20 +10,19 @@
  */
 
 /**
- * the base class for all menu (category) items in the cms. all menu items
- * must inherit from this.
-/**/
+ * The base class for all menu (category) items in the CMS. All menu items must inherit from this.
+ *
+ * @deprecated since 6.3.0 - only used for deprecated classic main menu
+ */
 class TCMSMenuItem
 {
     /**
-     * holds the menu item data.
-     *
      * @var array
      */
-    public $data = null;
+    public $data;
 
     /**
-     * set the data for the item.
+     * Sets data for the item.
      *
      * @param array $data
      */
@@ -33,7 +32,7 @@ class TCMSMenuItem
     }
 
     /**
-     * return an html link used to call the items detail page.
+     * Returns an HTML link used to call the item's detail page.
      *
      * @return string
      */

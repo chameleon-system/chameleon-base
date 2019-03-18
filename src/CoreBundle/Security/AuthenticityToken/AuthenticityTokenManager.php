@@ -75,12 +75,15 @@ class AuthenticityTokenManager implements AuthenticityTokenManagerInterface
         return $this->csrfTokenManager->isTokenValid(new CsrfToken(AuthenticityTokenManagerInterface::TOKEN_ID, $submittedToken));
     }
 
-    /**
-     * @return string|null
-     */
-    private function getSubmittedToken()
+    private function getSubmittedToken(): ?string
     {
-        return $this->inputFilterUtil->getFilteredInput(AuthenticityTokenManagerInterface::TOKEN_ID);
+        $token = $this->inputFilterUtil->getFilteredPostInput(AuthenticityTokenManagerInterface::TOKEN_ID);
+
+        if (null === $token) {
+            $token = $this->inputFilterUtil->getFilteredGetInput(AuthenticityTokenManagerInterface::TOKEN_ID);
+        }
+
+        return $token;
     }
 
     /**

@@ -17,7 +17,7 @@ if (false != $oCategory->Load($oField->ConfigGetDefaultCategoryId()) || $oField-
                 $sSelectedId = $oCategory->id;
             }
 
-            echo '<select class="form-control" name="'.TGlobal::OutHTML($oField->name).'__cms_media_tree_id" id="'.TGlobal::OutHTML($oField->name).'__cms_media_tree_id" class="form-control input-sm">';
+            echo '<select class="form-control" name="'.TGlobal::OutHTML($oField->name).'__cms_media_tree_id" id="'.TGlobal::OutHTML($oField->name).'__cms_media_tree_id" class="form-control form-control-sm">';
             echo $oTreeSelect->GetTreeOptions($sSelectedId, true);
             echo '</select>';
         } elseif ($oCategory) {
@@ -26,7 +26,7 @@ if (false != $oCategory->Load($oField->ConfigGetDefaultCategoryId()) || $oField-
     </div>
     <div class="form-group">
 <?php
-    echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_property_media.action_upload_and_assign'), 'javascript:'.$oField->_GetOpenUploadWindowJS(), URL_CMS.'/images/icons/add.png'); ?>
+    echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_property_media.action_upload_and_assign'), 'javascript:'.$oField->_GetOpenUploadWindowJS(), 'fas fa-file-upload'); ?>
     </div>
 <?php
 }

@@ -9,15 +9,10 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @deprecated since 6.3.0 - was only used by deprecated workflow bundle
+ */
 function gcf_GetPublishedIcon($value, $row)
 {
-    $returnVal = '';
-
-    if ('1' == $value) {
-        $returnVal = '<img src="/chameleon/blackbox/images/nav_icons/success.png" title="freigegeben" />';
-    } else {
-        $returnVal = '<img src="/chameleon/blackbox/images/nav_icons/error.png" title="nicht freigegeben" />';
-    }
-
-    return $returnVal;
+    return $value;
 }

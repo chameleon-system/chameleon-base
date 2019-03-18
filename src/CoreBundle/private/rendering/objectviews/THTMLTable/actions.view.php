@@ -1,4 +1,7 @@
 <?php
+/**
+ * @deprecated since 6.3.0 - not used anymore.
+ */
 /** @var $oHTMLTable THTMLTable */
 /** @var $oRecordList TCMSRecordList */
 /** @var $oColumns TIterator */
@@ -25,7 +28,7 @@ if (array_key_exists('sActionLocation', $aCallTimeVars)) {
         | <a href="#"
              onclick="THTMLTableSelectAll(document.<?=TGlobal::OutHTML($sCheckboxFormName); ?>,false);return false;"><?=TGlobal::OutHTML(TGlobal::Translate('Auswahl aufheben')); ?></a>
         <select name="actionselector<?=$sLocation; ?>"
-                onchange="if (confirm('<?=TGlobal::OutHTML(TGlobal::Translate('Wollen Sie diese Aktion wirklich auf alle ausgewählten Einträge anwenden?')); ?>')) {document.<?=TGlobal::OutHTML($sCheckboxFormName); ?>.elements['module_fnc[<?=TGlobal::OutHTML($sControllingModuleSpotName); ?>]'].value=this.value; document.<?=TGlobal::OutHTML($sCheckboxFormName); ?>.submit();}">
+                onchange="if (confirm('<?=TGlobal::OutJS(TGlobal::Translate('Wollen Sie diese Aktion wirklich auf alle ausgewählten Einträge anwenden?')); ?>')) {document.<?=TGlobal::OutHTML($sCheckboxFormName); ?>.elements['module_fnc[<?=TGlobal::OutHTML($sControllingModuleSpotName); ?>]'].value=this.value; document.<?=TGlobal::OutHTML($sCheckboxFormName); ?>.submit();}">
             <option value=""><?=TGlobal::OutHTML(TGlobal::Translate('markierte Einträge:')); ?></option>
             <?php foreach ($aActions as $sMethod => $sName) {
         ?>

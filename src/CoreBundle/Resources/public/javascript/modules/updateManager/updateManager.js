@@ -51,11 +51,11 @@ CHAMELEON.UPDATE_MANAGER = {
                     if($(this).val() != 'NULL'){
                         var _selectedUpdateFileIndex = $(this).val();
 
-                        $buttonSetUpdate.removeClass('disabled').addClass('green').bind('click', function(){
+                        $buttonSetUpdate.removeClass('disabled').bind('click', function(){
 
                             $('#singleUpdateSelectBundle, #singleUpdateSelectSubdir, #singleUpdateSelectFile').attr('disabled', 'disabled');
-                            $(this).removeClass('green').addClass('disabled');
-                            $(self.config.sRunUpdatesButtonId).removeClass('disabled').addClass('btn-success');
+                            $(this).addClass('disabled');
+                            $(self.config.sRunUpdatesButtonId).removeClass('disabled');
 
                             var updatesToExecute = {};
 
@@ -107,21 +107,7 @@ CHAMELEON.UPDATE_MANAGER = {
     addUpdateSuccessQueries: function (currentUpdate, successQueries, renderedSuccessQueriesUpdate)
     {
         var self = this;
-        this._getMessageContainerForUpdate(currentUpdate).append(renderedSuccessQueriesUpdate);
-
-        var $successQueryContainerForBundle = $('#successQueryContainer-' + currentUpdate.bundleName + '-' + currentUpdate.buildNumber);
-
-        $successQueryContainerForBundle.find('.head').on('click', function () {
-            var $queryList = $(this).parent().find('.queryList');
-            if ($queryList.is(':hidden')) {
-                $queryList.show();
-                $(this).find('.message').text(self.config.text.successfulQueriesHide);
-            }
-            else {
-                $queryList.hide();
-                $(this).find('.message').text(self.config.text.successfulQueriesShow);
-            }
-        });
+        this._getMessageContainerForUpdate(currentUpdate).find('.runFilesInfo').html(renderedSuccessQueriesUpdate);
     },
     addUpdateErrors: function (currentUpdate, errorQueries, renderedErrorQueriesGlobal, renderedErrorQueriesUpdate)
     {
@@ -129,10 +115,10 @@ CHAMELEON.UPDATE_MANAGER = {
             $globalErrorCountContainer = $('#count-errors');
 
         $globalErrorListContainer.append(renderedErrorQueriesGlobal);
-        this._getMessageContainerForUpdate(currentUpdate).append(renderedErrorQueriesUpdate);
+        this._getMessageContainerForUpdate(currentUpdate).find('.runFilesInfo').html(renderedErrorQueriesUpdate);
 
         $globalErrorCountContainer.text(parseInt($globalErrorCountContainer.text()) + errorQueries.length);
-        $('#updateErrorContainer').removeClass('hide');
+        $('#updateErrorContainer').removeClass('d-none');
     },
     addUpdateInfoMessages: function(currentUpdate, messages, renderedMessagesGlobal, renderedMessagesUpdate)
     {
@@ -140,10 +126,10 @@ CHAMELEON.UPDATE_MANAGER = {
             $globalInfoCountContainer = $('#count-info');
 
         $globalInfoListContainer.append(renderedMessagesGlobal);
-        this._getMessageContainerForUpdate(currentUpdate).append(renderedMessagesUpdate);
+        this._getMessageContainerForUpdate(currentUpdate).find('.runFilesInfo').html(renderedMessagesUpdate);
 
         $globalInfoCountContainer.text(parseInt($globalInfoCountContainer.text()) + messages.length);
-        $('#updateInfoContainer').removeClass('hide');
+        $('#updateInfoContainer').removeClass('d-none');
     },
     _getMessageContainerForUpdate: function(currentUpdate)
     {
@@ -155,11 +141,14 @@ CHAMELEON.UPDATE_MANAGER = {
         var $updateManagerOutput = $('#updateManagerOutput');
         $updateManagerOutput.find('.body').append(
             '<div id="update-' + currentUpdate.bundleName + '-' + currentUpdate.buildNumber + '">' +
-                '<div class="fileInfo"></div>' +
-                '<div class="updateBody"></div>' +
+                '<div class="card card-accent-info mb-3">\n' +
+                '  <div class="card-header fileInfo"></div>\n' +
+                '  <div class="card-body"><div class="callout callout-info updateBody"></div><div class="runFilesInfo"></div>\n' +
+                '  </div>\n' +
+              '  </div>\n' +
             '</div>'
         );
-        $updateManagerOutput.removeClass('hide');
+        $updateManagerOutput.removeClass('d-none');
 
         return $('#update-' + currentUpdate.bundleName + '-' + currentUpdate.buildNumber);
     },
@@ -172,7 +161,6 @@ CHAMELEON.UPDATE_MANAGER = {
             $('#ajaxTimeoutSelect').attr('disabled', 'disabled');
 
             $(this).attr("disabled", "disabled");
-            $(this).bootstrapBtn('loading');
             $(self.config.sGoBackButtonId).bind('click',function (event) {
                 event.preventDefault();
                 return false;
@@ -209,15 +197,14 @@ CHAMELEON.UPDATE_MANAGER = {
         if ((this._fProgressBarPercent + this._fProgressBarPercentPerUpdate) <= 100.1) {
             this._fProgressBarPercent += this._fProgressBarPercentPerUpdate;
             $('#updateProgressBar').css('width', this._fProgressBarPercent + '%');
-            $('#updateProgressBarInner').text(this.config.text.progressBarRunning + ' (' + Math.round(this._fProgressBarPercent) + ' %)');
+            $('#updateProgressBarText').text(this.config.text.progressBarRunning + ' (' + Math.round(this._fProgressBarPercent) + ' %)');
         }
     },
     _addGuiTypeContainer: function ()
     {
         if (this.countTotal > 0) {
             $('#updateManagerOutput').append(
-            '<div class="body">' +
-                '<div class="waiting"></div>' +
+            '<div class="body card-body">' +
             '</div>');
         }
     },
@@ -331,7 +318,7 @@ CHAMELEON.UPDATE_MANAGER = {
         var self = this;
 
         if(iIndex in this._aPostUpdateCommands){
-            $('#updateProgressBarInner').text(this._aPostUpdateCommands[iIndex].sMessage);
+            $('#updateProgressBarText').text(this._aPostUpdateCommands[iIndex].sMessage);
 
             $.ajax({
                 type: 'POST',
@@ -356,8 +343,7 @@ CHAMELEON.UPDATE_MANAGER = {
     {
         $(this.config.sRunUpdatesButtonId).unbind();
         $(this.config.sGoBackButtonId).unbind().removeAttr('disabled');
-        $('#updateProgressBar').removeClass('orange').addClass('green');
-        $('#updateProgressBarInner').text(this.config.text.progressBarFinished);
+        $('#updateProgressBarText').text(this.config.text.progressBarFinished);
     },
     addPostUpdateCommand: function(sCommand, sMessage)
     {
@@ -399,7 +385,7 @@ CHAMELEON.UPDATE_MANAGER = {
             '<p>response status: ' + oError.status + '</p>' +
             '<p>response text: ' + oError.responseText + '</p>'
         );
-        $globalFatalErrorContainer.removeClass('hide');
+        $globalFatalErrorContainer.removeClass('d-none');
         this._activateGuiElements();
     },
     _updateGuiCount: function (sStatus)

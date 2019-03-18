@@ -38,7 +38,6 @@ class ChameleonSystemCoreExtension extends Extension
             $this->loadConfigFile($container, $sConfigDir, 'services.xml');
             $this->loadConfigFile($container, $sConfigDir, 'mail.xml');
             $this->loadConfigFile($container, $sConfigDir, 'data_access.xml');
-            $this->loadConfigFile($container, $sConfigDir, 'logging.xml');
             $this->loadConfigFile($container, $sConfigDir, 'checks.xml');
             $this->loadConfigFile($container, $sConfigDir, 'urlnormalization.xml');
             $this->loadConfigFile($container, $sConfigDir, 'universal_uploader.xml');
@@ -55,16 +54,12 @@ class ChameleonSystemCoreExtension extends Extension
         $this->addGoogleApiConfig($config['google_maps'], $container);
         $this->addModuleExecutionConfig($config['module_execution'], $container);
         $this->configureSession($container);
+        $this->addBackendConfig($config['backend'], $container);
 
         $this->addResources($container);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param string           $sConfigDir
-     * @param string           $filename
-     */
-    private function loadConfigFile(ContainerBuilder $container, $sConfigDir, $filename)
+    private function loadConfigFile(ContainerBuilder $container, string $sConfigDir, string $filename): void
     {
         $loader = new XmlFileLoader($container, new FileLocator($sConfigDir));
         try {
@@ -74,11 +69,7 @@ class ChameleonSystemCoreExtension extends Extension
         }
     }
 
-    /**
-     * @param array            $config
-     * @param ContainerBuilder $container
-     */
-    private function addMailTransformationConfig(array $config, ContainerBuilder $container)
+    private function addMailTransformationConfig(array $config, ContainerBuilder $container): void
     {
         foreach ($config as $key => $value) {
             $container->setParameter("chameleon_system_core.mail_target_transformation_service.$key", $value);
@@ -91,11 +82,7 @@ class ChameleonSystemCoreExtension extends Extension
         }
     }
 
-    /**
-     * @param array            $config
-     * @param ContainerBuilder $container
-     */
-    private function addRedirectConfig(array $config, ContainerBuilder $container)
+    private function addRedirectConfig(array $config, ContainerBuilder $container): void
     {
         if ('throwexception' === $config['redirectstrategy']) {
             $definition = $container->getDefinition('chameleon_system_core.redirect');
@@ -106,11 +93,7 @@ class ChameleonSystemCoreExtension extends Extension
         }
     }
 
-    /**
-     * @param array            $cronjobConfig
-     * @param ContainerBuilder $container
-     */
-    private function addCronjobConfig(array $cronjobConfig, ContainerBuilder $container)
+    private function addCronjobConfig(array $cronjobConfig, ContainerBuilder $container): void
     {
         $backendAccessCheckDefinition = $container->getDefinition('chameleon_system_core.security.backend_access_check');
         $backendAccessCheckDefinition->addMethodCall('unrestrictPagedef', array('runcrons', $cronjobConfig['ip_whitelist']));
@@ -127,10 +110,7 @@ class ChameleonSystemCoreExtension extends Extension
         $container->setParameter('chameleon_system_core.cronjobs.fail_on_error_level', $failOnErrorLevel);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
-    private function addCacheConfig(ContainerBuilder $container)
+    private function addCacheConfig(ContainerBuilder $container): void
     {
         if ($container->getParameter('chameleon_system_core.cache.allow')
             && $container->getParameter('chameleon_system_core.cache.memcache_activate')) {
@@ -139,10 +119,7 @@ class ChameleonSystemCoreExtension extends Extension
         $this->addRequestCacheConfig($container);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
-    private function addMemcacheConfig(ContainerBuilder $container)
+    private function addMemcacheConfig(ContainerBuilder $container): void
     {
         $cacheCmsPortalDomainsDataAccessDefinition = $container->getDefinition('chameleon_system_core.data_access_cms_portal_domains_cache_decorator');
         $cacheCmsPortalDomainsDataAccessDefinition->setDecoratedService('chameleon_system_core.data_access_cms_portal_domains');
@@ -160,10 +137,7 @@ class ChameleonSystemCoreExtension extends Extension
         $cacheCmsTreeNodeDataAccessDefinition->setDecoratedService('chameleon_system_core.data_access_cms_tree_node');
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
-    private function addRequestCacheConfig(ContainerBuilder $container)
+    private function addRequestCacheConfig(ContainerBuilder $container): void
     {
         $requestCacheRoutingUtilDefinition = $container->getDefinition('chameleon_system_core.util.request_cache_routing');
         $requestCacheRoutingUtilDefinition->setDecoratedService('chameleon_system_core.util.routing');
@@ -181,11 +155,7 @@ class ChameleonSystemCoreExtension extends Extension
         $requestCacheCmsTreeNodeDataAccessDefinition->setDecoratedService('chameleon_system_core.data_access_cms_tree_node');
     }
 
-    /**
-     * @param array            $mailerConfig
-     * @param ContainerBuilder $container
-     */
-    private function addMailerConfig(array $mailerConfig, ContainerBuilder $container)
+    private function addMailerConfig(array $mailerConfig, ContainerBuilder $container): void
     {
         if (false === $container->hasDefinition('chameleon_system_core.mailer')) {
             return;
@@ -203,6 +173,12 @@ class ChameleonSystemCoreExtension extends Extension
         }
 
         $container->setAlias('chameleon_system_core.security.mail.mail_peer_security', $security);
+    }
+
+    private function addBackendConfig(array $backendConfig, ContainerBuilder $container): void
+    {
+        $definition = $container->getDefinition('chameleon_system_core.backend_controller');
+        $definition->addMethodCall('setHomePagedef', [ $backendConfig['home_pagedef'] ]);
     }
 
     /**

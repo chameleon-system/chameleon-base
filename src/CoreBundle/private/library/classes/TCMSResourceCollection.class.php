@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ResourceCollectionJavaScriptCollectedEvent;
+use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -18,7 +19,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * this class can manage resource collection creation.
 /**/
-class TCMSResourceCollection
+class TCMSResourceCollection implements ResourceCollectorInterface
 {
     /**
      * base path of server ($_SERVER['DOCUMENT_ROOT']).
@@ -31,9 +32,32 @@ class TCMSResourceCollection
     protected $sCurrentCSSPath = null;
 
     /**
-     * Check if resource collection is enabled in config.
-     *
-     * @return bool
+     * @var IPkgCmsFileManager
+     */
+    private $cmsFileManager;
+
+    /**
+     * @var PortalDomainServiceInterface
+     */
+    private $portalDomainService;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    public function __construct(
+        ?IPkgCmsFileManager $cmsFileManager = null,
+        ?PortalDomainServiceInterface $portalDomainService = null,
+        ?EventDispatcherInterface $eventDispatcher = null
+    ) {
+        $this->cmsFileManager = $cmsFileManager ?? ServiceLocator::get('chameleon_system_core.filemanager');
+        $this->portalDomainService = $portalDomainService ?? ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        $this->eventDispatcher = $eventDispatcher ?? ServiceLocator::get('event_dispatcher');
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function IsEnabled()
     {
@@ -41,10 +65,7 @@ class TCMSResourceCollection
     }
 
     /**
-     * Checks if system is allowed to use resource collection.
-     * Was used to disable resource collection in template engine.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function IsAllowed()
     {
@@ -64,11 +85,7 @@ class TCMSResourceCollection
     }
 
     /**
-     * combine external resources into one file.
-     *
-     * @param string $sPageContent
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function CollectExternalResources($sPageContent)
     {
@@ -151,8 +168,7 @@ class TCMSResourceCollection
     {
         $filesPrefix = ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix');
 
-        $portalDomainService = $this->getPortalDomainService();
-        $portal = $portalDomainService->getActivePortal();
+        $portal = $this->portalDomainService->getActivePortal();
 
         if (null !== $portal) {
             $filesPrefix .= $portal->getFileSuffix();
@@ -235,11 +251,9 @@ class TCMSResourceCollection
             $bFileCreated = true;
             $sCSSStaticPath = PATH_OUTBOX.'/static/css/';
             if (!file_exists($sCSSStaticPath.$sFileMD5)) {
-                $fileManager = $this->getFileManager();
-
                 $bTargetDirectoryIsWritable = true;
                 if (!is_dir($sCSSStaticPath)) {
-                    $bTargetDirectoryIsWritable = $fileManager->mkdir($sCSSStaticPath, 0777, true);
+                    $bTargetDirectoryIsWritable = $this->cmsFileManager->mkdir($sCSSStaticPath, 0777, true);
                 }
 
                 if ($bTargetDirectoryIsWritable) {
@@ -293,7 +307,7 @@ class TCMSResourceCollection
                         }
                     }
 
-                    $fileManager->file_put_contents($sCSSStaticPath.$sFileMD5, $sContent);
+                    $this->cmsFileManager->file_put_contents($sCSSStaticPath.$sFileMD5, $sContent);
                 }
             }
         }
@@ -316,11 +330,9 @@ class TCMSResourceCollection
             $bFileCreated = true;
             $sJSStaticPath = PATH_OUTBOX.'/static/js/';
             if (!file_exists($sJSStaticPath.$sFileJSMD5)) {
-                $fileManager = $this->getFileManager();
-
                 $bTargetDirectoryIsWritable = true;
                 if (!is_dir($sJSStaticPath)) {
-                    $bTargetDirectoryIsWritable = $fileManager->mkdir($sJSStaticPath, 0777, true);
+                    $bTargetDirectoryIsWritable = $this->cmsFileManager->mkdir($sJSStaticPath, 0777, true);
                 }
 
                 if ($bTargetDirectoryIsWritable) {
@@ -364,7 +376,7 @@ class TCMSResourceCollection
                         }
                     }
                     $sContent = $this->dispatchJSMinifyEvent($sContent);
-                    $fileManager->file_put_contents($sJSStaticPath.$sFileJSMD5, $sContent);
+                    $this->cmsFileManager->file_put_contents($sJSStaticPath.$sFileJSMD5, $sContent);
                 }
             }
         }
@@ -380,18 +392,9 @@ class TCMSResourceCollection
     private function dispatchJSMinifyEvent($jsContent)
     {
         $event = new ResourceCollectionJavaScriptCollectedEvent($jsContent);
-        /** @var ResourceCollectionJavaScriptCollectedEvent $event */
-        $event = $this->getEventDispatcher()->dispatch(CoreEvents::GLOBAL_RESOURCE_COLLECTION_COLLECTED_JAVASCRIPT, $event);
+        $event = $this->eventDispatcher->dispatch(CoreEvents::GLOBAL_RESOURCE_COLLECTION_COLLECTED_JAVASCRIPT, $event);
 
         return $event->getContent();
-    }
-
-    /**
-     * @return EventDispatcherInterface
-     */
-    private function getEventDispatcher()
-    {
-        return ServiceLocator::get('event_dispatcher');
     }
 
     /**
@@ -713,22 +716,5 @@ class TCMSResourceCollection
         }
 
         return $bIsLocal;
-    }
-
-    public function __construct()
-    {
-    }
-
-    /**
-     * @return IPkgCmsFileManager
-     */
-    private function getFileManager()
-    {
-        return ServiceLocator::get('chameleon_system_cms_file_manager.file_manager');
-    }
-
-    private function getPortalDomainService(): PortalDomainServiceInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

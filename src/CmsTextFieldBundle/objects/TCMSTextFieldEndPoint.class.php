@@ -734,9 +734,9 @@ class TCMSTextFieldEndPoint
                 $bHideName = true;
             }
             if ($sLinkName != $oItem->GetName()) {
-                $sResult = $oItem->GetDownloadLink(false, $bHideName, $bHideSize, false, $bHideIcon, $sLinkName);
+                $sResult = $oItem->getDownloadHtmlTag(false, $bHideName, $bHideSize, $bHideIcon, $sLinkName);
             } else {
-                $sResult = $oItem->GetDownloadLink(false, $bHideName, $bHideSize, false, $bHideIcon);
+                $sResult = $oItem->getDownloadHtmlTag(false, $bHideName, $bHideSize, $bHideIcon);
             }
         } else {
             $sResult = $aMatch[0];
@@ -761,9 +761,9 @@ class TCMSTextFieldEndPoint
         /** @var $oItem TCMSDownloadFile */
         if ($oItem->Load($sItemId)) {
             if ($sLinkName != $oItem->GetName()) {
-                $sResult = $oItem->GetDownloadLink(false, false, false, false, false, $sLinkName);
+                $sResult = $oItem->getDownloadHtmlTag(false, false, false, false, $sLinkName);
             } else {
-                $sResult = $oItem->GetDownloadLink();
+                $sResult = $oItem->getDownloadHtmlTag();
             }
         }
 

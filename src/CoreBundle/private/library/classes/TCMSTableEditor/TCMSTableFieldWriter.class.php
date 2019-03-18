@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
+use Doctrine\DBAL\DBALException;
 
 /**
  * manages creating, changing, and deleting fields from a table.
@@ -19,9 +20,9 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     /**
      * The field represented by this record.
      *
-     * @var TCMSField
+     * @var TCMSField|null
      */
-    protected $_oField = null;
+    protected $_oField;
 
     /**
      * the record of the cms_tbl_conf that points to this field.
@@ -31,6 +32,21 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     protected $_oParentRecord = null;
 
     protected $_sqlFieldName = null;
+
+    /**
+     * @var array|null
+     */
+    private $oldData;
+
+    /**
+     * @var string|null
+     */
+    private $oldTableName;
+
+    /**
+     * @var bool
+     */
+    private $prohibitChangesOnRelatedTables = false;
 
     /**
      * @return TCMSStdClass
@@ -120,66 +136,124 @@ class TCMSTableFieldWriter extends TCMSTableEditor
             return false;
         }
 
-        $bTargetTableChangeForMLTField = false;
-        if (array_key_exists('bTargetTableChangeForMLTField', $postData)) {
-            $bTargetTableChangeForMLTField = $postData['bTargetTableChangeForMLTField'];
-        }
-        // if the name of the field has changed we need to alter the table definition
-        // we also need to change the field definition if the type changed
-        $bTypeChanged = false;
-        if (array_key_exists('cms_field_type_id', $this->oTable->sqlData)) {
-            $bTypeChanged = ($this->oTable->sqlData['cms_field_type_id'] != $postData['cms_field_type_id']);
-            $currentFieldTypeQuery = "SELECT * FROM `cms_field_type` WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->oTable->sqlData['cms_field_type_id'])."'";
-            $currentFieldTypeResult = MySqlLegacySupport::getInstance()->query($currentFieldTypeQuery);
-            $currentFieldTypeRow = MySqlLegacySupport::getInstance()->fetch_assoc($currentFieldTypeResult);
-        }
-        $aOriginalData = $this->oTable->sqlData;
+        $this->oldData = $this->oTable->sqlData;
+        $this->oldTableName = $this->_oParentRecord->sqlData['name'];
+        $this->prohibitChangesOnRelatedTables = $postData['bTargetTableChangeForMLTField'] ?? false; // true (from TCMSTableWriter) prohibits target changes
 
-        $newFieldTypeQuery = "SELECT * FROM `cms_field_type` WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($postData['cms_field_type_id'])."'";
-        $newFieldTypeResult = MySqlLegacySupport::getInstance()->query($newFieldTypeQuery);
-        $newFieldTypeRow = MySqlLegacySupport::getInstance()->fetch_assoc($newFieldTypeResult);
+        return parent::Save($postData);
+    }
 
-        $oldName = $postData['name'];
-        if (array_key_exists('name', $this->oTable->sqlData)) {
-            $oldName = $this->oTable->sqlData['name'];
+    /**
+     * {@inheritdoc}
+     */
+    protected function PostSaveHook(&$oFields, &$oPostTable)
+    {
+        parent::PostSaveHook($oFields, $oPostTable);
+
+        $this->_oField = $this->adaptFieldAndRelatedTables($oPostTable->sqlData);
+
+        $this->getAutoclassesCacheWarmer()->updateTableById($oPostTable->sqlData['cms_tbl_conf_id']);
+    }
+
+    /**
+     * @param array $postData
+     *
+     * @return TCMSField - the new definition after changes
+     *
+     * @throws DBALException
+     */
+    protected function adaptFieldAndRelatedTables(array $postData): TCMSField
+    {
+        $oldTypeId = $this->oldData['cms_field_type_id'];
+        $newTypeId = $postData['cms_field_type_id'];
+        $newName = $this->oTable->sqlData['name'];
+
+        $isTypeChange = $oldTypeId !== $newTypeId;
+        $oldFieldTypeRow = $this->getFieldTypeDefinition($oldTypeId);
+        $newFieldTypeRow = $this->getFieldTypeDefinition($newTypeId);
+
+        /**
+         * @var $oldField TCMSField
+         */
+        $oldField = $this->oTablePreChangeData->GetFieldObject();
+        $oldField->oDefinition = $this->oTablePreChangeData;
+        $oldField->sTableName = $this->oldTableName;
+        $oldField->name = $this->oldData['name'];
+
+        if (true === $isTypeChange) {
+            $oldField->ChangeFieldTypePreHook();
         }
 
-        if ($bTypeChanged) {
-            $this->_oField->ChangeFieldTypePreHook();
-        }
-        if (!$bTargetTableChangeForMLTField) {
-            if ($this->_oField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
-                $this->_oField->DeleteRelatedTables();
-            } elseif ($this->_oField->AllowRenameRelatedTablesBeforeFieldSave($postData, $currentFieldTypeRow, $newFieldTypeRow)) {
-                $this->_oField->RenameRelatedTables($postData);
-            }
+        if (true === $this->prohibitChangesOnRelatedTables) {
+            $oldField->RenameRelatedTables($postData);
         } else {
-            $this->_oField->RenameRelatedTables($postData);
+            if (true === $oldField->AllowDeleteRelatedTablesBeforeFieldSave($postData, $oldFieldTypeRow, $newFieldTypeRow)) {
+                $oldField->DeleteRelatedTables();
+            } elseif (true === $oldField->AllowRenameRelatedTablesBeforeFieldSave($postData, $oldFieldTypeRow, $newFieldTypeRow)) {
+                $oldField->RenameRelatedTables($postData);
+            }
         }
-        $this->_oField->RemoveFieldIndex();
-        // need to change the type of field object
-        $this->oTable->sqlData['cms_field_type_id'] = $postData['cms_field_type_id'];
-        $this->_oField = &$this->oTable->GetFieldObject();
-        $this->_oField->name = $this->oTable->sqlData['name'];
-        $this->_oField->sTableName = $this->_oParentRecord->sqlData['name'];
-        $this->_oField->recordId = $this->sId;
-        $this->_oField->oDefinition = &$this->oTable;
-        if ($bTypeChanged) {
-            $this->_oField->ChangeFieldTypePostHook();
-        }
-        $this->_oField->ChangeFieldDefinition($oldName, $postData['name'], $postData);
-        $aOldData = $this->oTable->sqlData;
-        parent::Save($postData);
-        $this->oTable->Load($this->oTable->id);
-        if (!$bTargetTableChangeForMLTField && $this->_oField->AllowCreateRelatedTablesAfterFieldSave($aOldData, $currentFieldTypeRow, $newFieldTypeRow)) {
-            $this->_oField->CreateRelatedTables();
-        }
-        $this->_oField->CreateFieldIndex();
+        $oldField->RemoveFieldIndex();
 
-        $this->_oField->oDefinition->UpdateFieldTranslationKeys($aOriginalData);
-        $this->getAutoclassesCacheWarmer()->updateTableById($this->oTable->sqlData['cms_tbl_conf_id']);
+        $this->oTable->sqlData['cms_field_type_id'] = $newTypeId;
+        /**
+         * @var $newField TCMSField
+         */
+        $newField = $this->oTable->GetFieldObject();
 
-        return $this->GetObjectShortInfo($postData);
+        $newField->name = $newName;
+        $newField->sTableName = $this->_oParentRecord->sqlData['name'];
+        $newField->recordId = $this->sId;
+        $newField->oDefinition = $this->oTable;
+        if (true === $isTypeChange) {
+            $newField->ChangeFieldTypePostHook();
+        }
+
+        $oldFieldIsVirtual = $oldField->oDefinition->isVirtualField();
+        $newFieldIsVirtual = $newField->oDefinition->isVirtualField();
+
+        if ($oldFieldIsVirtual === $newFieldIsVirtual) {
+            $newField->ChangeFieldDefinition($this->oldData['name'], $newName, $postData);
+        } else {
+            if (false === $newFieldIsVirtual) {
+                $newField->CreateFieldDefinition(); // is missing: old one was virtual
+            } else {
+                $oldField->DeleteFieldDefinition();
+            }
+        }
+
+        // NOTE Save() was called here before the code was reorganized - hence the method names
+
+        if (false === $this->prohibitChangesOnRelatedTables && true === $newField->AllowCreateRelatedTablesAfterFieldSave($this->oldData, $oldFieldTypeRow, $newFieldTypeRow)) {
+            $newField->CreateRelatedTables();
+        }
+        $newField->CreateFieldIndex();
+
+        $newField->oDefinition->UpdateFieldTranslationKeys($this->oldData);
+
+        return $newField;
+    }
+
+    /**
+     * @param string $typeId
+     *
+     * @return array|null
+     *
+     * @throws DBALException
+     */
+    private function getFieldTypeDefinition(string $typeId): ?array
+    {
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $query = 'SELECT * FROM `cms_field_type` WHERE `id` = :typeId';
+
+        $fieldTypeData = $databaseConnection->fetchAssoc($query, ['typeId' => $typeId]);
+
+        if (false === $fieldTypeData) {
+            return null;
+        }
+
+        return $fieldTypeData;
     }
 
     /**

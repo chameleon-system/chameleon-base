@@ -65,10 +65,10 @@ class CMSSearch extends TModelBase
          </script>
         <meta http-equiv="Content-Language" content="de" />
         <link href="/chameleon/blackbox/themes/standard/css/layout.css" rel="stylesheet" type="text/css" />
-        <link href="/chameleon/blackbox/themes/standard/css/global.css" rel="stylesheet" type="text/css" />
         <link href="/chameleon/blackbox/bootstrap/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
-        <link href="/chameleon/blackbox/bootstrap/css/bootstrap-theme.min.css" media="screen" rel="stylesheet" type="text/css" />
-        <link href="/chameleon/blackbox/themes/standard/css/bootstrap.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="'.TGlobal::GetPathTheme().'/coreui/css/coreui-standalone.min.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="/chameleon/blackbox/themes/standard/css/global.css" rel="stylesheet" type="text/css" />             
+        <link href="/chameleon/blackbox/bootstrap/css/glyph-icons.css" media="screen" rel="stylesheet" type="text/css" />
       </head>
        <body style="background-color: #fff;">
          <div style="padding: 10px 0px 10px 0px;">
@@ -107,17 +107,4 @@ class CMSSearch extends TModelBase
         return true;
     }
 
-    public function GetHtmlHeadIncludes()
-    {
-        $aIncludes = parent::GetHtmlHeadIncludes();
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/form/jquery.form.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/BlockUI/jquery.blockUI.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqDnR.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.css').'" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
-
-        return $aIncludes;
-    }
 }

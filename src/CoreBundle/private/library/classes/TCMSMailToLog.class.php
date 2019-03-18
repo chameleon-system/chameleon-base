@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+
 class TCMSMailToLog extends TCMSMail
 {
     private $verbose = false;
@@ -63,7 +66,9 @@ class TCMSMailToLog extends TCMSMail
             } else {
                 $sLog = 'New Mail: '.$this->actualSubject."\nTo: ".$to;
             }
-            $this->oTools->WriteLogEntry($sLog, 4, __FILE__, __LINE__, 'dev_mail_log.log');
+
+            $logger = $this->getLogger();
+            $logger->info($sLog);
         }
 
         return true;
@@ -72,5 +77,10 @@ class TCMSMailToLog extends TCMSMail
     public function setVerbose($verbose)
     {
         $this->verbose = $verbose;
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
     }
 }

@@ -36,7 +36,7 @@ class TCMSListManagerDocumentChooser extends TCMSListManagerFullGroupTable
         $options .= $oTreeSelect->GetTreeOptions($documentTreeId);
 
         $oViewRenderer = new ViewRenderer();
-        $oViewRenderer->AddSourceObject('sInputClass', 'form-control input-sm');
+        $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm');
         $oViewRenderer->AddSourceObject('sName', 'cms_document_tree_id');
         $oViewRenderer->AddSourceObject('sLabelText', TGlobal::Translate('chameleon_system_core.document_chooser.tree_node'));
         $oViewRenderer->AddSourceObject('onChange', "document.forms['".TGlobal::OutHTML($this->tableObj->listName)."'].submit();");
@@ -151,7 +151,7 @@ class TCMSListManagerDocumentChooser extends TCMSListManagerFullGroupTable
     }
 
     /**
-     * returns the filetype as remdered html.
+     * returns the filetype as rendered html.
      *
      * @param string $id
      * @param array  $row

@@ -9,7 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class TGlobal extends TGlobalBase
@@ -19,7 +21,7 @@ class TGlobal extends TGlobalBase
      *
      * @var TCMSURLHistory
      *
-     * @deprecated since 6.0.14 - use GetURLHistory() instead.
+     * @deprecated since 6.0.14 - use service BackendBreadCrumbService::getBreadcrumb() instead.
      */
     protected $oURLHistory = null;
 
@@ -52,7 +54,7 @@ class TGlobal extends TGlobalBase
             if ('oUser' === $sParameterName) {
                 return TCMSUser::GetActiveUser();
             } elseif ('oURLHistory' === $sParameterName) {
-                return $this->GetURLHistory();
+                return $this->getBreadcrumbService()->getBreadcrumb();
             } else {
                 trigger_error('ERROR - parameter requested from TGlobal that does not exist', E_USER_ERROR);
             }
@@ -106,7 +108,7 @@ class TGlobal extends TGlobalBase
     public static function GetActiveLanguageId($sSetActiveLanguageId = null)
     {
         /** @var LanguageServiceInterface $languageService */
-        $languageService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        $languageService = ServiceLocator::get('chameleon_system_core.language_service');
 
         return $languageService->getActiveLanguageId();
     }
@@ -141,7 +143,7 @@ class TGlobal extends TGlobalBase
     {
         if (self::MODE_BACKEND === self::$mode) {
             if (null === $this->aLangaugeIds) {
-                $databaseConnection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+                $databaseConnection = ServiceLocator::get('database_connection');
                 $this->aLangaugeIds = array($this->oUser->sqlData['cms_language_id']);
                 // fetch user language list
                 $tmp = explode(',', $this->oUser->sqlData['languages']);
@@ -164,25 +166,13 @@ class TGlobal extends TGlobalBase
     }
 
     /**
-     * Return an instance of URL History (get it from session - create new if not exists).
+     * @deprecated since 6.3.0 - use service BackendBreadCrumbService::getBreadcrumb() instead.
      *
-     * @return TCMSURLHistory
+     * @return TCMSURLHistory|null - returns null if not in backend.
      */
     public function &GetURLHistory()
     {
-        if (self::MODE_BACKEND === self::$mode) {
-            if (!array_key_exists('_cmsurlhistory', $_SESSION)) {
-                $_SESSION['_cmsurlhistory'] = new TCMSURLHistory();
-            } else {
-                if (!$_SESSION['_cmsurlhistory']->paramsParameterExists()) {
-                    $_SESSION['_cmsurlhistory'] = new TCMSURLHistory();
-                }
-            }
-
-            return $_SESSION['_cmsurlhistory'];
-        }
-
-        trigger_error('method only supported in backend mode', E_USER_ERROR);
+        return $this->getBreadcrumbService()->getBreadcrumb();
     }
 
     /**
@@ -190,6 +180,11 @@ class TGlobal extends TGlobalBase
      */
     private static function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
+    }
+
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }

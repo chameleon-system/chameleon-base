@@ -26,8 +26,8 @@ class TCMSListManagerNewsletterRobinson extends TCMSListManagerFullGroupTable
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'ImportSubscriber';
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_newsletter.action.import_blacklist');
-        $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/folder_user.png');
-        $oMenuItem->sOnClick = "CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=NewsletterRobinsonImport&_pagedefType=Core',780,650,'".TGlobal::Translate('chameleon_system_newsletter.action.import_blacklist')."');";
+        $oMenuItem->sIcon = 'fas fa-user-minus';
+        $oMenuItem->sOnClick = "CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=NewsletterRobinsonImport&_pagedefType=Core',0,0,'".TGlobal::Translate('chameleon_system_newsletter.action.import_blacklist')."');";
 
         return $oMenuItem;
     }

@@ -36,7 +36,7 @@ function GetUsages(tableId, type) {
         sModuleSpotName = 'contentmodule';
         sType = 'documentIDs';
     }
-    var url = window.location.pathname+"?pagedef=" + sPageDef + "&module_fnc[" + sModuleSpotName
+    var url = window.location.pathname + "?pagedef=" + sPageDef + "&module_fnc[" + sModuleSpotName
         + "]=ExecuteAjaxCall&_fnc=CheckConnectionsAndDelete&bDoNotDelete=true&" + sType + "=" + tableId;
     GetAjaxCall(url, ShowUsagesResponse);
 }
@@ -53,14 +53,14 @@ function ShowUsagesResponse(data, responseMessage) {
 }
 
 function ShowUsageDialog(index, _connectedDataHTML) {
-    CreateModalIFrameDialogFromContentWithoutClose(_connectedDataHTML[index], 700, 600, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.table_editor.usages'));
+    CreateModalIFrameDialogFromContent(_connectedDataHTML[index], 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.table_editor.usages'));
 }
 
 function ExecutePostCommand(command) {
     document.cmseditform.elements['module_fnc[contentmodule]'].value = command;
     if (command == 'Save') {
-        if("undefined" != typeof CKEDITOR) {
-            $.map(CKEDITOR.instances, function(instance, instanceName){
+        if ("undefined" != typeof CKEDITOR) {
+            $.map(CKEDITOR.instances, function (instance, instanceName) {
                 $("#" + instanceName).val(instance.getData());
             });
         }
@@ -69,9 +69,9 @@ function ExecutePostCommand(command) {
         window.onbeforeunload = function () {
         };
         // reattach the message binding
-        SetChangedDataMessage();
+        CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
     }
-    PleaseWait();
+    CHAMELEON.CORE.showProcessingModal();
     document.cmseditform.submit();
 }
 
@@ -90,7 +90,7 @@ function AddFormElementToEditForm(sName, sValue) {
 function GoToRecordBySelectBox(tableID, fieldID) {
     var recordID = document.getElementById(fieldID).options[document.getElementById(fieldID).selectedIndex].value;
     if (recordID != '' && recordID != '0') {
-        document.location.href = window.location.pathname+'?pagedef=tableeditor&id=' + recordID + '&tableid=' + tableID;
+        document.location.href = window.location.pathname + '?pagedef=tableeditor&id=' + recordID + '&tableid=' + tableID;
     }
 }
 
@@ -144,11 +144,11 @@ function _SetImage(imageID, customCallback) {
     var _currentPosition = getCMSRegistryEntry('_currentPosition');
     var form = document.getElementById('cmseditform');
     var _currentTableId = form.querySelector('[name=tableid]').value;
-    var _currentRecordId =form.querySelector('[name=id]').value;
+    var _currentRecordId = form.querySelector('[name=id]').value;
     var fieldValue = form.querySelector('[name=' + _currentFieldName + ']').value;
 
-    var url = window.location.pathname+"?pagedef=CMSImageManager&module_fnc[module]=ExecuteAjaxCall&_fnc=SetImage&imageid=" + imageID + "&imagefieldname=" + _currentFieldName + "&tableid=" + _currentTableId + "&id=" + _currentRecordId + "&position=" + _currentPosition + "&imagefieldvalue=" + fieldValue;
-    if(typeof customCallback === 'undefined') {
+    var url = window.location.pathname + "?pagedef=CMSImageManager&module_fnc[module]=ExecuteAjaxCall&_fnc=SetImage&imageid=" + imageID + "&imagefieldname=" + _currentFieldName + "&tableid=" + _currentTableId + "&id=" + _currentRecordId + "&position=" + _currentPosition + "&imagefieldvalue=" + fieldValue;
+    if (typeof customCallback === 'undefined') {
         customCallback = SetImageResponse;
     }
     GetAjaxCall(url, customCallback);
@@ -178,6 +178,10 @@ function _SetDocumentResponse(data, responseMessage) {
  * sets the choosen document in a TCMSFieldDocument
  */
 function _SetDocument(documentID) {
+    var _currentFieldName = getCMSRegistryEntry('_currentFieldName');
+    var form = document.getElementById('cmseditform');
+    form.querySelector('[name=' + _currentFieldName + ']').value = documentID;
+
     var url = window.location.pathname + "?pagedef=CMSUniversalUploader&module_fnc[contentmodule]=ExecuteAjaxCall&_fnc=GetDownloadHTML&documentID=" + documentID;
     GetAjaxCall(url, _SetDocumentResponse);
 }
@@ -229,7 +233,7 @@ function loadHomeTreeNodeSelection(fieldName, id) {
     var portalID = document.cmseditform.id.value;
 
     if (portalID != '0' && portalID != '') {
-        CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=treenodeselect&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID , 400, 500);
+        CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=treenodeselect&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID, 400, 500);
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_portal_required'), 'WARNING');
     }
@@ -292,7 +296,7 @@ function editDocument(fieldName, documentID, html) {
  * document manager field: opens document manager popup
  */
 function loadDocumentManager(recordID, tableID, fieldName) {
-    _documentManagerWindow = window.open(window.location.pathname + '?pagedef=CMSDocumentManager&recordID=' + recordID + '&tableID=' + tableID + '&fieldName=' + fieldName, '_blank', 'width=1000,height=700,resizable=yes,scrollbars=no');
+    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSDocumentManager&recordID=' + recordID + '&tableID=' + tableID + '&fieldName=' + fieldName);
 }
 
 function addMLTConnectionResponse(data, responseMessage) {
@@ -309,7 +313,7 @@ function addMLTConnectionResponse(data, responseMessage) {
         if (chooserIframeObj) {
             chooserIframeObj.src = chooserIframeObj.src;
         }
-        jQuery.unblockUI();
+        CHAMELEON.CORE.hideProcessingModal();
         return true;
     } else {
         CloseModalIFrameDialog();
@@ -364,7 +368,7 @@ function loadPositionList(tableID, tableSQLName, fieldName, recordID, sRestricti
         sRestriction = $('#' + sRestrictionField).val();
     }
 
-    if (typeof(sRestriction) == 'undefined') sRestriction = '';
+    if (typeof (sRestriction) == 'undefined') sRestriction = '';
 
     var url = window.location.pathname + '?pagedef=CMSFieldPositionRPC&_rmhist=false&module_fnc[contentmodule]=GetSortElements';
     url += '&tableID=' + tableID;
@@ -374,7 +378,7 @@ function loadPositionList(tableID, tableSQLName, fieldName, recordID, sRestricti
     url += '&sRestriction=' + sRestriction;
     url += '&sRestrictionField=' + sRestrictionField;
 
-    CreateModalIFrameDialogCloseButton(url, 500, 550, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
+    CreateModalIFrameDialogCloseButton(url, 700, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
 }
 
 /*
@@ -387,32 +391,35 @@ function loadMltPositionList(tableSQLName, sRestriction, sRestrictionField) {
     url += '&sRestriction=' + sRestriction;
     url += '&sRestrictionField=' + sRestrictionField;
 
-    CreateModalIFrameDialogCloseButton(url, 500, 550, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
+    CreateModalIFrameDialogCloseButton(url, 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
 }
 
-/*
+/**
+ * @deprecated since 6.3.0
+ * use: CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(iFrameId, url) instead.
+ *
  * MLT field: show/hide MLT content
  */
 function showMLTField(objID, outerObjID, url) {
     var mltID = document.getElementById(objID);
-    top.currentMltId = mltID.id;
 
-    var $objID = jQuery('#' + objID);
+    var $objID = $('#' + objID);
     if ($objID.is(':hidden')) {
         mltID.src = url;
-        $objID.show();
+        $objID.removeClass('d-none');
     } else {
-        $objID.hide();
+        $objID.addClass('d-none');
     }
 }
+
 function setTableEditorListFieldState(triggerDiv, requestURL) {
     triggerDiv = $(triggerDiv);
     var state = 0;
     if (triggerDiv.data('fieldstate') != '1') {
         state = 1;
     }
-    triggerDiv.data('fieldstate',state);
-    GetAjaxCallTransparent(requestURL+'&state='+state);
+    triggerDiv.data('fieldstate', state);
+    GetAjaxCallTransparent(requestURL + '&state=' + state);
 }
 
 /*
@@ -436,7 +443,7 @@ function resetExtendedMultiTableListField(fieldName, defaultValue, defaultPrevie
  * tableEditor: method to lock a record
  */
 function RefreshRecordEditLock() {
-    if($('#cmseditform').length > 0 ){
+    if ($('#cmseditform').length > 0) {
         document.cmseditform.elements['module_fnc[contentmodule]'].value = 'ExecuteAjaxCall';
         document.cmseditform._fnc.value = 'RefreshLock';
 
@@ -445,7 +452,7 @@ function RefreshRecordEditLock() {
 }
 
 function CheckRefreshReturn(data) {
-    if (typeof(data) == 'object' && data instanceof Array && data.length == 2) {
+    if (typeof (data) == 'object' && data instanceof Array && data.length == 2) {
         if (data[0] == 'logedoutajax') {
             document.location.href = data[1]
         }
@@ -453,6 +460,9 @@ function CheckRefreshReturn(data) {
     window.setTimeout("RefreshRecordEditLock()", 30000);
 }
 
+/*
+ * @deprecated since 6.3.0 - workflow is not supported anymore
+ */
 function PublishViaAjaxCallback(data, statusText) {
     CloseModalIFrameDialog();
 
@@ -475,7 +485,7 @@ function PublishViaAjaxCallback(data, statusText) {
 }
 
 function ReloadMainPage() {
-    window.parent.location.href = window.location.pathname + '?pagedef=main';
+    window.parent.location.href = window.location.pathname;
 }
 
 /*
@@ -488,14 +498,17 @@ function SaveViaAjaxCustomCallback(customCallbackFunction, closeAfterSave) {
     document.cmseditform._fnc.value = 'AjaxSave';
 
     PostAjaxForm('cmseditform', eval(customCallbackFunction));
-    if (closeAfterSave == true && typeof parent != 'undefined') parent.setTimeout("parent.CloseModalIFrameDialog()", 3000);
+
+    if (closeAfterSave == true && typeof parent != 'undefined') {
+        parent.setTimeout("parent.CloseModalIFrameDialog()", 3000);
+    }
 }
 
 /*
  * tableEditor: save table single field via ajax
  */
 function SaveFieldViaAjaxCustomCallback(customCallbackFunction) {
-    if (customCallbackFunction == 'undefined') {
+    if ('undefined' === customCallbackFunction) {
         customCallbackFunction = SaveViaAjaxCallback;
     }
 
@@ -512,15 +525,15 @@ function SaveFieldViaAjaxCustomCallback(customCallbackFunction) {
 
 function SaveViaAjax() {
 
-    if("undefined" != typeof CKEDITOR) {
-        $.map(CKEDITOR.instances, function(instance, instanceName){
-           $("#" + instanceName).val(instance.getData());
+    if ("undefined" != typeof CKEDITOR) {
+        $.map(CKEDITOR.instances, function (instance, instanceName) {
+            $("#" + instanceName).val(instance.getData());
         });
     }
 
-    if (typeof(framestosave) != 'undefined' && framestosave.length > 0) {
-        $.map(framestosave, function(frameToSave, index){
-            $('.itemsave:first', $('#'+frameToSave).contents()).trigger('click')
+    if (typeof (framestosave) != 'undefined' && framestosave.length > 0) {
+        $.map(framestosave, function (frameToSave, index) {
+            $('.itemsave:first', $('#' + frameToSave).contents()).trigger('click')
         });
     }
     SaveViaAjaxCustomCallback(SaveViaAjaxCallback);
@@ -529,52 +542,49 @@ function SaveViaAjax() {
 function SaveViaAjaxCallback(data, statusText) {
     CloseModalIFrameDialog();
 
-    // remove all message-classes from the fields
-    $('*[id^="fieldname_"]').removeClass();
+    // remove all message background classes from field containers.
+    $('*[id^="fieldname_"]').removeClass(function (index, className) {
+        return (className.match (/(^|\s)bg-\S+/g) || []).join(' ');
+    });
 
     var returnVal = false;
-    if (data != false && data != null) {
+    if (data !== false && data != null) {
 
         returnVal = true;
 
         if (data.aMessages) {
             var bOnLoadResetted = false;
-            $.map(data.aMessages, function(oMessage, index) {
+            $.map(data.aMessages, function (oMessage, index) {
                 toasterMessage(oMessage.sMessage, oMessage.sMessageType);
 
                 // messages do have a reference to field (e.g. mail-field not valid)
-                if(oMessage.sMessageRefersToField) {
+                if (oMessage.sMessageRefersToField) {
                     // add the class to field
-                    $('#fieldname_'+oMessage.sMessageRefersToField).addClass('fieldMsg '+oMessage.sMessageType);
+                    $('#fieldname_' + oMessage.sMessageRefersToField).addClass('bg-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(oMessage.sMessageType));
                 }
 
-                if (oMessage.sMessageType != 'ERROR' && !bOnLoadResetted) {
+                if (oMessage.sMessageType !== 'ERROR' && !bOnLoadResetted) {
                     // remove "something changed" message, because now the data was saved
                     bOnLoadResetted = true;
                     window.onbeforeunload = function () {
                     };
                     // reattach the message binding
-                    SetChangedDataMessage();
+                    CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
                 }
-
-
             });
         } else {
             // remove "something changed" message, because now the data was saved
             window.onbeforeunload = function () {
             };
             // reattach the message binding
-            SetChangedDataMessage();
-            if (data.message && data.message != '') {
+            CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
+            if (data.message && data.message !== '') {
                 toasterMessage(data.message, 'MESSAGE');
             }
-
-            // add saved record to breadcrumb
-            if (data.name && data.name != '' && document.getElementById('breadcrumbLastNode')) {
-                document.getElementById('breadcrumbLastNode').innerHTML = data.name;
-                sCurrentRecordName = data.name;
-            }
         }
+
+        $('#tableEditorContainer .navbar-brand').html(data.name);
+        $('#cmsbreadcrumb .breadcrumb-item:last').html(data.name);
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_save'), 'ERROR');
     }
@@ -583,7 +593,7 @@ function SaveViaAjaxCallback(data, statusText) {
 }
 
 function Save() {
-    PleaseWait();
+    CHAMELEON.CORE.showProcessingModal();
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'Save';
     document.cmseditform.submit();
 }
@@ -598,18 +608,20 @@ function ShowAjaxSaveResult(data, statusText) {
     if (data.success == true) {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.msg_save_success'), 'MESSAGE');
         var contentContainer = parent.document ? parent.document.getElementById(data.fieldname + '_contentdiv') : null;
-        if(contentContainer) {
+        if (contentContainer) {
             contentContainer.innerHTML = data.contentFormatted;
         }
         var reponse = jQuery(data.contentFormatted);
         var reponseScript = reponse.filter("script");
-        parent.jQuery.each(reponseScript, function(idx, val) {
+        parent.jQuery.each(reponseScript, function (idx, val) {
             parent.eval(val.text);
         });
         window.dispatchEvent(new Event("savesuccess"));
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_save'), 'ERROR');
-        setTimeout(function() { window.dispatchEvent(new Event("saveerror")); }, 1000);
+        setTimeout(function () {
+            window.dispatchEvent(new Event("saveerror"));
+        }, 1000);
     }
 }
 
@@ -623,7 +635,7 @@ function ShowAjaxSaveResultAndClose(data, statusText) {
 
 function ResetTreeNodeSelection(fieldName) {
     document.getElementById(fieldName).value = '';
-    document.getElementById(fieldName + '_path').innerHTML = '<div class="treeField"><ul><li>' + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.nothing_assigned') + '</li></ul></div>';
+    document.getElementById(fieldName + '_path').innerHTML = '<ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li><li class="breadcrumb-item text-warning">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.nothing_assigned') + '</li></ol>';
 }
 
 function markCheckboxes(fieldname) {
@@ -643,7 +655,7 @@ function markCheckboxes(fieldname) {
         }
     }
 
-    var elements = document.forms['cmseditform'].elements[fieldname + "[]"];
+    var elements = document.querySelectorAll('[name="cmseditform"] input[name^="' + fieldname + '"]');
     for (i = 0; i < elements.length; i++) {
         var element = elements[i];
         if (false === element.disabled) {
@@ -653,7 +665,7 @@ function markCheckboxes(fieldname) {
 }
 
 function invertCheckboxes(fieldname) {
-    var elements = document.forms['cmseditform'].elements[fieldname + "[]"];
+    var elements = document.querySelectorAll('[name="cmseditform"] input[name^="' + fieldname + '"]');
     for (i = 0; i < elements.length; i++) {
         var element = elements[i];
         if (false === element.disabled) {
@@ -685,35 +697,287 @@ function openLayoutManagerResponse(data, statusText) {
     else toasterMessage(data.sToasterErrorMessage, 'ERROR');
 }
 
-$(document).ready(function () {
-    $('.noChangesWarning').click(function () {
-        window.onbeforeunload = function () {
-        };
-    });
-});
-
 /** needed for backwards compatibility */
 function DeleteRecord() {
     CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.confirm_delete'));
 }
 
 CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sConfirmText) {
-    if (sCurrentRecordName != '') {
-        sConfirmText += "\n\n " + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.record') + ": \"" + sCurrentRecordName + '"';
-    } else {
-        sConfirmText += "\n\n " + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.record') + ": \"" + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.unnamed') + '"';
-    }
+    var currentRecordName = $('#tableEditorContainer .navbar-brand').text();
+
+    sConfirmText += "\n\n " + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.record') + ": \"" + currentRecordName + '"';
+
     if (confirm(sConfirmText)) {
         window.onbeforeunload = function () {
         };
-        PleaseWait();
+        CHAMELEON.CORE.showProcessingModal();
         document.cmseditform.elements['module_fnc[contentmodule]'].value = 'Delete';
         document.cmseditform.submit();
     }
-}
+};
 
-function updateIframeSize(sFieldName,iHeight){
+CHAMELEON.CORE.MTTableEditor.initTabs = function () {
+    var hash = window.location.hash;
+
+    $('.nav-tabs').find('li a').each(function (key, tabLinkItem) {
+        var $tabLinkItem = $(tabLinkItem);
+        if (hash === tabLinkItem.getAttribute('href')) {
+            $tabLinkItem.click();
+        }
+        $tabLinkItem.click(function () {
+            window.location.hash = this.getAttribute('href');
+        });
+    });
+};
+
+CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle = function (chameleonMessageTypeName) {
+    chameleonMessageTypeName = chameleonMessageTypeName.toLowerCase();
+
+    if ('error' === chameleonMessageTypeName) {
+        return 'danger';
+    }
+
+    if ('message' === chameleonMessageTypeName) {
+        return 'success';
+    }
+
+    return chameleonMessageTypeName;
+};
+
+function updateIframeSize(sFieldName, iHeight) {
     if (sFieldName != '') {
         $('#' + sFieldName + '_iframe').height(iHeight + 'px');
     }
 }
+
+CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
+    // workaround for tempusdominus bug: https://github.com/tempusdominus/bootstrap-4/issues/123
+    $('*[data-toggle="datetimepicker"]').removeClass('datetimepicker-input');
+
+    $(document).on('toggle change hide keydown keyup', '*[data-toggle="datetimepicker"]', function() {
+        $(this).addClass('datetimepicker-input');
+    });
+
+    $('[data-datetimepicker-option]').each(function () {
+        $(this).datetimepicker($(this).data('datetimepicker-option'));
+    });
+
+    $('.datetimepicker-input').each(function () {
+        var id = $(this).attr('id');
+
+        // This custom-event of the datetimepicker only works with the ID of the element.
+        $('#' + id).on('change.datetimepicker', function (e) {
+            var moment = e.date;
+
+            if (moment === undefined) {
+                return;
+            }
+
+            if ($(this).hasClass('format-L') && $(this).hasClass('LTS')) {
+                var cmsDate = moment.format('YYYY-MM-DD HH:mm:ss');
+            } else {
+                var cmsDate = moment.format('YYYY-MM-DD');
+            }
+            // We need a SQL date format for BC reasons.
+            $('input[name=' + id + ']').val(cmsDate);
+        });
+    });
+};
+
+CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
+    $('[data-select2-option]').each(function () {
+        var options = $(this).data('select2-option');
+        options.selectOnClose = true;
+        $(this).select2(options);
+    });
+
+    $('.lookup-container-field-types select').on('select2:select', function (e) {
+        var data = e.params.data;
+        var fieldName = $(this).attr('name');
+        var fieldId = '#fieldTypeHelp' + data.id;
+        var helpText = $(fieldId).html();
+
+        if (helpText === '') {
+            $('#' + fieldName + '-helpContainer').html('&nbsp;');
+        } else {
+            $('#' + fieldName + '-helpContainer').html(helpText);
+        }
+    });
+
+    var quicklookuplist = $('#quicklookuplist');
+    quicklookuplist.select2({
+        placeholder: quicklookuplist.data('select2-placeholder'),
+        templateResult: function (data, container) {
+            // transfer class to select2 element
+            if (data.cssClass && '' !== data.cssClass) {
+                $(container).addClass(data.cssClass);
+            }
+
+            return data.text;
+        },
+        ajax: {
+            url: quicklookuplist.data('select2-ajax'),
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+            return {
+                results: JSON.parse(data)
+            };
+        }
+    }
+    }).on('select2:select', function (e) {
+        var id = e.params.data.id.trim();
+
+        if ('' === id) {
+            return;
+        }
+
+        switchRecord(id);
+    });
+
+    $('[data-tags]').each(function () {
+        $(this).select2({
+            tags: true,
+            width: '100%',
+            tokenSeparators: [',', ' ', ';'],
+            ajax: {
+                url: $(this).data('select2-ajax'),
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        currentTags: $(this).val().join(','),
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    }
+                }
+            },
+
+            createTag: function (params) {
+                var term = $.trim(params.term);
+
+                if ('' === term) {
+                    return null;
+                }
+
+                return {
+                    id: term,
+                    text: term
+                };
+            }
+        }).on('change', function (e) {
+            var currentTags = $(this).val().join(',');
+            var suggestionsUrl = $(this).data('ajax-suggestions-url')+'&currentTags='+currentTags;
+
+            $.ajax({
+                url: suggestionsUrl,
+                context: this,
+            }).done(function( data ) {
+                var suggestionsHtml = '';
+                $(data).each(function (dataKey, dataItem) {
+                    suggestionsHtml += '<span class="badge badge-secondary mr-2" data-tag-id="'+dataItem.id+'"><i class="far fa-plus-square"></i> '+dataItem.name+'</span>';
+                });
+
+                var that = $(this);
+
+                $('#'+$(this).attr('id')+'_suggestions .tagSuggestionList').html(suggestionsHtml).find('.badge').on('click', function(e) {
+                    var newOption = new Option($(this).data('tag-id'), $(this).data('tag-id'), false, true);
+                    that.append(newOption).trigger('change');
+                });
+            });
+        });
+    });
+
+    // catch arrow key keypress on select2 containers to open the select2 pulldown.
+    $('.select2.select2-container').on('keydown', function(e) {
+        if (40 === e.keyCode) {
+            $($(e.target).closest('.select2.select2-container').siblings('select')[0]).select2('open');
+        }
+    });
+};
+
+CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent = function (selector) {
+    $(selector).bind('click', function () {
+        var checkBoxFieldElement = $(this);
+        var hiddenFieldName = checkBoxFieldElement.attr('name') + 'hidden';
+        var hiddenFieldElement = $('#' + hiddenFieldName);
+
+        if (checkBoxFieldElement.is(':checked')) {
+            hiddenFieldElement.attr('disabled', true);
+        } else {
+            hiddenFieldElement.removeAttr('disabled');
+        }
+    });
+};
+
+CHAMELEON.CORE.MTTableEditor.initInputChangeObservation = function () {
+    $("input:text,input:checkbox,input:radio,textarea,select,input:hidden",$("#cmseditform")).not(".cmsdisablechangemessage").one("change",function() {
+        CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
+    });
+};
+
+/**
+ * @deprecated since 6.3.0 - use CHAMELEON.CORE.MTTableEditor.initInputChangeObservation(); instead
+ */
+function SetChangedDataMessage() {
+    CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
+}
+
+CHAMELEON.CORE.MTTableEditor.initHelpTexts = function () {
+    $(".help-text-button").click(function () {
+        var helpTextId = '#helptext-' + $(this).attr("data-helptextId");
+        $(helpTextId).toggle();
+    });
+};
+
+/*
+ * multi linked table (MLT)/property field: show/hide list in iframe.
+ */
+CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState = function (iFrameId, url) {
+    var iFrameElement = document.getElementById(iFrameId);
+    var cardBodyElement = iFrameElement.parentElement;
+
+    if (iFrameElement.classList.contains('d-none')) {
+        iFrameElement.src = url;
+        iFrameElement.classList.remove('d-none');
+        cardBodyElement.classList.remove('p-0');
+        cardBodyElement.classList.add('p-1');
+    } else {
+        iFrameElement.classList.add('d-none');
+        cardBodyElement.classList.remove('p-1');
+        cardBodyElement.classList.add('p-0');
+    }
+};
+
+CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe = function () {
+    var webpageiFrame = $('#userwebpageiframe');
+
+    if (0 === webpageiFrame.length) {
+        return;
+    }
+
+    var bodyHeight = parseInt($(window).height());
+    var iFramePos = $('#templateengine .card-body').position();
+    var additionPaddings = 235;
+    var iFrameHeight = bodyHeight - iFramePos.top - additionPaddings;
+
+    if (iFrameHeight < 450){
+        iFrameHeight = 450;
+    }
+
+    webpageiFrame.css('height', iFrameHeight);
+};
+
+$(document).ready(function () {
+    CHAMELEON.CORE.MTTableEditor.initTabs();
+    CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
+    CHAMELEON.CORE.MTTableEditor.initSelectBoxes();
+    CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
+    CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent('label.switch input[type=checkbox]');
+    CHAMELEON.CORE.MTTableEditor.initHelpTexts();
+    CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe();
+    CHAMELEON.CORE.handleFormAndLinkTargetsInModals();
+});

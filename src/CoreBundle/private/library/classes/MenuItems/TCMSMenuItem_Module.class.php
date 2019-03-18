@@ -10,8 +10,10 @@
  */
 
 /**
- * a standard CMS Module.
-/**/
+ * A standard CMS Module.
+ *
+ * @deprecated since 6.3.0 - only used for deprecated classic main menu
+ */
 class TCMSMenuItem_Module extends TCMSMenuItem
 {
     /**
@@ -21,23 +23,19 @@ class TCMSMenuItem_Module extends TCMSMenuItem
     {
         $pagedefType = $this->data['module_location'];
         $url = PATH_CMS_CONTROLLER.'?pagedef='.urlencode($this->data['module']);
-        if (!empty($this->data['parameter'])) {
+        if ('' !== $this->data['parameter']) {
             $url .= '&'.$this->data['parameter'];
         }
-        if (!empty($pagedefType)) {
+        if ('' !== $pagedefType) {
             $url .= '&_pagedefType='.$pagedefType;
         }
-        if ('1' == $this->data['show_as_popup']) {
-            $url = "javascript:CreateModalIFrameDialogCloseButton('".$url."',".TGlobal::OutHTML($this->data['width']).','.TGlobal::OutHTML($this->data['height']).');';
+
+        if (array_key_exists('icon_font_css_class', $this->data) && '' !== $this->data['icon_font_css_class']) {
+            $icon = $this->data['icon_font_css_class'];
+        } else {
+            $icon = 'fas fa-sign-out-alt'; //standard icon
         }
 
-        $iconStyle = '';
-        $rightIconStyle = 'display: block; background-image: url('.URL_CMS.'/images/icon_enter.gif); background-repeat: no-repeat; background-position: right center; padding-right: 16px;';
-        if (array_key_exists('icon_list', $this->data) && !empty($this->data['icon_list'])) {
-            $iconStyle = ' style="background-image: url('.URL_CMS.'/images/icons/'.$this->data['icon_list'].'); background-repeat: no-repeat; background-position: left center; line-height: 17px;"';
-            $rightIconStyle .= ' padding-left: 20px;';
-        }
-
-        return '<a href="'.$url.'" title="'.$this->data['name']."\"{$iconStyle}><span style=\"{$rightIconStyle}\">".$this->data['name'].'</span></a>';
+        return '<a class="nav-link-fa" href="'.$url.'"><i class="'.$icon.'"></i><span>'. TGlobal::OutHTML($this->data['name']).'</span></a>';
     }
 }

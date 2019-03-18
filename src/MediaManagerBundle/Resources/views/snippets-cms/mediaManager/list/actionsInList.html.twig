@@ -1,0 +1,17 @@
+{# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
+{# accessRightsMedia \ChameleonSystem\MediaManager\AccessRightsModel #}
+<div class="actions d-flex flex-md-column justify-content-end">
+    {% if accessRightsMedia.delete %}
+        <a href="#" class="btn btn-danger delete-item mr-1 mr-md-0 mb-md-1" title="{{ 'chameleon_system_media_manager.list_actions.delete' | trans }}">
+            <i class="far fa-trash-alt"></i>
+        </a>
+    {% endif %}
+    {% if pickImageMode %}
+        <a class="btn btn-primary pick-image mr-1 mr-md-0 mb-md-1" title="{{ 'chameleon_system_media_manager.list_actions.select' | trans }}">
+            <i class="far fa-check-circle"></i>
+        </a>
+    {% endif %}
+    <a href="#" class="btn btn-primary show-details" title="{{ 'chameleon_system_media_manager.list_actions.edit' | trans }}">
+        <i class="far fa-edit"></i>
+    </a>
+</div>

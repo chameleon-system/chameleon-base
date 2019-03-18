@@ -1,30 +1,50 @@
 {% trans_default_domain constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND') %}
 
-<div class="cmsimagefieldcontainer">
-    <div class="cmsimagefielditem">
-        {% if bReadOnly == false %}
-            <div class="cmsimagefielditemtitle">
+<div class="card bg-light">
+    <div class="card-header p-0 cmsimagefielditemtitle">
+        <div class="btn-group btn-group-sm" role="group">
+            {% if bReadOnly == false %}
                 {% if bImageSet %}
-                    <a href="javascript:{{ sOpenWindowJSMediaDetail }}" title="{{ 'chameleon_system_core.field_media.action_show_details'|trans }}" >
-                        <img style="float:right" src="{{ sImageIconURL }}/images/icons/image_link.png" width="16" height="16" alt="{{ 'chameleon_system_core.field_media.action_show_details'|trans }}" title="{{ 'chameleon_system_core.field_media.action_show_details'|trans }}" hspace="0" vspace="2" border="0" />
-                    </a>
-                    <a href="{{ sImageURL }}" title="{{ "chameleon_system_core.field_media.action_download_image"|trans }}" target="_blank">
-                        <img style="float:right" src="{{ sImageIconURL }}/images/icons/disk.png" width="16" height="16" alt="{{ "chameleon_system_core.field_media.action_download_image"|trans }}" title="{{ "chameleon_system_core.field_media.action_download_image"|trans }}" hspace="0" vspace="2" border="0" />
-                    </a>
+                    <button type="button" onclick="{{ sOpenWindowJSMediaDetail|e('html_attr') }}"
+                            class="btn btn-secondary rounded-0"
+                            data-toggle="tooltip" data-placement="top"
+                            title="{{ 'chameleon_system_core.field_media.action_show_details'|trans|e('html_attr') }}">
+                        <i class="fas fa-external-link-alt"></i>
+                    </button>
+
+                    <button type="button" onclick="window.open('{{ sImageURL|e('js') }}')"
+                            class="btn btn-secondary rounded-0"
+                            data-toggle="tooltip" data-placement="top"
+                            title="{{ "chameleon_system_core.field_media.action_download_image"|trans|e('html_attr') }}">
+                        <i class="far fa-save"></i>
+                    </button>
                 {% endif %}
-                <a href="javascript:{{ sOpenWindowJSSetImage }}" title="{{ 'chameleon_system_core.field_media.action_assign_image'|trans }}">
-                    <img style="float:right" src="{{ sImageIconURL }}/images/icons/image.gif" width="16" height="16" alt="{{ 'chameleon_system_core.field_media.action_assign_image'|trans }}" title="{{ 'chameleon_system_core.field_media.action_assign_image'|trans }}" hspace="0" vspace="2" border="0" />
-                </a>
-                <span style="cursor: pointer; cursor: hand; display:inline; visibility: {{ sDeleteVisibleType }}; float:right;" id="cmsimagefielditem_clearbutton_{{ sFieldName }}{{ iPosition }}">
-                    <img src="{{ sImageIconURL }}/images/icons/image_delete.gif" width="16" height="16" alt="{{ 'chameleon_system_core.field_media.action_reset_image_assignment'|trans }}" title="{{ 'chameleon_system_core.field_media.action_reset_image_assignment'|trans }}" hspace="0" vspace="2" border="0" onclick="ClearImage('{{ sTableId|e('js') }}','{{ sRecordId|e('js') }}','{{ sFieldName|e('js') }}','{{ iPosition|e('js') }}')" />
-                </span>
-            </div>
-        {% endif %}
+
+                <button type="button" onclick="{{ sOpenWindowJSSetImage|e('html_attr') }}" class="btn btn-secondary rounded-0"
+                        data-toggle="tooltip" data-placement="top"
+                        title="{{ 'chameleon_system_core.field_media.action_assign_image'|trans|e('html_attr') }}">
+                    <i class="far fa-image"></i>
+                </button>
+
+                <button type="button"
+                        onclick="ClearImage('{{ sTableId|e('js') }}','{{ sRecordId|e('js') }}','{{ sFieldName|e('js') }}','{{ iPosition|e('js') }}')"
+                        style="visibility: {{ sDeleteVisibleType }};"
+                        id="cmsimagefielditem_clearbutton_{{ sFieldName|e('html_attr') }}{{ iPosition|e('html_attr') }}"
+                        class="btn btn-secondary rounded-0"
+                        data-toggle="tooltip" data-placement="top"
+                        title="{{ 'chameleon_system_core.field_media.action_reset_image_assignment'|trans|e('html_attr') }}">
+                    <i class="far fa-trash-alt"></i>
+                </button>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card-body p-0 text-center">
         <div class="cmsimagefielditemimage">
-            <div id="cmsimagefielditem_noimagediv_{{ sFieldName }}{{ iPosition }}" class="noImageDiv" style="display:none;">
-                <img src="{{ emptyImageUrl }}" class="img-responsive">
+            <div id="cmsimagefielditem_noimagediv_{{ sFieldName|e('html_attr') }}{{ iPosition|e('html_attr') }}" class="noImageDiv"
+                 style="display:none;">
+                <img src="{{ emptyImageUrl|e('html_attr') }}" class="img-fluid" alt="">
             </div>
-            <div id="cmsimagefielditem_imagediv_{{ sFieldName }}{{ iPosition }}" class="imageHolder" style="">
+            <div id="cmsimagefielditem_imagediv_{{ sFieldName|e('html_attr') }}{{ iPosition|e('html_attr') }}" class="imageHolder" style="">
                 {% include '/common/media/pkgCmsTextFieldImageResponsive.html.twig' %}
             </div>
         </div>

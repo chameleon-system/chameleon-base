@@ -54,7 +54,7 @@ class CMSFieldPositionRPC extends TCMSModelBase
             $sRestriction = $oRecordObject->sqlData[$sRestrictionField];
         }
 
-        $sHTML = "<ul id=\"posList\" class=\"posListUL\">\n";
+        $sHTML = "<ul id=\"posList\" class=\"list-group\">\n";
 
         $sHTML .= $this->GetListItems($sTableSQLName, $sRecordID, $sFieldName, $sRestrictionField, $sRestriction, ('cms_field_conf' == $sTableSQLName));
 
@@ -100,14 +100,15 @@ class CMSFieldPositionRPC extends TCMSModelBase
             }
 
             ++$iCount;
+
+            $activeClass = '';
             if ($oPositionRow->id == $sRecordID) {
-                $sActiveRecord = 'positionListActive';
-            } else {
-                $sActiveRecord = 'positionList';
+                $activeClass = 'active';
             }
 
-            $sHTML .= '<li id="item'.$oPositionRow->id.'" rel="'.$iCount.'" class="'.$sActiveRecord.'">';
+            $sHTML .= '<li id="item'.$oPositionRow->id.'" rel="'.$iCount.'" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center '.$activeClass.'">';
             $sHTML .= '<input type="hidden" name="aPosOrder[]" value="'.$oPositionRow->id.'" />'.$oPositionRow->GetName();
+            $sHTML .= '<i class="fas fa-arrows-alt-v"></i>';
             $sHTML .= "</li>\n";
         }
 
@@ -136,7 +137,7 @@ class CMSFieldPositionRPC extends TCMSModelBase
                 $oTab = TdbCmsTblFieldTab::GetNewInstance($sTabId);
                 $sTabName = $oTab->GetName();
             }
-            $sHTML = '<li id="item'.$sTabId.'" rel="0" class="positionList disabled" style="background-color:#8ab9ff; color#000000; font-weight:bold;"> '.TGlobal::Translate('chameleon_system_core.field_mltrpc.tab', array('%tab%' => $sTabName)).'</li> ';
+            $sHTML = '<li id="item'.$sTabId.'" rel="0" class="list-group-item list-group-item-dark disabled" style="background-color:#8ab9ff; color#000000; font-weight:bold;"> '.TGlobal::Translate('chameleon_system_core.field_mltrpc.tab', array('%tab%' => $sTabName)).'</li> ';
         }
 
         return $sHTML;
@@ -248,39 +249,25 @@ class CMSFieldPositionRPC extends TCMSModelBase
         $aIncludes = parent::GetHtmlHeadIncludes();
         $fieldName = $this->global->GetUserData('fieldName');
 
-        $aIncludes[] = '<!--[if lte IE 7]><meta name="MSSmartTagsPreventParsing" content="true" /><![endif]-->';
-        $aIncludes[] = '<!--[if lte IE 7]><meta http-equiv="imagetoolbar" content="false" /><![endif]-->';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/form/jquery.form.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
-
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/BlockUI/jquery.blockUI.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqDnR.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.css').'" media="screen" rel="stylesheet" type="text/css" />';
-
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.sortable.js').'" type="text/javascript"></script>';
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
+        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fontawesome-free-5.5.0/css/all.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tableeditcontainer.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script type="text/javascript">
       $(document).ready(function(){
         $("#posList").sortable({
           smooth: false,
           tolerance: "fit",
-          activeClass: "positionListActive",
+          activeClass: "active",
           containment: "document",
           axis: "y",
           scroll: "true",
           helper: "clone",
           items: "li:not(.disabled)",
           start:  function(e , el){
-            $(el.helper).removeClass("positionList");
-            $(el.helper).addClass("positionListActive");
-            $(el.helper).css("width","492px");
+            $(el.helper).addClass("active");
             helperforthis = el.helper;
           },
           update: function (e , el) {
-            // $("#posList").droppableDestroy();
-
             var id = $(helperforthis).attr("id").replace("item", "");
             $("#movedItemID").val(id);
 

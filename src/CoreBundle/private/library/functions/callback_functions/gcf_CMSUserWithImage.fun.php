@@ -9,9 +9,12 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @deprecated since 6.3.0 - method moved to TCMSListManagerCMSUser::callbackCmsUserWithImage(). Use 'callbackCmsUserWithImage' for field callback configuration.
+ */
 function gcf_CMSUserWithImage($name, $row, $fieldName)
 {
-    $imageTag = '<img src="'.URL_CMS.'/images/nav_icons/user.gif"  hspace="0" vspace="0" border="0" style="margin-right:10px" align="left" />';
+    $imageTag = '<i class="fas fa-user"></i> ';
 
     $imageId = $row['images'];
     if ($imageId >= 1000 || !is_numeric($imageId)) {

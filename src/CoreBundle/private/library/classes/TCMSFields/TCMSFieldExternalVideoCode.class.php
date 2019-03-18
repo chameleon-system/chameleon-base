@@ -32,7 +32,7 @@ class TCMSFieldExternalVideoCode extends TCMSFieldText
     public function GetReadOnly()
     {
         $html = $this->_GetHiddenField()."\n".$this->data;
-        $html .= '<textarea style="margin-top: 10px; width: 500px; height: 200px;">'.TGlobal::OutHTML($this->data)."</textarea>\n";
+        $html .= '<textarea class="form-control form-control-sm" style="margin-top: 10px; width: 500px; height: 200px;">'.TGlobal::OutHTML($this->data)."</textarea>\n";
 
         return $html;
     }

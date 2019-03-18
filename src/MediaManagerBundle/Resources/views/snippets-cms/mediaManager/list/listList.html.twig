@@ -1,50 +1,84 @@
 {# accessRightsMedia \ChameleonSystem\MediaManager\AccessRightsModel #}
-<div class="snippetMediaManagerListList">
-    <table>
-        <tr>
-            <th colspan="2">{{ 'chameleon_system_media_manager.list.table_header_image' | trans }}</th>
-            <th>{{ 'chameleon_system_media_manager.list.table_header_name' | trans }}</th>
-            <th>{{ 'chameleon_system_media_manager.list.table_header_tags' | trans }}</th>
-            <th>{{ 'chameleon_system_media_manager.list.table_header_info' | trans }}</th>
-            <th class="actions">{{ 'chameleon_system_media_manager.list.table_header_actions' | trans }}</th>
-        </tr>
-        {% set mediaItems = listResult.items %}
-        {% for mediaItem in mediaItems %}
-            {# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
-            <tr class="cms-media-item" data-id="{{ mediaItem.id }}" data-name="{{ mediaItem.name }}">
-                <td class="selection-box">
-                    <input type="checkbox" class="select-row">
-                </td>
-                <td class="image">
-                    <div class="image-col">
-                        <div class="image-container">
-                            <img src="{{ mediaItem.id | cmsthumb(500, 100) }}" alt="">
+<div class="snippetMediaManagerListList mb-4">
+    <div class="row list-header pt-2 pb-2 ">
+        <div class="col-2 col-md-1"></div>
+        <div class="col-10 col-md-11">
+            <div class="row">
+                <div class="col-5 col-xl-2">
+                    {{ 'chameleon_system_media_manager.list.table_header_image' | trans }}
+                    <div class="d-xl-none">{{ 'chameleon_system_media_manager.list.table_header_info' | trans }}</div>
+                </div>
+                <div class="col-7 col-xl-4">
+                    <div class="row">
+                        <div class="col-12">
+                            {{ 'chameleon_system_media_manager.list.table_header_name' | trans }}
+                        </div>
+                        <div class="col-12">
+                            {{ 'chameleon_system_media_manager.list.table_header_tags' | trans }}
                         </div>
                     </div>
-                </td>
-                <td>
-                    <div class="caption{% if accessRightsMedia.edit %} editable{% endif %}"
-                         data-type="description">{{ mediaItem.name }}</div>
-                </td>
-                <td>
-                    {% if mediaItem.tags | length > 0 %}<span class="glyphicon glyphicon-tag"></span>{% endif %}
-                    <div class="tags{% if accessRightsMedia.edit %} editable{% endif %}"
-                         data-type="tags">{{ mediaItem.tags | join(', ') }}</div>
-                </td>
-                <td class="info">
-                    {% if mediaItem.type|lower in ['jpg', 'png', 'gif'] %}<img
-                        src="/chameleon/blackbox/images/filetype_icons/16x16/{{ mediaItem.type|lower }}.png"
-                        alt="">{% endif %} {{ mediaItem.type }}<br>
-                    <span class="glyphicon glyphicon-resize-full"></span> {{ mediaItem.width }} x {{ mediaItem.height }}
-                    px<br>
-                    <span class="glyphicon glyphicon-info-sign"></span> ID {{ mediaItem.id }}
-                    {% if mediaItem.dateChanged %}<br><span
-                            class="glyphicon glyphicon-time"></span> {{ 'chameleon_system_media_manager.changed_date' | trans }} {{ mediaItem.dateChanged | date('d.m.Y H:i:s') }}{% endif %}
-                </td>
-                <td>
-                    {% include('mediaManager/list/actions.html.twig') with {'mediaItem': mediaItem, 'pickImageMode': pickImageMode, 'pickImageCallback': pickImageCallback, 'pickImageWithCrop': pickImageWithCrop, 'accessRightsMedia': accessRightsMedia} %}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+                </div>
+                <div class="d-none d-xl-block col-9 col-xl-4">{{ 'chameleon_system_media_manager.list.table_header_info' | trans }}</div>
+                <div class="d-none d-xl-block col-3 col-xl-2 text-right actions"><span class="pr-1">{{ 'chameleon_system_media_manager.list.table_header_actions' | trans }}</span></div>
+            </div>
+        </div>
+    </div>
+
+    {% set mediaItems = listResult.items %}
+    {% for mediaItem in mediaItems %}
+        {# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
+        <div class="row pt-2 pb-2 cms-media-item" data-id="{{ mediaItem.id }}" data-name="{{ mediaItem.name }}">
+            <div class="col-2 col-md-1 selection-box align-self-center">
+                <input class="select-row" type="checkbox">
+            </div>
+            <div class="col-10 col-md-11">
+                <div class="row">
+                    <div class="col-5 col-xl-2 image mb-2 mb-xl-0">
+                        <div class="image-col">
+                            <div class="image-container{% if false == pickImageMode %}selectable{% endif %}">
+                                <img src="{{ mediaItem.id | cmsthumb(500, 100) }}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-7 col-xl-4">
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <div class="caption{% if accessRightsMedia.edit %} editable{% endif %}" data-type="description">{{ mediaItem.name }}</div>
+                            </div>
+                            <div class="col-12 tags"><i class="fas fa-tag pr-2"></i><div class="tag{% if accessRightsMedia.edit %} editable{% endif %}" data-type="tags">{{ mediaItem.tags | join(', ') }}</div></div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-10 col-xl-5 info">
+                        <table>
+                            <tr>
+                                <td>
+                                    {% if mediaItem.type|lower in ['jpg', 'png', 'gif'] %}
+                                        <img class="mr-1" src="/chameleon/blackbox/images/filetype_icons/16x16/{{ mediaItem.type|lower }}.png" alt="">
+                                    {% endif %}
+                                </td>
+                                <td>{{ mediaItem.type }}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-expand-arrows-alt mr-2"></i></td>
+                                <td>{{ mediaItem.width }} x {{ mediaItem.height }} px</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-info-circle mr-2"></i></td>
+                                <td>ID {{ mediaItem.id }}</td>
+                            </tr>
+                            {% if mediaItem.dateChanged %}
+                                <tr>
+                                    <td><i class="far fa-clock mr-2"></i></td>
+                                    <td>{{ 'chameleon_system_media_manager.changed_date' | trans }} {{ mediaItem.dateChanged | date('d.m.Y H:i:s') }}</td>
+                                </tr>
+                            {% endif %}
+                        </table>
+                    </div>
+                    <div class="col-12 col-md-2 col-xl-1 text-right align-self-end">
+                        {% include('mediaManager/list/actionsInList.html.twig') with {'mediaItem': mediaItem, 'pickImageMode': pickImageMode, 'pickImageCallback': pickImageCallback, 'pickImageWithCrop': pickImageWithCrop, 'accessRightsMedia': accessRightsMedia} %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 </div>

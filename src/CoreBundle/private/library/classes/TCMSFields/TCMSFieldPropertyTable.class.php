@@ -21,7 +21,7 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
  * we can show the subtable as a standard liste..
  * you can open the field on load via bOpenOnLoad=true  (field config)
  * you can open the field as a 1:1 relation via bOnlyOneRecord=true (field config).
-/**/
+ */
 class TCMSFieldPropertyTable extends TCMSFieldVarchar
 {
     /**
@@ -60,18 +60,30 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             }
         } else {
             $sOnClickEvent = $this->getOnClickEvent();
+
+            $sEscapedName = TGlobal::OutHTML($this->name);
+
             $html .= '<input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($sPropertyTableName).'" />';
-            $html .= '
-        <div style="border-bottom: 1px solid #A9C4E7;">
-          <div class="listBoxTopTitleRight"><img src="'.URL_CMS.'/images/boxTitleBgRight.gif" alt="" width="4" height="22" border="0" hspace="0" vspace="0" /></div>
-          <div class="listBoxTopTitleLeft"><img src="'.URL_CMS.'/images/boxTitleBgLeft.gif" alt="" width="4" height="22" border="0" hspace="0" vspace="0" /></div>
-          <div class="listBoxTop" data-fieldstate="'.$stateContainer->getState($this->sTableName, $this->name)."\" onClick=\"setTableEditorListFieldState(this, '{$sStateURL}');{$sOnClickEvent}\"><img src=\"".URL_CMS.'/images/icon_show_hide_list.gif" border="0" hspace="0" vspace="0" align="left" style="padding-top: 3px; padding-right: 8px; padding-left: 4px; ">'.TGlobal::Translate('chameleon_system_core.field_property.open_or_close_list').'</div>
-          <div class="cleardiv">&nbsp;</div>
-        </div>
-        <div id="'.TGlobal::OutHTML($this->name).'_iframe_block" class="listBoxBorder"><iframe id="'.TGlobal::OutHTML($this->name).'_iframe" width="100%" height="470" frameborder="0" style="display: none;"></iframe></div>';
+            $html .= '<div class="card">
+            <div class="card-header p-1">
+                <div class="card-action" 
+                data-fieldstate="'.TGlobal::OutHTML($stateContainer->getState($this->sTableName, $this->name)).'" 
+                id="mltListControllButton'.$sEscapedName.'" 
+                onClick="setTableEditorListFieldState(this, \''.$sStateURL.'\'); '.$sOnClickEvent.'">
+                <i class="fas fa-eye"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_property.open_or_close_list')).'
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div id="'.$sEscapedName.'_iframe_block\">
+                    <iframe id="'.$sEscapedName.'_iframe" width="100%" height="470" frameborder="0" class="d-none"></iframe>
+                </div>
+            </div>
+            </div>';
+
             if ('true' == $this->oDefinition->GetFieldtypeConfigKey('bOpenOnLoad') || $stateContainer->getState($this->sTableName, $this->name) == $stateContainer::STATE_OPEN) {
                 $html .= "
-            <script type=\"text/javascript\"> $(document).ready(function() {
+            <script type=\"text/javascript\">
+            $(document).ready(function() {
               {$sOnClickEvent}
             }); </script>
           ";
@@ -110,7 +122,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
                 $aEditorRequest['sTableEditorPagdef'] = 'tableeditorPopup';
             }
         }
-        $sOnClickEvent = "showMLTField('".TGlobal::OutJS($this->name)."_iframe','".TGlobal::OutJS($this->name)."_iframe_block','".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aEditorRequest)."');";
+        $sOnClickEvent = "CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState('".TGlobal::OutJS($this->name)."_iframe','".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aEditorRequest)."');";
 
         return $sOnClickEvent;
     }

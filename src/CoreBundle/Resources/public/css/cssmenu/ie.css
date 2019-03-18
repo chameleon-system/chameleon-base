@@ -1,3 +1,7 @@
+/**
+ * @deprecated - since 6.3.0
+ */
+
 #mainnavigationcontainer ul li a {
   height: 1%;
 }

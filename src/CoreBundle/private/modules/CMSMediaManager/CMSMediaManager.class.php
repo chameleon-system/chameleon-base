@@ -150,12 +150,7 @@ class CMSMediaManager extends TCMSModelBase
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
         // first the includes that are needed for the all fields
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/form/jquery.form.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/BlockUI/jquery.blockUI.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqDnR.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.css').'" media="screen" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />'; // we need this for the list of connections by delete events
         $aIncludes[] = '<script type="text/javascript">
       var messageNewFolder = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.action_new_folder')).'\';
@@ -172,7 +167,6 @@ class CMSMediaManager extends TCMSModelBase
       var messageErrorPasteNoFiles = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.error_no_past_source_selected')).'\';
       var messageUploadSuccessSingle = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.msg_single_file_upload_success')).'\';
       </script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/modules/mediaManager.js').'" type="text/javascript"></script>';
 
         $aTreeIncludes = $this->oTreeWidget->GetHtmlHeadIncludes();
@@ -274,8 +268,8 @@ class CMSMediaManager extends TCMSModelBase
         if (empty($sNodeId) && !empty($returnVal)) {
             $returnVal .= '
                 <div style="padding-top: 25px;">
-                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.confirm_none_empty_folder_delete'), "javascript:DeleteMediaDir('".TGlobal::OutJS($sDeleteNodeID)."');", TGlobal::GetPathTheme().'/images/icons/accept.png', 'DeleteMediaDirComplete').'
-                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.abort'), 'javascript:CloseDeleteCheckDialog();', TGlobal::GetPathTheme().'/images/icons/action_stop.gif').'
+                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.confirm_none_empty_folder_delete'), "javascript:DeleteMediaDir('".TGlobal::OutJS($sDeleteNodeID)."');", 'fas fa-check', 'DeleteMediaDirComplete').'
+                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.abort'), 'javascript:CloseDeleteCheckDialog();', 'fas fa-times').'
                 </div>
               ';
             $returnVal = array($sDeleteNodeID, $returnVal);
@@ -311,7 +305,7 @@ class CMSMediaManager extends TCMSModelBase
           </div>
           <div style="float:right;width:570px;">
             <table cellpadding="0" cellspacing="0" width="100%">
-             <tr class="tblHeader">
+             <tr class="bg-primary">
                <td>'.TGlobal::Translate('chameleon_system_core.cms_module_media_manager.used_in_table').'</td>
                <td>ID</td>
                <td>'.TGlobal::Translate('chameleon_system_core.cms_module_media_manager.used_in_record').'</td>
@@ -343,15 +337,15 @@ class CMSMediaManager extends TCMSModelBase
             if ($bRenderDeleteButton) {
                 $foundConnectionsHTML .= '
                 <div style="padding-top: 25px;">
-                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.confirm_used_image'), "javascript:SendDeleteForm('".$sFileId."');", TGlobal::GetPathTheme().'/images/icons/accept.png').'
-                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.abort'), 'javascript:CloseDeleteCheckDialog();', TGlobal::GetPathTheme().'/images/icons/action_stop.gif').'
+                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.confirm_used_image'), "javascript:SendDeleteForm('".$sFileId."');", 'fas fa-check').'
+                '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.abort'), 'javascript:CloseDeleteCheckDialog();', 'fas fa-times').'
                 </div>
             </div>
               ';
             } else {
                 $foundConnectionsHTML .= '
                   <div style="padding-top: 25px;">
-                  '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.close'), 'javascript:CloseModalIFrameDialog();', TGlobal::GetPathTheme().'/images/icons/action_stop.gif').'
+                  '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.close'), 'javascript:CloseModalIFrameDialog();', 'fas fa-times').'
                   </div>
               </div>';
             }
@@ -466,7 +460,7 @@ class CMSMediaManager extends TCMSModelBase
             if ($aFoundConnections) {
                 $returnVal = '
           <table cellpadding="0" cellspacing="0" width="450">
-           <tr class="tblHeader">
+           <tr class="bg-primary">
              <td>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.used_in_table')).'</td>
              <td>ID</td>
              <td>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.used_in_record')).'</td>

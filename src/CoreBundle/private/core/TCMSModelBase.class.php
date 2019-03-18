@@ -23,9 +23,9 @@ class TCMSModelBase extends TModelBase
     protected function AllowAddingURLToHistory()
     {
         // if this is an ajax call, then prevent the object from being added to the history
-        $allowHistory = !$this->_UserMadeAjaxCall();
+        $allowHistory = false === $this->_UserMadeAjaxCall();
         $suppressHistoryCommand = (in_array('_suppressHistory', $this->aModuleConfig) && true == $this->aModuleConfig['_suppressHistory']);
-        $allowHistory = $allowHistory && !$suppressHistoryCommand;
+        $allowHistory = $allowHistory && false === $suppressHistoryCommand;
 
         return $allowHistory;
     }

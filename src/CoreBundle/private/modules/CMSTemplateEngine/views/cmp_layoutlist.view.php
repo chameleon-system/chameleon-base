@@ -20,14 +20,15 @@ if (null === $editLanguage) {
 }
 
 ?>
-<!-- show list of layouts -->
 <form name="setpagedef" method="post" action="<?=PATH_CMS_CONTROLLER; ?>" target="_top" accept-charset="UTF-8">
     <input type="hidden" name="pagedef" value="templateengine"/>
     <input type="hidden" name="id" value="<?=$data['id']; ?>"/>
     <input type="hidden" name="sourcepagedef" value=""/>
     <input type="hidden" name="module_fnc[templateengine]" value="SetLayout"/>
 </form>
-<ul id="pageLayoutList">
+<div class="p-2 mb-4">
+
+    <div class="font-weight-bold mb-2"><?=TGlobal::Translate('chameleon_system_core.template_engine.headline_layout'); ?></div>
     <?php
     while ($oPageLayout = $data['oMasterDefs']->Next()) {
         /** @var $oPageLayout TdbCmsMasterPagedef */
@@ -42,24 +43,48 @@ if (null === $editLanguage) {
             'previewLanguageId' => $previewLanguageId,
         ];
         $url = $urlUtil->getArrayAsUrl($urlParameters, URL_WEB_CONTROLLER.'?', '&'); ?>
-        <li class="<?= $layoutItemClass; ?>" onClick="parent.document.getElementById('userwebpageiframe').src='<?= $url; ?>';">
-            <div class="extraBold"><?=TGlobal::OutHTML($oPageLayout->sqlData['name']); ?></div>
-            <div class="cleardiv">&nbsp;</div>
-            <div class="pageTitle" style="float: left; width: 60px;"><?=TGlobal::Translate('chameleon_system_core.template_engine.spot_count'); ?></div>
-            <div class="pageTitleValue" style="float:left;"><?=$oPageLayout->NumberOfDynamicModules(); ?></div>
-            <div class="cleardiv">&nbsp;</div>
-            <div class="pageTitleValue" style="padding-bottom: 5px;">
-                <?=nl2br(TGlobal::OutHTML($oPageLayout->sqlData['description'])); ?>
-            </div>
-            <?php if (!$bIsActiveLayout) {
+        <div class="card <?php if ($bIsActiveLayout) {
+            ?>text-white bg-success<?php
+        } ?>">
+            <div class="card-header p-2">
+                <span class="card-title mb-0"><?=TGlobal::OutHTML($oPageLayout->sqlData['name']); ?></span>
+                <?php if (true === $bIsActiveLayout) {
             ?>
-                <div>
-                    <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_use_page_template'), "javascript:document.setpagedef.sourcepagedef.value='".TGlobal::OutHTML($oPageLayout->id)."';document.setpagedef.submit();", TGlobal::GetPathTheme().'/images/icons/accept.png'); ?>
-                </div>
+                <span class="badge badge-pill badge-light float-right"><?=TGlobal::Translate('chameleon_system_core.template_engine.active'); ?></span>
                 <?php
         } ?>
-        </li>
+            </div>
+            <div class="card-body p-2">
+                <div class="callout mt-0 mb-1 <?php
+                if (false === $bIsActiveLayout) {
+                    ?>callout-success<?php
+                } ?>">
+                    <small class="text-muted"><?=TGlobal::Translate('chameleon_system_core.template_engine.spot_count'); ?></small><br>
+                    <strong class="h6"><?=$oPageLayout->NumberOfDynamicModules(); ?></strong>
+                </div>
+                <div class="card-text">
+                    <small><?=nl2br(TGlobal::OutHTML($oPageLayout->sqlData['description'])); ?></small>
+                </div>
+            </div>
+            <?php
+            if (false === $bIsActiveLayout) {
+                ?>
+            <div class="card-footer p-2">
+                <div class="btn-group">
+                    <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:parent.document.getElementById('userwebpageiframe').src='".$url."';", 'far fa-eye'); ?>
+                    <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_use_page_template'), "javascript:document.setpagedef.sourcepagedef.value='".TGlobal::OutHTML($oPageLayout->id)."';document.setpagedef.submit();", 'far fa-check-circle'); ?>
+                </div>
+            </div>
+            <?php
+            } else {
+                ?>
+            <div class="card-footer p-2 bg-success">
+                <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:parent.document.getElementById('userwebpageiframe').src='".$url."';", 'far fa-eye'); ?>
+            </div>
+            <?php
+            } ?>
+        </div>
         <?php
     }
     ?>
-</ul>
+</div>

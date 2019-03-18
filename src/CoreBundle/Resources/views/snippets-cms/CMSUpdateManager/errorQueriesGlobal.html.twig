@@ -1,7 +1,10 @@
 {% for message in messages %}
-    <li><a href="#errorQuery-{{ bundleName }}-{{ buildNumber }}-{{ loop.index0 }}">{{ 'chameleon_system_core.cms_module_update.go_to_message'|trans }}</a>
-        {{ 'chameleon_system_core.cms_module_update.error_message'|trans }} <pre>{{ message.error }}</pre><br />
-        {{ 'chameleon_system_core.cms_module_update.line'|trans }} {{ message.line }}<br />
+    <li class="list-group-item"><a
+                href="#errorQuery-{{ bundleName }}-{{ buildNumber }}-{{ loop.index0 }}">{{ 'chameleon_system_core.cms_module_update.go_to_message'|trans }}</a>
+        {{ 'chameleon_system_core.cms_module_update.error_message'|trans }}
+        <pre>{{ message.error }}</pre>
+        <br/>
+        {{ 'chameleon_system_core.cms_module_update.line'|trans }} {{ message.line }}<br/>
         {{ 'chameleon_system_core.cms_module_update.query'|trans }} {{ message.query }}
     </li>
 {% endfor %}

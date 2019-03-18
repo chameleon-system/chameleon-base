@@ -84,7 +84,7 @@
                         if (self.settings.accessRightsMediaTree.new) {
                             contextMenu.createItem = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.new_folder'),
-                                icon: "glyphicon glyphicon-folder-open",
+                                icon: "fas fa-folder-open",
                                 action: function (data) {
 
                                     var inst = $.jstree.reference(data.reference),
@@ -125,7 +125,7 @@
                         if (self.settings.accessRightsMediaTree.edit) {
                             contextMenu.renameItem = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.rename'),
-                                icon: "glyphicon glyphicon-pencil",
+                                icon: "fas fa-edit",
                                 action: function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);
@@ -138,7 +138,7 @@
                         if (self.settings.accessRightsMediaTree.delete) {
                             contextMenu.deleteItem = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.delete_folder'),
-                                icon: "glyphicon glyphicon-trash",
+                                icon: "fas fa-trash-alt text-danger",
                                 action: function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);
@@ -152,7 +152,7 @@
                         if (self.settings.accessRightsMedia.new) {
                             contextMenu.upload = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.upload'),
-                                icon: "glyphicon glyphicon-upload",
+                                icon: "fas fa-upload",
                                 action: function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);
@@ -166,7 +166,7 @@
                         if (self.settings.accessRightsMediaTree.edit) {
                             contextMenu.properties = {
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.edit_properties'),
-                                icon: "glyphicon glyphicon-cog",
+                                icon: "fas fa-cog",
                                 action: function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);
@@ -198,9 +198,7 @@
                 .one('state_ready.jstree', self.onTreeRestoredState.bind(this))
             ;
 
-            self.element.css('height', $(window).height() - 10);
             $(window).on('resize', function () {
-                self.element.css('height', $(window).height() - 10);
                 $('.gutter-horizontal', self.element).css('height', self.element.height());
             });
 
@@ -336,6 +334,7 @@
                 url: url,
                 data: {
                     'ps': state.pageSize,
+                    'p': state.pageNumber,
                     's': state.searchTerm,
                     'mediaTreeId': state.mediaTreeNodeId,
                     'listView': state.listView,
@@ -550,6 +549,10 @@
                 }
             });
 
+            $('[data-select2-option]').each(function () {
+                $(this).select2($(this).data('select2-option'));
+            });
+
             self.handleAutoCompleteOnSearchFields();
 
         },
@@ -693,12 +696,18 @@
             var errorMsg = CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.general_error_message');
 
             if (typeof data !== 'undefined') {
-                var jsonData = $.parseJSON(data.responseText);
-                if (jsonData.errorMessage) {
-                    errorMsg = jsonData.errorMessage;
-                }
-                if (jsonData.message) {
-                    errorMsg = jsonData.message;
+                errorMsg = data.status + " " + data.statusText + "\n";
+
+                try {
+                    var jsonData = $.parseJSON(data.responseText);
+                    if (jsonData.errorMessage) {
+                        errorMsg += jsonData.errorMessage;
+                    }
+                    if (jsonData.message) {
+                        errorMsg += jsonData.message;
+                    }
+                } catch (err) {
+                    // ignore here: is already an error with above general message
                 }
             }
 
@@ -763,7 +772,7 @@
                     self.bindDragging();
                 });
 
-                $('.image-container', self.editContainer).on('click', function (evt) {
+                $('.image-container.selectable', self.editContainer).on('click', function (evt) {
                     var selectionParent = $(this).parents('.cms-media-item');
                     var wasSelected = $(this).parents('.cms-media-item').hasClass('xselectable-selected');
                     var numberOfElementsSelected = $('.xselectable-selected', self.editContainer).length;
@@ -1009,7 +1018,7 @@
             var layover = self.openLayover(title, '');
 
             if (typeof height === 'undefined') {
-                height = layover.height() - layover.find('.title').height() - 50;
+                height = $('#edit-container').height() - (layover.find('.title').height() - 50);
             }
             iframe.css({'width': '100%', 'height': height}).appendTo(layover);
 
@@ -1028,15 +1037,9 @@
                 self.lastDetailPageShown = null;
             }
 
-            var closeButton = $('<span class="close-button">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.close_button_text') + ' <span class="glyphicon glyphicon-remove"></span></span>');
+            var closeButton = $('<span class="close-button">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.close_button_text') + ' <i class="fas fa-times"></i></span>');
             var layover = $('<div class="media-manager-layover"><div class="title h3">' + title + '</div></div>');
 
-            var newHeight = $(window).height() - this.editContainer.offset().top;
-            if (newHeight < this.element.height()) {
-                newHeight = this.element.height();
-            }
-
-            layover.css({'height': newHeight, 'width': '100%'});
             closeButton.on('click', function (evt) {
                 self.showWaitingAnimation();
                 layover.remove();
