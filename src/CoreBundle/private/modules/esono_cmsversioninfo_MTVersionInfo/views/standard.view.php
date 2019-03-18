@@ -1,6 +1,6 @@
 <?php
 /**
- * @deprecated since 6.3.0 because the module does not exist anymore.
+ * @deprecated since 6.3.0 - not used anymore.
  *
  * @var $updates array
  * @var $deploys array
