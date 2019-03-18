@@ -190,6 +190,10 @@
     margin-bottom: 0;
 }
 
+.table-hover.ui-sortable tbody tr.ui-sortable-helper:hover {
+    background-color: #20a8d8;
+}
+
 /**
  * Overwrite CKEditor theme 'moono-lisa'
  */
