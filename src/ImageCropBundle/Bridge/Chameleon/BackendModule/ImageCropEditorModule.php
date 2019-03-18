@@ -380,15 +380,16 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         $presetRestriction = $this->getPresetRestriction();
         $parameters = $this->getUrlParameters();
         unset($parameters[self::URL_PARAM_PRESET_NAME]);
+
+        if (0 !== count($presetRestriction)) {
+            return $customCropList;
+        }
+
         $customCropList[] = array(
             'name' => $this->translator->trans('chameleon_system_image_crop.editor.custom_crop_new'),
             'url' => URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&'),
             'active' => null === $presetSystemName && null === $activeCrop,
         );
-
-        if (0 !== count($presetRestriction)) {
-            return $customCropList;
-        }
 
         $image = $this->getCmsImage();
         if (null === $image) {
