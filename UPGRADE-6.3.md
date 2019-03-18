@@ -590,6 +590,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \TPkgCmsCoreLog
 - \TPkgCmsCoreLogCleanupCronJob
 - \TPkgCmsCoreLogMonologHandler_Database
+- \TPkgCmsLicenseManager_MTLogin
 - \TPkgSnippetRenderer_TranslationNode
 - \TPkgSnippetRenderer_TranslationTokenParser
 - \TTemplateTools
@@ -752,3 +753,4 @@ that are deprecated because they are outdated and replaced by frontend themes or
 ## Page Definitions
 
 - api.pagedef.php
+- pkgCmsLicenceManager.pagedef.php
