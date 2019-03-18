@@ -12,7 +12,6 @@
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper;
 
 use AbstractViewMapper;
-use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ImageCropBundle\Bridge\Chameleon\BackendModule\ImageCropEditorModule;
 use ChameleonSystem\MediaManager\DataModel\MediaItemDataModel;
@@ -27,17 +26,10 @@ class ImageCropEditorUrlMapper extends AbstractViewMapper
      */
     private $urlUtil;
 
-    /**
-     * @var AuthenticityTokenManagerInterface
-     */
-    private $authenticityTokenManager;
-
     public function __construct(
-        UrlUtil $urlUtil,
-        AuthenticityTokenManagerInterface $authenticityTokenManager
+        UrlUtil $urlUtil
     ) {
         $this->urlUtil = $urlUtil;
-        $this->authenticityTokenManager = $authenticityTokenManager;
     }
 
     /**
