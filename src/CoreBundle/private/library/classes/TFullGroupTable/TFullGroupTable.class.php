@@ -479,11 +479,13 @@ class TFullGroupTable extends TGroupTable
                 $sTable .= $this->sPagingSection;
             }
 
+            $sTable .= '<div class="table-responsive">';
             $sTable .= '<table '.$this->getInlineFromAttributes($this->getManagedAttributes()).'class="'.$this->getTableCSS().'">';
             $sTable .= $this->GetCellWidths();
             $sTable .= $this->sHeaderSection;
             $sTable .= $this->sContentSection;
             $sTable .= '</table>';
+            $sTable .= '</div>';
 
             if ('bottom' == $this->pageingLocation || 'top_and_bottom' == $this->pageingLocation) {
                 $sTable .= $this->sPagingSection;
