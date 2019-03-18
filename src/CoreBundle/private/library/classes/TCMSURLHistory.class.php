@@ -203,9 +203,6 @@ class TCMSURLHistory
                 unset($this->aHistory[$i]);
             }
         }
-
-        // reset the keys to prevent key gaps
-        $this->aHistory = array_values($this->aHistory);
     }
 
     /**
@@ -247,11 +244,6 @@ class TCMSURLHistory
     {
         if (0 === $this->getHistoryCount()) {
             return true;
-        }
-
-        if (false === isset($this->aHistory[0])) {
-            // reset the keys to prevent key gaps
-            $this->aHistory = array_values($this->aHistory);
         }
 
         return array_key_exists('params', $this->aHistory[0]);
