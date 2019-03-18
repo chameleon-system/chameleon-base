@@ -30,7 +30,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
      *
      * @var string
      */
-    protected $rootTreeID = '99';
+    protected $rootTreeID = TCMSTreeNode::TREE_ROOT_ID;
 
     /**
      * nodes that should not be assignable or that should have only a
@@ -91,15 +91,15 @@ class CMSTreeNodeSelect extends TCMSModelBase
 
             ++$level;
 
-            $path .= '<li><div class="treesubpath">'.$oNode->fieldName."</div></li>\n";
-            $this->data['treePathHTML'] .= '<div id="'.$fieldName.'_tmp_path_'.$oNode->id.'" style="display:none;"><div class="treeField"><ul>'.$path.'</ul></div></div>'."\n";
+            $path .= '<li class="breadcrumb-item">'.$oNode->fieldName."</li>\n";
+            $this->data['treePathHTML'] .= '<div id="'.$fieldName.'_tmp_path_'.$oNode->id.'" style="display:none;"><ol class="breadcrumb ml-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
 
             $this->data['treeHTML'] .= $spacer.'<li id="node'.$oNode->sqlData['cmsident'].'">';
 
             $this->data['treeHTML'] .= '<a href="#" onClick="'.$this->getOnClick($fieldName, $oNode).'">'.$sNodeName;
 
             if ($activeID == $oNode->id) {
-                $this->data['treeHTML'] .= '<span style="background: url('.TGlobal::GetPathTheme().'/images/icons/tick.png); height: 16px; background-repeat: no-repeat;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+                $this->data['treeHTML'] .= '<i class="fas fa-check"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
             }
 
             $this->data['treeHTML'] .= '</a>';
@@ -153,8 +153,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jsTree/jquery.jstree.js').'" type="text/javascript"></script>';
 

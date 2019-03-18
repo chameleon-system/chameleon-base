@@ -22,7 +22,7 @@ class TCMSFieldTime extends TCMSFieldNumber
         $minutes = $aFields[1];
         $seconds = $aFields[2];
         $html = '<input type="hidden" name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($this->data)."\" />\n";
-        $html .= '<select id="'.TGlobal::OutHTML($this->name).'_hour" name="'.TGlobal::OutHTML($this->name)."_hour\" class=\"form-control input-sm\" style=\"width: 65px; display: inline;\">\n";
+        $html .= '<select id="'.TGlobal::OutHTML($this->name).'_hour" name="'.TGlobal::OutHTML($this->name)."_hour\" class=\"form-control form-control-sm\" style=\"width: 65px; display: inline;\">\n";
 
         for ($i = 0; $i <= 23; ++$i) {
             $hourTmp = $i;
@@ -39,7 +39,7 @@ class TCMSFieldTime extends TCMSFieldNumber
 
         $html .= '
       </select> :
-      <select id="'.TGlobal::OutHTML($this->name).'_min"  name="'.TGlobal::OutHTML($this->name)."_min\" class=\"form-control input-sm\" style=\"width: 65px; display: inline;\">\n";
+      <select id="'.TGlobal::OutHTML($this->name).'_min"  name="'.TGlobal::OutHTML($this->name)."_min\" class=\"form-control form-control-sm\" style=\"width: 65px; display: inline;\">\n";
 
         for ($i = 0; $i <= 59; ++$i) {
             $minTmp = $i;
@@ -58,7 +58,7 @@ class TCMSFieldTime extends TCMSFieldNumber
       </select>';
         $html .= '
       </select> :
-      <select id="'.TGlobal::OutHTML($this->name).'_sec"  name="'.TGlobal::OutHTML($this->name)."_sec\" class=\"form-control input-sm\" style=\"width: 65px; display: inline;\">\n";
+      <select id="'.TGlobal::OutHTML($this->name).'_sec"  name="'.TGlobal::OutHTML($this->name)."_sec\" class=\"form-control form-control-sm\" style=\"width: 65px; display: inline;\">\n";
 
         for ($i = 0; $i <= 59; ++$i) {
             $minTmp = $i;

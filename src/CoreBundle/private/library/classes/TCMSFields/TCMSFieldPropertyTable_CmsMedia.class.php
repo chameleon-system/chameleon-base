@@ -194,7 +194,7 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
 <script type="text/javascript">
   function TCMSFieldPropertyTableCmsMediaOpenUploadWindow_{$this->name}(mediaTreeID) {
     if(mediaTreeID != '') {
-      CreateModalIFrameDialogCloseButton('{$sURL}&treeNodeID=' + mediaTreeID,630,500);
+      CreateModalIFrameDialogCloseButton('{$sURL}&treeNodeID=' + mediaTreeID);
     } else {
       toasterMessage('{$sErrorMessage}','ERROR');
     }

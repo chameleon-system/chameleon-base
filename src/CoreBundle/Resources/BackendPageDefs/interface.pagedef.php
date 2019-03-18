@@ -1,12 +1,9 @@
 <?php
 
-// main layout
-$layoutTemplate = 'popup_window_iframe';
+$layoutTemplate = 'default';
+$moduleList = array('contentmodule' => array('model' => 'CMSInterface', 'view' => 'standard', '_suppressHistory' => true));
 
-// modules...
-$moduleList = array('pagetitle' => array('model' => 'MTHeader', 'view' => 'title'), 'contentmodule' => array('model' => 'CMSInterface', 'view' => 'standard', '_suppressHistory' => true));
-
-// this line needs to be included... do not touch
-if (!is_array($moduleList)) {
-    $layoutTemplate = '';
-}
+addDefaultPageTitle($moduleList);
+addDefaultHeader($moduleList);
+addDefaultBreadcrumb($moduleList);
+addDefaultSidebar($moduleList);

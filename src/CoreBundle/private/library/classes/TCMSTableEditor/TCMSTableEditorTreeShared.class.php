@@ -83,7 +83,7 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save');
                     $oMenuItem->sItemKey = 'save';
-                    $oMenuItem->sIcon = TGlobal::GetStaticURL(URL_CMS.'/images/icons/action_save.gif');
+                    $oMenuItem->sIcon = 'far fa-save';
                     $oMenuItem->sOnClick = 'SaveTreeNodeAjax();';
                     $this->oMenuItems->AddItem($oMenuItem);
                 }
@@ -107,11 +107,7 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
       }
 
       .tableeditcontainer .leftTD {
-        width: 150px;
-      }
-
-      .tabsContainer {
-        padding-left: 0px;
+        max-width: 150px;
       }
       </style>';
 

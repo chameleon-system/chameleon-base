@@ -11,6 +11,9 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
+/**
+ * @deprecated since 6.3.0 - no longer used
+ */
 class TCMSFieldMediaProperties extends TCMSFieldNumber
 {
     /** @var bool */
@@ -18,11 +21,9 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
 
     public function GetHTML()
     {
-        $sFileTypeIconPath = '';
         if (!empty($this->oTableRow->sqlData['cms_filetype_id'])) {
             $oImageType = TdbCmsFiletype::GetNewInstance();
             $oImageType->Load($this->oTableRow->sqlData['cms_filetype_id']);
-            $sFileTypeIconPath = TGlobal::GetStaticURLToWebLib(URL_FILETYPE_ICONS_LOW_QUALITY.$oImageType->sqlData['file_extension'].'.png');
         }
         $fileSize = TCMSDownloadFile::GetHumanReadableFileSize($this->oTableRow->sqlData['filesize']);
 
@@ -34,21 +35,19 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
         $html .= '
       <div style="float: right;">';
 
-        $html .= $oImage->GetThumbnailTag(200, 140, 400, 400);
+        $html .= $oImage->renderImage(200, 140, 400, 400);
 
         $html .= '</div>
-      <table border="0" style="float: left; width: 50%" class="table table-condensed table-striped">
+      <table border="0" style="float: left; width: 50%" class="table table-sm table-striped">
         <tr>
           <td width="60">ID:</td>
           <td>'.TGlobal::OutHTML($this->oTableRow->sqlData['id']).'</td>
         </tr>';
 
-        if (!empty($sFileTypeIconPath)) {
-            $html .= '<tr>
+        $html .= '<tr>
           <td width="60">'.TGlobal::Translate('chameleon_system_core.text.file_type').':</td>
-                <td><img src ="'.$sFileTypeIconPath.'" width="16" height="16" style="float: left; margin-right: 10px;" /><div style="float: left;">'.TGlobal::OutHTML($oImageType->GetName()).'</div></td>
+                <td><span class="float-left">'.$oImage->GetPlainFileTypeIcon().'</span><div class="float-left">'.TGlobal::OutHTML($oImageType->GetName()).'</div></td>
         </tr>';
-        }
 
         $html .= '<tr>
           <td>'.TGlobal::Translate('chameleon_system_core.text.image_dimensions').':</td>
@@ -61,7 +60,7 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
 
         $html .= '<tr>
             <td colspan="2">
-            '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.download'), $oImage->GetFullURL(), TGlobal::GetStaticURLToWebLib('/images/icons/drive_disk.png'), 'pull-left').'
+            '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.download'), $oImage->GetFullURL(), 'fas fa-download', 'float-left').'
             <div style="padding-left: 10px; float: left;">('.TGlobal::Translate('chameleon_system_core.field_document.right_click_download').')</div>
             </td>
           </tr>';
@@ -69,7 +68,7 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
         if (!$this->bIsReadOnlyMode && empty($this->oTableRow->sqlData['external_video_id'])) {
             $html .= '<tr>
             <td colspan="2">
-            '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.replace'), 'javascript:OpenMediaUploadWindow();', TGlobal::GetStaticURLToWebLib('/images/icons/action_refresh_blue.gif')).'
+            '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.replace'), 'javascript:OpenMediaUploadWindow();', 'fas fa-sync').'
             </td>
           </tr>';
         }
@@ -126,7 +125,7 @@ class TCMSFieldMediaProperties extends TCMSFieldNumber
         $url = PATH_CMS_CONTROLLER.'?pagedef=CMSUniversalUploader&mode=media&callback=_ReloadPage&singleMode=1&showMetaFields=0&recordID='.$this->oTableRow->sqlData['id'];
         $html = "<script type=\"text/javascript\">
       function OpenMediaUploadWindow() {
-        CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."',450,480);
+        CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."');
       }
 
       function _ReloadPage(serverData) {

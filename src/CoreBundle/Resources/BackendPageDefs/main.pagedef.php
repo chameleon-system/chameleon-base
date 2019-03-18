@@ -1,12 +1,9 @@
 <?php
 
-// main layout
 $layoutTemplate = 'default';
+$moduleList = array('contentmodule' => array('model' => 'MTMenuManager', 'view' => 'standard'));
 
-// modules...
-$moduleList = array('pagetitle' => array('model' => 'MTHeader', 'view' => 'title'), 'headerimage' => array('model' => 'MTHeader', 'view' => 'standard'), 'contentmodule' => array('model' => 'MTMenuManager', 'view' => 'standard'));
-
-// this line needs to be included... do not touch
-if (!is_array($moduleList)) {
-    $layoutTemplate = '';
-}
+addDefaultPageTitle($moduleList);
+addDefaultHeader($moduleList);
+addDefaultBreadcrumb($moduleList);
+addDefaultSidebar($moduleList);

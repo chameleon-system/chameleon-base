@@ -31,7 +31,7 @@ function DeleteFormCallback() {
  *
  */
 function UploadFiles(selectedNodeID) {
-    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSUniversalUploader&amp;mode=media&amp;treeNodeID=' + selectedNodeID + '&amp;queueCompleteCallback=queueCompleteCallback', 700, 550, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.media_upload'));
+    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSUniversalUploader&amp;mode=media&amp;treeNodeID=' + selectedNodeID + '&amp;queueCompleteCallback=queueCompleteCallback', 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.media_upload'));
 
     //refresh parent header
     RefreshOpenerHeader();
@@ -44,7 +44,7 @@ function UploadFiles(selectedNodeID) {
  *
  */
 function UploadFilesFromLocal(selectedNodeID) {
-    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSMediaLocalImport&amp;nodeID=' + selectedNodeID, 650, 500, 'FTP Import');
+    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSMediaLocalImport&amp;nodeID=' + selectedNodeID, 0, 0, 'FTP Import');
 
     //refresh parent header
     RefreshOpenerHeader();
@@ -86,7 +86,7 @@ function ChangeFileSelection(id) {
 }
 
 function ShowConnectionDialog(index) {
-    CreateModalIFrameDialogFromContentWithoutClose(_connectedDataHTML[index], 700, 600, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.media_delete'));
+    CreateModalIFrameDialogFromContent(_connectedDataHTML[index], 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.media_delete'));
 }
 
 function CloseDeleteCheckDialog() {

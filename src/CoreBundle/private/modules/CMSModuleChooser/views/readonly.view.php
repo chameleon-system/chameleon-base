@@ -16,7 +16,7 @@ $menuPrefix = TGlobal::OutHTML($data['sModuleSpotName']);
     } else {
         $sViewName = $data['oModuleInstance']->sqlData['template'];
     } ?>
-        <div style="background-image: url(/chameleon/blackbox/images/header_bg.gif);">
+        <div style="background-color: #63c2de">
             <div class="moduleType"
                  style="background: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/'.TGlobal::OutHTML($data['oModule']->sqlData['icon_list'])); ?>); background-repeat: no-repeat; background-position: 3px;"><?=TGlobal::OutHTML($data['oModule']->sqlData['name']); ?></div>
         </div>
@@ -27,7 +27,7 @@ $menuPrefix = TGlobal::OutHTML($data['sModuleSpotName']);
         <?php
 } else {
         ?>
-        <div style="background-image: url(/chameleon/blackbox/images/header_bg.gif);">
+        <div style="background-color: #63c2de">
             <div class="moduleType"
                  style="background: url(<?=TGlobal::GetPathTheme(); ?>/images/icons/cross.png); background-repeat: no-repeat; background-position: 3px;"><?php echo TGlobal::Translate('chameleon_system_core.template_engine.slot_is_empty'); ?></div>
         </div>

@@ -21,11 +21,11 @@ class TCMSTableEditorCronJob extends TCMSTableEditor
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'runCronJob';
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor_cron_jobs.action_run_job');
-        $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/action_go.gif');
+        $oMenuItem->sIcon = 'far fa-play-circle';
 
         $sCallURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'runcrons', 'cronjobid' => $this->sId));
 
-        $oMenuItem->sOnClick = "CreateModalIFrameDialogCloseButton('".$sCallURL."',800,600,'".TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.table_editor_cron_jobs.action_run_job_confirm'))."',true,true);";
+        $oMenuItem->sOnClick = "CreateModalIFrameDialogCloseButton('".$sCallURL."',0,0,'".TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.table_editor_cron_jobs.action_run_job_confirm'))."',true,true);";
         $this->oMenuItems->AddItem($oMenuItem);
     }
 }

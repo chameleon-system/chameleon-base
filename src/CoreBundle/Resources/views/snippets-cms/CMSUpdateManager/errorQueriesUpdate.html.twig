@@ -1,14 +1,19 @@
-<div id="errorQueryContainer-{{ bundleName }}-{{ buildNumber }}" class="errorQueryContainer">
-    <div class="head">
-        <span class="message">{{ 'chameleon_system_core.cms_module_update.error_messages'|trans }}</span> (<span class="count">{{ messages|length }}</span>)
+<div id="errorQueryContainer-{{ bundleName }}-{{ buildNumber }}" class="card card-accent-danger">
+    <div class="card-header">
+        {{ 'chameleon_system_core.cms_module_update.error_messages'|trans }}
+        <span class="badge badge-pill badge-danger float-right">{{ messages|length }}</span>
     </div>
-    <ul class="queryList">
-        {% for message in messages %}
-            <li><a id="errorQuery-{{ bundleName }}-{{ buildNumber }}-{{ loop.index0 }}"></a>
-                {{ 'chameleon_system_core.cms_module_update.error_message'|trans }} <pre>{{ message.error }}</pre><br />
-                {{ 'chameleon_system_core.cms_module_update.line'|trans }} {{ message.line }}<br />
-                {{ 'chameleon_system_core.cms_module_update.query'|trans }} {{ message.query }}
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="card-body">
+        <ul class="queryList list-group">
+            {% for message in messages %}
+                <li class="list-group-item"><a id="errorQuery-{{ bundleName }}-{{ buildNumber }}-{{ loop.index0 }}"></a>
+                    {{ 'chameleon_system_core.cms_module_update.error_message'|trans }}
+                    <pre>{{ message.error }}</pre>
+                    <br/>
+                    {{ 'chameleon_system_core.cms_module_update.line'|trans }} {{ message.line }}<br/>
+                    {{ 'chameleon_system_core.cms_module_update.query'|trans }} {{ message.query }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>

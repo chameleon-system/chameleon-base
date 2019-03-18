@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\SanityCheck\MessageCheckOutput;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -20,8 +21,11 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\DatabaseMigration\Constant\MigrationRecorderConstants;
 use ChameleonSystem\DatabaseMigration\Exception\AccessDeniedException;
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
+use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -52,32 +56,9 @@ class MTHeader extends TCMSModelBase
      */
     public function Init()
     {
-        $this->data['startTreeID'] = 99;
-
         $this->CheckTemplateEngineStatus();
 
         $this->data['oUser'] = TCMSUser::GetActiveUser();
-
-        $sRemoveCommand = $this->global->GetUserData('_rmhist');
-
-        $this->data['pagedef'] = $this->global->GetUserData('pagedef');
-
-        if ('true' == $sRemoveCommand) {
-            // if no _histid is given, then we will need to search for one given the current parameters
-
-            if (!$this->global->UserDataExists('_histid')) {
-                $parameters = $this->global->GetUserData();
-                unset($parameters['_rmhist']);
-                $histid = $this->global->GetURLHistory()->FindHistoryId($parameters);
-            } else {
-                $histid = $this->global->GetUserData('_histid');
-            }
-            if (false !== $histid) {
-                $this->global->GetURLHistory()->Clear($histid);
-            } else {
-                trigger_error('lookup history id failed in MTHeader. Parameters: '.print_r($parameters, true), E_USER_WARNING);
-            }
-        }
 
         $migrationRecorderStateHandler = $this->getMigrationRecorderStateHandler();
         if (null === $migrationRecorderStateHandler->getCurrentBuildNumber()) {
@@ -96,8 +77,6 @@ class MTHeader extends TCMSModelBase
         if (stristr($this->viewTemplate, 'title.view.php')) {
             $this->data['sBackendTitle'] = $this->GetBackendTitle();
         } else {
-            $this->_LoadUserImage();
-
             if (ACTIVE_TRANSLATION || ACTIVE_BACKEND_TRANSLATION) {
                 $this->GetEditLanguagesHTML();
             }
@@ -116,13 +95,10 @@ class MTHeader extends TCMSModelBase
             $this->data['bHeaderIsHidden'] = false;
 
             if (TGlobal::CMSUserDefined()) {
-                $this->data['breadcrumb'] = $this->global->GetURLHistory()->GetBreadcrumb(true);
+                $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+                $this->data['breadcrumb'] = $breadcrumb->GetBreadcrumb(true);
 
-                $lastHistNode = end($this->data['breadcrumb']);
-                reset($this->data['breadcrumb']);
-                $lastHistNode = str_replace('_rmhist=true', '_rmhist=false', $lastHistNode['url']);
-                $this->data['clearCacheURL'] = $lastHistNode.'&'.urlencode('module_fnc['.$this->sModuleSpotName.']').'=ExecuteAjaxCall&_fnc=ClearCache';
-
+                $this->mapCacheClearUrl();
                 $this->FetchCounterInformation();
 
                 if (array_key_exists('chameleon_header', $_COOKIE) && 'hidden' === $_COOKIE['chameleon_header']) {
@@ -142,6 +118,22 @@ class MTHeader extends TCMSModelBase
         }
 
         return $this->data;
+    }
+
+    private function mapCacheClearUrl(): void
+    {
+        $request = $this->getCurrentRequest();
+        $baseUri = $request->getRequestUri();
+        if (false === \strpos($baseUri, '?')) {
+            $prefix = '?';
+        } else {
+            $prefix = '&';
+        }
+
+        $this->data['clearCacheURL'] = $this->getUrlUtil()->getArrayAsUrl([
+            'module_fnc['.$this->sModuleSpotName.']' => 'ExecuteAjaxCall',
+            '_fnc' => 'ClearCache',
+        ], $baseUri.$prefix, '&');
     }
 
     /**
@@ -244,11 +236,14 @@ class MTHeader extends TCMSModelBase
                 }
             } catch (Exception $e) {
                 $this->getFlashMessages()->addBackendToasterMessage('chameleon_system_core.cms_module_header.error_generate_portal_links');
-                $this->getLogger()->error('Error while generating portal links', __FILE__, __LINE__, array(
-                    'e.message' => $e->getMessage(),
-                    'e.file' => $e->getFile(),
-                    'e.line' => $e->getLine(),
-                ));
+                $this->getLogger()->error(
+                    sprintf('Error while generating portal links: %s', $e->getMessage()),
+                    [
+                        'e.message' => $e->getMessage(),
+                        'e.file' => $e->getFile(),
+                        'e.line' => $e->getLine(),
+                    ]
+                );
             }
         }
 
@@ -300,34 +295,16 @@ class MTHeader extends TCMSModelBase
     }
 
     /**
-     * checks the user rights for header shortcut links to document manager, media manager, navigation...
+     * checks the user rights for header shortcut links.
      */
     protected function CheckNavigationRights()
     {
-        $userIsInWebsiteEditGroup = false;
-        $userHasWebsiteEditRight = false;
-
-        $currentUser = &TCMSUser::GetActiveUser();
-        if (null === $currentUser) {
-            $this->data['showWebsiteEditNavi'] = false;
-
+        $activeUser = TCMSUser::GetActiveUser();
+        if (null === $activeUser) {
             return;
         }
 
-        $databaseConnection = $this->getDatabaseConnection();
-        $query = "SELECT `id` FROM `cms_usergroup` WHERE `internal_identifier` = 'website_editor'";
-        $websiteEditorGroupId = $databaseConnection->fetchColumn($query);
-
-        if (false !== $websiteEditorGroupId) {
-            $userIsInWebsiteEditGroup = $currentUser->oAccessManager->user->IsInGroups($websiteEditorGroupId);
-            $userHasWebsiteEditRight = $currentUser->oAccessManager->HasEditPermission('cms_tpl_page');
-        }
-
-        $this->data['showWebsiteEditNavi'] = $userIsInWebsiteEditGroup && $userHasWebsiteEditRight;
-        $this->data['showImageManagerNavi'] = ($currentUser->oAccessManager->PermitFunction('cms_image_pool_upload') || $currentUser->oAccessManager->PermitFunction('cms_image_pool_delete'));
-        $this->data['showDocumentManagerNavi'] = ($currentUser->oAccessManager->PermitFunction('cms_data_pool_upload') || $currentUser->oAccessManager->PermitFunction('cms_datei_pool_delete'));
-        $this->data['showCacheButton'] = $currentUser->oAccessManager->PermitFunction('flush_cms_cache');
-        $this->data['showNaviManager'] = $currentUser->oAccessManager->HasEditPermission('cms_tree');
+        $this->data['showCacheButton'] = $activeUser->oAccessManager->PermitFunction('flush_cms_cache');
     }
 
     public function DefineInterface()
@@ -387,14 +364,16 @@ class MTHeader extends TCMSModelBase
                 $_params['fragment'] = $urlParts['fragment'];
             }
 
-            $urlHistory = $this->global->GetURLHistory();
-            $urlHistory->AddItem($_params, $name);
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+            $breadcrumb->AddItem($_params, $name);
 
-            return $urlHistory->GetBreadcrumb(true);
+            return $breadcrumb->GetBreadcrumb(true);
         }
     }
 
     /**
+     * @deprecated since 6.3.0 - not used anymore, we don't show a user icon in the header toolbar anymore.
+     *
      * loads the user image or a default icon.
      */
     protected function _LoadUserImage()
@@ -403,7 +382,7 @@ class MTHeader extends TCMSModelBase
         if (null === $currentUser) {
             return;
         }
-        $userImage = TGlobal::GetPathTheme().'/images/nav_icons/user.gif';
+        $userImage = TGlobal::GetPathTheme().'/images/icons/user.png';
 
         $imageID = TCMSUser::GetActiveUser()->fieldImages;
         if ($imageID >= 1000 || !is_numeric($imageID)) {
@@ -450,16 +429,27 @@ class MTHeader extends TCMSModelBase
      */
     protected function ClearOutBox($sDir)
     {
-        $fileManager = $this->getFileManager();
-
         if (false === is_dir(PATH_OUTBOX)) {
             return;
         }
         $sDir = PATH_OUTBOX.$sDir;
-        if ('/' !== $sDir[strlen($sDir) - 1]) {
-            $sDir .= '/';
-        }
-        $files = array_values(preg_grep('/^((?!.gitkeep).)*$/', glob($sDir.'*.*')));
+
+        $this->clearFilesInDir($sDir);
+    }
+
+    /**
+     * Delete all the files in the given dir - except .gitkeep files.
+     *
+     * @param string $dir
+     *
+     * NOTE also see deleteFileOrDirectoryContent() which does something similar
+     */
+    private function clearFilesInDir(string $dir): void
+    {
+        $dir = rtrim($dir, '/').'/';
+
+        $fileManager = $this->getFileManager();
+        $files = array_values(preg_grep('/^((?!.gitkeep).)*$/', glob($dir.'*.*')));
         if ($files) {
             foreach ($files as $file) {
                 $fileManager->unlink($file);
@@ -471,7 +461,12 @@ class MTHeader extends TCMSModelBase
     {
         $this->ClearOutBox('static/js/');
         $this->ClearOutBox('static/css/');
-        $this->ClearOutBox('static/less/');
+
+        $lessCompiler = $this->getLessCompiler();
+        $cssTargetDir = $lessCompiler->getLocalPathToCompiledLess();
+        $this->clearFilesInDir($cssTargetDir);
+        $cssCacheDir = $lessCompiler->getLocalPathToCachedLess();
+        $this->clearFilesInDir($cssCacheDir);
 
         $oConfig = TdbCmsConfig::GetInstance();
         $aAdditionalFiles = explode("\n", $oConfig->fieldAdditionalFilesToDeleteFromCache);
@@ -715,62 +710,42 @@ class MTHeader extends TCMSModelBase
      */
     public function GetHtmlHeadIncludes()
     {
-        $aIncludes = parent::GetHtmlHeadIncludes();
-        if (TGlobal::CMSUserDefined()) {
-            // first the includes that are needed for the all fields
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-            // bootstrap 3
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/bootstrap/js/bootstrap.min.js').'" type="text/javascript"></script>';
-            $aIncludes[] = '
-            <script type="text/javascript">
-                var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-                $.fn.bootstrapBtn = bootstrapButton;            // give $().bootstrapBtn the Bootstrap functionality
+        $includes = parent::GetHtmlHeadIncludes();
+        $includes[] = '<link href="'.TGlobal::GetPathTheme().'/images/favicon.ico" rel="shortcut icon" />';
+        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/bootstrap/css/glyph-icons.css?v4.1').'" media="screen" rel="stylesheet" type="text/css" />';
+        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fontawesome-free-5.5.0/css/all.css').'" media="screen" rel="stylesheet" type="text/css" />';
+        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fileIconVectors/file-icon-square-o.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
-                var bootstrapTooltip = $.fn.tooltip.noConflict(); // return $.fn.tooltip to previously assigned value
-                $.fn.bootstrapTooltip = bootstrapTooltip;            // give $().bootstrapTooltip the Bootstrap functionality
+        return $includes;
+    }
 
-                $(document).ready(function () {
-                    // init tooltips
-                    $(\'[data-toggle="tooltip"], [rel="tooltip"]\').bootstrapTooltip({container: \'body\', trigger: \'hover\'});
-                });
-            </script>
-            ';
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/form/jquery.form.js').'" type="text/javascript"></script>'; // ajax form plugin
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/BlockUI/jquery.blockUI.js').'" type="text/javascript"></script>';
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.js').'" type="text/javascript"></script>';
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqDnR.js').'" type="text/javascript"></script>';
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
-            $aIncludes[] = '<link media="screen" rel="stylesheet" href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.css').'" type="text/css" />';
-            $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/images/favicon.ico" rel="shortcut icon" />';
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
+    /**
+     * {@inheritdoc}
+     */
+    public function GetHtmlFooterIncludes()
+    {
+        $includes = parent::GetHtmlFooterIncludes();
 
-            // autocomplete field
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/bgiframe/jquery.bgiframe.js').'" type="text/javascript"></script>';
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.menu.js').'" type="text/javascript"></script>';
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.autocomplete.js').'" type="text/javascript"></script>';
-
-            $iSessionTimeout = @ini_get('session.gc_maxlifetime');
-            if (!empty($iSessionTimeout)) {
-                $iSessionTimeout = ($iSessionTimeout - 60) * 1000; // cut 1min to be sure the logout will be processed before the server kicks the session / convert to milliseconds for JS
-                $aIncludes[] = '
-          <script type="text/javascript">
-            $(document).ready(function() {
-              setTimeout("window.location = \''.PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(array('pagedef' => 'login', 'module_fnc' => array('contentmodule' => 'Logout'))).'\'",'.$iSessionTimeout.');
-            });
-          </script>';
-            }
-        } else {
-            $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/images/favicon.ico" rel="shortcut icon" />';
-            $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
+        if (false === TGlobal::CMSUserDefined()) {
+            return $includes;
         }
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/themes/cupertino/cupertino.css').'" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<link href="/chameleon/blackbox/bootstrap/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<link href="/chameleon/blackbox/bootstrap/css/bootstrap-theme.min.css" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/bootstrap.css" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<link href="/chameleon/blackbox/iconFonts/foundation/foundation-icons.css" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<link href="/chameleon/blackbox/iconFonts/ionicons/ionicons.css" media="screen" rel="stylesheet" type="text/css" />';
 
-        return $aIncludes;
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
+        $includes[] = '<link href="/chameleon/blackbox/iconFonts/foundation/foundation-icons.css" media="screen" rel="stylesheet" type="text/css" />';
+        $includes[] = '<link href="/chameleon/blackbox/iconFonts/ionicons/ionicons.css" media="screen" rel="stylesheet" type="text/css" />';
+
+        $sessionTimeout = @ini_get('session.gc_maxlifetime');
+        if (!empty($sessionTimeout)) {
+            $sessionTimeout = ($sessionTimeout - 60) * 1000; // cut 1min to be sure the logout will be processed before the server kicks the session / convert to milliseconds for JS
+            $includes[] = '
+      <script type="text/javascript">
+        $(document).ready(function() {
+          setTimeout("window.location = \''.PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(array('pagedef' => 'login', 'module_fnc' => array('contentmodule' => 'Logout'))).'\'",'.$sessionTimeout.');
+        });
+      </script>';
+        }
+
+        return $includes;
     }
 
     /**
@@ -801,115 +776,83 @@ class MTHeader extends TCMSModelBase
         return $parameters;
     }
 
-    /**
-     * @return Connection
-     */
-    private function getDatabaseConnection()
+    private function getDatabaseConnection(): Connection
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
-    /**
-     * @return InputFilterUtilInterface
-     */
-    private function getInputFilterUtil()
+    private function getInputFilterUtil(): InputFilterUtilInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
-    /**
-     * @return null|\Symfony\Component\HttpFoundation\Request
-     */
-    private function getCurrentRequest()
+    private function getCurrentRequest(): ?Request
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
-    /**
-     * @return UrlUtil
-     */
-    private function getUrlUtil()
+    private function getUrlUtil(): UrlUtil
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 
-    /**
-     * @return IcmsCoreRedirect
-     */
-    private function getRedirect()
+    private function getRedirect(): IcmsCoreRedirect
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 
-    /**
-     * @return PageServiceInterface
-     */
-    private function getPageService()
+    private function getPageService(): PageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ServiceLocator::get('chameleon_system_core.page_service');
     }
 
-    /**
-     * @return FlashMessageServiceInterface
-     */
-    private function getFlashMessages()
+    private function getFlashMessages(): FlashMessageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
-    /**
-     * @return IPkgCmsCoreLog
-     */
-    private function getLogger()
+    private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmspkgcore.logchannel.standard');
+        return ServiceLocator::get('logger');
     }
 
-    /**
-     * @return LanguageServiceInterface
-     */
-    private function getLanguageService()
+    private function getLanguageService(): LanguageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
-    /**
-     * @return IPkgCmsFileManager
-     */
-    private function getFileManager()
+    private function getFileManager(): IPkgCmsFileManager
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.filemanager');
+        return ServiceLocator::get('chameleon_system_core.filemanager');
     }
 
-    /**
-     * @return CacheInterface
-     */
-    private function getCache()
+    private function getCache(): CacheInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_cache.cache');
+        return ServiceLocator::get('chameleon_system_cms_cache.cache');
     }
 
-    /**
-     * @return string
-     */
-    private function getCacheDir()
+    private function getCacheDir(): string
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('kernel.cache_dir');
+        return ServiceLocator::getParameter('kernel.cache_dir');
     }
 
-    /**
-     * @return MigrationRecorderStateHandler
-     */
-    private function getMigrationRecorderStateHandler()
+    private function getMigrationRecorderStateHandler(): MigrationRecorderStateHandler
     {
         return ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');
     }
 
-    /**
-     * @return TranslatorInterface
-     */
-    private function getTranslator()
+    private function getTranslator(): TranslatorInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
+    }
+
+    private function getLessCompiler(): TPkgViewRendererLessCompiler
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.less_compiler');
+    }
+
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }

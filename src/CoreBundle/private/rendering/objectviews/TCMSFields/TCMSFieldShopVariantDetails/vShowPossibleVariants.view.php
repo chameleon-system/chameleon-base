@@ -1,5 +1,5 @@
         <div class="table-responsive">
-            <table class="table table-striped table-bordered table-condensed table-hover" id="generateVariantTable">
+            <table class="table table-striped table-bordered table-sm table-hover" id="generateVariantTable">
                 <thead>
                 <tr>
                     <th><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.variants.variant_editor_headline')); ?></th>
@@ -58,7 +58,7 @@
                     <td>
                         <?php
                         $sFormatValue = number_format($oArticle->sqlData['price'] + $dVariantSurchargeTotal, 2, ',', '.'); ?>
-                        <input type="text" name="generateVariantPrice[<?=$iVariantCount; ?>]" class="generateVariantPrice" value="<?=$sFormatValue; ?>" onblur="this.value=NumberFormat(NumberToFloat(this.value, ',', '.'), 2, ',', '.')" />
+                        <input type="text" name="generateVariantPrice[<?=$iVariantCount; ?>]" class="form-control form-control-sm generateVariantPrice" value="<?=$sFormatValue; ?>" onblur="this.value=NumberFormat(NumberToFloat(this.value, ',', '.'), 2, ',', '.')" />
                     </td>
                 </tr>
                 <?php

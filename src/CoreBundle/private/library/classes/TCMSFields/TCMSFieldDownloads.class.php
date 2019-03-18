@@ -30,7 +30,7 @@ class TCMSFieldDownloads extends TCMSMLTField
         $html = '<input type="hidden" id="'.TGlobalBase::OutHTML($this->name).'" name="'.TGlobalBase::OutHTML($this->name).'" value="'.TGlobalBase::OutHTML($this->data).'" />
       <div>';
 
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.link.open_document_manager'), "javascript:loadDocumentManager('".$this->recordId."','".$this->oTableConf->id."','".$this->name."');", URL_CMS.'/images/icons/page_attachment.gif');
+        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.link.open_document_manager'), "javascript:loadDocumentManager('".$this->recordId."','".$this->oTableConf->id."','".$this->name."');", 'fas fa-file');
         $html .= '</div>
       <div class="cleardiv">&nbsp;</div>';
 
@@ -57,18 +57,48 @@ class TCMSFieldDownloads extends TCMSMLTField
         $oDocumentTableConf->LoadFromField('name', 'cms_document');
 
         $html .= '<div id="documentManager_'.$this->name."_anchor\">
-      <div style=\"margin-top: 10px;\">\n";
+      <div class=\"pt-2\">\n";
         while ($oDownload = &$oDownloads->Next()) {
             /** @var $oDownload TCMSDownloadFile */
+
+            $tdWidth = 50;
+            if (true === $bReadOnly) {
+                $tdWidth = 100;
+            }
+
             $html .= '
            <div id="documentManager_'.$this->name.'_'.$oDownload->id.'">
-             <table border="0" cellpadding="0" cellspacing="0" width="400">
+             <table class="table table-striped">
               <tr>
-               <td width="*">'.$oDownload->GetDownloadLink().'</td>';
+               <td style="width: '.$tdWidth.'%">'.$oDownload->getDownloadHtmlTag().'</td>';
 
-            if (!$bReadOnly) {
-                $html .= '<td width="20"><img src="'.URL_CMS.'/images/icons/page_delete.gif" alt="'.TGlobal::Translate('chameleon_system_core.field_download.remove')."\" border=\"0\" style=\"cursor: pointer; cursor: hand;\" onClick=\"if(confirm('".TGlobal::Translate('chameleon_system_core.field_download.confirm_removal')."')){removeDocument('".$this->name."','".$oDownload->id."','".$this->recordId."','".$this->oTableConf->id."')};\" /></td>\n";
-                $html .= '<td width="20"><img src="'.URL_CMS.'/images/icons/page_edit.gif" alt="'.TGlobal::Translate('chameleon_system_core.field_download.document_details')."\" border=\"0\" style=\"cursor: pointer; cursor: hand;\" onClick=\"CreateModalIFrameDialog('".PATH_CMS_CONTROLLER.'?tableid='.TGlobal::OutHTML($oDocumentTableConf->id).'&pagedef=tableeditorPopup&id='.TGlobal::OutHTML($oDownload->id)."', 1000, 800, '".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_download.document_details'))."', true, true);\" /></td>\n";
+            if (false === $bReadOnly) {
+                $html .= '<td style="width: 50%">';
+
+                $deleteButton = '<button type="button" class="btn btn-danger btn-sm mr-2" onClick="if(confirm(\'%s\')){removeDocument(\'%s\',\'%s\',\'%s\',\'%s\')}">
+                                    <i class="far fa-trash-alt mr-2"></i>%s
+                                </button>';
+                $html .= sprintf($deleteButton,
+                    TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.field_download.confirm_removal')),
+                    TGlobal::OutJS($this->name),
+                    TGlobal::OutJS($oDownload->id),
+                    TGlobal::OutJS($this->recordId),
+                    TGlobal::OutJS($this->oTableConf->id),
+                    TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_download.remove'))
+                );
+
+                $detailsButton = '<button type="button" class="btn info btn-sm" onClick="CreateModalIFrameDialog(\'%s?tableid=%s&pagedef=tableeditorPopup&id=%s\', 0, 0, \'%s\');">
+                                    <i class="fas fa-edit mr-2"></i>%s
+                                </button>';
+                $html .= sprintf($detailsButton,
+                    TGlobal::OutJS(PATH_CMS_CONTROLLER),
+                    TGlobal::OutJS($oDocumentTableConf->id),
+                    TGlobal::OutJS($oDownload->id),
+                    TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.field_download.document_details')),
+                    TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.field_download.document_details'))
+                );
+
+                $html .= '</td>';
             }
             $html .= '</tr>
             </table>

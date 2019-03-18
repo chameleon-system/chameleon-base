@@ -154,9 +154,14 @@ class TCMSTableConf extends TCMSRecord
     {
         $oFieldDefinition = &$this->GetFieldDefinitions(array(), $bDoNotUseAutoObjects);
         $oFields = new TIterator();
-        while ($oFieldDef = $oFieldDefinition->Next()) {
+        while ($oFieldDef = $oFieldDefinition->next()) {
             /** @var $oFieldDef TdbCmsFieldConf|TCMSFieldDefinition */
             $oField = &$oFieldDef->GetFieldObject();
+
+            if (null === $oField) {
+                continue;
+            }
+
             $oField->sTableName = $this->sqlData['name'];
             $oField->recordId = null;
             if ($oTableRow) {
@@ -181,7 +186,16 @@ class TCMSTableConf extends TCMSRecord
                     if (array_key_exists($oField->name.'-original', $oTableRow->sqlData)) {
                         $oField->data = $oTableRow->sqlData[$oField->name.'-original'];
                     } else {
-                        $oField->data = $oTableRow->sqlData[$oField->name];
+                        // Standard case
+                        // Try to find the correct field name for the data in $oTableRow with respect to the language
+
+                        $data = $this->getDataForCurrentLanguage($oFieldDef, $oTableRow->sqlData);
+
+                        if (null === $data) {
+                            $data = $oTableRow->sqlData[$oField->name];
+                        }
+
+                        $oField->data = $data;
                     }
                     $bAllowAddingField = true;
                 }
@@ -193,6 +207,36 @@ class TCMSTableConf extends TCMSRecord
         }
 
         return $oFields;
+    }
+
+    /**
+     * @param TdbCmsFieldConf|TCMSFieldDefinition $fieldDefinition
+     * @param array                               $sqlData
+     *
+     * @return mixed
+     */
+    private function getDataForCurrentLanguage($fieldDefinition, array $sqlData)
+    {
+        $languageId = $this->GetLanguage();
+
+        if (null === $languageId) {
+            return null;
+        }
+
+        $language = self::getLanguageService()->getLanguage($languageId);
+
+        if (null === $language) {
+            return null;
+        }
+
+        $fieldNameForLanguage = $fieldDefinition->GetEditFieldNameForLanguage($language);
+
+        if (false === $fieldNameForLanguage || false === \array_key_exists($fieldNameForLanguage, $sqlData)) {
+            // could be a Save() - containing only mono-language data
+            return null;
+        }
+
+        return $sqlData[$fieldNameForLanguage];
     }
 
     /**
@@ -219,7 +263,13 @@ class TCMSTableConf extends TCMSRecord
             if ($loadDefaults) {
                 $oField->data = $oFieldDef->sqlData['field_default_value'];
             } elseif (null !== $oTableRow && is_array($oTableRow->sqlData) && array_key_exists($oField->name, $oTableRow->sqlData)) {
-                $oField->data = $oTableRow->sqlData[$oField->name];
+                $data = $this->getDataForCurrentLanguage($oFieldDef, $oTableRow->sqlData);
+
+                if (null === $data) {
+                    $data = $oTableRow->sqlData[$oField->name];
+                }
+
+                $oField->data = $data;
             }
             $oField->oDefinition = $oFieldDef;
             $oField->oTableRow = $oTableRow;

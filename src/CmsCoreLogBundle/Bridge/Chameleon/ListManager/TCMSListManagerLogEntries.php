@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Chameleon System (https://www.chameleonsystem.com).
+ *
+ * (c) ESONO AG (https://www.esono.de)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace ChameleonSystem\CmsCoreLogBundle\Bridge\Chameleon\ListManager;
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
@@ -9,6 +18,9 @@ use Monolog\Logger;
 use TCMSListManagerFullGroupTable;
 use ViewRenderer;
 
+/**
+ * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface in conjunction with Monolog logging instead
+ */
 class TCMSListManagerLogEntries extends TCMSListManagerFullGroupTable
 {
     const ALL_SELECTION_VALUE = '0';
@@ -46,7 +58,7 @@ class TCMSListManagerLogEntries extends TCMSListManagerFullGroupTable
     private function getFilterLogLevelSelect($filterLogLevel)
     {
         $oViewRenderer = new ViewRenderer();
-        $oViewRenderer->AddSourceObject('sInputClass', 'form-control input-sm');
+        $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm');
         $oViewRenderer->AddSourceObject('sName', 'filterLogLevel');
         $oViewRenderer->AddSourceObject('sLabelText', $this->getTranslation('pkg_cms_core_log.log_table.field_level'));
 

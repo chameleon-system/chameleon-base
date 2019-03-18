@@ -69,9 +69,31 @@ class TCMSListManagerCMSUser extends TCMSListManagerFullGroupTable
         }
         $translator = $this->getTranslator();
 
-        return sprintf('<span title="%s" class="glyphicon glyphicon-remove" style="color: #d9534f; opacity: .5;"></span>',
+        return sprintf('<span title="%s" class="fas fa-trash-alt text-danger" style="color: #d9534f; opacity: .5;"></span>',
             TGlobal::OutJS($translator->trans('chameleon_system_core.list.system_entry_delete_not_allowed'))
         );
+    }
+
+    public function callbackCmsUserWithImage(string $name, array $row): string
+    {
+        $name = $name.', '.$row['firstname'];
+
+        $imageTag = '<i class="fas fa-user mr-2"></i>';
+
+        $imageId = $row['images'];
+        if (false === is_numeric($imageId) || (int)$imageId >= 1000) {
+            $image = new TCMSImage();
+            if (null !== $image) {
+                $image->Load($imageId);
+                $oThumbnail = $image->GetThumbnail(16, 16);
+                if (!is_null($oThumbnail)) {
+                    $oBigThumbnail = $image->GetThumbnail(400, 400);
+                    $imageTag = '<img src="'.TGlobal::OutHTML($oThumbnail->GetFullURL()).'" width="'.TGlobal::OutHTML($oThumbnail->aData['width']).'" height="'.TGlobal::OutHTML($oThumbnail->aData['height'])."\" hspace=\"0\" vspace=\"0\" border=\"0\" onclick=\"CreateMediaZoomDialogFromImageURL('".$oBigThumbnail->GetFullURL()."','".TGlobal::OutHTML($oBigThumbnail->aData['width'])."','".TGlobal::OutHTML($oBigThumbnail->aData['height'])."')\" style=\"cursor: hand; cursor: pointer; margin-right:10px\" align=\"left\" />";
+                }
+            }
+        }
+
+        return "<div>{$imageTag}".TGlobal::OutHTML($name).'<div class="cleardiv">&nbsp;</div></div>';
     }
 
     /**

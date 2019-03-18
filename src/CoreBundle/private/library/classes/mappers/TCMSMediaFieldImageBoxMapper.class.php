@@ -10,7 +10,9 @@
  */
 
 use ChameleonSystem\CoreBundle\Interfaces\MediaManagerUrlGeneratorInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
 {
@@ -118,7 +120,7 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
 
         $js = "var width=$(window).width() - 50; var height=$(window).height() - 100; saveCMSRegistryEntry('_currentFieldName','".$sFieldName."');saveCMSRegistryEntry('_currentPosition','".TGlobal::OutHTML(
                 $position
-            )."');CreateModalIFrameDialogCloseButton('".$url."',width,height);";
+            )."');CreateModalIFrameDialogCloseButton('".$url."',width,height,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title'))."');";
 
         return $js;
     }
@@ -162,5 +164,10 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
     protected function GetAllowedFileTypes()
     {
         return '';
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
     }
 }

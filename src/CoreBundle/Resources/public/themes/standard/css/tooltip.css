@@ -1,3 +1,7 @@
+/**
+ * @deprecated since 6.3.0 - use fontAwesome icons: "fas fa-lock-open" and "fas fa-user-lock" instead.
+ */
+
 .locked {
   background: url(/chameleon/blackbox/images/lock.png) no-repeat;
   width: 16px;

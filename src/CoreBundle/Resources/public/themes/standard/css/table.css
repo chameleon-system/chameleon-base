@@ -17,42 +17,39 @@
     float: right;
 }
 
-thead th {
-    background-color: #428bca;
-    color: white;
+.TFullGroupTable {
+    margin: .5rem 0;
 }
 
-.row.TFullGroupTable {
-    margin: 5px 0px 5px 5px;
+.TFullGroupTable .form-group {
+    padding: .5rem;
+    margin-bottom: 0;
 }
 
-.TFullGroupTable .form-inline label {
+.TFullGroupTable label {
     margin-right: 5px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
-.TFullGroupTable .form-inline .form-control {
+.TFullGroupTable .form-control {
     margin-right: 5px;
+}
+
+.TFullGroupTable #searchLookup {
+    width: 300px;
 }
 
 .TFullGroupTablePagination {
     margin-top: 5px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .TFullGroupTablePerPageSelect {
     margin-top: 5px;
 }
 
-.groupCell {
-    font-weight: bolder;
-    background-color: #c6c6c6 !important;
-    padding: 0px 0px 3px 5px !important;
-    font-size: 15px;
-    line-height: 20px;
-    letter-spacing: 1px;
-    color: #428bca;
-    border-bottom: 2px solid #777 !important;
+.select2-results__option.select2-results__message {
+    display: none;
 }
 
 .groupSpacer {
@@ -66,12 +63,6 @@ thead th {
     padding-left: 3px;
     padding-right: 3px;
     background-color: #ffffff;
-}
-
-.tblGroupSelector {
-    max-width: 170px;
-    margin-left: 10px;
-    margin-right: 10px;
 }
 
 .tblSearchButtonTDstyle {
@@ -123,7 +114,7 @@ thead th {
 }
 
 .tblsearch .row .form-group label {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .TGroupTableLink {
@@ -165,10 +156,6 @@ thead th {
 
 .table-function-bar ul li:last-child {
     padding-right: 0;
-}
-
-.table-function-bar ul li.table-function-delete {
-    color: #d9534f;
 }
 
 table.table-condensed tbody tr td, table.table-condensed thead tr th {

@@ -10,16 +10,14 @@
  */
 
 /**
- *  The class is based (copied) from the symfony TransTokenParser class.
-/**/
+ * The class is based (copied) from the symfony TransTokenParser class.
+ *
+ * @deprecated since 6.3.0 - no longer used.
+ */
 class TPkgSnippetRenderer_TranslationTokenParser extends Twig_TokenParser
 {
     /**
-     * Parses a token and returns a node.
-     *
-     * @param \Twig_Token $token A Twig_Token instance
-     *
-     * @return \Twig_NodeInterface A Twig_NodeInterface instance
+     * {@inheritdoc}
      */
     public function parse(\Twig_Token $token)
     {

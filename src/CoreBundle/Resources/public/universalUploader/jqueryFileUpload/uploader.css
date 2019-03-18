@@ -1,34 +1,3 @@
-.uploader-component {
-    border: 1px solid #AAAAAA;
-}
-
-.uploader-component .headline {
-    background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top,  #ffffff 0%, #eeeeee 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#eeeeee)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #ffffff 0%,#eeeeee 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #ffffff 0%,#eeeeee 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #ffffff 0%,#eeeeee 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #ffffff 0%,#eeeeee 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
-    padding: 10px;
-    margin: 0 0 10px 0;
-    border-bottom: 1px solid #AAAAAA;
-}
-
-.uploader-component .headline .h4 {
-    margin: 0 0 10px 0;
-}
-
-.uploader-component .dropzone {
-    padding-top: 10px;
-    position: relative;
-    height: 160px;
-    width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
 .uploader-component .fileupload-progress {
     display: none;
 }
@@ -37,18 +6,17 @@
     display: block;
 }
 
-.uploader-component .headline .glyphicon {
-    font-size: 16px;
-}
-
 .uploader-component .queue {
-    border-bottom: 1px solid #AAAAAA;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
+    border-bottom: 1px solid #cacaca;
 }
 
-.uploader-component .queue .filename {
-    text-indent: 10px;
+.uploader-component .queue .dropzone {
+    padding-top: 10px;
+    position: relative;
+    height: 160px;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .uploader-component .queue-header .filename,
@@ -57,16 +25,9 @@
     font-weight: bold;
 }
 
-.uploader-component .fileupload-buttonbar {
-    padding: 10px;
-}
-
-.uploader-component .meta-fields {
-    padding: 10px;
-}
 
 .uploader-component .queue-header {
-    border-bottom: 1px solid #AAAAAA;
+    border-bottom: 1px solid #cacaca;
 }
 
 .uploader-component .drag-drop-notice {
@@ -86,10 +47,6 @@
     width: 70%;
 }
 
-.uploader-component .state {
-    text-align: center;
-}
-
 .uploader-component .state .cancel {
     float: left;
     width: 30%;
@@ -99,6 +56,11 @@
 
 .uploader-component .queue-element {
     background-color: #fff;
+}
+@media (max-width: 991px) {
+    .uploader-component .queue-element {
+        border-bottom: 1px solid #e4e7ea;
+    }
 }
 
 .uploader-component .dropzone.hover .queue-element,

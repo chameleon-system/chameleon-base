@@ -189,7 +189,12 @@ class TCMSField implements TCMSFieldVisitableInterface
     {
         $this->bReadOnlyMode = true;
 
-        return $this->_GetHiddenField().TGlobal::OutHTML($this->data);
+        $html = $this->_GetHiddenField();
+        $html .= '<div class="input-group input-group-sm">';
+        $html .= '<div class="form-control form-control-sm" readonly>'.TGlobal::OutHTML($this->data).'</div>';
+        $html .= '</div>';
+
+        return $html;
     }
 
     /**
@@ -277,7 +282,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $edititem = TCMSRender::DrawButton(
             $translator->trans('chameleon_system_core.link.edit'),
             "javascript:{$openWindow}",
-            URL_CMS.'/images/icons/page_edit.gif'
+            'far fa-edit'
         );
         $edititem .= '<div class="cleardiv" style="margin-bottom: 10px;">&nbsp;</div>';
 
@@ -846,12 +851,12 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * Renames existing related table.
      *
-     * @param string $sNewTableName
-     * @param bool   $returnDDL
+     * @param array $newFieldData
+     * @param bool  $returnDDL
      *
      * @return string|null
      */
-    public function RenameRelatedTables($sNewTableName, $returnDDL = false)
+    public function RenameRelatedTables($newFieldData, $returnDDL = false)
     {
         if ($returnDDL) {
             return '';
@@ -1483,7 +1488,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $buttonItem = new TCMSTableEditorMenuItem();
         $buttonItem->sItemKey = 'save';
         $buttonItem->setTitle($translator->trans('chameleon_system_core.action.save'));
-        $buttonItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/action_save.gif');
+        $buttonItem->sIcon = 'fas fa-save';
         $buttonItem->setButtonStyle('btn-success');
 
         $onClickMethod = 'SaveFieldViaAjaxCustomCallback(ShowAjaxSaveResult); return false;';
@@ -1511,7 +1516,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $buttonItem = new TCMSTableEditorMenuItem();
         $buttonItem->sItemKey = 'saveandclose';
         $buttonItem->setTitle($translator->trans('chameleon_system_core.action.save_and_return'));
-        $buttonItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/accept.png');
+        $buttonItem->sIcon = 'far fa-save';
         $buttonItem->setButtonStyle('btn-success');
 
         $onClickMethod = 'SaveFieldViaAjaxCustomCallback(ShowAjaxSaveResultAndClose); return false;';
@@ -1539,7 +1544,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $buttonItem = new TCMSTableEditorMenuItem();
         $buttonItem->sItemKey = 'cancel';
         $buttonItem->setTitle($translator->trans('chameleon_system_core.action.abort'));
-        $buttonItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/action_stop.gif');
+        $buttonItem->sIcon = 'fas fa-times-circle';
         $buttonItem->setButtonStyle('btn-warning');
         $buttonItem->sOnClick = 'parent.CloseModalIFrameDialog();';
 

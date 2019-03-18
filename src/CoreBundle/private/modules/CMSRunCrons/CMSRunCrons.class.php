@@ -9,9 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\CronJob\CronjobEnablingServiceInterface;
 use ChameleonSystem\CoreBundle\CronJob\CronJobFactoryInterface;
 use ChameleonSystem\CoreBundle\SanityCheck\CronJobDataAccess;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * runs one explicit or all cronjobs.
@@ -28,6 +31,14 @@ class CMSRunCrons extends TModelBase
         $this->data['sMessageOutput'] = '';
 
         if ($this->global->UserDataExists('cronjobid') && TCMSUser::CMSUserDefined()) {
+            $translator = $this->getTranslator();
+
+            if (false === $this->isCronjobExecutionEnabled()) {
+                $this->displayError($translator->trans('chameleon_system_core.cronjob.error_cronjobs_disabled'));
+
+                return $this->data;
+            }
+
             /*
             * run explicit cronjob (needs valid CMS user session), called from backend
             * cronjob execution is forced (ignores active and last run, but checks for lock)
@@ -36,13 +47,28 @@ class CMSRunCrons extends TModelBase
             if (!empty($sCronID)) {
                 $oTdbCmsCronJob = TdbCmsCronjobs::GetNewInstance();
                 $oTdbCmsCronJob->Load($sCronID);
-                if (false === $oTdbCmsCronJob->fieldLock) {
-                    $this->RunCronJob($oTdbCmsCronJob, true);
+
+                if (true === $oTdbCmsCronJob->fieldLock) {
+                    $this->displayError($translator->trans('chameleon_system_core.cronjob.error_cronjob_still_locked'));
+
+                    return $this->data;
                 }
+
+                $this->RunCronJob($oTdbCmsCronJob, true);
             }
-        } else { // run all active cronjobs
+        } else {
+            // run all active cronjobs
+
             // unlock all cron jobs that are past their max lock time
             $this->unlockOldBlockedCronJobs();
+
+            $cronjobsWereEnabled = $this->isCronjobExecutionEnabled();
+
+            if (false === $cronjobsWereEnabled) {
+                $this->getLogger()->info('Executing all cronjobs was disabled before starting.');
+
+                return $this->data;
+            }
 
             $now = date('Y-m-d');
             $sQuery = "SELECT * FROM `cms_cronjobs`
@@ -51,14 +77,26 @@ class CMSRunCrons extends TModelBase
                      AND `active` = '1'
                 ORDER BY `execute_every_n_minutes`
                  ";
+
             $oTdbCmsCronjobsList = TdbCmsCronjobsList::GetList($sQuery);
             /** @var $oTdbCmsCronJob TdbCmsCronjobs */
             while ($oTdbCmsCronJob = $oTdbCmsCronjobsList->Next()) {
+                if (false === $this->isCronjobExecutionEnabled()) {
+                    $this->getLogger()->info(sprintf('Cronjob execution was disabled before executing %s', $oTdbCmsCronJob->id));
+
+                    return $this->data;
+                }
+
                 $this->RunCronJob($oTdbCmsCronJob);
             }
         }
 
         return $this->data;
+    }
+
+    private function isCronjobExecutionEnabled(): bool
+    {
+        return $this->getCronjobActivationService()->isCronjobExecutionEnabled();
     }
 
     protected function unlockOldBlockedCronJobs()
@@ -104,11 +142,31 @@ class CMSRunCrons extends TModelBase
         return $this->getCronjobFactory()->constructCronJob($oTdbCmsCronJob->sqlData['cron_class'], $oTdbCmsCronJob->sqlData);
     }
 
+    private function displayError(string $errorMessage): void
+    {
+        $this->data['sMessageOutput'] = $errorMessage;
+    }
+
     /**
      * @return CronJobFactoryInterface
      */
     private function getCronjobFactory()
     {
         return ServiceLocator::get('chameleon_system_core.cronjob.cronjob_factory');
+    }
+
+    private function getCronjobActivationService(): CronjobEnablingServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cronjob.cronjob_enabling_service');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.cronjob');
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
     }
 }

@@ -74,6 +74,8 @@ class TAccessManagerPermissions
     public $readonly = false;
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * is allowed to create and load record revisions.
      *
      * @var bool
@@ -108,7 +110,6 @@ class TAccessManagerPermissions
                 $this->showAll = $this->GetShowAllPermissionStatus($user, $table_id);
                 $this->newLanguage = $this->GetNewLanguagePermissionStatus($user, $table_id);
                 $this->readonly = $this->GetShowAllReadOnlyPermissionStatus($user, $table_id);
-                $this->revisionManagement = $this->GetRevisionManagementPermissionStatus($user, $table_id);
             } else {
                 $this->ResetPermissions();
             } // all false since we are not part of the group
@@ -128,7 +129,6 @@ class TAccessManagerPermissions
         $this->showAll = false;
         $this->newLanguage = false;
         $this->readonly = false;
-        $this->revisionManagement = false;
     }
 
     /**
@@ -330,35 +330,18 @@ class TAccessManagerPermissions
     }
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * get the permission status for the revision management right
      * note we assume that the user is in the same group as the table.
      *
      * @param TAccessManagerUser $oAccessManagerUser
-     * @param string             $table_id
+     * @param string $table_id
      *
      * @return bool
      */
     public function GetRevisionManagementPermissionStatus($oAccessManagerUser, $table_id)
     {
-        $returnVal = false;
-
-        static $requestCache = array();
-        if (array_key_exists($table_id, $requestCache)) {
-            $role_array = $requestCache[$table_id];
-        } else {
-            $role_array = array();
-            $query = "SELECT * FROM `cms_tbl_conf_cms_role7_mlt`
-                       WHERE `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($table_id)."'
-                     ";
-            if ($rolesWithRevisionManagementPermission = MySqlLegacySupport::getInstance()->query($query)) {
-                while ($roleWithRevisionManagementPermission = MySqlLegacySupport::getInstance()->fetch_assoc($rolesWithRevisionManagementPermission)) {
-                    $role_array[] = $roleWithRevisionManagementPermission['target_id'];
-                }
-            }
-            $requestCache[$table_id] = $role_array;
-        }
-        $returnVal = $oAccessManagerUser->IsInRoles($role_array);
-
-        return $returnVal;
+        return false;
     }
 }

@@ -9,10 +9,27 @@
  * file that was distributed with this source code.
  */
 
+use Doctrine\DBAL\Connection;
 use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\Logger;
 
+/**
+ * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface in conjunction with Monolog logging instead
+ */
 class TPkgCmsCoreLogMonologHandler_Database extends AbstractProcessingHandler
 {
+    /**
+     * @var Connection
+     */
+    private $connection;
+
+    public function __construct(Connection $connection)
+    {
+        parent::__construct(Logger::DEBUG, true);
+
+        $this->connection = $connection;
+    }
+
     protected function write(array $record)
     {
         static $rootDir = null;
@@ -24,11 +41,11 @@ class TPkgCmsCoreLogMonologHandler_Database extends AbstractProcessingHandler
         }
         /** @var DateTime $oDate */
         $oDate = $record['datetime'];
-        $aCleanContext = $record['context'];
+        $cleanContext = $record['context'];
 
-        if (isset($aCleanContext['_cmsRequestDetails'])) {
-            $aRequestDetails = $aCleanContext['_cmsRequestDetails'];
-            unset($aCleanContext['_cmsRequestDetails']);
+        if (isset($cleanContext['_cmsRequestDetails'])) {
+            $aRequestDetails = $cleanContext['_cmsRequestDetails'];
+            unset($cleanContext['_cmsRequestDetails']);
             $sFile = $aRequestDetails['file'];
             if (false !== $rootDir) {
                 $sFile = str_replace($rootDir, '', $sFile);
@@ -51,24 +68,47 @@ class TPkgCmsCoreLogMonologHandler_Database extends AbstractProcessingHandler
             $requestData = array();
         }
 
-        $aData = array(
+        foreach ($cleanContext as $key => $value) {
+            if ($value instanceof Throwable) {
+                $cleanContext[$key] = $this->formatExceptionForContext($value);
+            }
+        }
+
+        $data = array(
             'id' => TTools::GetUUID(),
             'timestamp' => $oDate->getTimestamp(),
             'channel' => $record['channel'],
             'message' => $record['message'],
             'level' => $record['level'],
-            'context' => serialize(array('context' => $aCleanContext, 'extra' => $record['extra'])),
+            'context' => serialize(array('context' => $cleanContext, 'extra' => $record['extra'])),
         );
 
-        $aData = array_merge($aData, $requestData);
+        $data = array_merge($data, $requestData);
 
-        $aParts = array();
-        foreach ($aData as $field => $val) {
-            $aParts[] = "`{$field}` = '".MySqlLegacySupport::getInstance()->real_escape_string($val)."'";
+        $this->connection->insert('pkg_cms_core_log', $data);
+    }
+
+    private function formatExceptionForContext(Throwable $e): string
+    {
+        // Taken from \Monolog\Formatter\LineFormatter
+
+        $previousText = '';
+        if ($previous = $e->getPrevious()) {
+            do {
+                $previousText .= ', '.$this->getClass($previous).'(code: '.$previous->getCode().'): '.$previous->getMessage().' at '.$previous->getFile().':'.$previous->getLine();
+            } while ($previous = $previous->getPrevious());
         }
-        $sQuery = 'INSERT INTO `pkg_cms_core_log`
-                           SET '.implode(",\n", $aParts).'
-                  ';
-        MySqlLegacySupport::getInstance()->query($sQuery);
+
+        $str = '[object] ('.$this->getClass($e).'(code: '.$e->getCode().'): '.$e->getMessage().' at '.$e->getFile().':'.$e->getLine().$previousText.')';
+        $str .= "\n[stacktrace]\n".$e->getTraceAsString()."\n";
+
+        return $str;
+    }
+
+    private function getClass($object): string
+    {
+        $class = \get_class($object);
+
+        return 'c' === $class[0] && 0 === strpos($class, "class@anonymous\0") ? get_parent_class($class).'@anonymous' : $class;
     }
 }

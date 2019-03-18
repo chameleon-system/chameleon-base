@@ -33,22 +33,20 @@
 </form>
 <?php if ($data['permission_new']) {
         ?>
-<div style="position: relative; top: 2px;">
-    <div style="padding-left: 20px;">
-        <div data-table-function-bar class="btn-group">
-                <?php
-                $data['oMenuItems']->GoToStart();
+<div data-table-function-bar class="row button-element">
+        <?php
+        $data['oMenuItems']->GoToStart();
         /** @var $oMenuItem TCMSTableEditorMenuItem */
         while ($oMenuItem = $data['oMenuItems']->Next()) {
-            echo $oMenuItem->GetMenuItemHTML();
+            echo '<div class="button-item col-12 col-sm-6 col-md-4 col-lg-auto">';
+                echo $oMenuItem->GetMenuItemHTML();
+            echo '</div>';
         } ?>
-        </div>
-    </div>
 </div>
 <?php
     } ?>
-<div>
-    <div class="cmsBoxBorder">
+<div class="card card-accent-primary">
+    <div class="card-body p-0">
     <?php echo $data['sTable']; ?>
     </div>
 </div>

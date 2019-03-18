@@ -23,6 +23,12 @@ class TCMSFile
     public $sDir = '';
     public $sFileName = '';
     public $sExtension = '';
+
+    /**
+     * @deprecated since 6.3.0
+     *
+     * @var string
+     */
     public $sTypeIcon = '';
 
     public $dSizeByte = 0;
@@ -101,8 +107,6 @@ class TCMSFile
             $this->bIsHTTPResource = true;
             $this->sTypeIcon = '';
             $this->sPath = $sPath;
-            //$aFileData = pathinfo($this->sPath);
-
             $this->sDir = dirname($sPath);
             $this->sFileName = basename($sPath);
             $iExtensionPos = strrpos($this->sFileName, '.');
@@ -119,9 +123,6 @@ class TCMSFile
 
             $this->dSizeByte = null;
             $this->sCreated = date('Y-m-d H:i:s');
-            if (!empty($this->sExtension) && file_exists(PATH_FILETYPE_ICONS_LOW_QUALITY.$this->sExtension.'.png')) {
-                $this->sTypeIcon = TGlobal::GetStaticURLToWebLib(URL_FILETYPE_ICONS_LOW_QUALITY.$this->sExtension.'.png');
-            }
             $bLoaded = true;
         } else {
             if (file_exists($sPath)) {
@@ -148,10 +149,6 @@ class TCMSFile
 
                 $this->dSizeByte = filesize($sPath);
                 $this->sCreated = date('Y-m-d H:i:s', filectime($this->sPath));
-                $iconPath = PATH_FILETYPE_ICONS_LOW_QUALITY.$this->sExtension.'.png';
-                if (!empty($this->sExtension) && file_exists($iconPath)) {
-                    $this->sTypeIcon = $iconPath;
-                }
                 $bLoaded = true;
             }
         }

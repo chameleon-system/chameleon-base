@@ -20,7 +20,7 @@
             <span class="optionTypeName">{{sName}}</span>
             {% block selectField %}
                 <span class="selectBlock">
-                    <select class="listOptionSelect" onchange="$(this).parentsUntil('form').parent().submit()" name="{{sSelectName | raw}}">
+                    <select class="listOptionSelect form-control form-control-sm" onchange="$(this).parentsUntil('form').parent().submit()" name="{{sSelectName | raw}}">
                         {% for aSelectOption in aOptionList%}
                             <option value="{{aSelectOption.sValue}}" {% if aSelectOption.bSelected %} selected="selected" {% endif %}>{{aSelectOption.sName}}</option>
                         {% endfor %}

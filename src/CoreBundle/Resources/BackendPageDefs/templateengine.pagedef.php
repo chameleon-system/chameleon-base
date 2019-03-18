@@ -1,12 +1,9 @@
 <?php
 
-// main layout
 $layoutTemplate = 'templateengine';
+$moduleList = array('templateengine' => array('model' => 'CMSTemplateEngine', 'view' => 'main'));
 
-// modules...
-$moduleList = array('pagetitle' => array('model' => 'MTHeader', 'view' => 'title'), 'headerimage' => array('model' => 'MTHeader', 'view' => 'standard'), 'templateengine' => array('model' => 'CMSTemplateEngine', 'view' => 'main'));
-
-// this line needs to be included... do not touch
-if (!is_array($moduleList)) {
-    $layoutTemplate = '';
-}
+addDefaultPageTitle($moduleList);
+addDefaultHeader($moduleList);
+addDefaultBreadcrumb($moduleList);
+addDefaultSidebar($moduleList);

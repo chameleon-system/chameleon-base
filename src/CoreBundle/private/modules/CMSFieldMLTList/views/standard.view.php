@@ -16,22 +16,10 @@
                                                                  value="<?=TGlobal::OutHTML($data['_isiniframe']); ?>"/><?php
     } ?>
 </form>
-<style>
-    .tblsearch {
-        background-image: url(<?php echo TGlobal::GetPathTheme(); ?>/images/table_bg.gif);
-        border-top: 1px solid #9A9A9A;
-        width: 100%;
-        padding: 5px;
-        color: #841313;
-        font-weight: bold;
-        font-size: 13px;
-        line-height: 20px;
-    }
-</style>
 <script>
     function addMLTConnectionPassThrough(id) {
         parent.addMLTConnection('<?php echo str_replace('_mlt', '', $data['sRestrictionField']); ?>', '<?=$data['name']; ?>', '<?php echo $data['sRestriction']; ?>', id);
-        toasterMessage('<?php echo TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_mlt.item_added')); ?>', 'WARNING');
+        toasterMessage('<?php echo TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_mlt.item_added')); ?>', 'SUCCESS');
     }
 </script>
 <?php echo $data['sTable']; ?>

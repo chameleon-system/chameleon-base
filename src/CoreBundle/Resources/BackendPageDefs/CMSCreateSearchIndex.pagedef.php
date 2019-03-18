@@ -3,14 +3,13 @@
 /**
  * @deprecated since 6.2.0 - no longer used.
  */
-
-// main layout
 $layoutTemplate = 'popup_window_iframe';
+$moduleList = [
+    'contentmodule' => [
+        'model' => 'CMSSearch',
+        'view' => 'standard',
+        '_suppressHistory' => true,
+    ],
+];
 
-// modules...
-$moduleList = array('pagetitle' => array('model' => 'MTHeader', 'view' => 'title'), 'contentmodule' => array('model' => 'CMSSearch', 'view' => 'standard', '_suppressHistory' => true));
-
-// this line needs to be included... do not touch
-if (!is_array($moduleList)) {
-    $layoutTemplate = '';
-}
+addDefaultPageTitle($moduleList);

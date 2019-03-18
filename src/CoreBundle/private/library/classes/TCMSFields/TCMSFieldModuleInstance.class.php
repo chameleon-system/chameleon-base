@@ -98,9 +98,9 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     {
         $oTableConf = new TCMSTableConf();
         $oTableConf->LoadFromField('name', 'cms_tpl_module_instance');
-        $html = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.select_instance'), 'javascript:'.$this->_GetOpenWindowJS($oTableConf).'', URL_CMS.'/images/icons/box.gif', 'pull-left');
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.reset_spot'), "javascript:ResetModuleInstance('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."')", URL_CMS.'/images/icons/action_stop.gif', 'pull-left button-spacing');
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.create_or_edit_instance'), '#', URL_CMS.'/images/icons/add.png', 'pull-left button-spacing', null, $this->name.'NewInstanceButton');
+        $html = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.select_instance'), 'javascript:'.$this->_GetOpenWindowJS($oTableConf).'', 'far fa-check-square', 'float-left');
+        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.reset_spot'), "javascript:ResetModuleInstance('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."')", 'fas fa-undo', 'float-left button-spacing');
+        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.create_or_edit_instance'), '#', 'fas fa-plus', 'float-left button-spacing', null, $this->name.'NewInstanceButton');
 
         return $html;
     }
@@ -112,7 +112,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         if (!empty($sRestrictToModule)) {
             $url .= '&amp;sModuleRestriction='.urlencode($sRestrictToModule);
         }
-        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."','900','640');";
+        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."');";
 
         return $js;
     }
@@ -160,9 +160,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     {
         $aIncludes = parent::GetCMSHtmlHeadIncludes();
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/bgiframe/jquery.bgiframe.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.mouse.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.draggable.js').'" type="text/javascript"></script>';
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/css/modules/templateengineeditor.css').'" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/modules/TemplateEngine.js').'" type="text/javascript"></script>';
 

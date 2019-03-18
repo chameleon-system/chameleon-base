@@ -9,6 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Exception\MaintenanceModeErrorException;
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
+use ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TCMSTableEditorCMSConfig extends TCMSTableEditor
 {
     /**
@@ -29,7 +34,7 @@ class TCMSTableEditorCMSConfig extends TCMSTableEditor
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'updateTranslationFields';
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor.regenerate_translatable_fields');
-        $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/file_font_truetype.gif');
+        $oMenuItem->sIcon = 'fas fa-font';
 
         $sCallURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'tableeditor', 'id' => $this->sId, 'tableid' => $this->oTableConf->id, 'module_fnc' => array('contentmodule' => 'UpdateTranslationFields'), '_noModuleFunction' => 'true'));
 
@@ -65,16 +70,38 @@ class TCMSTableEditorCMSConfig extends TCMSTableEditor
     protected function PostSaveHook(&$oFields, &$oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
+
+        $maintenanceModeService = $this->getMaintenanceModeService();
+
         /**
-         * @var TdbCmsConfig $config
+         * @var TdbCmsConfig $newConfig
          */
-        $config = $this->oTable;
-        if ($config->fieldShutdownWebsites) {
-            touch(PATH_MAINTENANCE_MODE_MARKER);
-        } else {
-            if (file_exists(PATH_MAINTENANCE_MODE_MARKER)) {
-                unlink(PATH_MAINTENANCE_MODE_MARKER);
+        $newConfig = $this->oTable;
+
+        try {
+            if (true === $newConfig->fieldShutdownWebsites) {
+                $maintenanceModeService->activate();
+            } else {
+                $maintenanceModeService->deactivate();
             }
+        } catch (MaintenanceModeErrorException $exception) {
+            $flashMessageService = $this->getFlashMessageService();
+
+            $flashMessageService->addMessage(
+                \TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
+                'TABLEEDITOR_CMS_CONFIG_MAINTENANCE_ERROR',
+                ['exceptionMessage' => $exception->getMessage()]
+            );
         }
+    }
+
+    private function getMaintenanceModeService(): MaintenanceModeServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.maintenance_mode_service');
+    }
+
+    private function getFlashMessageService(): FlashMessageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 }

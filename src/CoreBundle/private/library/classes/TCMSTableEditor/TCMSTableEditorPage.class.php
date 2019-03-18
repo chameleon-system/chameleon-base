@@ -144,18 +144,10 @@ class TCMSTableEditorPage extends TCMSTableEditor
         $deleteMessage = addslashes(TGlobal::Translate('chameleon_system_core.template_engine.confirm_page_delete'));
         $oMenuItemSave->sOnClick = "CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage('$deleteMessage');";
 
-        if ($this->IsRevisionManagementActive() && $oGlobal->oUser->oAccessManager->HasRevisionManagementPermission($this->oTableConf->sqlData['name'])) {
-            $oMenuItem = $this->oMenuItems->FindItemWithProperty('sItemKey', 'revisionManagement');
-            $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.record_revision.action_create_page_revision');
-
-            $oMenuItem = $this->oMenuItems->FindItemWithProperty('sItemKey', 'revisionManagementLoad');
-            $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.record_revision.action_load_page_revision');
-        }
-
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.list.page_settings');
         $oMenuItem->sItemKey = 'pagesettings';
-        $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/application_edit.png');
+        $oMenuItem->sIcon = 'far fa-edit';
         $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=tableeditor&tableid=70&id='.TGlobal::OutHTML($this->oTable->id)."';";
         $this->oMenuItems->AddItem($oMenuItem);
 
@@ -165,14 +157,15 @@ class TCMSTableEditorPage extends TCMSTableEditor
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.template_engine.action_edit_template');
             $oMenuItem->sItemKey = 'templateengine';
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/page_edit.gif');
+            $oMenuItem->sIcon = 'fa fa-pen-square';
             $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=edit_content&id='.TGlobal::OutHTML($this->oTable->id)."';";
+            $oMenuItem->setButtonStyle('btn btn-sm w-100 btn-primary');
             $this->oMenuItems->AddItem($oMenuItem);
 
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.template_engine.action_page_preview');
             $oMenuItem->sItemKey = 'pagepreview';
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/eye.png');
+            $oMenuItem->sIcon = 'far fa-eye';
             $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=preview_content&id='.TGlobal::OutHTML($this->oTable->id)."';";
             $this->oMenuItems->AddItem($oMenuItem);
         }
@@ -180,7 +173,7 @@ class TCMSTableEditorPage extends TCMSTableEditor
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.template_engine.action_page_templates');
         $oMenuItem->sItemKey = 'pagelayouts';
-        $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/page_code.gif');
+        $oMenuItem->sIcon = 'fas fa-code';
         $oMenuItem->sOnClick = "openLayoutManager('".TGlobal::OutJS($this->oTable->id)."');";
         $this->oMenuItems->AddItem($oMenuItem);
     }
@@ -196,8 +189,9 @@ class TCMSTableEditorPage extends TCMSTableEditor
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.list.page_settings');
         $oMenuItem->sItemKey = 'pagesettings';
-        $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/application_edit.png');
+        $oMenuItem->sIcon = 'fa fa-pen-square';
         $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=tableeditor&tableid=70&id='.TGlobal::OutHTML($this->oTable->id)."';";
+        $oMenuItem->setButtonStyle('btn btn-sm w-100 btn-primary');
         $this->oMenuItems->AddItem($oMenuItem);
 
         $bPageDefExists = (!empty($this->oTable->sqlData['cms_master_pagedef_id']));
@@ -206,14 +200,14 @@ class TCMSTableEditorPage extends TCMSTableEditor
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.template_engine.action_edit_template');
             $oMenuItem->sItemKey = 'templateengine';
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/page_edit.gif');
+            $oMenuItem->sIcon = 'far fa-edit';
             $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=edit_content&id='.TGlobal::OutHTML($this->oTable->id)."';";
             $this->oMenuItems->AddItem($oMenuItem);
 
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.template_engine.action_page_preview');
             $oMenuItem->sItemKey = 'pagepreview';
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/eye.png');
+            $oMenuItem->sIcon = 'far fa-eye';
             $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=preview_content&id='.TGlobal::OutHTML($this->oTable->id)."';";
             $this->oMenuItems->AddItem($oMenuItem);
         }

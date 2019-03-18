@@ -218,6 +218,8 @@ class TAccessManager
     }
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * checks if the user has the permission to create and load record revisions.
      *
      * @param string $table - name of the db-table
@@ -226,16 +228,7 @@ class TAccessManager
      */
     public function HasRevisionManagementPermission($table)
     {
-        if (is_null($this->user)) {
-            trigger_error('User needs to be Initiated before you can get table permissions', E_USER_ERROR);
-
-            return false;
-        } else {
-            // get permissions...
-            $permission = $this->GetTablePermissions($table);
-
-            return $permission->revisionManagement;
-        }
+        return false;
     }
 
     /**

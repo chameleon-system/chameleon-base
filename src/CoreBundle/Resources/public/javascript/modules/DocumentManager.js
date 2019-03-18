@@ -72,12 +72,12 @@ function ChangeAssignedFileSelection(id) {
 }
 
 function chooseSelectedFiles() {
-    if (window.opener && window.opener.open && !window.opener.closed) {
+    if (window.parent) {
         if (selectedFiles.length > 0) {
-            PleaseWait();
+            CHAMELEON.CORE.showProcessingModal();
             var sSelectedFiles = selectedFiles.join(",");
-            if (typeof window.opener.assignDocuments == 'function' || typeof window.opener.assignDocuments == 'object') {
-                window.opener.assignDocuments(_fieldName, sSelectedFiles, _recordID, _tableID);
+            if (typeof window.parent.assignDocuments == 'function' || typeof window.parent.assignDocuments == 'object') {
+                window.parent.assignDocuments(_fieldName, sSelectedFiles, _recordID, _tableID);
             }
             // reset array
             selectedFiles = new Array();
@@ -87,12 +87,12 @@ function chooseSelectedFiles() {
 }
 
 function removeSelectedFiles() {
-    if (window.opener && window.opener.open && !window.opener.closed) {
+    if (window.parent) {
         if (assignedSelectedFiles.length > 0) {
-            PleaseWait();
+            CHAMELEON.CORE.showProcessingModal();
             var sAssignedSelectedFiles = assignedSelectedFiles.join(",");
-            if (typeof window.opener.removeDocument == 'function' || typeof window.opener.removeDocument == 'object') {
-                window.opener.removeDocument(_fieldName, sAssignedSelectedFiles, _recordID, _tableID);
+            if (typeof window.parent.removeDocument == 'function' || typeof window.parent.removeDocument == 'object') {
+                window.parent.removeDocument(_fieldName, sAssignedSelectedFiles, _recordID, _tableID);
             }
             //refresh parent header
             RefreshOpenerHeader();
@@ -125,7 +125,7 @@ function CleanDelete() {
  *
  */
 function UploadFiles(selectedNodeID) {
-    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSUniversalUploader&amp;mode=document&amp;queueCompleteCallback=queueCompleteCallback&amp;treeNodeID=' + selectedNodeID, 700, 550, 'Upload');
+    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSUniversalUploader&amp;mode=document&amp;queueCompleteCallback=queueCompleteCallback&amp;treeNodeID=' + selectedNodeID, 0, 0, 'Upload');
 
     //refresh parent header
     RefreshOpenerHeader();
@@ -138,7 +138,7 @@ function UploadFiles(selectedNodeID) {
  *
  */
 function UploadFilesFromLocal(selectedNodeID) {
-    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSDocumentLocalImport&amp;nodeID=' + selectedNodeID, 650, 500, 'FTP Import');
+    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSDocumentLocalImport&amp;nodeID=' + selectedNodeID, 0, 0, 'FTP Import');
 
     //refresh parent header
     RefreshOpenerHeader();

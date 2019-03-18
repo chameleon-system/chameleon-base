@@ -8,10 +8,10 @@ CKEDITOR.editorConfig = function (config) {
 
     // %REMOVE_START%
 
-    config.skin = 'moonocolor,../ckEditorSkins/moonocolor/';
+    config.skin = 'moono-lisa'; // use packaged skin
     // %REMOVE_END%
 
-    config.uiColor = '#334a73';
+    config.uiColor = '#f0f3f5';
     // For the complete reference:
     // http://docs.ckeditor.com/#!/api/CKEDITOR.config
 

@@ -128,7 +128,7 @@ class TFullGroupTableStyle extends TGroupTableStyle
     {
         $output = '';
         if (!is_null($this->groupSelector)) {
-            $output = " class=\"form-control input-sm {$this->groupSelector}\"";
+            $output = " class=\"form-control form-control-sm {$this->groupSelector}\"";
         }
 
         return $output;

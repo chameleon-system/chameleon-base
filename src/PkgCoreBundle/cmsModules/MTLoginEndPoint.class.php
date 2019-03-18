@@ -39,7 +39,7 @@ class MTLoginEndPoint extends TCMSModelBase
         }
 
         if ($this->global->CMSUserDefined()) {
-            $this->controller->HeaderRedirect(array('pagedef' => 'main'));
+            $this->controller->HeaderRedirect([]);
         }
 
         return $this->data;
@@ -108,7 +108,7 @@ class MTLoginEndPoint extends TCMSModelBase
 
     protected function postLoginRedirect($bIsRefreshLogin)
     {
-        $aRedirectParams = array('pagedef' => 'main');
+        $aRedirectParams = [];
 
         if ($bIsRefreshLogin) {
             $sRedirectURL = $_SERVER['HTTP_REFERER'];
@@ -167,14 +167,6 @@ class MTLoginEndPoint extends TCMSModelBase
         if (!$noRedirect) {
             $this->getRedirect()->redirect(PATH_CMS_CONTROLLER.'?pagedef=login');
         }
-    }
-
-    public function GetHtmlHeadIncludes()
-    {
-        $aIncludes = parent::GetHtmlHeadIncludes();
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contentbox.css" rel="stylesheet" type="text/css" />';
-
-        return $aIncludes;
     }
 
     private function redirectOnPendingUpdates()

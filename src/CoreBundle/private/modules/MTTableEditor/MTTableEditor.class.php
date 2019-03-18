@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
@@ -257,8 +259,10 @@ class MTTableEditor extends TCMSModelBase
     protected function AddURLHistory()
     {
         if ($this->AllowAddingURLToHistory()) {
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+
             if ($this->global->UserDataExists('popLastURL')) {
-                $this->global->GetURLHistory()->PopURL();
+                $breadcrumb->PopURL();
             }
 
             $params = array();
@@ -275,7 +279,7 @@ class MTTableEditor extends TCMSModelBase
             if (null !== $this->oTableManager->oTableEditor->oTable) {
                 $sRecordName = $this->oTableManager->oTableEditor->oTable->GetName();
             }
-            $this->global->GetURLHistory()->AddItem($params, $sRecordName);
+            $breadcrumb->AddItem($params, $sRecordName);
         }
     }
 
@@ -320,7 +324,8 @@ class MTTableEditor extends TCMSModelBase
 
             $this->data['oBaseLanguage'] = $this->oBaseLanguage;
 
-            $this->data['breadcrumb'] = $this->global->GetURLHistory()->GetBreadcrumb(true);
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+            $this->data['breadcrumb'] = $breadcrumb->GetBreadcrumb(true);
             if ($this->isEditFieldMode()) {
                 $editFieldName = $this->global->GetUserData('_fieldName');
                 $this->oTableManager->oTableEditor->setActiveEditField($editFieldName);
@@ -384,7 +389,7 @@ class MTTableEditor extends TCMSModelBase
      */
     protected function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -438,20 +443,13 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * loads revision management relevant data if active.
      */
     protected function LoadRevisionData()
     {
         $this->data['bRevisionManagementActive'] = false;
-        $bRevisionManagementActive = $this->oTableManager->IsRevisionManagementActive();
-        if ($bRevisionManagementActive) {
-            $this->data['bRevisionManagementActive'] = $bRevisionManagementActive;
-            $sLastRevisionNumber = $this->GetLastRevisionNumber();
-            $this->data['iLastRevisionNumber'] = $sLastRevisionNumber;
-            $iBaseRevisionNumber = $this->oTableManager->oTableEditor->GetLastActivatedRevision();
-            $this->data['iBaseRevisionNumber'] = $iBaseRevisionNumber;
-            $this->data['oLastRevision'] = $this->oTableManager->oTableEditor->GetLastActivatedRevisionObject();
-        }
     }
 
     /**
@@ -512,28 +510,15 @@ class MTTableEditor extends TCMSModelBase
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
         // first the includes that are needed for all fields
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.core.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/form/jquery.form.js').'" type="text/javascript"></script>'; // ajax form plugin
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/BlockUI/jquery.blockUI.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqDnR.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jqModal/jqModal.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
-
-        // autocomplete field
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/bgiframe/jquery.bgiframe.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.menu.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jQueryUI/ui.autocomplete.js').'" type="text/javascript"></script>';
 
         // right click contextmenu
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/contextmenu/contextmenu.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contextmenu.css" rel="stylesheet" type="text/css" />';
-
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tableeditcontainer.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/tableEditor.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/WayfarerTooltip/WayfarerTooltip.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tooltip.css" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
         if (!$this->IsRecordLocked() && array_key_exists('locking_active', $this->oTableManager->oTableConf->sqlData) && '1' == $this->oTableManager->oTableConf->sqlData['locking_active'] && !$this->bIsReadOnlyMode && CHAMELEON_ENABLE_RECORD_LOCK) {
             $aIncludes[] = '<script type="text/javascript">
@@ -545,18 +530,9 @@ class MTTableEditor extends TCMSModelBase
 
         // onbeforeunload message
         $aIncludes[] = '<script type="text/javascript">
-        $(document).ready(function(){
-           SetChangedDataMessage();
-        });
-
-        function SetChangedDataMessage() {
-          $("input:text,input:checkbox,input:radio,textarea,select,input:hidden",$("#cmseditform")).not(".cmsdisablechangemessage").one("change",function() {
-            CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
-          });
-        }
         window.onbeforeunload = function () {
           if (CHAMELEON.CORE.MTTableEditor.bCmsContentChanged) {
-            $.unblockUI();
+            CHAMELEON.CORE.hideProcessingModal();
             return \''.TGlobal::Translate('chameleon_system_core.cms_module_table_editor.confirm_discard_changes').'\';
           }
         }
@@ -584,91 +560,13 @@ class MTTableEditor extends TCMSModelBase
             }
         }
 
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib().'/javascript/jquery/jQueryUI/ui.dialog.js" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib().'/javascript/jquery/jQueryUI/themes/cupertino/cupertino.css" media="screen" rel="stylesheet" type="text/css" />';
-
-        // content tabs
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib().'/javascript/jquery/jQueryUI/ui.tabs.js" type="text/javascript"></script>';
-
-        if (array_key_exists('oTabs', $this->data) && is_object($this->data['oTabs']) && $this->data['oTabs']->Length() > 0) {
-            $breadcrumb = $this->global->GetURLHistory()->GetBreadcrumb();
-            $lastHistNode = end($breadcrumb);
-            $lastHistNodeUrl = str_replace('_rmhist=true', '_rmhist=false', $lastHistNode['url']);
-            $addUrlToHistoryUrl = $lastHistNodeUrl.'&'.urlencode('module_fnc[headerimage]').'=ExecuteAjaxCall&_fnc=addTabToUrlHistory';
-
-            $_url_params = array();
-            $_url_params['pagedef'] = $this->global->GetUserData('pagedef');
-            $_url_params['id'] = $this->oTableManager->sId;
-            $_url_params['tableid'] = $this->oTableManager->sTableId;
-
-            $_url_aAdditionalParams = $this->GetHiddenFieldsHook();
-            if (is_array($_url_aAdditionalParams) && count($_url_aAdditionalParams) > 0) {
-                $_url_params = array_merge($_url_params, $_url_aAdditionalParams);
-            }
-
-            $currentElementUrl = PATH_CMS_CONTROLLER.'?'.http_build_query($_url_params);
-
-            $aIncludes[] = '<script type="text/javascript">
-
-                $(document).ready(function(){
-
-                    var windowIsIFrame = (window.location != window.parent.location) ? true : false;
-
-                    if(!windowIsIFrame){
-
-                        $(window).on("hashchange", function(e){
-                            e.preventDefault();
-                            /*
-                            * check the initial hash of the url
-                            * if it is one of the tabs -> select it
-                            */
-                            if($("#formTabs").tabs().find(window.location.hash).length > 0){
-                                $("#formTabs").tabs("select", window.location.hash);
-                            }
-                        });
-
-                        $("#formTabs").tabs({
-                            activate: function(event, ui){
-                                if(0 == ui.index){
-                                	window.location.hash = "";
-                                }
-                                else {
-                                	window.location.hash = ui.tab.hash;
-                                }
-
-                                var url = "'.$addUrlToHistoryUrl.'";
-                                url += "&url='.urlencode($currentElementUrl).'";
-                                url += encodeURIComponent(window.location.hash);
-                                url += "&name="+encodeURIComponent($(ui.tab).data("fullname"));
-
-                                GetAjaxCallTransparent(url, function(data){
-                                    if(data.length > 0){
-                                        $("#cmsbreadcrumb ol").empty();
-                                            $.map(data, function(item, index) {
-
-                                            var breadcrumNodeHTML = \'<li><a href="\'+item.url+\'">\'+item.name+\'</a></li>\';
-                                            if(item.name == "'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_main_menu')).'") {
-                                                breadcrumNodeHTML = \'<li><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;<a href="\'+item.url+\'">\'+item.name+\'</a></li>\';
-                                            }
-                                            $("#cmsbreadcrumb ol").append(breadcrumNodeHTML)
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                      $("#formTabs").tabs();
-                    }
-                });
-            </script>';
-        }
-
         return $aIncludes;
     }
 
     public function GetHtmlFooterIncludes()
     {
         $aIncludes = array();
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
 
         // get the tableEditor specific footer includes
         $aTableEditIncludes = $this->oTableManager->oTableEditor->GetHtmlFooterIncludes();
@@ -781,6 +679,8 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * add new record revision using the postdata
      * executes Save() before saving the revision.
      */
@@ -790,6 +690,9 @@ class MTTableEditor extends TCMSModelBase
         $this->oTableManager->AddNewRevision($postData);
     }
 
+    /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     */
     public function ActivateRevision()
     {
         $sRecordRevisionId = $this->global->GetUserData('sRecordRevisionId');
@@ -931,7 +834,8 @@ class MTTableEditor extends TCMSModelBase
 
         if (($insertObject && null !== $insertObject->id) || (!$insertObject && isset($this->oTableManager) && isset($this->oTableManager->oTableEditor) && isset($this->oTableManager->oTableEditor->oTable))) {
             // Remove last history stamp.
-            $this->global->GetURLHistory()->PopURL();
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+            $breadcrumb->PopURL();
 
             $parameters = array(
                 'pagedef' => $inputFilterUtil->getFilteredInput('pagedef'),
@@ -973,6 +877,8 @@ class MTTableEditor extends TCMSModelBase
             $parameter['_isiniframe'] = $isInIFrame;
             $parameter['id'] = $this->oTableManager->sTableId;
 
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+
             if ('true' === $isInIFrame) {
                 $aAdditionalParams = $this->GetHiddenFieldsHook();
                 if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
@@ -995,7 +901,7 @@ class MTTableEditor extends TCMSModelBase
                         $parameter['sourceRecordID'] = $this->global->GetUserData('sourceRecordID');
                     }
 
-                    $this->global->GetURLHistory()->PopURL();
+                    $breadcrumb->PopURL();
                     $this->controller->HeaderRedirect($parameter);
                 } else {
                     /** @var $oRestrictionTableConf TCMSTableConf */
@@ -1014,18 +920,19 @@ class MTTableEditor extends TCMSModelBase
                         $parameter['sourceRecordID'] = $sourceRecordId;
                     }
 
-                    $this->global->GetURLHistory()->PopURL();
+                    $breadcrumb->PopURL();
                     $this->controller->HeaderRedirect($parameter);
                 }
             } else {
-                //remove last item from url history
-                $this->global->GetURLHistory()->PopURL();
-                //search for id in the url we want to redirect now
-                //if the id equals to the current id of the record that is deleted remove this item too
-                while (preg_match('#id='.$this->sId.'#', $this->global->GetURLHistory()->GetURL()) > 0) {
-                    $this->global->GetURLHistory()->PopURL();
+                // remove last item from url history
+                $breadcrumb->PopURL();
+
+                $parentURL = $breadcrumb->GetURL();
+                if (false === $parentURL) {
+                    $parentURL = URL_CMS_CONTROLLER;
+                } else {
+                    $parentURL .= '&_histid='.($breadcrumb->index - 1);
                 }
-                $parentURL = $this->global->GetURLHistory()->GetURL().'&_histid='.($this->global->GetURLHistory()->index - 1);
             }
 
             if (!empty($parentURL)) {
@@ -1054,7 +961,9 @@ class MTTableEditor extends TCMSModelBase
     {
         $postData = $this->global->GetUserData(null);
         $this->oTableManager->Copy($postData);
-        $this->global->GetURLHistory()->PopURL();
+
+        $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+        $breadcrumb->PopURL();
 
         if ('_mlt' === substr($this->oTableManager->sRestrictionField, -4)) {
             $targetTable = $this->oTableManager->oTableConf->sqlData['name'];
@@ -1080,7 +989,9 @@ class MTTableEditor extends TCMSModelBase
     public function DatabaseCopy()
     {
         $this->oTableManager->DatabaseCopy(false, array(), true);
-        $this->global->GetURLHistory()->PopURL();
+
+        $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+        $breadcrumb->PopURL();
 
         if ('_mlt' === substr($this->oTableManager->sRestrictionField, -4)) {
             $targetTable = $this->oTableManager->oTableConf->sqlData['name'];
@@ -1140,6 +1051,8 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * checks for the last revision number for this record,
      * if no revisions are found it returns 0.
      *
@@ -1213,7 +1126,7 @@ class MTTableEditor extends TCMSModelBase
             $state = $inputFilterUtil->getFilteredInput('state');
         }
         /** @var TTableEditorListFieldState $stateContainer */
-        $stateContainer = \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.tableEditorListFieldState');
+        $stateContainer = ServiceLocator::get('cmsPkgCore.tableEditorListFieldState');
         $stateContainer->setState($this->oTableManager->oTableConf->sqlData['name'], $fieldName, $state);
     }
 
@@ -1222,6 +1135,11 @@ class MTTableEditor extends TCMSModelBase
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }

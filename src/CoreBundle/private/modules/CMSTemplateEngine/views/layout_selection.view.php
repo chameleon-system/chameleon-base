@@ -1,20 +1,20 @@
-<!-- layout selection main view -->
 <?php require __DIR__.'/parts/navi.inc.php'; ?>
-<div>
-    <?php
-    require __DIR__.'/parts/header.inc.php';
-    ?>
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
-        <tr>
-            <td width="300" style="vertical-align: top">
-                <iframe name="layoutliste" id="layoutliste" frameborder="0" width="300" style="min-height: 500px" height="100%"
-                        src="<?=PATH_CMS_CONTROLLER; ?>?pagedef=templateengineplain&_mode=layoutlist&id=<?=$data['id']; ?>"></iframe>
-            </td>
-            <td width="*">
+<div class="card card-accent-primary mb-2" id="templateengine">
+    <div class="card-header p-1">
+        <?php
+        require_once dirname(__FILE__).'/../../MTTableEditor/views/includes/editorheader.inc.php';
+        ?>
+    </div>
+    <div class="card-body p-0">
+        <div class="row">
+            <div class="col-lg-2 col-md-3 col-xs-4 pr-0"><iframe name="layoutliste" id="layoutliste" frameborder="0" width="100%" style="height: 100%; overflow: hidden;" height="100%"
+                                          src="<?=PATH_CMS_CONTROLLER; ?>?pagedef=templateengineplain&_mode=layoutlist&id=<?=$data['id']; ?>"></iframe></div>
+            <div class="col-lg-10 col-md-9 col-xs-8 pl-1 pr-3">
                 <?php $src = isset($data['sActualMasterLayout']) ? " src=\"{$data['sActualMasterLayout']}\"" : ''; ?>
-                <iframe name="layoutpreview" id="userwebpageiframe" frameborder="0" style="min-height: 500px" width="100%"
-                        height="100%"<?= $src; ?>></iframe>
-            </td>
-        </tr>
-    </table>
+                <iframe name="layoutpreview" id="userwebpageiframe" frameborder="0" style="height: 100%; overflow: hidden;" width="100%"
+                        height="100%"<?= $src; ?>>
+                </iframe>
+            </div>
+        </div>
+    </div>
 </div>

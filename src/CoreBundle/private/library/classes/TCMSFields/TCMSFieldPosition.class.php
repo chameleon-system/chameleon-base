@@ -38,7 +38,7 @@ class TCMSFieldPosition extends TCMSField
             $restrictionValue = '';
         }
 
-        $html = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_position.change'), "javascript:loadPositionList('".TGlobal::OutJS($this->oTableConf->id)."','".TGlobal::OutJS($this->sTableName)."','".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->recordId)."','".TGlobal::OutJS($restrictionValue)."','".TGlobal::OutJS($restrictionField)."');", URL_CMS.'/images/icons/application_cascade.png');
+        $html = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_position.change'), "javascript:loadPositionList('".TGlobal::OutJS($this->oTableConf->id)."','".TGlobal::OutJS($this->sTableName)."','".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->recordId)."','".TGlobal::OutJS($restrictionValue)."','".TGlobal::OutJS($restrictionField)."');", 'fas fa-sort');
         $html .= '<span id="'.TGlobal::OutHTML($this->name).'_dummy"></span>
       <input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($this->data)."\" />\n";
 

@@ -16,9 +16,9 @@ class TCMSFieldDuration extends TCMSFieldNumber
         $iSeconds = $this->_GetHTMLValue();
         $aFields = $this->IntToField($iSeconds);
         $html = '<input type="hidden" name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name)."\" value=\"\" />\n";
-        $html .= '<input class="fieldnumber" style="width:20px;" type="text" maxlength="2" name="'.TGlobal::OutHTML($this->name).'_hour" id="'.TGlobal::OutHTML($this->name).'_hour" value="'.TGlobal::OutHTML($aFields['hours'])."\" />:\n";
-        $html .= '<input class="fieldnumber" style="width:20px;" type="text" maxlength="2" name="'.TGlobal::OutHTML($this->name).'_min"  id="'.TGlobal::OutHTML($this->name).'_min"  value="'.TGlobal::OutHTML($aFields['minutes'])."\" onchange=\"if(parseInt(this.value)>59) this.value=59; \" />:\n";
-        $html .= '<input class="fieldnumber" style="width:20px;" type="text" maxlength="2" name="'.TGlobal::OutHTML($this->name).'_sec"  id="'.TGlobal::OutHTML($this->name).'_sec"  value="'.TGlobal::OutHTML($aFields['seconds'])."\" onchange=\"if(parseInt(this.value)>59) this.value=59;\" /> hh:mm:ss\n";
+        $html .= '<input class="fieldnumber form-control form-control-sm" style="width:20px;" type="text" maxlength="2" name="'.TGlobal::OutHTML($this->name).'_hour" id="'.TGlobal::OutHTML($this->name).'_hour" value="'.TGlobal::OutHTML($aFields['hours'])."\" />:\n";
+        $html .= '<input class="fieldnumber form-control form-control-sm" style="width:20px;" type="text" maxlength="2" name="'.TGlobal::OutHTML($this->name).'_min"  id="'.TGlobal::OutHTML($this->name).'_min"  value="'.TGlobal::OutHTML($aFields['minutes'])."\" onchange=\"if(parseInt(this.value)>59) this.value=59; \" />:\n";
+        $html .= '<input class="fieldnumber form-control form-control-sm" style="width:20px;" type="text" maxlength="2" name="'.TGlobal::OutHTML($this->name).'_sec"  id="'.TGlobal::OutHTML($this->name).'_sec"  value="'.TGlobal::OutHTML($aFields['seconds'])."\" onchange=\"if(parseInt(this.value)>59) this.value=59;\" /> hh:mm:ss\n";
 
         return $html;
     }

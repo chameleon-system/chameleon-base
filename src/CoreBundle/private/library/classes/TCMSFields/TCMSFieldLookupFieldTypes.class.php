@@ -9,49 +9,34 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TCMSFieldLookupFieldTypes extends TCMSFieldLookup
 {
+    /**
+     * @deprecated since 6.3.0 - moved to array fieldHelpTexts
+     *
+     * @var string
+     */
     protected $sFieldHelpTextHTML = '';
+
+    /**
+     * @var string[]
+     */
+    protected $fieldHelpTexts = [];
 
     public function GetHTML()
     {
         $this->GetOptions();
-        $html = "<script type=\"text/javascript\">
-      function showFieldTypeHelp(fieldTypeID) {
-        var fieldID = '#fieldTypeHelp' + fieldTypeID;
-        var helpText = $(fieldID).html();
-        if(helpText == '') {
-          $('#".TGlobal::OutJS($this->name)."helpContainer').html('&nbsp;');
-        } else {
-          $('#".TGlobal::OutJS($this->name)."helpContainer').html(helpText);
-        }
-      }
+        $viewRenderer = $this->getViewRenderer();
+        $viewRenderer->AddSourceObject('fieldName', $this->name);
+        $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
+        $viewRenderer->AddSourceObject('options', $this->options);
+        $viewRenderer->AddSourceObject('allowEmptySelection', false);
+        $viewRenderer->AddSourceObject('connectedRecordId', $this->data);
+        $viewRenderer->AddSourceObject('fieldsHelpText', $this->fieldHelpTexts);
 
-      $(document).ready(function(){
-        showFieldTypeHelp('".$this->data."');
-      });
-
-      </script>";
-
-        $html .= '<div class="row">
-        <div class="col-md-6">
-        <select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name)."\" class=\"form-control input-sm\" onkeyup=\"showFieldTypeHelp(this.options[this.selectedIndex].value)\" onchange=\"showFieldTypeHelp(this.options[this.selectedIndex].value)\">\n";
-        foreach ($this->options as $key => $value) {
-            $selected = '';
-            if (0 == strcmp($this->data, $key)) {
-                $selected = 'selected="selected"';
-            }
-            $html .= '<option value="'.TGlobal::OutHTML($key)."\" {$selected} onmouseover=\"showFieldTypeHelp(this.value)\">".TGlobal::OutHTML($value)."</option>\n";
-        }
-        $html .= '</select>
-        </div>';
-
-        $html .= '<div id="'.TGlobal::OutHTML($this->name)."helpContainer\" class=\"helpText col-md-6\"></div>
-        </div>\n";
-
-        $html .= $this->sFieldHelpTextHTML;
-
-        return $html;
+        return $viewRenderer->Render('TCMSFieldLookup/fieldLookupFieldTypes.html.twig', null, false);
     }
 
     public function GetOptions()
@@ -69,8 +54,12 @@ class TCMSFieldLookupFieldTypes extends TCMSFieldLookup
             if (!empty($name)) {
                 $this->options[$oRow->id] = $oRow->GetName();
             }
-
-            $this->sFieldHelpTextHTML .= '<div id="fieldTypeHelp'.$oRow->id.'" style="display: none;">'.$oRow->GetTextField('help_text').'</div>'."\n";
+            $this->fieldHelpTexts[$oRow->id] = $oRow->GetTextField('help_text');
         }
+    }
+
+    private function getViewRenderer(): ViewRenderer
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }

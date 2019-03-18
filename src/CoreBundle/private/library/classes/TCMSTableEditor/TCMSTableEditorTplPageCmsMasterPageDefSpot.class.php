@@ -40,19 +40,8 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function AddNewRevision_Execute($oFields, $oPostTable, $postData, $sParentId = '')
-    {
-        $oRecordShortInfoData = parent::AddNewRevision_Execute($oFields, $oPostTable, $postData, $sParentId);
-        if (false !== $oRecordShortInfoData) {
-            $this->AddNewRevisionForModuleInstances($oRecordShortInfoData, $postData);
-        }
-
-        return $oRecordShortInfoData;
-    }
-
-    /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * load module from spot and make revisions of the module instance and the connected module tables.
      *
      * @param TCMSRecord $oRecordShortInfoData
@@ -60,19 +49,11 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
      */
     protected function AddNewRevisionForModuleInstances($oRecordShortInfoData, $postDataFromParentRevision)
     {
-        $oCmsTplModuleInstance = $this->oTable->GetFieldCmsTplModuleInstance();
-        if (is_object($oCmsTplModuleInstance) && property_exists($oCmsTplModuleInstance, 'id') && !empty($oCmsTplModuleInstance->id)) {
-            $oCmsTplModule = $oCmsTplModuleInstance->GetFieldCmsTplModule();
-            if (!is_null($oCmsTplModule) && is_object($oCmsTplModule)) {
-                $this->AddNewRevisionModuleInstance($oCmsTplModuleInstance, $postDataFromParentRevision, $oRecordShortInfoData);
-                if ($oCmsTplModule->fieldRevisionManagementActive) {
-                    $this->AddNewRevisionModuleConnectedTables($oCmsTplModule, $oCmsTplModuleInstance, $postDataFromParentRevision, $oRecordShortInfoData);
-                }
-            }
-        }
     }
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * Make new revision from tables connected to given module.
      *
      * @param TdbCmsTplModule         $oCmsTplModule
@@ -82,18 +63,6 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
      */
     protected function AddNewRevisionModuleConnectedTables($oCmsTplModule, $oCmsTplModuleInstance, $postDataFromParentRevision, $oRecordShortInfoData)
     {
-        $oModuleTableConfList = $oCmsTplModule->GetFieldCmsTblConfList();
-        $oModuleConnectedTableEditor = new TCMSTableEditorManager();
-        /** @var $oTableEditor TCMSTableEditorManager */
-        while ($oModuleTableConf = $oModuleTableConfList->Next()) {
-            if ($this->IsRevisonAllowedConnectedTable($oModuleTableConf)) {
-                $oModuleContentRecordList = $this->GetConnectedTableRecords($oModuleTableConf, $oCmsTplModuleInstance);
-                while ($oModuleContentRecord = $oModuleContentRecordList->Next()) {
-                    /** @var $oModuleContentRecord TCMSRecord */
-                    $this->AddNewRevisionModuleConnectedTableRecord($oModuleConnectedTableEditor, $oModuleTableConf, $oModuleContentRecord, $postDataFromParentRevision, $oRecordShortInfoData);
-                }
-            }
-        }
     }
 
     /**
@@ -117,6 +86,8 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * Check if we can make a revision for the given table.
      * Revision is allowed when table field RevisionManagementActive is ture and
      * the value of field name was cms_tpl_module_instance_id.
@@ -127,19 +98,12 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
      */
     protected function IsRevisonAllowedConnectedTable($oModuleTableConf)
     {
-        $bIsRevisionAllowedConnectedTable = false;
-        if ('1' == $oModuleTableConf->fieldRevisionManagementActive) {
-            $query = "SELECT * FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oModuleTableConf->id)."' AND `name` = 'cms_tpl_module_instance_id'";
-            $result = MySqlLegacySupport::getInstance()->query($query);
-            if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
-                $bIsRevisionAllowedConnectedTable = true;
-            }
-        }
-
-        return $bIsRevisionAllowedConnectedTable;
+        return false;
     }
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * Make new revision for given table record.
      *
      * @param TdbCmsTblConf $oModuleTableConf
@@ -149,12 +113,11 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
      */
     protected function AddNewRevisionModuleConnectedTableRecord($oModuleConnectedTableEditor, $oModuleTableConf, $oModuleContentRecord, $postDataFromParentRevision, $oRecordShortInfoData)
     {
-        $oModuleConnectedTableEditor->Init($oModuleTableConf->id, $oModuleContentRecord->id);
-        $oModuleFields = $oModuleTableConf->GetFields($oModuleContentRecord);
-        $oModuleConnectedTableEditor->AddNewRevisionFromDatabase($oModuleFields, $oModuleContentRecord, $postDataFromParentRevision, $oRecordShortInfoData->id);
     }
 
     /**
+     * @deprecated since 6.3.0 - revision management is no longer supported
+     *
      * Make new revision for given module instance.
      *
      * @param TdbCmsTplModuleInstance $oCmsTplModuleInstance
@@ -165,18 +128,7 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
      */
     protected function AddNewRevisionModuleInstance($oCmsTplModuleInstance, $postDataFromParentRevision, $oRecordShortInfoData)
     {
-        $iCmsTplModuleInstanceTableID = TTools::GetCMSTableId('cms_tpl_module_instance');
-        $oCmsTplModuleInstanceTableEditor = new TCMSTableEditorManager();
-        /** @var $oTableEditor TCMSTableEditorManager */
-        $oCmsTplModuleInstanceTableEditor->Init($iCmsTplModuleInstanceTableID, $oCmsTplModuleInstance->id);
-        $oCmsTplModuleInstanceTableConf = $oCmsTplModuleInstance->GetTableConf();
-        /** @var $oPropetyTableConf TCMSTableConf */
-        $oFields = $oCmsTplModuleInstanceTableConf->GetFields($oCmsTplModuleInstance);
-        /** @var $oFields TIterator */
-        $oFields->RemoveItem('name', 'cms_tpl_page_cms_master_pagedef_spot');
-        $bSuccess = $oCmsTplModuleInstanceTableEditor->AddNewRevisionFromDatabase($oFields, $oCmsTplModuleInstance, $postDataFromParentRevision, $oRecordShortInfoData->id);
-
-        return $bSuccess;
+        return false;
     }
 
     /**
