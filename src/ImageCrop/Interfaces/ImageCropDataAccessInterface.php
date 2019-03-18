@@ -77,5 +77,5 @@ interface ImageCropDataAccessInterface
      *
      * @param string $cropId
      */
-    public function deleteCrop($cropId);
+    public function deleteCrop(string $cropId): void;
 }

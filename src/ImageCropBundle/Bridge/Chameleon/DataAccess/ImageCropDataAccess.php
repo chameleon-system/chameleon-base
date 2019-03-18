@@ -214,7 +214,7 @@ class ImageCropDataAccess implements ImageCropDataAccessInterface
     /**
      * {@inheritdoc}
      */
-    public function deleteCrop($cropId)
+    public function deleteCrop(string $cropId): void
     {
         try {
             $this->databaseConnection->delete('cms_image_crop', ['id' => $cropId]);

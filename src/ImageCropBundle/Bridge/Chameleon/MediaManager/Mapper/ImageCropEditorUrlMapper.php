@@ -80,10 +80,7 @@ class ImageCropEditorUrlMapper extends AbstractViewMapper
         return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');
     }
 
-    /**
-     * @return string
-     */
-    private function getDeleteCropUrl()
+    private function getDeleteCropUrl(): string
     {
         $parameters = array(
             'pagedef' => ImageCropEditorModule::PAGEDEF_NAME,
