@@ -846,7 +846,7 @@ class TFullGroupTable extends TGroupTable
             $sGroupSelectorHTML = '<div class="form-group mr-2">
             <label>'.$this->showGroupSelectorText.'</label>';
 
-            $sGroupSelectorHTML .= "<select class=\"form-control form-control-sm\" name=\"{$this->groupByCell->name}\" data-select2-option=\"{}\" onChange=\"document.{$this->listName}._startRecord.value=0; document.{$this->listName}.submit();\" ".$this->style->GetGroupSelector().">\n";
+            $sGroupSelectorHTML .= "<select class=\"form-control form-control-sm submitOnSelect\" name=\"{$this->groupByCell->name}\" data-select2-option=\"{}\" onChange=\"document.{$this->listName}._startRecord.value=0; document.{$this->listName}.submit();\" ".$this->style->GetGroupSelector().">\n";
             // add "show all" option to group selector
             $sGroupSelectorHTML .= '<option value=""';
             if (empty($this->_postData[$this->groupByCell->name])) {
