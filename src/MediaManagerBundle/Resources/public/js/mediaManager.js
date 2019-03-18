@@ -1155,6 +1155,25 @@
                 self.openIframeLayover(CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.crop_window_title') + ' ' + mediaItem.data('name') + ' - ' + $(this).parent().find('.version-name').text(), $(this).attr('href'));
                 evt.preventDefault();
             });
+            $('.delete-version', self.editContainer).on('click', function (evt) {
+                if (true === confirm(CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.delete.are_you_sure'))) {
+                    var mediaItem = $(this).parents('.cms-media-item');
+                    var url = $(this).attr('href');
+                    $.ajax({
+                        type: "POST",
+                        async: true,
+                        url: url,
+                        error: function (responseData) {
+                            self.showErrorFromAjaxResponse();
+                        },
+                        success: function (jsonData) {
+                            self.loadDetailPage(mediaItem.data('id'), mediaItem.data('name'));
+                        },
+                        dataType: 'JSON'
+                    });
+                }
+                evt.preventDefault();
+            });
             $('.delete-item', self.editContainer).on('click', function (evt) {
                 self.confirmDeleteForMediaItemIds([$(this).parents('.cms-media-item').data('id')]);
                 evt.preventDefault();

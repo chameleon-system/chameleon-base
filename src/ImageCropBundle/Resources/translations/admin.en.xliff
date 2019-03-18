@@ -77,6 +77,16 @@
                 <target>Cutouts</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_image_crop.media_manager_crops.delete">
+                <source>chameleon_system_image_crop.media_manager_crops.delete</source>
+                <target>Delete cutout</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.crop_not_deleted">
+                <source>chameleon_system_image_crop.editor.crop_not_deleted</source>
+                <target>Cutout could not be deleted.</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>

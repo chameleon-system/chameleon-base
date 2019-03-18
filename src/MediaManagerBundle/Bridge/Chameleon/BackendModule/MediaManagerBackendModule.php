@@ -12,6 +12,8 @@
 namespace ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule;
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
+use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
+use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -101,6 +103,11 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
      */
     private $mediaManagerExtensionCollection;
 
+    /**
+     * @var ResponseVariableReplacerInterface
+     */
+    private $responseVariableReplacer;
+
     public function __construct(
         MediaTreeDataAccessInterface $mediaTreeDataAccess,
         MediaItemDataAccessInterface $mediaItemDataAccess,
@@ -110,7 +117,8 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         LanguageServiceInterface $languageService,
         MediaManagerListRequestFactoryInterface $mediaManagerListRequestService,
         TranslatorInterface $translator,
-        MediaManagerExtensionCollection $mediaManagerExtensionCollection
+        MediaManagerExtensionCollection $mediaManagerExtensionCollection,
+        ResponseVariableReplacerInterface $responseVariableReplacer
     ) {
         parent::__construct();
         $this->mediaTreeDataAccess = $mediaTreeDataAccess;
@@ -122,6 +130,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->mediaManagerListRequestService = $mediaManagerListRequestService;
         $this->translator = $translator;
         $this->mediaManagerExtensionCollection = $mediaManagerExtensionCollection;
+        $this->responseVariableReplacer = $responseVariableReplacer;
     }
 
     /**
@@ -616,7 +625,14 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         }
 
         $detailReturn = new JavascriptPluginRenderedContent();
-        $detailReturn->contentHtml = $viewRenderer->Render('mediaManager/detail/detail.html.twig');
+
+        $contentHtml = $viewRenderer->Render('mediaManager/detail/detail.html.twig');
+        try {
+            $contentHtml = $this->responseVariableReplacer->replaceVariables($contentHtml);
+        } catch (TokenInjectionFailedException $e) {
+            $this->returnGeneralErrorMessageForAjax();
+        }
+        $detailReturn->contentHtml = $contentHtml;
         $detailReturn->mediaItemName = $mediaItem->getName();
 
         $this->returnAsAjaxResponse($detailReturn);
