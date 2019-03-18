@@ -605,6 +605,7 @@ is recommended (although this tool may not find database-related deprecations).
 - \TCMSFieldLookupFieldTypes::$sFieldHelpTextHTML
 - \TCMSFile::sTypeIcon
 - \TCMSTableEditorChangeLog::$oOldFields
+- \TCMSURLHistory::index
 
 ## Methods
 

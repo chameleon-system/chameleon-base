@@ -264,7 +264,7 @@ class MTTableManager extends TCMSModelBase
         } else {
             $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
 
-            $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->index - 1);
+            $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->getHistoryCount() -1);
         }
 
         $this->controller->HeaderURLRedirect($parentURL);

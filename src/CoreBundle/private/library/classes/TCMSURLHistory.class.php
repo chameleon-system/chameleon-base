@@ -21,7 +21,42 @@ class TCMSURLHistory
      */
     public $aHistory = array();
 
-    public $index = 0;
+    public function __get($name)
+    {
+        if ('index' === $name) {
+            @trigger_error('The property TCMSURLHistory::$index is deprecated.', E_USER_DEPRECATED);
+
+            return $this->getHistoryCount();
+        }
+
+        $trace = debug_backtrace();
+        trigger_error(sprintf('Undefined property via __get(): %s in %s on line %s',
+            $name,
+            $trace[0]['file'],
+            $trace[0]['line']),
+            E_USER_NOTICE);
+
+        return null;
+    }
+
+    public function __set($name, $val)
+    {
+        if ('index' === $name) {
+            @trigger_error('The property TCMSURLHistory::$index is deprecated.', E_USER_DEPRECATED);
+        }
+
+        $trace = debug_backtrace();
+        trigger_error(sprintf('Undefined property via __set(): %s in %s on line %s',
+            $name,
+            $trace[0]['file'],
+            $trace[0]['line']),
+            E_USER_NOTICE);
+    }
+
+    public function __isset($name)
+    {
+        return 'index' === $name;
+    }
 
     /**
      * adds item to the breadcrumb array.
@@ -36,9 +71,6 @@ class TCMSURLHistory
         if (null !== $foundHistoryElementIndex) {
             // element found, so remove it and add the new one at the end.
             $this->removeHistoryElementByIndex($foundHistoryElementIndex);
-        } else {
-            // the history has an internal item count, which needs to be decreased if we don't replace an item.
-            $this->index++;
         }
 
         // add the new item
@@ -78,13 +110,18 @@ class TCMSURLHistory
      */
     public function GetURL()
     {
-        if ($this->index > 0) {
-            $url = $this->aHistory[($this->index - 1)]['url'];
+        $historyCount = $this->getHistoryCount();
 
-            return $url;
+        if ($historyCount > 0 && isset($this->aHistory[$historyCount - 1])) {
+            return $this->aHistory[$historyCount - 1]['url'];
         } else {
             return false;
         }
+    }
+
+    public function getHistoryCount()
+    {
+        return count($this->aHistory);
     }
 
     /**
@@ -94,15 +131,10 @@ class TCMSURLHistory
      */
     public function PopURL()
     {
-        if ($this->index > 0) {
-            $url = $this->GetURL();
-            unset($this->aHistory[($this->index - 1)]);
-            --$this->index;
+        $url = $this->GetURL();
+        array_pop($this->aHistory);
 
-            return $url;
-        } else {
-            return false;
-        }
+        return $url;
     }
 
     /**
@@ -168,8 +200,13 @@ class TCMSURLHistory
      */
     public function Clear($id)
     {
-        $this->index = $id;
-        $endpoint = count($this->aHistory)-1;
+        $historyCount = $this->getHistoryCount();
+
+        if (0 === $historyCount) {
+            return;
+        }
+
+        $endpoint = $historyCount - 1;
         if ($endpoint > 0) {
             for ($i = $endpoint; $i > $id; --$i) {
                 unset($this->aHistory[$i]);
@@ -182,7 +219,6 @@ class TCMSURLHistory
      */
     public function reset()
     {
-        $this->index = 0;
         $this->aHistory = [];
     }
 
@@ -215,12 +251,8 @@ class TCMSURLHistory
      */
     public function paramsParameterExists()
     {
-        if (0 === count($this->aHistory)) {
+        if (0 === $this->getHistoryCount()) {
             return true;
-        }
-
-        if (false === isset($this->aHistory[0])) {
-            $this->aHistory = array_values($this->aHistory); // rearrange elements
         }
 
         return array_key_exists('params', $this->aHistory[0]);
