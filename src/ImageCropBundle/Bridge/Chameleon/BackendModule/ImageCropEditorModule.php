@@ -591,21 +591,30 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         );
     }
 
-    protected function deleteCrop() {
-        try {
-            $cropId = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_CROP_ID);
-            if (null !== $cropId) {
-                $this->imageCropDataAccess->deleteCrop($cropId);
-            }
-        } catch (ImageCropDataAccessException $e) {
-            $return['errorMessage'] = $this->translator->trans(
-                'chameleon_system_image_crop.editor.crop_not_deleted'
-            );
+    protected function deleteCrop()
+    {
+        $cropId = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_CROP_ID);
+        if (null === $cropId) {
+            $return = [
+                'errorMessage' => $this->translator->trans(
+                    'chameleon_system_image_crop.editor.crop_not_deleted'
+                ),
+            ];
             $this->returnAsAjaxError($return);
         }
 
-        $return = [];
-        $this->returnAsAjaxResponse($return);
+        try {
+            $this->imageCropDataAccess->deleteCrop($cropId);
+            $return = [];
+            $this->returnAsAjaxResponse($return);
+        } catch (ImageCropDataAccessException $e) {
+            $return = [
+                'errorMessage' => $this->translator->trans(
+                    'chameleon_system_image_crop.editor.crop_not_deleted'
+                ),
+            ];
+            $this->returnAsAjaxError($return);
+        }
     }
 
     /**
