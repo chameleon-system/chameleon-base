@@ -42,8 +42,15 @@ class TCMSURLHistory
     public function __set($name, $val)
     {
         if ('index' === $name) {
-            throw new \LogicException('Invalid property: '.$name);
+            @trigger_error('The property TCMSURLHistory::$index is deprecated.', E_USER_DEPRECATED);
         }
+
+        $trace = debug_backtrace();
+        trigger_error(sprintf('Undefined property via __set(): %s in %s on line %s',
+            $name,
+            $trace[0]['file'],
+            $trace[0]['line']),
+            E_USER_NOTICE);
     }
 
     public function __isset($name)
