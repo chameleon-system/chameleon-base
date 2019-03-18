@@ -28,11 +28,8 @@
     {% for mediaItem in mediaItems %}
         {# mediaItem \ChameleonSystem\MediaManager\DataModel\MediaItemDataModel #}
         <div class="row pt-2 pb-2 cms-media-item" data-id="{{ mediaItem.id }}" data-name="{{ mediaItem.name }}">
-            <div class="col-2 col-md-1 selection-box">
-                <label class="switch switch-sm switch-label switch-pill switch-secondary">
-                    <input class="switch-input select-row" type="checkbox">
-                    <span class="switch-slider" data-checked="✓" data-unchecked="✕"></span>
-                </label>
+            <div class="col-2 col-md-1 selection-box align-self-center">
+                <input class="select-row" type="checkbox">
             </div>
             <div class="col-10 col-md-11">
                 <div class="row">

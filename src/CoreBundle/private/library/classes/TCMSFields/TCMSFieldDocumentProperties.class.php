@@ -14,8 +14,6 @@ class TCMSFieldDocumentProperties extends TCMSField
     public function GetHTML()
     {
         $oFileType = new TCMSRecord('cms_filetype', $this->oTableRow->sqlData['cms_filetype_id']);
-        $fileTypeIconPath = TGlobal::GetStaticURLToWebLib(URL_FILETYPE_ICONS_LOW_QUALITY.$oFileType->sqlData['file_extension'].'.png');
-
         $fileSize = TCMSDownloadFile::GetHumanReadableFileSize($this->oTableRow->sqlData['filesize']);
 
         $oDownloadItem = new TCMSDownloadFile();
@@ -26,15 +24,19 @@ class TCMSFieldDocumentProperties extends TCMSField
         $sDownloadURL = $oDownloadItem->getBackendDownloadLink(true);
 
         $html = '<input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($this->data).'" />';
-        $html .= '<table border="0" class="table table-sm table-striped">
+
+        $downloadIcon = $oDownloadItem->getDownloadHtmlTag(false, true, true);
+        $html .= '<table class="table table-sm table-striped">
         <tr>
           <td width="60">ID:</td>
           <td>'.$oDownloadItem->id.'</td>
         </tr>
         <tr>
           <td width="60">'.TGlobal::Translate('chameleon_system_core.text.file_type').':</td>
-          <td><img src ="'.$fileTypeIconPath.'" width="16" height="16" style="float: left; margin-right: 10px;" /><div style="float: left;">'.TGlobal::OutHTML($oFileType->GetName()).' (.'.TGlobal::OutHTML($oFileType->sqlData['file_extension']).")</div></td>
+          <td><span class="float-left">'.$downloadIcon.'</span><div class="float-left">'.TGlobal::OutHTML($oFileType->GetName()).' (.'.TGlobal::OutHTML($oFileType->sqlData['file_extension']).")</div></td>
         </tr>\n";
+
+
 
         if (!empty($this->oTableRow->sqlData['hidden_image_width']) && !empty($this->oTableRow->sqlData['hidden_image_height'])) {
             $html .= '<tr>

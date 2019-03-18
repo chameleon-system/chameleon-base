@@ -68,6 +68,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $value = '';
         }
         $this->responseVariableReplacer->addVariable('sidebarDisplayState', $value);
+        $this->responseVariableReplacer->addVariable('sidebarActiveCategory', \TGlobal::OutHTML($this->getActiveCategory()));
     }
 
     /**
@@ -125,8 +126,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             return [];
         }
 
-        $activeCategoryId = $this->getActiveCategory();
-
         $tdbCategoryList = \TdbCmsMenuCategoryList::GetList();
         $tdbCategoryList->ChangeOrderBy([
             '`cms_menu_category`.`position`' => 'ASC',
@@ -150,7 +149,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                     $tdbCategory->id,
                     $tdbCategory->fieldName,
                     $tdbCategory->fieldIconFontCssClass,
-                    $activeCategoryId === $tdbCategory->id,
                     $menuItems
                 );
             }

@@ -3,23 +3,25 @@
   font-family: Arial, helvetica, sans-serif !important;
   color: white !important;
   padding: 3px 3px 3px 23px !important;
+  color: #23282c !important;
 }
 
 .moduleInfo {
   padding: 3px 3px 3px 3px !important;
   font-size: 10px !important;
   font-family: Arial, helvetica, sans-serif !important;
-  background-color: #354C75 !important;
-  color: white !important;
+  background-color: #63c2de !important;
+  color: #23282c !important;
+  border-top: 1px solid #fff;
 }
 
 .moduleInfo strong {
-  color: white !important;
+  color: #23282c !important;
 }
 
 #cmsModuleMenu {
   background: #efefef;
-  border: 1px solid #354C75;
+  border: 1px solid #20a8d8;
   height: 335px;
   left: 300px;
   margin: 0px;
@@ -35,7 +37,7 @@
 }
 
 #cmsModuleMenu .moduleMenuHeader {
-  background: url(/chameleon/blackbox/images/header_bg.gif) #354C75;
+  background-color: #20a8d8;
   color:#FFFFFF;
   cursor:move;
   height:18px;
@@ -44,7 +46,7 @@
   vertical-align:middle;
   width: 227px;
   position:absolute;
-  top:0px;
+  top:0;
 }
 
 #cmsModuleMenu .moduleMenuHeader a {
@@ -70,6 +72,11 @@
   width: 225px;
   height: 288px;
 }
+
+#menuWrapper a, #menuWrapper span {
+  font-size: 11px !important;
+}
+
 #cmsModuleMenu {
   position:realtive;
 }
@@ -80,7 +87,7 @@
 #cmsModuleMenu a.scrolltop, #cmsModuleMenu a.scrollbottom {
   display: block;
   height: 14px;
-  background-color: #99BBF0;
+  background-color: #20a8d8;
   background-image: url(/chameleon/blackbox/images/arrow_top_small.gif);
   background-position: center center;
   background-repeat: no-repeat;
@@ -95,21 +102,21 @@
 
 #cmsModuleMenu a.scrolltop:hover, #cmsModuleMenu a.scrollbottom:hover {
   text-decoration: none;
-  background-color: #C0D9FD;
+  background-color: #63c2de;
 }
 
 #cmsModuleMenu a.scrollbottom {
   background-image: url(/chameleon/blackbox/images/arrow_down_small.gif);
   position:absolute;
-  bottom:0px;
+  bottom:0;
 }
 
 #menuWrapper ul {
   list-style-image:none;
   list-style-position:outside;
   list-style-type:none;
-  margin:0px;
-  padding:0px;
+  margin:0;
+  padding:0;
   display: block;
 }
 
@@ -129,7 +136,7 @@
   color: #000;
   display: block;
   padding: 0px 5px 0px 5px;
-  background-color: #85aeec;
+  background-color: #63c2de;
   text-decoration: none;
   font-family: Arial, helvetica, sans-serif;
 }
@@ -191,7 +198,7 @@
   background: url(/chameleon/blackbox/images/arrow_left_small.gif) no-repeat scroll 98% center;
   background-color: #D2E4FD;
   font-weight: bold;
-  border-bottom: 7px solid #354C75;
+  border-bottom: 5px solid #20a8d8;
   position:relative;
   z-index:100;
 }
@@ -206,7 +213,7 @@
   background: url(/chameleon/blackbox/images/arrow_left_small.gif) no-repeat scroll 98% center;
   background-color: #D2E4FD;
   font-weight: bold;
-  border-bottom: 1px solid #354C75;
+  border-bottom: 1px solid #20a8d8;
 }
 #menuWrapper ul li.active ul li a.expanded span {
   color: #000;
@@ -217,7 +224,7 @@
   background: url(/chameleon/blackbox/images/arrow_left_small.gif) no-repeat scroll 98% center;
   background-color: #D2E4FD;
   font-weight: bold;
-  border-bottom: 7px solid #354C75;
+  border-bottom: 5px solid #20a8d8;
 }
 #menuWrapper ul li.active ul li.active ul li a.expanded span {
   color: #000;
@@ -227,7 +234,7 @@
   background: url(/chameleon/blackbox/images/arrow_left_small.gif) no-repeat scroll 98% center;
   background-color: #D2E4FD;
   font-weight: bold;
-  border-bottom: 7px solid #354C75;
+  border-bottom: 5px solid #20a8d8;
 }
 #menuWrapper ul li.active ul li.active ul li.active ul li a.expanded span {
   color: #000;
@@ -256,7 +263,7 @@ a.cmsModuleMenuLauncher:hover {
   background-color: #e3f1ff;
   text-decoration: none;
   color: #151c55;
-  cursor: arrow;
+  cursor: pointer;
   cursor: hand;
 }
 

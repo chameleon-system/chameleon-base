@@ -48,6 +48,10 @@
     margin-top: 5px;
 }
 
+.select2-results__option.select2-results__message {
+    display: none;
+}
+
 .groupSpacer {
     font-size: 1px;
     background-color: #FFFFFF;

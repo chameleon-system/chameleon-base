@@ -10,12 +10,21 @@
  */
 
 if (!defined('PKG_CMS_CORE_LOG_DEFAULT_MAX_AGE_IN_SECONDS')) {
+    /**
+     * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface in conjunction with Monolog logging instead
+     */
     define('PKG_CMS_CORE_LOG_DEFAULT_MAX_AGE_IN_SECONDS', 2592000);
 }
 if (!defined('PKG_CMS_CORE_LOG_DEFAULT_MAX_AGE_IN_SECONDS_LEVEL_BELOW_WARNING')) {
+    /**
+     * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface in conjunction with Monolog logging instead
+     */
     define('PKG_CMS_CORE_LOG_DEFAULT_MAX_AGE_IN_SECONDS_LEVEL_BELOW_WARNING', 604800); // default to 7 days for notice and below
 }
 
+/**
+ * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface in conjunction with Monolog logging instead
+ */
 class TPkgCmsCoreLogCleanupCronJob extends TdbCmsCronjobs
 {
     protected function _ExecuteCron()

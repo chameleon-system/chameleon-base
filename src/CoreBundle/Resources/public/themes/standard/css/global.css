@@ -10,7 +10,7 @@ iframe {
     border: none;
 }
 
-label, .action {
+label, .action, .card-action {
     cursor: pointer;
     cursor: hand;
 }
@@ -25,49 +25,6 @@ legend {
     padding-left: 5px;
     padding-right: 5px;
     font-size: 11px;
-}
-
-.error, .errorMessage {
-    background-color: #ffcccc;
-    color: #900;
-    border: 2px solid #c00;
-    padding-left: 45px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-weight: bold;
-    font-size: 13px;
-    min-height: 40px;
-    display: block;
-}
-
-.notice, .warningMessage, .noticeMessage, span.invalid, span.missing {
-    background-color: #F8F2AA;
-    color: #0B224B;
-    border: 2px solid #FFB608;
-    padding-left: 45px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-
-    font-weight: bold;
-    font-size: 13px;
-    min-height: 40px;
-    display: block;
-}
-
-div.success, span.success, .successMessage {
-    background-color: #E3F8D8;
-    color: #0B224B;
-    border: 2px solid #217C21;
-    padding-left: 45px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-weight: bold;
-    font-size: 13px;
-    min-height: 40px;
-    display: block;
 }
 
 .cleardiv {
@@ -99,34 +56,6 @@ div.success, span.success, .successMessage {
     line-height: 22px;
     height: 22px;
     text-decoration: none;
-}
-
-.actionButton:hover {
-    background-color: #21618c;
-    color: #fff;
-    border-color: #083c63;
-}
-
-.resizable-textarea textarea {
-    display: block;
-    margin-bottom: 0pt;
-    width: 95%;
-    height: 20%;
-}
-
-.cmsmessage {
-    margin-left: 10px;
-    border: 2px solid #FFB608;
-    padding: 3px;
-    font-size: 12px;
-    color: #0B224B;
-    background-color: #F8F2AA;
-}
-
-.contentbox .evenrow:hover, .contentbox .oddrow:hover, .shadow {
-    -moz-box-shadow: 0 0 4px #666;
-    -webkit-box-shadow: 0 0 4px #666;
-    box-shadow: 0 0 4px #666;
 }
 
 .cmsimage {
@@ -182,16 +111,6 @@ div.success, span.success, .successMessage {
     background-position: left center;
     background-repeat: no-repeat;
     padding: 1px 0px 1px 20px;
-}
-
-#topNavSpacer {
-    padding-top: 50px;
-    line-height: 0px;
-    font-size: 0px;
-}
-
-.tabsContainer {
-    padding-left: 20px;
 }
 
 /**

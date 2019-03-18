@@ -64,6 +64,11 @@ class MediaItemDataModel
     private $systemName = '';
 
     /**
+     * @var string
+     */
+    private $iconHtml = '';
+
+    /**
      * @param string $id
      * @param string $path
      */
@@ -215,5 +220,21 @@ class MediaItemDataModel
     public function setSystemName($systemName)
     {
         $this->systemName = $systemName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIconHtml(): string
+    {
+        return $this->iconHtml;
+    }
+
+    /**
+     * @param string $iconHtml
+     */
+    public function setIconHtml(string $iconHtml): void
+    {
+        $this->iconHtml = $iconHtml;
     }
 }

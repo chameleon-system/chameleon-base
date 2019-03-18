@@ -600,6 +600,45 @@ class TCMSLogChange
         }
     }
 
+    public static function setMainMenuPosition(
+        string $mainMenuCategorySystemName,
+        ?string $afterThisMainMenuCategory = null): void
+    {
+        $databaseConnection = self::getDatabaseConnection();
+
+        $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
+        $sourceMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $mainMenuCategorySystemName));
+
+        if (false === $sourceMenu) {
+            $message = sprintf('Could not place main menu category: %s, because this category is missing.', $mainMenuCategorySystemName);
+            self::addInfoMessage($message, self::INFO_MESSAGE_LEVEL_WARNING);
+
+            return;
+        }
+
+        $newPosition = 0;
+
+        if (null !== $afterThisMainMenuCategory) {
+            $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
+            $targetMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $afterThisMainMenuCategory));
+
+            if (false === $targetMenu) {
+                $message = sprintf('Could not place main menu category: %s, behind %s because the target category is missing.', $mainMenuCategorySystemName, $afterThisMainMenuCategory);
+                self::addInfoMessage($message, self::INFO_MESSAGE_LEVEL_WARNING);
+
+                return;
+            }
+
+            $newPosition = (int)$targetMenu['position'] + 1;
+        }
+
+        $query = 'UPDATE `cms_menu_category` SET `position` = `position`+1 WHERE `position` >= :newPosition';
+        $databaseConnection->executeQuery($query, array('newPosition' => $newPosition));
+
+        $query = 'UPDATE `cms_menu_category` SET `position` = :newPosition WHERE `id` = :sourceId';
+        $databaseConnection->executeQuery($query, array('newPosition' => $newPosition, 'sourceId' => $sourceMenu['id']));
+    }
+
     /**
      * fetches the id of a user role by given identifier e.g. 'chief_editor'.
      *
@@ -1369,7 +1408,7 @@ class TCMSLogChange
 
     /**
      * return id of the content-box with the name passed. return empty string, if the
-     * content box does n.
+     * content box does not exist.
      *
      * @static
      *

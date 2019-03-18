@@ -6,7 +6,7 @@
 $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
 
 if (array_key_exists('sMessage', $data) && !empty($data['sMessage'])) {
-    echo '<div class="errorMessage">'.$data['sMessage'].'</div>';
+    echo '<div class="alert alert-info">'.$data['sMessage'].'</div>';
 }
 
 ?>

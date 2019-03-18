@@ -5,123 +5,123 @@
 </div>
 <?php
 
-// Define menu items in human-readably format (first column is c = custom menu item, t = table menu item, m = module menu item),
+// Define menu items in human-readably format (second column is c = custom menu item, t = table menu item, m = module menu item),
 
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 
 $menuItemDef = <<<EOT
-c Navigation                            contents
-t cms_tpl_page                          contents
-c Media                                 contents
-c Documents                             contents
-t pkg_shop_primary_navi                 contents
-t pkg_cms_text_block                    contents
-t pkg_multi_module_set                  contents
-t pkg_comment                           contents
-t pkg_comment_type                      contents
-t data_contact_topic                    contents
-t shop_article                          products
-t shop_category                         products
-t shop_attribute                        products
-t shop_article_marker                   products
-t shop_article_type                     products
-t shop_article_group                    products
-t shop_variant_set                      products
-t shop_manufacturer                     products
-t pkg_shop_article_preorder             products
-t shop_vat                              products
-t shop_unit_of_measurement              products
-t shop_contributor                      products
-t shop_contributor_type                 products
-t shop_article_document_type            products
-t pkg_shop_listfilter                   productlists
-t shop_module_articlelist_orderby       productlists
-t shop_module_article_list_filter       productlists
-t pkg_shop_listfilter_item_type         productlists
-t shop_voucher_series                   discounts
-t shop_voucher_series_sponsor           discounts
-t shop_discount                         discounts
-t data_extranet_user                    externalusers
-t data_extranet_group                   externalusers
-t data_extranet                         externalusers
-t data_extranet_salutation              externalusers
-t shop_order                            orders
-t shop_order_basket                     orders
-t pkg_shop_payment_transaction_type     orders
-t shop_order_status_code                orders
-t shop_order_step                       checkout
-t shop_wrapping                         checkout
-t shop_wrapping_card                    checkout
-t shop_payment_handler_group            checkout
-t shop_shipping_type                    checkout
-t shop_shipping_group                   checkout
-t shop_shipping_group_handler           checkout
-t data_country                          internationalization
-t cms_locals                            internationalization
-t pkg_shop_currency                     internationalization
-t pkg_shop_rating_service_rating        ratings
-t pkg_shop_rating_service_history       ratings
-t shop_article_review                   ratings
-t pkg_shop_rating_service_widget_config ratings
-t pkg_shop_rating_service               ratings
-t shop_search_cloud_word                search
-m articlesearchindex                    search
-t shop_search_indexer                   search
-t shop_search_query                     search
-m shopstats                             analytics
-t pkg_external_tracker                  analytics
-t pkg_cms_changelog_set                 analytics
-t pkg_shop_statistic_group              analytics
-t shop_order_export_log                 logs
-t shop_search_log                       logs
-t pkg_shop_payment_ipn_message          logs
-t pkg_shop_payment_ipn_message_trigger  logs
-t data_mail_profile                     communication
-t pkg_newsletter_user                   communication
-t pkg_newsletter_robinson               communication
-t pkg_newsletter_group                  communication
-t pkg_newsletter_campaign               communication
-t shop                                  system
-t cms_portal                            system
-t cms_cronjobs                          system
-m sanitycheckbundle                     system
-t cms_migration_counter                 system
-m cmsupdatemanager                      system
-t cms_tpl_module                        system
-t pkg_cms_captcha                       system
-t pkg_cms_counter                       system
-t cms_filetype                          system
-t cms_field_type                        system
-t cms_config                            system
-t cms_content_box                       system
-t cms_menu_category                     system
-t cms_menu_custom_item                  system
-t cms_module                            system
-t cms_tbl_conf                          system
-t pkg_cms_class_manager                 system
-m Interface                             dataexchange
-t cms_interface_manager                 dataexchange
-t cms_export_profiles                   dataexchange
-t pkg_csv2sql                           dataexchange
-t pkg_generic_table_export              dataexchange
-t cms_master_pagedef                    layout
-t pkg_cms_theme                         layout
-t pkg_cms_theme_block                   layout
-t cms_message_manager_message_type      layout
-t shop_variant_display_handler          layout
-t shop_variant_type_handler             layout
-t cms_config_themes                     layout
-t cms_font_image                        layout
-t cms_url_alias                         routing
-t pkg_cms_routing                       routing
-t cms_smart_url_handler                 routing
-t cms_user                              internalusers
-t cms_usergroup                         internalusers
-t cms_role                              internalusers
-t cms_right                             internalusers
-m CMSUserRightsOverview                 internalusers
+base c Navigation                            contents
+base t cms_tpl_page                          contents
+base c Media                                 contents
+base c Documents                             contents
+shop t pkg_shop_primary_navi                 contents
+base t pkg_cms_text_block                    contents
+base t pkg_multi_module_set                  contents
+base t pkg_comment                           contents
+base t pkg_comment_type                      contents
+base t data_contact_topic                    contents
+shop t shop_article                          products
+shop t shop_category                         products
+shop t shop_attribute                        products
+shop t shop_article_marker                   products
+shop t shop_article_type                     products
+shop t shop_article_group                    products
+shop t shop_variant_set                      products
+shop t shop_manufacturer                     products
+shop t pkg_shop_article_preorder             products
+shop t shop_vat                              products
+shop t shop_unit_of_measurement              products
+shop t shop_contributor                      products
+shop t shop_contributor_type                 products
+shop t shop_article_document_type            products
+shop t pkg_shop_listfilter                   productlists
+shop t shop_module_articlelist_orderby       productlists
+shop t shop_module_article_list_filter       productlists
+shop t pkg_shop_listfilter_item_type         productlists
+shop t shop_voucher_series                   discounts
+shop t shop_voucher_series_sponsor           discounts
+shop t shop_discount                         discounts
+base t data_extranet_user                    externalusers
+base t data_extranet_group                   externalusers
+base t data_extranet                         externalusers
+base t data_extranet_salutation              externalusers
+shop t shop_order                            orders
+shop t shop_order_basket                     orders
+shop t pkg_shop_payment_transaction_type     orders
+shop t shop_order_status_code                orders
+shop t shop_order_step                       checkout
+shop t shop_wrapping                         checkout
+shop t shop_wrapping_card                    checkout
+shop t shop_payment_handler_group            checkout
+shop t shop_shipping_type                    checkout
+shop t shop_shipping_group                   checkout
+shop t shop_shipping_group_handler           checkout
+base t data_country                          internationalization
+base t cms_locals                            internationalization
+shop t pkg_shop_currency                     internationalization
+shop t pkg_shop_rating_service_rating        ratings
+shop t pkg_shop_rating_service_history       ratings
+shop t shop_article_review                   ratings
+shop t pkg_shop_rating_service_widget_config ratings
+shop t pkg_shop_rating_service               ratings
+shop t shop_search_cloud_word                search
+shop m articlesearchindex                    search
+shop t shop_search_indexer                   search
+shop t shop_search_query                     search
+shop m shopstats                             analytics
+base t pkg_external_tracker                  analytics
+base t pkg_cms_changelog_set                 analytics
+shop t pkg_shop_statistic_group              analytics
+shop t shop_order_export_log                 logs
+shop t shop_search_log                       logs
+shop t pkg_shop_payment_ipn_message          logs
+shop t pkg_shop_payment_ipn_message_trigger  logs
+base t data_mail_profile                     communication
+base t pkg_newsletter_user                   communication
+base t pkg_newsletter_robinson               communication
+base t pkg_newsletter_group                  communication
+base t pkg_newsletter_campaign               communication
+shop t shop                                  system
+base t cms_portal                            system
+base t cms_cronjobs                          system
+base m sanitycheckbundle                     system
+base t cms_migration_counter                 system
+base m cmsupdatemanager                      system
+base t cms_tpl_module                        system
+base t pkg_cms_captcha                       system
+base t pkg_cms_counter                       system
+base t cms_filetype                          system
+base t cms_field_type                        system
+base t cms_config                            system
+base t cms_content_box                       system
+base t cms_menu_category                     system
+base t cms_menu_custom_item                  system
+base t cms_module                            system
+base t cms_tbl_conf                          system
+base t pkg_cms_class_manager                 system
+base m Interface                             dataexchange
+base t cms_interface_manager                 dataexchange
+base t cms_export_profiles                   dataexchange
+base t pkg_csv2sql                           dataexchange
+base t pkg_generic_table_export              dataexchange
+base t cms_master_pagedef                    layout
+base t pkg_cms_theme                         layout
+base t pkg_cms_theme_block                   layout
+base t cms_message_manager_message_type      layout
+shop t shop_variant_display_handler          layout
+shop t shop_variant_type_handler             layout
+base t cms_config_themes                     layout
+base t cms_font_image                        layout
+base t cms_url_alias                         routing
+base t pkg_cms_routing                       routing
+base t cms_smart_url_handler                 routing
+base t cms_user                              internalusers
+base t cms_usergroup                         internalusers
+base t cms_role                              internalusers
+base t cms_right                             internalusers
+base m CMSUserRightsOverview                 internalusers
 EOT;
 
 $customMenuItemIconFontCssClasses = [
@@ -180,7 +180,7 @@ $fieldTranslationUtil = ServiceLocator::get('chameleon_system_core.util.field_tr
  */
 $languageService = ServiceLocator::get('chameleon_system_core.language_service');
 $nameFieldNameEn = $fieldTranslationUtil->getTranslatedFieldName(
-        'main_menu_custom_item',
+        'cms_menu_custom_item',
         'name',
         $languageService->getLanguageFromIsoCode('en')
 );
@@ -236,14 +236,20 @@ $invalidTableNames = [];
 $invalidModuleNames = [];
 $invalidCustomMenuItemNames = [];
 
+$isShopSystem = \class_exists(TShop::class);
+
 foreach ($menuItemLines as $menuItemLine) {
-    [$type, $identifier, $category] = \preg_split('#\s+#', $menuItemLine);
+    [$systemType, $itemType, $identifier, $category] = \preg_split('#\s+#', $menuItemLine);
+    if (false === $isShopSystem && 'shop' === $systemType) {
+        continue;
+    }
+
     if ($category !== $lastCategory) {
         $position = 0;
         $lastCategory = $category;
     }
     $menuItemId = TCMSLogChange::createUnusedRecordId('cms_menu_item');
-    switch ($type) {
+    switch ($itemType) {
         case 't':
             if (false === \array_key_exists($identifier, $tableList)) {
                 $invalidTableNames[] = $identifier;
@@ -297,7 +303,7 @@ foreach ($menuItemLines as $menuItemLine) {
                 'name' => $customMenuItemData['name'],
                 'target' => $customMenuItemData['id'],
                 'target_table_name' => 'cms_menu_custom_item',
-                'icon_font_css_class' => $customMenuItemIconFontCssClasses[$customMenuItemData['name']],
+                'icon_font_css_class' => $customMenuItemIconFontCssClasses[$customMenuItemData[$nameFieldNameEn]],
                 'position' => $position,
                 'cms_menu_category_id' => $categoryList[$category]['id'],
             ];

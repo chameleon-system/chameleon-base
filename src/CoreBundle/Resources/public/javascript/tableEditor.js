@@ -498,14 +498,17 @@ function SaveViaAjaxCustomCallback(customCallbackFunction, closeAfterSave) {
     document.cmseditform._fnc.value = 'AjaxSave';
 
     PostAjaxForm('cmseditform', eval(customCallbackFunction));
-    if (closeAfterSave == true && typeof parent != 'undefined') parent.setTimeout("parent.CloseModalIFrameDialog()", 3000);
+
+    if (closeAfterSave == true && typeof parent != 'undefined') {
+        parent.setTimeout("parent.CloseModalIFrameDialog()", 3000);
+    }
 }
 
 /*
  * tableEditor: save table single field via ajax
  */
 function SaveFieldViaAjaxCustomCallback(customCallbackFunction) {
-    if (customCallbackFunction == 'undefined') {
+    if ('undefined' === customCallbackFunction) {
         customCallbackFunction = SaveViaAjaxCallback;
     }
 
@@ -568,8 +571,6 @@ function SaveViaAjaxCallback(data, statusText) {
                     // reattach the message binding
                     CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
                 }
-
-
             });
         } else {
             // remove "something changed" message, because now the data was saved
@@ -580,13 +581,10 @@ function SaveViaAjaxCallback(data, statusText) {
             if (data.message && data.message !== '') {
                 toasterMessage(data.message, 'MESSAGE');
             }
-
-            // add saved record to breadcrumb
-            if (data.name && data.name !== '' && document.getElementById('breadcrumbLastNode')) {
-                document.getElementById('breadcrumbLastNode').innerHTML = data.name;
-                sCurrentRecordName = data.name;
-            }
         }
+
+        $('#tableEditorContainer .navbar-brand').html(data.name);
+        $('#cmsbreadcrumb .breadcrumb-item:last').html(data.name);
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_save'), 'ERROR');
     }
@@ -705,11 +703,10 @@ function DeleteRecord() {
 }
 
 CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sConfirmText) {
-    if (sCurrentRecordName != '') {
-        sConfirmText += "\n\n " + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.record') + ": \"" + sCurrentRecordName + '"';
-    } else {
-        sConfirmText += "\n\n " + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.record') + ": \"" + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.unnamed') + '"';
-    }
+    var currentRecordName = $('#tableEditorContainer .navbar-brand').text();
+
+    sConfirmText += "\n\n " + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.record') + ": \"" + currentRecordName + '"';
+
     if (confirm(sConfirmText)) {
         window.onbeforeunload = function () {
         };
@@ -720,7 +717,6 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
 };
 
 CHAMELEON.CORE.MTTableEditor.initTabs = function () {
-    var url = document.URL;
     var hash = window.location.hash;
 
     $('.nav-tabs').find('li a').each(function (key, tabLinkItem) {
@@ -755,6 +751,13 @@ function updateIframeSize(sFieldName, iHeight) {
 }
 
 CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
+    // workaround for tempusdominus bug: https://github.com/tempusdominus/bootstrap-4/issues/123
+    $('*[data-toggle="datetimepicker"]').removeClass('datetimepicker-input');
+
+    $(document).on('toggle change hide keydown keyup', '*[data-toggle="datetimepicker"]', function() {
+        $(this).addClass('datetimepicker-input');
+    });
+
     $('[data-datetimepicker-option]').each(function () {
         $(this).datetimepicker($(this).data('datetimepicker-option'));
     });
@@ -770,10 +773,10 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
                 return;
             }
 
-            if ($(this).hasClass('format-L')) {
-                var cmsDate = moment.format('YYYY-MM-DD');
-            } else {
+            if ($(this).hasClass('format-L') && $(this).hasClass('LTS')) {
                 var cmsDate = moment.format('YYYY-MM-DD HH:mm:ss');
+            } else {
+                var cmsDate = moment.format('YYYY-MM-DD');
             }
             // We need a SQL date format for BC reasons.
             $('input[name=' + id + ']').val(cmsDate);
@@ -783,7 +786,9 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
 
 CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     $('[data-select2-option]').each(function () {
-        $(this).select2($(this).data('select2-option'));
+        var options = $(this).data('select2-option');
+        options.selectOnClose = true;
+        $(this).select2(options);
     });
 
     $('.lookup-container-field-types select').on('select2:select', function (e) {
@@ -802,6 +807,14 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     var quicklookuplist = $('#quicklookuplist');
     quicklookuplist.select2({
         placeholder: quicklookuplist.data('select2-placeholder'),
+        templateResult: function (data, container) {
+            // transfer class to select2 element
+            if (data.cssClass && '' !== data.cssClass) {
+                $(container).addClass(data.cssClass);
+            }
+
+            return data.text;
+        },
         ajax: {
             url: quicklookuplist.data('select2-ajax'),
             dataType: 'json',
@@ -813,7 +826,12 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
         }
     }
     }).on('select2:select', function (e) {
-        var id = e.params.data.id;
+        var id = e.params.data.id.trim();
+
+        if ('' === id) {
+            return;
+        }
+
         switchRecord(id);
     });
 
@@ -871,6 +889,13 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
                 });
             });
         });
+    });
+
+    // catch arrow key keypress on select2 containers to open the select2 pulldown.
+    $('.select2.select2-container').on('keydown', function(e) {
+        if (40 === e.keyCode) {
+            $($(e.target).closest('.select2.select2-container').siblings('select')[0]).select2('open');
+        }
     });
 };
 

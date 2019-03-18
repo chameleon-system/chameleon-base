@@ -43,6 +43,7 @@ class AddGlobalHeadIncludesListener
         $event->addData(array(
             '<script src="'.TGlobal::GetStaticURLToWebLib('/wysiwyg/functions.js').'" type="text/javascript"></script>',
             '<link href="'.TGlobal::GetStaticURLToWebLib('/css/cms_user_style/main.css').'" rel="stylesheet" type="text/css" />',
+            '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fileIconVectors/file-icon-square-o.css').'" rel="stylesheet" type="text/css" />'
         ));
     }
 }
