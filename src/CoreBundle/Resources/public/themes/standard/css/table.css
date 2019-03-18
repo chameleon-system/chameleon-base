@@ -131,6 +131,9 @@
 
 .TCMSListManagerFullGroupTable {
     margin-bottom: 0px;
+    display: block;
+    overflow-x: scroll;
+    white-space: nowrap;
 }
 
 .table-function-bar ul {
