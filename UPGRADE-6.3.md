@@ -233,10 +233,10 @@ monolog:
        type: service
        id: cmsPkgCore.logHandler.database
        channels:
-         - "core_security"
-         - "core_cms_updates"
-         - "core_cronjobs"
-         - "core_api"
+         - "security"
+         - "cms_update"
+         - "cronjob"
+         - "api"
  
      database_for_fingers_crossed:
        type: service
@@ -246,7 +246,7 @@ monolog:
        type: fingers_crossed
        handler: database_for_fingers_crossed
        channels:
-         - "core_standard"
+         - "app"
  
      dbal:
        type: stream
