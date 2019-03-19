@@ -1013,17 +1013,19 @@
 
             self.showWaitingAnimation();
 
-            var iframe = $('<iframe src="' + url + '"></iframe>');
-
             var layover = self.openLayover(title, '');
+            var iframe;
 
             if (typeof height === 'undefined') {
-                height = $('#edit-container').height() - (layover.find('.title').height() - 50);
+                iframe = $('<iframe src="' + url + '" scrolling="no" frameborder="0" onload="this.style.height=(this.contentDocument.body.scrollHeight) +\'px\';"></iframe>');
+                iframe.css({'width': '100%', 'border': 'none'});
+            } else {
+                iframe = $('<iframe src="' + url + '"></iframe>');
+                iframe.css({'width': '100%', 'height': height});
             }
-            iframe.css({'width': '100%', 'height': height}).appendTo(layover);
+            iframe.appendTo(layover);
 
             self.hideWaitingAnimation();
-
             return iframe;
         },
         openLayover: function (title, html) {
