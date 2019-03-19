@@ -263,7 +263,25 @@ menu (which itself is no longer visible by default), assign the tables to the "L
 
 Sidebar menu items are (in contrast to the classic main menu) created independently from tables and backend modules.
 After migration menu items for backend modules might not yet be migrated to new sidebar menu items. Check the backend
-module list to see if modules are missing. 
+module list to see if modules are missing.
+
+If you maintain a third-party bundle that adds new tables, there should be an additional migration script that
+migrates the menu items. This ensures that the bundle can be installed seamlessly even after the project was migrated
+to Chameleon 6.3. The migration script should contain lines as follows:
+
+```php
+TCMSLogChange::requireBundleUpdates('ChameleonSystemCoreBundle', 1549624862);
+
+/**
+ * @var ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator $mainMenuMigrator
+ */
+$mainMenuMigrator = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.service.main_menu_migrator');
+// Add the following line if the bundle adds at least one table in a standard content box 
+$mainMenuMigrator->migrateUnhandledTableMenuItems();
+// Add the following line if the bundle adds at least one custom content box. Adjust the system name accordingly 
+$mainMenuMigrator->migrateContentBox('content_box_system_name');
+
+```
 
 ## New ImageCropBundle
 
