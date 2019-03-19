@@ -276,6 +276,11 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         }
 
         if (null === $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_PRESET_NAME)) {
+            $presetRestriction = $this->getPresetRestriction();
+            if (count($presetRestriction) > 0) {
+                return $presetRestriction[0];
+            }
+
             return null;
         }
 
