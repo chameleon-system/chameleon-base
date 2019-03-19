@@ -46,7 +46,7 @@ The system was successfully tested for compatibility with PHP 7.3.
 
 Cronjobs can now be disabled globally by toggling the new option `Cronjobs enabled` in the CMS settings.
 
-There are also new console commands `chameleon_system:cronjobs:enable` and `chameleon_system:cronjobs:enable` so that
+There are also new console commands `chameleon_system:cronjobs:enable` and `chameleon_system:cronjobs:disable` so that
 enabling and disabling can be performed by console. This can be useful e.g. in deployment scenarios where it is important
 that no cronjob is running in an intermediate system state.
 

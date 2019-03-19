@@ -262,10 +262,11 @@ menu (which itself is no longer visible by default), assign the tables to the "L
 ## Sidebar Menu Items
 
 Sidebar menu items are (in contrast to the classic main menu) created independently from tables and backend modules.
-After migration some menu items that existed in the classic main menu might not yet be migrated to new sidebar menu
-items. Create menu items manually for these tables and modules. 
+After migration menu items for backend modules might not yet be migrated to new sidebar menu items. Check the backend
+module list to see if modules are missing. 
 
-To migrate content boxes as a whole, use the method `migrateTableMenuItemsByOldContentBoxSystemName` of service
+All menu items from standard content boxes will be migrated automatically. Custom content boxes need to be migrated
+manually. Use the method `migrateTableMenuItemsByOldContentBoxSystemName` of service
 `chameleon_system_core.service.main_menu_migrator`.
 
 Menu categories can also be moved by calling the new method `TCMSLogChange::setMainMenuPosition`.
