@@ -98,7 +98,7 @@ class DataMappingServiceTest extends TestCase
         $mockVisitor->SetCurrentRequirements($mockRequirementVisitor->reveal())->shouldBeCalled();
         $mockVisitor->setTransformations(Argument::any())->shouldBeCalled();
         $mockVisitor->setMapToArray(Argument::any())->shouldBeCalled();
-        $mockVisitor->getCacheTriggerCollectedForMapperChainsExecuted()->shouldBeCalled();
+        $mockVisitor->getCacheTriggerCollectedForMapperChainsExecuted()->willReturn([])->shouldBeCalled();
 
         /** @var $mockCacheTrigger \IMapperCacheTrigger|ObjectProphecy */
         $mockCacheTrigger = $this->prophesize('IMapperCacheTrigger');
