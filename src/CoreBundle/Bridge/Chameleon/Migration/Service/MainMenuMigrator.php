@@ -12,6 +12,7 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service;
 
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class MainMenuMigrator
 {
@@ -19,11 +20,6 @@ class MainMenuMigrator
      * @var Connection
      */
     private $databaseConnection;
-
-    /**
-     * @var \TTools
-     */
-    private $tools;
 
     /**
      * @var FieldTranslationUtil
@@ -42,11 +38,9 @@ class MainMenuMigrator
 
     public function __construct(
         Connection $databaseConnection,
-        \TTools $tools,
         FieldTranslationUtil $fieldTranslationUtil)
     {
         $this->databaseConnection = $databaseConnection;
-        $this->tools = $tools;
         $this->fieldTranslationUtil = $fieldTranslationUtil;
 
         $this->initIconMapping();
@@ -55,7 +49,7 @@ class MainMenuMigrator
 
     private function initIconMapping(): void
     {
-        $this->iconMapping = array(
+        $this->iconMapping = [
             'accept.png' => 'fas fa-check-circle',
             'action_refresh.gif' => 'fas fa-sync',
             'action_save.gif' => 'far fa-save',
@@ -203,7 +197,7 @@ class MainMenuMigrator
             'news.png' => 'far fa-newspaper',
             'weather-few-clouds.png' => 'fas fa-cloud-sun',
             'thumbnail.png' => 'fas fa-images',
-        );
+        ];
     }
 
     /**
@@ -221,7 +215,7 @@ class MainMenuMigrator
      */
     private function initMainCategoryMapping(): void
     {
-        $this->mainCategoryMapping = array(
+        $this->mainCategoryMapping = [
             'system_website' => 'contents',
             'shop_article' => 'products',
             'shop_orders' => 'orders',
@@ -237,11 +231,11 @@ class MainMenuMigrator
             'system_logs' => 'logs',
             'shop_article_list_filter' => 'productlists',
             'system_press' => 'contents',
-            'shop_discount_and_vouchers' => 'discounts',
+            'shop_discounts_and_vouchers' => 'discounts',
             'shop_order_process_settings' => 'checkout',
             'routing' => 'routing',
             'system_community' => 'externalusers',
-        );
+        ];
     }
 
     /**
@@ -252,49 +246,86 @@ class MainMenuMigrator
         return $this->mainCategoryMapping;
     }
 
+    /**
+     * Creates new main menu items for all table entries in old content boxes for which no main menu item exists yet.
+     * This method only works for standard content boxes and content boxes provided by $additionalMainCategoryMapping.
+     * It is expected that all required main menu categories already exist when this method is called.
+     *
+     * @param array $additionalMainCategoryMapping Mapping from old content box system names to new main menu category
+     *                                             system names
+     */
     public function migrateUnhandledTableMenuItems(array $additionalMainCategoryMapping = []): void
     {
-        $statement = $this->databaseConnection->executeQuery('SELECT * FROM `cms_content_box` ORDER BY `name` ASC');
+        $contentBoxRows  = $this->databaseConnection->fetchAll('SELECT * FROM `cms_content_box`');
+        $categoryRows = $this->databaseConnection->fetchAll('SELECT * FROM `cms_menu_category`');
+        $categories = [];
+        foreach ($categoryRows as $categoryRow) {
+            $categories[$categoryRow['system_name']] = $categoryRow['id'];
+        }
 
         $mainCategoryMapping = $this->getMainCategoryMapping();
         $mainCategoryMapping = \array_merge($additionalMainCategoryMapping, $mainCategoryMapping);
 
-        while (false !== $row = $statement->fetch()) {
-            if (isset($mainCategoryMapping[$row['system_name']])) {
-                $sidebarCategorySystemName = $mainCategoryMapping[$row['system_name']];
-                $query = 'SELECT `id` FROM `cms_menu_category` WHERE `system_name` = :systemName';
-                $newCategoryId = $this->databaseConnection->fetchColumn($query, ['systemName' => $sidebarCategorySystemName]);
-                $oldContentBoxId = $row['id'];
-
-                $this->createAllUnhandledOldMenuItemsForCategory($oldContentBoxId, $newCategoryId);
-            } else {
-                $newCategoryId = $this->createMenuCategoryFromOldMenuRecord($row);
-                $oldContentBoxId = $row['id'];
-
-                $this->createAllUnhandledOldMenuItemsForCategory($oldContentBoxId, $newCategoryId);
+        foreach ($contentBoxRows as $contentBoxRow) {
+            if (false === isset($mainCategoryMapping[$contentBoxRow['system_name']])) {
+                continue;
             }
+
+            $oldContentBoxId = $contentBoxRow['id'];
+            $newCategorySystemName = $mainCategoryMapping[$contentBoxRow['system_name']];
+            $newCategoryId = $categories[$newCategorySystemName];
+
+            $this->createAllUnhandledOldMenuItemsForCategory($oldContentBoxId, $newCategoryId);
         }
-        $statement->closeCursor();
     }
 
-    public function migrateTableMenuItemsByOldContentBoxSystemName(string $oldContentBoxSystemName): void
+    /**
+     * @throws DBALException
+     */
+    public function migrateUnhandledContentBoxes(): void
+    {
+        $contentBoxRows  = $this->databaseConnection->fetchAll('SELECT * FROM `cms_content_box`');
+        $mainCategoryMapping = $this->getMainCategoryMapping();
+
+        foreach ($contentBoxRows as $contentBoxRow) {
+            $contentBoxSystemName = $contentBoxRow['system_name'];
+            if ('' === $contentBoxSystemName) {
+                continue;
+            }
+            if (true === isset($mainCategoryMapping[$contentBoxSystemName])) {
+                continue;
+            }
+            $this->migrateContentBox($contentBoxSystemName);
+        }
+    }
+
+    /**
+     * Creates a new main menu category with the same name as the content box with $oldContentBoxSystemName and the
+     * same menu items.
+     *
+     * @param string $oldContentBoxSystemName
+     *
+     * @throws DBALException
+     */
+    public function migrateContentBox(string $oldContentBoxSystemName): void
     {
         $query = 'SELECT * FROM `cms_content_box` WHERE `system_name` = :systemName';
         $row = $this->databaseConnection->fetchAssoc($query, array('systemName' => $oldContentBoxSystemName));
+        if (false === $row) {
+            \TCMSLogChange::addInfoMessage(\sprintf('No content box found for system name "%s"', $oldContentBoxSystemName), \TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR);
 
-        $newCategoryId = $this->createMenuCategoryFromOldMenuRecord($row);
+            return;
+        }
+
+        $newCategoryId = $this->createMenuCategoryFromContentBox($row);
         $oldContentBoxId = $row['id'];
 
         $this->createAllUnhandledOldMenuItemsForCategory($oldContentBoxId, $newCategoryId);
     }
 
-    private function createMenuCategoryFromOldMenuRecord(array $row, array $additionalIconMapping = []): string
+    private function createMenuCategoryFromContentBox(array $row, array $additionalIconMapping = []): string
     {
         $systemName = $row['system_name'];
-
-        if ('' === $systemName) {
-            $systemName = $this->tools->sanitizeFilename($row['name']);
-        }
 
         $query = 'SELECT `position` FROM `cms_menu_category` ORDER BY `position` DESC';
         $lastPosition = (int) $this->databaseConnection->fetchColumn($query);
@@ -353,7 +384,7 @@ class MainMenuMigrator
 ";
         $statement = $this->databaseConnection->executeQuery($query, ['contentBoxId' => $oldContentBoxId, '']);
 
-        $position = 0;
+        $position = $this->databaseConnection->fetchColumn('SELECT MAX(`position`) + 1 FROM `cms_menu_item` WHERE `cms_menu_category_id` = ?', [ $newCategoryId ]) ?? 0;
         while (false !== $row = $statement->fetch()) {
             $menuItemId = \TCMSLogChange::createUnusedRecordId('cms_menu_item');
 
