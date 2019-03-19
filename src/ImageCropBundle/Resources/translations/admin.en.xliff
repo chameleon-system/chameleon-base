@@ -72,11 +72,6 @@
                 <target>Image or cutout not found.</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_image_crop.editor.set">
-                <source>chameleon_system_image_crop.editor.set</source>
-                <target>Set selected cutout</target>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_image_crop.media_manager_crops.no_crops_yet">
                 <source>chameleon_system_image_crop.media_manager_crops.no_crops_yet</source>
                 <target>No cutouts yet.</target>

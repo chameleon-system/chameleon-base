@@ -42,12 +42,6 @@
         <button type="submit" class="btn btn-success mr-2 mt-2">
             <span class="fas fa-save"></span> {{ saveButtonTranslationKey | trans({'%savingMode%': savingMode}) }}
         </button>
-
-        {% if enableCallback and existingCrop.id %}
-            <button type="submit" class="btn btn-default mt-2">
-                <span class="fas fa-expand"></span> {{ 'chameleon_system_image_crop.editor.set' | trans }}
-            </button>
-        {% endif %}
     </div>
 
 </form>

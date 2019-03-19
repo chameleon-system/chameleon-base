@@ -72,11 +72,6 @@
                 <target>Bild oder Bildausschnitt nicht gefunden.</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_image_crop.editor.set">
-                <source>chameleon_system_image_crop.editor.set</source>
-                <target>Ausgewählten Ausschnitt setzen</target>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_image_crop.media_manager_crops.no_crops_yet">
                 <source>chameleon_system_image_crop.media_manager_crops.no_crops_yet</source>
                 <target>Noch keine Ausschnitte vorhanden.</target>
