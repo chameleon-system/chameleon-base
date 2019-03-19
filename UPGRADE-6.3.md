@@ -108,7 +108,7 @@ monolog:
       type: stream
       path: "%kernel.logs_dir%/%kernel.environment%.log"
       level: debug
-      channels: ["!event"]
+      channels: ["!event", "!doctrine"]
     # uncomment to get logging in your browser
     # you may have to allow bigger header sizes in your Web server configuration
     #firephp:
@@ -122,6 +122,9 @@ monolog:
       process_psr_3_messages: false
       channels: ["!event", "!doctrine", "!console"]
 ```
+
+This configuration excludes the `doctrine` channel that logs database statements as the system runs a lot of database
+queries in the `dev` environment. Remove the `!doctrine` rule to show these queries.
 
 Add the following lines to `app/config/config_prod.yml`:
 
