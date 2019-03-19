@@ -12,7 +12,7 @@
 class TPkgCmsCoreLayoutPluginManager
 {
     /**
-     * @var null|TModuleLoader
+     * @var TModuleLoader|null
      */
     private $moduleLoader = null;
 

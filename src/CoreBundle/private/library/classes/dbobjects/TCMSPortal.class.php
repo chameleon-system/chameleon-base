@@ -514,7 +514,7 @@ class TCMSPortal extends TCMSRecord
      * @param string              $systemPageName
      * @param TdbCmsLanguage|null $language
      *
-     * @return string|null|bool - returns null or false if no page was found
+     * @return string|bool|null - returns null or false if no page was found
      */
     public function GetSystemPageId($systemPageName, TdbCmsLanguage $language = null)
     {

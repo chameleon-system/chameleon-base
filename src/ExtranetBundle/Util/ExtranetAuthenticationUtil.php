@@ -45,7 +45,7 @@ class ExtranetAuthenticationUtil implements ExtranetAuthenticationUtilInterface
     }
 
     /**
-     * @return null|Request
+     * @return Request|null
      */
     private function getCurrentRequest()
     {

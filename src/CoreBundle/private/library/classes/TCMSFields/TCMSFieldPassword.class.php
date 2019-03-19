@@ -22,7 +22,7 @@ class TCMSFieldPassword extends TCMSFieldVarchar
     public const DEFAULT_MINIMUM_PASSWORD_LENGTH = 6;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $backendLanguageCode;
 
@@ -110,7 +110,7 @@ class TCMSFieldPassword extends TCMSFieldVarchar
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private function getMappedLanguageCodeForStrengthMeterPlugin()
     {

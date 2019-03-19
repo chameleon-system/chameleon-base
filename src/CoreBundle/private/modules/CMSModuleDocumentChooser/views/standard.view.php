@@ -1,1 +1,1 @@
-<?= $data['sTable']; ?>
+<?= $data['sTable'];

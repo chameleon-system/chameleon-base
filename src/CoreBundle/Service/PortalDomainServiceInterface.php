@@ -25,19 +25,19 @@ use TdbCmsTree;
 interface PortalDomainServiceInterface
 {
     /**
-     * @return null|TdbCmsPortalDomains
+     * @return TdbCmsPortalDomains|null
      */
     public function getActiveDomain();
 
     /**
-     * @return null|TdbCmsPortal
+     * @return TdbCmsPortal|null
      */
     public function getActivePortal();
 
     /**
      * Returns the first defined portal.
      *
-     * @return null|TdbCmsPortal
+     * @return TdbCmsPortal|null
      */
     public function getDefaultPortal();
 

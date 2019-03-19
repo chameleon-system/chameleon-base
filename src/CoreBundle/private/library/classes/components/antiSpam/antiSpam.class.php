@@ -42,7 +42,7 @@ class antiSpam
      * @param string|null $sName
      * @param array       $aLinkAttributes
      *
-     * @return null|string
+     * @return string|null
      */
     public function ShowLink($sEmail = null, $sName = null, $aLinkAttributes = array())
     {

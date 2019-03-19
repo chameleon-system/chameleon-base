@@ -161,7 +161,7 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
      *
      * @param string   $sItemId
      * @param string   $sTypeId
-     * @param null|int $iLanguageId
+     * @param int|null $iLanguageId
      *
      * @return TdbPkgCommentList
      */

@@ -264,7 +264,7 @@ class MTTableManager extends TCMSModelBase
         } else {
             $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
 
-            $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->getHistoryCount() -1);
+            $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->getHistoryCount() - 1);
         }
 
         $this->controller->HeaderURLRedirect($parentURL);
@@ -447,7 +447,6 @@ class MTTableManager extends TCMSModelBase
         while ($record = $recordList->Next()) {
             $name = $record->GetName();
             if (!empty($name)) {
-
                 // highlight active record
                 $cssClass = '';
                 if ($record->id == $recordID) {

@@ -2,10 +2,10 @@
 /**
  * @deprecated since 6.3.0 because the module does not exist anymore.
  *
- * @var $updates array
- * @var $deploys array
+ * @var $updates      array
+ * @var $deploys      array
  * @var $logEntryList array
- * @var $logEntry \esono\cmsversioninfo\Commit
+ * @var $logEntry     \esono\cmsversioninfo\Commit
  */
 ?>
 

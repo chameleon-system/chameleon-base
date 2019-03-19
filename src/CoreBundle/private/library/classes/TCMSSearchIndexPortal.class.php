@@ -57,7 +57,7 @@ class TCMSSearchIndexPortal
     private $indexedPages = array();
 
     /**
-     * @var null|array
+     * @var array|null
      */
     private $validPrefixList = null;
 

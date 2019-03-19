@@ -31,7 +31,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use TCMSPageDefinitionFile;
-use TCMSResourceCollection;
 use TGlobal;
 use TModelBase;
 use TModuleLoader;
@@ -134,7 +133,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @var ResponseVariableReplacerInterface
      */
     private $responseVariableReplacer;
-
 
     /**
      * @param RequestStack                 $requestStack

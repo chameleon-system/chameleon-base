@@ -24,7 +24,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      *
      * @param $sEmail
      *
-     * @return null|TdbPkgNewsletterUser
+     * @return TdbPkgNewsletterUser|null
      */
     public static function &GetInstanceForMail($sEmail)
     {
@@ -176,7 +176,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * return a link that can be used to confirm the registration.
      *
-     * @param null|TdbPkgNewsletterModuleSignupConfig $oNewsletterConfig
+     * @param TdbPkgNewsletterModuleSignupConfig|null $oNewsletterConfig
      *
      * @return string
      */
@@ -624,7 +624,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * confirm all of the users confirmations.
      *
-     * @param null|array $aNewData
+     * @param array|null $aNewData
      *
      * @internal param string $sNewsletterId
      *
@@ -1003,7 +1003,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * return TdbPkgNewsletterUser if the email has already been registered otherwise null.
      *
-     * @return null|TdbPkgNewsletterUser
+     * @return TdbPkgNewsletterUser|null
      */
     public function EMailAlreadyRegisteredNew()
     {

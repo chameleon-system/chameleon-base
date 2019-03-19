@@ -81,7 +81,7 @@ class TCMSListManagerCMSUser extends TCMSListManagerFullGroupTable
         $imageTag = '<i class="fas fa-user mr-2"></i>';
 
         $imageId = $row['images'];
-        if (false === is_numeric($imageId) || (int)$imageId >= 1000) {
+        if (false === is_numeric($imageId) || (int) $imageId >= 1000) {
             $image = new TCMSImage();
             if (null !== $image) {
                 $image->Load($imageId);

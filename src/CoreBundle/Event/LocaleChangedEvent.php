@@ -16,17 +16,17 @@ use Symfony\Component\EventDispatcher\Event;
 class LocaleChangedEvent extends Event
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $originalLocal;
     /**
-     * @var null|string
+     * @var string|null
      */
     private $newLocal;
 
     /**
-     * @param null|string $newLocal
-     * @param null|string $originalLocal
+     * @param string|null $newLocal
+     * @param string|null $originalLocal
      */
     public function __construct($newLocal, $originalLocal = null)
     {
@@ -35,7 +35,7 @@ class LocaleChangedEvent extends Event
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getNewLocal()
     {
@@ -43,7 +43,7 @@ class LocaleChangedEvent extends Event
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getOriginalLocal()
     {

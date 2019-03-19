@@ -32,7 +32,7 @@ class TPkgCmsCoreSendToHost
     private $logRequest = false;
 
     /**
-     * @param null|string $sUrl : http[s]://www.my.tld/path?q1=v1&q2=v2...
+     * @param string|null $sUrl : http[s]://www.my.tld/path?q1=v1&q2=v2...
      */
     public function __construct($sUrl = null)
     {
@@ -380,7 +380,7 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getLastRequest()
     {
@@ -388,7 +388,7 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getLastResponseHeader()
     {
@@ -396,7 +396,7 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getLastResponseBody()
     {

@@ -124,7 +124,7 @@ class SystemPageService implements SystemPageServiceInterface
      * @param TdbCmsPortal|null   $portal
      * @param TdbCmsLanguage|null $language
      *
-     * @return null|TdbCmsTree
+     * @return TdbCmsTree|null
      */
     private function getSystemPageTree($systemPageNameInternal, TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
     {

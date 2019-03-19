@@ -152,7 +152,7 @@ class TCMSActivePage extends TdbCmsTplPage
      *
      * @param string $name
      *
-     * @return null|TdbCmsDivision|string|TdbCmsLanguage|TCMSPageBreadcrumb|TGlobalBase
+     * @return TdbCmsDivision|string|TdbCmsLanguage|TCMSPageBreadcrumb|TGlobalBase|null
      */
     public function __get($name)
     {

@@ -944,7 +944,7 @@ class TGlobalBase
     /**
      * @param string $path
      *
-     * @return null|string
+     * @return string|null
      */
     private function resolveBundlePath($path)
     {
@@ -1393,7 +1393,7 @@ class TGlobalBase
     }
 
     /**
-     * @return null|Request
+     * @return Request|null
      */
     private static function getCurrentRequest()
     {

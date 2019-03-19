@@ -27,7 +27,7 @@ class MediaTreeNodeJsonObject
     public $name;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     public $icon;
 
@@ -41,7 +41,7 @@ class MediaTreeNodeJsonObject
      *
      * @param string      $id
      * @param string      $name
-     * @param null|string $icon
+     * @param string|null $icon
      */
     public function __construct($id, $name, $icon = null)
     {

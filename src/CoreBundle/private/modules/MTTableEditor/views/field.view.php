@@ -27,7 +27,7 @@
         <input type="hidden" name="module_fnc[contentmodule]" value="ExecuteAjaxCall"/>
         <?php
         if (null !== $sForeignField) {
-        ?>
+            ?>
             <input type="hidden" name="field" value="<?= TGlobal::OutHTML($sForeignField); ?>"/>
         <?php
         }

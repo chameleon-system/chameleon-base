@@ -40,7 +40,7 @@ class CMSTableExport extends TCMSModelBase
     protected $sTempFilePath = '';
 
     /**
-     * @var null|resource
+     * @var resource|null
      */
     protected $pTempFilePointer = null;
 

@@ -26,7 +26,7 @@ class EntityList implements EntityListInterface
     private $query = null;
 
     /**
-     * @var null|Statement
+     * @var Statement|null
      */
     private $databaseEntityListStatement = null;
 

@@ -14,7 +14,7 @@ use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 
 /**
- * multi linked table field (MLT)
+ * multi linked table field (MLT).
  */
 class TCMSFieldLookupMultiselect extends TCMSMLTField
 {
@@ -183,6 +183,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         $oForeignTableConfig->LoadFromField('name', $sForeignTableName);
         $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(array('_isiniframe' => 'true', 'pagedef' => 'mltfield', 'name' => $this->name, 'sRestriction' => $this->recordId, 'sRestrictionField' => $this->sTableName.'_mlt', 'id' => $oForeignTableConfig->id, 'table' => $this->sTableName, 'recordid' => $this->recordId, 'field' => $this->name,
             ));
+
         return $url;
     }
 
@@ -350,7 +351,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      *
      * @param  $aNewFieldData
      *
-     * @return null|string
+     * @return string|null
      */
     protected function GetConnectedTableNameFromSQLData($aNewFieldData)
     {

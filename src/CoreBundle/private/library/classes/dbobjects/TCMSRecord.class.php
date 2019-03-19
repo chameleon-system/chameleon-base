@@ -80,7 +80,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * sets the state of field based translation overload fallback
      * e.g. if __en field is empty should it return the value from base language de?
      *
-     * @var null|bool
+     * @var bool|null
      */
     private $bFieldBasedTranslationFallbackActive = null;
 
@@ -782,7 +782,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      * @param string $nameColumn
      *
-     * @return null|string
+     * @return string|null
      */
     private function getNameFromQuery($nameColumn)
     {
@@ -1202,7 +1202,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * @param string $sFieldIdName
      * @param bool   $sTableName
      *
-     * @return null|TCMSField
+     * @return TCMSField|null
      */
     protected function GetMLTField($sFieldIdName, $sTableName = false)
     {
@@ -2326,7 +2326,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private function getRequestStateHash()
     {

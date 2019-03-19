@@ -33,12 +33,12 @@ class JavascriptPluginConfigurationState
     public $pageSize = -1;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     public $searchTerm;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     public $listView;
 
@@ -53,7 +53,7 @@ class JavascriptPluginConfigurationState
     public $deleteWithUsageSearch = true;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     public $sortColumn;
 

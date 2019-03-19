@@ -232,7 +232,7 @@ class TCMSTableEditorEndPoint
     /**
      * current edit-on-click fieldname.
      *
-     * @var null|string
+     * @var string|null
      */
     private $activeEditField = null;
 
@@ -603,7 +603,7 @@ class TCMSTableEditorEndPoint
                         $aParameter = array(
                             'pagedef' => $this->getInputFilterUtil()->getFilteredGetInput('pagedef', 'tableeditor'),
                             'id' => $this->oTableConf->id,
-                            'tableid' => $oTableEditorConf->id
+                            'tableid' => $oTableEditorConf->id,
                         );
                         $aAdditionalParams = $this->GetHiddenFieldsHook();
                         if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
@@ -661,7 +661,7 @@ class TCMSTableEditorEndPoint
         $inputFilter = $this->getInputFilterUtil();
 
         $aParameter = array(
-            'pagedef' => $inputFilter->getFilteredGetInput('pagedef','tableeditor'),
+            'pagedef' => $inputFilter->getFilteredGetInput('pagedef', 'tableeditor'),
             'id' => $this->oTable->id,
             'tableid' => $this->oTableConf->id,
             'module_fnc' => array(
@@ -2089,7 +2089,7 @@ class TCMSTableEditorEndPoint
      * @param string $sSourceTableNameFieldId id of the field config
      * @param string $sSourceTableName        source table name
      *
-     * @return null|TCMSField
+     * @return TCMSField|null
      */
     protected function GetConnectedRecordReferenceSourceField($sSourceTableNameFieldId, $sSourceTableName)
     {
@@ -2785,9 +2785,10 @@ class TCMSTableEditorEndPoint
 
     /**
      * change position of current record
-     * currently expects a list of ids to sort via get/post aPosOrder
-
+     * currently expects a list of ids to sort via get/post aPosOrder.
+     *
      * @param string $sPositionField
+     *
      * @return int|null - returns NULL if position of current record did not change
      */
     public function UpdatePositionField($sPositionField)
@@ -2938,7 +2939,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     protected function getActiveEditField()
     {

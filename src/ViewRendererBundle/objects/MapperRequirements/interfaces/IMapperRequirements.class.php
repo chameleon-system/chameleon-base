@@ -23,14 +23,14 @@ interface IMapperRequirements extends IMapperRequirementsRestricted
     /**
      * @param string $key
      *
-     * @return null|string
+     * @return string|null
      */
     public function getSourceObjectType($key);
 
     /**
      * @param string $key
      *
-     * @return null|mixed
+     * @return mixed|null
      */
     public function getSourceObjectDefault($key);
 

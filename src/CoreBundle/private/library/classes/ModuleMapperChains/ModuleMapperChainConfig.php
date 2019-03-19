@@ -102,7 +102,7 @@ class ModuleMapperChainConfig implements ModuleMapperChainConfigInterface
      * @param string $mapperName
      * @param array  $mapperChain
      *
-     * @return null|string
+     * @return string|null
      */
     private function getMapperChainAsString($mapperName, $mapperChain)
     {

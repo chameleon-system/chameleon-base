@@ -173,7 +173,7 @@ class TCMSImageEndpoint
      * @param TCMSFile                $oFile
      * @param string                  $sCmsMediaCategoryId
      * @param string|null             $sDescription
-     * @param null|string             $sPreviewImageId
+     * @param string|null             $sPreviewImageId
      * @param IPkgCmsFileManager|null $filemanager
      *
      * @return TCMSImage

@@ -1429,7 +1429,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     /**
      * @param string $filter
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getSuccessUrlFromRequest($filter = TCMSUserInput::FILTER_URL)
     {
@@ -1439,7 +1439,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     /**
      * @param string $filter
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getFailureUrlFromRequest($filter = TCMSUserInput::FILTER_URL)
     {
@@ -1449,7 +1449,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     /**
      * @param string $filter
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getRedirectToUrlFromRequest($filter = TCMSUserInput::FILTER_URL)
     {
@@ -1460,7 +1460,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      * @param string $name
      * @param string $filter
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getUrlFromRequest($name, $filter = TCMSUserInput::FILTER_URL)
     {

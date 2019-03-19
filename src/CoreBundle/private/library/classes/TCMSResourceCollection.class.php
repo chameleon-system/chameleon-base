@@ -437,7 +437,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
 
     /**
      * @param string      $sType
-     * @param null|string $sFile
+     * @param string|null $sFile
      *
      * @return array
      */

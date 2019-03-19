@@ -27,14 +27,14 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
     /**
      * SEO filename used in outbox folder for symlinks.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $sSEOFileName = null;
 
     /**
      * full SEO URL path to symlink in outbox folder.
      *
-     * @var null|string
+     * @var string|null
      */
     public $fileURL = null;
 
@@ -373,7 +373,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
      * creates a token record and returns the token.
      *
      * @param bool $bCreateTokenWithUserBinding - off by default (adds the current user as token owner, if $oExtranetUser is given, user binding is forced)
-     * @param null|TdbDataExtranetUser if no user object is given the current logged in user is used instead
+     * @param TdbDataExtranetUser|null if no user object is given the current logged in user is used instead
      *
      * @return string
      */
@@ -400,7 +400,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
      * returns an array with post data for save in token database table.
      *
      * @param bool                     $bCreateTokenWithUserBinding
-     * @param null|TdbDataExtranetUser $oExtranetUser
+     * @param TdbDataExtranetUser|null $oExtranetUser
      *
      * @return array
      */

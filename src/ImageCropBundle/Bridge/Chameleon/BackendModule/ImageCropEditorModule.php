@@ -217,7 +217,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @return null|CmsMediaDataModel
+     * @return CmsMediaDataModel|null
      */
     private function getCmsImage()
     {
@@ -372,7 +372,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @param null|ImageCropDataModel $activeCrop
+     * @param ImageCropDataModel|null $activeCrop
      *
      * @return array
      *
@@ -419,7 +419,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @param null|CmsMediaDataModel $cmsImage
+     * @param CmsMediaDataModel|null $cmsImage
      *
      * @return string
      */

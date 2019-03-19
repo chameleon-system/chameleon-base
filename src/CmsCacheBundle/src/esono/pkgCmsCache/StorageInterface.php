@@ -16,7 +16,7 @@ interface StorageInterface
     /**
      * @param $key
      *
-     * @return null|string
+     * @return string|null
      */
     public function get($key);
 

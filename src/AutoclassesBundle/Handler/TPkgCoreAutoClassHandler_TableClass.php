@@ -71,7 +71,7 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
     /**
      * @param string $tableName
      *
-     * @return null|string
+     * @return string|null
      */
     private function getTableConfIdForTableName($tableName)
     {

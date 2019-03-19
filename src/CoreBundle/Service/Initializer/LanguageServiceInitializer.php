@@ -199,7 +199,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
      * @param Request      $request
      * @param TdbCmsPortal $activePortal
      *
-     * @return null|string
+     * @return string|null
      *
      * @throws InvalidLanguageException
      */

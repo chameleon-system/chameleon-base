@@ -21,7 +21,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
     protected $bDeleteAvailableNewsletter = false;
 
     /**
-     * @var null|TdbPkgNewsletterUser
+     * @var TdbPkgNewsletterUser|null
      */
     protected $oNewsletterSignup = null;
 

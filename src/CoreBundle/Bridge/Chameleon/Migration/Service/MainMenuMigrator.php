@@ -256,7 +256,7 @@ class MainMenuMigrator
      */
     public function migrateUnhandledTableMenuItems(array $additionalMainCategoryMapping = []): void
     {
-        $contentBoxRows  = $this->databaseConnection->fetchAll('SELECT * FROM `cms_content_box`');
+        $contentBoxRows = $this->databaseConnection->fetchAll('SELECT * FROM `cms_content_box`');
         $categoryRows = $this->databaseConnection->fetchAll('SELECT * FROM `cms_menu_category`');
         $categories = [];
         foreach ($categoryRows as $categoryRow) {
@@ -284,7 +284,7 @@ class MainMenuMigrator
      */
     public function migrateUnhandledContentBoxes(): void
     {
-        $contentBoxRows  = $this->databaseConnection->fetchAll('SELECT * FROM `cms_content_box`');
+        $contentBoxRows = $this->databaseConnection->fetchAll('SELECT * FROM `cms_content_box`');
         $mainCategoryMapping = $this->getMainCategoryMapping();
 
         foreach ($contentBoxRows as $contentBoxRow) {
@@ -384,7 +384,7 @@ class MainMenuMigrator
 ";
         $statement = $this->databaseConnection->executeQuery($query, ['contentBoxId' => $oldContentBoxId, '']);
 
-        $position = $this->databaseConnection->fetchColumn('SELECT MAX(`position`) + 1 FROM `cms_menu_item` WHERE `cms_menu_category_id` = ?', [ $newCategoryId ]) ?? 0;
+        $position = $this->databaseConnection->fetchColumn('SELECT MAX(`position`) + 1 FROM `cms_menu_item` WHERE `cms_menu_category_id` = ?', [$newCategoryId]) ?? 0;
         while (false !== $row = $statement->fetch()) {
             $menuItemId = \TCMSLogChange::createUnusedRecordId('cms_menu_item');
 

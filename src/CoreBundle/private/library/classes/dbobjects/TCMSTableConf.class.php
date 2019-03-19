@@ -26,7 +26,7 @@ class TCMSTableConf extends TCMSRecord
     /**
      * returns objects that manages the list display.
      *
-     * @param null|string $listClassName
+     * @param string|null $listClassName
      * @param string      $listClassLocation DEPRECATED - default Core
      * @param string      $sListClassPath    DEPRECATED - default TCMSListManager
      *
@@ -335,7 +335,7 @@ class TCMSTableConf extends TCMSRecord
      * which e.g. help texts are displayed, we set it to the current language, independent of the language of the field.
      * Otherwise these texts would be displayed in the current edit language.
      *
-     * @return null|string
+     * @return string|null
      */
     private function getLanguageForDefinition()
     {

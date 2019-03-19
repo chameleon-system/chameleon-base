@@ -20,7 +20,7 @@ interface ICmsObjectLink
      * @param string      $sTableName
      * @param string      $sId
      * @param bool        $bAbsolute  set to true to include the domain in the link
-     * @param null|string $sAnchor
+     * @param string|null $sAnchor
      *
      * @return string
      */

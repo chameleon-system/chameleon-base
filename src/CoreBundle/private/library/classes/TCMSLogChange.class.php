@@ -63,7 +63,7 @@ class TCMSLogChange
      * saves the passed buildNumber associated with the bundle in the database.
      *
      * @param string      $bundleName
-     * @param null|string $sSubFolder   @deprecated since 6.2.0 - no longer used.
+     * @param string|null $sSubFolder   @deprecated since 6.2.0 - no longer used.
      * @param int         $iBuildNumber
      *
      * @deprecated since 6.2.0 - use \ChameleonSystem\DatabaseMigration\Counter\MigrationCounterManagerInterface::markMigrationFileAsProcessed() instead.
@@ -629,7 +629,7 @@ class TCMSLogChange
                 return;
             }
 
-            $newPosition = (int)$targetMenu['position'] + 1;
+            $newPosition = (int) $targetMenu['position'] + 1;
         }
 
         $query = 'UPDATE `cms_menu_category` SET `position` = `position`+1 WHERE `position` >= :newPosition';
@@ -1177,7 +1177,7 @@ class TCMSLogChange
      *
      * @param $language
      *
-     * @return null|string
+     * @return string|null
      */
     private static function getLanguageCodeFromArgument($language)
     {
@@ -1679,7 +1679,7 @@ class TCMSLogChange
     /**
      * @param string      $packageName
      * @param int|string  $iVersion
-     * @param null|string $subFolder   @deprecated since 6.2.0 - no longer used
+     * @param string|null $subFolder   @deprecated since 6.2.0 - no longer used
      * @param string      $vendor
      *
      * @throws TPkgCmsException_Log
@@ -1866,7 +1866,7 @@ class TCMSLogChange
      * @param null   $sPlaceTabAfter  - if null, then tab will be placed last
      * @param null   $sTabId
      *
-     * @return null|string
+     * @return string|null
      */
     public static function addTabToTable(
         $sTableName,

@@ -507,7 +507,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
     }
 
     /**
-     * @return null|Request
+     * @return Request|null
      */
     protected function getRequest()
     {

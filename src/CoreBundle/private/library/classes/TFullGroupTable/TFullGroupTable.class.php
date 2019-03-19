@@ -890,7 +890,7 @@ class TFullGroupTable extends TGroupTable
             $filterContent .= '<div class="form-group mr-2">';
 
             if (true === $this->isAutoCompleteEnabled) {
-                $formatString =  '<select id="searchLookup" name="_search_word" data-listname="%s" class="form-control form-control-sm" data-select2-placeholder="%s" data-select2-ajax="%s" data-record-url="%s">';
+                $formatString = '<select id="searchLookup" name="_search_word" data-listname="%s" class="form-control form-control-sm" data-select2-placeholder="%s" data-select2-ajax="%s" data-record-url="%s">';
                 $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->listName), TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->getRecordAutocompleteUrl()), TGlobal::OutHTML($this->getRecordUrl()));
 
                 if ('' !== $this->_postData['_search_word']) {
@@ -900,7 +900,7 @@ class TFullGroupTable extends TGroupTable
 
                 $filterContent .= '</select>';
             } else {
-                $formatString =  '<input id="searchLookup" name="_search_word" class="form-control form-control-sm" placeholder="%s" value="%s">';
+                $formatString = '<input id="searchLookup" name="_search_word" class="form-control form-control-sm" placeholder="%s" value="%s">';
                 $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->_postData['_search_word']));
             }
 
@@ -950,7 +950,7 @@ class TFullGroupTable extends TGroupTable
             '_fnc' => 'getAutocompleteRecordList',
             'sRestrictionField' => $restrictionField,
             'sRestriction' => $restriction,
-            'recordID' => ''
+            'recordID' => '',
         ], PATH_CMS_CONTROLLER.'?', '&');
 
         return $sAjaxURL;
@@ -966,7 +966,7 @@ class TFullGroupTable extends TGroupTable
             'pagedef' => $pagedef,
             'tableid' => $tableId,
             'sRestriction' => '',
-            'sRestrictionField' => ''
+            'sRestrictionField' => '',
         ], PATH_CMS_CONTROLLER.'?', '&');
 
         return $recordUrl;
@@ -979,6 +979,7 @@ class TFullGroupTable extends TGroupTable
         if ('' !== $customTableEditor) {
             $pagedef = $customTableEditor;
         }
+
         return $pagedef;
     }
 

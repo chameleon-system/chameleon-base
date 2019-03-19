@@ -36,8 +36,6 @@ class TCMSFieldDocumentProperties extends TCMSField
           <td><span class="float-left">'.$downloadIcon.'</span><div class="float-left">'.TGlobal::OutHTML($oFileType->GetName()).' (.'.TGlobal::OutHTML($oFileType->sqlData['file_extension']).")</div></td>
         </tr>\n";
 
-
-
         if (!empty($this->oTableRow->sqlData['hidden_image_width']) && !empty($this->oTableRow->sqlData['hidden_image_height'])) {
             $html .= '<tr>
             <td>'.TGlobal::Translate('chameleon_system_core.text.image_dimensions').':</td>

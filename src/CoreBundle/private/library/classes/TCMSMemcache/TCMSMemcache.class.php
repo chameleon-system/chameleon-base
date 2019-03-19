@@ -16,7 +16,7 @@ class TCMSMemcache
     /**
      * holds memcache instance depending on what is available - for now only memcached.
      *
-     * @var null|Memcached
+     * @var Memcached|null
      */
     protected $oMemcache = null;
 

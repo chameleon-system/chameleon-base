@@ -34,7 +34,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
      *
      * sId defines the record to export or null to export whole list
      *
-     * @param null|string $sId
+     * @param string|null $sId
      * @param bool        $bUtf8Decode
      *
      * @return bool $bSuccess
@@ -79,7 +79,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
      *
      * sId defines the record to export or null to export whole list
      *
-     * @param null|string $sId
+     * @param string|null $sId
      * @param bool        $bUtf8Decode
      */
     public function WriteExportToDownload($sId = null, $bUtf8Decode = false)
@@ -284,7 +284,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
     /**
      * @param $sSystemName
      *
-     * @return null|TdbPkgGenericTableExport
+     * @return TdbPkgGenericTableExport|null
      */
     public static function GetInstanceFromSystemName($sSystemName)
     {

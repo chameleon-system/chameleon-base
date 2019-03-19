@@ -167,8 +167,8 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
     {
         $renderedPaths = '';
         $pathElementList = explode(' ', $paths);
-        foreach($pathElementList as $path) {
-            $path = ltrim($path,'/');
+        foreach ($pathElementList as $path) {
+            $path = ltrim($path, '/');
 
             $treeSubPath = str_replace('/', '</li><li class="breadcrumb-item">', $path);
             $renderedPaths .= sprintf('<ol class="breadcrumb p-1 mb-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li><li class="breadcrumb-item">%s</li></ol>', $treeSubPath);

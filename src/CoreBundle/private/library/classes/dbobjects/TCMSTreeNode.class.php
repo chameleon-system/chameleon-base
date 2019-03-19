@@ -363,7 +363,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      * returns url to the node IF a page is connected to the node.
      *
      * @param bool                $absolute           set to true to include the domain in the link
-     * @param null|string         $anchor
+     * @param string|null         $anchor
      * @param array               $optionalParameters
      * @param TdbCmsPortal|null   $portal
      * @param TdbCmsLanguage|null $language

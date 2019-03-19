@@ -54,7 +54,7 @@ class MediaItemDataModel
     private $altTag;
 
     /**
-     * @var null|\DateTime
+     * @var \DateTime|null
      */
     private $dateChanged;
 
@@ -95,7 +95,7 @@ class MediaItemDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getName()
     {
@@ -103,7 +103,7 @@ class MediaItemDataModel
     }
 
     /**
-     * @param null|string $name
+     * @param string|null $name
      */
     public function setName($name)
     {
@@ -127,7 +127,7 @@ class MediaItemDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getType()
     {
@@ -135,7 +135,7 @@ class MediaItemDataModel
     }
 
     /**
-     * @param null|string $type
+     * @param string|null $type
      */
     public function setType($type)
     {
@@ -175,7 +175,7 @@ class MediaItemDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getAltTag()
     {
@@ -183,7 +183,7 @@ class MediaItemDataModel
     }
 
     /**
-     * @param null|string $altTag
+     * @param string|null $altTag
      */
     public function setAltTag($altTag)
     {

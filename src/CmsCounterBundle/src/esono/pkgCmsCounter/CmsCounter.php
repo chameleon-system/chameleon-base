@@ -31,7 +31,7 @@ class CmsCounter
      * @param \TCMSRecord $owner
      * @param $systemName
      *
-     * @return null|int
+     * @return int|null
      */
     public function getCurrentValue(\TCMSRecord $owner, $systemName)
     {

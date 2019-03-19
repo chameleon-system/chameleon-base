@@ -1950,8 +1950,8 @@ class TTools
      * if no iso country code ($sCountry) or country id ($sCountryId) is passed the country of the active billing address will be used.
      *
      * @param string      $sVatId
-     * @param null|string $sCountry   iso code (2 characters) e.g. de
-     * @param null|string $sCountryId
+     * @param string|null $sCountry   iso code (2 characters) e.g. de
+     * @param string|null $sCountryId
      *
      * @return bool|int
      */

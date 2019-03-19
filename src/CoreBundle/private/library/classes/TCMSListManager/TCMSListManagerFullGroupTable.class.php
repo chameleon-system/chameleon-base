@@ -108,7 +108,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
     protected function isRecordEditPossible(): bool
     {
-        return (null === $this->_GetRecordClickJavaScriptFunctionName());
+        return null === $this->_GetRecordClickJavaScriptFunctionName();
     }
 
     /**

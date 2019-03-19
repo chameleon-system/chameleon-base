@@ -17,7 +17,7 @@ use Doctrine\DBAL\Connection;
 class TCMSSearchIndex
 {
     /**
-     * @var null|Connection
+     * @var Connection|null
      */
     private $databaseConnection = null;
 
@@ -82,7 +82,7 @@ class TCMSSearchIndex
     /**
      * returns formated (human readable) timer difference.
      *
-     * @return null|string
+     * @return string|null
      */
     private function timerGetDiffFormated()
     {

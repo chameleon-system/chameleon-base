@@ -931,7 +931,7 @@ class MTTableEditor extends TCMSModelBase
                 if (false === $parentURL) {
                     $parentURL = URL_CMS_CONTROLLER;
                 } else {
-                    $parentURL .= '&_histid='.($breadcrumb->getHistoryCount() -1);
+                    $parentURL .= '&_histid='.($breadcrumb->getHistoryCount() - 1);
                 }
             }
 

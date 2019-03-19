@@ -147,7 +147,7 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
      * @param FlattenException $exception
      * @param int              $code
      *
-     * @return null|string
+     * @return string|null
      */
     private function getExceptionPageDef(Request $request, FlattenException $exception, $code)
     {

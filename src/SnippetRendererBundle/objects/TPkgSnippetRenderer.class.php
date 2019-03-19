@@ -110,7 +110,7 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
     }
 
     /**
-     * @return null|Twig_Environment
+     * @return Twig_Environment|null
      *
      * @throws ViewRenderException
      */

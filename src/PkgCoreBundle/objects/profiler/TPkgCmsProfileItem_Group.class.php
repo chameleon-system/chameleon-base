@@ -93,7 +93,7 @@ class TPkgCmsProfileItem_Group extends AbstractPkgCmsProfilerItem
     public function getLongest()
     {
         reset($this->children);
-        /** @var null|AbstractPkgCmsProfilerItem $longest */
+        /** @var AbstractPkgCmsProfilerItem|null $longest */
         $longest = null;
         /** @var AbstractPkgCmsProfilerItem $child */
         foreach ($this->children as $child) {

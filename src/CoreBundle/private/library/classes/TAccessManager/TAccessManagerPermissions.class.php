@@ -336,7 +336,7 @@ class TAccessManagerPermissions
      * note we assume that the user is in the same group as the table.
      *
      * @param TAccessManagerUser $oAccessManagerUser
-     * @param string $table_id
+     * @param string             $table_id
      *
      * @return bool
      */

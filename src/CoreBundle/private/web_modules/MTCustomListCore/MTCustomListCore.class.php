@@ -249,8 +249,8 @@ class MTCustomListCore extends TUserCustomModelBase
     }
 
     /**
-     * @param null|string $sCategoryTable
-     * @param null|string $sCategoryNameField
+     * @param string|null $sCategoryTable
+     * @param string|null $sCategoryNameField
      *
      * @return string
      */

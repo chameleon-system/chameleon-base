@@ -14,8 +14,8 @@ use Symfony\Component\Yaml\Yaml;
 class TPkgViewRendererSnippetResourceCollectorEndPoint
 {
     /**
-     * @param null|TdbCmsPortal $oPortal
-     * @param null|string       $snippetPath - the base path (snippets/snippets-cms)
+     * @param TdbCmsPortal|null $oPortal
+     * @param string|null       $snippetPath - the base path (snippets/snippets-cms)
      *
      * @return array
      */

@@ -251,7 +251,7 @@ class MTHeader extends TCMSModelBase
     }
 
     /**
-     * @return null|TdbCmsPortalList
+     * @return TdbCmsPortalList|null
      */
     protected function GetPortalList()
     {
@@ -556,7 +556,7 @@ class MTHeader extends TCMSModelBase
     /**
      * adds a counter (inserts a new record).
      *
-     * @param null|string $sSystemName
+     * @param string|null $sSystemName
      * @param string      $sName
      * @param int         $iValue
      *
