@@ -880,7 +880,6 @@
 
         <service id="chameleon_system_core.service.main_menu_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator">
             <argument id="database_connection" type="service"/>
-            <argument id="chameleon_system_core.tools" type="service"/>
             <argument id="chameleon_system_core.util.field_translation" type="service"/>
         </service>
     </services>

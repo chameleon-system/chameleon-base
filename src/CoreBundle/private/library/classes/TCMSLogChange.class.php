@@ -1449,6 +1449,8 @@ class TCMSLogChange
      * @param string $sSystemName of the content box
      *
      * @return string content box id OR empty string
+     *
+     * @deprecated since 6.3.0 - only used for deprecated classic main menu
      */
     public static function getCmsContentBoxIdFromSystemName($sSystemName)
     {

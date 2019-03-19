@@ -265,12 +265,6 @@ Sidebar menu items are (in contrast to the classic main menu) created independen
 After migration menu items for backend modules might not yet be migrated to new sidebar menu items. Check the backend
 module list to see if modules are missing. 
 
-All menu items from standard content boxes will be migrated automatically. Custom content boxes need to be migrated
-manually. Use the method `migrateTableMenuItemsByOldContentBoxSystemName` of service
-`chameleon_system_core.service.main_menu_migrator`.
-
-Menu categories can also be moved by calling the new method `TCMSLogChange::setMainMenuPosition`.
-
 ## New ImageCropBundle
 
 Chameleon now ships with a bundle that provides support for image cutouts. Install it as follows (this is required if
@@ -663,6 +657,7 @@ Three newly defined log channels are deprecated and only necessary for backwards
 - \TCMSDownloadFileEndPoint::GetDownloadLink()
 - \TCMSFieldColorPicker::isFirstInstance()
 - \TCMSFieldLookup::enableComboBox()
+- \TCMSLogChange::getCmsContentBoxIdFromSystemName()
 - \TCMSLogChange::getUpdateLogger()
 - \TCMSTreeNode::GetPageTreeConnectionDateInformationHTML()
 - \TGlobal::GetURLHistory()
