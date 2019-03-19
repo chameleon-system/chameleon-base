@@ -19,12 +19,22 @@
 
             <trans-unit id="chameleon_system_image_crop.editor.save">
                 <source>chameleon_system_image_crop.editor.save</source>
-                <target>Save</target>
+                <target>Save (%savingMode%)</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_image_crop.editor.save_and_select">
-                <source>chameleon_system_image_crop.editor.save_and_select</source>
-                <target>Save and set cutout</target>
+            <trans-unit id="chameleon_system_image_crop.editor.save_and_set">
+                <source>chameleon_system_image_crop.editor.save_and_set</source>
+                <target>Save (%savingMode%) and set cutout</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.saving_mode.update_existing">
+                <source>chameleon_system_image_crop.editor.saving_mode.update_existing</source>
+                <target>update existing</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.saving_mode.create_new">
+                <source>chameleon_system_image_crop.editor.saving_mode.create_new</source>
+                <target>create new</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.editor.crop_name_placeholder">

@@ -30,12 +30,17 @@
         <input type="text" name="name" value="{{ existingCrop.name }}" class="form-control mr-2 mt-2 crop-name"
                placeholder="{{ placeholderTranslationsKey | trans }}"{% if not aspectRatio %} required{% endif %}>
 
+        {% set savingMode = 'chameleon_system_image_crop.editor.saving_mode.create_new' | trans %}
+        {% if existingCrop.id %}
+            {% set savingMode = 'chameleon_system_image_crop.editor.saving_mode.update_existing' | trans %}
+        {% endif %}
+
         {% set saveButtonTranslationKey = 'chameleon_system_image_crop.editor.save' %}
         {% if enableCallback %}
-            {% set saveButtonTranslationKey = 'chameleon_system_image_crop.editor.save_and_select' %}
+            {% set saveButtonTranslationKey = saveButtonTranslationKey ~ '_and_set' %}
         {% endif %}
         <button type="submit" class="btn btn-success mr-2 mt-2">
-            <span class="fas fa-save"></span> {{ saveButtonTranslationKey | trans }}
+            <span class="fas fa-save"></span> {{ saveButtonTranslationKey | trans({'%savingMode%': savingMode}) }}
         </button>
 
         {% if enableCallback and existingCrop.id %}
