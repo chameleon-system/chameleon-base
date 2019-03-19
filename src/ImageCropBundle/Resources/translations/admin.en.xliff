@@ -22,8 +22,18 @@
                 <target>Save</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_image_crop.editor.save_and_select">
+                <source>chameleon_system_image_crop.editor.save_and_select</source>
+                <target>Save and set cutout</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_image_crop.editor.crop_name_placeholder">
                 <source>chameleon_system_image_crop.editor.crop_name_placeholder</source>
+                <target>Enter name (optional)</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.crop_name_placeholder_custom_size">
+                <source>chameleon_system_image_crop.editor.crop_name_placeholder_custom_size</source>
                 <target>Enter name</target>
             </trans-unit>
 
@@ -52,9 +62,9 @@
                 <target>Image or cutout not found.</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_image_crop.editor.select">
-                <source>chameleon_system_image_crop.editor.select</source>
-                <target>Select</target>
+            <trans-unit id="chameleon_system_image_crop.editor.set">
+                <source>chameleon_system_image_crop.editor.set</source>
+                <target>Set selected cutout</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.media_manager_crops.no_crops_yet">

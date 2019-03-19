@@ -17,13 +17,18 @@
                 <target>Bildausschnitt: %cropName%</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_image_crop.editor.save">
-                <source>chameleon_system_image_crop.editor.save</source>
-                <target>Speichern</target>
+            <trans-unit id="chameleon_system_image_crop.editor.save_and_select">
+                <source>chameleon_system_image_crop.editor.save_and_select</source>
+                <target>Ausschnitt speichern und setzen</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.editor.crop_name_placeholder">
                 <source>chameleon_system_image_crop.editor.crop_name_placeholder</source>
+                <target>Name vergeben (optional)</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.crop_name_placeholder_custom_size">
+                <source>chameleon_system_image_crop.editor.crop_name_placeholder_custom_size</source>
                 <target>Name vergeben</target>
             </trans-unit>
 
@@ -52,9 +57,9 @@
                 <target>Bild oder Bildausschnitt nicht gefunden.</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_image_crop.editor.select">
-                <source>chameleon_system_image_crop.editor.select</source>
-                <target>Auswählen</target>
+            <trans-unit id="chameleon_system_image_crop.editor.set">
+                <source>chameleon_system_image_crop.editor.set</source>
+                <target>Ausgewählten Ausschnitt setzen</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.media_manager_crops.no_crops_yet">
