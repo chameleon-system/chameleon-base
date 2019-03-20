@@ -49,12 +49,13 @@ We now use the DoctrineBundle. While we do not use many of its features yet (esp
 the database connection is now handled by Doctrine. In practice the most noticeable difference is that the connection
 is opened lazily, so that some console commands can now be executed without a working database connection.
 
-Add the DoctrineBundle to the AppKernel:
+Add the DoctrineBundle and the DoctrineCacheBundle to the AppKernel:
 
 ```php
     $bundles = array(
     ...
     new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+    new \Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
     ...
     );
 ```
