@@ -39,11 +39,6 @@ legend {
     height: 20px;
 }
 
-/* jquery.flash alt Text */
-.flash-replaced .alt {
-    display: none;
-}
-
 .actionButton, .actionButton:hover {
     background-color: #e7f3ff;
     background-image: url(../images/icons/action_go.gif);

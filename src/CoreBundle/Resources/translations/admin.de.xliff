@@ -2463,11 +2463,6 @@
                 <source>chameleon_system_core.table_editor_media.error_invalid_format</source>
                 <target>Die Datei hat ein nicht unterstütztes Dateiformat</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.table_editor_media.error_invalid_flv">
-                <source>chameleon_system_core.table_editor_media.error_invalid_flv</source>
-                <target>Die FLV Datei ist defekt oder der Codec wird nicht unterstützt</target>
-                <note>@deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.</note>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_media.error_permission_target_folder">
                 <source>chameleon_system_core.table_editor_media.error_permission_target_folder</source>
                 <target>Die Datei konnte nicht in das Zielverzeichnis verschoben werden. Überprüfen Sie die Berechtigungen des Zielverzeichnisses</target>

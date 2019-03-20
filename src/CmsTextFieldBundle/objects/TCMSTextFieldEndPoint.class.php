@@ -197,7 +197,7 @@ class TCMSTextFieldEndPoint
      * @param bool  $includeClearDiv  - include a clear div at the end of the text block (is false by default)
      * @param array $aCustomVariables - any custom variables you want to replace
      * @param bool  $bClearThickBox   - remove all a href with class thickbox
-     * @param bool  $bClearScriptTags - clear all script tags and show only preview image of flv videos
+     * @param bool  $bClearScriptTags - clear all script tags
      *
      * @return string
      */
@@ -619,27 +619,7 @@ class TCMSTextFieldEndPoint
      */
     protected function _RemoveScriptTags($content)
     {
-        $replaceString = '/<script([^>]+?)>(.*?)<\\/script>/si';
-        $content = preg_replace($replaceString, '', $content);
-        $galleryMatchString = "/<div[^>]+?id=['\"]*?flashContainer*?[^>]+?url\((.*?)\)[^>]+?>.*?<\\/div>/usi";
-        $content = preg_replace_callback($galleryMatchString, array($this, '_callback_cmstextfield_image_flv_parser'), $content);
-
-        return $content;
-    }
-
-    /**
-     * @param array $aMatch
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    protected function _callback_cmstextfield_image_flv_parser($aMatch)
-    {
-        $sImgUrl = $aMatch[1];
-        $returnString = '<img src="'.$sImgUrl.'" alt="" />';
-
-        return $returnString;
+        return preg_replace('/<script([^>]+?)>(.*?)<\\/script>/si', '', $content);
     }
 
     /**
@@ -961,47 +941,31 @@ class TCMSTextFieldEndPoint
                     '.$returnString."<figcaption class=\"cssmediacaption\">{$tags['cmscaption']}</figcaption></figure>";
                 }
             } else {
-                $sImageType = $oImage->GetImageType();
+                $sFullImageURL = $this->GetFullImagePath($oImage, $tags);
 
-                switch ($sImageType) {
-                    case 'flv':
-                    case 'f4v':
-                        $returnString = $oImage->GetThumbnailTag($tags['width'], $tags['height'], null, null, '');
-                        if (1 == $tags['cmsshowcaption']) {
-                            $returnString = "<figure class=\"cssmedia cmsflv {$tags['class']}\" style=\"".$sStyles.'">
-                            '.$returnString."<figcaption class=\"cssmediacaption\">{$tags['cmscaption']}</figcaption></figure>";
+                $oViewRender = $this->getViewRenderer();
+                $oViewRender->AddMapper(new TPkgCmsTextfieldImage());
+                $oViewRender->AddSourceObject('oImage', $oImage); // full image (not resized yet)
+                $oViewRender->AddSourceObject('sFullImageURL', $sFullImageURL);
+                $oViewRender->AddSourceObject('sImageGroupName', $this->sImageGroupName);
+                $oViewRender->AddSourceObject('iThumbnailSizeThreshold', $this->iThumbnailSizeThreshold);
+                $oViewRender->AddSourceObject('aEffects', $this->aEffects);
+                $oViewRender->AddSourceObject('fromWYSIWYG', true);
+                $oViewRender->AddSourceObject('isForceThumbnailGenerationOnFullSizeImagesEnabled', $this->isForceThumbnailGenerationOnFullSizeImagesEnabled());
+
+                $sImageTagTemplatePath = '/common/media/pkgCmsTextFieldImage.html.twig';
+                if (true === $this->isResponsiveImagesEnabled() && true === $this->isImageBiggerThanMobileScreenSize($oImage) && true === $this->isBiggerThanMobileScreenSize($tags['width'])) {
+                    $sImageTagTemplatePath = '/common/media/pkgCmsTextFieldImageResponsive.html.twig';
+
+                    if (isset($tags['class'])) {
+                        if (stristr($tags['class'], 'img-responsive')) {
+                            $tags['class'] = trim(str_replace('img-responsive', '', $tags['class']));
                         }
-
-                        break;
-                    default:
-                        $sFullImageURL = $this->GetFullImagePath($oImage, $tags);
-
-                        $oViewRender = $this->getViewRenderer();
-                        $oViewRender->AddMapper(new TPkgCmsTextfieldImage());
-                        $oViewRender->AddSourceObject('oImage', $oImage); // full image (not resized yet)
-                        $oViewRender->AddSourceObject('sFullImageURL', $sFullImageURL);
-                        $oViewRender->AddSourceObject('sImageGroupName', $this->sImageGroupName);
-                        $oViewRender->AddSourceObject('iThumbnailSizeThreshold', $this->iThumbnailSizeThreshold);
-                        $oViewRender->AddSourceObject('aEffects', $this->aEffects);
-                        $oViewRender->AddSourceObject('fromWYSIWYG', true);
-                        $oViewRender->AddSourceObject('isForceThumbnailGenerationOnFullSizeImagesEnabled', $this->isForceThumbnailGenerationOnFullSizeImagesEnabled());
-
-                        $sImageTagTemplatePath = '/common/media/pkgCmsTextFieldImage.html.twig';
-                        if (true === $this->isResponsiveImagesEnabled() && true === $this->isImageBiggerThanMobileScreenSize($oImage) && true === $this->isBiggerThanMobileScreenSize($tags['width'])) {
-                            $sImageTagTemplatePath = '/common/media/pkgCmsTextFieldImageResponsive.html.twig';
-
-                            if (isset($tags['class'])) {
-                                if (stristr($tags['class'], 'img-responsive')) {
-                                    $tags['class'] = trim(str_replace('img-responsive', '', $tags['class']));
-                                }
-                            }
-                        }
-
-                        $oViewRender->AddSourceObject('aTagProperties', $tags);
-                        $returnString = $oViewRender->Render($sImageTagTemplatePath);
-
-                        break;
+                    }
                 }
+
+                $oViewRender->AddSourceObject('aTagProperties', $tags);
+                $returnString = $oViewRender->Render($sImageTagTemplatePath);
             }
             $returnString = $this->PostImageWraper($returnString, $sStyles, $tags['align'], $tags['width'], $tags['height'], $tags['border']);
         }

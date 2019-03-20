@@ -106,7 +106,7 @@ class TCMSListManagerWYSIWYGImage extends TCMSListManagerImagedatabase
     }
 
     /**
-     *  Add media filter for flash videos and images that be got from URL.
+     *  Add media filter for images that be got from URL.
      *
      * @param string $query
      *

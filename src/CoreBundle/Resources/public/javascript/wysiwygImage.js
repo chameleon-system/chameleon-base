@@ -32,15 +32,6 @@ function selectImageResponse(data, responseMessage) {
                 element.setValue(data['image'].aData['id']);
             }
 
-            // set width and height manually for swf files
-            if (data['file_type'] == 'swf') {
-                element = dialog.getContentElement('info', 'width');
-                element.setValue(data['image'].aData['width']);
-
-                element = dialog.getContentElement('info', 'height');
-                element.setValue(data['image'].aData['height']);
-            }
-
             window.close();
         });
     }
