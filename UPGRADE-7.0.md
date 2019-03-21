@@ -18,10 +18,36 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Classes and Interfaces
 
+- AbstractPkgCmsProfilerItem
+- CMSMediaViddlerImport
+- IClusterDriver
+- ICmsObjectLink
+- IMapperCacheManager
+- IMapperCacheManagerRestricted
+- IPkgCmsEventObservable
+- IPkgCmsServerSetupValidator
+- IPkgCmsServerSetupValidatorMessage
+- IPkgCoreDbClassFactory
+- MapperCacheManager
+- MapperCacheManagerException
+- MapperCacheManagerExceptionContentNotFound
+- MapperCacheManagerRestrictedProxy
 - TCacheManagerStorage_Decorator
 - TCacheManagerStorage_Decorator_LazyWriteMemcache
 - TCacheManagerStorage_Standard
+- TCMSDataExtranetUser
+- TCMSMath
+- TCmsObjectLinkBase
+- TCmsObjectLinkException_InvalidTargetClass
 - TPkgCmsClassManager_CmsConfig
+- TPkgCmsCore
+- TPkgCmsProfileItem_Group
+- TPkgCmsProfileItem_Tick
+- TPkgCmsProfiler
+- TPkgCmsServerSetupValidator_PHPVersion
+- TPkgCmsServerSetupValidatorManager
+- TPkgCmsServerSetupValidatorMessage
+- TPkgCmsSessionHandler_Decorator_Observable
 
 ## Properties
 
@@ -30,6 +56,7 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Methods
 
+- IPkgCmsFileManager::setDriver()
 - TCMSActivePage::GetActiveLanguage()
 - TCMSActivePage::GetActiveLanguageObject()
 - TCMSActivePage::GetInstanceWithoutCache()
