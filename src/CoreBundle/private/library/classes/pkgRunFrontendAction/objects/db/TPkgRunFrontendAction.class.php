@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
 {
     const TIMEOUT_IN_SECONDS = 60;
@@ -70,7 +73,7 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
             if (null !== $sPortalId) {
                 $aData['cms_portal_id'] = $sPortalId;
             } else {
-                $oPortal = TTools::GetActivePortal();
+                $oPortal = self::getPortalDomainService()->getActivePortal();
                 if ($oPortal) {
                     $aData['cms_portal_id'] = $oPortal->id;
                 }
@@ -124,5 +127,10 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
         $sUrl .= TdbPkgRunFrontendAction::URL_IDENTIFIER.$this->fieldRandomKey;
 
         return $sUrl;
+    }
+
+    private static function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

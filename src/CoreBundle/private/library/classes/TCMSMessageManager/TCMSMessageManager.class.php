@@ -12,6 +12,8 @@
 use ChameleonSystem\CoreBundle\EventListener\AddBackendToasterMessageListener;
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -56,7 +58,7 @@ class TCMSMessageManager
     public static function GetInstance($bReload = false)
     {
         $oInstance = null;
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ServiceLocator::get('request_stack')->getCurrentRequest();
         if ((null === $request) || (false === $request->getSession()->isStarted())) {
             return null;
         }
@@ -96,7 +98,7 @@ class TCMSMessageManager
         if (TGlobal::IsCMSMode()) {
             $this->AddBackendMessage($sConsumerName, $sMessageCode, $aMessageCodeParameters);
         } else {
-            $iPortalId = TTools::GetActivePortal()->id;
+            $iPortalId = $this->getPortalDomainService()->getActivePortal()->id;
 
             /** @var $oMessage TdbCmsMessageManagerMessage */
             $oMessage = TdbCmsMessageManagerMessage::GetNewInstance();
@@ -464,7 +466,12 @@ class TCMSMessageManager
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
+    }
+
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -472,7 +479,7 @@ class TCMSMessageManager
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
     }
 
     /**
@@ -480,6 +487,6 @@ class TCMSMessageManager
      */
     private function getEventDispatcher()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('event_dispatcher');
+        return ServiceLocator::get('event_dispatcher');
     }
 }
