@@ -167,7 +167,7 @@ class TCMSListManagerDocumentManagerSelected extends TCMSListManagerFullGroupTab
         $oFile = new TCMSDownloadFile();
         /** @var $oFile TCMSDownloadFile */
         $oFile->Load($row['id']);
-        $sDownloadLink = $oFile->GetDownloadLink(false, true, true);
+        $sDownloadLink = $oFile->getDownloadHtmlTag(false, true, true);
 
         return $sDownloadLink;
     }

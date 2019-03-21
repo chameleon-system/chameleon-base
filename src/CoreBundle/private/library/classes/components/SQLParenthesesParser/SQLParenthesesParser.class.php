@@ -14,12 +14,12 @@ class SQLParenthesesParser
     /**
      * level based string part stack.
      *
-     * @var null|array
+     * @var array|null
      */
     protected $aStack = null;
 
     /**
-     * @var null|array
+     * @var array|null
      */
     protected $current = null;
 

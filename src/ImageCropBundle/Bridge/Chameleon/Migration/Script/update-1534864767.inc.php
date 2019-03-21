@@ -5,7 +5,7 @@
 </div>
 <?php
 
-$query = "ALTER TABLE `cms_image_crop_preset` DROP INDEX `system_name`";
+$query = 'ALTER TABLE `cms_image_crop_preset` DROP INDEX `system_name`';
 TCMSLogChange::RunQuery(__LINE__, $query);
 
 $fieldId = TCMSLogChange::GetTableFieldId(TCMSLogChange::GetTableId('cms_image_crop_preset'), 'system_name');
@@ -23,7 +23,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     );
 TCMSLogChange::update(__LINE__, $data);
 
-$query = "ALTER TABLE `cms_image_crop_preset` ADD UNIQUE ( `system_name` )";
+$query = 'ALTER TABLE `cms_image_crop_preset` ADD UNIQUE ( `system_name` )';
 TCMSLogChange::RunQuery(__LINE__, $query);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')

@@ -6,6 +6,3 @@ $moduleList = [
 ];
 
 addDefaultPageTitle($moduleList);
-addDefaultHeader($moduleList);
-addDefaultBreadcrumb($moduleList);
-addDefaultSidebar($moduleList);

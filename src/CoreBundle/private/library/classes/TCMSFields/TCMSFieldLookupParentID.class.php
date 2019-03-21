@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+
 /**
  * through the config parameter "bShowLinkToParentRecord=true" you can activate a link
  * that can be used to jump to the parent record (assuming the user has the right permissions)
@@ -54,12 +57,13 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
                 $html .= '<div class="d-flex align-items-center">';
                 $itemName = $item->GetName();
                 if ('' !== $itemName) {
-                    $html .= '<div class="mr-2">' . $itemName . '</div>';
+                    $html .= '<div class="mr-2">'.$itemName.'</div>';
                 }
-                $html .= '<div class="switchToRecordBox">' . TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), "javascript:document.location.href='".$this->GetEditLinkForParentRecord()."';", 'fas fa-location-arrow') . '</div>';
+                $html .= '<div class="switchToRecordBox">'.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), "javascript:document.location.href='".$this->GetEditLinkForParentRecord()."';", 'fas fa-location-arrow').'</div>';
                 $html .= '</div>';
             }
         }
+
         return $html;
     }
 
@@ -94,9 +98,11 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
         $oTableConf = TdbCmsTblConf::GetNewInstance();
         $oTableConf->LoadFromField('name', $foreignTableName);
 
-        $sEditLink = '';
-
-        $sLinkParams = array('pagedef' => 'tableeditor', 'tableid' => $oTableConf->id, 'id' => urlencode($this->data));
+        $sLinkParams = array(
+            'pagedef' => $this->getInputFilterUtil()->getFilteredGetInput('pagedef', 'tableeditor'),
+            'tableid' => $oTableConf->id,
+            'id' => urlencode($this->data),
+        );
         $sLink = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($sLinkParams);
 
         return $sLink;
@@ -139,5 +145,10 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
     public function _GetSQLCharset()
     {
         return ' CHARACTER SET latin1 COLLATE latin1_general_ci';
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

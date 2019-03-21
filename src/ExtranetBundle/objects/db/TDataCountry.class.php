@@ -82,7 +82,7 @@ class TDataCountry extends TDataCountryAutoParent
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getTopLevelDomain()
     {
@@ -96,7 +96,7 @@ class TDataCountry extends TDataCountryAutoParent
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getInternationalDialingCode()
     {
@@ -110,7 +110,7 @@ class TDataCountry extends TDataCountryAutoParent
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getGermanPostalCode()
     {

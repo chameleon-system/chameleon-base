@@ -63,7 +63,7 @@ class TCMSLogChange
      * saves the passed buildNumber associated with the bundle in the database.
      *
      * @param string      $bundleName
-     * @param null|string $sSubFolder   @deprecated since 6.2.0 - no longer used.
+     * @param string|null $sSubFolder   @deprecated since 6.2.0 - no longer used.
      * @param int         $iBuildNumber
      *
      * @deprecated since 6.2.0 - use \ChameleonSystem\DatabaseMigration\Counter\MigrationCounterManagerInterface::markMigrationFileAsProcessed() instead.
@@ -598,6 +598,45 @@ class TCMSLogChange
         if (($aBeforeField = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) && ($aAfterField = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query2)))) {
             self::SetDisplayFieldPosition($sTableId, $aBeforeField['name'], $aAfterField['name']);
         }
+    }
+
+    public static function setMainMenuPosition(
+        string $mainMenuCategorySystemName,
+        ?string $afterThisMainMenuCategory = null): void
+    {
+        $databaseConnection = self::getDatabaseConnection();
+
+        $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
+        $sourceMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $mainMenuCategorySystemName));
+
+        if (false === $sourceMenu) {
+            $message = sprintf('Could not place main menu category: %s, because this category is missing.', $mainMenuCategorySystemName);
+            self::addInfoMessage($message, self::INFO_MESSAGE_LEVEL_WARNING);
+
+            return;
+        }
+
+        $newPosition = 0;
+
+        if (null !== $afterThisMainMenuCategory) {
+            $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
+            $targetMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $afterThisMainMenuCategory));
+
+            if (false === $targetMenu) {
+                $message = sprintf('Could not place main menu category: %s, behind %s because the target category is missing.', $mainMenuCategorySystemName, $afterThisMainMenuCategory);
+                self::addInfoMessage($message, self::INFO_MESSAGE_LEVEL_WARNING);
+
+                return;
+            }
+
+            $newPosition = (int) $targetMenu['position'] + 1;
+        }
+
+        $query = 'UPDATE `cms_menu_category` SET `position` = `position`+1 WHERE `position` >= :newPosition';
+        $databaseConnection->executeQuery($query, array('newPosition' => $newPosition));
+
+        $query = 'UPDATE `cms_menu_category` SET `position` = :newPosition WHERE `id` = :sourceId';
+        $databaseConnection->executeQuery($query, array('newPosition' => $newPosition, 'sourceId' => $sourceMenu['id']));
     }
 
     /**
@@ -1137,7 +1176,7 @@ class TCMSLogChange
      *
      * @param $language
      *
-     * @return null|string
+     * @return string|null
      */
     private static function getLanguageCodeFromArgument($language)
     {
@@ -1368,7 +1407,7 @@ class TCMSLogChange
 
     /**
      * return id of the content-box with the name passed. return empty string, if the
-     * content box does n.
+     * content box does not exist.
      *
      * @static
      *
@@ -1409,6 +1448,8 @@ class TCMSLogChange
      * @param string $sSystemName of the content box
      *
      * @return string content box id OR empty string
+     *
+     * @deprecated since 6.3.0 - only used for deprecated classic main menu
      */
     public static function getCmsContentBoxIdFromSystemName($sSystemName)
     {
@@ -1637,7 +1678,7 @@ class TCMSLogChange
     /**
      * @param string      $packageName
      * @param int|string  $iVersion
-     * @param null|string $subFolder   @deprecated since 6.2.0 - no longer used
+     * @param string|null $subFolder   @deprecated since 6.2.0 - no longer used
      * @param string      $vendor
      *
      * @throws TPkgCmsException_Log
@@ -1824,7 +1865,7 @@ class TCMSLogChange
      * @param null   $sPlaceTabAfter  - if null, then tab will be placed last
      * @param null   $sTabId
      *
-     * @return null|string
+     * @return string|null
      */
     public static function addTabToTable(
         $sTableName,

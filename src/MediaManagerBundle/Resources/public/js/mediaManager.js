@@ -1013,17 +1013,19 @@
 
             self.showWaitingAnimation();
 
-            var iframe = $('<iframe src="' + url + '"></iframe>');
-
             var layover = self.openLayover(title, '');
+            var iframe;
 
             if (typeof height === 'undefined') {
-                height = $('#edit-container').height() - (layover.find('.title').height() - 50);
+                iframe = $('<iframe src="' + url + '" scrolling="no" frameborder="0" onload="this.style.height=(this.contentDocument.body.scrollHeight) +\'px\';"></iframe>');
+                iframe.css({'width': '100%', 'border': 'none'});
+            } else {
+                iframe = $('<iframe src="' + url + '"></iframe>');
+                iframe.css({'width': '100%', 'height': height});
             }
-            iframe.css({'width': '100%', 'height': height}).appendTo(layover);
+            iframe.appendTo(layover);
 
             self.hideWaitingAnimation();
-
             return iframe;
         },
         openLayover: function (title, html) {
@@ -1153,6 +1155,25 @@
             $('.edit-version', self.editContainer).on('click', function (evt) {
                 var mediaItem = $(this).parents('.cms-media-item');
                 self.openIframeLayover(CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.crop_window_title') + ' ' + mediaItem.data('name') + ' - ' + $(this).parent().find('.version-name').text(), $(this).attr('href'));
+                evt.preventDefault();
+            });
+            $('.delete-version', self.editContainer).on('click', function (evt) {
+                if (true === confirm(CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.delete.are_you_sure'))) {
+                    var mediaItem = $(this).parents('.cms-media-item');
+                    var url = $(this).attr('href');
+                    $.ajax({
+                        type: "POST",
+                        async: true,
+                        url: url,
+                        error: function (responseData) {
+                            self.showErrorFromAjaxResponse();
+                        },
+                        success: function (jsonData) {
+                            self.loadDetailPage(mediaItem.data('id'), mediaItem.data('name'));
+                        },
+                        dataType: 'JSON'
+                    });
+                }
                 evt.preventDefault();
             });
             $('.delete-item', self.editContainer).on('click', function (evt) {

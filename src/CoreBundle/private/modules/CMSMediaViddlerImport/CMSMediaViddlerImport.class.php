@@ -27,7 +27,7 @@ class CMSMediaViddlerImport extends TCMSModelBase
     /**
      * viddler.com API object.
      *
-     * @var null|Viddler_V2
+     * @var Viddler_V2|null
      */
     protected $oViddlerAPI = null;
 
@@ -51,7 +51,7 @@ class CMSMediaViddlerImport extends TCMSModelBase
      *
      * if login failes a TCMSMessageManager message is added 'VIDDLER_LOGIN' with consumer name 'viddlerLogin'
      *
-     * @return null|Viddler_V2
+     * @return Viddler_V2|null
      */
     protected function LoadViddlerAPI()
     {

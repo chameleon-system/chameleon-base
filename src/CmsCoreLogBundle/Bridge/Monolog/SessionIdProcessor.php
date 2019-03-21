@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog;
 
-
 use Monolog\Processor\ProcessorInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 

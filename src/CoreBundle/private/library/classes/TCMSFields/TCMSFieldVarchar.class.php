@@ -22,7 +22,7 @@ class TCMSFieldVarchar extends TCMSField
     protected $sFieldHTMLInputType = 'text';
 
     /**
-     * @var null|string
+     * @var string|null
      */
     protected $sFieldHTMLPlaceholder;
 

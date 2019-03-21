@@ -18,6 +18,8 @@
         $('#' + fieldName + '_image_crop_id').val('');
         $('#label_' + fieldName + '_image_crop_id span').html('-');
         $(this).hide();
+        saveCMSRegistryEntry('_currentFieldName', fieldName);
+        saveCMSRegistryEntry('_currentPosition', 0);
         window._SetImage($('#' + fieldName).val());
         evt.preventDefault();
     };

@@ -17,42 +17,42 @@ class TCMSBreadcrumbNaviItem
     /**
      * name of the node.
      *
-     * @var null|string
+     * @var string|null
      */
     public $name = null;
 
     /**
      * page id of the node.
      *
-     * @var null|string
+     * @var string|null
      */
     public $page_id = null;
 
     /**
      * id of the node.
      *
-     * @var null|string
+     * @var string|null
      */
     public $id = null;
 
     /**
      * parent id of the node.
      *
-     * @var null|string
+     * @var string|null
      */
     public $parent_id = null;
 
     /**
      * the link from tree (can be set instead of a page).
      *
-     * @var null|string
+     * @var string|null
      */
     public $link = null;
 
     /**
      * if a link is given ( in tree) then this determines what window it will open in.
      *
-     * @var null|string
+     * @var string|null
      */
     public $linkTarget = null;
 

@@ -267,7 +267,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
             'table' => 'cms_tpl_page',
             'rootID' => TCMSTreeNode::TREE_ROOT_ID,
             'id' => $this->oTableRow->id,
-            'isInIframe' => '1'
+            'isInIframe' => '1',
         ]);
         $aIncludes[] = "<script type=\"text/javascript\">
         function loadTreeNodeSelection(fieldName,id) {

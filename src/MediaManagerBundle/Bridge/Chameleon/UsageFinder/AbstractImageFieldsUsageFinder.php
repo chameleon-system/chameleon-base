@@ -160,7 +160,7 @@ abstract class AbstractImageFieldsUsageFinder implements MediaItemUsageFinderInt
      * @param string $tableName
      * @param string $id
      *
-     * @return null|TCMSRecord
+     * @return TCMSRecord|null
      */
     private function getTableObject($tableName, $id)
     {

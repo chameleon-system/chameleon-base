@@ -33,6 +33,6 @@ class TCMSMenuItem_Table extends TCMSMenuItem
             $icon = 'fas fa-sign-out-alt'; //standard icon
         }
 
-        return '<a class="nav-link-fa" href="'.$url.'"'. $titleAttribute . '><i class="'.$icon.'"></i><span>'. TGlobal::OutHTML($this->data['translation']).'</span></a>';
+        return '<a class="nav-link-fa" href="'.$url.'"'.$titleAttribute.'><i class="'.$icon.'"></i><span>'.TGlobal::OutHTML($this->data['translation']).'</span></a>';
     }
 }

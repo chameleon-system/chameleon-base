@@ -54,7 +54,7 @@ class CaseInsensitivePortalExceptionListenerTest extends TestCase
     /**
      * @dataProvider provideDataForTestOnKernelException
      *
-     * @param null|RedirectResponse $expectedResponse
+     * @param RedirectResponse|null $expectedResponse
      */
     public function testOnKernelException(string $currentPath, string $requestMethod, ?RedirectResponse $expectedResponse): void
     {

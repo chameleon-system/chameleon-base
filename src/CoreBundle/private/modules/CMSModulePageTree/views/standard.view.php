@@ -47,7 +47,7 @@
     function moveNode(nodeID, parentNodeID, position) {
         if (typeof parentNodeID != 'undefined' && typeof nodeID != 'undefined') {
             CHAMELEON.CORE.showProcessingModal();
-            var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('module' => 'ExecuteAjaxCall'), '_fnc' => 'MoveNode', 'tableid' => $data['treeTableID'])); ?>&nodeID=' + nodeID + '&parentNodeID=' + parentNodeID + '&position=' + position;
+            var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'MoveNode', 'tableid' => $data['treeTableID'])); ?>&nodeID=' + nodeID + '&parentNodeID=' + parentNodeID + '&position=' + position;
             GetAjaxCallTransparent(url, moveNodeSuccess);
         }
     }
@@ -114,7 +114,7 @@
 
 		if(confirm(confirmMessage)){
 			var nodeID = $(node).attr('esrealid');
-			var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('module' => 'ExecuteAjaxCall'), '_fnc' => 'DeleteNode', 'tableid' => $data['treeTableID'], 'tbl' => 'cms_tpl_page')); ?>&nodeID=' + nodeID;
+			var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'DeleteNode', 'tableid' => $data['treeTableID'], 'tbl' => 'cms_tpl_page')); ?>&nodeID=' + nodeID;
             CHAMELEON.CORE.showProcessingModal();
 
 			GetAjaxCallTransparent(url, deleteNodeSuccess);
@@ -389,14 +389,14 @@
 
 <?php
 if (false === $isInIframe) {
-?>
+            ?>
 <div class="card">
     <div class="card-header">
         <h3>Navigation</h3>
     </div>
     <div class="card-body simple-tree-card">
 <?php
-}
+        }
 ?>
         <div class="navigationTreeContainer">
             <ul class="simpleTree">
@@ -444,9 +444,8 @@ if (false === $isInIframe) {
         </div>
         <?php
         if (false === $isInIframe) {
-        ?>
+            ?>
     </div>
 </div>
 <?php
-}
-
+        }

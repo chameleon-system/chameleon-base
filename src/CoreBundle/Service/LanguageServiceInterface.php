@@ -40,7 +40,7 @@ interface LanguageServiceInterface
      *
      * @param string $languageId
      *
-     * @return null|string
+     * @return string|null
      */
     public function getLanguageIsoCode($languageId = null);
 
@@ -51,9 +51,9 @@ interface LanguageServiceInterface
      * Returns null if the language could not be loaded.
      *
      * @param string      $isoCode
-     * @param null|string $targetLanguageId
+     * @param string|null $targetLanguageId
      *
-     * @return null|TdbCmsLanguage
+     * @return TdbCmsLanguage|null
      */
     public function getLanguageFromIsoCode($isoCode, $targetLanguageId = null);
 
@@ -70,9 +70,9 @@ interface LanguageServiceInterface
      * If null is passed for $targetLanguageId, the active language will be used.
      *
      * @param string      $id
-     * @param null|string $targetLanguageId
+     * @param string|null $targetLanguageId
      *
-     * @return null|TdbCmsLanguage
+     * @return TdbCmsLanguage|null
      */
     public function getLanguage($id, $targetLanguageId = null);
 

@@ -7,4 +7,3 @@
 
 TCMSLogChange::addInfoMessage('MTPageMeta now provides an additional variable "language-alternatives" that allows to add URLs to alternative languages of the same page using hreflang meta tags.
  See the view MTPageMeta/standard.view.php in chameleon-shop-theme-bundle for an example.', TCMSLogChange::INFO_MESSAGE_LEVEL_INFO);
-

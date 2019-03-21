@@ -161,7 +161,7 @@ class TCacheManager implements ICacheManager
     /**
      * clear the write lock for the key - or if non given for the global lock.
      *
-     * @param null|string $sKey
+     * @param string|null $sKey
      */
     protected static function ClearCacheWriteLock($sKey = null)
     {
@@ -226,7 +226,7 @@ class TCacheManager implements ICacheManager
      * use this hook to force refresh (who expected that) of global cache keys (TCacheManager::GetGlobalCacheKeyParameter())
      * or to get the state whether to refresh global cache keys or not.
      *
-     * @param null|bool $bRefresh pass the new state to change the current ones. the new state will be returned until it is changed again
+     * @param bool|null $bRefresh pass the new state to change the current ones. the new state will be returned until it is changed again
      *
      * @return bool the active or new state if passed
      */

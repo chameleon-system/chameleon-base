@@ -162,7 +162,7 @@ class CMSRunCrons extends TModelBase
 
     private function getLogger(): LoggerInterface
     {
-        return ServiceLocator::get('monolog.logger.cms_cronjob');
+        return ServiceLocator::get('monolog.logger.cronjob');
     }
 
     private function getTranslator(): TranslatorInterface

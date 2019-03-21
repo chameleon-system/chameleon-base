@@ -14,7 +14,7 @@ namespace ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel;
 class UploadedFileDataModel
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $savedRecordId;
 
@@ -151,7 +151,7 @@ class UploadedFileDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getSavedRecordId()
     {
@@ -159,7 +159,7 @@ class UploadedFileDataModel
     }
 
     /**
-     * @param null|string $savedRecordId
+     * @param string|null $savedRecordId
      */
     public function setSavedRecordId($savedRecordId)
     {

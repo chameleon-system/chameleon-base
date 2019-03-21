@@ -12,7 +12,7 @@
 class TDbChangeLogManagerForModules
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $className = null;
     /**
@@ -32,7 +32,7 @@ class TDbChangeLogManagerForModules
     }
 
     /**
-     * @return int|null|string
+     * @return int|string|null
      *
      * @throws ErrorException
      */

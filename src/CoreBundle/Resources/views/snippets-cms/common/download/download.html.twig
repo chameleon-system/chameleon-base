@@ -1,0 +1,22 @@
+{# @var downloadLink \ChameleonSystem\CoreBundle\DataModel\DownloadLink #}
+
+{% if downloadLink.backendLink %}
+    {% set downloadId -%}
+        cmsdocument="{{ downloadLink.id|e('html_attr') }}"
+    {%- endset %}
+{% endif %}
+
+ {% set fileName = downloadLink.fileName|e('html') %}
+{% if not downloadLink.showFilename %}
+    {% set fileName = '&nbsp;' %}
+{% endif %}
+
+<span class="cmsdownloaditem" {{ downloadId|raw }}>
+    <a style="{{ downloadLink.linkStyle|e('html_attr') }}" target="_blank" href="{{ downloadLink.downloadUrl|e('html_attr') }}"
+       onclick="window.open('{{ downloadLink.downloadUrl|e('html_attr') }}','downloaddetail','width=600,height=600,directories=no,location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes'); return false;">
+    <span class="{{ downloadLink.iconCssClass|e('html_attr') }}"></span> {{ fileName|raw }}
+    </a>
+    {% if downloadLink.showSize %}
+        <span class="downloadsize">[{{ downloadLink.humanReadableFileSize }}]</span>
+    {% endif %}
+</span>

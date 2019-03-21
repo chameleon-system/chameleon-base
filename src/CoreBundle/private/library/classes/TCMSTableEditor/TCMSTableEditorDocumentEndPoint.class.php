@@ -595,9 +595,9 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
                 $bHideName = true;
             }
             if ($sLinkName != $oItem->GetName()) {
-                $sResult = $oItem->GetDownloadLink(false, $bHideName, $bHideSize, false, $bHideIcon, $sLinkName);
+                $sResult = $oItem->getDownloadHtmlTag(false, $bHideName, $bHideSize, $bHideIcon, $sLinkName);
             } else {
-                $sResult = $oItem->GetDownloadLink(false, $bHideName, $bHideSize, false, $bHideIcon);
+                $sResult = $oItem->getDownloadHtmlTag(false, $bHideName, $bHideSize, $bHideIcon);
             }
         } else {
             $sResult = $aMatch[0];
@@ -658,7 +658,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
         $oDownloadFile = new TCMSDownloadFile();
         /** @var $oDownloadFile TCMSDownloadFile */
         $oDownloadFile->Load($this->sId);
-        $sDownLoadFileHTML = $oDownloadFile->GetDownloadLink();
+        $sDownLoadFileHTML = $oDownloadFile->getDownloadHtmlTag();
         $oRecordData->downloadHTML = $sDownLoadFileHTML;
 
         return $oRecordData;

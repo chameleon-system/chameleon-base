@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 /**
@@ -64,6 +65,9 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         $mltRecords = $this->getMltRecordData($oTargetTableConf->sqlData['list_group_field_column']);
         $activeGroup = '';
         $hasEditPermissionForForeignTable = $this->isRecordChangingAllowed($foreignTableName);
+
+        $inputFilter = $this->getInputFilterUtil();
+
         foreach ($mltRecords as $mltRecord) {
             $recordId = $mltRecord['id'];
             $currentGroup = $mltRecord['group'];
@@ -94,11 +98,12 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
                           <label class="form-check-label" for="'.$escapedId.'">'.TGlobal::OutHTML($displayValue).'</label>
                       </div>';
 
-            if ($hasEditPermissionForForeignTable) {
+            if (true === $hasEditPermissionForForeignTable) {
                 $url = $urlUtil->getArrayAsUrl(
                     array(
                         'tableid' => $oTargetTableConf->sqlData['id'],
-                        'pagedef' => 'tableeditor', 'id' => $recordId,
+                        'pagedef' => $inputFilter->getFilteredGetInput('pagedef', 'tableeditor'),
+                        'id' => $recordId,
                     ),
                     PATH_CMS_CONTROLLER.'?'
                 );
@@ -324,11 +329,13 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         return $bHasContent;
     }
 
-    /**
-     * @return UrlUtil
-     */
-    private function getUrlUtil()
+    private function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

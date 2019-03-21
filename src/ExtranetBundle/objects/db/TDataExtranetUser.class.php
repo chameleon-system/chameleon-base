@@ -2465,7 +2465,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     }
 
     /**
-     * @return null|Request
+     * @return Request|null
      */
     private function getCurrentRequest()
     {

@@ -38,7 +38,7 @@ class TCMSTableEditorMenuItem
      *
      * the title expects an already translated string
      *
-     * @var null|string
+     * @var string|null
      */
     protected $sTitle = null;
 
@@ -132,12 +132,12 @@ class TCMSTableEditorMenuItem
         $html .= '>';
 
         if ($this->isIconUrl($this->sIcon)) {
-            $html .= '<img src="' . $this->sIcon . '" border="0" style="float: left; padding-right: 5px;" alt="" />';
+            $html .= '<img src="'.$this->sIcon.'" border="0" style="float: left; padding-right: 5px;" alt="" />';
         } else {
             $html .= '<i class="'.$this->sIcon.' pr-2"></i>';
         }
 
-        $html .= $this->getTitle() . '</a>';
+        $html .= $this->getTitle().'</a>';
 
         if (count($this->aSubMenuItems) > 0) {
             $html .= '<ul>';
@@ -242,7 +242,6 @@ class TCMSTableEditorMenuItem
         return false !== \strpos($icon, '/') || false !== \strpos($icon, '.');
     }
 
-
     /**
      * bootstrap button style (default: btn-primary)
      * possible values in bootstrap 4.1: btn-primary, btn-secondary, btn-success, btn-info, btn-warning, btn-danger, btn-link.
@@ -273,7 +272,7 @@ class TCMSTableEditorMenuItem
      * if no position is set it will be added to the last position.
      *
      * @param TCMSTableEditorMenuItem $oItem
-     * @param null|int                $iPos  - position to place the item in the array (starting with index 0)
+     * @param int|null                $iPos  - position to place the item in the array (starting with index 0)
      */
     public function addSubMenuItem($oItem, $iPos = null)
     {

@@ -43,7 +43,7 @@ class TPkgViewRenderer_TCMSSmartURLHandler_SnippetLessCompiler extends TCMSSmart
     /**
      * @param string $cssFilenamePattern
      *
-     * @return null|TdbCmsPortal
+     * @return TdbCmsPortal|null
      */
     private function getPortalForCssRequest($cssFilenamePattern)
     {

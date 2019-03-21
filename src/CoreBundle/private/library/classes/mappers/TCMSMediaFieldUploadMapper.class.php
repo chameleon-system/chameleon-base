@@ -42,7 +42,7 @@ class TCMSMediaFieldUploadMapper extends AbstractViewMapper
     }
 
     /**
-     * @param null|TdbCmsMediaTree $oCategory
+     * @param TdbCmsMediaTree|null $oCategory
      * @param bool                 $bShowCategorySelector
      *
      * @return string

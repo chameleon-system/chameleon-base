@@ -251,7 +251,7 @@ class MTHeader extends TCMSModelBase
     }
 
     /**
-     * @return null|TdbCmsPortalList
+     * @return TdbCmsPortalList|null
      */
     protected function GetPortalList()
     {
@@ -556,7 +556,7 @@ class MTHeader extends TCMSModelBase
     /**
      * adds a counter (inserts a new record).
      *
-     * @param null|string $sSystemName
+     * @param string|null $sSystemName
      * @param string      $sName
      * @param int         $iValue
      *
@@ -714,6 +714,7 @@ class MTHeader extends TCMSModelBase
         $includes[] = '<link href="'.TGlobal::GetPathTheme().'/images/favicon.ico" rel="shortcut icon" />';
         $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/bootstrap/css/glyph-icons.css?v4.1').'" media="screen" rel="stylesheet" type="text/css" />';
         $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fontawesome-free-5.5.0/css/all.css').'" media="screen" rel="stylesheet" type="text/css" />';
+        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fileIconVectors/file-icon-square-o.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
         return $includes;
     }

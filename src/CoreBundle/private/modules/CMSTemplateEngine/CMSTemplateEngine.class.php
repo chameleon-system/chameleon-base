@@ -126,7 +126,7 @@ class CMSTemplateEngine extends TCMSModelBase
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private function getPageIdFromRequest()
     {

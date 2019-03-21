@@ -168,7 +168,7 @@ class TGlobal extends TGlobalBase
     /**
      * @deprecated since 6.3.0 - use service BackendBreadCrumbService::getBreadcrumb() instead.
      *
-     * @return TCMSURLHistory|null - returns null if not in backend.
+     * @return TCMSURLHistory|null - returns null if not in backend
      */
     public function &GetURLHistory()
     {

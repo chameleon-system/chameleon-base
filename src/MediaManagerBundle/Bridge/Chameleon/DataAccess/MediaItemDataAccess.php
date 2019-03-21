@@ -164,8 +164,16 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
             $dataModel->setDateChanged(new \DateTime($cmsMediaTableObject->fieldDateChanged));
         }
         $dataModel->setSystemName($cmsMediaTableObject->fieldSystemname);
+        $dataModel->setIconHtml($this->getFileTypeIconHtml($cmsMediaTableObject->id));
 
         return $dataModel;
+    }
+
+    private function getFileTypeIconHtml(string $imageId): string
+    {
+        $image = new \TCMSImage($imageId);
+
+        return $image->GetPlainFileTypeIcon();
     }
 
     /**

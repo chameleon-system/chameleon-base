@@ -22,7 +22,7 @@ class TCMSFieldDocument extends TCMSFieldLookup
             $oCmsDocument = TdbCmsDocument::GetNewInstance();
             /** @var $oCmsDocument TdbCmsDocument */
             if ($oCmsDocument->Load($this->data)) {
-                $currentFile = $oCmsDocument->GetDownloadLink();
+                $currentFile = $oCmsDocument->getDownloadHtmlTag();
             }
         }
 

@@ -1,8 +1,3 @@
-.card-action {
-  cursor: hand;
-  cursor: pointer;
-}
-
 .fieldMltInverseEmpty {
   margin-bottom: 2px;
 }
@@ -16,22 +11,4 @@
   float: none;
   position: relative;
   top: -3px;
-}
-
-#portalChooser {
-    position: absolute;
-	left: 200px;
-	top: 78px;
-	width: 200px;
-	height: 75px;
-	display: none;
-	z-index: 15;
-    padding: 5px;
-    background: #F8F2AA;
-    border: 2px solid #FFB608;
-}
-
-#activePortalID {
-  width: 200px;
-  margin-bottom: 8px;
 }

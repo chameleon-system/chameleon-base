@@ -98,7 +98,7 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
     /**
      * @param MediaItemUsageDataModel $usage
      *
-     * @return null|TdbCmsFieldConf
+     * @return TdbCmsFieldConf|null
      */
     private function getFieldDefinitionFromUsage(MediaItemUsageDataModel $usage)
     {

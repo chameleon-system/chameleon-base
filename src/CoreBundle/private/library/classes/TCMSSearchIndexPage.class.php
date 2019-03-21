@@ -81,7 +81,7 @@ class TCMSSearchIndexPage
     /**
      * @param $url
      *
-     * @return null|resource
+     * @return resource|null
      */
     private function getCurlConfig($url)
     {

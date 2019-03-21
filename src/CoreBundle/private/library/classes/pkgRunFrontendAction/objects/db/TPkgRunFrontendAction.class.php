@@ -55,7 +55,7 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
      * @param array  $aParameter
      * @param string $sLanguageId
      *
-     * @return null|TdbPkgRunFrontendAction
+     * @return TdbPkgRunFrontendAction|null
      */
     public static function CreateAction($sClass, $sPortalId = null, $aParameter = null, $sLanguageId = null)
     {

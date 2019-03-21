@@ -422,12 +422,17 @@ function addslashes(str) {
 
 
 /**
+ * @deprecated since 6.3.0 - not used anywhere.
+ *
  * switches the edit portal which will used as default portal while editing
  */
 function SwitchEditPortal() {
     PostAjaxFormTransparent('portalChooserForm', SwitchEditPortalCallback);
 }
 
+/**
+ * @deprecated since 6.3.0 - not used anywhere.
+ */
 function SwitchEditPortalCallback() {
     $('#portalChooser').slideToggle('fast');
     $('#portalContentBoxNameSpan').html(document.getElementById('activePortalID').options[document.getElementById('activePortalID').options.selectedIndex].text);
@@ -484,3 +489,23 @@ function initLightBox(){
     });
 }
 
+CHAMELEON.CORE.handleFormAndLinkTargetsInModals = function () {
+    if (self === top) {
+        return;
+    }
+
+    if (false === $('#modalDialog', top.document).hasClass('show')) {
+        return;
+    }
+
+    $("form[target='_top']").each(function() {
+        $(this).attr('target', '');
+        $(this).find("input[name='pagedef'][value='tableeditor']").each(function() {
+            $(this).val('tableeditorPopup');
+        });
+
+        $(this).find("input[name='pagedef'][value='tablemanager']").each(function() {
+            $(this).val('tablemanagerframe');
+        });
+    });
+};

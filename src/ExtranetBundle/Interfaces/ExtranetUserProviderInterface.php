@@ -25,7 +25,7 @@ interface ExtranetUserProviderInterface
      * object is returned). Returns null if not even an uninitialized user can be returned, e.g. if there is no session
      * available.
      *
-     * @return null|TdbDataExtranetUser
+     * @return TdbDataExtranetUser|null
      */
     public function getActiveUser();
 

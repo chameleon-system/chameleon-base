@@ -23,7 +23,7 @@ interface DataAccessCmsLanguageInterface
      * @param string $id
      * @param string $targetLanguageId
      *
-     * @return null|TdbCmsLanguage
+     * @return TdbCmsLanguage|null
      */
     public function getLanguage($id, $targetLanguageId);
 
@@ -33,7 +33,7 @@ interface DataAccessCmsLanguageInterface
      *
      * @param string $id
      *
-     * @return null|array
+     * @return array|null
      */
     public function getLanguageRaw($id);
 
@@ -45,7 +45,7 @@ interface DataAccessCmsLanguageInterface
      * @param string $isoCode
      * @param string $targetLanguageId
      *
-     * @return null|TdbCmsLanguage
+     * @return TdbCmsLanguage|null
      */
     public function getLanguageFromIsoCode($isoCode, $targetLanguageId);
 }

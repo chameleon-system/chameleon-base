@@ -13,7 +13,9 @@
 {% if crop %}
     <script type="text/javascript">
         (function ($, window) {
-            $('#{{ fieldName }}_image_crop_id_reset_button').on('click', window.imageCropResetButtonCallBack);
+            $('#{{ fieldName }}_image_crop_id_reset_button').on('click', function (e) {
+                window.imageCropResetButtonCallBack.call(this, e);
+            });
             $.ajax({
                 type: "GET",
                 async: true,

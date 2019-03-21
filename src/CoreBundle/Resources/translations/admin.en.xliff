@@ -232,7 +232,7 @@
 
             <trans-unit id="chameleon_system_core.link.upload_and_assign_media">
                 <source>chameleon_system_core.link.upload_and_assign_media</source>
-                <target>upload and assign media</target>
+                <target>Upload and assign media</target>
             </trans-unit>
 
 
@@ -270,7 +270,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_timestamp.last_change">
                 <source>chameleon_system_core.field_timestamp.last_change</source>
-                <target>last change on: %timestamp% Uhr"</target>
+                <target>last change on: %timestamp% h</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_timestamp.will_be_set_to">
                 <source>chameleon_system_core.field_timestamp.will_be_set_to</source>
@@ -517,7 +517,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.field_property_media.action_upload_and_assign">
                 <source>chameleon_system_core.field_property_media.action_upload_and_assign</source>
-                <target>upload and assign</target>
+                <target>Upload and assign</target>
             </trans-unit>
 
 
@@ -2114,7 +2114,6 @@
             <trans-unit id="chameleon_system_core.action.return_to_main_menu">
                 <source>chameleon_system_core.action.return_to_main_menu</source>
                 <target>Return to home</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
 
 

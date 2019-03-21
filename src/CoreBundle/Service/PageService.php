@@ -164,7 +164,7 @@ class PageService implements PageServiceInterface
     /**
      * @param TdbCmsTplPage $page
      *
-     * @return null|TdbCmsLanguage
+     * @return TdbCmsLanguage|null
      */
     private function getLanguageFallback(TdbCmsTplPage $page)
     {

@@ -60,14 +60,19 @@ class TCMSFieldDownloads extends TCMSMLTField
       <div class=\"pt-2\">\n";
         while ($oDownload = &$oDownloads->Next()) {
             /** @var $oDownload TCMSDownloadFile */
+            $tdWidth = 50;
+            if (true === $bReadOnly) {
+                $tdWidth = 100;
+            }
+
             $html .= '
            <div id="documentManager_'.$this->name.'_'.$oDownload->id.'">
              <table class="table table-striped">
               <tr>
-               <td>'.$oDownload->GetDownloadLink().'</td>';
+               <td style="width: '.$tdWidth.'%">'.$oDownload->getDownloadHtmlTag().'</td>';
 
-            if (!$bReadOnly) {
-                $html .= '<td>';
+            if (false === $bReadOnly) {
+                $html .= '<td style="width: 50%">';
 
                 $deleteButton = '<button type="button" class="btn btn-danger btn-sm mr-2" onClick="if(confirm(\'%s\')){removeDocument(\'%s\',\'%s\',\'%s\',\'%s\')}">
                                     <i class="far fa-trash-alt mr-2"></i>%s

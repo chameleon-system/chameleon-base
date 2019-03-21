@@ -28,7 +28,7 @@ class TPkgCmsStringUtilities_ReadConfig
     /**
      * @param string $sKey
      *
-     * @return null|string
+     * @return string|null
      */
     public function getConfigValue($sKey)
     {

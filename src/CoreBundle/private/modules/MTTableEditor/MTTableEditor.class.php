@@ -862,14 +862,15 @@ class MTTableEditor extends TCMSModelBase
                     $this->controller->HeaderRedirect($parameter);
                 }
             } else {
-                //remove last item from url history
+                // remove last item from url history
                 $breadcrumb->PopURL();
-                //search for id in the url we want to redirect now
-                //if the id equals to the current id of the record that is deleted remove this item too
-                while (preg_match('#id='.$this->sId.'#', $breadcrumb->GetURL()) > 0) {
-                    $breadcrumb->PopURL();
+
+                $parentURL = $breadcrumb->GetURL();
+                if (false === $parentURL) {
+                    $parentURL = URL_CMS_CONTROLLER;
+                } else {
+                    $parentURL .= '&_histid='.($breadcrumb->getHistoryCount() - 1);
                 }
-                $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->index - 1);
             }
 
             if (!empty($parentURL)) {

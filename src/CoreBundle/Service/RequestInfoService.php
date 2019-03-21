@@ -37,14 +37,14 @@ class RequestInfoService implements RequestInfoServiceInterface
      */
     private $urlPrefixGenerator;
     /**
-     * @var null|string
+     * @var string|null
      */
     private $requestId;
 
     /**
      * Cache of request type.
      *
-     * @var null|int
+     * @var int|null
      */
     private $chameleonRequestType;
 

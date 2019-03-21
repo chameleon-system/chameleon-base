@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\Event\RecordChangeEvent;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use Doctrine\DBAL\Connection;
@@ -194,7 +195,7 @@ class TCMSTableEditorEndPoint
     /**
      * current edit-on-click fieldname.
      *
-     * @var null|string
+     * @var string|null
      */
     private $activeEditField = null;
 
@@ -521,7 +522,11 @@ class TCMSTableEditorEndPoint
                         $oMenuItem->sIcon = 'far fa-edit';
                         $oMenuItem->setButtonStyle('btn-warning');
 
-                        $aParameter = array('pagedef' => 'tableeditor', 'id' => $this->oTableConf->id, 'tableid' => $oTableEditorConf->id);
+                        $aParameter = array(
+                            'pagedef' => $this->getInputFilterUtil()->getFilteredGetInput('pagedef', 'tableeditor'),
+                            'id' => $this->oTableConf->id,
+                            'tableid' => $oTableEditorConf->id,
+                        );
                         $aAdditionalParams = $this->GetHiddenFieldsHook();
                         if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
                             $aParameter = array_merge($aParameter, $aAdditionalParams);
@@ -574,8 +579,11 @@ class TCMSTableEditorEndPoint
         if (false === is_array($translatedFields) || 0 === count($translatedFields)) {
             return $menuItems;
         }
+
+        $inputFilter = $this->getInputFilterUtil();
+
         $aParameter = array(
-            'pagedef' => 'tableeditor',
+            'pagedef' => $inputFilter->getFilteredGetInput('pagedef', 'tableeditor'),
             'id' => $this->oTable->id,
             'tableid' => $this->oTableConf->id,
             'module_fnc' => array(
@@ -1944,7 +1952,7 @@ class TCMSTableEditorEndPoint
      * @param string $sSourceTableNameFieldId id of the field config
      * @param string $sSourceTableName        source table name
      *
-     * @return null|TCMSField
+     * @return TCMSField|null
      */
     protected function GetConnectedRecordReferenceSourceField($sSourceTableNameFieldId, $sSourceTableName)
     {
@@ -2249,9 +2257,10 @@ class TCMSTableEditorEndPoint
 
     /**
      * change position of current record
-     * currently expects a list of ids to sort via get/post aPosOrder
-
+     * currently expects a list of ids to sort via get/post aPosOrder.
+     *
      * @param string $sPositionField
+     *
      * @return int|null - returns NULL if position of current record did not change
      */
     public function UpdatePositionField($sPositionField)
@@ -2385,7 +2394,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     protected function getActiveEditField()
     {
@@ -2444,11 +2453,13 @@ class TCMSTableEditorEndPoint
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    /**
-     * @return Request|null
-     */
-    private function getCurrentRequest()
+    private function getCurrentRequest(): ?Request
     {
         return ServiceLocator::get('request_stack')->getCurrentRequest();
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

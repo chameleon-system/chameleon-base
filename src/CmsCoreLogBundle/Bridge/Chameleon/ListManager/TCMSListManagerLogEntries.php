@@ -18,6 +18,9 @@ use Monolog\Logger;
 use TCMSListManagerFullGroupTable;
 use ViewRenderer;
 
+/**
+ * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface in conjunction with Monolog logging instead
+ */
 class TCMSListManagerLogEntries extends TCMSListManagerFullGroupTable
 {
     const ALL_SELECTION_VALUE = '0';
@@ -55,7 +58,7 @@ class TCMSListManagerLogEntries extends TCMSListManagerFullGroupTable
     private function getFilterLogLevelSelect($filterLogLevel)
     {
         $oViewRenderer = new ViewRenderer();
-        $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm');
+        $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm submitOnSelect');
         $oViewRenderer->AddSourceObject('sName', 'filterLogLevel');
         $oViewRenderer->AddSourceObject('sLabelText', $this->getTranslation('pkg_cms_core_log.log_table.field_level'));
 

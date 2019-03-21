@@ -54,7 +54,7 @@ class MediaItemDataModel
     private $altTag;
 
     /**
-     * @var null|\DateTime
+     * @var \DateTime|null
      */
     private $dateChanged;
 
@@ -62,6 +62,11 @@ class MediaItemDataModel
      * @var string
      */
     private $systemName = '';
+
+    /**
+     * @var string
+     */
+    private $iconHtml = '';
 
     /**
      * @param string $id
@@ -90,7 +95,7 @@ class MediaItemDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getName()
     {
@@ -98,7 +103,7 @@ class MediaItemDataModel
     }
 
     /**
-     * @param null|string $name
+     * @param string|null $name
      */
     public function setName($name)
     {
@@ -122,7 +127,7 @@ class MediaItemDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getType()
     {
@@ -130,7 +135,7 @@ class MediaItemDataModel
     }
 
     /**
-     * @param null|string $type
+     * @param string|null $type
      */
     public function setType($type)
     {
@@ -170,7 +175,7 @@ class MediaItemDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getAltTag()
     {
@@ -178,7 +183,7 @@ class MediaItemDataModel
     }
 
     /**
-     * @param null|string $altTag
+     * @param string|null $altTag
      */
     public function setAltTag($altTag)
     {
@@ -215,5 +220,21 @@ class MediaItemDataModel
     public function setSystemName($systemName)
     {
         $this->systemName = $systemName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIconHtml(): string
+    {
+        return $this->iconHtml;
+    }
+
+    /**
+     * @param string $iconHtml
+     */
+    public function setIconHtml(string $iconHtml): void
+    {
+        $this->iconHtml = $iconHtml;
     }
 }

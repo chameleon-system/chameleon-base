@@ -19,7 +19,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
     /**
      * holds the module config - will be loaded if needed.
      *
-     * @var null|TdbPkgMultiModuleModuleConfig
+     * @var TdbPkgMultiModuleModuleConfig|null
      */
     protected $oConfig = null;
 
@@ -27,7 +27,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      * holds the array of TdbCmsTplModuleInstance objects
      * null by default.
      *
-     * @var null|TdbCmsTplModuleInstance[]
+     * @var TdbCmsTplModuleInstance[]|null
      */
     protected $aModuleInstances = null;
 
@@ -43,7 +43,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      * holds the array of TdbPkgMultiModuleSetItem objects
      * null by default.
      *
-     * @var null|array
+     * @var array|null
      */
     protected $aSetItems = null;
 
@@ -136,7 +136,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
     /**
      * loads config if not already done and returns a copy of the class property $oConfig.
      *
-     * @return null|TdbPkgMultiModuleModuleConfig
+     * @return TdbPkgMultiModuleModuleConfig|null
      */
     protected function GetConfig()
     {

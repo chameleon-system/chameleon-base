@@ -16,6 +16,10 @@ class MenuCategory
     /**
      * @var string
      */
+    private $id;
+    /**
+     * @var string
+     */
     private $name;
     /**
      * @var string
@@ -27,15 +31,22 @@ class MenuCategory
     private $menuItems;
 
     /**
+     * @param string     $id
      * @param string     $name
      * @param string     $iconFontCssClass
      * @param MenuItem[] $menuItems
      */
-    public function __construct(string $name, string $iconFontCssClass, array $menuItems)
+    public function __construct(string $id, string $name, string $iconFontCssClass, array $menuItems)
     {
+        $this->id = $id;
         $this->name = $name;
         $this->iconFontCssClass = $iconFontCssClass;
         $this->menuItems = $menuItems;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function getName(): string

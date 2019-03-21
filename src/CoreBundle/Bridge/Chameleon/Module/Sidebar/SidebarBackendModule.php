@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
+    private const ACTIVE_CATEGORY_SESSION_KEY = 'chameleonSidebarBackendModuleActiveCategory';
     private const DISPLAY_STATE_SESSION_KEY = 'chameleonSidebarBackendModuleDisplayState';
 
     /**
@@ -67,6 +68,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $value = '';
         }
         $this->responseVariableReplacer->addVariable('sidebarDisplayState', $value);
+        $this->responseVariableReplacer->addVariable('sidebarActiveCategory', \TGlobal::OutHTML($this->getActiveCategory()));
     }
 
     /**
@@ -75,6 +77,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
         $visitor->SetMappedValue('sidebarToggleNotificationUrl', $this->getSidebarToggleNotificationUrl());
+        $visitor->SetMappedValue('sidebarSaveActiveCategoryNotificationUrl', $this->getActiveCategoryNotificationUrl());
         $visitor->SetMappedValue('menuItems', $this->getMenuItems());
 
         $cmsUser = \TCMSUser::GetActiveUser();
@@ -85,20 +88,37 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     private function getSidebarToggleNotificationUrl(): string
     {
-        $request = $this->requestStack->getCurrentRequest();
-        $baseUri = $request->getRequestUri();
-        if (false === \strpos($baseUri, '?')) {
-            $baseUri .= '?';
-        } else {
-            $baseUri .= '&';
-        }
-
         return $this->urlUtil->getArrayAsUrl([
             'module_fnc' => [
                 $this->sModuleSpotName => 'ExecuteAjaxCall',
             ],
             '_fnc' => 'toggleSidebar',
-        ], $baseUri, '&');
+        ], $this->getBaseUri(), '&');
+    }
+
+    /**
+     * Returns the base URI for sidebar-related actions.
+     * The method uses a dummy pagedef because otherwise there would be interference with other modules (even for AJAX
+     * calls, the Init() method of all modules on a page is called. If the list module is on that page, it would add all
+     * parameters of the AJAX call to its own, which leads to the sidebar action being called on form submits).
+     * Similar problems are expected for other modules, so we use a dummy page that is both always present and contains
+     * no other modules.
+     *
+     * @return string
+     */
+    private function getBaseUri(): string
+    {
+        return \PATH_CMS_CONTROLLER.'?pagedef=sidebarDummy&';
+    }
+
+    private function getActiveCategoryNotificationUrl(): string
+    {
+        return $this->urlUtil->getArrayAsUrl([
+            'module_fnc' => [
+                $this->sModuleSpotName => 'ExecuteAjaxCall',
+            ],
+            '_fnc' => 'saveActiveCategory',
+        ], $this->getBaseUri(), '&');
     }
 
     private function getMenuItems(): array
@@ -127,11 +147,34 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 }
             }
             if (\count($menuItems) > 0) {
-                $menuCategories[] = new MenuCategory($tdbCategory->fieldName, $tdbCategory->fieldIconFontCssClass, $menuItems);
+                $menuCategories[] = new MenuCategory(
+                    $tdbCategory->id,
+                    $tdbCategory->fieldName,
+                    $tdbCategory->fieldIconFontCssClass,
+                    $menuItems
+                );
             }
         }
 
         return $menuCategories;
+    }
+
+    private function getActiveCategory(): ?string
+    {
+        $session = $this->requestStack->getCurrentRequest()->getSession();
+
+        return $session->get(self::ACTIVE_CATEGORY_SESSION_KEY);
+    }
+
+    protected function saveActiveCategory(): void
+    {
+        $activeCategory = $this->inputFilterUtil->getFilteredPostInput('categoryId');
+        if ('' === $activeCategory) {
+            $activeCategory = null;
+        }
+
+        $session = $this->requestStack->getCurrentRequest()->getSession();
+        $session->set(self::ACTIVE_CATEGORY_SESSION_KEY, $activeCategory);
     }
 
     /**
@@ -165,9 +208,10 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     {
         parent::DefineInterface();
         $this->methodCallAllowed[] = 'toggleSidebar';
+        $this->methodCallAllowed[] = 'saveActiveCategory';
     }
 
-    public function toggleSidebar(): void
+    protected function toggleSidebar(): void
     {
         $displayState = $this->inputFilterUtil->getFilteredPostInput('displayState');
         if (false === \in_array($displayState, ['minimized', 'shown'])) {

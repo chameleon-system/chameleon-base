@@ -139,7 +139,7 @@ class CMSModuleUniversalUploader extends TCMSModelBase
     }
 
     /**
-     * @return null|Request
+     * @return Request|null
      */
     private function getRequest()
     {
@@ -202,7 +202,7 @@ class CMSModuleUniversalUploader extends TCMSModelBase
             /** @var $oRecord TCMSDownloadFile* */
             $oRecord->table = 'cms_document';
             $oRecord->Load($this->global->GetUserData('documentID'));
-            $returnVal = $oRecord->GetDownloadLink();
+            $returnVal = $oRecord->getDownloadHtmlTag();
         }
 
         return $returnVal;

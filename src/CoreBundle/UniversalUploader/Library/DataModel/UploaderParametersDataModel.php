@@ -25,12 +25,12 @@ class UploaderParametersDataModel
     private $proportionExactMatch = false;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     private $maxUploadHeight;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     private $maxUploadWidth;
 
@@ -192,7 +192,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getRecordID()
     {
@@ -200,7 +200,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @param null|string $recordID
+     * @param string|null $recordID
      *
      * @throws InvalidParameterValueException
      */
@@ -276,7 +276,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getTreeNodeID()
     {
@@ -284,7 +284,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @param null|string $treeNodeID
+     * @param string|null $treeNodeID
      *
      * @throws InvalidParameterValueException
      */
@@ -329,7 +329,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getUploadSuccessCallback()
     {
@@ -337,7 +337,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @param null|string $uploadSuccessCallback
+     * @param string|null $uploadSuccessCallback
      *
      * @throws InvalidParameterValueException
      */

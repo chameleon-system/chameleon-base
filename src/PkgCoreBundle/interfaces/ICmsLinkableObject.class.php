@@ -13,7 +13,7 @@ interface ICmsLinkableObject
 {
     /**
      * @param bool                $bAbsolute           set to true to include the domain in the link
-     * @param null|string         $sAnchor
+     * @param string|null         $sAnchor
      * @param array               $aOptionalParameters
      * @param TdbCmsPortal|null   $portal
      * @param TdbCmsLanguage|null $language

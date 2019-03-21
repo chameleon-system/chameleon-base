@@ -264,7 +264,7 @@ class MTTableManager extends TCMSModelBase
         } else {
             $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
 
-            $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->index - 1);
+            $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->getHistoryCount() - 1);
         }
 
         $this->controller->HeaderURLRedirect($parentURL);
@@ -441,17 +441,18 @@ class MTTableManager extends TCMSModelBase
         $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $this->getAutocompleteListQuery());
 
         $returnVal = [];
-        $returnVal[] = ['id' => ' ', 'text' => ' '];
+        $returnVal[] = ['id' => ' ', 'text' => ' ', 'html' => ' ', 'cssClass' => 'd-none'];
 
         /** @var $record TCMSRecord */
         while ($record = $recordList->Next()) {
             $name = $record->GetName();
             if (!empty($name)) {
-                $html = $name;
+                // highlight active record
+                $cssClass = '';
                 if ($record->id == $recordID) {
-                    $html = '<strong>'.$name.'</strong>';
+                    $cssClass = 'bg-success';
                 }
-                $returnVal[] = ['id' => $record->id, 'text' => $name, 'html' => $html];
+                $returnVal[] = ['id' => $record->id, 'text' => $name, 'html' => $name, 'cssClass' => $cssClass];
             }
         }
 

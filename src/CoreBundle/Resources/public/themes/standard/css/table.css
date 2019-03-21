@@ -48,6 +48,10 @@
     margin-top: 5px;
 }
 
+.select2-results__option.select2-results__message {
+    display: none;
+}
+
 .groupSpacer {
     font-size: 1px;
     background-color: #FFFFFF;
@@ -127,6 +131,7 @@
 
 .TCMSListManagerFullGroupTable {
     margin-bottom: 0px;
+    white-space: nowrap;
 }
 
 .table-function-bar ul {

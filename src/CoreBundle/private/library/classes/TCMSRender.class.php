@@ -17,7 +17,7 @@ class TCMSRender
     /**
      * @param string   $sTitle
      * @param string   $boxIcon - not used anymore
-     * @param null|int $width
+     * @param int|null $width
      *
      * @deprecated since 6.3.0 - only used for deprecated classic main menu
      */

@@ -3,22 +3,20 @@ UPGRADE FROM 6.2 TO 6.3
 
 # Essentials
 
-## Changed Signatures
-
-See the Changed Interfaces and Method Signatures section whether changes in signatures affect the project.
-
-# Changed Features
+The steps in this chapter are required to get the project up and running in version 6.3.
 
 ## Symfony 3.4
 
 The system now uses Symfony 3.4, which needs a few adjustments:
 
-In dev mode the debug toolbar will report deprecations concerning services that are retrieved through the
-ServiceLocator or the Symfony container directly. To be prepared for Symfony 4, ServiceLocator and container calls
-should be used as rarely as possible (no news here) and dependency injection should be preferred. Where dependency
-injection is not possible, services should be declared public explicitly. The deprecation warnings will also be
-logged, potentially leading to huge log files and if there is a large number of warnings, performance in the dev
-environment will degrade. Therefore it is recommended to deal with most of the deprecations.
+In dev mode the debug toolbar will report some deprecations concerning non-public services that are retrieved through
+the ServiceLocator or the Symfony service container directly. In Symfony 4 this will no longer be possible; in addition,
+services will be private by default in Symfony 4.
+
+The best way to solve this upcoming problem is to use ServiceLocator and container calls as rarely as possible (no news
+here) and prefer dependency injection instead. Where dependency injection is not possible, services should be declared
+public explicitly. The deprecation warnings will also be logged, potentially leading to huge log files and possibly
+degraded performance in the dev environment.  Therefore it is recommended to deal with most of the deprecations.
 
 The scope concept is gone. Remove any scope references in service definitions (e.g. Chameleon modules used
 `scope="prototype"` in the past; if you didn't change these services to use `shared="false"` during the migration to
@@ -45,137 +43,24 @@ _errors:
 The system now uses Twig 2.x. Please have a look at the Twig changelog for required adjustments, but major problems are
 not expected.
 
-## Logging
-
-We are now using standard logging for Symfony applications using `Monolog` and `Psr\Log\LoggerInterface`.
-Desired differences in logging - like different log files - should be configured using Monolog or implemented using
-its interfaces (like `HandlerInterface`, `ProcessorInterface`, ...).
-
-This is already done in most places in Chameleon itself (chameleon-base and chameleon-shop).
-
-Project code should also be adapted to this. See below for a migration example.
-Note that if there is no handler configuration in your project nothing will be written.
-A minimum config could be a stream handler logging to `%kernel.logs_dir%/%kernel.environment%.log`.
-
-Note that log messages are no longer written to database.
-You can still configure this if needed with the service `cmsPkgCore.logHandler.database` (TPkgCmsCoreLogMonologHandler_Database).
-If you use this without channel restriction you must at least explicitly exclude the channel "doctrine".
-Also note that the standard logging channel is not configured as "fingerscrossed" anymore. All messages there will simply
-be logged everytime.
-See below for the full legacy config.
-
-However deprecated service definitions for the old log (channel) handler classes still exist in 
-`vendor/chameleon-system/chameleon-base/src/CmsCoreLogBundle/Resources/config/services.xml`.
-These will be removed in a later release.
-
-The menu entries in the backend ("logs", "log channel definition") are now hidden - that is: they are no longer 
-assigned to the category window ("Logs"). To show them again you can assign them again.
-
-Migration example for changing/defining a log handler for a channel logging to a file:
-
-Old in service.xml:
-```xml
-<service id="cmsPkgCore.logHandler.files" class="Monolog\Handler\StreamHandler" public="false">
-    <argument>%kernel.logs_dir%/core.log</argument>
-    <argument>200</argument>
-</service>
-        
-<service id="cmsPkgCore.logDriver.cmsUpdates" class="Monolog\Logger" public="false">
-    <argument>core.cmsUpdates</argument>
-    <call method="pushHandler">
-        <argument type="service" id="cmsPkgCore.logHandler.files"/>
-    </call>
-</service>
-
-<service id="cmsPkgCore.logChannel.cmsUpdates" class="TPkgCmsCoreLog">
-    <argument type="service" id="monolog.logger.cms_update"/>
-</service>
-```
-
-New in config.yml - changed the channel name slightly:
-```
-monolog:
-   handlers:
-       cms_updates:
-           type: stream
-           path: "%kernel.logs_dir%/core.log"
-           channels:
-               - "cms_update"
-           level: info
-```
-
-This is then used in that service.xml as two service arguments instead of a reference to `cmsPkgCore.logChannel.cmsUpdates`:
-```
-    <argument type="service" id="logger"/>
-    <tag name="monolog.logger" channel="cms_updates"/>
-```
-
-The full config (in config.yml) that would replicate the legacy logging behavior of Chameleon 6.2 looks like this:
-
-```
-monolog:
-   handlers:
-     database:
-       type: service
-       id: cmsPkgCore.logHandler.database
-       channels:
-         - "core_security"
-         - "core_cms_updates"
-         - "core_cronjobs"
-         - "core_api"
- 
-     database_for_fingers_crossed:
-       type: service
-       id: cmsPkgCore.logHandler.database
- 
-     standard:
-       type: fingers_crossed
-       handler: database_for_fingers_crossed
-       channels:
-         - "core_standard"
- 
-     dbal:
-       type: stream
-       path: "%kernel.logs_dir%/dbal.log"
-       channels:
-         - "doctrine"
-       level: warning
-```
-
-## New ImageCropBundle
-
-Chameleon now ships with a bundle that provides support for image cutouts. Install it as follows (this is required if
-the ChameleonShopThemeBundle is used, otherwise this step is optional):
-
-- Add `new \ChameleonSystem\ImageCropBundle\ChameleonSystemImageCropBundle()` to the AppKernel.
-- In a terminal, navigate to `<project root>/src/extensions/snippets-cms/` and create a symlink:
-
-  ```bash
-  ln -s ../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/snippets-cms/imageCrop
-  ```
-
-- Navigate to `<project root>/src/extensions/objectviews/TCMSFields` (create directory if it doesn't exist yet and
-  create a symlink:
-  ```bash
-  ln -s ../../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/objectviews/TCMSFields/TCMSFieldMediaWithImageCrop
-  ```
-
-- Run updates in the Chameleon backend.
-- Run assets:install console command.
-- Clear Symfony cache.
-
-## Mailer Peer Security
-
-The default value of config key `chameleon_system_core: mailer: peer_security` was changed from "permissive" to "strict".
-Using this setting SMTP connections verify SSL/TLS certificate validity so that invalid or self-signed certificates are rejected.
-
 ## DoctrineBundle
 
 We now use the DoctrineBundle. While we do not use many of its features yet (especially no ORM mapping), initializing
 the database connection is now handled by Doctrine. In practice the most noticeable difference is that the connection
-is opened lazily, so that more console commands can be executed without a working database connection.
+is opened lazily, so that some console commands can now be executed without a working database connection.
 
-This change requires to add the following configuration to `/app/config/config.yml`:
+Add the DoctrineBundle and the DoctrineCacheBundle to the AppKernel:
+
+```php
+    $bundles = array(
+    ...
+    new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+    new \Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
+    ...
+    );
+```
+
+Add the following configuration to `/app/config/config.yml`:
 
 ```yaml
 doctrine:
@@ -199,85 +84,291 @@ Please note that the parameter `chameleon_system_core.pdo.enable_mysql_compressi
 add the configuration value `doctrine: options: 1006: 1`.
 
 The DoctrineBundle provides a profiler in the Web Debug Toolbar. Therefore the Chameleon database profiler is now
-disabled by default, as its main benefit is now the backtrace feature. To enable it again, set the configuration key
+disabled by default, the provided information is mainly redundant. To enable it again, set the configuration key
 `chameleon_system_debug: database_profiler: enabled: true`. Backtrace will then be enabled by default.
 
-The `backtrace_enabled` and `backtrace_limit` keys
-were moved under the `database_profiler` key (e.g. `chameleon_system_debug: database_profiler: backtrace_enabled`
-instead of `chameleon_system_debug: backtrace_enabled`). Existing configuration should be adjusted.
+The `backtrace_enabled` and `backtrace_limit` keys were moved under the `database_profiler` key (e.g.
+`chameleon_system_debug: database_profiler: backtrace_enabled` instead of `chameleon_system_debug: backtrace_enabled`).
+Please adjust existing configuration.
 
-## Access-denied Page
+## Logging
 
-The access-denied page should now support an additionally mapped parameter `loginFormAction` as a target action for the shown 
-login form. This avoids another and then unexpected AccessDeniedException when logging in from the access-denied page.
-Login still worked in that case however.
-If you use your own theme check the files `webModules/MTExtranet/accessDenied.view.php` and `snippets/common/userInput/form/formLoginStandard.html.twig`
-and adapt them according to the changes in **chameleon-shop-theme-bundle**. 
+Chameleon now logs messages similar to other Symfony applications, using `Psr\Log\LoggerInterface` and `Monolog`.
 
-## TTools::GetModuleLoaderObject Returns New Object
+### Logging Configuration
 
-The method `TTools::GetModuleLoaderObject` now returns a new `TModuleLoader` instance instead of the global module
-loader. This instance will therefore only contain the module passed as argument, not all modules on the current page. 
+We recommend using the standard Symfony logging configuration as a base point from where to adjust to project needs.
+The application will then log to the logs dir (`app/logs/` by default).
 
-## Csv2SqlBundle
+Add the following lines to `app/config/config_dev.yml`:
 
-- `\TPkgCsv2SqlManager::SendErrorNotification()`
+```yaml
+monolog:
+  handlers:
+    main:
+      type: stream
+      path: "%kernel.logs_dir%/%kernel.environment%.log"
+      level: debug
+      channels: ["!event", "!doctrine"]
+    # uncomment to get logging in your browser
+    # you may have to allow bigger header sizes in your Web server configuration
+    #firephp:
+    #    type: firephp
+    #    level: info
+    #chromephp:
+    #    type: chromephp
+    #    level: info
+    console:
+      type: console
+      process_psr_3_messages: false
+      channels: ["!event", "!doctrine", "!console"]
+```
 
-Log output is no longer collected and no longer sent as attachments with the notification email.
+This configuration excludes the `doctrine` channel that logs database statements as the system runs a lot of database
+queries in the `dev` environment. Remove the `!doctrine` rule to show these queries.
 
-## RevisionManagementBundle
+Add the following lines to `app/config/config_prod.yml`:
 
-This bundle is not supported anymore.
+```yaml
+monolog:
+  handlers:
+    main:
+      type: fingers_crossed
+      action_level: error
+      handler: nested
+      excluded_404s:
+        # regex: exclude all 404 errors from the logs
+        - ^/
+    nested:
+      type: stream
+      path: "%kernel.logs_dir%/%kernel.environment%.log"
+      level: debug
+    console:
+      type: console
+      process_psr_3_messages: false
+      channels: ["!event", "!doctrine"]
+    deprecation:
+      type: stream
+      path: "%kernel.logs_dir%/%kernel.environment%.deprecations.log"
+    deprecation_filter:
+      type: filter
+      handler: deprecation
+      max_level: info
+      channels: ["php"]
+```
 
-## RequestInfoService
+Add the following lines to `app/config/config_test.yml`:
 
-- New method `getRequestId()`.
+```yaml
+monolog:
+  handlers:
+    main:
+      type: stream
+      path: "%kernel.logs_dir%/%kernel.environment%.log"
+      level: debug
+      channels: ["!event"]
+```
 
-## ckEditor
+See the Monolog documentation on how to change logging behaviour, e.g. logging to different files or modifying log
+entries with formatters and processors.
 
-The custom skin moonocolor is deprecated.
-If you have an extension of chameleonConfig.js please be sure to change the skin to 
-`config.skin = 'moono-lisa';` and the color to: `config.uiColor = '#f0f3f5';`
+### Adjust Logger Retrieval
 
-# Changed Interfaces and Method Signatures
+There is a number of classes and methods which were used for logging in previous Chameleon releases (and still work)
+but are now deprecated, especially `IPkgCmsCoreLog`, `TPkgCmsCoreLog`, `TTools::WriteLogEntry` and 
+`TTools::WriteLogEntrySimple`. It is recommended to switch to standard logging as soon as possible. Do this as follows:
+- Where dependency injection is possible, inject the `logger` service and typehint `Psr\Log\LoggerInterface`.
+- To use a specific channel, add a tag like this: `<tag name="monolog.logger" channel="order_payment_amazon"/>`
+- Where dependency injection cannot be used, retrieve the logger by service locator like this: `ChameleonSystem\CoreBundle\ServiceLocator::get('logger')`.
+  The return value can always be typehinted with `Psr\Log\LoggerInterface`.
+- To retrieve a specific log channel, use a call like this: `ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.custom_channel')`.
+
+Migration example:
+
+Old in services.xml (logger writing to a file):
+
+```xml
+<service id="cmsPkgCore.logHandler.files" class="Monolog\Handler\StreamHandler" public="false">
+    <argument>%kernel.logs_dir%/core.log</argument>
+    <argument>200</argument>
+</service>
+        
+<service id="cmsPkgCore.logDriver.cmsUpdates" class="Monolog\Logger" public="false">
+    <argument>core.cmsUpdates</argument>
+    <call method="pushHandler">
+        <argument type="service" id="cmsPkgCore.logHandler.files"/>
+    </call>
+</service>
+
+<service id="cmsPkgCore.logChannel.cmsUpdates" class="TPkgCmsCoreLog">
+    <argument type="service" id="monolog.logger.cms_update"/>
+</service>
+
+<service id="myService" class="MyClass">
+    <argument type="service" id="cmsPkgCore.logChannel.cmsUpdates" />
+</service>
+
+```
+
+New in services.xml:
+
+```xml
+<service id="myService" class="MyClass">
+    <argument type="service" id="logger"/>
+    <tag name="monolog.logger" channel="cms_update"/>
+</service>
+```
+
+So the service definition just states the channel in which to log. Directing log output to e.g. a file is then handled
+in the logging configuration in `config_<env>.yml`.
+
+### Legacy: Restore Database Logging
+
+Log messages are no longer written to database and the old database logging infrastructure will be removed in
+a future Chameleon release. If database logging is still needed in the project, restore by using the following config:
+
+```yaml
+monolog:
+   handlers:
+     database:
+       type: service
+       id: cmsPkgCore.logHandler.database
+       channels:
+         - "security"
+         - "cms_update"
+         - "cronjob"
+         - "api"
+ 
+     database_for_fingers_crossed:
+       type: service
+       id: cmsPkgCore.logHandler.database
+ 
+     standard:
+       type: fingers_crossed
+       handler: database_for_fingers_crossed
+       channels:
+         - "app"
+ 
+     dbal:
+       type: stream
+       path: "%kernel.logs_dir%/dbal.log"
+       channels:
+         - "doctrine"
+       level: warning
+```
+
+Note that the `doctrine` channel MUST be excluded from database logging.
+
+Log-related menu items in the backend ("logs", "log channel definition") are now hidden. To display these items in the
+new sidebar menu, create menu items assigned to the corresponding tables. To display these items in the classic main
+menu (which itself is no longer visible by default), assign the tables to the "Logs" content box.
+
+## Sidebar Menu Items
+
+Sidebar menu items are (in contrast to the classic main menu) created independently from tables and backend modules.
+After migration menu items for backend modules might not yet be migrated to new sidebar menu items. Check the backend
+module list to see if modules are missing.
+
+If you maintain a third-party bundle that adds new tables, there should be an additional migration script that
+migrates the menu items. This ensures that the bundle can be installed seamlessly even after the project was migrated
+to Chameleon 6.3. The migration script should contain lines as follows:
+
+```php
+TCMSLogChange::requireBundleUpdates('ChameleonSystemCoreBundle', 1549624862);
+
+/**
+ * @var ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator $mainMenuMigrator
+ */
+$mainMenuMigrator = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.service.main_menu_migrator');
+// Add the following line if the bundle adds at least one table in a standard content box 
+$mainMenuMigrator->migrateUnhandledTableMenuItems();
+// Add the following line if the bundle adds at least one custom content box. Adjust the system name accordingly 
+$mainMenuMigrator->migrateContentBox('content_box_system_name');
+
+```
+
+## New ImageCropBundle
+
+Chameleon now ships with a bundle that provides support for image cutouts. Install it as follows (this is required if
+the ChameleonShopThemeBundle is used, otherwise this step is optional):
+
+- Add `new \ChameleonSystem\ImageCropBundle\ChameleonSystemImageCropBundle()` to the AppKernel.
+- In a terminal, navigate to `<project root>/src/extensions/snippets-cms/` and create this symlink:
+
+  ```bash
+  ln -s ../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/snippets-cms/imageCrop
+  ```
+
+- Navigate to `<project root>/src/extensions/objectviews/TCMSFields` (create directory if it doesn't exist yet and
+  create this symlink:
+  ```bash
+  ln -s ../../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/objectviews/TCMSFields/TCMSFieldMediaWithImageCrop
+  ```
+
+- Run updates in the Chameleon backend.
+- Run assets:install console command.
+- Clear Symfony cache.
+
+## Mailer Peer Security
+
+The default value of config key `chameleon_system_core: mailer: peer_security` was changed from "permissive" to "strict".
+Using this setting, SMTP connections verify SSL/TLS certificate validity so that invalid or self-signed certificates are
+rejected. Be sure to test mail transmission with the SMTP server used in the project.
+
+## Changed Interfaces and Method Signatures
 
 This section contains information on interface and method signature changes which affect backwards compatibility (BC).
+Check usage of the listed classes in the project and make required changes.
+
 Note that ONLY BC breaking changes are listed, according to our backwards compatibility policy.
 
-## ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface
+### ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface
 
 - New method `getActivePortalCandidate()`.
 - New method `getDomainDataByName()`.
 - New method `getPortalPrefixListForDomain()`.
 
-## TCMSFieldDate/TCMSFieldDateToday
+### ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface
 
-The field classes now use the language independent SQL date format in frontend rendering instead of always using
+- New method `getRequestId()`.
+
+### TCMSFieldDate/TCMSFieldDateToday
+
+These field classes now use the language independent SQL date format in frontend rendering instead of always using
 German date format. For backwards compatibility reasons they work with German date format too.
 
-## \TCMSTableWriter
+### TCMSTableWriter
 
 - Method `changeTableEngine()` now also changes the table config accordingly.
 
-## \TTools
+### TTools
 
 - Changed method `WriteLogEntry()`: parameter `$sLogFileName` is now ignored.
 - Changed method `WriteLogEntrySimple()`: parameter `$sLogFileName` is now ignored.
+- Method `GetModuleLoaderObject` now returns a new `TModuleLoader` instance instead of the global module
+  loader. This instance will therefore only contain the module passed as argument, not all modules on the current page.
+  If the project depends on the previous behavior, use the public property `ChameleonController::$moduleLoader` instead.
+  Note that access to this property might be restricted in a future Chameleon release.
 
-## Backend Theme Library
+## Backend Design Changes
 
-The Backend was upgraded to Bootstrap 4.1.3.
+The following steps are only required if the project uses custom backend code, such as backend modules or custom field
+types.
 
-See the [Bootstrap Migration Guide](https://getbootstrap.com/docs/4.1/migration/) for required changes to your backend modules.
-To give an impression on which style changes might be required in project code, the following list contains CSS class
-changes we performed during the upgrade to Bootstrap 4:
+### Backend Theme Library
+
+The backend was upgraded to Bootstrap 4.1.3.
+
+See the [Bootstrap Migration Guide](https://getbootstrap.com/docs/4.1/migration/) for required changes to your backend
+modules. To give an impression on which style changes might be required in project code, the following list contains
+CSS class changes we performed during the upgrade to Bootstrap 4:
 
 .img-responsive -> .img-fluid
 - TCMSFieldMedia
 - TCMSFieldGMapCoordinate
 
 btn-default -> btn-secondary
-- Some TCMSField types and TCMSTableEditors so check yours.
+- Some TCMSField types and TCMSTableEditors.
 
 .pull-left -> .float-left
 - TCMSFieldDocument
@@ -345,12 +436,12 @@ Not found anywhere (so you might want to skip this search, too):
 - navbar-btn
 - progress-bar*
 
-## Backend JQuery
+### Backend JQuery
 
-JQuery that is used in the Chameleon backend was upgraded to version 3.3.1. For backwards compatibility
-jquery.migrate 1.4.1 was added, but will be removed in a future Chameleon version.
+JQuery used in the Chameleon backend was upgraded to version 3.3.1. For backwards compatibility jquery.migrate 1.4.1 was
+added, but will be removed in a future Chameleon release.
 
-## Backend Modals
+### Backend Modals
 
 To open modals in the backend, use `CHAMELEON.CORE.showModal()` now, which expects a CSS class that determines the
 modal size (one of `modal-sm`, `modal-md`, `modal-lg`, `modal-xl`, `modal-xxl`). This function will then open a
@@ -361,20 +452,42 @@ backwards-compatible way from the `width` argument (if in doubt, `modal-xxl` is 
 
 Please check custom calls of `CreateModal...` methods and remove width/height settings where possible.
 
-## Backend Tree Path Rendering
+### Backend Tree Path Rendering
 
 Tree paths are now rendered using Bootstrap 4 breadcrumb styles.
-Check your code for the CSS class "treeField" and if found, change the HTML to ol/li list with breadcrumb classes.
-See TCMSTreeNode::GetTreeNodePathAsBackendHTML() for an example. 
+Check your code for the CSS class `treeField` and if found, change the HTML to ol/li list with breadcrumb classes.
+See `TCMSTreeNode::GetTreeNodePathAsBackendHTML` for an example. 
 
-## Font Awesome Icons
+### Icons
 
-The icons of Font Awesome have been added.
+The famfamfam icon library is deprecated.
+Please check your code to any reference to the directory "/icons/".
+The folder exists twice, globally and inside a theme directory and both are deprecated.
+
+The icons of Font Awesome have been added as a replacement.
 They will replace all file icons and the glyphicons of Bootstrap3 in the backend.
 
 During migration, icons for main menu items will be replaced with matching Font Awesome icons. 
 
-Where icons cannot be matched, a default icon will be used; the database migrations will tell which icons could not be assigned. To manually assign an icon to a menu item representing a table, navigate to the table settings of this table and fill out the field "Icon Font CSS class". To manually assign an icon to a menu item representing a backend module, do this in the "CMS modules" menu respectively. See other menu items on what to write into these fields.
+Where icons cannot be matched, a default icon will be used; the database migrations will tell which icons could not be
+assigned. To manually assign an icon to a menu item representing a table, navigate to the table settings of this table
+and fill out the field "Icon Font CSS class". To manually assign an icon to a menu item representing a backend module,
+do this in the "CMS modules" menu respectively. See other menu items on what to write into these fields.
+
+### File Type Icons in WYSIWYG
+
+The image based file type icons where replaced by ["dmhendricks/file-icon-vectors"](https://github.com/dmhendricks/dmhendricks/file-icon-vectors).
+If you replaced the old icons with custom icons, you should check the CSS for that, because the HTML for the downloads
+changed slightly.
+The new icon is a `<span>` with CSS classes instead of a background image of the download link.
+If you have no custom icons the new icons should fit without any changes.
+
+A twig template which renders the download link can now be overridden: "/common/download/download.html.twig" (backend
+and frontend).
+
+# Optional
+
+The steps in this section are not strictly required but are recommended to make use of new features.
 
 ## Backend Pagedef Configuration
 
@@ -389,28 +502,55 @@ done by adding the following line after the module list definition:
 There are additional helper methods to simplify adding typical backend modules, but it is optional to use these methods.
 See `src/CoreBundle/private/library/classes/pagedefFunctions.inc.php` for reference.
 
-## Main Menu Changes
+# Cleanup
 
-This release of Chameleon System features a new main menu that is displayed as a sidebar while the old main menu (now
-called "classic main menu" is deprecated and will be removed in a future release. The new menu was restructured and some
-menu items were renamed to improve comprehensibility of the menu structure.
+The steps in this section are not strictly required but should be performed in order to be prepared for future Chameleon
+releases.
+
+## Access-denied Page
+
+The access-denied page should now support an additionally mapped parameter `loginFormAction` as a target action for the shown 
+login form. This avoids an unexpected second AccessDeniedException when logging in from the access-denied page.
+Login still worked in that case however.
+If you use a custom theme check the files `webModules/MTExtranet/accessDenied.view.php` and `snippets/common/userInput/form/formLoginStandard.html.twig`
+and adapt them according to the changes in `chameleon-shop-theme-bundle`. 
+
+## RevisionManagementBundle
+
+The RevisionManagementBundle is no longer supported. Remove it from the AppKernel. For now some database fields in the
+backend still refer to the bundle - they will be removed in a future Chameleon release.
+
+The bundle has been non-functional for some time, so there should be no loss of functionality.
+
+## ckEditor
+
+The custom skin moonocolor is deprecated.
+If you have an extension of chameleonConfig.js please be sure to change the skin to 
+`config.skin = 'moono-lisa';` and the color to: `config.uiColor = '#f0f3f5';`
+
+## Remove Deprecated Code Usage
+
+A lot of code entities were marked as deprecated and should no longer be used. See the `Deprecated Code Entities`
+section at the end of this document for details.
+
+# Informational
+
+This section provides information on further changes that only require action for more exotic use cases.
+
+## Restore Main Menu
+
+As the main menu is now displayed in the sidebar, the classic main menu was replaced with a welcome screen (which we
+plan to replace with a dashboard in a future Chameleon release). If users would like to keep the classic main menu yet,
+it can be restored by setting the config value `chameleon_system_core: backend: home_pagedef: 'main'` in `config.yml`.
 
 The content boxes of the classic main menu are unchanged to give users time to get accustomed to the new menu. It
 didn't make sense to keep old menu item names though, so be aware that some menu items were changed. The changes
 should be quite straightforward.
 
-Also some menu items that were located in the top bar were now moved to the sidebar. Finally the backend modules that
-were called in a popup window, like navigation, product search index generation and sanity check, now open inline.
+## Csv2SqlBundle No Longer Sends Logs
 
-From a technical point no changes are required if the project is a shop system. Projects that are pure CMS systems
-should consider removing menu categories that are nevertheless created during migration. Note that there will be some
-error messages during migration that complain about missing shop tables and modules in this case, which can be ignored. 
-
-## Home Page Changes
-
-As the main menu is now displayed in the sidebar, the classic main menu was replaced by a welcome screen (which we plan
-to replace by a dashboard in a future Chameleon release). If users would like to keep the classic main menu yet, it can
-be restored by setting the config value `chameleon_system_core: backend: home_pagedef: 'main'` in `config.yml`.
+In `\TPkgCsv2SqlManager::SendErrorNotification()` log output is no longer collected and no longer sent as attachments
+with the notification email.
 
 # Deprecated Code Entities
 
@@ -423,6 +563,7 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Services
 
+- chameleon_system_cms_core_log.cronjob.cleanup_cronjob
 - chameleon_system_core.pdo
 - cmsPkgCore.logChannel.apilogger
 - cmsPkgCore.logChannel.cmsUpdates
@@ -436,6 +577,7 @@ is recommended (although this tool may not find database-related deprecations).
 - cmsPkgCore.logDriver.dbal
 - cmsPkgCore.logDriver.security
 - cmsPkgCore.logDriver.standard
+- cmsPkgCore.logHandler.database
 - cmsPkgCore.logHandler.dbal
 - cmsPkgCore.logHandler.files
 - cmsPkgCore.logHandler.fingerscrossed
@@ -457,17 +599,28 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Log channels
 
-- Three newly defined log channels are deprecated and only necessary for backwards compatibility: chameleon_security, chameleon_dbal, chameleon_api
+Three newly defined log channels are deprecated and only necessary for backwards compatibility:
+- chameleon_api
+- chameleon_dbal
+- chameleon_security
 
 ## Constants
 
 - \CMS_ACTIVE_REVISION_MANAGEMENT
+- \PATH_FILETYPE_ICONS
+- \PATH_FILETYPE_ICONS_LOW_QUALITY
+- \PKG_CMS_CORE_LOG_DEFAULT_MAX_AGE_IN_SECONDS
+- \PKG_CMS_CORE_LOG_DEFAULT_MAX_AGE_IN_SECONDS_LEVEL_BELOW_WARNING
 - \TCMSCronJob_CleanOrphanedMLTConnections::MLT_DELETE_LOG_FILE
 - \TCMSTableEditorEndPoint::DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR
 - \TPkgCsv2SqlManager::IMPORT_ERROR_LOG_FILE
+- \URL_FILETYPE_ICONS
+- \URL_FILETYPE_ICONS_LOW_QUALITY
 
 ## Classes and Interfaces
 
+- \ChameleonSystem\CmsCoreLogBundle\Bridge\Chameleon\ListManager\TCMSListManagerLogEntries
+- \ChameleonSystem\CmsCoreLogBundle\Command\LogShowCommand
 - \IPkgCmsCoreLog
 - \MTMenuManager
 - \TCMSContentBox
@@ -475,11 +628,14 @@ is recommended (although this tool may not find database-related deprecations).
 - \TCMSFieldMediaProperties
 - \TCMSFontImage
 - \TCMSFontImageList
+- \TCMSMediaTreeNode
 - \TCMSMenuItem
 - \TCMSMenuItem_Module
 - \TCMSMenuItem_Table
 - \THTMLFileBrowser
 - \TPkgCmsCoreLog
+- \TPkgCmsCoreLogCleanupCronJob
+- \TPkgCmsCoreLogMonologHandler_Database
 - \TPkgSnippetRenderer_TranslationNode
 - \TPkgSnippetRenderer_TranslationTokenParser
 - \TTemplateTools
@@ -489,11 +645,13 @@ is recommended (although this tool may not find database-related deprecations).
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$sGeneratedPage
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$postRenderVariables
 - \TAccessManagerPermissions::$revisionManagement
+- \TCMSFieldLookupFieldTypes::$sFieldHelpTextHTML
+- \TCMSFile::sTypeIcon
+- \TCMSTableEditorChangeLog::$oOldFields
+- \TCMSURLHistory::index
 - \TFullGroupTable::$iconSortASC
 - \TFullGroupTable::$iconSortDESC
 - \TPkgCsv2Sql::$sLogFileName
-- \TCMSFieldLookupFieldTypes::$sFieldHelpTextHTML
-- \TCMSTableEditorChangeLog::$oOldFields
 
 ## Methods
 
@@ -518,8 +676,10 @@ is recommended (although this tool may not find database-related deprecations).
 - \MTTableManager::getAutocompleteRecordList()
 - \TAccessManager::HasRevisionManagementPermission()
 - \TCMSCronJob::getLogger()
+- \TCMSDownloadFileEndPoint::GetDownloadLink()
 - \TCMSFieldColorPicker::isFirstInstance()
 - \TCMSFieldLookup::enableComboBox()
+- \TCMSLogChange::getCmsContentBoxIdFromSystemName()
 - \TCMSLogChange::getUpdateLogger()
 - \TCMSTreeNode::GetPageTreeConnectionDateInformationHTML()
 - \TGlobal::GetURLHistory()
@@ -536,14 +696,18 @@ is recommended (although this tool may not find database-related deprecations).
 
 - bootstrap-colorpicker (new version 3.0.3 located in src/CoreBundle/Resources/public/javascript/jquery/bootstrap-colorpicker-3.0.3).
 - chosen.jquery.js
+- flash.js
+- html5shiv.js
 - jqModal.js 
 - jqDnR.js
 - jquery.form.js (new version 4.2.2 located in src/CoreBundle/Resources/public/javascript/jquery/jquery-form-4.2.2/jquery.form.min.js).
 - jquery.selectboxes.js
 - jQueryUI (everything in path src/CoreBundle/Resources/public/javascript/jquery/jQueryUI; drag and drop still used in the template engine).
+- maskedinput.js
 - pngForIE.htc
 - pNotify (new version 3.2.0 located in src/CoreBundle/Resources/public/javascript/pnotify-3.2.0/)
 - respond.min.js
+- rwd.images.js
 - src/CoreBundle/Resources/public/javascript/mainNav.js
 - THTMLFileBrowser.js
 - THTMLTable.js
@@ -567,19 +731,32 @@ is recommended (although this tool may not find database-related deprecations).
 - SaveNewRevision()
 - SetChangedDataMessage()
 - showMLTField()
+- SwitchEditPortal()
+- SwitchEditPortalCallback()
+
+## Frontend Assets
+
+There are some frontend styles, images and javascript helpers located in the core, 
+that are deprecated because they are outdated and replaced by frontend themes or will move to the bundle.
+
+- web_modules/MTConfigurableFeedbackCore (will be moved to bundle)
+- web_modules/MTExtranet
+- web_modules/MTFAQListCore
+- web_modules/MTFeedbackCore
+- web_modules/MTGlobalListCore
+- web_modules/MTNewsletterSignupCore
 
 ## Translations
 
-- chameleon_system_core.action.return_to_main_menu
 - chameleon_system_core.field_options.option_value_false
 - chameleon_system_core.field_options.option_value_true
 - chameleon_system_core.fields.lookup.no_matches
 - chameleon_system_core.record_lock.lock_owner_fax
 - chameleon_system_core.record_revision.action_confirm_restore_revision
 - chameleon_system_core.record_revision.action_create_page_revision
-- chameleon_system_core.record_revision.action_new_revision
 - chameleon_system_core.record_revision.action_load_page_revision
 - chameleon_system_core.record_revision.action_load_revision
+- chameleon_system_core.record_revision.action_new_revision
 - chameleon_system_core.record_revision.action_restore_revision
 - chameleon_system_core.record_revision.based_on
 - chameleon_system_core.record_revision.confirm_restore_revision
@@ -592,6 +769,10 @@ is recommended (although this tool may not find database-related deprecations).
 - chameleon_system_core.record_revision.no_revision_exists
 - chameleon_system_core.record_revision.revision_number
 - chameleon_system_core.template_engine.header_revision
+- pkg_cms_core_log.log_table.field_level
+- pkg_cms_core_log.log_table.select_level_all
+- pkg_cms_core_log.log_table.select_level_all_errors
+- pkg_cms_core_log.log_table.select_level_only
 
 ## Database Tables
 
@@ -614,3 +795,7 @@ is recommended (although this tool may not find database-related deprecations).
 ## Flash Messages
 
 - TABLEEDITOR_REVISION_SAVED
+
+## Page Definitions
+
+- api.pagedef.php

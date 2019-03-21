@@ -82,7 +82,7 @@ class TPkgExternalTrackerGoogleAnalytics extends TdbPkgExternalTracker
      *
      * @param TPkgExternalTrackerState $oState
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getIdentifierCode(TPkgExternalTrackerState $oState)
     {

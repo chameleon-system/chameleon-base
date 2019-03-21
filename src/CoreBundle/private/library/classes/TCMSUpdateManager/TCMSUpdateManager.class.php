@@ -180,8 +180,8 @@ class TCMSUpdateManager
      * Processes all non-processed updates for a specified bundle up to a buildNumber, or all updates of a bundle if null is passed as
      * highest build number, or updates for all bundles if null is passed as bundle alias.
      *
-     * @param null|string $bundleNameToRun
-     * @param null|int    $highestBuildNumberToExecute
+     * @param string|null $bundleNameToRun
+     * @param int|null    $highestBuildNumberToExecute
      *
      * @return string
      *
@@ -265,8 +265,8 @@ class TCMSUpdateManager
      * records the file as "processed" in the database.
      *
      * @param string      $sFileName  string full file name (e.g. "build6.inc.php)
-     * @param null|string $bundleName
-     * @param null|string $sSubdir    @deprecated since 6.2.0 - no longer used
+     * @param string|null $bundleName
+     * @param string|null $sSubdir    @deprecated since 6.2.0 - no longer used
      *
      * @return MigrationResult
      */

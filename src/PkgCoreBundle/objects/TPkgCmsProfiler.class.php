@@ -83,7 +83,7 @@ class TPkgCmsProfiler
     }
 
     /**
-     * @return null|TPkgCmsProfileItem_Group
+     * @return TPkgCmsProfileItem_Group|null
      */
     private function &getGroupPointer()
     {
