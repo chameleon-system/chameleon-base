@@ -342,7 +342,6 @@ class CMSModuleImageManager extends TCMSModelBase
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/table.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jsTree/jquery.jstree.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tooltip.css" rel="stylesheet" type="text/css" />';
 
         return $aIncludes;
     }
