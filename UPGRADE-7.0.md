@@ -51,11 +51,17 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Properties
 
+- ChameleonSystem\CoreBundle\Controller\ChameleonController::$portalDomainService
+- ChameleonSystem\CoreBundle\Controller\ChameleonController::$redirectPageDef
+- ChameleonSystem\CoreBundle\Controller\ChameleonController::$requestInfoService
 - TGlobal::$oURLHistory
 - TGlobalBase::$aUnitTestMockedObjects
 
 ## Methods
 
+- ChameleonSystem\CoreBundle\Controller\ChameleonController::GetExecutionTime()
+- ChameleonSystem\CoreBundle\Controller\ChameleonController::postRoutingHook()
+- ChameleonSystem\CoreBundle\Controller\ChameleonController::setOutputPageLoadTimeInfo()
 - IPkgCmsFileManager::setDriver()
 - TCMSActivePage::GetActiveLanguage()
 - TCMSActivePage::GetActiveLanguageObject()

@@ -63,12 +63,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     public $moduleLoader;
     /**
-     * @var string
-     *
-     * @deprecated since 6.2.0 - not used anymore
-     */
-    protected $redirectPageDef;
-    /**
      * @var array
      *
      * @deprecated since 6.3.0 - not used anymore
@@ -104,17 +98,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private $eventDispatcher;
     /**
-     * @var PortalDomainServiceInterface
-     *
-     * @deprecated since 6.1.9 - no longer used in this class.
-     */
-    protected $portalDomainService;
-    /**
      * @var RequestInfoServiceInterface
-     *
-     * @deprecated since 6.1.9 - no longer used in this class.
      */
-    protected $requestInfoService;
+    private $requestInfoService;
     /**
      * @var ICmsCoreRedirect
      *
@@ -134,17 +120,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private $responseVariableReplacer;
 
-    /**
-     * @param RequestStack                 $requestStack
-     * @param EventDispatcherInterface     $eventDispatcher
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param TModuleLoader                $moduleLoader
-     * @param IViewPathManager|null        $viewPathManager
-     */
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
-        PortalDomainServiceInterface $portalDomainService,
         TModuleLoader $moduleLoader,
         IViewPathManager $viewPathManager = null
     ) {
@@ -153,7 +131,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->moduleLoader->setController($this);
         $this->viewPathManager = $viewPathManager;
         $this->eventDispatcher = $eventDispatcher;
-        $this->portalDomainService = $portalDomainService;
     }
 
     /**
@@ -755,18 +732,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * return the time the process has run so far.
-     *
-     * @return float
-     *
-     * @deprecated since 6.2.0 - use a proper external tool to measure performance.
-     */
-    public function GetExecutionTime()
-    {
-        return 0;
-    }
-
-    /**
      * {@inheritdoc}
      *
      * This method will do nothing if CHAMELEON_ENABLE_FLUSHING is set to false in the config file.
@@ -886,25 +851,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * @param Request $request
-     *
-     * @deprecated since 6.1.9 - use an event listener for Symfony or Chameleon lifecycle events instead. The event that
-     * corresponds to this method in terms of execution order is CoreEvents::CHANGE_ACTIVE_PAGE.
-     */
-    protected function postRoutingHook(Request $request)
-    {
-    }
-
-    /**
-     * @param bool $outputPageLoadTimeInfo
-     *
-     * @deprecated since 6.2.0 - use a proper external tool to measure performance.
-     */
-    public function setOutputPageLoadTimeInfo($outputPageLoadTimeInfo)
-    {
-    }
-
-    /**
      * @return array
      */
     public function getHtmlHeaderIncludes()
@@ -930,8 +876,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * @param RequestInfoServiceInterface $requestInfoService
-     *
-     * @deprecated since 6.1.9 - no longer used in this class.
      */
     public function setRequestInfoService($requestInfoService)
     {
