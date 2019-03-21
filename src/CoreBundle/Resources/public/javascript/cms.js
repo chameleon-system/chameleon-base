@@ -508,4 +508,11 @@ CHAMELEON.CORE.handleFormAndLinkTargetsInModals = function () {
             $(this).val('tablemanagerframe');
         });
     });
+
+    $("a[target='_top']").each(function() {
+        $(this).attr('target', '');
+
+        var link = $(this).attr('href').replace('pagedef=tableeditor', 'pagedef=tableeditorPopup');
+        $(this).attr('href', link);
+    });
 };
