@@ -13,8 +13,13 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Constants
 
+- CHAMELEON_MEMCACHE_USE_LAZY_CACHE_WRITE_WRITEQUEUE
+- CHAMELEON_MEMCACHE_USE_LAZY_CACHE_WRITE_WRITEQUEUE_DIR
+
 ## Classes and Interfaces
 
+- TCacheManagerStorage_Decorator
+- TCacheManagerStorage_Decorator_LazyWriteMemcache
 - TCacheManagerStorage_Standard
 - TPkgCmsClassManager_CmsConfig
 
