@@ -460,16 +460,6 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
     }
 
     /**
-     * Refreshes the preview image to viddler. If no preview image was set,
-     * then get preview image from video starting point.
-     *
-     * @deprecated since 6.2.0 - Viddler is no longer supported
-     */
-    protected function RefreshImageOnViddler()
-    {
-    }
-
-    /**
      * creates the sub dirs based on media pool base directory and image SEO path.
      */
     protected function CreateSubPathInImagePath()

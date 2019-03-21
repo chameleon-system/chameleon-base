@@ -84,19 +84,6 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
     }
 
     /**
-     * return default language id using the oActivePage
-     *
-     * @deprecated use TGlobal::GetActiveLanguageId() instead of this
-     *
-     * @return int
-     */
-    static protected function GetDefaultLanguageId()
-    {
-        trigger_error('use TGlobal::GetActiveLanguageId() instead of this', E_USER_DEPRECATED);
-        return self::getMyLanguageService()->getActiveLanguageId();
-    }
-
-    /**
      * return default query for the table
      * @param int $iLanguageId - language used for query
      * @param string $sFilterString - any filter conditions to add to the query

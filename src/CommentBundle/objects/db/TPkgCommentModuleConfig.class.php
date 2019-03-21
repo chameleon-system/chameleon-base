@@ -208,20 +208,6 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
     }
 
     /**
-     * return default language id using the oActivePage.
-     *
-     * @deprecated use TGlobal::GetActiveLanguageId() instead of this
-     *
-     * @return string
-     */
-    protected static function GetDefaultLanguageId()
-    {
-        trigger_error('use TGlobal::GetActiveLanguageId() instead of this', E_USER_DEPRECATED);
-
-        return self::getLanguageService()->getActiveLanguageId();
-    }
-
-    /**
      * return active item.
      *
      * @return object

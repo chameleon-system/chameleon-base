@@ -97,18 +97,6 @@ class TCMSPage extends TCMSPageAutoParent
     }
 
     /**
-     * Gets the main tree from the site or null if no tree was found.
-     *
-     * @return TdbCmsTree|null
-     *
-     * @deprecated since 6.1.5 - use chameleon_system_core.tree_service::getById($page->GetMainTreeId()) instead.
-     */
-    public function GetMainTree()
-    {
-        return self::getTreeService()->getById($this->GetMainTreeId());
-    }
-
-    /**
      * Returns the primary tree id that this page connects to. If no primary
      * node has been set, it will return the first secondary node id we find.
      * Returns null if the page is not assigned to any page.

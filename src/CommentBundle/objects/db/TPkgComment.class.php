@@ -325,20 +325,6 @@ class TPkgComment extends TPkgCommentAutoParent
     }
 
     /**
-     * return default language id using the oActivePage.
-     *
-     * @deprecated use TGlobal::GetActiveLanguageId() instead of this
-     *
-     * @return string
-     */
-    protected static function GetDefaultLanguageId()
-    {
-        trigger_error('use TGlobal::GetActiveLanguageId() instead of this', E_USER_DEPRECATED);
-
-        return self::getLanguageService()->getActiveLanguageId();
-    }
-
-    /**
      * render the list using a given view.
      *
      * @param string $sViewName     - view name

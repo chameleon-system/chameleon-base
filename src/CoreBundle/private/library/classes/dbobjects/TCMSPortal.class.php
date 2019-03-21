@@ -113,18 +113,6 @@ class TCMSPortal extends TCMSRecord
     }
 
     /**
-     * returns the url to the home node of the portal.
-     *
-     * @return string
-     *
-     * @deprecated since 6.1.0 - use chameleon_system_core.page_service::getLinkToPortalHomePageAbsolute() instead
-     */
-    public function GetPortalHomeURL()
-    {
-        return self::getPageService()->getLinkToPortalHomePageAbsolute(array(), $this);
-    }
-
-    /**
      * get the portal or portals that match the given domain name.
      *
      * @param string $sDomainName
@@ -298,55 +286,6 @@ class TCMSPortal extends TCMSRecord
         }
 
         return $sDomainHost;
-    }
-
-    /**
-     * Returns the primary domain object based on target language id.
-     *
-     * @param string $languageId
-     *
-     * @return TdbCmsPortalDomains
-     *
-     * @throws InvalidPortalDomainException
-     *
-     * @deprecated since 6.2.0 - use chameleon_system_core.portal_domain_service::getPrimaryDomain() instead.
-     */
-    public function &GetPrimaryDomainObject($languageId = '')
-    {
-        if (empty($languageId)) {
-            $languageId = null;
-        }
-
-        return self::getPortalDomainService()->getPrimaryDomain($this->id, $languageId);
-    }
-
-    /**
-     * Returns the SSL name of the primary domain for this portal.
-     *
-     * @return string
-     *
-     * @throws InvalidPortalDomainException
-     *
-     * @deprecated since 6.2.0 - use chameleon_system_core.portal_domain_service::getPrimaryDomain()->fieldSslname instead.
-     *                           Be aware though that the field might be empty, in which case the name field serves for
-     *                           both HTTP and HTTPS access. In order to always receive a valid domain, it is recommended
-     *                           to call chameleon_system_core.portal_domain_service::getPrimaryDomain()->getSecureDomainName().
-     */
-    public function GetPrimarySSLDomain()
-    {
-        return self::getPortalDomainService()->getPrimaryDomain($this->id)->fieldSslname;
-    }
-
-    /**
-     * returns the corresponding SSL domain for the current URL.
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - use chameleon_system_core.portal_domain_service::getActiveDomain()->getSecureDomainName() instead.
-     */
-    public function GetSSLDomainForCurrentURL()
-    {
-        return self::getPortalDomainService()->getActiveDomain()->getSecureDomainName();
     }
 
     /**
@@ -713,44 +652,6 @@ class TCMSPortal extends TCMSRecord
         }
 
         return $aLanguages;
-    }
-
-    /**
-     * returns the base URL for the portal
-     * e.g. http[s]://www.MainDomain.com/OptionalPrefix/OptionalLanguagePrefix
-     * use this method to get the URL for <base href>.
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - use chameleon_system_core.page_service::getLinkToPortalHomePageAbsolute() instead.
-     */
-    public function GetPortalBaseURL()
-    {
-        $url = static::getPageService()->getLinkToPortalHomePageAbsolute(array(), $this);
-        $url = rtrim($url, '/').'/';
-
-        return $url;
-    }
-
-    /**
-     * return the absolute URL to the portal for a given language.
-     *
-     * @param $sLanguageId
-     * @param bool $bUseSSL
-     *
-     * @return string
-     *
-     * @deprecated since 6.1.4 - use chameleon_system_core.page_service::getLinkToPortalHomePageAbsolute() instead.
-     */
-    public function getRootURL($sLanguageId, $bUseSSL = false)
-    {
-        $language = null;
-        if ($sLanguageId) {
-            $language = new TdbCmsLanguage();
-            $language->LoadWithCaching($sLanguageId);
-        }
-
-        return self::getPageService()->getLinkToPortalHomePageAbsolute(array(), $this, $language, $bUseSSL);
     }
 
     /**
