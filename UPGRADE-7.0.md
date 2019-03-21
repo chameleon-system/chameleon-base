@@ -30,6 +30,9 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Methods
 
+- TCMSActivePage::GetActiveLanguage()
+- TCMSActivePage::GetActiveLanguageObject()
+- TCMSActivePage::GetInstanceWithoutCache()
 - TGlobal::GetActiveLanguageId()
 - TGlobalBase::_GetModuleRootPath()
 - TGlobalBase::AddFileToPHPFileCache()
