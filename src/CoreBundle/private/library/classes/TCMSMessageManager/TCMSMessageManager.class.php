@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\EventListener\AddBackendToasterMessageListener;
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -102,7 +103,7 @@ class TCMSMessageManager
 
             /** @var $oMessage TdbCmsMessageManagerMessage */
             $oMessage = TdbCmsMessageManagerMessage::GetNewInstance();
-            $oMessage->SetLanguage(TGlobal::GetActiveLanguageId());
+            $oMessage->SetLanguage($this->getLanguageService()->getActiveLanguageId());
 
             // try to load the message. if this fails, we create the message....
             if (!$oMessage->LoadFromFields(array('name' => $sMessageCode, 'cms_portal_id' => $iPortalId))) {
@@ -467,6 +468,11 @@ class TCMSMessageManager
     private function getActivePageService()
     {
         return ServiceLocator::get('chameleon_system_core.active_page_service');
+    }
+
+    private function getLanguageService(): LanguageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     private function getPortalDomainService(): PortalDomainServiceInterface

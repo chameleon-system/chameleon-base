@@ -47,6 +47,10 @@ class RequestInfoService implements RequestInfoServiceInterface
      * @var int|null
      */
     private $chameleonRequestType;
+    /**
+     * @var bool
+     */
+    private $isCmsTemplateEngineEditModeCache;
 
     /**
      * @param RequestStack                 $requestStack
@@ -107,7 +111,17 @@ class RequestInfoService implements RequestInfoServiceInterface
      */
     public function isCmsTemplateEngineEditMode()
     {
-        return \TGlobal::IsCMSTemplateEngineEditMode();
+        if (null !== $this->isCmsTemplateEngineEditModeCache) {
+            return $this->isCmsTemplateEngineEditModeCache;
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return false;
+        }
+        $this->isCmsTemplateEngineEditModeCache = false === \TGlobal::IsCMSMode() && 'true' === $request->get('__modulechooser');
+
+        return $this->isCmsTemplateEngineEditModeCache;
     }
 
     /**

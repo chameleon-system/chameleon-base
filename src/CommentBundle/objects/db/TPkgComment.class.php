@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 
 class TPkgComment extends TPkgCommentAutoParent
@@ -304,14 +306,14 @@ class TPkgComment extends TPkgCommentAutoParent
     public function GetChildComments($iLanguageId = null)
     {
         $oList = $this->GetFromInternalCache('CommentChildList');
-        if (is_null($oList)) {
+        if ($oList === null) {
             $sQuery = "SELECT * FROM `pkg_comment`
                   WHERE `pkg_comment`.`item_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->fieldItemId)."'
                     AND `pkg_comment_id`='".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
                     AND `pkg_comment_type_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->fieldPkgCommentTypeId)."'
                ORDER BY `pkg_comment`.`created_timestamp` DESC";
-            if (is_null($iLanguageId)) {
-                $iLanguageId = TGlobal::GetActiveLanguageId();
+            if ($iLanguageId === null) {
+                $iLanguageId = self::getLanguageService()->getActiveLanguageId();
             }
             $oList = TdbPkgCommentList::GetList();
             $oList->SetLanguage($iLanguageId);
@@ -333,7 +335,7 @@ class TPkgComment extends TPkgCommentAutoParent
     {
         trigger_error('use TGlobal::GetActiveLanguageId() instead of this', E_USER_DEPRECATED);
 
-        return TGlobal::GetActiveLanguageId();
+        return self::getLanguageService()->getActiveLanguageId();
     }
 
     /**

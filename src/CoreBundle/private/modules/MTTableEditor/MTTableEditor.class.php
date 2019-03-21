@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -108,7 +109,7 @@ class MTTableEditor extends TCMSModelBase
         $translatedObject->Load($targetObject->id);
         $translatedFields = TdbCmsConfig::GetInstance()->GetListOfTranslatableFields($targetObject->table);
         $new = $targetObject->sqlData;
-        $activeLanguagePrefix = TGlobal::GetLanguagePrefix(TGlobal::GetActiveLanguageId());
+        $activeLanguagePrefix = TGlobal::GetLanguagePrefix($this->getLanguageService()->getActiveLanguageId());
         if (!empty($activeLanguagePrefix)) {
             $activeLanguagePrefix = '__'.$activeLanguagePrefix;
         }
@@ -1141,5 +1142,10 @@ class MTTableEditor extends TCMSModelBase
     private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
+    }
+
+    private function getLanguageService(): LanguageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 }

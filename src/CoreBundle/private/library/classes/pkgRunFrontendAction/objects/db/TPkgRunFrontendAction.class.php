@@ -83,7 +83,7 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
             }
             $aData['parameter'] = TTools::mb_safe_serialize($aParameter);
             if (null === $sLanguageId) {
-                $sLanguageId = TGlobal::GetActiveLanguageId();
+                $sLanguageId = self::getLanguageService()->getActiveLanguageId();
             }
             $aData['cms_language_id'] = $sLanguageId;
             $oAction = TdbPkgRunFrontendAction::GetNewInstance($aData);

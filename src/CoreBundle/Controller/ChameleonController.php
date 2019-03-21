@@ -293,7 +293,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
             'type' => 'pagedefdata',
             'pagedef' => $pagedef,
             'requestMasterPageDef' => $this->inputFilterUtil->getFilteredInput('__masterPageDef', false),
-            'isTemplateEngineMode' => TGlobal::IsCMSTemplateEngineEditMode(),
+            'isTemplateEngineMode' => $this->requestInfoService->isCmsTemplateEngineEditMode(),
             'cmsuserdefined' => TGlobal::CMSUserDefined(),
         );
 

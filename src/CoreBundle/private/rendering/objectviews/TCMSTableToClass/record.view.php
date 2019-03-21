@@ -388,7 +388,7 @@ $oFields->GoToStart();
                 $isMultiLanguageField = call_user_func(array($sAutoClassName,'CMSFieldIsTranslated'), $sNameColumn);
                 if($isMultiLanguageField ) {
                     if($this->GetLanguage() === null) {
-                        $this->SetLanguage(TGlobal::GetActiveLanguageId());
+                        $this->SetLanguage(self::getLanguageService()->getActiveLanguageId());
                     }
                     $sActiveLanguagePrefix = '__'.TGlobal::GetLanguagePrefix($this->GetLanguage());
                     // prefix only if array key exists

@@ -161,7 +161,7 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
      *
      * @param string   $sItemId
      * @param string   $sTypeId
-     * @param int|null $iLanguageId
+     * @param string|null $iLanguageId
      *
      * @return TdbPkgCommentList
      */
@@ -179,8 +179,8 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
             $sOrderBy = 'ORDER BY `pkg_comment`.`created_timestamp` ASC';
         }
         $sQuery .= ' '.$sOrderBy;
-        if (is_null($iLanguageId)) {
-            $iLanguageId = TGlobal::GetActiveLanguageId();
+        if ($iLanguageId === null) {
+            $iLanguageId = self::getLanguageService()->getActiveLanguageId();
         }
         $oList = TdbPkgCommentList::GetList();
         $oList->SetLanguage($iLanguageId);
@@ -218,7 +218,7 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
     {
         trigger_error('use TGlobal::GetActiveLanguageId() instead of this', E_USER_DEPRECATED);
 
-        return TGlobal::GetActiveLanguageId();
+        return self::getLanguageService()->getActiveLanguageId();
     }
 
     /**
