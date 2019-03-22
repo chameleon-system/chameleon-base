@@ -152,18 +152,24 @@ class TCMSTableFieldWriter extends TCMSTableEditor
 
         $this->_oField = $this->adaptFieldAndRelatedTables($oPostTable->sqlData);
 
-        $this->getAutoclassesCacheWarmer()->updateTableById($oPostTable->sqlData['cms_tbl_conf_id']);
+        if (\array_key_exists('cms_tbl_conf_id', $oPostTable->sqlData)) {
+            $this->getAutoclassesCacheWarmer()->updateTableById($oPostTable->sqlData['cms_tbl_conf_id']);
+        }
     }
 
     /**
      * @param array $postData
      *
-     * @return TCMSField - the new definition after changes
+     * @return TCMSField|null - the new definition after changes; or null for small changes (without type)
      *
      * @throws DBALException
      */
-    protected function adaptFieldAndRelatedTables(array $postData): TCMSField
+    protected function adaptFieldAndRelatedTables(array $postData): ?TCMSField
     {
+        if (false === \array_key_exists('cms_field_type_id', $postData)) {
+            return null;
+        }
+
         $oldTypeId = $this->oldData['cms_field_type_id'];
         $newTypeId = $postData['cms_field_type_id'];
         $newName = $this->oTable->sqlData['name'];
