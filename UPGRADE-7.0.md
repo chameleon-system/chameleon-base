@@ -111,5 +111,5 @@ The code entities in this list were marked as deprecated in previous releases an
 #Icons
 
 All icons in CoreBundle/Resources/public/images/ 
-and CoreBundle/Resources/public/themes/standard/images/ (not recursively, subfolders remain) where deleted. 
+and CoreBundle/Resources/public/themes/standard/images/ (not recursively, subfolders remain) were deleted. 
 Exceptions are the chameleon logos and favicon.ico.
