@@ -91,6 +91,7 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Classes and Interfaces
 
+- CMSFieldMLT
 - TCMSFontImage
 - TCMSFontImageList
 
