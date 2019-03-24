@@ -712,6 +712,7 @@ class MTHeader extends TCMSModelBase
     {
         $includes = parent::GetHtmlHeadIncludes();
         $includes[] = '<link href="'.TGlobal::GetPathTheme().'/images/favicon.ico" rel="shortcut icon" />';
+        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fontawesome-free-5.8.1/css/all.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/bootstrap/css/glyph-icons.css?v4.1').'" media="screen" rel="stylesheet" type="text/css" />';
         $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fontawesome-free-5.5.0/css/all.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fileIconVectors/file-icon-square-o.css').'" media="screen" rel="stylesheet" type="text/css" />';
