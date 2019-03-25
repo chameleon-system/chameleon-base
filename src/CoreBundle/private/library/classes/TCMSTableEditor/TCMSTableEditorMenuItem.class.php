@@ -132,7 +132,7 @@ class TCMSTableEditorMenuItem
         $html .= '>';
 
         if ($this->isIconUrl($this->sIcon)) {
-            $html .= '<img src="'.$this->sIcon.'" border="0" style="float: left; padding-right: 5px;" alt="" />';
+            $html .= '<img src="'.$this->sIcon.'" border="0" style="float: left; padding-right: 5px; padding-top: 3px;" alt="" />';
         } else {
             $html .= '<i class="'.$this->sIcon.' pr-2"></i>';
         }

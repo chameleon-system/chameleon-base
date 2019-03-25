@@ -106,7 +106,7 @@ class TCMSListManagerWYSIWYGImage extends TCMSListManagerImagedatabase
     }
 
     /**
-     *  Add media filter for images that be got from URL.
+     *  Add media filter for images that be gone from URL.
      *
      * @param string $query
      *

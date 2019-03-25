@@ -54,7 +54,7 @@
 	color: #fff;
 	margin-right: 8px;
 	text-decoration: none;
-  background: transparent url(/chameleon/blackbox/images/icons/cross.png) no-repeat scroll 3px 50%;
+  background: transparent url(/chameleon/blackbox/themes/standard/images/templateEngineEditor/cross.png) no-repeat scroll 3px 50%;
   padding-left: 20px;
 }
 
@@ -88,7 +88,7 @@
   display: block;
   height: 14px;
   background-color: #20a8d8;
-  background-image: url(/chameleon/blackbox/images/arrow_top_small.gif);
+  background-image: url(/chameleon/blackbox/themes/standard/images/templateEngineEditor/arrow_top_small.gif);
   background-position: center center;
   background-repeat: no-repeat;
   cursor: hand;
@@ -106,7 +106,7 @@
 }
 
 #cmsModuleMenu a.scrollbottom {
-  background-image: url(/chameleon/blackbox/images/arrow_down_small.gif);
+  background-image: url(/chameleon/blackbox/themes/standard/images/templateEngineEditor/arrow_down_small.gif);
   position:absolute;
   bottom:0;
 }
@@ -190,12 +190,12 @@
 }
 
 .hasChildren {
-  background: url(/chameleon/blackbox/images/arrow_right_small.gif) no-repeat scroll 98% center;
+  background: url(/chameleon/blackbox/themes/standard/images/templateEngineEditor/arrow_right_small.gif) no-repeat scroll 98% center;
 }
 
 #menuWrapper ul li a.expanded {
   color: #000;
-  background: url(/chameleon/blackbox/images/arrow_left_small.gif) no-repeat scroll 98% center;
+  background: url(/chameleon/blackbox/themes/standard/images/templateEngineEditor/arrow_left_small.gif) no-repeat scroll 98% center;
   background-color: #D2E4FD;
   font-weight: bold;
   border-bottom: 5px solid #20a8d8;
@@ -210,7 +210,7 @@
 }
 #menuWrapper ul li.active ul li a.expanded {
   color: #000;
-  background: url(/chameleon/blackbox/images/arrow_left_small.gif) no-repeat scroll 98% center;
+  background: url(/chameleon/blackbox/themes/standard/images/templateEngineEditor/arrow_left_small.gif) no-repeat scroll 98% center;
   background-color: #D2E4FD;
   font-weight: bold;
   border-bottom: 1px solid #20a8d8;
@@ -221,7 +221,7 @@
 
 #menuWrapper ul li.active ul li.active ul li a.expanded {
   color: #000;
-  background: url(/chameleon/blackbox/images/arrow_left_small.gif) no-repeat scroll 98% center;
+  background: url(/chameleon/blackbox/themes/standard/images/templateEngineEditor/arrow_left_small.gif) no-repeat scroll 98% center;
   background-color: #D2E4FD;
   font-weight: bold;
   border-bottom: 5px solid #20a8d8;
@@ -231,7 +231,7 @@
 }
 #menuWrapper ul li.active ul li.active ul li.active ul li a.expanded {
   color: #000;
-  background: url(/chameleon/blackbox/images/arrow_left_small.gif) no-repeat scroll 98% center;
+  background: url(//chameleon/blackbox/themes/standard/images/templateEngineEditor/arrow_left_small.gif) no-repeat scroll 98% center;
   background-color: #D2E4FD;
   font-weight: bold;
   border-bottom: 5px solid #20a8d8;
@@ -252,7 +252,7 @@
 a.cmsModuleMenuLauncher {
   display: block;
   color: #fff;
-  background: #81A6DD url(/chameleon/blackbox/images/icons/layout_edit.png) no-repeat 5px center;
+  background: #81A6DD url(/chameleon/blackbox/themes/standard/images/templateEngineEditor/layout_edit.png) no-repeat 5px center;
   padding-left: 25px;
   text-decoration: none;
   font-weight: bold;
@@ -270,7 +270,7 @@ a.cmsModuleMenuLauncher:hover {
 a.cmsModuleMenuLauncher span {
   color: #fff;
   display: block;
-  background: url(/chameleon/blackbox/images/arrow_down_small.gif) no-repeat scroll 98% center;
+  background: url(/chameleon/blackbox/themes/standard/images/templateEngineEditor/arrow_down_small.gif) no-repeat scroll 98% center;
   height: 20px;
 }
 .cmsModuleInstanceWorkflow{

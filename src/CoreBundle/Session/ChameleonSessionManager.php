@@ -111,16 +111,12 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         $options = $this->sessionOptions;
         if (true === TGlobal::IsCMSMode()) {
             $options['cookie_lifetime'] = 0;
-        } elseif (CMS_MAX_SESSION_LIFETIME > -1) {
-            $options['cookie_lifetime'] = CMS_MAX_SESSION_LIFETIME;
         }
         if ($options['cookie_lifetime'] > $options['gc_maxlifetime']) {
             $options['gc_maxlifetime'] = $options['cookie_lifetime'];
         }
 
-        if (CMS_COOKIE_HTTP_ONLY) {
-            $options['cookie_httponly'] = 1;
-        }
+        $options['cookie_httponly'] = 1;
 
         // we set the threshold of the meta data bag to 20 seconds so that the decoration WriteCheckSessionHandler can prevent writing unchanged session data within a 20 second time frame
         $metaDataBag = new MetadataBag('_sf2_meta', $this->metaDataTimeout);
@@ -153,21 +149,6 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
 
         $request = $this->getRequest();
         $request->setSession($session);
-
-        if (false === USE_ONLY_COOKIES_FOR_SESSION_ID) {
-            $sessionId = $this->inputFilterUtil->getFilteredInput($request->getSession()->getName(), null);
-            if (null === $sessionId) {
-                $sessionId = $request->cookies->get($request->getSession()->getName(), null);
-                if ('' === $sessionId) {
-                    // do not allow an empty session id
-                    $request->cookies->remove($request->getSession()->getName());
-                }
-            }
-
-            if (null !== $sessionId && '' !== $sessionId) {
-                $request->getSession()->setId($sessionId);
-            }
-        }
 
         $this->isSessionStarting = true;
         $request->getSession()->start();
