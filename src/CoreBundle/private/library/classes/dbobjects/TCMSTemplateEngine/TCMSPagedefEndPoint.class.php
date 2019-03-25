@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
 class TCMSPagedefEndPoint extends TCMSPage
@@ -331,7 +333,7 @@ class TCMSPagedefEndPoint extends TCMSPage
         // drop empty spots if we are in frontend mode
         $isTemplateEnginePagedef = ('templateengine' === $this->getInputFilterUtil()->getFilteredInput('pagedef', '')); //e.g. changing layouts
 
-        if (false === $isTemplateEnginePagedef && false === TGlobal::IsCMSTemplateEngineEditMode() && is_array($this->aModuleList)) {
+        if (true === \is_array($this->aModuleList) && false === $isTemplateEnginePagedef && false === $this->getRequestInfoService()->isCmsTemplateEngineEditMode()) {
             reset($this->aModuleList);
             foreach ($this->aModuleList as $spotName => $spot) {
                 if ('MTEmpty' === $spot->sModel) {
@@ -347,5 +349,10 @@ class TCMSPagedefEndPoint extends TCMSPage
     private function getInputFilterUtil()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getRequestInfoService(): RequestInfoServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.request_info_service');
     }
 }

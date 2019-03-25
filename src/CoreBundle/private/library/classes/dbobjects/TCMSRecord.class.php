@@ -375,20 +375,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-     * checks if a table is configured for multiple languages.
-     *
-     * @param string $sTableName
-     *
-     * @return bool
-     *
-     * @deprecated since 6.1.0 - table-based translation is no longer supported.
-     */
-    public static function IsMultiLanguageTable($sTableName = null)
-    {
-        return false;
-    }
-
-    /**
      * Load the database record from the table using $sValue as a filter on the field $sField.
      *
      * @param string $field

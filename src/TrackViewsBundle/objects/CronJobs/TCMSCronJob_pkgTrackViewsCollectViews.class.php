@@ -106,7 +106,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
         if (!MySqlLegacySupport::getInstance()->num_rows($res) || 0 == MySqlLegacySupport::getInstance()->num_rows($res)) {
             $aData = array('table_name' => $aHistoryRow['table_name'], 'owner_id' => $aHistoryRow['owner_id'], 'count' => $aHistoryRow['views'], 'time_block' => $aDateGroup[$sDate]);
 
-            /** @var IPkgCoreDbClassFactory|TCMSRecord $sClassName */
+            /** @var TCMSRecord $sClassName */
             $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $targetTable);
 
             $oViewCount = $sClassName::GetNewInstance();

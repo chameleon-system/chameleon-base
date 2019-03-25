@@ -1,5 +1,9 @@
 <?php
 /** @var TdbCmsTblFieldTab $oTab */
+
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
+
 $iTextFieldCount = 0;
 $sLastTextFieldName = '';
 $data['oFields']->GoToStart();
@@ -111,8 +115,14 @@ if (!empty($sTmpFormTabsContent)) {
             $contentClass .= ' show active';
         }
 
-        $sFormTabsTitles .= '<li class="nav-item"><a id="'.TGlobal::OutHTML(strtolower(TTools::RealNameToURLName($sTabName))).'-tab" class="'.TGlobal::OutHTML($titleAnchorClass).'" data-toggle="tab" href="#tab-'.TGlobal::OutHTML(strtolower(TTools::RealNameToURLName($sTabName))).'" role="tab" aria-controls="tab-'.TGlobal::OutHTML(strtolower(TTools::RealNameToURLName($sTabName))).'" aria-selected="'.TGlobal::OutHTML($titleAriaSelected).'">'.TGlobal::OutHTML($sTabName).'</a></li>';
-        $sFormTabsContent .= '<div class="'.$contentClass.'" id="tab-'.strtolower(TTools::RealNameToURLName($sTabName)).'" role="tabpanel" aria-labelledby="'.strtolower(TTools::RealNameToURLName($sTabName)).'">';
+        /**
+         * @var UrlNormalizationUtil $urlNormalizationUtil
+         */
+        $urlNormalizationUtil = ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        $urlTabName = \strtolower($urlNormalizationUtil->normalizeUrl($sTabName));
+
+        $sFormTabsTitles .= '<li class="nav-item"><a id="'.TGlobal::OutHTML($urlTabName).'-tab" class="'.TGlobal::OutHTML($titleAnchorClass).'" data-toggle="tab" href="#tab-'.TGlobal::OutHTML($urlTabName).'" role="tab" aria-controls="tab-'.TGlobal::OutHTML($urlTabName).'" aria-selected="'.TGlobal::OutHTML($titleAriaSelected).'">'.TGlobal::OutHTML($sTabName).'</a></li>';
+        $sFormTabsContent .= '<div class="'.$contentClass.'" id="tab-'.$urlTabName.'" role="tabpanel" aria-labelledby="'.$urlTabName.'">';
     } else {
         $sFormTabsContent .= '<div id="tab-base">';
     }

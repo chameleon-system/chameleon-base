@@ -97,18 +97,6 @@ class TCMSPage extends TCMSPageAutoParent
     }
 
     /**
-     * Gets the main tree from the site or null if no tree was found.
-     *
-     * @return TdbCmsTree|null
-     *
-     * @deprecated since 6.1.5 - use chameleon_system_core.tree_service::getById($page->GetMainTreeId()) instead.
-     */
-    public function GetMainTree()
-    {
-        return self::getTreeService()->getById($this->GetMainTreeId());
-    }
-
-    /**
      * Returns the primary tree id that this page connects to. If no primary
      * node has been set, it will return the first secondary node id we find.
      * Returns null if the page is not assigned to any page.
@@ -427,8 +415,7 @@ class TCMSPage extends TCMSPageAutoParent
             $aExcludeParameters = array_merge($aExcludeParameters, array_keys($aAdditionalParameters));
         }
         $aExcludeParameters[] = 'pagedef';
-        $oGlobal = TGlobal::instance();
-        $sParameters = $oGlobal->OutputDataAsURL($aExcludeParameters);
+        $sParameters = $this->OutputDataAsURL($aExcludeParameters);
         if (!empty($sParameters)) {
             $sParameters = '?'.$sParameters;
         }
@@ -444,6 +431,50 @@ class TCMSPage extends TCMSPageAutoParent
         $sLink = $sLink.$sParameters;
 
         return $sLink;
+    }
+
+    /**
+     * returns all POST and GET parameters as url.
+     *
+     * @param array $excludeArray
+     *
+     * @return string
+     */
+    private function OutputDataAsURL($excludeArray = array())
+    {
+        $aData = TGlobal::instance()->GetUserData();
+        if (false === \is_array($aData)) {
+            return '';
+        }
+
+        foreach ($excludeArray as $key) {
+            if ('' === $key) {
+                continue;
+            }
+            if (isset($aData[$key])) {
+                unset($aData[$key]);
+                continue;
+            }
+            // if the key contains [ and ], then we need to regex
+            $iOpen = strpos($key, '[');
+            if (false !== $iOpen) {
+                $iClose = strpos($key, ']', $iOpen);
+                if (false !== $iClose) {
+                    if (preg_match("/^(.*?)(\[.*\])+/", $key, $aMatch)) {
+                        if (3 == count($aMatch)) {
+                            $aArrayKeys = explode('][', substr($aMatch[2], 1, -1));
+                            $sPathString = $aMatch[1].'-';
+                            foreach ($aArrayKeys as $Value) {
+                                $sPathString .= $Value.'-';
+                            }
+                            $aData = TTools::DeleteArrayKeyByPath($aData, $sPathString);
+                        }
+                    }
+                }
+            }
+        }
+
+        return TTools::GetArrayAsURL($aData);
     }
 
     /**

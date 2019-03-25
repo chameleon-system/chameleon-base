@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
-
 class TCMSPortalDomain extends TCMSRecord
 {
     public function __construct($id = null, $iLanguage = null)
@@ -98,27 +96,5 @@ class TCMSPortalDomain extends TCMSRecord
         $aDomainParts['domain'] = $domain;
 
         return $aDomainParts;
-    }
-
-    /**
-     * returns the current domain.
-     *
-     * @return TCMSPortalDomain
-     *
-     * @deprecated since 6.2.0 - use chameleon_system_core.portal_domain_service::getActiveDomain() instead.
-     */
-    public static function &GetActiveDomain()
-    {
-        $domain = self::getStaticPortalDomainService()->getActiveDomain();
-
-        return $domain;
-    }
-
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private static function getStaticPortalDomainService()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

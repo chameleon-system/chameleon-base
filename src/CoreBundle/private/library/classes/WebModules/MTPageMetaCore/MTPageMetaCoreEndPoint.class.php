@@ -28,15 +28,6 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
     public $aAdditionalBreadcrumbNodes = array();
 
     /**
-     * the portal of the page.
-     *
-     * @var TdbCmsPortal
-     *
-     * @deprecated since 6.1.4 - use chameleon_system_core.active_page_service to retrieve the active portal.
-     */
-    protected $oActivePortal = null;
-
-    /**
      * array holding all media file ids that may trigger a cache refresh.
      *
      * @var array
@@ -276,7 +267,6 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             return null;
         }
         $this->data['oActivePortal'] = $activePortal;
-        $this->oActivePortal = $activePortal;
 
         return $activePortal->GetTitle();
     }
@@ -311,7 +301,6 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
         $activePortal = $this->getPortalDomainService()->getActivePortal();
         $oPortalHomeNode = null;
         if (null !== $activePortal) {
-            $this->oActivePortal = $activePortal;
             $oPortalHomeNode = $activePortal->GetPortalHomeNode();
         }
 
@@ -350,7 +339,6 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             $sTitle = TGlobal::Translate('chameleon_system_core.page_meta_core.no_title');
             $sBreadcrumb = '';
             if (null !== $activePortal) {
-                $this->oActivePortal = $activePortal;
                 $this->data['oActivePortal'] = $activePortal;
                 $sPortalName = $this->_GetPortalName();
                 $activePage = $this->getActivePageService()->getActivePage();
@@ -587,62 +575,6 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
     }
 
     /**
-     * this function will implement the google analytics code in your website.
-     *
-     * @param TCMSActivePage $oActivePage @deprecated since 6.1.8 - argument is no longer used
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - use Universal Analytics in ChameleonSystemExternalTrackerGoogleAnalyticsBundle
-     */
-    protected function IncludeTrackerGoogleAnalytics($oActivePage)
-    {
-        return '';
-    }
-
-    /**
-     * use this hook to manipulate the variables that are used for etracker.
-     *
-     * @param string $sEtVariables
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - use pkgExternalTrackerEtracker instead.
-     */
-    protected function IncludeTrackerEtrackerHook($sEtVariables)
-    {
-        return $sEtVariables;
-    }
-
-    /**
-     * this function will implement the etracker code in your website.
-     *
-     * @param TCMSActivePage $oActivePage
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - use pkgExternalTrackerEtracker instead.
-     */
-    protected function IncludeTrackerEtracker(&$oActivePage)
-    {
-        return '';
-    }
-
-    /**
-     * use this function to catch the etracker id that is stored in portal config.
-     *
-     * @param TCMSActivePage $oActivePage @deprecated since 6.1.8 - argument is no longer used.
-     *
-     * @return int
-     *
-     * @deprecated since 6.2.0 - use pkgExternalTrackerEtracker instead.
-     */
-    protected function GetETrackerId($oActivePage)
-    {
-        return $this->getPortalDomainService()->getActivePortal()->fieldEtrackerId;
-    }
-
-    /**
      * return the canonical URL for the page.
      *
      * @return string
@@ -713,18 +645,12 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
         return $alternatives;
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private function getPortalDomainService()
+    private function getPortalDomainService(): PortalDomainServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }

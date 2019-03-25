@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TPkgNewsletterModuleSignupConfig extends TPkgNewsletterModuleSignupConfigAutoParent
 {
     /**
@@ -21,7 +24,7 @@ class TPkgNewsletterModuleSignupConfig extends TPkgNewsletterModuleSignupConfigA
      */
     public function GetFieldPkgNewsletterGroupList($sOrderBy = '')
     {
-        $oPortal = TTools::GetActivePortal();
+        $oPortal = $this->getPortalDomainService()->getActivePortal();
         $sSelect = "SELECT `pkg_newsletter_group`.*
                       FROM `pkg_newsletter_group`
                 INNER JOIN `pkg_newsletter_module_signup_config_pkg_newsletter_group_mlt` ON `pkg_newsletter_group`.`id` = `pkg_newsletter_module_signup_config_pkg_newsletter_group_mlt`.`target_id`
@@ -40,5 +43,10 @@ class TPkgNewsletterModuleSignupConfig extends TPkgNewsletterModuleSignupConfigA
         $oNewsletterGroupList = TdbPkgNewsletterGroupList::GetList($sSelect);
 
         return $oNewsletterGroupList;
+    }
+
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

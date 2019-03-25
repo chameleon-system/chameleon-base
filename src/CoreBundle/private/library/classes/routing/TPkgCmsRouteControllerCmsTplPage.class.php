@@ -156,19 +156,6 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
     }
 
     /**
-     * @param Request $request
-     * @param string  $pagePath
-     *
-     * @return bool
-     *
-     * @deprecated since 6.1.5 - no longer needed
-     */
-    protected function isNonSeoLink(Request $request, $pagePath)
-    {
-        return '/' === $pagePath && ($request->query->has('pagedef') || $request->request->has('pagedef'));
-    }
-
-    /**
      * @param ChameleonControllerInterface $controller
      */
     public function setMainController(ChameleonControllerInterface $controller)

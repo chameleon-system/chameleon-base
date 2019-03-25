@@ -58,7 +58,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      * return an instance for the query passed
      *
      * @param string $sQuery - custom query instead of default query
-     * @param int $iLanguageId - the language id for record overloading
+     * @param string $iLanguageId - the language id for record overloading
      * @param boolean $bAllowCaching - set this to true if you want to cache the record list object
      * @param boolean $bForceWorkflow - (deprecated) set this to true to force adding the workflow query part even in cms backend mode
      * @param boolean $bUseGlobalFilterInsteadOfPreviewFilter - (deprecated) set this to true if you want to overload all workflow data instead of only the records that are marked for preview
@@ -66,10 +66,10 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      */
     static public function &GetList($sQuery=null,$iLanguageId=null, $bAllowCaching = false, $bForceWorkflow = false, $bUseGlobalFilterInsteadOfPreviewFilter = false)
     {
-        if (is_null($iLanguageId)) {
-            $iLanguageId = TGlobal::GetActiveLanguageId();
+        if (null === $iLanguageId) {
+            $iLanguageId = self::getMyLanguageService()->getActiveLanguageId();
         }
-        if (is_null($sQuery)) {
+        if (null === $sQuery) {
             $sQuery = <?=$sClassName; ?>List::GetDefaultQuery($iLanguageId);
         }
         $oList = new <?=$sClassName; ?>List(); /** @var $oList <?=$sClassName; ?>List*/
@@ -81,19 +81,6 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
         if ($bAllowCaching) $oList->bChangedDataChanged = true;
 
         return $oList;
-    }
-
-    /**
-     * return default language id using the oActivePage
-     *
-     * @deprecated use TGlobal::GetActiveLanguageId() instead of this
-     *
-     * @return int
-     */
-    static protected function GetDefaultLanguageId()
-    {
-        trigger_error('use TGlobal::GetActiveLanguageId() instead of this', E_USER_DEPRECATED);
-        return TGlobal::GetActiveLanguageId();
     }
 
     /**

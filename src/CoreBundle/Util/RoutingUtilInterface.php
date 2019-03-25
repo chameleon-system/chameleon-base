@@ -20,22 +20,6 @@ use TdbCmsTree;
 interface RoutingUtilInterface
 {
     /**
-     * Generates a route for the passed tree node object.
-     * This method is only intended for use during route generation or other tasks performed at compile time
-     * as it may incorporate slow backend access.
-     *
-     * @param TdbCmsTree     $tree
-     * @param string         $controller
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
-     *
-     * @return Route|null returns null if there is no page linked to the tree object
-     *
-     * @deprecated since 6.1.5 - page routes are no longer generated and cached separately but will be resolved by TPkgCmsRouteControllerCmsTplPage.
-     */
-    public function getRouteForTree(TdbCmsTree $tree, $controller, TdbCmsPortal $portal, TdbCmsLanguage $language);
-
-    /**
      * Returns the URL of a page assigned to the passed tree node, or null if there is no assigned page.
      * This method is only intended for use during route generation or other tasks performed at compile time
      * as it may incorporate slow backend access. During runtime, use PortalAndLanguageAwareRouterInterface::generateWithPrefixes().
@@ -64,17 +48,6 @@ interface RoutingUtilInterface
      * @return string
      */
     public function getDomainRequirement(TdbCmsPortal $portal, TdbCmsLanguage $language, $secure);
-
-    /**
-     * @param string         $pagePath
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
-     *
-     * @return array|null
-     *
-     * @deprecated since 6.1.5 - page routes are no longer generated and cached separately but will be resolved by TPkgCmsRouteControllerCmsTplPage.
-     */
-    public function getPageDataForPagePath($pagePath, TdbCmsPortal $portal, TdbCmsLanguage $language);
 
     /**
      * Returns a list of routes for the passed $portal in the given $language. The list indexes are the page IDs, the
