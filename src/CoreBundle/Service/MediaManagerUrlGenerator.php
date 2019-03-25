@@ -81,7 +81,7 @@ class MediaManagerUrlGenerator implements MediaManagerUrlGeneratorInterface
     {
         $parameters = array(
             'pagedef' => 'CMSwysiwygImageChooser',
-            'sAllowedFileTypes' => 'jpg,png,gif,jpeg,flv,f4v',
+            'sAllowedFileTypes' => 'jpg,png,gif,jpeg',
         );
 
         return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');

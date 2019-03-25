@@ -15,15 +15,6 @@ use ChameleonSystem\CoreBundle\Event\DeleteMediaEvent;
 class TCMSTableEditorMedia extends TCMSTableEditorFiles
 {
     /**
-     * FLV Meta Data Object.
-     *
-     * @var stdClass
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    protected $oFLVMetaData = null;
-
-    /**
      * set public methods here that may be called from outside.
      */
     public function DefineInterface()
@@ -90,25 +81,18 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
             $imageUploadMaxSize = $oConfig->sqlData['max_image_upload_size'] * 1024;
 
             if ($isValid) {
-                $isValid = false;
-
-                $fileExtension = TTools::GetFileExtension($this->aUploadData['name']);
-                if ('flv' != $fileExtension && 'f4v' != $fileExtension) {
-                    $isValid = $this->CheckMediaMaxProportions($this->aUploadData['tmp_name']);
-                    if ($isValid && 'swf' != $fileExtension) {
-                        if ($this->aUploadData['size'] <= $imageUploadMaxSize) {
-                            $isValid = true;
-                        } else {
-                            throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_files.error_file_to_large',
-                                array(
-                                    '%size%' => TCMSLocal::GetActive()->FormatNumber($this->aUploadData['size'], 0),
-                                    '%allowed%' => TCMSLocal::GetActive()->FormatNumber($imageUploadMaxSize, 0),
-                                )
-                            ), -240);
-                        }
+                $isValid = $this->CheckMediaMaxProportions($this->aUploadData['tmp_name']);
+                if ($isValid) {
+                    if ($this->aUploadData['size'] <= $imageUploadMaxSize) {
+                        $isValid = true;
+                    } else {
+                        throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_files.error_file_to_large',
+                            array(
+                                '%size%' => TCMSLocal::GetActive()->FormatNumber($this->aUploadData['size'], 0),
+                                '%allowed%' => TCMSLocal::GetActive()->FormatNumber($imageUploadMaxSize, 0),
+                            )
+                        ), -240);
                     }
-                } else {
-                    $isValid = true;
                 }
             }
         }
@@ -128,7 +112,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
 
         $oGlobal = TGlobal::instance();
         /** @var $oGlobal TGlobal */
-        $sAllowedFileTypesFromExternal = $oGlobal->GetUserData('sAllowedFileTypes'); // comma seperated list of filetype endings e.g. jpg,gif,swf
+        $sAllowedFileTypesFromExternal = $oGlobal->GetUserData('sAllowedFileTypes'); // comma separated list of filetype endings e.g. jpg,gif
 
         // reduce allowed filetypes to external configured types
         $aAllowedFileTypesFinal = $aAllowedFileTypes;
@@ -230,66 +214,42 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
         $isValid = false;
 
         if (!is_null($this->aUploadData)) {
-            $fileExtension = TTools::GetFileExtension($this->aUploadData['name']);
-            if ('flv' != $fileExtension && 'f4v' != $fileExtension) {
-                if (isset($filePath) && !empty($filePath) && isset($allowedFileTypes) && is_array($allowedFileTypes)) {
-                    $imageInfo = false;
-                    // check if file extension and real filetype matches
-                    try {
-                        $imageInfo = getimagesize($filePath);
-                    } catch (Exception $e) {
-                        // file is no php supported image type
+            if (isset($filePath) && !empty($filePath) && isset($allowedFileTypes) && is_array($allowedFileTypes)) {
+                $imageInfo = false;
+                // check if file extension and real filetype matches
+                try {
+                    $imageInfo = getimagesize($filePath);
+                } catch (Exception $e) {
+                    // file is no php supported image type
+                }
+
+                if (isset($imageInfo) && is_array($imageInfo)) {
+                    $realFileExtension = image_type_to_extension($imageInfo[2]);
+                    $realFileExtension = strtolower($realFileExtension);
+
+                    $realFileExtension = str_replace('.', '', $realFileExtension);
+                    if ('jpeg' == $realFileExtension || 'jpe' == $realFileExtension) {
+                        $realFileExtension = 'jpg';
                     }
 
-                    if (isset($imageInfo) && is_array($imageInfo)) {
-                        $realFileExtension = image_type_to_extension($imageInfo[2]);
-                        $realFileExtension = strtolower($realFileExtension);
-
-                        $realFileExtension = str_replace('.', '', $realFileExtension);
-                        if ('jpeg' == $realFileExtension || 'jpe' == $realFileExtension) {
-                            $realFileExtension = 'jpg';
-                        }
-
-                        if (in_array($realFileExtension, $allowedFileTypes)) {
-                            // check for CMYK images
-                            if (isset($imageInfo['channels']) && 4 == $imageInfo['channels']) {
-                                throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_media.error_cmyk'), -270);
-                            // image is CMYK
-                            } else {
-                                $isValid = true;
-                            }
+                    if (in_array($realFileExtension, $allowedFileTypes)) {
+                        // check for CMYK images
+                        if (isset($imageInfo['channels']) && 4 == $imageInfo['channels']) {
+                            throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_media.error_cmyk'), -270);
+                        // image is CMYK
                         } else {
-                            throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_media.error_invalid_format'), -270);
+                            $isValid = true;
                         }
+                    } else {
+                        throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_media.error_invalid_format'), -270);
                     }
                 }
-            } else {
-                $this->LoadFlvInfo();
-                if (isset($this->oFLVMetaData['error']) || isset($this->oFLVMetaData['warning'])) {
-                    throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_media.error_invalid_flv'), -270);
-                }
-                $isValid = true;
             }
         } else {
             $isValid = true;
         }
 
         return $isValid;
-    }
-
-    /**
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    protected function LoadFlvInfo()
-    {
-        if (is_null($this->oFLVMetaData) && !is_null($this->aUploadData) && array_key_exists('tmp_name', $this->aUploadData)) {
-            if (class_exists('getID3')) {
-                $getId3 = new getID3();
-                $this->oFLVMetaData = $getId3->analyze($this->aUploadData['tmp_name']);
-            } else {
-                $this->oFLVMetaData = [];
-            }
-        }
     }
 
     /**
@@ -366,20 +326,9 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
 
             $postData['custom_filename'] = $fileNameWithoutExtension;
 
-            if ('flv' == $fileExtension || 'f4v' == $fileExtension) { // FLV Flash Video File
-                $mediaWidth = 640;
-                $mediaHeight = 480;
-
-                $this->LoadFlvInfo();
-                if (isset($this->oFLVMetaData['video'])) {
-                    $mediaWidth = $this->oFLVMetaData['video']['resolution_x'];
-                    $mediaHeight = $this->oFLVMetaData['video']['resolution_y'];
-                }
-            } else { // normal image or SWF
-                $imageInfo = getimagesize($this->aUploadData['tmp_name']);
-                $mediaWidth = $imageInfo[0];
-                $mediaHeight = $imageInfo[1];
-            }
+            $imageInfo = getimagesize($this->aUploadData['tmp_name']);
+            $mediaWidth = $imageInfo[0];
+            $mediaHeight = $imageInfo[1];
 
             $postData['width'] = $mediaWidth;
             $postData['height'] = $mediaHeight;

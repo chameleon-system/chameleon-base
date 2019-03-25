@@ -428,9 +428,3 @@
 .cmsdownloaditem a.zip {
     background-image: url(/chameleon/blackbox/images/filetype_icons/16x16/zip.png);
 }
-
-/* jquery.flash.js alt Text */
-.flash-replaced .alt {
-  display: none;
-}
-

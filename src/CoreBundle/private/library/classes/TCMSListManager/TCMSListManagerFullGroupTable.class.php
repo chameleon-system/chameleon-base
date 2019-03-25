@@ -741,8 +741,8 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $oImage->Load($row['id']);
         $image = '';
 
-        if ($oImage->IsFlashMovie() || $oImage->IsExternalMovie()) {
-            $image = $oImage->GetThumbnailTag(100, 75, null, null, '');
+        if ($oImage->IsExternalMovie()) {
+            $image = $oImage->renderImage(100, 75);
         } else {
             $oThumb = $oImage->GetThumbnail(80, 80);
             /** @var $oThumb TCMSImage */

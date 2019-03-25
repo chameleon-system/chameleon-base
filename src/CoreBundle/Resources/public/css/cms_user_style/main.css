@@ -1,5 +1,5 @@
 /**
-* CSS styles to render download links, flash replacements and some basic wysiwyg issues
+* CSS styles to render download links and some basic wysiwyg issues
 */
 
 .cmsdownloaditem a,
@@ -17,15 +17,6 @@
 span.wysiwyg_cmsdownloaditem {
     color: #0000EE !important;
     text-decoration: underline !important;
-}
-
-/**
- * jquery.flash.js alt text
- *
- * @deprecated - since 6.3.0
- */
-.flash-replaced .alt {
-    display: none;
 }
 
 a.cmsanchor {

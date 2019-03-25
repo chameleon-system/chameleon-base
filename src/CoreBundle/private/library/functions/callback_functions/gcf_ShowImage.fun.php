@@ -27,8 +27,8 @@ function gcf_ShowImage($field, $row, $fieldName)
             $oImage->useUnsharpMask = false;
             $oImage->Load($imageId);
 
-            if ($oImage->IsFlashMovie() || $oImage->IsExternalMovie()) {
-                $imageTag = $oImage->GetThumbnailTag(100, 75, null, null, '');
+            if ($oImage->IsExternalMovie()) {
+                $imageTag = $oImage->renderImage(100, 75);
             } else {
                 $oBigThumbnail = $oImage->GetThumbnail(400, 400);
                 $oThumbnail = $oImage->GetThumbnail(100, 100);

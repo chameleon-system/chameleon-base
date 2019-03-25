@@ -22,7 +22,6 @@ MIT License
 - Sensio/DistributionBundle - https://github.com/sensiolabs/SensioDistributionBundle
 - Sensio/SecurityChecker - https://github.com/sensiolabs/security-checker
 - LessPHP, modified by ESONO AG - http://leafo.net/lessphp/
-- SWFObject - https://github.com/swfobject/swfobject
 
 - jQuery - http://jquery.com
 - jQuery UI - http://jqueryui.com
@@ -32,7 +31,6 @@ MIT License
 - jQuery Cookie plugin - https://github.com/js-cookie/js-cookie
 - jQuery File Download plugin - http://johnculviner.com/jquery-file-download-plugin-for-ajax-like-feature-rich-file-downloads/
 - jQuery File Upload plugin - https://github.com/blueimp/jQuery-File-Upload
-- jQuery Flash plugin - http://jquery.lukelutman.com/plugins/flash/
 - jQuery Form plugin - http://malsup.com/jquery/form/
 - jQuery Hotkeys plugin - https://github.com/jeresig/jquery.hotkeys
 - jQuery jsTree plugin - https://www.jstree.com/

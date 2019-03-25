@@ -109,7 +109,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
             } else {
                 $oGlobal = TGlobal::instance();
                 /** @var $oGlobal TGlobal */
-                $sAllowedFileTypesFromExternal = $oGlobal->GetUserData('sAllowedFileTypes'); // comma seperated list of filetype endings e.g. jpg,gif,swf
+                $sAllowedFileTypesFromExternal = $oGlobal->GetUserData('sAllowedFileTypes'); // comma separated list of filetype endings e.g. jpg,gif
                 if (!empty($sAllowedFileTypesFromExternal)) {
                     $sAllowedFileTypesFromExternal = strtoupper($sAllowedFileTypesFromExternal);
                     $sAllowedFileTypesFromExternal = str_replace(',', ', ', $sAllowedFileTypesFromExternal);

@@ -148,15 +148,7 @@ class CMSModuleImageManager extends TCMSModelBase
             $returnData['uniqueID'] = $oImage->uniqueID;
             $returnData['maxThumbWidth'] = $maxThumbWidth;
 
-            $returnData['isFlashVideo'] = false;
-            $sImageType = $oImage->GetImageType();
-            if ('flv' == $sImageType || 'f4v' == $sImageType) {
-                $returnData['isFlashVideo'] = true;
-            }
-
             $returnData['sImage'] = $this->getBackendResponsiveThumbnail($oImage);
-            $returnData['FLVPlayerURL'] = $oImage->FLVPlayerURL;
-            $returnData['FLVPlayerHeight'] = $oImage->FLVPlayerHeight;
         } else {
             $returnData['message'] = TGlobal::Translate('chameleon_system_core.cms_module_image_manager.selected_image_not_found');
             $returnData['messageType'] = 'ERROR';
@@ -320,7 +312,6 @@ class CMSModuleImageManager extends TCMSModelBase
         $aIncludes = array();
         // first the includes that are needed for the all fields
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/table.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
