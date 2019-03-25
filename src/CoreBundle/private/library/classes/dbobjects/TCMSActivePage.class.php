@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -20,47 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
 /**/
 class TCMSActivePage extends TdbCmsTplPage
 {
-    /**
-     * returns the language id for the current page.
-     *
-     * @return string|int
-     *
-     * @deprecated since 6.0.0 - use \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service')->getActiveLanguageId() instead
-     */
-    public function GetActiveLanguage()
-    {
-        return self::getLanguageService()->getActiveLanguageId();
-    }
-
-    /**
-     * returns the language db object of the current page/division/portal language.
-     *
-     * @return TdbCmsLanguage
-     *
-     * @deprecated since 6.0.0 - use \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service')->getActiveLanguage() instead
-     */
-    public function GetActiveLanguageObject()
-    {
-        return self::getLanguageService()->getActiveLanguage();
-    }
-
-    /**
-     * returns pointer to singleton of the active page.
-     *
-     * @deprecated
-     *
-     * @return TCMSActivePage
-     */
-    public static function GetInstanceWithoutCache()
-    {
-        static $oPage;
-        if (!$oPage) {
-            $oPage = new self();
-        }
-
-        return $oPage;
-    }
-
     /**
      * returns a singleton of the active page.
      *
@@ -161,10 +121,10 @@ class TCMSActivePage extends TdbCmsTplPage
                 return $this->id;
                 break;
             case 'oGlobal':
-                return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.global');
+                return ServiceLocator::get('chameleon_system_core.global');
                 break;
             case 'oActivePortal':
-                return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service')->getActivePortal();
+                return ServiceLocator::get('chameleon_system_core.portal_domain_service')->getActivePortal();
                 break;
             case 'oBreadcrumb':
                 return $this->getBreadcrumb();
@@ -185,7 +145,7 @@ class TCMSActivePage extends TdbCmsTplPage
      */
     private static function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -193,6 +153,6 @@ class TCMSActivePage extends TdbCmsTplPage
      */
     private function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 }

@@ -1035,9 +1035,8 @@ class CMSModuleChooser extends TCMSModelBase
         if (false === $sPageId) {
             $sPageId = $this->global->GetUserData('pagedef');
         }
-        $oCmsTplPage = TCMSActivePage::GetInstance();
+        $oCmsTplPage = $this->getActivePageService()->getActivePage();
         $iTableID = TTools::GetCMSTableId('cms_tpl_page');
-        /** @var $oTableEditor TCMSTableEditorManager */
         $oTableEditor = new TCMSTableEditorManager();
         $oTableEditor->Init($iTableID, $sPageId);
         $oTableEditor->SaveField('name', $oCmsTplPage->sqlData['name']);

@@ -783,7 +783,7 @@ class TCMSTableEditorEndPoint
         if (!is_null($this->sId) && !empty($this->sId)) {
             $this->oTable = $this->GetNewTableObjectForEditor();
             $oCmsConfiguration = TdbCmsConfig::GetInstance();
-            $sActiveLanguageId = TGlobal::GetActiveLanguageId();
+            $sActiveLanguageId = $this->getLanguageService()->getActiveLanguageId();
             $oDefaultLanguage = $oCmsConfiguration->GetFieldTranslationBaseLanguage();
             if ($oDefaultLanguage && $sActiveLanguageId != $oDefaultLanguage->id) {
                 $oCmsConfiguration->SetLanguage($oDefaultLanguage->id);

@@ -1125,7 +1125,7 @@ class TCMSRecordList extends TIterator
      *
      * @return LanguageServiceInterface
      */
-    private static function getMyLanguageService()
+    protected static function getMyLanguageService(): LanguageServiceInterface
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }

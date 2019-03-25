@@ -1,5 +1,5 @@
             $oList = null;
-            $sLanguageId = TGlobal::GetActiveLanguageId();
+            $sLanguageId = self::getMyLanguageService()->getActiveLanguageId();
             $oActivePage = TCMSActivePage::GetInstance();
             $sQuery = "SELECT * FROM `<?=$sTableDatabaseName; ?>`
             LEFT JOIN `cms_portal_language_matrix` ON `cms_portal_language_matrix`.`record_id` = `<?=$sTableDatabaseName; ?>`.`id`
