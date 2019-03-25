@@ -128,9 +128,48 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## JavaScript Files and Functions
 
+- bootstrap-colorpicker (new version 3.0.3 located in src/CoreBundle/Resources/public/javascript/jquery/bootstrap-colorpicker-3.0.3).
 - Chameleon Flash plugin for CKEditor
+- chosen.jquery.js
 - flash.js
+- html5shiv.js
+- jqModal.js 
+- jqDnR.js
+- jquery.form.js (new version 4.2.2 located in src/CoreBundle/Resources/public/javascript/jquery/jquery-form-4.2.2/jquery.form.min.js).
+- jquery.selectboxes.js
+- jQueryUI (everything in path src/CoreBundle/Resources/public/javascript/jquery/jQueryUI; drag and drop still used in the template engine).
+- maskedinput.js
+- pngForIE.htc
+- pNotify (new version 3.2.0 located in src/CoreBundle/Resources/public/javascript/pnotify-3.2.0/)
+- respond.min.js
+- rwd.images.js
+- src/CoreBundle/Resources/public/javascript/mainNav.js
 - swfobject.js
+- TDataCustomListConfig.js
+- THTMLFileBrowser.js
+- THTMLTable.js
+
+- $.addOption() (jquery.selectboxes plugin)
+- $.bgiframe()
+- $.blockUI()
+- $.everyTime()
+- $.jBreadCrumb()
+- $.jqDnR() (part of jqModal)
+- $.jqM() (jqModal)
+- $.oneTime()
+- $.stopTime()
+- $.tagInput()
+- $.unblockUI()
+- $.wTooltip()
+- ActivateRecordRevision()
+- AddNewRevision()
+- CreateModalIFrameDialogFromContentWithoutClose()
+- PublishViaAjaxCallback()
+- SaveNewRevision()
+- SetChangedDataMessage()
+- showMLTField()
+- SwitchEditPortal()
+- SwitchEditPortalCallback()
 
 ## Translations
 
@@ -141,10 +180,21 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Database Fields
 
-#Icons
+## Icons
 
 All icons in CoreBundle/Resources/public/images/ 
 and CoreBundle/Resources/public/themes/standard/images/ (not recursively, subfolders remain) were deleted. 
 Exceptions are the chameleon logos and favicon.ico.
 
 The Font Awesome icon font was upgraded to 5.8.1.
+
+## Frontend Assets
+
+There were some frontend styles, images and javascript helpers located in the core that were deleted or moved to bundles.
+
+- web_modules/MTConfigurableFeedbackCore
+- web_modules/MTExtranet
+- web_modules/MTFAQListCore
+- web_modules/MTFeedbackCore
+- web_modules/MTGlobalListCore
+- web_modules/MTNewsletterSignupCore
