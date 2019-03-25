@@ -57,16 +57,6 @@ class PageService implements PageServiceInterface
      */
     private $urlUtil;
 
-    /**
-     * @param PortalAndLanguageAwareRouterInterface $router
-     * @param DataAccessInterface                   $dataAccess
-     * @param TreeNodeServiceInterface              $treeNodeService
-     * @param LanguageServiceInterface              $languageService
-     * @param PortalDomainServiceInterface          $portalDomainService
-     * @param PageServiceUtilInterface              $pageServiceUtil
-     * @param RequestStack                          $requestStack
-     * @param UrlUtil                               $urlUtil
-     */
     public function __construct(PortalAndLanguageAwareRouterInterface $router, DataAccessInterface $dataAccess, TreeNodeServiceInterface $treeNodeService, LanguageServiceInterface $languageService, PortalDomainServiceInterface $portalDomainService, PageServiceUtilInterface $pageServiceUtil, RequestStack $requestStack, UrlUtil $urlUtil)
     {
         $this->router = $router;

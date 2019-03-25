@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ChangeActivePageEvent;
 use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
 use ChameleonSystem\CoreBundle\Service\Initializer\ActivePageServiceInitializerInterface;
+use ChameleonSystem\CoreBundle\Util\PageServiceUtilInterface;
 use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -67,8 +68,12 @@ class ActivePageService implements ActivePageServiceInterface
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+    /**
+     * @var PageServiceUtilInterface
+     */
+    private $pageServiceUtil;
 
-    public function __construct(LanguageServiceInterface $languageService, ActivePageServiceInitializerInterface $activePageServiceInitializer, RequestStack $requestStack, RouterInterface $defaultRouter, PortalAndLanguageAwareRouterInterface $frontendRouter, UrlUtil $urlUtil, RequestInfoServiceInterface $requestInfoService, RoutingUtilInterface $routingUtil, EventDispatcherInterface $eventDispatcher)
+    public function __construct(LanguageServiceInterface $languageService, ActivePageServiceInitializerInterface $activePageServiceInitializer, RequestStack $requestStack, RouterInterface $defaultRouter, PortalAndLanguageAwareRouterInterface $frontendRouter, UrlUtil $urlUtil, RequestInfoServiceInterface $requestInfoService, RoutingUtilInterface $routingUtil, EventDispatcherInterface $eventDispatcher, PageServiceUtilInterface $pageServiceUtil)
     {
         $this->languageService = $languageService;
         $this->activePageServiceInitializer = $activePageServiceInitializer;
@@ -79,6 +84,7 @@ class ActivePageService implements ActivePageServiceInterface
         $this->requestInfoService = $requestInfoService;
         $this->routingUtil = $routingUtil;
         $this->eventDispatcher = $eventDispatcher;
+        $this->pageServiceUtil = $pageServiceUtil;
     }
 
     /**
@@ -252,8 +258,11 @@ class ActivePageService implements ActivePageServiceInterface
             if ($activePage->fieldPrimaryTreeIdHidden === $activePortal->fieldHomeNodeId) {
                 unset($parameters['pagePath']);
             } else {
-                $allPageRoutes = $this->routingUtil->getAllPageRoutes($activePortal, $language);
-                $parameters['pagePath'] = rtrim($allPageRoutes[$activePage->id]->getPrimaryPath(), '/');
+                $pagePath = $this->pageServiceUtil->getPagePath($activePage, $language);
+                if (true === $activePortal->fieldUseSlashInSeoUrls) {
+                    $pagePath .= '/';
+                }
+                $parameters['pagePath'] = $pagePath;
             }
         }
     }

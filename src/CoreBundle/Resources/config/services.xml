@@ -333,6 +333,7 @@
             <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="chameleon_system_core.util.routing"/>
             <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="chameleon_system_core.util.page_service_util"/>
         </service>
 
         <service id="chameleon_system_core.service_initializer.active_page_service" class="ChameleonSystem\CoreBundle\Service\Initializer\ActivePageServiceInitializer" public="false">
