@@ -154,6 +154,8 @@ All icons in CoreBundle/Resources/public/images/
 and CoreBundle/Resources/public/themes/standard/images/ (not recursively, subfolders remain) were deleted. 
 Exceptions are the chameleon logos and favicon.ico.
 
+The Font Awesome icon font was upgraded to 5.8.1.
+
 ## Frontend Assets
 
 There were some frontend styles, images and javascript helpers located in the core that were deleted or moved to bundles.
