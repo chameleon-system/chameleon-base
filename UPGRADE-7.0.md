@@ -1,6 +1,14 @@
 UPGRADE FROM 6.3 TO 7.0
 =======================
 
+# Cleanup
+
+## Remove Flash Files
+
+Support for Adobe Flash was removed. We recommend to search the media manager for legacy Flash files (search for file
+extensions "flv", "f4v" and "swf") and remove them.
+The media manager will also display where these files are still used; these usages should also be removed.
+
 # Removed Code Entities
 
 The code entities in this list were marked as deprecated in previous releases and have now been removed.
@@ -136,6 +144,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSMath
 - TCmsObjectLinkBase
 - TCmsObjectLinkException_InvalidTargetClass
+- TCMSSmartURLHandler_FlashCrossDomain
 - TCMSSmartURLHandler_Pagepath
 - TCMSUserInput_EMail
 - TCMSUserInput_XSS
@@ -157,7 +166,14 @@ The code entities in this list were marked as deprecated in previous releases an
 - ChameleonSystem\CoreBundle\Controller\ChameleonController::$redirectPageDef
 - ChameleonSystem\CoreBundle\Controller\ChameleonController::$requestInfoService
 - MTPageMetaCoreEndPoint::$oActivePortal
+- TCMSImageEndpoint::$bAutoPlay
+- TCMSImageEndpoint::$bFlashVideoZoomPopup
+- TCMSImageEndpoint::$FLVPlayerHeight
+- TCMSImageEndpoint::$FLVPlayerURL
+- TCMSImageEndpoint::$sFlashPlayerSkinURL
+- TCMSImageEndpoint::$sFlashVideoWMode
 - TCMSMemcache::$sUsedMemcacheClass
+- TCMSTableEditorMedia::$oFLVMetaData
 - TGlobal::$oURLHistory
 - TGlobalBase::$aUnitTestMockedObjects
 - TModelBase::$isExportCall
@@ -188,6 +204,13 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSConfig::GetGlobalCacheKeyParameter()
 - TCMSConfig::ObjectIsInitialized()
 - TCMSContentBoxItem::_loadMenuItems()
+- TCMSImageEndpoint::GetFlashPlugin()
+- TCMSImageEndpoint::GetFlashVarsArray()
+- TCMSImageEndpoint::GetPlayerUrl()
+- TCMSImageEndpoint::GetThumbnailTag()
+- TCMSImageEndpoint::IsFlashMovie()
+- TCMSImageEndpoint::renderFLV()
+- TCMSImageEndpoint::renderSWF()
 - TCmsLanguage::getLanguageFromIsoCodeCached()
 - TCMSLogChange::_WriteTransactionFooter()
 - TCMSLogChange::_WriteTransactionHeader()
@@ -209,9 +232,11 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSPortalDomain::GetActiveDomain()
 - TCMSPortalDomain::IsDevelopmentDomain()
 - TCMSRecord::IsMultiLanguageTable()
+- TCMSTableEditorMedia::LoadFlvInfo()
 - TCMSTableEditorMedia::RefreshImageOnViddler()
 - TCMSTableToClass::getDatabaseConnection()
 - TCMSTableToClass::setDatabaseConnection()
+- TCMSTextFieldEndPoint::_callback_cmstextfield_image_flv_parser()
 - TCMSTextFieldEndPoint::_RemoveProprietaryParameter()
 - TCMSTreeNode::ConvertToValidXHTMLLink()
 - TCMSUpdateManager::checkIfUpdateHasBeenProcessed()
@@ -278,7 +303,9 @@ The code entities in this list were marked as deprecated in previous releases an
 ## JavaScript Files and Functions
 
 - bootstrap-colorpicker (new version 3.0.3 located in src/CoreBundle/Resources/public/javascript/jquery/bootstrap-colorpicker-3.0.3).
+- Chameleon Flash plugin for CKEditor
 - chosen.jquery.js
+- flash.js
 - html5shiv.js
 - jqModal.js 
 - jqDnR.js
@@ -291,6 +318,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - respond.min.js
 - rwd.images.js
 - src/CoreBundle/Resources/public/javascript/mainNav.js
+- swfobject.js
 - TDataCustomListConfig.js
 - THTMLFileBrowser.js
 - THTMLTable.js
@@ -318,6 +346,9 @@ The code entities in this list were marked as deprecated in previous releases an
 - SwitchEditPortalCallback()
 
 ## Translations
+
+- chameleon_system_core.error.flash_required
+- chameleon_system_core.table_editor_media.error_invalid_flv
 
 ## Database Tables
 

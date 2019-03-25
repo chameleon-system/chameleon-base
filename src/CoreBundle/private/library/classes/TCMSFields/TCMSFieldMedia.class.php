@@ -111,22 +111,6 @@ class TCMSFieldMedia extends TCMSField
         return $oViewRenderer->Render('TCMSFieldMedia/mediaMultipleItems.html.twig', null, false);
     }
 
-    /**
-     * return an array of all js, css, or other header includes that are required
-     * in the cms for this field. each include should be in one line, and they
-     * should always be typed the same way so that no includes are included mor than once.
-     *
-     * @return array
-     */
-    public function GetCMSHtmlHeadIncludes()
-    {
-        $aIncludes = parent::GetCMSHtmlHeadIncludes();
-
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
-
-        return $aIncludes;
-    }
-
     public function GetHTMLExport()
     {
         $imageURLs = '';

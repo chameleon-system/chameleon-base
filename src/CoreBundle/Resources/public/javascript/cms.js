@@ -378,25 +378,6 @@ function getRadioValue(rObj) {
     return returnVal;
 }
 
-/**
- * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
- */
-function InitVideoPlayer(playerID, FLVPlayerURL, maxThumbWidth, playerHeight) {
-    $('#flashContainer' + playerID).flash(
-        { src:FLVPlayerURL,
-            id:playerID,
-            name:playerID,
-            align:'middle',
-            wmode:'window',
-            quality:'high',
-            allowScriptAccess:'always',
-            allowfullscreen:'true',
-            width:maxThumbWidth,
-            height:playerHeight },
-        { version:9 }
-    );
-}
-
 function addslashes(str) {
     // Escapes single quote, double quotes and backslash characters in a string with backslashes
     //

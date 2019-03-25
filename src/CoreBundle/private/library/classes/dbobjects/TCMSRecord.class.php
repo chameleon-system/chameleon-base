@@ -671,7 +671,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * @param bool   $includeClearDiv  - include a clear div at the end of the text block
      * @param array  $aCustomVariables - any custom variables you want to replace
      * @param bool   $bClearThickBox   - remove all a href with class thickbox
-     * @param bool   $bClearScriptTags - clear all script tags and show only preview image of flv videos
+     * @param bool   $bClearScriptTags - clear all script tags
      *
      * @return string
      */

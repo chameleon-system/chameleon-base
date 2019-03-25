@@ -25,13 +25,8 @@ function gcf_ShowOnlyTinyImage($field, $row, $fieldName)
     $oImage->useLightBox = false;
     $oImage->useUnsharpMask = false;
 
-    $sImageType = $oImage->GetImageType();
-    if ('flv' === $oImage->GetImageType() || 'f4v' === $sImageType) {
-        $imageTag = $oImage->GetThumbnailTag(40, 40, null, null, '');
-    } else {
-        $oThumbnail = $oImage->GetThumbnail(40, 40);
-        $imageTag = '<img src="'.TGlobal::OutHTML($oThumbnail->GetFullURL()).'" id="cmsimage_'.TGlobal::OutHTML($imageId).'" width="'.TGlobal::OutHTML($oThumbnail->aData['width']).'" height="'.TGlobal::OutHTML($oThumbnail->aData['height']).'" hspace="0" vspace="0" border="0" />';
-    }
+    $oThumbnail = $oImage->GetThumbnail(40, 40);
+    $imageTag = '<img src="'.TGlobal::OutHTML($oThumbnail->GetFullURL()).'" id="cmsimage_'.TGlobal::OutHTML($imageId).'" width="'.TGlobal::OutHTML($oThumbnail->aData['width']).'" height="'.TGlobal::OutHTML($oThumbnail->aData['height']).'" hspace="0" vspace="0" border="0" />';
 
     return $imageTag;
 }
