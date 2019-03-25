@@ -1,6 +1,14 @@
 UPGRADE FROM 6.3 TO 7.0
 =======================
 
+# Cleanup
+
+## Remove Flash Files
+
+Support for Adobe Flash was removed. We recommend to search the media manager for legacy Flash files (search for file
+extensions "flv", "f4v" and "swf") and remove them.
+The media manager will also display where these files are still used; these usages should also be removed.
+
 # Removed Code Entities
 
 The code entities in this list were marked as deprecated in previous releases and have now been removed.
