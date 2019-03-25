@@ -115,25 +115,6 @@ class ViewRendererTest extends TestCase
         $this->assertEquals($result[1]['username'], 'username');
     }
 
-    /**
-     * @expectedException \MapperException
-     */
-    public function testAddNotExistingMapperFromPath()
-    {
-        $this->oViewRenderer->AddMapperFromPath('Mapper', 'idontexist/mapper.php');
-    }
-
-    public function testAddExistingMapperFromPath()
-    {
-        $this->oViewRenderer->AddMapperFromPath('ArticleToTitleMapper', dirname(__FILE__).'/../testdata/mappers/ArticleToTitleMapper.class.php');
-        $this->oViewRenderer->AddSourceObject('article', new Article());
-        $result = $this->oViewRenderer->Render('testView', $this->oTestRenderer);
-        $expected = array('testView', array('title' => 'my nice title'));
-        $this->assertEquals('testView', $result[0]);
-        $this->assertTrue(array_key_exists('title', $result[1]));
-        $this->assertEquals($result[1]['title'], 'my nice title');
-    }
-
     public function testObjectInputValidType()
     {
         $oTestObject = new stdClass();
