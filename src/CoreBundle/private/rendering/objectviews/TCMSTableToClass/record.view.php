@@ -387,7 +387,7 @@ $oFields->GoToStart();
                 $sAutoClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS,$this->table);
                 $isMultiLanguageField = call_user_func(array($sAutoClassName,'CMSFieldIsTranslated'), $sNameColumn);
                 if($isMultiLanguageField ) {
-                    if($this->GetLanguage() === null) {
+                    if(null === $this->GetLanguage()) {
                         $this->SetLanguage(self::getLanguageService()->getActiveLanguageId());
                     }
                     $sActiveLanguagePrefix = '__'.TGlobal::GetLanguagePrefix($this->GetLanguage());

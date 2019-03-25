@@ -306,13 +306,13 @@ class TPkgComment extends TPkgCommentAutoParent
     public function GetChildComments($iLanguageId = null)
     {
         $oList = $this->GetFromInternalCache('CommentChildList');
-        if ($oList === null) {
+        if (null === $oList) {
             $sQuery = "SELECT * FROM `pkg_comment`
                   WHERE `pkg_comment`.`item_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->fieldItemId)."'
                     AND `pkg_comment_id`='".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
                     AND `pkg_comment_type_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->fieldPkgCommentTypeId)."'
                ORDER BY `pkg_comment`.`created_timestamp` DESC";
-            if ($iLanguageId === null) {
+            if (null === $iLanguageId) {
                 $iLanguageId = self::getLanguageService()->getActiveLanguageId();
             }
             $oList = TdbPkgCommentList::GetList();

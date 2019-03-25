@@ -179,7 +179,7 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
             $sOrderBy = 'ORDER BY `pkg_comment`.`created_timestamp` ASC';
         }
         $sQuery .= ' '.$sOrderBy;
-        if ($iLanguageId === null) {
+        if (null === $iLanguageId) {
             $iLanguageId = self::getLanguageService()->getActiveLanguageId();
         }
         $oList = TdbPkgCommentList::GetList();
