@@ -11,7 +11,9 @@
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ChangeNavigationTreeNodeEvent;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface;
+use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 
 class TCMSTableEditorTree extends TCMSTableEditor
@@ -63,27 +65,25 @@ class TCMSTableEditorTree extends TCMSTableEditor
     }
 
     /**
-     * gets called after save if all posted data was valid.
-     *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
-     * @param TCMSRecord $oPostTable holds the record object of all posted data
+     * {@inheritdoc}
      */
     protected function PostSaveHook(&$oFields, &$oPostTable)
     {
+        $fieldTranslationUtil = $this->getFieldTranslationUtil();
+        $translatedUrlnameFieldName = $fieldTranslationUtil->getTranslatedFieldName($this->oTableConf->fieldName, 'urlname');
+
         $updatedNodes = array();
         $updatedNodes[] = new TdbCmsTree($this->sId);
-        $oGlobal = TGlobal::instance();
-        $sAddLangPrefix = $oGlobal->GetActiveLanguagePrefix('__');
         $oFields->GoToStart();
         $urlname = '';
         while ($oField = &$oFields->Next()) {
             /** @var $oField TCMSField */
-            if ('name' == $oField->name) {
+            if ('name' === $oField->name) {
                 $urlname = $this->getUrlNormalizationUtil()->normalizeUrl($oField->data);
             }
-            if ('urlname' == $oField->name && empty($oField->data)) {
+            if ('urlname' === $oField->name && empty($oField->data)) {
                 $this->AllowEditByAll(true);
-                $this->SaveField('urlname'.MySqlLegacySupport::getInstance()->real_escape_string($sAddLangPrefix), $urlname);
+                $this->SaveField($translatedUrlnameFieldName, $urlname);
                 $this->AllowEditByAll(false);
             }
         }
@@ -383,6 +383,11 @@ class TCMSTableEditorTree extends TCMSTableEditor
 TCMSLogChange::initializeNestedSet('{$this->oTable->table}', 'parent_id', 'entry_sort');
 COMMAND;
         TCMSLogChange::WriteSqlTransactionWithPhpCommands('update nested set for table '.$this->oTable->table, array($command));
+    }
+
+    private function getFieldTranslationUtil(): FieldTranslationUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 
     /**

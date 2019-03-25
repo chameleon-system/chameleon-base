@@ -41,56 +41,6 @@ class TCMSLogChange
     const INFO_MESSAGE_LEVEL_TODO = 'TODO';
 
     /**
-     * @param string $sActiveDbCounterName
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public static function setActiveDbCounterName($sActiveDbCounterName)
-    {
-    }
-
-    /**
-     * @return string|null
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public static function getActiveDbCounterName()
-    {
-        return null;
-    }
-
-    /**
-     * saves the passed buildNumber associated with the bundle in the database.
-     *
-     * @param string      $bundleName
-     * @param string|null $sSubFolder   @deprecated since 6.2.0 - no longer used.
-     * @param int         $iBuildNumber
-     *
-     * @deprecated since 6.2.0 - use \ChameleonSystem\DatabaseMigration\Counter\MigrationCounterManagerInterface::markMigrationFileAsProcessed() instead.
-     * External code should not be required to call this method though.
-     */
-    public static function EndTransaction($bundleName, $sSubFolder = null, $iBuildNumber)
-    {
-        self::getMigrationCounterManager()->markMigrationFileAsProcessed($bundleName, $iBuildNumber);
-    }
-
-    /**
-     * returns true if the package exists (checks if the update counter exists).
-     *
-     * @param string $bundleName
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - should no longer be required by external code. Migration scripts should just be run and
-     * the system handles duplicate executions. To check for the installation status of a bundle, query for the required
-     * database state or the existence of a required class instead of purely technical information like counter names.
-     */
-    public static function UpdateCounterExists($bundleName)
-    {
-        return self::getMigrationCounterManager()->doesCounterExist($bundleName);
-    }
-
-    /**
      * @param string $bundleName
      *
      * @throws TCMSConfigException
@@ -445,60 +395,6 @@ class TCMSLogChange
 
             self::outputError($line, $e);
         }
-    }
-
-    /**
-     * @param resource $fp
-     * @param string   $sName
-     * @param int      $transactionNr
-     * @param int      $systemBuild
-     * @param string   $sActiveTrackName
-     *
-     * @deprecated since 6.2.0 - header is written implicitly when starting a new migration script. Transaction checking
-     * is no longer used.
-     */
-    public static function _WriteTransactionHeader($fp, $sName, $transactionNr, $systemBuild, $sActiveTrackName)
-    {
-        $oUser = &TCMSUser::GetActiveUser();
-        $sUserName = 'Unknown (e.g. cron)';
-        if (!is_null($oUser)) {
-            $sUserName = $oUser->GetName();
-        }
-        if (false === self::DisablePHPCommentsInDbLog()) {
-            $comment = "\n"."/*\n".' * Date:      '.date('d.m.Y H:i:s')."\n".' * User:      '.$sUserName."\n"." * DBVersion: {$transactionNr}\n"." * Build:     {$systemBuild}\n"." * Change:    {$sName}\n"."*/\n";
-        } else {
-            $comment = "\n";
-        }
-        $header = $comment."if (TCMSLogChange::AllowTransaction({$transactionNr}, '{$sActiveTrackName}')) { \n";
-        fwrite($fp, $header, strlen($header));
-    }
-
-    /**
-     * Will always return true.
-     *
-     * In ancient days there used to be a way to disable the comments. Now they are always disabled as no one used them.
-     *
-     * The code writing the comments is still there, though, just in case some developer comes screaming that those comments where the light of
-     * her life and everything is dark now. Then maybe we can restore them easily by reintroducing the mechanism to disable them by hand.
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function DisablePHPCommentsInDbLog()
-    {
-        return true;
-    }
-
-    /**
-     * @param resource $filePointer
-     *
-     * @deprecated since 6.2.0 - transaction checking is no longer used.
-     */
-    public static function _WriteTransactionFooter($filePointer)
-    {
-        $footer = "}\n\n";
-        fwrite($filePointer, $footer, strlen($footer));
     }
 
     /**
@@ -1941,51 +1837,6 @@ class TCMSLogChange
         $str = str_replace("\t", '\\t', $str);
 
         return $str;
-    }
-
-    /**
-     * This method lets old updates insert shop system pages. The table "shop_system_page" has been removed in shop-165.inc.php and
-     * old updates would fail when triggered afterwards.
-     *
-     * You should not use this method in new packages, which already know about the change.
-     *
-     * @param $shop_id
-     * @param $name_internal
-     * @param $name
-     * @param string $cms_tree_id
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public static function addShopSystemPage($shop_id, $name_internal, $name, $cms_tree_id = '', $id = null)
-    {
-        if (self::TableExists('shop_system_page')) {
-            $query = "INSERT INTO `shop_system_page`
-                      SET `shop_id` = '".$shop_id."',
-                          `name_internal` = '".$name_internal."',
-                          `name` = '".$name."',
-                          `cms_tree_id` = '".$cms_tree_id."'";
-            if (null !== $id) {
-                $query .= ", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($id)."'";
-            }
-            self::_RunQuery($query, __LINE__);
-        } else {
-            $shop = TdbShop::GetNewInstance();
-            if ($shop->Load($shop_id)) {
-                $portals = $shop->GetFieldCmsPortalIdList();
-                foreach ($portals as $portalid) {
-                    $query = "INSERT INTO `cms_portal_system_page` SET
-                                `cms_portal_id` =   '".MySqlLegacySupport::getInstance()->real_escape_string($portalid)."',
-                                `name_internal` =   '".MySqlLegacySupport::getInstance()->real_escape_string($name_internal)."',
-                                `name` =            '".MySqlLegacySupport::getInstance()->real_escape_string($name)."',
-                                `cms_tree_id` =     '".MySqlLegacySupport::getInstance()->real_escape_string($cms_tree_id)."',
-                                `id` =              '".MySqlLegacySupport::getInstance()->real_escape_string(TTools::GetUUID())."'
-                            ";
-                    self::_RunQuery($query, __LINE__);
-                }
-            } else {
-                self::DisplayErrorMessage('tried to insert system page for non existent shop id');
-            }
-        }
     }
 
     /**

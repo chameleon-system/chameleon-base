@@ -21,15 +21,6 @@ class TCMSMemcache
     protected $oMemcache = null;
 
     /**
-     * the used memcache class as string.
-     *
-     * @var string
-     *
-     * @deprecated since 6.2.0 - only Memcached is supported.
-     */
-    protected $sUsedMemcacheClass = 'Memcached';
-
-    /**
      * enable or disable logging - log messages are written into normal log file (e.g. chameleon.log by default).
      *
      * @var bool
@@ -51,14 +42,6 @@ class TCMSMemcache
      */
     protected $aLoggingMethods = array('flush');
 
-    /**
-     * @deprecated since 6.2.0 - no longer supported.
-     */
-    const CACHE_DRIVER_MEMCACHE = 1;
-    /**
-     * @deprecated since 6.2.0 - no longer needed, as Memcached is the only supported driver.
-     */
-    const CACHE_DRIVER_MEMCACHED = 2;
     /**
      * @var bool
      */
@@ -117,7 +100,7 @@ class TCMSMemcache
     }
 
     /**
-     * initializes the memcache object $this->oMemcache depending on what class to use and sets $this->sUsedMemcacheClass.
+     * initializes the memcache object $this->oMemcache.
      *
      * @param array $aServer - server array can hold as much servers as you want (as array) each server array must have the keys 'host' and 'port'
      */
@@ -280,16 +263,6 @@ class TCMSMemcache
         }
 
         return true;
-    }
-
-    /**
-     * @return int self::CACHE_DRIVER_MEMCACHED
-     *
-     * @deprecated since 6.2.0 - only Memcached is supported.
-     */
-    public function getDriverType()
-    {
-        return self::CACHE_DRIVER_MEMCACHED;
     }
 
     /**

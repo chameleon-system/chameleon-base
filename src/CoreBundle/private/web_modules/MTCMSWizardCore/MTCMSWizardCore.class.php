@@ -130,7 +130,6 @@ class MTCMSWizardCore extends TUserCustomModelBase
         // check if the method is permitted
         $aAllowedMethod = $this->oActiveOrderStep->AllowedMethods();
         if (in_array($sStepMethod, $aAllowedMethod) && method_exists($this->oActiveOrderStep, $sStepMethod)) {
-            $this->oActiveOrderStep->bHasMethodExecutionCalled = true;
             $this->oActiveOrderStep->$sStepMethod();
         } else {
             // error - method not allowed

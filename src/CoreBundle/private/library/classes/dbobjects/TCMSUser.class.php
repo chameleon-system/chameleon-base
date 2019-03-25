@@ -418,25 +418,6 @@ class TCMSUser extends TCMSRecord
     }
 
     /**
-     * @param string      $plainText
-     * @param string|null $salt
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - not used anymore.
-     */
-    protected function generateHash($plainText, $salt = null)
-    {
-        if (null === $salt) {
-            $salt = substr(md5(uniqid(rand(), true)), 0, 9);
-        } else {
-            $salt = substr($salt, 0, 9);
-        }
-
-        return $salt.'|'.sha1($salt.$plainText);
-    }
-
-    /**
      * Loads the access manager for the user (controls access to tables and modules).
      */
     public function _LoadAccessManager()

@@ -658,20 +658,6 @@ class TCMSTextFieldEndPoint
     }
 
     /**
-     * removes deprecated HTML tags, properties.
-     *
-     * @deprecated since 6.1.6 - method not used since 2011.
-     *
-     * @param string $content
-     *
-     * @return string
-     */
-    protected function _RemoveProprietaryParameter($content)
-    {
-        return $content;
-    }
-
-    /**
      * callback method that replaces CMS download links with frontend HTML.
      *
      * @param array $aMatch

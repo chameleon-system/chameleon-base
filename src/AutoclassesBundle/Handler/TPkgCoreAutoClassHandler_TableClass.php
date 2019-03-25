@@ -13,7 +13,6 @@ namespace ChameleonSystem\AutoclassesBundle\Handler;
 
 use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
 use TCMSTableToClass;
-use TPkgCmsFileManagerException;
 
 class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_AbstractBase
 {
@@ -28,11 +27,7 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
         }
         $oClassWriter = new TCMSTableToClass($this->filemanager, $targetDir);
         if ($oClassWriter->Load($tableConfId)) {
-            try {
-                $oClassWriter->Update($sClassName);
-            } catch (TPkgCmsFileManagerException $e) {
-                // errors are logged
-            }
+            $oClassWriter->Update($sClassName);
         }
     }
 

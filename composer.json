@@ -74,7 +74,6 @@
             "src/ExternalTrackerBundle/pkgExtranet",
             "src/ExternalTrackerBundle/pkgSearch",
             "src/ExternalTrackerBundle/pkgShop",
-            "src/ExternalTrackerGoogleAnalyticsBundle/objects",
             "src/ExtranetBundle/mapper",
             "src/ExtranetBundle/objects",
             "src/GenericTableExportBundle/objects",

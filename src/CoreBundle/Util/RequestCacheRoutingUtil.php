@@ -33,14 +33,6 @@ class RequestCacheRoutingUtil implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getRouteForTree(TdbCmsTree $tree, $controller, TdbCmsPortal $portal, TdbCmsLanguage $language)
-    {
-        return $this->routingUtil->getRouteForTree($tree, $controller, $portal, $language);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getLinkForTreeNode(TdbCmsTree $tree, TdbCmsLanguage $language = null)
     {
         return $this->routingUtil->getLinkForTreeNode($tree, $language);
@@ -72,14 +64,6 @@ class RequestCacheRoutingUtil implements RoutingUtilInterface
         $cache[$cacheKey] = $value;
 
         return $value;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPageDataForPagePath($pagePath, TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
-    {
-        return $this->routingUtil->getPageDataForPagePath($pagePath, $portal, $language);
     }
 
     /**
