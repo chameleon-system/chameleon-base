@@ -8,7 +8,7 @@ if (TCMSLogChange::AllowTransaction(1, 'dbversion-pkgShopPaymentEOS')) {
         - Add seo url handler<br/>
         <div style="padding: 15px;"></div>
     </div>
-<?php
+    <?php
     $query = "INSERT INTO `shop_payment_handler` SET `name` = 'eos-neopay-creditcard', `block_user_selection` = '0', `class` = 'TShopPaymentHandler_EOSNeoPayCreditCard', `class_type` = 'Core', `class_subtype` = 'pkgShopPaymentEOS/pkgShop/objects/db/TShopPaymentHandler', `shop_payment_handler_parameter` = 'shop_payment_handler_parameter'";
     $rRes = TCMSLogChange::_RunQuery($query, __LINE__);
 
@@ -20,7 +20,7 @@ if (TCMSLogChange::AllowTransaction(1, 'dbversion-pkgShopPaymentEOS')) {
         $query = "INSERT INTO `shop_payment_handler_parameter` SET `shop_payment_handler_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sInsertedId)."', `name` = 'Profil-ID', `systemname` = 'ProfileID', `description` = 'Dient zur Identifizierung des Händlerprofils', `value` = ''";
         TCMSLogChange::_RunQuery($query, __LINE__);
 
-        $query = "INSERT INTO `shop_payment_handler_parameter` SET `shop_payment_handler_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sInsertedId)."', `name` = 'Live-Mode', `systemname` = 'LiveMode', `description` = '1 =Produktiv-Schnittstellen benutzen. Achtung: Wenn USE_LIVE_PAYMENT = true wird IMMER die Testschnittstelle benutzt.', `value` = '0'";
+        $query = "INSERT INTO `shop_payment_handler_parameter` SET `shop_payment_handler_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sInsertedId)."', `name` = 'Live-Mode', `systemname` = 'LiveMode', `description` = '1 =Produktiv-Schnittstellen benutzen.', `value` = '0'";
         TCMSLogChange::_RunQuery($query, __LINE__);
 
         $query = "INSERT INTO `shop_payment_handler_parameter` SET `shop_payment_handler_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sInsertedId)."', `name` = 'Hashing-Salt', `systemname` = 'Salt', `description` = '<p>Wird benötigt, um den Sicherheits-Hash für Request zu generieren. </p>\\n<p>Wird bei der Erstellung des Händlerprofils zusammen mit der ProfileID von EOS Payment zur Verfügung gestellt.<br />\\n&nbsp; </p>', `value` = ''";

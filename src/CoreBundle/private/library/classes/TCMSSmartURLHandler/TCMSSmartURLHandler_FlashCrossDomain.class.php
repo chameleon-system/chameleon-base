@@ -9,9 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
-use ChameleonSystem\CoreBundle\ServiceLocator;
-
 /**
  * if we use static server flash files will load from this domain. Then the flash file has no rights
  * to get data from different domains if not defined in crossdomain.xml
@@ -56,20 +53,6 @@ class TCMSSmartURLHandler_FlashCrossDomain extends TCMSSmartURLHandler
 <!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd">
   <cross-domain-policy>
 ';
-        $oPortal = $this->getPortalDomainService()->getActivePortal();
-        $oPortalDomainList = $oPortal->GetFieldCmsPortalDomainsList();
-        while ($oPortalDomain = $oPortalDomainList->Next()) {
-            $sDomain = $oPortalDomain->fieldName;
-            if (!_DEVELOPMENT_MODE) {
-                if (!$oPortalDomain->IsDevelopmentDomain()) {
-                    $sXML .= '    <allow-access-from domain="'.TGlobal::OutHTML($sDomain).'" />'."\n";
-                    $sXML .= '    <allow-access-from domain="*.'.TGlobal::OutHTML($sDomain).'" />'."\n";
-                }
-            } else {
-                $sXML .= '    <allow-access-from domain="'.TGlobal::OutHTML($sDomain).'" />'."\n";
-                $sXML .= '    <allow-access-from domain="*.'.TGlobal::OutHTML($sDomain).'" />'."\n";
-            }
-        }
         $aStaticURLs = TGlobal::GetStaticURLPrefix();
         if (!is_array($aStaticURLs)) {
             $aStaticURLs = array($aStaticURLs);
@@ -98,10 +81,5 @@ class TCMSSmartURLHandler_FlashCrossDomain extends TCMSSmartURLHandler
         }
 
         return $sStaticDomain;
-    }
-
-    private function getPortalDomainService(): PortalDomainServiceInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

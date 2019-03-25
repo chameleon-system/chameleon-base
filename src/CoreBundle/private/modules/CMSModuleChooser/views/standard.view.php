@@ -12,7 +12,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
         <div id="moduleheaderline_<?=$menuPrefix; ?>">
             <a id="launch<?=$menuPrefix; ?>" class="cmsModuleMenuLauncher" href="javascript:void(0);"
                onclick="return false;"
-               style="display: block; font-weight: bold; color: #fff; background: #20a8d8 url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/layout_edit.png'); ?>) no-repeat scroll 5px center"><span><?=$translator->trans('chameleon_system_core.template_engine.spot_menu_headline', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+               style="display: block; font-weight: bold; color: #fff; background: #20a8d8 url(<?=TGlobal::GetPathTheme(); ?>/images/templateEngineEditor/layout_edit.png) no-repeat scroll 5px center"><span><?=$translator->trans('chameleon_system_core.template_engine.spot_menu_headline', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
         </div>
         <?php if (!is_null($data['oModule'])) {
     ?>
@@ -43,7 +43,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
         ?>
         <div style="background-color: #63c2de">
             <div class="moduleType"
-                 style="background: url(<?=TGlobal::GetPathTheme(); ?>/images/icons/cross.png); background-repeat: no-repeat; background-position: 3px;"><?php echo $translator->trans('chameleon_system_core.template_engine.slot_is_empty', array(), TranslationConstants::DOMAIN_BACKEND); ?></div>
+                 style="background: url(<?=TGlobal::GetPathTheme(); ?>/images/templateEngineEditor/cross.png); background-repeat: no-repeat; background-position: 3px;"><?php echo $translator->trans('chameleon_system_core.template_engine.slot_is_empty', array(), TranslationConstants::DOMAIN_BACKEND); ?></div>
         </div>
         <?php
     } ?>
