@@ -240,15 +240,6 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     }
 
     /**
-     * Called after a successful registration.
-     *
-     * @deprecated - you should consider placing your login in TDataExtranetUser::PostRegistrationHook
-     */
-    protected function PostRegistrationHook()
-    {
-    }
-
-    /**
      * Updates the user's billing/shipping address.
      *
      * @param string|null $sSuccessURL   - redirect on success (can also be passed via POST)
@@ -745,9 +736,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             if (is_array($oOldUser->sqlData) && array_key_exists($sFieldName, $oOldUser->sqlData) && is_array($oUser->sqlData) && array_key_exists($sFieldName, $oUser->sqlData)) {
                 $sNewValue = $oUser->sqlData[$sFieldName];
                 if ('password' == $sFieldName) {
-                    /** @var IPkgCmsSecurity_Password $oPwd */
-                    $oPwd = ServiceLocator::get('password');
-                    if (false === $oPwd->verify($sNewValue, $oOldUser->sqlData[$sFieldName])) {
+                    if (false === $this->getPasswordHashGenerator()->verify($sNewValue, $oOldUser->sqlData[$sFieldName])) {
                         $bPasswordIsRequired = true;
                         break;
                     }

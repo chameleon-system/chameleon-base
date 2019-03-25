@@ -150,7 +150,6 @@ class TCMSTextFieldEndPoint
         $content = $this->_ReplaceLinks($content);
         $content = $this->_ReplaceEMailLinks($content);
         $content = $this->_ReplaceDownloadLinks($content);
-        $content = $this->_ReplaceVariables($content);
         $content = $this->_ReplaceInvalidDivs($content);
         $content = $this->_ReplaceEmptyAligns($content);
         $content = $this->_RemoveEmptyTags($content);
@@ -210,7 +209,6 @@ class TCMSTextFieldEndPoint
         $content = $this->_ReplaceImages($content, $bClearThickBox);
         $content = $this->_ReplaceLinks($content);
         $content = $this->_ReplaceDownloadLinks($content);
-        $content = $this->_ReplaceVariables($content);
         $content = $this->_ReplaceInvalidDivs($content);
         $content = $this->_ReplaceEmptyAligns($content);
         $content = $this->_RemoveEmptyTags($content);
@@ -287,26 +285,6 @@ class TCMSTextFieldEndPoint
         if (!is_null($length) && mb_strlen($content) > $length) {
             $content = mb_substr($content, 0, $length);
         }
-
-        return $content;
-    }
-
-    /**
-     * replaces $$ variables.
-     *
-     * @deprecated don`t use this type of vars anymore! use twig style placeholder instead
-     *
-     * @param string $content
-     *
-     * @return string
-     */
-    protected function _ReplaceVariables($content)
-    {
-        if (false === stripos($content, '$$')) {
-            return $content;
-        }
-        $matchString = '/\$\$([^\$]+?)\$\$/usi';
-        $content = preg_replace_callback($matchString, array($this, '_callback_cmstextfield_varparser'), $content);
 
         return $content;
     }
@@ -773,23 +751,6 @@ class TCMSTextFieldEndPoint
             return $aLinkAttributes[0];
         } else {
             return array();
-        }
-    }
-
-    /**
-     * @deprecated only use {{}} variables instead of $$
-     *
-     * @param array $aMatch
-     *
-     * @return string
-     */
-    protected function _callback_cmstextfield_varparser($aMatch)
-    {
-        $varVal = TCMSRegistry::Get($aMatch[1]);
-        if (!is_null($varVal)) {
-            return $varVal;
-        } else {
-            return $aMatch[0];
         }
     }
 

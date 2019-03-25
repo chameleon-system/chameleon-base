@@ -10,10 +10,14 @@
 
         <div class="itemText"><?=$data['oItem']->GetTextField('artikel'); ?></div>
         <?php
-        $oDownloads = &$data['oItem']->GetDownloads('cms_document_mlt');
+        /**
+         * @var TCMSRecord $item
+         */
+        $item = $data['oItem'];
+        $oDownloads = $item->GetDownloads('cms_document_mlt');
         while ($oDownload = $oDownloads->Next()) {
             ?>
-            <div style="padding-bottom:3px"><?=$oDownload->GetDownloadLink(); ?></div>
+            <div style="padding-bottom:3px"><?=$oDownload->getDownloadHtmlTag(); ?></div>
             <?php
         } ?>
     </div>

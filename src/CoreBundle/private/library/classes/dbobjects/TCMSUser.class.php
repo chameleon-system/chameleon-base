@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManag
 use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * the user manager class for the cms.
@@ -236,7 +237,13 @@ class TCMSUser extends TCMSRecord
         }
 
         unset($_SESSION['_listObjCache']);
-        TCMSSessionHandler::ClearSession();
+        $request = self::getRequest();
+        if (null !== $request) {
+            $session = $request->getSession();
+            if (null === $session) {
+                $session->clear();
+            }
+        }
 
         self::getEventDispatcher()->dispatch(CoreEvents::BACKEND_LOGOUT_SUCCESS, new BackendLogoutEvent($user));
     }
@@ -506,5 +513,10 @@ class TCMSUser extends TCMSRecord
     private static function getEventDispatcher()
     {
         return ServiceLocator::get('event_dispatcher');
+    }
+
+    private static function getRequest(): ?Request
+    {
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 }

@@ -172,11 +172,6 @@
                 <source>chameleon_system_core.template_engine.header_lock</source>
                 <target>Record lock</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.template_engine.header_revision">
-                <source>chameleon_system_core.template_engine.header_revision</source>
-                <target>Version</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.header_navigation">
                 <source>chameleon_system_core.template_engine.header_navigation</source>
                 <target>Navigation nodes</target>
@@ -889,11 +884,6 @@
                 <source>chameleon_system_core.record_lock.lock_owner_phone</source>
                 <target>Tel.</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.record_lock.lock_owner_fax">
-                <source>chameleon_system_core.record_lock.lock_owner_fax</source>
-                <target>Fax</target>
-                 <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.record_lock.locked_by">
                 <source>chameleon_system_core.record_lock.locked_by</source>
                 <target>locked by</target>
@@ -902,88 +892,6 @@
                 <source>chameleon_system_core.record_lock.lock_owner_city</source>
                 <target>City</target>
             </trans-unit>
-
-            <trans-unit id="chameleon_system_core.record_revision.based_on">
-                <source>chameleon_system_core.record_revision.based_on</source>
-                <target>based on rev.</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.revision_number">
-                <source>chameleon_system_core.record_revision.revision_number</source>
-                <target>Revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.last_used_date">
-                <source>chameleon_system_core.record_revision.last_used_date</source>
-                <target>last used</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.name">
-                <source>chameleon_system_core.record_revision.name</source>
-                <target>Title</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.description">
-                <source>chameleon_system_core.record_revision.description</source>
-                <target>Description</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.no_revision_exists">
-                <source>chameleon_system_core.record_revision.no_revision_exists</source>
-                <target>unversioned</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_restore_revision">
-                <source>chameleon_system_core.record_revision.action_restore_revision</source>
-                <target>restore record revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.confirm_restore_revision">
-                <source>chameleon_system_core.record_revision.confirm_restore_revision</source>
-                <target>The current record will be overwritten by an older revision, are you sure?&lt;br/&gt;You should create a new revision&lt;br/&gt;if you're not sure</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_confirm_restore_revision">
-                <source>chameleon_system_core.record_revision.action_confirm_restore_revision</source>
-                <target>OK</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.header_new_revision">
-                <source>chameleon_system_core.record_revision.header_new_revision</source>
-                <target>Create revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.new_revision_help">
-                <source>chameleon_system_core.record_revision.new_revision_help</source>
-                <target>Please note: All unsaved data will not be revisioned and therefore be lost.</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.new_revision_number">
-                <source>chameleon_system_core.record_revision.new_revision_number</source>
-                <target>New revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_new_revision">
-                <source>chameleon_system_core.record_revision.action_new_revision</source>
-                <target>Create revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_load_revision">
-                <source>chameleon_system_core.record_revision.action_load_revision</source>
-                <target>Load revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_create_page_revision">
-                <source>chameleon_system_core.record_revision.action_create_page_revision</source>
-                <target>Create page revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_load_page_revision">
-                <source>chameleon_system_core.record_revision.action_load_page_revision</source>
-                <target>Load page revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-
 
             <trans-unit id="chameleon_system_core.list.no_entries">
                 <source>chameleon_system_core.list.no_entries</source>
@@ -1765,26 +1673,6 @@
                 <source>chameleon_system_core.cms_module_header.migration_recording_deactivated</source>
                 <target>Database recording deactivated.</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_header.error_unable_to_create_update_counter">
-                <source>chameleon_system_core.cms_module_header.error_unable_to_create_update_counter</source>
-                <target>Error creating database update counter!</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_header.msg_created_update_counter">
-                <source>chameleon_system_core.cms_module_header.msg_created_update_counter</source>
-                <target>Successfully created new database update counter %sSystemName%.</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_header.msg_update_counter_switched">
-                <source>chameleon_system_core.cms_module_header.msg_update_counter_switched</source>
-                <target>Successfully switched database update counter.</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_header.active_update_counter">
-                <source>chameleon_system_core.cms_module_header.active_update_counter</source>
-                <target>Active database update counter</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_header.action_edit_navigation_help">
                 <source>chameleon_system_core.cms_module_header.action_edit_navigation_help</source>
                 <target>Edit navigation</target>
@@ -2437,11 +2325,6 @@
             <trans-unit id="chameleon_system_core.table_editor_files.error_unable_to_move_or_copy_file">
                 <source>chameleon_system_core.table_editor_files.error_unable_to_move_or_copy_file</source>
                 <target>Unable to move or copy uploaded file to target location</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.table_editor_files.error_cluster_distribution">
-                <source>chameleon_system_core.table_editor_files.error_cluster_distribution</source>
-                <target>Could not share file in cluster. File: %name%, fileHandler Error: %error%)</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_files.error_file_to_large">
                 <source>chameleon_system_core.table_editor_files.error_file_to_large</source>

@@ -2,11 +2,6 @@
 
 if (!defined('_FRAMEWORK_CONFIG_LOADED')) {
     /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    define('DEBUG_LEVEL', 1);
-
-    /**
      * we set this so that this config is called only once.
      */
     define('_FRAMEWORK_CONFIG_LOADED', true);
@@ -86,13 +81,6 @@ if (!defined('_FRAMEWORK_CONFIG_LOADED')) {
     define('PATH_CORE_CUSTOMER', _CMS_CUSTOMER_CORE.'/core/');
 
     define('PATH_ROOT', _CMS_CORE);
-
-    /**
-     * points to the HTTP root of the framework.
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    define('HTTP_PATH_ROOT', realpath(_CMS_CORE.'/../../../httpdocs/chameleon/blackbox'));
 
     /**
      * Points to the library base. Below this path are usually things like ./classes and ./functions.

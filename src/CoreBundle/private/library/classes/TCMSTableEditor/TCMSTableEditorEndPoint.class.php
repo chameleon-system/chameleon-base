@@ -102,16 +102,6 @@ class TCMSTableEditorEndPoint
     protected $editOnly = false;
 
     /**
-     * array of errors to show on ajax save requests.
-     *
-     * @deprecated use TCMSMessagemanger instead
-     * @see TCMSField::CheckMandatoryField()
-     *
-     * @var array
-     */
-    protected $aErrors = array();
-
-    /**
      * if set to true, no user access rights will be checked.
      *
      * @var bool
