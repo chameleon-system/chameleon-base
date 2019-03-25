@@ -55,18 +55,6 @@ class TCmsLanguage extends TCmsLanguageAutoParent
     }
 
     /**
-     * @param string $iso6391Code
-     *
-     * @return TdbCmsLanguage
-     *
-     * @deprecated since 6.1.4 - use chameleon_system_core.language_service::getLanguageFromIsoCode() instead.
-     */
-    public static function getLanguageFromIsoCodeCached($iso6391Code)
-    {
-        return self::getLanguageService()->getLanguageFromIsoCode($iso6391Code);
-    }
-
-    /**
      * @return ActivePageServiceInterface
      */
     private function getActivePageService()

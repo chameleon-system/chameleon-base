@@ -344,15 +344,4 @@ class Cache implements CacheInterface
 
         return $group;
     }
-
-    /**
-     * Do nothing here because the class no longer needs the cache dir.
-     *
-     * @param string $cacheDir
-     *
-     * @deprecated since 6.1.8 - no longer used.
-     */
-    public function setCacheDir($cacheDir)
-    {
-    }
 }

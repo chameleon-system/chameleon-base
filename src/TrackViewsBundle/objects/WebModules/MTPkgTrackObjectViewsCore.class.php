@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class MTPkgTrackObjectViewsCore extends TUserCustomModelBase
 {
     public function &Execute()
@@ -16,7 +19,7 @@ class MTPkgTrackObjectViewsCore extends TUserCustomModelBase
         parent::Execute();
         $isEnabled = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_track_views.enabled');
         if ($isEnabled) {
-            if (false == TGlobal::IsCMSTemplateEngineEditMode()) {
+            if (false === $this->getRequestInfoService()->isCmsTemplateEngineEditMode()) {
                 $oTracker = &TPkgTrackObjectViews::GetInstance();
                 $this->data['sTrackHTML'] = $oTracker->Render();
             } else {
@@ -27,5 +30,10 @@ class MTPkgTrackObjectViewsCore extends TUserCustomModelBase
         }
 
         return $this->data;
+    }
+
+    private function getRequestInfoService(): RequestInfoServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.request_info_service');
     }
 }

@@ -46,8 +46,17 @@ The code entities in this list were marked as deprecated in previous releases an
 - CHAMELEON_MEMCACHE_SESSIONS_SERVER_PORT_2
 - CHAMELEON_MEMCACHE_USE_FALLBACK
 - CHAMELEON_MEMCACHE_USE_LAZY_CACHE_WRITE
+- CHAMELEON_MEMCACHE_USE_LAZY_CACHE_WRITE_WRITEQUEUE
+- CHAMELEON_MEMCACHE_USE_LAZY_CACHE_WRITE_WRITEQUEUE_DIR
 - CHAMELEON_MEMCACHED_TIMEOUT_IN_MILLISECONDS
 - CHAMELEON_SEO_URL_REWRITE_TO_CLEAN
+- chameleon::REQUEST_TYPE_ASSETS
+- chameleon::REQUEST_TYPE_BACKEND
+- chameleon::REQUEST_TYPE_BOOT_ONLY
+- chameleon::REQUEST_TYPE_FRONTEND
+- chameleon::REQUEST_TYPE_UNITTEST
+- ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface::REQUEST_TYPE_BOOT_ONLY
+- ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface::REQUEST_TYPE_UNITTEST
 - CMS_ACTIVE_REVISION_MANAGEMENT
 - CMS_ACTIVE_SMART_URL_HANDLER_CACHING
 - CMS_BOT_DISABLE_SESSION_LOCKING
@@ -73,16 +82,27 @@ The code entities in this list were marked as deprecated in previous releases an
 - ENABLE_EXTERNAL_RESOURCE_COLLECTION
 - ENABLE_EXTERNAL_RESOURCE_COLLECTION_MINIFY
 - ENABLE_EXTERNAL_RESOURCE_COLLECTION_REFRESH_PREFIX
+- MTHeader::CONFIGPARAM_DB_COUNTER
+- MTHeader::CONFIGPARAM_TIMESTAMP
+- MTHeader::DB_LOGGING_STATE
+- MTHeader::TIMESTAMP_CREATED_IN_SESSION
 - PATH_CMS_CUSTOMER_WORKFLOW_DOCUMENT
 - PATH_CMS_CUSTOMER_WORKFLOW_MEDIA
 - PATH_CMS_CUSTOMER_WORKFLOW_MEDIA_THUMBS
 - PATH_CMS_FONTS
 - PATH_CMS_UPDATE
+- PKG_EXTERNAL_TRACKER_GOOGLE_ANALYTICS_ENABLE_CROSS_DOMAIN_TRACKING
 - REQUEST_TRUSTED_PROXIES
 - REQUEST_TRUSTED_HEADER_CLIENT_HOST
 - REQUEST_TRUSTED_HEADER_CLIENT_IP
 - REQUEST_TRUSTED_HEADER_CLIENT_PORT
 - REQUEST_TRUSTED_HEADER_CLIENT_PROTO
+- TCMSCronJob::LOG_FILE
+- TCMSMemcache::CACHE_DRIVER_MEMCACHE
+- TCMSMemcache::CACHE_DRIVER_MEMCACHED
+- TCMSUserInput::FILTER_EMAIL
+- TCMSUserInput::FILTER_XSS
+- TDataExtranetUser::MAX_SALT_AGE_IN_SECONDS
 - USE_FILE_BASED_SESSION_HANDLING
 - USE_IMAGELAYER
 - USE_LIGHTBOX
@@ -91,17 +111,212 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Classes and Interfaces
 
+- AbstractPkgCmsProfilerItem
 - CMSFieldMLT
+- CMSMediaViddlerImport
+- IClusterDriver
+- ICmsObjectLink
+- IMapperCacheManager
+- IMapperCacheManagerRestricted
+- IPkgCmsEventObservable
+- IPkgCmsServerSetupValidator
+- IPkgCmsServerSetupValidatorMessage
+- IPkgCoreDbClassFactory
+- IUserCustomModelBase
+- MapperCacheManager
+- MapperCacheManagerException
+- MapperCacheManagerExceptionContentNotFound
+- MapperCacheManagerRestrictedProxy
+- MTPkgExternalTrackerGoogleAnalytics_MTPageMetaCore
+- TCacheManagerStorage_Decorator
+- TCacheManagerStorage_Decorator_LazyWriteMemcache
+- TCacheManagerStorage_Standard
+- TCMSDataExtranetUser
 - TCMSFontImage
 - TCMSFontImageList
+- TCMSMath
+- TCmsObjectLinkBase
+- TCmsObjectLinkException_InvalidTargetClass
+- TCMSSmartURLHandler_Pagepath
+- TCMSUserInput_EMail
+- TCMSUserInput_XSS
+- TPkgCmsClassManager_CmsConfig
+- TPkgCmsCore
+- TPkgCmsFileManagerException
+- TPkgCmsProfileItem_Group
+- TPkgCmsProfileItem_Tick
+- TPkgCmsProfiler
+- TPkgCmsServerSetupValidator_PHPVersion
+- TPkgCmsServerSetupValidatorManager
+- TPkgCmsServerSetupValidatorMessage
+- TPkgCmsSessionHandler_Decorator_Observable
+- TPkgExternalTrackerGoogleAnalytics
 
 ## Properties
 
+- ChameleonSystem\CoreBundle\Controller\ChameleonController::$portalDomainService
+- ChameleonSystem\CoreBundle\Controller\ChameleonController::$redirectPageDef
+- ChameleonSystem\CoreBundle\Controller\ChameleonController::$requestInfoService
+- MTPageMetaCoreEndPoint::$oActivePortal
+- TCMSMemcache::$sUsedMemcacheClass
+- TGlobal::$oURLHistory
+- TGlobalBase::$aUnitTestMockedObjects
+- TModelBase::$isExportCall
+
 ## Methods
 
-- TCMSPortalDomain::IsDevelopmentDomain
+- ChameleonSystem\CoreBundle\Controller\ChameleonController::GetExecutionTime()
+- ChameleonSystem\CoreBundle\Controller\ChameleonController::postRoutingHook()
+- ChameleonSystem\CoreBundle\Controller\ChameleonController::setOutputPageLoadTimeInfo()
+- ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer::handleUnitTestCase()
+- ChameleonSystem\CoreBundle\Util\RoutingUtilInterface::getPageDataForPagePath()
+- ChameleonSystem\CoreBundle\Util\RoutingUtilInterface::getRouteForTree()
+- esono\pkgCmsCache\Cache::setCacheDir()
+- IPkgCmsFileManager::setDriver()
+- MTHeader::_LoadUserImage()
+- MTHeader::AddCounter
+- MTHeader::ChangeActiveDbCounter
+- MTHeader::FetchCounterInformation
+- MTPageMetaCoreEndPoint::GetETrackerId()
+- MTPageMetaCoreEndPoint::IncludeTrackerEtracker()
+- MTPageMetaCoreEndPoint::IncludeTrackerEtrackerHook()
+- MTPageMetaCoreEndPoint::IncludeTrackerGoogleAnalytics()
+- TAdb*List::GetDefaultLanguageId()
+- TCMSActivePage::GetActiveLanguage()
+- TCMSActivePage::GetActiveLanguageObject()
+- TCMSActivePage::GetInstanceWithoutCache()
+- TCMSConfig::ExtranetModuleInstalled()
+- TCMSConfig::GetGlobalCacheKeyParameter()
+- TCMSConfig::ObjectIsInitialized()
+- TCMSContentBoxItem::_loadMenuItems()
+- TCmsLanguage::getLanguageFromIsoCodeCached()
+- TCMSLogChange::_WriteTransactionFooter()
+- TCMSLogChange::_WriteTransactionHeader()
+- TCMSLogChange::addShopSystemPage()
+- TCMSLogChange::DisablePHPCommentsInDbLog()
+- TCMSLogChange::EndTransaction()
+- TCMSLogChange::getActiveDbCounterName()
+- TCMSLogChange::setActiveDbCounterName()
+- TCMSLogChange::UpdateCounterExists()
+- TCMSMail::TransformEmailInDevelopmentMode()
+- TCMSMemcache::getDriverType()
+- TCMSPage::GetMainTree()
+- TCMSPortal::GetPortalBaseURL()
+- TCMSPortal::GetPortalHomeURL()
+- TCMSPortal::GetPrimaryDomainObject()
+- TCMSPortal::GetPrimarySSLDomain()
+- TCMSPortal::GetSSLDomainForCurrentURL()
+- TCMSPortal::getRootURL()
+- TCMSPortalDomain::GetActiveDomain()
+- TCMSPortalDomain::IsDevelopmentDomain()
+- TCMSRecord::IsMultiLanguageTable()
+- TCMSTableEditorMedia::RefreshImageOnViddler()
+- TCMSTableToClass::getDatabaseConnection()
+- TCMSTableToClass::setDatabaseConnection()
+- TCMSTextFieldEndPoint::_RemoveProprietaryParameter()
+- TCMSTreeNode::ConvertToValidXHTMLLink()
+- TCMSUpdateManager::checkIfUpdateHasBeenProcessed()
+- TCMSUpdateManager::getBuildNumbersForFolder()
+- TCMSUpdateManager::getLatestBuildNumberForFolder()
+- TCMSUpdateManager::RunCoreUpdates()
+- TCMSUser::generateHash()
+- TCMSUserInput::AutoAddAuthenticityTokenToForms()
+- TCMSUserInput::CallbackAddAuthenticityTokenToForms()
+- TCMSUserInput::CheckAuthenticityTokenInInput()
+- TCMSUserInput::GenerateNewAuthenticityToken()
+- TCMSUserInput::GetAuthenticityToken()
+- TCMSUserInput::GetAuthenticityTokenName()
+- TCMSUserInput::GetAuthenticityTokenString()
+- TCMSUserInput::HasActiveAutoProtectInputViaAuthenticityToken()
+- TDataExtranetCore::CacheCommit()
+- TDataExtranetCore::IsExtranetUsingCryptedPassword()
+- TDataExtranetUser::CommitToSession()
+- TDataExtranetUser::GetLinkSendDoubleOptInEmail()
+- TDataExtranetUser::GetPasswordSalt()
+- TDataExtranetUser::getRedirectToAccessDeniedPageLink()
+- TDataExtranetUser::RedirectToAccessDeniedPage()
+- TGlobal::GetActiveLanguageId()
+- TGlobalBase::_GetModuleRootPath()
+- TGlobalBase::AddFileToPHPFileCache()
+- TGlobalBase::ClassFactory()
+- TGlobalBase::DeleteUnitTestMockedObject()
+- TGlobalBase::FieldExists()
+- TGlobalBase::GetActiveLanguageId()
+- TGlobalBase::GetActiveLanguagePrefix()
+- TGlobalBase::GetMemcacheInstance()
+- TGlobalBase::GetPathWebLibrary()
+- TGlobalBase::GetUnitTestMockedObject()
+- TGlobalBase::IsCMSTemplateEngineEditMode()
+- TGlobalBase::LoadDBObjectClassDefinition()
+- TGlobalBase::LoadClassDefinition()
+- TGlobalBase::NewDBObject()
+- TGlobalBase::OutputDataAsFormFields()
+- TGlobalBase::OutputDataAsURL()
+- TGlobalBase::RegisterUnitTestMockedObject()
+- TGlobalBase::ReplaceCustomVariablesInString()
+- TGlobalBase::WriteLog()
+- TModelBase::AllowPageCache()
+- TModelBase::ClearCache()
+- TModelBase::ExecuteExport()
+- TModelBase::GetExportLink()
+- TModelBase::GetExportView()
+- TPkgCmsRouteControllerCmsTplPage::isNonSeoLink()
+- TPkgComment::GetDefaultLanguageId()
+- TPkgCommentModuleConfig::GetDefaultLanguageId()
+- TTools::ConvertMySQL2UnixTimeStamp()
+- TTools::DateTime2UnixTimestamp()
+- TTools::GenerateEncryptedPassword()
+- TTools::GetLanguageISOName()
+- TTools::GetPageObject()
+- TTools::RealNameToURLName()
+- TTools::sanitize_filename()
+- TTools::sendToHost()
+- TTools::sendToHostReturnFull()
+- TTools::UnicodeToEntitiesPreservingAscii()
+- TTools::UTF8ToEntitiesPreservingAscii()
+- TTools::UTF8ToUnicode()
 
 ## JavaScript Files and Functions
+
+- bootstrap-colorpicker (new version 3.0.3 located in src/CoreBundle/Resources/public/javascript/jquery/bootstrap-colorpicker-3.0.3).
+- chosen.jquery.js
+- html5shiv.js
+- jqModal.js 
+- jqDnR.js
+- jquery.form.js (new version 4.2.2 located in src/CoreBundle/Resources/public/javascript/jquery/jquery-form-4.2.2/jquery.form.min.js).
+- jquery.selectboxes.js
+- jQueryUI (everything in path src/CoreBundle/Resources/public/javascript/jquery/jQueryUI; drag and drop still used in the template engine).
+- maskedinput.js
+- pngForIE.htc
+- pNotify (new version 3.2.0 located in src/CoreBundle/Resources/public/javascript/pnotify-3.2.0/)
+- respond.min.js
+- rwd.images.js
+- src/CoreBundle/Resources/public/javascript/mainNav.js
+- TDataCustomListConfig.js
+- THTMLFileBrowser.js
+- THTMLTable.js
+
+- $.addOption() (jquery.selectboxes plugin)
+- $.bgiframe()
+- $.blockUI()
+- $.everyTime()
+- $.jBreadCrumb()
+- $.jqDnR() (part of jqModal)
+- $.jqM() (jqModal)
+- $.oneTime()
+- $.stopTime()
+- $.tagInput()
+- $.unblockUI()
+- $.wTooltip()
+- ActivateRecordRevision()
+- AddNewRevision()
+- CreateModalIFrameDialogFromContentWithoutClose()
+- PublishViaAjaxCallback()
+- SaveNewRevision()
+- SetChangedDataMessage()
+- showMLTField()
+- SwitchEditPortal()
+- SwitchEditPortalCallback()
 
 ## Translations
 
@@ -109,8 +324,21 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Database Fields
 
-#Icons
+## Icons
 
 All icons in CoreBundle/Resources/public/images/ 
 and CoreBundle/Resources/public/themes/standard/images/ (not recursively, subfolders remain) were deleted. 
 Exceptions are the chameleon logos and favicon.ico.
+
+The Font Awesome icon font was upgraded to 5.8.1.
+
+## Frontend Assets
+
+There were some frontend styles, images and javascript helpers located in the core that were deleted or moved to bundles.
+
+- web_modules/MTConfigurableFeedbackCore
+- web_modules/MTExtranet
+- web_modules/MTFAQListCore
+- web_modules/MTFeedbackCore
+- web_modules/MTGlobalListCore
+- web_modules/MTNewsletterSignupCore

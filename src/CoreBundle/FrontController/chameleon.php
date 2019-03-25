@@ -18,32 +18,6 @@ class chameleon
      */
     private static $requestType;
 
-    /**
-     * @deprecated since 6.1.6 - use RequestTypeInterface::REQUEST_TYPE_FRONTEND instead.
-     */
-    const REQUEST_TYPE_FRONTEND = 1;
-    /**
-     * @deprecated since 6.1.6 - use RequestTypeInterface::REQUEST_TYPE_BACKEND instead.
-     */
-    const REQUEST_TYPE_BACKEND = 2;
-    /**
-     * boot - start db and autoloader, but not the session.
-     *
-     * @deprecated since 6.1.6 - not used anymore.
-     */
-    const REQUEST_TYPE_UNITTEST = 3;
-    /**
-     * boot only (autoloader, session and db are initialized).
-     *
-     * @deprecated since 6.1.6 - not used anymore.
-     */
-    const REQUEST_TYPE_BOOT_ONLY = 4;
-    /**
-     * @deprecated since 6.1.6 - use RequestTypeInterface::REQUEST_TYPE_ASSETS instead (which is itself deprecated; see
-     * deprecation note for \ChameleonSystem\CoreBundle\RequestType\AssetRequestType).
-     */
-    const REQUEST_TYPE_ASSETS = 5;
-
     public function boot()
     {
         if (!array_key_exists('HTTP_HOST', $_SERVER)) {

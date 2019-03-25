@@ -98,14 +98,6 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
     /**
      * {@inheritdoc}
      */
-    public function setDriver(IClusterDriver $driver)
-    {
-        // we don't need a driver
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function chmod($file, $mode)
     {
         return chmod($file, $mode);

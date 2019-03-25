@@ -884,11 +884,7 @@ class TCMSRecordWritable extends TCMSRecord
                         $aFileData['error'] = 0;
                         $aFileData['size'] = filesize($sTmpFileName);
 
-                        try {
-                            $bUploadOK = $this->UploadCMSDocument($aFileData, $sFileName, $sFieldName, $iDocumentCategoryId, $bIsPrivate, $sDescription, true, $sDocumentID);
-                        } catch (TPkgCmsFileManagerException $e) {
-                            // errors are logged
-                        }
+                        $bUploadOK = $this->UploadCMSDocument($aFileData, $sFileName, $sFieldName, $iDocumentCategoryId, $bIsPrivate, $sDescription, true, $sDocumentID);
                     }
                 }
             }

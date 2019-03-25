@@ -17,13 +17,6 @@ CHAMELEON.CORE.hideProcessingModal = function () {
     $("#processingModal").modal('hide');
 };
 
-/**
- * @deprecated since 6.3.0 - call CHAMELEON.CORE.showProcessingModal(); instead
- */
-function PleaseWait() {
-    CHAMELEON.CORE.showProcessingModal();
-}
-
 function PostAjaxForm(formid, functionName) {
     CHAMELEON.CORE.showProcessingModal();
     PostAjaxFormTransparent(formid, functionName);
@@ -418,24 +411,6 @@ function addslashes(str) {
     // *     example 1: addslashes("kevin's birthday");
     // *     returns 1: 'kevin\'s birthday'
     return (str + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
-}
-
-
-/**
- * @deprecated since 6.3.0 - not used anywhere.
- *
- * switches the edit portal which will used as default portal while editing
- */
-function SwitchEditPortal() {
-    PostAjaxFormTransparent('portalChooserForm', SwitchEditPortalCallback);
-}
-
-/**
- * @deprecated since 6.3.0 - not used anywhere.
- */
-function SwitchEditPortalCallback() {
-    $('#portalChooser').slideToggle('fast');
-    $('#portalContentBoxNameSpan').html(document.getElementById('activePortalID').options[document.getElementById('activePortalID').options.selectedIndex].text);
 }
 
 function GetSynchronouslyAjaxCall(url, functionName) {

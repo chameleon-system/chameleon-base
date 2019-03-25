@@ -250,7 +250,7 @@ class CMSFieldPositionRPC extends TCMSModelBase
         $fieldName = $this->global->GetUserData('fieldName');
 
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fontawesome-free-5.5.0/css/all.css').'" media="screen" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fontawesome-free-5.8.1/css/all.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tableeditcontainer.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script type="text/javascript">
       $(document).ready(function(){

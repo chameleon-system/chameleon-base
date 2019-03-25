@@ -11,6 +11,7 @@
 
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
 use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -614,23 +615,9 @@ class TCMSTableToClass
         $this->cachedir = $cachedir;
     }
 
-    /**
-     * @param Connection $connection
-     *
-     * @deprecated since 6.0.12 - class does not use a database connection anymore.
-     */
-    public function setDatabaseConnection(Connection $connection)
+    private function getDatabaseConnection(): Connection
     {
-    }
-
-    /**
-     * @return Connection
-     *
-     * @deprecated since 6.0.12 - class does not use a database connection anymore.
-     */
-    protected function getDatabaseConnection()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
     /**
@@ -638,7 +625,7 @@ class TCMSTableToClass
      */
     private static function getAutoclassesCacheWarmer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
+        return ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
     }
 
     /**
@@ -646,6 +633,6 @@ class TCMSTableToClass
      */
     private function getAutoclassesDataAccess()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
+        return ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
     }
 }

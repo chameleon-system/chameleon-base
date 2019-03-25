@@ -39,16 +39,6 @@ class TCMSContentBoxItem extends TAdbCmsContentBox
         TCMSRender::DrawBoxFooter();
     }
 
-    /**
-     * load the menu items.
-     *
-     * @deprecated since 6.2.0 - use loadMenuItems() instead.
-     */
-    protected function _loadMenuItems()
-    {
-        $this->loadMenuItems();
-    }
-
     public function loadMenuItems()
     {
         if (!is_null($this->id)) {

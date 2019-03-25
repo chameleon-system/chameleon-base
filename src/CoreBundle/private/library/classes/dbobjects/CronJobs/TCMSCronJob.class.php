@@ -18,11 +18,6 @@ use Psr\Log\LoggerInterface;
 class TCMSCronJob extends TCMSRecord
 {
     /**
-     * @deprecated since 6.0.9 - use a logging service instead
-     */
-    const LOG_FILE = '/logs/cronjobs.log';
-
-    /**
      * add optional message output to this property
      * the message is rendered only in backend mode.
      */
