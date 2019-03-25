@@ -113,3 +113,5 @@ The code entities in this list were marked as deprecated in previous releases an
 All icons in CoreBundle/Resources/public/images/ 
 and CoreBundle/Resources/public/themes/standard/images/ (not recursively, subfolders remain) were deleted. 
 Exceptions are the chameleon logos and favicon.ico.
+
+The Font Awesome icon font was upgraded to 5.8.1.
