@@ -66,24 +66,6 @@ class TCMSPortalDomain extends TCMSRecord
         return $this->sqlData['sslname'];
     }
 
-    /**
-     * returns true if the current domain ends with _DEVELOPMENT_DOMAIN.
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - use the service container to provide environment-dependent behavior.
-     */
-    public function IsDevelopmentDomain()
-    {
-        $bIsDevelopmentDomain = false;
-        $sDomainName = $this->GetName();
-        if (_DEVELOPMENT_DOMAIN == substr($sDomainName, (strlen($sDomainName) - strlen(_DEVELOPMENT_DOMAIN)))) {
-            $bIsDevelopmentDomain = true;
-        }
-
-        return $bIsDevelopmentDomain;
-    }
-
     public static function ConvertFromIDN($sString)
     {
         static $IDN;

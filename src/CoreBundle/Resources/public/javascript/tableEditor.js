@@ -394,24 +394,6 @@ function loadMltPositionList(tableSQLName, sRestriction, sRestrictionField) {
     CreateModalIFrameDialogCloseButton(url, 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
 }
 
-/**
- * @deprecated since 6.3.0
- * use: CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(iFrameId, url) instead.
- *
- * MLT field: show/hide MLT content
- */
-function showMLTField(objID, outerObjID, url) {
-    var mltID = document.getElementById(objID);
-
-    var $objID = $('#' + objID);
-    if ($objID.is(':hidden')) {
-        mltID.src = url;
-        $objID.removeClass('d-none');
-    } else {
-        $objID.addClass('d-none');
-    }
-}
-
 function setTableEditorListFieldState(triggerDiv, requestURL) {
     triggerDiv = $(triggerDiv);
     var state = 0;
@@ -894,13 +876,6 @@ CHAMELEON.CORE.MTTableEditor.initInputChangeObservation = function () {
         CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
     });
 };
-
-/**
- * @deprecated since 6.3.0 - use CHAMELEON.CORE.MTTableEditor.initInputChangeObservation(); instead
- */
-function SetChangedDataMessage() {
-    CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
-}
 
 CHAMELEON.CORE.MTTableEditor.initHelpTexts = function () {
     $(".help-text-button").click(function () {

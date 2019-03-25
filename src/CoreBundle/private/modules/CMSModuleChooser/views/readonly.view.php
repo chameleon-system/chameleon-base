@@ -29,7 +29,7 @@ $menuPrefix = TGlobal::OutHTML($data['sModuleSpotName']);
         ?>
         <div style="background-color: #63c2de">
             <div class="moduleType"
-                 style="background: url(<?=TGlobal::GetPathTheme(); ?>/images/icons/cross.png); background-repeat: no-repeat; background-position: 3px;"><?php echo TGlobal::Translate('chameleon_system_core.template_engine.slot_is_empty'); ?></div>
+                 style="background: url(<?=TGlobal::GetPathTheme(); ?>/images/templateEngineEditor/cross.png); background-repeat: no-repeat; background-position: 3px;"><?php echo TGlobal::Translate('chameleon_system_core.template_engine.slot_is_empty'); ?></div>
         </div>
         <?php
     } ?>

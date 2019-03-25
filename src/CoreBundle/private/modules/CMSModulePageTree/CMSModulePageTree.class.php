@@ -284,7 +284,7 @@ class CMSModulePageTree extends TCMSModelBase
         }
 
         if (!empty($oParentTreeNode->sqlData['link'])) {
-            $sIconHTML .= $this->getNodeIndicatorIcon('/images/icon_external_link.gif', 'iconExternalLink', $oParentTreeNode->sqlData['link']);
+            $sIconHTML .= $this->getNodeIndicatorIcon('/images/tree/icon_external_link.gif', 'iconExternalLink', $oParentTreeNode->sqlData['link']);
         }
 
         $sIsTranslatedIdent = '';
