@@ -145,6 +145,7 @@ class MTTableEditor extends TCMSModelBase
         }
         $this->redirectPagedef = $oGlobal->GetUserData('redirectPagedef');
 
+        $this->data['sForeignField'] = null;
         if ($oGlobal->UserDataExists('field')) {
             // tableeditor called in iframe from other field
             $this->data['sForeignField'] = $oGlobal->GetUserData('field');
