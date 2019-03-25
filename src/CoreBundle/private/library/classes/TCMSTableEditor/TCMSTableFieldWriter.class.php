@@ -150,9 +150,12 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
-        $this->_oField = $this->adaptFieldAndRelatedTables($oPostTable->sqlData);
+        $this->_oField = null;
+        if (true === \array_key_exists('cms_field_type_id', $oPostTable->sqlData)) {
+            $this->_oField = $this->adaptFieldAndRelatedTables($oPostTable->sqlData);
+        }
 
-        if (\array_key_exists('cms_tbl_conf_id', $oPostTable->sqlData)) {
+        if (true === \array_key_exists('cms_tbl_conf_id', $oPostTable->sqlData)) {
             $this->getAutoclassesCacheWarmer()->updateTableById($oPostTable->sqlData['cms_tbl_conf_id']);
         }
     }
@@ -160,16 +163,12 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     /**
      * @param array $postData
      *
-     * @return TCMSField|null - the new definition after changes; or null for small changes (without type)
+     * @return TCMSField - the new definition after changes
      *
      * @throws DBALException
      */
-    protected function adaptFieldAndRelatedTables(array $postData): ?TCMSField
+    protected function adaptFieldAndRelatedTables(array $postData): TCMSField
     {
-        if (false === \array_key_exists('cms_field_type_id', $postData)) {
-            return null;
-        }
-
         $oldTypeId = $this->oldData['cms_field_type_id'];
         $newTypeId = $postData['cms_field_type_id'];
         $newName = $this->oTable->sqlData['name'];
