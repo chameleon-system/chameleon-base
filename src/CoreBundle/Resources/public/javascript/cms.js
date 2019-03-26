@@ -353,15 +353,6 @@ function CreateMediaZoomDialogFromImageURL(imageURL, width, height) {
 }
 
 /*
- * @deprecated since 6.3.0
- *
- * creates a ModalDialog without close button from content string
- */
-function CreateModalIFrameDialogFromContentWithoutClose(content, width, height, title, isDraggable, isResizable) {
-    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
-}
-
-/*
  * closes Modal Dialog
  */
 function CloseModalIFrameDialog() {
