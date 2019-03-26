@@ -1020,20 +1020,6 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
-     * translates field contents using Microsoft Translator.
-     *
-     * @deprecated since 6.2.0 - translation service is no longer supported.
-     */
-    public function TranslateString()
-    {
-        if ($this->global->UserDataExists('txt')) {
-            return $this->global->GetUserData('txt');
-        }
-
-        return false;
-    }
-
-    /**
      * @param string|null $fieldName
      * @param string|null $state
      */

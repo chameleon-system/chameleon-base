@@ -355,23 +355,6 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
     }
 
     /**
-     * Gets record list of references from MLT table. If caching allowed is,
-     * gets the record list from cache that performances changing table.
-     *
-     * @param string $sTableName
-     * @param string $sFieldName
-     * @param string $sMltTableName
-     *
-     * @return TCMSRecordList $oTableRecordList
-     *
-     * @deprecated since 6.2.0 - use QueryMltReferencesRecordList() instead.
-     */
-    protected function GetMltReferencesRecordList($sTableName, $sFieldName, $sMltTableName)
-    {
-        return $this->QueryMltReferencesRecordList($sTableName, $sMltTableName);
-    }
-
-    /**
      * Query record references from mlt table.
      *
      * @param string $sTableName
@@ -443,22 +426,6 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
                 }
             }
         }
-    }
-
-    /**
-     * Get all record from given table field where download item was added. If caching allowed is,
-     * gets the record list from cache that performances changing table.
-     *
-     * @param string $sTableName
-     * @param string $sFieldName
-     *
-     * @return TCMSRecordList $oTableRecordList
-     *
-     * @deprecated since 6.2.0 - use QueryRecordsWithWysiwygDownload() instead.
-     */
-    protected function GetRecordsWithWysiwygDownload($sTableName, $sFieldName)
-    {
-        return $this->QueryRecordsWithWysiwygDownload($sTableName, $sFieldName);
     }
 
     /**

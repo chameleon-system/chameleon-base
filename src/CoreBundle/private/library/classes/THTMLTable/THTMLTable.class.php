@@ -120,15 +120,6 @@ class THTMLTable
     protected $sGlobalSearchTerm = null;
 
     /**
-     * any tables that should trigger a cache clear.
-     *
-     * @var array
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected $aCachTriggerTables = null;
-
-    /**
      * holds a list of actions that can be performed on user selected records on the page. if at least one
      * action is defined, then a column with checkboxed will be added to the list.
      *
@@ -666,48 +657,6 @@ class THTMLTable
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
         return array();
-    }
-
-    /**
-     * Add view based clear cache triggers for the Render method here.
-     *
-     * @param array  $aClearTriggers - clear trigger array (with current contents)
-     * @param string $sViewName      - view being requested
-     * @param string $sViewType      - location of the view (Core, Custom-Core, Customer)
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
-    {
-    }
-
-    /**
-     * used to set the id of a clear cache (ie. related table).
-     *
-     * @param string $sTableName - the table name
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function GetClearCacheTriggerTableValue($sTableName)
-    {
-        return '';
-    }
-
-    /**
-     * returns an array with all table names that are relevant for the render function.
-     *
-     * @param string $sViewName - the view name being requested (if know by the caller)
-     * @param string $sViewType - the view type (core, custom-core, customer) being requested (if know by the caller)
-     *
-     * @return array
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function GetCacheRelevantTables($sViewName = null, $sViewType = null)
-    {
-        return [];
     }
 
     /**

@@ -35,12 +35,24 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Services
 
+- chameleon_system_core.password
+- chameleon_system_core.util.snippet_chain
+
 ## Container Parameters
+
+- chameleon_system_core.allow_database_logging
+- chameleon_system_core.cache.memcache_class
+- chameleon_system_core.cms_log_level
+- chameleon_system_core.debug.cms_debug_cache_record
+- chameleon_system_core.debug.cms_debug_cache_recordlist
+- chameleon_system_core.debug.cms_output_page_load_time_info
+- chameleon_system_core.debug.print_module_render_time
 
 ## Bundle Configuration
 
 ## Constants
 
+- _CMS_CORE_ENGINE
 - _CONFIG_USE_WORKFLOW_ENGINE
 - _CUSTOMER_SERVER_DBHOST
 - _CUSTOMER_SERVER_DBNAME
@@ -106,10 +118,12 @@ The code entities in this list were marked as deprecated in previous releases an
 - CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE_IN_LISTMANAGER
 - CMS_URL_AUTO_REWRITE_UNDERSCORE
 - CREATE_PAGE_REVISION_ON_WORKFLOW_PUBLISH
+- DEBUG_LEVEL
 - DEBUG_SHOW_VIEW_SOURCE_HTML_HINTS
 - ENABLE_EXTERNAL_RESOURCE_COLLECTION
 - ENABLE_EXTERNAL_RESOURCE_COLLECTION_MINIFY
 - ENABLE_EXTERNAL_RESOURCE_COLLECTION_REFRESH_PREFIX
+- HTTP_PATH_ROOT
 - MTHeader::CONFIGPARAM_DB_COUNTER
 - MTHeader::CONFIGPARAM_TIMESTAMP
 - MTHeader::DB_LOGGING_STATE
@@ -119,6 +133,8 @@ The code entities in this list were marked as deprecated in previous releases an
 - PATH_CMS_CUSTOMER_WORKFLOW_MEDIA_THUMBS
 - PATH_CMS_FONTS
 - PATH_CMS_UPDATE
+- PATH_FILETYPE_ICONS
+- PATH_FILETYPE_ICONS_LOW_QUALITY
 - PKG_EXTERNAL_TRACKER_GOOGLE_ANALYTICS_ENABLE_CROSS_DOMAIN_TRACKING
 - REQUEST_TRUSTED_PROXIES
 - REQUEST_TRUSTED_HEADER_CLIENT_HOST
@@ -132,6 +148,8 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSUserInput::FILTER_EMAIL
 - TCMSUserInput::FILTER_XSS
 - TDataExtranetUser::MAX_SALT_AGE_IN_SECONDS
+- URL_FILETYPE_ICONS
+- URL_FILETYPE_ICONS_LOW_QUALITY
 - USE_FILE_BASED_SESSION_HANDLING
 - USE_IMAGELAYER
 - USE_LIGHTBOX
@@ -140,8 +158,10 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Classes and Interfaces
 
+- _TCMSMediaTreeNodeMediaObj
 - AbstractPkgCmsProfilerItem
 - ChameleonSystem\core\DatabaseAccessLayer\Workflow\WorkflowQueryModifierOrderBy
+- ChameleonSystem\CoreBundle\Util\SnippetChainUtil
 - ChameleonSystem\RevisionManagementBundle\ChameleonSystemRevisionManagementBundle
 - CMSMediaViddlerImport
 - IClusterDriver
@@ -149,6 +169,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - IMapperCacheManager
 - IMapperCacheManagerRestricted
 - IPkgCmsEventObservable
+- IPkgCmsSecurity_Password
 - IPkgCmsServerSetupValidator
 - IPkgCmsServerSetupValidatorMessage
 - IPkgCoreDbClassFactory
@@ -157,8 +178,12 @@ The code entities in this list were marked as deprecated in previous releases an
 - MapperCacheManagerException
 - MapperCacheManagerExceptionContentNotFound
 - MapperCacheManagerRestrictedProxy
+- MTGoogleMyMapsCore
+- MTListCore
 - MTPassThrough
 - MTPkgExternalTrackerGoogleAnalytics_MTPageMetaCore
+- MTSendAFriendCore
+- MTSitemapCore
 - TCacheManagerStorage_Decorator
 - TCacheManagerStorage_Decorator_LazyWriteMemcache
 - TCacheManagerStorage_Standard
@@ -170,28 +195,37 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSFontImage
 - TCMSFontImageList
 - TCMSMath
+- TCMSMediaTreeNode
 - TCmsObjectLinkBase
 - TCmsObjectLinkException_InvalidTargetClass
+- TCMSSessionHandler
 - TCMSSmartURLHandler_FlashCrossDomain
 - TCMSSmartURLHandler_Pagepath
 - TCMSListManagerRevisionManagement
 - TCMSTableEditorRecordRevision
 - TCMSUserInput_EMail
 - TCMSUserInput_XSS
+- THTMLFileBrowser
 - TPkgCmsClassManager_CmsConfig
 - TPkgCmsCore
 - TPkgCmsFileManagerException
+- TPkgCmsLicenseManager_MTLogin
 - TPkgCmsProfileItem_Group
 - TPkgCmsProfileItem_Tick
 - TPkgCmsProfiler
+- TPkgCmsSecurity_Password
 - TPkgCmsServerSetupValidator_PHPVersion
 - TPkgCmsServerSetupValidatorManager
 - TPkgCmsServerSetupValidatorMessage
 - TPkgCmsSessionHandler_Decorator_Observable
 - TPkgExternalTrackerGoogleAnalytics
+- TPkgSnippetRenderer_TranslationNode
+- TPkgSnippetRenderer_TranslationTokenParser
+- TPkgViewRenderer_TCMSSmartURLHandler_SnippetLessCompiler
 
 ## Properties
 
+- antiSpam::$emailIcon
 - ChameleonSystem\CoreBundle\Controller\ChameleonController::$portalDomainService
 - ChameleonSystem\CoreBundle\Controller\ChameleonController::$redirectPageDef
 - ChameleonSystem\CoreBundle\Controller\ChameleonController::$requestInfoService
@@ -200,6 +234,8 @@ The code entities in this list were marked as deprecated in previous releases an
 - MTPageMetaCoreEndPoint::$oActivePortal
 - TAccessManagerPermissions::$revisionManagement
 - TAccessManagerPermissions::$workflowPublish
+- TCMSFieldLookupFieldTypes::$sFieldHelpTextHTML
+- TCMSFile::$sTypeIcon
 - TCMSImageEndpoint::$bAutoPlay
 - TCMSImageEndpoint::$bFlashVideoZoomPopup
 - TCMSImageEndpoint::$FLVPlayerHeight
@@ -212,20 +248,37 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSRecord::$bDataLoadedFromWorkflow
 - TCMSRecordList::$bForceWorkflow
 - TCMSRecordList::$bUseGlobalFilterInsteadOfPreviewFilter
+- TCMSRecordList::$sTableObjectSubtype
+- TCMSRecordList::$sTableObjectType
 - TCMSTableEditorEndPoint::$bBypassWorkflow
 - TCMSTableEditorEndPoint::$bWorkflowActive
 - TCMSTableEditorEndPoint::$bWorkflowIsUpdateFollowingAnInsert
+- TCMSTableEditorChangeLog::$oOldFields
+- TCMSTableEditorEndPoint::$aErrors
 - TCMSTableEditorMedia::$oFLVMetaData
 - TCMSUser::$bWorkflowEngineActive
+- TCMSWizardStep::$bHasMethodExecutionCalled
+- TFullGroupTable::$iconSortASC
+- TFullGroupTable::$iconSortDESC
 - TGlobal::$oURLHistory
 - TGlobalBase::$aUnitTestMockedObjects
+- THTMLTable::$aCachTriggerTables
 - TModelBase::$isExportCall
+- TViewParser::$aCacheClearTriggers
+- TViewParser::$aCacheParameters
+- TViewParser::$bUseCaching
 
 ## Methods
 
 - ChameleonSystem\CoreBundle\Controller\ChameleonController::GetExecutionTime()
 - ChameleonSystem\CoreBundle\Controller\ChameleonController::postRoutingHook()
 - ChameleonSystem\CoreBundle\Controller\ChameleonController::setOutputPageLoadTimeInfo()
+- ChameleonSystem\CoreBundle\CronJob\CronJobFactory::setCronJobs()
+- ChameleonSystem\CoreBundle\Interfaces\TransformOutgoingMailTargetsServiceInterface::setEnableTransformation()
+- ChameleonSystem\CoreBundle\Interfaces\TransformOutgoingMailTargetsServiceInterface::setSubjectPrefix()
+- ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::addModule()
+- ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::addModules()
+- ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::getModules()
 - ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer::handleUnitTestCase()
 - ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploaderParametersDataModel::isBIgnoreWorkflow
 - ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploaderParametersDataModel::setBIgnoreWorkflow
@@ -234,6 +287,8 @@ The code entities in this list were marked as deprecated in previous releases an
 - CMSModuleChooser::LoadWorkflowData()
 - CMSModuleImageManager::HandleWorkflowOnSetImage()
 - CMSModulePageTree::GetTransactionDetails()
+- CMSTableExport::GenerateHTMLExport()
+- CMSTableExport::getCMSCustomerStyles()
 - CMSTemplateEngine::GetLastRevisionNumber()
 - CMSTemplateEngine::LoadRevisionData()
 - CMSTemplateEngine::LoadWorkflowData()
@@ -242,6 +297,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - gcf_workflowLastChange()
 - gcf_workflowStatus()
 - IPkgCmsFileManager::setDriver()
+- MTExtranetCoreEndPoint::PostRegistrationHook()
 - MTHeader::_LoadUserImage()
 - MTHeader::AddCounter()
 - MTHeader::ChangeActiveDbCounter()
@@ -256,6 +312,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - MTTableEditor::GetLastRevisionNumber()
 - MTTableEditor::LoadRevisionData()
 - MTTableEditor::LoadWorkflowData()
+- MTTableEditor::TranslateString()
 - MTTableEditor::PublishViaAjax()
 - TAccessManager::HasRevisionManagementPermission()
 - TAccessManager::HasWorkflowEditPermission()
@@ -272,6 +329,10 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSConfig::GetGlobalCacheKeyParameter()
 - TCMSConfig::ObjectIsInitialized()
 - TCMSContentBoxItem::_loadMenuItems()
+- TCMSDownloadFileEndPoint::GetDownloadLink()
+- TCMSField::RenderInputFrontend()
+- TCMSFieldColorpicker::isFirstInstance()
+- TCMSFieldTreeNode::GetPageTreeConnectionDateInformationHTML()
 - TCMSImageEndpoint::GetFlashPlugin()
 - TCMSImageEndpoint::GetFlashVarsArray()
 - TCMSImageEndpoint::GetPlayerUrl()
@@ -284,17 +345,23 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSListManagerFullGroupTable::CallBackWorkflowActionType()
 - TCMSListManagerFullGroupTable::IsCmsWorkflowTransaction()
 - TCMSListManagerMLT::CallBackWorkflowConnectionActionType()
+- TCMSLogChange::_SetFieldPosition()
 - TCMSLogChange::_WriteTransactionFooter()
 - TCMSLogChange::_WriteTransactionHeader()
 - TCMSLogChange::addShopSystemPage()
 - TCMSLogChange::DisablePHPCommentsInDbLog()
 - TCMSLogChange::EndTransaction()
 - TCMSLogChange::getActiveDbCounterName()
+- TCMSLogChange::GetCmsContentBoxIdFromName()
+- TCMSLogChange::getUpdateLogger()
 - TCMSLogChange::setActiveDbCounterName()
 - TCMSLogChange::UpdateCounterExists()
 - TCMSMail::TransformEmailInDevelopmentMode()
 - TCMSMemcache::getDriverType()
+- TCMSMessageManager::SaveToSession()
+- TCMSTableEditorChangeLog::savePreSaveValues()
 - TCMSPage::GetMainTree()
+- TCMSPortal::getActivePortalLessSuffix()
 - TCMSPortal::GetPortalBaseURL()
 - TCMSPortal::GetPortalHomeURL()
 - TCMSPortal::GetPrimaryDomainObject()
@@ -303,11 +370,25 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSPortal::getRootURL()
 - TCMSPortalDomain::GetActiveDomain()
 - TCMSPortalDomain::IsDevelopmentDomain()
+- TCMSRecord::GetMLTTargetTableNameFromMLTField()
 - TCMSRecord::GetWorkflowMLTFilterQuery()
 - TCMSRecord::GetWorkflowRestrictionQuery()
 - TCMSRecord::IsMultiLanguageTable()
 - TCMSRecord::IsTableWithWorkflow()
+- TCMSRecord::PostLoadHookFromUnitTest()
 - TCMSRecord::SetWorkflowByPass()
+- TCMSSmartURL::GetDirectURL()
+- TCMSSmartURL::GetDocumentNotFoundPagedef()
+- TCMSSmartURL::GetLanguagePrefixForPortal()
+- TCMSSmartURL::GetNotFoundPagedef()
+- TCMSSmartURL::GetPagePathForTreeId()
+- TCMSSmartURL::GetPathDomainPrefix()
+- TCMSSmartURL::GetURL()
+- TCMSSmartURL::GetURLFast()
+- TCMSSmartURL::RealNameToURLName()
+- TCMSSmartURL::SetRealPagdef()
+- TCMSTableEditorDocumentEndPoint::GetMltReferencesRecordList()
+- TCMSTableEditorDocumentEndPoint::GetRecordsWithWysiwygDownload()
 - TCMSTableEditorDocumentEndPoint::MoveWorkflowDocumentToDocumentPool()
 - TCMSTableEditorEndPoint::ActivateMLTRecordRevisions()
 - TCMSTableEditorEndPoint::ActivateRecordRevision()
@@ -367,14 +448,19 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSTableEditorTplPageCmsMasterPageDefSpot::IsRevisonAllowedConnectedTable()
 - TCMSTableToClass::getDatabaseConnection()
 - TCMSTableToClass::setDatabaseConnection()
+- TCMSTableToClass::UpdateAllTables()
 - TCMSTableWriter::AddWorkflowFieldsToMLT()
 - TCMSTextFieldEndPoint::_callback_cmstextfield_image_flv_parser()
+- TCMSTextFieldEndPoint::_callback_cmstextfield_varparser()
 - TCMSTextFieldEndPoint::_RemoveProprietaryParameter()
+- TCMSTextFieldEndPoint::_ReplaceVariables()
+- TCMSTPLModule::getViewMapperConfigForView()
 - TCMSTreeNode::ConvertToValidXHTMLLink()
 - TCMSUpdateManager::checkIfUpdateHasBeenProcessed()
 - TCMSUpdateManager::getBuildNumbersForFolder()
 - TCMSUpdateManager::getLatestBuildNumberForFolder()
 - TCMSUpdateManager::RunCoreUpdates()
+- TCMSURLHistory::FindHistoryId()
 - TCMSUser::generateHash()
 - TCMSUser::LoadWorkflowEngineStatus()
 - TCMSUserInput::AutoAddAuthenticityTokenToForms()
@@ -385,6 +471,12 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSUserInput::GetAuthenticityTokenName()
 - TCMSUserInput::GetAuthenticityTokenString()
 - TCMSUserInput::HasActiveAutoProtectInputViaAuthenticityToken()
+- TCMSWizardStep::AddCachePrameters()
+- TCMSWizardStep::AddClearCacheTriggers()
+- TCMSWizardStep::AllowCaching()
+- TCMSWizardStep::TriggerClearCache()
+- TPkgCmsTextBlock::GetCacheTrigger()
+- TPkgMultiModule_CMSTPLModuleInstance::GetAjaxURLForContainingModule()
 - TDataExtranetCore::CacheCommit()
 - TDataExtranetCore::IsExtranetUsingCryptedPassword()
 - TDataExtranetUser::CommitToSession()
@@ -393,6 +485,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - TDataExtranetUser::getRedirectToAccessDeniedPageLink()
 - TDataExtranetUser::RedirectToAccessDeniedPage()
 - TGlobal::GetActiveLanguageId()
+- TGlobal::GetURLHistory()
 - TGlobalBase::_GetModuleRootPath()
 - TGlobalBase::AddFileToPHPFileCache()
 - TGlobalBase::ClassFactory()
@@ -412,6 +505,11 @@ The code entities in this list were marked as deprecated in previous releases an
 - TGlobalBase::RegisterUnitTestMockedObject()
 - TGlobalBase::ReplaceCustomVariablesInString()
 - TGlobalBase::WriteLog()
+- TGoogleMapEndPoint::setAPIVersion()
+- TGoogleMapEndPoint::showSearchBar()
+- THTMLTable::AddClearCacheTriggers()
+- THTMLTable::GetCacheRelevantTables()
+- THTMLTable::GetClearCacheTriggerTableValue()
 - TModelBase::AllowPageCache()
 - TModelBase::ClearCache()
 - TModelBase::ExecuteExport()
@@ -420,9 +518,12 @@ The code entities in this list were marked as deprecated in previous releases an
 - TPkgCmsRouteControllerCmsTplPage::isNonSeoLink()
 - TPkgComment::GetDefaultLanguageId()
 - TPkgCommentModuleConfig::GetDefaultLanguageId()
+- TPkgImageHotspotItemMarker::AddClearCacheTriggers()
+- TPkgImageHotspotItemSpot::AddClearCacheTriggers()
 - TTools::ConvertMySQL2UnixTimeStamp()
 - TTools::DateTime2UnixTimestamp()
 - TTools::GenerateEncryptedPassword()
+- TTools::GetActivePortal()
 - TTools::GetLanguageISOName()
 - TTools::GetPageObject()
 - TTools::RealNameToURLName()
@@ -432,6 +533,13 @@ The code entities in this list were marked as deprecated in previous releases an
 - TTools::UnicodeToEntitiesPreservingAscii()
 - TTools::UTF8ToEntitiesPreservingAscii()
 - TTools::UTF8ToUnicode()
+- TViewParser::ClearCache()
+- TViewParser::RenderFromCache()
+- TViewParser::SetCacheClearTriggers()
+- TViewParser::SetCacheParameters()
+- TViewParser::UseCaching()
+- ViewRenderer::AddMapperFromPath()
+- ViewRenderer::resolvePath()
 
 ## JavaScript Files and Functions
 
@@ -480,8 +588,32 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Translations
 
+- chameleon_system_core.cms_module_header.active_update_counter
+- chameleon_system_core.cms_module_header.error_unable_to_create_update_counter
+- chameleon_system_core.cms_module_header.msg_created_update_counter
+- chameleon_system_core.cms_module_header.msg_update_counter_switched
 - chameleon_system_core.error.flash_required
+- chameleon_system_core.fields.lookup.no_matches
+- chameleon_system_core.record_lock.lock_owner_fax
+- chameleon_system_core.record_revision.action_confirm_restore_revision
+- chameleon_system_core.record_revision.action_create_page_revision
+- chameleon_system_core.record_revision.action_load_page_revision
+- chameleon_system_core.record_revision.action_load_revision
+- chameleon_system_core.record_revision.action_new_revision
+- chameleon_system_core.record_revision.action_restore_revision
+- chameleon_system_core.record_revision.based_on
+- chameleon_system_core.record_revision.confirm_restore_revision
+- chameleon_system_core.record_revision.description
+- chameleon_system_core.record_revision.header_new_revision
+- chameleon_system_core.record_revision.last_used_date
+- chameleon_system_core.record_revision.name
+- chameleon_system_core.record_revision.new_revision_help
+- chameleon_system_core.record_revision.new_revision_number
+- chameleon_system_core.record_revision.no_revision_exists
+- chameleon_system_core.record_revision.revision_number
+- chameleon_system_core.table_editor_files.error_cluster_distribution
 - chameleon_system_core.table_editor_media.error_invalid_flv
+- chameleon_system_core.template_engine.header_revision
 
 ## Database Tables
 

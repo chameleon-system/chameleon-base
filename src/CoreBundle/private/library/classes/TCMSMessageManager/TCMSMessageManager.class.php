@@ -78,13 +78,6 @@ class TCMSMessageManager
     }
 
     /**
-     * @deprecated
-     */
-    public function SaveToSession()
-    {
-    }
-
-    /**
      * add a message code to the queue.
      *
      * @param string $sConsumerName

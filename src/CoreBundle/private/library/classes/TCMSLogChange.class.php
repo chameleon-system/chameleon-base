@@ -400,20 +400,6 @@ class TCMSLogChange
     /**
      * moves a field behind a given fieldname.
      *
-     * @deprecated - use TCMSLogChange::SetFieldPosition instead (without "_")
-     *
-     * @param int    $tableId
-     * @param string $fieldName
-     * @param string $beforeFieldName - field where we want to set the new field behind
-     */
-    public static function _SetFieldPosition($tableId, $fieldName, $beforeFieldName)
-    {
-        self::SetFieldPosition($tableId, $fieldName, $beforeFieldName);
-    }
-
-    /**
-     * moves a field behind a given fieldname.
-     *
      * @param int    $tableId
      * @param string $fieldName
      * @param string $afterThisField name of the field after which to place the passed field
@@ -1302,43 +1288,6 @@ class TCMSLogChange
     }
 
     /**
-     * return id of the content-box with the name passed. return empty string, if the
-     * content box does not exist.
-     *
-     * @static
-     *
-     * @param  $sContentBoxName
-     *
-     * @return string
-     *
-     * @deprecated use TCMSLogChange::GetCmsContentBoxIdFromSystemName() instead
-     */
-    public static function GetCmsContentBoxIdFromName($sContentBoxName)
-    {
-        $query = "SELECT * FROM `cms_content_box` WHERE `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sContentBoxName)."'";
-
-        $aNameMappingArray = array(
-            'CMS / Portal Einstellungen' => array('CMS / Portal Einstellungen', 'CMS / Portal-Einstellungen'),
-            'CMS / Portal-Einstellungen' => array('CMS / Portal Einstellungen', 'CMS / Portal-Einstellungen'),
-        );
-
-        if (array_key_exists($sContentBoxName, $aNameMappingArray)) {
-            foreach ($aNameMappingArray[$sContentBoxName] as $sContentBoxNameAlternative) {
-                $query .= " OR `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sContentBoxNameAlternative)."'";
-            }
-        }
-
-        $sId = '';
-        if ($aContentBox = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-            $sId = $aContentBox['id'];
-        } else {
-            self::addInfoMessage('Unable to find cms_content_box with name "'.$sContentBoxName.'"', self::INFO_MESSAGE_LEVEL_ERROR);
-        }
-
-        return $sId;
-    }
-
-    /**
      * get the id of a content box by its system_name.
      *
      * @param string $sSystemName of the content box
@@ -1805,16 +1754,6 @@ class TCMSLogChange
         }
 
         return $sTabId;
-    }
-
-    /**
-     * @return IPkgCmsCoreLog
-     *
-     * @deprecated since 6.3.0 - use getLogger()
-     */
-    public static function getUpdateLogger()
-    {
-        return  \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.cmsUpdates');
     }
 
     public static function getLogger(): LoggerInterface

@@ -136,24 +136,6 @@ class ViewRenderer
     }
 
     /**
-     * @param string $mapperName
-     * @param string $pathToMapper
-     *
-     * @throws MapperException
-     *
-     * @deprecated since 6.2.0 - use addMapperFromIdentifier() instead, thus relying on class autoloading or service
-     *   lookup to instantiate a mapper. Manual path handling is discouraged.
-     */
-    public function AddMapperFromPath($mapperName, $pathToMapper)
-    {
-        if (!file_exists($pathToMapper)) {
-            throw new MapperException("mapper at '".$pathToMapper."' does not exist");
-        }
-        require_once $pathToMapper;
-        $this->AddMapper(new $mapperName());
-    }
-
-    /**
      * Adds a mapper by either its service ID or fully qualified class name.
      *
      * @param string     $identifier
@@ -270,24 +252,6 @@ class ViewRenderer
     public function setShowHTMLHints($bShow)
     {
         $this->showHTMLHints = $bShow;
-    }
-
-    /**
-     * Resolves the relative path (relative to /snippets in _CMS_CUSTOMER_CORE, _CMS_CUSTOM_CORE,or  _CMS_CUSTOM_CORE
-     * into an absolute path. The method will try customer, then custom core, and finally core to find the relative path passed.
-     * If the path can not be resolved, an ErrorException is thrown.
-     *
-     * @param $sRelativePath - path relative to the snippets folder in Core, Custom-Core or Customer folder
-     *
-     * @throws ErrorException
-     *
-     * @deprecated - snippets are always relative to one of the snippet dirs
-     *
-     * @return mixed
-     */
-    public function resolvePath($sRelativePath)
-    {
-        return $sRelativePath;
     }
 
     /**
