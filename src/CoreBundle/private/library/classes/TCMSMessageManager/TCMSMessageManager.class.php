@@ -110,12 +110,7 @@ class TCMSMessageManager
                 $sDescription = $this->GetDefaultDescription($sConsumerName, $aMessageCodeParameters);
                 $sErrorMessage = $this->GetDefaultMessage($sMessageCode);
 
-                /*$oConfig =& TdbCmsConfig::GetInstance();
-                if (TGlobal::GetActiveLanguageId() !== $oConfig->fieldTranslationBaseLanguageId) $sSuffix = '__'.TGlobal::GetLanguagePrefix();
-                else*/
-                $sSuffix = '';
-
-                $aPostData = array('cms_portal_id' => $iPortalId, 'name' => $sMessageCode, 'description'.$sSuffix => $sDescription, 'message'.$sSuffix => $sErrorMessage);
+                $aPostData = array('cms_portal_id' => $iPortalId, 'name' => $sMessageCode, 'description' => $sDescription, 'message' => $sErrorMessage);
                 if (null !== $oMessage->id) {
                     $aPostData['id'] = $oMessage->id;
                 }

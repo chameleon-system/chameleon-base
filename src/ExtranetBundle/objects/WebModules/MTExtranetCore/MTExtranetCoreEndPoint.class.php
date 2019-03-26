@@ -224,7 +224,6 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                 $oUser->Register();
 
                 $this->UpdateUserAddress(null, null, true);
-                $this->PostRegistrationHook();
                 // redirect to registration success page
                 if (!is_null($sSuccessURL)) {
                     $this->RedirectToURL($sSuccessURL, true);
