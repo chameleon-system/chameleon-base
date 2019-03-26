@@ -155,7 +155,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - MapperCacheManagerException
 - MapperCacheManagerExceptionContentNotFound
 - MapperCacheManagerRestrictedProxy
-- MTGoogleMyMapsCore#
+- MTGoogleMyMapsCore
 - MTListCore
 - MTPkgExternalTrackerGoogleAnalytics_MTPageMetaCore
 - MTSendAFriendCore
