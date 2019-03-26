@@ -32,11 +32,6 @@
 
         <service id="chameleon_system_core.tools" class="TTools" public="true"/>
 
-        <service id="chameleon_system_core.password" class="TPkgCmsSecurity_Password">
-            <argument type="service" id="chameleon_system_core.security.password.password_hash_generator"/>
-            <deprecated>The %service_id% service is deprecated since Chameleon 6.2.0. Use chameleon_system_core.security.password.password_hash_generator instead.</deprecated>
-        </service>
-
         <service id="chameleon_system_core.filemanager" class="TPkgCmsFileManager_FileSystem" public="true"/>
 
         <service id="chameleon_system_core.redirectstrategy.registershutdown" class="ChameleonRedirectStrategyRegisterShutdown" public="false">
@@ -557,11 +552,6 @@
         <service id="chameleon_system_core.view_port_manager" class="TCMSViewPortManager" public="true">
             <argument type="service" id="request_stack" />
             <argument type="service" id="chameleon_system_core.util.input_filter" />
-        </service>
-
-        <service id="chameleon_system_core.util.snippet_chain" class="ChameleonSystem\CoreBundle\Util\SnippetChainUtil">
-            <argument type="service" id="database_connection"/>
-            <deprecated>The %service_id% service is deprecated since Chameleon 6.2.0. Use chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier instead.</deprecated>
         </service>
 
         <service id="chameleon_system_core.util.input_filter" class="ChameleonSystem\CoreBundle\Util\InputFilterUtil" public="true">

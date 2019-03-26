@@ -544,16 +544,6 @@ class TCMSTableToClass
     }
 
     /**
-     * loops through all tables and triggers autoclass generation.
-     *
-     * @deprecated Use chameleon_system_autoclasses.cache_warmer::updateAllTables() instead
-     */
-    public static function UpdateAllTables()
-    {
-        self::getAutoclassesCacheWarmer()->updateAllTables();
-    }
-
-    /**
      * @param array  $aChain
      * @param string $sAutoClass
      * @param bool   $bIsListClass

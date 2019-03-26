@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
-use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -138,25 +136,10 @@ class TGlobal extends TGlobalBase
     }
 
     /**
-     * @deprecated since 6.3.0 - use service BackendBreadCrumbService::getBreadcrumb() instead.
-     *
-     * @return TCMSURLHistory|null - returns null if not in backend
-     */
-    public function &GetURLHistory()
-    {
-        return $this->getBreadcrumbService()->getBreadcrumb();
-    }
-
-    /**
      * @return TranslatorInterface
      */
     private static function getTranslator()
     {
         return ServiceLocator::get('translator');
-    }
-
-    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }

@@ -16,10 +16,6 @@ use ChameleonSystem\CoreBundle\Interfaces\TransformOutgoingMailTargetsServiceInt
 class TransformOutgoingMailTargetsService implements TransformOutgoingMailTargetsServiceInterface
 {
     /**
-     * @var bool
-     */
-    private $enableTransformation = true;
-    /**
      * @var PortalDomainServiceInterface
      */
     private $portalDomainService;
@@ -60,35 +56,9 @@ class TransformOutgoingMailTargetsService implements TransformOutgoingMailTarget
 
     /**
      * {@inheritdoc}
-     *
-     * @deprecated since 6.3.0 - see deprecation note in interface. This implementation is now active by default
-     *             and should simply not be called if it should not be used (e.g. by using NullOutgoingMailTargetsService
-     *             instead). If deactivated by calling this method, the email subject will still be prefixed.
-     */
-    public function setEnableTransformation($enableTransformation)
-    {
-        $this->enableTransformation = $enableTransformation;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated since 6.3.0 - use constructor injection instead.
-     */
-    public function setSubjectPrefix($prefix)
-    {
-        $this->subjectPrefix = $prefix;
-    }
-
-    /**
-     * {@inheritdoc}
      */
     public function transform($mail)
     {
-        if (false === $this->enableTransformation) {
-            return $mail;
-        }
-
         if ($this->mailIsWhiteListed($mail)) {
             return $mail;
         }

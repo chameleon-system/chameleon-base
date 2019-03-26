@@ -665,25 +665,6 @@ class TCMSPortal extends TCMSRecord
     }
 
     /**
-     * Get the suffix for auto-generated less/css files for resource handler.
-     *
-     * @return string
-     *
-     * @deprecated Do not build the CSS path manually - use methods in chameleon_system_view_renderer.less_compiler instead.
-     */
-    public static function getActivePortalLessSuffix()
-    {
-        $oPortal = self::getPortalDomainService()->getActivePortal();
-        if ($oPortal) {
-            $sSuffix = $oPortal->getFileSuffix();
-        } else {
-            $sSuffix = '';
-        }
-
-        return $sSuffix;
-    }
-
-    /**
      * Get only for frontend activated languages selected in portal.
      *
      * @param string $sOrderBy

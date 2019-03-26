@@ -1268,20 +1268,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-     * returns the source table name for an mlt field from the mlt field name.
-     *
-     * @deprecated don't use this function because this wont work for new MLT fields
-     *
-     * @param string $sMLTFieldName - name of the mlt field
-     *
-     * @return string - the source table name
-     */
-    protected function GetMLTTargetTableNameFromMLTField($sMLTFieldName)
-    {
-        return self::getMltFieldUtil()->getRealTableName($sMLTFieldName);
-    }
-
-    /**
     /**
      * returns true if the record is connected using an MLT
      * returns false if not connected or no MLT exists.
@@ -2153,15 +2139,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     private function ExecuteSQLQueries($sQuery, array $parameter = array(), array $types = array())
     {
         return $this->getDatabaseConnection()->executeQuery($sQuery, $parameter, $types);
-    }
-
-    /**
-     * call the (protect) post load hook in unit test mode.
-     *
-     * @deprecated since 6.2.0 - no longer supported.
-     */
-    public function PostLoadHookFromUnitTest()
-    {
     }
 
     /**

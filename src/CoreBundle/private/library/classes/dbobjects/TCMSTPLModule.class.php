@@ -192,16 +192,6 @@ class TCMSTPLModule extends TCMSRecord
     }
 
     /**
-     * @param $sViewName
-     *
-     * @deprecated Please use getViewMapperConfig instead. This method will always return null from now on!
-     */
-    public function getViewMapperConfigForView($sViewName)
-    {
-        return null;
-    }
-
-    /**
      * @return ViewMapperConfig
      */
     public function getViewMapperConfig()
