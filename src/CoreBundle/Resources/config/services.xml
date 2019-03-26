@@ -326,10 +326,12 @@
             <argument type="service" id="chameleon_system_core.service_initializer.active_page_service" />
             <argument type="service" id="request_stack" />
             <argument type="service" id="router" />
+            <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
             <argument type="service" id="chameleon_system_core.util.url" />
             <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="chameleon_system_core.util.routing"/>
             <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="chameleon_system_core.util.page_service_util"/>
         </service>
 
         <service id="chameleon_system_core.service_initializer.active_page_service" class="ChameleonSystem\CoreBundle\Service\Initializer\ActivePageServiceInitializer" public="false">

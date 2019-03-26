@@ -509,3 +509,11 @@ CHAMELEON.CORE.handleFormAndLinkTargetsInModals = function () {
         });
     });
 };
+
+    $("a[target='_top']").each(function() {
+        $(this).attr('target', '');
+
+        var link = $(this).attr('href').replace('pagedef=tableeditor', 'pagedef=tableeditorPopup');
+        $(this).attr('href', link);
+    });
+};

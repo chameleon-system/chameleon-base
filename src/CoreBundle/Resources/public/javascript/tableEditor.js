@@ -585,6 +585,10 @@ function SaveViaAjaxCallback(data, statusText) {
 
         $('#tableEditorContainer .navbar-brand').html(data.name);
         $('#cmsbreadcrumb .breadcrumb-item:last').html(data.name);
+
+        if (self !== top) {
+            window.history.go(-1);
+        }
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_save'), 'ERROR');
     }

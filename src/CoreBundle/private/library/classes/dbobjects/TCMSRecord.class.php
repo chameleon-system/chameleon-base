@@ -870,7 +870,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     public function &GetTableConf()
     {
         if (is_null($this->_oTableConf)) {
-            $this->_oTableConf = TdbCmsTblConf::GetNewInstance();
+            $this->_oTableConf = TdbCmsTblConf::GetNewInstance(null, $this->iLanguageId);
 
             // fallback to base class - needed during DB autoClass generation
             if (null === $this->_oTableConf) {
