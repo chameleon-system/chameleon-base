@@ -429,7 +429,7 @@ class TCMSTableEditorManager
      * @param array $aOverloadedFields fields to copy with given value
      * @param bool  $bCopyAllLanguages Set to true if you want top copy alle language fields
      *
-     * @return bool
+     * @return TCMSstdClass|bool
      */
     public function DatabaseCopy($languageCopy = false, $aOverloadedFields = array(), $bCopyAllLanguages = true)
     {

@@ -164,6 +164,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - ChameleonSystem\CoreBundle\Util\SnippetChainUtil
 - ChameleonSystem\RevisionManagementBundle\ChameleonSystemRevisionManagementBundle
 - CMSMediaViddlerImport
+- esono\pkgCmsRouting\exceptions\DomainNotFoundException
 - IClusterDriver
 - ICmsObjectLink
 - IMapperCacheManager
@@ -199,6 +200,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCmsObjectLinkBase
 - TCmsObjectLinkException_InvalidTargetClass
 - TCMSSessionHandler
+- TCMSSmartURLHandler_EOSNeoPay
 - TCMSSmartURLHandler_FlashCrossDomain
 - TCMSSmartURLHandler_Pagepath
 - TCMSListManagerRevisionManagement
@@ -219,9 +221,12 @@ The code entities in this list were marked as deprecated in previous releases an
 - TPkgCmsServerSetupValidatorMessage
 - TPkgCmsSessionHandler_Decorator_Observable
 - TPkgExternalTrackerGoogleAnalytics
+- TPkgShopPaymentEOS_TPkgShopStoredUserPaymentMapper_CreditCard
 - TPkgSnippetRenderer_TranslationNode
 - TPkgSnippetRenderer_TranslationTokenParser
 - TPkgViewRenderer_TCMSSmartURLHandler_SnippetLessCompiler
+- TShopPaymentHandler_EOSNeoPay
+- TShopPaymentHandler_EOSNeoPayCreditCard
 
 ## Properties
 
@@ -290,9 +295,11 @@ The code entities in this list were marked as deprecated in previous releases an
 - CMSTableExport::GenerateHTMLExport()
 - CMSTableExport::getCMSCustomerStyles()
 - CMSTemplateEngine::GetLastRevisionNumber()
+- CMSTemplateEngine::GetMainNavigation()
 - CMSTemplateEngine::LoadRevisionData()
 - CMSTemplateEngine::LoadWorkflowData()
 - esono\pkgCmsCache\Cache::setCacheDir()
+- esono\pkgCmsCache\CacheInterface::getRequestStateKey()
 - gcf_workflowEditedRecordname()
 - gcf_workflowLastChange()
 - gcf_workflowStatus()
@@ -317,8 +324,11 @@ The code entities in this list were marked as deprecated in previous releases an
 - TAccessManager::HasRevisionManagementPermission()
 - TAccessManager::HasWorkflowEditPermission()
 - TAccessManager::HasWorkflowPublishPermission()
+- TAccessManager::InitFromDatabase()
+- TAccessManagerGroups::GetGroupName()
 - TAccessManagerPermissions::GetRevisionManagementPermissionStatus()
 - TAccessManagerPermissions::GetWorkflowPublishStatus()
+- TAccessManagerUser::InitFromDatabase()
 - TAdb*List::EditedRecordsAvailable()
 - TAdb*List::GetDefaultLanguageId()
 - TAdb*List::IsTableWithActiveWorkflow()
@@ -483,6 +493,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - TDataExtranetUser::GetPasswordSalt()
 - TDataExtranetUser::getRedirectToAccessDeniedPageLink()
 - TDataExtranetUser::RedirectToAccessDeniedPage()
+- TDataMailProfile::GetEMailAddress()
 - TGlobal::GetActiveLanguageId()
 - TGlobal::GetURLHistory()
 - TGlobalBase::_GetModuleRootPath()
@@ -514,6 +525,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - TModelBase::ExecuteExport()
 - TModelBase::GetExportLink()
 - TModelBase::GetExportView()
+- TModelBase::GetModuleType()
 - TPkgCmsRouteControllerCmsTplPage::isNonSeoLink()
 - TPkgComment::GetDefaultLanguageId()
 - TPkgCommentModuleConfig::GetDefaultLanguageId()
