@@ -649,12 +649,11 @@ class TCMSLogChange
      * 4 = add new language
      * 5 = publish record using workflow (deprecated since 6.2.0 - do not use)
      * 6 = show all records
-     * 7 = revision management (@deprecated since 6.3.0 - revision management is no longer supported)
      *
      * @param string     $sRoleName
      * @param string     $sTableName
      * @param bool       $bResetRoles  - indicates if all other roles will be kicked and the new role has the exclusive right
-     * @param array|bool $aPermissions - array of the role fieldnr. 0,1,2,3,4,5,6,7, default = false
+     * @param array|bool $aPermissions - array of the role fieldnr. 0,1,2,3,4,5,6, default = false
      */
     public static function SetTableRolePermissions($sRoleName = 'cms_admin', $sTableName, $bResetRoles = false, $aPermissions = false)
     {

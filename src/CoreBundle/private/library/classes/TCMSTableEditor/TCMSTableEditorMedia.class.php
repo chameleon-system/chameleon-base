@@ -731,15 +731,6 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
     }
 
     /**
-     * copy uploaded workflow temp image to mediapool.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function MoveWorkflowImageToMediaPool()
-    {
-    }
-
-    /**
      * get the target file name with directory.
      *
      * @return string

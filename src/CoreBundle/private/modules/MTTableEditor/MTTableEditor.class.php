@@ -218,15 +218,6 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
-     * loads workflow relevant data.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function LoadWorkflowData()
-    {
-    }
-
-    /**
      * sets an array of methods where calling is allowed without edit rights to the table.
      */
     protected function DefineReadOnlyMethods()
@@ -321,7 +312,6 @@ class MTTableEditor extends TCMSModelBase
 
             $this->GetPermissionSettings();
             $this->IsRecordLocked();
-            $this->LoadRevisionData();
 
             $this->data['oBaseLanguage'] = $this->oBaseLanguage;
 
@@ -441,16 +431,6 @@ class MTTableEditor extends TCMSModelBase
 
         $this->aMessages = $aMessages;
         $this->data['aMessages'] = $aMessages;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * loads revision management relevant data if active.
-     */
-    protected function LoadRevisionData()
-    {
-        $this->data['bRevisionManagementActive'] = false;
     }
 
     /**
@@ -674,48 +654,6 @@ class MTTableEditor extends TCMSModelBase
         }
 
         return $bSaveSuccessfull;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * add new record revision using the postdata
-     * executes Save() before saving the revision.
-     */
-    public function AddNewRevision()
-    {
-        $postData = $this->global->GetUserData(null);
-        $this->oTableManager->AddNewRevision($postData);
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     */
-    public function ActivateRevision()
-    {
-        $sRecordRevisionId = $this->global->GetUserData('sRecordRevisionId');
-        if (!empty($sRecordRevisionId) && $this->oTableManager->oTableEditor->AllowEdit()) {
-            $this->oTableManager->ActivateRecordRevision($sRecordRevisionId);
-        }
-
-        $parameter = array('pagedef' => $this->global->GetUserData('pagedef'), 'tableid' => $this->oTableManager->sTableId, 'id' => $this->oTableManager->sId);
-
-        $aAdditionalParams = $this->GetHiddenFieldsHook();
-        if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
-            $parameter = array_merge($parameter, $aAdditionalParams);
-        }
-
-        $this->controller->HeaderRedirect($parameter);
-    }
-
-    /**
-     * publishes workflow changes.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function PublishViaAjax()
-    {
-        return false;
     }
 
     /**
@@ -1046,21 +984,6 @@ class MTTableEditor extends TCMSModelBase
         }
 
         return $this->data['oCmsLock'];
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * checks for the last revision number for this record,
-     * if no revisions are found it returns 0.
-     *
-     * @return int
-     */
-    protected function GetLastRevisionNumber()
-    {
-        $iLastRevisionNumber = $this->oTableManager->oTableEditor->GetLastRevisionNumber();
-
-        return $iLastRevisionNumber;
     }
 
     /**

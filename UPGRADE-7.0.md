@@ -9,6 +9,26 @@ Support for Adobe Flash was removed. We recommend to search the media manager fo
 extensions "flv", "f4v" and "swf") and remove them.
 The media manager will also display where these files are still used; these usages should also be removed.
 
+# Changed Features
+
+## Changed Interfaces and Method Signatures
+
+### TCMSTableEditorEndPoint
+
+- Removed argument 1 from method `DeleteRecordReferencesFromSource`.
+- Removed argument 2 from method `DeleteRecordReferencesProperties`.
+
+### TCMSTableEditorModuleInstance
+
+- Removed argument 1 from method `DeleteRecordReferenceModuleContent`.
+- Removed argument 3 from method `GetConnectedTableRecords`.
+
+# Removed Features
+
+## RevisionManagementBundle
+
+The RevisionManagementBundle was removed. Remove it from the AppKernel.
+
 # Removed Code Entities
 
 The code entities in this list were marked as deprecated in previous releases and have now been removed.
@@ -124,6 +144,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSCronJob::LOG_FILE
 - TCMSMemcache::CACHE_DRIVER_MEMCACHE
 - TCMSMemcache::CACHE_DRIVER_MEMCACHED
+- TCMSTableEditorEndPoint::DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR
 - TCMSUserInput::FILTER_EMAIL
 - TCMSUserInput::FILTER_XSS
 - TDataExtranetUser::MAX_SALT_AGE_IN_SECONDS
@@ -139,7 +160,9 @@ The code entities in this list were marked as deprecated in previous releases an
 
 - _TCMSMediaTreeNodeMediaObj
 - AbstractPkgCmsProfilerItem
+- ChameleonSystem\core\DatabaseAccessLayer\Workflow\WorkflowQueryModifierOrderBy
 - ChameleonSystem\CoreBundle\Util\SnippetChainUtil
+- ChameleonSystem\RevisionManagementBundle\ChameleonSystemRevisionManagementBundle
 - CMSMediaViddlerImport
 - IClusterDriver
 - ICmsObjectLink
@@ -157,6 +180,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - MapperCacheManagerRestrictedProxy
 - MTGoogleMyMapsCore
 - MTListCore
+- MTPassThrough
 - MTPkgExternalTrackerGoogleAnalytics_MTPageMetaCore
 - MTSendAFriendCore
 - MTSitemapCore
@@ -164,6 +188,10 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCacheManagerStorage_Decorator_LazyWriteMemcache
 - TCacheManagerStorage_Standard
 - TCMSDataExtranetUser
+- TCMSFieldWorkflowActionType
+- TCMSFieldWorkflowAffectedRecord
+- TCMSFieldWorkflowBool
+- TCMSFieldWorkflowPublishActive
 - TCMSFontImage
 - TCMSFontImageList
 - TCMSMath
@@ -173,6 +201,8 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSSessionHandler
 - TCMSSmartURLHandler_FlashCrossDomain
 - TCMSSmartURLHandler_Pagepath
+- TCMSListManagerRevisionManagement
+- TCMSTableEditorRecordRevision
 - TCMSUserInput_EMail
 - TCMSUserInput_XSS
 - THTMLFileBrowser
@@ -199,21 +229,34 @@ The code entities in this list were marked as deprecated in previous releases an
 - ChameleonSystem\CoreBundle\Controller\ChameleonController::$portalDomainService
 - ChameleonSystem\CoreBundle\Controller\ChameleonController::$redirectPageDef
 - ChameleonSystem\CoreBundle\Controller\ChameleonController::$requestInfoService
+- CMSModuleChooser::$bModuleInstanceIsLockedByWorkflowTransaction
+- CMSModuleChooser::$bPageIsLockedByWorkflowTransaction
 - MTPageMetaCoreEndPoint::$oActivePortal
+- TAccessManagerPermissions::$revisionManagement
+- TAccessManagerPermissions::$workflowPublish
 - TCMSFieldLookupFieldTypes::$sFieldHelpTextHTML
 - TCMSFile::$sTypeIcon
 - TCMSImageEndpoint::$bAutoPlay
 - TCMSImageEndpoint::$bFlashVideoZoomPopup
 - TCMSImageEndpoint::$FLVPlayerHeight
 - TCMSImageEndpoint::$FLVPlayerURL
+- TCMSImageEndpoint::$iShowImageFromWorkflow
 - TCMSImageEndpoint::$sFlashPlayerSkinURL
 - TCMSImageEndpoint::$sFlashVideoWMode
 - TCMSMemcache::$sUsedMemcacheClass
+- TCMSRecord::$bBypassWorkflow
+- TCMSRecord::$bDataLoadedFromWorkflow
+- TCMSRecordList::$bForceWorkflow
+- TCMSRecordList::$bUseGlobalFilterInsteadOfPreviewFilter
 - TCMSRecordList::$sTableObjectSubtype
 - TCMSRecordList::$sTableObjectType
+- TCMSTableEditorEndPoint::$bBypassWorkflow
+- TCMSTableEditorEndPoint::$bWorkflowActive
+- TCMSTableEditorEndPoint::$bWorkflowIsUpdateFollowingAnInsert
 - TCMSTableEditorChangeLog::$oOldFields
 - TCMSTableEditorEndPoint::$aErrors
 - TCMSTableEditorMedia::$oFLVMetaData
+- TCMSUser::$bWorkflowEngineActive
 - TCMSWizardStep::$bHasMethodExecutionCalled
 - TFullGroupTable::$iconSortASC
 - TFullGroupTable::$iconSortDESC
@@ -237,23 +280,48 @@ The code entities in this list were marked as deprecated in previous releases an
 - ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::addModules()
 - ChameleonSystem\CoreBundle\ModuleService\ModuleResolver::getModules()
 - ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer::handleUnitTestCase()
+- ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploaderParametersDataModel::isBIgnoreWorkflow
+- ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploaderParametersDataModel::setBIgnoreWorkflow
 - ChameleonSystem\CoreBundle\Util\RoutingUtilInterface::getPageDataForPagePath()
 - ChameleonSystem\CoreBundle\Util\RoutingUtilInterface::getRouteForTree()
+- CMSModuleChooser::LoadWorkflowData()
+- CMSModuleImageManager::HandleWorkflowOnSetImage()
+- CMSModulePageTree::GetTransactionDetails()
 - CMSTableExport::GenerateHTMLExport()
 - CMSTableExport::getCMSCustomerStyles()
+- CMSTemplateEngine::GetLastRevisionNumber()
+- CMSTemplateEngine::LoadRevisionData()
+- CMSTemplateEngine::LoadWorkflowData()
 - esono\pkgCmsCache\Cache::setCacheDir()
+- gcf_workflowEditedRecordname()
+- gcf_workflowLastChange()
+- gcf_workflowStatus()
 - IPkgCmsFileManager::setDriver()
 - MTExtranetCoreEndPoint::PostRegistrationHook()
 - MTHeader::_LoadUserImage()
-- MTHeader::AddCounter
-- MTHeader::ChangeActiveDbCounter
-- MTHeader::FetchCounterInformation
+- MTHeader::AddCounter()
+- MTHeader::ChangeActiveDbCounter()
+- MTHeader::FetchCounterInformation()
+- MTHeader::GetCurrentTransactionInfo()
 - MTPageMetaCoreEndPoint::GetETrackerId()
 - MTPageMetaCoreEndPoint::IncludeTrackerEtracker()
 - MTPageMetaCoreEndPoint::IncludeTrackerEtrackerHook()
 - MTPageMetaCoreEndPoint::IncludeTrackerGoogleAnalytics()
+- MTTableEditor::ActivateRevision()
+- MTTableEditor::AddNewRevision()
+- MTTableEditor::GetLastRevisionNumber()
+- MTTableEditor::LoadRevisionData()
+- MTTableEditor::LoadWorkflowData()
 - MTTableEditor::TranslateString()
+- MTTableEditor::PublishViaAjax()
+- TAccessManager::HasRevisionManagementPermission()
+- TAccessManager::HasWorkflowEditPermission()
+- TAccessManager::HasWorkflowPublishPermission()
+- TAccessManagerPermissions::GetRevisionManagementPermissionStatus()
+- TAccessManagerPermissions::GetWorkflowPublishStatus()
+- TAdb*List::EditedRecordsAvailable()
 - TAdb*List::GetDefaultLanguageId()
+- TAdb*List::IsTableWithActiveWorkflow()
 - TCMSActivePage::GetActiveLanguage()
 - TCMSActivePage::GetActiveLanguageObject()
 - TCMSActivePage::GetInstanceWithoutCache()
@@ -273,6 +341,10 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSImageEndpoint::renderFLV()
 - TCMSImageEndpoint::renderSWF()
 - TCmsLanguage::getLanguageFromIsoCodeCached()
+- TCMSListManagerEndPoint::GetWorkflowRestrictions()
+- TCMSListManagerFullGroupTable::CallBackWorkflowActionType()
+- TCMSListManagerFullGroupTable::IsCmsWorkflowTransaction()
+- TCMSListManagerMLT::CallBackWorkflowConnectionActionType()
 - TCMSLogChange::_SetFieldPosition()
 - TCMSLogChange::_WriteTransactionFooter()
 - TCMSLogChange::_WriteTransactionHeader()
@@ -299,8 +371,12 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSPortalDomain::GetActiveDomain()
 - TCMSPortalDomain::IsDevelopmentDomain()
 - TCMSRecord::GetMLTTargetTableNameFromMLTField()
+- TCMSRecord::GetWorkflowMLTFilterQuery()
+- TCMSRecord::GetWorkflowRestrictionQuery()
 - TCMSRecord::IsMultiLanguageTable()
+- TCMSRecord::IsTableWithWorkflow()
 - TCMSRecord::PostLoadHookFromUnitTest()
+- TCMSRecord::SetWorkflowByPass()
 - TCMSSmartURL::GetDirectURL()
 - TCMSSmartURL::GetDocumentNotFoundPagedef()
 - TCMSSmartURL::GetLanguagePrefixForPortal()
@@ -313,11 +389,67 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSSmartURL::SetRealPagdef()
 - TCMSTableEditorDocumentEndPoint::GetMltReferencesRecordList()
 - TCMSTableEditorDocumentEndPoint::GetRecordsWithWysiwygDownload()
+- TCMSTableEditorDocumentEndPoint::MoveWorkflowDocumentToDocumentPool()
+- TCMSTableEditorEndPoint::ActivateMLTRecordRevisions()
+- TCMSTableEditorEndPoint::ActivateRecordRevision()
+- TCMSTableEditorEndPoint::ActivateRecordRevision_Execute()
+- TCMSTableEditorEndPoint::AddInsertWorkflowAction()
+- TCMSTableEditorEndPoint::AddNewRevision()
+- TCMSTableEditorEndPoint::AddNewRevision_Execute()
+- TCMSTableEditorEndPoint::AddNewRevisionForConnectedPropertyRecords()
+- TCMSTableEditorEndPoint::AddNewRevisionForMLTConnectedRecords()
+- TCMSTableEditorEndPoint::AddNewRevisionForSingleFields()
+- TCMSTableEditorEndPoint::AddNewRevisionFromDatabase()
+- TCMSTableEditorEndPoint::AddUpdateWorkflowAction()
+- TCMSTableEditorEndPoint::GetActionLogAsHTMLTable()
+- TCMSTableEditorEndPoint::GetLastActivatedRevision()
+- TCMSTableEditorEndPoint::GetLastActivatedRevisionObject()
+- TCMSTableEditorEndPoint::GetLastRevisionNumber()
+- TCMSTableEditorEndPoint::GetMLTRevisionIds()
+- TCMSTableEditorEndPoint::GetRecordChildRevisions()
+- TCMSTableEditorEndPoint::GetTransactionOwnership()
+- TCMSTableEditorEndPoint::GetTransactionTitle()
+- TCMSTableEditorEndPoint::GetWorkflowPreviewPageID()
+- TCMSTableEditorEndPoint::InsertForwardLog()
+- TCMSTableEditorEndPoint::IsRecordLockedByTransaction()
+- TCMSTableEditorEndPoint::IsRevisionManagementActive()
+- TCMSTableEditorEndPoint::IsTransactionOwner()
+- TCMSTableEditorEndPoint::Publish()
+- TCMSTableEditorEndPoint::PublishDelete()
+- TCMSTableEditorEndPoint::PublishInsert()
+- TCMSTableEditorEndPoint::PublishUpdate()
+- TCMSTableEditorEndPoint::RollBack()
+- TCMSTableEditorEndPoint::RollBackDelete()
+- TCMSTableEditorEndPoint::RollBackInsert()
+- TCMSTableEditorEndPoint::RollBackUpdate()
+- TCMSTableEditorEndPoint::SaveNewRevision()
+- TCMSTableEditorEndPoint::SaveWorkflowActionLog()
+- TCMSTableEditorEndPoint::SendOwnershipMovedNotifyEmail()
+- TCMSTableEditorEndPoint::SetWorkflowByPass()
+- TCMSTableEditorEndPoint::SetWorkflowState()
+- TCMSTableEditorEndPoint::UpdatePositionFieldIgnoringWorkflow()
+- TCMSTableEditorManager::ActivateRecordRevision()
+- TCMSTableEditorManager::AddNewRevision()
+- TCMSTableEditorManager::AddNewRevisionFromDatabase()
+- TCMSTableEditorManager::AddUpdateWorkflowAction()
+- TCMSTableEditorManager::GetLastActivatedRevision()
+- TCMSTableEditorManager::IsRevisionManagementActive()
+- TCMSTableEditorManager::IsRecordLockedByTransaction()
+- TCMSTableEditorManager::Publish()
+- TCMSTableEditorManager::RollBack()
+- TCMSTableEditorManager::SetWorkflowByPass()
 - TCMSTableEditorMedia::LoadFlvInfo()
+- TCMSTableEditorMedia::MoveWorkflowImageToMediaPool()
 - TCMSTableEditorMedia::RefreshImageOnViddler()
+- TCMSTableEditorTplPageCmsMasterPageDefSpot::AddNewRevisionForModuleInstances()
+- TCMSTableEditorTplPageCmsMasterPageDefSpot::AddNewRevisionModuleConnectedTableRecord()
+- TCMSTableEditorTplPageCmsMasterPageDefSpot::AddNewRevisionModuleConnectedTables()
+- TCMSTableEditorTplPageCmsMasterPageDefSpot::AddNewRevisionModuleInstance()
+- TCMSTableEditorTplPageCmsMasterPageDefSpot::IsRevisonAllowedConnectedTable()
 - TCMSTableToClass::getDatabaseConnection()
 - TCMSTableToClass::setDatabaseConnection()
 - TCMSTableToClass::UpdateAllTables()
+- TCMSTableWriter::AddWorkflowFieldsToMLT()
 - TCMSTextFieldEndPoint::_callback_cmstextfield_image_flv_parser()
 - TCMSTextFieldEndPoint::_callback_cmstextfield_varparser()
 - TCMSTextFieldEndPoint::_RemoveProprietaryParameter()
@@ -330,6 +462,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSUpdateManager::RunCoreUpdates()
 - TCMSURLHistory::FindHistoryId()
 - TCMSUser::generateHash()
+- TCMSUser::LoadWorkflowEngineStatus()
 - TCMSUserInput::AutoAddAuthenticityTokenToForms()
 - TCMSUserInput::CallbackAddAuthenticityTokenToForms()
 - TCMSUserInput::CheckAuthenticityTokenInInput()

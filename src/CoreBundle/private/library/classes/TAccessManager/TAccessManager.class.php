@@ -218,20 +218,6 @@ class TAccessManager
     }
 
     /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * checks if the user has the permission to create and load record revisions.
-     *
-     * @param string $table - name of the db-table
-     *
-     * @return bool - returns true if the user may create and load record revisions
-     */
-    public function HasRevisionManagementPermission($table)
-    {
-        return false;
-    }
-
-    /**
      * checks if the user has the permission to see all entries in "table" in read only mode.
      *
      * @param string $table - name of the db-table
@@ -268,35 +254,5 @@ class TAccessManager
         } else {
             return $this->functions->HasRight($function);
         }
-    }
-
-    /**
-     * checks if the user has the permission to publish all tables of the
-     * action items of a transaction.
-     *
-     * @param string $sTransactionID - id of the transaction
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function HasWorkflowPublishPermission($sTransactionID)
-    {
-        return false;
-    }
-
-    /**
-     * checks if the user has the permission to edit all tables of the
-     * action items of a transaction.
-     *
-     * @param string $sTransactionID - id of the transaction
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function HasWorkflowEditPermission($sTransactionID)
-    {
-        return false;
     }
 }

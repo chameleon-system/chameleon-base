@@ -237,8 +237,6 @@ class CMSTemplateEngine extends TCMSModelBase
 
         $this->data['id'] = $this->sPageId;
 
-        $this->LoadRevisionData();
-
         $this->data['oPage'] = $this->oPage;
         if ($this->bPageDefinitionAssigned) {
             $this->data['sActivePageDef'] = $this->oPage->iMasterPageDefId;
@@ -286,38 +284,6 @@ class CMSTemplateEngine extends TCMSModelBase
         }
 
         $this->SetTemplate('CMSTemplateEngine', $viewName);
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * loads revision management relevant data if active.
-     */
-    protected function LoadRevisionData()
-    {
-        $this->data['bRevisionManagementActive'] = false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * checks for the last revision number for this record,
-     * if no revisions are found it returns 0.
-     *
-     * @return int
-     */
-    protected function GetLastRevisionNumber()
-    {
-        return 0;
-    }
-
-    /**
-     * loads workflow relevant data.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function LoadWorkflowData()
-    {
     }
 
     /**

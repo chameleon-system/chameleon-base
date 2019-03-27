@@ -38,16 +38,6 @@ class TCMSUser extends TCMSRecord
     public $oAccessManager = null;
 
     /**
-     * indicates if the workflow engine is activates and the user
-     * has the needed rights to show/use it.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public $bWorkflowEngineActive = false;
-
-    /**
      * holds the user object singleton.
      *
      * @var TCMSUser
@@ -443,19 +433,6 @@ class TCMSUser extends TCMSRecord
             $this->oAccessManager = new TAccessManager();
             $this->oAccessManager->InitFromObject($this);
         }
-    }
-
-    /**
-     * returns true if the workflow engine is activated in config and user has
-     * rights to use it.
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function LoadWorkflowEngineStatus()
-    {
-        return false;
     }
 
     /**
