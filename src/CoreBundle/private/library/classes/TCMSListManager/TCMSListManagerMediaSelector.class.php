@@ -195,7 +195,7 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
     }
 
     /**
-     * loads max image height from default image or get/post variable "imageHeight".
+     * Retrieves max image height from GET/POST variable "imageHeight".
      *
      * @return int
      */
