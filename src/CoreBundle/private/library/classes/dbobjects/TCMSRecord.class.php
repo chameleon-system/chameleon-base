@@ -963,8 +963,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function &GetDownloads($sDownloadField = 'data_pool', $allowedFileTypes = null, $bOrderByPosition = false)
     {
-        $oCmsDocumentList = null;
-
         $mltTable = $this->table.'_'.$sDownloadField.'_cms_document_mlt';
 
         $databaseConnection = $this->getDatabaseConnection();
@@ -999,7 +997,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             }
         }
 
-        /** @var $oCmsDocumentList TdbCmsDocumentList */
         $oCmsDocumentList = TdbCmsDocumentList::GetList($sQuery);
 
         return $oCmsDocumentList;
@@ -1311,10 +1308,8 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             }
             if (!is_null($oMltField) || !is_null($sTargetTableName)) {
                 if (!empty($sTargetTableName)) {
-                    $sTargetTable = $sTargetTableName;
                     $sMLTTable = $this->GetMltTableName($sMLTField, $sTargetTableName);
                 } elseif (!is_null($oMltField)) {
-                    $sTargetTable = $oMltField->GetConnectedTableName();
                     $sMLTTable = $oMltField->GetMLTTableName();
                 }
                 $databaseConnection = $this->getDatabaseConnection();
@@ -1862,7 +1857,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function hasSameDataInSqlData($oCompareWith)
     {
-        $bIsSame = false;
         $aThisData = $this->sqlData;
         $aItemData = $oCompareWith->sqlData;
         $bIsSame = (is_array($aThisData) && is_array($aItemData));

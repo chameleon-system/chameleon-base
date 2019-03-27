@@ -172,7 +172,6 @@ class MTGlobalListCore extends TUserCustomModelBase
             $iNumberOfPages = ceil($this->oItemList->Length() / $this->GetPageSize());
         }
         $activePageService = $this->getActivePageService();
-        $iItemsOnPage = $this->GetPageSize();
         for ($iPage = 0; $iPage < $iNumberOfPages; ++$iPage) {
             $this->aPaging[$iPage] = $activePageService->getLinkToActivePageRelative(array($this->ipageURLParam => $iPage));
         }

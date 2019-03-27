@@ -58,13 +58,11 @@ class TCMSMessageManager
      */
     public static function GetInstance($bReload = false)
     {
-        $oInstance = null;
         $request = ServiceLocator::get('request_stack')->getCurrentRequest();
         if ((null === $request) || (false === $request->getSession()->isStarted())) {
             return null;
         }
         if ($bReload) {
-            $oInstance = null;
             if (true === $request->getSession()->has(self::SESSION_KEY_NAME)) {
                 $request->getSession()->remove(self::SESSION_KEY_NAME);
             }

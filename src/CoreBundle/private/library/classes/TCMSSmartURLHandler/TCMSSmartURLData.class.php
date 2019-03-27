@@ -69,56 +69,40 @@ class TCMSSmartURLData
         switch ($var) {
             case 'sRelativeURL':
                 return $this->getRequestInfoService()->getPathInfoWithoutPortalAndLanguagePrefix();
-                break;
             case 'sOriginalURL':
                 return $request->getPathInfo();
-                break;
             case 'oActiveDomain':
                 return $activeDomain;
-                break;
             case 'sDomainName':
                 return (null !== $activeDomain) ? $activeDomain->GetActiveDomainName() : null;
-                break;
             case 'sOriginalDomainName':
                 return $request->getHost();
-                break;
             case 'bIsSSLCall':
                 if (null === $request) {
                     return false;
                 }
 
                 return $request->isSecure();
-                break;
             case 'sRelativeURLPortalIdentifier':
                 return (null !== $activePortal) ? $activePortal->fieldIdentifier : null;
-                break;
             case 'sRelativeFullURL':
                 return $request->getPathInfo();
-                break;
             case 'aParameters':
                 return $request->query->all();
-                break;
             case 'iPortalId':
                 return ($activePortal) ? $activePortal->id : null;
-                break;
             case 'bPagedefFound':
                 return true;
-                break;
             case 'bDomainNotFound':
                 return null === $activeDomain;
-                break;
             case 'bPortalNotFound':
                 return null === $activePortal;
-                break;
             case 'sLanguageId':
                 return $this->getLanguageService()->getActiveLanguageId();
-                break;
             case 'sLanguageIdentifier':
                 return $this->getUrlPrefixGenerator()->getLanguagePrefix($activePortal, $activeLanguage);
-                break;
             case 'bDomainBasedLanguage':
                 return $activeDomain && '' !== $activeDomain->fieldCmsLanguageId;
-                break;
         }
 
         $trace = debug_backtrace();

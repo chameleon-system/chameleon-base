@@ -226,11 +226,6 @@ class CMSModuleImageManager extends TCMSModelBase
             ++$level;
             $this->data['treeHTML'] .= $spacer.'<li id="node'.$oNode->sqlData['cmsident'].'">';
 
-            $activeStyle = '';
-            if ((string) $activeID == (string) $oNode->id) {
-                $activeStyle = ' class="active"';
-            }
-
             $sListURL = $this->GetListURL();
             $sListURL .= '&amp;cms_media_tree_id='.$sCurrentNodeId;
 

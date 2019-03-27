@@ -63,19 +63,6 @@ class TAccessManager
     }
 
     /**
-     * load the data from the database.
-     *
-     * @deprecated
-     *
-     * @param string $user_id - id of the cms user
-     */
-    public function InitFromDatabase($user_id)
-    {
-        $this->user->InitFromDatabase($user_id);
-        $this->functions->InitFromDatabase($this->user);
-    }
-
-    /**
      * load the data from tdb object.
      *
      * @param TCMSUser $oTdbCMsUser

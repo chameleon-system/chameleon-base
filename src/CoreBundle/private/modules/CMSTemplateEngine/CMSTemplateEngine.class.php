@@ -146,8 +146,6 @@ class CMSTemplateEngine extends TCMSModelBase
      */
     public function IsMainNavigationSet()
     {
-        $oRecordData = null;
-
         $bMainNavigationIsSet = false;
         $oCmsTplPage = TdbCmsTplPage::GetNewInstance();
         /** @var $oCmsTplPage TdbCmsTplPage */
@@ -472,16 +470,6 @@ class CMSTemplateEngine extends TCMSModelBase
         }
 
         return $view;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - renamed and split into 2 methods: filterMainNavigation and getActiveModuleLayout.
-     */
-    protected function GetMainNavigation()
-    {
-        $this->filterMainNavigation();
-
-        return $this->getActiveModuleLayout();
     }
 
     public function GetHtmlHeadIncludes()

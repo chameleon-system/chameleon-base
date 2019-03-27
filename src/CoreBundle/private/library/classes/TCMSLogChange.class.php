@@ -393,7 +393,7 @@ class TCMSLogChange
                 ]
             );
 
-            self::outputError($line, $e);
+            self::outputError($e);
         }
     }
 
@@ -2203,7 +2203,7 @@ class TCMSLogChange
             self::outputSuccess($line, $query, $queryParams);
             self::logSuccess($line, $query, $queryParams);
         } catch (\Exception $e) {
-            self::outputError($line, $e);
+            self::outputError($e);
             self::logError($line, $e);
         }
     }
@@ -2244,10 +2244,9 @@ class TCMSLogChange
     }
 
     /**
-     * @param int       $line
      * @param Exception $exception
      */
-    private static function outputError($line, $exception)
+    private static function outputError($exception)
     {
         TCMSUpdateManager::GetInstance()->addException($exception);
     }

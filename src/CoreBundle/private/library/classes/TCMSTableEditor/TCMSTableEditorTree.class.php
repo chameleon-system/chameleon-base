@@ -50,7 +50,6 @@ class TCMSTableEditorTree extends TCMSTableEditor
                      WHERE `parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($parentId)."'
                        AND `id` <> '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'
                      ";
-        $entry_sort = 0;
         if ($counttemp = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($countQuery))) {
             $entry_sort = $counttemp['newsort'] + 1;
             $this->SaveField('entry_sort', $entry_sort);
@@ -182,7 +181,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         $oPageConnections = TdbCmsTreeNodeList::GetList($sQuery);
         while ($oPageConnection = $oPageConnections->Next()) {
             $oTreeManager = TTools::GetTableEditorManager('cms_tree_node', $oPageConnection->id);
-            $oNewPageConnection = $oTreeManager->DatabaseCopy(false, array('cms_tree_id' => $this->sId), $this->bIsCopyAllLanguageValues);
+            $oTreeManager->DatabaseCopy(false, array('cms_tree_id' => $this->sId), $this->bIsCopyAllLanguageValues);
         }
         $this->getNestedSetHelper()->initializeTree();
         $this->writeSqlLog();

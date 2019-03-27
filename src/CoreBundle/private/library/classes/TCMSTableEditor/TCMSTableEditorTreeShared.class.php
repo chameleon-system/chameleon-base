@@ -42,7 +42,6 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
                      WHERE `parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($parentId)."'
                        AND `id` <> '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'
                      ";
-        $entry_sort = 0;
         if ($counttemp = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($countQuery))) {
             $entry_sort = $counttemp['newsort'] + 1;
             $this->SaveField('entry_sort', $entry_sort);
@@ -110,8 +109,6 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
         max-width: 150px;
       }
       </style>';
-
-        $oGlobal = TGlobal::instance();
 
         $aIncludes[] = "<script type=\"text/javascript\">
       function SaveTreeNodeAjax() {

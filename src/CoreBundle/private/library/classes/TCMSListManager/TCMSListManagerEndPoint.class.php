@@ -359,7 +359,6 @@ class TCMSListManagerEndPoint
             }
 
             // check for user groups
-            $groupRestrictionQuery = '';
             $tmpQuery = "SELECT * FROM `cms_field_conf` WHERE `name` LIKE 'cms_usergroup_mlt' AND `cms_tbl_conf_id` = '".$this->oTableConf->id."' ";
             //$tmpQuery = "SHOW FIELDS FROM `{$this->oTableConf->sqlData['name']}` LIKE 'cms_usergroup_mlt'";
             $userField = MySqlLegacySupport::getInstance()->query($tmpQuery);

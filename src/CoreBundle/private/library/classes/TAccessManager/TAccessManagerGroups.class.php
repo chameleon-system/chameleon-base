@@ -103,24 +103,6 @@ class TAccessManagerGroups
     }
 
     /**
-     * get group name (translation name) by id.
-     *
-     * @deprecated - use GetGroupSystemIdentifier($id) instead
-     *
-     * @param string $id
-     *
-     * @return mixed - returns group name or false
-     */
-    public function GetGroupName($id)
-    {
-        if (array_key_exists($id, $this->list)) {
-            return $this->list[$id];
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * get group id by system identifier.
      *
      * @param string $id

@@ -327,7 +327,6 @@ class TCMSTableEditorManager
             $this->RefreshLock();
 
             if ('_mlt' === substr($this->sRestrictionField, -4)) {
-                $sourceID = $this->sRestriction;
                 $sourceTable = substr($this->sRestrictionField, 0, -4);
 
                 $targetTable = $this->oTableConf->sqlData['name'];
@@ -430,7 +429,7 @@ class TCMSTableEditorManager
      * @param array $aOverloadedFields fields to copy with given value
      * @param bool  $bCopyAllLanguages Set to true if you want top copy alle language fields
      *
-     * @return bool
+     * @return TCMSstdClass|bool
      */
     public function DatabaseCopy($languageCopy = false, $aOverloadedFields = array(), $bCopyAllLanguages = true)
     {
