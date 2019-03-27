@@ -39,7 +39,6 @@ class TCMSListManagerMediaManager extends TCMSListManagerImagedatabase
      */
     public function AddFields()
     {
-        $jsParas = array('id');
         ++$this->columnCount;
         $this->tableObj->AddHeaderField(array('id' => '#'), 'left', null, 1, false);
         $this->tableObj->AddColumn('id', 'left', array($this, 'CallBackMediaSelectBox'), null, 1);

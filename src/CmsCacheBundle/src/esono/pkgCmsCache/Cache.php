@@ -139,7 +139,7 @@ class Cache implements CacheInterface
             return;
         }
         $this->storage->set($key, $content, $iMaxLiveInSeconds);
-        $this->setTrigger($trigger, $key, $iMaxLiveInSeconds);
+        $this->setTrigger($trigger, $key);
     }
 
     /**
@@ -147,9 +147,8 @@ class Cache implements CacheInterface
      *
      * @param array  $triggerList
      * @param string $key
-     * @param int    $iMaxLiveInSeconds -
      */
-    private function setTrigger($triggerList, $key, $iMaxLiveInSeconds)
+    private function setTrigger($triggerList, $key)
     {
         if (!is_array($triggerList) || 0 === count($triggerList)) {
             return;

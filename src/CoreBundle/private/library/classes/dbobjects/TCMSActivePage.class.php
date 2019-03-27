@@ -119,25 +119,19 @@ class TCMSActivePage extends TdbCmsTplPage
         switch ($name) {
             case 'sActivePageNumber':
                 return $this->id;
-                break;
             case 'oGlobal':
                 return ServiceLocator::get('chameleon_system_core.global');
-                break;
             case 'oActivePortal':
                 return ServiceLocator::get('chameleon_system_core.portal_domain_service')->getActivePortal();
-                break;
             case 'oBreadcrumb':
                 return $this->getBreadcrumb();
-                break;
             case 'oActiveDivision':
                 return $this->getDivision();
-                break;
             case 'oLanguage':
                 return self::getLanguageService()->getActiveLanguage();
-                break;
+            default:
+                return null;
         }
-
-        return null;
     }
 
     /**

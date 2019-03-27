@@ -611,14 +611,6 @@ class TCMSTableToClass
     }
 
     /**
-     * @return AutoclassesCacheWarmer
-     */
-    private static function getAutoclassesCacheWarmer()
-    {
-        return ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
-    }
-
-    /**
      * @return AutoclassesDataAccessInterface
      */
     private function getAutoclassesDataAccess()

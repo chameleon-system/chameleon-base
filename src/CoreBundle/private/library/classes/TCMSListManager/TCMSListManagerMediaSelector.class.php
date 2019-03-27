@@ -205,12 +205,6 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
 
         if ($this->oGlobal->UserDataExists('imageHeight')) {
             $iHeight = $this->oGlobal->GetUserData('imageHeight');
-        } else {
-            if (isset($this->oDefaultImage->aData) && is_array($this->oDefaultImage->aData)) {
-                if (array_key_exists('height', $this->oDefaultImage->aData) && $this->oDefaultImage->aData['height'] > 0) {
-                    $iWidth = $this->oDefaultImage->aData['height'];
-                }
-            }
         }
 
         return $iHeight;

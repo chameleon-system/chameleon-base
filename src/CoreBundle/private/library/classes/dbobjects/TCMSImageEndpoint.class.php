@@ -927,7 +927,6 @@ class TCMSImageEndpoint
     public function GetThumbnailPointer($oThumb, $aEffects = array())
     {
         $aEffects = $this->ApplyEffectHook($aEffects, $oThumb);
-        $image_p = null;
         // now we need to resize the current image
         $image_p = imagecreatetruecolor($oThumb->aData['width'], $oThumb->aData['height']);
 
@@ -1471,9 +1470,7 @@ class TCMSImageEndpoint
             // set new squaresized thumbnail name
             $oThumb->aData['path'] = $thumbName;
 
-            $uncuttedImagePointer = null;
             // check if the thumbnail exists
-
             if (!file_exists($thumbPath)) {
                 if ($this->UseImageMagick()) {
                     $oImageMagick = &$this->GetImageMagicObject();

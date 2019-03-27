@@ -676,7 +676,6 @@ class TModelBase
     final public function __invoke(Request $request, $isLegacyModule)
     {
         $response = new Response();
-        $cachedContent = null;
         if (true === $this->_AllowCache()) {
             $cache = $this->getCache();
             $cacheKey = $cache->getKey($this->_GetCacheParameters());

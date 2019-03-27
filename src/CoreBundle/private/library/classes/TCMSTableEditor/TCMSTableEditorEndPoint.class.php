@@ -702,7 +702,7 @@ class TCMSTableEditorEndPoint
                 $this->oTable->SetLanguage($oDefaultLanguage->id);
             }
             $this->oTable->Load($this->sId);
-            if ($oDefaultLanguage && $sActiveLanguageId = !$oDefaultLanguage->id) {
+            if ($oDefaultLanguage && $sActiveLanguageId !== $oDefaultLanguage->id) {
                 $oCmsConfiguration->SetLanguage($oCmsConfiguration->GetLanguage());
             }
         }
@@ -1308,7 +1308,6 @@ class TCMSTableEditorEndPoint
      */
     public function &CopyClass($id)
     {
-        $oClass = null;
         $oClass = clone $this;
         $oClass->Init($this->sTableId, $id);
         $oClass->sRestriction = $this->sRestriction;
@@ -1465,11 +1464,7 @@ class TCMSTableEditorEndPoint
      */
     protected function GetLanguageListForDatabaseCopy()
     {
-        $oLanguageList = null;
-        $oCmsConfig = &TdbCmsConfig::GetInstance();
-        $oLanguageList = $oCmsConfig->GetFieldCmsLanguageList();
-
-        return $oLanguageList;
+        return TdbCmsConfig::GetInstance()->GetFieldCmsLanguageList();
     }
 
     /**
@@ -1603,7 +1598,6 @@ class TCMSTableEditorEndPoint
 
         $bWasInserted = false;
         $error = '';
-        $sourceRecordID = null;
         $whereConditions = array();
 
         if ($bIsUpdateCall) {
@@ -1619,7 +1613,6 @@ class TCMSTableEditorEndPoint
             // need to create an id.. try to insert until we have a free id. We will try at most 3 times
 
             $iMaxTry = 3;
-            $uid = null;
             do {
                 $uid = TTools::GetUUID();
                 $sInsertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($uid)."'";

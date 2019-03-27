@@ -448,7 +448,6 @@ class TCMSTextFieldEndPoint
     {
         $returnString = $aMatch[0];
         if (isset($aMatch[2]) && false !== strpos($aMatch[2], 'thickbox')) {
-            $returnString = $aMatch[1].$aMatch[3].$aMatch[5];
             $galleryMatchString = "/<a([^>]+?)class=['\"]([^'\"]*?)thickbox([^'\"]*?)['\"]([^>]*?)>(.*?)<\\/a>/usi";
             $returnString = preg_replace_callback($galleryMatchString, array($this, '_callback_cmstextfield_image_thickbox_clear'), $aMatch[0]);
         }
@@ -657,7 +656,6 @@ class TCMSTextFieldEndPoint
             $sLinkName = '';
             if (!empty($aMatch[3])) {
                 if (preg_match("#^(\[ico\])?(.*\\s*.*\\s*.*)(\[kb\])?$#", $aMatch[3], $aSubMatch)) {
-                    $iStart = 0;
                     $iLen = strlen($aSubMatch[0]);
                     $iStart = strpos($aSubMatch[0], '[ico]');
                     if (false !== strpos($aSubMatch[0], '[ico]')) {

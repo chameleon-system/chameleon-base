@@ -85,7 +85,6 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
         */
 
         if ($isValid) {
-            $isValid = false;
             // Array of valid extensions
             $allowedFileTypes = TTools::GetCMSFileTypes();
             $isValid = $this->IsValidFileExtension($allowedFileTypes);
@@ -259,12 +258,10 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
      */
     public function FetchConnections($fileID, $aTableBlackList = null)
     {
-        $aDocConnections = array();
         $aDownloadRefFromWysiwygFields = $this->GetDownloadRefFromWysiwygFields($aTableBlackList);
         $aMltConnectedRecordReferences = $this->GetMltConnectedRecordReferences($aTableBlackList);
-        $aDocConnections = array_merge_recursive($aDownloadRefFromWysiwygFields, $aMltConnectedRecordReferences);
 
-        return $aDocConnections;
+        return array_merge_recursive($aDownloadRefFromWysiwygFields, $aMltConnectedRecordReferences);
     }
 
     /**
@@ -311,7 +308,6 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
                     /** @var $oRecord TCMSRecord */
                     while ($oTableRecord = $oTableRecordList->Next()) {
                         $sWysiwygText = $this->RemoveDownloadFromWysiwygText($oTableRecord->sqlData[$field]);
-                        $s = strcmp($oTableRecord->sqlData[$field], $sWysiwygText);
                         if (strlen($oTableRecord->sqlData[$field]) != strlen($sWysiwygText)) {
                             $oTableRecordEditorManager = TTools::GetTableEditorManager($tableName, $oTableRecord->id);
                             $oTableRecordEditorManager->SaveField($field, $sWysiwygText);
@@ -541,7 +537,6 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
             $sLinkName = '';
             if (!empty($aMatch[3])) {
                 if (preg_match("#^(\[ico\])?(.*\\s*.*\\s*.*)(\[kb\])?$#", $aMatch[3], $aSubMatch)) {
-                    $iStart = 0;
                     $iLen = strlen($aSubMatch[0]);
                     $iStart = strpos($aSubMatch[0], '[ico]');
                     if (false !== strpos($aSubMatch[0], '[ico]')) {

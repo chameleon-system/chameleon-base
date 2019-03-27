@@ -146,8 +146,6 @@ class CMSTemplateEngine extends TCMSModelBase
      */
     public function IsMainNavigationSet()
     {
-        $oRecordData = null;
-
         $bMainNavigationIsSet = false;
         $oCmsTplPage = TdbCmsTplPage::GetNewInstance();
         /** @var $oCmsTplPage TdbCmsTplPage */

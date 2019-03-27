@@ -327,7 +327,6 @@ class TCMSTableEditorManager
             $this->RefreshLock();
 
             if ('_mlt' === substr($this->sRestrictionField, -4)) {
-                $sourceID = $this->sRestriction;
                 $sourceTable = substr($this->sRestrictionField, 0, -4);
 
                 $targetTable = $this->oTableConf->sqlData['name'];
