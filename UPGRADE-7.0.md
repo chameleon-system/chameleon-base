@@ -348,7 +348,6 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSLogChange::_SetFieldPosition()
 - TCMSLogChange::_WriteTransactionFooter()
 - TCMSLogChange::_WriteTransactionHeader()
-- TCMSLogChange::addShopSystemPage()
 - TCMSLogChange::DisablePHPCommentsInDbLog()
 - TCMSLogChange::EndTransaction()
 - TCMSLogChange::getActiveDbCounterName()

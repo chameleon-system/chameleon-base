@@ -1779,6 +1779,51 @@ class TCMSLogChange
     }
 
     /**
+     * This method lets old updates insert shop system pages. The table "shop_system_page" has been removed in shop-165.inc.php and
+     * old updates would fail when triggered afterwards.
+     *
+     * You should not use this method in new packages, which already know about the change.
+     *
+     * @param $shop_id
+     * @param $name_internal
+     * @param $name
+     * @param string $cms_tree_id
+     *
+     * @deprecated since 6.2.0 - no longer used.
+     */
+    public static function addShopSystemPage($shop_id, $name_internal, $name, $cms_tree_id = '', $id = null)
+    {
+        if (self::TableExists('shop_system_page')) {
+            $query = "INSERT INTO `shop_system_page`
+                      SET `shop_id` = '".$shop_id."',
+                          `name_internal` = '".$name_internal."',
+                          `name` = '".$name."',
+                          `cms_tree_id` = '".$cms_tree_id."'";
+            if (null !== $id) {
+                $query .= ", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($id)."'";
+            }
+            self::_RunQuery($query, __LINE__);
+        } else {
+            $shop = TdbShop::GetNewInstance();
+            if ($shop->Load($shop_id)) {
+                $portals = $shop->GetFieldCmsPortalIdList();
+                foreach ($portals as $portalid) {
+                    $query = "INSERT INTO `cms_portal_system_page` SET
+                                `cms_portal_id` =   '".MySqlLegacySupport::getInstance()->real_escape_string($portalid)."',
+                                `name_internal` =   '".MySqlLegacySupport::getInstance()->real_escape_string($name_internal)."',
+                                `name` =            '".MySqlLegacySupport::getInstance()->real_escape_string($name)."',
+                                `cms_tree_id` =     '".MySqlLegacySupport::getInstance()->real_escape_string($cms_tree_id)."',
+                                `id` =              '".MySqlLegacySupport::getInstance()->real_escape_string(TTools::GetUUID())."'
+                            ";
+                    self::_RunQuery($query, __LINE__);
+                }
+            } else {
+                self::DisplayErrorMessage('tried to insert system page for non existent shop id');
+            }
+        }
+    }
+
+    /**
      * @param string $moduleClassName
      *
      * @return TDbChangeLogManagerForModules

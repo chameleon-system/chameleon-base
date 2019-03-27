@@ -351,12 +351,6 @@ einen View mit Hilfe des `ViewRenderer` zu konfigurieren und zu rendern.
     $oViewRenderer->AddMapper(new ManufacturerToNameMapper());
     $renderedHTML = $oViewRenderer->Render("article/article_detail.html.twig");
 
-> $Hinweis$: In Core Modulen bietet sich an, die Instanzierung der
-> Objekte über die `ClassFactory` zu erledigen, da hierdurch eine
-> nachträgliche Denpendency Injection ermöglicht wird. In Modulen im
-> Cutom-Core und Customer Bereich wird es in den meisten Fällen in
-> Ordnung sein, den Constructor direkt zu verwenden.
-
 Neue Module
 ===========
 

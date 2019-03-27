@@ -300,9 +300,7 @@ class MTHeader extends TCMSModelBase
         $this->methodCallAllowed[] = 'GetCurrentTransactionInfo';
         $this->methodCallAllowed[] = 'addTabToUrlHistory';
         if ($oUser && $oUser->oAccessManager && $oUser->oAccessManager->PermitFunction('dbchangelog-manager')) {
-            $this->methodCallAllowed[] = 'ChangeActiveDbCounter';
             $this->methodCallAllowed[] = 'SwitchLoggingState';
-            $this->methodCallAllowed[] = 'AddCounter';
             $this->methodCallAllowed[] = 'UpdateUnixTimeStamp';
         }
     }
