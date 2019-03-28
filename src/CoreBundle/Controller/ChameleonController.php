@@ -843,10 +843,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     protected function handleRequest($pagedef)
     {
-        $request = $this->getRequest();
-        if (null !== $pagedef) {
-            $request->query->set('pagedef', $pagedef);
-        }
     }
 
     /**

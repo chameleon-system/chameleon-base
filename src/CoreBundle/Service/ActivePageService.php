@@ -169,15 +169,6 @@ class ActivePageService implements ActivePageServiceInterface
         if ('cms_pagedef' === $route) {
             return $this->urlUtil->getArrayAsUrl($finalParameterList, PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'?', '&');
         }
-        /*
-         * The link may not contain a pagedef parameter. It is intended to solve this the "right" way by not adding
-         * the parameter to the query parameters in the first place (ticket #30278), but as long as the request contains
-         * this parameter, we need to deal with it manually.
-         */
-        if (isset($finalParameterList['pagedef'])
-            && !$this->requestInfoService->isBackendMode()) {
-            unset($finalParameterList['pagedef']);
-        }
 
         /*
          * Routes have the form "routeName" or "routeName-portalId-languageIso"
