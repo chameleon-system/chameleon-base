@@ -33,12 +33,12 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
     public function __construct(UrlUtil $urlUtil = null, MediaManagerUrlGeneratorInterface $mediaManagerUrlGenerator = null)
     {
         if (null === $urlUtil) {
-            $this->urlUtil = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+            $this->urlUtil = ServiceLocator::get('chameleon_system_core.util.url');
         } else {
             $this->urlUtil = $urlUtil;
         }
         if (null === $mediaManagerUrlGenerator) {
-            $this->mediaManagerUrlGenerator = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.media_manager.url_generator');
+            $this->mediaManagerUrlGenerator = ServiceLocator::get('chameleon_system_media_manager.url_generator');
         } else {
             $this->mediaManagerUrlGenerator = $mediaManagerUrlGenerator;
         }

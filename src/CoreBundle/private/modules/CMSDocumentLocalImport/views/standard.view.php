@@ -5,7 +5,7 @@ if (!empty($data['errorMessage'])) {
     if (count($data['dirListing']) > 0) {
         ?>
     <div style="padding-bottom: 10px;">
-        <?=TGlobal::Translate('chameleon_system_core.cms_module_media_local_media.select_target_folder'); ?>:
+        <?=TGlobal::Translate('chameleon_system_core.document_local_import.select_target_folder'); ?>:
     </div>
     <form method="get" name="importForm" action="<?=PATH_CMS_CONTROLLER; ?>" accept-charset="UTF-8">
         <input type="hidden" name="pagedef" value="CMSDocumentLocalImport"/>
@@ -21,11 +21,11 @@ if (!empty($data['errorMessage'])) {
 
                 $sName = $aDir['directory'];
                 if ('base' == $aDir['directory']) {
-                    $sName = TGlobal::Translate('chameleon_system_core.cms_module_media_local_import.root_path');
+                    $sName = TGlobal::Translate('chameleon_system_core.document_local_import.root_path');
                 }
                 echo '<option value="'.$sValue.'">'.$sName.' ('.
                     TGlobal::Translate(
-                        'chameleon_system_core.cms_module_media_local_media.file_count',
+                        'chameleon_system_core.document_local_import.file_count',
                         array(
                             '%count%' => $aDir['filecount'],
                         )
@@ -35,13 +35,13 @@ if (!empty($data['errorMessage'])) {
         </select>
 
         <div style="padding-top: 10px;">
-            <div><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_media_local_media.mark_as_private')); ?></div>
+            <div><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.document_local_import.mark_as_private')); ?></div>
             <input type="radio" name="private" value="1"
                    checked="checked"> <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_boolean.yes')); ?>&nbsp;&nbsp;
             <input type="radio" name="private" value="0"> <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_boolean.no')); ?>
         </div>
         <div style="padding-top: 10px;"><?php
-            echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.cms_module_media_local_media.action_import'), 'javascript:CHAMELEON.CORE.showProcessingModal();document.importForm.submit();', 'fas fa-file-import'); ?></div>
+            echo TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.document_local_import.action_import'), 'javascript:CHAMELEON.CORE.showProcessingModal();document.importForm.submit();', 'fas fa-file-import'); ?></div>
     </form>
 
     <?php
@@ -56,7 +56,7 @@ if (!empty($data['errorMessage'])) {
     if (isset($data['importSuccess'])) {
         ?>
     <div style="padding-top: 20px; padding-bottom: 10px;">
-        <h1><?=TGlobal::Translate('chameleon_system_core.cms_module_media_local_media.import_result'); ?>:</h1></div>
+        <h1><?=TGlobal::Translate('chameleon_system_core.document_local_import.import_result'); ?>:</h1></div>
     <script type="text/javascript">
         top.showFileList('<?=$nodeID; ?>');
     </script>
