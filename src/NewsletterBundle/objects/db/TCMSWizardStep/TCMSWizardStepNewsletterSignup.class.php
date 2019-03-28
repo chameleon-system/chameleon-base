@@ -120,15 +120,4 @@ class TCMSWizardStepNewsletterSignup extends TdbCmsWizardStep
 
         return $aViewVariables;
     }
-
-    /**
-     * return true if you want to permit caching. if you do, make sure to overwrite the
-     * other cache methods as well.
-     *
-     * @return bool
-     */
-    protected function AllowCaching()
-    {
-        return true;
-    }
 }

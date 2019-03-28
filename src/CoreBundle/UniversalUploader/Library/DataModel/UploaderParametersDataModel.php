@@ -21,23 +21,16 @@ class UploaderParametersDataModel
 
     /**
      * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    private $bIgnoreWorkflow = false;
-
-    /**
-     * @var bool
      */
     private $proportionExactMatch = false;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     private $maxUploadHeight;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     private $maxUploadWidth;
 
@@ -90,26 +83,6 @@ class UploaderParametersDataModel
      * @var string|null
      */
     private $uploadSuccessCallback;
-
-    /**
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function isBIgnoreWorkflow()
-    {
-        return $this->bIgnoreWorkflow;
-    }
-
-    /**
-     * @param bool $bIgnoreWorkflow
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function setBIgnoreWorkflow($bIgnoreWorkflow)
-    {
-        $this->bIgnoreWorkflow = $bIgnoreWorkflow;
-    }
 
     /**
      * @return bool
@@ -219,7 +192,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getRecordID()
     {
@@ -227,7 +200,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @param null|string $recordID
+     * @param string|null $recordID
      *
      * @throws InvalidParameterValueException
      */
@@ -303,7 +276,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getTreeNodeID()
     {
@@ -311,7 +284,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @param null|string $treeNodeID
+     * @param string|null $treeNodeID
      *
      * @throws InvalidParameterValueException
      */
@@ -356,7 +329,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getUploadSuccessCallback()
     {
@@ -364,7 +337,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @param null|string $uploadSuccessCallback
+     * @param string|null $uploadSuccessCallback
      *
      * @throws InvalidParameterValueException
      */
@@ -395,12 +368,6 @@ class UploaderParametersDataModel
             $parameterArray['bProportionExactMatch'] = '1';
         } else {
             $parameterArray['bProportionExactMatch'] = '0';
-        }
-
-        if ($this->isBIgnoreWorkflow()) {
-            $parameterArray['bIgnoreWorkflow'] = '1';
-        } else {
-            $parameterArray['bIgnoreWorkflow'] = '0';
         }
 
         if ($this->isSingleMode()) {

@@ -24,8 +24,7 @@ class HtmlHelperTest extends TestCase
     {
         $output = new BufferedOutput();
         $helper = new HtmlHelper($output);
-        $helper->setHtmlText('foobar');
-        $helper->render();
+        $helper->render('foobar');
 
         $this->assertEquals("foobar\n", $output->fetch());
     }
@@ -37,8 +36,7 @@ class HtmlHelperTest extends TestCase
     {
         $output = new BufferedOutput();
         $helper = new HtmlHelper($output);
-        $helper->setHtmlText('foo<br>bar<br />baz');
-        $helper->render();
+        $helper->render('foo<br>bar<br />baz');
 
         $this->assertEquals("foo\nbar\nbaz\n", $output->fetch());
     }
@@ -50,8 +48,7 @@ class HtmlHelperTest extends TestCase
     {
         $output = new BufferedOutput();
         $helper = new HtmlHelper($output);
-        $helper->setHtmlText('foo<br>       bar     <br />              baz');
-        $helper->render();
+        $helper->render('foo<br>       bar     <br />              baz');
 
         $this->assertEquals("foo\n bar \n baz\n", $output->fetch());
     }
@@ -64,8 +61,7 @@ class HtmlHelperTest extends TestCase
         $output = new BufferedOutput();
         $output->setDecorated(true);
         $helper = new HtmlHelper($output);
-        $helper->setHtmlText('foo<br><h1>bar</h1><br /><h2>baz</h2>');
-        $helper->render();
+        $helper->render('foo<br><h1>bar</h1><br /><h2>baz</h2>');
 
         $this->assertEquals("foo\n[31;1mbar[39;22m\n\n[31;1mbaz[39;22m\n\n", $output->fetch());
     }
@@ -78,8 +74,7 @@ class HtmlHelperTest extends TestCase
         $output = new BufferedOutput();
         $output->setDecorated(true);
         $helper = new HtmlHelper($output);
-        $helper->setHtmlText('foo<br><h1>bar</h1><h2>baz</h2>bazz');
-        $helper->render();
+        $helper->render('foo<br><h1>bar</h1><h2>baz</h2>bazz');
 
         $this->assertEquals("foo\n[31;1mbar[39;22m\n[31;1mbaz[39;22m\nbazz\n", $output->fetch());
     }
@@ -92,8 +87,7 @@ class HtmlHelperTest extends TestCase
         $output = new BufferedOutput();
         $output->setDecorated(true);
         $helper = new HtmlHelper($output);
-        $helper->setHtmlText('foo<font class="deineMutterHatEineKlasse">bar</font><ul><li>baz</li></ul>');
-        $helper->render();
+        $helper->render('foo<font class="deineMutterHatEineKlasse">bar</font><ul><li>baz</li></ul>');
 
         $this->assertEquals("foobarbaz\n", $output->fetch());
     }
@@ -109,8 +103,7 @@ class HtmlHelperTest extends TestCase
         $stdClass = new \stdClass();
         $stdClass->message = 'foo';
         $stdClass->message2 = 'bar';
-        $helper->setHtmlText($stdClass);
-        $helper->render();
+        $helper->render($stdClass);
 
         $this->assertEquals("foo\nbar\n", $output->fetch());
     }
@@ -123,9 +116,7 @@ class HtmlHelperTest extends TestCase
         $output = new BufferedOutput();
         $output->setDecorated(true);
         $helper = new HtmlHelper($output);
-        $array = array('foo', 'bar');
-        $helper->setHtmlText($array);
-        $helper->render();
+        $helper->render(['foo', 'bar']);
 
         $this->assertEquals("foo\nbar\n", $output->fetch());
     }

@@ -437,7 +437,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
 
     /**
      * @param string      $sType
-     * @param null|string $sFile
+     * @param string|null $sFile
      *
      * @return array
      */
@@ -628,9 +628,6 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     protected function CollectExternalResourcesJSCallback($aMatch)
     {
         $sReturn = $aMatch[0];
-        // ignore if type = print
-        $sTmp = strtolower(str_replace(' ', '', $aMatch[0]));
-        $sTmp = str_replace("'", '"', $sTmp);
         $sJSName = $aMatch[2].'.js';
         if (0 === strpos($aMatch[3], '?')) {
             $sJSName .= $aMatch[3];

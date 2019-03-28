@@ -18,7 +18,6 @@ use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use ChameleonSystem\DatabaseMigration\Constant\MigrationRecorderConstants;
 use ChameleonSystem\DatabaseMigration\Exception\AccessDeniedException;
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
 use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
@@ -34,23 +33,6 @@ use Symfony\Component\Translation\TranslatorInterface;
 /**/
 class MTHeader extends TCMSModelBase
 {
-    /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    const DB_LOGGING_STATE = 'DB_LOGGING_STATE';
-    /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    const CONFIGPARAM_DB_COUNTER = 'dbversion-counter';
-    /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    const CONFIGPARAM_TIMESTAMP = 'dbversion-timestamp';
-    /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    const TIMESTAMP_CREATED_IN_SESSION = 'TIMESTAMP_CREATED_IN_SESSION';
-
     /**
      * {@inheritdoc}
      */
@@ -99,7 +81,6 @@ class MTHeader extends TCMSModelBase
                 $this->data['breadcrumb'] = $breadcrumb->GetBreadcrumb(true);
 
                 $this->mapCacheClearUrl();
-                $this->FetchCounterInformation();
 
                 if (array_key_exists('chameleon_header', $_COOKIE) && 'hidden' === $_COOKIE['chameleon_header']) {
                     $this->data['bHeaderIsHidden'] = true;
@@ -251,7 +232,7 @@ class MTHeader extends TCMSModelBase
     }
 
     /**
-     * @return null|TdbCmsPortalList
+     * @return TdbCmsPortalList|null
      */
     protected function GetPortalList()
     {
@@ -319,9 +300,7 @@ class MTHeader extends TCMSModelBase
         $this->methodCallAllowed[] = 'GetCurrentTransactionInfo';
         $this->methodCallAllowed[] = 'addTabToUrlHistory';
         if ($oUser && $oUser->oAccessManager && $oUser->oAccessManager->PermitFunction('dbchangelog-manager')) {
-            $this->methodCallAllowed[] = 'ChangeActiveDbCounter';
             $this->methodCallAllowed[] = 'SwitchLoggingState';
-            $this->methodCallAllowed[] = 'AddCounter';
             $this->methodCallAllowed[] = 'UpdateUnixTimeStamp';
         }
     }
@@ -372,37 +351,7 @@ class MTHeader extends TCMSModelBase
     }
 
     /**
-     * @deprecated since 6.3.0 - not used anymore, we don't show a user icon in the header toolbar anymore.
-     *
-     * loads the user image or a default icon.
-     */
-    protected function _LoadUserImage()
-    {
-        $currentUser = TCMSUser::GetActiveUser();
-        if (null === $currentUser) {
-            return;
-        }
-        $userImage = TGlobal::GetPathTheme().'/images/icons/user.png';
-
-        $imageID = TCMSUser::GetActiveUser()->fieldImages;
-        if ($imageID >= 1000 || !is_numeric($imageID)) {
-            $oImage = new TCMSImage();
-            if (null !== $oImage) {
-                $oImage->Load($imageID);
-                $oThumb = $oImage->GetSquareThumbnail(40);
-                if (null !== $oThumb) {
-                    $userImage = $oThumb->GetFullURL();
-                }
-            }
-        }
-
-        $this->data['userImage'] = $userImage;
-    }
-
-    /**
      * Empties the CMS cache completely, including the joined static JS/CSS includes.
-     * Note: This method is independent from the deprecated method in TModelBase. Do not use it interchangeably and do
-     * not remove it when removing the parent method.
      *
      * @return string - message to show as toaster
      */
@@ -554,53 +503,6 @@ class MTHeader extends TCMSModelBase
     }
 
     /**
-     * adds a counter (inserts a new record).
-     *
-     * @param null|string $sSystemName
-     * @param string      $sName
-     * @param int         $iValue
-     *
-     * @return stdClass
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public function AddCounter($sSystemName = null, $sName = '', $iValue = 0)
-    {
-        $oResponse = new stdClass();
-        $oResponse->sToasterMessage = '';
-
-        return $oResponse;
-    }
-
-    /**
-     * changes the active database-counter.
-     *
-     * @return string - message to show as toaster
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public function ChangeActiveDbCounter()
-    {
-        return json_encode([
-            'newCounter' => MigrationRecorderConstants::MIGRATION_SCRIPT_NAME,
-            'toasterMessage' => '',
-        ]);
-    }
-
-    /**
-     * fetches counter list and active counter and sets them into data array.
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function FetchCounterInformation()
-    {
-        $this->data['changeActiveDbCounterURL'] = '#';
-        $this->data['sAddCounterURL'] = '#';
-        $this->data['oActiveCounter'] = TdbCmsConfigParameter::GetNewInstance();
-        $this->data['oCounterList'] = &TdbCmsConfigParameterList::GetList();
-    }
-
-    /**
      * ajax method for changing the current db logging state.
      *
      * @return string
@@ -712,8 +614,7 @@ class MTHeader extends TCMSModelBase
     {
         $includes = parent::GetHtmlHeadIncludes();
         $includes[] = '<link href="'.TGlobal::GetPathTheme().'/images/favicon.ico" rel="shortcut icon" />';
-        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/bootstrap/css/glyph-icons.css?v4.1').'" media="screen" rel="stylesheet" type="text/css" />';
-        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fontawesome-free-5.5.0/css/all.css').'" media="screen" rel="stylesheet" type="text/css" />';
+        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fontawesome-free-5.8.1/css/all.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fileIconVectors/file-icon-square-o.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
         return $includes;
@@ -731,8 +632,6 @@ class MTHeader extends TCMSModelBase
         }
 
         $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
-        $includes[] = '<link href="/chameleon/blackbox/iconFonts/foundation/foundation-icons.css" media="screen" rel="stylesheet" type="text/css" />';
-        $includes[] = '<link href="/chameleon/blackbox/iconFonts/ionicons/ionicons.css" media="screen" rel="stylesheet" type="text/css" />';
 
         $sessionTimeout = @ini_get('session.gc_maxlifetime');
         if (!empty($sessionTimeout)) {
@@ -746,18 +645,6 @@ class MTHeader extends TCMSModelBase
         }
 
         return $includes;
-    }
-
-    /**
-     * loads the active workflow transaction object and returns an object used for ajax calls.
-     *
-     * @return stdClass
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function GetCurrentTransactionInfo()
-    {
-        return new stdClass();
     }
 
     /**

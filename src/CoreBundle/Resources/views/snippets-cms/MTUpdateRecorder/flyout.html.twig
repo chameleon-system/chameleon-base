@@ -15,15 +15,6 @@
         $('#toggleDbRecordingButton').attr('value', enabled ? '{{'chameleon_system_core.db_logger.stop_recording'|trans({}, 'admin')}}' : '{{'chameleon_system_core.db_logger.start_recording'|trans({}, 'admin')}}');
     }
 
-    /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    function handleDbCounterUpdate(response)
-    {
-        var jsonresponse = $.parseJSON(response);
-        DisplayAjaxMessage(jsonresponse['toasterMessage']);
-    }
-
     function handleTimestampUpdate(message)
     {
         var timestampElement = $("#currentTimestamp");
@@ -33,26 +24,11 @@
         CloseModalIFrameDialog();
     }
 
-    /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    function handleFilenameClick()
-    {
-    }
-
     $(function() {
         $('.dropdown-menu').find('form').click(function (e) {
             e.stopPropagation();
         });
-
-        /**
-         * @deprecated since 6.2.0 - no longer used.
-         */
-        function split( val ) {
-            return val.split( /,\s*/ );
-        }
     });
-
 </script>
 
     <li class="nav-item px-2 dropdown">

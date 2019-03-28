@@ -2,7 +2,7 @@
 {# existingCrop \ChameleonSystem\ImageCrop\DataModel\ImageCropDataModel #}
 {# preset \ChameleonSystem\ImageCrop\DataModel\ImageCropPresetDataModel #}
 <form action="{{ formAction | e('html_attr') }}" method="post"
-      class="snippetImageCropImageCropEditorImageCropEditorForm">
+      class="snippetImageCropImageCropEditorImageCropEditorForm mb-4">
 
     {% for urlParameterKey, urlParameterValue in urlParameters %}
         <input type="hidden" name="{{ urlParameterKey | e('html_attr') }}"
@@ -22,18 +22,27 @@
     <input type="hidden" name="width" id="width" value="">
     <input type="hidden" name="height" id="height" value="">
 
-    <input type="text" name="name" value="{{ existingCrop.name }}" class="form-control crop-name"
-           placeholder="{{ 'chameleon_system_image_crop.editor.crop_name_placeholder' | trans }}"{% if not aspectRatio %} required{% endif %}>
+    <div class="d-flex flex-wrap">
+        {% set placeholderTranslationsKey = 'chameleon_system_image_crop.editor.crop_name_placeholder' %}
+        {% if not aspectRatio %}
+            {% set placeholderTranslationsKey = 'chameleon_system_image_crop.editor.crop_name_placeholder_custom_size' %}
+        {% endif %}
+        <input type="text" name="name" value="{{ existingCrop.name }}" class="form-control mr-2 mt-2 crop-name"
+               placeholder="{{ placeholderTranslationsKey | trans }}"{% if not aspectRatio %} required{% endif %}>
 
-    <button type="submit" class="btn btn-success">
-        <span class="fas fa-save"></span> {{ 'chameleon_system_image_crop.editor.save' | trans }}
-    </button>
+        {% set savingMode = 'chameleon_system_image_crop.editor.saving_mode.create_new' | trans %}
+        {% if existingCrop.id %}
+            {% set savingMode = 'chameleon_system_image_crop.editor.saving_mode.update_existing' | trans %}
+        {% endif %}
 
-    {% if enableCallback and existingCrop.id %}
-        <button type="submit" class="btn btn-default">
-            <span class="fas fa-expand"></span> {{ 'chameleon_system_image_crop.editor.select' | trans }}
+        {% set saveButtonTranslationKey = 'chameleon_system_image_crop.editor.save' %}
+        {% if enableCallback %}
+            {% set saveButtonTranslationKey = saveButtonTranslationKey ~ '_and_set' %}
+        {% endif %}
+        <button type="submit" class="btn btn-success mr-2 mt-2">
+            <span class="fas fa-save"></span> {{ saveButtonTranslationKey | trans({'%savingMode%': savingMode}) }}
         </button>
-    {% endif %}
+    </div>
 
 </form>
 

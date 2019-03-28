@@ -49,7 +49,7 @@ class ImageCropDataModel
     private $height;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $name;
 
@@ -200,7 +200,7 @@ class ImageCropDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getName()
     {
@@ -208,7 +208,7 @@ class ImageCropDataModel
     }
 
     /**
-     * @param null|string $name
+     * @param string|null $name
      */
     public function setName($name)
     {

@@ -91,11 +91,7 @@ class CMSModuleWYSIWYGImage extends TCMSModelBase
                 $fullImageURL = $oImage->GetFullURL();
                 $sThumbURL = $fullImageURL;
             } else {
-                if ('flv' == $sFileType || 'f4v' == $sFileType) {
-                    $fullImageURL = URL_USER_CMS_PUBLIC.'/blackbox/flash/flvplayer/playerdummy.php?width='.$oImage->aData['width'].'&height='.$oImage->aData['height'].'&desc='.urlencode($oImage->aData['description']);
-                } else {
-                    $fullImageURL = $oImage->GetRelativeURL();
-                }
+                $fullImageURL = $oImage->GetRelativeURL();
             }
 
             $returnArray = array();
@@ -117,7 +113,6 @@ class CMSModuleWYSIWYGImage extends TCMSModelBase
         $aIncludes = parent::GetHtmlHeadIncludes();
         // first the includes that are needed for the all fields
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
 
         return $aIncludes;
     }

@@ -178,7 +178,7 @@ class ChameleonSystemCoreExtension extends Extension
     private function addBackendConfig(array $backendConfig, ContainerBuilder $container): void
     {
         $definition = $container->getDefinition('chameleon_system_core.backend_controller');
-        $definition->addMethodCall('setHomePagedef', [ $backendConfig['home_pagedef'] ]);
+        $definition->addMethodCall('setHomePagedef', [$backendConfig['home_pagedef']]);
     }
 
     /**

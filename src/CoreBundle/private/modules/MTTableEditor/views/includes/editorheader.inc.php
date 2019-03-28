@@ -104,11 +104,10 @@ $oController = TGlobal::GetController();
                 'sRestrictionField' => $sRestrictionField,
                 'sRestriction' => $sRestriction,
                 'recordID' => $data['id'],
-            ], PATH_CMS_CONTROLLER.'?', '&');
-            ?>
+            ], PATH_CMS_CONTROLLER.'?', '&'); ?>
 
             <div class="mt-2">
-                <select id="quicklookuplist" class="form-control" data-select2-placeholder='<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')) ?>' data-select2-ajax='<?= $sAjaxURL ?>'></select>
+                <select id="quicklookuplist" class="form-control" data-select2-placeholder='<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')); ?>' data-select2-ajax='<?= $sAjaxURL; ?>'></select>
             </div>
 
         <?php

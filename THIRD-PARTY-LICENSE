@@ -22,47 +22,32 @@ MIT License
 - Sensio/DistributionBundle - https://github.com/sensiolabs/SensioDistributionBundle
 - Sensio/SecurityChecker - https://github.com/sensiolabs/security-checker
 - LessPHP, modified by ESONO AG - http://leafo.net/lessphp/
-- SWFObject - https://github.com/swfobject/swfobject
 
 - jQuery - http://jquery.com
 - jQuery UI - http://jqueryui.com
 - jQuery GoogleMapsV3OverviewControl plugin - https://github.com/drcoen/Google-Maps-API-V3-Overview-Control
 - jQuery-bgiframe plugin - https://github.com/brandonaaron/bgiframe
-- jQuery-blockUI plugin - http://malsup.com/jquery/block/
-- jQuery Chosen plugin - http://harvesthq.github.io/chosen/
 - jQuery ContextMenu plugin - http://medialize.github.io/jQuery-contextMenu/
 - jQuery Cookie plugin - https://github.com/js-cookie/js-cookie
 - jQuery File Download plugin - http://johnculviner.com/jquery-file-download-plugin-for-ajax-like-feature-rich-file-downloads/
 - jQuery File Upload plugin - https://github.com/blueimp/jQuery-File-Upload
-- jQuery Flash plugin - http://jquery.lukelutman.com/plugins/flash/
 - jQuery Form plugin - http://malsup.com/jquery/form/
 - jQuery Hotkeys plugin - https://github.com/jeresig/jquery.hotkeys
-- jQuery jBreadCrumb plugin - http://www.comparenetworks.com/developers/jqueryplugins/jbreadcrumb.html
-- jQuery jqDnR - part of jqModal - https://github.com/briceburg/jqModal
 - jQuery jsTree plugin - https://www.jstree.com/
-- jQuery Masked Input plugin - http://digitalbush.com/projects/masked-input-plugin/
 - jQuery Modal plugin
 - jQuery Select2 - https://github.com/select2/select2/
-- jQuery Tag Input modified by ESONO AG - http://roberto.open-lab.com/2010/02/10/a-delicious-javascript-tagging-input-field/
-- jQuery Wayfarer Tooltip plugin - http://www.wayfarerweb.com/wtooltip.php
 
 - Bootstrap - http://getbootstrap.com/
 - Cookie Consent https://cookieconsent.insites.com/
 - CoreUI - https://http://coreui.io
 - Cropper.js - https://github.com/fengyuanchen/cropperjs
-- HTML5 Shiv - https://github.com/afarkas/html5shiv
 - moment.js - https://github.com/moment/moment/
 - perfect-scrollbar - https://github.com/utatti/perfect-scrollbar/
-- Respond - https://github.com/scottjehl/Respond
-- RWD Images - https://github.com/stowball/jQuery-rwdImageMaps
 - SocialSharePrivacy - http://panzi.github.io/SocialSharePrivacy/
 - Tempus Dominus - https://github.com/tempusdominus/bootstrap-4/
 - Thickbox modified by ESONO AG - http://codylindley.com/thickbox/
 
 - Font Awesome - https://fontawesome.com/
-- Foundation Icon Font - https://github.com/zurb/foundation-icons
-- Ionicons - http://ionicons.com/
-- file type icons generated with https://github.com/splitbrain/file-icon-generator
 - /src/CoreBundle/Resources/public/themes/standard/images/icons/user.png - https://github.com/material-components/material-components-web/
 
 Apache License 2.0
@@ -105,7 +90,6 @@ LGPLv2.1
 
 - HTMLPurifier - http://htmlpurifier.org/
 - PHPMailer - https://github.com/PHPMailer/PHPMailer
-- pnotify - http://sciactive.com/pnotify/ (up to version 2.0.1)
 - IDNA Convert - https://github.com/phpWhois/idna-convert
 
 
@@ -113,13 +97,6 @@ Creative Commons Attribution 2.5 License
 ----------------------------------------
 (see the end of this file for the license text)
 - Silk Icons http://famfamfam.com/lab/icons/silk/
-
-
-WTFPL License
--------------
-(see the end of this file for the license text)
-
-- jQuery Timers plugin - https://github.com/patryk/jquery.timers
 
 
 Free
@@ -626,26 +603,6 @@ UNLESS OTHERWISE MUTUALLY AGREED TO BY THE PARTIES IN WRITING, LICENSOR OFFERS T
     If any provision of this License is invalid or unenforceable under applicable law, it shall not affect the validity or enforceability of the remainder of the terms of this License, and without further action by the parties to this agreement, such provision shall be reformed to the minimum extent necessary to make such provision valid and enforceable.
     No term or provision of this License shall be deemed waived and no breach consented to unless such waiver or consent shall be in writing and signed by the party to be charged with such waiver or consent.
     This License constitutes the entire agreement between the parties with respect to the Work licensed here. There are no understandings, agreements or representations with respect to the Work not specified here. Licensor shall not be bound by any additional provisions that may appear in any communication from You. This License may not be modified without the mutual written agreement of the Licensor and You.
-
-
-WTFPL License
--------------
-
-DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-                    Version 2, December 2004
-
- Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
-
- Everyone is permitted to copy and distribute verbatim or modified
- copies of this license document, and changing it is allowed as long
- as the name is changed.
-
-            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
-
-  0. You just DO WHAT THE FUCK YOU WANT TO.
-
-
 
 
 CC0

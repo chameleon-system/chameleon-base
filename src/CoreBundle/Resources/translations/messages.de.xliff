@@ -14,11 +14,6 @@
                 <source>chameleon_system_core.text.wait_for_processing</source>
                 <target>wird verarbeitet...</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.error.flash_required">
-                <source>chameleon_system_core.error.flash_required</source>
-                <target>Sie benötigen den Adobe Flash Player Version %iVersion%, um das Video abspielen zu können</target>
-                <note>@deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.</note>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.text.redirect_text">
                 <source>chameleon_system_core.text.redirect_text</source>
                 <target>Sollten Sie nicht automatisch weitergeleitet werden, klicken Sie %linkstart%hier%linkend%.</target>

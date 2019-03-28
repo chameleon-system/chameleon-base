@@ -40,14 +40,6 @@ class RoutingUtilCacheDecorator implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getRouteForTree(TdbCmsTree $tree, $controller, TdbCmsPortal $portal, TdbCmsLanguage $language)
-    {
-        return $this->subject->getRouteForTree($tree, $controller, $portal, $language);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getLinkForTreeNode(TdbCmsTree $tree, TdbCmsLanguage $language)
     {
         return $this->subject->getLinkForTreeNode($tree, $language);
@@ -67,14 +59,6 @@ class RoutingUtilCacheDecorator implements RoutingUtilInterface
     public function getDomainRequirement(TdbCmsPortal $portal, TdbCmsLanguage $language, $secure)
     {
         return $this->subject->getDomainRequirement($portal, $language, $secure);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPageDataForPagePath($pagePath, TdbCmsPortal $portal, TdbCmsLanguage $language)
-    {
-        return $this->subject->getPageDataForPagePath($pagePath, $portal, $language);
     }
 
     /**

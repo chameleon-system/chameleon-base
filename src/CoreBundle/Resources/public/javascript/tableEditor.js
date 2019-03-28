@@ -126,11 +126,7 @@ function SetImageResponse(data, responseMessage) {
         imageDiv.style.display = 'block';
         noImageDiv.style.display = 'none';
 
-        if (data.isFlashVideo) {
-            InitVideoPlayer(data.uniqueID, data.FLVPlayerURL, data.maxThumbWidth, data.FLVPlayerHeight);
-        } else {
-            initLightBox();
-        }
+        initLightBox();
     }
 
     CloseModalIFrameDialog();
@@ -394,24 +390,6 @@ function loadMltPositionList(tableSQLName, sRestriction, sRestrictionField) {
     CreateModalIFrameDialogCloseButton(url, 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
 }
 
-/**
- * @deprecated since 6.3.0
- * use: CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(iFrameId, url) instead.
- *
- * MLT field: show/hide MLT content
- */
-function showMLTField(objID, outerObjID, url) {
-    var mltID = document.getElementById(objID);
-
-    var $objID = $('#' + objID);
-    if ($objID.is(':hidden')) {
-        mltID.src = url;
-        $objID.removeClass('d-none');
-    } else {
-        $objID.addClass('d-none');
-    }
-}
-
 function setTableEditorListFieldState(triggerDiv, requestURL) {
     triggerDiv = $(triggerDiv);
     var state = 0;
@@ -458,30 +436,6 @@ function CheckRefreshReturn(data) {
         }
     }
     window.setTimeout("RefreshRecordEditLock()", 30000);
-}
-
-/*
- * @deprecated since 6.3.0 - workflow is not supported anymore
- */
-function PublishViaAjaxCallback(data, statusText) {
-    CloseModalIFrameDialog();
-
-    if (data != false && data != null) {
-        if (data.error) {
-            top.toasterMessage('Fehler: ' + data.error, 'ERROR');
-        } else {
-            if (data.message && data.message != '') {
-                top.toasterMessage(data.message, 'MESSAGE');
-            } else {
-                top.toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.msg_published'), 'MESSAGE');
-                setTimeout('ReloadMainPage()', 2000);
-
-            }
-            if (data.name && data.name != '' && document.getElementById('breadcrumbLastNode')) document.getElementById('breadcrumbLastNode').innerHTML = data.name;
-        }
-    } else {
-        top.toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_publish'), 'ERROR');
-    }
 }
 
 function ReloadMainPage() {
@@ -918,13 +872,6 @@ CHAMELEON.CORE.MTTableEditor.initInputChangeObservation = function () {
         CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
     });
 };
-
-/**
- * @deprecated since 6.3.0 - use CHAMELEON.CORE.MTTableEditor.initInputChangeObservation(); instead
- */
-function SetChangedDataMessage() {
-    CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
-}
 
 CHAMELEON.CORE.MTTableEditor.initHelpTexts = function () {
     $(".help-text-button").click(function () {

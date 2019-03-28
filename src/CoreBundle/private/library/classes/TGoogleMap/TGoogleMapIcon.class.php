@@ -33,12 +33,12 @@ class TGoogleMapIcon
     public $shadow = '';
 
     /**
-     * @var null|int
+     * @var int|null
      */
     public $width = null;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     public $height = null;
 

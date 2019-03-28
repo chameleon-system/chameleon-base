@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
 
 class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugin
@@ -33,7 +35,7 @@ class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugi
     {
         $oThemeBlock = TdbPkgCmsThemeBlock::GetNewInstance();
         if ($oThemeBlock->LoadFromField('system_name', $contentIdentifier)) {
-            $oPortal = TTools::GetActivePortal();
+            $oPortal = $this->getPortalDomainService()->getActivePortal();
             if ($oPortal && !empty($oPortal->fieldPkgCmsThemeId)) {
                 $sQuery = 'SELECT * FROM `pkg_cms_theme_block_layout`
                         INNER JOIN `pkg_cms_theme_pkg_cms_theme_block_layout_mlt` ON `pkg_cms_theme_pkg_cms_theme_block_layout_mlt`.`target_id` = `pkg_cms_theme_block_layout`.`id`
@@ -74,7 +76,7 @@ class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugi
         $sThemeBlock = '<!-- theme block '.TGlobal::OutHTML($sSystemName).' not found -->';
         $oThemeBlock = TdbPkgCmsThemeBlock::GetNewInstance();
         if ($oThemeBlock->LoadFromField('system_name', $sSystemName)) {
-            $oPortal = TTools::GetActivePortal();
+            $oPortal = $this->getPortalDomainService()->getActivePortal();
             if ($oPortal && !empty($oPortal->fieldPkgCmsThemeId)) {
                 $sQuery = "SELECT * FROM `pkg_cms_theme_block_layout`
                         INNER JOIN `pkg_cms_theme_pkg_cms_theme_block_layout_mlt` ON `pkg_cms_theme_pkg_cms_theme_block_layout_mlt`.`target_id` = `pkg_cms_theme_block_layout`.`id`
@@ -120,6 +122,11 @@ class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugi
     private function getDatabaseConnection()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+    }
+
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**

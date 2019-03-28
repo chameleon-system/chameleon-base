@@ -12,6 +12,9 @@
 use ChameleonSystem\CoreBundle\EventListener\AddBackendToasterMessageListener;
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -55,13 +58,11 @@ class TCMSMessageManager
      */
     public static function GetInstance($bReload = false)
     {
-        $oInstance = null;
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ServiceLocator::get('request_stack')->getCurrentRequest();
         if ((null === $request) || (false === $request->getSession()->isStarted())) {
             return null;
         }
         if ($bReload) {
-            $oInstance = null;
             if (true === $request->getSession()->has(self::SESSION_KEY_NAME)) {
                 $request->getSession()->remove(self::SESSION_KEY_NAME);
             }
@@ -72,13 +73,6 @@ class TCMSMessageManager
         }
 
         return $request->getSession()->get(self::SESSION_KEY_NAME);
-    }
-
-    /**
-     * @deprecated
-     */
-    public function SaveToSession()
-    {
     }
 
     /**
@@ -96,11 +90,11 @@ class TCMSMessageManager
         if (TGlobal::IsCMSMode()) {
             $this->AddBackendMessage($sConsumerName, $sMessageCode, $aMessageCodeParameters);
         } else {
-            $iPortalId = TTools::GetActivePortal()->id;
+            $iPortalId = $this->getPortalDomainService()->getActivePortal()->id;
 
             /** @var $oMessage TdbCmsMessageManagerMessage */
             $oMessage = TdbCmsMessageManagerMessage::GetNewInstance();
-            $oMessage->SetLanguage(TGlobal::GetActiveLanguageId());
+            $oMessage->SetLanguage($this->getLanguageService()->getActiveLanguageId());
 
             // try to load the message. if this fails, we create the message....
             if (!$oMessage->LoadFromFields(array('name' => $sMessageCode, 'cms_portal_id' => $iPortalId))) {
@@ -114,12 +108,7 @@ class TCMSMessageManager
                 $sDescription = $this->GetDefaultDescription($sConsumerName, $aMessageCodeParameters);
                 $sErrorMessage = $this->GetDefaultMessage($sMessageCode);
 
-                /*$oConfig =& TdbCmsConfig::GetInstance();
-                if (TGlobal::GetActiveLanguageId() !== $oConfig->fieldTranslationBaseLanguageId) $sSuffix = '__'.TGlobal::GetLanguagePrefix();
-                else*/
-                $sSuffix = '';
-
-                $aPostData = array('cms_portal_id' => $iPortalId, 'name' => $sMessageCode, 'description'.$sSuffix => $sDescription, 'message'.$sSuffix => $sErrorMessage);
+                $aPostData = array('cms_portal_id' => $iPortalId, 'name' => $sMessageCode, 'description' => $sDescription, 'message' => $sErrorMessage);
                 if (null !== $oMessage->id) {
                     $aPostData['id'] = $oMessage->id;
                 }
@@ -464,7 +453,17 @@ class TCMSMessageManager
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
+    }
+
+    private function getLanguageService(): LanguageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -472,7 +471,7 @@ class TCMSMessageManager
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
     }
 
     /**
@@ -480,6 +479,6 @@ class TCMSMessageManager
      */
     private function getEventDispatcher()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('event_dispatcher');
+        return ServiceLocator::get('event_dispatcher');
     }
 }

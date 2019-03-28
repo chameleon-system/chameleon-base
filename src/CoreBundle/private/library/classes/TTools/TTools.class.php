@@ -14,11 +14,9 @@ use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\Corebundle\Util\UrlUtil;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -159,21 +157,6 @@ class TTools
     }
 
     /**
-     * @see TTools:sanitizeFilename()
-     *
-     * @param string      $filename
-     * @param string|null $forceExtension
-     *
-     * @return string
-     *
-     * @deprecated use sanitizeFilename() instead
-     */
-    public static function sanitize_filename($filename = '', $forceExtension = null)
-    {
-        return self::sanitizeFilename($filename, $forceExtension);
-    }
-
-    /**
      * Converts an array to a string. objects will be serialized and base64_encoded.
      *
      * @param array $aArray
@@ -275,21 +258,6 @@ class TTools
     }
 
     /**
-     * converts a string to a URL safe string (replaces special characters).
-     *
-     * @param string $sRealName
-     * @param string $sSpacer
-     *
-     * @return string
-     *
-     * @deprecated since 6.0.9 - use chameleon_system_core.util.url_normalization instead
-     */
-    public static function RealNameToURLName($sRealName, $sSpacer = '-')
-    {
-        return self::getUrlNormalizationUtil()->normalizeUrl($sRealName, $sSpacer);
-    }
-
-    /**
      * Returns true if the email address is valid.
      *
      * @param string $email
@@ -360,7 +328,6 @@ class TTools
         $returnVal = false;
         if ($bCheckFieldConfig) {
             $tableId = self::GetCMSTableId($sTableName);
-            $fieldExists = false;
             $query = "SELECT `id` FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($tableId)."' AND `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldName)."'";
             $result = MySqlLegacySupport::getInstance()->query($query);
             if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
@@ -548,27 +515,6 @@ class TTools
     }
 
     /**
-     * @deprecated since 27.01.2010 - use strtotime
-     * converts a mysql timestamp to unix timestamp
-     *
-     * @param string $timestamp
-     *
-     * @return string
-     */
-    public static function ConvertMySQL2UnixTimeStamp($timestamp)
-    {
-        // 2006-03-02 17:44:58
-        $year = substr($timestamp, 0, 4);
-        $month = substr($timestamp, 5, 2);
-        $day = substr($timestamp, 8, 2);
-        $hour = substr($timestamp, 11, 2);
-        $minute = substr($timestamp, 14, 2);
-        $second = substr($timestamp, 17, 2);
-
-        return mktime($hour, $minute, $second, $month, $day, $year);
-    }
-
-    /**
      * validates an ISO/mysql date format e.g. 2010-12-31.
      *
      * @var string $sDate - date in ISO format e.g. 2010-12-31
@@ -608,128 +554,6 @@ class TTools
     }
 
     /**
-     * calls a webpage by post/get and returns the page content as string.
-     *
-     * Examples:
-     *   sendToHost('www.google.com','get','/search','q=php_imlib');
-     *   sendToHost('www.example.com','post','/some_script.cgi',
-     *              'param=FirstParam&second=Secondparam');
-     *
-     * @param string $host        - Just the hostname.  No http:// or /path/to/file.html portions
-     * @param string $method      - get or post, case-insensitive
-     * @param string $path        - The /path/to/file.html part
-     * @param string $data        - The query string, without initial question mark
-     * @param bool   $bUserAgent  - If true, 'MSIE' will be sent as the User-Agent (optional)
-     * @param string $contentType - default: application/x-www-form-urlencoded
-     * @param bool   $bUseSSL
-     * @param string $sUser       - optional user and password if the url requires authentication
-     *
-     * @deprecated - use TPkgCmsCoreSendToHost instead
-     *
-     * @param string $sPassword
-     *
-     * @return string
-     */
-    public static function sendToHost($host, $method, $path, $data, $bUserAgent = false, $contentType = 'application/x-www-form-urlencoded', $bUseSSL = false, $sUser = null, $sPassword = null)
-    {
-        $sResponse = self::sendToHostReturnFull($host, $method, $path, $data, $bUserAgent, $contentType, $bUseSSL, false, $sUser, $sPassword);
-
-        return substr($sResponse, (strpos($sResponse, "\r\n\r\n") + 4));
-    }
-
-    /**
-     * send request to host returns full response including header
-     * Examples:
-     *   sendToHost('www.google.com','get','/search','q=php_imlib');
-     *   sendToHost('www.example.com','post','/some_script.cgi',
-     *              'param=FirstParam&second=Secondparam');.
-     *
-     * @param string $host           - Just the hostname.  No http:// or /path/to/file.html portions
-     * @param string $method         - get or post, case-insensitive
-     * @param string $path           - The /path/to/file.html part
-     * @param string $data           - The query string, without initial question mark
-     * @param bool   $bUserAgent     - If true, 'MSIE' will be sent as the User-Agent (optional)
-     * @param string $contentType    - default: application/x-www-form-urlencoded
-     * @param bool   $bUseSSL
-     * @param bool   $bReturnRequest - if set to true, then an array of the form ('request'=>...,'response'=>...) will be returned
-     * @param string $sUser          - optional user and password if the url requires authentication
-     * @param string $sPassword
-     *
-     * @deprecated - use TPkgCmsCoreSendToHost instead
-     *
-     * @return string
-     */
-    public static function sendToHostReturnFull($host, $method, $path, $data, $bUserAgent = false, $contentType = 'application/x-www-form-urlencoded', $bUseSSL = false, $bReturnRequest = false, $sUser = null, $sPassword = null)
-    {
-        $data = str_replace('&amp;', '&', $data); // remove encoding
-
-        $oToHostHandler = new TPkgCmsCoreSendToHost();
-        $oToHostHandler
-            ->setHost($host)
-            ->setMethod($method)
-            ->setPath($path)
-            ->setPayloadFromQueryString($data)
-            ->setSendUserAgent($bUserAgent)
-            ->setContentType($contentType)
-            ->setUseSSL($bUseSSL)->setUser($sUser)
-            ->setPassword($sPassword);
-
-        $buf = '';
-        try {
-            $sResponse = $oToHostHandler->executeRequest();
-            $buf = $oToHostHandler->getLastResponseHeader().$sResponse;
-        } catch (TPkgCmsException_Log $e) {
-            $buf = '';
-        }
-
-        if ($bReturnRequest) {
-            $buf = array('request' => $oToHostHandler->getLastRequest(), 'response' => $buf);
-        }
-
-        return $buf;
-    }
-
-    /**
-     * fetches the page object via TCMSActivePage or by given pageID and langID parameters.
-     *
-     * @param string $pageID
-     * @param string $languageID
-     *
-     * @return TCMSPage
-     *
-     * @deprecated since 6.1.4 - should not be needed anymore (instantiate TdbCmsTplPage instances manually or
-     * use ActivePageService::getActivePage() for the active page )
-     */
-    public static function GetPageObject($pageID = null, $languageID = null)
-    {
-        $oPage = null;
-        $oGlobal = TGlobal::instance();
-        // load active page or page given by ID via GET parameter
-        if (null === $pageID && $oGlobal->UserDataExists('pageID')) {
-            $pageID = $oGlobal->GetUserData('pageID');
-        }
-
-        if (null !== $pageID && !empty($pageID)) {
-            if (null === $languageID && $oGlobal->UserDataExists('langID')) {
-                $languageID = $oGlobal->GetUserData('langID');
-            }
-
-            if (null === $languageID || empty($languageID)) {
-                $languageID = static::getLanguageService()->getCmsBaseLanguageId();
-            }
-
-            $oPage = new TdbCmsTplPage();
-            $oPage->SetLanguage($languageID);
-            $oPage->Load($pageID);
-        } else {
-            $oActivePage = static::getActivePageService()->getActivePage();
-            $oPage = clone $oActivePage;
-        }
-
-        return $oPage;
-    }
-
-    /**
      * returns the ISO code of the currently active language.
      *
      * @return string
@@ -738,10 +562,10 @@ class TTools
     {
         $activeLanguage = self::getLanguageService()->getActiveLanguage();
         if (null === $activeLanguage) {
-            return 'de'; // preserved BC to the former call to self::GetLanguageISOName(); should be revised
-        } else {
-            return $activeLanguage->fieldIso6391;
+            return 'de'; // preserved BC; should be revised
         }
+
+        return $activeLanguage->fieldIso6391;
     }
 
     /**
@@ -836,32 +660,6 @@ class TTools
         }
 
         return '#'.implode('', $rgbValues);
-    }
-
-    /**
-     * returns the unix timestamp for a mysql datetime field.
-     *
-     * @deprecated since 27.01.2010 - use strtotime
-     *
-     * @param string $dateTime
-     *
-     * @return int
-     */
-    public static function DateTime2UnixTimestamp($dateTime)
-    {
-        $aDateParts = explode(' ', $dateTime);
-        $date = $aDateParts[0];
-        $aDate = explode('-', $date);
-        $year = $aDate[0];
-        $month = $aDate[1];
-        $day = $aDate[2];
-
-        $aTimeParts = explode(':', $aDateParts[1]);
-        $hour = $aTimeParts[0];
-        $minutes = $aTimeParts[1];
-        $seconds = $aTimeParts[2];
-
-        return mktime($hour, $minutes, $seconds, $month, $day, $year);
     }
 
     /**
@@ -1124,82 +922,6 @@ class TTools
     }
 
     /**
-     * converts an UTF-8 string to an array of unicode representations.
-     *
-     * @param string $string
-     *
-     * @return array
-     *
-     * @deprecated since 6.1.4 - should not be needed anymore
-     */
-    public static function UTF8ToUnicode($string)
-    {
-        $result = array();
-        $position = 0;
-
-        while ($position < $stringLength = strlen($string)) {
-            $currentValue = ord($string[$position]);
-            if ($currentValue < 128) {
-                $result[] = $currentValue;
-                ++$position;
-                continue;
-            }
-            if ($currentValue < 224) {
-                $value1 = ord($string[$position]);
-                $value2 = ord($string[$position + 1]);
-                $result[] = ($value1 % 32) * 64 + $value2 % 64;
-                $position += 2;
-                continue;
-            }
-
-            $value1 = ord($string[$position]);
-            $value2 = ord($string[$position + 1]);
-            $value3 = ord($string[$position + 2]);
-            $result[] = ($value1 % 16) * 4096 + ($value2 % 64) * 64 + $value3 % 64;
-            $position += 3;
-        }
-
-        return $result;
-    }
-
-    /**
-     * converts an unicode array to an encoded string with &#123 character encodings.
-     *
-     * @param array $unicodes
-     *
-     * @return string
-     *
-     * @deprecated since 6.1.4 - should not be needed anymore
-     */
-    public static function UnicodeToEntitiesPreservingAscii($unicodes)
-    {
-        $result = '';
-        foreach ($unicodes as $unicode) {
-            if ($unicode > 127) {
-                $result .= "&#$unicode;";
-            } else {
-                $result .= chr($unicode);
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * converts an UTF-8 text to text with &#123 character encodings.
-     *
-     * @param string $sText
-     *
-     * @return string
-     *
-     * @deprecated since 6.1.4 - should not be needed anymore
-     */
-    public static function UTF8ToEntitiesPreservingAscii($sText)
-    {
-        return static::UnicodeToEntitiesPreservingAscii(static::UTF8ToUnicode($sText));
-    }
-
-    /**
      * pass the result of debug_backtrace().
      *
      * @param array $aDebugData
@@ -1415,7 +1137,6 @@ class TTools
      */
     public static function mb_safe_unserialize($data)
     {
-        $sUnserializedData = null;
         if (':' !== substr($data, 1, 1)) {
             $data = base64_decode($data);
         }
@@ -1592,24 +1313,6 @@ class TTools
     }
 
     /**
-     * loads the language record based on language id and returns ISO6391 code (en,de,fr...).
-     *
-     * @param string $languageId
-     *
-     * @return string
-     *
-     * @deprecated since 6.1.4 - use chameleon_system_core.language_service::getLanguageIsoCode() instead.
-     */
-    public static function GetLanguageISOName($languageId = null)
-    {
-        if (empty($languageId)) {
-            return 'de';
-        }
-
-        return self::getLanguageService()->getLanguageIsoCode($languageId);
-    }
-
-    /**
      * returns the chameleon temp directory
      * if missing, it tries to create it
      * if creation fails the server`s tmp directory will be returned
@@ -1635,27 +1338,6 @@ class TTools
         }
 
         return $sWritableTempDir;
-    }
-
-    /**
-     * Generate sha1 + salt hash for given text.
-     *
-     * @param string      $sPlainText
-     * @param bool|string $sSalt      - default false
-     *
-     * @deprecated - use the service container with  "password" instead!
-     *
-     * @return string
-     */
-    public static function GenerateEncryptedPassword($sPlainText, $sSalt = false)
-    {
-        if (false === $sSalt) {
-            $sSalt = substr(md5(uniqid(rand(), true)), 0, 9);
-        } else {
-            $sSalt = substr($sSalt, 0, 9);
-        }
-
-        return $sSalt.'|'.sha1($sSalt.$sPlainText);
     }
 
     /**
@@ -1866,19 +1548,6 @@ class TTools
     }
 
     /**
-     * Get the active portal. First tries to get from active page.
-     * If no active page exists tries to get from smart url data.
-     *
-     * @return TdbCmsPortal $oActivePortal
-     *
-     * @deprecated use \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service')->getActivePortal() instead
-     */
-    public static function GetActivePortal()
-    {
-        return ServiceLocator::get('chameleon_system_core.portal_domain_service')->getActivePortal();
-    }
-
-    /**
      * validates an IPv4 or IPv6 address
      * for IPv6 validation PHP 5.2 or newer is mandatory.
      *
@@ -1950,8 +1619,8 @@ class TTools
      * if no iso country code ($sCountry) or country id ($sCountryId) is passed the country of the active billing address will be used.
      *
      * @param string      $sVatId
-     * @param null|string $sCountry   iso code (2 characters) e.g. de
-     * @param null|string $sCountryId
+     * @param string|null $sCountry   iso code (2 characters) e.g. de
+     * @param string|null $sCountryId
      *
      * @return bool|int
      */
@@ -2167,14 +1836,6 @@ class TTools
     }
 
     /**
-     * @return UrlNormalizationUtil
-     */
-    private static function getUrlNormalizationUtil()
-    {
-        return ServiceLocator::get('chameleon_system_core.util.url_normalization');
-    }
-
-    /**
      * @return ValidatorInterface
      */
     private static function getValidator()
@@ -2196,14 +1857,6 @@ class TTools
     private static function getLanguageService()
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
-    }
-
-    /**
-     * @return ContainerInterface
-     */
-    private static function getServiceContainer()
-    {
-        return ServiceLocator::get('service_container');
     }
 
     private static function getSubModuleLoader(): TUserModuleLoader

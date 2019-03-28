@@ -15,10 +15,10 @@ $iconMapping = $mainMenuMigrator->getIconMapping();
 foreach ($iconMapping as $oldIconName => $iconName) {
     $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'en')
         ->setFields([
-            'icon_font_css_class' => $iconName
+            'icon_font_css_class' => $iconName,
         ])
         ->setWhereEquals([
-            'icon_list' => $oldIconName
+            'icon_list' => $oldIconName,
         ])
     ;
     TCMSLogChange::update(__LINE__, $data);
@@ -136,10 +136,10 @@ $iconMapping = array(
 foreach ($iconMapping as $tableName => $iconName) {
     $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'en')
         ->setFields([
-            'icon_font_css_class' => $iconName
+            'icon_font_css_class' => $iconName,
         ])
         ->setWhereEquals([
-            'name' => $tableName
+            'name' => $tableName,
         ])
     ;
     TCMSLogChange::update(__LINE__, $data);
@@ -153,15 +153,15 @@ $iconMapping = array(
     'articlesearchindex' => 'fas fa-search-plus',
     'shopstats' => 'fas fa-chart-pie',
     'sanitycheckbundle' => 'fas fa-bug',
-    'cmssearchindexer' => 'fas fa-database'
+    'cmssearchindexer' => 'fas fa-database',
 );
 foreach ($iconMapping as $moduleName => $iconName) {
     $data = TCMSLogChange::createMigrationQueryData('cms_module', 'en')
         ->setFields([
-            'icon_font_css_class' => $iconName
+            'icon_font_css_class' => $iconName,
         ])
         ->setWhereEquals([
-            'uniquecmsname' => $moduleName
+            'uniquecmsname' => $moduleName,
         ])
     ;
     TCMSLogChange::update(__LINE__, $data);
@@ -181,7 +181,7 @@ while (false !== $row = $statement->fetch()) {
 }
 
 if (count($tablesWithEmptyIcon) > 0) {
-    TCMSLogChange::addInfoMessage('Table icons were replaced with CSS icon classes, but for some tables no fitting icon could be found. Please refer to the upgrade guide for Chameleon 6.3 on what to do (section "Font Awesome Icons"). Tables: '.implode(', ',$tablesWithEmptyIcon));
+    TCMSLogChange::addInfoMessage('Table icons were replaced with CSS icon classes, but for some tables no fitting icon could be found. Please refer to the upgrade guide for Chameleon 6.3 on what to do (section "Font Awesome Icons"). Tables: '.implode(', ', $tablesWithEmptyIcon));
 }
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
@@ -196,7 +196,5 @@ while (false !== $row = $statement->fetch()) {
 }
 
 if (count($modulesWithEmptyIcon) > 0) {
-    TCMSLogChange::addInfoMessage('Backend module icons were replaced with CSS icon classes, but for some modules no fitting icon could be found. Please refer to the upgrade guide for Chameleon 6.3 on what to do (section "Font Awesome Icons").. Modules: '.implode(', ',$modulesWithEmptyIcon));
+    TCMSLogChange::addInfoMessage('Backend module icons were replaced with CSS icon classes, but for some modules no fitting icon could be found. Please refer to the upgrade guide for Chameleon 6.3 on what to do (section "Font Awesome Icons").. Modules: '.implode(', ', $modulesWithEmptyIcon));
 }
-
-

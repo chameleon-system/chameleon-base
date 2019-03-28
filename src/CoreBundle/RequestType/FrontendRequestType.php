@@ -29,14 +29,9 @@ class FrontendRequestType extends AbstractRequestType
 
     private function initFrontend()
     {
-        if (true === USE_ONLY_COOKIES_FOR_SESSION_ID) {
-            // force users to use cookies
-            @ini_set('session.use_only_cookies', 1);
-            @ini_set('session.use_trans_sid', 0);
-        } else {
-            @ini_set('session.use_only_cookies', 0);
-            @ini_set('session.use_trans_sid', 1);
-        }
+        // force users to use cookies
+        @ini_set('session.use_only_cookies', 1);
+        @ini_set('session.use_trans_sid', 0);
     }
 
     protected function sendDefaultHeaders()

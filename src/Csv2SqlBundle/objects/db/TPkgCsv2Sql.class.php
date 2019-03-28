@@ -293,7 +293,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      * - move files to archive directory.
      *
      * @param null                $sLogName
-     * @param null|IPkgCmsBulkSql $oBulkInsertManager alternative bulk insert manager if not passed TPkgCmsBulkSql_LoadDataInfile will be used
+     * @param IPkgCmsBulkSql|null $oBulkInsertManager alternative bulk insert manager if not passed TPkgCmsBulkSql_LoadDataInfile will be used
      *
      * @return array|bool - array of error strings or false on error
      */

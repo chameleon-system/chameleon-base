@@ -71,4 +71,11 @@ interface ImageCropDataAccessInterface
      * @throws ImageCropDataAccessException
      */
     public function getExistingCrops(CmsMediaDataModel $cmsMedia);
+
+    /**
+     * @throws ImageCropDataAccessException
+     *
+     * @param string $cropId
+     */
+    public function deleteCrop(string $cropId): void;
 }

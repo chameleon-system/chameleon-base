@@ -194,20 +194,6 @@ class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
     }
 
     /**
-     * @param string $field
-     * @param array  $row
-     * @param string $name
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function CallBackWorkflowConnectionActionType($field, $row, $name)
-    {
-        return '';
-    }
-
-    /**
      * @return MltFieldUtil
      */
     protected function getMltFieldUtil()

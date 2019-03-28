@@ -17,7 +17,7 @@ class TPkgViewRendererSnippetGalleryItem
     public $sFullDummyDataPath = null;
     public $sDummyDataFileName = null;
     /**
-     * @var null|TPkgViewRendererSnippetDummyData
+     * @var TPkgViewRendererSnippetDummyData|null
      */
     public $oDummyData = null;
 

@@ -17,7 +17,7 @@ use ChameleonSystem\MediaManager\Interfaces\SortColumnInterface;
 class MediaManagerListRequest
 {
     /**
-     * @var null|MediaTreeNodeDataModel
+     * @var MediaTreeNodeDataModel|null
      */
     private $mediaTreeNode;
 
@@ -27,7 +27,7 @@ class MediaManagerListRequest
     private $subTreeIncluded = true;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $searchTerm;
 
@@ -42,7 +42,7 @@ class MediaManagerListRequest
     private $pageSize = -1;
 
     /**
-     * @var null|SortColumnInterface
+     * @var SortColumnInterface|null
      */
     private $sortColumn;
 
@@ -79,7 +79,7 @@ class MediaManagerListRequest
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getSearchTerm()
     {
@@ -87,7 +87,7 @@ class MediaManagerListRequest
     }
 
     /**
-     * @param null|string $searchTerm
+     * @param string|null $searchTerm
      */
     public function setSearchTerm($searchTerm)
     {

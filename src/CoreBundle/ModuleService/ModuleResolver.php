@@ -26,15 +26,6 @@ class ModuleResolver implements ModuleResolverInterface
     }
 
     /**
-     * @param string $id
-     *
-     * @deprecated since 6.3.0 - available modules are injected by constructor now
-     */
-    public function addModule($id)
-    {
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getModule($name)
@@ -52,24 +43,5 @@ class ModuleResolver implements ModuleResolverInterface
     public function hasModule($name)
     {
         return $this->container->has($name);
-    }
-
-    /**
-     * @param string[] $ids
-     *
-     * @deprecated since 6.3.0 - available modules are injected by constructor now
-     */
-    public function addModules(array $ids)
-    {
-    }
-
-    /**
-     * @return string[]
-     *
-     * @deprecated since 6.3.0 - complete module list can no longer be retrieved
-     */
-    public function getModules()
-    {
-        return [];
     }
 }

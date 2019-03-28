@@ -23,7 +23,7 @@ class MTPageImagesCore extends TUserModelBase
     /**
      *  current page id.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $iPageId = null;
 

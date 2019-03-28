@@ -31,7 +31,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use TCMSPageDefinitionFile;
-use TCMSResourceCollection;
 use TGlobal;
 use TModelBase;
 use TModuleLoader;
@@ -63,12 +62,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @var TModuleLoader
      */
     public $moduleLoader;
-    /**
-     * @var string
-     *
-     * @deprecated since 6.2.0 - not used anymore
-     */
-    protected $redirectPageDef;
     /**
      * @var array
      *
@@ -105,17 +98,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private $eventDispatcher;
     /**
-     * @var PortalDomainServiceInterface
-     *
-     * @deprecated since 6.1.9 - no longer used in this class.
-     */
-    protected $portalDomainService;
-    /**
      * @var RequestInfoServiceInterface
-     *
-     * @deprecated since 6.1.9 - no longer used in this class.
      */
-    protected $requestInfoService;
+    private $requestInfoService;
     /**
      * @var ICmsCoreRedirect
      *
@@ -135,18 +120,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private $responseVariableReplacer;
 
-
-    /**
-     * @param RequestStack                 $requestStack
-     * @param EventDispatcherInterface     $eventDispatcher
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param TModuleLoader                $moduleLoader
-     * @param IViewPathManager|null        $viewPathManager
-     */
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
-        PortalDomainServiceInterface $portalDomainService,
         TModuleLoader $moduleLoader,
         IViewPathManager $viewPathManager = null
     ) {
@@ -155,7 +131,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->moduleLoader->setController($this);
         $this->viewPathManager = $viewPathManager;
         $this->eventDispatcher = $eventDispatcher;
-        $this->portalDomainService = $portalDomainService;
     }
 
     /**
@@ -295,7 +270,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
             'type' => 'pagedefdata',
             'pagedef' => $pagedef,
             'requestMasterPageDef' => $this->inputFilterUtil->getFilteredInput('__masterPageDef', false),
-            'isTemplateEngineMode' => TGlobal::IsCMSTemplateEngineEditMode(),
+            'isTemplateEngineMode' => $this->requestInfoService->isCmsTemplateEngineEditMode(),
             'cmsuserdefined' => TGlobal::CMSUserDefined(),
         );
 
@@ -737,7 +712,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     /**
      * return an array of variables to search/replace in the rendered page
      * use this hook to add vars that should never be cached
-     * note: see TGlobalBase::ReplaceCustomVariablesInString() to find out what format the variables must have in your html code.
      *
      * @return array
      *
@@ -754,18 +728,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         }
 
         return $this->postRenderVariables;
-    }
-
-    /**
-     * return the time the process has run so far.
-     *
-     * @return float
-     *
-     * @deprecated since 6.2.0 - use a proper external tool to measure performance.
-     */
-    public function GetExecutionTime()
-    {
-        return 0;
     }
 
     /**
@@ -888,25 +850,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * @param Request $request
-     *
-     * @deprecated since 6.1.9 - use an event listener for Symfony or Chameleon lifecycle events instead. The event that
-     * corresponds to this method in terms of execution order is CoreEvents::CHANGE_ACTIVE_PAGE.
-     */
-    protected function postRoutingHook(Request $request)
-    {
-    }
-
-    /**
-     * @param bool $outputPageLoadTimeInfo
-     *
-     * @deprecated since 6.2.0 - use a proper external tool to measure performance.
-     */
-    public function setOutputPageLoadTimeInfo($outputPageLoadTimeInfo)
-    {
-    }
-
-    /**
      * @return array
      */
     public function getHtmlHeaderIncludes()
@@ -932,8 +875,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * @param RequestInfoServiceInterface $requestInfoService
-     *
-     * @deprecated since 6.1.9 - no longer used in this class.
      */
     public function setRequestInfoService($requestInfoService)
     {

@@ -15,7 +15,7 @@ interface RequestStateHashProviderInterface
      *
      * Will use the request passed, or the active request if null is passed.
      *
-     * @param null|Request $request
+     * @param Request|null $request
      *
      * @return string|null
      */

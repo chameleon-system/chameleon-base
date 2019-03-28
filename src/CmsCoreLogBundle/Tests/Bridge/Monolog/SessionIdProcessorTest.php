@@ -26,12 +26,12 @@ class SessionIdProcessorTest extends TestCase
     private $mockRequestStack;
 
     /**
-     * @var null|Request|ObjectProphecy
+     * @var Request|ObjectProphecy|null
      */
     private $mockRequest;
 
     /**
-     * @var null|SessionInterface|ObjectProphecy
+     * @var SessionInterface|ObjectProphecy|null
      */
     private $mockSession;
 

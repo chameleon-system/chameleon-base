@@ -29,26 +29,6 @@ class TCMSRecordList extends TIterator
     public $sTableObject = null;
 
     /**
-     * define where the class can be found (core, custom, customer)
-     * needs to be set by hand (not via function) because i did not want to change
-     * the constructor call everywhere.
-     *
-     * @var enum:Core,Custom,Customer
-     *
-     * @deprecated
-     */
-    public $sTableObjectType = 'Core';
-
-    /**
-     * set the subtype of the table object used for the items.
-     *
-     * @var string
-     *
-     * @deprecated
-     */
-    public $sTableObjectSubtype = 'dbobjects';
-
-    /**
      * if the record has translations, then iLanguageId can
      * be used to specify the language to use (set via public function: SetLanguage(id).
      *
@@ -128,38 +108,16 @@ class TCMSRecordList extends TIterator
     protected $iLimitResultSet = -1;
 
     /**
-     * set this to true if you want to activate the workflow filter in the query in the cms backend mode.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public $bForceWorkflow = false;
-
-    /**
-     * set this to true if you want to activate the workflow filter with all actions
-     * instead of only the actions that are currently marked for preview.
-     *
-     * this if needed for example in TCMSTableEditorMedia on image delete checks
-     * to get all records currently in workflow
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public $bUseGlobalFilterInsteadOfPreviewFilter = false;
-
-    /**
      * @var EntityList
      */
-    private $entityList = null;
+    private $entityList;
 
     /**
      * @var Connection
      */
     private $databaseConnection;
 
-    protected $estimationLowerLimit = null;
+    protected $estimationLowerLimit;
     private $queryParameters;
     private $queryParameterTypes;
 
@@ -197,7 +155,7 @@ class TCMSRecordList extends TIterator
      */
     public function GetIdentString()
     {
-        $sIdentString = $this->sTableName.$this->sTableObject.$this->sTableObjectSubtype.$this->sQuery.$this->iLanguageId.$this->sTableName.$this->iNumberOfRecordsToShow;
+        $sIdentString = $this->sTableName.$this->sTableObject.$this->sQuery.$this->iLanguageId.$this->sTableName.$this->iNumberOfRecordsToShow;
 
         return md5($sIdentString);
     }
@@ -228,8 +186,6 @@ class TCMSRecordList extends TIterator
         } else {
             $returnValues = array(
                 'sTableObject',
-                'sTableObjectType',
-                'sTableObjectSubtype',
                 'iLanguageId',
                 'sQuery',
                 'sTableName',
@@ -1125,7 +1081,7 @@ class TCMSRecordList extends TIterator
      *
      * @return LanguageServiceInterface
      */
-    private static function getMyLanguageService()
+    protected static function getMyLanguageService(): LanguageServiceInterface
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }

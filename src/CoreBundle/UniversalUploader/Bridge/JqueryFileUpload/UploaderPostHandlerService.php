@@ -218,7 +218,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
      *
      * @param UploadedFile $uploadedFile
      *
-     * @return mixed|null|string
+     * @return mixed|string|null
      */
     private function getClientOriginalName(UploadedFile $uploadedFile)
     {
@@ -248,7 +248,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
      *
      * @throws UploaderPostDataException
      *
-     * @return null|array
+     * @return array|null
      */
     private function getUploadedFile($fieldName)
     {

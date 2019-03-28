@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
@@ -24,12 +25,12 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      *
      * @param $sEmail
      *
-     * @return null|TdbPkgNewsletterUser
+     * @return TdbPkgNewsletterUser|null
      */
     public static function &GetInstanceForMail($sEmail)
     {
         $oInst = null;
-        $oPortal = TTools::GetActivePortal();
+        $oPortal = self::getPortalDomainServiceStatic()->getActivePortal();
         $oInst = TdbPkgNewsletterUser::GetNewInstance();
         if (!is_null($oPortal)) {
             if (!$oInst->LoadFromFields(array('email' => $sEmail, 'cms_portal_id' => $oPortal->id))) {
@@ -60,7 +61,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
             if (null !== $user && $user->IsLoggedIn()) {
                 /** @var $oInst TdbPkgNewsletterUser */
                 $oInst = TdbPkgNewsletterUser::GetNewInstance();
-                $oPortal = TTools::GetActivePortal();
+                $oPortal = self::getPortalDomainServiceStatic()->getActivePortal();
                 $bNewsletterUserLoaded = false;
                 $bNewsletterLoadedOnlyFromEMail = false;
                 if (!is_null($oPortal)) {
@@ -176,7 +177,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * return a link that can be used to confirm the registration.
      *
-     * @param null|TdbPkgNewsletterModuleSignupConfig $oNewsletterConfig
+     * @param TdbPkgNewsletterModuleSignupConfig|null $oNewsletterConfig
      *
      * @return string
      */
@@ -209,7 +210,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      */
     public function GetNewsletterModuleLink($sModuleInstanceId, $aLinkParams = array())
     {
-        $oPortal = $this->getPortalDomainService()->getActivePortal();
+        $oPortal = self::getPortalDomainServiceStatic()->getActivePortal();
         $oModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
         $oModuleInstance->Load($sModuleInstanceId);
         $oMasterPageList = $oModuleInstance->GetFieldCmsTplPageCmsMasterPagedefSpotList();
@@ -624,7 +625,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * confirm all of the users confirmations.
      *
-     * @param null|array $aNewData
+     * @param array|null $aNewData
      *
      * @internal param string $sNewsletterId
      *
@@ -1003,12 +1004,12 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * return TdbPkgNewsletterUser if the email has already been registered otherwise null.
      *
-     * @return null|TdbPkgNewsletterUser
+     * @return TdbPkgNewsletterUser|null
      */
     public function EMailAlreadyRegisteredNew()
     {
         $oFoundNewsletterUser = TdbPkgNewsletterUser::GetNewInstance();
-        $oPortal = TTools::GetActivePortal();
+        $oPortal = self::getPortalDomainServiceStatic()->getActivePortal();
         if (!is_null($oPortal)) {
             $oFoundNewsletterUser->LoadFromFields(array('email' => $this->fieldEmail, 'cms_portal_id' => $oPortal->id));
         } else {
@@ -1044,7 +1045,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      */
     private static function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 
     /**
@@ -1052,7 +1053,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      */
     private function getSystemPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 
     /**
@@ -1060,14 +1061,11 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private function getPortalDomainService()
+    private static function getPortalDomainServiceStatic(): PortalDomainServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

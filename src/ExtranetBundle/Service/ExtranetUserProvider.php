@@ -58,7 +58,7 @@ class ExtranetUserProvider implements ExtranetUserProviderInterface
     }
 
     /**
-     * @return null|SessionInterface
+     * @return SessionInterface|null
      */
     private function getSession()
     {

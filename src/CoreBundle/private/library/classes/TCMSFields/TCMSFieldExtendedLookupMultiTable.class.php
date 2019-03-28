@@ -370,7 +370,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
      *
      * @param string     $sOldName
      * @param string     $sNewName
-     * @param null|array $postData
+     * @param array|null $postData
      */
     public function ChangeFieldDefinition($sOldName, $sNewName, &$postData = null)
     {

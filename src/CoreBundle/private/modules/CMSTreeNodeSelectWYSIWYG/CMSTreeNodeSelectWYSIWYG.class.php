@@ -48,7 +48,7 @@ class CMSTreeNodeSelectWYSIWYG extends CMSTreeNodeSelect
     }
 
     /**
-     * @return null|Request
+     * @return Request|null
      */
     private function getRequest()
     {

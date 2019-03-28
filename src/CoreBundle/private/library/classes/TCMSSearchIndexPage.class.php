@@ -58,7 +58,6 @@ class TCMSSearchIndexPage
 
         try {
             $response = curl_exec($curl);
-            $error = curl_error($curl);
             $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
             $header = substr($response, 0, $headerSize);
             $headerElements = explode("\r\n", $header);
@@ -81,7 +80,7 @@ class TCMSSearchIndexPage
     /**
      * @param $url
      *
-     * @return null|resource
+     * @return resource|null
      */
     private function getCurlConfig($url)
     {

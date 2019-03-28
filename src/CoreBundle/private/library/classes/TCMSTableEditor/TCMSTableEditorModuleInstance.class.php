@@ -69,11 +69,10 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
      *
      * @param TdbCmsTblConf           $oModuleTableConf
      * @param TdbCmsTplModuleInstance $oCmsTplModuleInstance
-     * @param bool                    $bRevisionActivationMode (@deprecated since 6.3.0 - revision management is no longer supported)
      *
      * @return TCMSRecordList $oModuleContentRecordList
      */
-    protected function GetConnectedTableRecords($oModuleTableConf, $sModuleInstanceID, $bRevisionActivationMode = false)
+    protected function GetConnectedTableRecords($oModuleTableConf, $sModuleInstanceID)
     {
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $oModuleTableConf->fieldName.'List');
 
@@ -136,23 +135,18 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
     }
 
     /**
-     * deletes all references from the deleted record to other records
-     * property records and mlt connections.
-     *
-     * @param bool $bRevisionActivationMode (@deprecated since 6.3.0 - revision management is no longer supported)
+     * {@inheritdoc}
      */
-    public function DeleteRecordReferencesFromSource($bRevisionActivationMode = false)
+    public function DeleteRecordReferencesFromSource()
     {
-        $this->DeleteRecordReferenceModuleContent($bRevisionActivationMode);
-        parent::DeleteRecordReferencesFromSource($bRevisionActivationMode);
+        $this->DeleteRecordReferenceModuleContent();
+        parent::DeleteRecordReferencesFromSource();
     }
 
     /**
      * deleted references to this module instance in all tables with a cms_tpl_module_instance_id field.
-     *
-     * @param bool $bRevisionActivationMode (@deprecated since 6.3.0 - revision management is no longer supported)
      */
-    protected function DeleteRecordReferenceModuleContent($bRevisionActivationMode = false)
+    protected function DeleteRecordReferenceModuleContent()
     {
         if ($this->IsAllowedDeleteModuleInstance()) {
             $oModuleTableConfList = $this->GetModuleInstanceConfigTables();
@@ -162,7 +156,7 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
                 $query = "SELECT * FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oModuleTableConf->id)."' AND `name` = 'cms_tpl_module_instance_id'";
                 $result = MySqlLegacySupport::getInstance()->query($query);
                 if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) { // field cms_tpl_module_instance_id exists
-                    $oModuleContentRecordList = $this->GetConnectedTableRecords($oModuleTableConf, $this->sId, $bRevisionActivationMode);
+                    $oModuleContentRecordList = $this->GetConnectedTableRecords($oModuleTableConf, $this->sId);
                     /** @var $oModuleContentRecord TCMSRecord */
                     while ($oModuleContentRecord = $oModuleContentRecordList->Next()) {
                         $oTableEditorManager = TTools::GetTableEditorManager($oModuleTableConf->sqlData['name'], $oModuleContentRecord->id);

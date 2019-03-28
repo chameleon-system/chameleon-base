@@ -96,17 +96,19 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         ], $this->getBaseUri(), '&');
     }
 
+    /**
+     * Returns the base URI for sidebar-related actions.
+     * The method uses a dummy pagedef because otherwise there would be interference with other modules (even for AJAX
+     * calls, the Init() method of all modules on a page is called. If the list module is on that page, it would add all
+     * parameters of the AJAX call to its own, which leads to the sidebar action being called on form submits).
+     * Similar problems are expected for other modules, so we use a dummy page that is both always present and contains
+     * no other modules.
+     *
+     * @return string
+     */
     private function getBaseUri(): string
     {
-        $request = $this->requestStack->getCurrentRequest();
-        $baseUri = $request->getRequestUri();
-        if (false === \strpos($baseUri, '?')) {
-            $baseUri .= '?';
-        } else {
-            $baseUri .= '&';
-        }
-
-        return $baseUri;
+        return \PATH_CMS_CONTROLLER.'?pagedef=sidebarDummy&';
     }
 
     private function getActiveCategoryNotificationUrl(): string

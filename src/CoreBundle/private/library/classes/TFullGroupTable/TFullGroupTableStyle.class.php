@@ -18,56 +18,56 @@ class TFullGroupTableStyle extends TGroupTableStyle
     /**
      * style class name to use for the header line (default = NULL).
      *
-     * @var null|string
+     * @var string|null
      */
     public $header = null;
 
     /**
      * style class name to use for the search line (default = NULL).
      *
-     * @var null|string
+     * @var string|null
      */
     public $search = null;
 
     /**
      * style class name to use for the navigation line (default = NULL).
      *
-     * @var null|string
+     * @var string|null
      */
     public $navigation = null;
 
     /**
      * style class name to use for the not found text line line (default = NULL).
      *
-     * @var null|string
+     * @var string|null
      */
     public $notFoundText = null;
 
     /**
      * style class name to use for the group select field (default = NULL).
      *
-     * @var null|string
+     * @var string|null
      */
     public $groupSelector = null;
 
     /**
      * style class name to use for the filter table (default = NULL).
      *
-     * @var null|string
+     * @var string|null
      */
     public $filterTable = null;
 
     /**
      * CSS style to use in searchfield TD.
      *
-     * @var null|string
+     * @var string|null
      */
     public $searchFieldTDstyle = null;
 
     /**
      * CSS style to use in search button TD.
      *
-     * @var null|string
+     * @var string|null
      */
     public $searchButtonTDstyle = null;
 

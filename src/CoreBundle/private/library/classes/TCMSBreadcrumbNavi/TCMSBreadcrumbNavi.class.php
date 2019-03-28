@@ -26,7 +26,7 @@ class TCMSBreadcrumbNavi
     /**
      * page id.
      *
-     * @var null|string
+     * @var string|null
      */
     public $pageId = null;
 

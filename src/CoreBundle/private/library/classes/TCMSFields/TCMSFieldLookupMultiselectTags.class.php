@@ -29,7 +29,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
     /**
      * list object of all currently connected tags.
      *
-     * @var null|TdbCmsTagsList
+     * @var TdbCmsTagsList|null
      */
     protected $oConnectedMLTRecords = null;
 
@@ -51,7 +51,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
      * language suffix for name field of cms_tags if field based translation is active.
      *
      *
-     * @var null|string - "__en"
+     * @var string|null - "__en"
      */
     protected $sLanguageIsoName = null;
 
@@ -97,7 +97,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
             'callFieldMethod' => '1',
             'id' => $this->recordId,
             'tableid' => $tableConf->id,
-            '_fieldName' => $this->name
+            '_fieldName' => $this->name,
         );
     }
 
@@ -135,7 +135,6 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         if (null !== $this->sLanguageIsoName) {
             return $this->sLanguageIsoName;
         }
-
 
         if (false === TdbCmsTags::CMSFieldIsTranslated('name')) {
             return '';
@@ -222,7 +221,6 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
                 $aFoundTags[] = array('tag' => $name, 'freq' => $iTagUsageCount);
             }
         }
-
 
         return $aFoundTags;
     }

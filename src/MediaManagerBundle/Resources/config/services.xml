@@ -113,6 +113,7 @@
             <argument type="service" id="chameleon_system_media_manager.list_request_service"/>
             <argument type="service" id="translator"/>
             <argument type="service" id="chameleon_system_media_manager.extension_collection"/>
+            <argument type="service" id="chameleon_system_core.response.response_variable_replacer"/>
             <tag name="chameleon_system.module"/>
         </service>
 

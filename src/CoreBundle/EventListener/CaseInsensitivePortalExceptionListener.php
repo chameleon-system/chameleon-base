@@ -67,7 +67,7 @@ class CaseInsensitivePortalExceptionListener
      *
      * @param string $relativePath
      *
-     * @return null|string
+     * @return string|null
      */
     private function getPortalPrefixCandidate(string $relativePath): ?string
     {

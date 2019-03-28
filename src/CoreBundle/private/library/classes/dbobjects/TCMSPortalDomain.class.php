@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
-
 class TCMSPortalDomain extends TCMSRecord
 {
     public function __construct($id = null, $iLanguage = null)
@@ -66,24 +64,6 @@ class TCMSPortalDomain extends TCMSRecord
         return $this->sqlData['sslname'];
     }
 
-    /**
-     * returns true if the current domain ends with _DEVELOPMENT_DOMAIN.
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - use the service container to provide environment-dependent behavior.
-     */
-    public function IsDevelopmentDomain()
-    {
-        $bIsDevelopmentDomain = false;
-        $sDomainName = $this->GetName();
-        if (_DEVELOPMENT_DOMAIN == substr($sDomainName, (strlen($sDomainName) - strlen(_DEVELOPMENT_DOMAIN)))) {
-            $bIsDevelopmentDomain = true;
-        }
-
-        return $bIsDevelopmentDomain;
-    }
-
     public static function ConvertFromIDN($sString)
     {
         static $IDN;
@@ -116,27 +96,5 @@ class TCMSPortalDomain extends TCMSRecord
         $aDomainParts['domain'] = $domain;
 
         return $aDomainParts;
-    }
-
-    /**
-     * returns the current domain.
-     *
-     * @return TCMSPortalDomain
-     *
-     * @deprecated since 6.2.0 - use chameleon_system_core.portal_domain_service::getActiveDomain() instead.
-     */
-    public static function &GetActiveDomain()
-    {
-        $domain = self::getStaticPortalDomainService()->getActiveDomain();
-
-        return $domain;
-    }
-
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private static function getStaticPortalDomainService()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

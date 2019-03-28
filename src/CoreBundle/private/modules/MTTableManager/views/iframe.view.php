@@ -62,7 +62,7 @@ $fieldName = $oGlobal->GetUserData('fieldName'); /* if called through a field, t
         /** @var $oMenuItem TCMSTableEditorMenuItem */
         while ($oMenuItem = $data['oMenuItems']->Next()) {
             echo '<div class="button-item col-12 col-sm-6 col-md-auto">';
-                echo $oMenuItem->GetMenuItemHTML();
+            echo $oMenuItem->GetMenuItemHTML();
             echo '</div>';
         } ?>
         </div>

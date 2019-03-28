@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -108,7 +109,7 @@ class MTTableEditor extends TCMSModelBase
         $translatedObject->Load($targetObject->id);
         $translatedFields = TdbCmsConfig::GetInstance()->GetListOfTranslatableFields($targetObject->table);
         $new = $targetObject->sqlData;
-        $activeLanguagePrefix = TGlobal::GetLanguagePrefix(TGlobal::GetActiveLanguageId());
+        $activeLanguagePrefix = TGlobal::GetLanguagePrefix($this->getLanguageService()->getActiveLanguageId());
         if (!empty($activeLanguagePrefix)) {
             $activeLanguagePrefix = '__'.$activeLanguagePrefix;
         }
@@ -217,15 +218,6 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
-     * loads workflow relevant data.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function LoadWorkflowData()
-    {
-    }
-
-    /**
      * sets an array of methods where calling is allowed without edit rights to the table.
      */
     protected function DefineReadOnlyMethods()
@@ -320,7 +312,6 @@ class MTTableEditor extends TCMSModelBase
 
             $this->GetPermissionSettings();
             $this->IsRecordLocked();
-            $this->LoadRevisionData();
 
             $this->data['oBaseLanguage'] = $this->oBaseLanguage;
 
@@ -443,16 +434,6 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * loads revision management relevant data if active.
-     */
-    protected function LoadRevisionData()
-    {
-        $this->data['bRevisionManagementActive'] = false;
-    }
-
-    /**
      * returns the Tablist for the current Table.
      *
      * @return TdbCmsTblFieldTabList
@@ -509,15 +490,12 @@ class MTTableEditor extends TCMSModelBase
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
-        // first the includes that are needed for all fields
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
 
         // right click contextmenu
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/contextmenu/contextmenu.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contextmenu.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tableeditcontainer.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/tableEditor.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tooltip.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
         if (!$this->IsRecordLocked() && array_key_exists('locking_active', $this->oTableManager->oTableConf->sqlData) && '1' == $this->oTableManager->oTableConf->sqlData['locking_active'] && !$this->bIsReadOnlyMode && CHAMELEON_ENABLE_RECORD_LOCK) {
@@ -676,48 +654,6 @@ class MTTableEditor extends TCMSModelBase
         }
 
         return $bSaveSuccessfull;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * add new record revision using the postdata
-     * executes Save() before saving the revision.
-     */
-    public function AddNewRevision()
-    {
-        $postData = $this->global->GetUserData(null);
-        $this->oTableManager->AddNewRevision($postData);
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     */
-    public function ActivateRevision()
-    {
-        $sRecordRevisionId = $this->global->GetUserData('sRecordRevisionId');
-        if (!empty($sRecordRevisionId) && $this->oTableManager->oTableEditor->AllowEdit()) {
-            $this->oTableManager->ActivateRecordRevision($sRecordRevisionId);
-        }
-
-        $parameter = array('pagedef' => $this->global->GetUserData('pagedef'), 'tableid' => $this->oTableManager->sTableId, 'id' => $this->oTableManager->sId);
-
-        $aAdditionalParams = $this->GetHiddenFieldsHook();
-        if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
-            $parameter = array_merge($parameter, $aAdditionalParams);
-        }
-
-        $this->controller->HeaderRedirect($parameter);
-    }
-
-    /**
-     * publishes workflow changes.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function PublishViaAjax()
-    {
-        return false;
     }
 
     /**
@@ -931,7 +867,7 @@ class MTTableEditor extends TCMSModelBase
                 if (false === $parentURL) {
                     $parentURL = URL_CMS_CONTROLLER;
                 } else {
-                    $parentURL .= '&_histid='.($breadcrumb->index - 1);
+                    $parentURL .= '&_histid='.($breadcrumb->getHistoryCount() - 1);
                 }
             }
 
@@ -1051,21 +987,6 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * checks for the last revision number for this record,
-     * if no revisions are found it returns 0.
-     *
-     * @return int
-     */
-    protected function GetLastRevisionNumber()
-    {
-        $iLastRevisionNumber = $this->oTableManager->oTableEditor->GetLastRevisionNumber();
-
-        return $iLastRevisionNumber;
-    }
-
-    /**
      * ajax call to check if a record is locked by user locking or a workflow transaction.
      *
      * usage:
@@ -1099,20 +1020,6 @@ class MTTableEditor extends TCMSModelBase
     }
 
     /**
-     * translates field contents using Microsoft Translator.
-     *
-     * @deprecated since 6.2.0 - translation service is no longer supported.
-     */
-    public function TranslateString()
-    {
-        if ($this->global->UserDataExists('txt')) {
-            return $this->global->GetUserData('txt');
-        }
-
-        return false;
-    }
-
-    /**
      * @param string|null $fieldName
      * @param string|null $state
      */
@@ -1141,5 +1048,10 @@ class MTTableEditor extends TCMSModelBase
     private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
+    }
+
+    private function getLanguageService(): LanguageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 }
