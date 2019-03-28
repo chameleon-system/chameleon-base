@@ -14,6 +14,8 @@ class TCMSTableEditorMasterPagedefSpot extends TCMSTableEditor
     protected function DeleteRecordReferences()
     {
         // delete the spot connections
+        $query = "SELECT * FROM `cms_tpl_page_cms_master_pagedef_spot`
+                      WHERE `cms_master_pagedef_spot_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'";
 
         $oCmsTplPageCmsMasterPagedefSpotList = TdbCmsTplPageCmsMasterPagedefSpotList::GetList($query);
         /** @var $oCmsTplPageCmsMasterPagedefSpotList TdbCmsTplPageCmsMasterPagedefSpotList */

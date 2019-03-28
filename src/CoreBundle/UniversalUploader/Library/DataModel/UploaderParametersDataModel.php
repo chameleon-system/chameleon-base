@@ -370,12 +370,6 @@ class UploaderParametersDataModel
             $parameterArray['bProportionExactMatch'] = '0';
         }
 
-        if ($this->isBIgnoreWorkflow()) {
-            $parameterArray['bIgnoreWorkflow'] = '1';
-        } else {
-            $parameterArray['bIgnoreWorkflow'] = '0';
-        }
-
         if ($this->isSingleMode()) {
             $parameterArray['singleMode'] = '1';
         } else {
