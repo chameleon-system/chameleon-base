@@ -9,6 +9,14 @@ Support for Adobe Flash was removed. We recommend to search the media manager fo
 extensions "flv", "f4v" and "swf") and remove them.
 The media manager will also display where these files are still used; these usages should also be removed.
 
+# Informational
+
+## JavaScript disallowed in WYSIWYG fields by default
+
+JavaScript in WYSIWYG fields poses a potential security risk which is why it is now disallowed by default. If the
+project requires WYSIWYG JavaScript, allow it by setting the configuration key
+`chameleon_system_cms_text_field: allow_script_tags: true`.
+
 # Changed Features
 
 ## Changed Interfaces and Method Signatures
