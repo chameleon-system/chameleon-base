@@ -19,11 +19,31 @@
 
             <trans-unit id="chameleon_system_image_crop.editor.save">
                 <source>chameleon_system_image_crop.editor.save</source>
-                <target>Speichern</target>
+                <target>Ausschnitt speichern (%savingMode%)</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.save_and_set">
+                <source>chameleon_system_image_crop.editor.save_and_set</source>
+                <target>Ausschnitt speichern (%savingMode%) und setzen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.saving_mode.update_existing">
+                <source>chameleon_system_image_crop.editor.saving_mode.update_existing</source>
+                <target>bestehenden aktualisieren</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.saving_mode.create_new">
+                <source>chameleon_system_image_crop.editor.saving_mode.create_new</source>
+                <target>neuen erstellen</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.editor.crop_name_placeholder">
                 <source>chameleon_system_image_crop.editor.crop_name_placeholder</source>
+                <target>Name vergeben (optional)</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.crop_name_placeholder_custom_size">
+                <source>chameleon_system_image_crop.editor.crop_name_placeholder_custom_size</source>
                 <target>Name vergeben</target>
             </trans-unit>
 
@@ -52,11 +72,6 @@
                 <target>Bild oder Bildausschnitt nicht gefunden.</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_image_crop.editor.select">
-                <source>chameleon_system_image_crop.editor.select</source>
-                <target>Auswählen</target>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_image_crop.media_manager_crops.no_crops_yet">
                 <source>chameleon_system_image_crop.media_manager_crops.no_crops_yet</source>
                 <target>Noch keine Ausschnitte vorhanden.</target>
@@ -75,6 +90,16 @@
             <trans-unit id="chameleon_system_image_crop.media_manager_crops.headline">
                 <source>chameleon_system_image_crop.media_manager_crops.headline</source>
                 <target>Ausschnitte</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.media_manager_crops.delete">
+                <source>chameleon_system_image_crop.media_manager_crops.delete</source>
+                <target>Ausschnitt löschen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.editor.crop_not_deleted">
+                <source>chameleon_system_image_crop.editor.crop_not_deleted</source>
+                <target>Ausschnitt konnte nicht gelöscht werden.</target>
             </trans-unit>
         </body>
     </file>

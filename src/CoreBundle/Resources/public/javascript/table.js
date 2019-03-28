@@ -122,6 +122,10 @@ $(document).ready(function () {
         $(this).select2($(this).data('select2-option'));
     });
 
+    $('.submitOnSelect').on('select2:select', function (e) {
+        $(this).closest('form').submit();
+    });
+
     function createSearchWordInputWithValue(value){
         const listname = searchLookup.data('listname');
 

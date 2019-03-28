@@ -150,7 +150,7 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
             $this->SaveRow($aRow);
         }
 
-        $sFile = $this->CreateCSV();
+        $this->CreateCSV();
 
         $sMsg = 'Es wurden '.$oDataList->Length().' Datensätze exportiert. Sie können die CSV hier herunterladen:<br />';
         $sMsg .= '<a href="'.URL_OUTBOX.'/'.$this->GetExportTableName().'.csv"><strong>'.URL_OUTBOX.'/'.$this->GetExportTableName().'.csv</strong></a><br />';

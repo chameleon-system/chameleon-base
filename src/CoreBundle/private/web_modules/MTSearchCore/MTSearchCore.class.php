@@ -283,7 +283,7 @@ class MTSearchCore extends TUserCustomModelBase
     }
 
     /**
-     * @return null|TdbCmsPortal
+     * @return TdbCmsPortal|null
      */
     private function getActivePortal()
     {

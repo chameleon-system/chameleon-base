@@ -32,11 +32,6 @@
 
         <service id="chameleon_system_core.tools" class="TTools" public="true"/>
 
-        <service id="chameleon_system_core.password" class="TPkgCmsSecurity_Password">
-            <argument type="service" id="chameleon_system_core.security.password.password_hash_generator"/>
-            <deprecated>The %service_id% service is deprecated since Chameleon 6.2.0. Use chameleon_system_core.security.password.password_hash_generator instead.</deprecated>
-        </service>
-
         <service id="chameleon_system_core.filemanager" class="TPkgCmsFileManager_FileSystem" public="true"/>
 
         <service id="chameleon_system_core.redirectstrategy.registershutdown" class="ChameleonRedirectStrategyRegisterShutdown" public="false">
@@ -144,7 +139,8 @@
             <argument type="service" id="chameleon_system_core.viewPathManager" />
             <argument type="service" id="chameleon_system_cms_cache.cache" />
             <argument type="service" id="chameleon_system_core.global" />
-            <argument /> <!-- Module execution strategy will be set by ChameleonSystemCoreExtension -->
+            <argument />  <!-- Module execution strategy will be set by ChameleonSystemCoreExtension -->
+            <argument type="service" id="chameleon_system_core.request_info_service"/>
         </service>
         <service id="chameleon_system_core.usermoduleloader" class="TUserModuleLoader" parent="chameleon_system_core.moduleloader" public="true" />
 
@@ -153,7 +149,6 @@
         <service id="chameleon_system_core.base_controller" abstract="true">
             <argument type="service" id="request_stack"/>
             <argument type="service" id="event_dispatcher" />
-            <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <call method="setCache">
                 <argument type="service" id="chameleon_system_cms_cache.cache" />
             </call>
@@ -559,11 +554,6 @@
             <argument type="service" id="chameleon_system_core.util.input_filter" />
         </service>
 
-        <service id="chameleon_system_core.util.snippet_chain" class="ChameleonSystem\CoreBundle\Util\SnippetChainUtil">
-            <argument type="service" id="database_connection"/>
-            <deprecated>The %service_id% service is deprecated since Chameleon 6.2.0. Use chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier instead.</deprecated>
-        </service>
-
         <service id="chameleon_system_core.util.input_filter" class="ChameleonSystem\CoreBundle\Util\InputFilterUtil" public="true">
             <argument type="service" id="request_stack" />
         </service>
@@ -880,7 +870,6 @@
 
         <service id="chameleon_system_core.service.main_menu_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator">
             <argument id="database_connection" type="service"/>
-            <argument id="chameleon_system_core.tools" type="service"/>
             <argument id="chameleon_system_core.util.field_translation" type="service"/>
         </service>
     </services>

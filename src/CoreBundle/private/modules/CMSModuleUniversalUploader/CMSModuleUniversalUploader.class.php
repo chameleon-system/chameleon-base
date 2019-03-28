@@ -139,7 +139,7 @@ class CMSModuleUniversalUploader extends TCMSModelBase
     }
 
     /**
-     * @return null|Request
+     * @return Request|null
      */
     private function getRequest()
     {

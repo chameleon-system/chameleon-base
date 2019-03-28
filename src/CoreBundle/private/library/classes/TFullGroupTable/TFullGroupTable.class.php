@@ -68,24 +68,6 @@ class TFullGroupTable extends TGroupTable
     public $pageingLocation = 'top_and_bottom';
 
     /**
-     * @deprecated since 6.3.0 - We don`t need to configure an icon URL anymore. We use an icon font.
-     *
-     * path to the image to display for sorting in ASC order (default: NULL).
-     *
-     * @var mixed - string or null if no image path set
-     */
-    public $iconSortASC = null;
-
-    /**
-     * @deprecated since 6.3.0 - We don`t need to configure an icon URL anymore. We use an icon font.
-     *
-     * path to the image to display for sorting in DESC order (default: NULL).
-     *
-     * @var mixed - string or null if no image path set
-     */
-    public $iconSortDESC = null;
-
-    /**
      * if set to true a select box will appear that allows you to reduce the list to one group (default = true);
      * set it to false if you use a external group selector, be sure $useGroupSelector is true!
      *
@@ -479,11 +461,13 @@ class TFullGroupTable extends TGroupTable
                 $sTable .= $this->sPagingSection;
             }
 
+            $sTable .= '<div class="table-responsive">';
             $sTable .= '<table '.$this->getInlineFromAttributes($this->getManagedAttributes()).'class="'.$this->getTableCSS().'">';
             $sTable .= $this->GetCellWidths();
             $sTable .= $this->sHeaderSection;
             $sTable .= $this->sContentSection;
             $sTable .= '</table>';
+            $sTable .= '</div>';
 
             if ('bottom' == $this->pageingLocation || 'top_and_bottom' == $this->pageingLocation) {
                 $sTable .= $this->sPagingSection;
@@ -716,10 +700,10 @@ class TFullGroupTable extends TGroupTable
             document.'.$this->listName.'.submit();
         }
         </script>
-        <div class="d-flex justify-content-between">';
+        <div class="d-flex justify-content-between flex-wrap">';
         $tableNavigation .= '<nav>';
-        $tableNavigation .= '<ul class="pagination pagination-md TFullGroupTablePagination">';
-        $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><span class="fas fa-list-ul" aria-hidden="true" style="margin-right: 5px;"></span>'.$hitText.'</a></li>';
+        $tableNavigation .= '<ul class="pagination pagination-md TFullGroupTablePagination flex-wrap">';
+        $tableNavigation .= '<li class="disabled page-item"><a href="#" class="page-link"><i class="fas fa-list-ul d-none d-lg-inline pr-2"></i>'.$hitText.'</a></li>';
 
         if ($this->startRecord > 0 && -1 != $this->showRecordCount) {
             $tableNavigation .= '<li class="page-item"><a href="javascript:switchPage(\'0\');" class="page-link"><i class="fas fa-fast-backward" aria-hidden="true"></i></a></li>';
@@ -846,7 +830,7 @@ class TFullGroupTable extends TGroupTable
             $sGroupSelectorHTML = '<div class="form-group mr-2">
             <label>'.$this->showGroupSelectorText.'</label>';
 
-            $sGroupSelectorHTML .= "<select class=\"form-control form-control-sm\" name=\"{$this->groupByCell->name}\" data-select2-option=\"{}\" onChange=\"document.{$this->listName}._startRecord.value=0; document.{$this->listName}.submit();\" ".$this->style->GetGroupSelector().">\n";
+            $sGroupSelectorHTML .= "<select class=\"form-control form-control-sm submitOnSelect\" name=\"{$this->groupByCell->name}\" data-select2-option=\"{}\" onChange=\"document.{$this->listName}._startRecord.value=0; document.{$this->listName}.submit();\" ".$this->style->GetGroupSelector().">\n";
             // add "show all" option to group selector
             $sGroupSelectorHTML .= '<option value=""';
             if (empty($this->_postData[$this->groupByCell->name])) {
@@ -888,7 +872,7 @@ class TFullGroupTable extends TGroupTable
             $filterContent .= '<div class="form-group mr-2">';
 
             if (true === $this->isAutoCompleteEnabled) {
-                $formatString =  '<select id="searchLookup" name="_search_word" data-listname="%s" class="form-control form-control-sm" data-select2-placeholder="%s" data-select2-ajax="%s" data-record-url="%s">';
+                $formatString = '<select id="searchLookup" name="_search_word" data-listname="%s" class="form-control form-control-sm" data-select2-placeholder="%s" data-select2-ajax="%s" data-record-url="%s">';
                 $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->listName), TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->getRecordAutocompleteUrl()), TGlobal::OutHTML($this->getRecordUrl()));
 
                 if ('' !== $this->_postData['_search_word']) {
@@ -898,7 +882,7 @@ class TFullGroupTable extends TGroupTable
 
                 $filterContent .= '</select>';
             } else {
-                $formatString =  '<input id="searchLookup" name="_search_word" class="form-control form-control-sm" placeholder="%s" value="%s">';
+                $formatString = '<input id="searchLookup" name="_search_word" class="form-control form-control-sm" placeholder="%s" value="%s">';
                 $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->_postData['_search_word']));
             }
 
@@ -948,7 +932,7 @@ class TFullGroupTable extends TGroupTable
             '_fnc' => 'getAutocompleteRecordList',
             'sRestrictionField' => $restrictionField,
             'sRestriction' => $restriction,
-            'recordID' => ''
+            'recordID' => '',
         ], PATH_CMS_CONTROLLER.'?', '&');
 
         return $sAjaxURL;
@@ -964,7 +948,7 @@ class TFullGroupTable extends TGroupTable
             'pagedef' => $pagedef,
             'tableid' => $tableId,
             'sRestriction' => '',
-            'sRestrictionField' => ''
+            'sRestrictionField' => '',
         ], PATH_CMS_CONTROLLER.'?', '&');
 
         return $recordUrl;
@@ -977,6 +961,7 @@ class TFullGroupTable extends TGroupTable
         if ('' !== $customTableEditor) {
             $pagedef = $customTableEditor;
         }
+
         return $pagedef;
     }
 

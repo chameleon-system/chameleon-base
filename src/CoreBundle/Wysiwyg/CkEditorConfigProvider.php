@@ -52,7 +52,6 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
             'dialogadvtab',
             'div',
             'find',
-            'flash',
             'iframe',
             'image',
             'justify',
@@ -101,7 +100,6 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
             'chameleon_content_filter_extra',
             'chameleon_document_link',
             'chameleon_download_placeholder',
-            'chameleon_flash',
             'chameleon_image',
             'chameleon_link',
             'placeholder',
@@ -238,7 +236,6 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
                 'name' => 'insert',
                 'items' => array(
                     'Image',
-                    'Flash',
                     'Youtube',
                     'oembed',
                     'Table',
@@ -277,10 +274,6 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
             'filebrowserImageBrowseUrl' => "'".$this->mediaManagerUrlGenerator->getUrlToPickImageForWysiwyg()."'",
             'filebrowserImageBrowseUrlWindowHeight' => '800',
             'filebrowserImageBrowseUrkWindowWidth' => '1200',
-
-            'filebrowserFlashBrowseUrl' => "'".PATH_CMS_CONTROLLER."?pagedef=CMSwysiwygImageChooser&sAllowedFileTypes=swf'",
-            'filebrowserFlashWindowHeight' => '800',
-            'filebrowserFlashWindowWidth' => '1200',
 
             'filebrowserCreate_chameleon_document_linkBrowseUrl' => "'".PATH_CMS_CONTROLLER."?pagedef=CMSDocumentManager&mode=wysiwyg'",
             'filebrowserCreate_chameleon_document_linkWindowHeight' => '800',

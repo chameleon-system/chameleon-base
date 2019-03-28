@@ -37,16 +37,20 @@ class RequestInfoService implements RequestInfoServiceInterface
      */
     private $urlPrefixGenerator;
     /**
-     * @var null|string
+     * @var string|null
      */
     private $requestId;
 
     /**
      * Cache of request type.
      *
-     * @var null|int
+     * @var int|null
      */
     private $chameleonRequestType;
+    /**
+     * @var bool
+     */
+    private $isCmsTemplateEngineEditModeCache;
 
     /**
      * @param RequestStack                 $requestStack
@@ -107,7 +111,17 @@ class RequestInfoService implements RequestInfoServiceInterface
      */
     public function isCmsTemplateEngineEditMode()
     {
-        return \TGlobal::IsCMSTemplateEngineEditMode();
+        if (null !== $this->isCmsTemplateEngineEditModeCache) {
+            return $this->isCmsTemplateEngineEditModeCache;
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return false;
+        }
+        $this->isCmsTemplateEngineEditModeCache = false === \TGlobal::IsCMSMode() && 'true' === $request->get('__modulechooser');
+
+        return $this->isCmsTemplateEngineEditModeCache;
     }
 
     /**

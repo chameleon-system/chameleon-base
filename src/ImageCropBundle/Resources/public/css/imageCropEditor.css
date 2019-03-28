@@ -34,11 +34,6 @@
     background: rgb(179, 232, 255);
 }
 
-.snippetImageCropImageCropEditorImageCropEditorForm {
-    margin-bottom: 20px;
-    margin-top: 10px;
-}
-
 .snippetImageCropImageCropEditorImageCropEditorForm input.crop-name {
     width: 200px;
 }

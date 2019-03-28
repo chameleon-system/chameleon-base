@@ -29,7 +29,7 @@ class TrackViewsListener
 
         TPkgTrackObjectViews::GetInstance()->WriteView();
 
-        $name = PATH_USER_CMS_PUBLIC.'/blackbox/images/spacer.gif';
+        $name = '/bundles/chameleonsystemtrackviews/images/pixel.gif';
 
         $response = new Response();
         $response->headers->set('Content-Type', 'image/gif');

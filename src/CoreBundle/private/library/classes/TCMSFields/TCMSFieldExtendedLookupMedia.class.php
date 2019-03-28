@@ -137,7 +137,7 @@ class TCMSFieldExtendedLookupMedia extends TCMSFieldExtendedLookup
     }
 
     /**
-     * @return null|TdbCmsMediaTree
+     * @return TdbCmsMediaTree|null
      */
     protected function getDefaultMediaCategory()
     {

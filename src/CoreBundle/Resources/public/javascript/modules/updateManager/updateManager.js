@@ -164,7 +164,7 @@ CHAMELEON.UPDATE_MANAGER = {
             $(self.config.sGoBackButtonId).bind('click',function (event) {
                 event.preventDefault();
                 return false;
-            }).attr("disabled", "disabled");
+            }).addClass("disabled");
 
             self._runUpdates();
         });
@@ -342,7 +342,7 @@ CHAMELEON.UPDATE_MANAGER = {
     _activateGuiElements: function()
     {
         $(this.config.sRunUpdatesButtonId).unbind();
-        $(this.config.sGoBackButtonId).unbind().removeAttr('disabled');
+        $(this.config.sGoBackButtonId).unbind().removeClass('disabled');
         $('#updateProgressBarText').text(this.config.text.progressBarFinished);
     },
     addPostUpdateCommand: function(sCommand, sMessage)

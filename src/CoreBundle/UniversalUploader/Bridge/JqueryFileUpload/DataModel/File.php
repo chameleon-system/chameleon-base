@@ -17,7 +17,7 @@ namespace ChameleonSystem\CoreBundle\UniversalUploader\Bridge\JqueryFileUpload\D
 class File
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     public $recordId;
 

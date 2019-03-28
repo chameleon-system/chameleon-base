@@ -9,7 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -57,7 +59,7 @@ class TCMSSearchIndexPortal
     private $indexedPages = array();
 
     /**
-     * @var null|array
+     * @var array|null
      */
     private $validPrefixList = null;
 
@@ -84,7 +86,9 @@ class TCMSSearchIndexPortal
          */
         $this->loadPortalMetaData();
 
-        $this->notIndexedPages = array($this->getPortal()->GetPortalHomeURL());
+        $this->notIndexedPages = [
+            $this->getPageService()->getLinkToPortalHomePageAbsolute([], $this->getPortal()),
+        ];
         while (count($this->notIndexedPages)) {
             $pageURL = array_shift($this->notIndexedPages);
             $this->indexUrl($pageURL);
@@ -537,11 +541,16 @@ class TCMSSearchIndexPortal
         return $this->databaseConnection;
     }
 
+    private function getPageService(): PageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.page_service');
+    }
+
     /**
      * @return PortalDomainServiceInterface
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

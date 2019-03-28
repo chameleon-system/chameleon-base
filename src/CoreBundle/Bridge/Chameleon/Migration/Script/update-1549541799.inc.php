@@ -112,6 +112,7 @@ base t pkg_cms_theme_block                   layout
 base t cms_message_manager_message_type      layout
 shop t shop_variant_display_handler          layout
 shop t shop_variant_type_handler             layout
+base t cms_image_crop_preset                 layout
 base t cms_config_themes                     layout
 base t cms_font_image                        layout
 base t cms_url_alias                         routing

@@ -184,7 +184,7 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     protected function getRequestUID()
     {

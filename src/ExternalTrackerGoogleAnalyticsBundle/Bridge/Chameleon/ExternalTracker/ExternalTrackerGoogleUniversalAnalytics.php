@@ -118,7 +118,7 @@ class ExternalTrackerGoogleUniversalAnalytics extends TdbPkgExternalTracker
      *
      * @param TPkgExternalTrackerState $state
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getIdentifierCode(TPkgExternalTrackerState $state)
     {
@@ -154,7 +154,7 @@ class ExternalTrackerGoogleUniversalAnalytics extends TdbPkgExternalTracker
     /**
      * @param TPkgExternalTrackerState $state
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getAddToBasketEvent(TPkgExternalTrackerState $state)
     {

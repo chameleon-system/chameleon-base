@@ -123,7 +123,6 @@ class TCMSRecordWritable extends TCMSRecord
             reset($this->sqlData);
             $oTableConf = &$this->GetTableConf();
             $oFields = &$oTableConf->GetFields($this, true, true);
-            $bIsFirst = true;
             $this->sqlData['lastmodified'] = date('Y-m-d H:i:s');
 
             $aQueryFieldStrings = array();
@@ -159,7 +158,6 @@ class TCMSRecordWritable extends TCMSRecord
                 // need to create an id.. try to insert untill we have a free id. We will try at most 3 times
                 $iMaxTry = 3;
                 $bWasInserted = false;
-                $uid = null;
                 do {
                     $uid = TTools::GetUUID();
                     $sInsertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($uid)."'";
@@ -269,7 +267,6 @@ class TCMSRecordWritable extends TCMSRecord
                 // need to create an id.. try to insert until we have a free id. We will try at most 3 times
                 $iMaxTry = 3;
                 $bWasInserted = false;
-                $uid = null;
                 do {
                     $uid = TTools::GetUUID();
                     $sInsertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($uid)."'";
@@ -488,7 +485,6 @@ class TCMSRecordWritable extends TCMSRecord
         if ($user->IsLoggedIn()) {
             $iCurrentUserId = ''; // user id of the table
 
-            $iLoggedInUserId = null;
             $sUserTableName = $user->table;
             $iLoggedInUserId = $user->id;
 
@@ -884,11 +880,7 @@ class TCMSRecordWritable extends TCMSRecord
                         $aFileData['error'] = 0;
                         $aFileData['size'] = filesize($sTmpFileName);
 
-                        try {
-                            $bUploadOK = $this->UploadCMSDocument($aFileData, $sFileName, $sFieldName, $iDocumentCategoryId, $bIsPrivate, $sDescription, true, $sDocumentID);
-                        } catch (TPkgCmsFileManagerException $e) {
-                            // errors are logged
-                        }
+                        $bUploadOK = $this->UploadCMSDocument($aFileData, $sFileName, $sFieldName, $iDocumentCategoryId, $bIsPrivate, $sDescription, true, $sDocumentID);
                     }
                 }
             }

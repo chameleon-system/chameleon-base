@@ -191,7 +191,7 @@ class CropImageExtension extends Twig_Extension
      * @param int         $targetWidth
      * @param int         $targetHeight
      *
-     * @return null|string
+     * @return string|null
      */
     public function imageUrlWithCropSize($imageId, $cropId, $targetWidth = 0, $targetHeight = 0)
     {

@@ -72,7 +72,7 @@ abstract class AbstractDatabaseAccessLayer
     /**
      * @param $id
      *
-     * @return null|mixed
+     * @return mixed|null
      */
     protected function getFromCache($id)
     {

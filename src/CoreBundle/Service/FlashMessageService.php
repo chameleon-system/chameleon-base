@@ -33,7 +33,7 @@ class FlashMessageService implements FlashMessageServiceInterface
     }
 
     /**
-     * @return null|SessionInterface
+     * @return SessionInterface|null
      */
     private function getSession()
     {

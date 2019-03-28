@@ -62,7 +62,7 @@ class TGoogleOverviewMap
     /**
      * you need to pass the corresponding map object.
      *
-     * @var null|TGoogleMap
+     * @var TGoogleMap|null
      */
     public $oGoogleMap = null;
 

@@ -60,7 +60,10 @@ $rowCount = 0;
             foreach ($aMessages as $aMessage) {
                 if (isset($aMessage['sMessageRefersToField'])) {
                     // add the class to field
-                    echo "$('#fieldname_".$aMessage['sMessageRefersToField']."').addClass('bg-'+CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(".$aMessage['sMessageType']."));\n";
+                    echo sprintf('$("#fieldname_%s").addClass("bg-" + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle("%s"));',
+                        TGlobal::OutJS($aMessage['sMessageRefersToField']),
+                        TGlobal::OutJS($aMessage['sMessageType'])
+                        );
                 } ?>toasterMessage('<?=$aMessage['sMessage']; ?>', '<?=TGlobal::OutJS($aMessage['sMessageType']); ?>');<?php
             } ?>
         });

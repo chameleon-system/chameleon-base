@@ -58,7 +58,7 @@ class TCMSListManagerLogEntries extends TCMSListManagerFullGroupTable
     private function getFilterLogLevelSelect($filterLogLevel)
     {
         $oViewRenderer = new ViewRenderer();
-        $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm');
+        $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm submitOnSelect');
         $oViewRenderer->AddSourceObject('sName', 'filterLogLevel');
         $oViewRenderer->AddSourceObject('sLabelText', $this->getTranslation('pkg_cms_core_log.log_table.field_level'));
 

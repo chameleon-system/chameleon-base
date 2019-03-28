@@ -128,7 +128,7 @@ class ImageCropUsageDeleteService implements MediaItemUsageDeleteServiceInterfac
     /**
      * @param MediaItemUsageDataModel $usage
      *
-     * @return null|TdbCmsFieldConf
+     * @return TdbCmsFieldConf|null
      */
     private function getFieldDefinitionFromUsage(MediaItemUsageDataModel $usage)
     {

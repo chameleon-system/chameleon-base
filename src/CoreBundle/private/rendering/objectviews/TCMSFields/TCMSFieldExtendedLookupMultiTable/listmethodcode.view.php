@@ -1,5 +1,7 @@
             $oList = null;
-            if (is_null($iLanguageId)) $iLanguageId = TGlobal::GetActiveLanguageId();
+            if (null === $iLanguageId) {
+                self::getMyLanguageService()->getActiveLanguageId();
+            }
             $oRecord = <?=TCMSTableToClass::PREFIX_CLASS.TCMSTableToClass::ConvertToClassString($sTableDatabaseName); ?>::GetNewInstance($<?=$iLookupFieldName; ?>);
             $sFilter = "`<?=$sTableDatabaseName; ?>`.`<?=$aFieldData['sFieldDatabaseName']; ?>`= ".\ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection')->quote($<?=$iLookupFieldName; ?>)."
                             AND `<?=$sTableDatabaseName; ?>`.`<?=$aFieldData['sFieldDatabaseName']; ?>_table_name`= ".\ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection')->quote($oRecord->sqlData['<?=$aFieldData['sFieldDatabaseName']; ?>_table_name']);

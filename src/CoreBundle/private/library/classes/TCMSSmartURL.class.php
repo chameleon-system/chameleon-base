@@ -9,16 +9,12 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
-use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * maps urls to pagedefs, and pagedefs to pages.
@@ -57,17 +53,6 @@ class TCMSSmartURL
     public static function setAdditionalCacheKeys($aAdditionalCacheKeys = array())
     {
         self::$additionalCacheKeys = $aAdditionalCacheKeys;
-    }
-
-    /**
-     * @param array $aAdditionalCacheKeys
-     *                                    used to be called by every index.php - since we can not change every index.php for every customer, we must keep it
-     *
-     * @deprecated
-     */
-    public static function SetRealPagdef($aAdditionalCacheKeys = array())
-    {
-        self::setAdditionalCacheKeys($aAdditionalCacheKeys);
     }
 
     /**
@@ -146,62 +131,6 @@ class TCMSSmartURL
     }
 
     /**
-     * should return the pageid of the document not found page for the portal.
-     * return false if no "not-found" page exists.
-     *
-     * @param int $iPortalId
-     *
-     * @return int
-     *
-     * @deprecated since 6.2.0 - throw a NotFoundHttpException to display the not-found page.
-     */
-    public static function GetNotFoundPagedef($iPortalId)
-    {
-        $iNotFoundPageId = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
-        $oPortal = $oURLData->GetPortal();
-        if (array_key_exists('page_not_found_node', $oPortal->sqlData)) {
-            $oNotFoundNode = self::getTreeService()->getById($oPortal->sqlData['page_not_found_node']);
-            if (null !== $oNotFoundNode) {
-                $iNotFoundPageId = $oNotFoundNode->GetLinkedPage();
-                if (empty($iNotFoundPageId)) {
-                    $iNotFoundPageId = false;
-                }
-            }
-        }
-
-        return $iNotFoundPageId;
-    }
-
-    /**
-     * should return the pageid of the not found page for the portal.
-     * return false if no "document-not-found" page exists.
-     *
-     * @param int $iPortalId
-     *
-     * @return int
-     *
-     * @deprecated since 6.2.0 - throw a NotFoundHttpException to display the not-found page.
-     */
-    public static function GetDocumentNotFoundPagedef($iPortalId)
-    {
-        $iNotFoundPageId = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
-        $oPortal = $oURLData->GetPortal();
-        if (array_key_exists('document_not_found_node', $oPortal->sqlData)) {
-            $oNotFoundNode = self::getTreeService()->getById($oPortal->sqlData['document_not_found_node']);
-            if (null !== $oNotFoundNode) {
-                $iNotFoundPageId = $oNotFoundNode->GetLinkedPage();
-                if (empty($iNotFoundPageId)) {
-                    $iNotFoundPageId = false;
-                }
-            }
-        }
-
-        return $iNotFoundPageId;
-    }
-
-    /**
      * execute all custom handlers untill a pagedef is found. if none is found, return false
      * the custom handler which found a pagedef can return custom cache triggers.
      *
@@ -243,249 +172,6 @@ class TCMSSmartURL
     }
 
     /**
-     * converts a page title or something else to a valid URL.
-     *
-     * @param string $sRealName
-     *
-     * @return string
-     *
-     * @deprecated since at least 2009 - use chameleon_system_core.util.url_normalization instead
-     */
-    public static function RealNameToURLName($sRealName)
-    {
-        return self::getUrlNormalizationUtil()->normalizeUrl($sRealName);
-    }
-
-    /**
-     * returns an url path to the tree node iTreeNode for portal iPortalID
-     * NOTE: we ignore the first entry in the path since it is the last stop
-     *       node (so the navigation name, or the division, or the portal.
-     *
-     * @param int    $iTreeNode
-     * @param int    $sPortalId
-     * @param int    $sPageId          (optional, if we have no active page)
-     * @param string $sLanguageIsoName
-     *
-     * @return string
-     *
-     * @deprecated since 6.1.0. Use chameleon_system_core.page_service::getLinkToPageRelative() or chameleon_system_core.tree_service::getLinkToPageForTreeRelative() instead.
-     */
-    public static function GetURL($iTreeNode, $sPortalId = null, $sPageId = null, $sLanguageIsoName = '')
-    {
-        if (null === $sPortalId) {
-            $portal = null;
-        } else {
-            $portal = TdbCmsPortal::GetNewInstance($sPortalId);
-        }
-        if (empty($sLanguageIsoName)) {
-            $language = null;
-        } else {
-            $language = self::getLanguageService()->getLanguageFromIsoCode($sLanguageIsoName);
-        }
-
-        try {
-            if (null === $sPageId) {
-                $treeService = self::getTreeService();
-                $tree = $treeService->getById($iTreeNode);
-                if (null === $tree) {
-                    return '/';
-                }
-
-                return $treeService->getLinkToPageForTreeRelative($tree, array(), $language);
-            }
-
-            return self::getPageService()->getLinkToPageRelative($sPageId, array(), $language);
-        } catch (RouteNotFoundException $e) {
-            if (null !== $portal) {
-                return $portal->GetFieldPageNotFoundNodePageURL();
-            }
-
-            return '/';
-        }
-    }
-
-    /**
-     * returns a URL path to the tree node oRootNode for portal oPortal and oPage.
-     *
-     * @todo we should add logging here to fetch all old links so CMS users can see missing links
-     *
-     * @param TdbCmsTree    $oRootNode        - the node connected to the page
-     * @param TdbCmsPortal  $oPortal
-     * @param TdbCmsTplPage $oPage
-     * @param bool          $bForcePortal
-     * @param string        $sLanguageIsoName
-     *
-     * @return string
-     *
-     * @deprecated since 6.1.0. Use chameleon_system_core.page_service::getLinkToPage*() instead.
-     */
-    public function GetURLFast($oRootNode, &$oPortal, &$oPage, $bForcePortal = false, $sLanguageIsoName = '')
-    {
-        if (!$oRootNode || !$oPortal || !$oPage) {
-            return '#';
-        }
-
-        if (empty($sLanguageIsoName)) {
-            $targetLanguage = null;
-        } else {
-            $targetLanguage = self::getLanguageService()->getLanguageFromIsoCode($sLanguageIsoName);
-        }
-
-        $pageService = self::getPageService();
-        if ($bForcePortal) {
-            return $pageService->getLinkToPageObjectAbsolute($oPage, array(), $targetLanguage);
-        } else {
-            return $pageService->getLinkToPageObjectRelative($oPage, array(), $targetLanguage);
-        }
-    }
-
-    /**
-     * returns true if the target page is on a different domain then the current domain (or on a different protocol) for a target language.
-     *
-     * @param TdbCmsTplPage  $targetPage
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $targetLanguage
-     * @param bool           $currentRequestIsSecure
-     *
-     * @return bool
-     *
-     * @deprecated since 6.1.0. Use chameleon_system_core.page_service or chameleon_system_core.tree_service to generate
-     *                          URLs, which also take care of adding the domain.
-     */
-    private function requiresDomainPrefix(TdbCmsTplPage $targetPage, TdbCmsPortal $portal = null, TdbCmsLanguage $targetLanguage = null, $currentRequestIsSecure = false)
-    {
-        $targetUsesHttps = $currentRequestIsSecure || $targetPage->fieldUsessl;
-        if ($currentRequestIsSecure !== $targetUsesHttps) {
-            return true;
-        }
-        $portalDomainService = self::getPortalDomainService();
-
-        if (null === $portal) {
-            $portal = $portalDomainService->getActivePortal();
-        }
-        $activeLanguageId = self::getLanguageService()->getActiveLanguageId();
-        if ((null !== $portal && $portal->id !== $targetPage->fieldCmsPortalId) || (null !== $targetLanguage && $targetLanguage->id !== $activeLanguageId)) {
-            $primaryDomain = $portalDomainService->getPrimaryDomain($targetPage->fieldCmsPortalId, $targetLanguage->id);
-            $primaryDomainString = $primaryDomain->fieldName;
-            if ($targetUsesHttps && '' !== $primaryDomain->fieldSslname) {
-                $primaryDomainString = $primaryDomain->fieldSslname;
-            }
-
-            $sourceDomain = $portalDomainService->getActiveDomain();
-            $primarySourceDomainString = $sourceDomain->fieldName;
-            if ($targetUsesHttps && '' !== $sourceDomain->fieldSslname) {
-                $primarySourceDomainString = $sourceDomain->fieldSslname;
-            }
-
-            if (mb_strtolower($primaryDomainString) !== mb_strtolower($primarySourceDomainString)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param bool           $bForcePortal
-     * @param TdbCmsTplPage  $oPage
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $targetLanguage
-     *
-     * @return string
-     *
-     * @deprecated since 6.1.0. Use chameleon_system_core.page_service or chameleon_system_core.tree_service to generate
-     *                          URLs, which also take care of adding the domain.
-     */
-    public function GetPathDomainPrefix($bForcePortal, $oPage, TdbCmsPortal $portal = null, TdbCmsLanguage $targetLanguage = null)
-    {
-        $request = $this->getRequestStack()->getCurrentRequest();
-        if (false === $bForcePortal && ((null === $request) || (false === $this->requiresDomainPrefix($oPage, $portal, $targetLanguage, $request->isSecure())))) {
-            return '';
-        }
-
-        $targetUsesHttps = $oPage->fieldUsessl || (null !== $request && $request->isSecure());
-
-        $portalDomainService = self::getPortalDomainService();
-        $primaryDomain = $portalDomainService->getPrimaryDomain($oPage->GetPortal()->id, (null !== $targetLanguage) ? $targetLanguage->id : null);
-        $protocol = 'http://';
-        $primaryDomainString = $primaryDomain->fieldName;
-        if (true === $targetUsesHttps) {
-            $protocol = 'https://';
-            if ('' !== $primaryDomain->fieldSslname) {
-                $primaryDomainString = $primaryDomain->fieldSslname;
-            }
-        }
-
-        return $protocol.$primaryDomainString;
-    }
-
-    /**
-     * @param TdbCmsPortal   $oPortal
-     * @param TdbCmsLanguage $targetLanguage
-     *
-     * @return string
-     *
-     * @deprecated since 6.0.5. Use chameleon_system_core.util.url_prefix_generator::getLanguagePrefix instead
-     */
-    public function GetLanguagePrefixForPortal(TdbCmsPortal $oPortal, TdbCmsLanguage $targetLanguage)
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_prefix_generator')->getLanguagePrefix($oPortal, $targetLanguage);
-    }
-
-    /**
-     * @param string         $sPageMainTreeId
-     * @param TdbCmsPortal   $oPortal
-     * @param TdbCmsLanguage $targetLanguage
-     * @param string         $sPathSeparator
-     *
-     * @return string
-     *
-     * @deprecated since 6.1.0. Use chameleon_system_core.tree_service::getLinkToPageForTree*() instead.
-     */
-    protected function GetPagePathForTreeId($sPageMainTreeId, $oPortal, $targetLanguage, $sPathSeparator = '/')
-    {
-        $sPath = '';
-
-        $sFieldLanguageIsoName = TGlobal::GetLanguagePrefix($targetLanguage->id);
-        if ('' !== $sFieldLanguageIsoName) {
-            $sFieldLanguageIsoName = '__'.$sFieldLanguageIsoName;
-        }
-
-        $oPathNode = self::getTreeService()->getById($sPageMainTreeId, TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId);
-        if (null === $oPathNode) {
-            return '';
-        }
-        // always force tree node to base language to prevent field overloading; we load corresponding fields manually
-        $aStopNodes = TCMSPortal::GetStopNodes($oPortal->id);
-        $aPath = $oPathNode->GetPath($aStopNodes);
-
-        for ($i = 2; $i < count($aPath); ++$i) {
-            $sPath .= $sPathSeparator;
-            if (empty($aPath[$i]->sqlData['urlname'.$sFieldLanguageIsoName])) {
-                if ($oPortal->fieldShowNotTanslated) {
-                    $sPath .= $aPath[$i]->sqlData['urlname'];
-                } else {
-                    $sPath = '';
-                }
-            } else {
-                $sPath .= $aPath[$i]->sqlData['urlname'.$sFieldLanguageIsoName];
-            }
-        }
-
-        if (!empty($sPath)) {
-            if ($oPortal && !empty($oPortal->sqlData['use_slash_in_seo_urls'])) {
-                $sPath .= $sPathSeparator;
-            } else {
-                $sPath .= '.html';
-            }
-        } else {
-            $sPath .= $sPathSeparator;
-        }
-
-        return $sPath;
-    }
-
-    /**
      * returns the SEO url as names with " - " as spacer (for <title> tag.
      *
      * @param int $iTreeNode
@@ -508,21 +194,6 @@ class TCMSSmartURL
         }
 
         return $name;
-    }
-
-    /**
-     * returns the relative URL using the direct pagedef link without SEO conversion.
-     *
-     * @param int $iTreeNode
-     * @param int $pageID
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public static function GetDirectURL($iTreeNode, $pageID)
-    {
-        return '/'.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'?pagedef='.urlencode($pageID).'&__treeNode='.urlencode($iTreeNode);
     }
 
     /**
@@ -577,14 +248,6 @@ class TCMSSmartURL
     }
 
     /**
-     * @return TreeServiceInterface
-     */
-    private static function getTreeService()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.tree_service');
-    }
-
-    /**
      * @return PageServiceInterface
      */
     private static function getPageService()
@@ -598,21 +261,5 @@ class TCMSSmartURL
     private static function getRedirect()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
-    }
-
-    /**
-     * @return RequestStack
-     */
-    private function getRequestStack()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack');
-    }
-
-    /**
-     * @return UrlNormalizationUtil
-     */
-    private static function getUrlNormalizationUtil()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 }

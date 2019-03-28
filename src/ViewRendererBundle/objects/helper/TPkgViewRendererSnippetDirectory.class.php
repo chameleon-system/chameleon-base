@@ -415,7 +415,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
      * @param string $element
      * @param string $baseDirectory
      *
-     * @return null|string
+     * @return string|null
      */
     private function getVerifiedPath($element, $baseDirectory)
     {

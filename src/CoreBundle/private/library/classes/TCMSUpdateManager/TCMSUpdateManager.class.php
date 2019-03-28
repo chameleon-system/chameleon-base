@@ -30,11 +30,6 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * update file management, loads and executes database updates
- * use this class to execute mandatory core updates before module updates
- * <code>
- * $oUpdateManager =& TCMSUpdateManager::GetInstance();
- * echo $oUpdateManager->RunCoreUpdates(178);
- * </code>.
  *
 /**/
 class TCMSUpdateManager
@@ -98,23 +93,6 @@ class TCMSUpdateManager
     }
 
     /**
-     * Check if an update has been processed.
-     *
-     * @param string $sType       The Update Type
-     * @param string $sFolder     The Update Folder
-     * @param int    $buildNumber The buildnumber to check
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - use isUpdateAlreadyProcessed() instead (caution: the new method will return false if
-     *                           this method returns true and vice versa)
-     */
-    public function checkIfUpdateHasBeenProcessed($sType, $sFolder, $buildNumber)
-    {
-        return false === $this->isUpdateAlreadyProcessed($sType, $buildNumber);
-    }
-
-    /**
      * @param string $bundleName
      * @param int    $buildNumber
      *
@@ -127,41 +105,6 @@ class TCMSUpdateManager
         return
             true === array_key_exists($bundleName, $processedMigrationData)
             && true === array_key_exists($buildNumber, $processedMigrationData[$bundleName]->getBuildNumberToFileMap());
-    }
-
-    /**
-     * returns the highest recorded buildNumber for a updateFolder and type.
-     *
-     * @param string $sType
-     * @param string $sFolderName
-     *
-     * @return int|null buildNumber
-     *
-     * @deprecated since 6.2.0 - no longer needed
-     */
-    public function getLatestBuildNumberForFolder($sType, $sFolderName)
-    {
-        return null;
-    }
-
-    /**
-     * returns the highest recorded buildNumber for a updateFolder and type.
-     *
-     * @param string $sType
-     * @param string $sFolderName
-     *
-     * @return int[] buildNumber
-     *
-     * @deprecated since 6.2.0 - should no longer be needed
-     */
-    public function getBuildNumbersForFolder($sType, $sFolderName)
-    {
-        $processedMigrationData = $this->getProcessedMigrationDataModelFactory()->createMigrationDataModels();
-        if (false === array_key_exists($sType, $processedMigrationData)) {
-            return [];
-        }
-
-        return array_keys($processedMigrationData[$sType]->getBuildNumberToFileMap());
     }
 
     /**
@@ -180,8 +123,8 @@ class TCMSUpdateManager
      * Processes all non-processed updates for a specified bundle up to a buildNumber, or all updates of a bundle if null is passed as
      * highest build number, or updates for all bundles if null is passed as bundle alias.
      *
-     * @param null|string $bundleNameToRun
-     * @param null|int    $highestBuildNumberToExecute
+     * @param string|null $bundleNameToRun
+     * @param int|null    $highestBuildNumberToExecute
      *
      * @return string
      *
@@ -241,32 +184,12 @@ class TCMSUpdateManager
     }
 
     /**
-     * runs all core updates (stops at optional $iTargetBuild)
-     * $iTargetBuild Nr. from FILENAME not database Transaction Nr. (e.g. build197.inc.php) = 197 instead of 7148.
-     *
-     * @param int $iTargetBuild - build Nr. from FILENAME not database Transaction Nr. (e.g. build197.inc.php) = 197 instead of 7148
-     *
-     * @return string see ::runSingleUpdate for more information
-     *
-     * @deprecated since 6.2.0 - there is no longer a distinction between core and other updates
-     */
-    public function RunCoreUpdates($iTargetBuild = null)
-    {
-        try {
-            return $this->runUpdates('chameleon_system_core', $iTargetBuild);
-        } catch (InvalidArgumentException $e) {
-            // do nothing - the core bundle is always valid
-            return '';
-        }
-    }
-
-    /**
      * run a single update file and builds a JS response object for the file
      * records the file as "processed" in the database.
      *
      * @param string      $sFileName  string full file name (e.g. "build6.inc.php)
-     * @param null|string $bundleName
-     * @param null|string $sSubdir    @deprecated since 6.2.0 - no longer used
+     * @param string|null $bundleName
+     * @param string|null $sSubdir    @deprecated since 6.2.0 - no longer used
      *
      * @return MigrationResult
      */

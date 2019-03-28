@@ -17,7 +17,7 @@
 class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
 {
     /**
-     * @var null|TCMSPagedef
+     * @var TCMSPagedef|null
      */
     protected $oAssignedPage = null;
 

@@ -53,6 +53,7 @@ class ImageCropEditorUrlMapper extends AbstractViewMapper
          */
         $mediaItem = $oVisitor->GetSourceObject('mediaItem');
         $oVisitor->SetMappedValue('createCropUrl', $this->getCropEditorUrl($mediaItem->getId()));
+        $oVisitor->SetMappedValue('deleteCropUrl', $this->getDeleteCropUrl());
     }
 
     /**
@@ -66,6 +67,17 @@ class ImageCropEditorUrlMapper extends AbstractViewMapper
             'pagedef' => ImageCropEditorModule::PAGEDEF_NAME,
             '_pagedefType' => ImageCropEditorModule::PAGEDEF_TYPE,
             ImageCropEditorModule::URL_PARAM_IMAGE_ID => $mediaItemId,
+        );
+
+        return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');
+    }
+
+    private function getDeleteCropUrl(): string
+    {
+        $parameters = array(
+            'pagedef' => ImageCropEditorModule::PAGEDEF_NAME,
+            '_pagedefType' => ImageCropEditorModule::PAGEDEF_TYPE,
+            'module_fnc' => array('contentmodule' => 'deleteCrop'),
         );
 
         return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');

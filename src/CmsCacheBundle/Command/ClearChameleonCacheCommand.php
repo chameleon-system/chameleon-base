@@ -26,7 +26,7 @@ class ClearChameleonCacheCommand extends Command
 
     /**
      * @param CacheInterface $cache
-     * @param null|string    $name
+     * @param string|null    $name
      *
      * @throws LogicException When the command name is empty
      */

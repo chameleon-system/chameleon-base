@@ -250,8 +250,8 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
 ;
 TCMSLogChange::insert(__LINE__, $data);
 
-$query ="ALTER TABLE `cms_menu_category`
-                        ADD `icon_font_css_class` VARCHAR(255) NOT NULL";
+$query = 'ALTER TABLE `cms_menu_category`
+                        ADD `icon_font_css_class` VARCHAR(255) NOT NULL';
 TCMSLogChange::RunQuery(__LINE__, $query);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')

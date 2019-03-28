@@ -389,14 +389,14 @@
 
 <?php
 if (false === $isInIframe) {
-?>
+            ?>
 <div class="card">
     <div class="card-header">
         <h3>Navigation</h3>
     </div>
     <div class="card-body simple-tree-card">
 <?php
-}
+        }
 ?>
         <div class="navigationTreeContainer">
             <ul class="simpleTree">
@@ -444,9 +444,8 @@ if (false === $isInIframe) {
         </div>
         <?php
         if (false === $isInIframe) {
-        ?>
+            ?>
     </div>
 </div>
 <?php
-}
-
+        }

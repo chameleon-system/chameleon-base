@@ -27,14 +27,14 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
     /**
      * SEO filename used in outbox folder for symlinks.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $sSEOFileName = null;
 
     /**
      * full SEO URL path to symlink in outbox folder.
      *
-     * @var null|string
+     * @var string|null
      */
     public $fileURL = null;
 
@@ -144,26 +144,6 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
         }
 
         return $this->_cacheParameter['oFileType'];
-    }
-
-    /**
-     * @deprecated - since 6.3.0, use getDownloadHtmlTag() instead
-     *
-     * returns full URL to the file (inc. image and file size).
-     *
-     * @param bool                 $dummyLink            - prevent output of download url
-     * @param bool                 $bHideName            - hide the filename
-     * @param bool                 $bHideSize            - hide the size
-     * @param bool                 $bCreateLinkWithToken @deprecated - if set to true, the method will return a link with a token
-     * @param bool                 $bHideIcon            set to true if you want to hide file icon
-     * @param string               $sDownloadLinkName    use this to set link title other than real file name
-     * @param TdbDataExtranet|null $oExtranetUser        optional user object for downloads with tokens
-     *
-     * @return string
-     */
-    public function GetDownloadLink($dummyLink = false, $bHideName = false, $bHideSize = false, $bCreateLinkWithToken = false, $bHideIcon = false, $sDownloadLinkName = '', $oExtranetUser = null)
-    {
-        return $this->getDownloadHtmlTag($dummyLink, $bHideName, $bHideSize, $bHideIcon, $sDownloadLinkName);
     }
 
     /**
@@ -373,7 +353,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
      * creates a token record and returns the token.
      *
      * @param bool $bCreateTokenWithUserBinding - off by default (adds the current user as token owner, if $oExtranetUser is given, user binding is forced)
-     * @param null|TdbDataExtranetUser if no user object is given the current logged in user is used instead
+     * @param TdbDataExtranetUser|null if no user object is given the current logged in user is used instead
      *
      * @return string
      */
@@ -400,7 +380,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
      * returns an array with post data for save in token database table.
      *
      * @param bool                     $bCreateTokenWithUserBinding
-     * @param null|TdbDataExtranetUser $oExtranetUser
+     * @param TdbDataExtranetUser|null $oExtranetUser
      *
      * @return array
      */

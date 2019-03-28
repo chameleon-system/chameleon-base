@@ -80,7 +80,7 @@ class TViewPathManager implements IViewPathManager
      * @param string      $sViewName
      * @param string      $sModuleName
      * @param string      $sType
-     * @param null|string $sMappedPath - if there is already a mapped path replacing PATH_CUSTOMER_FRAMEWORK
+     * @param string|null $sMappedPath - if there is already a mapped path replacing PATH_CUSTOMER_FRAMEWORK
      *
      * @return string
      */
@@ -279,7 +279,7 @@ class TViewPathManager implements IViewPathManager
      *
      * @param string $sLayoutName name of layout with or without .layout.php
      *
-     * @return null|string
+     * @return string|null
      */
     public function getLayoutViewPath($sLayoutName)
     {

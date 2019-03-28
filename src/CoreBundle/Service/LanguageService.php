@@ -38,7 +38,7 @@ class LanguageService implements LanguageServiceInterface
      * Holds the fallback language in case we don't have a request (Console, ...). We hereby add a state to the service,
      * but the service isn't really stateless anyway because it uses the request to store our active language.
      *
-     * @var null|TdbCmsLanguage
+     * @var TdbCmsLanguage|null
      */
     private $fallbackLanguage;
     /**

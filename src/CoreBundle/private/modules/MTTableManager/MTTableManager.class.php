@@ -264,7 +264,7 @@ class MTTableManager extends TCMSModelBase
         } else {
             $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
 
-            $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->index - 1);
+            $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->getHistoryCount() - 1);
         }
 
         $this->controller->HeaderURLRedirect($parentURL);
@@ -447,7 +447,6 @@ class MTTableManager extends TCMSModelBase
         while ($record = $recordList->Next()) {
             $name = $record->GetName();
             if (!empty($name)) {
-
                 // highlight active record
                 $cssClass = '';
                 if ($record->id == $recordID) {
@@ -525,10 +524,8 @@ class MTTableManager extends TCMSModelBase
     public function GetHtmlHeadIncludes()
     {
         $includeLines = parent::GetHtmlHeadIncludes();
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
         $includeLines[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />';
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/table.js').'" type="text/javascript"></script>';
-        $includeLines[] = '<link href="'.TGlobal::GetPathTheme().'/css/tooltip.css" rel="stylesheet" type="text/css" />';
         $includeLines[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
         $this->LoadMessages();

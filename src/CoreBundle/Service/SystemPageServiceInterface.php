@@ -39,7 +39,7 @@ interface SystemPageServiceInterface
      * @param TdbCmsPortal|null   $portal                 if null, the active portal is used
      * @param TdbCmsLanguage|null $language               if null, the active language is used
      *
-     * @return null|TdbCmsPortalSystemPage
+     * @return TdbCmsPortalSystemPage|null
      */
     public function getSystemPage(
         $systemPageNameInternal,

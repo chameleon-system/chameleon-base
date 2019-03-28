@@ -67,11 +67,6 @@ interface IPkgCmsFileManager
     public function symlink($target, $link);
 
     /**
-     * @param IClusterDriver $driver @deprecated since 6.2.0 - cluster file handling is no longer available.
-     */
-    public function setDriver(IClusterDriver $driver);
-
-    /**
      * @param string $file
      * @param int    $mode
      *

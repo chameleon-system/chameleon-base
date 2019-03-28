@@ -29,7 +29,7 @@ class MediaTreeNodeDataModel
     private $children;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $iconPath;
 
@@ -70,7 +70,7 @@ class MediaTreeNodeDataModel
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getIconPath()
     {
@@ -78,7 +78,7 @@ class MediaTreeNodeDataModel
     }
 
     /**
-     * @param null|string $iconPath
+     * @param string|null $iconPath
      */
     public function setIconPath($iconPath)
     {

@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TPkgCmsTheme_PkgViewRendererSnippetResourceCollector extends TPkgCmsTheme_PkgViewRendererSnippetResourceCollectorAutoParent
 {
     /**
@@ -20,7 +23,7 @@ class TPkgCmsTheme_PkgViewRendererSnippetResourceCollector extends TPkgCmsTheme_
     {
         $aLayoutLess = array();
         if (null === $oPortal) {
-            $oPortal = TTools::GetActivePortal();
+            $oPortal = $this->getPortalDomainService()->getActivePortal();
         }
         if (null !== $oPortal && !empty($oPortal->fieldPkgCmsThemeId)) {
             $sQuery = "SELECT `pkg_cms_theme_block_layout`.* FROM `pkg_cms_theme_block_layout`
@@ -32,5 +35,10 @@ class TPkgCmsTheme_PkgViewRendererSnippetResourceCollector extends TPkgCmsTheme_
         }
 
         return $aLayoutLess;
+    }
+
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

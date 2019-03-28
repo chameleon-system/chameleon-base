@@ -69,15 +69,6 @@ class TCMSWizardStep extends TAdbCmsWizardStep
     protected $oWizardConf = null;
 
     /**
-     * set to true if a method has been called externally on the object.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - property was used in conjunction with deprecated caching methods and should no longer be required.
-     */
-    public $bHasMethodExecutionCalled = false;
-
-    /**
      * store all view data here so that it can be used in the description text.
      *
      * @var array
@@ -407,58 +398,6 @@ class TCMSWizardStep extends TAdbCmsWizardStep
     }
 
     /**
-     * return true if you want to clear the cache for the current render.
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function TriggerClearCache()
-    {
-        return false;
-    }
-
-    /**
-     * return true if you want to permit caching. if you do, make sure to overwrite the
-     * other cache methods as well.
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AllowCaching()
-    {
-        return false;
-    }
-
-    /**
-     * Add view based clear cache triggers for the Render method here.
-     *
-     * @param array  $aClearTriggers - clear trigger array (with current contents)
-     * @param string $sSpotName      - spot location of step
-     * @param string $aCallTimeVars  - any custom vars
-     * @param string $sViewName      - view being requested
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddClearCacheTriggers(&$aClearTriggers, $sSpotName, $aCallTimeVars, $sViewName)
-    {
-        $aClearTriggers[] = array('table' => 'cms_wizard_step', 'id' => $this->id);
-        $aClearTriggers[] = array('table' => 'cms_wizard_config', 'id' => '');
-    }
-
-    /**
-     * add any parameters that will identify the cache instance here.
-     *
-     * @param array $aCacheParameters
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddCachePrameters(&$aCacheParameters)
-    {
-    }
-
-    /**
      * Enter description here...
      */
     protected function GetDescription()
@@ -507,7 +446,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
     }
 
     /**
-     * @return null|Request
+     * @return Request|null
      */
     protected function getRequest()
     {

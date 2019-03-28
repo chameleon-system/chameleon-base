@@ -18,7 +18,7 @@ class DatabaseAccessLayerCmsTPlModule extends AbstractDatabaseAccessLayer
     /**
      * @param $classOrId
      *
-     * @return null|\TdbCmsTplModule
+     * @return \TdbCmsTplModule|null
      */
     public function loadFromClassOrServiceId($classOrId)
     {
@@ -36,7 +36,7 @@ class DatabaseAccessLayerCmsTPlModule extends AbstractDatabaseAccessLayer
     /**
      * @param $id
      *
-     * @return null|\TdbCmsTplModule
+     * @return \TdbCmsTplModule|null
      */
     public function loadFromId($id)
     {

@@ -14,7 +14,7 @@ namespace ChameleonSystem\CoreBundle\DataModel;
 class DownloadLinkDataModel
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $id;
 

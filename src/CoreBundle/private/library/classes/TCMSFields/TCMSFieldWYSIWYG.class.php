@@ -14,7 +14,7 @@ use ChameleonSystem\CoreBundle\Wysiwyg\CkEditorConfigProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * WYSIWYG text field
+ * WYSIWYG text field.
  *
  * you may set the field config variable "disableButtons" in CMS field configuration
  * or global via constant: CHAMELEON_WYSIWYG_DISABLED_BUTTONS
@@ -498,7 +498,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
-     * @return null|TdbCmsPortal
+     * @return TdbCmsPortal|null
      */
     protected function getPortalForCurrentRecord()
     {
@@ -520,7 +520,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
-     * @return null|TdbCmsTplPage
+     * @return TdbCmsTplPage|null
      */
     protected function getConnectedPageForCurrentRecord()
     {

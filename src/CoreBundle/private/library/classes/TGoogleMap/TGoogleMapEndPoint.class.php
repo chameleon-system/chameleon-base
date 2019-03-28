@@ -204,18 +204,6 @@ class TGoogleMapEndPoint
     }
 
     /**
-     * enables/disables search bar.
-     *
-     * @deprecated since 6.1.5 the searchbar is managed in the backend module and not by the map itself anymore
-     *
-     * @param bool $b
-     */
-    public function showSearchBar($b)
-    {
-        $this->bShowSearchBar = $b;
-    }
-
-    /**
      * enables/disables event-to-link hooking in menues.
      *
      * @param bool $b
@@ -953,18 +941,6 @@ class TGoogleMapEndPoint
         }
 
         return $sOut;
-    }
-
-    /**
-     * default API Version is V.3.
-     *
-     * @deprecated
-     *
-     * @param int $iAPIVersion
-     */
-    public function setAPIVersion($iAPIVersion)
-    {
-        $this->iAPIVersion = $iAPIVersion;
     }
 
     /**

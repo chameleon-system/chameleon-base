@@ -35,9 +35,9 @@ interface MediaManagerUrlGeneratorInterface
      *
      * @param string      $javaScriptCallbackFunctionName
      * @param bool        $canUseCrop
-     * @param null|string $imageFieldName                 - legacy
-     * @param null|string $tableId                        - legacy
-     * @param null|string $recordId                       - legacy
+     * @param string|null $imageFieldName                 - legacy
+     * @param string|null $tableId                        - legacy
+     * @param string|null $recordId                       - legacy
      * @param int         $position                       - legacy
      *
      * @return string

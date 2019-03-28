@@ -30,7 +30,7 @@ class TCMSImageImageCrop extends ChameleonSystemImageCropBundleBridgeChameleonTC
      */
     public function getCroppedImage($targetWidth, $targetHeight, $cropWidth, $cropHeight, $x = 0, $y = 0)
     {
-        if (true === $this->IsFlashMovie() || false === $this->CheckAllowThumbnailing()) {
+        if (false === $this->CheckAllowThumbnailing()) {
             return null;
         }
 

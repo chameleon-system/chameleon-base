@@ -93,7 +93,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
     protected function AddEntrySortOrder($query)
     {
         $sEntrySortField = 'entry_sort';
-        $oPortal = TTools::GetActivePortal();
+        $oPortal = $this->getPortalDomainService()->getActivePortal();
         if (TdbCmsTree::CMSFieldIsTranslated('entry_sort')) {
             $sLanguagePrefix = TGlobal::GetLanguagePrefix();
             $sLanguageId = self::getLanguageService()->getActiveLanguageId();
@@ -363,7 +363,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      * returns url to the node IF a page is connected to the node.
      *
      * @param bool                $absolute           set to true to include the domain in the link
-     * @param null|string         $anchor
+     * @param string|null         $anchor
      * @param array               $optionalParameters
      * @param TdbCmsPortal|null   $portal
      * @param TdbCmsLanguage|null $language
@@ -399,24 +399,6 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
     public function replacePlaceHolderInURL($sURL)
     {
         return $sURL;
-    }
-
-    /**
-     * This method receives an URL(absolute or relative) and forces its
-     * path elements (nothing else!) to be wellformed using urlencode().
-     *
-     * This method should also be used as an import filter for URLs
-     * in the future
-     *
-     * @var $sLink string
-     *
-     * @return string
-     *
-     * @deprecated since 6.1.0 - use chameleon_system_core.util.url instead
-     */
-    protected function ConvertToValidXHTMLLink($sLink)
-    {
-        return $this->getUrlUtil()->encodeUrlParts($sLink);
     }
 
     /**

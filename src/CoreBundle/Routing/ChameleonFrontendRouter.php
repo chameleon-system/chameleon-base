@@ -327,7 +327,7 @@ SQL;
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private function getDomainFromActiveDomain()
     {

@@ -253,17 +253,13 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
      */
     public function RenameInstance()
     {
-        $returnVal = false;
         $oTdbCmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
-        /** @var $oTdbCmsTplModuleInstance TdbCmsTplModuleInstance */
         $oTableConf = &$oTdbCmsTplModuleInstance->GetTableConf();
 
         $oTableEditor = new TCMSTableEditorModuleInstance();
-        /** @var $oTableEditor TCMSTableEditorModuleInstance */
         $oTableEditor->Init($oTableConf->id, $this->data);
-        $returnVal = $oTableEditor->RenameInstance();
 
-        return $returnVal;
+        return $oTableEditor->RenameInstance();
     }
 
     public function CreateNewInstance()

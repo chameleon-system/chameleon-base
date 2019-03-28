@@ -217,7 +217,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @return null|CmsMediaDataModel
+     * @return CmsMediaDataModel|null
      */
     private function getCmsImage()
     {
@@ -276,6 +276,11 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         }
 
         if (null === $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_PRESET_NAME)) {
+            $presetRestriction = $this->getPresetRestriction();
+            if (count($presetRestriction) > 0) {
+                return $presetRestriction[0];
+            }
+
             return null;
         }
 
@@ -367,7 +372,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @param null|ImageCropDataModel $activeCrop
+     * @param ImageCropDataModel|null $activeCrop
      *
      * @return array
      *
@@ -414,7 +419,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @param null|CmsMediaDataModel $cmsImage
+     * @param CmsMediaDataModel|null $cmsImage
      *
      * @return string
      */
@@ -528,6 +533,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         parent::DefineInterface();
         $this->methodCallAllowed[] = 'saveCrop';
         $this->methodCallAllowed[] = 'getImageFieldInformation';
+        $this->methodCallAllowed[] = 'deleteCrop';
     }
 
     protected function saveCrop()
@@ -589,6 +595,32 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         $this->redirectService->redirect(
             URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&')
         );
+    }
+
+    protected function deleteCrop()
+    {
+        $cropId = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_CROP_ID);
+        if (null === $cropId) {
+            $return = [
+                'errorMessage' => $this->translator->trans(
+                    'chameleon_system_image_crop.editor.crop_not_deleted'
+                ),
+            ];
+            $this->returnAsAjaxError($return);
+        }
+
+        try {
+            $this->imageCropDataAccess->deleteCrop($cropId);
+            $return = [];
+            $this->returnAsAjaxResponse($return);
+        } catch (ImageCropDataAccessException $e) {
+            $return = [
+                'errorMessage' => $this->translator->trans(
+                    'chameleon_system_image_crop.editor.crop_not_deleted'
+                ),
+            ];
+            $this->returnAsAjaxError($return);
+        }
     }
 
     /**

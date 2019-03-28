@@ -158,7 +158,7 @@ abstract class TCMSMLTField extends TCMSField
      * @param string $sTableName can be mlt field name or table name
      * @param array  $aFieldData If filled get table name from sql field data (only if given table name was empty)
      *
-     * @return null|string
+     * @return string|null
      */
     protected function GetClearedTableName($sTableName, $aFieldData = array())
     {
