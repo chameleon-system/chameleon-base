@@ -18,8 +18,6 @@ class TCMSCronJob_CleanOrphanedMLTConnections extends TCMSCronJob
 
     protected function _ExecuteCron()
     {
-        $sDeleteLog = '';
-
         //get all fields which represent a mlt connection
         $oFieldTypeList = TdbCmsFieldTypeList::GetList();
         $oFieldTypeList->AddFilterString("`base_type` = 'mlt'");

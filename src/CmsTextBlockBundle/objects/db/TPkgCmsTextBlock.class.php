@@ -42,21 +42,6 @@ class TPkgCmsTextBlock extends TPkgCmsTextBlockAutoParent
     }
 
     /**
-     * return cache trigger for the object.
-     *
-     * @return array
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public function GetCacheTrigger()
-    {
-        $aTrigger = array();
-        $aTrigger[] = array('table' => 'pkg_cms_text_block', 'id' => $this->id);
-
-        return $aTrigger;
-    }
-
-    /**
      * return text object for active portal.
      *
      * @param string      $sSystemName

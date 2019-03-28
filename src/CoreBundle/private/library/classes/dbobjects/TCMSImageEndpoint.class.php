@@ -14,10 +14,7 @@ use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsMedia;
 
 /**
- * handles images and thumbnails of table cms_media including FLV videos,
- * SWF and external videos.
- *
- * Note that Flash support is deprecated.
+ * handles images and thumbnails of table cms_media including external videos.
  **/
 class TCMSImageEndpoint
 {
@@ -78,75 +75,11 @@ class TCMSImageEndpoint
     public $isZoomedVideo = false;
 
     /**
-     * a unique id to allow multiple instances of an image or flv video player on the same page.
+     * a unique id to allow multiple instances of an image on the same page.
      *
      * @var string
      */
     public $uniqueID = null;
-
-    /**
-     * url of the flv player including all parameters to show an flv video.
-     *
-     * @var string
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    public $FLVPlayerURL = null;
-
-    /**
-     * the mode used for flash files.
-     *
-     * @var string
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    public $sFlashVideoWMode = 'opaque';
-
-    /**
-     * height of the flv player including control bar (videoheight+20px).
-     *
-     * @var int
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    public $FLVPlayerHeight = null;
-
-    /**
-     * auto play flash films.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    public $bAutoPlay = false;
-
-    /**
-     * indicates if the FLV player should show a zoom icon which links to a zoom page.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    public $bFlashVideoZoomPopup = false;
-
-    /**
-     * url to the FLV player skin.
-     *
-     * @deprecated - not used anymore with new FLV Player version
-     *
-     * @var string
-     */
-    public $sFlashPlayerSkinURL = '';
-
-    /**
-     * indicates that the workflow engine is activated for the cms_media table and the current image was changed
-     * and needs to be loaded from workflow temp dir.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected $iShowImageFromWorkflow = false;
 
     /**
      * if this static property is set to true the image urls will be forced to http even on https websites.
@@ -277,10 +210,6 @@ class TCMSImageEndpoint
             $this->SetUID();
         }
 
-        if (defined('bFlashVideoZoomPopup')) {
-            $this->bFlashVideoZoomPopup = bFlashVideoZoomPopup;
-        }
-
         return $bImageLoaded;
     }
 
@@ -340,7 +269,7 @@ class TCMSImageEndpoint
     }
 
     /**
-     * generates a unique id to allow multiple instances of an image or flv video player on the same page.
+     * generates a unique id to allow multiple instances of an image on the same page.
      */
     protected function SetUID()
     {
@@ -578,96 +507,90 @@ class TCMSImageEndpoint
             if ($allowThumbing) {
                 // determine how large the thumbnail should be
                 $oThumb = $this->InitThumbnailing();
+                $iThumbWidth = $width - $padding;
+                $iThumbHeight = $height - $padding;
+                $this->GetThumbnailProportions($oThumb, $iThumbWidth, $iThumbHeight, $bStretchImageToFullsize); // set width height including padding
+                $oThumb->_isThumbnail = true;
 
-                if ('swf' != $this->GetImageType()) {
-                    $iThumbWidth = $width - $padding;
-                    $iThumbHeight = $height - $padding;
-                    $this->GetThumbnailProportions($oThumb, $iThumbWidth, $iThumbHeight, $bStretchImageToFullsize); // set width height including padding
-                    $oThumb->_isThumbnail = true;
+                // resize needed
+                $sExtensions = 'jpg';
+                if ($this->SupportsTransparency() && !$this->CheckImageTransformPngToJpg($oThumb)) {
+                    $sExtensions = 'png';
+                }
+                $sEffectFileNamePart = '_bgcol_'.$bgcolor.'_pad'.$padding;
+                $thumbName = $this->GenerateThumbName($width, $height, $sEffectFileNamePart, $sExtensions);
+                $thumbPath = $this->GetLocalMediaDirectory(true).$thumbName;
 
-                    // resize needed
-                    $sExtensions = 'jpg';
-                    if ($this->SupportsTransparency() && !$this->CheckImageTransformPngToJpg($oThumb)) {
-                        $sExtensions = 'png';
-                    }
-                    $sEffectFileNamePart = '_bgcol_'.$bgcolor.'_pad'.$padding;
-                    $thumbName = $this->GenerateThumbName($width, $height, $sEffectFileNamePart, $sExtensions);
-                    $thumbPath = $this->GetLocalMediaDirectory(true).$thumbName;
+                $oThumb->aData['path'] = $thumbName;
 
-                    $oThumb->aData['path'] = $thumbName;
+                // check if the thumbnail exists
+                if (!file_exists($thumbPath)) {
+                    if ($this->UseImageMagick() && 0 == count($aEffects)) {
+                        $oImageMagick = &$this->GetImageMagicObject();
+                        $oImageMagick->LoadImage($this->GetLocalMediaDirectory().'/'.$this->aData['path'], $this);
+                        $oImageMagick->ResizeImage((int) $oThumb->aData['width'], (int) $oThumb->aData['height']);
+                        $oImageMagick->CenterImage($width, $height, '#'.$bgcolor);
+                        $oImageMagick->SaveToFile($thumbPath);
+                        if (0 === filesize($thumbPath)) {
+                            unlink($thumbPath);
+                        } else {
+                            $thumbnailRealPath = realpath($thumbPath);
+                            if (false !== $thumbnailRealPath) {
+                                $this->thumbnailCreatedHook($thumbnailRealPath, $sExtensions);
+                            }
+                        }
+                    } else {
+                        // now we need to resize the actual image
+                        $imagePointer = $this->GetThumbnailPointer($oThumb, $aEffects);
 
-                    // check if the thumbnail exists
-                    if (!file_exists($thumbPath)) {
-                        if ($this->UseImageMagick() && 'flv' != $this->_imageType && 'swf' != $this->_imageType && 'f4v' != $this->_imageType && 0 == count($aEffects)) {
-                            $oImageMagick = &$this->GetImageMagicObject();
-                            $oImageMagick->LoadImage($this->GetLocalMediaDirectory().'/'.$this->aData['path'], $this);
-                            $oImageMagick->ResizeImage((int) $oThumb->aData['width'], (int) $oThumb->aData['height']);
-                            $oImageMagick->CenterImage($width, $height, '#'.$bgcolor);
-                            $oImageMagick->SaveToFile($thumbPath);
+                        if (!is_null($imagePointer)) {
+                            $rDestImage = imagecreatetruecolor($width, $height);
+                            if ($this->SupportsTransparency() && !$this->CheckImageTransformPngToJpg($oThumb)) {
+                                imagealphablending($rDestImage, true);
+                            }
+
+                            // fetch rgb colors from hex
+                            for ($i = 0; $i < 3; ++$i) {
+                                $temp = substr($bgcolor, 2 * $i, 2);
+                                $rgb[$i] = 16 * hexdec(substr($temp, 0, 1)) + hexdec(substr($temp, 1, 1));
+                            }
+
+                            $bgcolor = imagecolorallocate($rDestImage, $rgb[0], $rgb[1], $rgb[2]);
+                            imagefilledrectangle($rDestImage, 0, 0, $width, $height, $bgcolor);
+
+                            $iNewpaddingX = round($padding + ((($width - (2 * $padding)) - $oThumb->aData['width']) / 2));
+                            $iNewpaddingY = round($padding + ((($height - (2 * $padding)) - $oThumb->aData['height']) / 2));
+
+                            if ($this->SupportsTransparency() && !$this->CheckImageTransformPngToJpg($oThumb)) {
+                                TCMSImage::imagecopymerge_alpha($rDestImage, $imagePointer, $iNewpaddingX, $iNewpaddingY, 0, 0, $oThumb->aData['width'], $oThumb->aData['height'], 100);
+                            } else {
+                                imagecopymerge($rDestImage, $imagePointer, $iNewpaddingX, $iNewpaddingY, 0, 0, $oThumb->aData['width'], $oThumb->aData['height'], 100);
+                            }
+                            if ($this->SupportsTransparency() && !$this->CheckImageTransformPngToJpg($oThumb)) {
+                                imagepng($rDestImage, $thumbPath);
+                            } else {
+                                $iJPGQuality = $this->GetTransformJPGQuality($oThumb);
+                                if (false === $iJPGQuality) {
+                                    $iJPGQuality = 100;
+                                }
+                                imagejpeg($rDestImage, $thumbPath, $iJPGQuality);
+                            }
                             if (0 === filesize($thumbPath)) {
                                 unlink($thumbPath);
                             } else {
                                 $thumbnailRealPath = realpath($thumbPath);
                                 if (false !== $thumbnailRealPath) {
-                                    $this->thumbnailCreatedHook($thumbnailRealPath, $sExtensions);
+                                    $this->thumbnailCreatedHook($thumbnailRealPath, 'png');
                                 }
                             }
-                        } else {
-                            // now we need to resize the actual image
-                            $imagePointer = $this->GetThumbnailPointer($oThumb, $aEffects);
 
-                            if (!is_null($imagePointer)) {
-                                $rDestImage = imagecreatetruecolor($width, $height);
-                                if ($this->SupportsTransparency() && !$this->CheckImageTransformPngToJpg($oThumb)) {
-                                    imagealphablending($rDestImage, true);
-                                }
-
-                                // fetch rgb colors from hex
-                                for ($i = 0; $i < 3; ++$i) {
-                                    $temp = substr($bgcolor, 2 * $i, 2);
-                                    $rgb[$i] = 16 * hexdec(substr($temp, 0, 1)) + hexdec(substr($temp, 1, 1));
-                                }
-
-                                $bgcolor = imagecolorallocate($rDestImage, $rgb[0], $rgb[1], $rgb[2]);
-                                imagefilledrectangle($rDestImage, 0, 0, $width, $height, $bgcolor);
-
-                                $iNewpaddingX = round($padding + ((($width - (2 * $padding)) - $oThumb->aData['width']) / 2));
-                                $iNewpaddingY = round($padding + ((($height - (2 * $padding)) - $oThumb->aData['height']) / 2));
-
-                                if ($this->SupportsTransparency() && !$this->CheckImageTransformPngToJpg($oThumb)) {
-                                    TCMSImage::imagecopymerge_alpha($rDestImage, $imagePointer, $iNewpaddingX, $iNewpaddingY, 0, 0, $oThumb->aData['width'], $oThumb->aData['height'], 100);
-                                } else {
-                                    imagecopymerge($rDestImage, $imagePointer, $iNewpaddingX, $iNewpaddingY, 0, 0, $oThumb->aData['width'], $oThumb->aData['height'], 100);
-                                }
-                                if ($this->SupportsTransparency() && !$this->CheckImageTransformPngToJpg($oThumb)) {
-                                    imagepng($rDestImage, $thumbPath);
-                                } else {
-                                    $iJPGQuality = $this->GetTransformJPGQuality($oThumb);
-                                    if (false === $iJPGQuality) {
-                                        $iJPGQuality = 100;
-                                    }
-                                    imagejpeg($rDestImage, $thumbPath, $iJPGQuality);
-                                }
-                                if (0 === filesize($thumbPath)) {
-                                    unlink($thumbPath);
-                                } else {
-                                    $thumbnailRealPath = realpath($thumbPath);
-                                    if (false !== $thumbnailRealPath) {
-                                        $this->thumbnailCreatedHook($thumbnailRealPath, 'png');
-                                    }
-                                }
-
-                                imagedestroy($rDestImage);
-                                imagedestroy($imagePointer);
-                            }
+                            imagedestroy($rDestImage);
+                            imagedestroy($imagePointer);
                         }
                     }
-                    $oThumb->aData['width'] = $width;
-                    $oThumb->aData['height'] = $height;
-                } else {
-                    // no resize needed it`s an swf file
-                    $oThumb = &$this;
                 }
+                $oThumb->aData['width'] = $width;
+                $oThumb->aData['height'] = $height;
             } else {
                 if ((!DISABLE_IMAGE_ERRORS_IN_DEVELOPMENT_MODE && _DEVELOPMENT_MODE) || !_DEVELOPMENT_MODE) {
                     trigger_error("Error reading original at: {$originalFile}", E_USER_WARNING);
@@ -770,8 +693,6 @@ class TCMSImageEndpoint
                     if ($this->CheckThumbnailFileSizeLimit($originalFile)) {
                         $allowThumbing = true;
                     }
-                } elseif ('swf' == $fileType || 'flv' == $fileType || 'f4v' == $fileType) {
-                    $allowThumbing = true;
                 }
             }
 
@@ -797,7 +718,7 @@ class TCMSImageEndpoint
                     }
 
                     $fileType = $this->GetImageType();
-                    if ('jpg' == $fileType || 'gif' == $fileType || 'png' == $fileType || 'swf' == $fileType) {
+                    if ('jpg' == $fileType || 'gif' == $fileType || 'png' == $fileType) {
                         $allowThumbing = true;
                     }
                 }
@@ -1006,7 +927,6 @@ class TCMSImageEndpoint
     public function GetThumbnailPointer($oThumb, $aEffects = array())
     {
         $aEffects = $this->ApplyEffectHook($aEffects, $oThumb);
-        $image_p = null;
         // now we need to resize the current image
         $image_p = imagecreatetruecolor($oThumb->aData['width'], $oThumb->aData['height']);
 
@@ -1025,9 +945,6 @@ class TCMSImageEndpoint
         } elseif ('png' == $imageType) {
             $image = imagecreatefrompng($this->GetLocalMediaDirectory().$this->aData['path']);
             imagealphablending($image, true);
-        // imagesavealpha($image, true);
-        } elseif ('flv' == $imageType || 'swf' == $imageType || 'f4v' == $imageType) {
-            $image = imagecreatefromjpeg($this->GetLocalMediaDirectory().'/100.jpg');
         }
 
         if (!is_null($image)) {
@@ -1145,12 +1062,7 @@ class TCMSImageEndpoint
         $returnVal = false;
         if (0 == $this->aData['width'] || 0 == $this->aData['height']) {
             // fetch real size from file
-            $sImageType = $this->GetImageType();
-            if ('flv' == $sImageType || 'f4v' == $sImageType) {
-                $path = $this->GetLocalMediaDirectory().'/100.jpg';
-            } else {
-                $path = $this->GetLocalMediaDirectory().$this->aData['path'];
-            }
+            $path = $this->GetLocalMediaDirectory().$this->aData['path'];
 
             if (file_exists($path)) {
                 $size = getimagesize($path);
@@ -1189,7 +1101,7 @@ class TCMSImageEndpoint
             $oThumb->aData['height'] = 1;
         }
 
-        if ($oThumb->aData['width'] != $this->aData['width'] || $oThumb->aData['height'] != $this->aData['height'] || $this->IsFlashMovie() || $this->IsExternalMovie()) {
+        if ($oThumb->aData['width'] != $this->aData['width'] || $oThumb->aData['height'] != $this->aData['height'] || $this->IsExternalMovie()) {
             $oThumb->_isThumbnail = true;
             $returnVal = true;
         }
@@ -1235,7 +1147,7 @@ class TCMSImageEndpoint
                 $thumbnailNeeded = $this->GetThumbnailProportions($oThumb, $maxWidth, $maxHeight);
 
                 $bTransFormToJPG = $this->CheckImageTransformPngToJpg($oThumb);
-                if (($thumbnailNeeded && 'swf' != $this->GetImageType()) || (count($aEffects) > 0) || $bTransFormToJPG) {
+                if ($thumbnailNeeded || (count($aEffects) > 0) || $bTransFormToJPG) {
                     $oThumb->_isThumbnail = true;
 
                     if (!$this->IsExternalMovie()) {
@@ -1277,7 +1189,7 @@ class TCMSImageEndpoint
                                 }
                             }
 
-                            if ($this->UseImageMagick() && ($bAllImageMagickEffectsSupported || (($this->aData['width'] * $this->aData['height']) > (1200 * 800))) && 'flv' != $this->_imageType && 'swf' != $this->_imageType && 'f4v' != $this->_imageType) {
+                            if ($this->UseImageMagick() && ($bAllImageMagickEffectsSupported || (($this->aData['width'] * $this->aData['height']) > (1200 * 800)))) {
                                 $this->ResizeImageUsingImageMagick($originalFile, $thumbPath, $iThumbWidth, $iThumbHeight, $aEffects);
                             } else {
                                 // now we need to resize the actual image
@@ -1510,12 +1422,7 @@ class TCMSImageEndpoint
 
             if (0 == $this->aData['width'] || 0 == $this->aData['height']) {
                 // fetch real size from file
-                $sFileType = $this->GetImageType();
-                if ('flv' == $sFileType || 'f4v' == $sFileType) {
-                    $path = $this->GetLocalMediaDirectory().'/100.jpg';
-                } else {
-                    $path = $this->GetLocalMediaDirectory().$this->aData['path'];
-                }
+                $path = $this->GetLocalMediaDirectory().$this->aData['path'];
 
                 if (file_exists($path)) {
                     $size = getimagesize($path);
@@ -1563,11 +1470,9 @@ class TCMSImageEndpoint
             // set new squaresized thumbnail name
             $oThumb->aData['path'] = $thumbName;
 
-            $uncuttedImagePointer = null;
             // check if the thumbnail exists
-
             if (!file_exists($thumbPath)) {
-                if ($this->UseImageMagick() && 'flv' != $this->_imageType && 'swf' != $this->_imageType && 'f4v' != $this->_imageType) {
+                if ($this->UseImageMagick()) {
                     $oImageMagick = &$this->GetImageMagicObject();
                     $oImageMagick->LoadImage($this->GetLocalMediaDirectory().'/'.$this->aData['path'], $this);
                     $oImageMagick->ResizeImage($width, $height);
@@ -1661,36 +1566,6 @@ class TCMSImageEndpoint
     }
 
     /**
-     * returns a html image tag of a thumbnail or FLV video player block.
-     *
-     * @param int    $maxThumbWidth  - max width of the thumbnail
-     * @param int    $maxThumbHeight - max height of the thumbnail
-     * @param int    $maxZoomWidth   - max width of the full size image
-     * @param int    $maxZoomHeight  - max height of the full size image
-     * @param string $sCSSClass      - optional CSS class for the image tag
-     * @param string $sNameOfSeries  - name of the image series (needed for back/forward buttons of lightbox)
-     * @param string $caption
-     * @param bool   $bForceSquare   - default: false, forces an thumbnail to be square format
-     * @param string $sZoomHTMLTag   - is included in the <a> tag if zoom is shown (you can use this to overlay a zoom symbol
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - use self::renderImage() instead unless Flash support is still required.
-     */
-    public function GetThumbnailTag($maxThumbWidth, $maxThumbHeight, $maxZoomWidth = null, $maxZoomHeight = null, $sCSSClass = '', $sNameOfSeries = null, $caption = null, $bForceSquare = false, $sZoomHTMLTag = '')
-    {
-        switch ($this->GetImageType()) {
-            case 'flv':
-            case 'fv4':
-                return $this->renderFLV($maxThumbWidth, $maxThumbHeight);
-            case 'swf':
-                return $this->renderSWF($maxThumbWidth, $maxThumbHeight);
-            default:
-                return $this->renderImage($maxThumbWidth, $maxThumbHeight, $maxZoomWidth, $maxZoomHeight, $sCSSClass, $sNameOfSeries, $caption, $bForceSquare, $sZoomHTMLTag);
-        }
-    }
-
-    /**
      * returns a html image tag of a thumbnail.
      *
      * @param int    $maxThumbWidth  - max width of the thumbnail
@@ -1778,132 +1653,6 @@ class TCMSImageEndpoint
     }
 
     /**
-     * @param int $maxThumbWidth  - max width of the thumbnail
-     * @param int $maxThumbHeight - max height of the thumbnail
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    protected function renderSWF($maxThumbWidth, $maxThumbHeight)
-    {
-        $oGlobal = TGlobal::instance();
-        $objectID = 'flash'.$this->id;
-        $translator = $this->getTranslator();
-
-        if (TGlobal::CMSUserDefined() && $oGlobal->IsCMSMode()) {
-            $returnString = '
-                          <div id="flashContainer'.$objectID.'">
-                           '.$translator->trans('chameleon_system_core.error.flash_required', array('%iVersion%' => 8)).".
-                          </div>
-                          <script type=\"text/javascript\">
-                            // <![CDATA[
-                            $(document).ready(function(){
-                                $('#flashContainer".$objectID."').flash(
-                                    { src: '".$this->GetFullURL()."',
-                                      id: '".$objectID."',
-                                      align: 'middle',
-                                      wmode: 'opaque',
-                                      quality: 'high',
-                                      allowScriptAccess: 'sameDomain',
-                                      width: ".$maxThumbWidth.',
-                                      height: '.$maxThumbHeight.' },
-                                    { version: 8 }
-                                );
-                            });
-                            // ]]>
-                          </script>
-                        ';
-        } else {
-            $returnString = '
-                          <div id="flashContainer'.$objectID.'">
-                           '.$translator->trans('chameleon_system_core.error.flash_required', array('%iVersion%' => 8)).".
-                          </div>
-                          <script type=\"text/javascript\">
-                            // <![CDATA[
-                            $(document).ready(function(){
-                                $('#flashContainer".$objectID."').flash(
-                                    { src: '".$this->GetFullURL()."',
-                                      align: 'middle',
-                                      wmode: 'opaque',
-                                      quality: 'high',
-                                      allowScriptAccess: 'sameDomain',
-                                      width: ".$maxThumbWidth.',
-                                      height: '.$maxThumbHeight.' },
-                                    { version: 8 }
-                                );
-                            });
-                            // ]]>
-                          </script>
-                        ';
-        }
-
-        return $returnString;
-    }
-
-    /**
-     * renders a FLV video tag.
-     *
-     * @param int $maxThumbWidth  - max width of the thumbnail
-     * @param int $maxThumbHeight - max height of the thumbnail
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    protected function renderFLV($maxThumbWidth, $maxThumbHeight)
-    {
-        $playerID = 'flash'.$this->uniqueID;
-
-        $sThumbnailURL = '';
-        $oThumb = $this->GetCenteredFixedSizeThumbnail($maxThumbWidth, $maxThumbHeight, 0, '000000');
-        if (is_a($oThumb, 'TCMSImage')) {
-            $sThumbnailURL = $oThumb->GetFullURL();
-        }
-
-        $aConfig = array();
-        $aFlashVars = array();
-        $aFlashVars['video_src'] = $this->GetFullURL();
-        $aFlashVars['preview_image'] = $sThumbnailURL;
-        $aFlashVars['javascriptid'] = $playerID;
-        $aFlashVars['showControls'] = 'true';
-        if ($this->bAutoPlay) {
-            $aFlashVars['autoPlay'] = 'true';
-        } else {
-            $aFlashVars['autoPlay'] = 'false';
-        }
-
-        // watermark logo
-        // add it only if logo in portal config is available and player size is greater than 300 pixel
-        if ($maxThumbWidth > 300) {
-            $oPortal = $this->getPortalDomainService()->getActivePortal();
-            if (!is_null($oPortal)) {
-                $oWaterMarkLogo = $oPortal->GetImage(0, 'watermark_logo');
-                /** @var $oWaterMarkLogo TCMSImage */
-                if (!is_null($oWaterMarkLogo)) {
-                    $sWaterMarkURL = $oWaterMarkLogo->GetFullURL();
-                    $aFlashVars['watermark_icon'] = $sWaterMarkURL;
-                    $aFlashVars['watermark_iconpos'] = 'TR';
-                }
-            }
-        }
-
-        $this->FLVPlayerURL = $this->GetPlayerUrl();
-
-        $playerHeight = $maxThumbHeight + 20;
-        $this->FLVPlayerHeight = $playerHeight;
-
-        $aConfig['sWidth'] = $maxThumbWidth;
-        $aConfig['sHeight'] = $playerHeight;
-        $aConfig['playerID'] = $playerID;
-        $aConfig['sThumbnailURL'] = $sThumbnailURL;
-        $aConfig['aFlashVars'] = $aFlashVars;
-        $returnString = $this->GetFlashPlugin($aConfig, TGlobal::IsCMSMode());
-
-        return $returnString;
-    }
-
-    /**
      * returns the video embed code for videos that are hosted external
      * replaces the width/height of the embed code with given values.
      *
@@ -1953,7 +1702,7 @@ class TCMSImageEndpoint
     }
 
     /**
-     * returns an image or flv video in Yahoo RSS Media tag format
+     * returns an image in Yahoo RSS Media tag format
      * http://search.yahoo.com/mrss/.
      *
      * @param int $maxThumbWidth
@@ -1972,44 +1721,27 @@ class TCMSImageEndpoint
         $returnString = false;
 
         if (!is_null($oThumb)) {
-            $sFileType = $this->GetImageType();
-            if ('flv' == $sFileType || 'f4v' == $sFileType) {
-                $playerURL = $this->GetPlayerUrl();
-                $flashVars = 'file='.$this->GetFullURL().'&amp;image='.$oThumb->GetFullURL().'&amp;showicons=true&amp;displayheight='.$maxThumbHeight.'&amp;usefullscreen=true';
-
-                $this->FLVPlayerURL = $playerURL.'?'.$flashVars;
-
-                $playerHeight = $maxThumbHeight + 20;
-
-                $this->FLVPlayerHeight = $playerHeight;
-
-                $returnString = '<media:player url="'.$playerURL.'" />
-                           <media:thumbnail url="'.$oThumb->GetFullURL().'" width="'.$maxThumbWidth.'" height="'.$maxThumbHeight.'" />
-                           <enclosure url="'.$playerURL.'?'.$flashVars.'" type="application/flash" />';
-            } else {
-                $returnString = '';
-                $oImageType = TdbCmsFiletype::GetNewInstance();
-                $oImageType->Load($this->aData['cms_filetype_id']);
-                $sThumbURL = $oThumb->GetFullURL();
-                if ('/' == substr($sThumbURL, 0, 1)) {
-                    $oSmartURLData = &TCMSSmartURLData::GetActive();
-                    $sPrefix = '';
-                    if ($oSmartURLData->bIsSSLCall) {
-                        $sPrefix = 'https';
-                    } else {
-                        $sPrefix = 'http';
-                    }
-                    $sThumbURL = $sPrefix.'://'.$oSmartURLData->sOriginalDomainName.$sThumbURL;
+            $oImageType = TdbCmsFiletype::GetNewInstance();
+            $oImageType->Load($this->aData['cms_filetype_id']);
+            $sThumbURL = $oThumb->GetFullURL();
+            if ('/' == substr($sThumbURL, 0, 1)) {
+                $oSmartURLData = &TCMSSmartURLData::GetActive();
+                $sPrefix = '';
+                if ($oSmartURLData->bIsSSLCall) {
+                    $sPrefix = 'https';
+                } else {
+                    $sPrefix = 'http';
                 }
-                $returnString .= '<media:content url="'.$sThumbURL.'" type="'.$oImageType->fieldContentType.'" height="'.$oThumb->aData['height'].'" width="'.$oThumb->aData['width'].'" />'."\n";
+                $sThumbURL = $sPrefix.'://'.$oSmartURLData->sOriginalDomainName.$sThumbURL;
             }
+            $returnString = '<media:content url="'.$sThumbURL.'" type="'.$oImageType->fieldContentType.'" height="'.$oThumb->aData['height'].'" width="'.$oThumb->aData['width'].'" />'."\n";
         }
 
         return $returnString;
     }
 
     /**
-     * returns an image or flv video in Atom RSS link enclosure format
+     * returns an image in Atom RSS link enclosure format
      * http://tools.ietf.org/html/rfc4287.
      *
      * @param int $maxThumbWidth
@@ -2028,26 +1760,20 @@ class TCMSImageEndpoint
         $returnString = false;
 
         if (!is_null($oThumb)) {
-            $sFileType = $this->GetImageType();
-
             $returnString = '';
             $oImageType = TdbCmsFiletype::GetNewInstance();
             $oImageType->Load($this->aData['cms_filetype_id']);
 
-            if ('flv' == $sFileType || 'f4v' == $sFileType) {
-                $sThumbURL = $oThumb->GetFullURL();
-            } else {
-                $sThumbURL = $oThumb->GetFullURL();
+            $sThumbURL = $oThumb->GetFullURL();
 
-                if ('/' == substr($sThumbURL, 0, 1)) {
-                    $oSmartURLData = &TCMSSmartURLData::GetActive();
-                    if ($oSmartURLData->bIsSSLCall) {
-                        $sPrefix = 'https';
-                    } else {
-                        $sPrefix = 'http';
-                    }
-                    $sThumbURL = $sPrefix.'://'.$oSmartURLData->sOriginalDomainName.$sThumbURL;
+            if ('/' == substr($sThumbURL, 0, 1)) {
+                $oSmartURLData = &TCMSSmartURLData::GetActive();
+                if ($oSmartURLData->bIsSSLCall) {
+                    $sPrefix = 'https';
+                } else {
+                    $sPrefix = 'http';
                 }
+                $sThumbURL = $sPrefix.'://'.$oSmartURLData->sOriginalDomainName.$sThumbURL;
             }
 
             $returnString .= '<link rel="enclosure" type="'.$oImageType->fieldContentType.'" length="'.$oThumb->_fileSize.'" href="'.$sThumbURL.'" />';
@@ -2057,123 +1783,7 @@ class TCMSImageEndpoint
     }
 
     /**
-     * return URL of chameleon FLV player.
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    protected function GetPlayerUrl()
-    {
-        $sPlayerURL = TGlobal::GetStaticURL(URL_USER_CMS_PUBLIC.'/blackbox/flash/ChameleonFLVPlayer/FLV_Player.swf');
-
-        return $sPlayerURL;
-    }
-
-    /**
-     * Flashvars for jQuery Flash Plugin.
-     *
-     * @param array $aFlashVars
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    protected function GetFlashVarsArray($aFlashVars)
-    {
-        $sFlashVar = '';
-        $bIsFirst = true;
-
-        foreach ($aFlashVars as $sVar => $sValue) {
-            if ($bIsFirst) {
-                $sFlashVar .= $sVar.':'."'".$sValue."'";
-                $bIsFirst = false;
-            } else {
-                $sFlashVar .= ",\n ".$sVar.':'."'".$sValue."'";
-            }
-        }
-
-        return $sFlashVar;
-    }
-
-    /**
-     * return jQuery Flash Plugin.
-     *
-     * @param array $aConfig
-     * @param bool  $bIsCmsMode
-     * @param bool  $bIsSwf
-     *
-     * @return string jQuery Flash Plugin
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    protected function GetFlashPlugin($aConfig, $bIsCmsMode = false, $bIsSwf = false)
-    {
-        $sThumbnailURL = $aConfig['sThumbnailURL'];
-        $sHeight = $aConfig['sHeight'];
-        $sWidth = $aConfig['sWidth'];
-        $playerID = $aConfig['playerID'];
-        $aFlashVars = $aConfig['aFlashVars'];
-        $wmode = 'opaque';
-
-        if (!$bIsSwf) {
-            $sStyle = 'style="background-image: url('.$sThumbnailURL."); background-repeat: no-repeat; height: {$sHeight}px\"";
-            $sPlayUrl = $this->FLVPlayerURL;
-            $iVersion = 9;
-        } else {
-            $sStyle = '';
-            $sPlayUrl = $this->GetFullURL();
-            $iVersion = 8;
-        }
-        $sNote = $this->getTranslator()->trans('chameleon_system_core.error.flash_required', array('%iVersion%' => $iVersion)).'.';
-
-        if (!$bIsSwf && !$this->isZoomedVideo) {
-            $wmode = $this->sFlashVideoWMode;
-        }
-
-        $sFlashPlugin = '
-      <div id="flashContainer'.$playerID.'" '.$sStyle.'>
-      '.$sNote."
-      </div>
-      <script type=\"text/javascript\">
-      // <![CDATA[\n";
-
-        $sFlashPlugin .= '
-      var InitFlashPlayer'.$playerID." = function() {
-        $('#flashContainer".$playerID."').flash(
-          {
-            src: '".$sPlayUrl."',
-            id: '".$playerID."',
-            name: '".$playerID."',
-            align: 'middle',
-            wmode: '".$wmode."',
-            quality: 'high',
-            allowScriptAccess: 'always',
-            allowfullscreen: 'true',
-            width: '".$sWidth."',
-            height: '".$sHeight."',
-            flashvars: {
-              ".$this->GetFlashVarsArray($aFlashVars).'
-            }
-          },
-          { version: '.$iVersion.' }
-        );
-      };
-      ';
-
-        $sFlashPlugin .= '
-       $(document).ready(function(){
-         InitFlashPlayer'.$playerID.'()
-       });
-      // ]]>
-      </script>
-      ';
-
-        return $sFlashPlugin;
-    }
-
-    /**
-     * returns a string describing the imageType (gif, jpg, png, swf, flv).
+     * returns a string describing the imageType (gif, jpg, png).
      *
      * @return string
      */
@@ -2193,27 +1803,10 @@ class TCMSImageEndpoint
                 case 3:
                     $this->_imageType = 'png';
                     break;
-                case 4:
-                    $this->_imageType = 'swf';
-                    break;
             }
         }
 
         return $this->_imageType;
-    }
-
-    /**
-     * return true if the image is a flash movie (flv, f4v or swf).
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    public function IsFlashMovie()
-    {
-        $sImageType = $this->GetImageType();
-
-        return 'flv' == $sImageType || 'f4v' == $sImageType || 'swf' == $sImageType;
     }
 
     /**
@@ -2232,7 +1825,7 @@ class TCMSImageEndpoint
     }
 
     /**
-     * returns a string describing the imageType (gif, jpg, png, swf, flv, f4v)
+     * returns a string describing the imageType (gif, jpg, png)
      * returns mp4 for all external videos.
      *
      * @return string
@@ -2384,7 +1977,7 @@ class TCMSImageEndpoint
     }
 
     /**
-     * returns an array describing the allowed media types (gif, jpg, png, swf, flv, f4v).
+     * returns an array describing the allowed media types (gif, jpg, png).
      *
      * this function is used static
      *
@@ -2392,9 +1985,7 @@ class TCMSImageEndpoint
      */
     public static function GetAllowedMediaTypes()
     {
-        $mediaTypes = array('gif', 'jpg', 'jpeg', 'jpe', 'png', 'swf', 'flv', 'f4v');
-
-        return $mediaTypes;
+        return ['gif', 'jpg', 'jpeg', 'jpe', 'png'];
     }
 
     /**
@@ -2636,14 +2227,6 @@ class TCMSImageEndpoint
     private function getUrlNormalizationUtil()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\TranslatorInterface
-     */
-    private function getTranslator()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 
     /**

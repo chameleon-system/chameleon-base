@@ -594,7 +594,6 @@ class TCCustomNavigation
      */
     protected function _RenderNode(&$oNode, &$oParentNode)
     {
-        $link = '';
         $link = $this->_GetNodeName($oNode);
         $linkStyle = $this->AddLinkStyle($oNode);
 

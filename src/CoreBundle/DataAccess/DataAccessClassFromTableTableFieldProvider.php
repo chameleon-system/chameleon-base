@@ -35,7 +35,6 @@ class DataAccessClassFromTableTableFieldProvider implements DataAccessClassFromT
      */
     public function getFieldClassNameFromDictionaryValues($tableName, $fieldName)
     {
-        $fieldClassName = null;
         $query = $this->getFieldClassRowQuery();
 
         try {

@@ -353,15 +353,6 @@ function CreateMediaZoomDialogFromImageURL(imageURL, width, height) {
 }
 
 /*
- * @deprecated since 6.3.0
- *
- * creates a ModalDialog without close button from content string
- */
-function CreateModalIFrameDialogFromContentWithoutClose(content, width, height, title, isDraggable, isResizable) {
-    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width));
-}
-
-/*
  * closes Modal Dialog
  */
 function CloseModalIFrameDialog() {
@@ -376,25 +367,6 @@ function getRadioValue(rObj) {
         if (rObj[i].checked) returnVal = rObj[i].value;
     }
     return returnVal;
-}
-
-/**
- * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
- */
-function InitVideoPlayer(playerID, FLVPlayerURL, maxThumbWidth, playerHeight) {
-    $('#flashContainer' + playerID).flash(
-        { src:FLVPlayerURL,
-            id:playerID,
-            name:playerID,
-            align:'middle',
-            wmode:'window',
-            quality:'high',
-            allowScriptAccess:'always',
-            allowfullscreen:'true',
-            width:maxThumbWidth,
-            height:playerHeight },
-        { version:9 }
-    );
 }
 
 function addslashes(str) {

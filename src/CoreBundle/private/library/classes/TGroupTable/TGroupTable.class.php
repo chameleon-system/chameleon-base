@@ -351,7 +351,6 @@ class TGroupTable
             if ($recordSetCount <= $offset) {
                 // not enough in this set. increase counter and exit function
                 $recordCount += $recordSetCount;
-                $showGroup = false;
             } else { // otherwise position it into the subset
                 $sql .= " LIMIT {$offset}";
                 if ($this->showRecordCount > 0) {

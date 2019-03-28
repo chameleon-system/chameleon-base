@@ -224,7 +224,6 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                 $oUser->Register();
 
                 $this->UpdateUserAddress(null, null, true);
-                $this->PostRegistrationHook();
                 // redirect to registration success page
                 if (!is_null($sSuccessURL)) {
                     $this->RedirectToURL($sSuccessURL, true);
@@ -237,15 +236,6 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         if (!is_null($sFailureURL)) {
             $this->RedirectToURL($sFailureURL, true);
         }
-    }
-
-    /**
-     * Called after a successful registration.
-     *
-     * @deprecated - you should consider placing your login in TDataExtranetUser::PostRegistrationHook
-     */
-    protected function PostRegistrationHook()
-    {
     }
 
     /**
@@ -745,9 +735,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             if (is_array($oOldUser->sqlData) && array_key_exists($sFieldName, $oOldUser->sqlData) && is_array($oUser->sqlData) && array_key_exists($sFieldName, $oUser->sqlData)) {
                 $sNewValue = $oUser->sqlData[$sFieldName];
                 if ('password' == $sFieldName) {
-                    /** @var IPkgCmsSecurity_Password $oPwd */
-                    $oPwd = ServiceLocator::get('password');
-                    if (false === $oPwd->verify($sNewValue, $oOldUser->sqlData[$sFieldName])) {
+                    if (false === $this->getPasswordHashGenerator()->verify($sNewValue, $oOldUser->sqlData[$sFieldName])) {
                         $bPasswordIsRequired = true;
                         break;
                     }

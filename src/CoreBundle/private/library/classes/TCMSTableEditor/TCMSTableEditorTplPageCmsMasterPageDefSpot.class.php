@@ -40,32 +40,6 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     }
 
     /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * load module from spot and make revisions of the module instance and the connected module tables.
-     *
-     * @param TCMSRecord $oRecordShortInfoData
-     * @param array      $postDataFromParentRevision
-     */
-    protected function AddNewRevisionForModuleInstances($oRecordShortInfoData, $postDataFromParentRevision)
-    {
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * Make new revision from tables connected to given module.
-     *
-     * @param TdbCmsTplModule         $oCmsTplModule
-     * @param TdbCmsTplModuleInstance $oCmsTplModuleInstance
-     * @param TCMSRecord              $postDataFromParentRevision
-     * @param array                   $oRecordShortInfoData
-     */
-    protected function AddNewRevisionModuleConnectedTables($oCmsTplModule, $oCmsTplModuleInstance, $postDataFromParentRevision, $oRecordShortInfoData)
-    {
-    }
-
-    /**
      * Get all records from given table connected with given module instance.
      *
      * @param TdbCmsTblConf           $oModuleTableConf
@@ -83,52 +57,6 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
         $oModuleContentRecordList->Load($sQuery);
 
         return $oModuleContentRecordList;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * Check if we can make a revision for the given table.
-     * Revision is allowed when table field RevisionManagementActive is ture and
-     * the value of field name was cms_tpl_module_instance_id.
-     *
-     * @param TdbCmsTblConf $oModuleTableConf
-     *
-     * @return bool $bIsRevisionAllowedConnectedTable
-     */
-    protected function IsRevisonAllowedConnectedTable($oModuleTableConf)
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * Make new revision for given table record.
-     *
-     * @param TdbCmsTblConf $oModuleTableConf
-     * @param TCMSRecord    $oModuleContentRecord
-     * @param array         $postDataFromParentRevision
-     * @param TCMSRecord    $oRecordShortInfoData
-     */
-    protected function AddNewRevisionModuleConnectedTableRecord($oModuleConnectedTableEditor, $oModuleTableConf, $oModuleContentRecord, $postDataFromParentRevision, $oRecordShortInfoData)
-    {
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * Make new revision for given module instance.
-     *
-     * @param TdbCmsTplModuleInstance $oCmsTplModuleInstance
-     * @param array                   $postDataFromParentRevision
-     * @param TCMSRecord              $oRecordShortInfoData
-     *
-     * @return bool $bSuccess
-     */
-    protected function AddNewRevisionModuleInstance($oCmsTplModuleInstance, $postDataFromParentRevision, $oRecordShortInfoData)
-    {
-        return false;
     }
 
     /**

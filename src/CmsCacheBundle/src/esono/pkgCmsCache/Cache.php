@@ -15,7 +15,6 @@ use ChameleonSystem\CoreBundle\RequestState\Interfaces\RequestStateHashProviderI
 use ChameleonSystem\CoreBundle\Util\HashInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class Cache implements CacheInterface
@@ -139,7 +138,7 @@ class Cache implements CacheInterface
             return;
         }
         $this->storage->set($key, $content, $iMaxLiveInSeconds);
-        $this->setTrigger($trigger, $key, $iMaxLiveInSeconds);
+        $this->setTrigger($trigger, $key);
     }
 
     /**
@@ -147,9 +146,8 @@ class Cache implements CacheInterface
      *
      * @param array  $triggerList
      * @param string $key
-     * @param int    $iMaxLiveInSeconds -
      */
-    private function setTrigger($triggerList, $key, $iMaxLiveInSeconds)
+    private function setTrigger($triggerList, $key)
     {
         if (!is_array($triggerList) || 0 === count($triggerList)) {
             return;
@@ -271,19 +269,13 @@ class Cache implements CacheInterface
     public function getKey($aParameters, $addStateKey = true)
     {
         if ($addStateKey) {
-            $aParameters['__state'] = $this->getRequestStateKey($this->requestStack->getCurrentRequest());
+            $aParameters['__state'] = [
+                self::REQUEST_STATE_HASH => $this->requestStateHashProvider->getHash($this->requestStack->getCurrentRequest()),
+            ];
         }
         $aParameters['__uniqueIdentity'] = $this->cacheKeyPrefix;
 
         return $this->hashArray->hash32($aParameters);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRequestStateKey(Request $request = null)
-    {
-        return [self::REQUEST_STATE_HASH => $this->requestStateHashProvider->getHash($request)];
     }
 
     /**

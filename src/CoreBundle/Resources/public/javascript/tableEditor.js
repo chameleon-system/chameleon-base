@@ -126,11 +126,7 @@ function SetImageResponse(data, responseMessage) {
         imageDiv.style.display = 'block';
         noImageDiv.style.display = 'none';
 
-        if (data.isFlashVideo) {
-            InitVideoPlayer(data.uniqueID, data.FLVPlayerURL, data.maxThumbWidth, data.FLVPlayerHeight);
-        } else {
-            initLightBox();
-        }
+        initLightBox();
     }
 
     CloseModalIFrameDialog();

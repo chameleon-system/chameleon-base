@@ -639,7 +639,21 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         }
 
         $aProtectedVariables = $this->GetProtectedSessionVariables();
-        TCMSSessionHandler::CleanUpSession($aProtectedVariables);
+        $request = $this->getCurrentRequest();
+        if (null !== $request) {
+            $session = $request->getSession();
+            if (null !== $session) {
+                $all = $session->all();
+                $new = array();
+                foreach ($aProtectedVariables as $key) {
+                    if (isset($all[$key])) {
+                        $new[$key] = $all[$key];
+                    }
+                }
+                $_SESSION = array();
+                $session->replace($new);
+            }
+        }
 
         $this->resetPageAccessCache();
         $this->sqlData = false;

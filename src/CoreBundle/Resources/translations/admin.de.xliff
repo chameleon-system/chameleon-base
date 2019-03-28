@@ -172,11 +172,6 @@
                 <source>chameleon_system_core.template_engine.header_lock</source>
                 <target>Datensatzsperre</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.template_engine.header_revision">
-                <source>chameleon_system_core.template_engine.header_revision</source>
-                <target>Version</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.header_navigation">
                 <source>chameleon_system_core.template_engine.header_navigation</source>
                 <target>Navigationspunkte</target>
@@ -889,11 +884,6 @@
                 <source>chameleon_system_core.record_lock.lock_owner_phone</source>
                 <target>Tel.</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.record_lock.lock_owner_fax">
-                <source>chameleon_system_core.record_lock.lock_owner_fax</source>
-                <target>Fax</target>
-                 <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.record_lock.locked_by">
                 <source>chameleon_system_core.record_lock.locked_by</source>
                 <target>gesperrt durch</target>
@@ -902,88 +892,6 @@
                 <source>chameleon_system_core.record_lock.lock_owner_city</source>
                 <target>Ort</target>
             </trans-unit>
-
-            <trans-unit id="chameleon_system_core.record_revision.based_on">
-                <source>chameleon_system_core.record_revision.based_on</source>
-                <target>basiert auf Rev.</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.revision_number">
-                <source>chameleon_system_core.record_revision.revision_number</source>
-                <target>Revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.last_used_date">
-                <source>chameleon_system_core.record_revision.last_used_date</source>
-                <target>zuletzt aktiviert</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.name">
-                <source>chameleon_system_core.record_revision.name</source>
-                <target>Titel</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.description">
-                <source>chameleon_system_core.record_revision.description</source>
-                <target>Beschreibung</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.no_revision_exists">
-                <source>chameleon_system_core.record_revision.no_revision_exists</source>
-                <target>unversioniert</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_restore_revision">
-                <source>chameleon_system_core.record_revision.action_restore_revision</source>
-                <target>Datensatzversion wiederherstellen</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.confirm_restore_revision">
-                <source>chameleon_system_core.record_revision.confirm_restore_revision</source>
-                <target><![CDATA[Sind Sie sicher, dass der aktuelle Datensatz mit einer älteren Version überschrieben werden soll?<br/>Legen Sie im Zweifelsfall eine neue Version des<br/>aktuellen Stands an.]]></target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_confirm_restore_revision">
-                <source>chameleon_system_core.record_revision.action_confirm_restore_revision</source>
-                <target>OK</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.header_new_revision">
-                <source>chameleon_system_core.record_revision.header_new_revision</source>
-                <target>Version anlegen</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.new_revision_help">
-                <source>chameleon_system_core.record_revision.new_revision_help</source>
-                <target>Hinweis: Zum jetzigen Zeitpunkt noch nicht gespeicherte Daten werden nicht mit versioniert und sind verloren.</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.new_revision_number">
-                <source>chameleon_system_core.record_revision.new_revision_number</source>
-                <target>Neue Version</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_new_revision">
-                <source>chameleon_system_core.record_revision.action_new_revision</source>
-                <target>Version anlegen</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_load_revision">
-                <source>chameleon_system_core.record_revision.action_load_revision</source>
-                <target>Version laden</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_create_page_revision">
-                <source>chameleon_system_core.record_revision.action_create_page_revision</source>
-                <target>Seitenversion anlegen</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_load_page_revision">
-                <source>chameleon_system_core.record_revision.action_load_page_revision</source>
-                <target>Seitenversion laden</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-
 
             <trans-unit id="chameleon_system_core.list.no_entries">
                 <source>chameleon_system_core.list.no_entries</source>
@@ -1765,26 +1673,6 @@
                 <source>chameleon_system_core.cms_module_header.migration_recording_deactivated</source>
                 <target>Datenbankaufzeichnung deaktiviert.</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_header.error_unable_to_create_update_counter">
-                <source>chameleon_system_core.cms_module_header.error_unable_to_create_update_counter</source>
-                <target>Fehler beim Anlegen des Datenbankzählers!</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_header.msg_created_update_counter">
-                <source>chameleon_system_core.cms_module_header.msg_created_update_counter</source>
-                <target>Neuer Datenbankzähler %sSystemName% wurde erfolgreich angelegt.</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_header.msg_update_counter_switched">
-                <source>chameleon_system_core.cms_module_header.msg_update_counter_switched</source>
-                <target>Datenbankcounter erfolgreich gewechselt.</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_header.active_update_counter">
-                <source>chameleon_system_core.cms_module_header.active_update_counter</source>
-                <target>Aktiver Counter</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_header.action_edit_navigation_help">
                 <source>chameleon_system_core.cms_module_header.action_edit_navigation_help</source>
                 <target>Seitenstruktur verwalten</target>
@@ -2438,11 +2326,6 @@
                 <source>chameleon_system_core.table_editor_files.error_unable_to_move_or_copy_file</source>
                 <target>Die Quelldatei konnte weder an das Ziel verschoben noch kopiert werden</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.table_editor_files.error_cluster_distribution">
-                <source>chameleon_system_core.table_editor_files.error_cluster_distribution</source>
-                <target>Die Datei konnte nicht im Cluster verteilt werden. File: %name%, fileHandler Error: %error%)</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_files.error_file_to_large">
                 <source>chameleon_system_core.table_editor_files.error_file_to_large</source>
                 <target>Die hochgeladene Datei ist zu groß mit %size% Bytes (erlaubt: %allowed%)</target>
@@ -2462,11 +2345,6 @@
             <trans-unit id="chameleon_system_core.table_editor_media.error_invalid_format">
                 <source>chameleon_system_core.table_editor_media.error_invalid_format</source>
                 <target>Die Datei hat ein nicht unterstütztes Dateiformat</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.table_editor_media.error_invalid_flv">
-                <source>chameleon_system_core.table_editor_media.error_invalid_flv</source>
-                <target>Die FLV Datei ist defekt oder der Codec wird nicht unterstützt</target>
-                <note>@deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_media.error_permission_target_folder">
                 <source>chameleon_system_core.table_editor_media.error_permission_target_folder</source>

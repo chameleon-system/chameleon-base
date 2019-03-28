@@ -11,8 +11,6 @@
 
 namespace esono\pkgCmsCache;
 
-use Symfony\Component\HttpFoundation\Request;
-
 interface CacheInterface
 {
     /**
@@ -83,15 +81,4 @@ interface CacheInterface
      * @throws \InvalidArgumentException if the key cannot be created with the given parameters
      */
     public function getKey($aParameters, $addStateKey = true);
-
-    /**
-     * returns an array of the parameters relevant for caching from the request (such as language, currency, protocol, etc).
-     *
-     * @param Request $request
-     *
-     * @return array
-     *
-     * @deprecated since 6.2.0 - use chameleon_system_core.request_state_hash_provider instead.
-     */
-    public function getRequestStateKey(Request $request);
 }

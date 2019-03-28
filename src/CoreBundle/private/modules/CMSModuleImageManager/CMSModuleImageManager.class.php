@@ -148,15 +148,7 @@ class CMSModuleImageManager extends TCMSModelBase
             $returnData['uniqueID'] = $oImage->uniqueID;
             $returnData['maxThumbWidth'] = $maxThumbWidth;
 
-            $returnData['isFlashVideo'] = false;
-            $sImageType = $oImage->GetImageType();
-            if ('flv' == $sImageType || 'f4v' == $sImageType) {
-                $returnData['isFlashVideo'] = true;
-            }
-
             $returnData['sImage'] = $this->getBackendResponsiveThumbnail($oImage);
-            $returnData['FLVPlayerURL'] = $oImage->FLVPlayerURL;
-            $returnData['FLVPlayerHeight'] = $oImage->FLVPlayerHeight;
         } else {
             $returnData['message'] = TGlobal::Translate('chameleon_system_core.cms_module_image_manager.selected_image_not_found');
             $returnData['messageType'] = 'ERROR';
@@ -196,23 +188,6 @@ class CMSModuleImageManager extends TCMSModelBase
         return $viewRenderer->Render('/common/media/pkgCmsTextFieldImageResponsive.html.twig', null, false);
     }
 
-    /**
-     * Add messages to return data if active user cant use media file because media file was in
-     * workflow transaction.
-     * Returns true is user can use image and false otherwise.
-     *
-     * @param array $returnData
-     * @param array $aImageData
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function HandleWorkflowOnSetImage(&$returnData, $aImageData)
-    {
-        return true;
-    }
-
     protected function _LoadData($tableId, $recordId, $imageFieldName)
     {
         $this->oTableConf = new TCMSTableConf();
@@ -250,11 +225,6 @@ class CMSModuleImageManager extends TCMSModelBase
 
             ++$level;
             $this->data['treeHTML'] .= $spacer.'<li id="node'.$oNode->sqlData['cmsident'].'">';
-
-            $activeStyle = '';
-            if ((string) $activeID == (string) $oNode->id) {
-                $activeStyle = ' class="active"';
-            }
 
             $sListURL = $this->GetListURL();
             $sListURL .= '&amp;cms_media_tree_id='.$sCurrentNodeId;
@@ -337,7 +307,6 @@ class CMSModuleImageManager extends TCMSModelBase
         $aIncludes = array();
         // first the includes that are needed for the all fields
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/table.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';

@@ -179,17 +179,12 @@ class CMSMediaLocalImport extends TCMSModelBase
 
         try {
             $aPostData = $this->GetFileRecordData($sFile);
-            $oImageMetaData = $oTableEditor->Save($aPostData);
+            $oTableEditor->Save($aPostData);
             $this->data['importSuccess'][] = $this->directory.'/'.$sFile;
 
-            if ('/' != substr($this->sImportFolder, -1)) {
-                $this->sImportFolder = $this->sImportFolder.'/';
+            if ('/' !== substr($this->sImportFolder, -1)) {
+                $this->sImportFolder .= '/';
             }
-            $subDir = $this->sImportFolder.$this->directory;
-            if ('/' != substr($subDir, -1)) {
-                $subDir = $subDir.'/';
-            }
-            $sFilePath = $subDir.$sFile;
         } catch (Exception $e) {
             $this->data['fileErrors'][] = $e->getMessage();
         }
@@ -216,10 +211,8 @@ class CMSMediaLocalImport extends TCMSModelBase
         $fileExtension = TTools::GetFileExtension($sFilePath);
 
         $oFileType = new TCMSRecord();
-        /** @var $oFileType TCMSRecord */
         $oFileType->table = 'cms_filetype';
         $oFileType->LoadFromField('file_extension', $fileExtension);
-        $filetypeID = $oFileType->id;
 
         $fileSize = filesize($sFilePath);
 

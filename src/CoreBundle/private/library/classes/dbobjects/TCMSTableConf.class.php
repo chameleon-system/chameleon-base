@@ -84,7 +84,6 @@ class TCMSTableConf extends TCMSRecord
      */
     public static function &GetMLTListObject($sTableName)
     {
-        $oList = null;
         // get the table conf - just in case the there is an mlt list
         $oTableConf = TdbCmsTblConf::GetNewInstance();
         $mltFieldHelper = self::getMltFieldUtil();

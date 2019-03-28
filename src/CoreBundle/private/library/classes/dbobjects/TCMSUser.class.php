@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManag
 use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * the user manager class for the cms.
@@ -35,16 +36,6 @@ class TCMSUser extends TCMSRecord
      * @var TAccessManager
      */
     public $oAccessManager = null;
-
-    /**
-     * indicates if the workflow engine is activates and the user
-     * has the needed rights to show/use it.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public $bWorkflowEngineActive = false;
 
     /**
      * holds the user object singleton.
@@ -236,7 +227,13 @@ class TCMSUser extends TCMSRecord
         }
 
         unset($_SESSION['_listObjCache']);
-        TCMSSessionHandler::ClearSession();
+        $request = self::getRequest();
+        if (null !== $request) {
+            $session = $request->getSession();
+            if (null === $session) {
+                $session->clear();
+            }
+        }
 
         self::getEventDispatcher()->dispatch(CoreEvents::BACKEND_LOGOUT_SUCCESS, new BackendLogoutEvent($user));
     }
@@ -439,19 +436,6 @@ class TCMSUser extends TCMSRecord
     }
 
     /**
-     * returns true if the workflow engine is activated in config and user has
-     * rights to use it.
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function LoadWorkflowEngineStatus()
-    {
-        return false;
-    }
-
-    /**
      * returns the default user icon or the custom user image as square thumbnail.
      *
      * @param bool $bWithZoom         - adds the thickbox/lightbox zoom <a> tag
@@ -506,5 +490,10 @@ class TCMSUser extends TCMSRecord
     private static function getEventDispatcher()
     {
         return ServiceLocator::get('event_dispatcher');
+    }
+
+    private static function getRequest(): ?Request
+    {
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 }

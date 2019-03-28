@@ -42,16 +42,6 @@ class HtmlHelper
     }
 
     /**
-     * @param string $html
-     *
-     * @deprecated since 6.2.0 - pass the HTML to render directly to the render() method.
-     */
-    public function setHtmlText($html)
-    {
-        $this->computeHtml($html);
-    }
-
-    /**
      * @param array|string|object $html
      */
     private function computeHtml($html)

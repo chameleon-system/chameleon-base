@@ -173,7 +173,6 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      */
     protected function GetBackgroundImage()
     {
-        $oImage = null;
         $sBackgroundStyle = '';
 
         $activePage = $this->getActivePageService()->getActivePage();

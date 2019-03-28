@@ -300,9 +300,7 @@ class MTHeader extends TCMSModelBase
         $this->methodCallAllowed[] = 'GetCurrentTransactionInfo';
         $this->methodCallAllowed[] = 'addTabToUrlHistory';
         if ($oUser && $oUser->oAccessManager && $oUser->oAccessManager->PermitFunction('dbchangelog-manager')) {
-            $this->methodCallAllowed[] = 'ChangeActiveDbCounter';
             $this->methodCallAllowed[] = 'SwitchLoggingState';
-            $this->methodCallAllowed[] = 'AddCounter';
             $this->methodCallAllowed[] = 'UpdateUnixTimeStamp';
         }
     }
@@ -647,18 +645,6 @@ class MTHeader extends TCMSModelBase
         }
 
         return $includes;
-    }
-
-    /**
-     * loads the active workflow transaction object and returns an object used for ajax calls.
-     *
-     * @return stdClass
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function GetCurrentTransactionInfo()
-    {
-        return new stdClass();
     }
 
     /**

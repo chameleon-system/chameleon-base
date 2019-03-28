@@ -328,7 +328,6 @@ class TTools
         $returnVal = false;
         if ($bCheckFieldConfig) {
             $tableId = self::GetCMSTableId($sTableName);
-            $fieldExists = false;
             $query = "SELECT `id` FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($tableId)."' AND `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldName)."'";
             $result = MySqlLegacySupport::getInstance()->query($query);
             if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
@@ -1138,7 +1137,6 @@ class TTools
      */
     public static function mb_safe_unserialize($data)
     {
-        $sUnserializedData = null;
         if (':' !== substr($data, 1, 1)) {
             $data = base64_decode($data);
         }

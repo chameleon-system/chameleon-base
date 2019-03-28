@@ -712,7 +712,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     /**
      * return an array of variables to search/replace in the rendered page
      * use this hook to add vars that should never be cached
-     * note: see TGlobalBase::ReplaceCustomVariablesInString() to find out what format the variables must have in your html code.
      *
      * @return array
      *

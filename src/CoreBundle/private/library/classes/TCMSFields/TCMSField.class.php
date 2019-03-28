@@ -1248,18 +1248,6 @@ class TCMSField implements TCMSFieldVisitableInterface
     }
 
     /**
-     * Render an input element used for forms.
-     *
-     * @deprecated please use Render() instead
-     *
-     * @return string
-     */
-    public function RenderInputFrontend()
-    {
-        return $this->GetHTML();
-    }
-
-    /**
      * Check if field data is valid when we are in frontend context.
      *
      * @return bool
@@ -1321,8 +1309,6 @@ class TCMSField implements TCMSFieldVisitableInterface
         $sViewSubType = null
     ) {
         $oView = new TViewParser();
-        /** @var $oView TViewParser* */
-        $oView->UseCaching(false);
         $oView->AddVar('oField', $this);
         $oView->AddVar('bFieldHasError', $bFieldHasError);
         $aAdditionalViewData = $this->GetAdditionalViewData();

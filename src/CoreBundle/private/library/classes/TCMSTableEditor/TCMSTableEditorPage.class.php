@@ -83,7 +83,6 @@ class TCMSTableEditorPage extends TCMSTableEditor
      */
     protected function OnAfterCopy()
     {
-        $sPrimaryTreeID = $this->oTable->sqlData['primary_tree_id_hidden'];
         // Dont add tree nodes from source page on copy tree or copy tree connections because these connections already exists
         if (false === TCMSTableEditorTree::IsCopyTreeMode() && false === TCMSTableEditorTreeConnection::IsCopyTreeConnectionMode()) {
             $query = "SELECT * FROM `cms_tree_node` WHERE `contid` = '".$this->sSourceId."' AND `tbl` = 'cms_tpl_page'";
@@ -136,8 +135,6 @@ class TCMSTableEditorPage extends TCMSTableEditor
     protected function GetCustomMenuItems()
     {
         parent::GetCustomMenuItems();
-
-        $oGlobal = TGlobal::instance();
 
         // add custom message to delete
         $oMenuItemSave = $this->oMenuItems->FindItemWithProperty('sItemKey', 'delete');

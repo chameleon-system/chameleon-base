@@ -427,7 +427,7 @@ class TModelBase
      */
     protected function SetTemplate($modelName, $name)
     {
-        $sType = $this->GetModuleType();
+        $sType = $this->aModuleConfig['moduleType'] ?? 'Core';
 
         $this->aModuleConfig['model'] = $modelName;
         $this->aModuleConfig['view'] = $name;
@@ -457,26 +457,6 @@ class TModelBase
         }
 
         return $rootPath;
-    }
-
-    /**
-     * get the type of the module (Core, Customer, Customer Core).
-     *
-     * @return string
-     *
-     * @deprecated
-     *
-     * @todo refactor calls
-     */
-    protected function GetModuleType()
-    {
-        $type = 'Core';
-
-        if (array_key_exists('moduleType', $this->aModuleConfig)) {
-            $type = $this->aModuleConfig['moduleType'];
-        }
-
-        return $type;
     }
 
     /**
@@ -676,7 +656,6 @@ class TModelBase
     final public function __invoke(Request $request, $isLegacyModule)
     {
         $response = new Response();
-        $cachedContent = null;
         if (true === $this->_AllowCache()) {
             $cache = $this->getCache();
             $cacheKey = $cache->getKey($this->_GetCacheParameters());

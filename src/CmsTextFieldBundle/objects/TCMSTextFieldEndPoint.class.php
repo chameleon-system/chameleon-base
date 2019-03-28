@@ -150,7 +150,6 @@ class TCMSTextFieldEndPoint
         $content = $this->_ReplaceLinks($content);
         $content = $this->_ReplaceEMailLinks($content);
         $content = $this->_ReplaceDownloadLinks($content);
-        $content = $this->_ReplaceVariables($content);
         $content = $this->_ReplaceInvalidDivs($content);
         $content = $this->_ReplaceEmptyAligns($content);
         $content = $this->_RemoveEmptyTags($content);
@@ -197,7 +196,7 @@ class TCMSTextFieldEndPoint
      * @param bool  $includeClearDiv  - include a clear div at the end of the text block (is false by default)
      * @param array $aCustomVariables - any custom variables you want to replace
      * @param bool  $bClearThickBox   - remove all a href with class thickbox
-     * @param bool  $bClearScriptTags - clear all script tags and show only preview image of flv videos
+     * @param bool  $bClearScriptTags - clear all script tags
      *
      * @return string
      */
@@ -210,7 +209,6 @@ class TCMSTextFieldEndPoint
         $content = $this->_ReplaceImages($content, $bClearThickBox);
         $content = $this->_ReplaceLinks($content);
         $content = $this->_ReplaceDownloadLinks($content);
-        $content = $this->_ReplaceVariables($content);
         $content = $this->_ReplaceInvalidDivs($content);
         $content = $this->_ReplaceEmptyAligns($content);
         $content = $this->_RemoveEmptyTags($content);
@@ -287,26 +285,6 @@ class TCMSTextFieldEndPoint
         if (!is_null($length) && mb_strlen($content) > $length) {
             $content = mb_substr($content, 0, $length);
         }
-
-        return $content;
-    }
-
-    /**
-     * replaces $$ variables.
-     *
-     * @deprecated don`t use this type of vars anymore! use twig style placeholder instead
-     *
-     * @param string $content
-     *
-     * @return string
-     */
-    protected function _ReplaceVariables($content)
-    {
-        if (false === stripos($content, '$$')) {
-            return $content;
-        }
-        $matchString = '/\$\$([^\$]+?)\$\$/usi';
-        $content = preg_replace_callback($matchString, array($this, '_callback_cmstextfield_varparser'), $content);
 
         return $content;
     }
@@ -470,7 +448,6 @@ class TCMSTextFieldEndPoint
     {
         $returnString = $aMatch[0];
         if (isset($aMatch[2]) && false !== strpos($aMatch[2], 'thickbox')) {
-            $returnString = $aMatch[1].$aMatch[3].$aMatch[5];
             $galleryMatchString = "/<a([^>]+?)class=['\"]([^'\"]*?)thickbox([^'\"]*?)['\"]([^>]*?)>(.*?)<\\/a>/usi";
             $returnString = preg_replace_callback($galleryMatchString, array($this, '_callback_cmstextfield_image_thickbox_clear'), $aMatch[0]);
         }
@@ -619,27 +596,7 @@ class TCMSTextFieldEndPoint
      */
     protected function _RemoveScriptTags($content)
     {
-        $replaceString = '/<script([^>]+?)>(.*?)<\\/script>/si';
-        $content = preg_replace($replaceString, '', $content);
-        $galleryMatchString = "/<div[^>]+?id=['\"]*?flashContainer*?[^>]+?url\((.*?)\)[^>]+?>.*?<\\/div>/usi";
-        $content = preg_replace_callback($galleryMatchString, array($this, '_callback_cmstextfield_image_flv_parser'), $content);
-
-        return $content;
-    }
-
-    /**
-     * @param array $aMatch
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.
-     */
-    protected function _callback_cmstextfield_image_flv_parser($aMatch)
-    {
-        $sImgUrl = $aMatch[1];
-        $returnString = '<img src="'.$sImgUrl.'" alt="" />';
-
-        return $returnString;
+        return preg_replace('/<script([^>]+?)>(.*?)<\\/script>/si', '', $content);
     }
 
     /**
@@ -699,7 +656,6 @@ class TCMSTextFieldEndPoint
             $sLinkName = '';
             if (!empty($aMatch[3])) {
                 if (preg_match("#^(\[ico\])?(.*\\s*.*\\s*.*)(\[kb\])?$#", $aMatch[3], $aSubMatch)) {
-                    $iStart = 0;
                     $iLen = strlen($aSubMatch[0]);
                     $iStart = strpos($aSubMatch[0], '[ico]');
                     if (false !== strpos($aSubMatch[0], '[ico]')) {
@@ -793,23 +749,6 @@ class TCMSTextFieldEndPoint
             return $aLinkAttributes[0];
         } else {
             return array();
-        }
-    }
-
-    /**
-     * @deprecated only use {{}} variables instead of $$
-     *
-     * @param array $aMatch
-     *
-     * @return string
-     */
-    protected function _callback_cmstextfield_varparser($aMatch)
-    {
-        $varVal = TCMSRegistry::Get($aMatch[1]);
-        if (!is_null($varVal)) {
-            return $varVal;
-        } else {
-            return $aMatch[0];
         }
     }
 
@@ -947,47 +886,31 @@ class TCMSTextFieldEndPoint
                     '.$returnString."<figcaption class=\"cssmediacaption\">{$tags['cmscaption']}</figcaption></figure>";
                 }
             } else {
-                $sImageType = $oImage->GetImageType();
+                $sFullImageURL = $this->GetFullImagePath($oImage, $tags);
 
-                switch ($sImageType) {
-                    case 'flv':
-                    case 'f4v':
-                        $returnString = $oImage->GetThumbnailTag($tags['width'], $tags['height'], null, null, '');
-                        if (1 == $tags['cmsshowcaption']) {
-                            $returnString = "<figure class=\"cssmedia cmsflv {$tags['class']}\" style=\"".$sStyles.'">
-                            '.$returnString."<figcaption class=\"cssmediacaption\">{$tags['cmscaption']}</figcaption></figure>";
+                $oViewRender = $this->getViewRenderer();
+                $oViewRender->AddMapper(new TPkgCmsTextfieldImage());
+                $oViewRender->AddSourceObject('oImage', $oImage); // full image (not resized yet)
+                $oViewRender->AddSourceObject('sFullImageURL', $sFullImageURL);
+                $oViewRender->AddSourceObject('sImageGroupName', $this->sImageGroupName);
+                $oViewRender->AddSourceObject('iThumbnailSizeThreshold', $this->iThumbnailSizeThreshold);
+                $oViewRender->AddSourceObject('aEffects', $this->aEffects);
+                $oViewRender->AddSourceObject('fromWYSIWYG', true);
+                $oViewRender->AddSourceObject('isForceThumbnailGenerationOnFullSizeImagesEnabled', $this->isForceThumbnailGenerationOnFullSizeImagesEnabled());
+
+                $sImageTagTemplatePath = '/common/media/pkgCmsTextFieldImage.html.twig';
+                if (true === $this->isResponsiveImagesEnabled() && true === $this->isImageBiggerThanMobileScreenSize($oImage) && true === $this->isBiggerThanMobileScreenSize($tags['width'])) {
+                    $sImageTagTemplatePath = '/common/media/pkgCmsTextFieldImageResponsive.html.twig';
+
+                    if (isset($tags['class'])) {
+                        if (stristr($tags['class'], 'img-responsive')) {
+                            $tags['class'] = trim(str_replace('img-responsive', '', $tags['class']));
                         }
-
-                        break;
-                    default:
-                        $sFullImageURL = $this->GetFullImagePath($oImage, $tags);
-
-                        $oViewRender = $this->getViewRenderer();
-                        $oViewRender->AddMapper(new TPkgCmsTextfieldImage());
-                        $oViewRender->AddSourceObject('oImage', $oImage); // full image (not resized yet)
-                        $oViewRender->AddSourceObject('sFullImageURL', $sFullImageURL);
-                        $oViewRender->AddSourceObject('sImageGroupName', $this->sImageGroupName);
-                        $oViewRender->AddSourceObject('iThumbnailSizeThreshold', $this->iThumbnailSizeThreshold);
-                        $oViewRender->AddSourceObject('aEffects', $this->aEffects);
-                        $oViewRender->AddSourceObject('fromWYSIWYG', true);
-                        $oViewRender->AddSourceObject('isForceThumbnailGenerationOnFullSizeImagesEnabled', $this->isForceThumbnailGenerationOnFullSizeImagesEnabled());
-
-                        $sImageTagTemplatePath = '/common/media/pkgCmsTextFieldImage.html.twig';
-                        if (true === $this->isResponsiveImagesEnabled() && true === $this->isImageBiggerThanMobileScreenSize($oImage) && true === $this->isBiggerThanMobileScreenSize($tags['width'])) {
-                            $sImageTagTemplatePath = '/common/media/pkgCmsTextFieldImageResponsive.html.twig';
-
-                            if (isset($tags['class'])) {
-                                if (stristr($tags['class'], 'img-responsive')) {
-                                    $tags['class'] = trim(str_replace('img-responsive', '', $tags['class']));
-                                }
-                            }
-                        }
-
-                        $oViewRender->AddSourceObject('aTagProperties', $tags);
-                        $returnString = $oViewRender->Render($sImageTagTemplatePath);
-
-                        break;
+                    }
                 }
+
+                $oViewRender->AddSourceObject('aTagProperties', $tags);
+                $returnString = $oViewRender->Render($sImageTagTemplatePath);
             }
             $returnString = $this->PostImageWraper($returnString, $sStyles, $tags['align'], $tags['width'], $tags['height'], $tags['border']);
         }

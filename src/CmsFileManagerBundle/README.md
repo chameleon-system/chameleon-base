@@ -29,21 +29,4 @@ $filemanager->fclose($newFile);
 ?>
 ```
 
-The following methods are available:
-
-* put($sSource, $sTarget, $chmod=null, $remoteOnly=false);
-* move($source, $target);
-* copy($source, $target);
-* get($sPath);
-* delete($file);
-* unlink($file);
-* symlink($target, $link);
-* setDriver(IClusterDriver $driver);
-* chmod($file, $mode);
-* mkdir($path, $mode = 0777, $recursive = false);
-* rmdir($path);
-* deldir($path, $recursive = false);
-* fopen($filename, $mode, $use_include_path = null);
-* fwrite($handle, $string, $length = null);
-* fclose($handle);
-* file_put_contents($filename, $data);
+See Interface `IPkgCmsFileManager` for available methods.

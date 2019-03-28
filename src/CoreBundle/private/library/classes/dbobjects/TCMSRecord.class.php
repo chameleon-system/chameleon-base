@@ -68,32 +68,12 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     public $_oTableConf = null;
 
     /**
-     * indicates if the record was overloaded with changes from the workflow and does NOT hold the current record.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public $bDataLoadedFromWorkflow = false;
-
-    /**
      * sets the state of field based translation overload fallback
      * e.g. if __en field is empty should it return the value from base language de?
      *
      * @var bool|null
      */
     private $bFieldBasedTranslationFallbackActive = null;
-
-    /**
-     * indicates if the record data will be overwritten with data from a
-     * workflow transaction in PostLoadHook
-     * (needed for publishing a record).
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected $bBypassWorkflow = false;
 
     /**
      * can be set to false using $this->DisablePostLoadHook(true);.
@@ -242,18 +222,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-     * sets the workflow bypass switch
-     * don`t forget to reset the switch after use.
-     *
-     * @param bool $bBypassWorkflow
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function SetWorkflowByPass($bBypassWorkflow = false)
-    {
-    }
-
-    /**
      * this method will return a query string to restrict to the id value of this record.
      *
      * @param string $sTableName - name of the table on which the restriction acts
@@ -264,18 +232,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     protected static function GetIdRestrictionQueryString($sTableName, $iIdValue)
     {
         return "`{$sTableName}`.`id` = ".ServiceLocator::get('database_connection')->quote($iIdValue);
-    }
-
-    /**
-     * returns query part to filter inserts and deletes if workflow is activated for the table.
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function GetWorkflowRestrictionQuery()
-    {
-        return '';
     }
 
     /**
@@ -671,7 +627,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * @param bool   $includeClearDiv  - include a clear div at the end of the text block
      * @param array  $aCustomVariables - any custom variables you want to replace
      * @param bool   $bClearThickBox   - remove all a href with class thickbox
-     * @param bool   $bClearScriptTags - clear all script tags and show only preview image of flv videos
+     * @param bool   $bClearScriptTags - clear all script tags
      *
      * @return string
      */
@@ -1007,8 +963,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function &GetDownloads($sDownloadField = 'data_pool', $allowedFileTypes = null, $bOrderByPosition = false)
     {
-        $oCmsDocumentList = null;
-
         $mltTable = $this->table.'_'.$sDownloadField.'_cms_document_mlt';
 
         $databaseConnection = $this->getDatabaseConnection();
@@ -1043,24 +997,9 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             }
         }
 
-        /** @var $oCmsDocumentList TdbCmsDocumentList */
         $oCmsDocumentList = TdbCmsDocumentList::GetList($sQuery);
 
         return $oCmsDocumentList;
-    }
-
-    /**
-     * returns a filter query for mlt/document lookups to handle the workflow.
-     *
-     * @param string $mltTable
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function GetWorkflowMLTFilterQuery($mltTable)
-    {
-        return '';
     }
 
     /**
@@ -1268,20 +1207,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-     * returns the source table name for an mlt field from the mlt field name.
-     *
-     * @deprecated don't use this function because this wont work for new MLT fields
-     *
-     * @param string $sMLTFieldName - name of the mlt field
-     *
-     * @return string - the source table name
-     */
-    protected function GetMLTTargetTableNameFromMLTField($sMLTFieldName)
-    {
-        return self::getMltFieldUtil()->getRealTableName($sMLTFieldName);
-    }
-
-    /**
     /**
      * returns true if the record is connected using an MLT
      * returns false if not connected or no MLT exists.
@@ -1383,10 +1308,8 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             }
             if (!is_null($oMltField) || !is_null($sTargetTableName)) {
                 if (!empty($sTargetTableName)) {
-                    $sTargetTable = $sTargetTableName;
                     $sMLTTable = $this->GetMltTableName($sMLTField, $sTargetTableName);
                 } elseif (!is_null($oMltField)) {
-                    $sTargetTable = $oMltField->GetConnectedTableName();
                     $sMLTTable = $oMltField->GetMLTTableName();
                 }
                 $databaseConnection = $this->getDatabaseConnection();
@@ -1934,7 +1857,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function hasSameDataInSqlData($oCompareWith)
     {
-        $bIsSame = false;
         $aThisData = $this->sqlData;
         $aItemData = $oCompareWith->sqlData;
         $bIsSame = (is_array($aThisData) && is_array($aItemData));
@@ -2028,20 +1950,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         }
 
         return $aTmpData;
-    }
-
-    /**
-     * returns true if table is marked for publishing workflow handling.
-     *
-     * @param string $sTableName
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public static function IsTableWithWorkflow($sTableName)
-    {
-        return false;
     }
 
     /**
@@ -2153,15 +2061,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     private function ExecuteSQLQueries($sQuery, array $parameter = array(), array $types = array())
     {
         return $this->getDatabaseConnection()->executeQuery($sQuery, $parameter, $types);
-    }
-
-    /**
-     * call the (protect) post load hook in unit test mode.
-     *
-     * @deprecated since 6.2.0 - no longer supported.
-     */
-    public function PostLoadHookFromUnitTest()
-    {
     }
 
     /**

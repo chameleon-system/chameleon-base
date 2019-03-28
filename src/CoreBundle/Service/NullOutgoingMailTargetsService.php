@@ -18,13 +18,6 @@ class NullOutgoingMailTargetsService implements TransformOutgoingMailTargetsServ
     /**
      * {@inheritdoc}
      */
-    public function setEnableTransformation($enableTransformation)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function transform($mail)
     {
         return $mail;
@@ -36,12 +29,5 @@ class NullOutgoingMailTargetsService implements TransformOutgoingMailTargetsServ
     public function transformSubject($subject)
     {
         return $subject;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setSubjectPrefix($prefix)
-    {
     }
 }

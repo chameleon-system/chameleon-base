@@ -596,20 +596,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         return $sSortOrder;
     }
 
-    /**
-     * @param string $field
-     * @param array  $row
-     * @param string $name
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function CallBackWorkflowActionType($field, $row, $name)
-    {
-        return '';
-    }
-
     public function CallBackLockingStatus($field, $row, $name)
     {
         $userLock = TTools::IsRecordLocked($_SESSION['_tmpCurrentTableID'], $row['id']);
@@ -755,8 +741,8 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $oImage->Load($row['id']);
         $image = '';
 
-        if ($oImage->IsFlashMovie() || $oImage->IsExternalMovie()) {
-            $image = $oImage->GetThumbnailTag(100, 75, null, null, '');
+        if ($oImage->IsExternalMovie()) {
+            $image = $oImage->renderImage(100, 75);
         } else {
             $oThumb = $oImage->GetThumbnail(80, 80);
             /** @var $oThumb TCMSImage */
@@ -849,22 +835,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     public function CallBackRowStyling($sRecordID, $row)
     {
         return '';
-    }
-
-    /**
-     * tests, whether $row has a workflow_action and the record is part of the
-     * current workflow transaction
-     * returns always true on tables without activated transaction handling.
-     *
-     * @param array $row
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function IsCmsWorkflowTransaction($row)
-    {
-        return true;
     }
 
     /**

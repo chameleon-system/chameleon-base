@@ -393,22 +393,8 @@ class TCMSLogChange
                 ]
             );
 
-            self::outputError($line, $e);
+            self::outputError($e);
         }
-    }
-
-    /**
-     * moves a field behind a given fieldname.
-     *
-     * @deprecated - use TCMSLogChange::SetFieldPosition instead (without "_")
-     *
-     * @param int    $tableId
-     * @param string $fieldName
-     * @param string $beforeFieldName - field where we want to set the new field behind
-     */
-    public static function _SetFieldPosition($tableId, $fieldName, $beforeFieldName)
-    {
-        self::SetFieldPosition($tableId, $fieldName, $beforeFieldName);
     }
 
     /**
@@ -663,12 +649,11 @@ class TCMSLogChange
      * 4 = add new language
      * 5 = publish record using workflow (deprecated since 6.2.0 - do not use)
      * 6 = show all records
-     * 7 = revision management (@deprecated since 6.3.0 - revision management is no longer supported)
      *
      * @param string     $sRoleName
      * @param string     $sTableName
      * @param bool       $bResetRoles  - indicates if all other roles will be kicked and the new role has the exclusive right
-     * @param array|bool $aPermissions - array of the role fieldnr. 0,1,2,3,4,5,6,7, default = false
+     * @param array|bool $aPermissions - array of the role fieldnr. 0,1,2,3,4,5,6, default = false
      */
     public static function SetTableRolePermissions($sRoleName = 'cms_admin', $sTableName, $bResetRoles = false, $aPermissions = false)
     {
@@ -1303,43 +1288,6 @@ class TCMSLogChange
     }
 
     /**
-     * return id of the content-box with the name passed. return empty string, if the
-     * content box does not exist.
-     *
-     * @static
-     *
-     * @param  $sContentBoxName
-     *
-     * @return string
-     *
-     * @deprecated use TCMSLogChange::GetCmsContentBoxIdFromSystemName() instead
-     */
-    public static function GetCmsContentBoxIdFromName($sContentBoxName)
-    {
-        $query = "SELECT * FROM `cms_content_box` WHERE `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sContentBoxName)."'";
-
-        $aNameMappingArray = array(
-            'CMS / Portal Einstellungen' => array('CMS / Portal Einstellungen', 'CMS / Portal-Einstellungen'),
-            'CMS / Portal-Einstellungen' => array('CMS / Portal Einstellungen', 'CMS / Portal-Einstellungen'),
-        );
-
-        if (array_key_exists($sContentBoxName, $aNameMappingArray)) {
-            foreach ($aNameMappingArray[$sContentBoxName] as $sContentBoxNameAlternative) {
-                $query .= " OR `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sContentBoxNameAlternative)."'";
-            }
-        }
-
-        $sId = '';
-        if ($aContentBox = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-            $sId = $aContentBox['id'];
-        } else {
-            self::addInfoMessage('Unable to find cms_content_box with name "'.$sContentBoxName.'"', self::INFO_MESSAGE_LEVEL_ERROR);
-        }
-
-        return $sId;
-    }
-
-    /**
      * get the id of a content box by its system_name.
      *
      * @param string $sSystemName of the content box
@@ -1808,16 +1756,6 @@ class TCMSLogChange
         return $sTabId;
     }
 
-    /**
-     * @return IPkgCmsCoreLog
-     *
-     * @deprecated since 6.3.0 - use getLogger()
-     */
-    public static function getUpdateLogger()
-    {
-        return  \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.cmsUpdates');
-    }
-
     public static function getLogger(): LoggerInterface
     {
         return  \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.cms_update');
@@ -1838,6 +1776,51 @@ class TCMSLogChange
         $str = str_replace("\t", '\\t', $str);
 
         return $str;
+    }
+
+    /**
+     * This method lets old updates insert shop system pages. The table "shop_system_page" has been removed in shop-165.inc.php and
+     * old updates would fail when triggered afterwards.
+     *
+     * You should not use this method in new packages, which already know about the change.
+     *
+     * @param $shop_id
+     * @param $name_internal
+     * @param $name
+     * @param string $cms_tree_id
+     *
+     * @deprecated since 6.2.0 - no longer used.
+     */
+    public static function addShopSystemPage($shop_id, $name_internal, $name, $cms_tree_id = '', $id = null)
+    {
+        if (self::TableExists('shop_system_page')) {
+            $query = "INSERT INTO `shop_system_page`
+                      SET `shop_id` = '".$shop_id."',
+                          `name_internal` = '".$name_internal."',
+                          `name` = '".$name."',
+                          `cms_tree_id` = '".$cms_tree_id."'";
+            if (null !== $id) {
+                $query .= ", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($id)."'";
+            }
+            self::_RunQuery($query, __LINE__);
+        } else {
+            $shop = TdbShop::GetNewInstance();
+            if ($shop->Load($shop_id)) {
+                $portals = $shop->GetFieldCmsPortalIdList();
+                foreach ($portals as $portalid) {
+                    $query = "INSERT INTO `cms_portal_system_page` SET
+                                `cms_portal_id` =   '".MySqlLegacySupport::getInstance()->real_escape_string($portalid)."',
+                                `name_internal` =   '".MySqlLegacySupport::getInstance()->real_escape_string($name_internal)."',
+                                `name` =            '".MySqlLegacySupport::getInstance()->real_escape_string($name)."',
+                                `cms_tree_id` =     '".MySqlLegacySupport::getInstance()->real_escape_string($cms_tree_id)."',
+                                `id` =              '".MySqlLegacySupport::getInstance()->real_escape_string(TTools::GetUUID())."'
+                            ";
+                    self::_RunQuery($query, __LINE__);
+                }
+            } else {
+                self::DisplayErrorMessage('tried to insert system page for non existent shop id');
+            }
+        }
     }
 
     /**
@@ -2220,7 +2203,7 @@ class TCMSLogChange
             self::outputSuccess($line, $query, $queryParams);
             self::logSuccess($line, $query, $queryParams);
         } catch (\Exception $e) {
-            self::outputError($line, $e);
+            self::outputError($e);
             self::logError($line, $e);
         }
     }
@@ -2261,10 +2244,9 @@ class TCMSLogChange
     }
 
     /**
-     * @param int       $line
      * @param Exception $exception
      */
-    private static function outputError($line, $exception)
+    private static function outputError($exception)
     {
         TCMSUpdateManager::GetInstance()->addException($exception);
     }

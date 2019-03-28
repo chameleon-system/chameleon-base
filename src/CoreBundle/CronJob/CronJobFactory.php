@@ -17,15 +17,6 @@ class CronJobFactory implements CronJobFactoryInterface
     }
 
     /**
-     * @param string[] $idList
-     *
-     * @deprecated since 6.3.0 - available cron jobs are injected by constructor now
-     */
-    public function setCronJobs(array $idList)
-    {
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function constructCronJob($identifier, array $data)

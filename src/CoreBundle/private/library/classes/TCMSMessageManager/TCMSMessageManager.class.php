@@ -58,13 +58,11 @@ class TCMSMessageManager
      */
     public static function GetInstance($bReload = false)
     {
-        $oInstance = null;
         $request = ServiceLocator::get('request_stack')->getCurrentRequest();
         if ((null === $request) || (false === $request->getSession()->isStarted())) {
             return null;
         }
         if ($bReload) {
-            $oInstance = null;
             if (true === $request->getSession()->has(self::SESSION_KEY_NAME)) {
                 $request->getSession()->remove(self::SESSION_KEY_NAME);
             }
@@ -75,13 +73,6 @@ class TCMSMessageManager
         }
 
         return $request->getSession()->get(self::SESSION_KEY_NAME);
-    }
-
-    /**
-     * @deprecated
-     */
-    public function SaveToSession()
-    {
     }
 
     /**
@@ -117,12 +108,7 @@ class TCMSMessageManager
                 $sDescription = $this->GetDefaultDescription($sConsumerName, $aMessageCodeParameters);
                 $sErrorMessage = $this->GetDefaultMessage($sMessageCode);
 
-                /*$oConfig =& TdbCmsConfig::GetInstance();
-                if (TGlobal::GetActiveLanguageId() !== $oConfig->fieldTranslationBaseLanguageId) $sSuffix = '__'.TGlobal::GetLanguagePrefix();
-                else*/
-                $sSuffix = '';
-
-                $aPostData = array('cms_portal_id' => $iPortalId, 'name' => $sMessageCode, 'description'.$sSuffix => $sDescription, 'message'.$sSuffix => $sErrorMessage);
+                $aPostData = array('cms_portal_id' => $iPortalId, 'name' => $sMessageCode, 'description' => $sDescription, 'message' => $sErrorMessage);
                 if (null !== $oMessage->id) {
                     $aPostData['id'] = $oMessage->id;
                 }

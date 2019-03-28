@@ -69,23 +69,6 @@ class TCMSFieldColorpicker extends TCMSField
     }
 
     /**
-     * @deprecated since 6.3.0 - no longer used in Chameleon (looks like this is an orphan which was used by an older color picker).
-     *
-     * @return bool
-     */
-    public static function isFirstInstance()
-    {
-        static $isFirst;
-        if (!$isFirst && true !== $isFirst && false !== $isFirst) {
-            $isFirst = false;
-
-            return true;
-        }
-
-        return $isFirst;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function DataIsValid()
