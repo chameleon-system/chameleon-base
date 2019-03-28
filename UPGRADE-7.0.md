@@ -171,6 +171,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - ChameleonSystem\core\DatabaseAccessLayer\Workflow\WorkflowQueryModifierOrderBy
 - ChameleonSystem\CoreBundle\Util\SnippetChainUtil
 - ChameleonSystem\RevisionManagementBundle\ChameleonSystemRevisionManagementBundle
+- CMSFieldMLT
 - CMSMediaViddlerImport
 - esono\pkgCmsRouting\exceptions\DomainNotFoundException
 - IClusterDriver
