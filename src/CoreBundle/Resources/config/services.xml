@@ -882,5 +882,8 @@
             <argument id="database_connection" type="service"/>
             <argument id="chameleon_system_core.util.field_translation" type="service"/>
         </service>
+        <service id="chameleon_system_core.service.module_icon_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\ModuleIconMigrator">
+            <argument id="database_connection" type="service"/>
+        </service>
     </services>
 </container>
