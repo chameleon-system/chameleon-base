@@ -68,7 +68,7 @@
 
         <service id="chameleon_system_image_crop.mapper.media_field_image_box_with_crop"
                  class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Mapper\ImageCropMediaFieldImageBoxMapper">
-            <argument type="service" id="chameleon_system_core.media_manager.url_generator"/>
+            <argument type="service" id="chameleon_system_media_manager.url_generator"/>
         </service>
 
         <service id="chameleon_system_image_crop.mapper.media_manager_media_item_crops"

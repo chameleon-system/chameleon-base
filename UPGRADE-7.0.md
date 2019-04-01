@@ -55,6 +55,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - chameleon_system_core.debug.cms_debug_cache_recordlist
 - chameleon_system_core.debug.cms_output_page_load_time_info
 - chameleon_system_core.debug.print_module_render_time
+- chameleon_system_core.render_media_properties_field
 
 ## Bundle Configuration
 
@@ -169,10 +170,15 @@ The code entities in this list were marked as deprecated in previous releases an
 - _TCMSMediaTreeNodeMediaObj
 - AbstractPkgCmsProfilerItem
 - ChameleonSystem\core\DatabaseAccessLayer\Workflow\WorkflowQueryModifierOrderBy
+- ChameleonSystem\CoreBundle\Service\MediaManagerUrlGenerator
 - ChameleonSystem\CoreBundle\Util\SnippetChainUtil
 - ChameleonSystem\RevisionManagementBundle\ChameleonSystemRevisionManagementBundle
 - CMSFieldMLT
+- CMSMediaLocalImport
+- CMSMediaManager
+- CMSMediaManagerTreeRPC
 - CMSMediaViddlerImport
+- CMSModuleImagePool
 - esono\pkgCmsRouting\exceptions\DomainNotFoundException
 - IClusterDriver
 - ICmsObjectLink
@@ -198,6 +204,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCacheManagerStorage_Decorator_LazyWriteMemcache
 - TCacheManagerStorage_Standard
 - TCMSDataExtranetUser
+- TCMSFieldMediaProperties
 - TCMSFieldWorkflowActionType
 - TCMSFieldWorkflowAffectedRecord
 - TCMSFieldWorkflowBool
@@ -205,6 +212,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSFontImage
 - TCMSFontImageList
 - TCMSMath
+- TCMSMediaConnections
 - TCMSMediaTreeNode
 - TCmsObjectLinkBase
 - TCmsObjectLinkException_InvalidTargetClass
@@ -456,6 +464,10 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSTableEditorManager::Publish()
 - TCMSTableEditorManager::RollBack()
 - TCMSTableEditorManager::SetWorkflowByPass()
+- TCMSTableEditorMedia::_FieldContainsImage()
+- TCMSTableEditorMedia::_GetImageRecords()
+- TCMSTableEditorMedia::_GetMediaConnectionObject()
+- TCMSTableEditorMedia::FetchConnections()
 - TCMSTableEditorMedia::LoadFlvInfo()
 - TCMSTableEditorMedia::MoveWorkflowImageToMediaPool()
 - TCMSTableEditorMedia::RefreshImageOnViddler()
@@ -574,6 +586,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - jquery.selectboxes.js
 - jQueryUI (everything in path src/CoreBundle/Resources/public/javascript/jquery/jQueryUI; drag and drop still used in the template engine).
 - maskedinput.js
+- mediaManager.js
 - pngForIE.htc
 - pNotify (new version 3.2.0 located in src/CoreBundle/Resources/public/javascript/pnotify-3.2.0/)
 - respond.min.js
@@ -599,6 +612,9 @@ The code entities in this list were marked as deprecated in previous releases an
 - ActivateRecordRevision()
 - AddNewRevision()
 - CreateModalIFrameDialogFromContentWithoutClose()
+- DeleteMediaDir()
+- deleteSelectedMediaDirResponse()
+- loadMediaManager()
 - PublishViaAjaxCallback()
 - SaveNewRevision()
 - SetChangedDataMessage()
@@ -612,6 +628,41 @@ The code entities in this list were marked as deprecated in previous releases an
 - chameleon_system_core.cms_module_header.error_unable_to_create_update_counter
 - chameleon_system_core.cms_module_header.msg_created_update_counter
 - chameleon_system_core.cms_module_header.msg_update_counter_switched
+- chameleon_system_core.cms_module_media_local_import.error_no_read_access_to_path
+- chameleon_system_core.cms_module_media_local_import.error_path_not_found
+- chameleon_system_core.cms_module_media_local_import.root_path
+- chameleon_system_core.cms_module_media_local_import.select_source_path
+- chameleon_system_core.cms_module_media_local_media.action_import
+- chameleon_system_core.cms_module_media_local_media.file_count
+- chameleon_system_core.cms_module_media_local_media.import_result
+- chameleon_system_core.cms_module_media_local_media.mark_as_private
+- chameleon_system_core.cms_module_media_manager.action_delete
+- chameleon_system_core.cms_module_media_manager.action_new_folder
+- chameleon_system_core.cms_module_media_manager.action_upload
+- chameleon_system_core.cms_module_media_manager.confirm_delete
+- chameleon_system_core.cms_module_media_manager.confirm_none_empty_folder_delete
+- chameleon_system_core.cms_module_media_manager.confirm_used_image
+- chameleon_system_core.cms_module_media_manager.error_folder_name_missing
+- chameleon_system_core.cms_module_media_manager.error_no_file_selected
+- chameleon_system_core.cms_module_media_manager.error_no_move_source_selected
+- chameleon_system_core.cms_module_media_manager.error_no_past_source_selected
+- chameleon_system_core.cms_module_media_manager.error_upload_error
+- chameleon_system_core.cms_module_media_manager.error_upload_to_root_folder_not_permitted
+- chameleon_system_core.cms_module_media_manager.file_id
+- chameleon_system_core.cms_module_media_manager.folder
+- chameleon_system_core.cms_module_media_manager.image_size
+- chameleon_system_core.cms_module_media_manager.msg_attention
+- chameleon_system_core.cms_module_media_manager.msg_delete_success
+- chameleon_system_core.cms_module_media_manager.msg_file_in_use
+- chameleon_system_core.cms_module_media_manager.msg_on_delete_file_in_use
+- chameleon_system_core.cms_module_media_manager.msg_select_move_target
+- chameleon_system_core.cms_module_media_manager.msg_single_file_upload_success
+- chameleon_system_core.cms_module_media_manager.msg_upload_success
+- chameleon_system_core.cms_module_media_manager.root_folder
+- chameleon_system_core.cms_module_media_manager.upload_more_files
+- chameleon_system_core.cms_module_media_manager.used_in_field
+- chameleon_system_core.cms_module_media_manager.used_in_record
+- chameleon_system_core.cms_module_media_manager.used_in_table
 - chameleon_system_core.error.flash_required
 - chameleon_system_core.fields.lookup.no_matches
 - chameleon_system_core.record_lock.lock_owner_fax

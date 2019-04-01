@@ -224,10 +224,8 @@ class TCMSFieldMedia extends TCMSField
                     $sContentType = image_type_to_mime_type($aSizeOfImage[2]);
                     $aImageFileData = array('name' => $_FILES[$this->name.'image']['name'][$sKey], 'type' => $sContentType, 'size' => $oFile->dSizeByte, 'tmp_name' => $oFile->sPath, 'error' => 0);
                     $oMediaTableConf = new TCMSTableConf();
-                    /** @var $oMediaTableConf TCMSTableConf */
                     $oMediaTableConf->LoadFromField('name', 'cms_media');
                     $oMediaManagerEditor = new TCMSTableEditorMedia();
-                    /** @var $oMediaManagerEditor TCMSTableEditorMedia */
                     $oMediaManagerEditor->AllowEditByAll(true);
                     $oMediaManagerEditor->Init($oMediaTableConf->id);
                     $oMediaManagerEditor->SetUploadData($aImageFileData, true);

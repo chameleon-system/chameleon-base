@@ -19,7 +19,7 @@ class TCMSTreeWidget
     protected $sTreeTableName = '';
 
     /**
-     * defines the ajax page definition name (e.g. CMSDocumentManager, CMSMediaManager).
+     * defines the ajax page definition name (e.g. CMSDocumentManager).
      *
      * @var string
      */
