@@ -1,0 +1,80 @@
+<?php
+/*
+ * This file is part of the Chameleon System (https://www.chameleonsystem.com).
+ *
+ * (c) ESONO AG (https://www.esono.de)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service;
+
+use ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Mapping\IconMapping;
+use Doctrine\DBAL\Connection;
+
+class ModuleIconMigrator
+{
+    /**
+     * @var array
+     */
+    private $iconMapping = [];
+
+    /**
+     * @var Connection
+     */
+    private $databaseConnection;
+
+    public function __construct(
+        Connection $databaseConnection
+    ) {
+        $this->databaseConnection = $databaseConnection;
+
+        $this->initIconMapping();
+    }
+
+    private function initIconMapping(): void
+    {
+        $iconMapping = new IconMapping();
+        $this->iconMapping = $iconMapping->getIconMapping();
+    }
+
+    public function migrateModuleIcon(string $module, array $additionalIconMapping = [])
+    {
+        $query = 'SELECT * FROM `cms_tpl_module` WHERE `classname` = :module';
+        $row = $this->databaseConnection->fetchAssoc($query, array('module' => $module));
+
+        $this->migrateModuleIconByRecord($row, $additionalIconMapping);
+    }
+
+    public function migrateUnhandledModules(array $additionalIconMapping = [])
+    {
+        $moduleRecordList = $this->databaseConnection->fetchAll("SELECT * FROM `cms_tpl_module` WHERE `icon_font_css_class` = '' AND `icon_list` != ''");
+
+        foreach ($moduleRecordList as $moduleRecord) {
+            $this->migrateModuleIconByRecord($moduleRecord, $additionalIconMapping);
+        }
+    }
+
+    private function migrateModuleIconByRecord(array $moduleRecord, array $additionalIconMapping = [])
+    {
+        $iconFontClass = $this->getFontIconStyleByImage($moduleRecord['icon_list'], $additionalIconMapping);
+
+        $query = 'UPDATE `cms_tpl_module`
+          SET `icon_font_css_class` = :iconFontClass
+          WHERE `id` = :id';
+
+        $this->databaseConnection->executeQuery($query, ['id' => $moduleRecord['id'], 'iconFontClass' => $iconFontClass]);
+    }
+
+    private function getFontIconStyleByImage(string $iconFilename, array $additionalIconMapping = []): string
+    {
+        $iconMapping = \array_merge($additionalIconMapping, $this->iconMapping);
+
+        if ('' === $iconFilename || false === isset($iconMapping[$iconFilename])) {
+            return '';
+        }
+
+        return $iconMapping[$iconFilename];
+    }
+}
