@@ -5,7 +5,7 @@
 </div>
 <?php
 
-$fieldId = TCMSLogChange::GetTableFieldId(TCMSLogChange::GetTableId('cms_tpl_module'), 'cms_field_conf');
+$fieldId = TCMSLogChange::GetTableFieldId(TCMSLogChange::GetTableId('cms_tpl_module'), 'icon_list');
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
   ->setFields([
