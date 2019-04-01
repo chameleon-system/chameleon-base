@@ -44,6 +44,12 @@ class ModuleIconMigrator
         $query = 'SELECT * FROM `cms_tpl_module` WHERE `classname` = :module';
         $row = $this->databaseConnection->fetchAssoc($query, array('module' => $module));
 
+        if (false === $row) {
+            \TCMSLogChange::addInfoMessage(\sprintf('Template Module "%s" could not be found.', $module), \TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR);
+
+            return;
+        }
+
         $this->migrateModuleIconByRecord($row, $additionalIconMapping);
     }
 
@@ -72,6 +78,8 @@ class ModuleIconMigrator
         $iconMapping = \array_merge($additionalIconMapping, $this->iconMapping);
 
         if ('' === $iconFilename || false === isset($iconMapping[$iconFilename])) {
+            \TCMSLogChange::addInfoMessage(\sprintf('No icon mapping found for %s.', $iconFilename), \TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR);
+
             return '';
         }
 
