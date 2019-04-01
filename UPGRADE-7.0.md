@@ -657,3 +657,7 @@ There were some frontend styles, images and javascript helpers located in the co
 - web_modules/MTFeedbackCore
 - web_modules/MTGlobalListCore
 - web_modules/MTNewsletterSignupCore
+
+## Page Definitions
+
+- versioninfo.pagedef.php
