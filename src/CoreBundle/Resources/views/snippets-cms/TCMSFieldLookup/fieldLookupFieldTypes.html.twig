@@ -1,14 +1,11 @@
 {% set selectOptions -%}
-    {"placeholder": "{{ 'chameleon_system_core.form.select_box_nothing_selected'|trans }}"{% if allowEmptySelection %}, "allowClear": true{% endif %}, "width": "100%" }
+    { "width": "100%" }
 {%- endset %}
 
 <div class="lookup-container-field-types row">
     <div class="col-12 col-lg-6">
         <select name="{{ fieldName|e('html_attr') }}" id="{{ fieldName|e('html_attr') }}" class="{{ sClass|e('html_attr') }}"
                 data-select2-option='{{ selectOptions|e('html_attr') }}'>
-            {% if allowEmptySelection %}
-                <option></option>
-            {% endif %}
             {% set helpText = "" %}
             {% for key, option in options %}
                 {% if key == connectedRecordId %}
