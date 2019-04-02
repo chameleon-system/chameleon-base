@@ -4,6 +4,12 @@ use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 $menuPrefix = TGlobal::OutHTML($data['sModuleSpotName']);
 $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
 
+/**
+ * @var $oModule \TdbCmsTplModule
+ * @var $oModuleInstance \TdbCmsTplModuleInstance
+ * @var $createModuleMenu string
+ */
+
 ?>
 <div class="moduleChooserMenu">
 
@@ -12,38 +18,43 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
         <div id="moduleheaderline_<?=$menuPrefix; ?>">
             <a id="launch<?=$menuPrefix; ?>" class="cmsModuleMenuLauncher" href="javascript:void(0);"
                onclick="return false;"
-               style="display: block; font-weight: bold; color: #fff; background: #20a8d8 url(<?=TGlobal::GetPathTheme(); ?>/images/templateEngineEditor/layout_edit.png) no-repeat scroll 5px center"><span><?=$translator->trans('chameleon_system_core.template_engine.spot_menu_headline', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+               ><i class="fas fa-edit"></i> <?=$translator->trans('chameleon_system_core.template_engine.spot_menu_headline', array(), TranslationConstants::DOMAIN_BACKEND); ?></a>
         </div>
-        <?php if (!is_null($data['oModule'])) {
+        <?php
+        if (null !== $oModule) {
+            $iconFontCssClass = $oModule->fieldIconFontCssClass;
+            if ('' === $iconFontCssClass) {
+                $iconFontCssClass = '';
+            }
     ?>
         <?php
-        $aViewMapping = $data['oModule']->GetViewMapping();
-    if (array_key_exists($data['oModuleInstance']->sqlData['template'], $aViewMapping)) {
-        $sViewName = $aViewMapping[$data['oModuleInstance']->sqlData['template']];
+        $aViewMapping = $oModule->GetViewMapping();
+    if (array_key_exists($oModuleInstance->sqlData['template'], $aViewMapping)) {
+        $sViewName = $aViewMapping[$oModuleInstance->sqlData['template']];
     } else {
-        $sViewName = $data['oModuleInstance']->sqlData['template'];
+        $sViewName = $oModuleInstance->sqlData['template'];
     } ?>
         <div style="background-color: #63c2de">
-            <div class="moduleType"
-                 style="background: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/'.TGlobal::OutHTML($data['oModule']->sqlData['icon_list'])); ?>); background-repeat: no-repeat; background-position: 3px;"><?=TGlobal::OutHTML($data['oModule']->sqlData['name']); ?></div>
+            <div class="moduleType">
+                <i class="<?=TGlobal::OutHTML($iconFontCssClass)?>"></i> <?=TGlobal::OutHTML($oModule->sqlData['name']); ?>
+            </div>
         </div>
         <div class="moduleInfo"><strong><?=$translator->trans('chameleon_system_core.template_engine.module_view', array(), TranslationConstants::DOMAIN_BACKEND); ?>
             :</strong> <?=TGlobal::OutHTML(str_replace('_', ' ', $sViewName)); ?></div>
         <div class="moduleInfo"><strong><?=$translator->trans('chameleon_system_core.template_engine.slot_content', array(), TranslationConstants::DOMAIN_BACKEND); ?>
-            : </strong><?=TGlobal::OutHTML($data['oModuleInstance']->sqlData['name']); ?></div>
+            : </strong><?=TGlobal::OutHTML($oModuleInstance->sqlData['name']); ?></div>
         <div style="background-color:#20a8d8; text-align:right;">
             <span style="font-size:10px;color:#FFFFFF;font-weight:bold;"><?= $translator->trans('chameleon_system_core.template_engine.action_move_slot_content', array(), TranslationConstants::DOMAIN_BACKEND); ?></span>
 
-            <div class="CMSModuleChooserCrosshair" data-spotname="<?=TGlobal::OutHTML($data['sModuleSpotName']); ?>"
-                 style="background: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/arrow_right.png'); ?>);background-repeat: no-repeat; background-position: right center;float:right;background-color:transparent;height:15px;width:20px;cursor:move">
-                &nbsp;</div>
+            <div class="CMSModuleChooserCrosshair fas fa-random" data-spotname="<?=TGlobal::OutHTML($data['sModuleSpotName']); ?>"></div>
         </div>
         <?php
 } else {
         ?>
         <div style="background-color: #63c2de">
-            <div class="moduleType"
-                 style="background: url(<?=TGlobal::GetPathTheme(); ?>/images/templateEngineEditor/cross.png); background-repeat: no-repeat; background-position: 3px;"><?php echo $translator->trans('chameleon_system_core.template_engine.slot_is_empty', array(), TranslationConstants::DOMAIN_BACKEND); ?></div>
+            <div class="moduleType">
+                <i class="fas fa-cube"></i> <?php echo $translator->trans('chameleon_system_core.template_engine.slot_is_empty', array(), TranslationConstants::DOMAIN_BACKEND); ?>
+            </div>
         </div>
         <?php
     } ?>
@@ -51,28 +62,28 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
             <?php
             $oViews = null;
             $oRelatedTables = null;
-            if (!is_null($data['oModuleInstance']) && !is_null($data['oModule'])) {
-                $oViews = $data['oModule']->GetViews();
-                $aViewMapping = $data['oModule']->GetViewMapping();
-                $oRelatedTables = $data['oModule']->GetMLT('cms_tbl_conf_mlt');
+            if (!is_null($oModuleInstance) && !is_null($oModule)) {
+                $oViews = $oModule->GetViews();
+                $aViewMapping = $oModule->GetViewMapping();
+                $oRelatedTables = $oModule->GetMLT('cms_tbl_conf_mlt');
             }
             ?>
-            <form style="margin:0;padding:0px" name="moduleblock<?=$menuPrefix; ?>"
+            <form style="margin:0;padding:0" name="moduleblock<?=$menuPrefix; ?>"
                   method="post" action="<?=URL_WEB_CONTROLLER; ?>" accept-charset="UTF-8">
                 <input type="hidden" name="__modulechooser" value="true"/>
                 <input type="hidden" name="pagedef" value="<?=TGlobal::OutHTML($data['pagedef']); ?>"/>
                 <input type="hidden" name="id" value="<?=TGlobal::OutHTML($data['id']); ?>"/>
                 <input type="hidden" name="module_fnc[<?=TGlobal::OutHTML($data['sModuleSpotName']); ?>]" value=""/>
-                <?php if (!is_null($data['oModuleInstance'])) {
+                <?php if (!is_null($oModuleInstance)) {
                 ?>
                 <input type="hidden" name="moduleid"
-                       value="<?=TGlobal::OutHTML($data['oModuleInstance']->sqlData['cms_tpl_module_id']); ?>"/>
+                       value="<?=TGlobal::OutHTML($oModuleInstance->sqlData['cms_tpl_module_id']); ?>"/>
                 <input type="hidden" name="view"
-                       value="<?=TGlobal::OutHTML($data['oModuleInstance']->sqlData['template']); ?>"/>
+                       value="<?=TGlobal::OutHTML($oModuleInstance->sqlData['template']); ?>"/>
                 <input type="hidden" name="instancename"
-                       value="<?=TGlobal::OutHTML($data['oModuleInstance']->sqlData['name']); ?>"/>
+                       value="<?=TGlobal::OutHTML($oModuleInstance->sqlData['name']); ?>"/>
                 <input type="hidden" name="moduleinstanceid"
-                       value="<?=TGlobal::OutHTML($data['oModuleInstance']->sqlData['id']); ?>"/>
+                       value="<?=TGlobal::OutHTML($oModuleInstance->sqlData['id']); ?>"/>
                 <?php
             } else {
                 ?>
@@ -104,8 +115,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
 <div id="<?=$menuPrefix; ?>MenuTree" class="moduleChooserMenuTree" style="display: none;">
 <ul>
     <?php
-
-    if (!is_null($data['oModuleInstance'])) {
+    if (!is_null($oModuleInstance)) {
         $oRelatedTable = $oRelatedTables->Current();
         if (false !== $oRelatedTable) {
             ?>
@@ -115,13 +125,13 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
                 if ($oRelatedTables->Length() > 1) {
                     echo ' class="hasChildren" onclick="openMenuLevel(this);return false"';
                 } else { // edit table
-                    echo " onclick=\"EditTable('".TGlobal::OutJS($oRelatedTable->id)."','".TGlobal::OutJS(urlencode($data['oModuleInstance']->id))."','');return false;\"";
-                } ?>><span class="menueicon"
-                         style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_edit.gif'); ?>);"><?=$translator->trans('chameleon_system_core.template_engine.slot_edit', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+                    echo " onclick=\"EditTable('".TGlobal::OutJS($oRelatedTable->id)."','".TGlobal::OutJS(urlencode($oModuleInstance->id))."','');return false;\"";
+                } ?>><span class="menueicon"><i class="fas fa-edit"></i> <?=$translator->trans('chameleon_system_core.template_engine.slot_edit', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
                 <ul>
                     <?php while ($oTmpRelatedTable = $oRelatedTables->Next()) {
-                    $sJS = " onclick=\"EditTable('".TGlobal::OutJS($oTmpRelatedTable->id)."','".TGlobal::OutJS(urlencode($data['oModuleInstance']->id))."','');return false;\"";
-                    echo "<li ><a href=\"javascript:void(0);\" style=\"background-color:#{$oModuleInstance->GetModuleConnectedTableColorEditState($oTmpRelatedTable)}\" {$sJS}><span class=\"menueicon\" style=\"background-image: url(".TGlobal::GetStaticURLToWebLib('/images/icons/page_edit.gif').');">'.TGlobal::OutHTML($oTmpRelatedTable->GetName())."</span></a></li>\n";
+                    $sJS = " onclick=\"EditTable('".TGlobal::OutJS($oTmpRelatedTable->id)."','".TGlobal::OutJS(urlencode($oModuleInstance->id))."','');return false;\"";
+                    echo "<li ><a href=\"javascript:void(0);\" style=\"background-color: #".TGlobal::OutHTML($oModuleInstance->GetModuleConnectedTableColorEditState($oTmpRelatedTable))."\" ".$sJS.">
+                    <span class=\"menueicon\"><i class=\"fas fa-edit\"></i> ".TGlobal::OutHTML($oTmpRelatedTable->GetName())."</span></a></li>\n";
                 } ?>
                 </ul>
             </li>
@@ -132,8 +142,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
             if ($oViews->Length() > 1 && $data['functionRights']['bInstanceChangeViewAllowed']) {
                 ?>
                 <li><a href="javascript:void(0);" class="hasChildren" onclick="openMenuLevel(this);return false;"><span
-                    class="menueicon"
-                    style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/layout.png'); ?>);"><?=$translator->trans('chameleon_system_core.template_engine.action_change_template', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+                    class="menueicon"><i class="fas fa-th-large"></i> <?=$translator->trans('chameleon_system_core.template_engine.action_change_template', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
                     <?php
                     echo "<ul>\n";
                 $viewCount = 0;
@@ -141,11 +150,11 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
                     ++$viewCount;
                     $sNameView = TGlobal::OutHTML($sViewName);
                     $jsFunction = " onClick=\"ChangeView('".TGlobal::OutHTML($data['sModuleSpotName'])."', '".TGlobal::OutHTML($sView)."'); return false;\"";
-                    if ($sView == $data['oModuleInstance']->sqlData['template']) {
+                    if ($sView == $oModuleInstance->sqlData['template']) {
                         $sNameView = '<strong>'.TGlobal::OutHTML($sViewName).'</strong>';
                         $jsFunction = ' onclick="return false"';
                     }
-                    echo "<li><a href=\"javascript:void(0);\" {$jsFunction}><span class=\"menueicon\" style=\"background-image: url(".TGlobal::GetStaticURLToWebLib('/images/icons/layout_content.png').');">'.TGlobal::OutHTML($sViewName)."</span></a></li>\n";
+                    echo "<li><a href=\"javascript:void(0);\" {$jsFunction}><span class=\"menueicon\"><i class=\"fas fa-th-large\"></i> ".TGlobal::OutHTML($sViewName)."</span></a></li>\n";
                 }
                 echo "</ul>\n"; ?>
                 </li>
@@ -154,9 +163,8 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
             if ($data['functionRights']['bInstanceRenameInstanceAllowed']) {
                 ?>
                 <li><a href="javascript:void(0);"
-                       onclick="Rename('<?=TGlobal::OutHTML($data['sModuleSpotName']); ?>','<?=TGlobal::OutJS($data['oModuleInstance']->sqlData['name']); ?>');return false;"><span
-                    class="menueicon"
-                    style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/style.png'); ?>);"><?=$translator->trans('chameleon_system_core.template_engine.slot_rename', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+                       onclick="Rename('<?=TGlobal::OutHTML($data['sModuleSpotName']); ?>','<?=TGlobal::OutJS($oModuleInstance->sqlData['name']); ?>');return false;"><span
+                    class="menueicon"><i class="fas fa-font"></i> <?=$translator->trans('chameleon_system_core.template_engine.slot_rename', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
                 </li>
                 <?php
             }
@@ -164,8 +172,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
                 ?>
                 <li><a href="javascript:void(0);"
                        onclick="ClearModuleInstance('<?=TGlobal::OutHTML($data['sModuleSpotName']); ?>');return false;"><span
-                    class="menueicon"
-                    style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/arrow_undo.png'); ?>);"><?=$translator->trans('chameleon_system_core.template_engine.slot_reset', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+                    class="menueicon"><i class="fas fa-power-off"></i> <?=$translator->trans('chameleon_system_core.template_engine.slot_reset', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
                 </li>
                 <?php
             }
@@ -173,8 +180,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
                 ?>
                 <li><a href="javascript:void(0);"
                        onclick="DeleteModuleInstance('<?=TGlobal::OutHTML($data['sModuleSpotName']); ?>');return false;"><span
-                    class="menueicon"
-                    style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_cross.gif'); ?>);"><?=$translator->trans('chameleon_system_core.template_engine.action_delete_instance_content', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+                    class="menueicon"><i class="fas fa-trash-alt"></i><?=$translator->trans('chameleon_system_core.template_engine.action_delete_instance_content', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
                 </li>
                 <?php
             }
@@ -182,8 +188,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
                 ?>
                 <li><a href="javascript:void(0);"
                        onclick="CopyModuleInstance('<?=TGlobal::OutHTML($data['sModuleSpotName']); ?>');return false;"><span
-                    class="menueicon"
-                    style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_copy.png'); ?>);"><?=$translator->trans('chameleon_system_core.template_engine.slot_copy_content', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+                    class="menueicon"><i class="fas fa-copy"></i> <?=$translator->trans('chameleon_system_core.template_engine.slot_copy_content', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
                 </li>
                 <?php
             }
@@ -196,9 +201,8 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     if ($data['oAccessManager']->PermitFunction('cms_template_module_edit')) {
         if ($data['functionRights']['bInstanceNewInstanceAllowed']) {
             ?>
-      <li><a href="javascript:void(0);" class="hasChildren" onclick="openMenuLevel(this);return false;"><span
-                class="menueicon"
-                style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_new.gif'); ?>);"><?=$translator->trans('chameleon_system_core.template_engine.action_create_module_instance', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+      <li><a href="javascript:void(0);" class="hasChildren" onclick="openMenuLevel(this);return false;">
+              <span class="menueicon"><i class="fas fa-plus-square"></i> <?=$translator->trans('chameleon_system_core.template_engine.action_create_module_instance', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
         <ul>
         <?php
             // modules
@@ -207,29 +211,25 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
       </li>
             <li>
                 <a href="javascript:void(0);" class="hasChildren" onclick="openMenuLevel(this);return false"><span
-                    class="menueicon"
-                    style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_tick.gif'); ?>);"><?=$translator->trans('chameleon_system_core.template_engine.slot_load_content_headline', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+                    class="menueicon"><i class="fas fa-check-square"></i> <?=$translator->trans('chameleon_system_core.template_engine.slot_load_content_headline', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
                 <ul>
                     <li><a href="javascript:void(0);"
                            onclick="LoadModuleInstance('<?=TGlobal::OutHTML($data['sModuleSpotName']); ?>','<?=TGlobal::OutHTML($data['id']); ?>','');return false;"><span
-                        class="menueicon"
-                        style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_tick.gif'); ?>);"><?=$translator->trans('chameleon_system_core.template_engine.slot_load_instance', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+                        class="menueicon"><i class="fas fa-share-alt-square"></i> <?=$translator->trans('chameleon_system_core.template_engine.slot_load_instance', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
                     </li>
                     <li><a href="javascript:void(0);"
                            onclick="LoadModuleInstanceCopy('<?=TGlobal::OutHTML($data['sModuleSpotName']); ?>','<?=TGlobal::OutHTML($data['id']); ?>','');return false;"><span
-                        class="menueicon"
-                        style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_tick.gif'); ?>);"><?=$translator->trans('chameleon_system_core.template_engine.slot_load_as_copy', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+                        class="menueicon"><i class="fas fa-copy"></i> <?=$translator->trans('chameleon_system_core.template_engine.slot_load_as_copy', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
                     </li>
                 </ul>
             </li>
             <?php
         }
 
-        if (!is_null($data['oModuleInstance']) && $data['functionRights']['bInstanceSwitchingAllowed']) {
+        if (!is_null($oModuleInstance) && $data['functionRights']['bInstanceSwitchingAllowed']) {
             ?>
             <li><a href="javascript:void(0);" class="hasChildren" onclick="openMenuLevel(this);return false;"><span
-                class="menueicon"
-                style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_new.gif'); ?>);"><?=$translator->trans('chameleon_system_core.template_engine.action_move_slot_content', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+                class="menueicon"><i class="fas fa-random"></i> <?=$translator->trans('chameleon_system_core.template_engine.action_move_slot_content', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
                 <ul>
                     <?php
                     // modules
@@ -238,11 +238,10 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
                         $name = $oModule->aModuleConfig['name'];
 
                         if (!empty($name)) {
-                            if (!$oModule->aModuleConfig['static'] && (empty($oModule->aModuleConfig['permittedModules']) || (is_array($oModule->aModuleConfig['permittedModules']) && array_key_exists($data['oModule']->sqlData['classname'], $oModule->aModuleConfig['permittedModules']) && in_array($oModuleInstance->sqlData['template'], $oModule->aModuleConfig['permittedModules'][$data['oModule']->sqlData['classname']])))
+                            if (!$oModule->aModuleConfig['static'] && (empty($oModule->aModuleConfig['permittedModules']) || (is_array($oModule->aModuleConfig['permittedModules']) && array_key_exists($oModule->sqlData['classname'], $oModule->aModuleConfig['permittedModules']) && in_array($oModuleInstance->sqlData['template'], $oModule->aModuleConfig['permittedModules'][$oModule->sqlData['classname']])))
                             ) {
                                 ?>
-                                <li><a href="#" class="moduleInstanceSwitcher" data-sourcespot="<?=$menuPrefix; ?>" data-targetspot="<?=$sSpotName; ?>"><span class="menueicon"
-                                                                                                  style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/layout_content.png'); ?>);"><?=TGlobal::OutHTML($name); ?></span></a>
+                                <li><a href="#" class="moduleInstanceSwitcher" data-sourcespot="<?=$menuPrefix; ?>" data-targetspot="<?=$sSpotName; ?>"><span class="menueicon"><i class="fas fa-th-large"></i> <?=TGlobal::OutHTML($name); ?></span></a>
                                 </li>
                                 <?php
                             }
@@ -263,8 +262,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
         $oCmsMasterPageDefSpot->LoadFromFieldsWithCaching(array('name' => $_moduleID, 'cms_master_pagedef_id' => $oPagedef->sqlData['cms_master_pagedef_id'])); ?>
         <li><a
             onclick="EditCmsMasterSpot('<?=PATH_CMS_CONTROLLER; ?>','<?=$iCmsMasterPagedefSpotTableID; ?>','<?=$oCmsMasterPageDefSpot->id; ?>');"><span
-            class="menueicon"
-            style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_tick.gif'); ?>);"><?=$translator->trans('chameleon_system_core.template_engine.slot_edit_definition', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
+            class="menueicon"><i class="fas fa-tools"></i> <?=$translator->trans('chameleon_system_core.template_engine.slot_edit_definition', array(), TranslationConstants::DOMAIN_BACKEND); ?></span></a>
         </li>
         <?php
     }

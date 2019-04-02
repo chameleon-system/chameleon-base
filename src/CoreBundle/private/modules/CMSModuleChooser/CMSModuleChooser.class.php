@@ -106,6 +106,8 @@ class CMSModuleChooser extends TCMSModelBase
 
         $this->CheckFunctionRights();
 
+        $this->data['createModuleMenu'] = '';
+
         if ($this->bMasterPagedefRequest) {
             // no change right and no module set, then just show the box
             $this->SetTemplate('CMSModuleChooser', 'placeholder');
