@@ -12,7 +12,7 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Mapping;
 
 class IconMapping
 {
-    private $iconMapping = [
+    public const ICON_MAPPING = [
         'accept.png' => 'fas fa-check-circle',
         'action_refresh.gif' => 'fas fa-sync',
         'action_save.gif' => 'far fa-save',
@@ -183,10 +183,5 @@ class IconMapping
         'weather-few-clouds.png' => 'fas fa-cloud-sun',
         'thumbnail.png' => 'fas fa-images',
     ];
-
-    public function getIconMapping(): array
-    {
-        return $this->iconMapping;
-    }
 
 }
