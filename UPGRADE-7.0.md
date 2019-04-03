@@ -1,6 +1,52 @@
 UPGRADE FROM 6.3 TO 7.0
 =======================
 
+# Essentials
+
+## Pagedef No Longer In Request Data
+
+When the user sends a request, the system in general first tries to find which page to load. If a page is found in this
+routing process, the ID of that page, called pagedef, is saved in the request attributes. In previous Chameleon releases
+this pagedef was additionally saved as request query parameter, which is no longer the case.
+
+Your project code should no longer retrieve the pagedef from the request query parameters, nor set it (e.g. in older
+SmartURLHandlers). An exception to this rule is in code that is only ever executed in backend context, where it is
+still valid.
+
+The following examples show what is NO LONGER working for code that may run in frontend context in Chameleon 7.0: 
+
+```php
+$request = ServiceLocator::get('request_stack'')->getCurrentRequest();
+$request->query->get('pagedef');
+```
+
+```php
+$inputFilterUtil = ServiceLocator::get('chameleon_system_core.util.input_filter');
+$inputFilterUtil->getFilteredGetInput('pagedef');
+```
+
+The following examples show what still works and does not need changes. Note that only the first example is considered
+the "correct" way. The second example uses a generic method that doesn't distinguish between GET, POST and request
+attributes which is considered a bad practice. The third example uses deprecated methods in TGlobal that do still work,
+but will be removed in a future Chameleon release.
+
+```php
+$request = ServiceLocator::get('request_stack'')->getCurrentRequest();
+$request->attributes->get('pagedef');
+$request->get('pagedef');
+```
+
+```php
+$inputFilterUtil = ServiceLocator::get('chameleon_system_core.util.input_filter');
+$inputFilterUtil->getFilteredInput('pagedef');
+```
+
+```php
+$global = TGlobal::instance();
+$global->GetUserData('pagedef');
+
+```
+
 # Cleanup
 
 ## Remove Flash Files
