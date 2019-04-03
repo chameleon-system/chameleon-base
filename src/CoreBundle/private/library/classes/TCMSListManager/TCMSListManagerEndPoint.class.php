@@ -488,7 +488,7 @@ class TCMSListManagerEndPoint
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sItemKey = 'edittableconf';
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.open_table_configuration');
-                    $oMenuItem->sIcon = 'far fa-edit';
+                    $oMenuItem->sIcon = 'fas fa-cogs';
                     $oMenuItem->setButtonStyle('btn-warning');
 
                     $pagedef = 'tableeditor';
