@@ -37,7 +37,7 @@ TCMSLogChange::RunQuery(__LINE__, $query);
 
 $recordId = TCMSLogChange::createUnusedRecordId();
 
-$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
+$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
   ->setFields([
       'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_tpl_module'),
       'name' => 'icon_font_css_class',

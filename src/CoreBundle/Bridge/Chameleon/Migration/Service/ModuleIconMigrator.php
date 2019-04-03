@@ -29,14 +29,7 @@ class ModuleIconMigrator
         Connection $databaseConnection
     ) {
         $this->databaseConnection = $databaseConnection;
-
-        $this->initIconMapping();
-    }
-
-    private function initIconMapping(): void
-    {
-        $iconMapping = new IconMapping();
-        $this->iconMapping = $iconMapping::ICON_MAPPING;
+        $this->iconMapping = IconMapping::ICON_MAPPING;
     }
 
     public function migrateModuleIcon(string $module, array $additionalIconMapping = [])

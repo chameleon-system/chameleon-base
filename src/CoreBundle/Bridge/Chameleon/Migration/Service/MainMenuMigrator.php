@@ -43,15 +43,9 @@ class MainMenuMigrator
     {
         $this->databaseConnection = $databaseConnection;
         $this->fieldTranslationUtil = $fieldTranslationUtil;
+        $this->iconMapping = IconMapping::ICON_MAPPING;
 
-        $this->initIconMapping();
         $this->initMainCategoryMapping();
-    }
-
-    private function initIconMapping(): void
-    {
-        $iconMapping = new IconMapping();
-        $this->iconMapping = $iconMapping::ICON_MAPPING;
     }
 
     /**
