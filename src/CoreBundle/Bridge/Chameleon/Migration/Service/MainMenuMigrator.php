@@ -51,7 +51,7 @@ class MainMenuMigrator
     private function initIconMapping(): void
     {
         $iconMapping = new IconMapping();
-        $this->iconMapping = $iconMapping->getIconMapping();
+        $this->iconMapping = $iconMapping::ICON_MAPPING;
     }
 
     /**

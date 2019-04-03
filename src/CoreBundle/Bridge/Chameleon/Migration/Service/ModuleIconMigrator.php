@@ -36,7 +36,7 @@ class ModuleIconMigrator
     private function initIconMapping(): void
     {
         $iconMapping = new IconMapping();
-        $this->iconMapping = $iconMapping->getIconMapping();
+        $this->iconMapping = $iconMapping::ICON_MAPPING;
     }
 
     public function migrateModuleIcon(string $module, array $additionalIconMapping = [])
