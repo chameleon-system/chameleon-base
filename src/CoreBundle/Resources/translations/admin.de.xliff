@@ -2112,7 +2112,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_local_import.import_result">
                 <source>chameleon_system_core.document_local_import.import_result</source>
-                <target>Erfolgreich importierte Mediendateien</target>
+                <target>Erfolgreich importierte Dokumente</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.document_local_import.mark_as_private">
                 <source>chameleon_system_core.document_local_import.mark_as_private</source>
@@ -2125,6 +2125,14 @@
             <trans-unit id="chameleon_system_core.document_local_import.select_target_folder">
                 <source>chameleon_system_core.document_local_import.select_target_folder</source>
                 <target>Bitte wählen Sie ein Verzeichnis, aus dem Dokumente importiert werden sollen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.error_path_not_found">
+                <source>chameleon_system_core.document_local_import.error_path_not_found</source>
+                <target>Das Verzeichnis %path% existiert nicht.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.error_no_read_access_to_path">
+                <source>chameleon_system_core.document_local_import.error_no_read_access_to_path</source>
+                <target>Das Verzeichnis %path% ist nicht lesbar.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.table_editor.regenerate_translatable_fields">
