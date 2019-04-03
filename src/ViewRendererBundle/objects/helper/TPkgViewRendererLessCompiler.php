@@ -23,10 +23,16 @@ class TPkgViewRendererLessCompiler
      * @var string
      */
     private $cssDir;
+
     /**
      * @var string
      */
     private $resourceCollectionRefreshPrefix;
+
+    /**
+     * @var array
+     */
+    private $additionalVariables;
 
     public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix, array $additionalVariables)
     {
