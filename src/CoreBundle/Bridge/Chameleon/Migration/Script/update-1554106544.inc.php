@@ -10,3 +10,5 @@
  */
 $moduleIconMigrator = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.service.module_icon_migrator');
 $moduleIconMigrator->migrateUnhandledModules();
+
+TCMSLogChange::addInfoMessage('Please note that custom frontend modules may need a migration for the icon. See the updated 6.3 upgrade guide for details.');

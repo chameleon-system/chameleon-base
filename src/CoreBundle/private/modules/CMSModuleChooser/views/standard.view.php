@@ -24,7 +24,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
         if (null !== $oModule) {
             $iconFontCssClass = $oModule->fieldIconFontCssClass;
             if ('' === $iconFontCssClass) {
-                $iconFontCssClass = '';
+                $iconFontCssClass = 'fas fa-pen-square';
             }
     ?>
         <?php
