@@ -204,12 +204,12 @@ class RoutingUtil implements RoutingUtilInterface
             return '/';
         }
         $normalizedPagePath = $path;
-        $normalizedPagePath = rtrim($normalizedPagePath, '/');
-        if ('.html' === mb_strtolower(mb_substr($normalizedPagePath, -5))) {
-            $normalizedPagePath = mb_substr($normalizedPagePath, 0, -5);
+        $normalizedPagePath = \rtrim($normalizedPagePath, '/');
+        if ('.html' === mb_strtolower(\mb_substr($normalizedPagePath, -5))) {
+            $normalizedPagePath = \mb_substr($normalizedPagePath, 0, -5);
         }
         if (CHAMELEON_SEO_URL_REWRITE_TO_LOWERCASE) {
-            $normalizedPagePath = strtolower($path);
+            $normalizedPagePath = \strtolower($normalizedPagePath);
         }
 
         return $normalizedPagePath;

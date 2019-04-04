@@ -97,7 +97,7 @@ class TCMSSmartURL
                 $request->query->set($key, $value);
             }
 
-            $request->query->set('pagedef', $pagedef);
+            $request->attributes->set('pagedef', $pagedef);
         }
 
         $aAllParameter = array_keys($oGlobal->GetRawUserData());

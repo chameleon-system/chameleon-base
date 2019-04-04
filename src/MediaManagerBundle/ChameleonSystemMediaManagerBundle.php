@@ -28,12 +28,10 @@ class ChameleonSystemMediaManagerBundle extends Bundle
      */
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new ReplaceUrlGeneratorPass());
         $container->addCompilerPass(new ConfigurationPass());
         $container->addCompilerPass(new AddMediaItemFindersToChainPass());
         $container->addCompilerPass(new AddMediaItemUsageDeleteServicesToChainPass());
         $container->addCompilerPass(new AddMediaItemSortColumnsToCollectionPass());
-        $container->addCompilerPass(new RemoveCoreDeleteMediaListenerPass());
         $container->addCompilerPass(new AddMediaManagerExtensionsToCollectionPass());
     }
 }

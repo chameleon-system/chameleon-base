@@ -73,7 +73,7 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
             if (null !== $sPortalId) {
                 $aData['cms_portal_id'] = $sPortalId;
             } else {
-                $oPortal = self::getPortalDomainService()->getActivePortal();
+                $oPortal = self::getStaticPortalDomainService()->getActivePortal();
                 if ($oPortal) {
                     $aData['cms_portal_id'] = $oPortal->id;
                 }
@@ -129,7 +129,7 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
         return $sUrl;
     }
 
-    private static function getPortalDomainService(): PortalDomainServiceInterface
+    private static function getStaticPortalDomainService(): PortalDomainServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }

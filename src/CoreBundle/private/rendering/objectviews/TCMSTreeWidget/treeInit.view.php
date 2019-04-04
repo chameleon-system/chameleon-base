@@ -175,26 +175,4 @@
         CloseModalIFrameDialog();
     }
 
-    /**
-     * @deprecated since 6.2.0 - Chameleon has a new media manager
-     */
-    function DeleteMediaDir(sMediaDirId) {
-        var url = "<?=PATH_CMS_CONTROLLER; ?>?pagedef=CMSMediaManager&module_fnc[content]=ExecuteAjaxCall&_fnc=DeleteNode&sNodeID=" + sMediaDirId;
-        GetAjaxCall(url, deleteSelectedMediaDirResponse);
-    }
-
-    /**
-     * @deprecated since 6.2.0 - Chameleon has a new media manager
-     */
-    function deleteSelectedMediaDirResponse(data) {
-        CloseModalIFrameDialog();
-        if (!data) {
-            $.jstree.rollback(data.rlbk);
-            $('#' + data.rslt.obj.attr("id").replace("node", "") + ' a').click();
-            $("#treePlacer").jstree("refresh", parentNodeID);
-        } else {
-            showFileList(<?=$sRootNodeID; ?>);
-            $("#treePlacer").jstree("refresh", parentNodeID);
-        }
-    }
 </script>
