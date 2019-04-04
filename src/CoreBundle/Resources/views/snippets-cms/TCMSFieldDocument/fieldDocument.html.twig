@@ -1,6 +1,6 @@
 
 {% set selectOptions -%}
-    {"placeholder": "{{ 'chameleon_system_core.form.select_box_nothing_selected'|trans }}", "allowClear": true, "width": "100%" }
+    { "width": "100%" }
 {%- endset %}
 
 <div class="fieldDocument">
@@ -28,7 +28,7 @@
             <div class="form-group mb-0">
                 <label>{{ 'chameleon_system_core.field_document.upload'|trans }}</label>
                 <select name="documentTreeId_{{ fieldName |e('html_attr') }}" id="documentTreeId_{{ fieldName |e('html_attr') }}" class="{{ sClass |e('html_attr') }}" data-select2-option='{{ selectOptions }}' >
-                    <option></option>
+                    <option value="">{{ 'chameleon_system_core.form.select_box_nothing_selected'|trans }}</option>
                     {{ optionsHTML|raw }}
                 </select>
             </div>

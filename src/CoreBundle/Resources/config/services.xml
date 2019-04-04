@@ -11,7 +11,6 @@
         <parameter key="chameleon_system_core.database.estimation_lower_limit">0</parameter>
         <parameter key="chameleon_system_core.controller_invoke_listener.class">ChameleonSystem\CoreBundle\Controller\ChameleonControllerInvokeListener</parameter>
         <parameter key="chameleon_system_core.tpl_page_controller.class">TPkgCmsRouteControllerCmsTplPage</parameter>
-        <parameter key="chameleon_system_core.render_media_properties_field">true</parameter>
     </parameters>
 
     <services>
@@ -321,10 +320,12 @@
             <argument type="service" id="chameleon_system_core.service_initializer.active_page_service" />
             <argument type="service" id="request_stack" />
             <argument type="service" id="router" />
+            <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
             <argument type="service" id="chameleon_system_core.util.url" />
             <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="chameleon_system_core.util.routing"/>
             <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="chameleon_system_core.util.page_service_util"/>
         </service>
 
         <service id="chameleon_system_core.service_initializer.active_page_service" class="ChameleonSystem\CoreBundle\Service\Initializer\ActivePageServiceInitializer" public="false">
@@ -693,7 +694,7 @@
         </service>
 
         <service id="chameleon_system_core.wysiwyg.ckeditor_config_provider" class="ChameleonSystem\CoreBundle\Wysiwyg\CkEditorConfigProvider" public="true">
-            <argument type="service" id="chameleon_system_core.media_manager.url_generator"/>
+            <argument type="service" id="chameleon_system_media_manager.url_generator"/>
         </service>
 
         <service id="chameleon_system_core.security.password.password_hash_generator" class="ChameleonSystem\CoreBundle\Security\Password\PasswordHashGenerator" public="true">
@@ -718,15 +719,6 @@
 
         <service id="chameleon_system_core.mapper_loader" class="ChameleonSystem\CoreBundle\MapperLoader\MapperLoader" public="true">
             <argument type="service" id="service_container" />
-        </service>
-
-        <service id="chameleon_system_core.media_manager.url_generator"
-                 class="ChameleonSystem\CoreBundle\Service\MediaManagerUrlGenerator" public="true">
-            <argument type="service" id="chameleon_system_core.util.url"/>
-        </service>
-
-        <service id="chameleon_system_core.event_listener.delete_media_connections_listener" class="ChameleonSystem\CoreBundle\EventListener\DeleteMediaConnectionsListener">
-            <tag name="kernel.event_listener" event="chameleon_system_core.before_delete_media" method="onDeleteMedia" />
         </service>
 
         <service id="chameleon_system_core.field.provider.class_from_table_field" class="ChameleonSystem\CoreBundle\Field\Provider\ClassFromTableFieldProvider" public="true">
@@ -871,6 +863,9 @@
         <service id="chameleon_system_core.service.main_menu_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator">
             <argument id="database_connection" type="service"/>
             <argument id="chameleon_system_core.util.field_translation" type="service"/>
+        </service>
+        <service id="chameleon_system_core.service.module_icon_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\ModuleIconMigrator">
+            <argument id="database_connection" type="service"/>
         </service>
     </services>
 </container>

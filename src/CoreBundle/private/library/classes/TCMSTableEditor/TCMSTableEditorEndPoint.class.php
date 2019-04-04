@@ -509,7 +509,7 @@ class TCMSTableEditorEndPoint
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'edittableconf';
                         $oMenuItem->setTitle(TGlobal::Translate('chameleon_system_core.action.open_table_configuration'));
-                        $oMenuItem->sIcon = 'far fa-edit';
+                        $oMenuItem->sIcon = 'fas fa-cogs';
                         $oMenuItem->setButtonStyle('btn-warning');
 
                         $aParameter = array(
@@ -828,6 +828,10 @@ class TCMSTableEditorEndPoint
      */
     public function SaveField($sFieldName, $sFieldContent, $bTriggerPostSaveHook = false)
     {
+        if (!is_null($this->oTable)) {
+            $this->oTablePreChangeData = clone $this->oTable;
+        }
+
         $oPostTable = $this->GetNewTableObjectForEditor();
         $postData = array($sFieldName => $sFieldContent, 'id' => $this->sId);
         $oPostTable->DisablePostLoadHook(true);
@@ -865,6 +869,10 @@ class TCMSTableEditorEndPoint
      */
     public function SaveFields($aFieldData, $bTriggerPostSaveHook = false)
     {
+        if (!is_null($this->oTable)) {
+            $this->oTablePreChangeData = clone $this->oTable;
+        }
+
         $oPostTable = $this->GetNewTableObjectForEditor();
         $postData = $aFieldData;
         $postData['id'] = $this->sId;

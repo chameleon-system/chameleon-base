@@ -467,12 +467,36 @@ The folder exists twice, globally and inside a theme directory and both are depr
 The icons of Font Awesome have been added as a replacement.
 They will replace all file icons and the glyphicons of Bootstrap3 in the backend.
 
-During migration, icons for main menu items will be replaced with matching Font Awesome icons. 
+During migration, icons for main menu items will be replaced with matching Font Awesome icons.
 
 Where icons cannot be matched, a default icon will be used; the database migrations will tell which icons could not be
 assigned. To manually assign an icon to a menu item representing a table, navigate to the table settings of this table
 and fill out the field "Icon Font CSS class". To manually assign an icon to a menu item representing a backend module,
 do this in the "CMS modules" menu respectively. See other menu items on what to write into these fields.
+
+The famfamfam icons where also used for frontend modules.
+During migration, icons for frontend modules will be replaced with matching Font Awesome icons.
+Where icons cannot be matched, a default icon will be used; the database migrations will tell which icons could not be
+assigned.
+
+You can manually set a Font Awesome icon class or add icon mappings and start the module icon migrator again via update. 
+
+```php
+TCMSLogChange::requireBundleUpdates('ChameleonSystemCoreBundle', 1554106544);
+
+/**
+ * @var ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\ModuleIconMigrator $moduleIconMigrator
+ */
+$moduleIconMigrator = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.service.module_icon_migrator');
+// Add the following lines if the bundle adds at least one frontend module with optional icon mapping if needed.
+$additionalIconMapping = ['old-icon.png' => 'fas fa-icon-class']; 
+$moduleIconMigrator->migrateUnhandledModules($additionalIconMapping);
+ 
+// Add the following line if you need to overwrite the default mapping for one module. 
+$mainMenuMigrator->migrateModuleIcon('MyCustomModuleClassOrServiceName', $additionalIconMapping)
+
+```
+
 
 ### File Type Icons in WYSIWYG
 
@@ -801,3 +825,4 @@ that are deprecated because they are outdated and replaced by frontend themes or
 
 - api.pagedef.php
 - pkgCmsLicenceManager.pagedef.php
+- versioninfo.pagedef.php

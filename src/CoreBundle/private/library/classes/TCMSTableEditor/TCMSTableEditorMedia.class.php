@@ -14,25 +14,9 @@ use ChameleonSystem\CoreBundle\Event\DeleteMediaEvent;
 
 class TCMSTableEditorMedia extends TCMSTableEditorFiles
 {
-    /**
-     * set public methods here that may be called from outside.
-     */
-    public function DefineInterface()
-    {
-        parent::DefineInterface();
-        $this->methodCallAllowed[] = 'FetchConnections';
-    }
-
     protected function GetTableName()
     {
         return 'cms_media';
-    }
-
-    public function GetHtmlHeadIncludes()
-    {
-        $aIncludes = parent::GetHtmlHeadIncludes();
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />'; // we need this for the list of usages
-        return $aIncludes;
     }
 
     public function DatabaseCopy($languageCopy = false, $aOverloadedFields = array(), $bCopyAllLanguages = false)
@@ -147,7 +131,6 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
         $iMediaHeight = $aMediaInfo[1];
 
         $oGlobal = TGlobal::instance();
-        /** @var $oGlobal TGlobal */
         $bProportionExactMatch = $oGlobal->GetUserData('bProportionExactMatch');
         if (!empty($bProportionExactMatch)) {
             $bProportionExactMatch = true;
@@ -359,17 +342,6 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
             if (array_key_exists('height', $oPostTable->sqlData)) {
                 $this->SaveField('height', $oPostTable->sqlData['height']);
             }
-            if (array_key_exists('width', $oPostTable->sqlData)) {
-                /*
-                 * The width field is hidden and will therefore not be saved by default. We save it
-                 * explicitly and also need to allow editing by all to bypass restrictions of the hidden state.
-                 */
-                // TODO remove with https://github.com/chameleon-system/chameleon-system/issues/220 - do not use TCMSFieldMediaProperties for "width"
-
-                $this->AllowEditByAll(true);
-                $this->SaveField('width', $oPostTable->sqlData['width']);
-                $this->AllowEditByAll(false);
-            }
 
             $this->SaveField('date_changed', date('Y-m-d H:i:s'));
             /**
@@ -419,245 +391,6 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
                 TTools::WriteLogEntry('could not create image subdir: '.$sFullPath, 1, __FILE__, __LINE__);
             }
         }
-    }
-
-    /**
-     * @deprecated since 6.2.0 - use chameleon_system_media_manager.usages.finder_collection from media manager bundle
-     * to find usages
-     *
-     * returns an array of _TCMSMediaConnections holding all fields with matching values in all
-     * tables that contain the image given by the image id $fileID
-     *
-     * @param string $fileID - an image id (from the table cms_media)
-     *
-     * @return TCMSMediaConnections[]
-     */
-    public function FetchConnections($fileID, $aTableBlackList = null)
-    {
-        $aMediaConnections = array();
-        // get all table confs that contain fields that may hold images
-        $oImageTables = new TListImageTables();
-        /** @var $oImageTables TListImageTables */
-
-        // get a list of field types that can hold images
-        $imageFieldTypes = TCMSFieldDefinition::GetImageFieldTypes();
-
-        $tmpList = array(); // an array in which we collect the fields from the table configs that may
-        // hold images (the original configs hold all fields, not just the once that
-        // may contain images
-
-        // loop through all image tables
-        while ($oImageTable = $oImageTables->Next()) {
-            /** @var $oImageTable TCMSTableConf */
-            if (!empty($aTableBlackList) && in_array($oImageTable->sqlData['name'], $aTableBlackList)) {
-                continue;
-            }
-            // get an iterator of image fields within the current table
-            $oImageFields = &$oImageTable->GetFieldDefinitions($imageFieldTypes);
-
-            $tmpList[$oImageTable->GetName()] = array();
-
-            // loop through the image fields and store them in our tempList
-            while ($oImageField = $oImageFields->Next()) {
-                /** @var $oImageField TCMSFieldDefinition */
-                $tmpList[$oImageTable->GetName()][$oImageField->GetName()] = $oImageField;
-            }
-
-            // now find all records in the current table that actually contain the image
-            $oMatchingRecords = self::_GetImageRecords($fileID, $oImageTable, $tmpList[$oImageTable->GetName()]);
-
-            // now for each record create as many TCMSMediaConnection objects as we have matching fields in that table
-            while ($oMatchingRecord = &$oMatchingRecords->Next()) {
-                /** @var $oMatchingRecord TCMSRecord */
-                $oImageFields->GoToStart();
-                // for the record that matches, include only the fields that caused that match
-                while ($oImageField = &$oImageFields->Next()) {
-                    /** @var $oImageField TCMSFieldDefinition */
-                    if (self::_FieldContainsImage($fileID, $oMatchingRecord, $oImageField)) {
-                        $aMediaConnections[] = self::_GetMediaConnectionObject($oMatchingRecord, $oImageTable, $oImageField);
-                    }
-                }
-            }
-        }
-
-        return $aMediaConnections;
-    }
-
-    /**
-     * @deprecated since 6.2.0 - use chameleon_system_media_manager.usages.finder_collection from media manager bundle
-     * to find usages
-     *
-     * returns true if the image identified through sImageID is in the field oImageField
-     * within the record oTable
-     *
-     * @param string              $sImageID    - id of the image (from table "images")
-     * @param TCMSRecord          $oTable      - record being inspected
-     * @param TCMSFieldDefinition $oImageField - field being inspected
-     *
-     * @return bool
-     */
-    public static function _FieldContainsImage($sImageID, &$oTable, &$oImageField)
-    {
-        $bFieldContainsImage = false;
-        $oFieldType = $oImageField->GetFieldType();
-        $content = ''; //mlt fields
-        if (isset($oTable->sqlData[$oImageField->sqlData['name']])) {
-            $content = $oTable->sqlData[$oImageField->sqlData['name']];
-        }
-
-        switch ($oFieldType->sqlData['constname']) {
-            case 'CMSFIELD_TABLELIST':
-                // tablelist is only relevant if it connects to images (ie its name is images_id)
-                if ('cms_media_id' == $oImageField->sqlData['name']) {
-                    if ($content == $sImageID) {
-                        $bFieldContainsImage = true;
-                    }
-                }
-                break;
-            case 'CMSFIELD_MULTITABLELIST':
-                if ('cms_media_mlt' == $oImageField->sqlData['name']) {
-                    $oTableConfig = &$oTable->GetTableConf();
-                    $smltTable = $oTableConfig->sqlData['name'].'_'.$oImageField->sqlData['name'];
-                    $query = 'SELECT *
-      	                FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($smltTable)."`
-      	               WHERE `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oTable->id)."'
-      	                 AND `target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sImageID)."'
-      	             ";
-                    if (MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-                        $bFieldContainsImage = true;
-                    }
-                }
-                break;
-            case 'CMSFIELD_MEDIA':
-            case 'CMSFIELD_EXTENDEDTABLELIST_MEDIA':
-                $imageIds = explode(',', $content);
-                if (in_array($sImageID, $imageIds)) {
-                    $bFieldContainsImage = true;
-                }
-                break;
-            case 'CMSFIELD_WYSIWYG':
-            case 'CMSFIELD_WYSIWYG_LIGHT':
-                if ((false !== strpos($content, 'cmsmedia="'.MySqlLegacySupport::getInstance()->real_escape_string($sImageID).'"'))) {
-                    $bFieldContainsImage = true;
-                }
-                break;
-            default:
-                trigger_error('Error in $oImageField. Field '.TGlobal::OutHTML($oFieldType->sqlData['constname']).' is not able to hold images', E_USER_ERROR);
-                break;
-        }
-
-        return $bFieldContainsImage;
-    }
-
-    /**
-     * @deprecated since 6.2.0 - use chameleon_system_media_manager.usages.finder_collection from media manager bundle
-     * to find usages
-     *
-     * returns a RecordList object of all records in a table that hold the given image
-     *
-     * @param string        $sImageID        - id of the image we are looking for
-     * @param TCMSTableConf $oImageTable     - the definition of the Table we currently searching in
-     * @param array         $aImageFieldList - array of TCMSFieldDefinition of the fields within the table that are capable of holding images
-     *
-     * @return TCMSRecordList
-     */
-    public static function _GetImageRecords($sImageID, $oImageTable, $aImageFieldList)
-    {
-        $query = 'SELECT DISTINCT `'.MySqlLegacySupport::getInstance()->real_escape_string($oImageTable->sqlData['name']).'`.*
-                  FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($oImageTable->sqlData['name']).'`
-               ';
-        $fieldQuery = '';
-        $sMLTTables = '';
-        $sImageIDEscaped = MySqlLegacySupport::getInstance()->real_escape_string($sImageID);
-        foreach ($aImageFieldList as $fieldName => $oImageField) {
-            /** @var $oImageField TCMSFieldDefinition */
-            $oFieldType = $oImageField->GetFieldType();
-            $sFName = MySqlLegacySupport::getInstance()->real_escape_string($oImageField->sqlData['name']);
-            switch ($oFieldType->sqlData['constname']) {
-                case 'CMSFIELD_TABLELIST':
-                    // tablelist is only relevant if it connects to images (ie its name is images_id)
-                    if ('cms_media_id' == $oImageField->sqlData['name']) {
-                        if (!empty($fieldQuery)) {
-                            $fieldQuery .= ' OR ';
-                        }
-                        $fieldQuery .= " (`{$sFName}` = '{$sImageIDEscaped}') ";
-                    }
-                    break;
-                case 'CMSFIELD_MULTITABLELIST':
-                    if ('cms_media_mlt' == $oImageField->sqlData['name']) {
-                        $smltTable = $oImageTable->sqlData['name'].'_'.$oImageField->sqlData['name'];
-                        $sMLTTables .= " LEFT JOIN {$smltTable} AS {$smltTable} ON `".MySqlLegacySupport::getInstance()->real_escape_string($oImageTable->sqlData['name'])."`.`id` = {$smltTable}.`source_id`";
-                        if (!empty($fieldQuery)) {
-                            $fieldQuery .= ' OR ';
-                        }
-                        $fieldQuery .= " ({$smltTable}.`target_id` = '{$sImageIDEscaped}') ";
-                    }
-                    break;
-                case 'CMSFIELD_MEDIA':
-                case 'CMSFIELD_EXTENDEDTABLELIST_MEDIA':
-                    if (!empty($fieldQuery)) {
-                        $fieldQuery .= ' OR ';
-                    }
-                    $fieldQuery .= "
-        	   (`{$sFName}` LIKE '%,{$sImageIDEscaped}' OR
-        	    `{$sFName}` LIKE '{$sImageIDEscaped},%' OR
-        	    `{$sFName}` LIKE '%,{$sImageIDEscaped},%' OR
-        	    `{$sFName}` = '{$sImageIDEscaped}')
-        	  ";
-                    break;
-                case 'CMSFIELD_WYSIWYG':
-                case 'CMSFIELD_WYSIWYG_LIGHT':
-                    if (!empty($fieldQuery)) {
-                        $fieldQuery .= ' OR ';
-                    }
-                    $fieldQuery .= " (`{$sFName}` LIKE '%cmsmedia=\"".MySqlLegacySupport::getInstance()->real_escape_string($sImageIDEscaped)."\"%') ";
-                    break;
-                default:
-                    trigger_error('Error getting ImageRecord. Field '.TGlobal::OutHTML($oFieldType->sqlData['constname']).' is not able to hold images', E_USER_ERROR);
-                    break;
-            }
-        }
-
-        if (!empty($fieldQuery)) {
-            $query .= $sMLTTables.' WHERE '.$fieldQuery;
-        } else {
-            $query .= $sMLTTables.' WHERE 1=2';
-        }
-
-        $sClassName = TCMSTableToClass::GetClassName('Tdb', $oImageTable->sqlData['name']).'List';
-        if (!class_exists($sClassName, false)) {
-        } // when calling the method via index.php the autoload will sometimes fail (no idea why). this fixes the problem.
-        $oImageRecords = &call_user_func_array(array($sClassName, 'GetList'), array($query, null, false, true, true));
-
-        return $oImageRecords;
-    }
-
-    /**
-     * @deprecated since 6.2.0 - use chameleon_system_media_manager.usages.finder_collection from media manager bundle
-     * to find usages
-     *
-     * factory generating an instance of the _TCMSMediaConnections. The object
-     * will be initialised with the data from oTable, oTableConf, and oFieldDefinition
-     *
-     * @param TCMSRecord          $oTable           - record that holds the image
-     * @param TCMSTableConf       $oTableConf       - definition of oTable
-     * @param TCMSFieldDefinition $oFieldDefinition - the field that holds the image
-     *
-     * @return TCMSMediaConnections
-     */
-    public static function &_GetMediaConnectionObject(&$oTable, &$oTableConf, &$oFieldDefinition)
-    {
-        $oMediaConnection = new TCMSMediaConnections();
-        $oMediaConnection->table = $oTable->table;
-        $oMediaConnection->tableName = $oTableConf->GetName();
-        $oMediaConnection->id = $oTable->id;
-        $oMediaConnection->fieldName = $oFieldDefinition->sqlData['name'];
-        $oMediaConnection->fieldVal = $oTable->sqlData[$oMediaConnection->fieldName];
-        $oMediaConnection->recordName = $oTable->GetName();
-        $oMediaConnection->fieldTranslationName = $oFieldDefinition->sqlData['translation'];
-        $oMediaConnection->oFieldDefinition = $oFieldDefinition;
-
-        return $oMediaConnection;
     }
 
     /**
@@ -738,9 +471,8 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
     protected function GetTargetFileName()
     {
         $sTargetDir = $this->GetBaseTargetDirectory();
-        $sTargetFile = $sTargetDir.'/'.$this->oTable->GetImageNameAsSeoName();
 
-        return $sTargetFile;
+        return $sTargetDir.'/'.$this->oTable->GetImageNameAsSeoName();
     }
 
     /**
@@ -759,14 +491,22 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
      */
     public function ClearCacheOfObjectsUsingImage($sImageId)
     {
-        if (true === TCacheManager::IsCachingEnabled()) {
-            $aData = $this->FetchConnections($sImageId);
-            if (is_array($aData)) {
-                /** @var $oConnection TCMSMediaConnections */
-                foreach ($aData as $oConnection) {
-                    TCacheManager::PerformeTableChange($oConnection->tableName, $oConnection->id);
-                }
-            }
-        }
+        /*
+         * This method is replaced by its counterpart in the subclass
+         * \ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\TableEditor\CmsMediaTableEditor
+         *
+         * If this method is called instead of CmsMediaTableEditor, be sure to set the sub-class as media table editor
+         * (see update 1517924152 in MediaManagerBundle).
+         *
+         * This constellation is from a time where the "new" media manager was optional and is now only kept for
+         * simplicity. Ideas for improvements:
+         * - Move the code from CmsMediaTableEditor. This wasn't done yet as it would bring in a hard dependency to
+         *   MediaManagerBundle. We already have such dependencies, but should avoid them because MediaManagerBundle
+         *   already depends on CoreBundle so this would mean cyclic dependency between components, which is evil.
+         * - Dispatch an event on image change. I didn't do this right away because it's unclear exactly when to
+         *   dispatch. The caller of this method implies it should only be dispatched on significant changes, but in
+         *   reality it is called on every save. This should be investigated first.
+         */
+
     }
 }

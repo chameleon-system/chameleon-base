@@ -1013,155 +1013,6 @@
                 <target>Link auf externe Website</target>
             </trans-unit>
 
-
-            <trans-unit id="chameleon_system_core.cms_module_media_local_import.error_path_not_found">
-                <source>chameleon_system_core.cms_module_media_local_import.error_path_not_found</source>
-                <target>Das Verzeichnis %path% existiert nicht.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_import.error_no_read_access_to_path">
-                <source>chameleon_system_core.cms_module_media_local_import.error_no_read_access_to_path</source>
-                <target>Das Verzeichnis %path% ist nicht vom Webuser lesbar.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_import.select_source_path">
-                <source>chameleon_system_core.cms_module_media_local_import.select_source_path</source>
-                <target>Bitte wählen Sie ein Verzeichnis, aus dem Mediendateien importiert werden sollen</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_import.root_path">
-                <source>chameleon_system_core.cms_module_media_local_import.root_path</source>
-                <target>Hauptverzeichnis</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_media.file_count">
-                <source>chameleon_system_core.cms_module_media_local_media.file_count</source>
-                <target>%count% Dateien</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_media.action_import">
-                <source>chameleon_system_core.cms_module_media_local_media.action_import</source>
-                <target>Importieren</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_media.import_result">
-                <source>chameleon_system_core.cms_module_media_local_media.import_result</source>
-                <target>Erfolgreich importierte Mediendateien</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_media.select_target_folder">
-                <source>chameleon_system_core.document_local_import.select_target_folder</source>
-                <target>Bitte wählen Sie ein Verzeichnis, aus dem Dokumente importiert werden sollen</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_media.mark_as_private">
-                <source>chameleon_system_core.cms_module_media_local_media.mark_as_private</source>
-                <target>als geschützt markieren</target>
-            </trans-unit>
-
-
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.root_folder">
-                <source>chameleon_system_core.cms_module_media_manager.root_folder</source>
-                <target>Medien</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.action_new_folder">
-                <source>chameleon_system_core.cms_module_media_manager.action_new_folder</source>
-                <target>Neuen Ordner anlegen</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.action_upload">
-                <source>chameleon_system_core.cms_module_media_manager.action_upload</source>
-                <target>Hochladen</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.action_delete">
-                <source>chameleon_system_core.cms_module_media_manager.action_delete</source>
-                <target>löschen</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.upload_more_files">
-                <source>chameleon_system_core.cms_module_media_manager.upload_more_files</source>
-                <target>Weitere Dateien hochladen</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_delete_success">
-                <source>chameleon_system_core.cms_module_media_manager.msg_delete_success</source>
-                <target>Mediendatei(en) erfolgreich gelöscht.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_upload_success">
-                <source>chameleon_system_core.cms_module_media_manager.msg_upload_success</source>
-                <target>Folgende Dateien wurden erfolgreich hochgeladen</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_select_move_target">
-                <source>chameleon_system_core.cms_module_media_manager.msg_select_move_target</source>
-                <target>Wählen Sie jetzt einen Ordner, in den Sie die Dateien verschieben möchten.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_single_file_upload_success">
-                <source>chameleon_system_core.cms_module_media_manager.msg_single_file_upload_success</source>
-                <target>Datei wurde erfolgreich hochgeladen</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_on_delete_file_in_use">
-                <source>chameleon_system_core.cms_module_media_manager.msg_on_delete_file_in_use</source>
-                <target>Die zu löschende Datei wird noch von folgenden Datensätzen verwendet. Wenn Sie die Mediendatei dennoch löschen, wird diese unwiderruflich aus den Inhalten entfernt</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_file_in_use">
-                <source>chameleon_system_core.cms_module_media_manager.msg_file_in_use</source>
-                <target>Die Datei wird noch von folgenden Datensätzen verwendet.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_attention">
-                <source>chameleon_system_core.cms_module_media_manager.msg_attention</source>
-                <target>Achtung</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.used_in_table">
-                <source>chameleon_system_core.cms_module_media_manager.used_in_table</source>
-                <target>Tabelle</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.used_in_record">
-                <source>chameleon_system_core.cms_module_media_manager.used_in_record</source>
-                <target>Datensatz</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.used_in_field">
-                <source>chameleon_system_core.cms_module_media_manager.used_in_field</source>
-                <target>Feld</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.file_id">
-                <source>chameleon_system_core.cms_module_media_manager.file_id</source>
-                <target>Mediendatei ID %id%</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.folder">
-                <source>chameleon_system_core.cms_module_media_manager.folder</source>
-                <target>Verzeichnisse</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.confirm_none_empty_folder_delete">
-                <source>chameleon_system_core.cms_module_media_manager.confirm_none_empty_folder_delete</source>
-                <target>Ordner dennoch löschen</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.confirm_used_image">
-                <source>chameleon_system_core.cms_module_media_manager.confirm_used_image</source>
-                <target>Dennoch löschen</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.confirm_delete">
-                <source>chameleon_system_core.cms_module_media_manager.confirm_delete</source>
-                <target>Sind Sie sicher, dass Sie diese Datei löschen möchten?</target>
-            </trans-unit>
-
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_folder_name_missing">
-                <source>chameleon_system_core.cms_module_media_manager.error_folder_name_missing</source>
-                <target>Bitte geben Sie einen Titel für den Ordner an.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_upload_error">
-                <source>chameleon_system_core.cms_module_media_manager.error_upload_error</source>
-                <target>Der Upload war nicht erfolgreich</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_no_file_selected">
-                <source>chameleon_system_core.cms_module_media_manager.error_no_file_selected</source>
-                <target>Bitte wählen Sie eine Datei zum Upload aus.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_upload_to_root_folder_not_permitted">
-                <source>chameleon_system_core.cms_module_media_manager.error_upload_to_root_folder_not_permitted</source>
-                <target>In das Hauptverzeichnis können keine Dateien hochgeladen werden.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_no_move_source_selected">
-                <source>chameleon_system_core.cms_module_media_manager.error_no_move_source_selected</source>
-                <target>Sie haben keine Dateien zum Verschieben ausgewählt.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_no_past_source_selected">
-                <source>chameleon_system_core.cms_module_media_manager.error_no_past_source_selected</source>
-                <target>Es sind keine Dateien zum Einfügen markiert.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.image_size">
-                <source>chameleon_system_core.cms_module_media_manager.image_size</source>
-                <target>Bildgröße</target>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_core.table_editor_media.media_usage">
                 <source>chameleon_system_core.table_editor_media.media_usage</source>
                 <target>Verwendungen</target>
@@ -2242,7 +2093,47 @@
                 <source>chameleon_system_core.document_manager.close</source>
                 <target>schließen</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.confirm_delete">
+                <source>chameleon_system_core.document_manager.confirm_delete</source>
+                <target>Sind Sie sicher, dass Sie diese Datei löschen möchten?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.image_size">
+                <source>chameleon_system_core.document_manager.image_size</source>
+                <target>Bildgröße</target>
+            </trans-unit>
 
+            <trans-unit id="chameleon_system_core.document_local_import.action_import">
+                <source>chameleon_system_core.document_local_import.action_import</source>
+                <target>Importieren</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.file_count">
+                <source>chameleon_system_core.document_local_import.file_count</source>
+                <target>%count% Dateien</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.import_result">
+                <source>chameleon_system_core.document_local_import.import_result</source>
+                <target>Erfolgreich importierte Dokumente</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.mark_as_private">
+                <source>chameleon_system_core.document_local_import.mark_as_private</source>
+                <target>als geschützt markieren</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.root_path">
+                <source>chameleon_system_core.document_local_import.root_path</source>
+                <target>Hauptverzeichnis</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.select_target_folder">
+                <source>chameleon_system_core.document_local_import.select_target_folder</source>
+                <target>Bitte wählen Sie ein Verzeichnis, aus dem Dokumente importiert werden sollen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.error_path_not_found">
+                <source>chameleon_system_core.document_local_import.error_path_not_found</source>
+                <target>Das Verzeichnis %path% existiert nicht.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.error_no_read_access_to_path">
+                <source>chameleon_system_core.document_local_import.error_no_read_access_to_path</source>
+                <target>Das Verzeichnis %path% ist nicht lesbar.</target>
+            </trans-unit>
 
             <trans-unit id="chameleon_system_core.table_editor.regenerate_translatable_fields">
                 <source>chameleon_system_core.table_editor.regenerate_translatable_fields</source>

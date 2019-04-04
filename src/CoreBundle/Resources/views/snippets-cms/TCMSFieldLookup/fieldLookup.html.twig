@@ -1,5 +1,5 @@
 {% set selectOptions -%}
-    {"placeholder": "{{ 'chameleon_system_core.form.select_box_nothing_selected'|trans }}"{% if allowEmptySelection %}, "allowClear": true{% endif %}, "width": "100%" }
+    { "width": "100%" }
 {%- endset %}
 
 <div class="fieldLookup row">
@@ -7,7 +7,7 @@
         <select name="{{ fieldName|e('html_attr') }}" id="{{ fieldName|e('html_attr') }}"
                 class="{{ sClass|e('html_attr') }}" data-select2-option='{{ selectOptions }}'>
             {% if allowEmptySelection %}
-                <option></option>
+                <option value="">{{ 'chameleon_system_core.form.select_box_nothing_selected'|trans }}</option>
             {% endif %}
             {% for key, option in options %}
                 {% if key == connectedRecordId %}
