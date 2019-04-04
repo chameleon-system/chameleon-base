@@ -35,7 +35,7 @@ $query = "ALTER TABLE `cms_tpl_module`
                             `icon_list` VARCHAR(255) DEFAULT 'application.png' NOT NULL COMMENT 'Icon: @deprecated since 7.0.0 - no longer used - use icon_font_css_class instead'";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
-$recordId = TCMSLogChange::createUnusedRecordId();
+$recordId = TCMSLogChange::createUnusedRecordId('cms_field_conf');
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
   ->setFields([
