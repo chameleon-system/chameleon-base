@@ -4,17 +4,10 @@
  * @var $oField   TCMSField
  */
 ?>
-<div style="background-color: #F2F8FC;">
-    <div data-frame-function-bar class="btn-group">
-        <?php
-        $data['oMenuItems']->GoToStart();
-        /** @var $oMenuItem TCMSTableEditorMenuItem */
-        while ($buttonItem = $data['oMenuItems']->Next()) {
-            echo $buttonItem->GetMenuItemHTML();
-        }
-        ?>
-    </div>
-
+<div>
+    <?php
+    include __DIR__.'/includes/menuItems.inc.php';
+    ?>
     <form name="cmseditform" id="cmseditform" method="post" action="<?= PATH_CMS_CONTROLLER; ?>"
           style="margin 0; padding 0;" accept-charset="UTF-8" onsubmit="CHAMELEON.CORE.showProcessingModal();">
         <input type="hidden" name="pagedef" value="tableeditor"/>

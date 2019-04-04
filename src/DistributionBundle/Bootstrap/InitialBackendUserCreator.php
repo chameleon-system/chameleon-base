@@ -159,11 +159,34 @@ class InitialBackendUserCreator
             'show_as_rights_template' => '1',
         ]);
 
-        $this->databaseConnection->insert('cms_user_cms_language_mlt', [
-            'source_id' => $userId,
-            'target_id' => $languageEn->id,
-            'entry_sort' => 1,
-        ]);
+        $this->connectUserToLanguages($userId);
+        $this->connectUserToPortals($userId);
+    }
+
+    private function connectUserToLanguages(string $userId): void
+    {
+        $languageList = \TdbCmsLanguageList::GetList();
+        $position = 0;
+        while (false !== $language = $languageList->Next()) {
+            $this->databaseConnection->insert('cms_user_cms_language_mlt', [
+                'source_id' => $userId,
+                'target_id' => $language->id,
+                'entry_sort' => ++$position,
+            ]);
+        }
+    }
+
+    private function connectUserToPortals(string $userId): void
+    {
+        $portalList = \TdbCmsPortalList::GetList();
+        $position = 0;
+        while (false !== $portal = $portalList->Next()) {
+            $this->databaseConnection->insert('cms_user_cms_portal_mlt', [
+                'source_id' => $userId,
+                'target_id' => $portal->id,
+                'entry_sort' => ++$position,
+            ]);
+        }
     }
 
     private function addUserRoles(string $userId): void
