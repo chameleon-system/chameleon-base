@@ -78,12 +78,7 @@ function tcms_GenerateDownloadLink_callback($id, $row)
  */
 function tcms_MLTfunctionblock_callback($id, $row)
 {
-    $returnValue = '';
-    $returnValue .= '<img src="'.URL_CMS."/images/icons/link_break.png\" onclick=\"deleteConnection('{$row['id']}');\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".TGlobal::Translate('chameleon_system_core.action.remove_connection')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
-    $returnValue .= '<div id="functionTitle_'.$row['cmsident'].'" class="functionTitle"></div>';
-    $returnValue .= '</div>';
-
-    return $returnValue;
+    return '<img src="'.URL_CMS.'/images/icons/link_break.png" onclick="deleteConnection(\''.TGlobal::OutJS($row['id']).'\');" title="'.TGlobal::Translate('chameleon_system_core.action.remove_connection').'" />';
 }
 
 /**
