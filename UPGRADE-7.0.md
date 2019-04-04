@@ -757,5 +757,8 @@ There were some frontend styles, images and javascript helpers located in the co
 
 ## Page Definitions
 
+- api.pagedef.php
+- CMSCreateSearchIndex.pagedef.php
+- CMSCreateSearchIndexPlain.pagedef.php
 - pkgCmsLicenseManager.pagedef.php
 - versioninfo.pagedef.php
