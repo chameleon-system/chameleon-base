@@ -757,5 +757,5 @@ There were some frontend styles, images and javascript helpers located in the co
 
 ## Page Definitions
 
-- pkgCmsLicenceManager.pagedef.php
+- pkgCmsLicenseManager.pagedef.php
 - versioninfo.pagedef.php
