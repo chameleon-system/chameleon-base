@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * through the config parameter "bShowLinkToParentRecord=true" you can activate a link
@@ -38,31 +39,42 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
      */
     protected function getLinkToParentRecordIfSet()
     {
+        $translator = $this->getTranslator();
+
         if (empty($this->data)) {
-            return TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected');
+            return $translator->trans('chameleon_system_core.field_lookup.nothing_selected', array(), 'admin');
         }
+
+        $html = $this->_GetHiddenField();
 
         $tblName = $this->GetConnectedTableName();
         $item = new TCMSRecord();
         $item->table = $tblName;
-        $item->Load($this->data);
-        $showLinkToParentRecord = $this->oDefinition->GetFieldtypeConfigKey('bShowLinkToParentRecord');
+        if (false === $item->Load($this->data)) {
+            $html .= '<div class="alert alert-warning">'.$translator->trans('chameleon_system_core.field_lookup.error_assigned_id_does_not_exists', array('%id%' => $this->data), 'admin').'</div>';
 
-        $html = $this->_GetHiddenField();
-
-        if ('true' == $showLinkToParentRecord && '' !== $this->data) {
-            $foreignTableName = $this->GetConnectedTableName();
-            $global = TGlobal::instance();
-            if ($global->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
-                $html .= '<div class="d-flex align-items-center">';
-                $itemName = $item->GetName();
-                if ('' !== $itemName) {
-                    $html .= '<div class="mr-2">'.$itemName.'</div>';
-                }
-                $html .= '<div class="switchToRecordBox">'.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), "javascript:document.location.href='".$this->GetEditLinkForParentRecord()."';", 'fas fa-location-arrow').'</div>';
-                $html .= '</div>';
-            }
+            return $html;
         }
+
+        $showLinkToParentRecord = $this->oDefinition->GetFieldtypeConfigKey('bShowLinkToParentRecord');
+        $itemName = $item->GetName();
+
+        $foreignTableName = $this->GetConnectedTableName();
+        $global = TGlobal::instance();
+
+        if ('true' === $showLinkToParentRecord && '' !== $this->data && true === $global->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
+            $html .= '<div class="d-flex align-items-center">';
+
+            if ('' !== $itemName) {
+                $html .= '<div class="mr-2">'.$itemName.'</div>';
+            }
+            $html .= '<div class="switchToRecordBox">'.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), "javascript:document.location.href='".$this->GetEditLinkForParentRecord()."';", 'fas fa-location-arrow').'</div>';
+            $html .= '</div>';
+
+            return $html;
+        }
+
+        $html .= $itemName;
 
         return $html;
     }
@@ -150,5 +162,10 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
     private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
     }
 }

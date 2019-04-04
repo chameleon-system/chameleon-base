@@ -359,7 +359,7 @@ class TCMSFieldDownloads extends TCMSMLTField
             $aFileUploadData = array('name' => $_FILES[$this->name.'document']['name'][$sKey], 'type' => 'application/octet-stream', 'tmp_name' => $_FILES[$this->name.'document']['tmp_name'][$sKey], 'error' => 0, 'size' => filesize($_FILES[$this->name.'document']['tmp_name'][$sKey]));
             $oMediaTableConf = new TCMSTableConf(); /*@var $oMediaTableConf TCMSTableConf*/
             $oMediaTableConf->LoadFromField('name', 'cms_document');
-            $oMediaManagerEditor = new TCMSTableEditorDocument(); /*@var $oMediaManagerEditor TCMSTableEditorMedia*/
+            $oMediaManagerEditor = new TCMSTableEditorDocument();
             $oMediaManagerEditor->AllowEditByAll(true);
             $oMediaManagerEditor->Init($oMediaTableConf->id);
             $oMediaManagerEditor->SetUploadData($aFileUploadData, true);
@@ -434,9 +434,9 @@ class TCMSFieldDownloads extends TCMSMLTField
                 foreach (array_keys($aConnectedRecordIdsToDelete) as $sDeleteId) {
                     $sDeleteSql = 'DELETE FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sMLTTableName)."` WHERE `source_id`='".MySqlLegacySupport::getInstance()->real_escape_string($sId)."' AND `target_id`='".MySqlLegacySupport::getInstance()->real_escape_string($sDeleteId)."'";
                     MySqlLegacySupport::getInstance()->query($sDeleteSql);
-                    $oMediaTableConf = new TCMSTableConf(); /*@var $oMediaTableConf TCMSTableConf*/
+                    $oMediaTableConf = new TCMSTableConf();
                     $oMediaTableConf->LoadFromField('name', 'cms_document');
-                    $oMediaManagerEditor = new TCMSTableEditorDocument(); /*@var $oMediaManagerEditor TCMSTableEditorMedia*/
+                    $oMediaManagerEditor = new TCMSTableEditorDocument();
                     $oMediaManagerEditor->AllowDeleteByAll(true);
                     $oMediaManagerEditor->Init($oMediaTableConf->id, $sDeleteId);
                     $oMediaManagerEditor->Delete($sDeleteId);

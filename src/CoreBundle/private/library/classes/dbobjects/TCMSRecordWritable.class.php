@@ -715,11 +715,9 @@ class TCMSRecordWritable extends TCMSRecord
             }
 
             // now upload the file
-            /** @var $oMediaTableConf TCMSTableConf */
             $oMediaTableConf = new TCMSTableConf();
             $oMediaTableConf->LoadFromField('name', 'cms_media');
 
-            /** @var $oMediaManagerEditor TCMSTableEditorMedia */
             $oMediaManagerEditor = new TCMSTableEditorMedia();
             $oMediaManagerEditor->Init($oMediaTableConf->id);
             $oMediaManagerEditor->SetUploadData($aFileData, $isNotUpload);

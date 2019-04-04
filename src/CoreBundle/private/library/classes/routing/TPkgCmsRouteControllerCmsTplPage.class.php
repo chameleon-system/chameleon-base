@@ -65,7 +65,6 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
 
         $pagedef = $this->getPagedef($request, $pagePath);
 
-        $request->query->set('pagedef', $pagedef);
         $request->attributes->set('pagedef', $pagedef);
 
         return call_user_func($this->controller);

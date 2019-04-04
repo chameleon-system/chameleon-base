@@ -26,11 +26,7 @@ function GetUsages(tableId, type) {
     var sPageDef = '';
     var sModuleSpotName = '';
     var sType = '';
-    if (type == null || type == 'media') { //@deprecated since 6.2.0 - we don't need this part anymore once the old media manager has been removed
-        sPageDef = 'CMSMediaManager';
-        sModuleSpotName = 'content';
-        sType = 'fileIDs'
-    }
+
     if (type == 'document') {
         sPageDef = 'CMSDocumentManager';
         sModuleSpotName = 'contentmodule';
@@ -348,14 +344,6 @@ function removeMLTConnection(sourceTable, fieldName, sourceID, targetID) {
 }
 
 /*
- * media manager field: opens media manager popup
- */
-function loadMediaManager(recordID, tableID, fieldName) {
-    _mediaManagerWindow = window.open(window.location.pathname + '?pagedef=CMSMediaManager&recordID=' + recordID + '&tableID=' + tableID + '&fieldName=' + fieldName, '_blank', 'width=1000,height=700,resizable=yes,scrollbars=no');
-}
-
-
-/*
  * Position field: loads list of Positions
  */
 function loadPositionList(tableID, tableSQLName, fieldName, recordID, sRestriction, sRestrictionField) {
@@ -539,6 +527,10 @@ function SaveViaAjaxCallback(data, statusText) {
 
         $('#tableEditorContainer .navbar-brand').html(data.name);
         $('#cmsbreadcrumb .breadcrumb-item:last').html(data.name);
+
+        if (self !== top) {
+            window.history.go(-1);
+        }
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_save'), 'ERROR');
     }

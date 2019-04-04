@@ -150,9 +150,14 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
-        $this->_oField = $this->adaptFieldAndRelatedTables($oPostTable->sqlData);
+        $this->_oField = null;
+        if (true === \array_key_exists('cms_field_type_id', $oPostTable->sqlData)) {
+            $this->_oField = $this->adaptFieldAndRelatedTables($oPostTable->sqlData);
+        }
 
-        $this->getAutoclassesCacheWarmer()->updateTableById($oPostTable->sqlData['cms_tbl_conf_id']);
+        if (true === \array_key_exists('cms_tbl_conf_id', $oPostTable->sqlData)) {
+            $this->getAutoclassesCacheWarmer()->updateTableById($oPostTable->sqlData['cms_tbl_conf_id']);
+        }
     }
 
     /**
