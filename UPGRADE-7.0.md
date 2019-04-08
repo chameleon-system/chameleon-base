@@ -3,7 +3,7 @@ UPGRADE FROM 6.3 TO 7.0
 
 # Essentials
 
-The steps in this chapter are required to get the project up and running in version 6.3.
+The steps in this chapter are required to get the project up and running in version 7.0.
 It is recommended to follow these steps in the given order.
 
 ## Prepare Project
@@ -12,7 +12,7 @@ Be sure to install the latest release of the Chameleon 6.3.x branch before migra
 deprecated code usage from the project before migrating. This way there will be deprecation messages still available
 which will help to decide what to do with code calling deprecated entities.
 
-Note that we decided to keep some entities although this is a major release. See section
+Note that we decided to keep some deprecated entities although this is a major release. See section
 `Still-deprecated Code Entities` for details. These entities will be removed in a future Chameleon release, so be sure
 to remove calls over time.
 
