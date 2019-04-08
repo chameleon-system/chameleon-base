@@ -199,6 +199,20 @@ legend {
     border: 1px solid #e4e7ea;
 }
 
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #20a8d8 !important;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
+}
+
+.select2-selection.select2-selection--single:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
+}
+
 .nav-link-fa {
     display: block;
     padding: .5rem 0;
