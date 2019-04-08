@@ -1239,32 +1239,6 @@
                 <target>Yes, import CSV file</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.headline">
-                <source>chameleon_system_core.cms_module_cms_search.headline</source>
-                <target>Create search index</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.select_portal">
-                <source>chameleon_system_core.cms_module_cms_search.select_portal</source>
-                <target>Select a portal for which to create the search index</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.action_start_index">
-                <source>chameleon_system_core.cms_module_cms_search.action_start_index</source>
-                <target>Start indexing</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.state_index_running">
-                <source>chameleon_system_core.cms_module_cms_search.state_index_running</source>
-                <target>Creating search index</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.state_indexed">
-                <source>chameleon_system_core.cms_module_cms_search.state_indexed</source>
-                <target>pages indexed</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_core.cms_module_table_export.state_export_done">
                 <source>chameleon_system_core.cms_module_table_export.state_export_done</source>
                 <target>The export file has been created</target>
