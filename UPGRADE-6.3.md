@@ -4,44 +4,19 @@ UPGRADE FROM 6.2 TO 6.3
 # Essentials
 
 The steps in this chapter are required to get the project up and running in version 6.3.
+It is recommended to follow these steps in the given order.
 
-## Symfony 3.4
+## Prepare Project
 
-The system now uses Symfony 3.4, which needs a few adjustments:
+Be sure to install the latest release of the Chameleon 6.2.x branch before migrating. Also deploy this release to test
+and production systems before proceeding.
 
-In dev mode the debug toolbar will report some deprecations concerning non-public services that are retrieved through
-the ServiceLocator or the Symfony service container directly. In Symfony 4 this will no longer be possible; in addition,
-services will be private by default in Symfony 4.
+Logout from the Chameleon backend.
 
-The best way to solve this upcoming problem is to use ServiceLocator and container calls as rarely as possible (no news
-here) and prefer dependency injection instead. Where dependency injection is not possible, services should be declared
-public explicitly. The deprecation warnings will also be logged, potentially leading to huge log files and possibly
-degraded performance in the dev environment.  Therefore it is recommended to deal with most of the deprecations.
+## Adjust Composer Dependencies
 
-The scope concept is gone. Remove any scope references in service definitions (e.g. Chameleon modules used
-`scope="prototype"` in the past; if you didn't change these services to use `shared="false"` during the migration to
-Chameleon 6.2.x, it needs to be done now).
-
-In `app/config/routing_dev.yml`, replace this route import:
-
-```yaml
-_configurator:
-    resource: "@SensioDistributionBundle/Resources/config/routing/webconfigurator.xml"
-    prefix:   /_configurator
-```
-
-with this one:
-
-```yaml
-_errors:
-    resource: '@TwigBundle/Resources/config/routing/errors.xml'
-    prefix:   /_error
-```
-
-## Twig 2.x
-
-The system now uses Twig 2.x. Please have a look at the Twig changelog for required adjustments, but major problems are
-not expected.
+In `composer.json`, adjust version constraints for all Chameleon dependencies from `~6.2.0` to `~6.3.0` and run
+`composer update --no-scripts`.
 
 ## DoctrineBundle
 
@@ -78,18 +53,57 @@ doctrine:
       collate: 'utf8_unicode_ci'
 ```
 
-The parameters should already be defined.
+The parameters are already defined if you didn't change the default configuration.
 
 Please note that the parameter `chameleon_system_core.pdo.enable_mysql_compression` no longer works. To use compression,
 add the configuration value `doctrine: options: 1006: 1`.
 
-The DoctrineBundle provides a profiler in the Web Debug Toolbar. Therefore the Chameleon database profiler is now
-disabled by default, the provided information is mainly redundant. To enable it again, set the configuration key
-`chameleon_system_debug: database_profiler: enabled: true`. Backtrace will then be enabled by default.
+## New ImageCropBundle
 
-The `backtrace_enabled` and `backtrace_limit` keys were moved under the `database_profiler` key (e.g.
-`chameleon_system_debug: database_profiler: backtrace_enabled` instead of `chameleon_system_debug: backtrace_enabled`).
-Please adjust existing configuration.
+Chameleon now ships with a bundle that provides support for image cutouts. Install it as follows (this is required if
+the ChameleonShopThemeBundle is used, otherwise this step is optional):
+
+- Add `new \ChameleonSystem\ImageCropBundle\ChameleonSystemImageCropBundle()` to the AppKernel.
+- In a terminal, navigate to `<project root>/src/extensions/snippets-cms/` and create this symlink:
+
+  ```bash
+  ln -s ../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/snippets-cms/imageCrop
+  ```
+
+- Navigate to `<project root>/src/extensions/objectviews/TCMSFields` (create directory if it doesn't exist yet and
+  create this symlink:
+  ```bash
+  ln -s ../../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/objectviews/TCMSFields/TCMSFieldMediaWithImageCrop
+  ```
+
+## Remove Scopes
+
+The system now uses Symfony 3.4. The scope concept is gone since Symfony 3.0, so remove any scope references in service
+definitions (e.g. Chameleon modules used `scope="prototype"` in the past; if you didn't change these services to use
+`shared="false"` during the migration to Chameleon 6.2.x, it needs to be done now).
+
+## Route Imports
+
+In `app/config/routing_dev.yml`, replace this route import:
+
+```yaml
+_configurator:
+    resource: "@SensioDistributionBundle/Resources/config/routing/webconfigurator.xml"
+    prefix:   /_configurator
+```
+
+with this one:
+
+```yaml
+_errors:
+    resource: '@TwigBundle/Resources/config/routing/errors.xml'
+    prefix:   /_error
+```
+
+## Twig 2.x
+
+The system now uses Twig 2.x. Please have a look at the Twig changelog for required adjustments, but major problems are
+not expected.
 
 ## Logging
 
@@ -263,6 +277,10 @@ Log-related menu items in the backend ("logs", "log channel definition") are now
 new sidebar menu, create menu items assigned to the corresponding tables. To display these items in the classic main
 menu (which itself is no longer visible by default), assign the tables to the "Logs" content box.
 
+## Re-run Composer
+
+Run `composer update` again, this time without the `--no-scripts` argument.
+
 ## Sidebar Menu Items
 
 Sidebar menu items are (in contrast to the classic main menu) created independently from tables and backend modules.
@@ -287,33 +305,32 @@ $mainMenuMigrator->migrateContentBox('content_box_system_name');
 
 ```
 
-## New ImageCropBundle
-
-Chameleon now ships with a bundle that provides support for image cutouts. Install it as follows (this is required if
-the ChameleonShopThemeBundle is used, otherwise this step is optional):
-
-- Add `new \ChameleonSystem\ImageCropBundle\ChameleonSystemImageCropBundle()` to the AppKernel.
-- In a terminal, navigate to `<project root>/src/extensions/snippets-cms/` and create this symlink:
-
-  ```bash
-  ln -s ../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/snippets-cms/imageCrop
-  ```
-
-- Navigate to `<project root>/src/extensions/objectviews/TCMSFields` (create directory if it doesn't exist yet and
-  create this symlink:
-  ```bash
-  ln -s ../../../../vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/objectviews/TCMSFields/TCMSFieldMediaWithImageCrop
-  ```
-
-- Run updates in the Chameleon backend.
-- Run assets:install console command.
-- Clear Symfony cache.
-
 ## Mailer Peer Security
 
 The default value of config key `chameleon_system_core: mailer: peer_security` was changed from "permissive" to "strict".
 Using this setting, SMTP connections verify SSL/TLS certificate validity so that invalid or self-signed certificates are
 rejected. Be sure to test mail transmission with the SMTP server used in the project.
+
+## Symfony Service Retrieval
+
+In dev mode the debug toolbar will report some deprecations concerning non-public services that are retrieved through
+the ServiceLocator or the Symfony service container directly. In Symfony 4 this will no longer be possible; in addition,
+services will be private by default in Symfony 4.
+
+The best way to solve this upcoming problem is to use ServiceLocator and container calls as rarely as possible (no news
+here) and prefer dependency injection instead. Where dependency injection is not possible, services should be declared
+public explicitly. The deprecation warnings will also be logged, potentially leading to huge log files and possibly
+degraded performance in the dev environment.  Therefore it is recommended to deal with most of the deprecations.
+
+## Database Profiling
+
+The DoctrineBundle provides a profiler in the Web Debug Toolbar. Therefore the Chameleon database profiler is now
+disabled by default, the provided information is mainly redundant. To enable it again, set the configuration key
+`chameleon_system_debug: database_profiler: enabled: true`. Backtrace will then be enabled by default.
+
+The `backtrace_enabled` and `backtrace_limit` keys were moved under the `database_profiler` key (e.g.
+`chameleon_system_debug: database_profiler: backtrace_enabled` instead of `chameleon_system_debug: backtrace_enabled`).
+Please adjust existing configuration.
 
 ## Changed Interfaces and Method Signatures
 
