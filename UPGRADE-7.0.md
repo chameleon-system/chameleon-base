@@ -55,6 +55,12 @@ Support for Adobe Flash was removed. We recommend to search the media manager fo
 extensions "flv", "f4v" and "swf") and remove them.
 The media manager will also display where these files are still used; these usages should also be removed.
 
+## Remove module_cms_search Table
+
+The CMS search module was removed. If the project still needs this module, restore it from an earlier Chameleon release.
+Otherwise remove the associated database table by calling `TCMSLogChange::deleteTable('module_cms_search')` in an update
+script.
+
 # Informational
 
 ## JavaScript disallowed in WYSIWYG fields by default
@@ -225,6 +231,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - CMSMediaManagerTreeRPC
 - CMSMediaViddlerImport
 - CMSModuleImagePool
+- CMSSearch
 - esono\pkgCmsRouting\exceptions\DomainNotFoundException
 - IClusterDriver
 - ICmsObjectLink
@@ -244,11 +251,13 @@ The code entities in this list were marked as deprecated in previous releases an
 - MTListCore
 - MTPassThrough
 - MTPkgExternalTrackerGoogleAnalytics_MTPageMetaCore
+- MTSearchCore
 - MTSendAFriendCore
 - MTSitemapCore
 - TCacheManagerStorage_Decorator
 - TCacheManagerStorage_Decorator_LazyWriteMemcache
 - TCacheManagerStorage_Standard
+- TCMSCronJob_CreateSearchIndex
 - TCMSDataExtranetUser
 - TCMSFieldMediaProperties
 - TCMSFieldWorkflowActionType
@@ -257,16 +266,19 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSFieldWorkflowPublishActive
 - TCMSFontImage
 - TCMSFontImageList
+- TCMSListManagerRevisionManagement
 - TCMSMath
 - TCMSMediaConnections
 - TCMSMediaTreeNode
 - TCmsObjectLinkBase
 - TCmsObjectLinkException_InvalidTargetClass
+- TCMSSearchIndex
+- TCMSSearchIndexPage
+- TCMSSearchIndexPortal
 - TCMSSessionHandler
 - TCMSSmartURLHandler_EOSNeoPay
 - TCMSSmartURLHandler_FlashCrossDomain
 - TCMSSmartURLHandler_Pagepath
-- TCMSListManagerRevisionManagement
 - TCMSTableEditorRecordRevision
 - TCMSUserInput_EMail
 - TCMSUserInput_XSS
@@ -670,6 +682,11 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Translations
 
+- chameleon_system_core.cms_module_cms_search.action_start_index
+- chameleon_system_core.cms_module_cms_search.headline
+- chameleon_system_core.cms_module_cms_search.select_portal
+- chameleon_system_core.cms_module_cms_search.state_index_running
+- chameleon_system_core.cms_module_cms_search.state_indexed
 - chameleon_system_core.cms_module_header.active_update_counter
 - chameleon_system_core.cms_module_header.error_unable_to_create_update_counter
 - chameleon_system_core.cms_module_header.msg_created_update_counter
@@ -711,6 +728,10 @@ The code entities in this list were marked as deprecated in previous releases an
 - chameleon_system_core.cms_module_media_manager.used_in_table
 - chameleon_system_core.error.flash_required
 - chameleon_system_core.fields.lookup.no_matches
+- chameleon_system_core.module_search.action_run_search
+- chameleon_system_core.module_search.no_results
+- chameleon_system_core.module_search.search_box_headline
+- chameleon_system_core.module_search.result_headline
 - chameleon_system_core.record_lock.lock_owner_fax
 - chameleon_system_core.record_revision.action_confirm_restore_revision
 - chameleon_system_core.record_revision.action_create_page_revision

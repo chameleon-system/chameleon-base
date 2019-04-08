@@ -1239,32 +1239,6 @@
                 <target>Ja, CSV-Datei importieren</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.headline">
-                <source>chameleon_system_core.cms_module_cms_search.headline</source>
-                <target>Suchindex neu aufbauen</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.select_portal">
-                <source>chameleon_system_core.cms_module_cms_search.select_portal</source>
-                <target>Bitte wählen Sie ein Portal aus, für den der Index neu aufgebaut werden soll</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.action_start_index">
-                <source>chameleon_system_core.cms_module_cms_search.action_start_index</source>
-                <target>Indizierung starten</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.state_index_running">
-                <source>chameleon_system_core.cms_module_cms_search.state_index_running</source>
-                <target>Suchindex wird aufgebaut</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.state_indexed">
-                <source>chameleon_system_core.cms_module_cms_search.state_indexed</source>
-                <target>Seiten indiziert</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_core.cms_module_table_export.state_export_done">
                 <source>chameleon_system_core.cms_module_table_export.state_export_done</source>
                 <target>Die Datei wurde generiert</target>

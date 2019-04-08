@@ -70,23 +70,6 @@
                 <target>Apply to none</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_core.module_search.result_headline">
-                <source>chameleon_system_core.module_search.result_headline</source>
-                <target>Search results</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.module_search.no_results">
-                <source>chameleon_system_core.module_search.no_results</source>
-                <target>There is no content matching your search</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.module_search.search_box_headline">
-                <source>chameleon_system_core.module_search.search_box_headline</source>
-                <target>Search</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.module_search.action_run_search">
-                <source>chameleon_system_core.module_search.action_run_search</source>
-                <target>search</target>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_core.module_send_a_friend.from_name">
                 <source>chameleon_system_core.module_send_a_friend.from_name</source>
                 <target>Your name</target>

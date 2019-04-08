@@ -153,7 +153,6 @@ $iconMapping = array(
     'articlesearchindex' => 'fas fa-search-plus',
     'shopstats' => 'fas fa-chart-pie',
     'sanitycheckbundle' => 'fas fa-bug',
-    'cmssearchindexer' => 'fas fa-database',
 );
 foreach ($iconMapping as $moduleName => $iconName) {
     $data = TCMSLogChange::createMigrationQueryData('cms_module', 'en')
