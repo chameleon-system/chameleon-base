@@ -3,6 +3,33 @@ UPGRADE FROM 6.3 TO 7.0
 
 # Essentials
 
+The steps in this chapter are required to get the project up and running in version 6.3.
+It is recommended to follow these steps in the given order.
+
+## Prepare Project
+
+Be sure to install the latest release of the Chameleon 6.3.x branch before migrating. It is recommended to remove all
+deprecated code usage from the project before migrating. This way there will be deprecation messages still available
+which will help to decide what to do with code calling deprecated entities.
+
+Note that we decided to keep some entities although this is a major release. See section
+`Still-deprecated Code Entities` for details. These entities will be removed in a future Chameleon release, so be sure
+to remove calls over time.
+
+Logout from the Chameleon backend.
+
+## Adjust Composer Dependencies
+
+In `composer.json`, adjust version constraints for all Chameleon dependencies from `~6.3.0` to `~7.0.0` and run
+`composer update`.
+
+## Regenerate Autoclasses And Run Updates
+
+Regenerate autoclasses, either by deleting the `app/cache/autoclasses` directory and calling the Chameleon backend, or
+by calling the console command `app/console chameleon_system:autoclasses:generate`.
+
+Login to the Chameleon backend as administrator then and run updates.
+
 ## Pagedef No Longer In Request Data
 
 When the user sends a request, the system in general first tries to find which page to load. If a page is found in this
@@ -82,6 +109,25 @@ project requires WYSIWYG JavaScript, allow it by setting the configuration key
 ## RevisionManagementBundle
 
 The RevisionManagementBundle was removed. Remove it from the AppKernel.
+
+# Still-deprecated Code Entities
+
+Some code entities have been marked as deprecated in previous releases, but were not removed in this release because of
+wide usage, bug risks or quite a short deprecation period. They will be removed in a future Chameleon release, so be
+sure to remove calls over time.
+
+Entities that were NOT removed include (incomplete list):
+
+- Any database fields
+- Almost any method arguments
+- Classic main menu
+- Anything logging-related
+- TGlobal::GetUserData() and related methods
+- TGlobal::Translate()
+- TTools::GetArrayAsURL() and TTools::GetArrayAsURLForJavascript()
+- TCMSLogChange::_RunQuery()
+- MySQLLegacySupport
+- instance() methods
 
 # Removed Code Entities
 
