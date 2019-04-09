@@ -116,6 +116,15 @@ project requires WYSIWYG JavaScript, allow it by setting the configuration key
 
 The RevisionManagementBundle was removed. Remove it from the AppKernel.
 
+# Deprecated Code Entities
+
+There is a small number of entities that is deprecated since 7.0.0.
+
+## Database Fields
+
+- cms_tbl_conf.icon_list
+- cms_tpl_module.icon_list
+
 # Still-deprecated Code Entities
 
 Some code entities have been marked as deprecated in previous releases, but were not removed in this release because of
