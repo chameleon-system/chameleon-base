@@ -112,10 +112,6 @@
             <argument type="service" id="chameleon_system_core.util.input_filter" />
         </service>
 
-        <service id="chameleon_system_core.ChameleonSessionManager" alias="chameleon_system_core.session.chameleon_session_manager" public="true">
-            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.2.0 - use chameleon_system_core.session.chameleon_session_manager instead.</deprecated>
-        </service>
-
         <service id="session" synthetic="true" public="true"/>
 
         <service id="chameleon_system_core.chameleon_controller" synthetic="true" public="true"/>

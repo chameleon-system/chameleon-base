@@ -141,6 +141,7 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Services
 
+- chameleon_system_core.ChameleonSessionManager
 - chameleon_system_core.password
 - chameleon_system_core.util.snippet_chain
 
