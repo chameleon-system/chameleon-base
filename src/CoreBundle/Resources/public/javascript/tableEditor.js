@@ -579,10 +579,6 @@ function SaveViaAjaxCallback(data, statusText) {
                 sCurrentRecordName = data.name;
             }
         }
-
-        if (self !== top) {
-            window.history.go(-1);
-        }
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_save'), 'ERROR');
     }
