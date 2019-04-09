@@ -118,7 +118,7 @@ The RevisionManagementBundle was removed. Remove it from the AppKernel.
 
 # Deprecated Code Entities
 
-There is a small number of entities that is deprecated since 7.0.0.
+There is a small number of entities newly deprecated since 7.0.0.
 
 ## Database Fields
 
