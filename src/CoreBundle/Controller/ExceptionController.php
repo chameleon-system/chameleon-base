@@ -142,7 +142,7 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
     }
 
     /**
-     * @param int              $code
+     * @param int $code
      *
      * @return string|null
      */

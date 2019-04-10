@@ -18,7 +18,6 @@ use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ErrorException;
@@ -711,7 +710,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * return an array of variables to search/replace in the rendered page
-     * use this hook to add vars that should never be cached
+     * use this hook to add vars that should never be cached.
      *
      * @return array
      *

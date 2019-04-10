@@ -14,7 +14,6 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

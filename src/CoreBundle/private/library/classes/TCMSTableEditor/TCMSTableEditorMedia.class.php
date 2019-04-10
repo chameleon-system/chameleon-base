@@ -507,6 +507,5 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
          *   dispatch. The caller of this method implies it should only be dispatched on significant changes, but in
          *   reality it is called on every save. This should be investigated first.
          */
-
     }
 }

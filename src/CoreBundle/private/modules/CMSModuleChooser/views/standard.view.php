@@ -5,11 +5,10 @@ $menuPrefix = TGlobal::OutHTML($data['sModuleSpotName']);
 $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
 
 /**
- * @var $oModule \TdbCmsTplModule
- * @var $oModuleInstance \TdbCmsTplModuleInstance
+ * @var $oModule          \TdbCmsTplModule
+ * @var $oModuleInstance  \TdbCmsTplModuleInstance
  * @var $createModuleMenu string
  */
-
 ?>
 <div class="moduleChooserMenu">
 
@@ -25,18 +24,17 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
             $iconFontCssClass = $oModule->fieldIconFontCssClass;
             if ('' === $iconFontCssClass) {
                 $iconFontCssClass = 'fas fa-pen-square';
-            }
-    ?>
+            } ?>
         <?php
         $aViewMapping = $oModule->GetViewMapping();
-    if (array_key_exists($oModuleInstance->sqlData['template'], $aViewMapping)) {
-        $sViewName = $aViewMapping[$oModuleInstance->sqlData['template']];
-    } else {
-        $sViewName = $oModuleInstance->sqlData['template'];
-    } ?>
+            if (array_key_exists($oModuleInstance->sqlData['template'], $aViewMapping)) {
+                $sViewName = $aViewMapping[$oModuleInstance->sqlData['template']];
+            } else {
+                $sViewName = $oModuleInstance->sqlData['template'];
+            } ?>
         <div style="background-color: #63c2de">
             <div class="moduleType">
-                <i class="<?=TGlobal::OutHTML($iconFontCssClass)?>"></i> <?=TGlobal::OutHTML($oModule->sqlData['name']); ?>
+                <i class="<?=TGlobal::OutHTML($iconFontCssClass); ?>"></i> <?=TGlobal::OutHTML($oModule->sqlData['name']); ?>
             </div>
         </div>
         <div class="moduleInfo"><strong><?=$translator->trans('chameleon_system_core.template_engine.module_view', array(), TranslationConstants::DOMAIN_BACKEND); ?>
@@ -49,15 +47,15 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
             <div class="CMSModuleChooserCrosshair fas fa-random" data-spotname="<?=TGlobal::OutHTML($data['sModuleSpotName']); ?>"></div>
         </div>
         <?php
-} else {
-        ?>
+        } else {
+            ?>
         <div style="background-color: #63c2de">
             <div class="moduleType">
                 <i class="fas fa-cube"></i> <?php echo $translator->trans('chameleon_system_core.template_engine.slot_is_empty', array(), TranslationConstants::DOMAIN_BACKEND); ?>
             </div>
         </div>
         <?php
-    } ?>
+        } ?>
         <div>
             <?php
             $oViews = null;
@@ -130,8 +128,8 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
                 <ul>
                     <?php while ($oTmpRelatedTable = $oRelatedTables->Next()) {
                     $sJS = " onclick=\"EditTable('".TGlobal::OutJS($oTmpRelatedTable->id)."','".TGlobal::OutJS(urlencode($oModuleInstance->id))."','');return false;\"";
-                    echo "<li ><a href=\"javascript:void(0);\" style=\"background-color: #".TGlobal::OutHTML($oModuleInstance->GetModuleConnectedTableColorEditState($oTmpRelatedTable))."\" ".$sJS.">
-                    <span class=\"menueicon\"><i class=\"fas fa-edit\"></i> ".TGlobal::OutHTML($oTmpRelatedTable->GetName())."</span></a></li>\n";
+                    echo '<li ><a href="javascript:void(0);" style="background-color: #'.TGlobal::OutHTML($oModuleInstance->GetModuleConnectedTableColorEditState($oTmpRelatedTable)).'" '.$sJS.'>
+                    <span class="menueicon"><i class="fas fa-edit"></i> '.TGlobal::OutHTML($oTmpRelatedTable->GetName())."</span></a></li>\n";
                 } ?>
                 </ul>
             </li>

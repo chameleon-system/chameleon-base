@@ -31,14 +31,14 @@ if (0 === \count($rights)) {
 
 $data = TCMSLogChange::createMigrationQueryData('cms_role_cms_right_mlt', 'en')
     ->setWhereExpressions([
-        new Comparison('target_id', Comparison::IN, $rights)
+        new Comparison('target_id', Comparison::IN, $rights),
     ])
 ;
 TCMSLogChange::delete(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_right', 'en')
     ->setWhereExpressions([
-        new Comparison('id', Comparison::IN, $rights)
+        new Comparison('id', Comparison::IN, $rights),
     ])
 ;
 TCMSLogChange::delete(__LINE__, $data);

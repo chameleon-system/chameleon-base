@@ -183,5 +183,4 @@ class IconMapping
         'weather-few-clouds.png' => 'fas fa-cloud-sun',
         'thumbnail.png' => 'fas fa-images',
     ];
-
 }

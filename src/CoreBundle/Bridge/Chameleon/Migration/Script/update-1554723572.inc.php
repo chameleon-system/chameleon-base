@@ -24,21 +24,21 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'en')
       'cms_usergroup_id' => '',
   ])
   ->setWhereExpressions([
-      new Comparison('cms_usergroup_id', Comparison::IN, $groups)
+      new Comparison('cms_usergroup_id', Comparison::IN, $groups),
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_user_cms_usergroup_mlt', 'en')
     ->setWhereExpressions([
-        new Comparison('target_id', Comparison::IN, $groups)
+        new Comparison('target_id', Comparison::IN, $groups),
     ])
 ;
 TCMSLogChange::delete(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_usergroup', 'en')
     ->setWhereExpressions([
-        new Comparison('id', Comparison::IN, $groups)
+        new Comparison('id', Comparison::IN, $groups),
     ])
 ;
 TCMSLogChange::delete(__LINE__, $data);

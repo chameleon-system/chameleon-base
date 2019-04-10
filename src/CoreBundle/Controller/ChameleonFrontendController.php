@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\Controller;
 
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;

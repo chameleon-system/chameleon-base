@@ -21,56 +21,56 @@ if (0 === \count($roles)) {
 
 $data = TCMSLogChange::createMigrationQueryData('cms_role_cms_role_mlt', 'en')
     ->setWhereExpressions([
-        new Comparison('source_id', Comparison::IN, $roles)
+        new Comparison('source_id', Comparison::IN, $roles),
     ])
 ;
 TCMSLogChange::delete(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_role_cms_right_mlt', 'en')
     ->setWhereExpressions([
-        new Comparison('source_id', Comparison::IN, $roles)
+        new Comparison('source_id', Comparison::IN, $roles),
     ])
 ;
 TCMSLogChange::delete(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf_cms_role_mlt', 'en')
     ->setWhereExpressions([
-        new Comparison('target_id', Comparison::IN, $roles)
+        new Comparison('target_id', Comparison::IN, $roles),
     ])
 ;
 TCMSLogChange::delete(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf_cms_role1_mlt', 'en')
     ->setWhereExpressions([
-        new Comparison('target_id', Comparison::IN, $roles)
+        new Comparison('target_id', Comparison::IN, $roles),
     ])
 ;
 TCMSLogChange::delete(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf_cms_role2_mlt', 'en')
     ->setWhereExpressions([
-        new Comparison('target_id', Comparison::IN, $roles)
+        new Comparison('target_id', Comparison::IN, $roles),
     ])
 ;
 TCMSLogChange::delete(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf_cms_role3_mlt', 'en')
     ->setWhereExpressions([
-        new Comparison('target_id', Comparison::IN, $roles)
+        new Comparison('target_id', Comparison::IN, $roles),
     ])
 ;
 TCMSLogChange::delete(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_user_cms_role_mlt', 'en')
     ->setWhereExpressions([
-        new Comparison('target_id', Comparison::IN, $roles)
+        new Comparison('target_id', Comparison::IN, $roles),
     ])
 ;
 TCMSLogChange::delete(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_role', 'en')
     ->setWhereExpressions([
-        new Comparison('id', Comparison::IN, $roles)
+        new Comparison('id', Comparison::IN, $roles),
     ])
 ;
 TCMSLogChange::delete(__LINE__, $data);

@@ -5,7 +5,6 @@
 </div>
 <?php
 
-
 $data = TCMSLogChange::createMigrationQueryData('cms_module', 'en')
     ->setWhereEquals([
             'uniquecmsname' => 'cmssearchindexer',

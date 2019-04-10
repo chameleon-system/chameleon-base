@@ -10,8 +10,6 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 
 class TPkgComment extends TPkgCommentAutoParent

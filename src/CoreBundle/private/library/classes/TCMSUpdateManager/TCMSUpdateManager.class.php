@@ -29,7 +29,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * update file management, loads and executes database updates
+ * update file management, loads and executes database updates.
  *
 /**/
 class TCMSUpdateManager
