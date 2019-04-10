@@ -122,6 +122,8 @@ There is a small number of entities newly deprecated since 7.0.0.
 
 ## Database Fields
 
+- cms_content_box.icon_list
+- cms_module.icon_list
 - cms_tbl_conf.icon_list
 - cms_tpl_module.icon_list
 
