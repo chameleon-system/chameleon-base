@@ -1572,7 +1572,10 @@ class TCMSImageEndpoint
                     $oImageMagick->LoadImage($this->GetLocalMediaDirectory().'/'.$this->aData['path'], $this);
                     $oImageMagick->ResizeImage($width, $height);
                     $oImageMagick->CropImage($iMaxWidth, $iMaxHeight, $bCenter);
-                    $oImageMagick->SaveToFile($thumbPath);
+                    if (false === $oImageMagick->SaveToFile($thumbPath)) {
+                        return $oThumb;
+                    }
+
                     if (0 === filesize($thumbPath)) {
                         unlink($thumbPath);
                     } else {
