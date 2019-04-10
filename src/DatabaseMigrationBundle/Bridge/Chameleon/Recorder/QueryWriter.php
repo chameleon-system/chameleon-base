@@ -13,6 +13,7 @@ namespace ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder;
 
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use Doctrine\Common\Collections\Expr\Comparison;
 use ErrorException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use TCMSLogChange;
@@ -108,22 +109,31 @@ class QueryWriter
         $snippetrenderer->AddSourceObject('language', $migrationQueryData->getLanguage());
         $snippetrenderer->AddSourceObject('fields', $this->getArrayValuesToWrite($operationType, $migrationQueryData->getFields()));
         $snippetrenderer->AddSourceObject('whereEquals', $this->getArrayValuesToWrite($operationType, $migrationQueryData->getWhereEquals()));
+        $snippetrenderer->AddSourceObject('whereExpressions', $this->getExpressionValuesToWrite($migrationQueryData->getWhereExpressions()));
 
         $renderedQuery = $snippetrenderer->Render('MigrationRecorder/migrationQueryTemplate.html.twig');
         fwrite($filePointer, $renderedQuery, strlen($renderedQuery));
     }
 
-    /**
-     * @param string $operationType
-     * @param array  $arrayToWrite
-     *
-     * @return array
-     */
-    private function getArrayValuesToWrite($operationType, array $arrayToWrite)
+    private function getArrayValuesToWrite(string $operationType, array $arrayToWrite): array
     {
-        $retValue = array();
+        $retValue = [];
         foreach ($arrayToWrite as $fieldName => $value) {
             $retValue[$fieldName] = $this->getValueToWrite($operationType, $fieldName, $value);
+        }
+
+        return $retValue;
+    }
+
+    /**
+     * @param Comparison[] $expressionsToWrite
+     * @return array
+     */
+    private function getExpressionValuesToWrite(array $expressionsToWrite): array
+    {
+        $retValue = [];
+        foreach ($expressionsToWrite as $expression) {
+            $retValue[] = new Comparison($expression->getField(), $expression->getOperator(), $this->quotePhpValue($expression->getValue()->getValue()));
         }
 
         return $retValue;

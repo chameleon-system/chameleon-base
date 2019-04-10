@@ -13,6 +13,13 @@ $data = TCMSLogChange::createMigrationQueryData('{{ tableName }}', '{{ language 
   {% endfor %}
 ])
 {% endif -%}
+{% if whereExpressions|length > 0 %}
+  ->setWhereExpressions([
+  {% for expression in whereExpressions %}
+    new \Doctrine\Common\Collections\Expr\Comparison('{{ expression.field }}', '{{ expression.operator|raw }}', {{ expression.value.value|raw }}),
+  {% endfor %}
+  ])
+{% endif -%}
 ;
 TCMSLogChange::{{ operationType }}(__LINE__, $data);
 
