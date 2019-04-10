@@ -167,6 +167,8 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Bundle Configuration
 
+None.
+
 ## Constants
 
 - _CMS_CORE_ENGINE
@@ -811,7 +813,11 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Database Tables
 
+None.
+
 ## Database Fields
+
+None.
 
 ## Icons
 
