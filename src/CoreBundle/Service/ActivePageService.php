@@ -21,6 +21,7 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use TCMSActivePage;
@@ -169,7 +170,7 @@ class ActivePageService implements ActivePageServiceInterface
         }
 
         if (true === $this->requestInfoService->isBackendMode()) {
-            return $this->defaultRouter->generate($route, $finalParameterList);
+            return $this->defaultRouter->generate($route, $finalParameterList, $referenceType);
         }
 
         /*
@@ -181,11 +182,19 @@ class ActivePageService implements ActivePageServiceInterface
 
         $route = $this->getBaseRouteName($route);
 
-        /**
+        /*
          * We need to call the frontend router explicitly, as it contains logic that makes sure the correct domain is
          * used (domain might e.g. be different if another language is requested).
          */
-        return $this->frontendRouter->generateWithPrefixes($route, $finalParameterList, null, $language, $referenceType);
+        try {
+            return $this->frontendRouter->generateWithPrefixes($route, $finalParameterList, null, $language, $referenceType);
+        } catch (RouteNotFoundException $e) {
+            /*
+             * Fallback to the default router in case the active route isn't registered in the backend routing config
+             * and has therefore no portal and language handling.
+             */
+            return $this->defaultRouter->generate($route, $finalParameterList, $referenceType);
+        }
     }
 
     /**
