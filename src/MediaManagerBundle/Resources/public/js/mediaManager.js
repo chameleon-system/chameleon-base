@@ -286,6 +286,7 @@
         onTreeDelete: function (e, data) {
             var id = data.node.id.replace("mediaTreeNode", "");
             var self = this;
+            PleaseWait();
             $.ajax({
                 type: "POST",
                 async: true,
@@ -294,10 +295,12 @@
                     'id': encodeURIComponent(id)
                 },
                 error: function (responseData) {
+                    $.unblockUI();
                     data.instance.refresh();
                     self.showErrorFromAjaxResponse(responseData);
                 },
                 success: function (jsonData) {
+                    $.unblockUI();
                     self.showSuccessMessage(jsonData);
                     if (self.state.mediaTreeNodeId === id) {
                         self.state.mediaTreeNodeId = null;
