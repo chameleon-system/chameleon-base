@@ -140,6 +140,11 @@
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.delete_folder'),
                                 icon: "glyphicon glyphicon-trash",
                                 action: function (data) {
+                                    var confirmation = window.confirm(CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.delete.folder_are_you_sure')+"\n"+data.reference.text());
+                                    if (false === confirmation) {
+                                        return;
+                                    }
+
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);
                                     var ref = self.treeContainer.jstree(true);
