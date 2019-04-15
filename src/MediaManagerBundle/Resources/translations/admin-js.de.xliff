@@ -44,6 +44,10 @@
                 <source>chameleon_system_media_manager.delete.success_message</source>
                 <target>Erfolgreich gelöscht.</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_media_manager.delete.folder_are_you_sure">
+                <source>chameleon_system_media_manager.delete.folder_are_you_sure</source>
+                <target>Sind Sie sicher, dass Sie den Ordner und alle Elemente darin löschen wollen?</target>
+            </trans-unit>
 
             <trans-unit id="chameleon_system_media_manager.tree.multiple_selected_message">
                 <source>chameleon_system_media_manager.tree.multiple_selected_message</source>

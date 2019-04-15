@@ -44,6 +44,10 @@
                 <source>chameleon_system_media_manager.delete.success_message</source>
                 <target>Successfully deleted.</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_media_manager.delete.folder_are_you_sure">
+                <source>chameleon_system_media_manager.delete.folder_are_you_sure</source>
+                <target>Are you sure you want to delete this folder and all its content?</target>
+            </trans-unit>
 
             <trans-unit id="chameleon_system_media_manager.tree.multiple_selected_message">
                 <source>chameleon_system_media_manager.tree.multiple_selected_message</source>
