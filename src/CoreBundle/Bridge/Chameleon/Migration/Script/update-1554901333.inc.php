@@ -6,5 +6,5 @@
 
 TCMSLogChange::addInfoMessage('Pages are now only available if they are part of a navigation (see navigation
 options in the portal settings). This restores the behavior of a previous Chameleon release; it was never intended that
-any pages are accessible in the frontend. Check if all pages that should be available in the frontend are part of a
+every page is accessible in the frontend. Ensure that all pages that should be available in the frontend are part of a
 navigation.', TCMSLogChange::INFO_MESSAGE_LEVEL_TODO);
