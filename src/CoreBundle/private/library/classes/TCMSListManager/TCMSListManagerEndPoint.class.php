@@ -292,7 +292,7 @@ class TCMSListManagerEndPoint
                         $mltSubSelect = $this->getSubselectForMlt($quotedTableName, $quotedMltTable);
                         $mltSubSelect .= " OR $quotedMltTable.`target_id` IN ($portalRestriction)";
 
-                        $restriction .= " `id` IN ($mltSubSelect)";
+                        $restriction .= " $quotedTableName.`id` IN ($mltSubSelect)";
                     }
                     if ($portalIDFieldExists) {
                         if (!empty($restriction)) {
@@ -306,7 +306,7 @@ class TCMSListManagerEndPoint
 
                         $mltSubSelect = $this->getSubselectForMlt($quotedTableName, $quotedMltTable);
 
-                        $restriction .= " `id` IN ($mltSubSelect)";
+                        $restriction .= " $quotedTableName.`id` IN ($mltSubSelect)";
                     }
                     if ($portalIDFieldExists) {
                         if (!empty($restriction)) {
