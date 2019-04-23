@@ -2058,6 +2058,7 @@ class TCMSTableEditorEndPoint
     {
         $this->DeleteIdConnectedRecordReferences();
         $this->DeleteMltConnectedRecordReferences();
+        $this->deleteMultiTableRecordReferences($this->oTableConf->sqlData['name'], $this->sId);
     }
 
     /**
@@ -2086,6 +2087,44 @@ class TCMSTableEditorEndPoint
                     $oTableEditor->SaveField($this->oTableConf->sqlData['name'].'_id', '');
                 }
             }
+        }
+    }
+
+    protected function deleteMultiTableRecordReferences(string $tableName, string $id = ''): void
+    {
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $query = 'SELECT `id` FROM `cms_field_type` WHERE `constname` = '.$databaseConnection->quote(TCMSFieldExtendedLookupMultiTable::FIELD_SYSTEM_NAME);
+        $fieldTypeId = $databaseConnection->fetchColumn($query);
+
+        if (false === $fieldTypeId) {
+            return;
+        }
+
+        $query = 'SELECT 
+                         `cms_field_conf`.`name` AS fieldName,
+                         `cms_tbl_conf`.`name` AS tableName
+                    FROM `cms_field_conf` 
+               LEFT JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id` 
+                   WHERE `cms_field_conf`.`cms_field_type_id` = :fieldTypeId';
+        $result = $databaseConnection->fetchAll($query, ['fieldTypeId' => $fieldTypeId]);
+        foreach ($result as $row) {
+            $query = 'UPDATE 
+                         '.$databaseConnection->quoteIdentifier($row['tableName']).'
+                     SET 
+                         '.$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX)." = '',
+                         ".$databaseConnection->quoteIdentifier($row['fieldName'])." = ''   
+                   WHERE 
+                         ".$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX).' = '.$databaseConnection->quote($tableName);
+
+            if ('' !== $id) {
+                $query .= ' AND '.$databaseConnection->quoteIdentifier($row['fieldName']).' = '.$databaseConnection->quote($id);
+            }
+
+            $databaseConnection->query($query);
+
+            $queries[] = new LogChangeDataModel($query, LogChangeDataModel::TYPE_CUSTOM_QUERY);
+            TCMSLogChange::WriteTransaction($queries);
         }
     }
 
