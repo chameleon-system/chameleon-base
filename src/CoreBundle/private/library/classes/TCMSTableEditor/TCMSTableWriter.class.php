@@ -357,6 +357,18 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
+    public function DeleteConnectedRecordReferences()
+    {
+        $this->DeleteIdConnectedRecordReferences();
+        $this->DeleteMltConnectedRecordReferences();
+
+        // delete all related records targeting the deleted table
+        $this->deleteMultiTableRecordReferences($this->oTableConf->sqlData['name']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function Copy($postData, $bNoConversion = false)
     {
         // we do not allow tables to be copied... so no code here
