@@ -2094,22 +2094,23 @@ class TCMSTableEditorEndPoint
     {
         $databaseConnection = $this->getDatabaseConnection();
 
-        $query = 'SELECT `id` FROM `cms_field_type` WHERE `constname` = '.$databaseConnection->quote(TCMSFieldExtendedLookupMultiTable::FIELD_SYSTEM_NAME);
-        $fieldTypeId = $databaseConnection->fetchColumn($query);
+        $fieldTypeId = $this->getFieldTypeIdBySystemName(TCMSFieldExtendedLookupMultiTable::FIELD_SYSTEM_NAME);
 
-        if (false === $fieldTypeId) {
+        if (null === $fieldTypeId) {
             return;
         }
 
-        $query = 'SELECT 
+        $fieldConfigQuery = 'SELECT 
                          `cms_field_conf`.`name` AS fieldName,
                          `cms_tbl_conf`.`name` AS tableName
                     FROM `cms_field_conf` 
                LEFT JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id` 
                    WHERE `cms_field_conf`.`cms_field_type_id` = :fieldTypeId';
-        $result = $databaseConnection->fetchAll($query, ['fieldTypeId' => $fieldTypeId]);
-        foreach ($result as $row) {
-            $query = 'UPDATE 
+        $fieldConfigResult = $databaseConnection->fetchAll($fieldConfigQuery, ['fieldTypeId' => $fieldTypeId]);
+
+        $recordedQueries = [];
+        foreach ($fieldConfigResult as $row) {
+            $updateQuery = 'UPDATE 
                          '.$databaseConnection->quoteIdentifier($row['tableName']).'
                      SET 
                          '.$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX)." = '',
@@ -2118,14 +2119,29 @@ class TCMSTableEditorEndPoint
                          ".$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX).' = '.$databaseConnection->quote($tableName);
 
             if ('' !== $id) {
-                $query .= ' AND '.$databaseConnection->quoteIdentifier($row['fieldName']).' = '.$databaseConnection->quote($id);
+                $updateQuery .= ' AND '.$databaseConnection->quoteIdentifier($row['fieldName']).' = '.$databaseConnection->quote($id);
             }
 
-            $databaseConnection->query($query);
+            $databaseConnection->query($updateQuery);
 
-            $queries[] = new LogChangeDataModel($query, LogChangeDataModel::TYPE_CUSTOM_QUERY);
-            TCMSLogChange::WriteTransaction($queries);
+            $recordedQueries[] = new LogChangeDataModel($updateQuery, LogChangeDataModel::TYPE_CUSTOM_QUERY);
         }
+
+        TCMSLogChange::WriteTransaction($recordedQueries);
+    }
+
+    protected function getFieldTypeIdBySystemName(string $systemName): ?string
+    {
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $query = 'SELECT `id` FROM `cms_field_type` WHERE `constname` = '.$databaseConnection->quote($systemName);
+        $fieldTypeId = $databaseConnection->fetchColumn($query);
+
+        if (false === $fieldTypeId) {
+            return null;
+        }
+
+        return $fieldTypeId;
     }
 
     /**
