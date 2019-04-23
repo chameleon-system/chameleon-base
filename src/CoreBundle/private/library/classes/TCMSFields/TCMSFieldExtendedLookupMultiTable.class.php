@@ -18,6 +18,11 @@ use Doctrine\Common\Collections\Expr\Comparison;
 /**/
 class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 {
+
+    CONST TABLE_NAME_FIELD_SUFFIX = '_table_name';
+
+    CONST FIELD_SYSTEM_NAME = 'CMSFIELD_EXTENDEDMULTITABLELIST';
+
     /**
      * returns the name of the table this field is connected with
      * depends on the hidden field fieldName_table_name that will be set after the save
@@ -48,13 +53,13 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         return $sTableName;
     }
 
-    protected function getTableFieldName(string $tableName = '')
+    protected function getTableFieldName(string $tableName = ''): string
     {
         if ('' === $tableName) {
             $tableName = $this->name;
         }
 
-        return $tableName.'_table_name';
+        return $tableName.self::TABLE_NAME_FIELD_SUFFIX;
     }
 
     /**
