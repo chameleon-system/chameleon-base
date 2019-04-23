@@ -1023,13 +1023,6 @@ class TCMSTableEditorEndPoint
         /** @var TCMSMLTField $oField */
         $oField = $this->oTableConf->GetField($sFieldName, $this->oTable);
 
-        $sTargetTable = $oField->GetConnectedTableName();
-        $sTargetTableName = TCMSTableToClass::GetClassName('Tdb', $sTargetTable);
-        if (class_exists($sTargetTableName)) {
-            $oTargetTable = call_user_func(array($sTargetTableName, 'GetNewInstance'));
-            $oTargetTable->Load($sConnectedID);
-        }
-
         $this->RemoveMLTConnectionExecute($oField, $sConnectedID);
     }
 
