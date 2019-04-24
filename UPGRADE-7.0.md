@@ -8,13 +8,23 @@ It is recommended to follow these steps in the given order.
 
 ## Prepare Project
 
-Be sure to install the latest release of the Chameleon 6.3.x branch before migrating. It is recommended to remove all
+Be sure to install (locally) the latest release of the Chameleon 6.3.x branch before continuing migrating. It is 
+recommended to remove all
 deprecated code usage from the project before migrating. This way there will be deprecation messages still available
 which will help to decide what to do with code calling deprecated entities.
 
 Note that we decided to keep some deprecated entities although this is a major release. See section
 `Still-deprecated Code Entities` for details. These entities will be removed in a future Chameleon release, so be sure
 to remove calls over time.
+
+After switching to 7.0 provide two stub classes that were removed but are still used in the (live) database and thus are
+needed for auto class generation. They can be removed when the upgrade is finished.
+
+- TCMSFieldMediaProperties
+- TCMSFieldWorkflowBool
+
+These classes should extend TCMSField but otherwise can be empty and without namespace.
+They can be placed for example in "src/extensions" of the project.
 
 Logout from the Chameleon backend.
 
