@@ -493,7 +493,7 @@ class imageMagick
                         $aParameter[] = '-gamma '.escapeshellarg($oImageMagickConfig->fieldGamma);
                     }
                     if ($oImageMagickConfig->fieldScharpen) {
-                        $aParameter[] = '-unsharp 1.5×1.0+1.5+0.02';
+                        $aParameter[] = '-adaptive-sharpen 0x1';
                     }
                     $iQuality = $oImageMagickConfig->fieldQuality;
                     if ($oImageMagickConfig->fieldForceJpeg) {

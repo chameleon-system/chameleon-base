@@ -278,13 +278,13 @@ class TCMSTableConf extends TCMSRecord
     }
 
     /**
-     * returns an iterator of field definitions that match the types given in aFieldTypes
+     * Returns a record list of field definitions that match the types given in aFieldTypes
      * (aFieldTypes = `constname` in cms_field_type).
      *
      * @param array $aFieldTypes
      * @param bool  $bDoNotUseAutoObjects - set to true if you want to prevent the class from using auto objects
      *
-     * @return TIterator
+     * @return TCMSRecordList|TdbCmsFieldConfList
      */
     public function &GetFieldDefinitions($aFieldTypes = array(), $bDoNotUseAutoObjects = false)
     {
@@ -347,7 +347,7 @@ class TCMSTableConf extends TCMSRecord
     }
 
     /**
-     * returns a fielddefinition for a given field.
+     * returns a field definition for a given field.
      *
      * @param string $fieldName the sql name of the field
      *

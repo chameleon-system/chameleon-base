@@ -914,13 +914,6 @@ class TCMSTableEditorEndPoint
         /** @var TCMSMLTField $oField */
         $oField = $this->oTableConf->GetField($sFieldName, $this->oTable);
 
-        $sTargetTable = $oField->GetConnectedTableName();
-        $sTargetTableName = TCMSTableToClass::GetClassName('Tdb', $sTargetTable);
-        if (class_exists($sTargetTableName)) {
-            $oTargetTable = call_user_func(array($sTargetTableName, 'GetNewInstance'));
-            $oTargetTable->Load($sConnectedID);
-        }
-
         $this->RemoveMLTConnectionExecute($oField, $sConnectedID);
     }
 
@@ -1871,6 +1864,7 @@ class TCMSTableEditorEndPoint
     {
         $this->DeleteIdConnectedRecordReferences();
         $this->DeleteMltConnectedRecordReferences();
+        $this->deleteMultiTableRecordReferences($this->oTableConf->sqlData['name'], $this->sId);
     }
 
     /**
@@ -1900,6 +1894,60 @@ class TCMSTableEditorEndPoint
                 }
             }
         }
+    }
+
+    protected function deleteMultiTableRecordReferences(string $tableName, string $id = ''): void
+    {
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $fieldTypeId = $this->getFieldTypeIdBySystemName(TCMSFieldExtendedLookupMultiTable::FIELD_SYSTEM_NAME);
+
+        if (null === $fieldTypeId) {
+            return;
+        }
+
+        $fieldConfigQuery = 'SELECT 
+                         `cms_field_conf`.`name` AS fieldName,
+                         `cms_tbl_conf`.`name` AS tableName
+                    FROM `cms_field_conf` 
+               LEFT JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id` 
+                   WHERE `cms_field_conf`.`cms_field_type_id` = :fieldTypeId';
+        $fieldConfigResult = $databaseConnection->fetchAll($fieldConfigQuery, ['fieldTypeId' => $fieldTypeId]);
+
+        $recordedQueries = [];
+        foreach ($fieldConfigResult as $row) {
+            $updateQuery = 'UPDATE 
+                         '.$databaseConnection->quoteIdentifier($row['tableName']).'
+                     SET 
+                         '.$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX)." = '',
+                         ".$databaseConnection->quoteIdentifier($row['fieldName'])." = ''   
+                   WHERE 
+                         ".$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX).' = '.$databaseConnection->quote($tableName);
+
+            if ('' !== $id) {
+                $updateQuery .= ' AND '.$databaseConnection->quoteIdentifier($row['fieldName']).' = '.$databaseConnection->quote($id);
+            }
+
+            $databaseConnection->query($updateQuery);
+
+            $recordedQueries[] = new LogChangeDataModel($updateQuery, LogChangeDataModel::TYPE_CUSTOM_QUERY);
+        }
+
+        TCMSLogChange::WriteTransaction($recordedQueries);
+    }
+
+    protected function getFieldTypeIdBySystemName(string $systemName): ?string
+    {
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $query = 'SELECT `id` FROM `cms_field_type` WHERE `constname` = '.$databaseConnection->quote($systemName);
+        $fieldTypeId = $databaseConnection->fetchColumn($query);
+
+        if (false === $fieldTypeId) {
+            return null;
+        }
+
+        return $fieldTypeId;
     }
 
     /**
