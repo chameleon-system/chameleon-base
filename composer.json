@@ -28,7 +28,7 @@
         "symfony/symfony": "~2.8.23",
         "symfony-cmf/routing-bundle": "~1.2.0",
         "tedivm/jshrink": "~1.0",
-        "twig/twig": "~1.13"
+        "twig/twig": "~1.39"
     },
     "require-dev": {
         "chameleon-system/code-style-config": "dev-master@dev",

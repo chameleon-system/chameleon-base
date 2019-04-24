@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\TwigDebugBundle\Twig\Node;
 
+use Twig\Source;
 use Twig_Compiler;
 use Twig_Node_Include;
 use Twig_NodeInterface;
@@ -92,5 +93,15 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
     public function getFilename()
     {
         return $this->original->getFilename();
+    }
+
+    public function setSourceContext(Source $source)
+    {
+        $this->original->setSourceContext($source);
+    }
+
+    public function getSourceContext()
+    {
+        return $this->original->getSourceContext();
     }
 }
