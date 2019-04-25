@@ -627,15 +627,28 @@ class TCMSField implements TCMSFieldVisitableInterface
             return;
         }
 
+        $this->dropIndexByName($this->name);
+    }
+
+    protected function dropIndexByName(string $indexName): bool
+    {
         $connection = $this->getDatabaseConnection();
 
         $quotedTableName = $connection->quoteIdentifier($this->sTableName);
-        $quotedName = $connection->quoteIdentifier($this->name);
 
-        $query = 'ALTER TABLE '.$quotedTableName.' DROP INDEX '.$quotedName;
-        $connection->query($query);
-        $transaction = array(new LogChangeDataModel($query));
+        $indexExistsQuery = 'SHOW INDEX FROM '.$quotedTableName.' WHERE KEY_NAME = '.$connection->quote($indexName);
+        $indexExistsResult = $connection->query($indexExistsQuery);
+        if (0 === $indexExistsResult->rowCount()) {
+            return false;
+        }
+
+        $dropIndexQuery = 'ALTER TABLE '.$quotedTableName.' DROP INDEX '.$connection->quoteIdentifier($indexName);
+        $connection->query($dropIndexQuery);
+
+        $transaction = array(new LogChangeDataModel($dropIndexQuery));
         TCMSLogChange::WriteTransaction($transaction);
+
+        return true;
     }
 
     /**
