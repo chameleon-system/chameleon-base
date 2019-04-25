@@ -2092,14 +2092,14 @@ class TCMSTableEditorEndPoint
 
     protected function deleteMultiTableRecordReferences(string $tableName, string $id = ''): void
     {
-        $databaseConnection = $this->getDatabaseConnection();
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
-
         $fieldTypeId = $this->getFieldTypeIdBySystemName(TCMSFieldExtendedLookupMultiTable::FIELD_SYSTEM_NAME);
 
         if (null === $fieldTypeId) {
             return;
         }
+
+        $databaseConnection = $this->getDatabaseConnection();
+        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
 
         $fieldConfigResult = $this->getFieldsOfType($fieldTypeId);
 
@@ -2109,7 +2109,8 @@ class TCMSTableEditorEndPoint
                 continue;
             }
 
-            $updateQuery = 'UPDATE 
+            $updateQuery = '
+              UPDATE 
                      '.$databaseConnection->quoteIdentifier($row['tableName']).'
                  SET 
                      '.$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX)." = '',
@@ -2160,7 +2161,8 @@ class TCMSTableEditorEndPoint
     {
         $databaseConnection = $this->getDatabaseConnection();
 
-        $fieldConfigQuery = 'SELECT 
+        $fieldConfigQuery = '
+                  SELECT 
                          `cms_field_conf`.`name` AS fieldName,
                          `cms_tbl_conf`.`name` AS tableName
                     FROM `cms_field_conf` 
@@ -2174,7 +2176,9 @@ class TCMSTableEditorEndPoint
     {
         $databaseConnection = $this->getDatabaseConnection();
 
-        $relatedRecordsQuery = 'SELECT `id`
+        $relatedRecordsQuery = '
+                   SELECT 
+                          `id`
                      FROM
                           '.$databaseConnection->quoteIdentifier($tableName).'
                    WHERE
