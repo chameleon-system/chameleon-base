@@ -526,7 +526,6 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     {
         parent::RemoveFieldIndex();
 
-        $this->dropIndexByName($this->name.self::TABLE_NAME_FIELD_SUFFIX);
         $this->dropIndexByName($this->name.'_combined');
     }
 
@@ -544,13 +543,11 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         $indexFields = array($this->getTableFieldName(), $this->name);
 
         if (true === $returnDDL) {
-            $queryDump .= $this->getIndexQuery($this->name.self::TABLE_NAME_FIELD_SUFFIX).";\n";
             $queryDump .= $this->getIndexQuery($this->name.'_combined', 'INDEX', $indexFields).";\n";
 
             return $queryDump;
         }
 
-        $this->createIndex($this->name.self::TABLE_NAME_FIELD_SUFFIX);
         $this->createIndex($this->name.'_combined', 'INDEX', $indexFields);
 
         return $queryDump;
