@@ -636,9 +636,7 @@ class TCMSField implements TCMSFieldVisitableInterface
 
         $quotedTableName = $connection->quoteIdentifier($this->sTableName);
 
-        $indexExistsQuery = 'SHOW INDEX FROM '.$quotedTableName.' WHERE KEY_NAME = '.$connection->quote($indexName);
-        $indexExistsResult = $connection->query($indexExistsQuery);
-        if (0 === $indexExistsResult->rowCount()) {
+        if (false === $this->indexExists($indexName)) {
             return false;
         }
 
@@ -651,16 +649,26 @@ class TCMSField implements TCMSFieldVisitableInterface
         return true;
     }
 
+    protected function indexExists(string $indexName): bool
+    {
+        $connection = $this->getDatabaseConnection();
+        $quotedTableName = $connection->quoteIdentifier($this->sTableName);
+
+        $indexExistsQuery = 'SHOW INDEX FROM '.$quotedTableName.' WHERE KEY_NAME = '.$connection->quote($indexName);
+        $indexExistsResult = $connection->query($indexExistsQuery);
+
+        return 0 !== $indexExistsResult->rowCount();
+    }
+
     /**
      * sets field index if the field type is indexable.
      *
-     * @param bool $returnDDL - if tre the SQL alter statement will be returned
+     * @param bool $returnDDL - if true the SQL alter statement will be returned
      *
      * @return string|null
      */
     public function CreateFieldIndex($returnDDL = false)
     {
-        $connection = $this->getDatabaseConnection();
         $inputFilterUtil = $this->getInputFilterUtil();
 
         $oFieldType = null;
@@ -672,28 +680,51 @@ class TCMSField implements TCMSFieldVisitableInterface
             $oFieldType = new TCMSRecord('cms_field_type', $cmsFieldTypeId);
         }
 
-        if ('index' !== $oFieldType->sqlData['indextype'] && 'unique' !== $oFieldType->sqlData['indextype']) {
+        $indexType = strtoupper($oFieldType->sqlData['indextype']);
+
+        if ('INDEX' !== $indexType && 'UNIQUE' !== $indexType) {
             return $returnDDL ? '' : null;
         }
 
-        if ('index' === $oFieldType->sqlData['indextype']) {
-            $indexType = 'INDEX';
-        } elseif ('unique' === $oFieldType->sqlData['indextype']) {
-            $indexType = 'UNIQUE';
-        }
-        $quotedTableName = $connection->quoteIdentifier($this->sTableName);
-        $quotedIndexName = $connection->quoteIdentifier($this->name);
-        $query = "ALTER TABLE $quotedTableName ADD $indexType ( $quotedIndexName )";
+        if (true === $returnDDL) {
+            $query = $this->getIndexQuery($this->name, $indexType);
 
-        if ($returnDDL) {
             return $query.";\n";
+        } else {
+            $this->createIndex($this->name, $indexType);
         }
+
+        return null;
+    }
+
+    protected function getIndexQuery(string $indexName, string $indexType = 'INDEX', array $fields = []): string
+    {
+        $connection = $this->getDatabaseConnection();
+        $quotedTableName = $connection->quoteIdentifier($this->sTableName);
+        $quotedIndexName = $connection->quoteIdentifier($indexName);
+
+        $quotedFields = $quotedIndexName;
+
+        if (0 !== count($fields)) {
+            $quotedFields = implode(',',array_map(array($connection,'quoteIdentifier'), $fields));
+        }
+
+        return 'ALTER TABLE '.$quotedTableName.' ADD '.$indexType.' '.$quotedIndexName.' ('.$quotedFields.')';
+    }
+
+    protected function createIndex(string $indexName, string $indexType = 'INDEX', array $fields = [])
+    {
+        $connection = $this->getDatabaseConnection();
+
+        if (true === $this->indexExists($indexName)) {
+            return;
+        }
+
+        $query = $this->getIndexQuery($indexName, $indexType, $fields);
 
         $connection->query($query);
         $transaction = array(new LogChangeDataModel($query));
         TCMSLogChange::WriteTransaction($transaction);
-
-        return null;
     }
 
     /**
