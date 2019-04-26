@@ -2110,13 +2110,10 @@ class TCMSTableEditorEndPoint
             }
 
             $updateQuery = '
-              UPDATE 
-                     '.$databaseConnection->quoteIdentifier($row['tableName']).'
-                 SET 
-                     '.$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX)." = '',
+              UPDATE '.$databaseConnection->quoteIdentifier($row['tableName']).'
+                 SET '.$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX)." = '',
                      ".$databaseConnection->quoteIdentifier($row['fieldName'])." = ''   
-               WHERE 
-                     ".$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX).' = '.$databaseConnection->quote($tableName);
+               WHERE ".$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX).' = '.$databaseConnection->quote($tableName);
 
             $setFields[$row['fieldName']] = '';
             $setFields[$row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX] = '';
@@ -2162,8 +2159,7 @@ class TCMSTableEditorEndPoint
         $databaseConnection = $this->getDatabaseConnection();
 
         $fieldConfigQuery = '
-                  SELECT 
-                         `cms_field_conf`.`name` AS fieldName,
+                  SELECT `cms_field_conf`.`name` AS fieldName,
                          `cms_tbl_conf`.`name` AS tableName
                     FROM `cms_field_conf` 
                LEFT JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id` 
@@ -2177,12 +2173,9 @@ class TCMSTableEditorEndPoint
         $databaseConnection = $this->getDatabaseConnection();
 
         $relatedRecordsQuery = '
-                   SELECT 
-                          `id`
-                     FROM
-                          '.$databaseConnection->quoteIdentifier($tableName).'
-                   WHERE
-                         '.$databaseConnection->quoteIdentifier($fieldName.TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX).' = '.$databaseConnection->quote($deletedTableName);
+                   SELECT `id`
+                     FROM '.$databaseConnection->quoteIdentifier($tableName).'
+                    WHERE '.$databaseConnection->quoteIdentifier($fieldName.TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX).' = '.$databaseConnection->quote($deletedTableName);
 
         if ('' !== $deletedRecordId) {
             $relatedRecordsQuery .= ' AND '.$databaseConnection->quoteIdentifier($fieldName).' = '.$databaseConnection->quote($deletedRecordId);
