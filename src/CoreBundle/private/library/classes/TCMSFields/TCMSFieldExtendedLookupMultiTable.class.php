@@ -14,14 +14,13 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use Doctrine\Common\Collections\Expr\Comparison;
 
 /**
- * lookup.
-/**/
+ * Lookup to different tables.
+ */
 class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 {
+    const TABLE_NAME_FIELD_SUFFIX = '_table_name';
 
-    CONST TABLE_NAME_FIELD_SUFFIX = '_table_name';
-
-    CONST FIELD_SYSTEM_NAME = 'CMSFIELD_EXTENDEDMULTITABLELIST';
+    const FIELD_SYSTEM_NAME = 'CMSFIELD_EXTENDEDMULTITABLELIST';
 
     /**
      * returns the name of the table this field is connected with
@@ -527,33 +526,30 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     {
         parent::RemoveFieldIndex();
 
-        $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'` DROP INDEX `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name).'_combined`';
-
-        MySqlLegacySupport::getInstance()->query($query);
-        $aQuery = array(new LogChangeDataModel($query));
-        TCMSLogChange::WriteTransaction($aQuery);
+        $this->dropIndexByName($this->name.'_combined');
     }
 
     /**
      * sets field index if the field type is indexable.
      *
-     * @param bool $returnDDL - if tre the SQL alter statement will be returned
+     * @param bool $returnDDL - if true the SQL alter statement will be returned
      *
      * @return string
      */
     public function CreateFieldIndex($returnDDL = false)
     {
-        $sDDL = parent::CreateFieldIndex($returnDDL);
+        $queryDump = parent::CreateFieldIndex($returnDDL);
 
-        $sCreateCombinedIndex = 'ALTER TABLE  `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'` ADD INDEX `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name).'_combined` (  `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName()).'` ,  `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name).'` )';
-        if (false === $returnDDL) {
-            MySqlLegacySupport::getInstance()->query($sCreateCombinedIndex);
-            $aQuery = array(new LogChangeDataModel($sCreateCombinedIndex));
-            TCMSLogChange::WriteTransaction($aQuery);
-        } else {
-            $sDDL .= $sCreateCombinedIndex.";\n";
+        $indexFields = array($this->getTableFieldName(), $this->name);
+
+        if (true === $returnDDL) {
+            $queryDump .= $this->getIndexQuery($this->name.'_combined', 'INDEX', $indexFields).";\n";
+
+            return $queryDump;
         }
 
-        return $sDDL;
+        $this->createIndex($this->name.'_combined', 'INDEX', $indexFields);
+
+        return $queryDump;
     }
 }

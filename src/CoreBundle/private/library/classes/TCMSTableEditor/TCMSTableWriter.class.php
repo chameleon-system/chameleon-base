@@ -418,7 +418,7 @@ class TCMSTableWriter extends TCMSTableEditor
     {
         parent::DeleteConnectedRecordReferences();
 
-        $this->deleteMultiTableRecordReferencesForDeletedTable($this->oTableConf->sqlData['name']);
+        $this->deleteMultiTableRecordReferencesForDeletedTable($this->_sqlTableName);
     }
 
     protected function deleteMultiTableRecordReferencesForDeletedTable(string $tableName)
