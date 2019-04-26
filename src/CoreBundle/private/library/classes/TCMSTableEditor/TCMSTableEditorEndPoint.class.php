@@ -1898,42 +1898,52 @@ class TCMSTableEditorEndPoint
 
     protected function deleteMultiTableRecordReferences(string $tableName, string $id = ''): void
     {
-        $databaseConnection = $this->getDatabaseConnection();
-
         $fieldTypeId = $this->getFieldTypeIdBySystemName(TCMSFieldExtendedLookupMultiTable::FIELD_SYSTEM_NAME);
 
         if (null === $fieldTypeId) {
             return;
         }
 
-        $fieldConfigQuery = 'SELECT 
-                         `cms_field_conf`.`name` AS fieldName,
-                         `cms_tbl_conf`.`name` AS tableName
-                    FROM `cms_field_conf` 
-               LEFT JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id` 
-                   WHERE `cms_field_conf`.`cms_field_type_id` = :fieldTypeId';
-        $fieldConfigResult = $databaseConnection->fetchAll($fieldConfigQuery, ['fieldTypeId' => $fieldTypeId]);
+        $databaseConnection = $this->getDatabaseConnection();
+        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+
+        $fieldConfigResult = $this->getFieldsOfType($fieldTypeId);
 
         $recordedQueries = [];
         foreach ($fieldConfigResult as $row) {
-            $updateQuery = 'UPDATE 
-                         '.$databaseConnection->quoteIdentifier($row['tableName']).'
-                     SET 
-                         '.$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX)." = '',
-                         ".$databaseConnection->quoteIdentifier($row['fieldName'])." = ''   
-                   WHERE 
-                         ".$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX).' = '.$databaseConnection->quote($tableName);
+            if (false === $this->hasMultiTableRecordReferences($row['tableName'], $row['fieldName'], $tableName, $id)) {
+                continue;
+            }
+
+            $updateQuery = '
+              UPDATE '.$databaseConnection->quoteIdentifier($row['tableName']).'
+                 SET '.$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX)." = '',
+                     ".$databaseConnection->quoteIdentifier($row['fieldName'])." = ''   
+               WHERE ".$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX).' = '.$databaseConnection->quote($tableName);
+
+            $setFields[$row['fieldName']] = '';
+            $setFields[$row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX] = '';
+
+            $whereEquals[$row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX] = $tableName;
 
             if ('' !== $id) {
                 $updateQuery .= ' AND '.$databaseConnection->quoteIdentifier($row['fieldName']).' = '.$databaseConnection->quote($id);
+
+                $whereEquals[$row['fieldName']] = $id;
             }
 
-            $databaseConnection->query($updateQuery);
+            $databaseConnection->executeUpdate($updateQuery);
 
-            $recordedQueries[] = new LogChangeDataModel($updateQuery, LogChangeDataModel::TYPE_CUSTOM_QUERY);
+            $migrationQueryData = new MigrationQueryData($row['tableName'], $editLanguage->fieldIso6391);
+            $migrationQueryData->setFields($setFields);
+            $migrationQueryData->setWhereEquals($whereEquals);
+
+            $recordedQueries[] = new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE);
         }
 
-        TCMSLogChange::WriteTransaction($recordedQueries);
+        if (count($recordedQueries) > 0) {
+            TCMSLogChange::WriteTransaction($recordedQueries);
+        }
     }
 
     protected function getFieldTypeIdBySystemName(string $systemName): ?string
@@ -1948,6 +1958,38 @@ class TCMSTableEditorEndPoint
         }
 
         return $fieldTypeId;
+    }
+
+    protected function getFieldsOfType(string $fieldTypeId): array
+    {
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $fieldConfigQuery = '
+                  SELECT `cms_field_conf`.`name` AS fieldName,
+                         `cms_tbl_conf`.`name` AS tableName
+                    FROM `cms_field_conf` 
+               LEFT JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id` 
+                   WHERE `cms_field_conf`.`cms_field_type_id` = :fieldTypeId';
+
+        return $databaseConnection->fetchAll($fieldConfigQuery, ['fieldTypeId' => $fieldTypeId]);
+    }
+
+    protected function hasMultiTableRecordReferences(string $tableName, string $fieldName, string $deletedTableName, string $deletedRecordId = ''): bool
+    {
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $relatedRecordsQuery = '
+                   SELECT `id`
+                     FROM '.$databaseConnection->quoteIdentifier($tableName).'
+                    WHERE '.$databaseConnection->quoteIdentifier($fieldName.TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX).' = '.$databaseConnection->quote($deletedTableName);
+
+        if ('' !== $deletedRecordId) {
+            $relatedRecordsQuery .= ' AND '.$databaseConnection->quoteIdentifier($fieldName).' = '.$databaseConnection->quote($deletedRecordId);
+        }
+
+        $relatedRecordsResult = $databaseConnection->executeQuery($relatedRecordsQuery);
+
+        return $relatedRecordsResult->rowCount() > 0;
     }
 
     /**
