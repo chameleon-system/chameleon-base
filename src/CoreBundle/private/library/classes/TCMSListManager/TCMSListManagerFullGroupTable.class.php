@@ -416,7 +416,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $sTranslatedField = TGlobal::Translate('chameleon_system_core.list.column_name_name');
             $this->tableObj->AddHeaderField(array($name => $sTranslatedField), 'left', null, 1, $allowSort);
 
-            $this->tableObj->AddColumn('id', 'left', null, $jsParas, 1);
+            $this->tableObj->AddColumn('id', 'left', array($this, 'callBackUuid'), $jsParas, 1);
             $this->tableObj->AddColumn('cmsident', 'left', null, $jsParas, 1);
             $originalField = $name;
             $aNameColumnData = $this->TransformFieldForTranslations(array('db_alias' => $name, 'name' => $name));
@@ -754,6 +754,20 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         }
 
         return $image;
+    }
+
+    public function callBackUuid(string $id, array $row)
+    {
+        return '<span title="'.TGlobal::OutHTML($id).'"><i class="fas fa-fingerprint"></i> '.$this->getShortUuid($id).'</span>';
+    }
+
+    protected function getShortUuid(string $uuid)
+    {
+        if (strlen($uuid) > 8) {
+            return substr($uuid,0,8).'&hellip;';
+        }
+
+        return $uuid;
     }
 
     /**
