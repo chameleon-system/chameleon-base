@@ -398,28 +398,6 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         $aQuery = array(new LogChangeDataModel($sQuery));
 
         TCMSLogChange::WriteTransaction($aQuery);
-
-        if ('new_field' != $sOldName) {
-            //get the table name and fill the field
-            $sTableName = $this->GetConnectedTableName();
-            $oTableConfig = TdbCmsTblConf::GetNewInstance();
-            //only update the records if the connected table is a valid table to prevent errors in the table editor
-            if ($oTableConfig->LoadFromField('name', $sTableName)) {
-                $sQuery = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
-                      SET `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName($sNewName))."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."'";
-                MySqlLegacySupport::getInstance()->query($sQuery);
-
-                $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
-                $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguage->fieldIso6391);
-                $migrationQueryData
-                    ->setFields(array(
-                        $this->getTableFieldName($sNewName) => $sTableName,
-                    ))
-                ;
-                $aQuery = array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE));
-                TCMSLogChange::WriteTransaction($aQuery);
-            }
-        }
     }
 
     /**
