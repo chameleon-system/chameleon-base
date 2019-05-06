@@ -13,14 +13,17 @@
         });
     };
 
-    window.imageCropResetButtonCallBack = function (evt) {
+    window.imageCropResetButtonCallBack = function (evt, imageId) {
         var fieldName = $(this).data('field-name');
         $('#' + fieldName + '_image_crop_id').val('');
         $('#label_' + fieldName + '_image_crop_id span').html('-');
         $(this).hide();
         saveCMSRegistryEntry('_currentFieldName', fieldName);
         saveCMSRegistryEntry('_currentPosition', 0);
-        window._SetImage($('#' + fieldName).val());
+        if ('undefined' === typeof imageId) {
+            imageId = $('#' + fieldName).val();
+        }
+        window._SetImage(imageId);
         evt.preventDefault();
     };
 

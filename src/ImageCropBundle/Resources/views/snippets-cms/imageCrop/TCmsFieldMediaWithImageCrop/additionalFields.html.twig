@@ -14,7 +14,7 @@
     <script type="text/javascript">
         (function ($, window) {
             $('#{{ fieldName }}_image_crop_id_reset_button').on('click', function (e) {
-                window.imageCropResetButtonCallBack.call(this, e);
+                window.imageCropResetButtonCallBack.call(this, e, '{{ crop.cmsMedia.id|e('js') }}');
             });
             $.ajax({
                 type: "GET",
