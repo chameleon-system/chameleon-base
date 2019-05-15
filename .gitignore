@@ -1,2 +1,6 @@
 composer.lock
 vendor/
+/src/CoreBundle/Resources/Theme/node_modules/
+!/src/CoreBundle/Resources/public/themes/coreui/coreui/css/.gitkeep
+!/src/CoreBundle/Resources/public/themes/coreui/coreui/js/.gitkeep
+/src/CoreBundle/Resources/public/themes/coreui/coreui/
