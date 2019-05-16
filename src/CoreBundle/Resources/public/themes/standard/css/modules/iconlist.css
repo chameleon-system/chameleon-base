@@ -1,0 +1,40 @@
+/* the box of the icon selector field module */
+.iconBox, .smallIconBox {
+  float:left;
+  width: 140px;
+  height: 36px;
+  border: 1px solid #A9C4E7;
+  margin: 2px;
+  cursor: pointer;
+  cursor: hand;
+  padding: 2px;
+}
+
+.iconName {
+ width: 90px;
+ float: left;
+ font-size: 9px;
+ padding-top: 12px;
+ font-family: Arial, helvetica, sans-serif;
+ overflow: hidden;
+ line-height: 10px;
+}
+
+.icon {
+ float: left;
+ width: 40px;
+ float: left;
+}
+
+.smallIconBox {
+  height: 20px;
+}
+
+.smallIconBox .iconName {
+ width: 105px;
+ padding-top: 0px;
+}
+
+.smallIconBox .icon {
+  width: 25px;
+}

@@ -1,0 +1,47 @@
+#updatemanager {
+    margin: 20px;
+}
+
+#updateFatalErrorContainer {
+    color: #000000;
+}
+
+@keyframes gradientAnimation {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+#updateFatalError {
+    max-height: 500px;
+    overflow: scroll;
+}
+
+#updatemanager li.list-group-item-success {
+    background: linear-gradient(270deg, #90ff7e, #2bc313);
+    background-size: 400% 400%;
+
+    -webkit-animation: gradientAnimation 4s ease infinite;
+    -moz-animation: gradientAnimation 4s ease infinite;
+    -o-animation: gradientAnimation 4s ease infinite;
+    animation: gradientAnimation 4s ease infinite;
+}
+
+#updateProgressBarContainer {
+    height: 30px;
+}
+
+#updatemanager #ajaxTimeoutContainer {
+    float: right;
+}
+#updatemanager #ajaxTimeoutContainer em {
+    text-decoration: underline;
+}
+
+#updateManagerOutput .body .successQueryContainer .queryList {
+    display: none;
+}
+
+#singleUpdateSelectContainer {
+    padding-bottom: 20px;
+}

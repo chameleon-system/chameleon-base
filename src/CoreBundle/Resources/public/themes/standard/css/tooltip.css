@@ -1,0 +1,28 @@
+/**
+ * @deprecated since 6.3.0 - use fontAwesome icons: "fas fa-lock-open" and "fas fa-user-lock" instead.
+ */
+
+.locked {
+  background: url(/chameleon/blackbox/images/lock.png) no-repeat;
+  width: 16px;
+  height: 16px;
+}
+
+.unlocked {
+  background: url(/chameleon/blackbox/images/lock_open.png) no-repeat;
+  width: 16px;
+  height: 16px;
+}
+
+.chameleonTooltip {
+  background: url(/chameleon/blackbox/themes/standard/images/tooltipp_gross_bg.png) no-repeat;
+  color: #ffffff;
+  padding-top: 15px;
+  font-size: 11px;
+  padding-left:15px;
+  padding-right:5px;
+  width: 280px;
+  height: 135px;
+  font-family: "Segoe UI", Arial, helvetica, sans-serif;
+  line-height: 14px;
+}

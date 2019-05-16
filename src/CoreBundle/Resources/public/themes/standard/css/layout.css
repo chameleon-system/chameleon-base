@@ -1,0 +1,14 @@
+.fieldMltInverseEmpty {
+  margin-bottom: 2px;
+}
+
+.fieldMltInverseEmpty label {
+  position: relative;
+  top: -3px;
+}
+
+.fieldMltInverseEmpty .toolTipButton {
+  float: none;
+  position: relative;
+  top: -3px;
+}

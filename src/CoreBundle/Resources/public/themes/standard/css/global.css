@@ -1,0 +1,270 @@
+@import "./cms_user_style/main.css";
+
+a:hover {
+    text-decoration: underline;
+}
+
+iframe {
+    background-image: none;
+    background-color: #ffffff;
+    border: none;
+}
+
+label, .action, .card-action {
+    cursor: pointer;
+    cursor: hand;
+}
+
+fieldset {
+    border-color: #A9C4E7;
+}
+
+legend {
+    color: #0B224B;
+    font-weight: bold;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 11px;
+}
+
+.cleardiv {
+    clear: both;
+    font-size: 0px;
+    line-height: 0px;
+    height: 0px;
+}
+
+.pageNavigationTreeSelectBox .treeField ul li .treesubpath {
+    line-height: 20px;
+    height: 20px;
+}
+
+/* jquery.flash alt Text */
+.flash-replaced .alt {
+    display: none;
+}
+
+.actionButton, .actionButton:hover {
+    background-color: #e7f3ff;
+    background-image: url(../images/icons/action_go.gif);
+    background-repeat: no-repeat;
+    background-position: 5px 4px;
+    padding: 5px 5px 5px 25px;
+    color: #151c55;
+    border: 1px solid;
+    border-color: #9cb2c6;
+    line-height: 22px;
+    height: 22px;
+    text-decoration: none;
+}
+
+.cmsimage {
+    position: relative;
+}
+
+.videoprocessing {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    background-color: #F8F2AA;
+    padding: 5px;
+    color: #0B224B;
+}
+
+.btn .btn-icon {
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding: 1px 0px 1px 20px;
+}
+.button-element {
+    margin-left: -3px!important;
+    margin-right: -3px!important;
+}
+
+.button-element .button-item {
+    padding: 0 3px 6px 3px;
+}
+
+.dropdown-menu .dropdown-icon, .dropdown-menu .dropdown-icon:hover {
+    background-position: 5px center;
+    background-repeat: no-repeat;
+    padding-left: 28px;
+}
+
+/**
+ * default cms box container
+ */
+.cmsBoxBorder {
+    background-color: #fff;
+    padding: 5px;
+}
+
+#cmsbreadcrumb .breadcrumb {
+    border-radius: 0;
+}
+
+#cmsbreadcrumb .breadcrumb i {
+    color: #098dba;
+}
+
+.cmsNavIcon {
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding: 1px 0px 1px 20px;
+}
+
+/**
+* needed because bootstrap fields use z-index: 2
+*/
+#ui-datepicker-div {
+    z-index: 10 !important;
+}
+
+.iframeInnerSpacing {
+    padding: 5px;
+}
+
+#header-nav {
+    padding: 0;
+}
+
+#ToggleRecording {
+    margin-top: 5px;
+}
+
+#dbLoggerDropdown {
+    min-width: 260px;
+    padding-left: 10px;
+}
+
+.app-header .navbar-brand {
+    width: 200px;
+    background-repeat: no-repeat;
+    background-position-y: 7px;
+}
+
+/** fix for missing border color, looks like a bootstrap bug */
+.card.bg-success .card-footer {
+    border-color: #379457;
+}
+
+.alert-warning .lds-ring div {
+    border: 6px solid #856404;
+    border-color: #856404 transparent transparent transparent;
+}
+
+/**
+* Animated Spinner.
+* https://loading.io/css/
+*
+* Released under CC0 License.
+*/
+.lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+}
+.lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 51px;
+    height: 51px;
+    margin: 6px;
+    border: 6px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.select2-selection.select2-selection--single {
+    border: 1px solid #e4e7ea;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #20a8d8 !important;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
+}
+
+.select2-selection.select2-selection--single:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
+}
+
+.nav-link-fa {
+    display: block;
+    padding: .5rem 0;
+}
+.nav-link-fa i {
+    color: #098dba;
+    width: 30px;
+}
+
+.sidebar-filter-input, .sidebar-filter-input:focus {
+    border-radius: 0;
+    padding-top: 1.4rem;
+    padding-bottom: 1.3rem;
+    padding-left: 2.5em;
+    position: relative;
+    background: transparent;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+
+.sidebar-filter-input-wrapper {
+    margin: 0;
+    background-color: #fff;
+}
+
+.sidebar-filter-input-wrapper:before {
+    position: absolute;
+    left: 1.2em;
+    top: 1.1em;
+    content: "\f002";
+    color: #576873;
+}
+
+.sidebar .nav-dropdown-items .nav-item {
+    background-color: #FFFFFF;
+}
+
+.sidebar .nav-dropdown-items .nav-link {
+    color: #000000 !important;
+}
+
+/**
+Bootstrap 4 addons.
+ */
+@media (min-width: 992px) {
+    .modal-xl {
+        width: 90%;
+        max-width: 1140px;
+    }
+
+    .modal-xxl {
+        width: 90%;
+        max-width: 1900px;
+    }
+}
+
