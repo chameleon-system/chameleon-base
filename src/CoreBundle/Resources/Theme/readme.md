@@ -2,7 +2,9 @@
 
 ## CoreUI as Requirement in `composer.json`
 
-CoreUI is defined as a requirement in the `composer.json` file. Thus CoreUI will be installed when calling `composer install`. Yet `composer` will not install all dependencies of CoreUI. To do that you need to build CoreUI using a script defined in CoreUI's `package.json` file. You don't have to call that script directly. Instead use one of the scripts described below.  
+CoreUI is defined as a requirement in the `composer.json` file. All assets related to CoreUI are included in Chameleon. 
+
+To re-build CoreUI please use a script defined in CoreUI's `package.json` file. Please note that you don't have to call that script directly. Instead use one of the scripts described below.  
 
 ## Scripts
 
