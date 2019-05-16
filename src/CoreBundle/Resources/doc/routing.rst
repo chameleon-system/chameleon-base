@@ -69,6 +69,12 @@ Portals and Domains
   only match if the request is "caught" by a domain assigned to a portal containing the required page.
 - the portal URL prefix is considered if set (TAdbCmsPortal::$fieldIdentifier).
 
+Navigation
+..........
+
+- A page can only be accessed if it is part of a navigation (i.e. if the primary tree node of the page has a parent
+  node that is registered in the cms_portal_navigation table for the page's portal).
+
 Internationalization
 ....................
 
