@@ -2337,4 +2337,18 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 
         return $stateHashProvider->getHash();
     }
+
+    public function callBackUuid(string $id)
+    {
+        return '<span title="'.TGlobal::OutHTML($id).'"><i class="fas fa-fingerprint"></i> '.self::getShortUuid($id).'</span>';
+    }
+
+    protected function getShortUuid(string $uuid)
+    {
+        if (strlen($uuid) > 8) {
+            return substr($uuid,0,8);
+        }
+
+        return $uuid;
+    }
 }
