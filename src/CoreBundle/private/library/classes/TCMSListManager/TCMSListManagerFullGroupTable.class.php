@@ -390,20 +390,12 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 }
                 $sTranslatedField = $fieldConfig['title'];
                 $this->tableObj->AddHeaderField(array($fieldConfig['name'] => $sTranslatedField), $fieldConfig['align'], null, 1, $allowSort, $fieldConfig['width']);
-                $callback = null;
-                if ('1' == $fieldConfig['use_callback'] && !empty($fieldConfig['callback_fnc'])) {
-                    $callback = $fieldConfig['callback_fnc'];
-                    // check if it is a standard callback, or part of the object:
-                    if ('gcf_' !== substr($callback, 0, 4) && 'ccf_' !== substr($callback, 0, 4)) {
-                        $callback = array(TCMSTableToClass::GetClassName('Tdb', $this->oTableConf->sqlData['name']), $callback);
-                    }
-                }
                 $db_alias = trim($fieldConfig['db_alias']);
                 $columnField = $dbfieldname;
-                if (!empty($db_alias)) {
+                if ('' !== $db_alias) {
                     $columnField = array($db_alias => $dbfieldname);
                 }
-                $this->tableObj->AddColumn($columnField, $fieldConfig['align'], $callback, $jsParas, 1, null, null, null, $originalField, $originalTable);
+                $this->tableObj->AddColumn($columnField, $fieldConfig['align'], $this->getCellFormattingFunctionConfig($fieldConfig), $jsParas, 1, null, null, null, $originalField, $originalTable);
                 $this->tableObj->searchFields[$fieldConfig['name']] = 'full';
             }
         } else {
@@ -416,7 +408,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $sTranslatedField = TGlobal::Translate('chameleon_system_core.list.column_name_name');
             $this->tableObj->AddHeaderField(array($name => $sTranslatedField), 'left', null, 1, $allowSort);
 
-            $this->tableObj->AddColumn('id', 'left', null, $jsParas, 1);
+            $this->tableObj->AddColumn('id', 'left', array('TCMSRecord', 'callBackUuid'), $jsParas, 1);
             $this->tableObj->AddColumn('cmsident', 'left', null, $jsParas, 1);
             $originalField = $name;
             $aNameColumnData = $this->TransformFieldForTranslations(array('db_alias' => $name, 'name' => $name));
@@ -439,6 +431,37 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         }
 
         $this->AddCustomColumns();
+    }
+
+    /**
+     * @param array $fieldConfig
+     *
+     * @return null|array|string - returns the types AddColumn allows for the callback parameter
+     */
+    protected function getCellFormattingFunctionConfig(array $fieldConfig)
+    {
+        $formatFunctionName = $fieldConfig['callback_fnc'];
+
+        if ('' === $formatFunctionName) {
+            // handle UUID formatting globally if no callback method was defined
+            if ('id' === $fieldConfig['db_alias'] && 'ID' === $fieldConfig['title']) {
+                return array('TCMSRecord', 'callBackUuid');
+            }
+        }
+
+        // check if it is a standard callback, or a record object method
+        if ('gcf_' !== substr($formatFunctionName, 0, 4) && 'ccf_' !== substr($formatFunctionName, 0, 4)) {
+            $recordObjectName = TCMSTableToClass::GetClassName('Tdb', $this->oTableConf->sqlData['name']);
+            $recordObject =  new $recordObjectName;
+
+            if (false === is_callable(array($recordObject, $formatFunctionName))) {
+                return null;
+            }
+
+            return array($recordObjectName, $formatFunctionName);
+        }
+
+        return $formatFunctionName;
     }
 
     /**
@@ -596,20 +619,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         return $sSortOrder;
     }
 
-    /**
-     * @param string $field
-     * @param array  $row
-     * @param string $name
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function CallBackWorkflowActionType($field, $row, $name)
-    {
-        return '';
-    }
-
     public function CallBackLockingStatus($field, $row, $name)
     {
         $userLock = TTools::IsRecordLocked($_SESSION['_tmpCurrentTableID'], $row['id']);
@@ -755,8 +764,8 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $oImage->Load($row['id']);
         $image = '';
 
-        if ($oImage->IsFlashMovie() || $oImage->IsExternalMovie()) {
-            $image = $oImage->GetThumbnailTag(100, 75, null, null, '');
+        if ($oImage->IsExternalMovie()) {
+            $image = $oImage->renderImage(100, 75);
         } else {
             $oThumb = $oImage->GetThumbnail(80, 80);
             /** @var $oThumb TCMSImage */
@@ -768,6 +777,20 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         }
 
         return $image;
+    }
+
+    public function callBackUuid(string $id, array $row)
+    {
+        return '<span title="'.TGlobal::OutHTML($id).'"><i class="fas fa-fingerprint"></i> '.$this->getShortUuid($id).'</span>';
+    }
+
+    protected function getShortUuid(string $uuid)
+    {
+        if (strlen($uuid) > 8) {
+            return substr($uuid,0,8).'&hellip;';
+        }
+
+        return $uuid;
     }
 
     /**
@@ -849,22 +872,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     public function CallBackRowStyling($sRecordID, $row)
     {
         return '';
-    }
-
-    /**
-     * tests, whether $row has a workflow_action and the record is part of the
-     * current workflow transaction
-     * returns always true on tables without activated transaction handling.
-     *
-     * @param array $row
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function IsCmsWorkflowTransaction($row)
-    {
-        return true;
     }
 
     /**
