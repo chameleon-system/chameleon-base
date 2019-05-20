@@ -371,9 +371,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         if (count($listFieldsConfig) > 0) {
             foreach ($listFieldsConfig as $fieldConfig) {
-                if ('cms_workflow_actiontype_id' === $fieldConfig['name']) {
-                    continue;
-                }
                 $fieldConfig = $this->TransformFieldForTranslations($fieldConfig);
                 $dbfieldname = trim($fieldConfig['name']);
                 $originalField = trim($fieldConfig['db_alias']);
