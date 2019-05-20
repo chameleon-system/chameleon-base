@@ -87,7 +87,7 @@ function AjaxError(XMLHttpRequest, textStatus, errorThrown) {
                     top.document.location.href = window.location.pathname;
                 }
             } else {
-                alert(errorMessage);
+                toasterMessage(errorMessage, "ERROR");
             }
         }
     } else {
