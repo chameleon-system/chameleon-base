@@ -434,34 +434,48 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     }
 
     /**
-     * @param array $fieldConfig
+     * @param array $cellConfig
      *
-     * @return null|array|string - returns the types AddColumn allows for the callback parameter
+     * @return null|array|string - returns the types AddColumn allows for the callback parameter: null, array('object','callbackName'), callbackNameString
      */
-    protected function getCellFormattingFunctionConfig(array $fieldConfig)
+    protected function getCellFormattingFunctionConfig(array $cellConfig)
     {
-        $formatFunctionName = $fieldConfig['callback_fnc'];
+        $formatFunctionName = $cellConfig['callback_fnc'];
 
         if ('' === $formatFunctionName) {
-            // handle UUID formatting globally if no callback method was defined
-            if ('id' === $fieldConfig['db_alias'] && 'ID' === $fieldConfig['title']) {
-                return array('TCMSRecord', 'callBackUuid');
+            $cellFormattingConfig = $this->getGlobalCellFormattingFunctionConfigByCellConfig($cellConfig);
+
+            if (null === $cellFormattingConfig) {
+                return $cellFormattingConfig;
             }
         }
 
-        // check if it is a standard callback, or a record object method
-        if ('gcf_' !== substr($formatFunctionName, 0, 4) && 'ccf_' !== substr($formatFunctionName, 0, 4)) {
-            $recordObjectName = TCMSTableToClass::GetClassName('Tdb', $this->oTableConf->sqlData['name']);
-            $recordObject =  new $recordObjectName;
-
-            if (false === is_callable(array($recordObject, $formatFunctionName))) {
-                return null;
-            }
-
-            return array($recordObjectName, $formatFunctionName);
+        if ('gcf_' === substr($formatFunctionName, 0, 4) || 'ccf_' === substr($formatFunctionName, 0, 4)) {
+            return $formatFunctionName;
         }
 
-        return $formatFunctionName;
+        return $this->getCellFormattingFunctionConfigByRecordObject($formatFunctionName);
+    }
+
+    protected function getGlobalCellFormattingFunctionConfigByCellConfig(array $cellConfig): ?array
+    {
+        if ('id' === $cellConfig['db_alias'] && 'ID' === $cellConfig['title']) {
+            return array('TCMSRecord', 'callBackUuid');
+        }
+
+        return null;
+    }
+
+    protected function getCellFormattingFunctionConfigByRecordObject(string $formatFunctionName): ?array
+    {
+        $recordObjectName = TCMSTableToClass::GetClassName('Tdb', $this->oTableConf->sqlData['name']);
+        $recordObject =  new $recordObjectName;
+
+        if (false === is_callable(array($recordObject, $formatFunctionName))) {
+            return null;
+        }
+
+        return array($recordObjectName, $formatFunctionName);
     }
 
     /**
