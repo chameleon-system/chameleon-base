@@ -87,7 +87,7 @@ function AjaxError(XMLHttpRequest, textStatus, errorThrown) {
                     top.document.location.href = window.location.pathname;
                 }
             } else {
-                alert(errorMessage);
+                toasterMessage(errorMessage, "ERROR");
             }
         }
     } else {
@@ -134,7 +134,8 @@ function toasterMessage(message,type) {
 window.alert = function(message) {
     new PNotify({
         title: "Alert",
-        text: message
+        text: message,
+        text_escape: true
     });
 };
 
