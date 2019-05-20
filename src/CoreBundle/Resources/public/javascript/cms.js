@@ -134,7 +134,8 @@ function toasterMessage(message,type) {
 window.alert = function(message) {
     new PNotify({
         title: "Alert",
-        text: message
+        text: message,
+        text_escape: true
     });
 };
 
