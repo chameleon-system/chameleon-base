@@ -18,7 +18,12 @@ class TableMenuItemProvider implements MenuItemProviderInterface
      */
     public function createMenuItem(\TdbCmsMenuItem $menuItem): ?MenuItem
     {
-        $tableConf = new \TdbCmsTblConf($menuItem->fieldTarget);
+        $tableConf = \TdbCmsTblConf::GetNewInstance();
+        $loadSuccess = $tableConf->Load($menuItem->fieldTarget);
+
+        if (false === $loadSuccess) {
+            return null;
+        }
 
         if (false === $this->isTableAccessAllowed($tableConf)) {
             return null;
