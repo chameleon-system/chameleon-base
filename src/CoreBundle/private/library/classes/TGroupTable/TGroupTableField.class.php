@@ -422,17 +422,21 @@ class TGroupTableField
         $format = $this->format;
         $name = $this->name;
         if (is_array($format)) {
-            if (method_exists($format[0], $format[1])) {
-                return call_user_func(array($format[0], $format[1]), $cellValue, $row, $name);
+            $className = $format[0];
+            $callbackFunctionName = $format[1];
+            $recordObject =  new $className;
+
+            if (false === is_callable(array($recordObject, $callbackFunctionName))) {
+                return sprintf('[Error: callback function "%s" does not exist in "%s" for field "%s"]', $callbackFunctionName, $className, $name);
             }
 
-            return sprintf('[Error: invalid callback function for field ({%s})]', $name);
+            return call_user_func(array($className, $callbackFunctionName), $cellValue, $row, $name);
         }
         if (function_exists($format)) {
             return call_user_func($format, $cellValue, $row, $name);
         }
 
-        return sprintf('[Error: invalid callback function for field ({%s})]', $name);
+        return sprintf('[Error: callback function "%s" does not exist for field "%s"]', $format, $name);
     }
 
     /**
