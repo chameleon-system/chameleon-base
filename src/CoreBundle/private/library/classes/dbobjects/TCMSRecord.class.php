@@ -2365,7 +2365,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     protected function getShortUuid(string $uuid)
     {
         if (strlen($uuid) > 8) {
-            return substr($uuid,0,8);
+            return substr($uuid, 0, 8);
         }
 
         return $uuid;

@@ -436,7 +436,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     /**
      * @param array $cellConfig
      *
-     * @return null|array|string - returns the types TGroupTable::AddColumn allows for the callback parameter: null, array('object','callbackName'), callbackNameString
+     * @return array|string|null - returns the types TGroupTable::AddColumn allows for the callback parameter: null, array('object','callbackName'), callbackNameString
      */
     protected function getCellFormattingFunctionConfig(array $cellConfig)
     {
@@ -450,7 +450,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
          * @var TCMSRecord $recordObject
          */
         $recordObjectName = TCMSTableToClass::GetClassName('Tdb', $this->oTableConf->sqlData['name']);
-        $recordObject = new $recordObjectName;
+        $recordObject = new $recordObjectName();
 
         return $recordObject->getCellFormattingFunction($cellConfig, $formattingFunctionName);
     }
@@ -476,7 +476,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     protected function getCellFormattingFunctionConfigByRecordObject(string $formatFunctionName): ?array
     {
         $recordObjectName = TCMSTableToClass::GetClassName('Tdb', $this->oTableConf->sqlData['name']);
-        $recordObject =  new $recordObjectName;
+        $recordObject = new $recordObjectName();
 
         if (false === is_callable(array($recordObject, $formatFunctionName))) {
             return null;
