@@ -2346,6 +2346,10 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $cellFormattingFunctionName = 'callBackUuid';
         }
 
+        if ('' === $cellFormattingFunctionName) {
+            return null;
+        }
+
         if (false === is_callable(array($tdbClassName, $cellFormattingFunctionName))) {
             return null;
         }

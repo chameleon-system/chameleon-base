@@ -440,10 +440,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      */
     protected function getCellFormattingFunctionConfig(array $cellConfig)
     {
-        $formatFunctionName = $cellConfig['callback_fnc'];
+        $formattingFunctionName = $cellConfig['callback_fnc'];
 
-        if (true === $this->isLegacyFormatFunction($formatFunctionName)) {
-            return $formatFunctionName;
+        if (true === $this->isLegacyFormattingFunction($formattingFunctionName)) {
+            return $formattingFunctionName;
         }
 
         /**
@@ -452,10 +452,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $recordObjectName = TCMSTableToClass::GetClassName('Tdb', $this->oTableConf->sqlData['name']);
         $recordObject = new $recordObjectName;
 
-        return $recordObject->getCellFormattingFunction($cellConfig, $formatFunctionName);
+        return $recordObject->getCellFormattingFunction($cellConfig, $formattingFunctionName);
     }
 
-    protected function isLegacyFormatFunction(string $formatFunctionName): bool
+    protected function isLegacyFormattingFunction(string $formatFunctionName): bool
     {
         if ('gcf_' === substr($formatFunctionName, 0, 4) || 'ccf_' === substr($formatFunctionName, 0, 4)) {
             return true;
