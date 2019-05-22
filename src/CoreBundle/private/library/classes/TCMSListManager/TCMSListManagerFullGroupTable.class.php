@@ -464,27 +464,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         return false;
     }
 
-    protected function getGlobalCellFormattingFunctionConfigByCellConfig(array $cellConfig): ?array
-    {
-        if ('id' === $cellConfig['db_alias'] && 'ID' === $cellConfig['title']) {
-            return array('TCMSRecord', 'callBackUuid');
-        }
-
-        return null;
-    }
-
-    protected function getCellFormattingFunctionConfigByRecordObject(string $formatFunctionName): ?array
-    {
-        $recordObjectName = TCMSTableToClass::GetClassName('Tdb', $this->oTableConf->sqlData['name']);
-        $recordObject = new $recordObjectName();
-
-        if (false === is_callable(array($recordObject, $formatFunctionName))) {
-            return null;
-        }
-
-        return array($recordObjectName, $formatFunctionName);
-    }
-
     /**
      * use this method to add field columns between the standard columns and the function column.
      */
