@@ -154,7 +154,7 @@ class TPkgViewRendererLessCompiler
      */
     public function getGeneratedCssForPortal($portal, $minifyCss = null)
     {
-        if (false === class_exists('Less_Cache') && false === class_exists('lessc')) {
+        if (false === class_exists('Less_Parser') && false === class_exists('lessc')) {
             throw new ViewRenderException(
                 'You need to install oyejorge/less.php or leafo/lessphp in an appropriate version. See composer.json in chameleon-system/pkgviewrenderer in the suggest section.'
             );
@@ -166,7 +166,7 @@ class TPkgViewRendererLessCompiler
 
         $lessFiles = $this->getLessFilesFromSnippetsAndTheme($portal);
 
-        if (true === class_exists('Less_Cache')) {
+        if (true === class_exists('Less_Parser')) {
             // Workaround (#37218): Remove trailing slash from document root; it will confuse less.php's "path interpretation"
             $originalDocumentRoot = $_SERVER['DOCUMENT_ROOT'];
             $_SERVER['DOCUMENT_ROOT'] = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
@@ -191,25 +191,42 @@ class TPkgViewRendererLessCompiler
                 $filesForLessParsing[PATH_WEB.$lessFile] = '/';
             }
 
-            \Less_Cache::SetCacheDir($cachedLessDir);
-            try {
-                $cssFile = \Less_Cache::Get($filesForLessParsing, $options);
-            } catch (Exception $exc) {
-                if (false !== strpos($exc->getMessage(), 'stat failed')) {
-                    // Consider this as a 'File removed! Halp!' and clear the cache and try again
-                    array_map('unlink', glob($cachedLessDir.'/*'));
+            $css = '';
 
+            if (_DEVELOPMENT_MODE) {
+                \Less_Cache::SetCacheDir($cachedLessDir);
+                try {
                     $cssFile = \Less_Cache::Get($filesForLessParsing, $options);
-                } else {
+                } catch (Exception $exc) {
+                    if (false !== strpos($exc->getMessage(), 'stat failed')) {
+                        // Consider this as a 'File removed! Halp!' and clear the cache and try again
+                        array_map('unlink', glob($cachedLessDir.'/*'));
+
+                        $cssFile = \Less_Cache::Get($filesForLessParsing, $options);
+                    } else {
+                        throw new ViewRenderException('Exception during less compile', 0, $exc);
+                    }
+                }
+
+                $absoluteCssFilepath = $cachedLessDir.'/'.$cssFile;
+
+                $css = file_get_contents($absoluteCssFilepath);
+            } else {
+                try {
+                    $parser = new \Less_Parser($options);
+                    foreach ($filesForLessParsing as $file => $root) {
+                        $parser->parseFile($file, $root);
+                    }
+
+                    $css = $parser->getCss();
+                } catch (Exception $exc) {
                     throw new ViewRenderException('Exception during less compile', 0, $exc);
                 }
             }
 
-            $absoluteCssFilepath = $cachedLessDir.'/'.$cssFile;
-
             $_SERVER['DOCUMENT_ROOT'] = $originalDocumentRoot;
 
-            return file_get_contents($absoluteCssFilepath);
+            return $css;
         }
 
         // NOTE also remove Cssmin when this is removed?
