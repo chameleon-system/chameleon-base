@@ -436,25 +436,32 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     /**
      * @param array $cellConfig
      *
-     * @return null|array|string - returns the types AddColumn allows for the callback parameter: null, array('object','callbackName'), callbackNameString
+     * @return null|array|string - returns the types TGroupTable::AddColumn allows for the callback parameter: null, array('object','callbackName'), callbackNameString
      */
     protected function getCellFormattingFunctionConfig(array $cellConfig)
     {
         $formatFunctionName = $cellConfig['callback_fnc'];
 
-        if ('' === $formatFunctionName) {
-            $cellFormattingConfig = $this->getGlobalCellFormattingFunctionConfigByCellConfig($cellConfig);
-
-            if (null === $cellFormattingConfig) {
-                return $cellFormattingConfig;
-            }
-        }
-
-        if ('gcf_' === substr($formatFunctionName, 0, 4) || 'ccf_' === substr($formatFunctionName, 0, 4)) {
+        if (true === $this->isLegacyFormatFunction($formatFunctionName)) {
             return $formatFunctionName;
         }
 
-        return $this->getCellFormattingFunctionConfigByRecordObject($formatFunctionName);
+        /**
+         * @var TCMSRecord $recordObject
+         */
+        $recordObjectName = TCMSTableToClass::GetClassName('Tdb', $this->oTableConf->sqlData['name']);
+        $recordObject = new $recordObjectName;
+
+        return $recordObject->getCellFormattingFunction($cellConfig, $formatFunctionName);
+    }
+
+    protected function isLegacyFormatFunction(string $formatFunctionName): bool
+    {
+        if ('gcf_' === substr($formatFunctionName, 0, 4) || 'ccf_' === substr($formatFunctionName, 0, 4)) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getGlobalCellFormattingFunctionConfigByCellConfig(array $cellConfig): ?array
