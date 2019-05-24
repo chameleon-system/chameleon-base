@@ -45,8 +45,8 @@ The <info>%command.name%</info> command creates the initial Chameleon backend us
 or interactively. The user created by this command is a basic stub that is minimally configured to be able to log into the backend.
 The user should be edited in the backend thereafter.
 Possible environment variables:
-- APP_INITIAL_USER_NAME: The user name
-- APP_INITIAL_USER_PASSWORD The password
+- APP_INITIAL_BACKEND_USER_NAME: The user name
+- APP_INITIAL_BACKEND_USER_PASSWORD The password
 EOF
             )
         ;

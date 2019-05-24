@@ -118,11 +118,11 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
         $lowerCasedPagePath = mb_strtolower($normalizedPagePath);
 
         $routes = $this->routingUtil->getAllPageRoutes($activePortal, $activeLanguage);
-        foreach ($routes as $pagedef => $routesToPage) {
+        foreach ($routes as $pageId => $routesToPage) {
             foreach ($routesToPage->getPathList() as $comparePath) {
                 $lowerCasedComparePath = mb_strtolower($comparePath);
                 if ($lowerCasedComparePath === $lowerCasedPagePath) {
-                    return $pagedef;
+                    return $pageId;
                 }
             }
         }
