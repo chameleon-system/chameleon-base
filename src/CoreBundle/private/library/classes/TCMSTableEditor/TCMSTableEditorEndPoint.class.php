@@ -839,6 +839,10 @@ class TCMSTableEditorEndPoint
 
         $oField = &$this->oTableConf->GetField($sFieldName, $oPostTable);
 
+        if (false === $oField->DataIsValid()) {
+            return $this->GetObjectShortInfo($postData);
+        }
+
         // overwrite the modifier type, because we definitely want to save the record field.
         $oField->oDefinition->sqlData['modifier'] = 'none';
 

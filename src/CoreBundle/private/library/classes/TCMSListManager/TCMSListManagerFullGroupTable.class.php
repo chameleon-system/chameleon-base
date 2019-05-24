@@ -387,20 +387,12 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 }
                 $sTranslatedField = $fieldConfig['title'];
                 $this->tableObj->AddHeaderField(array($fieldConfig['name'] => $sTranslatedField), $fieldConfig['align'], null, 1, $allowSort, $fieldConfig['width']);
-                $callback = null;
-                if ('1' == $fieldConfig['use_callback'] && !empty($fieldConfig['callback_fnc'])) {
-                    $callback = $fieldConfig['callback_fnc'];
-                    // check if it is a standard callback, or part of the object:
-                    if ('gcf_' !== substr($callback, 0, 4) && 'ccf_' !== substr($callback, 0, 4)) {
-                        $callback = array(TCMSTableToClass::GetClassName('Tdb', $this->oTableConf->sqlData['name']), $callback);
-                    }
-                }
                 $db_alias = trim($fieldConfig['db_alias']);
                 $columnField = $dbfieldname;
-                if (!empty($db_alias)) {
+                if ('' !== $db_alias) {
                     $columnField = array($db_alias => $dbfieldname);
                 }
-                $this->tableObj->AddColumn($columnField, $fieldConfig['align'], $callback, $jsParas, 1, null, null, null, $originalField, $originalTable);
+                $this->tableObj->AddColumn($columnField, $fieldConfig['align'], $this->getCellFormattingFunctionConfig($fieldConfig), $jsParas, 1, null, null, null, $originalField, $originalTable);
                 $this->tableObj->searchFields[$fieldConfig['name']] = 'full';
             }
         } else {
@@ -413,7 +405,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $sTranslatedField = TGlobal::Translate('chameleon_system_core.list.column_name_name');
             $this->tableObj->AddHeaderField(array($name => $sTranslatedField), 'left', null, 1, $allowSort);
 
-            $this->tableObj->AddColumn('id', 'left', null, $jsParas, 1);
+            $this->tableObj->AddColumn('id', 'left', array('TCMSRecord', 'callBackUuid'), $jsParas, 1);
             $this->tableObj->AddColumn('cmsident', 'left', null, $jsParas, 1);
             $originalField = $name;
             $aNameColumnData = $this->TransformFieldForTranslations(array('db_alias' => $name, 'name' => $name));
@@ -436,6 +428,37 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         }
 
         $this->AddCustomColumns();
+    }
+
+    /**
+     * @param array $cellConfig
+     *
+     * @return array|string|null - returns the types TGroupTable::AddColumn allows for the callback parameter: null, array('object','callbackName'), callbackNameString
+     */
+    protected function getCellFormattingFunctionConfig(array $cellConfig)
+    {
+        $formattingFunctionName = $cellConfig['callback_fnc'];
+
+        if (true === $this->isLegacyFormattingFunction($formattingFunctionName)) {
+            return $formattingFunctionName;
+        }
+
+        /**
+         * @var TCMSRecord $recordObject
+         */
+        $recordObjectName = TCMSTableToClass::GetClassName('Tdb', $this->oTableConf->sqlData['name']);
+        $recordObject = new $recordObjectName();
+
+        return $recordObject->getCellFormattingFunction($cellConfig, $formattingFunctionName);
+    }
+
+    protected function isLegacyFormattingFunction(string $formatFunctionName): bool
+    {
+        if ('gcf_' === substr($formatFunctionName, 0, 4) || 'ccf_' === substr($formatFunctionName, 0, 4)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

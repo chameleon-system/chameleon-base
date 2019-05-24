@@ -2222,4 +2222,37 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 
         return $stateHashProvider->getHash();
     }
+
+    public function getCellFormattingFunction(array $cellConfig, string $cellFormattingFunctionName = ''): ?array
+    {
+        $tdbClassName = get_class($this);
+
+        if ('' === $cellFormattingFunctionName && 'id' === $cellConfig['db_alias'] && 'ID' === $cellConfig['title']) {
+            $cellFormattingFunctionName = 'callBackUuid';
+        }
+
+        if ('' === $cellFormattingFunctionName) {
+            return null;
+        }
+
+        if (false === is_callable(array($tdbClassName, $cellFormattingFunctionName))) {
+            return null;
+        }
+
+        return array($tdbClassName, $cellFormattingFunctionName);
+    }
+
+    public function callBackUuid(string $id)
+    {
+        return '<span title="'.TGlobal::OutHTML($id).'"><i class="fas fa-fingerprint"></i> '.self::getShortUuid($id).'</span>';
+    }
+
+    protected function getShortUuid(string $uuid)
+    {
+        if (strlen($uuid) > 8) {
+            return substr($uuid, 0, 8);
+        }
+
+        return $uuid;
+    }
 }
