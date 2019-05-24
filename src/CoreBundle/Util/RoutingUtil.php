@@ -177,6 +177,9 @@ class RoutingUtil implements RoutingUtilInterface
                 continue;
             }
             $path = $this->getPathForPageAssignment($treeId, $portal, $language);
+            if (null === $path) {
+                continue;
+            }
 
             if (false === isset($routes[$pageId])) {
                 $routes[$pageId] = new PagePath($pageId, $path);
@@ -188,24 +191,31 @@ class RoutingUtil implements RoutingUtilInterface
         return $routes;
     }
 
-    /**
-     * @param string       $treeId
-     * @param TdbCmsPortal $portal
-     *
-     * @return string
-     */
-    private function getPathForPageAssignment($treeId, TdbCmsPortal $portal, TdbCmsLanguage $language)
+    private function getPathForPageAssignment(string $treeId, TdbCmsPortal $portal, TdbCmsLanguage $language): ?string
     {
-        $aStopNodes = TCMSPortal::GetStopNodes($portal->id);
         $pathNode = $this->treeService->getById($treeId, $language->id);
-        $aPath = $pathNode->GetPath($aStopNodes);
+        if (null === $pathNode) {
+            return null;
+        }
+
+        $aPath = $pathNode->GetPath(TCMSPortal::GetStopNodes($portal->id));
+
+        $navigationRootDepth = $this->getNavigationRootDepth($portal, $aPath);
+        /*
+         * If the tree node is not part of any navigation, it is not accessible --> abort.
+         */
+        if (null === $navigationRootDepth) {
+            return null;
+        }
 
         $pathParts = array();
-        for ($i = 2; $i < $pathPartCount = count($aPath); ++$i) {
-            $pathPart = $aPath[$i]->fieldUrlname;
+        for ($i = $navigationRootDepth + 1; $i < $pathPartCount = \count($aPath); $i++) {
+            $node = $aPath[$i];
+            $pathPart = $node->fieldUrlname;
+
             if (empty($pathPart)) {
                 if ($portal->fieldShowNotTanslated) {
-                    $pathPart = $aPath[$i]->sqlData['urlname'];
+                    $pathPart = $node->sqlData['urlname'];
                 } else {
                     $pathPart = '';
                 }
@@ -214,6 +224,26 @@ class RoutingUtil implements RoutingUtilInterface
         }
 
         return $this->normalizeRoutePath(implode('/', $pathParts), $portal);
+    }
+
+    /**
+     * Returns the depth of the first node in $pathElements that is also registered as navigation root for $portal (0-based).
+     *
+     * @param TdbCmsPortal $portal
+     * @param TdbCmsTree[] $pathElements
+     * @return string|null The depth of a navigation root node, or null if $pathElements does not contain a navigation
+     *                     root node.
+     */
+    private function getNavigationRootDepth(TdbCmsPortal $portal, array $pathElements): ?string
+    {
+        $naviNodeIdList = $portal->GetNaviNodeIds();
+        foreach ($pathElements as $i => $node) {
+            if (true === \in_array($node->id, $naviNodeIdList, true)) {
+                return $i;
+            }
+        }
+
+        return null;
     }
 
     /**
