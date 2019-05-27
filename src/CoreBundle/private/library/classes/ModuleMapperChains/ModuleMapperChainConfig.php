@@ -52,7 +52,7 @@ class ModuleMapperChainConfig implements ModuleMapperChainConfigInterface
      */
     private function getChainFromLine($line)
     {
-        $line = str_replace(' ', '', $line);
+        $line = str_replace([' ', "\r"], '', $line);
         if ('' === $line) {
             return null;
         }
