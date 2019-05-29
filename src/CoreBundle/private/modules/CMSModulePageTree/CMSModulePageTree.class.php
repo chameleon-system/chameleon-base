@@ -394,7 +394,7 @@ class CMSModulePageTree extends TCMSModelBase
             if ($level >= $iMaxLevel && $allowAjax && !$lastStateOpen) {
                 $this->data['sTreeHTML'] .= ' class="ajax">\n';
 
-                $ajaxURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('module' => 'ExecuteAjaxCall'), '_fnc' => 'GetSubTree', 'tableid' => $this->data['treeTableID'], 'sOutputMode' => 'Plain', 'nodeID' => $iParentID));
+                $ajaxURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'GetSubTree', 'tableid' => $this->data['treeTableID'], 'sOutputMode' => 'Plain', 'nodeID' => $iParentID));
                 if (isset($this->data['dataID'])) {
                     $ajaxURL .= '&id='.$this->data['dataID'];
                 }
