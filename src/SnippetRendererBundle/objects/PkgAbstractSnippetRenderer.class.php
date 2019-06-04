@@ -21,9 +21,12 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
     private $sSource = null;
     private $sFile = null;
     private $oSourceModule = null;
+    private $sourceType = IPkgSnippetRenderer::SOURCE_TYPE_STRING;
 
     public function InitializeSource($sSource, $iSourceType = IPkgSnippetRenderer::SOURCE_TYPE_STRING)
     {
+        $this->sourceType = $iSourceType;
+
         switch ($iSourceType) {
             case IPkgSnippetRenderer::SOURCE_TYPE_STRING:
                 $this->setSource($sSource);
@@ -38,6 +41,11 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
                 throw new ErrorException('invalid source type ', 0, E_USER_ERROR);
                 break;
         }
+    }
+
+    protected function getSourceType(): int
+    {
+        return $this->sourceType;
     }
 
     /**
