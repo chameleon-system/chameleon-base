@@ -8,7 +8,6 @@ use TCMSPageDefinitionFile;
 
 class DataAccessCmsMasterPagedefFile implements DataAccessCmsMasterPagedefInterface
 {
-
     /**
      * @var InputFilterUtilInterface
      */
@@ -24,18 +23,18 @@ class DataAccessCmsMasterPagedefFile implements DataAccessCmsMasterPagedefInterf
         $this->global = $global;
     }
 
-    public function getPagedefObject(string $pagedef): ?CmsMasterPagdef
+    public function get(string $id): ?CmsMasterPagdef
     {
         $oPageDefinitionFile = new TCMSPageDefinitionFile();
-        $fullPageDefPath = $this->PageDefinitionFile($pagedef);
-        $pagePath = substr($fullPageDefPath, 0, -strlen($pagedef.'.pagedef.php'));
+        $fullPageDefPath = $this->PageDefinitionFile($id);
+        $pagePath = substr($fullPageDefPath, 0, -strlen($id.'.pagedef.php'));
 
-        if (!$oPageDefinitionFile->Load($pagedef, $pagePath)) {
+        if (false === $oPageDefinitionFile->Load($id, $pagePath)) {
             return null;
         }
 
         return new CmsMasterPagdef(
-            $pagedef,
+            $id,
             $oPageDefinitionFile->GetModuleList(),
             $oPageDefinitionFile->GetLayoutFile()
         );

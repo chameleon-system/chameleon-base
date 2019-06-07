@@ -288,10 +288,11 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private function getPagedefData($pagedef)
     {
-        $pagedefData = $this->dataAccessCmsMasterPagedef->getPagedefObject($pagedef);
+        $pagedefData = $this->dataAccessCmsMasterPagedef->get($pagedef);
         if (null === $pagedefData) {
             return false;
         }
+
         return             [
             'moduleList' => $pagedefData->getModuleList(),
             'sLayoutFile' => $pagedefData->getLayoutFile(),
@@ -312,7 +313,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @var string $pagedef
      *
      * @return TCMSPageDefinitionFile|bool
-     * @deprecated 6.2 - use chameleon_system_core.data_access_cms_master_pagedef_file or chameleon_system_core.data_access_cms_master_pagedef_database instead
+     *
+     * @deprecated since 6.2.10 - use chameleon_system_core.data_access_cms_master_pagedef_file or chameleon_system_core.data_access_cms_master_pagedef_database instead
      */
     public function &GetPagedefObject($pagedef)
     {
@@ -335,7 +337,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @return string
      *
-     * @deprecated 6.2
+     * @deprecated since 6.2.10 - not necessary anymore / do not use
      */
     protected function PageDefinitionFile($pagedef)
     {

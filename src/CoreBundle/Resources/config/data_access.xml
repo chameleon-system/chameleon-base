@@ -91,22 +91,29 @@
             <argument type="service" id="database_connection"/>
         </service>
 
-        <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefFile" id="chameleon_system_core.data_access_cms_master_pagedef_file" public="false">
+        <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefFile"
+                 id="chameleon_system_core.data_access_cms_master_pagedef_file" public="false">
             <argument id="chameleon_system_core.util.input_filter" type="service"/>
             <argument id="chameleon_system_core.global" type="service"/>
         </service>
-        <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefCacheDecorator" id="chameleon_system_core.data_access_cms_master_pagedef_file_cache_decorator" decorates="chameleon_system_core.data_access_cms_master_pagedef_file" public="false">
-            <argument id="chameleon_system_core.data_access_cms_master_pagedef_file_cache_decorator.inner" type="service"/>
+        <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefCacheDecorator"
+                 id="chameleon_system_core.data_access_cms_master_pagedef_file_cache_decorator"
+                 decorates="chameleon_system_core.data_access_cms_master_pagedef_file" public="false">
+            <argument id="chameleon_system_core.data_access_cms_master_pagedef_file_cache_decorator.inner"
+                      type="service"/>
             <argument id="chameleon_system_core.util.input_filter" type="service"/>
             <argument id="chameleon_system_cms_cache.cache" type="service"/>
         </service>
 
-        <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefDatabase" id="chameleon_system_core.data_access_cms_master_pagedef_database" public="false">
+        <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefDatabase"
+                 id="chameleon_system_core.data_access_cms_master_pagedef_database" public="false">
             <argument id="chameleon_system_core.data_access_cms_master_pagedef_file" type="service"/>
             <argument id="chameleon_system_core.util.input_filter" type="service"/>
         </service>
 
-        <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefCacheDecorator" id="chameleon_system_core.data_access_cms_master_pagedef_cache_decorator" decorates="chameleon_system_core.data_access_cms_master_pagedef_database" public="false">
+        <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefCacheDecorator"
+                 id="chameleon_system_core.data_access_cms_master_pagedef_cache_decorator"
+                 decorates="chameleon_system_core.data_access_cms_master_pagedef_database" public="false">
             <argument id="chameleon_system_core.data_access_cms_master_pagedef_cache_decorator.inner" type="service"/>
             <argument id="chameleon_system_core.util.input_filter" type="service"/>
             <argument id="chameleon_system_cms_cache.cache" type="service"/>

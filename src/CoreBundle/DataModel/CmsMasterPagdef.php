@@ -38,6 +38,4 @@ class CmsMasterPagdef
     {
         return $this->layoutFile;
     }
-
-
 }

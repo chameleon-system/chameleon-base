@@ -13,31 +13,31 @@ class DataAccessCmsMasterPagedefDatabase implements DataAccessCmsMasterPagedefIn
     /**
      * @var DataAccessCmsMasterPagedefInterface
      */
-    private $fileBasedLoader;
+    private $fallbackLoader;
     /**
      * @var InputFilterUtilInterface
      */
     private $inputFilterUtil;
 
-    public function __construct(DataAccessCmsMasterPagedefInterface $fileBasedLoader, InputFilterUtilInterface $inputFilterUtil)
+    public function __construct(DataAccessCmsMasterPagedefInterface $fallbackLoader, InputFilterUtilInterface $inputFilterUtil)
     {
-        $this->fileBasedLoader = $fileBasedLoader;
+        $this->fallbackLoader = $fallbackLoader;
         $this->inputFilterUtil = $inputFilterUtil;
     }
 
-    public function getPagedefObject(string $pagedef): ?CmsMasterPagdef
+    public function get(string $id): ?CmsMasterPagdef
     {
         //check if the pagedef exists in the database... if it does, use it. if not, use the file
         $oPageDefinitionFile = null;
 
         $requestMasterPageDef = $this->inputFilterUtil->getFilteredInput('__masterPageDef', false);
 
-        if ($requestMasterPageDef && TGlobal::CMSUserDefined()) {
+        if (true === $requestMasterPageDef && true ===  TGlobal::CMSUserDefined()) {
             // load master pagedef...
             $oPageDefinitionFile = TdbCmsMasterPagedef::GetNewInstance();
             $oPageDefinitionFile->Load($this->inputFilterUtil->getFilteredInput('id'));
         } else {
-            $oPageDefinitionFile = new TCMSPagedef($pagedef);
+            $oPageDefinitionFile = new TCMSPagedef($id);
 
             if (null === $oPageDefinitionFile->iMasterPageDefId || empty($oPageDefinitionFile->iMasterPageDefId)) {
                 $oPageDefinitionFile->sqlData = false;
@@ -45,11 +45,11 @@ class DataAccessCmsMasterPagedefDatabase implements DataAccessCmsMasterPagedefIn
         }
 
         if (false === $oPageDefinitionFile->sqlData) {
-            return $this->fileBasedLoader->getPagedefObject($pagedef);
+            return $this->fallbackLoader->get($id);
         }
 
         return new CmsMasterPagdef(
-            $pagedef,
+            $id,
             $oPageDefinitionFile->GetModuleList(),
             $oPageDefinitionFile->GetLayoutFile()
         );

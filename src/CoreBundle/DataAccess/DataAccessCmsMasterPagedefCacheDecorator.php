@@ -32,27 +32,27 @@ class DataAccessCmsMasterPagedefCacheDecorator implements DataAccessCmsMasterPag
         $this->inputFilterUtil = $inputFilterUtil;
     }
 
-    public function getPagedefObject(string $pagedef): ?CmsMasterPagdef
+    public function get(string $id): ?CmsMasterPagdef
     {
-        $cacheKey = $this->getCacheKeyParameters($pagedef);
+        $cacheKeyParameter = $this->getCacheKeyParameters($id);
 
-        $key = $this->cache->getKey($cacheKey);
-        $pagedefData = $this->cache->get($key);
+        $cacheKey = $this->cache->getKey($cacheKeyParameter);
+        $pagedefData = $this->cache->get($cacheKey);
         if (null !== $pagedefData) {
             return $pagedefData;
         }
 
-        $pagedefData = $this->subject->getPagedefObject($pagedef);
+        $pagedefData = $this->subject->get($id);
         if (null === $pagedefData) {
             return null;
         }
         $aTrigger = array(
-            array('table' => 'cms_tpl_page', 'id' => $pagedef),
+            array('table' => 'cms_tpl_page', 'id' => $id),
             array('table' => 'cms_tree', 'id' => null),
             array('table' => 'cms_tree_node', 'id' => null),
             array('table' => 'cms_master_pagedef', 'id' => null),
         );
-        $this->cache->set($key, $pagedefData, $aTrigger);
+        $this->cache->set($cacheKey, $pagedefData, $aTrigger);
 
         return $pagedefData;
     }
@@ -60,11 +60,11 @@ class DataAccessCmsMasterPagedefCacheDecorator implements DataAccessCmsMasterPag
     private function getCacheKeyParameters(string $pagedef): array
     {
         $cacheKey = array(
-            'type'                 => 'pagedefdata',
-            'pagedef'              => $pagedef,
+            'type' => 'pagedefdata',
+            'pagedef' => $pagedef,
             'requestMasterPageDef' => $this->inputFilterUtil->getFilteredInput('__masterPageDef', false),
             'isTemplateEngineMode' => TGlobal::IsCMSTemplateEngineEditMode(),
-            'cmsuserdefined'       => TGlobal::CMSUserDefined(),
+            'cmsuserdefined' => TGlobal::CMSUserDefined(),
         );
 
         if ($cacheKey['cmsuserdefined'] && $cacheKey['requestMasterPageDef']) {
@@ -73,5 +73,4 @@ class DataAccessCmsMasterPagedefCacheDecorator implements DataAccessCmsMasterPag
 
         return $cacheKey;
     }
-
 }
