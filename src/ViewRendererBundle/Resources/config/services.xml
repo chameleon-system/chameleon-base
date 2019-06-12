@@ -11,6 +11,9 @@
         <parameter key="chameleon_system_view_renderer.twig.chameleon_standard_extension.class">ChameleonSystem\ViewRendererBundle\Twig\Extension\ChameleonStandardExtension</parameter>
         <parameter key="chameleon_system_view_renderer.twig.loader.class">ChameleonSystem\ViewRendererBundle\Twig\Loader\ChameleonTwigLoader</parameter>
         <parameter key="chameleon_system_view_renderer.snippet_directory.class">TPkgViewRendererSnippetDirectory</parameter>
+        <parameter key="chameleon_system_view_renderer.compiler.class">ChameleonSystem\ViewRendererBundle\Compiler\Stylesheet\Compiler</parameter>
+        <parameter key="chameleon_system_view_renderer.compiler.less.class">ChameleonSystem\ViewRendererBundle\Compiler\Stylesheet\Adapter\LessCompiler</parameter>
+        <parameter key="chameleon_system_view_renderer.compiler.scss.class">ChameleonSystem\ViewRendererBundle\Compiler\Stylesheet\Adapter\ScssCompiler</parameter>
     </parameters>
 
     <services>
@@ -67,12 +70,12 @@
         </service>
 
         <service id="chameleon_system_view_renderer.compile_less_command" class="ChameleonSystem\ViewRendererBundle\Command\CompileLessCommand">
-            <argument type="service" id="chameleon_system_view_renderer.less_compiler" />
+            <argument type="service" id="chameleon_system_view_renderer.compiler" />
             <tag name="console.command" />
         </service>
 
         <service id="chameleon_system_view_renderer.mapper.config_to_less" class="TPkgViewRendererConfigToLessMapper">
-            <argument type="service" id="chameleon_system_view_renderer.less_compiler" />
+            <argument type="service" id="chameleon_system_view_renderer.compiler" />
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
         </service>
 
@@ -94,6 +97,18 @@
             public="false">
             <argument type="service" id="database_connection"/>
         </service>
-        
+
+        <service id="chameleon_system_view_renderer.compiler.less" class="%chameleon_system_view_renderer.compiler.less.class%" />
+        <service id="chameleon_system_view_renderer.compiler.scss" class="%chameleon_system_view_renderer.compiler.scss.class%" />
+
+        <service id="chameleon_system_view_renderer.compiler" class="%chameleon_system_view_renderer.compiler.class%">
+            <argument type="collection">
+                <argument type="service" id="chameleon_system_view_renderer.compiler.less" />
+                <argument type="service" id="chameleon_system_view_renderer.compiler.scss" />
+            </argument>
+            <argument type="string">less</argument>
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+        </service>
+
     </services>
 </container>

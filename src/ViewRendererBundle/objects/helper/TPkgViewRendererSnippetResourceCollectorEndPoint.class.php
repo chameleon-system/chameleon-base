@@ -19,20 +19,28 @@ class TPkgViewRendererSnippetResourceCollectorEndPoint
      */
     public function getLessResources($oPortal = null, $snippetPath = null)
     {
-        $aLessFiles = array();
+        $files = array();
         $oTree = $this->getViewRendererSnippetDirectory();
         $aSnippetTree = $oTree->getConfigTree($oPortal, $snippetPath);
         $aTmpResources = $this->getConfigsFromTree($aSnippetTree);
         foreach ($aTmpResources as $sPathToConfig) {
-            $aConfig = Symfony\Component\Yaml\Yaml::parse($sPathToConfig);
-            if (isset($aConfig['less'])) {
-                foreach ($aConfig['less'] as $sResource) {
-                    $aLessFiles[$sResource] = true;
-                }
+            $config = Symfony\Component\Yaml\Yaml::parse($sPathToConfig);
+            switch ($config) {
+                case 'less':
+                    foreach($config["less"] as $resource){
+                        $files[$resource] = true;
+                    }
+                    break;
+
+                case 'scss':
+                    foreach($config["scss"] as $resource){
+                        $files[$resource] = true;
+                    }
+                    break;
             }
         }
 
-        $aLessFiles = array_merge($aLessFiles, $this->getAdditionalLessResources($oPortal));
+        $aLessFiles = array_merge($files, $this->getAdditionalLessResources($oPortal));
 
         return array_keys($aLessFiles);
     }

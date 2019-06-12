@@ -22,17 +22,17 @@ class TPkgViewRenderer_TCMSSmartURLHandler_SnippetLessCompiler extends TCMSSmart
      */
     public function GetPageDef()
     {
-        $lessCompiler = $this->getLessCompiler();
-        $portal = $this->getPortalForCssRequest($lessCompiler->getCompiledCssFilenamePattern());
+        $compiler = $this->getCompiler();
+        $portal = $this->getPortalForCssRequest($compiler->getCompiledCssFilenamePattern());
 
         if (null === $portal) {
             return false;
         }
 
-        $css = $lessCompiler->getGeneratedCssForPortal($portal);
+        $css = $compiler->getGeneratedCssForPortal($portal);
 
         if ($this->getLessCachingForWebserverEnabled()) {
-            $lessCompiler->writeCssFileForPortal($css, $portal);
+            $compiler->writeCssFileForPortal($css, $portal);
         }
 
         header('Content-Type: text/css');
@@ -71,11 +71,11 @@ class TPkgViewRenderer_TCMSSmartURLHandler_SnippetLessCompiler extends TCMSSmart
     }
 
     /**
-     * @return TPkgViewRendererLessCompiler
+     * @return CompilerInterface
      */
-    private function getLessCompiler()
+    private function getCompiler()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.less_compiler');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.compiler');
     }
 
     /**

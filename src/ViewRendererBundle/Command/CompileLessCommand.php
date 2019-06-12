@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\ViewRendererBundle\Command;
 
+use ChameleonSystem\ViewRendererBundle\Compiler\Stylesheet\CompilerInterface;
 use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,14 +25,14 @@ use TdbCmsPortalList;
 class CompileLessCommand extends Command
 {
     /**
-     * @var TPkgViewRendererLessCompiler
+     * @var CompilerInterface|TPkgViewRendererLessCompiler
      */
-    private $lessCompiler;
+    private $compiler;
 
-    public function __construct($lessCompiler)
+    public function __construct($compiler)
     {
         parent::__construct('chameleon_system:less:compile');
-        $this->lessCompiler = $lessCompiler;
+        $this->compiler = $compiler;
     }
 
     /**
@@ -64,8 +65,8 @@ EOF
         $portalList = TdbCmsPortalList::GetList();
         $minifyCss = true === $input->getOption('minify-css');
         while ($portal = $portalList->Next()) {
-            $css = $this->lessCompiler->getGeneratedCssForPortal($portal, $minifyCss);
-            $cacheWriteSuccess = $this->lessCompiler->writeCssFileForPortal($css, $portal);
+            $css = $this->compiler->getGeneratedCssForPortal($portal, $minifyCss);
+            $cacheWriteSuccess = $this->compiler->writeCssFileForPortal($css, $portal);
 
             if ($cacheWriteSuccess) {
                 $output->writeln('<info>Compiled LESS for portal '.$portal->fieldName.'.<info>');

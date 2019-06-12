@@ -1,4 +1,4 @@
-<?php
+composer isntall prefer c<?php
 
 /*
  * This file is part of the Chameleon System (https://www.chameleonsystem.com).

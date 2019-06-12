@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\ViewRendererBundle\Compiler\Stylesheet\CompilerInterface;
 use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
 
 class TPkgViewRendererConfigToLessMapper extends AbstractViewMapper
@@ -17,22 +18,22 @@ class TPkgViewRendererConfigToLessMapper extends AbstractViewMapper
     /**
      * @var TPkgViewRendererLessCompiler
      */
-    private $lessCompiler;
+    private $compiler;
     /**
      * @var PortalDomainServiceInterface
      */
     private $portalDomainService;
 
     /**
-     * @param TPkgViewRendererLessCompiler|null $lessCompiler
+     * @param CompilerInterface|null $compiler
      * @param PortalDomainServiceInterface|null $portalDomainService
      */
-    public function __construct(TPkgViewRendererLessCompiler $lessCompiler = null, PortalDomainServiceInterface $portalDomainService = null)
+    public function __construct(CompilerInterface $compiler = null, PortalDomainServiceInterface $portalDomainService = null)
     {
-        if (null === $lessCompiler) {
-            $this->lessCompiler = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.less_compiler');
+        if (null === $compiler) {
+            $this->compiler = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.compiler');
         } else {
-            $this->lessCompiler = $lessCompiler;
+            $this->compiler = $compiler;
         }
         if (null === $portalDomainService) {
             $this->portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
@@ -54,7 +55,7 @@ class TPkgViewRendererConfigToLessMapper extends AbstractViewMapper
      */
     public function Accept(IMapperVisitorRestricted $visitor, $cachingEnabled, IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
-        $compiledCssSource = $this->lessCompiler->getCompiledCssUrl($this->portalDomainService->getActivePortal());
+        $compiledCssSource = $this->compiler->getCompiledCssUrl($this->portalDomainService->getActivePortal());
         if (true === $visitor->GetSourceObject('inTemplateEngineMode')) {
             if (false === strpos($compiledCssSource, '?')) {
                 $separator = '?';
