@@ -53,7 +53,7 @@ abstract class AbstractCompilerAdapter implements CompilerAdapterInterface
      *
      * @todo refactoring
      */
-    public function writeCssFileForPortal($generatedCss, TdbCmsPortal $portal): bool
+    public function writeCssFileForPortal(string $generatedCss, TdbCmsPortal $portal): bool
     {
         $filePath = $this->getLocalPathToCompiledCssFileForPortal($portal);
 

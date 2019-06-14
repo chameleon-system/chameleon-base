@@ -80,7 +80,7 @@ class Compiler implements CompilerInterface
     /**
      * {@inheritdoc}
      */
-    public function getGeneratedCssForPortal(TdbCmsPortal $portal, $minifyCss = false): string
+    public function getGeneratedCssForPortal(TdbCmsPortal $portal, bool $minifyCss = false): string
     {
         $type = $this->getTypeByPortalTheme($portal);
         return $this->compilerAdapters[$type]->getGeneratedCssForPortal($portal, $minifyCss);
