@@ -6,10 +6,7 @@ use TdbCmsPortal;
 
 interface CompilerInterface
 {
-    /**
-     * @return string
-     */
-    public function getLocalPathToCompiled();
+    public function getLocalPathToCompiled(): string;
 
     /**
      * @param TdbCmsPortal|null $portal
@@ -17,28 +14,11 @@ interface CompilerInterface
      */
     public function getCompiledCssUrl(TdbCmsPortal $portal = null);
 
-    /**
-     * @param TdbCmsPortal $portal
-     * @return string
-     */
-    public function getLocalPathToCompiledCssFileForPortal(TdbCmsPortal $portal);
+    public function getLocalPathToCompiledCssFileForPortal(TdbCmsPortal $portal): string;
 
-    /**
-     * @return string
-     */
-    public function getCompiledCssFilenamePattern();
+    public function getCompiledCssFilenamePattern(): string;
 
-    /**
-     * @param TdbCmsPortal $portal
-     * @param bool $minifyCss
-     * @return string
-     */
-    public function getGeneratedCssForPortal(TdbCmsPortal $portal, $minifyCss = false);
+    public function getGeneratedCssForPortal(TdbCmsPortal $portal, bool $minifyCss = false): string;
 
-    /**
-     * @param string $generatedCss
-     * @param $portal
-     * @return bool
-     */
-    public function writeCssFileForPortal($generatedCss, TdbCmsPortal $portal);
+    public function writeCssFileForPortal(string $generatedCss, TdbCmsPortal $portal): bool;
 }

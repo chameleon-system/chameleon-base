@@ -30,7 +30,7 @@ class Compiler implements CompilerInterface
      */
     public function __construct(
         array $compilerAdapters,
-        $defaultType = 'less',
+        string $defaultType = 'less',
         PortalDomainServiceInterface $portalDomainService = null
     ) {
         foreach ($compilerAdapters as $compilerAdapter) {
@@ -44,7 +44,7 @@ class Compiler implements CompilerInterface
     /**
      * {@inheritdoc}
      */
-    public function getLocalPathToCompiled()
+    public function getLocalPathToCompiled(): string
     {
         $type = $this->getTypeByPortalTheme();
         return $this->compilerAdapters[$type]->getLocalPathToCompiled();
@@ -62,7 +62,7 @@ class Compiler implements CompilerInterface
     /**
      * {@inheritdoc}
      */
-    public function getLocalPathToCompiledCssFileForPortal(TdbCmsPortal $portal)
+    public function getLocalPathToCompiledCssFileForPortal(TdbCmsPortal $portal): string
     {
         $type = $this->getTypeByPortalTheme($portal);
         return $this->compilerAdapters[$type]->getLocalPathToCompiledCssFileForPortal($portal);
@@ -71,7 +71,7 @@ class Compiler implements CompilerInterface
     /**
      * {@inheritdoc}
      */
-    public function getCompiledCssFilenamePattern()
+    public function getCompiledCssFilenamePattern(): string
     {
         $type = $this->getTypeByPortalTheme();
         return $this->compilerAdapters[$type]->getCompiledCssFilenamePattern();
@@ -80,7 +80,7 @@ class Compiler implements CompilerInterface
     /**
      * {@inheritdoc}
      */
-    public function getGeneratedCssForPortal(TdbCmsPortal $portal, $minifyCss = false)
+    public function getGeneratedCssForPortal(TdbCmsPortal $portal, $minifyCss = false): string
     {
         $type = $this->getTypeByPortalTheme($portal);
         return $this->compilerAdapters[$type]->getGeneratedCssForPortal($portal, $minifyCss);
@@ -89,7 +89,7 @@ class Compiler implements CompilerInterface
     /**
      * {@inheritdoc}
      */
-    public function writeCssFileForPortal($generatedCss, TdbCmsPortal $portal)
+    public function writeCssFileForPortal(string $generatedCss, TdbCmsPortal $portal): bool
     {
         $type = $this->getTypeByPortalTheme($portal);
         return $this->compilerAdapters[$type]->writeCssFileForPortal($generatedCss, $portal);
@@ -98,7 +98,7 @@ class Compiler implements CompilerInterface
     /**
      * @return string
      */
-    private function getTypeByPortalTheme(TdbCmsPortal $portal = null)
+    private function getTypeByPortalTheme(TdbCmsPortal $portal = null): string
     {
         if (null === $portal) {
             $portal = $this->getActivePortal();
@@ -127,10 +127,7 @@ class Compiler implements CompilerInterface
         return $type;
     }
 
-    /**
-     * @return string
-     */
-    private function getActivePortal()
+    private function getActivePortal(): ?TdbCmsPortal
     {
         $this->portalDomainService->getActivePortal();
     }

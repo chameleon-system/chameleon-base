@@ -6,8 +6,5 @@ use ChameleonSystem\ViewRendererBundle\Compiler\Stylesheet\CompilerInterface;
 
 interface CompilerAdapterInterface extends CompilerInterface
 {
-    /**
-     * @return string
-     */
-    public function getType();
+    public function getType(): string;
 }

@@ -10,7 +10,7 @@ abstract class AbstractCompilerAdapter implements CompilerAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function getLocalPathToCompiledCssFileForPortal(TdbCmsPortal $portal)
+    public function getLocalPathToCompiledCssFileForPortal(TdbCmsPortal $portal): string
     {
         $lessDir = $this->getLocalPathToCompiled();
         $filename = $this->getCompiledCssFilename($portal);
@@ -21,7 +21,7 @@ abstract class AbstractCompilerAdapter implements CompilerAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function getCompiledCssUrl(TdbCmsPortal $portal = null)
+    public function getCompiledCssUrl(TdbCmsPortal $portal = null): string
     {
         $path = $this->getDirUrlPath();
         $filename = $this->getCompiledCssFilename($portal);
@@ -33,7 +33,7 @@ abstract class AbstractCompilerAdapter implements CompilerAdapterInterface
     /**
      * {@inheritdoc}
      */
-    private function getCompiledCssFilename(TdbCmsPortal $portal = null)
+    private function getCompiledCssFilename(TdbCmsPortal $portal = null): string
     {
         $fileSuffix = null === $portal ? '' : $portal->getFileSuffix();
 
@@ -43,7 +43,7 @@ abstract class AbstractCompilerAdapter implements CompilerAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function getCompiledCssFilenamePattern()
+    public function getCompiledCssFilenamePattern(): string
     {
         return '/(.*)chameleon_([0-9]{1,16}).css/';
     }
@@ -53,7 +53,7 @@ abstract class AbstractCompilerAdapter implements CompilerAdapterInterface
      *
      * @todo refactoring
      */
-    public function writeCssFileForPortal($generatedCss, TdbCmsPortal $portal)
+    public function writeCssFileForPortal($generatedCss, TdbCmsPortal $portal): bool
     {
         $filePath = $this->getLocalPathToCompiledCssFileForPortal($portal);
 
@@ -75,11 +75,7 @@ abstract class AbstractCompilerAdapter implements CompilerAdapterInterface
         return $cacheFileWriteSuccess;
     }
 
-    /**
-     * @param TdbCmsPortal $portal
-     * @return string
-     */
-    protected function getImportStatementsForSnippetResources(TdbCmsPortal $portal)
+    protected function getImportStatementsForSnippetResources(TdbCmsPortal $portal): string
     {
         $resourceCollector = new TPkgViewRendererSnippetResourceCollector();
         $resources = $resourceCollector->getLessResources($portal, CMS_SNIPPET_PATH);
@@ -93,8 +89,5 @@ abstract class AbstractCompilerAdapter implements CompilerAdapterInterface
         return implode("\n", $importResources);
     }
 
-    /**
-     * @return string
-     */
-    abstract protected function getDirUrlPath();
+    abstract protected function getDirUrlPath(): string;
 }

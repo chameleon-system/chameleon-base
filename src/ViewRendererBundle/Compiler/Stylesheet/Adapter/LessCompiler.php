@@ -9,7 +9,7 @@ class LessCompiler extends AbstractCompilerAdapter
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): string
     {
         return 'less';
     }
@@ -17,7 +17,7 @@ class LessCompiler extends AbstractCompilerAdapter
     /**
      * {@inheritdoc}
      */
-    public function getLocalPathToCompiled()
+    public function getLocalPathToCompiled(): string
     {
         return PATH_USER_CMS_PUBLIC.'/outbox/static/less';
     }
@@ -27,7 +27,7 @@ class LessCompiler extends AbstractCompilerAdapter
      *
      * @todo refactoring
      */
-    public function getGeneratedCssForPortal(TdbCmsPortal $portal, $minifyCss = false)
+    public function getGeneratedCssForPortal(TdbCmsPortal $portal, bool $minifyCss = false): string
     {
         $snippetImportStatements = $this->getImportStatementsForSnippetResources($portal);
         try {
@@ -79,7 +79,7 @@ class LessCompiler extends AbstractCompilerAdapter
     /**
      * {@inheritdoc}
      */
-    protected function getDirUrlPath()
+    protected function getDirUrlPath(): string
     {
         $sOutboxURL = URL_OUTBOX;
 
@@ -97,12 +97,7 @@ class LessCompiler extends AbstractCompilerAdapter
         return $sOutboxURL;
     }
 
-    /**
-     * @param TdbCmsPortal $portal
-     * @param string $snippetIncludes
-     * @return string
-     */
-    private function generateChameleonLess(TdbCmsPortal $portal, $snippetIncludes = '')
+    private function generateChameleonLess(TdbCmsPortal $portal, string $snippetIncludes = ''): string
     {
         $theme = null;
         if (is_object($portal)) {

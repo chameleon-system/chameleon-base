@@ -16,7 +16,7 @@ class ScssCompiler extends AbstractCompilerAdapter
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): string
     {
         return 'scss';
     }
@@ -24,7 +24,7 @@ class ScssCompiler extends AbstractCompilerAdapter
     /**
      * {@inheritdoc}
      */
-    public function getLocalPathToCompiled()
+    public function getLocalPathToCompiled(): string
     {
         return PATH_USER_CMS_PUBLIC.'/outbox/static/scss';
     }
@@ -32,7 +32,7 @@ class ScssCompiler extends AbstractCompilerAdapter
     /**
      * {@inheritdoc}
      */
-    protected function getDirUrlPath()
+    protected function getDirUrlPath(): string
     {
         $sOutboxURL = URL_OUTBOX;
 
@@ -53,7 +53,7 @@ class ScssCompiler extends AbstractCompilerAdapter
     /**
      * {@inheritdoc}
      */
-    public function getGeneratedCssForPortal(TdbCmsPortal $portal, $minifyCss = false)
+    public function getGeneratedCssForPortal(TdbCmsPortal $portal, bool $minifyCss = false): string
     {
         $snippetImportStatements = $this->getImportStatementsForSnippetResources($portal);
         try {
@@ -86,12 +86,7 @@ class ScssCompiler extends AbstractCompilerAdapter
         return $scss->compile($chameleonScss);
     }
 
-    /**
-     * @param TdbCmsPortal $portal
-     * @param string $snippetIncludes
-     * @return string
-     */
-    private function generateChameleonScss(TdbCmsPortal $portal, $snippetIncludes = '')
+    private function generateChameleonScss(TdbCmsPortal $portal, string $snippetIncludes = ''): string
     {
         $lessFileToImport = '/assets/scss/chameleon.scss';
 
