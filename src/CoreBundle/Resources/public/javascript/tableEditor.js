@@ -582,7 +582,7 @@ function ShowMessages(messages) {
         // messages do have a reference to field (e.g. mail-field not valid)
         if (message.sMessageRefersToField) {
             // add the class to field
-            $('#fieldname_' + oMessage.sMessageRefersToField).addClass('bg-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(oMessage.sMessageType));
+            $('#fieldname_' + message.sMessageRefersToField).addClass('bg-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(message.sMessageType));
         }
 
         if (message.sMessageType !== 'ERROR' && !bOnLoadResetted) {
