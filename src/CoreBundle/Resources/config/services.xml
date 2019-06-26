@@ -194,6 +194,7 @@
         </service>
 
         <service id="chameleon_system_core.frontend_controller" class="ChameleonSystem\CoreBundle\Controller\ChameleonFrontendController" parent="chameleon_system_core.base_controller">
+            <argument type="service" id="chameleon_system_core.data_access_cms_master_pagedef_database" />
             <argument type="service" id="chameleon_system_core.usermoduleloader" />
             <argument type="service" id="chameleon_system_core.viewPathManager" />
             <argument type="service" id="service_container" />
@@ -201,6 +202,7 @@
         </service>
 
         <service id="chameleon_system_core.backend_controller" class="ChameleonSystem\CoreBundle\Controller\ChameleonBackendController" parent="chameleon_system_core.base_controller">
+            <argument type="service" id="chameleon_system_core.data_access_cms_master_pagedef_file" />
             <argument type="service" id="chameleon_system_core.moduleloader" />
             <call method="setBackendAccessCheck">
                 <argument type="service" id="chameleon_system_core.security.backend_access_check" />
