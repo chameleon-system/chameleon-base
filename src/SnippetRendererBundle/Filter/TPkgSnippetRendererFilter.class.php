@@ -27,7 +27,7 @@ class TPkgSnippetRendererFilter
     public static function getThumbnail(
         $cmsMediaId,
         $maxWidth,
-        $maxHeight = 0,
+        $maxHeight = 2000,
         $forceSize = false,
         $returnAbsoluteUrl = null
     ) {
