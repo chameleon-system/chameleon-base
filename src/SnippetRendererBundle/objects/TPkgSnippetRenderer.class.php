@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * TPkgSnippetRenderer - a simple yet effective renderer for HTML snippets.
  *
@@ -90,7 +92,7 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
      */
     public static function GetNewInstance($sSource, $iSourceType = IPkgSnippetRenderer::SOURCE_TYPE_STRING)
     {
-        $oNewInstance = \ChameleonSystem\CoreBundle\ServiceLocator::get(
+        $oNewInstance = ServiceLocator::get(
             'chameleon_system_snippet_renderer.snippet_renderer'
         );
         $oNewInstance->InitializeSource($sSource, $iSourceType);
@@ -144,10 +146,18 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
             $this->setFilename($this->getSourceModule()->viewTemplate);
         }
 
-        try {
-            $content = $this->getTwigHandler()->render($this->getSource(), $this->getVars());
-        } catch (Twig_Error $e) {
-            throw new TPkgSnippetRenderer_SnippetRenderingException(sprintf("%s\nin file %s at line %s\n", $e->getMessage(), $e->getFile(), $e->getLine()), $e->getCode(), $e);
+        if ($this->getSourceType() !== IPkgSnippetRenderer::SOURCE_TYPE_STRING) {
+            try {
+                $content = $this->getTwigHandler()->render($this->getSource(), $this->getVars());
+            } catch (Twig_Error $e) {
+                throw new TPkgSnippetRenderer_SnippetRenderingException(
+                    sprintf("%s\nin file %s at line %s\n", $e->getMessage(), $e->getFile(), $e->getLine()),
+                    $e->getCode(),
+                    $e
+                );
+            }
+        } else {
+            $content = $this->getSource();
         }
 
         return $content;

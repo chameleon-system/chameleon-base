@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Controller;
 
+use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -37,12 +38,13 @@ class ChameleonFrontendController extends ChameleonController
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
+        DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
         $viewPathManager,
         ContainerInterface $container,
         TPkgViewRendererConfigToLessMapper $configToLessMapper
     ) {
-        parent::__construct($requestStack, $eventDispatcher, $moduleLoader, $viewPathManager);
+        parent::__construct($requestStack, $eventDispatcher, $dataAccessCmsMasterPagedef, $moduleLoader, $viewPathManager);
         $this->container = $container; // for ViewRenderer instantiation
         $this->configToLessMapper = $configToLessMapper;
     }
