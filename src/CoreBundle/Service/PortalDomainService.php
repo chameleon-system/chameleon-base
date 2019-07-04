@@ -40,10 +40,6 @@ class PortalDomainService implements PortalDomainServiceInterface
      */
     private $domain;
     /**
-     * @var TdbCmsPortal
-     */
-    private $defaultPortal;
-    /**
      * @var array|null
      */
     private $portalDomainNames;
@@ -121,18 +117,7 @@ class PortalDomainService implements PortalDomainServiceInterface
      */
     public function getDefaultPortal()
     {
-        if (null !== $this->defaultPortal) {
-            return $this->defaultPortal;
-        }
-
-        $portalList = TdbCmsPortalList::GetList();
-        $portalList->GoToStart();
-        $this->defaultPortal = $portalList->Current();
-        if (false === $this->defaultPortal) {
-            return null;
-        }
-
-        return $this->defaultPortal;
+        return \TdbCmsConfig::GetInstance()->GetPrimaryPortal();
     }
 
     /**

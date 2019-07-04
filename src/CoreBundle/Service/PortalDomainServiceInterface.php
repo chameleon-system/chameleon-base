@@ -35,7 +35,7 @@ interface PortalDomainServiceInterface
     public function getActivePortal();
 
     /**
-     * Returns the first defined portal.
+     * Returns the primary portal (cms config).
      *
      * @return TdbCmsPortal|null
      */
