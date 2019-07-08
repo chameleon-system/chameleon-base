@@ -467,10 +467,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         return $mapper;
     }
 
-    /**
-     * @return FieldTranslationUtil
-     */
-    private function getFieldTranslationUtil()
+    private function getFieldTranslationUtil(): FieldTranslationUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
