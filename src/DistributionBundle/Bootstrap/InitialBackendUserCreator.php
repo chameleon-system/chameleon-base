@@ -73,6 +73,10 @@ class InitialBackendUserCreator
             $username = $questionHelper->ask($input, $output, $question);
         }
 
+        if (null === $username) {
+            throw new \InvalidArgumentException('No user name specified.');
+        }
+
         if ('www' === $username) {
             throw new \InvalidArgumentException('The name of the user must not be "www".');
         }
@@ -90,6 +94,10 @@ class InitialBackendUserCreator
             if (\mb_strlen(\trim($password)) < $minimumLength) {
                 throw new \InvalidArgumentException(sprintf('Password is too short. Please use at least %s characters.', $minimumLength));
             }
+        }
+
+        if (null === $password) {
+            throw new \InvalidArgumentException('No password specified.');
         }
 
         return $this->passwordHashGenerator->hash($password);

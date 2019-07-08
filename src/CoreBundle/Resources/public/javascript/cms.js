@@ -101,7 +101,7 @@ function AjaxError(XMLHttpRequest, textStatus, errorThrown) {
                     top.document.location.href = window.location.pathname;
                 }
             } else {
-                alert(errorMessage);
+                toasterMessage(errorMessage, "ERROR");
             }
         }
     } else {
@@ -148,12 +148,13 @@ function toasterMessage(message,type) {
 
 window.alert = function(message) {
     new PNotify({
-        title: 'Alert',
+        title: "Alert",
+        text: message,
+        text_escape: true,
         type: 'error',
         opacity: 1,
         styling: 'bootstrap3',
-        icons: 'fontawesome5',
-        text: message
+        icons: 'fontawesome5'
     });
 };
 

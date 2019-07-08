@@ -250,6 +250,10 @@
     border-bottom: 1px solid #c8ced3;
 }
 
+.snippetMediaManagerBackendModuleStandard .cms-media-item .image-col img {
+    max-width: 100%;
+}
+
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .cms-media-item .actions > a {
     padding: 3px 6px;
 }
