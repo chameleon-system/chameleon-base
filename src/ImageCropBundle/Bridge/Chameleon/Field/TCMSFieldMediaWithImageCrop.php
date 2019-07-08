@@ -46,16 +46,20 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $additionalFieldNameNewFieldName = $this->getFieldNameOfAdditionalField($sNewName);
         $databaseConnection = $this->getDatabaseConnection();
 
-        $query = sprintf(
-            'ALTER TABLE %s CHANGE %s %s CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL',
-            $databaseConnection->quoteIdentifier($this->sTableName),
-            $databaseConnection->quoteIdentifier($additionalFieldNameOldFieldName),
-            $databaseConnection->quoteIdentifier($additionalFieldNameNewFieldName)
-        );
-        $databaseConnection->query($query);
+        $tableName = $databaseConnection->quoteIdentifier($this->sTableName);
+        if (false !== $databaseConnection->fetchColumn(sprintf('SHOW COLUMNS FROM %s LIKE :columnName', $tableName), ['columnName' => $additionalFieldNameOldFieldName])) {
+            //For new fields, the additional field already has the right name, but we have no way to check that here so we just check if the column exists.
+            $query = sprintf(
+                'ALTER TABLE %s CHANGE %s %s CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL',
+                $tableName,
+                $databaseConnection->quoteIdentifier($additionalFieldNameOldFieldName),
+                $databaseConnection->quoteIdentifier($additionalFieldNameNewFieldName)
+            );
+            $databaseConnection->query($query);
 
-        $logChangeDataModels[] = new LogChangeDataModel($query);
-        TCMSLogChange::WriteTransaction($logChangeDataModels);
+            $logChangeDataModels[] = new LogChangeDataModel($query);
+            TCMSLogChange::WriteTransaction($logChangeDataModels);
+        }
 
         $translatedFieldDefinition = clone $this->oDefinition;
         $translatedFieldDefinition->sqlData['is_translatable'] = $postData['is_translatable'];
