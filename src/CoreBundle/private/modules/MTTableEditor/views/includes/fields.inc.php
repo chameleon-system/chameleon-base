@@ -105,7 +105,7 @@ if (!empty($sTmpFormTabsContent)) {
         $titleAriaSelected = 'false';
         $contentClass = 'tab-pane p-0';
 
-        if (1 === $iTabCount) {
+        if (isset($firstActiveTab) && true === $firstActiveTab) {
             $titleAnchorClass .= ' active';
             $titleAriaSelected = 'true';
             $contentClass .= ' show active';
