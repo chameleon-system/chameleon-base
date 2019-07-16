@@ -684,16 +684,12 @@ function invertCheckboxes(fieldname) {
 }
 
 function OpenPreviewURL(url, statusText) {
-    var ghost = document["createElement"]("a");
-    ghost["href"] = "about:blank";
-    ghost["target"] = "PopHelper";
-    document["getElementsByTagName"]("body")[0]["appendChild"](ghost);
-    ghost["parentNode"]["removeChild"](ghost);
-    var clk = document["createEvent"]("MouseEvents");
-    clk["initMouseEvent"]("click", true, true, window, 0, 0, 0, 0, 0, true, false, false, true, 0, null);
-    ghost["dispatchEvent"](clk);
-    var previewWindow = window["open"](url, "PopHelper");
-    previewWindow["focus"]();
+    var a = document.createElement("a");
+    a.setAttribute("href", url);
+    a.setAttribute("target", "PopHelper");
+    a.setAttribute("id", "openwin");
+    document.body.appendChild(a);
+    a.click();
 }
 
 function openLayoutManager(id) {
