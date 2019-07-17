@@ -522,7 +522,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
      */
     public function ReplaceRealPathCallback($aMatch)
     {
-        if (true === $this->isRelativeUrl($aMatch[1])) {
+        if (isset($aMatch[1]) && true === $this->isRelativeUrl($aMatch[1])) {
             $sNewPath = TGlobal::GetStaticURL($this->sCurrentCSSPath.DIRECTORY_SEPARATOR.$aMatch[1]);
             if ('http://' == substr($sNewPath, 0, 7)) {
                 $sNewPath = substr($sNewPath, 5);
