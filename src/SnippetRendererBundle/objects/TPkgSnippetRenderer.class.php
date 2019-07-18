@@ -146,18 +146,14 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
             $this->setFilename($this->getSourceModule()->viewTemplate);
         }
 
-        if ($this->getSourceType() !== IPkgSnippetRenderer::SOURCE_TYPE_STRING) {
-            try {
-                $content = $this->getTwigHandler()->render($this->getSource(), $this->getVars());
-            } catch (Twig_Error $e) {
-                throw new TPkgSnippetRenderer_SnippetRenderingException(
-                    sprintf("%s\nin file %s at line %s\n", $e->getMessage(), $e->getFile(), $e->getLine()),
-                    $e->getCode(),
-                    $e
-                );
-            }
-        } else {
-            $content = $this->getSource();
+        try {
+            $content = $this->getTwigHandler()->render($this->getSource(), $this->getVars());
+        } catch (Twig_Error $e) {
+            throw new TPkgSnippetRenderer_SnippetRenderingException(
+                sprintf("%s\nin file %s at line %s\n", $e->getMessage(), $e->getFile(), $e->getLine()),
+                $e->getCode(),
+                $e
+            );
         }
 
         return $content;
