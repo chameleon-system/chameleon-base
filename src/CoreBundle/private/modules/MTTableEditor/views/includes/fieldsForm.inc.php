@@ -39,9 +39,19 @@
                 }
                 ++$iTabCount;
 
+                $tabHasAField = false;
                 /** @var $fields TIterator */
                 $fields = $data['oFields'];
-                if ($fields->Length() > 0) {
+                /** @var $field TCMSField */
+                while ($field = $fields->Next()) {
+                    // NOTE this is also checked in fields.inc.php
+                    if ($sTabId === $field->oDefinition->sqlData['cms_tbl_field_tab'] && 'hidden' !== $field->GetDisplayType()) {
+                        $tabHasAField = true;
+                        break;
+                    }
+                }
+                $fields->GoToStart();
+                if (true === $tabHasAField) {
                     $fields->GoToStart();
                     require dirname(__FILE__).'/fields.inc.php';
                     $firstActiveTab = false;
