@@ -24,6 +24,7 @@
         $iTabCount = 0;
         $sTabId = '';
 
+        $firstActiveTab = true;
         if ($oTabs->Length() > 0) { // fields WITH headers
             $sFormTabsTitles = ''; // '<ul>';
             /** @var TdbCmsTblFieldTab $oTab */
@@ -38,7 +39,13 @@
                 }
                 ++$iTabCount;
 
-                require dirname(__FILE__).'/fields.inc.php';
+                /** @var $fields TIterator */
+                $fields = $data['oFields'];
+                if ($fields->Length() > 0) {
+                    $fields->GoToStart();
+                    require dirname(__FILE__).'/fields.inc.php';
+                    $firstActiveTab = false;
+                }
             }
             if (!empty($sFormTabsTitles)) {
                 echo '<ul class="nav nav-tabs" role="tablist">'.$sFormTabsTitles."\n</ul>";
