@@ -6,9 +6,9 @@
     {%- endset %}
 {% endif %}
 
- {% set fileName = downloadLink.fileName|e('html') %}
-{% if not downloadLink.showFilename %}
-    {% set fileName = '&nbsp;' %}
+{% set fileName = '&nbsp;' %}
+{% if downloadLink.showFilename %}
+    {% set fileName = downloadLink.fileName %}
 {% endif %}
 
 <span class="cmsdownloaditem" {{ downloadId|raw }}>
