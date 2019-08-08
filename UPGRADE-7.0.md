@@ -1,6 +1,89 @@
 UPGRADE FROM 6.3 TO 7.0
 =======================
 
+# Essentials
+
+The steps in this chapter are required to get the project up and running in version 7.0.
+It is recommended to follow these steps in the given order.
+
+## Prepare Project
+
+Be sure to install (locally) the latest release of the Chameleon 6.3.x branch before continuing migrating. It is 
+recommended to remove all
+deprecated code usage from the project before migrating. This way there will be deprecation messages still available
+which will help to decide what to do with code calling deprecated entities.
+
+Note that we decided to keep some deprecated entities although this is a major release. See section
+`Still-deprecated Code Entities` for details. These entities will be removed in a future Chameleon release, so be sure
+to remove calls over time.
+
+After switching to 7.0 provide two stub classes that were removed but are still used in the (live) database and thus are
+needed for auto class generation. They can be removed when the upgrade is finished.
+
+- TCMSFieldMediaProperties
+- TCMSFieldWorkflowBool
+
+These classes should extend TCMSField but otherwise can be empty and without namespace.
+They can be placed for example in "src/extensions" of the project.
+
+Logout from the Chameleon backend.
+
+## Adjust Composer Dependencies
+
+In `composer.json`, adjust version constraints for all Chameleon dependencies from `~6.3.0` to `~7.0.0` and run
+`composer update`.
+
+## Regenerate Autoclasses And Run Updates
+
+Regenerate autoclasses, either by deleting the `app/cache/autoclasses` directory and calling the Chameleon backend, or
+by calling the console command `app/console chameleon_system:autoclasses:generate`.
+
+Login to the Chameleon backend as administrator then and run updates.
+
+## Pagedef No Longer In Request Data
+
+When the user sends a request, the system in general first tries to find which page to load. If a page is found in this
+routing process, the ID of that page, called pagedef, is saved in the request attributes. In previous Chameleon releases
+this pagedef was additionally saved as request query parameter, which is no longer the case.
+
+Your project code should no longer retrieve the pagedef from the request query parameters, nor set it (e.g. in older
+SmartURLHandlers). An exception to this rule is in code that is only ever executed in backend context, where it is
+still valid.
+
+The following examples show what is NO LONGER working for code that may run in frontend context in Chameleon 7.0: 
+
+```php
+$request = ServiceLocator::get('request_stack'')->getCurrentRequest();
+$request->query->get('pagedef');
+```
+
+```php
+$inputFilterUtil = ServiceLocator::get('chameleon_system_core.util.input_filter');
+$inputFilterUtil->getFilteredGetInput('pagedef');
+```
+
+The following examples show what still works and does not need changes. Note that only the first example is considered
+the "correct" way. The second example uses a generic method that doesn't distinguish between GET, POST and request
+attributes which is considered a bad practice. The third example uses deprecated methods in TGlobal that do still work,
+but will be removed in a future Chameleon release.
+
+```php
+$request = ServiceLocator::get('request_stack'')->getCurrentRequest();
+$request->attributes->get('pagedef');
+$request->get('pagedef');
+```
+
+```php
+$inputFilterUtil = ServiceLocator::get('chameleon_system_core.util.input_filter');
+$inputFilterUtil->getFilteredInput('pagedef');
+```
+
+```php
+$global = TGlobal::instance();
+$global->GetUserData('pagedef');
+
+```
+
 # Cleanup
 
 ## Remove Flash Files
@@ -8,6 +91,12 @@ UPGRADE FROM 6.3 TO 7.0
 Support for Adobe Flash was removed. We recommend to search the media manager for legacy Flash files (search for file
 extensions "flv", "f4v" and "swf") and remove them.
 The media manager will also display where these files are still used; these usages should also be removed.
+
+## Remove module_cms_search Table
+
+The CMS search module was removed. If the project still needs this module, restore it from an earlier Chameleon release.
+Otherwise remove the associated database table by calling `TCMSLogChange::deleteTable('module_cms_search')` in an update
+script.
 
 # Informational
 
@@ -37,12 +126,43 @@ project requires WYSIWYG JavaScript, allow it by setting the configuration key
 
 The RevisionManagementBundle was removed. Remove it from the AppKernel.
 
+# Deprecated Code Entities
+
+There is a small number of entities newly deprecated since 7.0.0.
+
+## Database Fields
+
+- cms_content_box.icon_list
+- cms_module.icon_list
+- cms_tbl_conf.icon_list
+- cms_tpl_module.icon_list
+
+# Still-deprecated Code Entities
+
+Some code entities have been marked as deprecated in previous releases, but were not removed in this release because of
+wide usage, bug risks or quite a short deprecation period. They will be removed in a future Chameleon release, so be
+sure to remove calls over time.
+
+Entities that were NOT removed include (incomplete list):
+
+- Any database fields
+- Almost any method arguments
+- Classic main menu
+- Anything logging-related
+- TGlobal::GetUserData() and related methods
+- TGlobal::Translate()
+- TTools::GetArrayAsURL() and TTools::GetArrayAsURLForJavascript()
+- TCMSLogChange::_RunQuery()
+- MySQLLegacySupport
+- instance() methods
+
 # Removed Code Entities
 
 The code entities in this list were marked as deprecated in previous releases and have now been removed.
 
 ## Services
 
+- chameleon_system_core.ChameleonSessionManager
 - chameleon_system_core.password
 - chameleon_system_core.util.snippet_chain
 
@@ -58,6 +178,8 @@ The code entities in this list were marked as deprecated in previous releases an
 - chameleon_system_core.render_media_properties_field
 
 ## Bundle Configuration
+
+None.
 
 ## Constants
 
@@ -179,6 +301,7 @@ The code entities in this list were marked as deprecated in previous releases an
 - CMSMediaManagerTreeRPC
 - CMSMediaViddlerImport
 - CMSModuleImagePool
+- CMSSearch
 - esono\pkgCmsRouting\exceptions\DomainNotFoundException
 - IClusterDriver
 - ICmsObjectLink
@@ -198,11 +321,13 @@ The code entities in this list were marked as deprecated in previous releases an
 - MTListCore
 - MTPassThrough
 - MTPkgExternalTrackerGoogleAnalytics_MTPageMetaCore
+- MTSearchCore
 - MTSendAFriendCore
 - MTSitemapCore
 - TCacheManagerStorage_Decorator
 - TCacheManagerStorage_Decorator_LazyWriteMemcache
 - TCacheManagerStorage_Standard
+- TCMSCronJob_CreateSearchIndex
 - TCMSDataExtranetUser
 - TCMSFieldMediaProperties
 - TCMSFieldWorkflowActionType
@@ -211,16 +336,19 @@ The code entities in this list were marked as deprecated in previous releases an
 - TCMSFieldWorkflowPublishActive
 - TCMSFontImage
 - TCMSFontImageList
+- TCMSListManagerRevisionManagement
 - TCMSMath
 - TCMSMediaConnections
 - TCMSMediaTreeNode
 - TCmsObjectLinkBase
 - TCmsObjectLinkException_InvalidTargetClass
+- TCMSSearchIndex
+- TCMSSearchIndexPage
+- TCMSSearchIndexPortal
 - TCMSSessionHandler
 - TCMSSmartURLHandler_EOSNeoPay
 - TCMSSmartURLHandler_FlashCrossDomain
 - TCMSSmartURLHandler_Pagepath
-- TCMSListManagerRevisionManagement
 - TCMSTableEditorRecordRevision
 - TCMSUserInput_EMail
 - TCMSUserInput_XSS
@@ -624,6 +752,11 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Translations
 
+- chameleon_system_core.cms_module_cms_search.action_start_index
+- chameleon_system_core.cms_module_cms_search.headline
+- chameleon_system_core.cms_module_cms_search.select_portal
+- chameleon_system_core.cms_module_cms_search.state_index_running
+- chameleon_system_core.cms_module_cms_search.state_indexed
 - chameleon_system_core.cms_module_header.active_update_counter
 - chameleon_system_core.cms_module_header.error_unable_to_create_update_counter
 - chameleon_system_core.cms_module_header.msg_created_update_counter
@@ -665,6 +798,10 @@ The code entities in this list were marked as deprecated in previous releases an
 - chameleon_system_core.cms_module_media_manager.used_in_table
 - chameleon_system_core.error.flash_required
 - chameleon_system_core.fields.lookup.no_matches
+- chameleon_system_core.module_search.action_run_search
+- chameleon_system_core.module_search.no_results
+- chameleon_system_core.module_search.search_box_headline
+- chameleon_system_core.module_search.result_headline
 - chameleon_system_core.record_lock.lock_owner_fax
 - chameleon_system_core.record_revision.action_confirm_restore_revision
 - chameleon_system_core.record_revision.action_create_page_revision
@@ -688,7 +825,11 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Database Tables
 
+None.
+
 ## Database Fields
+
+None.
 
 ## Icons
 
@@ -711,4 +852,8 @@ There were some frontend styles, images and javascript helpers located in the co
 
 ## Page Definitions
 
+- api.pagedef.php
+- CMSCreateSearchIndex.pagedef.php
+- CMSCreateSearchIndexPlain.pagedef.php
+- pkgCmsLicenseManager.pagedef.php
 - versioninfo.pagedef.php

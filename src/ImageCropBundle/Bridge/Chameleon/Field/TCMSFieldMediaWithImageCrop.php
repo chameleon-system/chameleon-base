@@ -12,6 +12,7 @@
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field;
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\Corebundle\Util\UrlUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
@@ -38,22 +39,33 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
      */
     public function ChangeFieldDefinition($sOldName, $sNewName, &$postData = null)
     {
+        $originalDefinitionData = $this->oDefinition->sqlData;
         parent::ChangeFieldDefinition($sOldName, $sNewName, $postData);
 
         $additionalFieldNameOldFieldName = $this->getFieldNameOfAdditionalField($sOldName);
         $additionalFieldNameNewFieldName = $this->getFieldNameOfAdditionalField($sNewName);
         $databaseConnection = $this->getDatabaseConnection();
 
-        $query = sprintf(
-            'ALTER TABLE %s CHANGE %s %s CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL',
-            $databaseConnection->quoteIdentifier($this->sTableName),
-            $databaseConnection->quoteIdentifier($additionalFieldNameOldFieldName),
-            $databaseConnection->quoteIdentifier($additionalFieldNameNewFieldName)
-        );
-        $databaseConnection->query($query);
+        $tableName = $databaseConnection->quoteIdentifier($this->sTableName);
+        if (false !== $databaseConnection->fetchColumn(sprintf('SHOW COLUMNS FROM %s LIKE :columnName', $tableName), ['columnName' => $additionalFieldNameOldFieldName])) {
+            //For new fields, the additional field already has the right name, but we have no way to check that here so we just check if the column exists.
+            $query = sprintf(
+                'ALTER TABLE %s CHANGE %s %s CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL',
+                $tableName,
+                $databaseConnection->quoteIdentifier($additionalFieldNameOldFieldName),
+                $databaseConnection->quoteIdentifier($additionalFieldNameNewFieldName)
+            );
+            $databaseConnection->query($query);
 
-        $logChangeDataModels[] = new LogChangeDataModel($query);
-        TCMSLogChange::WriteTransaction($logChangeDataModels);
+            $logChangeDataModels[] = new LogChangeDataModel($query);
+            TCMSLogChange::WriteTransaction($logChangeDataModels);
+        }
+
+        $translatedFieldDefinition = clone $this->oDefinition;
+        $translatedFieldDefinition->sqlData['is_translatable'] = $postData['is_translatable'];
+        $originalDefinitionData['name'] = $additionalFieldNameOldFieldName;
+        $translatedFieldDefinition->sqlData['name'] = $additionalFieldNameNewFieldName;
+        $translatedFieldDefinition->UpdateFieldTranslationKeys($originalDefinitionData);
     }
 
     /**
@@ -83,6 +95,15 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $cropId = '';
         $crop = TdbCmsImageCrop::GetNewInstance();
         $additionalFieldName = $this->getFieldNameOfAdditionalField($this->name);
+        $additionalFieldNameTranslated = $additionalFieldName;
+
+        if (true === $this->oDefinition->isTranslatable()) {
+            $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+            if (null !== $editLanguage && $this->getFieldTranslationUtil()->isTranslationNeeded($editLanguage)) {
+                $additionalFieldNameTranslated .= '__'.$editLanguage->fieldIso6391;
+            }
+        }
+
         if (true === isset($this->oTableRow->sqlData[$additionalFieldName]) && $crop->Load(
                 $this->oTableRow->sqlData[$additionalFieldName]
             )) {
@@ -90,7 +111,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         }
 
         $databaseConnection = $this->getDatabaseConnection();
-        $data = array($databaseConnection->quoteIdentifier($additionalFieldName) => $cropId);
+        $data = array($databaseConnection->quoteIdentifier($additionalFieldNameTranslated) => $cropId);
         $identifier = array('id' => $recordId);
         $databaseConnection->update($databaseConnection->quoteIdentifier($this->sTableName), $data, $identifier);
 
@@ -263,7 +284,6 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
      */
     public function RenderFieldPostLoadString()
     {
-        $postLoadString = parent::RenderFieldPostLoadString();
         $viewParser = new TViewParser();
         $viewParser->bShowTemplatePathAsHTMLHint = false;
         $viewData = $this->GetFieldWriterData();
@@ -273,8 +293,9 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
                 $additionalFieldName
             );
         $viewParser->AddVarArray($viewData);
-        $postLoadString .= $viewParser->RenderObjectView(
-            'additionalPostload',
+
+        $postLoadString = $viewParser->RenderObjectView(
+            'postload',
             'TCMSFields/TCMSFieldMediaWithImageCrop',
             'Customer'
         );
@@ -297,10 +318,6 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $fieldHtml .= $viewRenderer->Render('imageCrop/TCmsFieldMediaWithImageCrop/button.html.twig');
 
         $imageId = $this->_GetFieldValue();
-        if ('1' === $imageId) {
-            $imageId = $this->getOriginalLanguageImageId();
-        }
-
         $languageId = $this->getLanguageService()->getActiveEditLanguage()->id;
         $crop = null;
         $cmsMedia = $this->getCmsMediaDataAccess()->getCmsMedia($imageId, $languageId);
@@ -448,5 +465,10 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $mapper[] = 'chameleon_system_image_crop.mapper.media_field_image_box_with_crop';
 
         return $mapper;
+    }
+
+    private function getFieldTranslationUtil(): FieldTranslationUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 }

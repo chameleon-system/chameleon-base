@@ -94,7 +94,7 @@ function AjaxError(XMLHttpRequest, textStatus, errorThrown) {
                     top.document.location.href = window.location.pathname;
                 }
             } else {
-                alert(errorMessage);
+                toasterMessage(errorMessage, "ERROR");
             }
         }
     } else {
@@ -141,12 +141,13 @@ function toasterMessage(message,type) {
 
 window.alert = function(message) {
     new PNotify({
-        title: 'Alert',
+        title: "Alert",
+        text: message,
+        text_escape: true,
         type: 'error',
         opacity: 1,
         styling: 'bootstrap3',
-        icons: 'fontawesome5',
-        text: message
+        icons: 'fontawesome5'
     });
 };
 
@@ -454,5 +455,12 @@ CHAMELEON.CORE.handleFormAndLinkTargetsInModals = function () {
         $(this).find("input[name='pagedef'][value='tablemanager']").each(function() {
             $(this).val('tablemanagerframe');
         });
+    });
+
+    $("a[target='_top']").each(function() {
+        $(this).attr('target', '');
+
+        var link = $(this).attr('href').replace('pagedef=tableeditor', 'pagedef=tableeditorPopup');
+        $(this).attr('href', link);
     });
 };

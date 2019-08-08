@@ -25,7 +25,6 @@ use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use Doctrine\DBAL\DBALException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 if (!defined('PKG_EXTRANET_USE_CASE_INSENSITIVE_LOGIN_NAMES')) {
     define('PKG_EXTRANET_USE_CASE_INSENSITIVE_LOGIN_NAMES', false);

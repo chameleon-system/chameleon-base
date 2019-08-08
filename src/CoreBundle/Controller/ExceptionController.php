@@ -84,7 +84,6 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
             return parent::showAction($request, $exception, $logger);
         }
         $request->attributes->set('pagedef', $exceptionPageDef);
-        $request->query->set('pagedef', $exceptionPageDef);
 
         // Do not execute (original) module_fnc for error pages
         $request->request->remove('module_fnc');
@@ -143,7 +142,7 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
     }
 
     /**
-     * @param int              $code
+     * @param int $code
      *
      * @return string|null
      */

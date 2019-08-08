@@ -25,4 +25,3 @@ $data = TCMSLogChange::createMigrationQueryData('cms_smart_url_handler', 'en')
   ])
 ;
 TCMSLogChange::delete(__LINE__, $data);
-

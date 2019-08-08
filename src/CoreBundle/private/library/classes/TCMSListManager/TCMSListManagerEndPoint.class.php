@@ -131,10 +131,6 @@ class TCMSListManagerEndPoint
         if (is_array($this->oTableConf->sqlData) && array_key_exists('list_query', $this->oTableConf->sqlData)) {
             $recordquery = trim($this->oTableConf->sqlData['list_query']);
             $portalRestriction = $this->GetPortalRestriction();
-            $portalRestrictionJoin = '';
-            if (!empty($portalRestriction)) {
-                $portalRestrictionJoin = $this->GetPortalRestrictionJoin();
-            }
             $userRestriction = $this->GetUserRestriction();
             $userRestrictionJoin = '';
             if (!empty($userRestriction) && false !== strpos($userRestriction, '_cms_usergroup_mlt')) {
@@ -147,9 +143,9 @@ class TCMSListManagerEndPoint
                 $quotedTableName = $databaseConnection->quoteIdentifier($this->oTableConf->sqlData['name']);
                 $filterQuery = preg_replace("/(FROM\s.+?(\s|$))/", "FROM $quotedTableName ", $filterQuery);
                 if (false !== strpos($filterQuery, 'WHERE')) {
-                    $filterQuery = str_replace('WHERE', $this->GetFilterQueryCustomJoins()." $portalRestrictionJoin $userRestrictionJoin WHERE ", $filterQuery);
+                    $filterQuery = str_replace('WHERE', $this->GetFilterQueryCustomJoins()." $userRestrictionJoin WHERE ", $filterQuery);
                 } else {
-                    $filterQuery = str_ireplace("FROM $quotedTableName ", "FROM $quotedTableName ".$this->GetFilterQueryCustomJoins()." $portalRestrictionJoin $userRestrictionJoin", $filterQuery);
+                    $filterQuery = str_ireplace("FROM $quotedTableName ", "FROM $quotedTableName ".$this->GetFilterQueryCustomJoins()." $userRestrictionJoin", $filterQuery);
                 }
 
                 // if we don't have a where condition we will need to add one
@@ -157,7 +153,7 @@ class TCMSListManagerEndPoint
                     $filterQuery .= ' WHERE 1=1';
                 }
             } else {
-                $filterQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($this->oTableConf->sqlData['name']).'` '.$this->GetFilterQueryCustomJoins().' '.$portalRestrictionJoin.' '.$userRestrictionJoin.' WHERE 1=1';
+                $filterQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($this->oTableConf->sqlData['name']).'` '.$this->GetFilterQueryCustomJoins().' '.$userRestrictionJoin.' WHERE 1=1';
             }
 
             if (!empty($portalRestriction)) {
@@ -292,7 +288,11 @@ class TCMSListManagerEndPoint
                 if (false !== $portalRestriction) { // the user is in portals...
                     if ($portalMLTFieldExists) {
                         // mlt connection (record may be in many portals)
-                        $restriction .= " ($quotedMltTable.`target_id` IN ($portalRestriction) OR $quotedMltTable.`target_id` IS NULL)";
+
+                        $mltSubSelect = $this->getSubselectForMlt($quotedTableName, $quotedMltTable);
+                        $mltSubSelect .= " OR $quotedMltTable.`target_id` IN ($portalRestriction)";
+
+                        $restriction .= " $quotedTableName.`id` IN ($mltSubSelect)";
                     }
                     if ($portalIDFieldExists) {
                         if (!empty($restriction)) {
@@ -303,7 +303,10 @@ class TCMSListManagerEndPoint
                 } else {
                     if ($portalMLTFieldExists) {
                         // mlt connection (record may be in many portals)
-                        $restriction .= " ($quotedMltTable.`target_id` IS NULL)";
+
+                        $mltSubSelect = $this->getSubselectForMlt($quotedTableName, $quotedMltTable);
+
+                        $restriction .= " $quotedTableName.`id` IN ($mltSubSelect)";
                     }
                     if ($portalIDFieldExists) {
                         if (!empty($restriction)) {
@@ -328,6 +331,15 @@ class TCMSListManagerEndPoint
         $query = $oRecordList->GetListManagerPortalRestriction($this, $query);
 
         return $query;
+    }
+
+    private function getSubselectForMlt(string $quotedTableName, string $quotedMltTableName): string
+    {
+        $mltSubSelect = "SELECT DISTINCT $quotedTableName.`id` FROM $quotedTableName";
+        $mltSubSelect .= $this->GetPortalRestrictionJoin();
+        $mltSubSelect .= " WHERE $quotedMltTableName.`target_id` IS NULL";
+
+        return $mltSubSelect;
     }
 
     public function CreateRestriction($fieldname, $operatorAndValue)
@@ -462,7 +474,7 @@ class TCMSListManagerEndPoint
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sItemKey = 'edittableconf';
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.open_table_configuration');
-                    $oMenuItem->sIcon = 'far fa-edit';
+                    $oMenuItem->sIcon = 'fas fa-cogs';
                     $oMenuItem->setButtonStyle('btn-warning');
 
                     $pagedef = 'tableeditor';

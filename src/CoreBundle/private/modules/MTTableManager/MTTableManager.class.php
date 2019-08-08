@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use Doctrine\DBAL\Connection;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -437,12 +438,15 @@ class MTTableManager extends TCMSModelBase
         $recordID = $inputFilterUtil->getFilteredInput('recordID');
         $autoClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->fieldName);
 
+        $listQuery = $this->getAutocompleteListQuery();
         /** @var $recordList TCMSRecordList */
-        $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $this->getAutocompleteListQuery());
+        $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $listQuery);
 
         $returnVal = [];
         $returnVal[] = ['id' => ' ', 'text' => ' ', 'html' => ' ', 'cssClass' => 'd-none'];
 
+        $editLanguageId = $this->getLanguageService()->getActiveEditLanguage()->id;
+        $recordList->SetLanguage($editLanguageId);
         /** @var $record TCMSRecord */
         while ($record = $recordList->Next()) {
             $name = $record->GetName();
@@ -673,5 +677,10 @@ class MTTableManager extends TCMSModelBase
     private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
+    }
+
+    private function getLanguageService(): LanguageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 }

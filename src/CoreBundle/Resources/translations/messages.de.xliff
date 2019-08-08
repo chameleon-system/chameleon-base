@@ -70,23 +70,6 @@
                 <target>nichts wählen</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_core.module_search.result_headline">
-                <source>chameleon_system_core.module_search.result_headline</source>
-                <target>Suchergebnisse</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.module_search.no_results">
-                <source>chameleon_system_core.module_search.no_results</source>
-                <target>Zu Ihrer Anfrage wurden leider keine Inhalte gefunden</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.module_search.search_box_headline">
-                <source>chameleon_system_core.module_search.search_box_headline</source>
-                <target>Suche</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.module_search.action_run_search">
-                <source>chameleon_system_core.module_search.action_run_search</source>
-                <target>Suchen</target>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_core.module_send_a_friend.from_name">
                 <source>chameleon_system_core.module_send_a_friend.from_name</source>
                 <target>Ihr Name</target>

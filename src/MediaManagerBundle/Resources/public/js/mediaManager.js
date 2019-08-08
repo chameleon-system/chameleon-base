@@ -140,6 +140,11 @@
                                 label: CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.tree_context_menu.delete_folder'),
                                 icon: "fas fa-trash-alt text-danger",
                                 action: function (data) {
+                                    var confirmation = window.confirm(CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.delete.folder_are_you_sure')+"\n"+data.reference.text());
+                                    if (false === confirmation) {
+                                        return;
+                                    }
+
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference);
                                     var ref = self.treeContainer.jstree(true);
@@ -281,6 +286,7 @@
         onTreeDelete: function (e, data) {
             var id = data.node.id.replace("mediaTreeNode", "");
             var self = this;
+            CHAMELEON.CORE.showProcessingModal();
             $.ajax({
                 type: "POST",
                 async: true,
@@ -289,10 +295,12 @@
                     'id': encodeURIComponent(id)
                 },
                 error: function (responseData) {
+                    CHAMELEON.CORE.hideProcessingModal();
                     data.instance.refresh();
                     self.showErrorFromAjaxResponse(responseData);
                 },
                 success: function (jsonData) {
+                    CHAMELEON.CORE.hideProcessingModal();
                     self.showSuccessMessage(jsonData);
                     if (self.state.mediaTreeNodeId === id) {
                         self.state.mediaTreeNodeId = null;

@@ -1,6 +1,5 @@
 <?php
 /** @var TdbCmsTblFieldTab $oTab */
-
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 

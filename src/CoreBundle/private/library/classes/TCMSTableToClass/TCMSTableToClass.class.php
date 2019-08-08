@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
 use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;

@@ -112,10 +112,6 @@
             <argument type="service" id="chameleon_system_core.util.input_filter" />
         </service>
 
-        <service id="chameleon_system_core.ChameleonSessionManager" alias="chameleon_system_core.session.chameleon_session_manager" public="true">
-            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.2.0 - use chameleon_system_core.session.chameleon_session_manager instead.</deprecated>
-        </service>
-
         <service id="session" synthetic="true" public="true"/>
 
         <service id="chameleon_system_core.chameleon_controller" synthetic="true" public="true"/>
@@ -178,6 +174,7 @@
         </service>
 
         <service id="chameleon_system_core.frontend_controller" class="ChameleonSystem\CoreBundle\Controller\ChameleonFrontendController" parent="chameleon_system_core.base_controller" public="true">
+            <argument type="service" id="chameleon_system_core.data_access_cms_master_pagedef_database" />
             <argument type="service" id="chameleon_system_core.usermoduleloader" />
             <argument type="service" id="chameleon_system_core.viewPathManager" />
             <argument type="service" id="service_container" />
@@ -185,6 +182,7 @@
         </service>
 
         <service id="chameleon_system_core.backend_controller" class="ChameleonSystem\CoreBundle\Controller\ChameleonBackendController" parent="chameleon_system_core.base_controller" public="true">
+            <argument type="service" id="chameleon_system_core.data_access_cms_master_pagedef_file" />
             <argument type="service" id="chameleon_system_core.moduleloader" />
             <call method="setBackendAccessCheck">
                 <argument type="service" id="chameleon_system_core.security.backend_access_check" />
@@ -320,10 +318,12 @@
             <argument type="service" id="chameleon_system_core.service_initializer.active_page_service" />
             <argument type="service" id="request_stack" />
             <argument type="service" id="router" />
+            <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
             <argument type="service" id="chameleon_system_core.util.url" />
             <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="chameleon_system_core.util.routing"/>
             <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="chameleon_system_core.util.page_service_util"/>
         </service>
 
         <service id="chameleon_system_core.service_initializer.active_page_service" class="ChameleonSystem\CoreBundle\Service\Initializer\ActivePageServiceInitializer" public="false">
@@ -861,6 +861,9 @@
         <service id="chameleon_system_core.service.main_menu_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator">
             <argument id="database_connection" type="service"/>
             <argument id="chameleon_system_core.util.field_translation" type="service"/>
+        </service>
+        <service id="chameleon_system_core.service.module_icon_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\ModuleIconMigrator">
+            <argument id="database_connection" type="service"/>
         </service>
     </services>
 </container>

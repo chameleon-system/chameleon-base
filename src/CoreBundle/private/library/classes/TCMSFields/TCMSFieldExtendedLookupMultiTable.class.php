@@ -14,10 +14,14 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use Doctrine\Common\Collections\Expr\Comparison;
 
 /**
- * lookup.
-/**/
+ * Lookup to different tables.
+ */
 class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 {
+    const TABLE_NAME_FIELD_SUFFIX = '_table_name';
+
+    const FIELD_SYSTEM_NAME = 'CMSFIELD_EXTENDEDMULTITABLELIST';
+
     /**
      * returns the name of the table this field is connected with
      * depends on the hidden field fieldName_table_name that will be set after the save
@@ -30,8 +34,8 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
      */
     public function GetConnectedTableName()
     {
-        if (!is_null($this->oTableRow) && array_key_exists($this->name.'_table_name', $this->oTableRow->sqlData)) {
-            $sTableName = $this->oTableRow->sqlData[$this->name.'_table_name'];
+        if (!is_null($this->oTableRow) && array_key_exists($this->getTableFieldName(), $this->oTableRow->sqlData)) {
+            $sTableName = $this->oTableRow->sqlData[$this->getTableFieldName()];
         } else {
             $sTableName = '';
         }
@@ -48,6 +52,15 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         return $sTableName;
     }
 
+    protected function getTableFieldName(string $tableName = ''): string
+    {
+        if ('' === $tableName) {
+            $tableName = $this->name;
+        }
+
+        return $tableName.self::TABLE_NAME_FIELD_SUFFIX;
+    }
+
     /**
      * renders a input field of type "hidden"
      * will store the table name of the connected record on selection of the record.
@@ -56,10 +69,12 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
      */
     protected function _GetHiddenField()
     {
-        $sHTML = parent::_GetHiddenField();
-        $sHTML .= '<input type="hidden" name="'.TGlobal::OutHTML($this->name.'_table_name').'" id="'.TGlobal::OutHTML($this->name.'_table_name').'" value="'.TGlobal::OutHTML($this->oTableRow->sqlData[$this->name.'_table_name']).'" />'."\n";
+        $html = parent::_GetHiddenField();
 
-        return $sHTML;
+        $tableFieldNameEscaped = TGlobal::OutHTML($this->getTableFieldName());
+        $html .= '<input type="hidden" name="'.$tableFieldNameEscaped.'" id="'.$tableFieldNameEscaped.'" value="'.TGlobal::OutHTML($this->oTableRow->sqlData[$tableFieldNameEscaped]).'" />'."\n";
+
+        return $html;
     }
 
     /**
@@ -377,34 +392,12 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         parent::ChangeFieldDefinition($sOldName, $sNewName, $postData);
 
         $sQuery = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
-                      CHANGE `'.MySqlLegacySupport::getInstance()->real_escape_string($sOldName).'_table_name`
-                             `'.MySqlLegacySupport::getInstance()->real_escape_string($sNewName)."_table_name` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'Zugehöriger Tabellenname für das Feld \"".MySqlLegacySupport::getInstance()->real_escape_string($sNewName)."\":'";
+                      CHANGE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName($sOldName)).'`
+                             `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName($sNewName))."` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'Zugehöriger Tabellenname für das Feld \"".MySqlLegacySupport::getInstance()->real_escape_string($sNewName)."\":'";
         MySqlLegacySupport::getInstance()->query($sQuery);
         $aQuery = array(new LogChangeDataModel($sQuery));
 
         TCMSLogChange::WriteTransaction($aQuery);
-
-        if ('new_field' != $sOldName) {
-            //get the table name and fill the field
-            $sTableName = $this->GetConnectedTableName();
-            $oTableConfig = TdbCmsTblConf::GetNewInstance();
-            //only update the records if the connected table is a valid table to prevent errors in the table editor
-            if ($oTableConfig->LoadFromField('name', $sTableName)) {
-                $sQuery = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
-                      SET `'.MySqlLegacySupport::getInstance()->real_escape_string($sNewName)."_table_name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."'";
-                MySqlLegacySupport::getInstance()->query($sQuery);
-
-                $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
-                $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguage->fieldIso6391);
-                $migrationQueryData
-                    ->setFields(array(
-                        $sNewName.'_table_name' => $sTableName,
-                    ))
-                ;
-                $aQuery = array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE));
-                TCMSLogChange::WriteTransaction($aQuery);
-            }
-        }
     }
 
     /**
@@ -417,13 +410,13 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     {
         $sTableName = '';
         $oCmsTblConf = TdbCmsTblConf::GetNewInstance();
-        if ($oCmsTblConf->Load($this->oTableRow->sqlData[$this->name.'_table_name'])) {
+        if ($oCmsTblConf->Load($this->oTableRow->sqlData[$this->getTableFieldName()])) {
             $sTableName = $oCmsTblConf->fieldName;
         }
 
         if (!empty($sTableName)) {
             $sQuery = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
-                      SET `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name.'_table_name')."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."'
+                      SET `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName())."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."'
                     WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->oTableRow->id)."'
                  ";
             MySqlLegacySupport::getInstance()->query($sQuery);
@@ -432,7 +425,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguage->fieldIso6391);
             $migrationQueryData
                 ->setFields(array(
-                    $this->name.'_table_name' => $sTableName,
+                    $this->getTableFieldName() => $sTableName,
                 ))
                 ->setWhereEquals(array(
                     'id' => $this->oTableRow->id,
@@ -454,7 +447,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 
         $this->RemoveFieldIndex();
         $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
-                        DROP `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name.'_table_name').'` ';
+                        DROP `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName()).'` ';
 
         MySqlLegacySupport::getInstance()->query($query);
         $aQuery = array(new LogChangeDataModel($query));
@@ -471,19 +464,19 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         $sTableName = $this->GetConnectedTableName();
         $sQuery = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
                     SET `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name)."` = ''
-                  WHERE `".MySqlLegacySupport::getInstance()->real_escape_string($this->name)."_table_name` != '".MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."'";
+                  WHERE `".MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName())."` != '".MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."'";
         MySqlLegacySupport::getInstance()->query($sQuery);
 
         $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
         $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguage->fieldIso6391);
         $migrationQueryData
             ->setFields(array($this->name => ''))
-            ->setWhereExpressions(array(new Comparison($this->name.'_table_name', Comparison::NEQ, $sTableName)));
+            ->setWhereExpressions(array(new Comparison($this->getTableFieldName().'', Comparison::NEQ, $sTableName)));
 
         TCMSLogChange::WriteTransaction(array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE)));
 
         $sQuery = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
-                        DROP `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name.'_table_name').'` ';
+                        DROP `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName().'').'` ';
 
         MySqlLegacySupport::getInstance()->query($sQuery);
         $aQuery = array(new LogChangeDataModel($sQuery));
@@ -497,7 +490,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     public function ChangeFieldTypePostHook()
     {
         $sQuery = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
-                         ADD `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name)."_table_name` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'Zugehöriger Tabellenname für das Feld \"".MySqlLegacySupport::getInstance()->real_escape_string($this->name)."\":'";
+                         ADD `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName())."` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'Zugehöriger Tabellenname für das Feld \"".MySqlLegacySupport::getInstance()->real_escape_string($this->name)."\":'";
 
         MySqlLegacySupport::getInstance()->query($sQuery);
         $aQuery = array(new LogChangeDataModel($sQuery));
@@ -511,33 +504,30 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     {
         parent::RemoveFieldIndex();
 
-        $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'` DROP INDEX `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name).'_combined`';
-
-        MySqlLegacySupport::getInstance()->query($query);
-        $aQuery = array(new LogChangeDataModel($query));
-        TCMSLogChange::WriteTransaction($aQuery);
+        $this->dropIndexByName($this->name.'_combined');
     }
 
     /**
      * sets field index if the field type is indexable.
      *
-     * @param bool $returnDDL - if tre the SQL alter statement will be returned
+     * @param bool $returnDDL - if true the SQL alter statement will be returned
      *
      * @return string
      */
     public function CreateFieldIndex($returnDDL = false)
     {
-        $sDDL = parent::CreateFieldIndex($returnDDL);
+        $queryDump = parent::CreateFieldIndex($returnDDL);
 
-        $sCreateCombinedIndex = 'ALTER TABLE  `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'` ADD INDEX `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name).'_combined` (  `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name).'_table_name` ,  `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name).'` )';
-        if (false === $returnDDL) {
-            MySqlLegacySupport::getInstance()->query($sCreateCombinedIndex);
-            $aQuery = array(new LogChangeDataModel($sCreateCombinedIndex));
-            TCMSLogChange::WriteTransaction($aQuery);
-        } else {
-            $sDDL .= $sCreateCombinedIndex.";\n";
+        $indexFields = array($this->getTableFieldName(), $this->name);
+
+        if (true === $returnDDL) {
+            $queryDump .= $this->getIndexQuery($this->name.'_combined', 'INDEX', $indexFields).";\n";
+
+            return $queryDump;
         }
 
-        return $sDDL;
+        $this->createIndex($this->name.'_combined', 'INDEX', $indexFields);
+
+        return $queryDump;
     }
 }

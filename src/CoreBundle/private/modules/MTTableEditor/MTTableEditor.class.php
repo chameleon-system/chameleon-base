@@ -12,8 +12,8 @@
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use Symfony\Component\HttpFoundation\Request;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * edit a table record
@@ -146,6 +146,7 @@ class MTTableEditor extends TCMSModelBase
         }
         $this->redirectPagedef = $oGlobal->GetUserData('redirectPagedef');
 
+        $this->data['sForeignField'] = null;
         if ($oGlobal->UserDataExists('field')) {
             // tableeditor called in iframe from other field
             $this->data['sForeignField'] = $oGlobal->GetUserData('field');
@@ -707,7 +708,7 @@ class MTTableEditor extends TCMSModelBase
             }
 
             $this->LoadMessages();
-            if (false == $oRecordData || null === $oRecordData) {
+            if (false === $oRecordData || null === $oRecordData) {
                 $oRecordData = $this->oTableManager->oTableEditor->GetObjectShortInfo($postData);
             }
 
@@ -729,13 +730,33 @@ class MTTableEditor extends TCMSModelBase
             $fieldValue = $this->global->GetUserData($editFieldName);
             $this->oTableManager->SaveField($editFieldName, $fieldValue);
             $contentFormatted = $this->getFormattedFieldContent($editFieldName, $fieldValue);
+            $this->LoadMessages();
 
-            $result = array('success' => true, 'fieldname' => $editFieldName, 'content' => $fieldValue, 'contentFormatted' => $contentFormatted);
+            $result = array(
+                'success' => false === $this->hasErrorMessages(),
+                'fieldname' => $editFieldName,
+                'content' => $fieldValue,
+                'contentFormatted' => $contentFormatted,
+                'messages' => $this->aMessages,
+            );
         } else {
             $result = array('success' => false);
         }
 
         return $result;
+    }
+
+    private function hasErrorMessages(): bool
+    {
+        if (is_array($this->aMessages) && count($this->aMessages) > 0) {
+            foreach ($this->aMessages as $message) {
+                if ('ERROR' === $message['sMessageType']) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

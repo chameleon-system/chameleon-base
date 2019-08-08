@@ -55,7 +55,7 @@ class ModuleChooserModuleListMapper extends AbstractViewMapper
             $module = array(
                 'name' => $moduleObject->fieldName,
                 'id' => $moduleObject->id,
-                'icon' => TGlobal::GetStaticURLToWebLib('/images/icons/'.$moduleObject->fieldIconList),
+                'icon' => $moduleObject->fieldIconFontCssClass,
                 'views' => array(),
             );
             $moduleObject->aPermittedViews = $permittedModules[$moduleObject->fieldClassname];

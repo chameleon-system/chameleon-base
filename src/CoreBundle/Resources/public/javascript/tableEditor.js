@@ -495,25 +495,7 @@ function SaveViaAjaxCallback(data, statusText) {
         returnVal = true;
 
         if (data.aMessages) {
-            var bOnLoadResetted = false;
-            $.map(data.aMessages, function (oMessage, index) {
-                toasterMessage(oMessage.sMessage, oMessage.sMessageType);
-
-                // messages do have a reference to field (e.g. mail-field not valid)
-                if (oMessage.sMessageRefersToField) {
-                    // add the class to field
-                    $('#fieldname_' + oMessage.sMessageRefersToField).addClass('bg-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(oMessage.sMessageType));
-                }
-
-                if (oMessage.sMessageType !== 'ERROR' && !bOnLoadResetted) {
-                    // remove "something changed" message, because now the data was saved
-                    bOnLoadResetted = true;
-                    window.onbeforeunload = function () {
-                    };
-                    // reattach the message binding
-                    CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
-                }
-            });
+            ShowMessages(data.aMessages);
         } else {
             // remove "something changed" message, because now the data was saved
             window.onbeforeunload = function () {
@@ -534,6 +516,28 @@ function SaveViaAjaxCallback(data, statusText) {
     return returnVal;
 }
 
+function ShowMessages(messages) {
+    var bOnLoadResetted = false;
+    $.map(messages, function (message, index) {
+        toasterMessage(message.sMessage, message.sMessageType);
+
+        // messages do have a reference to field (e.g. mail-field not valid)
+        if (message.sMessageRefersToField) {
+            // add the class to field
+            $('#fieldname_' + message.sMessageRefersToField).addClass('bg-' + CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle(message.sMessageType));
+        }
+
+        if (message.sMessageType !== 'ERROR' && !bOnLoadResetted) {
+            // remove "something changed" message, because now the data was saved
+            bOnLoadResetted = true;
+            window.onbeforeunload = function () {
+            };
+            // reattach the message binding
+            CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
+        }
+    });
+}
+
 function Save() {
     CHAMELEON.CORE.showProcessingModal();
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'Save';
@@ -547,6 +551,11 @@ function ShowFieldEditWindow(type, data, evt) {
 
 function ShowAjaxSaveResult(data, statusText) {
     CloseModalIFrameDialog();
+
+    if (data.messages) {
+        ShowMessages(data.messages);
+    }
+
     if (data.success == true) {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.msg_save_success'), 'MESSAGE');
         var contentContainer = parent.document ? parent.document.getElementById(data.fieldname + '_contentdiv') : null;

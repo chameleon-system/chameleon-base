@@ -12,13 +12,13 @@
 namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\CoreEvents;
+use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ErrorException;
@@ -116,6 +116,10 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private $resourceCollector;
     /**
+     * @var DataAccessCmsMasterPagedefInterface
+     */
+    private $dataAccessCmsMasterPagedef;
+    /**
      * @var ResponseVariableReplacerInterface
      */
     private $responseVariableReplacer;
@@ -123,6 +127,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
+        DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
         IViewPathManager $viewPathManager = null
     ) {
@@ -131,6 +136,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->moduleLoader->setController($this);
         $this->viewPathManager = $viewPathManager;
         $this->eventDispatcher = $eventDispatcher;
+        $this->dataAccessCmsMasterPagedef = $dataAccessCmsMasterPagedef;
     }
 
     /**
@@ -266,43 +272,15 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private function getPagedefData($pagedef)
     {
-        $cacheKey = array(
-            'type' => 'pagedefdata',
-            'pagedef' => $pagedef,
-            'requestMasterPageDef' => $this->inputFilterUtil->getFilteredInput('__masterPageDef', false),
-            'isTemplateEngineMode' => $this->requestInfoService->isCmsTemplateEngineEditMode(),
-            'cmsuserdefined' => TGlobal::CMSUserDefined(),
-        );
-
-        if ($cacheKey['cmsuserdefined'] && $cacheKey['requestMasterPageDef']) {
-            $cacheKey['get_id'] = $this->inputFilterUtil->getFilteredInput('id');
+        $pagedefData = $this->dataAccessCmsMasterPagedef->get($pagedef);
+        if (null === $pagedefData) {
+            return false;
         }
 
-        $key = $this->cache->getKey($cacheKey);
-        $pagedefData = $this->cache->get($key);
-        if (null !== $pagedefData) {
-            return $pagedefData;
-        }
-        $oPageDefinitionFile = $this->GetPagedefObject($pagedef);
-        if (false !== $oPageDefinitionFile) {
-            // GetLayoutFile will reload the module list so MAKE SURE TO CALL GetModuleList first (and yes, i know this is terrible)
-            $pagedefData = array(
-                'moduleList' => $oPageDefinitionFile->GetModuleList(),
-                'sLayoutFile' => $oPageDefinitionFile->GetLayoutFile(),
-            );
-
-            $aTrigger = array(
-                array('table' => 'cms_tpl_page', 'id' => $pagedef),
-                array('table' => 'cms_tree', 'id' => null),
-                array('table' => 'cms_tree_node', 'id' => null),
-                array('table' => 'cms_master_pagedef', 'id' => null),
-            );
-            $this->cache->set($key, $pagedefData, $aTrigger);
-        } else {
-            $pagedefData = false;
-        }
-
-        return $pagedefData;
+        return             [
+            'moduleList' => $pagedefData->getModuleList(),
+            'sLayoutFile' => $pagedefData->getLayoutFile(),
+        ];
     }
 
     /**
@@ -319,6 +297,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @var string $pagedef
      *
      * @return TCMSPageDefinitionFile|bool
+     *
+     * @deprecated since 6.2.10 - use chameleon_system_core.data_access_cms_master_pagedef_file or chameleon_system_core.data_access_cms_master_pagedef_database instead
      */
     public function &GetPagedefObject($pagedef)
     {
@@ -340,6 +320,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @param string $pagedef - name of the pagedef
      *
      * @return string
+     *
+     * @deprecated since 6.2.10 - not necessary anymore / do not use
      */
     protected function PageDefinitionFile($pagedef)
     {
@@ -711,7 +693,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * return an array of variables to search/replace in the rendered page
-     * use this hook to add vars that should never be cached
+     * use this hook to add vars that should never be cached.
      *
      * @return array
      *
@@ -843,10 +825,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     protected function handleRequest($pagedef)
     {
-        $request = $this->getRequest();
-        if (null !== $pagedef) {
-            $request->query->set('pagedef', $pagedef);
-        }
     }
 
     /**

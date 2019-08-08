@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "chameleon-system/sanitycheck-bundle": "dev-master",
+        "chameleon-system/sanitycheck-bundle": "~7.0.0",
         "ckeditor/ckeditor": "4.6.2",
         "dmhendricks/file-icon-vectors": "~1.0",
         "doctrine/dbal": "~2.5",
@@ -33,11 +33,11 @@
         "symfony/symfony": "~3.4.0",
         "symfony-cmf/routing-bundle": "~2.1.0",
         "tedivm/jshrink": "~1.0",
-        "twig/twig": "^2.0"
+        "twig/twig": "~2.8"
     },
     "require-dev": {
         "chameleon-system/code-style-config": "dev-master@dev",
-        "chameleon-system/sanitycheck": "dev-master",
+        "chameleon-system/sanitycheck": "~7.0.0",
         "phpunit/phpunit": "~7.0"
     },
     "autoload": {
