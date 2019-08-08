@@ -24,7 +24,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('static_content_url')
                     ->defaultValue('')
-                    ->info('URL for static content (images, fonts, ...) if served from a different location (i. e. a CDN). Can be omitted. Default is empty.')
+                    ->info('URL for static content (images, fonts, ...) if served from a different location (e.g. a CDN). Can be omitted. Default is empty.')
             ->end();
 
         return $treeBuilder;

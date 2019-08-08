@@ -29,7 +29,7 @@ class ChameleonSystemViewRendererExtension extends ConfigurableExtension
         $lessCompiler = $container->getDefinition('chameleon_system_view_renderer.less_compiler');
         $lessCompiler->replaceArgument(0, $mergedConfig['css_dir']);
         $lessCompiler->replaceArgument(2, ['STATIC_CONTENT_URL' => '"'.$mergedConfig['static_content_url'].'"']);
-        // NOTE must be included in .less something like: url("@{STATIC_CONTENT_URL}")
-        //   - because the quotes here are necessary for preprocessing or a URL in the less compiler.
+        // NOTE The quotes here around $mergedConfig[...] are necessary for the preprocessing in the less compiler.
+        // NOTE for the usage in a .less file use this exact notation: url("@{STATIC_CONTENT_URL}").
     }
 }
