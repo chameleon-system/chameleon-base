@@ -211,7 +211,7 @@ class TPkgViewRendererLessCompiler
                     // Consider this as a 'File removed! Halp!' and clear the cache and try again
                     array_map('unlink', glob($cachedLessDir.'/*'));
 
-                    $cssFile = \Less_Cache::Get($filesForLessParsing, $options);
+                    $cssFile = \Less_Cache::Get($filesForLessParsing, $options, $this->additionalVariables);
                 } else {
                     throw new ViewRenderException('Exception during less compile', 0, $exc);
                 }
