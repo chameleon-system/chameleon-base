@@ -13,7 +13,6 @@ namespace ChameleonSystem\ViewRendererBundle\objects;
 
 use CssMin;
 use Exception;
-use Less_Parser;
 use TdbCmsPortal;
 use TPkgViewRendererSnippetResourceCollector;
 use ViewRenderException;
@@ -235,7 +234,7 @@ class TPkgViewRendererLessCompiler
                 try {
                     $parser = new \Less_Parser($options);
                     if (\count($this->additionalVariables) > 0) {
-                        $parser->parse(Less_Parser::serializeVars($this->additionalVariables)); // TODO this works ???
+                        $parser->parse(\Less_Parser::serializeVars($this->additionalVariables)); // TODO this works ???
                     }
 
                     foreach ($filesForLessParsing as $file => $root) {
