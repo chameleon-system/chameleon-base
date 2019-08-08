@@ -32,13 +32,20 @@ class TPkgViewRendererLessCompiler
     /**
      * @var array
      */
-    private $additionalVariables;
+    private $additionalVariables = [];
 
-    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix, array $additionalVariables)
+    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix)
     {
         $this->cssDir = trim($cssDirRelativeToWebRoot, '/');
         $this->resourceCollectionRefreshPrefix = $resourceCollectionRefreshPrefix;
-        $this->additionalVariables = $additionalVariables;
+    }
+
+    /**
+     * @param array $variables - key-value pairs that are passed to the less compiler.
+     */
+    public function addAdditionalVariables(array $variables): void
+    {
+        $this->additionalVariables = \array_merge($this->additionalVariables, $variables);
     }
 
     /**
