@@ -24,4 +24,12 @@ abstract class AbstractRequestType implements RequestTypeInterface
             header('Content-type: text/html; charset=UTF-8');
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setAllowedDomains(array $domainNames): void
+    {
+
+    }
 }

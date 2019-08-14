@@ -43,4 +43,11 @@ interface RequestTypeInterface
      * @return string
      */
     public function getControllerName();
+
+    /**
+     * Allow further domains to see this page (e.g. in an iframe).
+     *
+     * @param array $domainNames
+     */
+    public function setAllowedDomains(array $domainNames): void;
 }

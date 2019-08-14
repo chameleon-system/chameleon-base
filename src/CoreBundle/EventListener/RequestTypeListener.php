@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\RequestType\AbstractRequestType;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 class RequestTypeListener implements ContainerAwareInterface
@@ -61,9 +62,40 @@ class RequestTypeListener implements ContainerAwareInterface
         }
         $request = $event->getRequest();
         $requestType = $this->getRequestType();
+
+        if (true === $this->canAllowAdditionalDomains($request)) {
+            $refererHost = $this->getRefererHost();
+            if (null !== $refererHost && $request->getHost() !== $refererHost) {
+                $requestType->setAllowedDomains([$refererHost]);
+            }
+        }
+
         $requestType->initialize();
+
+        
         $request->attributes->set('chameleon.request_type', $requestType->getRequestType());
         $this->container->set('chameleon_core.request_type', $requestType);
+    }
+
+    private function canAllowAdditionalDomains(Request $request): bool
+    {
+        // TODO CMSUserDefined() does not work here yet (?)
+        return 'true' === $request->get('__previewmode'); // && true === \TGlobalBase::CMSUserDefined();
+    }
+
+    private function getRefererHost(): ?string
+    {
+        if (false === \array_key_exists('HTTP_REFERER', $_SERVER)) {
+            return null;
+        }
+
+        $urlParts = parse_url($_SERVER['HTTP_REFERER']);
+
+        if (false === \array_key_exists('host', $urlParts)) {
+            return null;
+        }
+
+        return $urlParts['host'];
     }
 
     /**

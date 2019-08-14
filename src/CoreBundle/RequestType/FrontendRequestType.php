@@ -13,6 +13,8 @@ namespace ChameleonSystem\CoreBundle\RequestType;
 
 class FrontendRequestType extends AbstractRequestType
 {
+    private $allowedDomainNames = [];
+
     /**
      * @return int
      */
@@ -42,6 +44,16 @@ class FrontendRequestType extends AbstractRequestType
     protected function sendDefaultHeaders()
     {
         parent::sendDefaultHeaders();
+
+        $this->allowAdditionalDomains();
+    }
+
+    private function allowAdditionalDomains(): void
+    {
+        foreach ($this->allowedDomainNames as $allowedDomain) {
+            // TODO some sort of "header encode"?
+            header("X-Frame-Options: ALLOW-FROM $allowedDomain");
+        }
     }
 
     /**
@@ -50,5 +62,13 @@ class FrontendRequestType extends AbstractRequestType
     public function getControllerName()
     {
         return 'chameleon_system_core.frontend_controller';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setAllowedDomains(array $domainNames): void
+    {
+        $this->allowedDomainNames = $domainNames;
     }
 }
