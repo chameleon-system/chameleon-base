@@ -42,7 +42,7 @@ class AllowEmbeddingForDifferentDomainListener
             return;
         }
 
-        $refererHost = $this->getRefererHost();
+        $refererHost = $this->getRefererHost($request);
         if (null === $refererHost || $request->getHost() === $refererHost) {
             return;
         }
@@ -59,11 +59,11 @@ class AllowEmbeddingForDifferentDomainListener
         return 'true' === $request->get('__previewmode');
     }
 
-    private function getRefererHost(): ?string
+    private function getRefererHost(Request $request): ?string
     {
-        // TODO can the referer be determined more high-level than $_SERVER?
+        $referer = $request->server->get('HTTP_REFERER');
 
-        if (false === \array_key_exists('HTTP_REFERER', $_SERVER)) {
+        if (null === $referer) {
             return null;
         }
 
