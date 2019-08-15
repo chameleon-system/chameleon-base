@@ -67,7 +67,7 @@ class AllowEmbeddingForDifferentDomainListener
             return null;
         }
 
-        $urlParts = parse_url($_SERVER['HTTP_REFERER']);
+        $urlParts = parse_url($referer);
 
         if (false === \array_key_exists('host', $urlParts)) {
             return null;
