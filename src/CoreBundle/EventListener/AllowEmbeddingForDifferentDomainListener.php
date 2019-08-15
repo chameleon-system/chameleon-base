@@ -11,6 +11,8 @@
 
 namespace ChameleonSystem\CoreBundle\EventListener;
 
+use ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface;
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
@@ -20,13 +22,23 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 class AllowEmbeddingForDifferentDomainListener
 {
     /**
+     * @var CmsPortalDomainsDataAccessInterface
+     */
+    private $domainsDataAccess;
+
+    public function __construct(CmsPortalDomainsDataAccessInterface $domainsDataAccess)
+    {
+        $this->domainsDataAccess = $domainsDataAccess;
+    }
+
+    /**
      * @param GetResponseEvent $event
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
 
-        if (false === $this->allowAdditionalDomain($request)) {
+        if (false === $this->isPreviewMode($request)) {
             return;
         }
 
@@ -35,14 +47,16 @@ class AllowEmbeddingForDifferentDomainListener
             return;
         }
 
+        if (false === $this->isConfiguredDomain($refererHost)) {
+            return;
+        }
+
         header("X-Frame-Options: ALLOW-FROM $refererHost");
     }
 
-    private function allowAdditionalDomain(Request $request): bool
+    private function isPreviewMode(Request $request): bool
     {
-        // TODO the priority in service definition as low as it is is necessary for CMSUserDefined() to work..
-
-        return 'true' === $request->get('__previewmode') && true === \TGlobalBase::CMSUserDefined();
+        return 'true' === $request->get('__previewmode');
     }
 
     private function getRefererHost(): ?string
@@ -60,5 +74,12 @@ class AllowEmbeddingForDifferentDomainListener
         }
 
         return $urlParts['host'];
+    }
+
+    private function isConfiguredDomain(string $refererHost): bool
+    {
+        $domainNames = $this->domainsDataAccess->getAllDomainNames();
+
+        return true === \in_array($refererHost, $domainNames, true);
     }
 }
