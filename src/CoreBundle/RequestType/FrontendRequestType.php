@@ -43,6 +43,7 @@ class FrontendRequestType extends AbstractRequestType
     {
         parent::sendDefaultHeaders();
     }
+
     /**
      * {@inheritdoc}
      */
