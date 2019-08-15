@@ -26,15 +26,19 @@ class AllowEmbeddingForDifferentDomainListener
     {
         $request = $event->getRequest();
 
-        if (true === $this->canAllowAdditionalDomains($request)) {
-            $refererHost = $this->getRefererHost();
-            if (null !== $refererHost && $request->getHost() !== $refererHost) {
-                header("X-Frame-Options: ALLOW-FROM $refererHost");
-            }
+        if (false === $this->allowAdditionalDomain($request)) {
+            return;
         }
+
+        $refererHost = $this->getRefererHost();
+        if (null === $refererHost || $request->getHost() === $refererHost) {
+            return;
+        }
+
+        header("X-Frame-Options: ALLOW-FROM $refererHost");
     }
 
-    private function canAllowAdditionalDomains(Request $request): bool
+    private function allowAdditionalDomain(Request $request): bool
     {
         // TODO the priority in service definition as low as it is is necessary for CMSUserDefined() to work..
 
