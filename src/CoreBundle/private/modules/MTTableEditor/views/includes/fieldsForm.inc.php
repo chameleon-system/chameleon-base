@@ -42,6 +42,7 @@
                 $tabHasAField = false;
                 /** @var $fields TIterator */
                 $fields = $data['oFields'];
+                $fields->GoToStart();
                 /** @var $field TCMSField */
                 while ($field = $fields->Next()) {
                     // NOTE this is also checked in fields.inc.php
@@ -50,7 +51,6 @@
                         break;
                     }
                 }
-                $fields->GoToStart();
                 if (true === $tabHasAField) {
                     $fields->GoToStart();
                     require dirname(__FILE__).'/fields.inc.php';
