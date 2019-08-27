@@ -505,7 +505,7 @@ class TCMSFieldLookup extends TCMSField
     public function GetCMSHtmlHeadIncludes()
     {
         $includes = parent::GetCMSHtmlHeadIncludes();
-        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
+        $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
         return $includes;
     }
@@ -516,7 +516,7 @@ class TCMSFieldLookup extends TCMSField
     public function GetCMSHtmlFooterIncludes()
     {
         $includes = parent::GetCMSHtmlFooterIncludes();
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2/js/select2.full.min.js').'" type="text/javascript"></script>';
 
         return $includes;
     }
