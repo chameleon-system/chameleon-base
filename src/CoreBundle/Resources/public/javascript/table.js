@@ -181,52 +181,66 @@ $(document).ready(function () {
                 newOption: true
             }
         }
-    }).on('select2:select', function (e) {
-        if (e.params.data.newOption) {
-            var listname = searchLookup.data('listname');
-            document[listname]._startRecord.value = 0;
-            document[listname].submit();
-        } else {
-            var id = e.params.data.id.trim();
-
-            if ('' === id) {
-                return;
-            }
-
-            switchRecord(id);
-        }
     }).on('select2:unselect', function (e) {
         // :unselect and submit() doesn't transmit the empty searchlookup-Field. Therefore, the value of
         // _search_word is not overwritten (not reset) in the session. With an additional hidden field it works.
         const form = createSearchWordInputWithValue();
         form.submit();
-    }).on('select2:closing', function(e, what) {
-        // If the select2 widget's autocomplete list is being closed without any selection made
-        // we will check whether a search term has been typed into the search field.
-        // If the search field contains a value an additional input field will be added to the form. After closing the
-        // autocomplete list by hitting the enter key the `select` listener will be triggered which will handle the
-        // input as `newOption`.
+    }).on('select2:closing', function(e) {
+         /* There is no handler attached to the `select` event. Instead the `closing` handler will also manage the
+         * `select` event. This is done by analyzing the data passed alongside the event.
+         * */
+        const data = e.params.args.originalSelect2Event.data;
 
-        // Known drawback: The search field associated to the current select2 widget can not be directly determined as
-        // select2 does not expose any way to retrieve it. Therefore the DOM will be queried for the
-        // search field's selector.
-        // The query will return the first search field found in the DOM which might not be the desired one.
-        // Yet as select2 creates a new search field on activating the widget and removes it when unnecessary there
-        // should be only one search field present in the DOM.
-
-        const select2SearchField = document.querySelector('.select2-search__field');
-
-        if (null === select2SearchField || '' === select2SearchField.value ) {
+        if ('undefined' === typeof data) {
             return;
         }
 
-        createSearchWordInputWithValue(select2SearchField.value);
+        /* The following condition validates to `true` when no selection has been made from select2's suggestions.
+        *  In this case a hidden form field with the search term as value will be added to the form.
+        * */
+        if (true === data.newOption) {
+            if ('' === data.text) {
+                return;
+            }
+
+            const form = createSearchWordInputWithValue(data.text.trim());
+
+            form.submit();
+        } else {
+            switchRecord(data.id.trim(), data.text.trim());
+        }
+    }).on('select2:open', function(e) {
+        /* Synchronize select2's search term display field by listening to keyboard events. */
+        const select2SearchField = document.querySelector('.select2-search__field');
+        const selectSelectionRendered = document.querySelector('.select2-selection__rendered');
+
+        if (null === select2SearchField || null === selectSelectionRendered) {
+            return;
+        }
+
+        $(select2SearchField).off('input');
+
+        select2SearchField.innerText = '';
+
+        if ('1' === this.dataset.keyUpListenerAttached) {
+            return;
+        }
+        select2SearchField.addEventListener('keyup', (e) => {
+            selectSelectionRendered.title = select2SearchField.value;
+            selectSelectionRendered.textContent = select2SearchField.value;
+        });
+
+        this.dataset.keyUpListenerAttached = '1';
     });
 
-    function switchRecord(id) {
+    function switchRecord(id, searchTerm = '') {
         if ('' !== id) {
-            var url = searchLookup.data('record-url') + '&id=' + id;
-            top.document.location.href = url;
+            const searchTermPart = '' !== searchTerm ? `&_search_word=${searchTerm}` : '';
+            /* Also submit the search term (the selected suggestion of select2)
+             * so it can be added to the session as last search term.
+             * */
+            top.document.location.href = searchLookup.data('record-url') + '&id=' + id + searchTermPart;
         }
     }
 });
