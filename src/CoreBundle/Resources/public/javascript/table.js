@@ -190,7 +190,13 @@ $(document).ready(function () {
          /* There is no handler attached to the `select` event. Instead the `closing` handler will also manage the
          * `select` event. This is done by analyzing the data passed alongside the event.
          * */
-        const data = e.params.args.originalSelect2Event.data;
+
+        const originalSelect2EventData = e.params.args.originalSelect2Event;
+        if ('undefined' === typeof originalSelect2EventData) {
+            return;
+        }
+
+        const data = originalSelect2EventData.data;
 
         if ('undefined' === typeof data) {
             return;
@@ -213,15 +219,21 @@ $(document).ready(function () {
     }).on('select2:open', function(e) {
         /* Synchronize select2's search term display field by listening to keyboard events. */
         const select2SearchField = document.querySelector('.select2-search__field');
-        const selectSelectionRendered = document.querySelector('.select2-selection__rendered');
+        const select2 = getSibling(this, '.select2');
+        const selectSelectionRendered = null === select2 ? null : select2.querySelector('.select2-selection__rendered');
 
         if (null === select2SearchField || null === selectSelectionRendered) {
             return;
         }
 
-        $(select2SearchField).off('input');
+        const text = $(selectSelectionRendered).contents().filter(function() {
+            return this.nodeType === Node.TEXT_NODE;
+        }).text();
 
-        select2SearchField.innerText = '';
+        select2SearchField.value = text;
+        select2SearchField.select();
+
+        $(select2SearchField).off('input');
 
         if ('1' === this.dataset.keyUpListenerAttached) {
             return;
@@ -233,6 +245,24 @@ $(document).ready(function () {
 
         this.dataset.keyUpListenerAttached = '1';
     });
+
+    function getSibling(node, selector) {
+        let sibling = node.nextSibling;
+
+        if (null === sibling) {
+            return null;
+        }
+
+        try {
+            if (sibling.matches(selector)) {
+                return sibling;
+            }
+        } catch (ex) {
+            // go on with recursion
+        }
+
+        return getSibling(sibling, selector);
+    }
 
     function switchRecord(id, searchTerm = '') {
         if ('' !== id) {
