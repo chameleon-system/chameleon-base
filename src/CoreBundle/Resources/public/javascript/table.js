@@ -226,8 +226,8 @@ $(document).ready(function () {
     }).on('select2:open', function(e) {
         /* Synchronize select2's search term display field by listening to keyboard events. */
         const select2SearchField = document.querySelector('.select2-search__field');
-        const select2 = getSibling(this, '.select2');
-        const selectSelectionRendered = null === select2 ? null : select2.querySelector('.select2-selection__rendered');
+        const select2 = $(this).siblings('.select2');
+        const selectSelectionRendered = 1 === select2.length ? select2[0].querySelector('.select2-selection__rendered') : null;
 
         if (null === select2SearchField || null === selectSelectionRendered) {
             return;
@@ -316,24 +316,6 @@ $(document).ready(function () {
         }
 
         return value;
-    }
-
-    function getSibling(node, selector) {
-        let sibling = node.nextSibling;
-
-        if (null === sibling) {
-            return null;
-        }
-
-        try {
-            if (sibling.matches(selector)) {
-                return sibling;
-            }
-        } catch (ex) {
-            // go on with recursion
-        }
-
-        return getSibling(sibling, selector);
     }
 
     function switchRecord(id, searchTerm = '') {
