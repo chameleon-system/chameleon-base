@@ -248,6 +248,11 @@ legend {
     color: #000000 !important;
 }
 
+/* overwrite min-height: 100vh; set from coreui */
+body.app {
+    min-height: 100%;
+}
+
 /**
 Bootstrap 4 addons.
  */
