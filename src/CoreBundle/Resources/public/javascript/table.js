@@ -233,8 +233,6 @@ $(document).ready(function () {
             return;
         }
 
-        const select2SelectionClear = selectSelectionRendered.querySelector('.select2-selection__clear');
-
         select2SearchField.value = $(selectSelectionRendered).contents().filter(function() {
             return this.nodeType === Node.TEXT_NODE;
         }).text();
@@ -247,6 +245,8 @@ $(document).ready(function () {
             return;
         }
         select2SearchField.addEventListener('keyup', (e) => {
+            /* Preserve clear button */
+            const select2SelectionClear = selectSelectionRendered.querySelector('.select2-selection__clear');
             selectSelectionRendered.title = select2SearchField.value;
             selectSelectionRendered.textContent = select2SearchField.value;
             if (null !== select2SelectionClear) {
