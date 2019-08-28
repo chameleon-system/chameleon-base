@@ -187,8 +187,7 @@ $(document).ready(function () {
         const form = createSearchWordInputWithValue();
         form.submit();
     }).on('select2:closing', function(e) {
-         /* There is no handler attached to the `select` event. Instead the `closing` handler will also manage the
-         * `select` event. This is done by analyzing the data passed alongside the event.
+         /* Only monitoring the closing event here because this way there is only one event handler needed.
          * */
 
         const originalSelect2EventData = e.params.args.originalSelect2Event;
@@ -202,10 +201,7 @@ $(document).ready(function () {
             return;
         }
 
-        /* The following condition validates to `true` when no selection has been made from select2's suggestions.
-        *  In this case a hidden form field with the search term as value will be added to the form.
-        * */
-        if (true === data.newOption) {
+        if (false === optionSelected(data)) {
             if ('' === data.text) {
                 return;
             }
@@ -245,6 +241,13 @@ $(document).ready(function () {
 
         this.dataset.keyUpListenerAttached = '1';
     });
+
+    function optionSelected(originalSelect2EventData) {
+        /* If no selection has been made from the suggestions (which can be seen as select options)
+         * select2 will treat the user's input as a new option.
+        * */
+        return !(true === data.newOption)
+    }
 
     function getSibling(node, selector) {
         let sibling = node.nextSibling;
