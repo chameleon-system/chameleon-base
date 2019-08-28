@@ -42,7 +42,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
         $translator = $this->getTranslator();
 
         if (empty($this->data)) {
-            return $translator->trans('chameleon_system_core.field_lookup.nothing_selected', array(), 'admin');
+            return '<div class="col-form-label">'.$translator->trans('chameleon_system_core.field_lookup.nothing_selected', array(), 'admin').'</div>';
         }
 
         $html = $this->_GetHiddenField();
@@ -74,7 +74,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
             return $html;
         }
 
-        $html .= $itemName;
+        $html .= '<div class="col-form-label">'.$itemName.'</div>';
 
         return $html;
     }

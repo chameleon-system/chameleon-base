@@ -143,7 +143,8 @@ class TCMSFieldDecimal extends TCMSField
      */
     public function GetReadOnly()
     {
-        $html = $this->_GetHiddenField().TGlobal::OutHTML(number_format($this->data, $this->_GetNumberOfDecimals(), ',', '.'));
+        $html = $this->_GetHiddenField();
+        $html .= '<div class="col-form-label">'.TGlobal::OutHTML(number_format($this->data, $this->_GetNumberOfDecimals(), ',', '.')).'</div>';
 
         return $html;
     }

@@ -94,7 +94,7 @@ class TCMSFieldOption extends TCMSField
     {
         $this->GetOptions();
         if (array_key_exists($this->data, $this->options)) {
-            return $this->_GetHiddenField().TGlobal::OutHTML($this->options[$this->data]);
+            return $this->_GetHiddenField().'<div class="col-form-label">'.$this->options[$this->data].'</div>';
         } else {
             return $this->_GetHiddenField();
         }
