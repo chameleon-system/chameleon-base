@@ -244,7 +244,7 @@ $(document).ready(function () {
         if ('1' === this.dataset.keyUpListenerAttached) {
             return;
         }
-        select2SearchField.addEventListener('keyup', (e) => {
+        select2SearchField.addEventListener('keypress', (e) => {
             /* Preserve clear button */
             const select2SelectionClear = selectSelectionRendered.querySelector('.select2-selection__clear');
             selectSelectionRendered.title = select2SearchField.value;
