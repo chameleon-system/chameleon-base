@@ -202,7 +202,7 @@ $(document).ready(function () {
         }
 
         if (false === optionSelected(data)) {
-            if ('' === data.text) {
+            if (isSearchTermEmpty()) {
                 return;
             }
 
@@ -246,7 +246,11 @@ $(document).ready(function () {
         /* If no selection has been made from the suggestions (which can be seen as select options)
          * select2 will treat the user's input as a new option.
         * */
-        return !(true === data.newOption)
+        return !(true === originalSelect2EventData.newOption)
+    }
+
+    function isSearchTermEmpty(originalSelect2EventData) {
+        return '' === originalSelect2EventData.text;
     }
 
     function getSibling(node, selector) {
