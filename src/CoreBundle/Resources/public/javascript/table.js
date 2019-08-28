@@ -149,6 +149,8 @@ $(document).ready(function () {
 
     var searchLookup = $('select#searchLookup');
 
+    let uiEnabled = true;
+
     searchLookup.select2({
         placeholder: searchLookup.data('select2-placeholder'),
         allowClear: true,
@@ -181,37 +183,46 @@ $(document).ready(function () {
                 newOption: true
             }
         }
-    }).on('select2:unselect', function (e) {
-        // :unselect and submit() doesn't transmit the empty searchlookup-Field. Therefore, the value of
-        // _search_word is not overwritten (not reset) in the session. With an additional hidden field it works.
+    }).on('select2:clear', function(e) {
         const form = createSearchWordInputWithValue();
+
+        uiEnabled = false;
+        e.stopPropagation();
         form.submit();
-    }).on('select2:closing', function(e) {
-         /* Only monitoring the closing event here because this way there is only one event handler needed.
-         * */
 
-        const originalSelect2EventData = e.params.args.originalSelect2Event;
-        if ('undefined' === typeof originalSelect2EventData) {
+    }).on('select2:closing', function (e) {
+        if (false === uiEnabled) {
+            return;
+        }
+        if (false === hasEventData(e)) {
             return;
         }
 
-        const data = originalSelect2EventData.data;
+        const data = getDataFromEvent(e);
+        const searchField = document.querySelector('.select2-search__field');
 
-        if ('undefined' === typeof data) {
-            return;
-        }
+        if (isSelected(data)) {
+            switchRecord(data.id.trim(), data.text.trim());
+        } else {
+            let searchTerm = '';
 
-        if (false === optionSelected(data)) {
-            if (isSearchTermEmpty()) {
+            if (isSearchTermEmpty(data)) {
+                if (searchFieldContainsValue(searchField)) {
+                    searchTerm = getValueFromSearchField(searchField);
+                }
+            } else {
+                searchTerm = getSearchTerm(data);
+            }
+
+            if ('' === searchTerm) {
                 return;
             }
 
-            const form = createSearchWordInputWithValue(data.text.trim());
+            const form = createSearchWordInputWithValue(searchTerm);
 
             form.submit();
-        } else {
-            switchRecord(data.id.trim(), data.text.trim());
         }
+
     }).on('select2:open', function(e) {
         /* Synchronize select2's search term display field by listening to keyboard events. */
         const select2SearchField = document.querySelector('.select2-search__field');
@@ -222,11 +233,12 @@ $(document).ready(function () {
             return;
         }
 
-        const text = $(selectSelectionRendered).contents().filter(function() {
+        const select2SelectionClear = selectSelectionRendered.querySelector('.select2-selection__clear');
+
+        select2SearchField.value = $(selectSelectionRendered).contents().filter(function() {
             return this.nodeType === Node.TEXT_NODE;
         }).text();
 
-        select2SearchField.value = text;
         select2SearchField.select();
 
         $(select2SearchField).off('input');
@@ -237,20 +249,73 @@ $(document).ready(function () {
         select2SearchField.addEventListener('keyup', (e) => {
             selectSelectionRendered.title = select2SearchField.value;
             selectSelectionRendered.textContent = select2SearchField.value;
+            if (null !== select2SelectionClear) {
+                selectSelectionRendered.appendChild(select2SelectionClear);
+            }
         });
 
         this.dataset.keyUpListenerAttached = '1';
     });
 
-    function optionSelected(originalSelect2EventData) {
-        /* If no selection has been made from the suggestions (which can be seen as select options)
-         * select2 will treat the user's input as a new option.
-        * */
-        return !(true === originalSelect2EventData.newOption)
+    function hasEventData(e) {
+        const argOriginalSelect2Event = e.params.args.originalSelect2Event;
+
+        if ('undefined' === typeof argOriginalSelect2Event) {
+            return false;
+        }
+
+        const data = argOriginalSelect2Event.data;
+
+        return 'undefined' !== typeof data;
+    }
+
+    function getDataFromEvent(e) {
+        return  e.params.args.originalSelect2Event.data;
+    }
+
+    function isSelected(originalSelect2EventData) {
+        if (true === originalSelect2EventData.newOption) {
+            return false;
+        }
+
+        if ('string' !== typeof originalSelect2EventData.id) {
+            return false;
+        }
+
+        if (originalSelect2EventData.id.trim() === originalSelect2EventData.text.trim()) {
+            return false;
+        }
+
+        return '' !== originalSelect2EventData.id.trim();
     }
 
     function isSearchTermEmpty(originalSelect2EventData) {
-        return '' === originalSelect2EventData.text;
+        return '' === originalSelect2EventData.text.trim();
+    }
+
+    function getValueFromSearchField(searchField) {
+        if (null === searchField) {
+            return '';
+        }
+
+        return searchField.value;
+    }
+
+    function getSearchTerm(originalSelect2EventData) {
+        return originalSelect2EventData.text.trim();
+    }
+
+    function searchFieldContainsValue(searchField) {
+        if (null === searchField) {
+            return false;
+        }
+
+        const value = searchField.value;
+        if ('' === value) {
+            return false;
+        }
+
+        return value;
     }
 
     function getSibling(node, selector) {
