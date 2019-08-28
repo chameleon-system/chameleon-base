@@ -321,8 +321,10 @@ $(document).ready(function () {
     function switchRecord(id, searchTerm = '') {
         if ('' !== id) {
             const searchTermPart = '' !== searchTerm ? `&_search_word=${searchTerm}` : '';
-            /* Also submit the search term (the selected suggestion of select2)
-             * so it can be added to the session as last search term.
+            /* Here the URL will be set to make the browser load the given detail page's URL. The search form will not
+             * be submitted. Therefore the search term stored in the session will not be changed.
+             * In some cases it may be desirable to change the session stored search term to the selection value of the
+             * select2 widget. To make this possible the search term will be submitted here alongside the record ID.
              * */
             top.document.location.href = searchLookup.data('record-url') + '&id=' + id + searchTermPart;
         }
