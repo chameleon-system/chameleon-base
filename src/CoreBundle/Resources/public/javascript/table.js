@@ -149,7 +149,7 @@ $(document).ready(function () {
 
     var searchLookup = $('select#searchLookup');
 
-    let searchInputFieldCleared = true;
+    let clearRequested = false;
 
     searchLookup.select2({
         placeholder: searchLookup.data('select2-placeholder'),
@@ -186,12 +186,12 @@ $(document).ready(function () {
     }).on('select2:clear', function(e) {
         const form = createSearchWordInputWithValue();
 
-        searchInputFieldCleared = false;
+        clearRequested = true;
         e.stopPropagation();
         form.submit();
 
     }).on('select2:closing', function (e) {
-        if (false === searchInputFieldCleared) {
+        if (true === clearRequested) {
             return;
         }
         if (false === hasEventData(e)) {
