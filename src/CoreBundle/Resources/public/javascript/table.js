@@ -149,6 +149,8 @@ $(document).ready(function () {
 
     var searchLookup = $('select#searchLookup');
 
+    let clearRequested = false;
+
     searchLookup.select2({
         placeholder: searchLookup.data('select2-placeholder'),
         allowClear: true,
@@ -181,52 +183,144 @@ $(document).ready(function () {
                 newOption: true
             }
         }
-    }).on('select2:select', function (e) {
-        if (e.params.data.newOption) {
-            var listname = searchLookup.data('listname');
-            document[listname]._startRecord.value = 0;
-            document[listname].submit();
-        } else {
-            var id = e.params.data.id.trim();
-
-            if ('' === id) {
-                return;
-            }
-
-            switchRecord(id);
-        }
-    }).on('select2:unselect', function (e) {
-        // :unselect and submit() doesn't transmit the empty searchlookup-Field. Therefore, the value of
-        // _search_word is not overwritten (not reset) in the session. With an additional hidden field it works.
+    }).on('select2:clear', function(e) {
         const form = createSearchWordInputWithValue();
+
+        clearRequested = true;
+        e.stopPropagation();
         form.submit();
-    }).on('select2:closing', function(e, what) {
-        // If the select2 widget's autocomplete list is being closed without any selection made
-        // we will check whether a search term has been typed into the search field.
-        // If the search field contains a value an additional input field will be added to the form. After closing the
-        // autocomplete list by hitting the enter key the `select` listener will be triggered which will handle the
-        // input as `newOption`.
 
-        // Known drawback: The search field associated to the current select2 widget can not be directly determined as
-        // select2 does not expose any way to retrieve it. Therefore the DOM will be queried for the
-        // search field's selector.
-        // The query will return the first search field found in the DOM which might not be the desired one.
-        // Yet as select2 creates a new search field on activating the widget and removes it when unnecessary there
-        // should be only one search field present in the DOM.
-
-        const select2SearchField = document.querySelector('.select2-search__field');
-
-        if (null === select2SearchField || '' === select2SearchField.value ) {
+    }).on('select2:closing', function (e) {
+        if (true === clearRequested) {
+            return;
+        }
+        if (false === hasEventData(e)) {
             return;
         }
 
-        createSearchWordInputWithValue(select2SearchField.value);
+        const data = getDataFromEvent(e);
+        const searchField = document.querySelector('.select2-search__field');
+
+        if (isSelected(data)) {
+            switchRecord(data.id.trim());
+        } else {
+            let searchTerm = '';
+
+            if (isSearchTermEmpty(data)) {
+                if (searchFieldContainsValue(searchField)) {
+                    searchTerm = getValueFromSearchField(searchField);
+                }
+            } else {
+                searchTerm = getSearchTerm(data);
+            }
+
+            if ('' === searchTerm) {
+                return;
+            }
+
+            const form = createSearchWordInputWithValue(searchTerm);
+
+            form.submit();
+        }
+
+    }).on('select2:open', function(e) {
+        /* Synchronize select2's search term display field by listening to keyboard events. */
+        const select2SearchField = document.querySelector('.select2-search__field');
+        const select2 = $(this).siblings('.select2');
+        const selectSelectionRendered = 1 === select2.length ? select2[0].querySelector('.select2-selection__rendered') : null;
+
+        if (null === select2SearchField || null === selectSelectionRendered) {
+            return;
+        }
+
+        select2SearchField.value = $(selectSelectionRendered).contents().filter(function() {
+            return this.nodeType === Node.TEXT_NODE;
+        }).text();
+
+        select2SearchField.select();
+
+        $(select2SearchField).off('input');
+
+        if ('1' === this.dataset.keyUpListenerAttached) {
+            return;
+        }
+        select2SearchField.addEventListener('keypress', (e) => {
+            /* Preserve clear button */
+            const select2SelectionClear = selectSelectionRendered.querySelector('.select2-selection__clear');
+            selectSelectionRendered.title = select2SearchField.value;
+            selectSelectionRendered.textContent = select2SearchField.value;
+            if (null !== select2SelectionClear) {
+                selectSelectionRendered.appendChild(select2SelectionClear);
+            }
+        });
+
+        this.dataset.keyUpListenerAttached = '1';
     });
+
+    function hasEventData(e) {
+        const argOriginalSelect2Event = e.params.args.originalSelect2Event;
+
+        if ('undefined' === typeof argOriginalSelect2Event) {
+            return false;
+        }
+
+        const data = argOriginalSelect2Event.data;
+
+        return 'undefined' !== typeof data;
+    }
+
+    function getDataFromEvent(e) {
+        return  e.params.args.originalSelect2Event.data;
+    }
+
+    function isSelected(originalSelect2EventData) {
+        if (true === originalSelect2EventData.newOption) {
+            return false;
+        }
+
+        if ('string' !== typeof originalSelect2EventData.id) {
+            return false;
+        }
+
+        if (originalSelect2EventData.id.trim() === originalSelect2EventData.text.trim()) {
+            return false;
+        }
+
+        return '' !== originalSelect2EventData.id.trim();
+    }
+
+    function isSearchTermEmpty(originalSelect2EventData) {
+        return '' === originalSelect2EventData.text.trim();
+    }
+
+    function getValueFromSearchField(searchField) {
+        if (null === searchField) {
+            return '';
+        }
+
+        return searchField.value;
+    }
+
+    function getSearchTerm(originalSelect2EventData) {
+        return originalSelect2EventData.text.trim();
+    }
+
+    function searchFieldContainsValue(searchField) {
+        if (null === searchField) {
+            return false;
+        }
+
+        const value = searchField.value;
+        if ('' === value) {
+            return false;
+        }
+
+        return value;
+    }
 
     function switchRecord(id) {
         if ('' !== id) {
-            var url = searchLookup.data('record-url') + '&id=' + id;
-            top.document.location.href = url;
+            top.document.location.href = searchLookup.data('record-url') + '&id=' + id;
         }
     }
 });
