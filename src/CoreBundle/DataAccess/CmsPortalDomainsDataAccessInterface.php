@@ -29,6 +29,14 @@ interface CmsPortalDomainsDataAccessInterface
     public function getPrimaryDomain($portalId, $languageId);
 
     /**
+     * @return array - the names of all domains of all portals
+     *
+     * NOTE \ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface::getDomainNameList() is similar but works only for the current portal.
+     *   TODO This should be joined with that code (the service calling a method here).
+     */
+    public function getAllDomainNames(): array;
+
+    /**
      * Returns a list of portal prefixes for portals that are available for the passed $domain.
      *
      * @param string $domainName

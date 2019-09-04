@@ -25,6 +25,11 @@ class CmsPortalDomainsDataAccessRequestLevelCacheDecorator implements CmsPortalD
     private $cache = [];
 
     /**
+     * @var string[]
+     */
+    private $domainNamesCache;
+
+    /**
      * @param CmsPortalDomainsDataAccessInterface $subject
      */
     public function __construct(CmsPortalDomainsDataAccessInterface $subject)
@@ -46,6 +51,18 @@ class CmsPortalDomainsDataAccessRequestLevelCacheDecorator implements CmsPortalD
         $this->cache[$cacheKey] = $domain;
 
         return $domain;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllDomainNames(): array
+    {
+        if (null === $this->domainNamesCache) {
+            $this->domainNamesCache = $this->subject->getAllDomainNames();
+        }
+
+        return $this->domainNamesCache;
     }
 
     /**

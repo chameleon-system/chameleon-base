@@ -62,6 +62,7 @@ class RequestTypeListener implements ContainerAwareInterface
         $request = $event->getRequest();
         $requestType = $this->getRequestType();
         $requestType->initialize();
+        
         $request->attributes->set('chameleon.request_type', $requestType->getRequestType());
         $this->container->set('chameleon_core.request_type', $requestType);
     }
