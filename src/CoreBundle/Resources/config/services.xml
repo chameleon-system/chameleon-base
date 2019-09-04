@@ -303,6 +303,12 @@
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="252" />
         </service>
 
+        <service id="chameleon_system_core.listener.allow_embedding_for_different_domain" class="ChameleonSystem\CoreBundle\EventListener\AllowEmbeddingForDifferentDomainListener">
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="12"/>
+
+            <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains"/>
+        </service>
+
         <service id="chameleon_system_core.request_type" synthetic="true" />
 
         <service id="chameleon_system_core.security.backend_access_check" class="ChameleonSystem\CoreBundle\Security\BackendAccessCheck">

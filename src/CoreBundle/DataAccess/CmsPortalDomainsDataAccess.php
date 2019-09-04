@@ -52,6 +52,34 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * Copied partly from PortalDomainServiceInterface::getDomainNameList().
+     */
+    public function getAllDomainNames(): array
+    {
+        $portalList = \TdbCmsPortalList::GetList();
+
+        $portalDomainNames = [];
+
+        while (false !== ($portal = $portalList->Next())) {
+            $domains = $portal->GetFieldCmsPortalDomainsList();
+            while ($domain = $domains->Next()) {
+                $domainName = trim($domain->fieldName);
+                if ('' !== $domainName) {
+                    $portalDomainNames[$domainName] = true;
+                }
+                $domainName = trim($domain->fieldSslname);
+                if ('' !== $domainName) {
+                    $portalDomainNames[$domainName] = true;
+                }
+            }
+        }
+
+        return \array_keys($portalDomainNames);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getPortalPrefixListForDomain(string $domainName): array
