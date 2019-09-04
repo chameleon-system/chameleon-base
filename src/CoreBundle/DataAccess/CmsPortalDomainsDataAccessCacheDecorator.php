@@ -118,4 +118,12 @@ class CmsPortalDomainsDataAccessCacheDecorator implements CmsPortalDomainsDataAc
     {
         return $this->container->get('chameleon_system_cms_cache.cache');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllDomainNames(): array
+    {
+        return $this->subject->getAllDomainNames();
+    }
 }

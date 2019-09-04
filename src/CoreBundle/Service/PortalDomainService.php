@@ -117,7 +117,14 @@ class PortalDomainService implements PortalDomainServiceInterface
      */
     public function getDefaultPortal()
     {
-        return \TdbCmsConfig::GetInstance()->GetPrimaryPortal();
+        $tcmsPortal = \TdbCmsConfig::GetInstance()->GetPrimaryPortal();
+
+        $tdbPortal = TdbCmsPortal::GetNewInstance();
+        if (false === $tdbPortal->Load($tcmsPortal->id)) {
+            return null;
+        }
+
+        return $tdbPortal;
     }
 
     /**
