@@ -413,8 +413,8 @@ class MTHeader extends TCMSModelBase
         $translator = $this->getTranslator();
         // clear compiled less css and resource collection files
         if ($this->global->UserDataExists('clearFiles')) {
-            $this->clearCacheFiles();
             $returnMessage = $translator->trans('chameleon_system_core.cms_module_header.msg_full_cache_cleared');
+            $this->clearCacheFiles();
         } else {
             $returnMessage = $translator->trans('chameleon_system_core.cms_module_header.msg_page_object_cache_cleared');
         }
