@@ -564,11 +564,7 @@ class TCMSFieldLookup extends TCMSField
             return '';
         }
         $tableName = $this->GetConnectedTableName();
-        $identifyingColumnName = $this->oDefinition->_oTableConf->GetNameColumn();;
-
-        if (false === TCMSTableConf::FieldExists($tableName, $identifyingColumnName)) {
-            $identifyingColumnName = 'id';
-        }
+        $identifyingColumnName = $this->oDefinition->_oTableConf->GetNameColumn();
 
         $databaseConnection = $this->getDatabaseConnection();
         $quotedTableName = $databaseConnection->quoteIdentifier($tableName);
