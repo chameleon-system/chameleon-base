@@ -41,7 +41,7 @@ while ($oField = $data['oFields']->Next()) {
 
                 $sTmpFormTabsContent .= '
                 <div class="form-group table-editor-form-group row" id="fieldname_'.TGlobal::OutHTML($oField->name).'">
-                    <div class="col-sm-2 col-form-label">
+                    <div class="col-sm-2 form-label-simple">
             ';
 
                 $oFieldConfig = TdbCmsFieldConf::GetNewInstance();

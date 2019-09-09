@@ -236,3 +236,17 @@ label.switch .switch-slider::after {
 .bootstrap-datetimepicker-widget.dropdown-menu.wider {
     width: 38em !important;
 }
+
+.form-label-simple,
+.form-content-simple {
+    /* simple input field has a padding of 0.25rem and 1px border */
+    padding-top: calc(0.25rem + 1px);
+    padding-bottom: calc(0.25rem + 1px);
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+    /* for the same alignment as label */
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
