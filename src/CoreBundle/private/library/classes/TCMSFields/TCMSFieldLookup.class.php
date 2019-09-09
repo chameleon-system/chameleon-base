@@ -564,7 +564,7 @@ class TCMSFieldLookup extends TCMSField
             return '';
         }
         $tableName = $this->GetConnectedTableName();
-        $identifyingColumnName = 'name';
+        $identifyingColumnName = $this->oDefinition->_oTableConf->GetNameColumn();;
 
         if (false === TCMSTableConf::FieldExists($tableName, $identifyingColumnName)) {
             $identifyingColumnName = 'id';
@@ -578,7 +578,7 @@ class TCMSFieldLookup extends TCMSField
         } else {
             $idList = $databaseConnection->quote($this->data);
         }
-        $sQuery = "SELECT `id`, $quotedIdentifierColumn FROM $quotedTableName WHERE `id` in ($idList) ORDER BY $quotedIdentifierColumn";
+        $sQuery = "SELECT $quotedIdentifierColumn FROM $quotedTableName WHERE `id` in ($idList) ORDER BY $quotedIdentifierColumn";
 
         $result = $databaseConnection->query($sQuery);
         if (!$result) {
