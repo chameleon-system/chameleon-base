@@ -237,8 +237,8 @@ label.switch .switch-slider::after {
     width: 38em !important;
 }
 
-.form-label-simple,
-.form-content-simple {
+.tableeditcontainer .col-form-label,
+.tableeditcontainer .form-content-simple {
     /* simple input field has a padding of 0.25rem and 1px border */
     padding-top: calc(0.25rem + 1px);
     padding-bottom: calc(0.25rem + 1px);
