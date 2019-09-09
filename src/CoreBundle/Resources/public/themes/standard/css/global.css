@@ -1,5 +1,18 @@
 @import "./cms_user_style/main.css";
 
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+/* overwrite min-height: 100vh; set from coreui */
+body.app {
+    min-height: 100%;
+}
+
 a:hover {
     text-decoration: underline;
 }
@@ -246,11 +259,6 @@ legend {
 
 .sidebar .nav-dropdown-items .nav-link {
     color: #000000 !important;
-}
-
-/* overwrite min-height: 100vh; set from coreui */
-body.app {
-    min-height: 100%;
 }
 
 /**
