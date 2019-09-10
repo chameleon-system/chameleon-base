@@ -17,7 +17,7 @@ class TCMSFieldUID extends TCMSField
     public function GetHTML()
     {
         parent::GetHTML();
-        $html = $this->_GetHiddenField().$this->_GetHTMLValue();
+        $html = $this->_GetHiddenField().'<div class="form-content-simple">'.$this->_GetHTMLValue().'</div>';
 
         return $html;
     }

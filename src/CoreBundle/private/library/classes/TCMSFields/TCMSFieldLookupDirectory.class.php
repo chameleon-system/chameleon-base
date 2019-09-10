@@ -116,7 +116,7 @@ class TCMSFieldLookupDirectory extends TCMSField
     {
         $this->GetOptions();
         if (array_key_exists($this->data, $this->options)) {
-            return $this->_GetHiddenField().TGlobal::OutHTML($this->options[$this->data]);
+            return $this->_GetHiddenField().'<div class="form-content-simple">'.TGlobal::OutHTML($this->options[$this->data]).'</div>';
         } else {
             return $this->_GetHiddenField();
         }
