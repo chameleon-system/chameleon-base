@@ -35,7 +35,8 @@ class TCMSFieldTreeURLName extends TCMSFieldVarchar
      */
     public function GetReadOnly()
     {
-        $html = $this->_GetHiddenField().TGlobal::OutHTML($this->data);
+        $html = $this->_GetHiddenField();
+        $html .= '<div class="form-content-simple">'.TGlobal::OutHTML($this->data).'</div>';
 
         $url = $this->GetTreeNodeLink();
         if (!empty($url)) {
