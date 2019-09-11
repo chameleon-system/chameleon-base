@@ -322,6 +322,19 @@ here) and prefer dependency injection instead. Where dependency injection is not
 public explicitly. The deprecation warnings will also be logged, potentially leading to huge log files and possibly
 degraded performance in the dev environment.  Therefore it is recommended to deal with most of the deprecations.
 
+### Cronjobs Now Only As Service
+
+The new Symfony service retrieval security has however one direct consequence for cronjobs: If they require services
+and thus have a call to `ServiceLocator::get()` this will in dev mode normally result in the error: 
+"The "X" service is private, getting it from the container is deprecated since Symfony 3.2..."
+
+Therefor all customer cronjobs need to be defined as services now. This normally requires the following changes for each:
+
+- Define the cronjob class as a service (in a services.xml).
+- In addition to the needed service arguments this needs the tag "chameleon_system.cronjob" and must be "shared=false".
+- The cronjob class needs the proper constructor and parent constructor call. This must include `$id = null, $sLanguageId = null` as argument.
+- Finally change the cronjob specification in the backend (table "cms_cronjobs") to use the newly defined service id.
+
 ## Database Profiling
 
 The DoctrineBundle provides a profiler in the Web Debug Toolbar. Therefore the Chameleon database profiler is now
