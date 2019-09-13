@@ -45,8 +45,11 @@
 
             // Special case filter input field
             if ($activeElement.is(this.$filterElement) && "ArrowDown" === evt.key) {
-                console.log(this.$navItems.first());
-                this.$navItems.first().focus();
+                const visibleItems = this.getVisibleNavItems();
+
+                if (visibleItems.length > 0) {
+                    visibleItems[0].focus();
+                }
 
                 return;
             }
@@ -112,21 +115,24 @@
             return null;
         },
         getVisibleNavItems: function() {
-            let nonFilteredNavItems = this.$navTitles.not(".d-none");
+            let visibleTitleItems = this.$navTitles.not(".d-none");
 
-            // TODO with filtering there is more than one opened item
-            let openedNavItem = nonFilteredNavItems.filter(".open");
-            if (openedNavItem.length === 0) {
-                return nonFilteredNavItems;
+            let openedTitleItems = visibleTitleItems.filter(".open").toArray();
+            if (openedTitleItems.length === 0) {
+                return visibleTitleItems;
             }
+
+            // const filteringIsOn = visibleTitleItems.length !== this.$navTitles.length;
 
             let visibleNavItems = [];
 
-            nonFilteredNavItems.each(function () {
+            // add the sub items for opened items at the right order
+            visibleTitleItems.each(function () {
                 visibleNavItems.push(this);
 
-                if ($(this).is(openedNavItem)) {
-                    openedNavItem.find(".nav-item").not(".d-none").each(function() {
+                const idx = openedTitleItems.indexOf(this);
+                if (idx > -1) {
+                    $(openedTitleItems[idx]).find(".nav-item").not(".d-none").each(function () {
                         visibleNavItems.push(this);
                     });
                 }
@@ -160,7 +166,7 @@
             this.$navTitles.addClass('d-none').removeClass('open');
             this.$navItems.addClass('d-none');
 
-            const $matchingNavItems = this.$navItems.find(":chameleonContainsCaseInsensitive('" + searchTerm + "')").closest('.nav-item');
+            let $matchingNavItems = this.$navItems.find(":chameleonContainsCaseInsensitive('" + searchTerm + "')").closest('.nav-item');
             $matchingNavItems.removeClass('d-none');
             $matchingNavItems.parents('.nav-item').addClass('open').removeClass('d-none');
         },
