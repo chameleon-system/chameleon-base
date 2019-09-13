@@ -3,6 +3,8 @@
 
     const pluginName = "chameleonSystemSidebarMenu";
 
+    // NOTE this works parallel to bootstrap "dropdown.js" which reacts on the same css style classes.
+
     function Plugin(baseElement) {
         this.$baseElement = $(baseElement);
         this.$navItems = this.$baseElement.find(".nav-item");
@@ -14,8 +16,6 @@
     }
     $.extend(Plugin.prototype, {
         init: function () {
-            const self = this;
-
             this.$filterElement.on('keyup', this.filter.bind(this));
             this.$baseElement.find('.sidebar-minimizer').on('click', this.onSidebarToggle.bind(this));
             this.$baseElement.find('.nav-dropdown-toggle').on('click', this.onCategoryToggle.bind(this));
@@ -29,7 +29,7 @@
             });
 
             // TODO this can be more specific (see keyup above)
-            $(document).on("keyup", self.handleKeyEvent.bind(this));
+            $(document).on("keyup", this.handleKeyEvent.bind(this));
 
             this.$filterElement.focus();
         },
@@ -57,7 +57,7 @@
             // Toggle category or activate link?
             if ("Enter" === evt.key) {
                 if ($activeElement.hasClass("nav-dropdown")) {
-                    this.toggleCategory($activeElement);
+                    this.toggleCategory($activeElement, false);
                 } else {
                     const linkElement = $activeElement.find(".nav-link");
                     if (linkElement.length > 0) {
@@ -141,7 +141,7 @@
             return visibleNavItems;
         },
         filter: function (event) {
-            const searchTerm = event.target.value;
+            const searchTerm = this.$filterElement.val();
             if ('' !== this.lastSearchTerm && '' === searchTerm) {
                 // display all again
 
@@ -155,14 +155,6 @@
                 return;
             }
 
-            if ('undefined' === typeof this.$navItems) {
-                console.log("Strange undefined case");
-
-                this.$navTitles = this.$baseElement.find('.nav-dropdown');
-                this.$navItems = this.$baseElement.find('.nav-dropdown-items .nav-item');
-                // TODO these are/were only the leaf items
-            }
-
             this.$navTitles.addClass('d-none').removeClass('open');
             this.$navItems.addClass('d-none');
 
@@ -171,25 +163,30 @@
             $matchingNavItems.parents('.nav-item').addClass('open').removeClass('d-none');
         },
         onCategoryToggle: function (event) {
-            const $category = $(event.target).parent('.nav-dropdown');
-
-            this.toggleCategory($category);
+            let category = $(event.target).parent('.nav-dropdown');
+            this.toggleCategory(category, true);
         },
-        toggleCategory: function($category) {
+        toggleCategory: function($category, clicked) {
+            // TODO the parameter "clicked" is quite not elegant
+
             const categoryOpen = $category.hasClass("open");
             let categoryId = null;
 
-            if (categoryOpen) {
-                $category.removeClass("open");
-
-                // TODO this is correct in filtered state?
-            } else {
-                // Else close others and open this one
-                this.$baseElement.find('.nav-dropdown.open').not($category).removeClass('open');
-                $category.addClass("open");
+            if (!categoryOpen) {
+                if ('' === this.$filterElement.val()) {
+                    // Without filter close others before opening this one
+                    this.$baseElement.find('.nav-dropdown.open').not($category).removeClass('open');
+                }
 
                 categoryId = $category.data('categoryid');
             }
+
+            if (!clicked) {
+                $category.toggleClass("open");
+            }
+            // Else dropdown.js will react on the click
+
+            $category.focus();
 
             const url = this.$baseElement.data('save-active-category-notification-url');
             $.post(url, {
