@@ -277,6 +277,13 @@ Log-related menu items in the backend ("logs", "log channel definition") are now
 new sidebar menu, create menu items assigned to the corresponding tables. To display these items in the classic main
 menu (which itself is no longer visible by default), assign the tables to the "Logs" content box.
 
+## Correct Mime Type For ExecuteAjaxCall()
+
+The response for the function `ExecuteAjaxCall` now has the correct mime type: "application/json".
+This means that Javascript (library) code handling this might already decode it for later usage. Especially jQuery does this.
+
+So searching for "JSON.parse" in your projects code might yield locations where this extra parsing must now be removed.
+
 ## Re-run Composer
 
 Run `composer update` again, this time without the `--no-scripts` argument.
