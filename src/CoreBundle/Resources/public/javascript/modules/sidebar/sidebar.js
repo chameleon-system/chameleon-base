@@ -79,7 +79,7 @@
             // Toggle category or activate link?
             if ("Enter" === evt.key) {
                 if ($activeElement.hasClass("nav-dropdown")) {
-                    this.toggleCategory($activeElement, false);
+                    this.toggleCategory($activeElement, true);
                 } else {
                     const linkElement = $activeElement.find(".nav-link");
                     if (linkElement.length > 0) {
@@ -97,7 +97,7 @@
                 if ("ArrowDown" === evt.key) {
                     desiredNavItem = this.getNextVisibleNavItem($activeElement);
                 } else {
-                    // TODO quite odd to get a non-nav item (text field) here when being on top of the list
+                    // Can also be the text field (a non-nav item)
 
                     desiredNavItem = this.getPreviousVisibleNavItem($activeElement);
                 }
@@ -143,11 +143,9 @@
         },
         onCategoryToggle: function (event) {
             let category = $(event.target).parent('.nav-dropdown');
-            this.toggleCategory(category, true);
+            this.toggleCategory(category, false);
         },
-        toggleCategory: function($category, clicked) {
-            // TODO the parameter "clicked" is quite not elegant
-
+        toggleCategory: function($category, byKeyboard) {
             const categoryOpen = $category.hasClass("open");
             let categoryId = null;
 
@@ -160,7 +158,7 @@
                 categoryId = $category.data('categoryid');
             }
 
-            if (!clicked) {
+            if (byKeyboard) {
                 $category.toggleClass("open");
             }
             // Else dropdown.js will react on the click
