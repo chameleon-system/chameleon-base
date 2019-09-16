@@ -94,7 +94,6 @@
             if ($activeElement.is(".nav-item") && ("ArrowDown" === evt.key || "ArrowUp" === evt.key)) {
                 let desiredNavItem = null;
 
-                // TODO cache "visible items" somehow - invalidate when expanding
                 if ("ArrowDown" === evt.key) {
                     desiredNavItem = this.getNextVisibleNavItem($activeElement);
                 } else {
@@ -139,6 +138,10 @@
             return null;
         },
         getVisibleNavItems: function() {
+            // NOTE not sure if this has the right order in every browser (depth first)
+            return this.$baseElement.find(".nav-item.nav-dropdown, .nav-item.nav-dropdown.open .nav-item").not(".d-none").toArray();
+
+            /*
             let visibleTitleItems = this.$navTitles.not(".d-none");
 
             let openedTitleItems = visibleTitleItems.filter(".open").toArray();
@@ -161,6 +164,7 @@
             });
 
             return visibleNavItems;
+            */
         },
         onCategoryToggle: function (event) {
             let category = $(event.target).parent('.nav-dropdown');
