@@ -110,13 +110,13 @@
         getNextVisibleNavItem: function(activeElement) {
             const visibleItems = this.getVisibleNavItems();
 
-            for (let i=0; i<visibleItems.length; i++) {
-                if ($(visibleItems[i]).is(activeElement)) {
-                    if (i < visibleItems.length - 1) {
-                        return visibleItems[i + 1];
-                    } else {
-                        return null;
-                    }
+            const idx = $(visibleItems).index(activeElement);
+
+            if (idx > -1) {
+                if (idx < visibleItems.length - 1) {
+                    return visibleItems[idx + 1];
+                } else {
+                    return null;
                 }
             }
 
@@ -125,13 +125,13 @@
         getPreviousVisibleNavItem: function(activeElement) {
             const visibleItems = this.getVisibleNavItems();
 
-            for (let i=0; i<visibleItems.length; i++) {
-                if ($(visibleItems[i]).is(activeElement)) {
-                    if (i > 0) {
-                        return visibleItems[i - 1];
-                    } else {
-                        return this.$filterElement;
-                    }
+            const idx = $(visibleItems).index(activeElement);
+
+            if (idx > -1) {
+                if (idx > 0) {
+                    return visibleItems[idx - 1];
+                } else {
+                    return this.$filterElement;
                 }
             }
 
@@ -140,31 +140,6 @@
         getVisibleNavItems: function() {
             // NOTE not sure if this has the right order in every browser (depth first)
             return this.$baseElement.find(".nav-item.nav-dropdown, .nav-item.nav-dropdown.open .nav-item").not(".d-none").toArray();
-
-            /*
-            let visibleTitleItems = this.$navTitles.not(".d-none");
-
-            let openedTitleItems = visibleTitleItems.filter(".open").toArray();
-            if (openedTitleItems.length === 0) {
-                return visibleTitleItems;
-            }
-
-            let visibleNavItems = [];
-
-            // add the sub items for opened items at the right position
-            visibleTitleItems.each(function () {
-                visibleNavItems.push(this);
-
-                const idx = openedTitleItems.indexOf(this);
-                if (idx > -1) {
-                    $(openedTitleItems[idx]).find(".nav-item").not(".d-none").each(function () {
-                        visibleNavItems.push(this);
-                    });
-                }
-            });
-
-            return visibleNavItems;
-            */
         },
         onCategoryToggle: function (event) {
             let category = $(event.target).parent('.nav-dropdown');
