@@ -3,7 +3,8 @@
 
     const pluginName = "chameleonSystemSidebarMenu";
 
-    // NOTE this works parallel to bootstrap "dropdown.js" which reacts on the same css style classes.
+    // NOTE this works parallel to bootstrap "dropdown.js" which reacts on the same css style classes with
+    //   opening and closing items with "nav-dropdown".
 
     function Plugin(baseElement) {
         this.$baseElement = $(baseElement);
@@ -28,10 +29,31 @@
                 }
             });
 
-            // TODO this can be more specific (see keyup above)
-            $(document).on("keyup", this.handleKeyEvent.bind(this));
+            this.$baseElement.on("keyup", this.handleKeyEvent.bind(this));
 
             this.$filterElement.focus();
+        },
+        filter: function (event) {
+            const searchTerm = this.$filterElement.val();
+            if ('' !== this.lastSearchTerm && '' === searchTerm) {
+                // display all again
+
+                this.$navTitles.removeClass('d-none open');
+                this.$navItems.removeClass('d-none');
+            }
+
+            this.lastSearchTerm = searchTerm;
+
+            if ('' === searchTerm) {
+                return;
+            }
+
+            this.$navTitles.addClass('d-none').removeClass('open');
+            this.$navItems.addClass('d-none');
+
+            let $matchingNavItems = this.$navItems.find(":chameleonContainsCaseInsensitive('" + searchTerm + "')").closest('.nav-item');
+            $matchingNavItems.removeClass('d-none');
+            $matchingNavItems.parents('.nav-item').addClass('open').removeClass('d-none');
         },
         handleKeyEvent: function(evt) {
             if ("ArrowDown" !== evt.key && "ArrowUp" !== evt.key && "Enter" !== evt.key) {
@@ -124,11 +146,9 @@
                 return visibleTitleItems;
             }
 
-            // const filteringIsOn = visibleTitleItems.length !== this.$navTitles.length;
-
             let visibleNavItems = [];
 
-            // add the sub items for opened items at the right order
+            // add the sub items for opened items at the right position
             visibleTitleItems.each(function () {
                 visibleNavItems.push(this);
 
@@ -141,28 +161,6 @@
             });
 
             return visibleNavItems;
-        },
-        filter: function (event) {
-            const searchTerm = this.$filterElement.val();
-            if ('' !== this.lastSearchTerm && '' === searchTerm) {
-                // display all again
-
-                this.$navTitles.removeClass('d-none open');
-                this.$navItems.removeClass('d-none');
-            }
-
-            this.lastSearchTerm = searchTerm;
-
-            if ('' === searchTerm) {
-                return;
-            }
-
-            this.$navTitles.addClass('d-none').removeClass('open');
-            this.$navItems.addClass('d-none');
-
-            let $matchingNavItems = this.$navItems.find(":chameleonContainsCaseInsensitive('" + searchTerm + "')").closest('.nav-item');
-            $matchingNavItems.removeClass('d-none');
-            $matchingNavItems.parents('.nav-item').addClass('open').removeClass('d-none');
         },
         onCategoryToggle: function (event) {
             let category = $(event.target).parent('.nav-dropdown');
