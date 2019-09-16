@@ -76,6 +76,8 @@
                 if ("ArrowDown" === evt.key) {
                     desiredNavItem = this.getNextVisibleNavItem($activeElement);
                 } else {
+                    // TODO quite odd to get a non-nav item (text field) here when being on top of the list
+
                     desiredNavItem = this.getPreviousVisibleNavItem($activeElement);
                 }
 
