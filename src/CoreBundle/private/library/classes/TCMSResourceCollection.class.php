@@ -522,7 +522,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
      */
     public function ReplaceRealPathCallback($aMatch)
     {
-        if (isset($aMatch[1]) && 'http://' != substr($aMatch[1], 0, 7) && 'https://' != substr($aMatch[1], 0, 8) && 0 !== strpos($aMatch[1], '/')) {
+        if (isset($aMatch[1]) && true === $this->isRelativeUrl($aMatch[1])) {
             $sNewPath = TGlobal::GetStaticURL($this->sCurrentCSSPath.DIRECTORY_SEPARATOR.$aMatch[1]);
             if ('http://' == substr($sNewPath, 0, 7)) {
                 $sNewPath = substr($sNewPath, 5);
@@ -534,6 +534,23 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         }
 
         return $aMatch[0];
+    }
+
+    private function isRelativeUrl(string $url): bool
+    {
+        if ('/' === substr($url, 0, 1)) {
+            return false;
+        }
+
+        if ('http://' === substr($url, 0, 7) || 'https://' === substr($url, 0, 8)) {
+            return false;
+        }
+
+        if ('data:' === substr($url, 0, 5)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
