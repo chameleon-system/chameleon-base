@@ -842,37 +842,6 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
         }
     });
 
-    var quicklookuplist = $('select#quicklookuplist');
-    quicklookuplist.select2({
-        placeholder: quicklookuplist.data('select2-placeholder'),
-        templateResult: function (data, container) {
-            // transfer class to select2 element
-            if (data.cssClass && '' !== data.cssClass) {
-                $(container).addClass(data.cssClass);
-            }
-
-            return data.text;
-        },
-        ajax: {
-            url: quicklookuplist.data('select2-ajax'),
-            dataType: 'json',
-            delay: 250,
-            processResults: function (data) {
-            return {
-                results: JSON.parse(data)
-            };
-        }
-    }
-    }).on('select2:select', function (e) {
-        var id = e.params.data.id.trim();
-
-        if ('' === id) {
-            return;
-        }
-
-        switchRecord(id);
-    });
-
     $('[data-tags]').each(function () {
         $(this).select2({
             tags: true,
