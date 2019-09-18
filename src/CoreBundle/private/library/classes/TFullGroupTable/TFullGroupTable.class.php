@@ -272,9 +272,9 @@ class TFullGroupTable extends TGroupTable
 
 
     /**
-     * @deprecated since 6.3.6 - not necessary anymore
-     *
      * @param bool $state
+     *
+     * @deprecated since 6.3.6 - not necessary anymore
      */
     public function setAutoCompleteState(bool $state)
     {
@@ -938,7 +938,7 @@ class TFullGroupTable extends TGroupTable
             '_rmhist' => 'false',
             'sOutputMode' => 'Ajax',
             'module_fnc[contentmodule]' => 'ExecuteAjaxCall',
-            '_fnc' => 'getAutocompleteRecordList',
+            '_fnc' => 'getAutocompleteRecords',
             'sRestrictionField' => $restrictionField,
             'sRestriction' => $restriction,
             'recordID' => '',

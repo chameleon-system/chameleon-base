@@ -151,6 +151,7 @@ class MTTableManager extends TCMSModelBase
         $externalFunctions = array(
             'ClearNaviCache',
             'getAutocompleteRecordList',
+            'getAutocompleteRecords',
             'DeleteSelected',
         );
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
@@ -395,7 +396,7 @@ class MTTableManager extends TCMSModelBase
     }
 
     /**
-     * @deprecated since 6.3.0 - use getAutocompleteRecordList() instead
+     * @deprecated since 6.3.0 - use getAutocompleteRecords() instead
      *
      * @return array
      */
@@ -428,11 +429,23 @@ class MTTableManager extends TCMSModelBase
     }
 
     /**
-     * Generates the record list for the ajax autocomplete input fields in table editor and record lists.
+     * Generates the record list for the ajax autocomplete select boxes in table editor and record lists.
+     *
+     * @return string|false JSON with id, text, html elements
+     *
+     * @deprecated since 6.3.6 - use getAutocompleteRecords() which uses the correct return type for ajax
+     */
+    public function getAutocompleteRecordList()
+    {
+        return json_encode($this->getAutocompleteRecords());
+    }
+
+    /**
+     * Generates the record list for the ajax autocomplete for search in table editor and record lists.
      *
      * @return array
      */
-    public function getAutocompleteRecordList(): array
+    protected function getAutocompleteRecords(): array
     {
         $inputFilterUtil = $this->getInputFilterUtil();
         $recordID = $inputFilterUtil->getFilteredInput('recordID');

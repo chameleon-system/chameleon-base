@@ -734,6 +734,7 @@ Three newly defined log channels are deprecated and only necessary for backwards
 - \MTTableEditor::AddNewRevision()
 - \MTTableEditor::GetLastRevisionNumber()
 - \MTTableEditor::LoadRevisionData()
+- \MTTableManager::GetAutoCompleteAjaxList()
 - \MTTableManager::getAutocompleteRecordList()
 - \TAccessManager::HasRevisionManagementPermission()
 - \TCMSCronJob::getLogger()
