@@ -104,6 +104,14 @@ legend {
     padding-left: 28px;
 }
 
+.dropdown-menu .active .dropdown-item {
+    /* highlight keyboard selected entry - typeahead does not have extra styles */
+
+    color: #181b1e;
+    text-decoration: none;
+    background-color: #f0f3f5;
+}
+
 /**
  * default cms box container
  */
