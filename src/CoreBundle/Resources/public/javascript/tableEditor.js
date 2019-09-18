@@ -789,6 +789,20 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
     });
 };
 
+CHAMELEON.CORE.MTTableEditor.initEntrySwitcherAutocomplete = function() {
+    const listSearchField = $('input#quicklookuplist');
+
+    CHAMELEON.CORE.initializeEntryAutocomplete(listSearchField);
+
+    listSearchField.on("keydown", function(event) {
+        if (event.key === "Enter") {
+            // TODO that should lead to a search on the table page - but that is not known here yet.
+
+            event.preventDefault();
+        }
+    });
+};
+
 CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
     $('[data-select2-option]').each(function () {
         var options = $(this).data('select2-option');
@@ -806,18 +820,6 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
             $('#' + fieldName + '-helpContainer').html('&nbsp;');
         } else {
             $('#' + fieldName + '-helpContainer').html(helpText);
-        }
-    });
-
-    const listSearchField = $('input#quicklookuplist');
-
-    CHAMELEON.CORE.initializeEntryAutocomplete(listSearchField);
-
-    listSearchField.on("keydown", function(event) {
-        if (event.key === "Enter") {
-            // TODO that should lead to a search on the table page - but that is not known here yet.
-
-            event.preventDefault();
         }
     });
 
@@ -960,6 +962,7 @@ CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe = function () {
 $(document).ready(function () {
     CHAMELEON.CORE.MTTableEditor.initTabs();
     CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
+    CHAMELEON.CORE.MTTableEditor.initEntrySwitcherAutocomplete();
     CHAMELEON.CORE.MTTableEditor.initSelectBoxes();
     CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
     CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent('label.switch input[type=checkbox]');
