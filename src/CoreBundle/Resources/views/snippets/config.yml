@@ -1,0 +1,4 @@
+js:
+  - /chameleon/blackbox/components/bootstrap3-typeahead/bootstrap3-typeahead.min.js
+
+# TODO does not work? - remove this file
