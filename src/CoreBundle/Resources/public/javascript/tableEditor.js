@@ -813,7 +813,7 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
 
     CHAMELEON.CORE.initializeEntryAutocomplete(listSearchField);
 
-    listSearchField.on("keyup", function(event) {
+    listSearchField.on("keydown", function(event) {
         if (event.key === "Enter") {
             // TODO that should lead to a search on the table page - but that is not known here yet.
 

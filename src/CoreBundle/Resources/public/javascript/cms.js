@@ -533,6 +533,7 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
             }
         },
         autoSelect: false,
+        minLength: 2,
         delay: 300,
         items: 16  // TODO change for smaller displays? (see Genialokal "itemsToShow")
     });
