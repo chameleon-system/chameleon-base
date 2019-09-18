@@ -2,22 +2,6 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
-if ($data['aPermission']['showlist'] && '1' != $data['only_one_record_tbl']) {
-    ?>
-    <script type="text/javascript">
-        function switchRecord(id) {
-            if (id != '') {
-                url = '<?=PATH_CMS_CONTROLLER; ?>?pagedef=tableeditor&id=' + id + '&tableid=<?=urlencode($data['tableid']); ?>&sRestriction=<?php if (!empty($data['sRestriction'])) {
-        echo urlencode($data['sRestriction']);
-    } ?>&sRestrictionField=<?php if (!empty($data['sRestrictionField'])) {
-        echo urlencode($data['sRestrictionField']);
-    } ?>&popLastURL=1';
-                document.location.href = url;
-            }
-        }
-    </script>
-    <?php
-}
 $oController = TGlobal::GetController();
 ?>
 <nav class="navbar navbar-light bg-light pl-2 pr-2 pt-0">
@@ -104,7 +88,16 @@ $oController = TGlobal::GetController();
                 'sRestrictionField' => $sRestrictionField,
                 'sRestriction' => $sRestriction,
                 'recordID' => $data['id'],
-            ], PATH_CMS_CONTROLLER.'?', '&'); ?>
+            ], PATH_CMS_CONTROLLER.'?', '&');
+
+            $recordUrl = $urlUtil->getArrayAsUrl([
+                'pagedef' => 'tableeditor',
+                'tableid' => $data['tableid'],
+                'sRestrictionField' => $sRestrictionField,
+                'sRestriction' => $sRestriction,
+                'popLastURL' => '1',
+            ], PATH_CMS_CONTROLLER.'?', '&');
+            ?>
 
             <?php // TODO name and value ?>
 
@@ -116,7 +109,7 @@ $oController = TGlobal::GetController();
                        value=""
                        autocomplete="off"
                        data-source-url="<?= $sAjaxURL; ?>"
-                       data-record-url="%s">
+                       data-record-url="<?= $recordUrl ?>">
             </div>
 
         <?php

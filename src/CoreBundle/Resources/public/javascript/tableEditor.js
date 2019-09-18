@@ -809,30 +809,9 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
         }
     });
 
-    let listSearchField = $('input#quicklookuplist');
+    const listSearchField = $('input#quicklookuplist');
 
-    listSearchField.typeahead({
-        source: function (query, process) {
-            return $.get(listSearchField.data('source-url'), {'term': query}, function (data) {
-                return process(data);
-            });
-        },
-        afterSelect: function(item) {
-            if (typeof item.id !== "undefined") {
-                switchRecord(item.id);
-            } else {
-                // TODO
-                listSearchField.parentsUntil("form").parent().submit();
-            }
-        },
-        autoSelect: false,
-        delay: 300,
-        items: 16  // TODO change for smaller displays? (see Genialokal "itemsToShow")
-    });
-
-    listSearchField.on("focusin", function() {
-        $(this).typeahead("lookup");
-    });
+    CHAMELEON.CORE.initializeEntryAutocomplete(listSearchField);
 
     listSearchField.on("keyup", function(event) {
         if (event.key === "Enter") {

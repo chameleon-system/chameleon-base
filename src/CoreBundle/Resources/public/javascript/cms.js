@@ -517,3 +517,27 @@ CHAMELEON.CORE.handleFormAndLinkTargetsInModals = function () {
         $(this).attr('href', link);
     });
 };
+
+CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
+    $element.typeahead({
+        source: function (query, process) {
+            return $.get($element.data('source-url'), {'term': query}, function (data) {
+                return process(data);
+            });
+        },
+        afterSelect: function(item) {
+            if (typeof item.id !== "undefined") {
+                if ("" !== $element.data('record-url')) {
+                    top.document.location.href = $element.data('record-url') + '&id=' + item.id;
+                }
+            }
+        },
+        autoSelect: false,
+        delay: 300,
+        items: 16  // TODO change for smaller displays? (see Genialokal "itemsToShow")
+    });
+
+    $element.on("focusin", function() {
+        $(this).typeahead("lookup");
+    });
+};

@@ -116,27 +116,5 @@ $(document).ready(function () {
         $(this).find('a.TGroupTableLink').css('height', TRHeight);
     });
 
-    let inputfield = $('input#searchLookup');
-
-    inputfield.typeahead({
-        source: function (query, process) {
-            return $.get(inputfield.data('source-url'), {'term': query}, function (data) {
-                return process(data);
-            });
-        },
-        afterSelect: function(item) {
-            if (typeof item.id !== "undefined") {
-                top.document.location.href = inputfield.data('record-url') + '&id=' + item.id;
-            } else {
-                inputfield.parentsUntil("form").parent().submit();
-            }
-        },
-        autoSelect: false,
-        delay: 300,
-        items: 16  // TODO change for smaller displays? (see Genialokal "itemsToShow")
-    });
-
-    inputfield.on("focusin", function() {
-        $(this).typeahead("lookup");
-    });
+    CHAMELEON.CORE.initializeEntryAutocomplete($('input#searchLookup'));
 });
