@@ -809,7 +809,40 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
         }
     });
 
-    var quicklookuplist = $('#quicklookuplist');
+    let listSearchField = $('input#quicklookuplist');
+
+    listSearchField.typeahead({
+        source: function (query, process) {
+            return $.get(listSearchField.data('source-url'), {'term': query}, function (data) {
+                return process(data);
+            });
+        },
+        afterSelect: function(item) {
+            if (typeof item.id !== "undefined") {
+                switchRecord(item.id);
+            } else {
+                // TODO
+                listSearchField.parentsUntil("form").parent().submit();
+            }
+        },
+        autoSelect: false,
+        delay: 300,
+        items: 16  // TODO change for smaller displays? (see Genialokal "itemsToShow")
+    });
+
+    listSearchField.on("focusin", function() {
+        $(this).typeahead("lookup");
+    });
+
+    listSearchField.on("keyup", function(event) {
+        if (event.key === "Enter") {
+            // TODO that should lead to a search on the table page - but that is not known here yet.
+
+            event.preventDefault();
+        }
+    });
+
+    var quicklookuplist = $('select#quicklookuplist');
     quicklookuplist.select2({
         placeholder: quicklookuplist.data('select2-placeholder'),
         templateResult: function (data, container) {

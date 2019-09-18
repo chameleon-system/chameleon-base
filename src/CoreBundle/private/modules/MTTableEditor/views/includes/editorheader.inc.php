@@ -106,8 +106,17 @@ $oController = TGlobal::GetController();
                 'recordID' => $data['id'],
             ], PATH_CMS_CONTROLLER.'?', '&'); ?>
 
+            <?php // TODO name and value ?>
+
             <div class="mt-2">
-                <select id="quicklookuplist" class="form-control" data-select2-placeholder='<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')); ?>' data-select2-ajax='<?= $sAjaxURL; ?>'></select>
+                <input id="quicklookuplist"
+                       name="_search_word"
+                       class="form-control"
+                       placeholder="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')); ?>"
+                       value=""
+                       autocomplete="off"
+                       data-source-url="<?= $sAjaxURL; ?>"
+                       data-record-url="%s">
             </div>
 
         <?php
