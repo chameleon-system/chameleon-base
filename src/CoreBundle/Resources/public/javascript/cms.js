@@ -535,7 +535,7 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
         autoSelect: false,
         minLength: 2,
         delay: 300,
-        items: 16  // TODO change for smaller displays? (see Genialokal "itemsToShow")
+        items: $(window).height() > 600 ? 16 : 8
     });
 
     $element.on("focusin", function() {
