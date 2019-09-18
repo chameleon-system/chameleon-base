@@ -428,11 +428,11 @@ class MTTableManager extends TCMSModelBase
     }
 
     /**
-     * Generates the record list for the ajax autocomplete select boxes in table editor and record lists.
+     * Generates the record list for the ajax autocomplete input fields in table editor and record lists.
      *
-     * @return string|false JSON with id, text, html elements
+     * @return array
      */
-    public function getAutocompleteRecordList()
+    public function getAutocompleteRecordList(): array
     {
         $inputFilterUtil = $this->getInputFilterUtil();
         $recordID = $inputFilterUtil->getFilteredInput('recordID');
@@ -443,7 +443,7 @@ class MTTableManager extends TCMSModelBase
         $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $listQuery);
 
         $returnVal = [];
-        $returnVal[] = ['id' => ' ', 'text' => ' ', 'html' => ' ', 'cssClass' => 'd-none'];
+        $returnVal[] = ['id' => ' ', 'name' => ' ', 'cssClass' => 'd-none'];
 
         $editLanguageId = $this->getLanguageService()->getActiveEditLanguage()->id;
         $recordList->SetLanguage($editLanguageId);
@@ -456,11 +456,11 @@ class MTTableManager extends TCMSModelBase
                 if ($record->id == $recordID) {
                     $cssClass = 'bg-success';
                 }
-                $returnVal[] = ['id' => $record->id, 'text' => $name, 'html' => $name, 'cssClass' => $cssClass];
+                $returnVal[] = ['id' => $record->id, 'name' => $name, 'cssClass' => $cssClass];
             }
         }
 
-        return json_encode($returnVal);
+        return $returnVal;
     }
 
     private function getAutocompleteListQuery(): string
@@ -530,6 +530,9 @@ class MTTableManager extends TCMSModelBase
         $includeLines = parent::GetHtmlHeadIncludes();
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
         $includeLines[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />';
+
+        // TODO what is the correct path here? (vendor?)
+        $includeLines[] = '<script src="/bundles/chameleonsystemchameleonshoptheme/js/bootstrap3-typeahead.js" type="text/javascript"></script>';
         $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/table.js').'" type="text/javascript"></script>';
         $includeLines[] = '<link href="'.TGlobal::GetPathTheme().'/css/tooltip.css" rel="stylesheet" type="text/css" />';
         $includeLines[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
