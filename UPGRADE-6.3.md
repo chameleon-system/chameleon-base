@@ -743,6 +743,7 @@ Three newly defined log channels are deprecated and only necessary for backwards
 - \TCMSLogChange::getCmsContentBoxIdFromSystemName()
 - \TCMSLogChange::getUpdateLogger()
 - \TCMSTreeNode::GetPageTreeConnectionDateInformationHTML()
+- \TFullGroupTable::setAutoCompleteState()
 - \TGlobal::GetURLHistory()
 - \TPkgCmsCoreSendToHost::setLogRequest()
 - \TPkgCmsException_Log::getLogger()
