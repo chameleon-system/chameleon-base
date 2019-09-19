@@ -98,6 +98,12 @@ legend {
     padding: 0 3px 6px 3px;
 }
 
+.dropdown-menu {
+    /* Right align Typeahead popup. */
+
+    left: auto !important;
+}
+
 .dropdown-menu .dropdown-icon, .dropdown-menu .dropdown-icon:hover {
     background-position: 5px center;
     background-repeat: no-repeat;
