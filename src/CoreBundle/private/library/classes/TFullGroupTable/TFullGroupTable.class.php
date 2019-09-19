@@ -884,7 +884,7 @@ class TFullGroupTable extends TGroupTable
         if ($this->showSearchBox) {
             $this->somethingToShow = true;
 
-            $filterContent .= '<div class="form-group mr-2">';
+            $filterContent .= '<div class="form-group mr-2 typeahead-relative">';
 
             $formatString = '<input id="searchLookup" name="_search_word" class="form-control form-control-sm" placeholder="%s" value="%s" autocomplete="off" data-source-url="%s" data-record-url="%s">';
             $filterContent .= sprintf(

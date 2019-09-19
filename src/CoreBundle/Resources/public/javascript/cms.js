@@ -536,6 +536,7 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
         minLength: 2,
         delay: 300,
         items: $(window).height() > 600 ? 16 : 8,
+        menu: '<ul class="typeahead dropdown-menu dropdown-menu-right" role="listbox"></ul>X',
     });
 
     $element.on("focusin", function() {

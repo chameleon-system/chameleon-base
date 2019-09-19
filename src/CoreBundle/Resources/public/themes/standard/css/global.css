@@ -98,11 +98,14 @@ legend {
     padding: 0 3px 6px 3px;
 }
 
-.typeahead.dropdown-menu {
-    /* Right align Typeahead popup */
+.typeahead-relative {
+    /* Give the right aligned Typeahead dropdown the correct anchor */
 
-    left: auto !important;
-    right: 10px;
+    position: relative;
+}
+
+.typeahead.dropdown-menu-right {
+    right: 8px;
 }
 
 .typeahead.dropdown-menu .dropdown-icon, .typeahead.dropdown-menu .dropdown-icon:hover {
