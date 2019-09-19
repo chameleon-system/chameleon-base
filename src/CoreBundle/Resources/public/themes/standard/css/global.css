@@ -98,20 +98,21 @@ legend {
     padding: 0 3px 6px 3px;
 }
 
-.dropdown-menu {
-    /* Right align Typeahead popup. */
+.typeahead.dropdown-menu {
+    /* Right align Typeahead popup */
 
     left: auto !important;
+    right: 10px;
 }
 
-.dropdown-menu .dropdown-icon, .dropdown-menu .dropdown-icon:hover {
+.typeahead.dropdown-menu .dropdown-icon, .typeahead.dropdown-menu .dropdown-icon:hover {
     background-position: 5px center;
     background-repeat: no-repeat;
     padding-left: 28px;
 }
 
-.dropdown-menu .active .dropdown-item {
-    /* highlight keyboard selected entry - typeahead does not have extra styles */
+.typeahead.dropdown-menu .active .dropdown-item {
+    /* highlight keyboard selected entry - Typeahead does not have extra styles */
 
     color: #181b1e;
     text-decoration: none;
