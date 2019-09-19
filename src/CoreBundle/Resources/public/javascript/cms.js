@@ -535,11 +535,8 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
         autoSelect: false,
         minLength: 2,
         delay: 300,
-        items: $(window).height() > 600 ? 16 : 8
-    });
-
-    $element.on("focusin", function() {
-        $element.typeahead("lookup");
+        items: $(window).height() > 600 ? 16 : 8,
+        showHintOnFocus: true
     });
 
     $element.on("keydown", function(event) {
