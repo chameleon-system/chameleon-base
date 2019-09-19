@@ -19,7 +19,6 @@ $oController = TGlobal::GetController();
             }
         }
         echo $sRecordName; ?></span>
-    <form class="form-inline">
         <?php
         $idsPopoverText = '<div class="callout callout-info mt-0 mb-1"><strong class="text-muted">Auto-Increment ID:</strong><br><strong class="h6">'.$data['cmsident'].'</strong></div>
         <div class="callout callout-info mt-0 mb-1"><strong class="text-muted">ID:</strong><br><strong class="h6">'.$data['id'].'</strong></div>';
@@ -99,21 +98,17 @@ $oController = TGlobal::GetController();
             ], PATH_CMS_CONTROLLER.'?', '&');
             ?>
 
-            <?php // TODO name and value ?>
-
             <div class="mt-2">
                 <input id="quicklookuplist"
-                       name="_search_word"
                        class="form-control"
                        placeholder="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')); ?>"
-                       value=""
                        autocomplete="off"
                        data-source-url="<?= $sAjaxURL; ?>"
-                       data-record-url="<?= $recordUrl ?>">
+                       data-record-url="<?= $recordUrl ?>"
+                >
             </div>
 
         <?php
         }
         ?>
-    </form>
 </nav>

@@ -790,17 +790,7 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
 };
 
 CHAMELEON.CORE.MTTableEditor.initEntrySwitcherAutocomplete = function() {
-    const listSearchField = $('input#quicklookuplist');
-
-    CHAMELEON.CORE.initializeEntryAutocomplete(listSearchField);
-
-    listSearchField.on("keydown", function(event) {
-        if (event.key === "Enter") {
-            // TODO that should lead to a search on the table page - but that is not known here yet.
-
-            event.preventDefault();
-        }
-    });
+    CHAMELEON.CORE.initializeEntryAutocomplete($('input#quicklookuplist'));
 };
 
 CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {

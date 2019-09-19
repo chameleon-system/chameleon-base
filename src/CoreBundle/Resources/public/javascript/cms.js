@@ -539,6 +539,28 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
     });
 
     $element.on("focusin", function() {
-        $(this).typeahead("lookup");
+        $element.typeahead("lookup");
+    });
+
+    $element.on("keydown", function(event) {
+        if (event.key !== "Enter") {
+            return;
+        }
+
+        // Make sure typeahead does not prevent a form submit (if mouse is not over input field).
+
+        $element.closest("form").submit();
+    });
+
+    $element.on("keyup", function(event) {
+        if (event.key !== "Enter") {
+            return;
+        }
+
+        if (0 === $element.closest("form").length) {
+            // If there is no form: redo the hiding of Typeahead's "select(undefined)".
+
+            $element.typeahead("show");
+        }
     });
 };
