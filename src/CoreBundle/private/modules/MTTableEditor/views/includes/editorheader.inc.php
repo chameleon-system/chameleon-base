@@ -98,10 +98,10 @@ $oController = TGlobal::GetController();
             ], PATH_CMS_CONTROLLER.'?', '&');
             ?>
 
-            <div class="mt-2">
+            <div class="mt-2 typeahead-relative">
                 <input id="quicklookuplist"
                        class="form-control"
-                       placeholder="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')); ?>"
+                       placeholder="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.other_entries')); ?>"
                        autocomplete="off"
                        data-source-url="<?= $sAjaxURL; ?>"
                        data-record-url="<?= $recordUrl ?>"

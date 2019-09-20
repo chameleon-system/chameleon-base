@@ -795,6 +795,10 @@
                 <source>chameleon_system_core.list.search_term</source>
                 <target>Search term</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.list.other_entries">
+                <source>chameleon_system_core.list.other_entries</source>
+                <target>Other entries</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.list.perform_search">
                 <source>chameleon_system_core.list.perform_search</source>
                 <target>Search</target>
