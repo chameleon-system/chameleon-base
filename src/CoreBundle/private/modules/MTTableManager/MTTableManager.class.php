@@ -456,7 +456,6 @@ class MTTableManager extends TCMSModelBase
         $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $listQuery);
 
         $returnVal = [];
-        $returnVal[] = ['id' => ' ', 'name' => ' ', 'cssClass' => 'd-none'];
 
         $editLanguageId = $this->getLanguageService()->getActiveEditLanguage()->id;
         $recordList->SetLanguage($editLanguageId);

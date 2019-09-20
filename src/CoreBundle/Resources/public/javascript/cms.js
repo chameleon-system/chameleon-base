@@ -533,14 +533,10 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
             }
         },
         autoSelect: false,
-        minLength: 2,
-        delay: 300,
+        minLength: 0,
+        showHintOnFocus: true,
         items: $(window).height() > 600 ? 16 : 8,
         menu: '<ul class="typeahead dropdown-menu dropdown-menu-right" role="listbox"></ul>X',
-    });
-
-    $element.on("focusin", function() {
-        $element.typeahead("lookup");
     });
 
     $element.on("keydown", function(event) {
