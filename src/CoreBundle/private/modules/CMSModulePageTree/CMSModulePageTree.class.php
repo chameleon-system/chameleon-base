@@ -627,12 +627,19 @@ class CMSModulePageTree extends TCMSModelBase
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/simpleTree/jquery.simple.tree.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/tree/jqueryTree.js').'" type="text/javascript"></script>';
+//        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/simpleTree/jquery.simple.tree.js').'" type="text/javascript"></script>';
+//        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/tree/jqueryTree.js').'" type="text/javascript"></script>';
+//
+//        $aIncludes[] = '<script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/jstree/3.3.8/jstree.js').'"></script>';
+
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/simpleTree.css" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/contextmenu/contextmenu.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contextmenu.css" rel="stylesheet" type="text/css" />';
+//        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/simpleTree.css" media="screen" rel="stylesheet" type="text/css" />';
+//        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/contextmenu/contextmenu.js').'" type="text/javascript"></script>';
+//        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contextmenu.css" rel="stylesheet" type="text/css" />';
+
+
+//        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/jstree/3.3.8/themes/default/style.css'));
+
 
         return $aIncludes;
     }
