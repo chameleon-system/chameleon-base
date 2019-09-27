@@ -419,7 +419,9 @@ class TCMSTreeWidget
     public function GetHtmlHeadIncludes()
     {
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURL(URL_CMS.'javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURL(URL_CMS.'javascript/jquery/jsTree/jquery.jstree.js').'" type="text/javascript"></script>';
+
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/jstree/3.3.8/jstree.js').'"></script>';
+        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/jstree/3.3.8/themes/default/style.css'));
 
         $aIncludes[] = '<style type="text/css">
       .jstree-default.jstree-focused {

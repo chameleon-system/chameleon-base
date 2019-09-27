@@ -370,7 +370,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $includes = parent::GetHtmlHeadIncludes();
         $includes[] = sprintf(
             '<link rel="stylesheet" href="%s">',
-            TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/jstree/3.3.7/themes/default/style.css')
+            TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/jstree/3.3.8/themes/default/style.css')
         );
         $includes[] = sprintf(
             '<link rel="stylesheet" href="%s">',
@@ -401,7 +401,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $includes = parent::GetHtmlFooterIncludes();
         $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemmediamanager/lib/jstree/3.3.7/jstree.js'
+                '/bundles/chameleonsystemmediamanager/lib/jstree/3.3.8/jstree.js'
             ).'"></script>';
         $includes[] = '<script src="'.TGlobal::GetStaticURL(
                 '/bundles/chameleonsystemmediamanager/lib/xselectable/xselectable.js'

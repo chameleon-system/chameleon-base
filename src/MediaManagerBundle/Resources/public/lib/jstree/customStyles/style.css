@@ -1,0 +1,4 @@
+
+.jstree.jstree-checkbox-selection li.no-checkbox > a > i.jstree-checkbox {
+    display: none;
+}
