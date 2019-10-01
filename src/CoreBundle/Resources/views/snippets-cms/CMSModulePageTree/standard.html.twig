@@ -1,1 +1,37 @@
-HUHU
+
+{% if level == 0 %}
+
+    <button class="btn btn-success mb-4 jstree-selection">Auswahl übernehmen</button>
+    <button class="btn btn-danger mb-4 jstree-exit">Abbrechen</button>
+
+    <div id="singleTreeNodeSelect">
+        <ul>
+{% endif %}
+
+            {% if treeNodes.name != "" %}
+                <li id="node{{ treeNodes.cmsIdent }}"{% if level <=1 %} class="no-checkbox"{% endif %}
+                    data-jstree="{&quot;type&quot;: &quot;{% if treeNodes.children | length > 0 %}pageFolder{% else %}page{% endif %}&quot;{% if level <= 1 %}, &quot;disabled&quot;: true{% endif %}}"
+                    data-selection="{&quot;fieldName&quot;: &quot;{{ fieldName }}&quot;, &quot;nodeId&quot;: &quot;{{ treeNodes.id }}&quot;}" >
+
+                    <a href="#"{% if activeId == treeNodes.id %} class="jstree-clicked"{% endif %}>
+                        {{ treeNodes.name }}
+                    </a>
+
+                    {% if treeNodes.children | length > 0 %}
+                        <ul>
+                            {% for child in treeNodes.children %}
+                                {% include _self with {'treeNodes': child, 'level': level+1, 'path': path, 'pathComplete': pathComplete} %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endif %}
+
+{% if level == 0 %}
+        </ul>
+    </div>
+
+    <button class="btn btn-success mt-4 jstree-selection">Auswahl übernehmen</button>
+    <button class="btn btn-danger mt-4 jstree-exit">Abbrechen</button>
+
+{% endif %}
