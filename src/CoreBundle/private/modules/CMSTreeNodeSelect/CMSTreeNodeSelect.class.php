@@ -51,16 +51,13 @@ class CMSTreeNodeSelect extends TCMSModelBase
         $oRootNode->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
         $oRootNode->Load($this->rootTreeID);
 
-        $this->data['treeHTML'] = '';
-        $this->data['treePathHTML'] = '';
         $this->aRestrictedNodes = $this->GetPortalNavigationStartNodes();
-        $this->RenderTree($oRootNode, $this->nodeID, $this->fieldName);
 
-//        $viewRenderer = new ViewRenderer();
-//        $viewRenderer->AddSourceObject('oNode', $oRootNode);
-//        $viewRenderer->AddSourceObject('activeId', $this->nodeID);
-//        $viewRenderer->AddSourceObject('fieldName', $this->fieldName);
-//        $this->data['treeHTML'] = $viewRenderer->Render('CMSModulePageTree/standard.html.twig');
+        $this->data['treePathHTML'] = '';
+        $treeNodes = $this->createTreeDataModel($oRootNode, $this->fieldName);
+        $this->data['treeNodes'] = $treeNodes;
+        $this->data['nodeId'] = $this->nodeID;
+        $this->data['fieldName'] = $this->fieldName;
 
         return $this->data;
     }
@@ -78,65 +75,43 @@ class CMSTreeNodeSelect extends TCMSModelBase
     }
 
     /**
-     * renders the tree.
+     * @deprecated since 6.3.5 - use createTreeDataMode() instead.
      *
      * @param TdbCmsTree $oNode
-     * @param int        $activeID
-     * @param $fieldName
+     * @param string $activeID
+     * @param string $fieldName
      * @param string $path
-     * @param int    $level
+     * @param int $level
+     *
+     * @return string
      */
     protected function RenderTree(&$oNode, $activeID, $fieldName, $path = '', $level = 0)
     {
-        $sNodeName = $oNode->fieldName;
-        if (!empty($sNodeName)) {
+        return '';
+    }
 
-            ++$level;
+    protected function createTreeDataModel(TdbCmsTree $node, string $fieldName, $path = '')
+    {
+        $treeNodeFactory = $this->getBackendTreeNodeFactory();
+        $treeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($node);
+        $children = $node->GetChildren(true);
 
-            $path .= '<li class="breadcrumb-item">'.$oNode->fieldName."</li>\n";
-            $this->data['treePathHTML'] .= '<div id="'.$fieldName.'_tmp_path_'.$oNode->id.'" style="display:none;"><ol class="breadcrumb ml-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
+        $path .= $this->addBreadcrumbHmlForNode($node, $fieldName, $path);
 
-            $oChildren = &$oNode->GetChildren(true);
-            $iChildrenCount = $oChildren->Length();
-
-            $disabled = "";
-            $cssClass = "";
-            if ($level <= 2) {
-                $disabled = " ,&quot;checkbox_disabled&quot;: true";
-                $cssClass = ' class="no-checkbox"';
-            }
-
-            if ($iChildrenCount > 0) {
-                $nodeType = ' data-jstree="{&quot;type&quot;:&quot;pageFolder&quot;'.$disabled.'}"';
-            } else {
-                $nodeType = ' data-jstree="{&quot;type&quot;:&quot;page&quot;'.$disabled.'}"';
-            }
-            $datasForSelection = ' data-selection="{&quot;fieldName&quot;:&quot;'. $fieldName .'&quot; ,&quot;nodeId&quot;: &quot;'. $oNode->id .'&quot;}"';
-
-            $this->data['treeHTML'] .= '<li id="node'.$oNode->sqlData['cmsident'].'" '. $cssClass . $nodeType . $datasForSelection .'>';
-            $active = '';
-            if ($activeID == $oNode->id) {
-                $active = ' class="jstree-clicked"';
-            }
-
-            $this->data['treeHTML'] .= '<a href="#"'. $active .'>'.$sNodeName;
-
-            $this->data['treeHTML'] .= '</a>';
-
-
-            if ($iChildrenCount > 0) {
-                $this->data['treeHTML'] .= "\n<ul>\n";
-            }
-
-            while ($oChild = $oChildren->Next()) {
-                $this->RenderTree($oChild, $activeID, $fieldName, $path, $level);
-            }
-            if ($iChildrenCount > 0) {
-                $this->data['treeHTML'] .= "\n</ul>\n";
-            }
-
-            $this->data['treeHTML'] .= "</li>\n";
+        while ($child = $children->Next()) {
+            $childTreeNodeObj = $this->createTreeDataModel($child, $fieldName, $path);
+            $treeNodeDataModel->addChildren($childTreeNodeObj);
         }
+
+        return $treeNodeDataModel;
+    }
+
+    protected function addBreadcrumbHmlForNode(TdbCmsTree $node, string $fieldName, string $path = ''): string
+    {
+        $path .= '<li class="breadcrumb-item">'.$node->fieldName."</li>\n";
+        $this->data['treePathHTML'] .= '<div id="'.$fieldName.'_tmp_path_'.$node->id.'" style="display:none;"><ol class="breadcrumb ml-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
+
+        return $path;
     }
 
     /**
@@ -173,13 +148,17 @@ class CMSTreeNodeSelect extends TCMSModelBase
         $aIncludes = parent::GetHtmlHeadIncludes();
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
-
-//                $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jsTree/jquery.jstree.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/jstree/3.3.8/jstree.js').'"></script>';
-        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/jstree/3.3.8/themes/default/style.css'));
-        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/jstree/customStyles/style.css'));
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/jsTree/3.3.8/jstree.js').'"></script>';
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/navigationTree.js').'"></script>';
+        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/jsTree/3.3.8/themes/default/style.css'));
+        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/jsTree/customStyles/style.css'));
 
         return $aIncludes;
+    }
+
+    private function getBackendTreeNodeFactory(): \ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.factory.backend_tree_node');
     }
 
 }
