@@ -26,7 +26,7 @@ The following scripts will be usefull during develoment:
   * Install all requirements for the build process of CoreUI
   * Install all CoreUI requirements and assets
   * Install 'Perfect Scrollbar'
-  * Copy all necessary files for 'Perfect Scrollbar' to the theme directory
+  * Copy all necessary files for 'Perfect Scrollbar' to chameleon's theme directory
   * Copy CoreUI's JavaScript files to chameleon's theme directory
   * Run the `css` command (see below)
 
@@ -35,8 +35,8 @@ The following scripts will be usefull during develoment:
   * Compile scss sources to css
   * Minify the resulting css
 
-3. `watch-css` This script starts the watch mode for all files within `vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/public/themes/standard/src/scss` and compiles and minifies all scss sources to the target directory. Thus calling the `css` script over and over again after every change is not necessary.
-For performance reasons the watch mode drops linting. You might want to call `css` (see above) after having made your customizations.
+3. `watch-css` This script starts the watch mode for all files within `vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/public/themes/standard/src/scss` and compiles and minifies scss sources to the target directory exactly as the `css` script (see above) does. Thus calling the `css` script over and over again after every change is not necessary.
+For performance reasons the watch mode drops linting. You might want to call `css` after having made your customizations.
 
 The `package.json` file contains some other scripts that are not intended to be called separately.
 
