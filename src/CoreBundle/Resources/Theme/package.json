@@ -14,19 +14,22 @@
   },
   "dependencies": {
     "clean-css-cli": "^4.3.0",
-    "node-sass": "^4.12.0",
     "perfect-scrollbar": "^1.4.0"
   },
   "devDependencies": {
+    "node-sass": "^4.12.0",
+    "nodemon": "^1.19.3",
     "stylelint": "^10.0.1",
     "stylelint-config-standard": "^18.3.0"
   },
   "scripts": {
+    "watch-css": "nodemon --watch ./../public/themes/standard/src/scss -e scss -x \"npm run css-no-lint\"",
     "install-coreui": "cd $npm_package_config_coreuidir && npm install && npm run dist",
     "install-perfect-scrollbar": "npm install perfect-scrollbar --save",
     "cp-perfect-scrollbar-css-to-theme": "cp -f ./node_modules/perfect-scrollbar/css/perfect-scrollbar.css $npm_package_config_outdir/coreui/css/perfect-scrollbar.css",
     "cp-perfect-scrollbar-js-to-theme": "cp -f ./node_modules/perfect-scrollbar/dist/* $npm_package_config_outdir/coreui/js/",
     "cp-coreui-js-to-theme": "cp -f $npm_package_config_coreuidir/dist/js/* $npm_package_config_outdir/coreui/js",
+    "css-no-lint": "npm run css-compile && npm run css-minify",
     "css": "npm run css-lint && npm run css-compile && npm run css-minify",
     "css-lint": "stylelint --config $npm_package_config_stylelintconfig $npm_package_config_srcdir/scss/*.scss",
     "css-compile": "node-sass --output-style expanded --source-map true --source-map-contents true --precision 6 $npm_package_config_srcdir/scss/$npm_package_config_entry.scss $npm_package_config_outdir/coreui/css/$npm_package_config_out.css",
