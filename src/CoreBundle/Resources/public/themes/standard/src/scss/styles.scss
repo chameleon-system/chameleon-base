@@ -1,0 +1,11 @@
+// To override CoreUI variables add them to chameleon's custom variables file
+@import 'chameleon/variables';
+
+// Importing CoreUi
+@import '../../../../../../../../../../coreui/coreui/scss/coreui-standalone';
+
+// Import any other styles below
+//@import './chameleon/example';
+
+// Please note to leave a blank line at the end of this file. Thus this file will end with a line break. This is required
+// to pass lint tests.
