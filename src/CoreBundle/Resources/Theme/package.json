@@ -4,8 +4,8 @@
   "description": "<p align=\"center\"><a href=\"https://chameleonsystem.com\" target=\"_blank\"><img src=\"https://demo.chameleon-system.de/chameleon/mediapool/8/ae/chameleon-logo_id3834.png\"></a><br /><span>The E-Business Platform</span></p>",
   "main": "index.js",
   "config": {
-    "srcdir": "./../public/themes/coreui/src",
-    "outdir": "./../public/themes/coreui",
+    "srcdir": "./../public/themes/standard/src",
+    "outdir": "./../public/themes/standard",
     "entry": "styles",
     "out": "coreui-standalone",
     "stylelintconfig": "./.stylelintrc.json",
@@ -27,22 +27,22 @@
     "cp-perfect-scrollbar-css-to-theme": "cp -f ./node_modules/perfect-scrollbar/css/perfect-scrollbar.css $npm_package_config_outdir/coreui/css/perfect-scrollbar.css",
     "cp-perfect-scrollbar-js-to-theme": "cp -f ./node_modules/perfect-scrollbar/dist/* $npm_package_config_outdir/coreui/js/",
     "cp-coreui-js-to-theme": "cp -f $npm_package_config_coreuidir/dist/js/* $npm_package_config_outdir/coreui/js",
-    "css": "npm run css-lint && npm run css-compile && npm run css-minify && npm run echo-msg",
+    "css": "npm run css-lint && npm run css-compile && npm run css-minify",
     "css-lint": "stylelint --config $npm_package_config_stylelintconfig $npm_package_config_srcdir/scss/*.scss",
     "css-compile": "node-sass --output-style expanded --source-map true --source-map-contents true --precision 6 $npm_package_config_srcdir/scss/$npm_package_config_entry.scss $npm_package_config_outdir/coreui/css/$npm_package_config_out.css",
     "css-minify": "cleancss --level 1 --source-map --source-map-inline-sources --output $npm_package_config_outdir/coreui/css/$npm_package_config_out.min.css $npm_package_config_outdir/coreui/css/$npm_package_config_out.css",
     "echo-msg": "echo \\\\033[32m \"Done!\"",
-    "build": "npm install && npm run install-coreui && npm run install-perfect-scrollbar && npm run cp-perfect-scrollbar-css-to-theme && npm run cp-coreui-js-to-theme && npm run cp-perfect-scrollbar-js-to-theme && npm run css"
+    "build": "npm install && npm run install-coreui && npm run install-perfect-scrollbar && npm run cp-perfect-scrollbar-css-to-theme && npm run cp-coreui-js-to-theme && npm run cp-perfect-scrollbar-js-to-theme && npm run css && npm audit fix && npm run echo-msg"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gerritious/chameleon-system.git"
+    "url": "git+https://github.com/chameleon-system/chameleon-system.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/gerritious/chameleon-system/issues"
+    "url": "https://github.com/chameleon-system/chameleon-system/issues"
   },
-  "homepage": "https://github.com/gerritious/chameleon-system#readme"
+  "homepage": "https://github.com/chameleon-system/chameleon-system#readme"
 }
