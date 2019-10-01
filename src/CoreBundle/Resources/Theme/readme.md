@@ -2,7 +2,7 @@
 
 ## CoreUI as Requirement in `composer.json`
 
-Please require CoreUI in your `composer.json`:
+To build CoreUI please require CoreUI in your `composer.json`:
 
 `composer require coreui/coreui`
 
@@ -35,11 +35,16 @@ The following scripts will be usefull during develoment:
   * Compile scss sources to css
   * Minify the resulting css
 
+3. `watch-css` This script starts the watch mode for all files within `vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/public/themes/standard/src/scss` and compiles and minifies all scss sources to the target directory. Thus calling the `css` script over and over again after every change is not necessary.
+For performance reasons the watch mode drops linting. You might want to call `css` (see above) after having made your customizations.
+
 The `package.json` file contains some other scripts that are not intended to be called separately.
+
 
 ## Target Directory
 All resulting files can be found in the target directory:
 `/vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/public/themes/coreui`
+
 
 ## Customization for Chameleon
 
