@@ -24,7 +24,7 @@ $(document).ready(function () {
                 "cascade": "none"
             },
             "plugins":[ "types", "wholerow", "changed", "checkbox" ]
-        }).on('select');
+        });
 
 
     $('.jstree-selection').click(function () {
@@ -41,6 +41,55 @@ $(document).ready(function () {
     $('.jstree-exit').click(function () {
         parent.CloseModalIFrameDialog();
     });
+
+
+    $(".navigationTreeContainer")
+        .jstree({
+            "core":{
+                "initially_open":[ "node99" ],
+                "multiple": true
+            },
+            "types": {
+                "default": {
+                    "icon": "fas fa-folder-open"
+                },
+                "pageFolder": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
+                "page": {
+                    "icon": "far fa-file"
+                }
+            },
+            "plugins":[ "types", "wholerow", "changed" ]
+        });
+
+    $(".navigationTreeContainer-checkboxes")
+        .jstree({
+            "core":{
+                "initially_open":[ "node99" ],
+                "multiple": true
+            },
+            "types": {
+                "default": {
+                    "icon": "fas fa-folder-open"
+                },
+                "pageFolder": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
+                "page": {
+                    "icon": "far fa-file"
+                }
+            },
+            "checkbox": {
+                "three_state": false,
+                "cascade": "none"
+            },
+            "plugins":[ "types", "wholerow", "changed", "checkbox" ]
+        });
+
+
 });
 /*
  * TreeNode field: sets selected node

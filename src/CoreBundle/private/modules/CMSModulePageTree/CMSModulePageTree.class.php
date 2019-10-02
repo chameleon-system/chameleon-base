@@ -260,9 +260,6 @@ class CMSModulePageTree extends TCMSModelBase
             }
         }
 
-        $sSpacing = '  ';
-        str_pad($sSpacing, ($level + 1) * 2, '  ');
-
         $sSpanClass = '';
         $sSpanMenuClass = 'standard';
         if (!$this->global->UserDataExists('nodeID')) {
@@ -334,7 +331,7 @@ class CMSModulePageTree extends TCMSModelBase
                 $sPageTag = ' espageid="'.TGlobal::OutHTML($sPrimaryPageID).'"';
             }
             if ($bCurrentPageIsConnectedToThisNode) {
-                $sSpanClass .= ' activeConnectedNode';
+                $sSpanClass .= ' activeConnectedNode jstree-clicked';
 
                 // kill all current page ids from $aPages and check if we have other pages connected
                 $aKeys = array_keys($aPages, $this->data['dataID']);
@@ -343,10 +340,10 @@ class CMSModulePageTree extends TCMSModelBase
                 }
 
                 if (count($aPages) > 0) {
-                    $sSpanClass .= ' otherConnectedNode';
+                    $sSpanClass .= ' otherConnectedNode jstree-clicked';
                 }
             } else {
-                $sSpanClass .= ' otherConnectedNode';
+                $sSpanClass .= ' otherConnectedNode jstree-clicked';
             }
         }
 
@@ -354,7 +351,7 @@ class CMSModulePageTree extends TCMSModelBase
         // check if last node state was "open"
         if ($level <= 2 || in_array('node'.$iParentID, $this->aOpenTreeNodes)) {
             $lastStateOpen = true;
-            $sListClasses .= ' folder-open';
+            $sListClasses .= ' jstree-open';
         }
 
         if (in_array($oParentTreeNode->id, $this->aRestrictedNodes)) {
@@ -362,7 +359,7 @@ class CMSModulePageTree extends TCMSModelBase
         }
 
         ++$this->data['iTreeNodeCount']; // count the tree nodes
-        $this->data['sTreeHTML'] .= $sSpacing.'<li class="'.$sListClasses.'" id="node'.$oParentTreeNode->sqlData['cmsident'].'" esrealid="'.$iParentID.'" '.$sPageTag.'>
+        $this->data['sTreeHTML'] .= '<li class="'.$sListClasses.'" id="node'.$oParentTreeNode->sqlData['cmsident'].'" esrealid="'.$iParentID.'" '.$sPageTag.'>
         <span class="'.$sSpanClass.' '.$sSpanMenuClass.'">'.TGlobal::OutHTML($sTreeNodeName).$sIsTranslatedIdent.'</span>'.$sIconHTML;
 
         $databaseConnection = $this->getDatabaseConnection();
@@ -381,7 +378,7 @@ class CMSModulePageTree extends TCMSModelBase
         ++$level;
 
         if ($oTreeNodes->Length() > 0) {
-            $this->data['sTreeHTML'] .= "\n".$sSpacing.'  <ul';
+            $this->data['sTreeHTML'] .= "\n  <ul";
 
             // change to ajax
 
@@ -410,9 +407,9 @@ class CMSModulePageTree extends TCMSModelBase
         }
 
         if ($oTreeNodes->Length() > 0) {
-            $this->data['sTreeHTML'] .= $sSpacing."  </ul>\n";
+            $this->data['sTreeHTML'] .= "  </ul>\n";
         }
-        $this->data['sTreeHTML'] .= $sSpacing."</li>\n";
+        $this->data['sTreeHTML'] .= "</li>\n";
     }
 
     /**
@@ -627,16 +624,19 @@ class CMSModulePageTree extends TCMSModelBase
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/simpleTree/jquery.simple.tree.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/tree/jqueryTree.js').'" type="text/javascript"></script>';
+//        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/simpleTree/jquery.simple.tree.js').'" type="text/javascript"></script>';
+//        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/tree/jqueryTree.js').'" type="text/javascript"></script>';
 
-//        $aIncludes[] = '<script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/jsTree/3.3.8/jstree.js').'"></script>';
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jsTree/3.3.8/jstree.js').'"></script>';
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/navigationTree.js').'"></script>';
 
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/simpleTree.css" media="screen" rel="stylesheet" type="text/css" />';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/contextmenu/contextmenu.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contextmenu.css" rel="stylesheet" type="text/css" />';
-//        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/jsTree/3.3.8/themes/default/style.css'));
+
+//        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/simpleTree.css" media="screen" rel="stylesheet" type="text/css" />';
+//        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/contextmenu/contextmenu.js').'" type="text/javascript"></script>';
+//        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contextmenu.css" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURLToWebLib('/javascript/jsTree/3.3.8/themes/default/style.css'));
+        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURLToWebLib('/javascript/jsTree/customStyles/style.css'));
 
 
         return $aIncludes;

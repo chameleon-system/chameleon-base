@@ -67,12 +67,19 @@
             var self = this;
             $(this.treeContainer).jstree({
                 'plugins': [
-                    'cookies', 'dnd', 'hotkeys', 'contextmenu', 'state', 'wholerow', 'types'
+                    'dnd', 'contextmenu', 'state', 'wholerow', 'types'
                 ],
-                'core': {check_callback: true, multiple: true},
+                'core': {
+                    'check_callback': true,
+                    'multiple': true},
                 'dnd': {
                     'is_draggable': function (node) {
                         return !!self.settings.accessRightsMediaTree.edit;
+                    }
+                },
+                'types': {
+                    'default': {
+                        'icon': 'far fa-folder'
                     }
                 },
                 'contextmenu': {
@@ -239,8 +246,8 @@
                 } else {
                     var id = data.selected[0].replace("mediaTreeNode", "");
                     var state = {
-                        mediaTreeNodeId: id,
-                        pageNumber: 0
+                        'mediaTreeNodeId': id,
+                        'pageNumber': 0
                     };
                     this.updateListView(state);
                 }
