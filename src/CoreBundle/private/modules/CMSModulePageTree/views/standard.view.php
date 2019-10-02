@@ -272,7 +272,6 @@
             </a>
         </li>
     </ul>
-    <div class="cleardiv">&nbsp;</div>
 </div>
 <div id="RootNodeRightClickMenuContainer" style="display: none;">
     <ul>
@@ -283,7 +282,6 @@
             </a>
         </li>
     </ul>
-    <div class="cleardiv">&nbsp;</div>
 </div>
 <div id="RestrictedNodeRightClickMenuContainer" style="display: none;">
     <ul>
@@ -300,7 +298,6 @@
             </a>
         </li>
     </ul>
-    <div class="cleardiv">&nbsp;</div>
 </div>
 
 <script type="text/javascript">
@@ -388,7 +385,12 @@
 </script>
 
 <?php
-if (false === $isInIframe) {
+$withCheckboxes = "";
+if (true === $data['showAssignDialog']) {
+    $withCheckboxes = "-checkboxes";
+}
+
+if (false === $data['isInIframe']) {
             ?>
 <div class="card">
     <div class="card-header">
@@ -398,50 +400,52 @@ if (false === $isInIframe) {
 <?php
         }
 ?>
-        <div class="navigationTreeContainer">
+        <div class="navigationTreeContainer<?=$withCheckboxes ?>">
             <ul class="simpleTree">
                 <?php
                 echo $data['sTreeHTML'];
                 ?>
             </ul>
+        </div>
 
-            <div class="treelegend">
-                <h3>
-                    <span class="nodeIndicatorIcon"></span>
-                    <?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_header'); ?>
-                </h3>
+        <div class="treelegend">
+            <h3>
+                <span class="nodeIndicatorIcon"></span>
+                <?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_header'); ?>
+            </h3>
 
-                <div class="text">
-                    <span class="nodeIndicatorIcon"></span>
-                    <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_node_has_no_page'); ?></span>
-                </div>
+            <div class="text">
+                <span class="nodeIndicatorIcon"></span>
+                <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_node_has_no_page'); ?></span>
+            </div>
 
-                <div class="otherConnectedNode">
-                    <span class="nodeIndicatorIcon"></span>
-                    <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_has_connected_pages'); ?></span>
-                </div>
+            <div class="otherConnectedNode">
+                <span class="nodeIndicatorIcon"></span>
+                <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_has_connected_pages'); ?></span>
+            </div>
 
-                <div class="activeConnectedNode">
-                    <span class="nodeIndicatorIcon"></span>
-                    <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page'); ?></span>
-                </div>
+            <div class="activeConnectedNode">
+                <span class="nodeIndicatorIcon"></span>
+                <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page'); ?></span>
+            </div>
 
-                <div class="restrictedPage">
-                    <span class="nodeIndicatorIcon iconRestricted" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/lock.png')); ?>');"></span>
-                    <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page'); ?></span>
-                </div>
+            <div class="restrictedPage">
+                <span class="nodeIndicatorIcon iconRestricted" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/lock.png')); ?>');"></span>
+                <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page'); ?></span>
+            </div>
 
-                <div class="legendLine">
-                    <span class="nodeIndicatorIcon iconHidden" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/hidden.png')); ?>');"></span>
-                    <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_hidden'); ?></span>
-                </div>
+            <div class="legendLine">
+                <span class="nodeIndicatorIcon iconHidden" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/hidden.png')); ?>');"></span>
+                <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_hidden'); ?></span>
+            </div>
 
-                <div class="legendLine">
-                    <span class="nodeIndicatorIcon iconExternalLink" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/icon_external_link.gif')); ?>');"></span>
-                    <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_external_link'); ?></span>
-                </div>
+            <div class="legendLine">
+                <span class="nodeIndicatorIcon iconExternalLink" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/icon_external_link.gif')); ?>');"></span>
+                <span><?=$translator->trans('chameleon_system_core.cms_module_page_tree.legend_external_link'); ?></span>
             </div>
         </div>
+
+
         <?php
         if (false === $isInIframe) {
             ?>
