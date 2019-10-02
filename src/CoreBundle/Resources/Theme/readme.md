@@ -2,7 +2,7 @@
 
 ## CoreUI as Requirement in `composer.json`
 
-To build CoreUI please require CoreUI in your `composer.json`:
+To build CoreUI please require CoreUI in your `composer.json` (if not yet sone so):
 
 `composer require coreui/coreui`
 
@@ -26,14 +26,15 @@ The following scripts will be usefull during develoment:
   * Install all requirements for the build process of CoreUI
   * Install all CoreUI requirements and assets
   * Install 'Perfect Scrollbar'
-  * Copy all necessary files for 'Perfect Scrollbar' to chameleon's theme directory
-  * Copy CoreUI's JavaScript files to chameleon's theme directory
+  * Copy all necessary files for 'Perfect Scrollbar' to Chameleon's theme directory
+  * Copy CoreUI's JavaScript files to Chameleon's theme directory
   * Run the `css` command (see below)
 
 2. `css` Please call this script whenever you make changes to your custom scss sources. It will perform the following steps:
   * Lint scss sources to enforce conventions and avoid frequent errors
   * Compile scss sources to css
   * Minify the resulting css
+  * Copy the result to the target directory (see below)
 
 3. `watch-css` This script starts the watch mode for all files within `vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/public/themes/standard/src/scss` and compiles and minifies scss sources to the target directory exactly as the `css` script (see above) does. Thus calling the `css` script over and over again after every change is not necessary.
 For performance reasons the watch mode drops linting. You might want to call `css` after having made your customizations.
