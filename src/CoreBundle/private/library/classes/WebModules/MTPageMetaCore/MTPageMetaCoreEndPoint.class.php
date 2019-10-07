@@ -503,11 +503,6 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      */
     public function _AllowCache()
     {
-        // if user is logged in to CMS the cache will be disabled to allow output of CMS only content
-        if (TGlobal::CMSUserDefined()) {
-            return false;
-        }
-
         return null !== $this->getPortalDomainService()->getActivePortal();
     }
 
@@ -516,13 +511,17 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      */
     public function _GetCacheParameters()
     {
-        $aParameters = parent::_GetCacheParameters();
+        $cacheParameters = parent::_GetCacheParameters();
+
+        if (_DEVELOPMENT_MODE && TCMSUser::CMSUserDefined()) {
+            $cacheParameters['debugOutputActive'] = true;
+        }
 
         $oActivePage = $this->getActivePageService()->getActivePage();
-        $aParameters['activepage'] = $oActivePage->id;
-        $aParameters['aAdditionalBreadcrumbNodes'] = serialize($this->aAdditionalBreadcrumbNodes);
+        $cacheParameters['activepage'] = $oActivePage->id;
+        $cacheParameters['aAdditionalBreadcrumbNodes'] = serialize($this->aAdditionalBreadcrumbNodes);
 
-        return $aParameters;
+        return $cacheParameters;
     }
 
     /**
