@@ -151,6 +151,7 @@ class MTTableManager extends TCMSModelBase
         $externalFunctions = array(
             'ClearNaviCache',
             'getAutocompleteRecordList',
+            'getAutocompleteRecords',
             'DeleteSelected',
         );
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
@@ -395,7 +396,7 @@ class MTTableManager extends TCMSModelBase
     }
 
     /**
-     * @deprecated since 6.3.0 - use getAutocompleteRecordList() instead
+     * @deprecated since 6.3.0 - use getAutocompleteRecords() instead
      *
      * @return array
      */
@@ -431,8 +432,20 @@ class MTTableManager extends TCMSModelBase
      * Generates the record list for the ajax autocomplete select boxes in table editor and record lists.
      *
      * @return string|false JSON with id, text, html elements
+     *
+     * @deprecated since 6.3.6 - use getAutocompleteRecords() which uses the correct return type for ajax
      */
     public function getAutocompleteRecordList()
+    {
+        return json_encode($this->getAutocompleteRecords());
+    }
+
+    /**
+     * Generates the record list for the ajax autocomplete for search in table editor and record lists.
+     *
+     * @return array
+     */
+    protected function getAutocompleteRecords(): array
     {
         $inputFilterUtil = $this->getInputFilterUtil();
         $recordID = $inputFilterUtil->getFilteredInput('recordID');
@@ -443,7 +456,6 @@ class MTTableManager extends TCMSModelBase
         $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $listQuery);
 
         $returnVal = [];
-        $returnVal[] = ['id' => ' ', 'text' => ' ', 'html' => ' ', 'cssClass' => 'd-none'];
 
         $editLanguageId = $this->getLanguageService()->getActiveEditLanguage()->id;
         $recordList->SetLanguage($editLanguageId);
@@ -453,14 +465,14 @@ class MTTableManager extends TCMSModelBase
             if (!empty($name)) {
                 // highlight active record
                 $cssClass = '';
-                if ($record->id == $recordID) {
-                    $cssClass = 'bg-success';
+                if ($record->id === $recordID) {
+                    $cssClass = 'active';
                 }
-                $returnVal[] = ['id' => $record->id, 'text' => $name, 'html' => $name, 'cssClass' => $cssClass];
+                $returnVal[] = ['id' => $record->id, 'name' => $name, 'cssClass' => $cssClass];
             }
         }
 
-        return json_encode($returnVal);
+        return $returnVal;
     }
 
     private function getAutocompleteListQuery(): string
