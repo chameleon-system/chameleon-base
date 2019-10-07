@@ -536,7 +536,7 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
         minLength: 0,
         showHintOnFocus: true,
         items: $(window).height() > 600 ? 16 : 8,
-        menu: '<ul class="typeahead dropdown-menu dropdown-menu-right" role="listbox"></ul>X',
+        menu: '<ul class="typeahead dropdown-menu dropdown-menu-right" role="listbox"></ul>',
     });
 
     $element.on("keydown", function(event) {
