@@ -419,7 +419,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             $sCustomHeaderData = $activePortal->sqlData['custom_metadata'];
 
             // add pageID to content if user is logged in
-            if (_DEVELOPMENT_MODE && TGlobal::CMSUserDefined()) {
+            if (true === TCMSUser::CMSUserDefined()) {
                 $activePage = $this->getActivePageService()->getActivePage();
                 $sCustomHeaderData .= "\n<!-- CMS page ID: ".TGlobal::OutHTML($activePage->id).'; IDENT: '.TGlobal::OutHTML($activePage->sqlData['cmsident'])."-->\n";
             }
@@ -513,7 +513,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
     {
         $cacheParameters = parent::_GetCacheParameters();
 
-        if (_DEVELOPMENT_MODE && TCMSUser::CMSUserDefined()) {
+        if (true === TCMSUser::CMSUserDefined()) {
             $cacheParameters['debugOutputActive'] = true;
         }
 
