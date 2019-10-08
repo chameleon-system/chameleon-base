@@ -33,7 +33,7 @@ class TCMSListManagerImagedatabaseMLT extends TCMSListManagerMLT
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function GetCustomRestriction()
     {
