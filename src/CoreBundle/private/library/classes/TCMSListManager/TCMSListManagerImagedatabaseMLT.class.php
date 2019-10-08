@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Doctrine\DBAL\Connection;
+
 /**
  * extends the standard listing so that a preview image is shown, and if the
  * class is called with the right parameters it will show an assign button to
@@ -30,14 +33,18 @@ class TCMSListManagerImagedatabaseMLT extends TCMSListManagerMLT
     }
 
     /**
-     * restrict the list to show only images starting at ID = 1000.
-     *
-     * @param string $query
+     * {@inheritdoc}
      */
     public function GetCustomRestriction()
     {
-        parent::GetCustomRestriction();
-        $query = '`'.MySqlLegacySupport::getInstance()->real_escape_string($this->oTableConf->sqlData['name']).'`.`cmsident` >= 1000';
+        $query = parent::GetCustomRestriction();
+
+        if ('' !== $query) {
+            $query .= ' AND ';
+        }
+
+        $dbConnection = $this->getDatabaseConnection();
+        $query .= $dbConnection->quoteIdentifier($this->oTableConf->sqlData['name']).'.`cmsident` >= 1000';
 
         return $query;
     }
@@ -54,5 +61,10 @@ class TCMSListManagerImagedatabaseMLT extends TCMSListManagerMLT
         parent::GetCustomMenuItems();
         $this->oMenuItems->RemoveItem('sItemKey', 'deleteall');
         $this->oMenuItems->RemoveItem('sItemKey', 'edittableconf');
+    }
+
+    private function getDatabaseConnection(): Connection
+    {
+        return ServiceLocator::get('database_connection');
     }
 }
