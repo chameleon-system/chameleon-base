@@ -20,33 +20,35 @@ Example: `npm --prefix vendor/chameleon-system/chameleon-base/src/CoreBundle/Res
 
 **Please make sure** to always call these scripts from within your project's root directory and provide the path to the theme's `package.json` file as a value to the `prefix` option as shown above. This ensures that scripts run properly in docker environments.
 
-The following scripts will be usefull during develoment:
+The following scripts will be usefull during develoment and installation:
 
-1. `build` Please call this script to re-install CoreUI. It will execute the following steps:
+1. `build` Please call this script to re-install or update CoreUI. It will execute the following steps:
   * Install all requirements for the build process of CoreUI
   * Install all CoreUI requirements and assets
-  * Install 'Perfect Scrollbar'
+  * Install 'Perfect Scrollbar' ([GitHub - mdbootstrap/perfect-scrollbar: Minimalistic but perfect custom scrollbar plugin](https://github.com/mdbootstrap/perfect-scrollbar))
   * Copy all necessary files for 'Perfect Scrollbar' to Chameleon's theme directory
   * Copy CoreUI's JavaScript files to Chameleon's theme directory
   * Run the `css` command (see below)
 
 2. `css` Please call this script whenever you make changes to your custom scss sources. It will perform the following steps:
   * Lint scss sources to enforce conventions and avoid frequent errors
+  (see `vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/Theme/.stylelintrc.json`)
   * Compile scss sources to css
   * Minify the resulting css
   * Copy the result to the target directory (see below)
 
 3. `watch-css` This script starts the watch mode for all files within `vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/public/themes/standard/src/scss` and compiles and minifies scss sources to the target directory exactly as the `css` script (see above) does. Thus calling the `css` script over and over again after every change is not necessary.
-For performance reasons the watch mode drops linting. You might want to call `css` after having made your customizations.
+For performance reasons the watch mode drops linting. You might want to call the `css` command after having made your customizations.
 
 The `package.json` file contains some other scripts that are not intended to be called separately.
 
 
 ## Target Directory
 All resulting files can be found in the target directory:
-`/vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/public/themes/coreui`
+`/vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/public/themes/standard`
 
 
 ## Customization for Chameleon
 
 Please add your styles and imports to `vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/public/themes/standard/src/scss/styles.scss` to customize the CoreUI theme.
+Please note the documentation within this file.
