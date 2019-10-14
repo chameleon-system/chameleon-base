@@ -2,7 +2,7 @@
 
 ## CoreUI as Requirement in `composer.json`
 
-To build CoreUI please require CoreUI in your `composer.json` (if not yet sone so):
+To build CoreUI please require CoreUI in your `composer.json` (if not yet done so):
 
 `composer require coreui/coreui`
 
@@ -20,7 +20,7 @@ Example: `npm --prefix vendor/chameleon-system/chameleon-base/src/CoreBundle/Res
 
 **Please make sure** to always call these scripts from within your project's root directory and provide the path to the theme's `package.json` file as a value to the `prefix` option as shown above. This ensures that scripts run properly in docker environments.
 
-The following scripts will be usefull during develoment and installation:
+The following scripts will be useful during development and installation:
 
 1. `build` Please call this script to re-install or update CoreUI. It will execute the following steps:
   * Install all requirements for the build process of CoreUI
