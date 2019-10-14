@@ -56,4 +56,4 @@ Please note the documentation within this file.
 
 ## Other Sources
 
-At the time of writing this docummnetation not all `css` sources are included in the build process. Some are includen by calling `GetHtmlHeadIncludes` or directly in the HTML code.
+At the time of writing this documentation not all `css` sources are included in the build process. Some are included by calling `GetHtmlHeadIncludes` or directly in the HTML code or by other means.
