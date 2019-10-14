@@ -52,3 +52,8 @@ All resulting files can be found in the target directory:
 
 Please add your styles and imports to `vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/public/themes/standard/src/scss/styles.scss` to customize the CoreUI theme.
 Please note the documentation within this file.
+
+
+## Other Sources
+
+At the time of writing this docummnetation not all `css` sources are included in the build process. Some are includen by calling `GetHtmlHeadIncludes` or directly in the HTML code.
