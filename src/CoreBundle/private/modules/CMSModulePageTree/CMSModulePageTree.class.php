@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ChangeNavigationTreeNodeEvent;
+use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperFactoryInterface;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface;
@@ -111,10 +113,10 @@ class CMSModulePageTree extends TCMSModelBase
             $this->data['dataID'] = $this->global->GetUserData('id');
         }
 
-        $nodeID = $inputFilterUtil->getFilteredGetInput('rootID', TCMSTreeNode::TREE_ROOT_ID);
-        $this->data['rootID'] = $nodeID;
-        $this->iRootNode = $nodeID;
-        $this->GetRootNodeName($nodeID);
+        $rootNodeID = $inputFilterUtil->getFilteredGetInput('rootID', TCMSTreeNode::TREE_ROOT_ID);
+        $this->data['rootID'] = $rootNodeID;
+        $this->iRootNode = $rootNodeID;
+        $this->GetRootNodeName($rootNodeID);
         $this->LoadTreeState();
         $this->aRestrictedNodes = $this->GetPortalNavigationStartNodes();
 
@@ -137,6 +139,8 @@ class CMSModulePageTree extends TCMSModelBase
             $row = MySqlLegacySupport::getInstance()->fetch_assoc($checkResult);
             $this->data['dataName'] = $row['name'];
         }
+
+        $this->data['treeNodes'] = $this->createRootTreeWithDefaultPortalItems($rootNodeID);
 
         return $this->data;
     }
@@ -213,6 +217,38 @@ class CMSModulePageTree extends TCMSModelBase
         }
 
         return $sHTML;
+    }
+
+    /**
+     * renders all children of a node
+     * is called via ajax.
+     *
+     * @return string
+     */
+    public function GetSubTreeForJsTree()
+    {
+
+
+        header('Content-Type: application/json');
+
+        if ( $_GET["id"] === "#" ) {
+            $treeData = array(
+                array( "id" => "ajson1", "parent" => "#", "text" => "Simple root node"  ),
+                array( "id" => "ajson2", "parent" => "#", "text" => "Root node 2", "children" => true ),
+
+            );
+        }
+
+        else if ( $_GET["id"] === "ajson2" ) {
+            $treeData = array(
+                array( "id" => "ajson3", "parent" => "ajson2", "text" => "Child 1" ),
+                array( "id" => "ajson4", "parent" => "ajson2", "text" => "Child 2" )
+            );
+        }
+
+        return json_encode( $treeData);
+
+
     }
 
     /**
@@ -383,15 +419,15 @@ class CMSModulePageTree extends TCMSModelBase
             // change to ajax
 
             if ($this->iPortalCount > 3) {
-                $iMaxLevel = 4;
+                $iMaxLevel = 3;
             } else {
-                $iMaxLevel = 5;
+                $iMaxLevel = 3;
             }
 
             if ($level >= $iMaxLevel && $allowAjax && !$lastStateOpen) {
                 $this->data['sTreeHTML'] .= ' class="ajax">\n';
 
-                $ajaxURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'GetSubTree', 'tableid' => $this->data['treeTableID'], 'sOutputMode' => 'Plain', 'nodeID' => $iParentID));
+                $ajaxURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'GetSubTreeFor', 'tableid' => $this->data['treeTableID'], 'sOutputMode' => 'Plain', 'nodeID' => $iParentID));
                 if (isset($this->data['dataID'])) {
                     $ajaxURL .= '&id='.$this->data['dataID'];
                 }
@@ -411,6 +447,67 @@ class CMSModulePageTree extends TCMSModelBase
         }
         $this->data['sTreeHTML'] .= "</li>\n";
     }
+
+
+    protected function createRootTreeWithDefaultPortalItems ()
+    {
+        $portalDomainService = $this->getPortalDomainService();
+        $defaultPortal = $portalDomainService->getDefaultPortal();
+        $defaultPortalMainNodeId = $defaultPortal->fieldMainNodeTree;
+
+        $rootTreeNode = new TdbCmsTree();
+        $rootTreeNode->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        $rootTreeNode->Load($this->iRootNode);
+
+        $treeNodeFactory = $this->getBackendTreeNodeFactory();
+        $rootTreeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($rootTreeNode, false);
+
+        $oPortalList = TdbCmsPortalList::GetList();
+        $this->iPortalCount = $oPortalList->Length();
+
+        if ($oPortalList->Length() > 0) {
+            while ($portal = $oPortalList->Next()) {
+
+                $portalId = $portal->fieldMainNodeTree;
+
+                $portalTreeNode = new TdbCmsTree();
+                $portalTreeNode->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+                $portalTreeNode->Load($portalId);
+
+                if ($portalId === $defaultPortalMainNodeId) {
+                    $portalTreeNodeDataModel = $this->createTreeDataModel($portalTreeNode);
+                } else {
+                    $treeNodeFactory = $this->getBackendTreeNodeFactory();
+                    $portalTreeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($portalTreeNode, false);
+
+                    $ajaxURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'GetSubTreeForJsTree', 'tableid' => $this->data['treeTableID'], 'sOutputMode' => 'Plain', 'nodeID' => $portalId));
+                    if (isset($this->data['dataID'])) {
+                        $ajaxURL .= '&id='.$this->data['dataID'];
+                    }
+
+                    $portalTreeNodeDataModel->setChildrenAjaxUrl($ajaxURL);
+                }
+                $rootTreeNodeDataModel->addChildren($portalTreeNodeDataModel);
+            }
+        }
+        return $rootTreeNodeDataModel;
+    }
+
+
+    protected function createTreeDataModel(TdbCmsTree $node)
+    {
+        $treeNodeFactory = $this->getBackendTreeNodeFactory();
+        $treeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($node, false);
+        $children = $node->GetChildren(true);
+
+        while ($child = $children->Next()) {
+            $childTreeNodeObj = $this->createTreeDataModel($child);
+            $treeNodeDataModel->addChildren($childTreeNodeObj);
+        }
+
+        return $treeNodeDataModel;
+    }
+
 
     /**
      * Fetches a list of all restricted nodes (of all portals)
@@ -735,5 +832,15 @@ COMMAND;
     private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getBackendTreeNodeFactory(): BackendTreeNodeFactory
+    {
+        return ServiceLocator::get('chameleon_system_core.factory.backend_tree_node');
+    }
+
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }
