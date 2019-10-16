@@ -2,7 +2,7 @@
 
 ## CoreUI as Requirement in `composer.json`
 
-To build CoreUI please require CoreUI in your `composer.json` (if not yet done so):
+To build CoreUI please require CoreUI in your `composer.json` (the CoreBundle already requires the bundle):
 
 `composer require coreui/coreui`
 
