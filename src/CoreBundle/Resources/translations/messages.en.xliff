@@ -225,6 +225,14 @@
                 <source>chameleon_system_core.template_tool.show_dynamic_box</source>
                 <target>show</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.navigation_tree.confirm_selection">
+                <source>chameleon_system_core.navigation_tree.confirm_selection</source>
+                <target>Confirm selection</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.navigation_tree.cancel_selection">
+                <source>chameleon_system_core.navigation_tree.cancel_selection</source>
+                <target>Cancel</target>
+            </trans-unit>
 
         </body>
     </file>

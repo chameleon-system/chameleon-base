@@ -392,7 +392,7 @@ if (true === $data['showAssignDialog']) {
 
 if (false === $data['isInIframe']) {
             ?>
-<div class="card">
+<div class="card" style="display: none;">
     <div class="card-header">
         <h3>Navigation</h3>
     </div>
@@ -447,9 +447,26 @@ if (false === $data['isInIframe']) {
 
 
         <?php
-        if (false === $isInIframe) {
+        if (false === $data['isInIframe']) {
             ?>
     </div>
 </div>
 <?php
         }
+
+
+/**
+ * @var \ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel $treeNodes
+
+ * @var string $treePathHTML
+ * @var string $isInIframe
+ * @var string $showAssignDialog
+ */
+$viewRenderer = new ViewRenderer();
+$viewRenderer->AddSourceObject('treeNodes', $treeNodes);
+//$viewRenderer->AddSourceObject('activeIds', $nodeIds);
+$viewRenderer->AddSourceObject('isInIframe', $isInIframe);
+$viewRenderer->AddSourceObject('showAssignDialog', $showAssignDialog);
+$viewRenderer->AddSourceObject('level', 0);
+echo $viewRenderer->Render('CMSModulePageTree/standard.html.twig');
+

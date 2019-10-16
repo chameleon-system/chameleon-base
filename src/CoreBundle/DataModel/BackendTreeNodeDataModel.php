@@ -23,15 +23,22 @@ class BackendTreeNodeDataModel
     private $cmsIdent = '';
 
     /**
+     * @var string
+     */
+    private $childrenAjaxUrl = '';
+    
+
+    /**
      * @var BackendTreeNodeDataModel[]
      */
     private $children = [];
 
-    public function __construct($id, $name, $cmsIdent)
+    public function __construct($id, $name, $cmsIdent, $childrenAjaxUrl)
     {
         $this->id = $id;
         $this->name = $name;
         $this->cmsIdent = $cmsIdent;
+        $this->childrenAjaxUrl = $childrenAjaxUrl;
     }
 
     /**
@@ -73,4 +80,21 @@ class BackendTreeNodeDataModel
     {
         $this->children[] = $treeNodeDataModel;
     }
+
+    /**
+     * @return string
+     */
+    public function getChildrenAjaxUrl(): string
+    {
+        return $this->childrenAjaxUrl;
+    }
+
+    /**
+     * @param string $childrenAjaxUrl
+     */
+    public function setChildrenAjaxUrl(string $childrenAjaxUrl): void
+    {
+        $this->childrenAjaxUrl = $childrenAjaxUrl;
+    }
+
 }
