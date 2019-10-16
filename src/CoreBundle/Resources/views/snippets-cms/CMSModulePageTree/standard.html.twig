@@ -1,37 +1,81 @@
+{# @var treeNodes \ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel #}
 
-{% if level == 0 %}
+{% if isInIframe == false and level == 0 %}
 
-    <button class="btn btn-success mb-4 jstree-selection">Auswahl übernehmen</button>
-    <button class="btn btn-danger mb-4 jstree-exit">Abbrechen</button>
-
-    <div id="singleTreeNodeSelect">
-        <ul>
+<div class="card">
+    <div class="card-header">
+        <h3>Navigation</h3>
+    </div>
+    <div class="card-body simple-tree-card">
 {% endif %}
 
-            {% if treeNodes.name != "" %}
-                <li id="node{{ treeNodes.cmsIdent }}"{% if level <=1 %} class="no-checkbox"{% endif %}
-                    data-jstree="{&quot;type&quot;: &quot;{% if treeNodes.children | length > 0 %}pageFolder{% else %}page{% endif %}&quot;{% if level <= 1 %}, &quot;disabled&quot;: true{% endif %}}"
-                    data-selection="{&quot;fieldName&quot;: &quot;{{ fieldName }}&quot;, &quot;nodeId&quot;: &quot;{{ treeNodes.id }}&quot;}" >
+        {% if level == 0 %}
+            <div class="navigationTreeContainer{% if showAssignDialog == true %}-checkboxes{% endif %}">
+                <ul class="simpleTree">
+        {% endif %}
 
-                    <a href="#"{% if activeId == treeNodes.id %} class="jstree-clicked"{% endif %}>
-                        {{ treeNodes.name }}
-                    </a>
+                    {% if treeNodes.name != "" %}
+                        <li id="node{{ treeNodes.cmsIdent }}" class="{% if level <=1 %}no-checkbox{% endif %}{% if level == 0 %} jstree-open{% endif %}"
+                            data-jstree="{&quot;type&quot;: &quot;{% if treeNodes.children | length > 0 or treeNodes.childrenAjaxUrl %}pageFolder{% else %}page{% endif %}&quot;{% if level <= 1 %}, &quot;disabled&quot;: true{% endif %}{% if treeNodes.childrenAjaxUrl %}, &quot;children&quot;: true{% endif %} }"
+                            data-selection="{&quot;fieldName&quot;: &quot;{{ fieldName }}&quot;, &quot;nodeId&quot;: &quot;{{ treeNodes.id }}&quot;}" >
 
-                    {% if treeNodes.children | length > 0 %}
-                        <ul>
-                            {% for child in treeNodes.children %}
-                                {% include _self with {'treeNodes': child, 'level': level+1, 'path': path, 'pathComplete': pathComplete} %}
-                            {% endfor %}
-                        </ul>
+                            <a href="#"{% if activeId == treeNodes.id %} class="jstree-clicked"{% endif %}>
+                                {{ treeNodes.name }}
+                            </a>
+
+                            {% if treeNodes.children | length > 0 %}
+                                <ul>
+                                    {% for child in treeNodes.children %}
+                                        {% include _self with {'treeNodes': child, 'level': level+1} %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
                     {% endif %}
-                </li>
-            {% endif %}
 
-{% if level == 0 %}
-        </ul>
+        {% if level == 0 %}
+                </ul>
+            </div>
+
+            <div class="treelegend" style="display: none;">
+                <h3>
+                    <span class="nodeIndicatorIcon"></span>
+                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_header' | trans }}</span>
+                </h3>
+
+                <div class="text">
+                    <span class="nodeIndicatorIcon"></span>
+                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_node_has_no_page' | trans }}</span>
+                </div>
+
+                <div class="otherConnectedNode">
+                    <span class="nodeIndicatorIcon"></span>
+                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_has_connected_pages' | trans }}</span>
+                </div>
+
+                <div class="activeConnectedNode">
+                    <span class="nodeIndicatorIcon"></span>
+                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page' | trans }}</span>
+                </div>
+
+                <div class="restrictedPage">
+    {#                <span class="nodeIndicatorIcon iconRestricted" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/lock.png')); ?>');"></span>#}
+                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page' | trans }}</span>
+                </div>
+
+                <div class="legendLine">
+    {#                <span class="nodeIndicatorIcon iconHidden" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/hidden.png')); ?>');"></span>#}
+                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_hidden' | trans }}</span>
+                </div>
+
+                <div class="legendLine">
+    {#                <span class="nodeIndicatorIcon iconExternalLink" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/icon_external_link.gif')); ?>');"></span>#}
+                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_external_link' | trans }}</span>
+                </div>
+            </div>
+        {% endif %}
+
+{% if isInIframe == false and level == 0 %}
     </div>
-
-    <button class="btn btn-success mt-4 jstree-selection">Auswahl übernehmen</button>
-    <button class="btn btn-danger mt-4 jstree-exit">Abbrechen</button>
-
+</div>
 {% endif %}

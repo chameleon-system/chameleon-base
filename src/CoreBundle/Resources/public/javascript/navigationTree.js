@@ -4,7 +4,6 @@ $(document).ready(function () {
     $("#singleTreeNodeSelect")
         .jstree({
             "core":{
-                "initially_open":[ "node557" ],
                 "multiple": false
             },
             "types": {
@@ -46,8 +45,15 @@ $(document).ready(function () {
     $(".navigationTreeContainer")
         .jstree({
             "core":{
-                "initially_open":[ "node99" ],
                 "multiple": true
+                // "data": {
+                //     "url": "/cms?pagedef=CMSModulePageTreePlain&amp;module_fnc%5Bcontentmodule%5D=ExecuteAjaxCall&amp;_fnc=GetSubTreeForJsTree&amp;tableid=201&amp;sOutputMode=Plain&amp;nodeID=e2452e83-8afe-7d55-c827-bea96e2b6c73&amp;cmsauthenticitytoken=PF51drbPW6mqFlA_77H3Q2eMwb3MtXP-MH4iigARqAE",
+                //     "data": function (node) {
+                //         console.log('Huhu:'+node.id);
+                //
+                //         return { "id": node.id };
+                //     }
+                // }
             },
             "types": {
                 "default": {
@@ -64,10 +70,21 @@ $(document).ready(function () {
             "plugins":[ "types", "wholerow", "changed" ]
         });
 
+
+    // $('.navigationTreeContainer').jstree(options).bind("select_node.jstree",function(event, data){
+    //         //Load child node here
+    //     console.log('Click!');
+    //
+    // });
+
+
+    $(".navigationTreeContainer").bind("select_node.jstree", function(e, data) {
+        $("#jstree_demo_div").jstree('open_node', data.node);
+    });
+
     $(".navigationTreeContainer-checkboxes")
         .jstree({
             "core":{
-                "initially_open":[ "node99" ],
                 "multiple": true
             },
             "types": {

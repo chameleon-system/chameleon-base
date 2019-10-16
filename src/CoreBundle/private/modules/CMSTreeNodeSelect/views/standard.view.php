@@ -10,7 +10,7 @@ $viewRenderer->AddSourceObject('treeNodes', $treeNodes);
 $viewRenderer->AddSourceObject('activeId', $nodeId);
 $viewRenderer->AddSourceObject('fieldName', $fieldName);
 $viewRenderer->AddSourceObject('level', 0);
-echo $viewRenderer->Render('CMSModulePageTree/standard.html.twig');
+echo $viewRenderer->Render('CMSTreeNodeSelect/standard.html.twig');
 
 echo $treePathHTML;
 
