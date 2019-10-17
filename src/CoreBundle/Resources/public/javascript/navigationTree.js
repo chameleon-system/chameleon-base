@@ -42,18 +42,24 @@ $(document).ready(function () {
     });
 
 
-    $(".navigationTreeContainer")
+    $(".no-navigationTreeContainer")
         .jstree({
             "core":{
-                "multiple": true
-                // "data": {
-                //     "url": "/cms?pagedef=CMSModulePageTreePlain&amp;module_fnc%5Bcontentmodule%5D=ExecuteAjaxCall&amp;_fnc=GetSubTreeForJsTree&amp;tableid=201&amp;sOutputMode=Plain&amp;nodeID=e2452e83-8afe-7d55-c827-bea96e2b6c73&amp;cmsauthenticitytoken=PF51drbPW6mqFlA_77H3Q2eMwb3MtXP-MH4iigARqAE",
-                //     "data": function (node) {
-                //         console.log('Huhu:'+node.id);
-                //
-                //         return { "id": node.id };
-                //     }
-                // }
+                "multiple": true,
+                'data' : {
+                    'text': 'Website',
+                    'children': [
+                        {
+                            'text': 'Home',
+                            'children': false
+                        },
+                        {
+                            'text': 'Impressum',
+                            'children': true
+                        }
+                    ]
+
+                }
             },
             "types": {
                 "default": {
@@ -78,9 +84,9 @@ $(document).ready(function () {
     // });
 
 
-    $(".navigationTreeContainer").bind("select_node.jstree", function(e, data) {
-        $("#jstree_demo_div").jstree('open_node', data.node);
-    });
+    // $(".navigationTreeContainer").bind("select_node.jstree", function(e, data) {
+    //     $("#jstree_demo_div").jstree('open_node', data.node);
+    // });
 
     $(".navigationTreeContainer-checkboxes")
         .jstree({
