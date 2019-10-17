@@ -750,6 +750,7 @@ Three newly defined log channels are deprecated and only necessary for backwards
 - \TPkgCmsException_Log::getLogger()
 - \TPkgCsv2Sql::CreateLogFileName()
 - \TPkgCsv2Sql::GetLogFile()
+- \TPkgSnippetRenderer::getTwigHandler()
 - \TTools::AddStaticPageVariables()
 - \TCMSTableEditorChangeLog::savePreSaveValues()
 - gcf_CMSUserWithImage()

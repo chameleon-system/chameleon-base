@@ -11,7 +11,8 @@
     <services>
         <service id="chameleon_system_snippet_renderer.snippet_renderer"
                  class="%chameleon_system_snippet_renderer.snippet_renderer.class%" public="true" shared="false">
-            <argument type="service" id="twig" />
+            <argument type="service" id="twig"/>
+            <argument type="service" id="chameleon_system_view_renderer.twig.string_environment"/>
         </service>
 
     </services>

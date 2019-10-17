@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use Twig\Environment;
+use Twig\Error\Error;
 
 /**
  * TPkgSnippetRenderer - a simple yet effective renderer for HTML snippets.
@@ -67,16 +69,19 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
 {
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
-    private $oTwigHandler = null;
+    private $twigEnvironment = null;
 
     /**
-     * @param Twig_Environment $twigHandler
+     * @var Environment
      */
-    public function __construct(Twig_Environment $twigHandler)
+    private $twigStringEnvironment;
+
+    public function __construct(Environment $twigEnvironment, Environment $twigStringEnvironment)
     {
-        $this->oTwigHandler = $twigHandler;
+        $this->twigEnvironment = $twigEnvironment;
+        $this->twigStringEnvironment = $twigStringEnvironment;
     }
 
     /**
@@ -115,14 +120,16 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
      * @return Twig_Environment|null
      *
      * @throws ViewRenderException
+     *
+     * @deprecated since 6.3.6 - use the normal dependency injection
      */
     protected function &getTwigHandler()
     {
-        if (null === $this->oTwigHandler) {
+        if (null === $this->twigEnvironment) {
             throw new ViewRenderException('No twig environment set!');
         }
 
-        return $this->oTwigHandler;
+        return $this->twigEnvironment;
     }
 
     /**
@@ -147,8 +154,15 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
         }
 
         try {
-            $content = $this->getTwigHandler()->render($this->getSource(), $this->getVars());
-        } catch (Twig_Error $e) {
+            if ($this->getSourceType() !== IPkgSnippetRenderer::SOURCE_TYPE_STRING) {
+                // use the normal file-only Twig environment
+
+                $content = $this->twigEnvironment->render($this->getSource(), $this->getVars());
+            } else {
+                $content = $this->twigStringEnvironment->render($this->getSource(), $this->getVars());
+            }
+        } catch (Error $e) {
+            // TODO simulate error (in file or string): does the message look correct/helpful?
             throw new TPkgSnippetRenderer_SnippetRenderingException(
                 sprintf("%s\nin file %s at line %s\n", $e->getMessage(), $e->getFile(), $e->getLine()),
                 $e->getCode(),
