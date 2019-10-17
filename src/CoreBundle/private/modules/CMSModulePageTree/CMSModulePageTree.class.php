@@ -148,7 +148,7 @@ class CMSModulePageTree extends TCMSModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('SetConnection', 'MoveNode', 'DeleteNode', 'GetSubTree', 'GetTransactionDetails');
+        $externalFunctions = array('SetConnection', 'MoveNode', 'DeleteNode', 'GetSubTree', 'GetSubTreeForJsTree', 'GetTransactionDetails');
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -229,26 +229,61 @@ class CMSModulePageTree extends TCMSModelBase
     {
 
 
-        header('Content-Type: application/json');
 
         if ( $_GET["id"] === "#" ) {
-            $treeData = array(
-                array( "id" => "ajson1", "parent" => "#", "text" => "Simple root node"  ),
-                array( "id" => "ajson2", "parent" => "#", "text" => "Root node 2", "children" => true ),
-
-            );
+            $treeData = [
+                [
+                    "id" => "WebsiteId",
+                    "text" => "Website",
+                    "children" => [
+                        [
+                            "id" => "Portal1-Id",
+                            "text" => "Portal1",
+                            "children" => [
+                                [
+                                    'id' => "HomeId",
+                                    'text' => "Home",
+                                ],
+                                [
+                                    'id' => "ImpressumId",
+                                    'text' => "Impressum",
+                                ]
+                            ]
+                        ],
+                        [
+                            "id" => "Portal2",
+                            "text" => "Portal2",
+                            "children" => true
+                        ]
+                    ]
+                ]
+            ];
+        }
+        else {
+            $treeData = [
+                [ "id" => "child1", "text" => "Child 1" ],
+                [ "id" => "child2", "text" => "Child 2" ]
+            ];
         }
 
-        else if ( $_GET["id"] === "ajson2" ) {
-            $treeData = array(
-                array( "id" => "ajson3", "parent" => "ajson2", "text" => "Child 1" ),
-                array( "id" => "ajson4", "parent" => "ajson2", "text" => "Child 2" )
-            );
+        $this->outputForAjaxAndExit(json_encode($treeData), 'application/json');
+    }
+
+//    ToDo: Das ist nur ein Hotfix!!!!!
+
+    private function outputForAjaxAndExit($content, string $contentType): void
+    {
+        // now clear the output. notice that we need the @ since the function throws a notice once the buffer is cleared
+        $this->SetHTMLDivWrappingStatus(false);
+        while (@ob_end_clean()) {
         }
+        header(sprintf('Content-Type: %s', $contentType));
+        //never index ajax responses
+        header('X-Robots-Tag: noindex, nofollow', true);
 
-        return json_encode( $treeData);
+        echo $content;
 
-
+        exit;
     }
 
     /**
