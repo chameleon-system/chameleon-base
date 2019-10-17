@@ -1,5 +1,9 @@
 {# @var treeNodes \ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel #}
 
+
+
+
+
 {% if isInIframe == false and level == 0 %}
 
 <div class="card">
@@ -11,30 +15,30 @@
 
         {% if level == 0 %}
             <div class="navigationTreeContainer{% if showAssignDialog == true %}-checkboxes{% endif %}">
-                <ul class="simpleTree">
+{#                <ul class="simpleTree">#}
         {% endif %}
 
-                    {% if treeNodes.name != "" %}
-                        <li id="node{{ treeNodes.cmsIdent }}" class="{% if level <=1 %}no-checkbox{% endif %}{% if level == 0 %} jstree-open{% endif %}"
-                            data-jstree="{&quot;type&quot;: &quot;{% if treeNodes.children | length > 0 or treeNodes.childrenAjaxUrl %}pageFolder{% else %}page{% endif %}&quot;{% if level <= 1 %}, &quot;disabled&quot;: true{% endif %}{% if treeNodes.childrenAjaxUrl %}, &quot;children&quot;: true{% endif %} }"
-                            data-selection="{&quot;fieldName&quot;: &quot;{{ fieldName }}&quot;, &quot;nodeId&quot;: &quot;{{ treeNodes.id }}&quot;}" >
+{#                    {% if treeNodes.name != "" %}#}
+{#                        <li id="node{{ treeNodes.cmsIdent }}" class="{% if level <=1 %}no-checkbox{% endif %}{% if level == 0 %} jstree-open{% endif %}"#}
+{#                            data-jstree="{&quot;type&quot;: &quot;{% if treeNodes.children | length > 0 or treeNodes.childrenAjaxUrl %}pageFolder{% else %}page{% endif %}&quot;{% if level <= 1 %}, &quot;disabled&quot;: true{% endif %}{% if treeNodes.childrenAjaxUrl %}, &quot;children&quot;: true{% endif %} }"#}
+{#                            data-selection="{&quot;fieldName&quot;: &quot;{{ fieldName }}&quot;, &quot;nodeId&quot;: &quot;{{ treeNodes.id }}&quot;}" >#}
 
-                            <a href="#"{% if activeId == treeNodes.id %} class="jstree-clicked"{% endif %}>
-                                {{ treeNodes.name }}
-                            </a>
+{#                            <a href="#"{% if activeId == treeNodes.id %} class="jstree-clicked"{% endif %}>#}
+{#                                {{ treeNodes.name }}#}
+{#                            </a>#}
 
-                            {% if treeNodes.children | length > 0 %}
-                                <ul>
-                                    {% for child in treeNodes.children %}
-                                        {% include _self with {'treeNodes': child, 'level': level+1} %}
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </li>
-                    {% endif %}
+{#                            {% if treeNodes.children | length > 0 %}#}
+{#                                <ul>#}
+{#                                    {% for child in treeNodes.children %}#}
+{#                                        {% include _self with {'treeNodes': child, 'level': level+1} %}#}
+{#                                    {% endfor %}#}
+{#                                </ul>#}
+{#                            {% endif %}#}
+{#                        </li>#}
+{#                    {% endif %}#}
 
         {% if level == 0 %}
-                </ul>
+{#                </ul>#}
             </div>
 
             <div class="treelegend" style="display: none;">
@@ -59,17 +63,17 @@
                 </div>
 
                 <div class="restrictedPage">
-    {#                <span class="nodeIndicatorIcon iconRestricted" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/lock.png')); ?>');"></span>#}
+                    <span class="nodeIndicatorIcon iconRestricted" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/lock.png')); ?>');"></span>
                     <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page' | trans }}</span>
                 </div>
 
                 <div class="legendLine">
-    {#                <span class="nodeIndicatorIcon iconHidden" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/hidden.png')); ?>');"></span>#}
+                    <span class="nodeIndicatorIcon iconHidden" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/hidden.png')); ?>');"></span>
                     <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_hidden' | trans }}</span>
                 </div>
 
                 <div class="legendLine">
-    {#                <span class="nodeIndicatorIcon iconExternalLink" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/icon_external_link.gif')); ?>');"></span>#}
+                    <span class="nodeIndicatorIcon iconExternalLink" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/icon_external_link.gif')); ?>');"></span>
                     <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_external_link' | trans }}</span>
                 </div>
             </div>
@@ -79,3 +83,34 @@
     </div>
 </div>
 {% endif %}
+
+<script>
+    $(".navigationTreeContainer")
+        .jstree({
+            "core":{
+                "multiple": true,
+                "data": {
+                    "url": "/cms?pagedef=CMSModulePageTreePlain&module_fnc%5Bcontentmodule%5D=ExecuteAjaxCall&_fnc=GetSubTreeForJsTree",
+                    "data": function(node) {
+                        return {
+                            'id' : node.id
+                        };
+                    }
+                }
+            },
+            "types": {
+                "default": {
+                    "icon": "fas fa-folder-open"
+                },
+                "pageFolder": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
+                "page": {
+                    "icon": "far fa-file"
+                }
+            },
+            "plugins":[ "types", "wholerow", "changed"]
+        });
+</script>
+
