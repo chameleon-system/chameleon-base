@@ -698,17 +698,6 @@ function updateIframeSize(sFieldName, iHeight) {
 }
 
 CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
-    // workaround for tempusdominus bug: https://github.com/tempusdominus/bootstrap-4/issues/123
-    $('*[data-toggle="datetimepicker"]').removeClass('datetimepicker-input');
-
-    $(document).on('toggle change hide keydown keyup', '*[data-toggle="datetimepicker"]', function() {
-        $(this).addClass('datetimepicker-input');
-    });
-
-    $('[data-datetimepicker-option]').each(function () {
-        $(this).datetimepicker($(this).data('datetimepicker-option'));
-    });
-
     $('.datetimepicker-input').each(function () {
         var id = $(this).attr('id');
 
@@ -728,6 +717,17 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
             // We need a SQL date format for BC reasons.
             $('input[name=' + id + ']').val(cmsDate);
         });
+    });
+
+    // workaround for tempusdominus bug: https://github.com/tempusdominus/bootstrap-4/issues/123
+    $('*[data-toggle="datetimepicker"]').removeClass('datetimepicker-input');
+
+    $(document).on('toggle change hide keydown keyup', '*[data-toggle="datetimepicker"]', function() {
+        $(this).addClass('datetimepicker-input');
+    });
+
+    $('[data-datetimepicker-option]').each(function () {
+        $(this).datetimepicker($(this).data('datetimepicker-option'));
     });
 };
 
