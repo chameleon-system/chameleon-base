@@ -117,7 +117,7 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
     }
 
     /**
-     * @return Twig_Environment|null
+     * @return Environment
      *
      * @throws ViewRenderException
      *
@@ -153,6 +153,9 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
             $this->setFilename($this->getSourceModule()->viewTemplate);
         }
 
+        // TODO why didn't the old handling swallow up any "missing template" error?
+        //  -> that is maybe the reason why missing twig templates always showed up simply as the file path?
+
         try {
             if ($this->getSourceType() !== IPkgSnippetRenderer::SOURCE_TYPE_STRING) {
                 // use the normal file-only Twig environment
@@ -162,7 +165,6 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
                 $content = $this->twigStringEnvironment->render($this->getSource(), $this->getVars());
             }
         } catch (Error $e) {
-            // TODO simulate error (in file or string): does the message look correct/helpful?
             throw new TPkgSnippetRenderer_SnippetRenderingException(
                 sprintf("%s\nin file %s at line %s\n", $e->getMessage(), $e->getFile(), $e->getLine()),
                 $e->getCode(),
