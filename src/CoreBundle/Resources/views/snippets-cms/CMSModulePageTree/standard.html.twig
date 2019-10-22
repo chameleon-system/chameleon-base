@@ -1,10 +1,7 @@
 {# @var treeNodes \ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel #}
 
 
-
-
-
-{% if isInIframe == false and level == 0 %}
+{% if isInIframe == false %}
 
 <div class="card">
     <div class="card-header">
@@ -13,84 +10,57 @@
     <div class="card-body simple-tree-card">
 {% endif %}
 
-        {% if level == 0 %}
-            <div class="navigationTreeContainer{% if showAssignDialog == true %}-checkboxes{% endif %}">
-{#                <ul class="simpleTree">#}
-        {% endif %}
+        <div id="navigationTreeContainer{% if showAssignDialog == true %}-checkboxes{% endif %}"></div>
 
-{#                    {% if treeNodes.name != "" %}#}
-{#                        <li id="node{{ treeNodes.cmsIdent }}" class="{% if level <=1 %}no-checkbox{% endif %}{% if level == 0 %} jstree-open{% endif %}"#}
-{#                            data-jstree="{&quot;type&quot;: &quot;{% if treeNodes.children | length > 0 or treeNodes.childrenAjaxUrl %}pageFolder{% else %}page{% endif %}&quot;{% if level <= 1 %}, &quot;disabled&quot;: true{% endif %}{% if treeNodes.childrenAjaxUrl %}, &quot;children&quot;: true{% endif %} }"#}
-{#                            data-selection="{&quot;fieldName&quot;: &quot;{{ fieldName }}&quot;, &quot;nodeId&quot;: &quot;{{ treeNodes.id }}&quot;}" >#}
+        <div class="treelegend" style="display: none;">
+            <h3>
+                <span class="nodeIndicatorIcon"></span>
+                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_header' | trans }}</span>
+            </h3>
 
-{#                            <a href="#"{% if activeId == treeNodes.id %} class="jstree-clicked"{% endif %}>#}
-{#                                {{ treeNodes.name }}#}
-{#                            </a>#}
-
-{#                            {% if treeNodes.children | length > 0 %}#}
-{#                                <ul>#}
-{#                                    {% for child in treeNodes.children %}#}
-{#                                        {% include _self with {'treeNodes': child, 'level': level+1} %}#}
-{#                                    {% endfor %}#}
-{#                                </ul>#}
-{#                            {% endif %}#}
-{#                        </li>#}
-{#                    {% endif %}#}
-
-        {% if level == 0 %}
-{#                </ul>#}
+            <div class="text">
+                <span class="nodeIndicatorIcon"></span>
+                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_node_has_no_page' | trans }}</span>
             </div>
 
-            <div class="treelegend" style="display: none;">
-                <h3>
-                    <span class="nodeIndicatorIcon"></span>
-                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_header' | trans }}</span>
-                </h3>
-
-                <div class="text">
-                    <span class="nodeIndicatorIcon"></span>
-                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_node_has_no_page' | trans }}</span>
-                </div>
-
-                <div class="otherConnectedNode">
-                    <span class="nodeIndicatorIcon"></span>
-                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_has_connected_pages' | trans }}</span>
-                </div>
-
-                <div class="activeConnectedNode">
-                    <span class="nodeIndicatorIcon"></span>
-                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page' | trans }}</span>
-                </div>
-
-                <div class="restrictedPage">
-                    <span class="nodeIndicatorIcon iconRestricted" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/lock.png')); ?>');"></span>
-                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page' | trans }}</span>
-                </div>
-
-                <div class="legendLine">
-                    <span class="nodeIndicatorIcon iconHidden" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/hidden.png')); ?>');"></span>
-                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_hidden' | trans }}</span>
-                </div>
-
-                <div class="legendLine">
-                    <span class="nodeIndicatorIcon iconExternalLink" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/icon_external_link.gif')); ?>');"></span>
-                    <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_external_link' | trans }}</span>
-                </div>
+            <div class="otherConnectedNode">
+                <span class="nodeIndicatorIcon"></span>
+                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_has_connected_pages' | trans }}</span>
             </div>
-        {% endif %}
 
-{% if isInIframe == false and level == 0 %}
+            <div class="activeConnectedNode">
+                <span class="nodeIndicatorIcon"></span>
+                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page' | trans }}</span>
+            </div>
+
+            <div class="restrictedPage">
+                <span class="nodeIndicatorIcon iconRestricted" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/lock.png')); ?>');"></span>
+                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page' | trans }}</span>
+            </div>
+
+            <div class="legendLine">
+                <span class="nodeIndicatorIcon iconHidden" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/hidden.png')); ?>');"></span>
+                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_hidden' | trans }}</span>
+            </div>
+
+            <div class="legendLine">
+                <span class="nodeIndicatorIcon iconExternalLink" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/icon_external_link.gif')); ?>');"></span>
+                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_external_link' | trans }}</span>
+            </div>
+        </div>
+
+{% if isInIframe == false %}
     </div>
 </div>
 {% endif %}
 
 <script>
-    $(".navigationTreeContainer")
+    $("#navigationTreeContainer")
         .jstree({
             "core":{
                 "multiple": true,
                 "data": {
-                    "url": "/cms?pagedef=CMSModulePageTreePlain&module_fnc%5Bcontentmodule%5D=ExecuteAjaxCall&_fnc=GetSubTreeForJsTree",
+                    "url": "{{ treeNodesAjaxUrl | raw }}",
                     "data": function(node) {
                         return {
                             'id' : node.id
@@ -112,5 +82,33 @@
             },
             "plugins":[ "types", "wholerow", "changed"]
         });
-</script>
 
+    $("#navigationTreeContainer-checkboxes")
+        .jstree({
+            "core":{
+                "multiple": true,
+                "data": {
+                    "url": "{{ treeNodesAjaxUrl | raw }}",
+                    "data": function(node) {
+                        return {
+                            'id' : node.id
+                        };
+                    }
+                }
+            },
+            "types": {
+                "default": {
+                    "icon": "fas fa-folder-open"
+                },
+                "pageFolder": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
+                "page": {
+                    "icon": "far fa-file"
+                }
+            },
+            "plugins":[ "types", "wholerow", "changed", "checkbox"]
+        });
+
+</script>

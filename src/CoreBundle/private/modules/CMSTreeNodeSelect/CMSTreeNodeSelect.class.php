@@ -93,7 +93,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
     protected function createTreeDataModel(TdbCmsTree $node, string $fieldName, $path = '')
     {
         $treeNodeFactory = $this->getBackendTreeNodeFactory();
-        $treeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($node, false);
+        $treeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($node);
         $children = $node->GetChildren(true);
 
         $path .= $this->addBreadcrumbHmlForNode($node, $fieldName, $path);
