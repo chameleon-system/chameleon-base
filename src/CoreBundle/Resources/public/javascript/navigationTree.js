@@ -10,7 +10,7 @@ $(document).ready(function () {
                 "default": {
                     "icon": ""
                 },
-                "pageFolder": {
+                "folder": {
                     "icon": "fas fa-folder-open",
                     "check_node": false
                 },

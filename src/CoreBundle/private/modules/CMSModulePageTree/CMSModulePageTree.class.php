@@ -229,6 +229,9 @@ class CMSModulePageTree extends TCMSModelBase
 
         $treeNodeFactory = $this->getBackendTreeNodeFactory();
         $rootTreeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($rootTreeNode);
+        $rootTreeNodeDataModel->setOpened(true);
+        $rootTreeNodeDataModel->setType('folder');
+        $rootTreeNodeDataModel->setLiAttr(["class" => "no-checkbox"]);
 
         $oPortalList = TdbCmsPortalList::GetList();
         $this->iPortalCount = $oPortalList->Length();
@@ -244,11 +247,13 @@ class CMSModulePageTree extends TCMSModelBase
 
                 if ($portalId === $defaultPortalMainNodeId) {
                     $portalTreeNodeDataModel = $this->createTreeDataModel($portalTreeNode);
+                    $portalTreeNodeDataModel->setOpened(true);
                 } else {
                     $treeNodeFactory = $this->getBackendTreeNodeFactory();
                     $portalTreeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($portalTreeNode);
-                    $portalTreeNodeDataModel->addChildrenAjaxLoad(true);
+                    $portalTreeNodeDataModel->setChildrenAjaxLoad(true);
                 }
+                $portalTreeNodeDataModel->setLiAttr(["class" => "no-checkbox"]);
                 $rootTreeNodeDataModel->addChildren($portalTreeNodeDataModel);
             }
         }
@@ -256,14 +261,34 @@ class CMSModulePageTree extends TCMSModelBase
     }
 
 
-    protected function createTreeDataModel(TdbCmsTree $node)
+    protected function createTreeDataModel(TdbCmsTree $node, $level = 0)
     {
         $treeNodeFactory = $this->getBackendTreeNodeFactory();
         $treeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($node);
         $children = $node->GetChildren(true);
 
+        if ($children->Length() > 0) {
+            $treeNodeDataModel->setType('folder');
+        } else {
+            $treeNodeDataModel->setType('page');
+            if (true == $node->fieldHidden) {
+                $treeNodeDataModel->setType('hidden');
+            }
+            if ("" !== $node->sqlData['link']) {
+                $treeNodeDataModel->setType('externalLink');
+            }
+        }
+
+        if ($level == 0) {
+            $treeNodeDataModel->setOpened(true);
+        }
+        if ($level <= 1) {
+            $treeNodeDataModel->setLiAttr(["class" => "no-checkbox"]);
+        }
+
+        ++$level;
         while ($child = $children->Next()) {
-            $childTreeNodeObj = $this->createTreeDataModel($child);
+            $childTreeNodeObj = $this->createTreeDataModel($child, $level);
             $treeNodeDataModel->addChildren($childTreeNodeObj);
         }
 
