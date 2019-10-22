@@ -3,8 +3,9 @@
 
 namespace ChameleonSystem\CoreBundle\DataModel;
 
+use JsonSerializable;
 
-class BackendTreeNodeDataModel
+class BackendTreeNodeDataModel implements JsonSerializable
 {
     /**
      * @var string
@@ -23,22 +24,21 @@ class BackendTreeNodeDataModel
     private $cmsIdent = '';
 
     /**
-     * @var string
-     */
-    private $childrenAjaxUrl = '';
-    
-
-    /**
      * @var BackendTreeNodeDataModel[]
      */
     private $children = [];
 
-    public function __construct($id, $name, $cmsIdent, $childrenAjaxUrl)
+    /**
+     * @var bool
+     */
+    private $childrenAjaxLoad = false;
+
+
+    public function __construct($id, $name, $cmsIdent)
     {
         $this->id = $id;
         $this->name = $name;
         $this->cmsIdent = $cmsIdent;
-        $this->childrenAjaxUrl = $childrenAjaxUrl;
     }
 
     /**
@@ -74,6 +74,14 @@ class BackendTreeNodeDataModel
     }
 
     /**
+     * @return bool
+     */
+    public function isChildrenAjaxLoad(): bool
+    {
+        return $this->childrenAjaxLoad;
+    }
+
+    /**
      * @param BackendTreeNodeDataModel[] $children
      */
     public function addChildren(BackendTreeNodeDataModel $treeNodeDataModel): void
@@ -82,19 +90,36 @@ class BackendTreeNodeDataModel
     }
 
     /**
-     * @return string
+     * @param bool $childrenAjaxLoad
      */
-    public function getChildrenAjaxUrl(): string
+    public function addChildrenAjaxLoad(bool $childrenAjaxLoad): void
     {
-        return $this->childrenAjaxUrl;
+        $this->childrenAjaxLoad = $childrenAjaxLoad;
     }
 
     /**
-     * @param string $childrenAjaxUrl
+     * Specify data which should be serialized to JSON
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
      */
-    public function setChildrenAjaxUrl(string $childrenAjaxUrl): void
+    public function jsonSerialize()
     {
-        $this->childrenAjaxUrl = $childrenAjaxUrl;
-    }
+        if ($this->isChildrenAjaxLoad()) {
+            return
+                [
+                    'id' => $this->id,
+                    'text' => $this->name,
+                    'children' => $this->childrenAjaxLoad
+                ];
+        }
 
+        return
+        [
+            'id' => $this->id,
+            'text' => $this->name,
+            'children' => $this->children
+        ];
+    }
 }
