@@ -19,6 +19,7 @@ use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Treemanagement Module for the CMS Navigation tree.
@@ -265,26 +266,127 @@ class CMSModulePageTree extends TCMSModelBase
     {
         $treeNodeFactory = $this->getBackendTreeNodeFactory();
         $treeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($node);
-        $children = $node->GetChildren(true);
+        $liAttr = [];
+        $aAttr = [];
+        $liClass = "";
+        $aClass = "";
 
+        if ('' === $treeNodeDataModel->GetName()) {
+            $translator = ServiceLocator::get('translator');
+            $treeNodeDataModel->setName(TGlobal::OutHTML($translator->trans('chameleon_system_core.text.unnamed_record')));
+        }
+
+        $children = $node->GetChildren(true);
         if ($children->Length() > 0) {
             $treeNodeDataModel->setType('folder');
         } else {
             $treeNodeDataModel->setType('page');
-            if (true == $node->fieldHidden) {
-                $treeNodeDataModel->setType('hidden');
+        }
+        if ("" !== $node->sqlData['link']) {
+            $treeNodeDataModel->setType('externalLink');
+        }
+
+        if (true == $node->fieldHidden) {
+            $treeNodeDataModel->setAAttr([]);
+        }
+
+
+        $oCmsUser = TCMSUser::GetActiveUser();
+        $oEditLanguage = $oCmsUser->GetCurrentEditLanguageObject();
+        $nodeHidden = false;
+
+        $node->SetLanguage($oEditLanguage->id);
+        if (true == $node->fieldHidden) {
+            $nodeHidden = true;
+            $aClass .= " node-hidden";
+        }
+
+//        $sIsTranslatedIdent = '';
+//        if (CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE) {
+//            $oCmsConfig = TCMSConfig::GetInstance();
+//            $oDefaultLang = $oCmsConfig->GetFieldTranslationBaseLanguage();
+//            if ($oDefaultLang && $oDefaultLang->id != $oEditLanguage->id) {
+//                if (empty($node->sqlData['name__'.$oEditLanguage->fieldIso6391])) {
+//                    $sIsTranslatedIdent = '<img src="'.TGlobal::GetStaticURL('chameleon/blackbox/images/tree/folder_edit.png').'" width="12" align="absmiddle" border="0" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_page_tree.not_translated')).'" />';
+//                }
+//            }
+//        }
+
+
+        $aPages = [];
+        $bCurrentPageIsConnectedToThisNode = false;
+
+        $oConnectedPages = $node->GetAllLinkedPages();
+        $bFoundSecuredPage = false;
+        while ($connectedPage = $oConnectedPages->Next()) {
+            $aPages[] = $connectedPage->id;
+
+            if (false === $nodeHidden
+                && false === $bFoundSecuredPage
+                && (true === $connectedPage->fieldExtranetPage
+                    && false === $node->fieldShowExtranetPage)) {
+                $aClass .= " page-hidden";
+                $bFoundSecuredPage = true;
             }
-            if ("" !== $node->sqlData['link']) {
-                $treeNodeDataModel->setType('externalLink');
+
+            if (true === $connectedPage->fieldExtranetPage) {
+                $treeNodeDataModel->setType('locked');
             }
         }
+
+
+//        $sPageTag = '';
+//        $sPrimaryPageID = $node->GetLinkedPage(true);
+//
+//        if (count($aPages) > 0) {
+//            if (array_key_exists('dataID', $this->data) && in_array($this->data['dataID'], $aPages)) {
+//                $bCurrentPageIsConnectedToThisNode = true;
+//            }
+//            if (false !== $sPrimaryPageID) {
+//                $sPageTag = ' espageid="'.TGlobal::OutHTML($sPrimaryPageID).'"';
+//            }
+//            if ($bCurrentPageIsConnectedToThisNode) {
+//                $aClass .= ' activeConnectedNode jstree-clicked';
+//
+//                // kill all current page ids from $aPages and check if we have other pages connected
+//                $aKeys = array_keys($aPages, $this->data['dataID']);
+//                foreach ($aKeys as $key) {
+//                    unset($aPages[$key]);
+//                }
+//
+//                if (count($aPages) > 0) {
+//                    $aClass .= ' otherConnectedNode jstree-clicked';
+//                }
+//            } else {
+//                $aClass .= ' otherConnectedNode jstree-clicked';
+//            }
+//        }
+
+
+//        $sSpanClass = '';
+//        $sSpanMenuClass = 'standard';
+//        if (!$this->global->UserDataExists('nodeID')) {
+//            if (0 == $level) {
+//                $sSpanMenuClass = 'rootRightClickMenu';
+//            }
+//        }
 
         if ($level == 0) {
             $treeNodeDataModel->setOpened(true);
         }
         if ($level <= 1) {
-            $treeNodeDataModel->setLiAttr(["class" => "no-checkbox"]);
+            $liClass .= " no-checkbox";
         }
+
+//       Set every html attribute to <li> or <a>-Element as you want
+//        $liAttr = array_merge($liAttr, ["data-foo" => "bar"]);
+
+        $liAttr = array_merge($liAttr, ["class" => $liClass]);
+        $treeNodeDataModel->setAAttr($liAttr);
+
+        $aAttr = array_merge($aAttr, ["class" => $aClass]);
+        $treeNodeDataModel->setAAttr($aAttr);
+
 
         ++$level;
         while ($child = $children->Next()) {
@@ -845,5 +947,10 @@ COMMAND;
     private function getPortalDomainService(): PortalDomainServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
     }
 }

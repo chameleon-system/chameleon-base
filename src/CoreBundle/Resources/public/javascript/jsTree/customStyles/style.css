@@ -3,6 +3,11 @@
     display: none;
 }
 
+.jstree .node-hidden,
+.jstree .page-hidden {
+    color: grey;
+}
+
 /*.simple-tree-card {*/
 /*    padding-left: 2.5rem !important;*/
 /*}*/
