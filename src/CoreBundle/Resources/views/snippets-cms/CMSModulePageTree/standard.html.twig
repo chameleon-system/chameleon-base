@@ -10,44 +10,44 @@
     <div class="card-body simple-tree-card">
 {% endif %}
 
-        <div id="navigationTreeContainer{% if showAssignDialog == true %}-checkboxes{% endif %}"></div>
+        <div id="navigationTreeContainer{% if showAssignDialog == true %}-checkboxes{% endif %}" class="navigationTreeContainer"></div>
 
-        <div class="treelegend" style="display: none;">
-            <h3>
-                <span class="nodeIndicatorIcon"></span>
-                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_header' | trans }}</span>
-            </h3>
+{#        <div class="treelegend" style="display: none;">#}
+{#            <h3>#}
+{#                <span class="nodeIndicatorIcon"></span>#}
+{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_header' | trans }}</span>#}
+{#            </h3>#}
 
-            <div class="text">
-                <span class="nodeIndicatorIcon"></span>
-                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_node_has_no_page' | trans }}</span>
-            </div>
+{#            <div class="text">#}
+{#                <span class="nodeIndicatorIcon"></span>#}
+{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_node_has_no_page' | trans }}</span>#}
+{#            </div>#}
 
-            <div class="otherConnectedNode">
-                <span class="nodeIndicatorIcon"></span>
-                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_has_connected_pages' | trans }}</span>
-            </div>
+{#            <div class="otherConnectedNode">#}
+{#                <span class="nodeIndicatorIcon"></span>#}
+{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_has_connected_pages' | trans }}</span>#}
+{#            </div>#}
 
-            <div class="activeConnectedNode">
-                <span class="nodeIndicatorIcon"></span>
-                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page' | trans }}</span>
-            </div>
+{#            <div class="activeConnectedNode">#}
+{#                <span class="nodeIndicatorIcon"></span>#}
+{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page' | trans }}</span>#}
+{#            </div>#}
 
-            <div class="restrictedPage">
-                <span class="nodeIndicatorIcon iconRestricted" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/lock.png')); ?>');"></span>
-                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page' | trans }}</span>
-            </div>
+{#            <div class="restrictedPage">#}
+{#                <span class="nodeIndicatorIcon iconRestricted" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/lock.png')); ?>');"></span>#}
+{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page' | trans }}</span>#}
+{#            </div>#}
 
-            <div class="legendLine">
-                <span class="nodeIndicatorIcon iconHidden" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/hidden.png')); ?>');"></span>
-                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_hidden' | trans }}</span>
-            </div>
+{#            <div class="legendLine">#}
+{#                <span class="nodeIndicatorIcon iconHidden" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/hidden.png')); ?>');"></span>#}
+{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_hidden' | trans }}</span>#}
+{#            </div>#}
 
-            <div class="legendLine">
-                <span class="nodeIndicatorIcon iconExternalLink" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/icon_external_link.gif')); ?>');"></span>
-                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_external_link' | trans }}</span>
-            </div>
-        </div>
+{#            <div class="legendLine">#}
+{#                <span class="nodeIndicatorIcon iconExternalLink" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/icon_external_link.gif')); ?>');"></span>#}
+{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_external_link' | trans }}</span>#}
+{#            </div>#}
+{#        </div>#}
 
 {% if isInIframe == false %}
     </div>
@@ -66,15 +66,21 @@
                             'id' : node.id
                         };
                     }
-                }
+                },
+                "check_callback" : true
             },
             "types": {
                 "default": {
                     "icon": "fas fa-folder-open"
                 },
                 "folder": {
-                    "icon": "fas fa-folder-open",
-                    "check_node": false
+                    "icon": "fas fa-folder-open"
+                },
+                "folderRestrictedMenu": {
+                    "icon": "fas fa-folder-open"
+                },
+                "folderRootRestrictedMenu": {
+                    "icon": "fas fa-folder-open"
                 },
                 "page": {
                     "icon": "far fa-file"
@@ -86,7 +92,10 @@
                     "icon": "fas fa-external-link-alt"
                 }
             },
-            "plugins":[ "types", "wholerow", "changed"]
+            "plugins":[ "types", "wholerow", "changed", "contextmenu"],
+            "contextmenu": {
+                "items": navigationRightClickMenu
+            }
         });
 
     $("#navigationTreeContainer-checkboxes")
@@ -100,13 +109,22 @@
                             'id' : node.id
                         };
                     }
-                }
+                },
+                "check_callback" : true
             },
             "types": {
                 "default": {
                     "icon": "fas fa-folder-open"
                 },
                 "folder": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
+                "folderRestrictedMenu": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
+                "folderRootRestrictedMenu": {
                     "icon": "fas fa-folder-open",
                     "check_node": false
                 },
@@ -124,7 +142,69 @@
                 "three_state": false,
                 "cascade": "none"
             },
-            "plugins":[ "types", "wholerow", "changed", "checkbox"]
+            "plugins":[ "types", "wholerow", "changed", "checkbox", "contextmenu"],
+            "contextmenu": {
+                "items": navigationRightClickMenu
+            }
         });
+
+
+    function navigationRightClickMenu(node) {
+        var items = {
+            "connectedPage": {
+                "label": "Verbundene Seite",
+                "icon": "fas fa-link",
+                "_class": "foo-bar",
+                "action": function (obj) {
+                    openPageConnectionList(obj.reference);
+                }
+            },
+            "editPage": {
+                "label": "Seite editieren",
+                "icon": "far fa-edit",
+                "action": ""
+            },
+            "pageSettings": {
+                "label": "Seiteneinstellungen",
+                "icon": "fas fa-cog",
+                "action": ""
+            },
+            "editNavigation": {
+                "label": "Navigation editieren",
+                "icon": "fas fa-sitemap",
+                "action": ""
+            },
+            "new": {
+                "label": "Neu",
+                "icon": "fas fa-plus",
+                "action": ""
+            },
+            "delete": {
+                "label": "Löschen",
+                "icon": "far fa-trash-alt",
+                "action": ""
+            }
+        };
+
+        if (node.type === "folderRestrictedMenu" || node.type === "folderRootRestrictedMenu")  {
+            delete items.connectedPage;
+            delete items.editPage;
+            delete items.pageSettings;
+            delete items.delete;
+        }
+
+        if (node.type === "folderRootRestrictedMenu") {
+            delete items.editNavigation;
+        }
+
+        return items;
+    }
+
+    function showConnetedPage(node) {
+        console.log(node);
+        $(node).css("color", "red");
+    }
+
+
 
 </script>
