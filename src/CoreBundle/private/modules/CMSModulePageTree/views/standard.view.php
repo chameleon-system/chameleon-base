@@ -74,7 +74,8 @@
     }
 
     function openPageConnectionList(node) {
-        var nodeID = $(node).attr('esrealid');
+        var nodeID = $(node).attr('id');
+        console.log("HIER:"+nodeID);
         var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('id' => $data['treeNodeTableID'], 'pagedef' => 'tablemanagerframe', 'sRestrictionField' => 'cms_tree_id')); ?>&sRestriction=' + nodeID;
         CreateModalIFrameDialogCloseButton(url);
     }
@@ -302,78 +303,78 @@
 
 <script type="text/javascript">
     function BindContextMenu() {
-        $('.simpleTree span.standard').contextMenu('rightClickMenuContainer', {
-
-            onContextMenu:function (e) {
-                var sNodeClasses = $(e.target).attr('class');
-                if (sNodeClasses.search('rightClickMenuDisabled') != -1) {
-                    return false;
-                } else return true;
-            },
-
-            bindings:{
-                'editpageconnections':function (t) {
-                    openPageConnectionList($(t).parents('li'));
-                },
-
-                'editpage':function (t) {
-                    openPageEditor($(t).parents('li'));
-                },
-
-                'editpageconfig':function (t) {
-                    openPageConfigEditor($(t).parents('li'));
-                },
-
-                'newnode':function (t) {
-                    openTreeNodeEditorAddNewNode($(t).parents('li'));
-                },
-
-                'editnode':function (t) {
-                    openTreeNodeEditor($(t).parents('li'));
-                },
-
-                'deletenode':function (t) {
-                    deleteNode($(t).parents('li'));
-                },
-
-                'assignpage':function (t) {
-                    assignPage($(t).parents('li'));
-                }
-            }
-        });
+        // $('.simpleTree span.standard').contextMenu('rightClickMenuContainer', {
+        //
+        //     onContextMenu:function (e) {
+        //         var sNodeClasses = $(e.target).attr('class');
+        //         if (sNodeClasses.search('rightClickMenuDisabled') != -1) {
+        //             return false;
+        //         } else return true;
+        //     },
+        //
+        //     bindings:{
+        //         'editpageconnections':function (t) {
+        //             openPageConnectionList($(t).parents('li'));
+        //         },
+        //
+        //         'editpage':function (t) {
+        //             openPageEditor($(t).parents('li'));
+        //         },
+        //
+        //         'editpageconfig':function (t) {
+        //             openPageConfigEditor($(t).parents('li'));
+        //         },
+        //
+        //         'newnode':function (t) {
+        //             openTreeNodeEditorAddNewNode($(t).parents('li'));
+        //         },
+        //
+        //         'editnode':function (t) {
+        //             openTreeNodeEditor($(t).parents('li'));
+        //         },
+        //
+        //         'deletenode':function (t) {
+        //             deleteNode($(t).parents('li'));
+        //         },
+        //
+        //         'assignpage':function (t) {
+        //             assignPage($(t).parents('li'));
+        //         }
+        //     }
+        // });
     }
 
     function BindContextMenuToRootNode() {
-        $('.simpleTree span.rootRightClickMenu').contextMenu('RootNodeRightClickMenuContainer', {
-
-            bindings:{
-                'newnode':function (t) {
-                    openTreeNodeEditorAddNewNode($(t).parents('li'));
-                }
-            }
-        });
+        // $('.simpleTree span.rootRightClickMenu').contextMenu('RootNodeRightClickMenuContainer', {
+        //
+        //     bindings:{
+        //         'newnode':function (t) {
+        //             openTreeNodeEditorAddNewNode($(t).parents('li'));
+        //         }
+        //     }
+        // });
     }
 
     function BindRestrictedContextMenuNode() {
-        $('.simpleTree span.restrictedRightClickMenu').contextMenu('RestrictedNodeRightClickMenuContainer', {
-
-            onContextMenu:function (e) {
-                var sNodeClasses = $(e.target).attr('class');
-                if (sNodeClasses.search('rightClickMenuDisabled') != -1) {
-                    return false;
-                } else return true;
-            },
-
-            bindings:{
-                'newnode':function (t) {
-                    openTreeNodeEditorAddNewNode($(t).parents('li'));
-                },
-
-                'editnode':function (t) {
-                    openTreeNodeEditor($(t).parents('li'));
-                }
-            }
-        });
+        // $('.simpleTree span.restrictedRightClickMenu').contextMenu('RestrictedNodeRightClickMenuContainer', {
+        //
+        //     onContextMenu:function (e) {
+        //         var sNodeClasses = $(e.target).attr('class');
+        //         if (sNodeClasses.search('rightClickMenuDisabled') != -1) {
+        //             return false;
+        //         } else return true;
+        //     },
+        //
+        //     bindings:{
+        //         'newnode':function (t) {
+        //             openTreeNodeEditorAddNewNode($(t).parents('li'));
+        //         },
+        //
+        //         'editnode':function (t) {
+        //             openTreeNodeEditor($(t).parents('li'));
+        //         }
+        //     }
+        // });
     }
 
     $(document).ready(function () {
@@ -385,36 +386,37 @@
 </script>
 
 <?php
-$withCheckboxes = "";
-if (true === $data['showAssignDialog']) {
-    $withCheckboxes = "-checkboxes";
-}
-
-if (false === $data['isInIframe']) {
-            ?>
-<div class="card" style="display: none;">
-    <div class="card-header">
-        <h3>Navigation</h3>
-    </div>
-    <div class="card-body simple-tree-card">
+//$withCheckboxes = "";
+//if (true === $data['showAssignDialog']) {
+//    $withCheckboxes = "-checkboxes";
+//}
+//
+//if (false === $data['isInIframe']) {
+//            ?>
+<!--<div class="card">-->
+<!--    <div class="card-header">-->
+<!--        <h3>Navigation</h3>-->
+<!--    </div>-->
+<!--    <div class="card-body simple-tree-card">-->
 <?php
-        }
-?>
-        <div class="navigationTreeContainer<?=$withCheckboxes ?>">
-            <ul class="simpleTree">
-                <?php
-                echo $data['sTreeHTML'];
-                ?>
-            </ul>
-        </div>
-
-        <?php
-        if (false === $data['isInIframe']) {
-            ?>
-    </div>
-</div>
+//        }
+//?>
+<!--        <div class="navigationTreeContainer--><?//=$withCheckboxes ?><!--">-->
+<!--            <ul class="simpleTree">-->
+<!--                --><?php
+//                echo $data['sTreeHTML'];
+//                ?>
+<!--            </ul>-->
+<!--        </div>-->
+<!---->
+<!--        --><?php
+//        if (false === $data['isInIframe']) {
+//            ?>
+<!--    </div>-->
+<!--</div>-->
 <?php
-        }
+//        }
+
 
 
 /**
@@ -425,7 +427,6 @@ if (false === $data['isInIframe']) {
  * @var string $treeNodesAjaxUrl
  */
 $viewRenderer = new ViewRenderer();
-    //$viewRenderer->AddSourceObject('activeIds', $nodeIds);
 $viewRenderer->AddSourceObject('isInIframe', $isInIframe);
 $viewRenderer->AddSourceObject('showAssignDialog', $showAssignDialog);
 $viewRenderer->AddSourceObject('treeNodesAjaxUrl', $treeNodesAjaxUrl);

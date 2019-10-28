@@ -12,35 +12,35 @@
 /*    padding-left: 2.5rem !important;*/
 /*}*/
 
-/*.simpleTree*/
+/*.navigationTreeContainer*/
 /*{*/
 /*    margin:0;*/
 /*    padding:0;*/
 /*}*/
-/*.simpleTree li*/
+/*.navigationTreeContainer li*/
 /*{*/
 /*    list-style: none;*/
 /*    margin:0;*/
 /*    padding:0 0 0 34px;*/
 /*    line-height: 14px;*/
 /*}*/
-/*.simpleTree li span*/
+/*.navigationTreeContainer li span*/
 /*{*/
 /*    display:inline;*/
 /*    clear: left;*/
 /*    white-space: nowrap;*/
 /*}*/
-/*.simpleTree ul*/
+/*.navigationTreeContainer ul*/
 /*{*/
 /*    margin:0;*/
 /*    padding:0;*/
 /*}*/
-/*.simpleTree .root*/
+/*.navigationTreeContainer .root*/
 /*{*/
 /*    margin-left:-16px;*/
 /*    background: url(/chameleon/blackbox/images/tree/root.gif) no-repeat 16px 0 #ffffff;*/
 /*}*/
-/*.simpleTree .line*/
+/*.navigationTreeContainer .line*/
 /*{*/
 /*    margin:0 0 0 -16px;*/
 /*    padding:0;*/
@@ -49,7 +49,7 @@
 /*    font-size:5px;*/
 /*    background: url(/chameleon/blackbox/images/tree/line_bg.gif) 0 0 no-repeat transparent;*/
 /*}*/
-/*.simpleTree .line-last*/
+/*.navigationTreeContainer .line-last*/
 /*{*/
 /*    margin:0 0 0 -16px;*/
 /*    padding:0;*/
@@ -58,7 +58,7 @@
 /*    font-size:5px;*/
 /*    background: url(/chameleon/blackbox/images/tree/spacer.gif) 0 0 no-repeat transparent;*/
 /*}*/
-/*.simpleTree .line-over*/
+/*.navigationTreeContainer .line-over*/
 /*{*/
 /*    margin:0 0 0 -16px;*/
 /*    padding:0;*/
@@ -67,7 +67,7 @@
 /*    font-size:5px;*/
 /*    background: url(/chameleon/blackbox/images/tree/line_bg_over.gif) 0 0 no-repeat transparent;*/
 /*}*/
-/*.simpleTree .line-over-last*/
+/*.navigationTreeContainer .line-over-last*/
 /*{*/
 /*    margin:0 0 0 -16px;*/
 /*    padding:0;*/
@@ -76,49 +76,49 @@
 /*    font-size:5px;*/
 /*    background: url(/chameleon/blackbox/images/tree/line_bg_over_last.gif) 0 0 no-repeat transparent;*/
 /*}*/
-/*.simpleTree .jstree-open*/
+/*.navigationTreeContainer .jstree-open*/
 /*{*/
 /*    margin-left:-16px;*/
 /*    background: url(/chameleon/blackbox/images/tree/collapsable.gif) 0 -2px no-repeat #fff;*/
 /*}*/
-/*.simpleTree .jstree-open-last*/
+/*.navigationTreeContainer .jstree-open-last*/
 /*{*/
 /*    margin-left:-16px;*/
 /*    background: url(/chameleon/blackbox/images/tree/collapsable-last.gif) 0 -2px no-repeat #fff;*/
 /*}*/
-/*.simpleTree .folder-close*/
+/*.navigationTreeContainer .folder-close*/
 /*{*/
 /*    margin-left:-16px;*/
 /*    background: url(/chameleon/blackbox/images/tree/expandable.gif) 0 -2px no-repeat #fff;*/
 /*}*/
-/*.simpleTree .folder-close-last*/
+/*.navigationTreeContainer .folder-close-last*/
 /*{*/
 /*    margin-left:-16px;*/
 /*    background: url(/chameleon/blackbox/images/tree/expandable-last.gif) 0 -2px no-repeat #fff;*/
 /*}*/
-/*.simpleTree .doc*/
+/*.navigationTreeContainer .doc*/
 /*{*/
 /*    margin-left:-16px;*/
 /*    background: url(/chameleon/blackbox/images/tree/leaf.gif) 0 -1px no-repeat #fff;*/
 /*}*/
-/*.simpleTree .doc-last*/
+/*.navigationTreeContainer .doc-last*/
 /*{*/
 /*    margin-left:-16px;*/
 /*    background: url(/chameleon/blackbox/images/tree/leaf-last.gif) 0 -1px no-repeat #fff;*/
 /*}*/
-/*.simpleTree .ajax*/
+/*.navigationTreeContainer .ajax*/
 /*{*/
 /*    background: url(/chameleon/blackbox/images/tree/spinner.gif) no-repeat 0 0 #ffffff;*/
 /*    height: 16px;*/
 /*    display:none;*/
 /*}*/
-/*.simpleTree .ajax li*/
+/*.navigationTreeContainer .ajax li*/
 /*{*/
 /*    display:none;*/
 /*    margin:0;*/
 /*    padding:0;*/
 /*}*/
-/*.simpleTree .trigger*/
+/*.navigationTreeContainer .trigger*/
 /*{*/
 /*    display:inline;*/
 /*    margin-left:-32px;*/
@@ -132,7 +132,7 @@
 /*    width: 100%;*/
 /*}*/
 
-/*.navigationTreeContainer .simpleTree {*/
+/*.navigationTreeContainer .navigationTreeContainer {*/
 /*    display: table-cell;*/
 /*}*/
 
@@ -149,11 +149,11 @@
 /*    font-style: italic;*/
 /*}*/
 
-/*.navigationTreeContainer .simpleTree .text {*/
+/*.navigationTreeContainer .navigationTreeContainer .text {*/
 /*    cursor: pointer;*/
 /*}*/
 
-/*.simpleTree .active*/
+/*.navigationTreeContainer .active*/
 /*{*/
 /*    background-color:#ddf9bc;*/
 /*    padding:0px 2px;*/
@@ -161,7 +161,7 @@
 /*    cursor: pointer;*/
 /*}*/
 
-/*.simpleTree .rootContextMenu {*/
+/*.navigationTreeContainer .rootContextMenu {*/
 /*    cursor: pointer;*/
 /*}*/
 
@@ -180,16 +180,18 @@
 /*    background-size: 13px;*/
 /*}*/
 
+.navigationTreeContainer .otherConnectedNode,
 .treelegend .otherConnectedNode {
     font-style: normal;
-    font-weight: bold;
+    /*font-weight: bold;*/
+    color: green;
 }
 
 /*.navigationTreeContainer span.rightClickMenuDisabled {*/
 /*    font-style: normal;*/
 /*    font-weight: bold;*/
 /*}*/
-/*.simpleTree span.rightClickMenuDisabled {*/
+/*.navigationTreeContainer span.rightClickMenuDisabled {*/
 /*    background-color: #FFBFBF;*/
 /*    border: 1px solid #FF0000;*/
 /*    padding: 0 2px;*/
