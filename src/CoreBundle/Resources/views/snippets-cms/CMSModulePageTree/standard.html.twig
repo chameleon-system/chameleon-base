@@ -55,6 +55,8 @@
 {% endif %}
 
 <script>
+    var currentNodeID = null;
+
     $("#navigationTreeContainer")
         .jstree({
             "core":{
@@ -144,67 +146,179 @@
             },
             "plugins":[ "types", "wholerow", "changed", "checkbox", "contextmenu"],
             "contextmenu": {
-                "items": navigationRightClickMenu
+                "items": navigationRightClickMenuWithAssignDialog,
+                "select_node": false
             }
         });
 
 
     function navigationRightClickMenu(node) {
         var items = {
-            "connectedPage": {
-                "label": "Verbundene Seite",
+            "editpageconnections": {
+                "label": "{{ 'chameleon_system_core.cms_module_page_tree.connected_pages'|trans }}",
                 "icon": "fas fa-link",
-                "_class": "foo-bar",
+                // "_class": "foo-bar",
                 "action": function (obj) {
-                    openPageConnectionList(obj.reference);
+                    this.openPageConnectionList(obj.reference);
                 }
             },
-            "editPage": {
-                "label": "Seite editieren",
+            "editpage": {
+                "label": "{{ 'chameleon_system_core.cms_module_page_tree.action_edit_page'|trans }}",
                 "icon": "far fa-edit",
-                "action": ""
+                "action": function (obj) {
+                    this.openPageEditor(obj.reference);
+                }
             },
-            "pageSettings": {
-                "label": "Seiteneinstellungen",
+            "editpageconfig": {
+                "label": "{{ 'chameleon_system_core.list.page_settings'|trans }}",
                 "icon": "fas fa-cog",
-                "action": ""
+                "action": function (obj) {
+                    this.openPageConfigEditor(obj.reference);
+                }
             },
-            "editNavigation": {
-                "label": "Navigation editieren",
+            "editnode": {
+                "label": "{{ 'chameleon_system_core.cms_module_page_tree.action_edit_node'|trans }}",
                 "icon": "fas fa-sitemap",
-                "action": ""
+                "action": function (obj) {
+                    this.openTreeNodeEditor(obj.reference);
+                }
             },
-            "new": {
-                "label": "Neu",
+            "newnode": {
+                "label": "{{ 'chameleon_system_core.action.new'|trans }}",
                 "icon": "fas fa-plus",
-                "action": ""
+                "action": function (obj) {
+                    this.openTreeNodeEditorAddNewNode(obj.reference);
+                }
             },
-            "delete": {
-                "label": "Löschen",
+            "deletenode": {
+                "label": "{{ 'chameleon_system_core.action.delete'|trans }}",
                 "icon": "far fa-trash-alt",
-                "action": ""
+                "action": function (obj) {
+                    this.deleteNode(obj.reference);
+                }
             }
         };
 
         if (node.type === "folderRestrictedMenu" || node.type === "folderRootRestrictedMenu")  {
-            delete items.connectedPage;
-            delete items.editPage;
-            delete items.pageSettings;
-            delete items.delete;
+            delete items.editpageconnections;
+            delete items.editpage;
+            delete items.editpageconfig;
+            delete items.deletenode;
         }
 
         if (node.type === "folderRootRestrictedMenu") {
-            delete items.editNavigation;
+            delete items.editnode;
         }
 
         return items;
     }
 
-    function showConnetedPage(node) {
-        console.log(node);
-        $(node).css("color", "red");
+    function navigationRightClickMenuWithAssignDialog(node) {
+        var assignPage = {
+            "assignPage": {
+                "label": "{{ 'chameleon_system_core.cms_module_page_tree.action_connect_page'|trans }}",
+                "icon": "fas fa-link",
+                "separator_after": true,
+                "action": function (obj) {
+                    // this.assignPage(obj.reference);
+                }
+            }
+        };
+
+        return Object.assign(assignPage, navigationRightClickMenu(node));
     }
 
+
+    function openPageConnectionList(node) {
+        var nodeID = $(node).parent().attr('id');
+        var url = "{{ openPageConnectionListUrl | raw }}" + "&sRestriction=" + nodeID;
+        CreateModalIFrameDialogCloseButton(url);
+    }
+
+    /**
+     * opens the page in edit mode
+     */
+    function openPageEditor(node) {
+        var pageID = $(node).parent().attr('ispageid');
+
+        if (pageID != false && typeof(pageID) != "undefined") {
+            var url = "{{ openPageEditorUrl | raw }}" + '&id=' + pageID;
+            parent.document.location.href = url;
+        } else {
+            alert("{{ 'chameleon_system_core.cms_module_page_tree.node_has_no_page'|trans }}");
+        }
+    }
+
+    /**
+     * opens the page in config edit mode
+     */
+    function openPageConfigEditor(node) {
+        var pageID = $(node).parent().attr('ispageid');
+        if (pageID != false && typeof(pageID) != "undefined") {
+            var url = "{{ openPageConfigEditorUrl | raw }}" + '&id=' + pageID;
+            parent.document.location.href = url;
+        } else {
+            alert("{{ 'chameleon_system_core.cms_module_page_tree.node_has_no_page'|trans }}");
+        }
+    }
+
+    /**
+     * opens the tree node editor
+     */
+    function openTreeNodeEditor(node) {
+        var nodeID = $(node).parent().attr('id');
+        currentNodeID = nodeID; // save node ID in global var
+        var url = "{{ openTreeNodeEditorUrl | raw }}" + '&id=' + nodeID;
+        CreateModalIFrameDialogCloseButton(url);
+    }
+
+    /**
+     * opens the tree node editor and adds a new node
+     *
+     */
+    function openTreeNodeEditorAddNewNode(node) {
+        var nodeID = $(node).parent().attr('id');
+        currentNodeID = nodeID; // save node ID in global var
+        var url = "{{ openTreeNodeEditorAddNewNodeUrl | raw }}" + '&parent_id=' + nodeID;
+        CreateModalIFrameDialogCloseButton(url);
+    }
+
+    /**
+     * deletes a node and kills the page connections
+     */
+    function deleteNode(node) {
+        var confirmMessage = "{{ 'chameleon_system_core.cms_module_page_tree.confirm_delete'|trans }}";
+        confirmMessage = confirmMessage.replace(/&quot;/g, '\"');
+
+        var nodeTitle = $(node).text();
+        confirmMessage = confirmMessage.replace('%nodeName%', nodeTitle);
+
+        if(confirm(confirmMessage)){
+            var nodeID = $(node).parent().attr('id');
+            var url = "{{ deleteNodeUrl | raw }}" + '&nodeID=' + nodeID;
+            CHAMELEON.CORE.showProcessingModal();
+            GetAjaxCallTransparent(url, deleteNodeSuccess);
+        }
+    }
+
+    /**
+     * final remove of the node from DOM tree
+     */
+    function deleteNodeSuccess(nodeID, responseMessage) {
+        if ('success' === responseMessage) {
+            var deletedNode = $(".navigationTreeContainer.jstree #" + nodeID);
+            $(".navigationTreeContainer.jstree").jstree(true).delete_node(deletedNode);
+
+
+            //ToDo: parent: change folder-icon to page-icon if there're no children anymore
+
+
+        }
+        /**
+         * see "deleteNode" method for explanation why "window.parent" is used here
+         */
+        window.parent.CHAMELEON.CORE.hideProcessingModal();
+    }
 
 
 </script>
