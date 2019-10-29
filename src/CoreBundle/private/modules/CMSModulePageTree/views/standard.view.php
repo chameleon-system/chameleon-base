@@ -7,39 +7,6 @@
 
 <script type="text/javascript">
     var currentNodeID = null;
-    /**
-     * opens the page in edit mode
-     */
-    function openPageEditor(node) {
-        var pageID = $(node).attr('espageid');
-        if (pageID != false && typeof(pageID) != "undefined") {
-            var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('tableid' => $data['tplPageTableID'], 'pagedef' => 'templateengine')); ?>&id=' + pageID;
-            parent.document.location.href = url;
-        } else {
-            alert('<?=TGlobal::OutJS($translator->trans('chameleon_system_core.cms_module_page_tree.node_has_no_page')); ?>');
-        }
-    }
-
-    /**
-     * opens the tree node editor
-     */
-    function openTreeNodeEditor(node) {
-        var nodeID = $(node).attr('esrealid');
-        currentNodeID = nodeID; // save node ID in global var
-        var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('tableid' => $data['treeTableID'], 'pagedef' => 'tableeditorPopup')); ?>&id=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url);
-    }
-
-    /**
-     * opens the tree node editor and adds a new node
-     *
-     */
-    function openTreeNodeEditorAddNewNode(node) {
-        var nodeID = $(node).attr('esrealid');
-        currentNodeID = nodeID; // save node ID in global var
-        var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('tableid' => $data['treeTableID'], 'pagedef' => 'tableeditorPopup', 'module_fnc' => array('contentmodule' => 'Insert'))); ?>&parent_id=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url);
-    }
 
     /**
      * moves node by drag&drop data
@@ -59,26 +26,6 @@
         window.parent.CHAMELEON.CORE.hideProcessingModal();
     }
 
-    /**
-     * opens the page in config edit mode
-     */
-    function openPageConfigEditor(node) {
-        var pageID = $(node).attr('espageid');
-        if (pageID != false && typeof(pageID) != "undefined") {
-
-            var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('tableid' => $data['tplPageTableID'], 'pagedef' => 'tableeditor')); ?>&id=' + pageID;
-            parent.document.location.href = url;
-        } else {
-            alert('<?=TGlobal::OutJS($translator->trans('chameleon_system_core.cms_module_page_tree.node_has_no_page')); ?>');
-        }
-    }
-
-    function openPageConnectionList(node) {
-        var nodeID = $(node).attr('id');
-        console.log("HIER:"+nodeID);
-        var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('id' => $data['treeNodeTableID'], 'pagedef' => 'tablemanagerframe', 'sRestrictionField' => 'cms_tree_id')); ?>&sRestriction=' + nodeID;
-        CreateModalIFrameDialogCloseButton(url);
-    }
 
     function assignPage(node) {
         var nodeID = $(node).attr('esrealid');
@@ -103,39 +50,6 @@
         }
     }
 
-    /**
-     * deletes a node and kills the page connections
-     */
-    function deleteNode(node) {
-		var confirmMessage = '<?=$translator->trans('chameleon_system_core.cms_module_page_tree.confirm_delete'); ?>';
-
-		var nodeTitle = $(node).find('span.active').text();
-
-		confirmMessage = confirmMessage.replace('%nodeName%', nodeTitle);
-
-		if(confirm(confirmMessage)){
-			var nodeID = $(node).attr('esrealid');
-			var url = '<?=PATH_CMS_CONTROLLER; ?>?<?=TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'DeleteNode', 'tableid' => $data['treeTableID'], 'tbl' => 'cms_tpl_page')); ?>&nodeID=' + nodeID;
-            CHAMELEON.CORE.showProcessingModal();
-
-			GetAjaxCallTransparent(url, deleteNodeSuccess);
-		}
-    }
-
-    /**
-     * final remove of the node from DOM tree
-     */
-    function deleteNodeSuccess(nodeID, responseMessage) {
-        $('#node' + nodeID).click();
-        $('#node' + nodeID).focus();
-        simpleTreeCollection.get(0).delNode();
-
-		/**
-		 * see "deleteNode" method for explanation why "window.parent" is used here
-		 */
-		window.parent.CHAMELEON.CORE.hideProcessingModal();
-
-    }
 
     // updates the tree node HTML without page connection
     function updateTreeNode(formObject, nodeID) {
@@ -194,8 +108,8 @@
 
         $('#node' + nodeID).attr({ esrealid:realID });
 
-        BindContextMenu();
-        CloseModalIFrameDialog();
+        // BindContextMenu();
+        // CloseModalIFrameDialog();
     }
 
     <?php
@@ -222,202 +136,9 @@
     }
     ?>
 </script>
-<div id="rightClickMenuContainer" style="display: none;">
-    <ul>
-        <?php
-        if (true == $data['showAssignDialog']) {
-            ?>
-            <li class="firstnode" id="assignpage">
-                <a href="javascript:void(0);">
-                    <i class="fas fa-link mr-2"></i>
-                    <?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.action_connect_page'); ?>
-                </a>
-            </li>
-            <?php
-        }
-        ?>
-        <li id="editpageconnections">
-            <a href="javascript:void(0);">
-                <i class="fas fa-link mr-2"></i>
-                <?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.connected_pages'); ?>
-            </a>
-        </li>
-        <li id="editpage">
-            <a href="javascript:void(0);">
-                <i class="far fa-edit mr-2"></i>
-                <?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.action_edit_page'); ?>
-            </a>
-        </li>
-        <li id="editpageconfig">
-            <a href="javascript:void(0);">
-                <i class="fas fa-cog mr-2"></i>
-                <?php echo $translator->trans('chameleon_system_core.list.page_settings'); ?>
-            </a>
-        </li>
-        <li id="editnode">
-            <a href="javascript:void(0);">
-                <i class="fas fa-sitemap mr-1"></i>
-                <?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.action_edit_node'); ?>
-            </a>
-        </li>
-        <li id="newnode">
-            <a href="javascript:void(0);">
-                <i class="fas fa-plus mr-2"></i>
-                <?php echo $translator->trans('chameleon_system_core.action.new'); ?>
-            </a>
-        </li>
-        <li id="deletenode">
-            <a href="javascript:void(0);">
-                <i class="far fa-trash-alt mr-2"></i>
-                <?php echo $translator->trans('chameleon_system_core.action.delete'); ?>
-            </a>
-        </li>
-    </ul>
-</div>
-<div id="RootNodeRightClickMenuContainer" style="display: none;">
-    <ul>
-        <li id="newnode">
-            <a href="javascript:void(0);">
-                <i class="fas fa-plus mr-2"></i>
-                <?php echo $translator->trans('chameleon_system_core.action.new'); ?>
-            </a>
-        </li>
-    </ul>
-</div>
-<div id="RestrictedNodeRightClickMenuContainer" style="display: none;">
-    <ul>
-        <li id="editnode">
-            <a href="javascript:void(0);">
-                <i class="far fa-edit mr-2"></i>
-                <?php echo $translator->trans('chameleon_system_core.cms_module_page_tree.action_edit_node'); ?>
-            </a>
-        </li>
-        <li id="newnode">
-            <a href="javascript:void(0);">
-                <i class="fas fa-plus mr-2"></i>
-                <?php echo $translator->trans('chameleon_system_core.action.new'); ?>
-            </a>
-        </li>
-    </ul>
-</div>
 
-<script type="text/javascript">
-    function BindContextMenu() {
-        // $('.simpleTree span.standard').contextMenu('rightClickMenuContainer', {
-        //
-        //     onContextMenu:function (e) {
-        //         var sNodeClasses = $(e.target).attr('class');
-        //         if (sNodeClasses.search('rightClickMenuDisabled') != -1) {
-        //             return false;
-        //         } else return true;
-        //     },
-        //
-        //     bindings:{
-        //         'editpageconnections':function (t) {
-        //             openPageConnectionList($(t).parents('li'));
-        //         },
-        //
-        //         'editpage':function (t) {
-        //             openPageEditor($(t).parents('li'));
-        //         },
-        //
-        //         'editpageconfig':function (t) {
-        //             openPageConfigEditor($(t).parents('li'));
-        //         },
-        //
-        //         'newnode':function (t) {
-        //             openTreeNodeEditorAddNewNode($(t).parents('li'));
-        //         },
-        //
-        //         'editnode':function (t) {
-        //             openTreeNodeEditor($(t).parents('li'));
-        //         },
-        //
-        //         'deletenode':function (t) {
-        //             deleteNode($(t).parents('li'));
-        //         },
-        //
-        //         'assignpage':function (t) {
-        //             assignPage($(t).parents('li'));
-        //         }
-        //     }
-        // });
-    }
-
-    function BindContextMenuToRootNode() {
-        // $('.simpleTree span.rootRightClickMenu').contextMenu('RootNodeRightClickMenuContainer', {
-        //
-        //     bindings:{
-        //         'newnode':function (t) {
-        //             openTreeNodeEditorAddNewNode($(t).parents('li'));
-        //         }
-        //     }
-        // });
-    }
-
-    function BindRestrictedContextMenuNode() {
-        // $('.simpleTree span.restrictedRightClickMenu').contextMenu('RestrictedNodeRightClickMenuContainer', {
-        //
-        //     onContextMenu:function (e) {
-        //         var sNodeClasses = $(e.target).attr('class');
-        //         if (sNodeClasses.search('rightClickMenuDisabled') != -1) {
-        //             return false;
-        //         } else return true;
-        //     },
-        //
-        //     bindings:{
-        //         'newnode':function (t) {
-        //             openTreeNodeEditorAddNewNode($(t).parents('li'));
-        //         },
-        //
-        //         'editnode':function (t) {
-        //             openTreeNodeEditor($(t).parents('li'));
-        //         }
-        //     }
-        // });
-    }
-
-    $(document).ready(function () {
-        BindContextMenu();
-        BindRestrictedContextMenuNode();
-        BindContextMenuToRootNode();
-
-    });
-</script>
 
 <?php
-//$withCheckboxes = "";
-//if (true === $data['showAssignDialog']) {
-//    $withCheckboxes = "-checkboxes";
-//}
-//
-//if (false === $data['isInIframe']) {
-//            ?>
-<!--<div class="card">-->
-<!--    <div class="card-header">-->
-<!--        <h3>Navigation</h3>-->
-<!--    </div>-->
-<!--    <div class="card-body simple-tree-card">-->
-<?php
-//        }
-//?>
-<!--        <div class="navigationTreeContainer--><?//=$withCheckboxes ?><!--">-->
-<!--            <ul class="simpleTree">-->
-<!--                --><?php
-//                echo $data['sTreeHTML'];
-//                ?>
-<!--            </ul>-->
-<!--        </div>-->
-<!---->
-<!--        --><?php
-//        if (false === $data['isInIframe']) {
-//            ?>
-<!--    </div>-->
-<!--</div>-->
-<?php
-//        }
-
-
 
 /**
  * @var \ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel $treeNodes
@@ -425,10 +146,23 @@
  * @var string $isInIframe
  * @var string $showAssignDialog
  * @var string $treeNodesAjaxUrl
+ * @var string $openPageConnectionListUrl
+ * @var string $openPageEditorUrl
+ * @var string $openPageConfigEditorUrl
+ * @var string $openTreeNodeEditorUrl
+ * @var string $openTreeNodeEditorAddNewNodeUrl
+ * @var string $deleteNodeUrl
  */
 $viewRenderer = new ViewRenderer();
 $viewRenderer->AddSourceObject('isInIframe', $isInIframe);
 $viewRenderer->AddSourceObject('showAssignDialog', $showAssignDialog);
 $viewRenderer->AddSourceObject('treeNodesAjaxUrl', $treeNodesAjaxUrl);
+$viewRenderer->AddSourceObject('openPageConnectionListUrl', $openPageConnectionListUrl);
+$viewRenderer->AddSourceObject('openPageEditorUrl', $openPageEditorUrl);
+$viewRenderer->AddSourceObject('openPageConfigEditorUrl', $openPageConfigEditorUrl);
+$viewRenderer->AddSourceObject('openTreeNodeEditorUrl', $openTreeNodeEditorUrl);
+$viewRenderer->AddSourceObject('openTreeNodeEditorAddNewNodeUrl', $openTreeNodeEditorAddNewNodeUrl);
+$viewRenderer->AddSourceObject('deleteNodeUrl', $deleteNodeUrl);
+
 echo $viewRenderer->Render('CMSModulePageTree/standard.html.twig');
 

@@ -83,9 +83,6 @@ class CMSModulePageTree extends TCMSModelBase
         $this->data['treeTableID'] = TTools::GetCMSTableId('cms_tree');
         $this->data['treeNodeTableID'] = TTools::GetCMSTableId('cms_tree_node');
 
-        $urlUtil = $this->getUrlUtil();
-        $this->data['openPageConnectionListUrl'] = $urlUtil->getArrayAsUrl(array('id' => $this->data['treeNodeTableID'], 'pagedef' => 'tablemanagerframe', 'sRestrictionField' => 'cms_tree_id',), PATH_CMS_CONTROLLER . '?', '&');
-
     }
 
     /**
@@ -146,7 +143,14 @@ class CMSModulePageTree extends TCMSModelBase
             $this->data['dataName'] = $row['name'];
         }
 
-        $this->data['treeNodesAjaxUrl'] = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'getTreeNodesJson'));
+        $urlUtil = $this->getUrlUtil();
+        $this->data['treeNodesAjaxUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'getTreeNodesJson',), PATH_CMS_CONTROLLER . '?', '&');
+        $this->data['openPageConnectionListUrl'] = $urlUtil->getArrayAsUrl(array('id' => $this->data['treeNodeTableID'], 'pagedef' => 'tablemanagerframe', 'sRestrictionField' => 'cms_tree_id',), PATH_CMS_CONTROLLER . '?', '&');
+        $this->data['openPageEditorUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['tplPageTableID'], 'pagedef' => 'templateengine'), PATH_CMS_CONTROLLER . '?', '&');
+        $this->data['openPageConfigEditorUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['tplPageTableID'], 'pagedef' => 'tableeditor'), PATH_CMS_CONTROLLER . '?', '&');
+        $this->data['openTreeNodeEditorUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['treeTableID'], 'pagedef' => 'tableeditorPopup'), PATH_CMS_CONTROLLER . '?', '&');
+        $this->data['openTreeNodeEditorAddNewNodeUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['treeTableID'], 'pagedef' => 'tableeditorPopup', 'module_fnc' => array('contentmodule' => 'Insert')), PATH_CMS_CONTROLLER . '?', '&');
+        $this->data['deleteNodeUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'DeleteNode', 'tableid' => $this->data['treeTableID']), PATH_CMS_CONTROLLER . '?', '&');
 
         return $this->data;
     }
@@ -261,17 +265,14 @@ class CMSModulePageTree extends TCMSModelBase
                     $portalTreeNodeDataModel->setChildrenAjaxLoad(true);
 
                     $liAttr = $portalTreeNodeDataModel->getLiAttr();
-                    $aAttr = [];
-                    $liClass = "";
-                    $aClass = "";
+                    $liAttr = array_merge($liAttr, ["class" => "no-checkbox"]);
+                    $portalTreeNodeDataModel->setLiAttr($liAttr);
 
                     $portalTreeNodeDataModel->setType("folder");
                     if (in_array($portalTreeNode->id, $this->aRestrictedNodes)) {
                         $typeRestricted = $portalTreeNodeDataModel->getType()."RestrictedMenu";
                         $portalTreeNodeDataModel->setType($typeRestricted);
                     }
-
-
                 }
                 $rootTreeNodeDataModel->addChildren($portalTreeNodeDataModel);
             }
@@ -353,20 +354,14 @@ class CMSModulePageTree extends TCMSModelBase
             }
         }
 
-
-        $sPageTag = '';
-        $bCurrentPageIsConnectedToThisNode = false;
-
-        $sPrimaryPageID = $node->GetLinkedPage(true);
-
         if (count($aPages) > 0) {
-            if (array_key_exists('dataID', $this->data) && in_array($this->data['dataID'], $aPages)) {
-                $bCurrentPageIsConnectedToThisNode = true;
-            }
+            $sPrimaryPageID = $node->GetLinkedPage(true);
             if (false !== $sPrimaryPageID) {
-                $sPageTag = ' espageid="'.TGlobal::OutHTML($sPrimaryPageID).'"';
+                $liAttr = array_merge($liAttr, ["ispageid" => TGlobal::OutHTML($sPrimaryPageID)]);
             }
-            if ($bCurrentPageIsConnectedToThisNode) {
+
+            // current page is connected to this node
+            if (array_key_exists('dataID', $this->data) && in_array($this->data['dataID'], $aPages)) {
                 $aClass .= ' activeConnectedNode';
                 $treeNodeDataModel->setSelected(true);
 
@@ -390,9 +385,6 @@ class CMSModulePageTree extends TCMSModelBase
         if ($level <= 1) {
             $liClass .= " no-checkbox";
         }
-
-//       Set every html attribute to <li> or <a>-Element as you want
-//       $liAttr = array_merge($liAttr, ["data-foo" => "bar"]);
 
         $liAttr = array_merge($liAttr, ["class" => $liClass]);
         $treeNodeDataModel->setLiAttr($liAttr);
@@ -800,7 +792,7 @@ class CMSModulePageTree extends TCMSModelBase
             $iNodeID = $this->global->GetUserData('nodeID');
             $oTableEditor = new TCMSTableEditorManager();
             $oTableEditor->Init($iTableID, $iNodeID);
-            $returnVal = $oTableEditor->oTableEditor->oTable->sqlData['cmsident'];
+            $returnVal = $iNodeID;
             $oTableEditor->Delete($iNodeID);
         }
 
