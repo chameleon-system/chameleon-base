@@ -57,7 +57,7 @@ class ResponseVariableReplacer implements ResponseVariableReplacerInterface
             foreach ($content as $sKey => $sValue) {
                 $content[$sKey] = $this->replaceVariables($sValue);
             }
-        } else {
+        } elseif (true === \is_string($content)) {
             $content = $this->doReplaceVariables((string) $content);
         }
 
