@@ -9,45 +9,55 @@
     </div>
     <div class="card-body simple-tree-card">
 {% endif %}
+        <div class="row">
+            <div class="col-12 col-md-6 col-xl-8">
+                {{ pageId }}
 
-        <div id="navigationTreeContainer{% if showAssignDialog == true %}-checkboxes{% endif %}" class="navigationTreeContainer"></div>
+                <div id="navigationTreeContainer{% if showAssignDialog == true %}-checkboxes{% endif %}" class="navigationTreeContainer"></div>
+            </div>
+            <div class="col-12 col-md-6 col-xl-4 justify-content-end mt-4 mt-md-0">
+                <div class="treelegend">
+                    <h5>
+                        <span class="nodeIndicatorIcon"></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_header' | trans }}</span>
+                    </h5>
 
-{#        <div class="treelegend" style="display: none;">#}
-{#            <h3>#}
-{#                <span class="nodeIndicatorIcon"></span>#}
-{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_header' | trans }}</span>#}
-{#            </h3>#}
+                    <div class="text">
+                        <span class="nodeIndicatorIcon"></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_node_has_no_page' | trans }}</span>
+                    </div>
 
-{#            <div class="text">#}
-{#                <span class="nodeIndicatorIcon"></span>#}
-{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_node_has_no_page' | trans }}</span>#}
-{#            </div>#}
+                    <div class="otherConnectedNode">
+                        <span class="nodeIndicatorIcon"></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_has_connected_pages' | trans }}</span>
+                    </div>
 
-{#            <div class="otherConnectedNode">#}
-{#                <span class="nodeIndicatorIcon"></span>#}
-{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_has_connected_pages' | trans }}</span>#}
-{#            </div>#}
+                    {% if showAssignDialog %}
+                        <div class="activeConnectedNode primaryConnectedNode">
+                            <span class="nodeIndicatorIcon"></span>
+{#                            <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page' | trans }}</span>#}
+                            <span>aktiver Hauptnavigationspunkt</span>
+                        </div>
+                    {% endif %}
 
-{#            <div class="activeConnectedNode">#}
-{#                <span class="nodeIndicatorIcon"></span>#}
-{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page' | trans }}</span>#}
-{#            </div>#}
+                    <div class="restrictedPage">
+                        <span class="nodeIndicatorIcon iconRestricted"></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page' | trans }}</span>
+                    </div>
 
-{#            <div class="restrictedPage">#}
-{#                <span class="nodeIndicatorIcon iconRestricted" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/lock.png')); ?>');"></span>#}
-{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page' | trans }}</span>#}
-{#            </div>#}
+                    <div class="node-hidden">
+                        <span class="nodeIndicatorIcon iconHidden"><i class="fas fa-lock"></i></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_hidden' | trans }}</span>
+                    </div>
 
-{#            <div class="legendLine">#}
-{#                <span class="nodeIndicatorIcon iconHidden" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/tree/hidden.png')); ?>');"></span>#}
-{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_hidden' | trans }}</span>#}
-{#            </div>#}
+                    <div class="legendLine">
+                        <span class="nodeIndicatorIcon iconExternalLink"><i class="fas fa-external-link-alt"></i></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_external_link' | trans }}</span>
+                    </div>
+                </div>
 
-{#            <div class="legendLine">#}
-{#                <span class="nodeIndicatorIcon iconExternalLink" style="background-image: url('<?php echo TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib('/images/icon_external_link.gif')); ?>');"></span>#}
-{#                <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_external_link' | trans }}</span>#}
-{#            </div>#}
-{#        </div>#}
+            </div>
+        </div>
 
 {% if isInIframe == false %}
     </div>
@@ -65,7 +75,8 @@
                     "url": "{{ treeNodesAjaxUrl | raw }}",
                     "data": function(node) {
                         return {
-                            'id' : node.id
+                            'id' : node.id,
+                            'pageId': '{{ pageId }}'
                         };
                     }
                 },
@@ -84,6 +95,10 @@
                 "folderRootRestrictedMenu": {
                     "icon": "fas fa-folder-open"
                 },
+                "folderWithPage": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
                 "page": {
                     "icon": "far fa-file"
                 },
@@ -94,7 +109,7 @@
                     "icon": "fas fa-external-link-alt"
                 }
             },
-            "plugins":[ "types", "wholerow", "changed", "contextmenu"],
+            "plugins":[ "state", "types", "wholerow", "changed", "contextmenu"],
             "contextmenu": {
                 "items": navigationRightClickMenu
             }
@@ -108,7 +123,8 @@
                     "url": "{{ treeNodesAjaxUrl | raw }}",
                     "data": function(node) {
                         return {
-                            'id' : node.id
+                            'id' : node.id,
+                            'pageId': '{{ pageId }}'
                         };
                     }
                 },
@@ -127,6 +143,10 @@
                     "check_node": false
                 },
                 "folderRootRestrictedMenu": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
+                "folderWithPage": {
                     "icon": "fas fa-folder-open",
                     "check_node": false
                 },
@@ -150,6 +170,13 @@
                 "select_node": false
             }
         });
+        // .on("check_node.jstree", function (e, data) {
+        //     console.log("checked:"+e+"*/*"+data);
+        //
+        // })
+        // .on("uncheck_node.jstree", function (e, data) {
+        //     console.log("unchecked:"+e+"*/*"+data);
+        // });
 
 
     function navigationRightClickMenu(node) {
@@ -220,7 +247,7 @@
                 "icon": "fas fa-link",
                 "separator_after": true,
                 "action": function (obj) {
-                    // this.assignPage(obj.reference);
+                    this.assignPage(obj.reference);
                 }
             }
         };
@@ -231,6 +258,7 @@
 
     function openPageConnectionList(node) {
         var nodeID = $(node).parent().attr('id');
+        currentNodeID = nodeID; // save node ID in global var
         var url = "{{ openPageConnectionListUrl | raw }}" + "&sRestriction=" + nodeID;
         CreateModalIFrameDialogCloseButton(url);
     }
@@ -241,9 +269,8 @@
     function openPageEditor(node) {
         var pageID = $(node).parent().attr('ispageid');
 
-        if (pageID != false && typeof(pageID) != "undefined") {
-            var url = "{{ openPageEditorUrl | raw }}" + '&id=' + pageID;
-            parent.document.location.href = url;
+        if (pageID !== false && typeof(pageID) !== "undefined") {
+            parent.document.location.href = "{{ openPageEditorUrl | raw }}" + '&id=' + pageID;
         } else {
             alert("{{ 'chameleon_system_core.cms_module_page_tree.node_has_no_page'|trans }}");
         }
@@ -254,9 +281,8 @@
      */
     function openPageConfigEditor(node) {
         var pageID = $(node).parent().attr('ispageid');
-        if (pageID != false && typeof(pageID) != "undefined") {
-            var url = "{{ openPageConfigEditorUrl | raw }}" + '&id=' + pageID;
-            parent.document.location.href = url;
+        if (pageID !== false && typeof(pageID) !== "undefined") {
+            parent.document.location.href = "{{ openPageConfigEditorUrl | raw }}" + '&id=' + pageID;
         } else {
             alert("{{ 'chameleon_system_core.cms_module_page_tree.node_has_no_page'|trans }}");
         }
@@ -306,19 +332,45 @@
      */
     function deleteNodeSuccess(nodeID, responseMessage) {
         if ('success' === responseMessage) {
-            var deletedNode = $(".navigationTreeContainer.jstree #" + nodeID);
-            $(".navigationTreeContainer.jstree").jstree(true).delete_node(deletedNode);
-
-
-            //ToDo: parent: change folder-icon to page-icon if there're no children anymore
-
-
+            var parentNodeOfDeletedNode = $(".navigationTreeContainer.jstree #" + nodeID).parent().parent();
+            $(".navigationTreeContainer.jstree").jstree(true).refresh_node(parentNodeOfDeletedNode);
         }
         /**
          * see "deleteNode" method for explanation why "window.parent" is used here
          */
         window.parent.CHAMELEON.CORE.hideProcessingModal();
     }
+
+    // updates the tree node HTML without page connection
+    function updateTreeNode(formObject, nodeID) {
+        var pageID = '';
+        updateTreeNodeWithPage(formObject, nodeID, pageID);
+    }
+
+    /**
+     * update jstree node(s)
+     */
+    function updateTreeNodeWithPage(formObject, cmsIdent, nodeID, pageID) {
+        if (formObject.id.value === currentNodeID) {
+            // makes a reload of current node via ajax
+            $('.navigationTreeContainer.jstree').jstree(true).refresh_node(formObject.id.value);
+        } else {
+            // a new node was created, currentNodeID is the parent of the new node => refresh tree from this parent via ajax
+            $('.navigationTreeContainer.jstree').jstree(true).refresh_node(currentNodeID);
+
+            // set currentNodeID to new created node
+            currentNodeID = formObject.id.value;
+        }
+    }
+
+
+    function assignPage(node) {
+        var nodeID = $(node).attr('id');
+        var assignedpageId = "{{ pageId }}";
+        var url = '{{ assignPageUrl }}&sRestriction=' + nodeID + '&contid=' + assignedpageId + '&cms_tree_id=' + nodeID;
+        CreateModalIFrameDialogCloseButton(url);
+    }
+
 
 
 </script>
