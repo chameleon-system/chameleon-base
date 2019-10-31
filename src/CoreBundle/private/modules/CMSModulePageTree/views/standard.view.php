@@ -51,90 +51,6 @@
     }
 
 
-    // updates the tree node HTML without page connection
-    function updateTreeNode(formObject, nodeID) {
-        var pageID = '';
-        updateTreeNodeWithPage(formObject, nodeID, pageID);
-    }
-
-    /**
-     * changes the node to show changes (hidden, external link etc.)
-     */
-    function updateTreeNodeWithPage(formObject, nodeID, realID, pageID) {
-        var isHidden = getRadioValue(formObject.elements['hidden']);
-        var newNodeTitle = formObject.name.value;
-
-        var hiddenClass = '';
-        if (isHidden != false && isHidden != 0 && isHidden != 'false') {
-            var hiddenClass = 'hiddenNode';
-        }
-
-        var newNodeAfterLabel = '';
-        if (formObject.link.value != '') {
-            var newNodeAfterLabel = '<a href="' + formObject.link.value + '\" target="_blank"><img src="<?=TGlobal::GetStaticURLToWebLib('/images/icon_external_link.gif'); ?>" style="padding-left: 5px;" border="0" width="15" height="13" style="float: right;" /></a>';
-        }
-
-        if (formObject.id.value != currentNodeID) { // parent node is current node, so we have created a new node and need to add it to the tree
-            // add new node
-            simpleTreeCollection.get(0).addNode('node' + nodeID, newNodeTitle);
-            $('ul.simpletree span.active').removeClass('active').addClass('text');
-            $('#node' + nodeID + ' span').addClass('standard active');
-            $('#node' + nodeID + ' span').removeClass('text');
-        } else {
-            // update title
-            $('#node' + nodeID + ' span.active').html(newNodeTitle);
-        }
-
-        // add hidden class
-        if (hiddenClass != '') {
-            $('#node' + nodeID + ' span.active').addClass(hiddenClass);
-        } else {
-            $('#node' + nodeID + ' span.active').removeClass('hiddenNode');
-        }
-
-        // add external link icon
-        if (newNodeAfterLabel != '') {
-            if ($('#node' + nodeID + ' span.active').next('a').html() == null) {
-                $('#node' + nodeID + ' span.active').append(newNodeAfterLabel);
-            }
-        } else {
-            $('#node' + nodeID + ' span').next('a').remove();
-        }
-
-        if (pageID != '' && pageID != false && pageID != 'false') { // add page id attribute
-            $('#node' + nodeID).attr({ espageid:pageID });
-            $('#node' + nodeID + ' span.active').addClass('otherConnectedNode');
-        }
-
-        $('#node' + nodeID).attr({ esrealid:realID });
-
-        // BindContextMenu();
-        // CloseModalIFrameDialog();
-    }
-
-    <?php
-    if ($data['iTreeNodeCount'] < 300) {
-        ?>
-    $(window).unload(function () {
-            var sOpenNodes = '';
-            // save current tree state to cookie
-            $(".simpleTree li.folder-open").each(function (i) {
-                if (sOpenNodes != '') sOpenNodes += ',';
-                sOpenNodes += this.getAttribute('esrealid');
-            });
-
-            $.cookie('chameleonTreeState', sOpenNodes, { expires:7, domain:'<?=$_SERVER['HTTP_HOST']; ?>' });
-        }
-    );
-        <?php
-    } else {
-        ?>
-    $(window).unload(function () {
-        $.cookie('chameleonTreeState', '', { expires:-1 });
-    });
-        <?php
-    }
-    ?>
 </script>
 
 
@@ -152,6 +68,8 @@
  * @var string $openTreeNodeEditorUrl
  * @var string $openTreeNodeEditorAddNewNodeUrl
  * @var string $deleteNodeUrl
+ * @var string $assignPageUrl
+ * @var object $dataID
  */
 $viewRenderer = new ViewRenderer();
 $viewRenderer->AddSourceObject('isInIframe', $isInIframe);
@@ -163,6 +81,8 @@ $viewRenderer->AddSourceObject('openPageConfigEditorUrl', $openPageConfigEditorU
 $viewRenderer->AddSourceObject('openTreeNodeEditorUrl', $openTreeNodeEditorUrl);
 $viewRenderer->AddSourceObject('openTreeNodeEditorAddNewNodeUrl', $openTreeNodeEditorAddNewNodeUrl);
 $viewRenderer->AddSourceObject('deleteNodeUrl', $deleteNodeUrl);
+$viewRenderer->AddSourceObject('assignPageUrl', $assignPageUrl);
+$viewRenderer->AddSourceObject('pageId', $dataID);
 
 echo $viewRenderer->Render('CMSModulePageTree/standard.html.twig');
 

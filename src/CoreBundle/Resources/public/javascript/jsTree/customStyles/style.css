@@ -3,10 +3,31 @@
     display: none;
 }
 
-.jstree .node-hidden,
-.jstree .page-hidden {
+.navigationTreeContainer .node-hidden,
+.treelegend .page-hidden {
     color: grey;
 }
+
+.navigationTreeContainer .activeConnectedNode,
+.treelegend .activeConnectedNode {
+    font-style: normal;
+    font-weight: bold;
+    color: darkgreen;
+}
+
+.navigationTreeContainer .otherConnectedNode,
+.treelegend .otherConnectedNode {
+    font-style: normal;
+    /*font-weight: bold;*/
+    color: green;
+}
+
+.navigationTreeContainer .activeConnectedNode.primaryConnectedNode,
+.treelegend .activeConnectedNode.primaryConnectedNode {
+    font-style: normal;
+    color: blue;
+}
+
 
 /*.simple-tree-card {*/
 /*    padding-left: 2.5rem !important;*/
@@ -179,13 +200,6 @@
 /*.nodeIndicatorIcon.iconRestricted {*/
 /*    background-size: 13px;*/
 /*}*/
-
-.navigationTreeContainer .otherConnectedNode,
-.treelegend .otherConnectedNode {
-    font-style: normal;
-    /*font-weight: bold;*/
-    color: green;
-}
 
 /*.navigationTreeContainer span.rightClickMenuDisabled {*/
 /*    font-style: normal;*/
