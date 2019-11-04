@@ -776,7 +776,7 @@
 
         <service id="chameleon_system_core.security.authenticity_token.csrf_token_manager_factory" class="ChameleonSystem\CoreBundle\Security\AuthenticityToken\CsrfTokenManagerFactory">
             <argument type="service" id="security.csrf.token_generator"/>
-            <argument type="service" id="security.csrf.token_storage"/>
+            <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_storage"/>
             <argument type="service" id="request_stack"/>
             <argument type="service" id="chameleon_system_core.request_info_service"/>
         </service>
