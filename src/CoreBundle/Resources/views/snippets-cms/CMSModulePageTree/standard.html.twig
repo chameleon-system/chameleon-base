@@ -11,8 +11,6 @@
 {% endif %}
         <div class="row">
             <div class="col-12 col-md-6 col-xl-8">
-                {{ pageId }}
-
                 <div id="navigationTreeContainer{% if showAssignDialog == true %}-checkboxes{% endif %}" class="navigationTreeContainer"></div>
             </div>
             <div class="col-12 col-md-6 col-xl-4 justify-content-end mt-4 mt-md-0">
@@ -21,6 +19,19 @@
                         <span class="nodeIndicatorIcon"></span>
                         <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_header' | trans }}</span>
                     </h5>
+
+                    {% if showAssignDialog %}
+                        <div class="activeConnectedNode primaryConnectedNode">
+                            <span class="nodeIndicatorIcon"></span>
+                            <span>aktiver Hauptnavigationspunkt dieser Seite </span>
+                        </div>
+
+
+                        <div class="activeConnectedNode">
+                            <span class="nodeIndicatorIcon"></span>
+                            <span>aktiver weiterer Navigationspunkt dieser Seite</span>
+                        </div>
+                    {% endif %}
 
                     <div class="text">
                         <span class="nodeIndicatorIcon"></span>
@@ -32,21 +43,13 @@
                         <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_has_connected_pages' | trans }}</span>
                     </div>
 
-                    {% if showAssignDialog %}
-                        <div class="activeConnectedNode primaryConnectedNode">
-                            <span class="nodeIndicatorIcon"></span>
-{#                            <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page' | trans }}</span>#}
-                            <span>aktiver Hauptnavigationspunkt</span>
-                        </div>
-                    {% endif %}
-
                     <div class="restrictedPage">
-                        <span class="nodeIndicatorIcon iconRestricted"></span>
+                        <span class="nodeIndicatorIcon iconRestricted"><i class="fas fa-lock"></i></span>
                         <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page' | trans }}</span>
                     </div>
 
                     <div class="node-hidden">
-                        <span class="nodeIndicatorIcon iconHidden"><i class="fas fa-lock"></i></span>
+                        <span class="nodeIndicatorIcon iconHidden"><i class="far fa-eye-slash"></i></span>
                         <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_hidden' | trans }}</span>
                     </div>
 
@@ -105,14 +108,23 @@
                 "locked": {
                     "icon": "fas fa-lock"
                 },
+                "page-hidden": {
+                    "icon": "far fa-eye-slash"
+                },
+                "node-hidden": {
+                    "icon": "far fa-eye-slash"
+                },
                 "externalLink": {
                     "icon": "fas fa-external-link-alt"
                 }
             },
-            "plugins":[ "state", "types", "wholerow", "changed", "contextmenu"],
+            "plugins":[ "state", "types", "wholerow", "changed", "contextmenu", "dnd"],
             "contextmenu": {
                 "items": navigationRightClickMenu
             }
+        })
+        .on("move_node.jstree", function (e, data) {
+            moveNode(data.node.id, data.parent, data.position);
         });
 
     $("#navigationTreeContainer-checkboxes")
@@ -156,6 +168,12 @@
                 "locked": {
                     "icon": "fas fa-lock"
                 },
+                "page-hidden": {
+                    "icon": "far fa-eye-slash"
+                },
+                "node-hidden": {
+                    "icon": "far fa-eye-slash"
+                },
                 "externalLink": {
                     "icon": "fas fa-external-link-alt"
                 }
@@ -164,11 +182,17 @@
                 "three_state": false,
                 "cascade": "none"
             },
-            "plugins":[ "types", "wholerow", "changed", "checkbox", "contextmenu"],
+            "plugins":[ "types", "wholerow", "changed", "checkbox", "contextmenu", "dnd"],
             "contextmenu": {
                 "items": navigationRightClickMenuWithAssignDialog,
                 "select_node": false
+            },
+            "dnd": {
+                "drag_selection": false
             }
+        })
+        .on("move_node.jstree", function (e, data) {
+            moveNode(data.node.id, data.parent, data.position);
         });
         // .on("check_node.jstree", function (e, data) {
         //     console.log("checked:"+e+"*/*"+data);
@@ -261,6 +285,12 @@
         currentNodeID = nodeID; // save node ID in global var
         var url = "{{ openPageConnectionListUrl | raw }}" + "&sRestriction=" + nodeID;
         CreateModalIFrameDialogCloseButton(url);
+
+        $('#modalDialog').on('hidden.bs.modal', function () {
+            if (currentNodeID == nodeID) {
+                $(".navigationTreeContainer.jstree").jstree(true).refresh_node(nodeID);
+            }
+        });
     }
 
     /**
@@ -321,6 +351,7 @@
 
         if(confirm(confirmMessage)){
             var nodeID = $(node).parent().attr('id');
+            currentNodeID = nodeID; // save node ID in global var
             var url = "{{ deleteNodeUrl | raw }}" + '&nodeID=' + nodeID;
             CHAMELEON.CORE.showProcessingModal();
             GetAjaxCallTransparent(url, deleteNodeSuccess);
@@ -331,14 +362,11 @@
      * final remove of the node from DOM tree
      */
     function deleteNodeSuccess(nodeID, responseMessage) {
-        if ('success' === responseMessage) {
+        if ('success' === responseMessage && currentNodeID === nodeID) {
             var parentNodeOfDeletedNode = $(".navigationTreeContainer.jstree #" + nodeID).parent().parent();
             $(".navigationTreeContainer.jstree").jstree(true).refresh_node(parentNodeOfDeletedNode);
         }
-        /**
-         * see "deleteNode" method for explanation why "window.parent" is used here
-         */
-        window.parent.CHAMELEON.CORE.hideProcessingModal();
+        window.CHAMELEON.CORE.hideProcessingModal();
     }
 
     // updates the tree node HTML without page connection
@@ -366,11 +394,36 @@
 
     function assignPage(node) {
         var nodeID = $(node).attr('id');
+        currentNodeID = nodeID; // save node ID in global var
         var assignedpageId = "{{ pageId }}";
-        var url = '{{ assignPageUrl }}&sRestriction=' + nodeID + '&contid=' + assignedpageId + '&cms_tree_id=' + nodeID;
+        var url = '{{ assignPageUrl | raw }}&sRestriction=' + nodeID + '&contid=' + assignedpageId + '&cms_tree_id=' + nodeID;
         CreateModalIFrameDialogCloseButton(url);
+
+        $('#modalDialog').on('hidden.bs.modal', function () {
+            if (currentNodeID == nodeID) {
+                $(".navigationTreeContainer.jstree").jstree(true).refresh_node(nodeID);
+            }
+        });
     }
 
+
+    /**
+     * moves node by drag&drop data
+     */
+    function moveNode(nodeID, parentNodeID, position) {
+        if (typeof parentNodeID != 'undefined' && typeof nodeID != 'undefined') {
+            CHAMELEON.CORE.showProcessingModal();
+            var url = '{{ moveNodeUrl | raw }}&nodeID=' + nodeID + '&parentNodeID=' + parentNodeID + '&position=' + position;
+            GetAjaxCallTransparent(url, moveNodeSuccess);
+        }
+    }
+
+    /**
+     * unblocks the UI
+     */
+    function moveNodeSuccess(nodeID, responseMessage) {
+        window.CHAMELEON.CORE.hideProcessingModal();
+    }
 
 
 </script>
