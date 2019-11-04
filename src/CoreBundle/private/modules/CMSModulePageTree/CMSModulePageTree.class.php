@@ -150,6 +150,7 @@ class CMSModulePageTree extends TCMSModelBase
         $this->data['openTreeNodeEditorAddNewNodeUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['treeTableID'], 'pagedef' => 'tableeditorPopup', 'module_fnc' => array('contentmodule' => 'Insert')), PATH_CMS_CONTROLLER . '?', '&');
         $this->data['deleteNodeUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'DeleteNode', 'tableid' => $this->data['treeTableID']), PATH_CMS_CONTROLLER . '?', '&');
         $this->data['assignPageUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['treeNodeTableID'], 'pagedef' => 'tableeditorPopup', 'sRestrictionField' => 'cms_tree_id', 'module_fnc' => array('contentmodule' => 'Insert'), 'active' => '1', 'preventTemplateEngineRedirect' => '1'), PATH_CMS_CONTROLLER . '?', '&');
+        $this->data['moveNodeUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'MoveNode', 'tableid' => $this->data['treeTableID']), PATH_CMS_CONTROLLER . '?', '&');
 
         return $this->data;
     }
@@ -322,6 +323,7 @@ class CMSModulePageTree extends TCMSModelBase
         if (true == $node->fieldHidden) {
             $nodeHidden = true;
             $aClass .= " node-hidden";
+            $treeNodeDataModel->setType('node-hidden');
         }
 
 //        $sIsTranslatedIdent = '';
@@ -348,11 +350,13 @@ class CMSModulePageTree extends TCMSModelBase
                 && (true === $connectedPage->fieldExtranetPage
                     && false === $node->fieldShowExtranetPage)) {
                 $aClass .= " page-hidden";
+                $treeNodeDataModel->setType('page-hidden');
                 $bFoundSecuredPage = true;
             }
 
             if (true === $connectedPage->fieldExtranetPage) {
                 $treeNodeDataModel->setType('locked');
+                $aClass .= " locked";
             }
         }
 

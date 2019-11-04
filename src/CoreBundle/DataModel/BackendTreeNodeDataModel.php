@@ -72,6 +72,7 @@ class BackendTreeNodeDataModel implements JsonSerializable
         $this->name = $name;
         $this->cmsIdent = $cmsIdent;
         $this->liAttr = ['cmsIdent' => $cmsIdent];
+        $this->disabled = true;
     }
 
     /**
