@@ -41,7 +41,7 @@ while ($oField = $data['oFields']->Next()) {
 
                 $sTmpFormTabsContent .= '
                 <div class="form-group table-editor-form-group row" id="fieldname_'.TGlobal::OutHTML($oField->name).'">
-                    <div class="col-sm-2 col-form-label">
+                    <div class="col-xl-3 col-sm-4 col-form-label">
             ';
 
                 $oFieldConfig = TdbCmsFieldConf::GetNewInstance();
@@ -88,7 +88,7 @@ while ($oField = $data['oFields']->Next()) {
                     $sTmpFormTabsContent .= '&nbsp;<span class="requiredfield">*<span>';
                 }
                 $sTmpFormTabsContent .= '</div>
-                <div class="col-sm-10">';
+                <div class="col-xl-9 col-sm-8 col-form-content">';
                 if ('' !== $oField->oDefinition->sqlData['049_helptext']) {
                     $sTmpFormTabsContent .= '<div class="helptextContainer alert alert-info" id="helptext-'.TGlobal::OutHTML($oField->name).'">'.nl2br(TGlobal::OutHTML($oField->oDefinition->sqlData['049_helptext'])).'</div>';
                 }

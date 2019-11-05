@@ -250,3 +250,19 @@ label.switch .switch-slider::after {
     border-top: 1px solid transparent;
     border-bottom: 1px solid transparent;
 }
+
+@media (min-width: 1600px) {
+    /* overwrite from boostrap col-sm-2 and col-sm-10 */
+
+    #templateengine .col-template-selection,
+    .tableeditcontainer .tab-content .col-form-label {
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+
+    #templateengine .col-template-content,
+    .tableeditcontainer .tab-content .col-form-content {
+        flex: 0 0 80%;
+        max-width: 80%;
+    }
+}
