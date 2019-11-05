@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use Psr\Log\LoggerInterface;
 use Twig\Environment;
 use Twig\Error\Error;
+use Twig\Error\LoaderError;
 
 /**
  * TPkgSnippetRenderer - a simple yet effective renderer for HTML snippets.
@@ -168,11 +169,17 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
             } else {
                 $content = $this->twigStringEnvironment->render($this->getSource(), $this->getVars());
             }
-        } catch (Error $e) {
+        } catch (LoaderError $e) {
             $message = sprintf('Error while rendering view %s: %s', $this->getSource(), $e->getMessage());
             $this->logger->error($message, ['error' => $e]);
 
             return $message;
+        } catch (Error $e) {
+            throw new TPkgSnippetRenderer_SnippetRenderingException(
+                sprintf("%s\nin file %s at line %s\n", $e->getMessage(), $e->getFile(), $e->getLine()),
+                $e->getCode(),
+                $e
+            );
         }
 
         return $content;

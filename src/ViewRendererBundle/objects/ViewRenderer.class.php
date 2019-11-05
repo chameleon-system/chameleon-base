@@ -219,6 +219,7 @@ class ViewRenderer
      * @return string the rendered snippet
      *
      * @throws MapperException
+     * @throws TPkgSnippetRenderer_SnippetRenderingException
      */
     public function Render($sView, $oSnippetRenderer = null, $bEnableCaching = true)
     {
