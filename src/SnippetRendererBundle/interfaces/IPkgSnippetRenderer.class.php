@@ -86,8 +86,6 @@ interface IPkgSnippetRenderer
      * Renders the snippet and returns the rendered content.
      *
      * @return string - the rendered content
-     *
-     * @throws \TPkgSnippetRenderer_SnippetRenderingException|\Exception
      */
     public function render();
 

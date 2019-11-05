@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
 use Twig\Environment;
 use Twig\Error\Error;
 
@@ -78,10 +79,16 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
      */
     private $twigStringEnvironment;
 
-    public function __construct(Environment $twigEnvironment, Environment $twigStringEnvironment)
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(Environment $twigEnvironment, Environment $twigStringEnvironment, LoggerInterface $logger)
     {
         $this->twigEnvironment = $twigEnvironment;
         $this->twigStringEnvironment = $twigStringEnvironment;
+        $this->logger = $logger;
     }
 
     /**
@@ -153,9 +160,6 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
             $this->setFilename($this->getSourceModule()->viewTemplate);
         }
 
-        // TODO why didn't the old handling swallow up any "missing template" error?
-        //  -> that is maybe the reason why missing twig templates always showed up simply as the file path?
-
         try {
             if ($this->getSourceType() !== IPkgSnippetRenderer::SOURCE_TYPE_STRING) {
                 // use the normal file-only Twig environment
@@ -165,11 +169,10 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
                 $content = $this->twigStringEnvironment->render($this->getSource(), $this->getVars());
             }
         } catch (Error $e) {
-            throw new TPkgSnippetRenderer_SnippetRenderingException(
-                sprintf("%s\nin file %s at line %s\n", $e->getMessage(), $e->getFile(), $e->getLine()),
-                $e->getCode(),
-                $e
-            );
+            $message = sprintf('Error while rendering view %s: %s', $this->getSource(), $e->getMessage());
+            $this->logger->error($message, ['error' => $e]);
+
+            return $message;
         }
 
         return $content;
