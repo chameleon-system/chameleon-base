@@ -464,3 +464,47 @@ CHAMELEON.CORE.handleFormAndLinkTargetsInModals = function () {
         $(this).attr('href', link);
     });
 };
+
+CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
+    $element.typeahead({
+        source: function (query, process) {
+            return $.get($element.data('source-url'), {'term': query}, function (data) {
+                return process(data);
+            });
+        },
+        afterSelect: function(item) {
+            if (typeof item.id !== "undefined") {
+                if ("" !== $element.data('record-url')) {
+                    top.document.location.href = $element.data('record-url') + '&id=' + item.id;
+                }
+            }
+        },
+        autoSelect: false,
+        minLength: 0,
+        showHintOnFocus: true,
+        items: $(window).height() > 600 ? 16 : 8,
+        menu: '<ul class="typeahead dropdown-menu dropdown-menu-right" role="listbox"></ul>',
+    });
+
+    $element.on("keydown", function(event) {
+        if (event.key !== "Enter") {
+            return;
+        }
+
+        // Make sure typeahead does not prevent a form submit (if mouse is not over input field).
+
+        $element.closest("form").submit();
+    });
+
+    $element.on("keyup", function(event) {
+        if (event.key !== "Enter") {
+            return;
+        }
+
+        if (0 === $element.closest("form").length) {
+            // If there is no form: redo the hiding of Typeahead's "select(undefined)".
+
+            $element.typeahead("show");
+        }
+    });
+};
