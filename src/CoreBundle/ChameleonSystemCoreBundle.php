@@ -19,6 +19,7 @@ use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\CollectRequestStateE
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\ControllerResolverPass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\SetChameleonHttpKernelPass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\SetCsrfTokenManagerFactoryPass;
+use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\SetCsrfTokenStoragePass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -36,6 +37,7 @@ class ChameleonSystemCoreBundle extends Bundle
         $container->addCompilerPass(new ControllerResolverPass());
         $container->addCompilerPass(new SetChameleonHttpKernelPass());
         $container->addCompilerPass(new SetCsrfTokenManagerFactoryPass());
+        $container->addCompilerPass(new SetCsrfTokenStoragePass());
         $container->addCompilerPass(new CollectRequestStateElementProvidersPass());
     }
 }
