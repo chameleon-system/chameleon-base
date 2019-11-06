@@ -48,7 +48,10 @@
         </service>
 
         <service id="chameleon_system_view_renderer.twig.loader.string" class="ChameleonSystem\ViewRendererBundle\Bridge\Twig\Loader\TwigStringLoader">
-            <tag name="twig.loader" priority="-255" />
+        </service>
+
+        <service id="chameleon_system_view_renderer.twig.string_environment" class="Twig\Environment">
+            <argument type="service" id="chameleon_system_view_renderer.twig.loader.string"/>
         </service>
 
         <service id="chameleon_system_view_renderer.snippet_directory" class="%chameleon_system_view_renderer.snippet_directory.class%">

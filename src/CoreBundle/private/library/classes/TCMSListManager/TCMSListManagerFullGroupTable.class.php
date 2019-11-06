@@ -272,10 +272,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $this->tableObj->showRowsPerPageChooser = true;
         $this->AddRowCallback();
 
-        if (true === $this->isRecordEditPossible()) {
-            $this->tableObj->setAutoCompleteState(true);
-        }
-
         $this->PostCreateTableObjectHook();
     }
 

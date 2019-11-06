@@ -406,7 +406,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             $sCustomHeaderData = $activePortal->sqlData['custom_metadata'];
 
             // add pageID to content if user is logged in
-            if (_DEVELOPMENT_MODE && TGlobal::CMSUserDefined()) {
+            if (true === TCMSUser::CMSUserDefined()) {
                 $activePage = $this->getActivePageService()->getActivePage();
                 $sCustomHeaderData .= "\n<!-- CMS page ID: ".TGlobal::OutHTML($activePage->id).'; IDENT: '.TGlobal::OutHTML($activePage->sqlData['cmsident'])."-->\n";
             }
@@ -490,11 +490,6 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      */
     public function _AllowCache()
     {
-        // if user is logged in to CMS the cache will be disabled to allow output of CMS only content
-        if (TGlobal::CMSUserDefined()) {
-            return false;
-        }
-
         return null !== $this->getPortalDomainService()->getActivePortal();
     }
 
@@ -503,13 +498,17 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      */
     public function _GetCacheParameters()
     {
-        $aParameters = parent::_GetCacheParameters();
+        $cacheParameters = parent::_GetCacheParameters();
+
+        if (true === TCMSUser::CMSUserDefined()) {
+            $cacheParameters['debugOutputActive'] = true;
+        }
 
         $oActivePage = $this->getActivePageService()->getActivePage();
-        $aParameters['activepage'] = $oActivePage->id;
-        $aParameters['aAdditionalBreadcrumbNodes'] = serialize($this->aAdditionalBreadcrumbNodes);
+        $cacheParameters['activepage'] = $oActivePage->id;
+        $cacheParameters['aAdditionalBreadcrumbNodes'] = serialize($this->aAdditionalBreadcrumbNodes);
 
-        return $aParameters;
+        return $cacheParameters;
     }
 
     /**
