@@ -80,10 +80,14 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $visitor->SetMappedValue('sidebarSaveActiveCategoryNotificationUrl', $this->getActiveCategoryNotificationUrl());
         $visitor->SetMappedValue('menuItems', $this->getMenuItems());
 
-        $cmsUser = \TCMSUser::GetActiveUser();
-        $cacheTriggerManager->addTrigger('cms_tbl_conf', null);
-        $cacheTriggerManager->addTrigger('cms_module', null);
-        $cacheTriggerManager->addTrigger('cms_user', null === $cmsUser ? null : $cmsUser->id);
+        if (true === $cachingEnabled) {
+            $cmsUser = \TCMSUser::GetActiveUser();
+            $cacheTriggerManager->addTrigger('cms_tbl_conf', null);
+            $cacheTriggerManager->addTrigger('cms_module', null);
+            $cacheTriggerManager->addTrigger('cms_user', null === $cmsUser ? null : $cmsUser->id);
+            $cacheTriggerManager->addTrigger('cms_menu_category', null);
+            $cacheTriggerManager->addTrigger('cms_menu_item', null);
+        }
     }
 
     private function getSidebarToggleNotificationUrl(): string
