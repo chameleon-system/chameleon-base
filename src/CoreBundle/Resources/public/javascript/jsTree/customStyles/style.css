@@ -3,6 +3,10 @@
     display: none;
 }
 
+.jstree.jstree-checkbox-selection .jstree-disabled.jstree-clicked {
+    background: unset;
+}
+
 .navigationTreeContainer .node-hidden,
 .treelegend .page-hidden {
     color: grey;

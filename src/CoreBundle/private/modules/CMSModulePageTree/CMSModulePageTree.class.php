@@ -49,11 +49,19 @@ class CMSModulePageTree extends TCMSModelBase
     protected $treeTable = 'cms_tree';
 
     /**
-     * pageId
+     * currentPageId
      *
      * @var string
      */
-    protected $dataID = '';
+    protected $currentPageId = '';
+
+    /**
+     * primaryConnectedNodeIdOfCurrentPage
+     *
+     * @var string
+     */
+    protected $primaryConnectedNodeIdOfCurrentPage = '';
+
 
     /**
      * nodes that should not be assignable or that should have only a
@@ -117,11 +125,17 @@ class CMSModulePageTree extends TCMSModelBase
             $this->data['showAssignDialog'] = false;
         }
 
-        $this->data['dataID'] = null;
+        $this->data['currentPageId'] = null;
+        $this->data['primaryConnectedNodeIdOfCurrentPage'] = null;
 
         if ($this->global->UserDataExists('id')) {
-            $this->data['dataID'] = $this->global->GetUserData('id');
-            $this->dataID = $this->data['dataID'];
+            $this->data['currentPageId'] = $this->global->GetUserData('id');
+            $this->currentPageId = $this->data['currentPageId'];
+        }
+
+        if ($this->global->UserDataExists('primaryTreeNodeId')) {
+            $this->data['primaryConnectedNodeIdOfCurrentPage'] = $this->global->GetUserData('primaryTreeNodeId');
+            $this->primaryConnectedNodeIdOfCurrentPage = $this->data['primaryConnectedNodeIdOfCurrentPage'];
         }
 
         $rootNodeID = $inputFilterUtil->getFilteredGetInput('rootID', TCMSTreeNode::TREE_ROOT_ID);
@@ -134,8 +148,6 @@ class CMSModulePageTree extends TCMSModelBase
         // Check if we have more than 3 portals (needed because of performance issues in tree pre-rendering)
         $oPortalList = TdbCmsPortalList::GetList();
         $this->iPortalCount = $oPortalList->Length();
-
-//        $this->RenderTree($this->oRootNode->id, $this->oRootNode, 0);
 
         if ($this->global->UserDataExists('table')) {
             $this->data['table'] = $this->global->GetUserData('table');
@@ -197,9 +209,13 @@ class CMSModulePageTree extends TCMSModelBase
      */
     public function getTreeNodesJson()
     {
-        if ( $_GET["pageId"] !== "" ) {
-            $this->dataID = $_GET["pageId"];
+        if ( $_GET["currentPageId"] !== "" ) {
+            $this->currentPageId = $_GET["currentPageId"];
         }
+        if ( $_GET["primaryConnectedNodeIdOfCurrentPage"] !== "" ) {
+            $this->primaryConnectedNodeIdOfCurrentPage = $_GET["primaryConnectedNodeIdOfCurrentPage"];
+        }
+
 
         if ( $_GET["id"] === "#" ) {
             $treeData = $this->createRootTreeWithDefaultPortalItems();
@@ -366,26 +382,17 @@ class CMSModulePageTree extends TCMSModelBase
             }
 
             $sPrimaryPageID = $node->GetLinkedPage(true);
-
-
             if (false !== $sPrimaryPageID) {
                 $liAttr = array_merge($liAttr, ["ispageid" => TGlobal::OutHTML($sPrimaryPageID)]);
             }
 
             // current page is connected to this node
-            if ($this->dataID && in_array($this->dataID, $aPages)) {
-                $aClass .= ' activeConnectedNode jstree-clicked';
+            if ($this->currentPageId && in_array($this->currentPageId, $aPages)) {
+                $aClass .= ' activeConnectedNode';
                 $treeNodeDataModel->setOpened(true);
                 $treeNodeDataModel->setSelected(true);
 
-
-                // kill all current page ids from $aPages and check if we have other pages connected
-                $aKeys = array_keys($aPages, $this->dataID);
-                foreach ($aKeys as $key) {
-                    unset($aPages[$key]);
-                }
-
-                if (count($aPages) > 0) {
+                if ($this->primaryConnectedNodeIdOfCurrentPage === $node->id) {
                     $aClass .= ' primaryConnectedNode';
                     $treeNodeDataModel->setDisabled(true);
                 }
@@ -457,181 +464,6 @@ class CMSModulePageTree extends TCMSModelBase
         // Return span wrapped in link from supplied url.
         return $anchorSnippet;
     }
-
-    /**
-     * get children of current tree node.
-     *
-     * @param string     $iParentID
-     * @param TdbCmsTree $oParentTreeNode
-     * @param int        $level
-     * @param bool       $allowAjax
-     */
-    protected function RenderTree($iParentID = null, $oParentTreeNode = null, $level = 0, $allowAjax = true)
-    {
-        if (null === $iParentID) {
-            $iParentID = $this->iRootNode;
-        }
-
-        $sListClasses = '';
-
-        if (!$this->global->UserDataExists('nodeID')) {
-            if (0 == $level) {
-                $sListClasses = 'root';
-            }
-        }
-
-        $sSpanClass = '';
-        $sSpanMenuClass = 'standard';
-        if (!$this->global->UserDataExists('nodeID')) {
-            if (0 == $level) {
-                $sSpanMenuClass = 'rootRightClickMenu';
-            }
-        }
-
-        $sIconHTML = '';
-
-        $oCmsUser = TCMSUser::GetActiveUser();
-        $oEditLanguage = $oCmsUser->GetCurrentEditLanguageObject();
-        $parentNodeHidden = false;
-
-        $oParentTreeNode->SetLanguage($oEditLanguage->id);
-        if (true == $oParentTreeNode->fieldHidden) {
-            $sIconHTML .= $this->getNodeIndicatorIcon('/images/tree/hidden.png', 'iconHidden');
-            $parentNodeHidden = true;
-        }
-
-        if (!empty($oParentTreeNode->sqlData['link'])) {
-            $sIconHTML .= $this->getNodeIndicatorIcon('/images/icon_external_link.gif', 'iconExternalLink', $oParentTreeNode->sqlData['link']);
-        }
-
-        $sIsTranslatedIdent = '';
-        if (CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE) {
-            $oCmsConfig = TCMSConfig::GetInstance();
-            $oDefaultLang = $oCmsConfig->GetFieldTranslationBaseLanguage();
-            if ($oDefaultLang && $oDefaultLang->id != $oEditLanguage->id) {
-                if (empty($oParentTreeNode->sqlData['name__'.$oEditLanguage->fieldIso6391])) {
-                    $sIsTranslatedIdent = '<img src="'.TGlobal::GetStaticURL('chameleon/blackbox/images/tree/folder_edit.png').'" width="12" align="absmiddle" border="0" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_page_tree.not_translated')).'" />';
-                }
-            }
-        }
-        $sTreeNodeName = $oParentTreeNode->GetName();
-        if (empty($sTreeNodeName)) {
-            $sTreeNodeName = TGlobal::Translate('chameleon_system_core.text.unnamed_record');
-        }
-
-        $sPageTag = '';
-        $sPrimaryPageID = $oParentTreeNode->GetLinkedPage(true);
-
-        $aPages = array();
-
-        $bCurrentPageIsConnectedToThisNode = false;
-        $oConnectedPages = $oParentTreeNode->GetAllLinkedPages();
-        $bFoundSecuredPage = false;
-        while ($connectedPage = $oConnectedPages->Next()) {
-            $aPages[] = $connectedPage->id;
-
-            if (!$parentNodeHidden
-                && !$bFoundSecuredPage
-                && (true === $connectedPage->fieldExtranetPage
-                && false === $oParentTreeNode->fieldShowExtranetPage)) {
-                $sIconHTML .= $this->getNodeIndicatorIcon('/images/tree/hidden.png', 'iconHidden');
-                $bFoundSecuredPage = true;
-            }
-
-            if (true === $connectedPage->fieldExtranetPage) {
-                $sIconHTML .= $this->getNodeIndicatorIcon('/images/tree/lock.png', 'iconRestricted');
-            }
-        }
-
-        if (count($aPages) > 0) {
-            if (array_key_exists('dataID', $this->data) && in_array($this->data['dataID'], $aPages)) {
-                $bCurrentPageIsConnectedToThisNode = true;
-            }
-            if (false !== $sPrimaryPageID) {
-                $sPageTag = ' espageid="'.TGlobal::OutHTML($sPrimaryPageID).'"';
-            }
-            if ($bCurrentPageIsConnectedToThisNode) {
-                $sSpanClass .= ' activeConnectedNode jstree-clicked';
-
-                // kill all current page ids from $aPages and check if we have other pages connected
-                $aKeys = array_keys($aPages, $this->data['dataID']);
-                foreach ($aKeys as $key) {
-                    unset($aPages[$key]);
-                }
-
-                if (count($aPages) > 0) {
-                    $sSpanClass .= ' otherConnectedNode jstree-clicked';
-                }
-            } else {
-                $sSpanClass .= ' otherConnectedNode jstree-clicked';
-            }
-        }
-
-        $lastStateOpen = false;
-        // check if last node state was "open"
-        if ($level <= 2 || in_array('node'.$iParentID, $this->aOpenTreeNodes)) {
-            $lastStateOpen = true;
-            $sListClasses .= ' jstree-open';
-        }
-
-        if (in_array($oParentTreeNode->id, $this->aRestrictedNodes)) {
-            $sSpanMenuClass = 'restrictedRightClickMenu';
-        }
-
-        ++$this->data['iTreeNodeCount']; // count the tree nodes
-        $this->data['sTreeHTML'] .= '<li class="'.$sListClasses.'" id="node'.$oParentTreeNode->sqlData['cmsident'].'" esrealid="'.$iParentID.'" '.$sPageTag.'>
-        <span class="'.$sSpanClass.' '.$sSpanMenuClass.'">'.TGlobal::OutHTML($sTreeNodeName).$sIsTranslatedIdent.'</span>'.$sIconHTML;
-
-        $databaseConnection = $this->getDatabaseConnection();
-        $quotedTreeTable = $databaseConnection->quoteIdentifier($this->treeTable);
-        $quotedParentId = $databaseConnection->quote($iParentID);
-        $quotedSortField = $databaseConnection->quoteIdentifier($this->GetSortFieldName($iParentID));
-        $sPortalCondition = $this->GetChildrenPortalCondition();
-
-        $query = "SELECT *
-                  FROM $quotedTreeTable
-                  WHERE `parent_id` = $quotedParentId
-                  {$sPortalCondition}
-                  ORDER BY $quotedSortField";
-
-        $oTreeNodes = TdbCmsTreeList::GetList($query, TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
-        ++$level;
-
-        if ($oTreeNodes->Length() > 0) {
-            $this->data['sTreeHTML'] .= "\n  <ul";
-
-            // change to ajax
-
-            if ($this->iPortalCount > 3) {
-                $iMaxLevel = 3;
-            } else {
-                $iMaxLevel = 3;
-            }
-
-            if ($level >= $iMaxLevel && $allowAjax && !$lastStateOpen) {
-                $this->data['sTreeHTML'] .= ' class="ajax">\n';
-
-                $ajaxURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'GetSubTree', 'tableid' => $this->data['treeTableID'], 'sOutputMode' => 'Plain', 'nodeID' => $iParentID));
-                if (isset($this->data['dataID'])) {
-                    $ajaxURL .= '&id='.$this->data['dataID'];
-                }
-
-                $this->data['sTreeHTML'] .= '<li>{url:'.$ajaxURL.'}';
-            } else {
-                $this->data['sTreeHTML'] .= ">\n";
-                // render next tree level
-                while ($oTreeNode = $oTreeNodes->Next()) {
-                    $this->RenderTree($oTreeNode->id, $oTreeNode, $level);
-                }
-            }
-        }
-
-        if ($oTreeNodes->Length() > 0) {
-            $this->data['sTreeHTML'] .= "  </ul>\n";
-        }
-        $this->data['sTreeHTML'] .= "</li>\n";
-    }
-
 
 
     /**
