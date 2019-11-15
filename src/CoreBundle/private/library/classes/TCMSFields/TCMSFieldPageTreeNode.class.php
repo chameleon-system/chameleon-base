@@ -268,6 +268,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
             'rootID' => TCMSTreeNode::TREE_ROOT_ID,
             'id' => $this->oTableRow->id,
             'isInIframe' => '1',
+            'primaryTreeNodeId' => $this->oTableRow->fieldPrimaryTreeIdHidden
         ]);
         $aIncludes[] = "<script type=\"text/javascript\">
         function loadTreeNodeSelection(fieldName,id) {

@@ -79,7 +79,8 @@
                     "data": function(node) {
                         return {
                             'id' : node.id,
-                            'pageId': '{{ pageId }}'
+                            'currentPageId': '{{ currentPageId }}',
+                            'primaryConnectedNodeIdOfCurrentPage': '{{ primaryConnectedNodeIdOfCurrentPage }}'
                         };
                     }
                 },
@@ -136,7 +137,8 @@
                     "data": function(node) {
                         return {
                             'id' : node.id,
-                            'pageId': '{{ pageId }}'
+                            'currentPageId': '{{ currentPageId }}',
+                            'primaryConnectedNodeIdOfCurrentPage': '{{ primaryConnectedNodeIdOfCurrentPage }}'
                         };
                     }
                 },
@@ -285,12 +287,7 @@
         currentNodeID = nodeID; // save node ID in global var
         var url = "{{ openPageConnectionListUrl | raw }}" + "&sRestriction=" + nodeID;
         CreateModalIFrameDialogCloseButton(url);
-
-        $('#modalDialog').on('hidden.bs.modal', function () {
-            if (currentNodeID == nodeID) {
-                $(".navigationTreeContainer.jstree").jstree(true).refresh_node(nodeID);
-            }
-        });
+        refreshNodeOnModalClose(nodeID);
     }
 
     /**
@@ -326,6 +323,7 @@
         currentNodeID = nodeID; // save node ID in global var
         var url = "{{ openTreeNodeEditorUrl | raw }}" + '&id=' + nodeID;
         CreateModalIFrameDialogCloseButton(url);
+        //refreshNode with callback function updateTreeNode
     }
 
     /**
@@ -337,6 +335,7 @@
         currentNodeID = nodeID; // save node ID in global var
         var url = "{{ openTreeNodeEditorAddNewNodeUrl | raw }}" + '&parent_id=' + nodeID;
         CreateModalIFrameDialogCloseButton(url);
+        //refreshNode with callback function updateTreeNode
     }
 
     /**
@@ -363,47 +362,29 @@
      */
     function deleteNodeSuccess(nodeID, responseMessage) {
         if ('success' === responseMessage && currentNodeID === nodeID) {
-            var parentNodeOfDeletedNode = $(".navigationTreeContainer.jstree #" + nodeID).parent().parent();
-            $(".navigationTreeContainer.jstree").jstree(true).refresh_node(parentNodeOfDeletedNode);
+            //set to parent of deleted node
+            currentNodeID = $(".navigationTreeContainer.jstree #" + nodeID).parent().parent().attr('id');
+            refreshNode(currentNodeID);
         }
         window.CHAMELEON.CORE.hideProcessingModal();
-    }
-
-    // updates the tree node HTML without page connection
-    function updateTreeNode(formObject, nodeID) {
-        var pageID = '';
-        updateTreeNodeWithPage(formObject, nodeID, pageID);
     }
 
     /**
      * update jstree node(s)
      */
-    function updateTreeNodeWithPage(formObject, cmsIdent, nodeID, pageID) {
-        if (formObject.id.value === currentNodeID) {
-            // makes a reload of current node via ajax
-            $('.navigationTreeContainer.jstree').jstree(true).refresh_node(formObject.id.value);
-        } else {
-            // a new node was created, currentNodeID is the parent of the new node => refresh tree from this parent via ajax
-            $('.navigationTreeContainer.jstree').jstree(true).refresh_node(currentNodeID);
-
-            // set currentNodeID to new created node
-            currentNodeID = formObject.id.value;
-        }
+    function updateTreeNode(formObject) {
+        // maybe a new node was created, currentNodeId is the node from which the call was made, so refresh from this node
+        refreshNode(currentNodeID);
+        currentNodeID = formObject.id.value;
     }
-
 
     function assignPage(node) {
         var nodeID = $(node).attr('id');
         currentNodeID = nodeID; // save node ID in global var
-        var assignedpageId = "{{ pageId }}";
+        var assignedpageId = "{{ currentPageId }}";
         var url = '{{ assignPageUrl | raw }}&sRestriction=' + nodeID + '&contid=' + assignedpageId + '&cms_tree_id=' + nodeID;
         CreateModalIFrameDialogCloseButton(url);
-
-        $('#modalDialog').on('hidden.bs.modal', function () {
-            if (currentNodeID == nodeID) {
-                $(".navigationTreeContainer.jstree").jstree(true).refresh_node(nodeID);
-            }
-        });
+        refreshNodeOnModalClose(nodeID);
     }
 
 
@@ -423,6 +404,23 @@
      */
     function moveNodeSuccess(nodeID, responseMessage) {
         window.CHAMELEON.CORE.hideProcessingModal();
+    }
+
+    function refreshNodeOnModalClose(nodeID) {
+        console.log('refreshNodeOnModalClose');
+        $('#modalDialog').on('hidden.bs.modal', function () {
+            refreshNode(nodeID);
+        });
+    }
+
+    function refreshNode(nodeID) {
+        if (currentNodeID == nodeID) {
+            // a new selection is set correct from jstree_refresh, but a deselection won't reset automatically
+            if (false === $(".navigationTreeContainer.jstree #"+nodeID+"_anchor").hasClass('activeConnetedNode')) {
+                $(".navigationTreeContainer.jstree").jstree(true).deselect_node(nodeID);
+            }
+            $(".navigationTreeContainer.jstree").jstree(true).refresh_node(nodeID);
+        }
     }
 
 

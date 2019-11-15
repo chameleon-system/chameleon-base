@@ -44,7 +44,7 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
         PostAjaxForm('cmseditform', function(data,statusText) {
           if(SaveViaAjaxCallback(data,statusText)) {
             var nodeID = '".$oGlobal->GetUserData('id')."';
-            parent.updateTreeNode(document.cmseditform,nodeID);
+            parent.updateTreeNode(document.cmseditform);
             parent.CloseModalIFrameDialog();
           }
         });

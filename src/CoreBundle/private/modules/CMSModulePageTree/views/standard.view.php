@@ -14,7 +14,8 @@
  * @var string $deleteNodeUrl
  * @var string $assignPageUrl
  * @var string $moveNodeUrl
- * @var object $dataID
+ * @var object $currentPageId
+ * @var object $primaryConnectedNodeIdOfCurrentPage
  */
 $viewRenderer = new ViewRenderer();
 $viewRenderer->AddSourceObject('isInIframe', $isInIframe);
@@ -28,7 +29,8 @@ $viewRenderer->AddSourceObject('openTreeNodeEditorAddNewNodeUrl', $openTreeNodeE
 $viewRenderer->AddSourceObject('deleteNodeUrl', $deleteNodeUrl);
 $viewRenderer->AddSourceObject('assignPageUrl', $assignPageUrl);
 $viewRenderer->AddSourceObject('moveNodeUrl', $moveNodeUrl);
-$viewRenderer->AddSourceObject('pageId', $dataID);
+$viewRenderer->AddSourceObject('currentPageId', $currentPageId);
+$viewRenderer->AddSourceObject('primaryConnectedNodeIdOfCurrentPage', $primaryConnectedNodeIdOfCurrentPage);
 
 echo $viewRenderer->Render('CMSModulePageTree/standard.html.twig');
 
