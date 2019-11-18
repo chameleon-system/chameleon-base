@@ -195,14 +195,13 @@
         })
         .on("move_node.jstree", function (e, data) {
             moveNode(data.node.id, data.parent, data.position);
+        })
+        .on("select_node.jstree", function (e, data) {
+            connectPageOnSelect(data.node.id);
+        })
+        .on("deselect_node.jstree", function (e, data) {
+            disconnectPageOnDeselect(data.node.id);
         });
-        // .on("check_node.jstree", function (e, data) {
-        //     console.log("checked:"+e+"*/*"+data);
-        //
-        // })
-        // .on("uncheck_node.jstree", function (e, data) {
-        //     console.log("unchecked:"+e+"*/*"+data);
-        // });
 
 
     function navigationRightClickMenu(node) {
@@ -388,6 +387,28 @@
     }
 
 
+    function connectPageOnSelect(nodeID) {
+        currentNodeID = nodeID; // save node ID in global var
+        var assignedpageId = "{{ currentPageId }}";
+        var url = '{{ connectPageOnSelectUrl | raw }}&sRestriction=' + nodeID + '&contid=' + assignedpageId + '&cms_tree_id=' + nodeID;
+        GetAjaxCallTransparent(url, connectPageSuccess);
+    }
+
+
+    function disconnectPageOnDeselect(nodeID) {
+        currentNodeID = nodeID; // save node ID in global var
+        var assignedpageId = "{{ currentPageId }}";
+        var url = '{{ disconnectPageOnDeselectUrl | raw }}&sRestriction=' + nodeID + '&contid=' + assignedpageId + '&cms_tree_id=' + nodeID;
+        GetAjaxCallTransparent(url, connectPageSuccess);
+    }
+
+    function connectPageSuccess(nodeID, responseMessage) {
+        if ('success' === responseMessage && currentNodeID === nodeID) {
+            refreshNode(nodeID);
+        }
+    }
+
+
     /**
      * moves node by drag&drop data
      */
@@ -407,7 +428,6 @@
     }
 
     function refreshNodeOnModalClose(nodeID) {
-        console.log('refreshNodeOnModalClose');
         $('#modalDialog').on('hidden.bs.modal', function () {
             refreshNode(nodeID);
         });
