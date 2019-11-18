@@ -89,22 +89,12 @@ class CMSModulePageTree extends TCMSModelBase
     /**
      * {@inheritdoc}
      */
-    public function Init()
-    {
-        parent::Init();
-        $this->data['sTreeHTML'] = '';
-        $this->data['iTreeNodeCount'] = 0;
-
-        $this->data['treeTableID'] = TTools::GetCMSTableId('cms_tree');
-        $this->data['treeNodeTableID'] = TTools::GetCMSTableId('cms_tree_node');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function &Execute()
     {
         parent::Execute();
+
+        $this->data['treeTableID'] = TTools::GetCMSTableId('cms_tree');
+        $this->data['treeNodeTableID'] = TTools::GetCMSTableId('cms_tree_node');
 
         $inputFilterUtil = $this->getInputFilterUtil();
         $this->data['isInIframe'] = false;

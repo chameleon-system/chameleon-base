@@ -1,0 +1,447 @@
+{# @var treeNodes \ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel #}
+
+
+{% if isInIframe == false %}
+
+<div class="card">
+    <div class="card-header">
+        <h3>Navigation</h3>
+    </div>
+    <div class="card-body simple-tree-card">
+{% endif %}
+        <div class="row">
+            <div class="col-12 col-md-6 col-xl-8">
+                <div id="navigationTreeContainer{% if showAssignDialog == true %}-checkboxes{% endif %}" class="navigationTreeContainer"></div>
+            </div>
+            <div class="col-12 col-md-6 col-xl-4 justify-content-end mt-4 mt-md-0">
+                <div class="treelegend">
+                    <h5>
+                        <span class="nodeIndicatorIcon"></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_header' | trans }}</span>
+                    </h5>
+
+                    {% if showAssignDialog %}
+                        <div class="activeConnectedNode primaryConnectedNode">
+                            <span class="nodeIndicatorIcon"></span>
+                            <span>aktiver Hauptnavigationspunkt dieser Seite </span>
+                        </div>
+
+
+                        <div class="activeConnectedNode">
+                            <span class="nodeIndicatorIcon"></span>
+                            <span>aktiver weiterer Navigationspunkt dieser Seite</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="text">
+                        <span class="nodeIndicatorIcon"></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_node_has_no_page' | trans }}</span>
+                    </div>
+
+                    <div class="otherConnectedNode">
+                        <span class="nodeIndicatorIcon"></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_has_connected_pages' | trans }}</span>
+                    </div>
+
+                    <div class="restrictedPage">
+                        <span class="nodeIndicatorIcon iconRestricted"><i class="fas fa-lock"></i></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page' | trans }}</span>
+                    </div>
+
+                    <div class="node-hidden">
+                        <span class="nodeIndicatorIcon iconHidden"><i class="far fa-eye-slash"></i></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_hidden' | trans }}</span>
+                    </div>
+
+                    <div class="legendLine">
+                        <span class="nodeIndicatorIcon iconExternalLink"><i class="fas fa-external-link-alt"></i></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_external_link' | trans }}</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+{% if isInIframe == false %}
+    </div>
+</div>
+{% endif %}
+
+<script>
+    var currentNodeID = null;
+
+    $("#navigationTreeContainer")
+        .jstree({
+            "core":{
+                "multiple": true,
+                "data": {
+                    "url": "{{ treeNodesAjaxUrl | raw }}",
+                    "data": function(node) {
+                        return {
+                            'id' : node.id,
+                            'currentPageId': '{{ currentPageId }}',
+                            'primaryConnectedNodeIdOfCurrentPage': '{{ primaryConnectedNodeIdOfCurrentPage }}'
+                        };
+                    }
+                },
+                "check_callback" : true
+            },
+            "types": {
+                "default": {
+                    "icon": "fas fa-folder-open"
+                },
+                "folder": {
+                    "icon": "fas fa-folder-open"
+                },
+                "folderRestrictedMenu": {
+                    "icon": "fas fa-folder-open"
+                },
+                "folderRootRestrictedMenu": {
+                    "icon": "fas fa-folder-open"
+                },
+                "folderWithPage": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
+                "page": {
+                    "icon": "far fa-file"
+                },
+                "locked": {
+                    "icon": "fas fa-lock"
+                },
+                "page-hidden": {
+                    "icon": "far fa-eye-slash"
+                },
+                "node-hidden": {
+                    "icon": "far fa-eye-slash"
+                },
+                "externalLink": {
+                    "icon": "fas fa-external-link-alt"
+                }
+            },
+            "plugins":[ "state", "types", "wholerow", "changed", "contextmenu", "dnd"],
+            "contextmenu": {
+                "items": navigationRightClickMenu
+            }
+        })
+        .on("move_node.jstree", function (e, data) {
+            moveNode(data.node.id, data.parent, data.position);
+        });
+
+    $("#navigationTreeContainer-checkboxes")
+        .jstree({
+            "core":{
+                "multiple": true,
+                "data": {
+                    "url": "{{ treeNodesAjaxUrl | raw }}",
+                    "data": function(node) {
+                        return {
+                            'id' : node.id,
+                            'currentPageId': '{{ currentPageId }}',
+                            'primaryConnectedNodeIdOfCurrentPage': '{{ primaryConnectedNodeIdOfCurrentPage }}'
+                        };
+                    }
+                },
+                "check_callback" : true
+            },
+            "types": {
+                "default": {
+                    "icon": "fas fa-folder-open"
+                },
+                "folder": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
+                "folderRestrictedMenu": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
+                "folderRootRestrictedMenu": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
+                "folderWithPage": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
+                "page": {
+                    "icon": "far fa-file"
+                },
+                "locked": {
+                    "icon": "fas fa-lock"
+                },
+                "page-hidden": {
+                    "icon": "far fa-eye-slash"
+                },
+                "node-hidden": {
+                    "icon": "far fa-eye-slash"
+                },
+                "externalLink": {
+                    "icon": "fas fa-external-link-alt"
+                }
+            },
+            "checkbox": {
+                "three_state": false,
+                "cascade": "none"
+            },
+            "plugins":[ "types", "wholerow", "changed", "checkbox", "contextmenu", "dnd"],
+            "contextmenu": {
+                "items": navigationRightClickMenuWithAssignDialog,
+                "select_node": false
+            },
+            "dnd": {
+                "drag_selection": false
+            }
+        })
+        .on("move_node.jstree", function (e, data) {
+            moveNode(data.node.id, data.parent, data.position);
+        })
+        .on("select_node.jstree", function (e, data) {
+            connectPageOnSelect(data.node.id);
+        })
+        .on("deselect_node.jstree", function (e, data) {
+            disconnectPageOnDeselect(data.node.id);
+        });
+
+
+    function navigationRightClickMenu(node) {
+        var items = {
+            "editpageconnections": {
+                "label": "{{ 'chameleon_system_core.cms_module_page_tree.connected_pages'|trans }}",
+                "icon": "fas fa-link",
+                // "_class": "foo-bar",
+                "action": function (obj) {
+                    this.openPageConnectionList(obj.reference);
+                }
+            },
+            "editpage": {
+                "label": "{{ 'chameleon_system_core.cms_module_page_tree.action_edit_page'|trans }}",
+                "icon": "far fa-edit",
+                "action": function (obj) {
+                    this.openPageEditor(obj.reference);
+                }
+            },
+            "editpageconfig": {
+                "label": "{{ 'chameleon_system_core.list.page_settings'|trans }}",
+                "icon": "fas fa-cog",
+                "action": function (obj) {
+                    this.openPageConfigEditor(obj.reference);
+                }
+            },
+            "editnode": {
+                "label": "{{ 'chameleon_system_core.cms_module_page_tree.action_edit_node'|trans }}",
+                "icon": "fas fa-sitemap",
+                "action": function (obj) {
+                    this.openTreeNodeEditor(obj.reference);
+                }
+            },
+            "newnode": {
+                "label": "{{ 'chameleon_system_core.action.new'|trans }}",
+                "icon": "fas fa-plus",
+                "action": function (obj) {
+                    this.openTreeNodeEditorAddNewNode(obj.reference);
+                }
+            },
+            "deletenode": {
+                "label": "{{ 'chameleon_system_core.action.delete'|trans }}",
+                "icon": "far fa-trash-alt",
+                "action": function (obj) {
+                    this.deleteNode(obj.reference);
+                }
+            }
+        };
+
+        if (node.type === "folderRestrictedMenu" || node.type === "folderRootRestrictedMenu")  {
+            delete items.editpageconnections;
+            delete items.editpage;
+            delete items.editpageconfig;
+            delete items.deletenode;
+        }
+
+        if (node.type === "folderRootRestrictedMenu") {
+            delete items.editnode;
+        }
+
+        return items;
+    }
+
+    function navigationRightClickMenuWithAssignDialog(node) {
+        var assignPage = {
+            "assignPage": {
+                "label": "{{ 'chameleon_system_core.cms_module_page_tree.action_connect_page'|trans }}",
+                "icon": "fas fa-link",
+                "separator_after": true,
+                "action": function (obj) {
+                    this.assignPage(obj.reference);
+                }
+            }
+        };
+
+        return Object.assign(assignPage, navigationRightClickMenu(node));
+    }
+
+
+    function openPageConnectionList(node) {
+        var nodeID = $(node).parent().attr('id');
+        currentNodeID = nodeID; // save node ID in global var
+        var url = "{{ openPageConnectionListUrl | raw }}" + "&sRestriction=" + nodeID;
+        CreateModalIFrameDialogCloseButton(url);
+        refreshNodeOnModalClose(nodeID);
+    }
+
+    /**
+     * opens the page in edit mode
+     */
+    function openPageEditor(node) {
+        var pageID = $(node).parent().attr('ispageid');
+
+        if (pageID !== false && typeof(pageID) !== "undefined") {
+            parent.document.location.href = "{{ openPageEditorUrl | raw }}" + '&id=' + pageID;
+        } else {
+            alert("{{ 'chameleon_system_core.cms_module_page_tree.node_has_no_page'|trans }}");
+        }
+    }
+
+    /**
+     * opens the page in config edit mode
+     */
+    function openPageConfigEditor(node) {
+        var pageID = $(node).parent().attr('ispageid');
+        if (pageID !== false && typeof(pageID) !== "undefined") {
+            parent.document.location.href = "{{ openPageConfigEditorUrl | raw }}" + '&id=' + pageID;
+        } else {
+            alert("{{ 'chameleon_system_core.cms_module_page_tree.node_has_no_page'|trans }}");
+        }
+    }
+
+    /**
+     * opens the tree node editor
+     */
+    function openTreeNodeEditor(node) {
+        var nodeID = $(node).parent().attr('id');
+        currentNodeID = nodeID; // save node ID in global var
+        var url = "{{ openTreeNodeEditorUrl | raw }}" + '&id=' + nodeID;
+        CreateModalIFrameDialogCloseButton(url);
+        //refreshNode with callback function updateTreeNode
+    }
+
+    /**
+     * opens the tree node editor and adds a new node
+     *
+     */
+    function openTreeNodeEditorAddNewNode(node) {
+        var nodeID = $(node).parent().attr('id');
+        currentNodeID = nodeID; // save node ID in global var
+        var url = "{{ openTreeNodeEditorAddNewNodeUrl | raw }}" + '&parent_id=' + nodeID;
+        CreateModalIFrameDialogCloseButton(url);
+        //refreshNode with callback function updateTreeNode
+    }
+
+    /**
+     * deletes a node and kills the page connections
+     */
+    function deleteNode(node) {
+        var confirmMessage = "{{ 'chameleon_system_core.cms_module_page_tree.confirm_delete'|trans }}";
+        confirmMessage = confirmMessage.replace(/&quot;/g, '\"');
+
+        var nodeTitle = $(node).text();
+        confirmMessage = confirmMessage.replace('%nodeName%', nodeTitle);
+
+        if(confirm(confirmMessage)){
+            var nodeID = $(node).parent().attr('id');
+            currentNodeID = nodeID; // save node ID in global var
+            var url = "{{ deleteNodeUrl | raw }}" + '&nodeID=' + nodeID;
+            CHAMELEON.CORE.showProcessingModal();
+            GetAjaxCallTransparent(url, deleteNodeSuccess);
+        }
+    }
+
+    /**
+     * final remove of the node from DOM tree
+     */
+    function deleteNodeSuccess(nodeID, responseMessage) {
+        if ('success' === responseMessage && currentNodeID === nodeID) {
+            //set to parent of deleted node
+            currentNodeID = $(".navigationTreeContainer.jstree #" + nodeID).parent().parent().attr('id');
+            refreshNode(currentNodeID);
+        }
+        window.CHAMELEON.CORE.hideProcessingModal();
+    }
+
+    /**
+     * update jstree node(s)
+     */
+    function updateTreeNode(formObject) {
+        // maybe a new node was created, currentNodeId is the node from which the call was made, so refresh from this node
+        refreshNode(currentNodeID);
+        currentNodeID = formObject.id.value;
+    }
+
+    function assignPage(node) {
+        var nodeID = $(node).attr('id');
+        currentNodeID = nodeID; // save node ID in global var
+        var assignedpageId = "{{ currentPageId }}";
+        var url = '{{ assignPageUrl | raw }}&sRestriction=' + nodeID + '&contid=' + assignedpageId + '&cms_tree_id=' + nodeID;
+        CreateModalIFrameDialogCloseButton(url);
+        refreshNodeOnModalClose(nodeID);
+    }
+
+
+    function connectPageOnSelect(nodeID) {
+        currentNodeID = nodeID; // save node ID in global var
+        var assignedpageId = "{{ currentPageId }}";
+        var url = '{{ connectPageOnSelectUrl | raw }}&sRestriction=' + nodeID + '&contid=' + assignedpageId + '&cms_tree_id=' + nodeID;
+        GetAjaxCallTransparent(url, connectPageSuccess);
+    }
+
+
+    function disconnectPageOnDeselect(nodeID) {
+        currentNodeID = nodeID; // save node ID in global var
+        var assignedpageId = "{{ currentPageId }}";
+        var url = '{{ disconnectPageOnDeselectUrl | raw }}&sRestriction=' + nodeID + '&contid=' + assignedpageId + '&cms_tree_id=' + nodeID;
+        GetAjaxCallTransparent(url, connectPageSuccess);
+    }
+
+    function connectPageSuccess(nodeID, responseMessage) {
+        if ('success' === responseMessage && currentNodeID === nodeID) {
+            refreshNode(nodeID);
+        }
+    }
+
+
+    /**
+     * moves node by drag&drop data
+     */
+    function moveNode(nodeID, parentNodeID, position) {
+        if (typeof parentNodeID != 'undefined' && typeof nodeID != 'undefined') {
+            CHAMELEON.CORE.showProcessingModal();
+            var url = '{{ moveNodeUrl | raw }}&nodeID=' + nodeID + '&parentNodeID=' + parentNodeID + '&position=' + position;
+            GetAjaxCallTransparent(url, moveNodeSuccess);
+        }
+    }
+
+    /**
+     * unblocks the UI
+     */
+    function moveNodeSuccess(nodeID, responseMessage) {
+        window.CHAMELEON.CORE.hideProcessingModal();
+    }
+
+    function refreshNodeOnModalClose(nodeID) {
+        $('#modalDialog').on('hidden.bs.modal', function () {
+            refreshNode(nodeID);
+        });
+    }
+
+    function refreshNode(nodeID) {
+        if (currentNodeID == nodeID) {
+            // a new selection is set correct from jstree_refresh, but a deselection won't reset automatically
+            if (false === $(".navigationTreeContainer.jstree #"+nodeID+"_anchor").hasClass('activeConnetedNode')) {
+                $(".navigationTreeContainer.jstree").jstree(true).deselect_node(nodeID);
+            }
+            $(".navigationTreeContainer.jstree").jstree(true).refresh_node(nodeID);
+        }
+    }
+
+
+</script>
