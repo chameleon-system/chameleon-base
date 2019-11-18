@@ -97,7 +97,6 @@ class CMSModulePageTree extends TCMSModelBase
 
         $this->data['treeTableID'] = TTools::GetCMSTableId('cms_tree');
         $this->data['treeNodeTableID'] = TTools::GetCMSTableId('cms_tree_node');
-
     }
 
     /**
@@ -164,8 +163,8 @@ class CMSModulePageTree extends TCMSModelBase
         $this->data['assignPageUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['treeNodeTableID'], 'pagedef' => 'tableeditorPopup', 'sRestrictionField' => 'cms_tree_id', 'module_fnc' => array('contentmodule' => 'Insert'), 'active' => '1', 'preventTemplateEngineRedirect' => '1'), PATH_CMS_CONTROLLER . '?', '&');
         $this->data['moveNodeUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'MoveNode', 'tableid' => $this->data['treeTableID']), PATH_CMS_CONTROLLER . '?', '&');
 
-        $this->data['connectPageOnSelectUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'ConnectPageToNode', 'tableid' => $this->data['treeNodeTableID']), PATH_CMS_CONTROLLER . '?', '&');
-        $this->data['disconnectPageOnDeselectUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'DisconnectPageFromNode', 'tableid' => $this->data['treeNodeTableID']), PATH_CMS_CONTROLLER . '?', '&');
+        $this->data['connectPageOnSelectUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'connectPageToNode', 'tableid' => $this->data['treeNodeTableID']), PATH_CMS_CONTROLLER . '?', '&');
+        $this->data['disconnectPageOnDeselectUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'disconnectPageFromNode', 'tableid' => $this->data['treeNodeTableID']), PATH_CMS_CONTROLLER . '?', '&');
 
         return $this->data;
     }
@@ -173,7 +172,7 @@ class CMSModulePageTree extends TCMSModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('SetConnection', 'MoveNode', 'DeleteNode', 'ConnectPageToNode', 'DisconnectPageFromNode', 'getTreeNodesJson', 'GetTransactionDetails');
+        $externalFunctions = array('SetConnection', 'MoveNode', 'DeleteNode', 'connectPageToNode', 'disconnectPageFromNode', 'getTreeNodesJson', 'GetTransactionDetails');
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -201,7 +200,6 @@ class CMSModulePageTree extends TCMSModelBase
             $this->aOpenTreeNodes = explode(',', $_COOKIE['chameleonTreeState']);
         }
     }
-
 
     /**
      * renders all children of a node
@@ -242,15 +240,6 @@ class CMSModulePageTree extends TCMSModelBase
         $this->GetRootNodeName($rootNodeID);
         $this->LoadTreeState();
         $this->aRestrictedNodes = $this->GetPortalNavigationStartNodes();
-
-        // load all:
-//        $treeNode = new TdbCmsTree();
-//        $treeNode->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
-//        $treeNode->Load($rootNodeID);
-//        $treeData = $this->createTreeDataModel($treeNode);
-//        return $treeData;
-        //----------------------------------------------
-
 
         $portalDomainService = $this->getPortalDomainService();
         $defaultPortal = $portalDomainService->getDefaultPortal();
@@ -301,21 +290,34 @@ class CMSModulePageTree extends TCMSModelBase
         return $rootTreeNodeDataModel;
     }
 
-
     protected function createTreeDataModel(TdbCmsTree $node, $level = 0)
     {
         $treeNodeFactory = $this->getBackendTreeNodeFactory();
         $treeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($node);
-
 
         $liAttr = $treeNodeDataModel->getLiAttr();
         $aAttr = [];
         $liClass = "";
         $aClass = "";
 
+        $translator = $this->getTranslator();
+
         if ('' === $treeNodeDataModel->GetName()) {
-            $translator = ServiceLocator::get('translator');
-            $treeNodeDataModel->setName(TGlobal::OutHTML($translator->trans('chameleon_system_core.text.unnamed_record')));
+            $unnamedRecordTitle = TGlobal::OutHTML($translator->trans('chameleon_system_core.text.unnamed_record'));
+            $treeNodeDataModel->setName($unnamedRecordTitle);
+        }
+
+        $oCmsUser = TCMSUser::GetActiveUser();
+        $oEditLanguage = $oCmsUser->GetCurrentEditLanguageObject();
+
+        if (true === CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE) {
+            $cmsConfig = TCMSConfig::GetInstance();
+            $defaultLanguage = $cmsConfig->GetFieldTranslationBaseLanguage();
+            if (null !== $defaultLanguage && $defaultLanguage->id !== $oEditLanguage->id) {
+                if ('' === $node->sqlData['name__' . $oEditLanguage->fieldIso6391]) {
+                    $treeNodeDataModel->setName($treeNodeDataModel->getName().' <span class="bg-danger px-1"><i class="fas fa-language" title="'.$translator->trans('chameleon_system_core.cms_module_table_editor.not_translated').'"></i></span>');
+                }
+            }
         }
 
         $children = $node->GetChildren(true);
@@ -333,8 +335,6 @@ class CMSModulePageTree extends TCMSModelBase
             $treeNodeDataModel->setType($typeRestricted);
         }
 
-        $oCmsUser = TCMSUser::GetActiveUser();
-        $oEditLanguage = $oCmsUser->GetCurrentEditLanguageObject();
         $nodeHidden = false;
 
         $node->SetLanguage($oEditLanguage->id);
@@ -343,18 +343,6 @@ class CMSModulePageTree extends TCMSModelBase
             $aClass .= " node-hidden";
             $treeNodeDataModel->setType('node-hidden');
         }
-
-//        $sIsTranslatedIdent = '';
-//        if (CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE) {
-//            $oCmsConfig = TCMSConfig::GetInstance();
-//            $oDefaultLang = $oCmsConfig->GetFieldTranslationBaseLanguage();
-//            if ($oDefaultLang && $oDefaultLang->id != $oEditLanguage->id) {
-//                if (empty($node->sqlData['name__'.$oEditLanguage->fieldIso6391])) {
-//                    $sIsTranslatedIdent = '<img src="'.TGlobal::GetStaticURL('chameleon/blackbox/images/tree/folder_edit.png').'" width="12" align="absmiddle" border="0" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_page_tree.not_translated')).'" />';
-//                }
-//            }
-//        }
-
 
         $aPages = [];
 
@@ -413,7 +401,6 @@ class CMSModulePageTree extends TCMSModelBase
         $aAttr = array_merge($aAttr, ["class" => $aClass]);
         $treeNodeDataModel->setAAttr($aAttr);
 
-
         ++$level;
         while ($child = $children->Next()) {
             $childTreeNodeObj = $this->createTreeDataModel($child, $level);
@@ -425,30 +412,6 @@ class CMSModulePageTree extends TCMSModelBase
 
         return $treeNodeDataModel;
     }
-
-    /**
-     * forms an indicator icon with an optional link.
-     *
-     * @param string      $iconUrl
-     * @param string      $iconIdentifier
-     * @param string|null $linkUrl
-     *
-     * @return string
-     */
-    private function getNodeIndicatorIcon($iconUrl, $iconIdentifier, $linkUrl = null)
-    {
-        $staticIconUrl = TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib($iconUrl));
-        $styleSnippet = sprintf('style="background-image: url(\'%s\')" class="nodeIndicatorIcon %s"', $staticIconUrl, $iconIdentifier);
-        $spanSnippet = sprintf('<span %s></span>', $styleSnippet);
-        $anchorSnippet = sprintf('<a %s href="%s" target="_blank"></a>', $styleSnippet, $linkUrl);
-        // Return only span without link if no link url was supplied.
-        if (null === $linkUrl) {
-            return $spanSnippet;
-        }
-        // Return span wrapped in link from supplied url.
-        return $anchorSnippet;
-    }
-
 
     /**
      * Fetches a list of all restricted nodes (of all portals)
@@ -630,13 +593,7 @@ class CMSModulePageTree extends TCMSModelBase
         return $returnVal;
     }
 
-
-    /**
-     * deletes a node and all subnodes.
-     *
-     * @return mixed - returns false or id of the node that needs to be removed from the html tree
-     */
-    public function ConnectPageToNode()
+    public function connectPageToNode(): string
     {
         if ($this->global->UserDataExists('tableid') && $this->global->UserDataExists('cms_tree_id')) {
             $tableID = $this->global->GetUserData('tableid');
@@ -659,20 +616,14 @@ class CMSModulePageTree extends TCMSModelBase
             return $nodeID;
         }
 
-        return false;
+        return '';
     }
 
 
-    /**
-     * deletes a node and all subnodes.
-     *
-     * @return mixed - returns false or id of the node that needs to be removed from the html tree
-     */
-    public function DisconnectPageFromNode()
+    public function disconnectPageFromNode(): string
     {
-        $dbConnetion = $this->getDatabaseConnection();
+        $dbConnection = $this->getDatabaseConnection();
 
-        $returnVal = false;
         if ($this->global->UserDataExists('tableid') && $this->global->UserDataExists('contid')) {
             $iTableID = $this->global->GetUserData('tableid');
             $nodeID = $this->global->GetUserData('cms_tree_id');
@@ -680,8 +631,8 @@ class CMSModulePageTree extends TCMSModelBase
 
             $query = "SELECT * 
                         FROM `cms_tree_node` 
-                       WHERE `cms_tree_node`.`contid` = ".$dbConnetion->quote($contId)."
-                         AND `cms_tree_node`.`cms_tree_id` = ".$dbConnetion->quote($nodeID)."
+                       WHERE `cms_tree_node`.`contid` = ".$dbConnection->quote($contId)."
+                         AND `cms_tree_node`.`cms_tree_id` = ".$dbConnection->quote($nodeID)."
                          AND `cms_tree_node`.`tbl` = 'cms_tpl_page'
                        ";
             $nodePageConnectionList = TdbCmsTreeNodeList::GetList($query);
@@ -694,8 +645,6 @@ class CMSModulePageTree extends TCMSModelBase
 
         return $nodeID;
     }
-
-
 
     /**
      * update the cache of the tree path to each node of the given subtree.
