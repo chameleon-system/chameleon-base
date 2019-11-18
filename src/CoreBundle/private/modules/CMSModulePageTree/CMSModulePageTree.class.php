@@ -154,7 +154,7 @@ class CMSModulePageTree extends TCMSModelBase
         }
 
         $urlUtil = $this->getUrlUtil();
-        $this->data['treeNodesAjaxUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'getTreeNodesJson',), PATH_CMS_CONTROLLER . '?', '&');
+        $this->data['treeNodesAjaxUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'getTreeNodesJson',), PATH_CMS_CONTROLLER . '?', '&');
         $this->data['openPageConnectionListUrl'] = $urlUtil->getArrayAsUrl(array('id' => $this->data['treeNodeTableID'], 'pagedef' => 'tablemanagerframe', 'sRestrictionField' => 'cms_tree_id',), PATH_CMS_CONTROLLER . '?', '&');
         $this->data['openPageEditorUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['tplPageTableID'], 'pagedef' => 'templateengine'), PATH_CMS_CONTROLLER . '?', '&');
         $this->data['openPageConfigEditorUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['tplPageTableID'], 'pagedef' => 'tableeditor'), PATH_CMS_CONTROLLER . '?', '&');
@@ -164,14 +164,16 @@ class CMSModulePageTree extends TCMSModelBase
         $this->data['assignPageUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['treeNodeTableID'], 'pagedef' => 'tableeditorPopup', 'sRestrictionField' => 'cms_tree_id', 'module_fnc' => array('contentmodule' => 'Insert'), 'active' => '1', 'preventTemplateEngineRedirect' => '1'), PATH_CMS_CONTROLLER . '?', '&');
         $this->data['moveNodeUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'MoveNode', 'tableid' => $this->data['treeTableID']), PATH_CMS_CONTROLLER . '?', '&');
 
+        $this->data['connectPageOnSelectUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'ConnectPageToNode', 'tableid' => $this->data['treeNodeTableID']), PATH_CMS_CONTROLLER . '?', '&');
+        $this->data['disconnectPageOnDeselectUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'DisconnectPageFromNode', 'tableid' => $this->data['treeNodeTableID']), PATH_CMS_CONTROLLER . '?', '&');
+
         return $this->data;
     }
 
     protected function DefineInterface()
     {
         parent::DefineInterface();
-//        $externalFunctions = array('SetConnection', 'MoveNode', 'DeleteNode', 'GetSubTree', 'getTreeNodesJson', 'GetTransactionDetails');
-        $externalFunctions = array('SetConnection', 'MoveNode', 'DeleteNode', 'getTreeNodesJson', 'GetTransactionDetails');
+        $externalFunctions = array('SetConnection', 'MoveNode', 'DeleteNode', 'ConnectPageToNode', 'DisconnectPageFromNode', 'getTreeNodesJson', 'GetTransactionDetails');
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -227,7 +229,7 @@ class CMSModulePageTree extends TCMSModelBase
             $treeData = $this->createTreeDataModel($treeNode);
         }
 
-        $this->outputForAjaxAndExit(json_encode($treeData), 'application/json');
+        return $treeData;
     }
 
     protected function createRootTreeWithDefaultPortalItems ()
@@ -422,24 +424,6 @@ class CMSModulePageTree extends TCMSModelBase
         }
 
         return $treeNodeDataModel;
-    }
-
-
-//    ToDo: Das ist nur ein Hotfix!!!!!
-
-    private function outputForAjaxAndExit($content, string $contentType): void
-    {
-        // now clear the output. notice that we need the @ since the function throws a notice once the buffer is cleared
-        $this->SetHTMLDivWrappingStatus(false);
-        while (@ob_end_clean()) {
-        }
-        header(sprintf('Content-Type: %s', $contentType));
-        //never index ajax responses
-        header('X-Robots-Tag: noindex, nofollow', true);
-
-        echo $content;
-
-        exit;
     }
 
     /**
@@ -646,6 +630,73 @@ class CMSModulePageTree extends TCMSModelBase
         return $returnVal;
     }
 
+
+    /**
+     * deletes a node and all subnodes.
+     *
+     * @return mixed - returns false or id of the node that needs to be removed from the html tree
+     */
+    public function ConnectPageToNode()
+    {
+        if ($this->global->UserDataExists('tableid') && $this->global->UserDataExists('cms_tree_id')) {
+            $tableID = $this->global->GetUserData('tableid');
+            $nodeID = $this->global->GetUserData('cms_tree_id');
+            $connectedPageId = $this->global->GetUserData('contid');
+            $oTableEditor = new TCMSTableEditorManager();
+            $oTableEditor->Init($tableID);
+            $insertSuccessData = $oTableEditor->Insert();
+            $recordId = $insertSuccessData->id;
+
+            $postData = [];
+            $postData['id'] = $recordId;
+            $postData['active'] = '1';
+            $postData['cms_tree_id'] = $nodeID;
+            $postData['contid'] = $connectedPageId;
+            $postData['tbl'] = 'cms_tpl_page';
+
+            $oTableEditor->Save($postData);
+
+            return $nodeID;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * deletes a node and all subnodes.
+     *
+     * @return mixed - returns false or id of the node that needs to be removed from the html tree
+     */
+    public function DisconnectPageFromNode()
+    {
+        $dbConnetion = $this->getDatabaseConnection();
+
+        $returnVal = false;
+        if ($this->global->UserDataExists('tableid') && $this->global->UserDataExists('contid')) {
+            $iTableID = $this->global->GetUserData('tableid');
+            $nodeID = $this->global->GetUserData('cms_tree_id');
+            $contId = $this->global->GetUserData('contid');
+
+            $query = "SELECT * 
+                        FROM `cms_tree_node` 
+                       WHERE `cms_tree_node`.`contid` = ".$dbConnetion->quote($contId)."
+                         AND `cms_tree_node`.`cms_tree_id` = ".$dbConnetion->quote($nodeID)."
+                         AND `cms_tree_node`.`tbl` = 'cms_tpl_page'
+                       ";
+            $nodePageConnectionList = TdbCmsTreeNodeList::GetList($query);
+            while ($nodePageConnection = $nodePageConnectionList->Next()) {
+                $oTableEditor = new TCMSTableEditorManager();
+                $oTableEditor->Init($iTableID, $nodePageConnection->id);
+                $oTableEditor->Delete($nodePageConnection->id);
+            }
+        }
+
+        return $nodeID;
+    }
+
+
+
     /**
      * update the cache of the tree path to each node of the given subtree.
      *
@@ -678,17 +729,9 @@ class CMSModulePageTree extends TCMSModelBase
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
-//        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/simpleTree/jquery.simple.tree.js').'" type="text/javascript"></script>';
-//        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/tree/jqueryTree.js').'" type="text/javascript"></script>';
-
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jsTree/3.3.8/jstree.js').'"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/navigationTree.js').'"></script>';
-
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
-
-//        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/simpleTree.css" media="screen" rel="stylesheet" type="text/css" />';
-//        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/contextmenu/contextmenu.js').'" type="text/javascript"></script>';
-//        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contextmenu.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURLToWebLib('/javascript/jsTree/3.3.8/themes/default/style.css'));
         $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURLToWebLib('/javascript/jsTree/customStyles/style.css'));
 

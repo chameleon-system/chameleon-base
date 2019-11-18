@@ -14,6 +14,8 @@
  * @var string $deleteNodeUrl
  * @var string $assignPageUrl
  * @var string $moveNodeUrl
+ * @var string $connectPageOnSelectUrl
+ * @var string $disconnectPageOnDeselectUrl
  * @var object $currentPageId
  * @var object $primaryConnectedNodeIdOfCurrentPage
  */
@@ -29,6 +31,8 @@ $viewRenderer->AddSourceObject('openTreeNodeEditorAddNewNodeUrl', $openTreeNodeE
 $viewRenderer->AddSourceObject('deleteNodeUrl', $deleteNodeUrl);
 $viewRenderer->AddSourceObject('assignPageUrl', $assignPageUrl);
 $viewRenderer->AddSourceObject('moveNodeUrl', $moveNodeUrl);
+$viewRenderer->AddSourceObject('connectPageOnSelectUrl', $connectPageOnSelectUrl);
+$viewRenderer->AddSourceObject('disconnectPageOnDeselectUrl', $disconnectPageOnDeselectUrl);
 $viewRenderer->AddSourceObject('currentPageId', $currentPageId);
 $viewRenderer->AddSourceObject('primaryConnectedNodeIdOfCurrentPage', $primaryConnectedNodeIdOfCurrentPage);
 
