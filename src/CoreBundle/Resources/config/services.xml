@@ -911,5 +911,18 @@
 
             <argument type="service" id="chameleon_system_core.service.backend_breadcrumb"/>
         </service>
+
+        <service id="chameleon_system_core.module.navigation_tree" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTree\NavigationTree" shared="false">
+            <argument id="database_connection" type="service"/>
+            <argument id="event_dispatcher" type="service"/>
+            <argument id="chameleon_system_core.util.input_filter" type="service"/>
+            <argument id="chameleon_system_core.factory.backend_tree_node" type="service"/>
+            <argument id="chameleon_system_core.portal_domain_service" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_core.util.url" type="service"/>
+            <argument id="chameleon_system_core.table_editor_nested_set_helper_factory" type="service" />
+            <tag name="chameleon_system.module"/>
+        </service>
+
     </services>
 </container>
