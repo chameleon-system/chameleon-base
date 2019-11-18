@@ -252,14 +252,6 @@ class TFullGroupTable extends TGroupTable
      */
     protected $tableCSS = 'table table-sm table-striped table-hover TCMSListManagerFullGroupTable';
 
-    /**
-     * Enables a rich select component with autocomplete.
-     * This is only available if record edit is possible.
-     *
-     * @var bool
-     */
-    private $isAutoCompleteEnabled = false;
-
     public function TFullGroupTable($postData = array())
     {
         parent::TGroupTable();
@@ -278,9 +270,14 @@ class TFullGroupTable extends TGroupTable
         $this->_postData = $postData;
     }
 
+
+    /**
+     * @param bool $state
+     *
+     * @deprecated since 6.3.6 - not necessary anymore
+     */
     public function setAutoCompleteState(bool $state)
     {
-        $this->isAutoCompleteEnabled = $state;
     }
 
     /**
@@ -887,22 +884,16 @@ class TFullGroupTable extends TGroupTable
         if ($this->showSearchBox) {
             $this->somethingToShow = true;
 
-            $filterContent .= '<div class="form-group mr-2">';
+            $filterContent .= '<div class="form-group mr-2 typeahead-relative">';
 
-            if (true === $this->isAutoCompleteEnabled) {
-                $formatString = '<select id="searchLookup" name="_search_word" data-listname="%s" class="form-control form-control-sm" data-select2-placeholder="%s" data-select2-ajax="%s" data-record-url="%s">';
-                $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->listName), TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->getRecordAutocompleteUrl()), TGlobal::OutHTML($this->getRecordUrl()));
-
-                if ('' !== $this->_postData['_search_word']) {
-                    $formatString = '<option value="%1$s">%1$s</option>';
-                    $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->_postData['_search_word']));
-                }
-
-                $filterContent .= '</select>';
-            } else {
-                $formatString = '<input id="searchLookup" name="_search_word" class="form-control form-control-sm" placeholder="%s" value="%s">';
-                $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchFieldText), TGlobal::OutHTML($this->_postData['_search_word']));
-            }
+            $formatString = '<input id="searchLookup" name="_search_word" class="form-control form-control-sm" placeholder="%s" value="%s" autocomplete="off" data-source-url="%s" data-record-url="%s">';
+            $filterContent .= sprintf(
+                $formatString,
+                TGlobal::OutHTML($this->searchFieldText),
+                TGlobal::OutHTML($this->_postData['_search_word']),
+                TGlobal::OutHTML($this->getRecordAutocompleteUrl()),
+                TGlobal::OutHTML($this->getRecordUrl())
+            );
 
             $filterContent .= '</div>
                                 <div class="form-group">';
@@ -947,7 +938,7 @@ class TFullGroupTable extends TGroupTable
             '_rmhist' => 'false',
             'sOutputMode' => 'Ajax',
             'module_fnc[contentmodule]' => 'ExecuteAjaxCall',
-            '_fnc' => 'getAutocompleteRecordList',
+            '_fnc' => 'getAutocompleteRecords',
             'sRestrictionField' => $restrictionField,
             'sRestriction' => $restriction,
             'recordID' => '',

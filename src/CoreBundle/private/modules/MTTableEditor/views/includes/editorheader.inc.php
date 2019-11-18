@@ -2,22 +2,6 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
-if ($data['aPermission']['showlist'] && '1' != $data['only_one_record_tbl']) {
-    ?>
-    <script type="text/javascript">
-        function switchRecord(id) {
-            if (id != '') {
-                url = '<?=PATH_CMS_CONTROLLER; ?>?pagedef=tableeditor&id=' + id + '&tableid=<?=urlencode($data['tableid']); ?>&sRestriction=<?php if (!empty($data['sRestriction'])) {
-        echo urlencode($data['sRestriction']);
-    } ?>&sRestrictionField=<?php if (!empty($data['sRestrictionField'])) {
-        echo urlencode($data['sRestrictionField']);
-    } ?>&popLastURL=1';
-                document.location.href = url;
-            }
-        }
-    </script>
-    <?php
-}
 $oController = TGlobal::GetController();
 ?>
 <nav class="navbar navbar-light bg-light pl-2 pr-2 pt-0">
@@ -35,7 +19,6 @@ $oController = TGlobal::GetController();
             }
         }
         echo $sRecordName; ?></span>
-    <form class="form-inline">
         <?php
         $idsPopoverText = '<div class="callout callout-info mt-0 mb-1"><strong class="text-muted">Auto-Increment ID:</strong><br><strong class="h6">'.$data['cmsident'].'</strong></div>
         <div class="callout callout-info mt-0 mb-1"><strong class="text-muted">ID:</strong><br><strong class="h6">'.$data['id'].'</strong></div>';
@@ -100,18 +83,32 @@ $oController = TGlobal::GetController();
                 '_rmhist' => 'false',
                 'sOutputMode' => 'Ajax',
                 'module_fnc[contentmodule]' => 'ExecuteAjaxCall',
-                '_fnc' => 'getAutocompleteRecordList',
+                '_fnc' => 'getAutocompleteRecords',
                 'sRestrictionField' => $sRestrictionField,
                 'sRestriction' => $sRestriction,
                 'recordID' => $data['id'],
-            ], PATH_CMS_CONTROLLER.'?', '&'); ?>
+            ], PATH_CMS_CONTROLLER.'?', '&');
 
-            <div class="mt-2">
-                <select id="quicklookuplist" class="form-control" data-select2-placeholder='<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.search_term')); ?>' data-select2-ajax='<?= $sAjaxURL; ?>'></select>
+            $recordUrl = $urlUtil->getArrayAsUrl([
+                'pagedef' => 'tableeditor',
+                'tableid' => $data['tableid'],
+                'sRestrictionField' => $sRestrictionField,
+                'sRestriction' => $sRestriction,
+                'popLastURL' => '1',
+            ], PATH_CMS_CONTROLLER.'?', '&');
+            ?>
+
+            <div class="mt-2 typeahead-relative">
+                <input id="quicklookuplist"
+                       class="form-control"
+                       placeholder="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.other_entries')); ?>"
+                       autocomplete="off"
+                       data-source-url="<?= $sAjaxURL; ?>"
+                       data-record-url="<?= $recordUrl ?>"
+                >
             </div>
 
         <?php
         }
         ?>
-    </form>
 </nav>

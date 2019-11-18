@@ -38,7 +38,7 @@ class ResponseVariableReplacerTest extends TestCase
      */
     private $actualResult;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->authenticityTokenManagerMock = null;
@@ -86,6 +86,11 @@ class ResponseVariableReplacerTest extends TestCase
                 [],
                 'This is my string and I am proud of it.',
             ],
+            'basic-variable-types' => [
+                [ true, 1 ],
+                [],
+                [ true, 1 ],
+            ],
             'string-with-placeholders' => [
                 'This is my string with [{two}] [{placeholders}] and I am proud of it.',
                 [
@@ -125,6 +130,15 @@ class ResponseVariableReplacerTest extends TestCase
                 $expectedResultObject,
             ],
         ];
+    }
+
+    public function testBasicTypesDoNotGetConverted(): void
+    {
+        $this->givenResponseVariableReplacer([]);
+        $this->whenReplaceVariablesIsCalled([ true, 1 ]);
+        $this->assertCount(2, $this->actualResult);
+        $this->assertSame(true, $this->actualResult[0]);
+        $this->assertSame(1, $this->actualResult[1]);
     }
 
     public function testTokenInjectionFailedException(): void

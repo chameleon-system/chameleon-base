@@ -756,17 +756,6 @@ function updateIframeSize(sFieldName, iHeight) {
 }
 
 CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
-    // workaround for tempusdominus bug: https://github.com/tempusdominus/bootstrap-4/issues/123
-    $('*[data-toggle="datetimepicker"]').removeClass('datetimepicker-input');
-
-    $(document).on('toggle change hide keydown keyup', '*[data-toggle="datetimepicker"]', function() {
-        $(this).addClass('datetimepicker-input');
-    });
-
-    $('[data-datetimepicker-option]').each(function () {
-        $(this).datetimepicker($(this).data('datetimepicker-option'));
-    });
-
     $('.datetimepicker-input').each(function () {
         var id = $(this).attr('id');
 
@@ -787,6 +776,21 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
             $('input[name=' + id + ']').val(cmsDate);
         });
     });
+
+    // workaround for tempusdominus bug: https://github.com/tempusdominus/bootstrap-4/issues/123
+    $('*[data-toggle="datetimepicker"]').removeClass('datetimepicker-input');
+
+    $(document).on('toggle change hide keydown keyup', '*[data-toggle="datetimepicker"]', function() {
+        $(this).addClass('datetimepicker-input');
+    });
+
+    $('[data-datetimepicker-option]').each(function () {
+        $(this).datetimepicker($(this).data('datetimepicker-option'));
+    });
+};
+
+CHAMELEON.CORE.MTTableEditor.initEntrySwitcherAutocomplete = function() {
+    CHAMELEON.CORE.initializeEntryAutocomplete($('input#quicklookuplist'));
 };
 
 CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
@@ -807,37 +811,6 @@ CHAMELEON.CORE.MTTableEditor.initSelectBoxes = function () {
         } else {
             $('#' + fieldName + '-helpContainer').html(helpText);
         }
-    });
-
-    var quicklookuplist = $('#quicklookuplist');
-    quicklookuplist.select2({
-        placeholder: quicklookuplist.data('select2-placeholder'),
-        templateResult: function (data, container) {
-            // transfer class to select2 element
-            if (data.cssClass && '' !== data.cssClass) {
-                $(container).addClass(data.cssClass);
-            }
-
-            return data.text;
-        },
-        ajax: {
-            url: quicklookuplist.data('select2-ajax'),
-            dataType: 'json',
-            delay: 250,
-            processResults: function (data) {
-            return {
-                results: JSON.parse(data)
-            };
-        }
-    }
-    }).on('select2:select', function (e) {
-        var id = e.params.data.id.trim();
-
-        if ('' === id) {
-            return;
-        }
-
-        switchRecord(id);
     });
 
     $('[data-tags]').each(function () {
@@ -979,6 +952,7 @@ CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe = function () {
 $(document).ready(function () {
     CHAMELEON.CORE.MTTableEditor.initTabs();
     CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
+    CHAMELEON.CORE.MTTableEditor.initEntrySwitcherAutocomplete();
     CHAMELEON.CORE.MTTableEditor.initSelectBoxes();
     CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
     CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent('label.switch input[type=checkbox]');

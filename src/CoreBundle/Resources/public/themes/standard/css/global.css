@@ -1,4 +1,4 @@
-@import "./cms_user_style/main.css";
+@import "cms_user_style/main.css";
 
 html {
     height: 100%;
@@ -98,10 +98,28 @@ legend {
     padding: 0 3px 6px 3px;
 }
 
-.dropdown-menu .dropdown-icon, .dropdown-menu .dropdown-icon:hover {
+.typeahead-relative {
+    /* Give the right aligned Typeahead dropdown the correct anchor */
+
+    position: relative;
+}
+
+.typeahead.dropdown-menu-right {
+    right: 8px;
+}
+
+.typeahead.dropdown-menu .dropdown-icon, .typeahead.dropdown-menu .dropdown-icon:hover {
     background-position: 5px center;
     background-repeat: no-repeat;
     padding-left: 28px;
+}
+
+.typeahead.dropdown-menu .active .dropdown-item {
+    /* highlight keyboard selected entry - Typeahead does not have extra styles */
+
+    color: #181b1e;
+    text-decoration: none;
+    background-color: #f0f3f5;
 }
 
 /**
@@ -235,6 +253,18 @@ legend {
     width: 30px;
 }
 
+.sidebar .nav-dropdown-items .nav-item {
+    background-color: #FFFFFF;
+}
+
+.sidebar .nav-dropdown-items .nav-link {
+    color: #000000 !important;
+}
+
+.sidebar .nav-item:focus {
+    background-color: #20a8d8;
+}
+
 .sidebar-filter-input, .sidebar-filter-input:focus {
     border-radius: 0;
     padding-top: 1.4rem;
@@ -256,14 +286,6 @@ legend {
     top: 1.1em;
     content: "\f002";
     color: #576873;
-}
-
-.sidebar .nav-dropdown-items .nav-item {
-    background-color: #FFFFFF;
-}
-
-.sidebar .nav-dropdown-items .nav-link {
-    color: #000000 !important;
 }
 
 /**
