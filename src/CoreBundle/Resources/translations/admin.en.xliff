@@ -2559,6 +2559,15 @@
                 <source>chameleon_system_core.sidebar.popular_entries</source>
                 <target>Frequently used</target>
             </trans-unit>
+
+            <trans-unit id="chameleon_system_core.navigation_tree.confirm_selection">
+                <source>chameleon_system_core.navigation_tree.confirm_selection</source>
+                <target>Confirm selection</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.navigation_tree.cancel_selection">
+                <source>chameleon_system_core.navigation_tree.cancel_selection</source>
+                <target>Cancel</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
