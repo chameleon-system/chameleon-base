@@ -1,6 +1,13 @@
 <?php
 
 $layoutTemplate = 'frame';
-$moduleList = array('contentmodule' => array('model' => 'CMSModulePageTree', 'view' => 'standard'));
+
+$moduleList = [
+    'contentmodule' => [
+        'model' => 'chameleon_system_core.module.navigation_tree',
+        'moduleType' => '@CoreBundle',
+        'view' => 'standard',
+    ],
+];
 
 addDefaultPageTitle($moduleList);
