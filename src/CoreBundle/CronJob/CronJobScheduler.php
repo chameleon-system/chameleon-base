@@ -18,14 +18,13 @@ class CronJobScheduler implements CronJobSchedulerInterface
 
     public function requiresExecution(CronJobScheduleDataModel $schedule): bool
     {
-        if (null === $schedule->getLastExecutedUtc()) {
+        $lastPlannedExecution = $schedule->getLastPlannedExecution();
+        if (null === $lastPlannedExecution) {
             return true;
         }
 
-        $utc = new \DateTimeZone('UTC');
-        $nowObject = $this->timeProvider->getDateTime($utc);
+        $nowObject = $this->timeProvider->getDateTime($lastPlannedExecution->getTimezone());
 
-        $lastPlannedExecution = $schedule->getLastExecutedUtc();
 
         $nextExecution = clone $lastPlannedExecution;
         $nextExecution->add(new \DateInterval(sprintf('PT%sM', $schedule->getExecuteEveryNMinutes())));
@@ -52,15 +51,17 @@ class CronJobScheduler implements CronJobSchedulerInterface
         return true;
     }
 
-    public function calculateCurrentPlanedExecutionDateUtc(CronJobScheduleDataModel $scheduleDataModel): \DateTime
+    public function calculateCurrentPlanedExecutionDate(CronJobScheduleDataModel $scheduleDataModel): \DateTime
     {
-        $utc = new \DateTimeZone('UTC');
-        $now = $this->timeProvider->getDateTime($utc);
+        $lastPannedExecution = $scheduleDataModel->getLastPlannedExecution();
 
-        $lastPannedExecution = $scheduleDataModel->getLastExecutedUtc();
+
         if (null === $lastPannedExecution) {
-            return $now;
+            return $this->timeProvider->getDateTime();
         }
+        $timeZone = $lastPannedExecution->getTimezone();
+
+        $now = $this->timeProvider->getDateTime($timeZone);
 
         if ($now < $lastPannedExecution) {
             return $lastPannedExecution;

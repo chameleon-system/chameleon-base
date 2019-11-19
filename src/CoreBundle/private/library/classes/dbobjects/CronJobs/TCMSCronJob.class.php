@@ -156,8 +156,7 @@ class TCMSCronJob extends TCMSRecord
         if ('' !== $this->sqlData['last_execution']) {
             $lastPlannedExecution = \DateTime::createFromFormat(
                 'Y-m-d H:i:s',
-                $this->sqlData['last_execution'],
-                new \DateTimeZone('UTC')
+                $this->sqlData['last_execution']
             );
         }
 
@@ -178,9 +177,9 @@ class TCMSCronJob extends TCMSRecord
         $schedule = $this->getSchedule();
 
         $timeProvider = $this->getTimeProvider();
-        $now = $timeProvider->getDateTime(new DateTimeZone('UTC'));
+        $now = $timeProvider->getDateTime();
 
-        $plannedExecutionTime = $scheduler->calculateCurrentPlanedExecutionDateUtc($schedule);
+        $plannedExecutionTime = $scheduler->calculateCurrentPlanedExecutionDate($schedule);
 
         $this->getDatabaseConnection()->update(
             $this->table,
@@ -194,8 +193,7 @@ class TCMSCronJob extends TCMSRecord
 
     protected function UpdateLastExecutionOnStart()
     {
-        $utc = new \DateTimeZone('UTC');
-        $nowObject = new \DateTime('now', $utc);
+        $nowObject = new \DateTime('now');
 
         $this->getDatabaseConnection()->update(
             $this->table,

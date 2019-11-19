@@ -6,5 +6,5 @@ interface CronJobSchedulerInterface
 {
     public function requiresExecution(CronJobScheduleDataModel $schedule): bool;
 
-    public function calculateCurrentPlanedExecutionDateUtc(CronJobScheduleDataModel $scheduleDataModel): \DateTime;
+    public function calculateCurrentPlanedExecutionDate(CronJobScheduleDataModel $scheduleDataModel): \DateTime;
 }

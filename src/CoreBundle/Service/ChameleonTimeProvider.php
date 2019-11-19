@@ -11,7 +11,7 @@ final class ChameleonTimeProvider implements ChameleonTimeProviderInterface
         return time();
     }
 
-    public function getDateTime(\DateTimeZone $timeZone): \DateTime
+    public function getDateTime(?\DateTimeZone $timeZone = null): \DateTime
     {
         return new \DateTime('now', $timeZone);
     }

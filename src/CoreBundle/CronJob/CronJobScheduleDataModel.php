@@ -7,7 +7,7 @@ class CronJobScheduleDataModel
     /**
      * @var \DateTime|null
      */
-    private $lastExecutedUtc;
+    private $lastPlannedExecution;
     /**
      * @var int
      */
@@ -21,22 +21,17 @@ class CronJobScheduleDataModel
      */
     private $isLocked;
 
-    /**
-     * @param int       $executeEveryNMinutes
-     * @param int       $unlockAfterNMinutes
-     * @param \DateTime $lastExecutedUtc
-     */
-    public function __construct(int $executeEveryNMinutes, int $unlockAfterNMinutes, $isLocked, ?\DateTime $lastExecutedUtc)
+    public function __construct(int $executeEveryNMinutes, int $unlockAfterNMinutes, bool $isLocked, ?\DateTime $lastPlannedExecution)
     {
-        $this->lastExecutedUtc = $lastExecutedUtc;
+        $this->lastPlannedExecution = $lastPlannedExecution;
         $this->executeEveryNMinutes = $executeEveryNMinutes;
         $this->unlockAfterNMinutes = $unlockAfterNMinutes;
         $this->isLocked = $isLocked;
     }
 
-    public function getLastExecutedUtc(): ?\DateTime
+    public function getLastPlannedExecution(): ?\DateTime
     {
-        return $this->lastExecutedUtc;
+        return $this->lastPlannedExecution;
     }
 
     public function getExecuteEveryNMinutes(): int
@@ -49,9 +44,6 @@ class CronJobScheduleDataModel
         return $this->unlockAfterNMinutes;
     }
 
-    /**
-     * @return bool
-     */
     public function isLocked(): bool
     {
         return $this->isLocked;
