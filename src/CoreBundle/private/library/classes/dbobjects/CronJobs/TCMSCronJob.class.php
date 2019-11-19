@@ -150,6 +150,11 @@ class TCMSCronJob extends TCMSRecord
         return ServiceLocator::get('chameleon_system_core.cron_job.cron_job_scheduler');
     }
 
+    /**
+     * @return CronJobScheduleDataModel
+     *
+     * @throws InvalidArgumentException
+     */
     private function getSchedule(): CronJobScheduleDataModel
     {
         $lastPlannedExecution = null;
@@ -160,9 +165,21 @@ class TCMSCronJob extends TCMSRecord
             );
         }
 
+        $executeEveryNMinutes = (int) $this->sqlData['execute_every_n_minutes'];
+
+        if (0 === $executeEveryNMinutes) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'CronJob %s has an invalid value of "%s" for the execute_every_n_minutes field',
+                    $this->sqlData['name'],
+                    $this->sqlData['execute_every_n_minutes']
+                )
+            );
+        }
+
         return new CronJobScheduleDataModel(
-            $this->sqlData['execute_every_n_minutes'],
-            $this->sqlData['unlock_after_n_minutes'],
+            $executeEveryNMinutes,
+            (int) $this->sqlData['unlock_after_n_minutes'],
             '1' === $this->sqlData['lock'],
             $lastPlannedExecution
         );
@@ -174,8 +191,13 @@ class TCMSCronJob extends TCMSRecord
     protected function _UpdateLastExecutionTime()
     {
         $scheduler = $this->getCronJobScheduler();
-        $schedule = $this->getSchedule();
+        try {
+            $schedule = $this->getSchedule();
+        } catch (InvalidArgumentException $e) {
+            $this->getLogger()->error($e->getMessage(), __FILE__, __LINE__);
 
+            return;
+        }
         $timeProvider = $this->getTimeProvider();
         $now = $timeProvider->getDateTime();
 
@@ -212,7 +234,13 @@ class TCMSCronJob extends TCMSRecord
     protected function _NeedExecution()
     {
         $scheduler = $this->getCronJobScheduler();
-        $schedule = $this->getSchedule();
+        try {
+            $schedule = $this->getSchedule();
+        } catch (InvalidArgumentException $e) {
+            $this->getLogger()->error($e->getMessage(), __FILE__, __LINE__);
+
+            return false;
+        }
 
         $requiresExecution = $scheduler->requiresExecution($schedule);
         if ($requiresExecution && '1' === $this->sqlData['lock']) {

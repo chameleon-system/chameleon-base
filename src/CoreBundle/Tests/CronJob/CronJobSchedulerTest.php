@@ -128,6 +128,22 @@ class CronJobSchedulerTest extends TestCase
         ];
     }
 
+    public function provideDataForExecutionNeededThrowsExceptionOnInvalidInput(): array
+    {
+        return [
+            'invalid-execute-every-n-minutes' => [
+                'schedule' => new CronJobScheduleDataModel(
+                    0,
+                    2880,
+                    false,
+                    $this->createDate('2019-11-14 23:15:00')
+                ),
+                'currentUtcTime' => $this->createDate('2019-11-15 00:00:00'),
+                'expectedException' => new \InvalidArgumentException(sprintf('Invalid schedule value of "0" for executeEveryNMinutes property')),
+            ],
+        ];
+    }
+
     public function provideDataForCalculateCurrentPlanedExecutionDateUtc(): array
     {
         $locked = [false, true];
@@ -261,6 +277,24 @@ class CronJobSchedulerTest extends TestCase
         $this->thenExpectedResponseIs($expectedResult);
     }
 
+    /**
+     * @dataProvider provideDataForExecutionNeededThrowsExceptionOnInvalidInput
+     *
+     * @param CronJobScheduleDataModel $schedule
+     * @param \DateTime                $currentUtcTime
+     * @param \Exception               $expectedException
+     */
+    public function testExecutionNeededThrowsExceptionOnInvalidInput(
+        CronJobScheduleDataModel $schedule,
+        \DateTime $currentUtcTime,
+        \Exception $expectedException
+    ): void {
+        $this->givenCurrentTimeIs($currentUtcTime);
+
+        $this->thenExceptionIsExpected($expectedException);
+        $this->whenRequiresExecutionIsCalledWith($schedule);
+    }
+
     private function givenCurrentTimeIs(\DateTime $currentUtcTime): void
     {
         $this->mockTimeProvider->getDateTime(Argument::any())->willReturn($currentUtcTime);
@@ -283,7 +317,7 @@ class CronJobSchedulerTest extends TestCase
      * @param \DateTime                $currentUtcTime
      * @param \DateTime                $expectedUtcExecutionTime
      */
-    public function testCalculateCurrentPlanedExecutionDateUtc(
+    public function testCalculateCurrentPlanedExecutionDate(
         CronJobScheduleDataModel $schedule,
         \DateTime $currentUtcTime,
         \DateTime $expectedUtcExecutionTime
@@ -291,6 +325,24 @@ class CronJobSchedulerTest extends TestCase
         $this->givenCurrentTimeIs($currentUtcTime);
         $this->whenCalculateCurrentPlanedExecutionDateUtcIsCalledWith($schedule);
         $this->thenThePlannedExecutionDateShouldBe($expectedUtcExecutionTime);
+    }
+
+    /**
+     * @dataProvider provideDataForExecutionNeededThrowsExceptionOnInvalidInput
+     *
+     * @param CronJobScheduleDataModel $schedule
+     * @param \DateTime                $currentUtcTime
+     * @param \Exception               $expectedException
+     */
+    public function testCalculateCurrentPlanedExecutionDateThrowsExceptionOnInvalidInput(
+        CronJobScheduleDataModel $schedule,
+        \DateTime $currentUtcTime,
+        \Exception $expectedException
+    ): void {
+        $this->givenCurrentTimeIs($currentUtcTime);
+
+        $this->thenExceptionIsExpected($expectedException);
+        $this->whenCalculateCurrentPlanedExecutionDateUtcIsCalledWith($schedule);
     }
 
     private function whenCalculateCurrentPlanedExecutionDateUtcIsCalledWith(CronJobScheduleDataModel $schedule): void
@@ -305,12 +357,17 @@ class CronJobSchedulerTest extends TestCase
 
     private function createDate(string $dateString): \DateTime
     {
-        $utc = null;//new \DateTimeZone('UTC');
+        $utc = null; //new \DateTimeZone('UTC');
 
         return \DateTime::createFromFormat(
             'Y-m-d H:i:s',
             $dateString,
             $utc
         );
+    }
+
+    private function thenExceptionIsExpected(\Exception $expectedException): void
+    {
+        $this->expectExceptionObject($expectedException);
     }
 }

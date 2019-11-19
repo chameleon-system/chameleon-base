@@ -18,13 +18,14 @@ class CronJobScheduler implements CronJobSchedulerInterface
 
     public function requiresExecution(CronJobScheduleDataModel $schedule): bool
     {
+        $this->validateSchedule($schedule);
+
         $lastPlannedExecution = $schedule->getLastPlannedExecution();
         if (null === $lastPlannedExecution) {
             return true;
         }
 
         $nowObject = $this->timeProvider->getDateTime($lastPlannedExecution->getTimezone());
-
 
         $nextExecution = clone $lastPlannedExecution;
         $nextExecution->add(new \DateInterval(sprintf('PT%sM', $schedule->getExecuteEveryNMinutes())));
@@ -51,10 +52,11 @@ class CronJobScheduler implements CronJobSchedulerInterface
         return true;
     }
 
-    public function calculateCurrentPlanedExecutionDate(CronJobScheduleDataModel $scheduleDataModel): \DateTime
+    public function calculateCurrentPlanedExecutionDate(CronJobScheduleDataModel $schedule): \DateTime
     {
-        $lastPannedExecution = $scheduleDataModel->getLastPlannedExecution();
+        $this->validateSchedule($schedule);
 
+        $lastPannedExecution = $schedule->getLastPlannedExecution();
 
         if (null === $lastPannedExecution) {
             return $this->timeProvider->getDateTime();
@@ -67,7 +69,7 @@ class CronJobScheduler implements CronJobSchedulerInterface
             return $lastPannedExecution;
         }
 
-        $executionInterval = new \DateInterval(sprintf('PT%sM', $scheduleDataModel->getExecuteEveryNMinutes()));
+        $executionInterval = new \DateInterval(sprintf('PT%sM', $schedule->getExecuteEveryNMinutes()));
 
         $timePassedSinceLastPlannedExecution = $now->diff($lastPannedExecution);
 
@@ -87,5 +89,20 @@ class CronJobScheduler implements CronJobSchedulerInterface
         }
 
         return $plannedExecution;
+    }
+
+    /**
+     * @param CronJobScheduleDataModel $schedule
+     */
+    private function validateSchedule(CronJobScheduleDataModel $schedule): void
+    {
+        if ($schedule->getExecuteEveryNMinutes() <= 0) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Invalid schedule value of "%s" for executeEveryNMinutes property',
+                    $schedule->getExecuteEveryNMinutes()
+                )
+            );
+        }
     }
 }
