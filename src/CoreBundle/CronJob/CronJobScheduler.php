@@ -63,28 +63,28 @@ class CronJobScheduler implements CronJobSchedulerInterface
     {
         $this->validateSchedule($schedule);
 
-        $lastPannedExecution = $schedule->getLastPlannedExecution();
+        $lastPlannedExecution = $schedule->getLastPlannedExecution();
 
-        if (null === $lastPannedExecution) {
+        if (null === $lastPlannedExecution) {
             return $this->timeProvider->getDateTime();
         }
-        $timeZone = $lastPannedExecution->getTimezone();
+        $timeZone = $lastPlannedExecution->getTimezone();
 
         $now = $this->timeProvider->getDateTime($timeZone);
 
-        if ($now < $lastPannedExecution) {
-            return $lastPannedExecution;
+        if ($now < $lastPlannedExecution) {
+            return $lastPlannedExecution;
         }
 
         $executionInterval = new \DateInterval(sprintf('PT%sM', $schedule->getExecuteEveryNMinutes()));
 
-        $timePassedSinceLastPlannedExecution = $now->diff($lastPannedExecution);
+        $timePassedSinceLastPlannedExecution = $now->diff($lastPlannedExecution);
 
         if ($timePassedSinceLastPlannedExecution < $executionInterval) {
-            return $lastPannedExecution;
+            return $lastPlannedExecution;
         }
 
-        $plannedExecution = clone $lastPannedExecution;
+        $plannedExecution = clone $lastPlannedExecution;
 
         do {
             $plannedExecution->add($executionInterval);

@@ -16,7 +16,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
  * manages a cronjob.
- * /**/
+ */
 class TCMSCronJob extends TCMSRecord
 {
     /**
@@ -215,12 +215,12 @@ class TCMSCronJob extends TCMSRecord
 
     protected function UpdateLastExecutionOnStart()
     {
-        $nowObject = new \DateTime('now');
+        $now = new \DateTime('now');
 
         $this->getDatabaseConnection()->update(
             $this->table,
             [
-                'last_execution' => $nowObject->format('Y-m-d H:i:s'),
+                'last_execution' => $now->format('Y-m-d H:i:s'),
             ],
             ['id' => $this->id]
         );
@@ -243,10 +243,10 @@ class TCMSCronJob extends TCMSRecord
         }
 
         $requiresExecution = $scheduler->requiresExecution($schedule);
-        if ($requiresExecution && $this->isLocked()) {
+        if (true === $requiresExecution && true === $this->isLocked()) {
             $this->getLogger()->warning(
                 sprintf(
-                    'CronJob "%s" (%s) was force unlocked due to it being locked for longer than its unlock_after_n_minutes value',
+                    'Cron job "%s" (%s) was force unlocked due to it being locked for longer than its unlock_after_n_minutes value',
                     $this->sqlData['name'],
                     $this->id
                 ),
