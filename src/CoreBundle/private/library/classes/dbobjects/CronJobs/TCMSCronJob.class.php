@@ -11,11 +11,12 @@
 
 use ChameleonSystem\CoreBundle\CronJob\CronJobScheduleDataModel;
 use ChameleonSystem\CoreBundle\CronJob\CronJobSchedulerInterface;
+use ChameleonSystem\CoreBundle\Interfaces\ChameleonTimeProviderInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
  * manages a cronjob.
-/**/
+ * /**/
 class TCMSCronJob extends TCMSRecord
 {
     /**
@@ -125,11 +126,21 @@ class TCMSCronJob extends TCMSRecord
             $sMessage = sprintf('Cronjob "%s" completed. [pid: %s]', $this->sqlData['name'], getmypid());
             $this->getLogger()->info($sMessage, __FILE__, __LINE__);
         } else {
-            $sMessage = sprintf('Cronjob "%s" failed with PHP error: %s [pid: %s]', $this->sqlData['name'], $error->getMessage(), getmypid());
-            $this->getLogger()->critical($sMessage, __FILE__, __LINE__, array(
-                'fullMessage' => $error->getMessage(),
-                'trace' => $error->getTraceAsString(),
-            ));
+            $sMessage = sprintf(
+                'Cronjob "%s" failed with PHP error: %s [pid: %s]',
+                $this->sqlData['name'],
+                $error->getMessage(),
+                getmypid()
+            );
+            $this->getLogger()->critical(
+                $sMessage,
+                __FILE__,
+                __LINE__,
+                array(
+                    'fullMessage' => $error->getMessage(),
+                    'trace' => $error->getTraceAsString(),
+                )
+            );
         }
         $this->AddMessageOutput($sMessage);
     }
@@ -138,48 +149,47 @@ class TCMSCronJob extends TCMSRecord
     {
         return ServiceLocator::get('chameleon_system_core.cron_job.cron_job_scheduler');
     }
+
+    private function getSchedule(): CronJobScheduleDataModel
+    {
+        $lastPlannedExecution = null;
+        if ('' !== $this->sqlData['last_execution']) {
+            $lastPlannedExecution = \DateTime::createFromFormat(
+                'Y-m-d H:i:s',
+                $this->sqlData['last_execution'],
+                new \DateTimeZone('UTC')
+            );
+        }
+
+        return new CronJobScheduleDataModel(
+            $this->sqlData['execute_every_n_minutes'],
+            $this->sqlData['unlock_after_n_minutes'],
+            '1' === $this->sqlData['lock'],
+            $lastPlannedExecution
+        );
+    }
+
     /**
      * updates the last execution time.
      */
     protected function _UpdateLastExecutionTime()
     {
-        // maybe the cron was deactivated... the new time should be less than n minutes before now
-        // set server timezone to daylight saving time less region (UTC) to prevent cron job time shifts by 1 hour during daylight saving times
-        $sServerDateTimeZoneSetting = date_default_timezone_get();
-        date_default_timezone_set('UTC');
+        $scheduler = $this->getCronJobScheduler();
+        $schedule = $this->getSchedule();
 
-        $utc = new \DateTimeZone('UTC');
-        $nowObject = new \DateTime('now', $utc);
-        $executionBeforeNow = clone $nowObject;
-        $executionBeforeNow->sub(new DateInterval(sprintf('P%sM', $this->sqlData['execute_every_n_minutes'])));
-        $now = time();
-        if ('' === $this->sqlData['last_execution']) {
-            $newTimeObject = DateTime::createFromFormat('Y-m-d H:i:s', $this->sqlData['start_execution']. ' 00:00:00', $utc);
-        } else {
-            $newTimeObject = DateTime::createFromFormat('Y-m-d H:i:s', $this->sqlData['last_execution'], $utc);
-        }
+        $timeProvider = $this->getTimeProvider();
+        $now = $timeProvider->getDateTime(new DateTimeZone('UTC'));
 
-//        $newTime = strtotime($this->sqlData['last_execution']);
-//        if ($newTime <= 0) {
-//            $newTime = 1;
-//        } // fixes empty last_execution field (would lead to infinite loop)
-//        if (empty($this->sqlData['last_execution'])) {
-//            $newTime = $now;
-//        } else {
-            do {
-                $newTimeObject = $newTimeObject->add(new DateInterval(sprintf('P%sM', $this->sqlData['execute_every_n_minutes'])));
-                //$newTime = $newTime + (60 * $this->sqlData['execute_every_n_minutes']);
-            //} while ($newTime < $now - (60 * $this->sqlData['execute_every_n_minutes']));
-            } while ($newTimeObject < $executionBeforeNow);
-//        }
+        $plannedExecutionTime = $scheduler->calculateCurrentPlanedExecutionDateUtc($schedule);
 
-        $query = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->table)."`
-                   SET `last_execution` = '".MySqlLegacySupport::getInstance()->real_escape_string($newTimeObject->format('Y-m-d H:i:s'))."',
-                   `real_last_execution` = '".MySqlLegacySupport::getInstance()->real_escape_string($nowObject->format('Y-m-d H:i:s'))."'
-                 WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'";
-        MySqlLegacySupport::getInstance()->query($query);
-
-        date_default_timezone_set($sServerDateTimeZoneSetting);
+        $this->getDatabaseConnection()->update(
+            $this->table,
+            [
+                'last_execution' => $plannedExecutionTime->format('Y-m-d H:i:s'),
+                'real_last_execution' => $now->format('Y-m-d H:i:s'),
+            ],
+            ['id' => $this->id]
+        );
     }
 
     protected function UpdateLastExecutionOnStart()
@@ -187,10 +197,13 @@ class TCMSCronJob extends TCMSRecord
         $utc = new \DateTimeZone('UTC');
         $nowObject = new \DateTime('now', $utc);
 
-        $query = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->table)."`
-                   SET `last_execution` = '".MySqlLegacySupport::getInstance()->real_escape_string($nowObject->format('Y-m-d H:i:s'))."'
-                 WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'";
-        MySqlLegacySupport::getInstance()->query($query);
+        $this->getDatabaseConnection()->update(
+            $this->table,
+            [
+                'last_execution' => $nowObject->format('Y-m-d H:i:s'),
+            ],
+            ['id' => $this->id]
+        );
     }
 
     /**
@@ -201,17 +214,7 @@ class TCMSCronJob extends TCMSRecord
     protected function _NeedExecution()
     {
         $scheduler = $this->getCronJobScheduler();
-        $utc = new \DateTimeZone('UTC');
-        $lastPlannedExecution = null;
-        if ('' !== $this->sqlData['last_execution']) {
-            $lastPlannedExecution = \DateTime::createFromFormat('Y-m-d H:i:s', $this->sqlData['last_execution'], $utc);
-        }
-        $schedule = new CronJobScheduleDataModel(
-            $this->sqlData['execute_every_n_minutes'],
-            $this->sqlData['unlock_after_n_minutes'],
-            '1' === $this->sqlData['lock'],
-            $lastPlannedExecution
-        );
+        $schedule = $this->getSchedule();
 
         $requiresExecution = $scheduler->requiresExecution($schedule);
         if ($requiresExecution && '1' === $this->sqlData['lock']) {
@@ -228,13 +231,14 @@ class TCMSCronJob extends TCMSRecord
      */
     public function _Lock()
     {
-        $query = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->table)."`
-                   SET `lock` = '1'
-                 WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'";
-        MySqlLegacySupport::getInstance()->query($query);
+        $numberOfRowsAffected = $this->getDatabaseConnection()->update(
+            $this->table,
+            ['lock' => '1'],
+            ['id' => $this->id]
+        );
         $this->sqlData['lock'] = '1';
 
-        return 1 == MySqlLegacySupport::getInstance()->affected_rows();
+        return 1 === $numberOfRowsAffected;
     }
 
     /**
@@ -242,10 +246,11 @@ class TCMSCronJob extends TCMSRecord
      */
     public function _Unlock()
     {
-        $query = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->table)."`
-                   SET `lock` = '0'
-                 WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'";
-        MySqlLegacySupport::getInstance()->query($query);
+        $this->getDatabaseConnection()->update(
+            $this->table,
+            ['lock' => '0'],
+            ['id' => $this->id]
+        );
         $this->sqlData['lock'] = '0';
     }
 
@@ -277,5 +282,10 @@ class TCMSCronJob extends TCMSRecord
     private function setErrorHandler($errorHandler)
     {
         set_error_handler($errorHandler);
+    }
+
+    private function getTimeProvider(): ChameleonTimeProviderInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.chameleon_time_provider');
     }
 }

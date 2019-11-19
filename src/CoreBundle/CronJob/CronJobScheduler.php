@@ -54,6 +54,37 @@ class CronJobScheduler implements CronJobSchedulerInterface
 
     public function calculateCurrentPlanedExecutionDateUtc(CronJobScheduleDataModel $scheduleDataModel): \DateTime
     {
-        // TODO: Implement calculateCurrentPlanedExecutionDateUtc() method.
+        $utc = new \DateTimeZone('UTC');
+        $now = $this->timeProvider->getDateTime($utc);
+
+        $lastPannedExecution = $scheduleDataModel->getLastExecutedUtc();
+        if (null === $lastPannedExecution) {
+            return $now;
+        }
+
+        if ($now < $lastPannedExecution) {
+            return $lastPannedExecution;
+        }
+
+        $executionInterval = new \DateInterval(sprintf('PT%sM', $scheduleDataModel->getExecuteEveryNMinutes()));
+
+        $timePassedSinceLastPlannedExecution = $now->diff($lastPannedExecution);
+
+        if ($timePassedSinceLastPlannedExecution < $executionInterval) {
+            return $lastPannedExecution;
+        }
+
+        // find the next execution point
+        $plannedExecution = clone $lastPannedExecution;
+
+        do {
+            $plannedExecution->add($executionInterval);
+        } while ($plannedExecution < $now);
+
+        if ($plannedExecution > $now) {
+            $plannedExecution->sub($executionInterval);
+        }
+
+        return $plannedExecution;
     }
 }

@@ -36,50 +36,32 @@ class CronJobSchedulerTest extends TestCase
 
     public function provideDataForExecutionNeeded(): array
     {
-        $utc = new \DateTimeZone('UTC');
-
         $schedule24Hours = new CronJobScheduleDataModel(
             1440,
             2880,
             false,
-            \DateTime::createFromFormat('Y-m-d H:i:s', '2019-11-14 01:15:00', $utc)
+            $this->createUtcDate('2019-11-14 01:15:00')
         );
 
         return [
             'requires-execution-exact-24-hours-ago' => [
                 'schedule' => $schedule24Hours,
-                'currentUtcTime' => \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    '2019-11-15 01:15:00',
-                    $utc
-                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-15 01:15:00'),
                 'expectedResult' => true,
             ],
             'requires-execution-25-hours-ago' => [
                 'schedule' => $schedule24Hours,
-                'currentUtcTime' => \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    '2019-11-15 02:15:00',
-                    $utc
-                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-15 02:15:00'),
                 'expectedResult' => true,
             ],
             'no-execution-23-hours-ago' => [
                 'schedule' => $schedule24Hours,
-                'currentUtcTime' => \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    '2019-11-15 00:15:00',
-                    $utc
-                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-15 00:15:00'),
                 'expectedResult' => false,
             ],
             'no-execution-one-second-before-next-planned-job' => [
                 'schedule' => $schedule24Hours,
-                'currentUtcTime' => \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    '2019-11-15 01:14:59',
-                    $utc
-                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-15 01:14:59'),
                 'expectedResult' => false,
             ],
             'requires-execution-but-is-locked' => [
@@ -87,13 +69,9 @@ class CronJobSchedulerTest extends TestCase
                     1440,
                     2880,
                     true,
-                    \DateTime::createFromFormat('Y-m-d H:i:s', '2019-11-14 01:15:00', $utc)
+                    $this->createUtcDate('2019-11-14 01:15:00')
                 ),
-                'currentUtcTime' => \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    '2019-11-15 02:15:00',
-                    $utc
-                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-15 02:15:00'),
                 'expectedResult' => false,
             ],
             'requires-execution-is-locked-but-lock-timed-out-for-30-min' => [
@@ -101,13 +79,9 @@ class CronJobSchedulerTest extends TestCase
                     1440,
                     1470,
                     true,
-                    \DateTime::createFromFormat('Y-m-d H:i:s', '2019-11-14 01:15:00', $utc)
+                    $this->createUtcDate('2019-11-14 01:15:00')
                 ),
-                'currentUtcTime' => \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    '2019-11-15 02:15:01',
-                    $utc
-                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-15 02:15:01'),
                 'expectedResult' => true,
             ],
             '15-min-after-one-oclock-utc-plus-one' => [
@@ -115,13 +89,9 @@ class CronJobSchedulerTest extends TestCase
                     1440,
                     2880,
                     false,
-                    \DateTime::createFromFormat('Y-m-d H:i:s', '2019-11-14 01:15:00', $utc)
+                    $this->createUtcDate('2019-11-14 01:15:00')
                 ),
-                'currentUtcTime' => \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    '2019-11-14 01:15:05',
-                    $utc
-                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-14 01:15:05'),
                 'expectedResult' => false,
             ],
             'no-last-execution' => [
@@ -131,11 +101,7 @@ class CronJobSchedulerTest extends TestCase
                     false,
                     null
                 ),
-                'currentUtcTime' => \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    '2019-11-15 01:15:05',
-                    $utc
-                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-15 01:15:05'),
                 'expectedResult' => true,
             ],
             'no-last-execution-job-locked' => [
@@ -145,15 +111,99 @@ class CronJobSchedulerTest extends TestCase
                     true,
                     null
                 ),
-                'currentUtcTime' => \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    '2019-11-15 01:15:05',
-                    $utc
-                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-15 01:15:05'),
                 'expectedResult' => true,
-
             ],
         ];
+    }
+
+    public function provideDataForCalculateCurrentPlanedExecutionDateUtc(): array
+    {
+        $locked = [false, true];
+        $testCases = [];
+
+        foreach ($locked as $isLocked) {
+            $keyName = $isLocked ? 'is-locked-' : 'not-locked-';
+
+            $testCases[$keyName.'last-planned-date-is-not-set'] = [
+                'schedule' => new CronJobScheduleDataModel(
+                    1440,
+                    2880,
+                    $isLocked,
+                    null
+                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-10 15:00:00'),
+                'expectedUtcExecutionTime' => $this->createUtcDate('2019-11-10 15:00:00'),
+            ];
+
+            $testCases[$keyName.'last-planned-date-is-in-the-future'] = [
+                'schedule' => new CronJobScheduleDataModel(
+                    1440,
+                    2880,
+                    $isLocked,
+                    $this->createUtcDate('2019-11-20 15:00:00')
+                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-10 15:00:00'),
+                'expectedUtcExecutionTime' => $this->createUtcDate('2019-11-20 15:00:00'),
+            ];
+
+            $testCases[$keyName.'last-planned-date-is-in-the-future-but-less-than-execute-every-n-minutes-time'] = [
+                'schedule' => new CronJobScheduleDataModel(
+                    1440,
+                    2880,
+                    $isLocked,
+                    $this->createUtcDate('2019-11-20 15:00:00')
+                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-20 11:00:00'),
+                'expectedUtcExecutionTime' => $this->createUtcDate('2019-11-20 15:00:00'),
+            ];
+
+            $testCases[$keyName.'last-planned-date-is-in-the-past-but-one-second-more-than-execute-every-n-minutes-time'] = [
+                'schedule' => new CronJobScheduleDataModel(
+                    1440,
+                    2880,
+                    $isLocked,
+                    $this->createUtcDate('2019-11-20 15:00:00')
+                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-21 14:59:59'),
+                'expectedUtcExecutionTime' => $this->createUtcDate('2019-11-20 15:00:00'),
+            ];
+
+            $testCases[$keyName.'last-planned-date-is-in-the-past-but-one-second-less-execute-every-n-minutes-time'] = [
+                'schedule' => new CronJobScheduleDataModel(
+                    1440,
+                    2880,
+                    $isLocked,
+                    $this->createUtcDate('2019-11-20 15:00:00')
+                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-21 15:00:01'),
+                'expectedUtcExecutionTime' => $this->createUtcDate('2019-11-21 15:00:00'),
+            ];
+
+            $testCases[$keyName.'last-planned-date-is-in-the-past-but-exactly-as-execute-every-n-minutes-time'] = [
+                'schedule' => new CronJobScheduleDataModel(
+                    1440,
+                    2880,
+                    $isLocked,
+                    $this->createUtcDate('2019-11-20 15:00:00')
+                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-21 15:00:00'),
+                'expectedUtcExecutionTime' => $this->createUtcDate('2019-11-21 15:00:00'),
+            ];
+
+            $testCases[$keyName.'last-planned-date-is-in-the-past-twice-as-execute-every-n-minutes-time'] = [
+                'schedule' => new CronJobScheduleDataModel(
+                    1440,
+                    2880,
+                    $isLocked,
+                    $this->createUtcDate('2019-11-20 15:00:00')
+                ),
+                'currentUtcTime' => $this->createUtcDate('2019-11-22 15:00:00'),
+                'expectedUtcExecutionTime' => $this->createUtcDate('2019-11-22 15:00:00'),
+            ];
+        }
+
+        return $testCases;
     }
 
     /**
@@ -181,7 +231,7 @@ class CronJobSchedulerTest extends TestCase
         CronJobScheduleDataModel $schedule,
         \DateTime $currentUtcTime,
         bool $expectedResult
-    ) {
+    ): void {
         $this->givenCurrentTimeIs($currentUtcTime);
 
         $this->whenRequiresExecutionIsCalledWith($schedule);
@@ -192,7 +242,6 @@ class CronJobSchedulerTest extends TestCase
     private function givenCurrentTimeIs(\DateTime $currentUtcTime): void
     {
         $this->mockTimeProvider->getDateTime(Argument::any())->willReturn($currentUtcTime);
-//        $this->mockCurrentUtcTime = $currentUtcTime;
     }
 
     private function whenRequiresExecutionIsCalledWith(CronJobScheduleDataModel $schedule): void
@@ -203,5 +252,43 @@ class CronJobSchedulerTest extends TestCase
     private function thenExpectedResponseIs(bool $expectedResult): void
     {
         $this->assertEquals($expectedResult, $this->subjectResult);
+    }
+
+    /**
+     * @dataProvider provideDataForCalculateCurrentPlanedExecutionDateUtc
+     *
+     * @param CronJobScheduleDataModel $schedule
+     * @param \DateTime                $currentUtcTime
+     * @param \DateTime                $expectedUtcExecutionTime
+     */
+    public function testCalculateCurrentPlanedExecutionDateUtc(
+        CronJobScheduleDataModel $schedule,
+        \DateTime $currentUtcTime,
+        \DateTime $expectedUtcExecutionTime
+    ): void {
+        $this->givenCurrentTimeIs($currentUtcTime);
+        $this->whenCalculateCurrentPlanedExecutionDateUtcIsCalledWith($schedule);
+        $this->thenThePlannedExecutionDateShouldBe($expectedUtcExecutionTime);
+    }
+
+    private function whenCalculateCurrentPlanedExecutionDateUtcIsCalledWith(CronJobScheduleDataModel $schedule): void
+    {
+        $this->subjectResult = $this->subject->calculateCurrentPlanedExecutionDateUtc($schedule);
+    }
+
+    private function thenThePlannedExecutionDateShouldBe(\DateTime $expectedUtcExecutionTime): void
+    {
+        $this->assertEquals($expectedUtcExecutionTime, $this->subjectResult);
+    }
+
+    private function createUtcDate(string $dateString): \DateTime
+    {
+        $utc = new \DateTimeZone('UTC');
+
+        return \DateTime::createFromFormat(
+            'Y-m-d H:i:s',
+            $dateString,
+            $utc
+        );
     }
 }
