@@ -270,7 +270,6 @@ class CronJobSchedulerTest extends TestCase
     {
         $this->mockCurrentUtcTime = null;
         $this->mockTimeZone = new \DateTimeZone('UTC');
-        /** @var ObjectProphecy|TimeProviderInterface $timeProvider */
         $this->mockTimeProvider = $this->prophesize(TimeProviderInterface::class);
         $this->mockTimeProvider->getDateTime(Argument::any())->willReturn($this->mockCurrentUtcTime);
 
