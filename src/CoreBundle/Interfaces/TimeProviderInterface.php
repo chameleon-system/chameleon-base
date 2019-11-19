@@ -4,7 +4,7 @@ namespace ChameleonSystem\CoreBundle\Interfaces;
 
 interface TimeProviderInterface
 {
-    public function getTime(): int;
+    public function getUnixTimestamp(): int;
 
     /**
      * Returns the current DateTime as a DateTime Object. If you provide no time zone, then the systems current timezone

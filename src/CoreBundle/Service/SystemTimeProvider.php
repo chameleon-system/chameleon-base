@@ -6,7 +6,7 @@ use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
 
 final class SystemTimeProvider implements TimeProviderInterface
 {
-    public function getTime(): int
+    public function getUnixTimestamp(): int
     {
         return time();
     }
