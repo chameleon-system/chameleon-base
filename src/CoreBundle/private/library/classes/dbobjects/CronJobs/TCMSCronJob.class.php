@@ -138,7 +138,7 @@ class TCMSCronJob extends TCMSRecord
                 __LINE__,
                 array(
                     'fullMessage' => $error->getMessage(),
-                    'trace' => $error->getTraceAsString(),
+                    'trace'       => $error->getTraceAsString(),
                 )
             );
         }
@@ -165,7 +165,7 @@ class TCMSCronJob extends TCMSRecord
             );
         }
 
-        $executeEveryNMinutes = (int) $this->sqlData['execute_every_n_minutes'];
+        $executeEveryNMinutes = (int)$this->sqlData['execute_every_n_minutes'];
 
         if (0 === $executeEveryNMinutes) {
             throw new InvalidArgumentException(
@@ -179,7 +179,7 @@ class TCMSCronJob extends TCMSRecord
 
         return new CronJobScheduleDataModel(
             $executeEveryNMinutes,
-            (int) $this->sqlData['unlock_after_n_minutes'],
+            (int)$this->sqlData['unlock_after_n_minutes'],
             '1' === $this->sqlData['lock'],
             $lastPlannedExecution
         );
@@ -206,7 +206,7 @@ class TCMSCronJob extends TCMSRecord
         $this->getDatabaseConnection()->update(
             $this->table,
             [
-                'last_execution' => $plannedExecutionTime->format('Y-m-d H:i:s'),
+                'last_execution'      => $plannedExecutionTime->format('Y-m-d H:i:s'),
                 'real_last_execution' => $now->format('Y-m-d H:i:s'),
             ],
             ['id' => $this->id]
@@ -243,7 +243,17 @@ class TCMSCronJob extends TCMSRecord
         }
 
         $requiresExecution = $scheduler->requiresExecution($schedule);
-        if ($requiresExecution && '1' === $this->sqlData['lock']) {
+        if ($requiresExecution && $this->isLocked()) {
+            $this->getLogger()->warning(
+                sprintf(
+                    'CronJob "%s" (%s) was force unlocked due to it being locked for longer than its unlock_after_n_minutes value',
+                    $this->sqlData['name'],
+                    $this->id
+                ),
+                __FILE__,
+                __LINE__,
+                ['schedule' => $schedule]
+            );
             $this->_Unlock();
         }
 
@@ -313,5 +323,10 @@ class TCMSCronJob extends TCMSRecord
     private function getTimeProvider(): TimeProviderInterface
     {
         return ServiceLocator::get('chameleon_system_core.system_time_provider');
+    }
+
+    protected function isLocked(): bool
+    {
+        return '1' === $this->sqlData['lock'];
     }
 }
