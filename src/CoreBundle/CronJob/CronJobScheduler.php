@@ -25,6 +25,9 @@ class CronJobScheduler implements CronJobSchedulerInterface
         $this->timeProvider = $timeProvider;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function requiresExecution(CronJobScheduleDataModel $schedule): bool
     {
         $this->validateSchedule($schedule);
@@ -59,6 +62,9 @@ class CronJobScheduler implements CronJobSchedulerInterface
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function calculateCurrentPlannedExecutionDate(CronJobScheduleDataModel $schedule): \DateTime
     {
         $this->validateSchedule($schedule);

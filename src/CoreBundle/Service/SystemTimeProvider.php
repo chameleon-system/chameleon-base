@@ -15,11 +15,17 @@ use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
 
 final class SystemTimeProvider implements TimeProviderInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function getUnixTimestamp(): int
     {
         return time();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getDateTime(?\DateTimeZone $timeZone = null): \DateTime
     {
         return new \DateTime('now', $timeZone);
