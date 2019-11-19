@@ -27,5 +27,5 @@ interface CronJobSchedulerInterface
      * @return \DateTime
      * @throws \InvalidArgumentException
      */
-    public function calculateCurrentPlanedExecutionDate(CronJobScheduleDataModel $schedule): \DateTime;
+    public function calculateCurrentPlannedExecutionDate(CronJobScheduleDataModel $schedule): \DateTime;
 }

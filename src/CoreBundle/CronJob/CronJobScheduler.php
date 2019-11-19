@@ -59,7 +59,7 @@ class CronJobScheduler implements CronJobSchedulerInterface
         return true;
     }
 
-    public function calculateCurrentPlanedExecutionDate(CronJobScheduleDataModel $schedule): \DateTime
+    public function calculateCurrentPlannedExecutionDate(CronJobScheduleDataModel $schedule): \DateTime
     {
         $this->validateSchedule($schedule);
 

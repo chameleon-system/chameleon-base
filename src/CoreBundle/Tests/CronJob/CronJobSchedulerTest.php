@@ -365,7 +365,7 @@ class CronJobSchedulerTest extends TestCase
 
     private function whenCalculateCurrentPlanedExecutionDateUtcIsCalledWith(CronJobScheduleDataModel $schedule): void
     {
-        $this->subjectResult = $this->subject->calculateCurrentPlanedExecutionDate($schedule);
+        $this->subjectResult = $this->subject->calculateCurrentPlannedExecutionDate($schedule);
     }
 
     private function thenThePlannedExecutionDateShouldBe(\DateTime $expectedUtcExecutionTime): void

@@ -201,7 +201,7 @@ class TCMSCronJob extends TCMSRecord
         $timeProvider = $this->getTimeProvider();
         $now = $timeProvider->getDateTime();
 
-        $plannedExecutionTime = $scheduler->calculateCurrentPlanedExecutionDate($schedule);
+        $plannedExecutionTime = $scheduler->calculateCurrentPlannedExecutionDate($schedule);
 
         $this->getDatabaseConnection()->update(
             $this->table,
