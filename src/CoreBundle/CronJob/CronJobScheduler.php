@@ -39,13 +39,13 @@ class CronJobScheduler implements CronJobSchedulerInterface
         $nextExecution = clone $lastPlannedExecution;
         $nextExecution->add(new \DateInterval(sprintf('PT%sM', $schedule->getExecuteEveryNMinutes())));
 
-        // not time to execute again
         if ($now < $nextExecution) {
+
             return false;
         }
 
         if (false === $schedule->isLocked()) {
-            // not locked - so execution required.
+
             return true;
         }
 
@@ -84,7 +84,6 @@ class CronJobScheduler implements CronJobSchedulerInterface
             return $lastPannedExecution;
         }
 
-        // find the next execution point
         $plannedExecution = clone $lastPannedExecution;
 
         do {
