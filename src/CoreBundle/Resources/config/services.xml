@@ -905,6 +905,7 @@
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_core.util.url" type="service"/>
             <argument id="chameleon_system_core.table_editor_nested_set_helper_factory" type="service" />
+            <argument id="chameleon_system_core.cache" type="service"/>
             <tag name="chameleon_system.module"/>
         </service>
 
