@@ -4,7 +4,7 @@ namespace ChameleonSystem\CoreBundle\Tests\CronJob;
 
 use ChameleonSystem\CoreBundle\CronJob\CronJobScheduleDataModel;
 use ChameleonSystem\CoreBundle\CronJob\CronJobScheduler;
-use ChameleonSystem\CoreBundle\Interfaces\ChameleonTimeProviderInterface;
+use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -21,7 +21,7 @@ class CronJobSchedulerTest extends TestCase
      */
     private $mockTimeZone;
     /**
-     * @var ObjectProphecy|ChameleonTimeProviderInterface
+     * @var ObjectProphecy|TimeProviderInterface
      */
     private $mockTimeProvider;
 
@@ -251,8 +251,8 @@ class CronJobSchedulerTest extends TestCase
     {
         $this->mockCurrentUtcTime = null;
         $this->mockTimeZone = new \DateTimeZone('UTC');
-        /** @var ObjectProphecy|ChameleonTimeProviderInterface $timeProvider */
-        $this->mockTimeProvider = $this->prophesize(ChameleonTimeProviderInterface::class);
+        /** @var ObjectProphecy|TimeProviderInterface $timeProvider */
+        $this->mockTimeProvider = $this->prophesize(TimeProviderInterface::class);
         $this->mockTimeProvider->getDateTime(Argument::any())->willReturn($this->mockCurrentUtcTime);
 
         $this->subject = new CronJobScheduler($this->mockTimeProvider->reveal());

@@ -11,7 +11,7 @@
 
 use ChameleonSystem\CoreBundle\CronJob\CronJobScheduleDataModel;
 use ChameleonSystem\CoreBundle\CronJob\CronJobSchedulerInterface;
-use ChameleonSystem\CoreBundle\Interfaces\ChameleonTimeProviderInterface;
+use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
@@ -310,8 +310,8 @@ class TCMSCronJob extends TCMSRecord
         set_error_handler($errorHandler);
     }
 
-    private function getTimeProvider(): ChameleonTimeProviderInterface
+    private function getTimeProvider(): TimeProviderInterface
     {
-        return ServiceLocator::get('chameleon_system_core.chameleon_time_provider');
+        return ServiceLocator::get('chameleon_system_core.system_time_provider');
     }
 }

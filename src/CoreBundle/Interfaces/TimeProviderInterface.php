@@ -2,7 +2,7 @@
 
 namespace ChameleonSystem\CoreBundle\Interfaces;
 
-interface ChameleonTimeProviderInterface
+interface TimeProviderInterface
 {
     public function getTime(): int;
 

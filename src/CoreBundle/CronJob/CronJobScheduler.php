@@ -2,16 +2,16 @@
 
 namespace ChameleonSystem\CoreBundle\CronJob;
 
-use ChameleonSystem\CoreBundle\Interfaces\ChameleonTimeProviderInterface;
+use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
 
 class CronJobScheduler implements CronJobSchedulerInterface
 {
     /**
-     * @var ChameleonTimeProviderInterface
+     * @var TimeProviderInterface
      */
     private $timeProvider;
 
-    public function __construct(ChameleonTimeProviderInterface $timeProvider)
+    public function __construct(TimeProviderInterface $timeProvider)
     {
         $this->timeProvider = $timeProvider;
     }

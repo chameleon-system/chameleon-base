@@ -2,9 +2,9 @@
 
 namespace ChameleonSystem\CoreBundle\Service;
 
-use ChameleonSystem\CoreBundle\Interfaces\ChameleonTimeProviderInterface;
+use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
 
-final class ChameleonTimeProvider implements ChameleonTimeProviderInterface
+final class SystemTimeProvider implements TimeProviderInterface
 {
     public function getTime(): int
     {
