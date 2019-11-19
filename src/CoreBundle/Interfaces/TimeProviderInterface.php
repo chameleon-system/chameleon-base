@@ -16,10 +16,7 @@ interface TimeProviderInterface
     public function getUnixTimestamp(): int;
 
     /**
-     * Returns the current DateTime as a DateTime Object. If you provide no time zone, then the systems current timezone
-     * will be used.
-     *
-     * @param \DateTimeZone|null $timeZone
+     * @param \DateTimeZone|null $timeZone - will use the systems current timezone if null is passed
      *
      * @return \DateTime
      */
