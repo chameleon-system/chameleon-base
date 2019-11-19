@@ -114,15 +114,44 @@ class CronJobSchedulerTest extends TestCase
                 'schedule' => new CronJobScheduleDataModel(
                     1440,
                     2880,
-                    true,
+                    false,
                     \DateTime::createFromFormat('Y-m-d H:i:s', '2019-11-14 01:15:00', $utc)
+                ),
+                'currentUtcTime' => \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    '2019-11-14 01:15:05',
+                    $utc
+                ),
+                'expectedResult' => false,
+            ],
+            'no-last-execution' => [
+                'schedule' => new CronJobScheduleDataModel(
+                    1440,
+                    2880,
+                    false,
+                    null
                 ),
                 'currentUtcTime' => \DateTime::createFromFormat(
                     'Y-m-d H:i:s',
                     '2019-11-15 01:15:05',
                     $utc
                 ),
-                'expectedResult' => false,
+                'expectedResult' => true,
+            ],
+            'no-last-execution-job-locked' => [
+                'schedule' => new CronJobScheduleDataModel(
+                    1440,
+                    2880,
+                    true,
+                    null
+                ),
+                'currentUtcTime' => \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    '2019-11-15 01:15:05',
+                    $utc
+                ),
+                'expectedResult' => true,
+
             ],
         ];
     }

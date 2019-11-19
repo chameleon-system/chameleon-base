@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\CronJob\CronJobScheduleDataModel;
+use ChameleonSystem\CoreBundle\CronJob\CronJobSchedulerInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
@@ -132,6 +134,10 @@ class TCMSCronJob extends TCMSRecord
         $this->AddMessageOutput($sMessage);
     }
 
+    private function getCronJobScheduler(): CronJobSchedulerInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cron_job.cron_job_scheduler');
+    }
     /**
      * updates the last execution time.
      */
@@ -142,22 +148,34 @@ class TCMSCronJob extends TCMSRecord
         $sServerDateTimeZoneSetting = date_default_timezone_get();
         date_default_timezone_set('UTC');
 
+        $utc = new \DateTimeZone('UTC');
+        $nowObject = new \DateTime('now', $utc);
+        $executionBeforeNow = clone $nowObject;
+        $executionBeforeNow->sub(new DateInterval(sprintf('P%sM', $this->sqlData['execute_every_n_minutes'])));
         $now = time();
-        $newTime = strtotime($this->sqlData['last_execution']);
-        if ($newTime <= 0) {
-            $newTime = 1;
-        } // fixes empty last_execution field (would lead to infinite loop)
-        if (empty($this->sqlData['last_execution'])) {
-            $newTime = $now;
+        if ('' === $this->sqlData['last_execution']) {
+            $newTimeObject = DateTime::createFromFormat('Y-m-d H:i:s', $this->sqlData['start_execution']. ' 00:00:00', $utc);
         } else {
-            do {
-                $newTime = $newTime + (60 * $this->sqlData['execute_every_n_minutes']);
-            } while ($newTime < $now - (60 * $this->sqlData['execute_every_n_minutes']));
+            $newTimeObject = DateTime::createFromFormat('Y-m-d H:i:s', $this->sqlData['last_execution'], $utc);
         }
 
+//        $newTime = strtotime($this->sqlData['last_execution']);
+//        if ($newTime <= 0) {
+//            $newTime = 1;
+//        } // fixes empty last_execution field (would lead to infinite loop)
+//        if (empty($this->sqlData['last_execution'])) {
+//            $newTime = $now;
+//        } else {
+            do {
+                $newTimeObject = $newTimeObject->add(new DateInterval(sprintf('P%sM', $this->sqlData['execute_every_n_minutes'])));
+                //$newTime = $newTime + (60 * $this->sqlData['execute_every_n_minutes']);
+            //} while ($newTime < $now - (60 * $this->sqlData['execute_every_n_minutes']));
+            } while ($newTimeObject < $executionBeforeNow);
+//        }
+
         $query = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->table)."`
-                   SET `last_execution` = '".MySqlLegacySupport::getInstance()->real_escape_string(date('Y-m-d H:i:s', $newTime))."',
-                   `real_last_execution` = '".MySqlLegacySupport::getInstance()->real_escape_string(date('Y-m-d H:i:s'))."'
+                   SET `last_execution` = '".MySqlLegacySupport::getInstance()->real_escape_string($newTimeObject->format('Y-m-d H:i:s'))."',
+                   `real_last_execution` = '".MySqlLegacySupport::getInstance()->real_escape_string($nowObject->format('Y-m-d H:i:s'))."'
                  WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'";
         MySqlLegacySupport::getInstance()->query($query);
 
@@ -166,8 +184,11 @@ class TCMSCronJob extends TCMSRecord
 
     protected function UpdateLastExecutionOnStart()
     {
+        $utc = new \DateTimeZone('UTC');
+        $nowObject = new \DateTime('now', $utc);
+
         $query = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->table)."`
-                   SET `last_execution` = '".MySqlLegacySupport::getInstance()->real_escape_string(date('Y-m-d H:i:s'))."'
+                   SET `last_execution` = '".MySqlLegacySupport::getInstance()->real_escape_string($nowObject->format('Y-m-d H:i:s'))."'
                  WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'";
         MySqlLegacySupport::getInstance()->query($query);
     }
@@ -179,41 +200,25 @@ class TCMSCronJob extends TCMSRecord
      */
     protected function _NeedExecution()
     {
-        $needExecution = false;
-        if (!empty($this->sqlData['last_execution'])) {
-            $iExecutionIntervalInSeconds = $this->sqlData['execute_every_n_minutes'] * 60;
-            $iLastExecutionTimeInSeconds = strtotime($this->sqlData['last_execution']);
-            $iNextExecutionTime = $iLastExecutionTimeInSeconds + (60 * $this->sqlData['execute_every_n_minutes']) - 30; // add a 30 second tolerance
+        $scheduler = $this->getCronJobScheduler();
+        $utc = new \DateTimeZone('UTC');
+        $lastPlannedExecution = null;
+        if ('' !== $this->sqlData['last_execution']) {
+            $lastPlannedExecution = \DateTime::createFromFormat('Y-m-d H:i:s', $this->sqlData['last_execution'], $utc);
+        }
+        $schedule = new CronJobScheduleDataModel(
+            $this->sqlData['execute_every_n_minutes'],
+            $this->sqlData['unlock_after_n_minutes'],
+            '1' === $this->sqlData['lock'],
+            $lastPlannedExecution
+        );
 
-            if ('1' == $this->sqlData['lock']) {
-                // check if cronjob is locked, but last execution is older than 24h and older than execute interval
-                // may be possible if the cronjob was interrupted before end of script by an error or server time-out
-                if ($iNextExecutionTime <= time()) {
-                    $iMaxLockTime = $this->sqlData['unlock_after_n_minutes'];
-                    if (!empty($iMaxLockTime)) {
-                        $iMaxLockTime = 60 * $iMaxLockTime;
-                        if (time() - $iLastExecutionTimeInSeconds - $iExecutionIntervalInSeconds > $iMaxLockTime) {
-                            $needExecution = true;
-                        }
-                    } else {
-                        if ($iLastExecutionTimeInSeconds + $iExecutionIntervalInSeconds <= strtotime('-1 day')) {
-                            $needExecution = true;
-                        }
-                    }
-                    if ($needExecution) {
-                        $this->_Unlock();
-                    }
-                }
-            } else {
-                if ($iNextExecutionTime <= time()) {
-                    $needExecution = true;
-                }
-            }
-        } else {
-            $needExecution = true;
+        $requiresExecution = $scheduler->requiresExecution($schedule);
+        if ($requiresExecution && '1' === $this->sqlData['lock']) {
+            $this->_Unlock();
         }
 
-        return $needExecution;
+        return $requiresExecution;
     }
 
     /**

@@ -18,7 +18,6 @@ class CronJobScheduler implements CronJobSchedulerInterface
 
     public function requiresExecution(CronJobScheduleDataModel $schedule): bool
     {
-        $needExecution = false;
         if (null === $schedule->getLastExecutedUtc()) {
             return true;
         }
@@ -28,7 +27,6 @@ class CronJobScheduler implements CronJobSchedulerInterface
 
         $lastPlannedExecution = $schedule->getLastExecutedUtc();
 
-//            $iLastExecutionTimeInSeconds = strtotime($this->sqlData['last_execution']);
         $nextExecution = clone $lastPlannedExecution;
         $nextExecution->add(new \DateInterval(sprintf('PT%sM', $schedule->getExecuteEveryNMinutes())));
 
