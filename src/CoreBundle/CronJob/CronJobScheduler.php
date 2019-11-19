@@ -34,13 +34,13 @@ class CronJobScheduler implements CronJobSchedulerInterface
             return true;
         }
 
-        $nowObject = $this->timeProvider->getDateTime($lastPlannedExecution->getTimezone());
+        $now = $this->timeProvider->getDateTime($lastPlannedExecution->getTimezone());
 
         $nextExecution = clone $lastPlannedExecution;
         $nextExecution->add(new \DateInterval(sprintf('PT%sM', $schedule->getExecuteEveryNMinutes())));
 
         // not time to execute again
-        if ($nowObject < $nextExecution) {
+        if ($now < $nextExecution) {
             return false;
         }
 
@@ -49,12 +49,10 @@ class CronJobScheduler implements CronJobSchedulerInterface
             return true;
         }
 
-        // check if cronjob is locked, but last execution is older than 24h and older than execute interval
-        // may be possible if the cronjob was interrupted before end of script by an error or server time-out
         $iMaxLockTime = $schedule->getUnlockAfterNMinutes();
         $maxLock = clone $lastPlannedExecution;
         $maxLock->add(new \DateInterval(sprintf('PT%sM', $iMaxLockTime)));
-        if ($nowObject <= $maxLock) {
+        if ($now <= $maxLock) {
             return false;
         }
 
