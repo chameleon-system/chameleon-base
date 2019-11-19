@@ -104,6 +104,16 @@ class CronJobSchedulerTest extends TestCase
                 'currentUtcTime' => $this->createDate('2019-11-15 02:15:01'),
                 'expectedResult' => true,
             ],
+            'lock-ignored-if-job-is-not-due-to-be-executed' => [
+                'schedule' => new CronJobScheduleDataModel(
+                    1440,
+                    10,
+                    true,
+                    $this->createDate('2019-11-14 01:15:00')
+                ),
+                'currentUtcTime' => $this->createDate('2019-11-15 00:15:00'),
+                'expectedResult' => false,
+            ],
             '15-min-after-one-oclock-utc-plus-one' => [
                 'schedule' => new CronJobScheduleDataModel(
                     1440,
