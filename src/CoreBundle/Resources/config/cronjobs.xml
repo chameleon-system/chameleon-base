@@ -3,7 +3,7 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service class="ChameleonSystem\CoreBundle\CronJob\CronJobScheduler" id="chameleon_system_core.cron_job.cron_job_scheduler" public="false">
+        <service class="ChameleonSystem\CoreBundle\CronJob\CronJobScheduler" id="chameleon_system_core.cron_job.scheduler" public="true">
             <argument type="service" id="chameleon_system_core.system_time_provider"/>
         </service>
 

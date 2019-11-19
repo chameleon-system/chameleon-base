@@ -147,7 +147,7 @@ class TCMSCronJob extends TCMSRecord
 
     private function getCronJobScheduler(): CronJobSchedulerInterface
     {
-        return ServiceLocator::get('chameleon_system_core.cron_job.cron_job_scheduler');
+        return ServiceLocator::get('chameleon_system_core.cron_job.scheduler');
     }
 
     /**
