@@ -11,7 +11,7 @@
 {% endif %}
         <div class="row">
             <div class="col-12 col-md-6 col-xl-8">
-                <div id="navigationTreeContainer{% if showAssignDialog == true %}-checkboxes{% endif %}" class="navigationTreeContainer"></div>
+                <div id="navigationTreeContainer{% if noAssignDialog == false %}-checkboxes{% endif %}" class="navigationTreeContainer"></div>
             </div>
             <div class="col-12 col-md-6 col-xl-4 justify-content-end mt-4 mt-md-0">
                 <div class="treelegend">
@@ -20,7 +20,7 @@
                         <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_header' | trans }}</span>
                     </h5>
 
-                    {% if showAssignDialog %}
+                    {% if noAssignDialog == false %}
                         <div class="activeConnectedNode primaryConnectedNode">
                             <span class="nodeIndicatorIcon"></span>
                             <span>aktiver Hauptnavigationspunkt dieser Seite </span>
@@ -68,7 +68,7 @@
 {% endif %}
 
 <script>
-    var currentNodeID = null;
+    var currentNodeId = null;
 
     $("#navigationTreeContainer")
         .jstree({
@@ -78,9 +78,7 @@
                     "url": "{{ treeNodesAjaxUrl | raw }}",
                     "data": function(node) {
                         return {
-                            'id' : node.id,
-                            'currentPageId': '{{ currentPageId }}',
-                            'primaryConnectedNodeIdOfCurrentPage': '{{ primaryConnectedNodeIdOfCurrentPage }}'
+                            'id' : node.id
                         };
                     }
                 },
@@ -136,9 +134,7 @@
                     "url": "{{ treeNodesAjaxUrl | raw }}",
                     "data": function(node) {
                         return {
-                            'id' : node.id,
-                            'currentPageId': '{{ currentPageId }}',
-                            'primaryConnectedNodeIdOfCurrentPage': '{{ primaryConnectedNodeIdOfCurrentPage }}'
+                            'id' : node.id
                         };
                     }
                 },
@@ -282,21 +278,21 @@
 
 
     function openPageConnectionList(node) {
-        var nodeID = $(node).parent().attr('id');
-        currentNodeID = nodeID; // save node ID in global var
-        var url = "{{ openPageConnectionListUrl | raw }}" + "&sRestriction=" + nodeID;
+        var nodeId = $(node).parent().attr('id');
+        currentNodeId = nodeId; // save nodeId in global var
+        var url = "{{ openPageConnectionListUrl | raw }}" + "&sRestriction=" + nodeId;
         CreateModalIFrameDialogCloseButton(url);
-        refreshNodeOnModalClose(nodeID);
+        refreshNodeOnModalClose(nodeId);
     }
 
     /**
      * opens the page in edit mode
      */
     function openPageEditor(node) {
-        var pageID = $(node).parent().attr('ispageid');
+        var pageId = $(node).parent().attr('isPageId');
 
-        if (pageID !== false && typeof(pageID) !== "undefined") {
-            parent.document.location.href = "{{ openPageEditorUrl | raw }}" + '&id=' + pageID;
+        if (pageId !== false && typeof(pageId) !== "undefined") {
+            parent.document.location.href = "{{ openPageEditorUrl | raw }}" + '&id=' + pageId;
         } else {
             alert("{{ 'chameleon_system_core.cms_module_page_tree.node_has_no_page'|trans }}");
         }
@@ -306,9 +302,9 @@
      * opens the page in config edit mode
      */
     function openPageConfigEditor(node) {
-        var pageID = $(node).parent().attr('ispageid');
-        if (pageID !== false && typeof(pageID) !== "undefined") {
-            parent.document.location.href = "{{ openPageConfigEditorUrl | raw }}" + '&id=' + pageID;
+        var pageId = $(node).parent().attr('isPageId');
+        if (pageId !== false && typeof(pageId) !== "undefined") {
+            parent.document.location.href = "{{ openPageConfigEditorUrl | raw }}" + '&id=' + pageId;
         } else {
             alert("{{ 'chameleon_system_core.cms_module_page_tree.node_has_no_page'|trans }}");
         }
@@ -318,9 +314,9 @@
      * opens the tree node editor
      */
     function openTreeNodeEditor(node) {
-        var nodeID = $(node).parent().attr('id');
-        currentNodeID = nodeID; // save node ID in global var
-        var url = "{{ openTreeNodeEditorUrl | raw }}" + '&id=' + nodeID;
+        var nodeId = $(node).parent().attr('id');
+        currentNodeId = nodeId; // save nodeId in global var
+        var url = "{{ openTreeNodeEditorUrl | raw }}" + '&id=' + nodeId;
         CreateModalIFrameDialogCloseButton(url);
         //refreshNode with callback function updateTreeNode
     }
@@ -330,9 +326,9 @@
      *
      */
     function openTreeNodeEditorAddNewNode(node) {
-        var nodeID = $(node).parent().attr('id');
-        currentNodeID = nodeID; // save node ID in global var
-        var url = "{{ openTreeNodeEditorAddNewNodeUrl | raw }}" + '&parent_id=' + nodeID;
+        var nodeId = $(node).parent().attr('id');
+        currentNodeId = nodeId; // save nodeId in global var
+        var url = "{{ openTreeNodeEditorAddNewNodeUrl | raw }}" + '&parent_id=' + nodeId;
         CreateModalIFrameDialogCloseButton(url);
         //refreshNode with callback function updateTreeNode
     }
@@ -348,9 +344,9 @@
         confirmMessage = confirmMessage.replace('%nodeName%', nodeTitle);
 
         if(confirm(confirmMessage)){
-            var nodeID = $(node).parent().attr('id');
-            currentNodeID = nodeID; // save node ID in global var
-            var url = "{{ deleteNodeUrl | raw }}" + '&nodeID=' + nodeID;
+            var nodeId = $(node).parent().attr('id');
+            currentNodeId = nodeId; // save nodeId in global var
+            var url = "{{ deleteNodeUrl | raw }}" + '&nodeId=' + nodeId;
             CHAMELEON.CORE.showProcessingModal();
             GetAjaxCallTransparent(url, deleteNodeSuccess);
         }
@@ -359,11 +355,11 @@
     /**
      * final remove of the node from DOM tree
      */
-    function deleteNodeSuccess(nodeID, responseMessage) {
-        if ('success' === responseMessage && currentNodeID === nodeID) {
+    function deleteNodeSuccess(nodeId, responseMessage) {
+        if ('success' === responseMessage && currentNodeId === nodeId) {
             //set to parent of deleted node
-            currentNodeID = $(".navigationTreeContainer.jstree #" + nodeID).parent().parent().attr('id');
-            refreshNode(currentNodeID);
+            currentNodeId = $(".navigationTreeContainer.jstree #" + nodeId).parent().parent().attr('id');
+            refreshNode(currentNodeId);
         }
         window.CHAMELEON.CORE.hideProcessingModal();
     }
@@ -373,38 +369,36 @@
      */
     function updateTreeNode(formObject) {
         // maybe a new node was created, currentNodeId is the node from which the call was made, so refresh from this node
-        refreshNode(currentNodeID);
-        currentNodeID = formObject.id.value;
+        refreshNode(currentNodeId);
+        currentNodeId = formObject.id.value;
     }
 
     function assignPage(node) {
-        var nodeID = $(node).attr('id');
-        currentNodeID = nodeID; // save node ID in global var
-        var assignedpageId = "{{ currentPageId }}";
-        var url = '{{ assignPageUrl | raw }}&sRestriction=' + nodeID + '&contid=' + assignedpageId + '&cms_tree_id=' + nodeID;
+        var nodeId = $(node).attr('id');
+        currentNodeId = nodeId; // save nodeId in global var
+        var url = '{{ assignPageUrl | raw }}&sRestriction=' + nodeId + '&nodeId=' + nodeId;1
         CreateModalIFrameDialogCloseButton(url);
-        refreshNodeOnModalClose(nodeID);
+        refreshNodeOnModalClose(nodeId);
     }
 
 
-    function connectPageOnSelect(nodeID) {
-        currentNodeID = nodeID; // save node ID in global var
-        var assignedpageId = "{{ currentPageId }}";
-        var url = '{{ connectPageOnSelectUrl | raw }}&sRestriction=' + nodeID + '&contid=' + assignedpageId + '&cms_tree_id=' + nodeID;
+    function connectPageOnSelect(nodeId) {
+        currentNodeId = nodeId; // save nodeId in global var
+        var url = '{{ connectPageOnSelectUrl | raw }}&sRestriction=' + nodeId + '&nodeId=' + nodeId;
         GetAjaxCallTransparent(url, connectPageSuccess);
     }
 
 
-    function disconnectPageOnDeselect(nodeID) {
-        currentNodeID = nodeID; // save node ID in global var
+    function disconnectPageOnDeselect(nodeId) {
+        currentNodeId = nodeId; // save nodeId in global var
         var assignedpageId = "{{ currentPageId }}";
-        var url = '{{ disconnectPageOnDeselectUrl | raw }}&sRestriction=' + nodeID + '&contid=' + assignedpageId + '&cms_tree_id=' + nodeID;
+        var url = '{{ disconnectPageOnDeselectUrl | raw }}&sRestriction=' + nodeId + '&pageId=' + assignedpageId + '&nodeId=' + nodeId;
         GetAjaxCallTransparent(url, connectPageSuccess);
     }
 
-    function connectPageSuccess(nodeID, responseMessage) {
-        if ('success' === responseMessage && currentNodeID === nodeID) {
-            refreshNode(nodeID);
+    function connectPageSuccess(nodeId, responseMessage) {
+        if ('success' === responseMessage && currentNodeId === nodeId) {
+            refreshNode(nodeId);
         }
     }
 
@@ -412,10 +406,10 @@
     /**
      * moves node by drag&drop data
      */
-    function moveNode(nodeID, parentNodeID, position) {
-        if (typeof parentNodeID != 'undefined' && typeof nodeID != 'undefined') {
+    function moveNode(nodeId, parentNodeId, position) {
+        if (typeof parentNodeId != 'undefined' && typeof nodeId != 'undefined') {
             CHAMELEON.CORE.showProcessingModal();
-            var url = '{{ moveNodeUrl | raw }}&nodeID=' + nodeID + '&parentNodeID=' + parentNodeID + '&position=' + position;
+            var url = '{{ moveNodeUrl | raw }}&nodeId=' + nodeId + '&parentNodeId=' + parentNodeId + '&position=' + position;
             GetAjaxCallTransparent(url, moveNodeSuccess);
         }
     }
@@ -423,23 +417,23 @@
     /**
      * unblocks the UI
      */
-    function moveNodeSuccess(nodeID, responseMessage) {
+    function moveNodeSuccess(nodeId, responseMessage) {
         window.CHAMELEON.CORE.hideProcessingModal();
     }
 
-    function refreshNodeOnModalClose(nodeID) {
+    function refreshNodeOnModalClose(nodeId) {
         $('#modalDialog').on('hidden.bs.modal', function () {
-            refreshNode(nodeID);
+            refreshNode(nodeId);
         });
     }
 
-    function refreshNode(nodeID) {
-        if (currentNodeID == nodeID) {
+    function refreshNode(nodeId) {
+        if (currentNodeId == nodeId) {
             // a new selection is set correct from jstree_refresh, but a deselection won't reset automatically
-            if (false === $(".navigationTreeContainer.jstree #"+nodeID+"_anchor").hasClass('activeConnetedNode')) {
-                $(".navigationTreeContainer.jstree").jstree(true).deselect_node(nodeID);
+            if (false === $(".navigationTreeContainer.jstree #"+nodeId+"_anchor").hasClass('activeConnetedNode')) {
+                $(".navigationTreeContainer.jstree").jstree(true).deselect_node(nodeId);
             }
-            $(".navigationTreeContainer.jstree").jstree(true).refresh_node(nodeID);
+            $(".navigationTreeContainer.jstree").jstree(true).refresh_node(nodeId);
         }
     }
 
