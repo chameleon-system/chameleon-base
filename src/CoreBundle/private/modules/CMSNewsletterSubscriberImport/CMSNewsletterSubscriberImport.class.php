@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Doctrine\DBAL\Connection;
+
 class CMSNewsletterSubscriberImport extends TCMSModelBase
 {
     const MESSAGE_MANAGER_CONSUMER = 'CMSNewsletterSubscriberImport';
@@ -35,19 +39,18 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
         $databaseConnection = $this->getDatabaseConnection();
         $idListString = implode(',', array_map(array($databaseConnection, 'quote'), $aPortals));
 
-        $query = "SELECT `id`,`name` FROM `pkg_newsletter_group` WHERE `cms_portal_id` IN ($idListString) ORDER BY `name` ASC";
+        $query = "SELECT `id`,`name` FROM `pkg_newsletter_group` WHERE `cms_portal_id` IN ($idListString) OR cms_portal_id = '' ORDER BY `name` ASC";
         $oPkgNewsletterGroupList = TdbPkgNewsletterGroupList::GetList($query);
         $this->data['oPkgNewsletterGroupList'] = $oPkgNewsletterGroupList;
 
-        $oMessageManager = TCMSMessageManager::GetInstance();
-        /** @var $oMessageManager TCMSMessageManager */
+        $oMessageManager = $this->getMessageManager();
         $sConsumerName = self::MESSAGE_MANAGER_CONSUMER.'-Step1';
         if (0 == $oPkgNewsletterGroupList->Length()) {
             $sMessageCode = 'ERROR_NO_GROUP_FOUND_FOR_IMPORT';
-            $oMessageManager->AddMessage($sConsumerName, $sMessageCode);
+            $oMessageManager->addMessage($sConsumerName, $sMessageCode);
         }
 
-        $this->data['messages'] = $oMessageManager->RenderMessages($sConsumerName);
+        $this->data['messages'] = $oMessageManager->renderMessages($sConsumerName, 'standard','Core');
     }
 
     protected function DefineInterface()
@@ -269,5 +272,15 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
         }
 
         return $genderID;
+    }
+
+    private function getDatabaseConnection(): Connection
+    {
+        return ServiceLocator::get('database_connection');
+    }
+
+    private function getMessageManager(): FlashMessageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 }
