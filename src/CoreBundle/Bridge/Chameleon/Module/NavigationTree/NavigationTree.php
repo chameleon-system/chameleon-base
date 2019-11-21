@@ -14,6 +14,7 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTree;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ChangeNavigationTreeNodeEvent;
 use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
+use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperFactoryInterface;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface;
@@ -109,7 +110,6 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      */
     private $cache;
 
-
     public function __construct(
         Connection $dbConnection,
         EventDispatcherInterface $eventDispatcher,
@@ -195,7 +195,6 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         }
     }
 
-
     protected function DefineInterface()
     {
         parent::DefineInterface();
@@ -203,19 +202,182 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
+    /**
+     * moves node to new position and updates all relevant node positions
+     * and the parent node connection if changed.
+     *
+     * @return bool
+     */
+    public function moveNode(): bool
+    {
+        $tableId = $this->inputFilterUtil->getFilteredGetInput('tableid', '');
+        $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
+        $parentNodeId = $this->inputFilterUtil->getFilteredGetInput('parentNodeId', '');
+        $position = $this->inputFilterUtil->getFilteredGetInput('position', '');
+
+        if ('' === $tableId || '' === $nodeId || '' === $parentNodeId || '' === $position) {
+            return false;
+        }
+
+        $updatedNodes = array();
+
+        $tableEditor = new \TCMSTableEditorManager();
+        $entrySortField = $this->getSortFieldName();
+
+        $quotedTreeTable = $this->dbConnection->quoteIdentifier($this->treeTable);
+        $quotedParentNodeId = $this->dbConnection->quote($parentNodeId);
+        if (0 == $position) { // set every other node pos+1
+            $query = "SELECT * FROM $quotedTreeTable WHERE `parent_id` = $quotedParentNodeId";
+            $cmsTreeList = \TdbCmsTreeList::GetList($query);
+            while ($cmsTreeNode = &$cmsTreeList->Next()) {
+                $tableEditor->Init($tableId, $cmsTreeNode->id);
+                $newSortOrder = $tableEditor->oTableEditor->oTable->sqlData[$entrySortField] + 1;
+                $tableEditor->SaveField('entry_sort', $newSortOrder);
+                $updatedNodes[] = $cmsTreeNode;
+            }
+
+            $tableEditor->Init($tableId, $nodeId);
+            $tableEditor->SaveField('entry_sort', 0);
+            $tableEditor->SaveField('parent_id', $parentNodeId);
+        } else {
+            $quotedNodeId = $this->dbConnection->quote($nodeId);
+            $quotedEntrySortField = $this->dbConnection->quoteIdentifier($entrySortField);
+            $query = "SELECT * FROM $quotedTreeTable WHERE `parent_id` = $quotedParentNodeId AND `id` != $quotedNodeId ORDER BY $quotedEntrySortField  ASC";
+            $cmsTreeList = &\TdbCmsTreeList::GetList($query, \TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+
+            $count = 0;
+            while ($cmsTree = &$cmsTreeList->Next()) {
+                if ($position == $count) { // skip new position of moved node
+                    ++$count;
+                }
+
+                $tableEditor->Init($tableId, $cmsTree->id);
+                $tableEditor->SaveField('entry_sort', $count);
+                ++$count;
+            }
+
+            $tableEditor->Init($tableId, $nodeId);
+            $tableEditor->SaveField('entry_sort', $position);
+            $tableEditor->SaveField('parent_id', $parentNodeId);
+            $updatedNodes[] = $cmsTree;
+        }
+
+        // update cache
+        // @todo needed? Should be tested
+//                $this->cache->callTrigger($this->treeTable, $nodeId);
+        $this->updateSubtreePathCache($nodeId);
+
+        $node = \TdbCmsTree::GetNewInstance($nodeId);
+        $this->getNestedSetHelper()->updateNode($node);
+        $this->writeSqlLog();
+
+        $updatedNodes[] = $node;
+        $event = new ChangeNavigationTreeNodeEvent($updatedNodes);
+        $this->eventDispatcher->dispatch(CoreEvents::UPDATE_NAVIGATION_TREE_NODE, $event);
+
+        return true;
+    }
 
     /**
-     * renders all children of a node
-     * is called via ajax.
+     * Deletes a node and all subnodes.
      *
-     * @return string
+     * @return null|string - returns null or id of the node that needs to be removed from the html tree.
      */
-    public function getTreeNodesJson()
+    public function deleteNode(): ?string
+    {
+        $tableId = $this->inputFilterUtil->getFilteredGetInput('tableid', '');
+        $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
+
+        if ('' === $tableId || '' === $nodeId) {
+            return null;
+        }
+
+        $tableEditor = new \TCMSTableEditorManager();
+        $tableEditor->Init($tableId, $nodeId);
+        $tableEditor->Delete($nodeId);
+
+        return $nodeId;
+    }
+
+    public function connectPageToNode(): string
+    {
+        $tableId = $this->inputFilterUtil->getFilteredGetInput('tableid', '');
+        $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
+        $currentPageId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
+
+        if ('' === $tableId || '' === $nodeId || '' === $currentPageId) {
+            return false;
+        }
+
+        $tableEditor = new \TCMSTableEditorManager();
+        $tableEditor->Init($tableId);
+        $insertSuccessData = $tableEditor->Insert();
+        $recordId = $insertSuccessData->id;
+
+        $recordData = [];
+        $recordData['tableid'] = $tableId;
+        $recordData['id'] = $recordId;
+        $recordData['active'] = '1';
+        $recordData['start_date'] = '0000-00-00 00:00:00';
+        $recordData['end_date'] = '0000-00-00 00:00:00';
+        $recordData['cms_tree_id'] = $nodeId;
+        $recordData['contid'] = $currentPageId;
+        $recordData['tbl'] = 'cms_tpl_page';
+
+        $tableEditor->AllowEditByAll(true);
+        $tableEditor->Save($recordData);
+        $tableEditor->AllowEditByAll(false);
+
+        return $nodeId;
+    }
+
+    public function disconnectPageFromNode(): string
+    {
+        $tableId = $this->inputFilterUtil->getFilteredGetInput('tableid', '');
+        $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
+        $currentPageId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
+
+        if ('' === $tableId || '' === $nodeId || '' === $currentPageId) {
+            return false;
+        }
+
+        $query = 'SELECT *
+                FROM `cms_tree_node`
+               WHERE `cms_tree_node`.`contid` = '.$this->dbConnection->quote($currentPageId).'
+                 AND `cms_tree_node`.`cms_tree_id` = '.$this->dbConnection->quote($nodeId)."
+                 AND `cms_tree_node`.`tbl` = 'cms_tpl_page'
+               ";
+        $nodePageConnectionList = \TdbCmsTreeNodeList::GetList($query);
+        while ($nodePageConnection = $nodePageConnectionList->Next()) {
+            $tableEditor = new \TCMSTableEditorManager();
+            $tableEditor->Init($tableId, $nodePageConnection->id);
+            $tableEditor->Delete($nodePageConnection->id);
+        }
+
+        return $nodeId;
+    }
+
+    /**
+     * Renders all children of a node.
+     * Is called via ajax and converted to JSON.
+     *
+     * @return BackendTreeNodeDataModel
+     */
+    public function getTreeNodesJson(): BackendTreeNodeDataModel
     {
         $this->currentPageId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
         $this->primaryConnectedNodeIdOfCurrentPage = $this->inputFilterUtil->getFilteredGetInput('primaryTreeNodeId', '');
 
         $startNodeId = $this->inputFilterUtil->getFilteredGetInput('id');
+
+        // '#' = first ajax call from jstree AND there're a currentPage
+        if ('#' === $startNodeId && '' !== $this->currentPageId) {
+            $portalBasedRootNodeId = $this->getPortalBasedRootNodeByPageId($this->currentPageId);
+            if ('' !== $portalBasedRootNodeId) {
+                // only load the portal of the current page
+                $startNodeId = $portalBasedRootNodeId;
+            }
+        }
 
         if ('#' === $startNodeId) {
             $treeData = $this->createRootTreeWithDefaultPortalItems();
@@ -229,7 +391,19 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         return $treeData;
     }
 
-    protected function createRootTreeWithDefaultPortalItems()
+    private function getPortalBasedRootNodeByPageId(string $pageId): string
+    {
+        $page = \TdbCmsTplPage::GetNewInstance();
+        if (false == $page->Load($pageId)) {
+            return null;
+        }
+
+        $portal = $page->GetPortal();
+
+        return $portal->fieldMainNodeTree;
+    }
+
+    private function createRootTreeWithDefaultPortalItems(): BackendTreeNodeDataModel
     {
         $this->restrictedNodes = $this->getPortalNavigationStartNodes();
 
@@ -280,59 +454,69 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         return $rootTreeNodeDataModel;
     }
 
-    protected function createTreeDataModel(\TdbCmsTree $node, $level = 0)
+    private function createTreeDataModel(\TdbCmsTree $node, $level = 0): BackendTreeNodeDataModel
     {
         $treeNodeDataModel = $this->backendTreeNodeFactory->createTreeNodeDataModelFromTreeRecord($node);
 
-        $liAttr = $treeNodeDataModel->getLiAttr();
-        $aAttr = [];
-        $liClass = '';
-        $aClass = '';
+        $treeNodeDataModel->setName($this->checkNameTranslation($treeNodeDataModel->getName(), $node));
+        $this->setTypeAndAttributes($treeNodeDataModel, $node);
 
-        if ('' === $treeNodeDataModel->GetName()) {
-            $unnamedRecordTitle = \TGlobal::OutHTML($this->translator->trans('chameleon_system_core.text.unnamed_record'));
-            $treeNodeDataModel->setName($unnamedRecordTitle);
+        if (0 == $level) {
+            $treeNodeDataModel->setOpened(true);
         }
 
+        ++$level;
+        $children = $node->GetChildren(true);
+        while ($child = $children->Next()) {
+            $childTreeNodeDataModel = $this->createTreeDataModel($child, $level);
+            if ($childTreeNodeDataModel->isOpened()) {
+                $treeNodeDataModel->setOpened(true);
+            }
+            $treeNodeDataModel->addChildren($childTreeNodeDataModel);
+        }
+
+        return $treeNodeDataModel;
+    }
+
+    protected function checkNameTranslation(string $name, \TdbCmsTree $node): string
+    {
         $cmsUser = \TCMSUser::GetActiveUser();
         $editLanguage = $cmsUser->GetCurrentEditLanguageObject();
+        $node->SetLanguage($editLanguage->id);
+
+        if ('' === $name) {
+            $name = \TGlobal::OutHTML($this->translator->trans('chameleon_system_core.text.unnamed_record'));
+        }
 
         if (true === CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE) {
             $cmsConfig = \TCMSConfig::GetInstance();
             $defaultLanguage = $cmsConfig->GetFieldTranslationBaseLanguage();
             if (null !== $defaultLanguage && $defaultLanguage->id !== $editLanguage->id) {
                 if ('' === $node->sqlData['name__'.$editLanguage->fieldIso6391]) {
-                    $treeNodeDataModel->setName($treeNodeDataModel->getName().' <span class="bg-danger px-1"><i class="fas fa-language" title="'.$this->translator->trans('chameleon_system_core.cms_module_table_editor.not_translated').'"></i></span>');
+                    $name .= ' <span class="bg-danger px-1"><i class="fas fa-language" title="'.$this->translator->trans('chameleon_system_core.cms_module_table_editor.not_translated').'"></i></span>';
                 }
             }
         }
 
-        $children = $node->GetChildren(true);
-        if ($children->Length() > 0) {
-            $treeNodeDataModel->setType('folder');
-        } else {
-            $treeNodeDataModel->setType('page');
-        }
-        if ('' !== $node->sqlData['link']) {
-            $treeNodeDataModel->setType('externalLink');
-        }
+        return $name;
+    }
 
-        if (in_array($node->id, $this->restrictedNodes)) {
-            $typeRestricted = $treeNodeDataModel->getType().'RestrictedMenu';
-            $treeNodeDataModel->setType($typeRestricted);
-        }
+    private function setTypeAndAttributes(BackendTreeNodeDataModel $treeNodeDataModel, \TdbCmsTree $node): void
+    {
+        $treeNodeDataModel->setType($this->setInitialType($node));
+
+        $liAttr = $treeNodeDataModel->getLiAttr();
+        $aAttr = [];
+        $liClass = '';
+        $aClass = '';
 
         $nodeHidden = false;
-
-        $node->SetLanguage($editLanguage->id);
         if (true == $node->fieldHidden) {
             $nodeHidden = true;
             $aClass .= ' node-hidden';
-            $treeNodeDataModel->setType('node-hidden');
         }
 
         $pages = [];
-
         $connectedPages = $node->GetAllLinkedPages();
         $foundSecuredPage = false;
         while ($connectedPage = $connectedPages->Next()) {
@@ -378,26 +562,35 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             }
         }
 
-        if (0 == $level) {
-            $treeNodeDataModel->setOpened(true);
-        }
-
         $liAttr = array_merge($liAttr, ['class' => $liClass]);
         $treeNodeDataModel->setLiAttr($liAttr);
 
         $aAttr = array_merge($aAttr, ['class' => $aClass]);
         $treeNodeDataModel->setAAttr($aAttr);
+    }
 
-        ++$level;
-        while ($child = $children->Next()) {
-            $childTreeNodeObj = $this->createTreeDataModel($child, $level);
-            if ($childTreeNodeObj->isOpened()) {
-                $treeNodeDataModel->setOpened(true);
-            }
-            $treeNodeDataModel->addChildren($childTreeNodeObj);
+    private function setInitialType(\TdbCmsTree $node): string
+    {
+        $children = $node->GetChildren(true);
+        if ($children->Length() > 0) {
+            $type = 'folder';
+        } else {
+            $type = 'page';
         }
 
-        return $treeNodeDataModel;
+        if ('' !== $node->sqlData['link']) {
+            $type = 'externalLink';
+        }
+
+        if (in_array($node->id, $this->restrictedNodes)) {
+            $type .= 'RestrictedMenu';
+        }
+
+        if (true == $node->fieldHidden) {
+            $type = 'node-hidden';
+        }
+
+        return $type;
     }
 
     /**
@@ -406,7 +599,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      *
      * @return array
      */
-    protected function getPortalNavigationStartNodes()
+    private function getPortalNavigationStartNodes(): array
     {
         $portalList = \TdbCmsPortalList::GetList(null, \TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
 
@@ -422,17 +615,14 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         return $restrictedNodes;
     }
 
-
     /**
      * Get the sort field name for the active language.
      * Get default field name if active language is same as portal main language,
-     * field is not translateable or field based translation is off.
-     *
-     * @param string $sTreeId Id of an existing tree (need to check if language field exists)
+     * field is not translatable or field based translation is off.
      *
      * @return string
      */
-    protected function getSortFieldName($sTreeId)
+    private function getSortFieldName(): string
     {
         $entrySortField = 'entry_sort';
         if (\TdbCmsTree::CMSFieldIsTranslated('entry_sort')) {
@@ -445,164 +635,12 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         return $entrySortField;
     }
 
-
-    /**
-     * moves node to new position and updates all relevant node positions
-     * and the parent node connection if changed.
-     *
-     * @return bool
-     */
-    public function moveNode()
-    {
-        $tableId = $this->inputFilterUtil->getFilteredGetInput('tableid', '');
-        $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
-        $parentNodeId = $this->inputFilterUtil->getFilteredGetInput('parentNodeId', '');
-        $position = $this->inputFilterUtil->getFilteredGetInput('position', '');
-
-        if ('' === $tableId || '' === $nodeId || '' === $parentNodeId || '' === $position) {
-            return false;
-        }
-
-        $updatedNodes = array();
-
-        $tableEditor = new \TCMSTableEditorManager();
-        $entrySortField = $this->getSortFieldName($parentNodeId);
-
-        $quotedTreeTable = $this->dbConnection->quoteIdentifier($this->treeTable);
-        $quotedParentNodeId = $this->dbConnection->quote($parentNodeId);
-        if (0 == $position) { // set every other node pos+1
-            $query = "SELECT * FROM $quotedTreeTable WHERE `parent_id` = $quotedParentNodeId";
-            $cmsTreeList = \TdbCmsTreeList::GetList($query);
-            while ($cmsTreeNode = &$cmsTreeList->Next()) {
-                $tableEditor->Init($tableId, $cmsTreeNode->id);
-                $newSortOrder = $tableEditor->oTableEditor->oTable->sqlData[$entrySortField] + 1;
-                $tableEditor->SaveField('entry_sort', $newSortOrder);
-                $updatedNodes[] = $cmsTreeNode;
-            }
-
-            $tableEditor->Init($tableId, $nodeId);
-            $tableEditor->SaveField('entry_sort', 0);
-            $tableEditor->SaveField('parent_id', $parentNodeId);
-        } else {
-            $quotedNodeId = $this->dbConnection->quote($nodeId);
-            $quotedEntrySortField = $this->dbConnection->quoteIdentifier($entrySortField);
-            $query = "SELECT * FROM $quotedTreeTable WHERE `parent_id` = $quotedParentNodeId AND `id` != $quotedNodeId ORDER BY $quotedEntrySortField  ASC";
-            $cmsTreeList = &\TdbCmsTreeList::GetList($query, \TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
-
-            $count = 0;
-            while ($cmsTree = &$cmsTreeList->Next()) {
-                if ($position == $count) { // skip new position of moved node
-                    ++$count;
-                }
-
-                $tableEditor->Init($tableId, $cmsTree->id);
-                $tableEditor->SaveField('entry_sort', $count);
-                ++$count;
-            }
-
-            $tableEditor->Init($tableId, $nodeId);
-            $tableEditor->SaveField('entry_sort', $position);
-            $tableEditor->SaveField('parent_id', $parentNodeId);
-            $updatedNodes[] = $cmsTree;
-        }
-
-        // update cache
-        // @todo needed? Should be tested
-//                $this->cache->callTrigger($this->treeTable, $nodeId);
-        $this->updateSubtreePathCache($nodeId);
-
-
-        $node = \TdbCmsTree::GetNewInstance($nodeId);
-        $this->getNestedSetHelper()->updateNode($node);
-        $this->writeSqlLog();
-
-        $updatedNodes[] = $node;
-        $event = new ChangeNavigationTreeNodeEvent($updatedNodes);
-        $this->eventDispatcher->dispatch(CoreEvents::UPDATE_NAVIGATION_TREE_NODE, $event);
-
-        return true;
-    }
-
-    /**
-     * deletes a node and all subnodes.
-     *
-     * @return mixed - returns false or id of the node that needs to be removed from the html tree
-     */
-    public function deleteNode()
-    {
-        $tableId = $this->inputFilterUtil->getFilteredGetInput('tableid', '');
-        $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
-
-        if ('' === $tableId || '' === $nodeId) {
-            return false;
-        }
-
-        $tableEditor = new \TCMSTableEditorManager();
-        $tableEditor->Init($tableId, $nodeId);
-        $tableEditor->Delete($nodeId);
-
-        return $nodeId;
-    }
-
-    public function connectPageToNode(): string
-    {
-        $tableId = $this->inputFilterUtil->getFilteredGetInput('tableid', '');
-        $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
-        $currentPageId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
-
-        if ('' === $tableId || '' === $nodeId || '' === $currentPageId) {
-            return false;
-        }
-
-        $tableEditor = new \TCMSTableEditorManager();
-        $tableEditor->Init($tableId);
-        $insertSuccessData = $tableEditor->Insert();
-        $recordId = $insertSuccessData->id;
-
-        $postData = [];
-        $postData['id'] = $recordId;
-        $postData['active'] = '1';
-        $postData['cms_tree_id'] = $nodeId;
-        $postData['contid'] = $currentPageId;
-        $postData['tbl'] = 'cms_tpl_page';
-
-        $tableEditor->Save($postData, true);
-
-        return $nodeId;
-    }
-
-    public function disconnectPageFromNode(): string
-    {
-        $tableId = $this->inputFilterUtil->getFilteredGetInput('tableid', '');
-        $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
-        $currentPageId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
-
-        if ('' === $tableId || '' === $nodeId || '' === $currentPageId) {
-            return false;
-        }
-
-        $query = 'SELECT *
-                FROM `cms_tree_node`
-               WHERE `cms_tree_node`.`contid` = '.$this->dbConnection->quote($currentPageId).'
-                 AND `cms_tree_node`.`cms_tree_id` = '.$this->dbConnection->quote($nodeId)."
-                 AND `cms_tree_node`.`tbl` = 'cms_tpl_page'
-               ";
-        $nodePageConnectionList = \TdbCmsTreeNodeList::GetList($query);
-        while ($nodePageConnection = $nodePageConnectionList->Next()) {
-            $tableEditor = new \TCMSTableEditorManager();
-            $tableEditor->Init($tableId, $nodePageConnection->id);
-            $tableEditor->Delete($nodePageConnection->id);
-        }
-
-        return $nodeId;
-    }
-
     /**
      * update the cache of the tree path to each node of the given subtree.
      *
      * @param int $nodeId
      */
-    protected function updateSubtreePathCache($nodeId)
+    private function updateSubtreePathCache($nodeId)
     {
         $oNode = \TdbCmsTree::GetNewInstance();
         $oNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
