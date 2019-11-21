@@ -951,11 +951,7 @@ CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe = function () {
 
 CHAMELEON.CORE.MTTableEditor.idButtonCopyToClipboard = function () {
     $(".entry-id-copy-button").on("click", function() {
-        const $temp = $("<input>");
-        $("body").append($temp);
-        $temp.val($(this).data("entry-id")).select();
-        document.execCommand("copy");
-        $temp.remove();
+        CHAMELEON.CORE.copyToClipboard($(this).data("entry-id"));
     });
 };
 
