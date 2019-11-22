@@ -389,8 +389,11 @@
     }
 
     function connectPageSuccess(nodeId, responseMessage) {
-        if ('success' === responseMessage && currentNodeId === nodeId) {
-            refreshNode(nodeId);
+        if ('success' === responseMessage) {
+            //don't do a refresh here, because refresh_node triggers "selected" again from state
+            $(".navigationTreeContainer.jstree #"+nodeId+"_anchor").addClass('activeConnectedNode');
+        } else {
+            $(".navigationTreeContainer.jstree #" + nodeId + "_anchor").addClass('jstree-clicked');
         }
     }
 
@@ -402,13 +405,13 @@
     }
 
     function disconnectPageSuccess(nodeId, responseMessage) {
-        if ('success' === responseMessage && currentNodeId === nodeId) {
-            refreshNode(nodeId);
-            // a new selection is set correct from jstree_refresh, but a deselection won't reset automatically
-            $(".navigationTreeContainer.jstree").jstree(true).deselect_node(nodeId);
+        if ('success' === responseMessage) {
+            //don't do a refresh here, because refresh_node triggers "selected" again from state
+            $(".navigationTreeContainer.jstree #" + nodeId + "_anchor").removeClass('activeConnectedNode');
+        } else {
+            $(".navigationTreeContainer.jstree #" + nodeId + "_anchor").addClass('jstree-clicked');
         }
     }
-
 
     /**
      * moves node by drag&drop data
@@ -435,12 +438,16 @@
     }
 
     function refreshNode(nodeId) {
-        if (currentNodeId == nodeId) {
-            if (false === $(".navigationTreeContainer.jstree #"+nodeId+"_anchor").hasClass('activeConnetedNode')) {
-                $(".navigationTreeContainer.jstree").jstree(true);
-            }
-            $(".navigationTreeContainer.jstree").jstree(true).refresh_node(nodeId);
+        if (false === $(".navigationTreeContainer.jstree #"+nodeId+"_anchor").hasClass('activeConnetedNode')) {
+            // refresh_node does a Selection, but unfortunately no automatic deselection
+            // but deselect_node also triggers on("deselect_node.jstree") and this kills an active page-connection, even if only a navigation edit was called.
+            // the solution could be, only a normal selection and deselection is possible, when checkboxes are active.
+
+            // $(".navigationTreeContainer.jstree").jstree(true).deselect_node(nodeId);
         }
+
+        $(".navigationTreeContainer.jstree").jstree(true).refresh_node(nodeId);
+
     }
 
 
