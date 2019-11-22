@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use Doctrine\DBAL\Connection;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -477,8 +478,7 @@ class MTTableManager extends TCMSModelBase
 
     private function getAutocompleteListQuery(): string
     {
-        $inputFilterUtil = $this->getInputFilterUtil();
-        $searchKey = $inputFilterUtil->getFilteredInput('term');
+        $databaseConnection = $this->getDatabaseConnection();
 
         $listClass = null;
         // allow custom list class overwriting (defined in pagedef)
@@ -489,37 +489,28 @@ class MTTableManager extends TCMSModelBase
         $oTableList = &$this->oTableConf->GetListObject($listClass);
 
         $query = $oTableList->FilterQuery();
-        $parentTableAlias = $oTableList->GetTableAlias($query);
-
-        $nameColumn = $this->oTableConf->GetNameColumn();
-        $autoClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->fieldName);
-        $fieldIsTranslatable = call_user_func(array($autoClassName, 'CMSFieldIsTranslated'), $nameColumn);
-
-        if ($fieldIsTranslatable) {
-            $currentEditLanguageId = TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID();
-            $languageSuffix = TGlobal::GetLanguagePrefix($currentEditLanguageId);
-            if ('' !== $languageSuffix) {
-                $nameColumn .= '__'.$languageSuffix;
-            }
-        }
-        $databaseConnection = $this->getDatabaseConnection();
-        $quotedNameColumn = $databaseConnection->quoteIdentifier($nameColumn);
+        $tableName = $oTableList->GetTableAlias($query);
 
         $quoteCharacter = $databaseConnection->getDatabasePlatform()->getIdentifierQuoteCharacter();
-        if (false === strpos($parentTableAlias, $quoteCharacter)) {
-            $quotedParentTableAlias = $databaseConnection->quoteIdentifier($parentTableAlias);
+        if (false === strpos($tableName, $quoteCharacter)) {
+            $quotedTableName = $databaseConnection->quoteIdentifier($tableName);
         } else {
-            $quotedParentTableAlias = $parentTableAlias;
+            $quotedTableName = $tableName;
         }
 
+        $nameColumn = $this->getFieldTranslationUtil()->getTranslatedFieldName($this->oTableConf->fieldName, $this->oTableConf->GetNameColumn());
+        $quotedNameColumn = $databaseConnection->quoteIdentifier($nameColumn);
+
+        $searchKey = $this->getInputFilterUtil()->getFilteredInput('term');
+
         if (stristr($query, 'WHERE')) {
-            $query = str_replace('WHERE', "WHERE $quotedParentTableAlias.$quotedNameColumn LIKE '%".MySqlLegacySupport::getInstance()->real_escape_string($searchKey)."%' AND ", $query);
+            $query = str_replace('WHERE', "WHERE $quotedTableName.$quotedNameColumn LIKE '%".$databaseConnection->quote($searchKey)."%' AND ", $query);
         } else {
-            $query .= "WHERE $quotedParentTableAlias.$quotedNameColumn LIKE '%".MySqlLegacySupport::getInstance()->real_escape_string($searchKey)."%' ";
+            $query .= "WHERE $quotedTableName.$quotedNameColumn LIKE '%".$databaseConnection->quote($searchKey)."%' ";
         }
 
         if ('%' !== $searchKey) {
-            $query .= " ORDER BY $quotedParentTableAlias.$quotedNameColumn";
+            $query .= " ORDER BY $quotedTableName.$quotedNameColumn";
         }
 
         $query .= ' LIMIT 0,50';
@@ -696,5 +687,10 @@ class MTTableManager extends TCMSModelBase
     private function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    private function getFieldTranslationUtil(): FieldTranslationUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 }
