@@ -486,10 +486,42 @@ class MTTableManager extends TCMSModelBase
             $listClass = $this->aModuleConfig['listClass'];
         }
 
-        $oTableList = &$this->oTableConf->GetListObject($listClass);
+        $listManager = &$this->oTableConf->GetListObject($listClass);
 
-        $query = $oTableList->FilterQuery();
-        $tableName = $oTableList->GetTableAlias($query);
+        $query = $listManager->FilterQuery();
+
+        $quotedNameToQuery = $this->getNameToQueryQuoted($listManager, $query);
+
+        $searchTerm = '%'.$this->getInputFilterUtil()->getFilteredInput('term').'%';
+        $quotedSearchTerm = $databaseConnection->quote($searchTerm);
+
+        if (false !== stripos($query, 'WHERE')) {
+            // TODO / NOTE if $query contains an OR (without brackets) then this here will make the query wrong.
+            $query = str_replace('WHERE', "WHERE $quotedNameToQuery LIKE $quotedSearchTerm AND ", $query);
+        } else {
+            $query .= "WHERE $quotedNameToQuery LIKE $quotedSearchTerm ";
+        }
+
+        if ('%' !== $searchTerm) {
+            $query .= " ORDER BY $quotedNameToQuery";
+        }
+
+        $query .= ' LIMIT 0,50';
+
+        return $query;
+    }
+
+    /**
+     * @param TCMSListManager $listManager
+     * @param string          $query
+     * @return string
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    private function getNameToQueryQuoted(TCMSListManager $listManager, string $query): string
+    {
+        $databaseConnection = $this->getDatabaseConnection();
+
+        $tableName = $listManager->GetTableAlias($query);
 
         $quoteCharacter = $databaseConnection->getDatabasePlatform()->getIdentifierQuoteCharacter();
         if (false === strpos($tableName, $quoteCharacter)) {
@@ -498,24 +530,13 @@ class MTTableManager extends TCMSModelBase
             $quotedTableName = $tableName;
         }
 
-        $nameColumn = $this->getFieldTranslationUtil()->getTranslatedFieldName($this->oTableConf->fieldName, $this->oTableConf->GetNameColumn());
+        $nameColumn = $this->getFieldTranslationUtil()->getTranslatedFieldName(
+            $this->oTableConf->fieldName,
+            $this->oTableConf->GetNameColumn()
+        );
         $quotedNameColumn = $databaseConnection->quoteIdentifier($nameColumn);
 
-        $searchKey = $this->getInputFilterUtil()->getFilteredInput('term');
-
-        if (stristr($query, 'WHERE')) {
-            $query = str_replace('WHERE', "WHERE $quotedTableName.$quotedNameColumn LIKE '%".$databaseConnection->quote($searchKey)."%' AND ", $query);
-        } else {
-            $query .= "WHERE $quotedTableName.$quotedNameColumn LIKE '%".$databaseConnection->quote($searchKey)."%' ";
-        }
-
-        if ('%' !== $searchKey) {
-            $query .= " ORDER BY $quotedTableName.$quotedNameColumn";
-        }
-
-        $query .= ' LIMIT 0,50';
-
-        return $query;
+        return $quotedTableName.'.'.$quotedNameColumn;
     }
 
     /**
