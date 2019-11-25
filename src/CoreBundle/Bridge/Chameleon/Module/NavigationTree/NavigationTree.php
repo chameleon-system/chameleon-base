@@ -431,18 +431,22 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
                 $portalTreeNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
                 $portalTreeNode->Load($portalId);
 
-                if ($portalId === $defaultPortalMainNodeId) {
+//              See https://github.com/vakata/jstree/issues/2324
+//              If the the other portals are loaded later via ajax, the drag&drop functionality freezes the browser.
+//              Until this problem is solved, we load all portals immediately.
+
+//                if ($portalId === $defaultPortalMainNodeId) {
                     $portalTreeNodeDataModel = $this->createTreeDataModel($portalTreeNode);
                     $portalTreeNodeDataModel->setOpened(true);
-                } else {
-                    $portalTreeNodeDataModel = $this->backendTreeNodeFactory->createTreeNodeDataModelFromTreeRecord($portalTreeNode);
-                    $portalTreeNodeDataModel->setChildrenAjaxLoad(true);
-                    $portalTreeNodeDataModel->setType('folder');
-                    if (in_array($portalTreeNode->id, $this->restrictedNodes)) {
-                        $typeRestricted = $portalTreeNodeDataModel->getType().'RestrictedMenu';
-                        $portalTreeNodeDataModel->setType($typeRestricted);
-                    }
-                }
+//                } else {
+//                    $portalTreeNodeDataModel = $this->backendTreeNodeFactory->createTreeNodeDataModelFromTreeRecord($portalTreeNode);
+//                    $portalTreeNodeDataModel->setChildrenAjaxLoad(true);
+//                    $portalTreeNodeDataModel->setType('folder');
+//                    if (in_array($portalTreeNode->id, $this->restrictedNodes)) {
+//                        $typeRestricted = $portalTreeNodeDataModel->getType().'RestrictedMenu';
+//                        $portalTreeNodeDataModel->setType($typeRestricted);
+//                    }
+//                }
                 $liAttr = $portalTreeNodeDataModel->getLiAttr();
                 $liAttr = array_merge($liAttr, ['class' => 'no-checkbox']);
                 $portalTreeNodeDataModel->setLiAttr($liAttr);
