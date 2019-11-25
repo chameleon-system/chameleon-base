@@ -699,8 +699,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $items['edit'] = $this->CallBackFunctionBlockEditButton($id, $row);
         }
 
-        $items['clipboard'] = '<span title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.text.copy_id_to_clipboard')).'" class="entry-id-copy-button far fa-clipboard"></span>';
-
         if ($accessManager->HasNewPermission($fieldName)) {
             $items['copy'] = $this->CallBackFunctionBlockCopyButton($id, $row);
         }

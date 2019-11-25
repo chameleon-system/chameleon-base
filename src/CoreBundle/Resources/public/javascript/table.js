@@ -117,10 +117,4 @@ $(document).ready(function () {
     });
 
     CHAMELEON.CORE.initializeEntryAutocomplete($('input#searchLookup'));
-
-    $(".entry-id-copy-button").on("click", function() {
-        const id = $(this).closest("tr").data("record-id");
-
-        CHAMELEON.CORE.copyToClipboard(id);
-    });
 });
