@@ -11,16 +11,12 @@
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ChangeNavigationTreeNodeEvent;
-use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperFactoryInterface;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Treemanagement Module for the CMS Navigation tree.
@@ -49,21 +45,6 @@ class CMSModulePageTree extends TCMSModelBase
     protected $treeTable = 'cms_tree';
 
     /**
-     * currentPageId
-     *
-     * @var string
-     */
-    protected $currentPageId = '';
-
-    /**
-     * primaryConnectedNodeIdOfCurrentPage
-     *
-     * @var string
-     */
-    protected $primaryConnectedNodeIdOfCurrentPage = '';
-
-
-    /**
      * nodes that should not be assignable or that should have only a
      * restricted context menu.
      *
@@ -89,12 +70,22 @@ class CMSModulePageTree extends TCMSModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Init()
     {
-        parent::Execute();
+        parent::Init();
+        $this->data['sTreeHTML'] = '';
+        $this->data['iTreeNodeCount'] = 0;
 
         $this->data['treeTableID'] = TTools::GetCMSTableId('cms_tree');
         $this->data['treeNodeTableID'] = TTools::GetCMSTableId('cms_tree_node');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function &Execute()
+    {
+        parent::Execute();
 
         $inputFilterUtil = $this->getInputFilterUtil();
         $this->data['isInIframe'] = false;
@@ -114,23 +105,16 @@ class CMSModulePageTree extends TCMSModelBase
             $this->data['showAssignDialog'] = false;
         }
 
-        $this->data['currentPageId'] = null;
-        $this->data['primaryConnectedNodeIdOfCurrentPage'] = null;
+        $this->data['dataID'] = null;
 
         if ($this->global->UserDataExists('id')) {
-            $this->data['currentPageId'] = $this->global->GetUserData('id');
-            $this->currentPageId = $this->data['currentPageId'];
+            $this->data['dataID'] = $this->global->GetUserData('id');
         }
 
-        if ($this->global->UserDataExists('primaryTreeNodeId')) {
-            $this->data['primaryConnectedNodeIdOfCurrentPage'] = $this->global->GetUserData('primaryTreeNodeId');
-            $this->primaryConnectedNodeIdOfCurrentPage = $this->data['primaryConnectedNodeIdOfCurrentPage'];
-        }
-
-        $rootNodeID = $inputFilterUtil->getFilteredGetInput('rootID', TCMSTreeNode::TREE_ROOT_ID);
-        $this->data['rootID'] = $rootNodeID;
-        $this->iRootNode = $rootNodeID;
-        $this->GetRootNodeName($rootNodeID);
+        $nodeID = $inputFilterUtil->getFilteredGetInput('rootID', TCMSTreeNode::TREE_ROOT_ID);
+        $this->data['rootID'] = $nodeID;
+        $this->iRootNode = $nodeID;
+        $this->GetRootNodeName($nodeID);
         $this->LoadTreeState();
         $this->aRestrictedNodes = $this->GetPortalNavigationStartNodes();
 
@@ -138,23 +122,21 @@ class CMSModulePageTree extends TCMSModelBase
         $oPortalList = TdbCmsPortalList::GetList();
         $this->iPortalCount = $oPortalList->Length();
 
+        $this->RenderTree($this->oRootNode->id, $this->oRootNode, 0);
+
         if ($this->global->UserDataExists('table')) {
             $this->data['table'] = $this->global->GetUserData('table');
         }
 
-        $urlUtil = $this->getUrlUtil();
-        $this->data['treeNodesAjaxUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'getTreeNodesJson',), PATH_CMS_CONTROLLER . '?', '&');
-        $this->data['openPageConnectionListUrl'] = $urlUtil->getArrayAsUrl(array('id' => $this->data['treeNodeTableID'], 'pagedef' => 'tablemanagerframe', 'sRestrictionField' => 'cms_tree_id',), PATH_CMS_CONTROLLER . '?', '&');
-        $this->data['openPageEditorUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['tplPageTableID'], 'pagedef' => 'templateengine'), PATH_CMS_CONTROLLER . '?', '&');
-        $this->data['openPageConfigEditorUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['tplPageTableID'], 'pagedef' => 'tableeditor'), PATH_CMS_CONTROLLER . '?', '&');
-        $this->data['openTreeNodeEditorUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['treeTableID'], 'pagedef' => 'tableeditorPopup'), PATH_CMS_CONTROLLER . '?', '&');
-        $this->data['openTreeNodeEditorAddNewNodeUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['treeTableID'], 'pagedef' => 'tableeditorPopup', 'module_fnc' => array('contentmodule' => 'Insert')), PATH_CMS_CONTROLLER . '?', '&');
-        $this->data['deleteNodeUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'DeleteNode', 'tableid' => $this->data['treeTableID']), PATH_CMS_CONTROLLER . '?', '&');
-        $this->data['assignPageUrl'] = $urlUtil->getArrayAsUrl(array('tableid' => $this->data['treeNodeTableID'], 'pagedef' => 'tableeditorPopup', 'sRestrictionField' => 'cms_tree_id', 'module_fnc' => array('contentmodule' => 'Insert'), 'active' => '1', 'preventTemplateEngineRedirect' => '1'), PATH_CMS_CONTROLLER . '?', '&');
-        $this->data['moveNodeUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'MoveNode', 'tableid' => $this->data['treeTableID']), PATH_CMS_CONTROLLER . '?', '&');
-
-        $this->data['connectPageOnSelectUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'connectPageToNode', 'tableid' => $this->data['treeNodeTableID']), PATH_CMS_CONTROLLER . '?', '&');
-        $this->data['disconnectPageOnDeselectUrl'] = $urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'disconnectPageFromNode', 'tableid' => $this->data['treeNodeTableID']), PATH_CMS_CONTROLLER . '?', '&');
+        if ($this->global->UserDataExists('table') && $this->data['dataID']) {
+            $databaseConnection = $this->getDatabaseConnection();
+            $quotedTable = $databaseConnection->quoteIdentifier(str_replace('`', '', $this->global->GetUserData('table', TCMSUserInput::FILTER_SAFE_TEXT)));
+            $quotedId = $databaseConnection->quote($this->data['dataID']);
+            $checkQuery = "SELECT `name` FROM $quotedTable WHERE `id` = $quotedId";
+            $checkResult = MySqlLegacySupport::getInstance()->query($checkQuery);
+            $row = MySqlLegacySupport::getInstance()->fetch_assoc($checkResult);
+            $this->data['dataName'] = $row['name'];
+        }
 
         return $this->data;
     }
@@ -162,7 +144,7 @@ class CMSModulePageTree extends TCMSModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('SetConnection', 'MoveNode', 'DeleteNode', 'connectPageToNode', 'disconnectPageFromNode', 'getTreeNodesJson', 'GetTransactionDetails');
+        $externalFunctions = array('SetConnection', 'MoveNode', 'DeleteNode', 'GetSubTree', 'GetTransactionDetails');
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -197,210 +179,240 @@ class CMSModulePageTree extends TCMSModelBase
      *
      * @return string
      */
-    public function getTreeNodesJson()
+    public function GetSubTree()
     {
-        if ( $_GET["currentPageId"] !== "" ) {
-            $this->currentPageId = $_GET["currentPageId"];
-        }
-        if ( $_GET["primaryConnectedNodeIdOfCurrentPage"] !== "" ) {
-            $this->primaryConnectedNodeIdOfCurrentPage = $_GET["primaryConnectedNodeIdOfCurrentPage"];
-        }
+        $sHTML = '';
+        if ($this->global->UserDataExists('nodeID')) {
+            $iParentID = $this->global->GetUserData('nodeID');
+            if ($this->global->UserDataExists('id')) {
+                $this->data['dataID'] = $this->global->GetUserData('id');
+            }
 
+            $databaseConnection = $this->getDatabaseConnection();
+            $quotedTreeTable = $databaseConnection->quoteIdentifier($this->treeTable);
+            $quotedParentId = $databaseConnection->quote($iParentID);
+            $quotedSortField = $databaseConnection->quoteIdentifier($this->GetSortFieldName($iParentID));
+            $sPortalCondition = $this->GetChildrenPortalCondition();
 
-        if ( $_GET["id"] === "#" ) {
-            $treeData = $this->createRootTreeWithDefaultPortalItems();
-        }
-        else {
-            $treeNode = new TdbCmsTree();
-            $treeNode->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
-            $treeNode->Load($_GET["id"]);
-            $treeData = $this->createTreeDataModel($treeNode);
-        }
+            $query = "SELECT *
+                      FROM $quotedTreeTable
+                      WHERE `parent_id` = $quotedParentId
+                      {$sPortalCondition}
+                      ORDER BY $quotedSortField";
 
-        return $treeData;
-    }
+            $oTreeNodes = TdbCmsTreeList::GetList($query, TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
 
-    protected function createRootTreeWithDefaultPortalItems ()
-    {
-        $inputFilterUtil = $this->getInputFilterUtil();
-        $this->data['rootNodeName'] = 'Root';
-        $rootNodeID = $inputFilterUtil->getFilteredGetInput('rootID', TCMSTreeNode::TREE_ROOT_ID);
-        $this->data['rootID'] = $rootNodeID;
-        $this->iRootNode = $rootNodeID;
-        $this->GetRootNodeName($rootNodeID);
-        $this->LoadTreeState();
-        $this->aRestrictedNodes = $this->GetPortalNavigationStartNodes();
-
-        $portalDomainService = $this->getPortalDomainService();
-        $defaultPortal = $portalDomainService->getDefaultPortal();
-        $defaultPortalMainNodeId = $defaultPortal->fieldMainNodeTree;
-
-        $rootTreeNode = new TdbCmsTree();
-        $rootTreeNode->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
-        $rootTreeNode->Load($this->iRootNode);
-
-        $treeNodeFactory = $this->getBackendTreeNodeFactory();
-        $rootTreeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($rootTreeNode);
-        $rootTreeNodeDataModel->setOpened(true);
-        $rootTreeNodeDataModel->setType('folderRootRestrictedMenu');
-        $rootTreeNodeDataModel->setLiAttr(["class" => "no-checkbox"]);
-
-        $oPortalList = TdbCmsPortalList::GetList();
-        $this->iPortalCount = $oPortalList->Length();
-
-        if ($oPortalList->Length() > 0) {
-            while ($portal = $oPortalList->Next()) {
-
-                $portalId = $portal->fieldMainNodeTree;
-
-                $portalTreeNode = new TdbCmsTree();
-                $portalTreeNode->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
-                $portalTreeNode->Load($portalId);
-
-                if ($portalId === $defaultPortalMainNodeId) {
-                    $portalTreeNodeDataModel = $this->createTreeDataModel($portalTreeNode);
-                    $portalTreeNodeDataModel->setOpened(true);
-                } else {
-                    $treeNodeFactory = $this->getBackendTreeNodeFactory();
-                    $portalTreeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($portalTreeNode);
-                    $portalTreeNodeDataModel->setChildrenAjaxLoad(true);
-                    $portalTreeNodeDataModel->setType("folder");
-                    if (in_array($portalTreeNode->id, $this->aRestrictedNodes)) {
-                        $typeRestricted = $portalTreeNodeDataModel->getType()."RestrictedMenu";
-                        $portalTreeNodeDataModel->setType($typeRestricted);
-                    }
+            if ($oTreeNodes->Length() > 0) {
+                // render next tree level
+                while ($oTreeNode = $oTreeNodes->Next()) {
+                    $this->RenderTree($oTreeNode->id, $oTreeNode, 0, false);
                 }
-                $liAttr = $portalTreeNodeDataModel->getLiAttr();
-                $liAttr = array_merge($liAttr, ["class" => "no-checkbox"]);
-                $portalTreeNodeDataModel->setLiAttr($liAttr);
 
-                $rootTreeNodeDataModel->addChildren($portalTreeNodeDataModel);
+                $sHTML = $this->data['sTreeHTML'];
             }
         }
-        return $rootTreeNodeDataModel;
+
+        return $sHTML;
     }
 
-    protected function createTreeDataModel(TdbCmsTree $node, $level = 0)
+    /**
+     * forms an indicator icon with an optional link.
+     *
+     * @param string      $iconUrl
+     * @param string      $iconIdentifier
+     * @param string|null $linkUrl
+     *
+     * @return string
+     */
+    private function getNodeIndicatorIcon($iconUrl, $iconIdentifier, $linkUrl = null)
     {
-        $treeNodeFactory = $this->getBackendTreeNodeFactory();
-        $treeNodeDataModel = $treeNodeFactory->createTreeNodeDataModelFromTreeRecord($node);
-
-        $liAttr = $treeNodeDataModel->getLiAttr();
-        $aAttr = [];
-        $liClass = "";
-        $aClass = "";
-
-        $translator = $this->getTranslator();
-
-        if ('' === $treeNodeDataModel->GetName()) {
-            $unnamedRecordTitle = TGlobal::OutHTML($translator->trans('chameleon_system_core.text.unnamed_record'));
-            $treeNodeDataModel->setName($unnamedRecordTitle);
+        $staticIconUrl = TGlobal::OutHTML(TGlobal::GetStaticURLToWebLib($iconUrl));
+        $styleSnippet = sprintf('style="background-image: url(\'%s\')" class="nodeIndicatorIcon %s"', $staticIconUrl, $iconIdentifier);
+        $spanSnippet = sprintf('<span %s></span>', $styleSnippet);
+        $anchorSnippet = sprintf('<a %s href="%s" target="_blank"></a>', $styleSnippet, $linkUrl);
+        // Return only span without link if no link url was supplied.
+        if (null === $linkUrl) {
+            return $spanSnippet;
         }
+        // Return span wrapped in link from supplied url.
+        return $anchorSnippet;
+    }
+
+    /**
+     * get children of current tree node.
+     *
+     * @param string     $iParentID
+     * @param TdbCmsTree $oParentTreeNode
+     * @param int        $level
+     * @param bool       $allowAjax
+     */
+    protected function RenderTree($iParentID = null, $oParentTreeNode = null, $level = 0, $allowAjax = true)
+    {
+        if (null === $iParentID) {
+            $iParentID = $this->iRootNode;
+        }
+
+        $sListClasses = '';
+
+        if (!$this->global->UserDataExists('nodeID')) {
+            if (0 == $level) {
+                $sListClasses = 'root';
+            }
+        }
+
+        $sSpacing = '  ';
+        str_pad($sSpacing, ($level + 1) * 2, '  ');
+
+        $sSpanClass = '';
+        $sSpanMenuClass = 'standard';
+        if (!$this->global->UserDataExists('nodeID')) {
+            if (0 == $level) {
+                $sSpanMenuClass = 'rootRightClickMenu';
+            }
+        }
+
+        $sIconHTML = '';
 
         $oCmsUser = TCMSUser::GetActiveUser();
         $oEditLanguage = $oCmsUser->GetCurrentEditLanguageObject();
+        $parentNodeHidden = false;
 
-        if (true === CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE) {
-            $cmsConfig = TCMSConfig::GetInstance();
-            $defaultLanguage = $cmsConfig->GetFieldTranslationBaseLanguage();
-            if (null !== $defaultLanguage && $defaultLanguage->id !== $oEditLanguage->id) {
-                if ('' === $node->sqlData['name__' . $oEditLanguage->fieldIso6391]) {
-                    $treeNodeDataModel->setName($treeNodeDataModel->getName().' <span class="bg-danger px-1"><i class="fas fa-language" title="'.$translator->trans('chameleon_system_core.cms_module_table_editor.not_translated').'"></i></span>');
+        $oParentTreeNode->SetLanguage($oEditLanguage->id);
+        if (true == $oParentTreeNode->fieldHidden) {
+            $sIconHTML .= $this->getNodeIndicatorIcon('/images/tree/hidden.png', 'iconHidden');
+            $parentNodeHidden = true;
+        }
+
+        if (!empty($oParentTreeNode->sqlData['link'])) {
+            $sIconHTML .= $this->getNodeIndicatorIcon('/images/icon_external_link.gif', 'iconExternalLink', $oParentTreeNode->sqlData['link']);
+        }
+
+        $sIsTranslatedIdent = '';
+        if (CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE) {
+            $oCmsConfig = TCMSConfig::GetInstance();
+            $oDefaultLang = $oCmsConfig->GetFieldTranslationBaseLanguage();
+            if ($oDefaultLang && $oDefaultLang->id != $oEditLanguage->id) {
+                if (empty($oParentTreeNode->sqlData['name__'.$oEditLanguage->fieldIso6391])) {
+                    $sIsTranslatedIdent = '<img src="'.TGlobal::GetStaticURL('chameleon/blackbox/images/tree/folder_edit.png').'" width="12" align="absmiddle" border="0" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_page_tree.not_translated')).'" />';
                 }
             }
         }
-
-        $children = $node->GetChildren(true);
-        if ($children->Length() > 0) {
-            $treeNodeDataModel->setType('folder');
-        } else {
-            $treeNodeDataModel->setType('page');
-        }
-        if ("" !== $node->sqlData['link']) {
-            $treeNodeDataModel->setType('externalLink');
+        $sTreeNodeName = $oParentTreeNode->GetName();
+        if (empty($sTreeNodeName)) {
+            $sTreeNodeName = TGlobal::Translate('chameleon_system_core.text.unnamed_record');
         }
 
-        if (in_array($node->id, $this->aRestrictedNodes)) {
-            $typeRestricted = $treeNodeDataModel->getType()."RestrictedMenu";
-            $treeNodeDataModel->setType($typeRestricted);
-        }
+        $sPageTag = '';
+        $sPrimaryPageID = $oParentTreeNode->GetLinkedPage(true);
 
-        $nodeHidden = false;
+        $aPages = array();
 
-        $node->SetLanguage($oEditLanguage->id);
-        if (true == $node->fieldHidden) {
-            $nodeHidden = true;
-            $aClass .= " node-hidden";
-            $treeNodeDataModel->setType('node-hidden');
-        }
-
-        $aPages = [];
-
-        $oConnectedPages = $node->GetAllLinkedPages();
+        $bCurrentPageIsConnectedToThisNode = false;
+        $oConnectedPages = $oParentTreeNode->GetAllLinkedPages();
         $bFoundSecuredPage = false;
         while ($connectedPage = $oConnectedPages->Next()) {
             $aPages[] = $connectedPage->id;
 
-            if (false === $nodeHidden
-                && false === $bFoundSecuredPage
+            if (!$parentNodeHidden
+                && !$bFoundSecuredPage
                 && (true === $connectedPage->fieldExtranetPage
-                    && false === $node->fieldShowExtranetPage)) {
-                $aClass .= " page-hidden";
-                $treeNodeDataModel->setType('page-hidden');
+                && false === $oParentTreeNode->fieldShowExtranetPage)) {
+                $sIconHTML .= $this->getNodeIndicatorIcon('/images/tree/hidden.png', 'iconHidden');
                 $bFoundSecuredPage = true;
             }
 
             if (true === $connectedPage->fieldExtranetPage) {
-                $treeNodeDataModel->setType('locked');
-                $aClass .= " locked";
+                $sIconHTML .= $this->getNodeIndicatorIcon('/images/tree/lock.png', 'iconRestricted');
             }
         }
 
         if (count($aPages) > 0) {
-            if ($treeNodeDataModel->getType() === "folder") {
-                $treeNodeDataModel->setType('folderWithPage');
+            if (array_key_exists('dataID', $this->data) && in_array($this->data['dataID'], $aPages)) {
+                $bCurrentPageIsConnectedToThisNode = true;
             }
-
-            $sPrimaryPageID = $node->GetLinkedPage(true);
             if (false !== $sPrimaryPageID) {
-                $liAttr = array_merge($liAttr, ["ispageid" => TGlobal::OutHTML($sPrimaryPageID)]);
+                $sPageTag = ' espageid="'.TGlobal::OutHTML($sPrimaryPageID).'"';
             }
+            if ($bCurrentPageIsConnectedToThisNode) {
+                $sSpanClass .= ' activeConnectedNode';
 
-            // current page is connected to this node
-            if ($this->currentPageId && in_array($this->currentPageId, $aPages)) {
-                $aClass .= ' activeConnectedNode';
-                $treeNodeDataModel->setOpened(true);
-                $treeNodeDataModel->setSelected(true);
+                // kill all current page ids from $aPages and check if we have other pages connected
+                $aKeys = array_keys($aPages, $this->data['dataID']);
+                foreach ($aKeys as $key) {
+                    unset($aPages[$key]);
+                }
 
-                if ($this->primaryConnectedNodeIdOfCurrentPage === $node->id) {
-                    $aClass .= ' primaryConnectedNode';
-                    $treeNodeDataModel->setDisabled(true);
+                if (count($aPages) > 0) {
+                    $sSpanClass .= ' otherConnectedNode';
                 }
             } else {
-                $aClass .= ' otherConnectedNode';
+                $sSpanClass .= ' otherConnectedNode';
             }
         }
 
-        if ($level == 0) {
-            $treeNodeDataModel->setOpened(true);
+        $lastStateOpen = false;
+        // check if last node state was "open"
+        if ($level <= 2 || in_array('node'.$iParentID, $this->aOpenTreeNodes)) {
+            $lastStateOpen = true;
+            $sListClasses .= ' folder-open';
         }
 
-        $liAttr = array_merge($liAttr, ["class" => $liClass]);
-        $treeNodeDataModel->setLiAttr($liAttr);
+        if (in_array($oParentTreeNode->id, $this->aRestrictedNodes)) {
+            $sSpanMenuClass = 'restrictedRightClickMenu';
+        }
 
-        $aAttr = array_merge($aAttr, ["class" => $aClass]);
-        $treeNodeDataModel->setAAttr($aAttr);
+        ++$this->data['iTreeNodeCount']; // count the tree nodes
+        $this->data['sTreeHTML'] .= $sSpacing.'<li class="'.$sListClasses.'" id="node'.$oParentTreeNode->sqlData['cmsident'].'" esrealid="'.$iParentID.'" '.$sPageTag.'>
+        <span class="'.$sSpanClass.' '.$sSpanMenuClass.'">'.TGlobal::OutHTML($sTreeNodeName).$sIsTranslatedIdent.'</span>'.$sIconHTML;
 
+        $databaseConnection = $this->getDatabaseConnection();
+        $quotedTreeTable = $databaseConnection->quoteIdentifier($this->treeTable);
+        $quotedParentId = $databaseConnection->quote($iParentID);
+        $quotedSortField = $databaseConnection->quoteIdentifier($this->GetSortFieldName($iParentID));
+        $sPortalCondition = $this->GetChildrenPortalCondition();
+
+        $query = "SELECT *
+                  FROM $quotedTreeTable
+                  WHERE `parent_id` = $quotedParentId
+                  {$sPortalCondition}
+                  ORDER BY $quotedSortField";
+
+        $oTreeNodes = TdbCmsTreeList::GetList($query, TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
         ++$level;
-        while ($child = $children->Next()) {
-            $childTreeNodeObj = $this->createTreeDataModel($child, $level);
-            if ($childTreeNodeObj->isOpened()) {
-                $treeNodeDataModel->setOpened(true);
+
+        if ($oTreeNodes->Length() > 0) {
+            $this->data['sTreeHTML'] .= "\n".$sSpacing.'  <ul';
+
+            // change to ajax
+
+            if ($this->iPortalCount > 3) {
+                $iMaxLevel = 4;
+            } else {
+                $iMaxLevel = 5;
             }
-            $treeNodeDataModel->addChildren($childTreeNodeObj);
+
+            if ($level >= $iMaxLevel && $allowAjax && !$lastStateOpen) {
+                $this->data['sTreeHTML'] .= ' class="ajax">\n';
+
+                $ajaxURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'GetSubTree', 'tableid' => $this->data['treeTableID'], 'sOutputMode' => 'Plain', 'nodeID' => $iParentID));
+                if (isset($this->data['dataID'])) {
+                    $ajaxURL .= '&id='.$this->data['dataID'];
+                }
+
+                $this->data['sTreeHTML'] .= '<li>{url:'.$ajaxURL.'}';
+            } else {
+                $this->data['sTreeHTML'] .= ">\n";
+                // render next tree level
+                while ($oTreeNode = $oTreeNodes->Next()) {
+                    $this->RenderTree($oTreeNode->id, $oTreeNode, $level);
+                }
+            }
         }
 
-        return $treeNodeDataModel;
+        if ($oTreeNodes->Length() > 0) {
+            $this->data['sTreeHTML'] .= $sSpacing."  </ul>\n";
+        }
+        $this->data['sTreeHTML'] .= $sSpacing."</li>\n";
     }
 
     /**
@@ -576,64 +588,11 @@ class CMSModulePageTree extends TCMSModelBase
             $iNodeID = $this->global->GetUserData('nodeID');
             $oTableEditor = new TCMSTableEditorManager();
             $oTableEditor->Init($iTableID, $iNodeID);
-            $returnVal = $iNodeID;
+            $returnVal = $oTableEditor->oTableEditor->oTable->sqlData['cmsident'];
             $oTableEditor->Delete($iNodeID);
         }
 
         return $returnVal;
-    }
-
-    public function connectPageToNode(): string
-    {
-        if ($this->global->UserDataExists('tableid') && $this->global->UserDataExists('cms_tree_id')) {
-            $tableID = $this->global->GetUserData('tableid');
-            $nodeID = $this->global->GetUserData('cms_tree_id');
-            $connectedPageId = $this->global->GetUserData('contid');
-            $oTableEditor = new TCMSTableEditorManager();
-            $oTableEditor->Init($tableID);
-            $insertSuccessData = $oTableEditor->Insert();
-            $recordId = $insertSuccessData->id;
-
-            $postData = [];
-            $postData['id'] = $recordId;
-            $postData['active'] = '1';
-            $postData['cms_tree_id'] = $nodeID;
-            $postData['contid'] = $connectedPageId;
-            $postData['tbl'] = 'cms_tpl_page';
-
-            $oTableEditor->Save($postData);
-
-            return $nodeID;
-        }
-
-        return '';
-    }
-
-
-    public function disconnectPageFromNode(): string
-    {
-        $dbConnection = $this->getDatabaseConnection();
-
-        if ($this->global->UserDataExists('tableid') && $this->global->UserDataExists('contid')) {
-            $iTableID = $this->global->GetUserData('tableid');
-            $nodeID = $this->global->GetUserData('cms_tree_id');
-            $contId = $this->global->GetUserData('contid');
-
-            $query = "SELECT * 
-                        FROM `cms_tree_node` 
-                       WHERE `cms_tree_node`.`contid` = ".$dbConnection->quote($contId)."
-                         AND `cms_tree_node`.`cms_tree_id` = ".$dbConnection->quote($nodeID)."
-                         AND `cms_tree_node`.`tbl` = 'cms_tpl_page'
-                       ";
-            $nodePageConnectionList = TdbCmsTreeNodeList::GetList($query);
-            while ($nodePageConnection = $nodePageConnectionList->Next()) {
-                $oTableEditor = new TCMSTableEditorManager();
-                $oTableEditor->Init($iTableID, $nodePageConnection->id);
-                $oTableEditor->Delete($nodePageConnection->id);
-            }
-        }
-
-        return $nodeID;
     }
 
     /**
@@ -668,12 +627,12 @@ class CMSModulePageTree extends TCMSModelBase
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jsTree/3.3.8/jstree.js').'"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/navigationTree.js').'"></script>';
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/simpleTree/jquery.simple.tree.js').'" type="text/javascript"></script>';
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/tree/jqueryTree.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
-        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURLToWebLib('/javascript/jsTree/3.3.8/themes/default/style.css'));
-        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURLToWebLib('/javascript/jsTree/customStyles/style.css'));
-
+        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/simpleTree.css" media="screen" rel="stylesheet" type="text/css" />';
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/contextmenu/contextmenu.js').'" type="text/javascript"></script>';
+        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/contextmenu.css" rel="stylesheet" type="text/css" />';
 
         return $aIncludes;
     }
@@ -771,25 +730,5 @@ COMMAND;
     private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
-    }
-
-    private function getBackendTreeNodeFactory(): BackendTreeNodeFactory
-    {
-        return ServiceLocator::get('chameleon_system_core.factory.backend_tree_node');
-    }
-
-    private function getPortalDomainService(): PortalDomainServiceInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
-    }
-
-    private function getTranslator(): TranslatorInterface
-    {
-        return ServiceLocator::get('translator');
-    }
-
-    private function getUrlUtil(): UrlUtil
-    {
-        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }
