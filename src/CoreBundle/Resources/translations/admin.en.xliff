@@ -1084,6 +1084,14 @@
                 <source>chameleon_system_core.cms_module_page_tree.legend_header</source>
                 <target>Key</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_active_main_node_of_page">
+                <source>chameleon_system_core.cms_module_page_tree.legend_active_main_node_of_page</source>
+                <target>Active main navigation node of this page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_active_further_node_of_page">
+                <source>chameleon_system_core.cms_module_page_tree.legend_active_further_node_of_page</source>
+                <target>Active further navigation node of this page</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_node_has_no_page">
                 <source>chameleon_system_core.cms_module_page_tree.legend_node_has_no_page</source>
                 <target>Navigation node without connected page</target>
