@@ -5,7 +5,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3>Navigation</h3>
+        <h3>{{ 'chameleon_system_core.cms_module_page_tree.headline' | trans }}</h3>
     </div>
     <div class="card-body simple-tree-card">
 {% endif %}
@@ -23,13 +23,13 @@
                     {% if noAssignDialog == false %}
                         <div class="activeConnectedNode primaryConnectedNode">
                             <span class="nodeIndicatorIcon"></span>
-                            <span>aktiver Hauptnavigationspunkt dieser Seite </span>
+                            <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_active_main_node_of_page' | trans }}</span>
                         </div>
 
 
                         <div class="activeConnectedNode">
                             <span class="nodeIndicatorIcon"></span>
-                            <span>aktiver weiterer Navigationspunkt dieser Seite</span>
+                            <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_active_further_node_of_page' | trans }}</span>
                         </div>
                     {% endif %}
 
