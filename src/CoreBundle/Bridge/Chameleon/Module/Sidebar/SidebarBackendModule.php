@@ -18,7 +18,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
+    /**
+     * @deprecated since 6.3.8 - use OPEN_CATEGORIES_SESSION_KEY with an array
+     */
     private const ACTIVE_CATEGORY_SESSION_KEY = 'chameleonSidebarBackendModuleActiveCategory';
+    private const OPEN_CATEGORIES_SESSION_KEY = 'chameleonSidebarBackendModuleOpenCategories';
     private const DISPLAY_STATE_SESSION_KEY = 'chameleonSidebarBackendModuleDisplayState';
 
     /**
@@ -52,12 +56,27 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->menuItemFactory = $menuItemFactory;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function DefineInterface()
+    {
+        parent::DefineInterface();
+        $this->methodCallAllowed[] = 'toggleSidebar';
+        $this->methodCallAllowed[] = 'toggleCategoryOpenState';
+    }
+
     public function Init()
     {
         parent::Init();
         $this->restoreDisplayState();
     }
 
+    /**
+     * To enable sensible module caching.
+     * 
+     * TODO! -> problem with popular entries
+     */
     private function restoreDisplayState(): void
     {
         $session = $this->requestStack->getCurrentRequest()->getSession();
@@ -67,8 +86,9 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         } else {
             $value = '';
         }
+        
         $this->responseVariableReplacer->addVariable('sidebarDisplayState', $value);
-        $this->responseVariableReplacer->addVariable('sidebarActiveCategory', \TGlobal::OutHTML($this->getActiveCategory()));
+        $this->responseVariableReplacer->addVariable('sidebarOpenCategoryIds', \TGlobal::OutHTML(implode(',', $this->getOpenCategories())));
     }
 
     /**
@@ -77,7 +97,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
         $visitor->SetMappedValue('sidebarToggleNotificationUrl', $this->getSidebarToggleNotificationUrl());
-        $visitor->SetMappedValue('sidebarSaveActiveCategoryNotificationUrl', $this->getActiveCategoryNotificationUrl());
+        $visitor->SetMappedValue('sidebarToggleCategoryNotificationUrl', $this->getToggleCategoryNotificationUrl());
         $visitor->SetMappedValue('menuItems', $this->getMenuItems());
 
         if (true === $cachingEnabled) {
@@ -115,13 +135,13 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return \PATH_CMS_CONTROLLER.'?pagedef=sidebarDummy&';
     }
 
-    private function getActiveCategoryNotificationUrl(): string
+    private function getToggleCategoryNotificationUrl(): string
     {
         return $this->urlUtil->getArrayAsUrl([
             'module_fnc' => [
                 $this->sModuleSpotName => 'ExecuteAjaxCall',
             ],
-            '_fnc' => 'saveActiveCategory',
+            '_fnc' => 'toggleCategoryOpenState',
         ], $this->getBaseUri(), '&');
     }
 
@@ -163,22 +183,55 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $menuCategories;
     }
 
-    private function getActiveCategory(): ?string
+    private function getOpenCategories(): array
     {
         $session = $this->requestStack->getCurrentRequest()->getSession();
 
-        return $session->get(self::ACTIVE_CATEGORY_SESSION_KEY);
-    }
-
-    protected function saveActiveCategory(): void
-    {
-        $activeCategory = $this->inputFilterUtil->getFilteredPostInput('categoryId');
-        if ('' === $activeCategory) {
-            $activeCategory = null;
+        if (null === $session) {
+            return [];
         }
 
-        $session = $this->requestStack->getCurrentRequest()->getSession();
-        $session->set(self::ACTIVE_CATEGORY_SESSION_KEY, $activeCategory);
+        return $session->get(self::OPEN_CATEGORIES_SESSION_KEY, []);
+    }
+
+    /**
+     * @deprecated since 6.3.8 - use toggleCategoryOpenState
+     */
+    protected function saveActiveCategory(): void
+    {
+        $this->toggleCategoryOpenState();
+    }
+
+    protected function toggleCategoryOpenState(): void
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return;
+        }
+
+        $session = $request->getSession();
+        if (null === $session) {
+            return;
+        }
+
+        $toggledCategoryId = $this->inputFilterUtil->getFilteredPostInput('categoryId', '');
+
+        if ('' === $toggledCategoryId) {
+            return;
+        }
+
+        $activeCategoryIds = $session->get(self::OPEN_CATEGORIES_SESSION_KEY, []);
+
+        $index = array_search($toggledCategoryId, $activeCategoryIds, true);
+        if (false !== $index){
+            unset($activeCategoryIds[$index]);
+        } else {
+            $activeCategoryIds[] = $toggledCategoryId;
+        }
+
+        $session->set(self::OPEN_CATEGORIES_SESSION_KEY, $activeCategoryIds);
+
+        // TODO could/should save this connected to the user (and not login session)?
     }
 
     /**
@@ -203,16 +256,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             \TGlobal::GetStaticURLToWebLib('/javascript/modules/sidebar/sidebar.js'));
 
         return $includes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function DefineInterface()
-    {
-        parent::DefineInterface();
-        $this->methodCallAllowed[] = 'toggleSidebar';
-        $this->methodCallAllowed[] = 'saveActiveCategory';
     }
 
     protected function toggleSidebar(): void

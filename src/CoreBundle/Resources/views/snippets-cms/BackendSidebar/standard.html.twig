@@ -1,8 +1,8 @@
 <div
         class="sidebar"
         data-toggle-notification-url="{{ sidebarToggleNotificationUrl|e('html_attr') }}"
-        data-save-active-category-notification-url="{{ sidebarSaveActiveCategoryNotificationUrl|e('html_attr') }}"
-        data-active-category="[{sidebarActiveCategory}]"
+        data-toggle-category-notification-url="{{ sidebarToggleCategoryNotificationUrl|e('html_attr') }}"
+        data-active-categories="[{sidebarOpenCategoryIds}]"
 >
     <p class="sidebar-filter-input-wrapper fas"><input
             type="text"
