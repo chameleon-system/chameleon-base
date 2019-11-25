@@ -182,7 +182,7 @@
             },
             "plugins":[ "types", "wholerow", "changed", "checkbox", "contextmenu", "dnd"],
             "contextmenu": {
-                "items": navigationRightClickMenuWithAssignDialog,
+                "items": navigationRightClickMenuForCheckboxes,
                 "select_node": false
             },
             "dnd": {
@@ -261,19 +261,23 @@
         return items;
     }
 
-    function navigationRightClickMenuWithAssignDialog(node) {
-        var assignPage = {
-            "assignPage": {
-                "label": "{{ 'chameleon_system_core.cms_module_page_tree.action_connect_page'|trans }}",
-                "icon": "fas fa-link",
-                "separator_after": true,
+    function navigationRightClickMenuForCheckboxes(node) {
+        return {
+            "newnode": {
+                "label": "{{ 'chameleon_system_core.action.new'|trans }}",
+                "icon": "fas fa-plus",
                 "action": function (obj) {
-                    this.assignPage(obj.reference);
+                    this.openTreeNodeEditorAddNewNode(obj.reference);
+                }
+            },
+            "deletenode": {
+                "label": "{{ 'chameleon_system_core.action.delete'|trans }}",
+                "icon": "far fa-trash-alt",
+                "action": function (obj) {
+                    this.deleteNode(obj.reference);
                 }
             }
         };
-
-        return Object.assign(assignPage, navigationRightClickMenu(node));
     }
 
 
