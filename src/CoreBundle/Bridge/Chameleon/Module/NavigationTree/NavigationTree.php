@@ -369,6 +369,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $this->primaryConnectedNodeIdOfCurrentPage = $this->inputFilterUtil->getFilteredGetInput('primaryTreeNodeId', '');
 
         $startNodeId = $this->inputFilterUtil->getFilteredGetInput('id');
+        $level = 0;
 
         // '#' = first ajax call from jstree AND there're a currentPage
         if ('#' === $startNodeId && '' !== $this->currentPageId) {
@@ -376,6 +377,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             if ('' !== $portalBasedRootNodeId) {
                 // only load the portal of the current page
                 $startNodeId = $portalBasedRootNodeId;
+                $level = 1;
             }
         }
 
@@ -385,7 +387,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             $treeNode = new \TdbCmsTree();
             $treeNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
             $treeNode->Load($startNodeId);
-            $treeData = $this->createTreeDataModel($treeNode);
+            $treeData = $this->createTreeDataModel($treeNode, $level);
         }
 
         return $treeData;
@@ -436,7 +438,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 //              Until this problem is solved, we load all portals immediately.
 
 //                if ($portalId === $defaultPortalMainNodeId) {
-                    $portalTreeNodeDataModel = $this->createTreeDataModel($portalTreeNode);
+                    $portalTreeNodeDataModel = $this->createTreeDataModel($portalTreeNode, 1);
                     $portalTreeNodeDataModel->setOpened(true);
 //                } else {
 //                    $portalTreeNodeDataModel = $this->backendTreeNodeFactory->createTreeNodeDataModelFromTreeRecord($portalTreeNode);
@@ -465,6 +467,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $treeNodeDataModel->setName($this->checkNameTranslation($treeNodeDataModel->getName(), $node));
         $this->setTypeAndAttributes($treeNodeDataModel, $node);
 
+        if (2 >= $level) {
+            $liAttr = $treeNodeDataModel->getLiAttr();
+            $liAttr = array_merge($liAttr, ['class' => 'no-checkbox']);
+            $treeNodeDataModel->setLiAttr($liAttr);
+        }
         if (0 == $level) {
             $treeNodeDataModel->setOpened(true);
         }
