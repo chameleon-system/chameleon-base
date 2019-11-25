@@ -20,6 +20,7 @@
             this.$filterElement.on('keyup', this.filter.bind(this));
             this.$baseElement.find('.sidebar-minimizer').on('click', this.onSidebarToggle.bind(this));
             this.$baseElement.find('.nav-dropdown-toggle').on('click', this.onCategoryToggle.bind(this));
+            this.$navItems.not(".nav-dropdown").on("click", this.onElementClick.bind(this));
 
             this.restoreOpenState();
 
@@ -184,6 +185,21 @@
             }
             $.post(url, {
                 displayState: displayState
+            });
+        },
+        onElementClick: function (event) {
+            this.handleElementClickForPopular($(event.target));
+        },
+        handleElementClickForPopular: function($clickedItem) {
+            const clickedHref = $clickedItem.attr("href");
+
+            if (0 === clickedHref.length) {
+                return;
+            }
+
+            const url = this.$baseElement.data('element-click-notification-url');
+            $.post(url, {
+                clickedHref: clickedHref
             });
         }
     });

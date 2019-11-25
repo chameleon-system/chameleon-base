@@ -2551,6 +2551,10 @@
                 <source>chameleon_system_core.sidebar.filter_menu</source>
                 <target>Menü filtern</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.sidebar.popular_entries">
+                <source>chameleon_system_core.sidebar.popular_entries</source>
+                <target>Häufig benutzt</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -15,15 +15,13 @@ use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
-    /**
-     * @deprecated since 6.3.8 - use OPEN_CATEGORIES_SESSION_KEY with an array
-     */
-    private const ACTIVE_CATEGORY_SESSION_KEY = 'chameleonSidebarBackendModuleActiveCategory';
     private const OPEN_CATEGORIES_SESSION_KEY = 'chameleonSidebarBackendModuleOpenCategories';
     private const DISPLAY_STATE_SESSION_KEY = 'chameleonSidebarBackendModuleDisplayState';
+    private const POPULAR_CATEGORY_ID = '0000000-0000-0001-0000-000000000001';
 
     /**
      * @var UrlUtil
@@ -46,14 +44,27 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     private $menuItemFactory;
 
-    public function __construct(UrlUtil $urlUtil, RequestStack $requestStack, InputFilterUtilInterface $inputFilterUtil, ResponseVariableReplacerInterface $responseVariableReplacer, MenuItemFactoryInterface $menuItemFactory)
-    {
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    public function __construct(
+        UrlUtil $urlUtil,
+        RequestStack $requestStack,
+        InputFilterUtilInterface $inputFilterUtil,
+        ResponseVariableReplacerInterface $responseVariableReplacer,
+        MenuItemFactoryInterface $menuItemFactory,
+        TranslatorInterface $translator
+    ) {
         parent::__construct();
+
         $this->urlUtil = $urlUtil;
         $this->requestStack = $requestStack;
         $this->inputFilterUtil = $inputFilterUtil;
         $this->responseVariableReplacer = $responseVariableReplacer;
         $this->menuItemFactory = $menuItemFactory;
+        $this->translator = $translator;
     }
 
     /**
@@ -62,8 +73,10 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     protected function DefineInterface()
     {
         parent::DefineInterface();
+
         $this->methodCallAllowed[] = 'toggleSidebar';
         $this->methodCallAllowed[] = 'toggleCategoryOpenState';
+        $this->methodCallAllowed[] = 'reportElementClick';
     }
 
     public function Init()
@@ -96,8 +109,9 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
-        $visitor->SetMappedValue('sidebarToggleNotificationUrl', $this->getSidebarToggleNotificationUrl());
-        $visitor->SetMappedValue('sidebarToggleCategoryNotificationUrl', $this->getToggleCategoryNotificationUrl());
+        $visitor->SetMappedValue('sidebarToggleNotificationUrl', $this->getNotificationUrl('toggleSidebar'));
+        $visitor->SetMappedValue('sidebarToggleCategoryNotificationUrl', $this->getNotificationUrl('toggleCategoryOpenState'));
+        $visitor->SetMappedValue('sidebarElementClickNotificationUrl', $this->getNotificationUrl('reportElementClick'));
         $visitor->SetMappedValue('menuItems', $this->getMenuItems());
 
         if (true === $cachingEnabled) {
@@ -108,16 +122,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $cacheTriggerManager->addTrigger('cms_menu_category', null);
             $cacheTriggerManager->addTrigger('cms_menu_item', null);
         }
-    }
-
-    private function getSidebarToggleNotificationUrl(): string
-    {
-        return $this->urlUtil->getArrayAsUrl([
-            'module_fnc' => [
-                $this->sModuleSpotName => 'ExecuteAjaxCall',
-            ],
-            '_fnc' => 'toggleSidebar',
-        ], $this->getBaseUri(), '&');
     }
 
     /**
@@ -135,13 +139,13 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return \PATH_CMS_CONTROLLER.'?pagedef=sidebarDummy&';
     }
 
-    private function getToggleCategoryNotificationUrl(): string
+    private function getNotificationUrl(string $subFunction): string
     {
         return $this->urlUtil->getArrayAsUrl([
             'module_fnc' => [
                 $this->sModuleSpotName => 'ExecuteAjaxCall',
             ],
-            '_fnc' => 'toggleCategoryOpenState',
+            '_fnc' => $subFunction,
         ], $this->getBaseUri(), '&');
     }
 
@@ -152,11 +156,13 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             return [];
         }
 
+        $menuCategories = [];
+        $menuItemMap = [];
+
         $tdbCategoryList = \TdbCmsMenuCategoryList::GetList();
         $tdbCategoryList->ChangeOrderBy([
             '`cms_menu_category`.`position`' => 'ASC',
         ]);
-        $menuCategories = [];
         while (false !== $tdbCategory = $tdbCategoryList->Next()) {
             $menuItems = [];
             $tdbMenuItemList = $tdbCategory->GetFieldCmsMenuItemList();
@@ -168,6 +174,8 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 $menuItem = $this->menuItemFactory->createMenuItem($tdbMenuItem);
                 if (null !== $menuItem) {
                     $menuItems[] = $menuItem;
+
+                    $menuItemMap[$menuItem->getUrl()] = $menuItem;
                 }
             }
             if (\count($menuItems) > 0) {
@@ -177,6 +185,31 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                     $tdbCategory->fieldIconFontCssClass,
                     $menuItems
                 );
+            }
+        }
+
+        // TODO test code:
+        $session = $this->requestStack->getCurrentRequest()->getSession();
+        $clickCounters = $session->get('dummy-clickers', []);
+
+        if (count($clickCounters) > 0) {
+            // TODO sort by click count (?) or alphabetically
+
+            $items = [];
+            foreach ($clickCounters as $href => $count) {
+                if (\array_key_exists($href, $menuItemMap)) {
+                    $items[] = $menuItemMap[$href];
+                }
+            }
+
+            if (count($items) > 0) {
+                $popularCategory = new MenuCategory(
+                    self::POPULAR_CATEGORY_ID,
+                    $this->translator->trans('chameleon_system_core.sidebar.popular_entries'),
+                    'fas fa-fire',
+                    array_slice($items, 0, 6)
+                );
+                \array_unshift($menuCategories, $popularCategory);
             }
         }
 
@@ -267,6 +300,29 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $session = $this->requestStack->getCurrentRequest()->getSession();
         $session->set(self::DISPLAY_STATE_SESSION_KEY, $displayState);
+    }
+
+    protected function reportElementClick(): void
+    {
+        $href = $this->inputFilterUtil->getFilteredPostInput('clickedHref', '');
+
+        if ('' === $href) {
+            return;
+        }
+
+        // TODO what about the rmhist things?
+
+        // TODO test code:
+        $session = $this->requestStack->getCurrentRequest()->getSession();
+        $clickCounters = $session->get('dummy-clickers', []);
+
+        if (\array_key_exists($href, $clickCounters)) {
+            $clickCounters[$href]++;
+        } else {
+            $clickCounters[$href] = 1;
+        }
+
+        $session->set('dummy-clickers', $clickCounters);
     }
 
     /**

@@ -1,7 +1,10 @@
+{# @var menuItem \ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItem #}
+
 <div
         class="sidebar"
         data-toggle-notification-url="{{ sidebarToggleNotificationUrl|e('html_attr') }}"
         data-toggle-category-notification-url="{{ sidebarToggleCategoryNotificationUrl|e('html_attr') }}"
+        data-element-click-notification-url="{{ sidebarElementClickNotificationUrl|e('html_attr') }}"
         data-active-categories="[{sidebarOpenCategoryIds}]"
 >
     <p class="sidebar-filter-input-wrapper fas"><input
