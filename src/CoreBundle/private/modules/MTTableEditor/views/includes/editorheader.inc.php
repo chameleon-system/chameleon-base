@@ -23,11 +23,22 @@ $oController = TGlobal::GetController();
         $idsPopoverText = '<div class="callout callout-info mt-0 mb-1"><strong class="text-muted">Auto-Increment ID:</strong><br><strong class="h6">'.$data['cmsident'].'</strong></div>
         <div class="callout callout-info mt-0 mb-1"><strong class="text-muted">ID:</strong><br><strong class="h6">'.$data['id'].'</strong></div>';
         ?>
-        <button class="btn btn-outline-info btn-sm mt-2 mr-2" type="button" role="button" data-toggle="popover"
-                data-placement="bottom"
-                data-content="<?= TGlobal::OutHTML($idsPopoverText); ?>" data-original-title="IDs">
-            <i class="fas fa-database"></i> IDs
-        </button>
+        <div>
+            <button class="btn btn-outline-info btn-sm mt-2 mr-2" type="button" role="button"
+                    data-toggle="popover"
+                    data-placement="bottom"
+                    data-content="<?= TGlobal::OutHTML($idsPopoverText); ?>"
+                    data-original-title="IDs"
+            >
+                <i class="fas fa-database"></i> IDs
+            </button>
+            <button class="entry-id-copy-button btn btn-outline-info btn-sm mt-2 mr-2"
+                    data-entry-id="<?= TGlobal::OutHTML($data['id']) ?>"
+                    title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.text.copy_id_to_clipboard')) ?>"
+            >
+                <i class="far fa-clipboard"></i>
+            </button>
+        </div>
 
         <?php
         if ('' !== $oTableDefinition->sqlData['notes']) {

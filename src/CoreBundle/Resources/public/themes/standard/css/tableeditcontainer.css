@@ -266,3 +266,7 @@ label.switch .switch-slider::after {
         max-width: 80%;
     }
 }
+
+#tableEditorContainer nav {
+    align-content: center;
+}
