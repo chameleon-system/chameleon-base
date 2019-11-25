@@ -27,13 +27,13 @@ class UserMenuItemDataAccess implements UserMenuItemDataAccessInterface
     /**
      * {@inheritDoc}
      */
-    public function getMenuItems(string $userId): array
+    public function getMenuItemIds(string $userId): array
     {
         if ('' === $userId) {
             return [];
         }
 
-        $query = 'SELECT `cms_menu_item`.* 
+        $query = 'SELECT `cms_menu_item`.`id`
                     FROM `cms_user_cms_menu_item_mlt`
               INNER JOIN `cms_menu_item` ON `cms_user_cms_menu_item_mlt`.`target_id` = `cms_menu_item`.`id`
                    WHERE `cms_user_cms_menu_item_mlt`.`source_id` = :userId
@@ -51,19 +51,9 @@ class UserMenuItemDataAccess implements UserMenuItemDataAccessInterface
             return [];
         }
 
-        $menuItems = [];
-
-
-        // todo USE MenuItemFactory here?
-
-        foreach ($rows as $row) {
-            $menuItem = \TdbCmsMenuItem::GetNewInstance();
-            $menuItem->LoadFromRow($row);
-
-            $menuItems[] = $menuItem->id;
-        }
-
-        return $menuItems;
+        return array_map(static function (array $row) {
+            return $row['id'];
+        }, $rows);
     }
 
     /**

@@ -196,31 +196,9 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             }
         }
 
-        // TODO test code:
-        $activeUser = \TCMSUser::GetActiveUser();
-        if (null === $activeUser) {
-            return $menuCategories;
-        }
-
-        $menuItemsClickedByUser = $this->userMenuItemDataAccess->getMenuItems($activeUser->id);
-
-        if (count($menuItemsClickedByUser) > 0) {
-            $items = [];
-            foreach ($menuItemsClickedByUser as $menuId) {
-                if (\array_key_exists($menuId, $menuItemMap)) {
-                    $items[] = $menuItemMap[$menuId];
-                }
-            }
-
-            if (count($items) > 0) {
-                $popularCategory = new MenuCategory(
-                    self::POPULAR_CATEGORY_ID,
-                    $this->translator->trans('chameleon_system_core.sidebar.popular_entries'),
-                    'fas fa-fire',
-                    array_slice($items, 0, 6)
-                );
-                \array_unshift($menuCategories, $popularCategory);
-            }
+        $popularCategory = $this->getPopularMenuEntries($menuItemMap);
+        if (null !== $popularCategory) {
+            \array_unshift($menuCategories, $popularCategory);
         }
 
         return $menuCategories;
@@ -235,6 +213,36 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         return $session->get(self::OPEN_CATEGORIES_SESSION_KEY, []);
+    }
+
+    private function getPopularMenuEntries(array $menuItemMap): ?MenuCategory
+    {
+        $activeUser = \TCMSUser::GetActiveUser();
+        if (null === $activeUser) {
+            return null;
+        }
+
+        $menuItemsClickedByUser = $this->userMenuItemDataAccess->getMenuItemIds($activeUser->id);
+        $menuItemsClickedByUser = \array_slice($menuItemsClickedByUser, 0, 6);
+
+        $items = [];
+
+        foreach ($menuItemsClickedByUser as $menuId) {
+            if (\array_key_exists($menuId, $menuItemMap)) {
+                $items[] = $menuItemMap[$menuId];
+            }
+        }
+
+        if (0 === $items) {
+            return null;
+        }
+
+        return new MenuCategory(
+            self::POPULAR_CATEGORY_ID,
+            $this->translator->trans('chameleon_system_core.sidebar.popular_entries'),
+            'fas fa-fire',
+            $items
+        );
     }
 
     /**
@@ -321,8 +329,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         // TODO what about the rmhist things?
-
-        // TODO test code
 
         $activeUser = \TCMSUser::GetActiveUser();
         if (null === $activeUser) {
