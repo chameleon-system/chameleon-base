@@ -867,6 +867,7 @@
             <argument type="service" id="chameleon_system_core.response.response_variable_replacer"/>
             <argument type="service" id="chameleon_system_core.bridge.chameleon.module.sidebar.menu_item_factory"/>
             <argument type="service" id="translator"/>
+            <argument type="service" id="chameleon_system_core.sidebar.user_menu_access"/>
         </service>
 
         <service id="chameleon_system_core.bridge.chameleon.module.sidebar.menu_item_factory" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItemFactory" />
@@ -879,6 +880,11 @@
         </service>
         <service id="chameleon_system_core.bridge.chameleon.module.sidebar.custom_item_provider" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\CustomMenuItemProvider">
             <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsMenuCustomItem" />
+        </service>
+
+        <service id="chameleon_system_core.sidebar.user_menu_access" class="ChameleonSystem\CoreBundle\DataAccess\UserMenuItemDataAccess" shared="false">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="logger"/>
         </service>
 
         <service id="chameleon_system_core.module.static_view_module" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\StaticView\StaticViewModule" shared="false">

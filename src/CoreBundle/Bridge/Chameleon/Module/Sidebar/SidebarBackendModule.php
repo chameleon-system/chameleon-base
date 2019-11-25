@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar;
 
+use ChameleonSystem\CoreBundle\DataAccess\UserMenuItemDataAccessInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -49,13 +50,19 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     private $translator;
 
+    /**
+     * @var UserMenuItemDataAccessInterface
+     */
+    private $userMenuItemDataAccess;
+
     public function __construct(
         UrlUtil $urlUtil,
         RequestStack $requestStack,
         InputFilterUtilInterface $inputFilterUtil,
         ResponseVariableReplacerInterface $responseVariableReplacer,
         MenuItemFactoryInterface $menuItemFactory,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        UserMenuItemDataAccessInterface $userMenuItemDataAccess
     ) {
         parent::__construct();
 
@@ -65,6 +72,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->responseVariableReplacer = $responseVariableReplacer;
         $this->menuItemFactory = $menuItemFactory;
         $this->translator = $translator;
+        $this->userMenuItemDataAccess = $userMenuItemDataAccess;
     }
 
     /**
@@ -175,7 +183,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 if (null !== $menuItem) {
                     $menuItems[] = $menuItem;
 
-                    $menuItemMap[$menuItem->getUrl()] = $menuItem;
+                    $menuItemMap[$menuItem->getId()] = $menuItem;
                 }
             }
             if (\count($menuItems) > 0) {
@@ -189,16 +197,18 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         // TODO test code:
-        $session = $this->requestStack->getCurrentRequest()->getSession();
-        $clickCounters = $session->get('dummy-clickers', []);
+        $activeUser = \TCMSUser::GetActiveUser();
+        if (null === $activeUser) {
+            return $menuCategories;
+        }
 
-        if (count($clickCounters) > 0) {
-            // TODO sort by click count (?) or alphabetically
+        $menuItemsClickedByUser = $this->userMenuItemDataAccess->getMenuItems($activeUser->id);
 
+        if (count($menuItemsClickedByUser) > 0) {
             $items = [];
-            foreach ($clickCounters as $href => $count) {
-                if (\array_key_exists($href, $menuItemMap)) {
-                    $items[] = $menuItemMap[$href];
+            foreach ($menuItemsClickedByUser as $menuId) {
+                if (\array_key_exists($menuId, $menuItemMap)) {
+                    $items[] = $menuItemMap[$menuId];
                 }
             }
 
@@ -304,25 +314,22 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     protected function reportElementClick(): void
     {
-        $href = $this->inputFilterUtil->getFilteredPostInput('clickedHref', '');
+        $menuId = $this->inputFilterUtil->getFilteredPostInput('clickedMenuId', '');
 
-        if ('' === $href) {
+        if ('' === $menuId) {
             return;
         }
 
         // TODO what about the rmhist things?
 
-        // TODO test code:
-        $session = $this->requestStack->getCurrentRequest()->getSession();
-        $clickCounters = $session->get('dummy-clickers', []);
+        // TODO test code
 
-        if (\array_key_exists($href, $clickCounters)) {
-            $clickCounters[$href]++;
-        } else {
-            $clickCounters[$href] = 1;
+        $activeUser = \TCMSUser::GetActiveUser();
+        if (null === $activeUser) {
+            return;
         }
 
-        $session->set('dummy-clickers', $clickCounters);
+        $this->userMenuItemDataAccess->trackMenuItem($activeUser->id, $menuId);
     }
 
     /**

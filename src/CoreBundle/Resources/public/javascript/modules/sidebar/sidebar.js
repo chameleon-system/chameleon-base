@@ -191,15 +191,17 @@
             this.handleElementClickForPopular($(event.target));
         },
         handleElementClickForPopular: function($clickedItem) {
-            const clickedHref = $clickedItem.attr("href");
+            const clickedMenuId = $clickedItem.data("entry-id");
 
-            if (0 === clickedHref.length) {
+            console.log(clickedMenuId);
+
+            if (0 === clickedMenuId.length) {
                 return;
             }
 
             const url = this.$baseElement.data('element-click-notification-url');
             $.post(url, {
-                clickedHref: clickedHref
+                clickedMenuId: clickedMenuId
             });
         }
     });
