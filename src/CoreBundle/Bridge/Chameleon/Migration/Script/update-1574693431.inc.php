@@ -1,38 +1,38 @@
-<h1>Build #1574083379</h1>
-<h2>Date: 2019-11-18</h2>
+<h1>Build #1574693431</h1>
+<h2>Date: 2019-11-25</h2>
 <div class="changelog">
-    - #107: add module: "Backend Navigation Tree"
+    -
 </div>
 <?php
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'en')
   ->setFields([
-      'name' => 'Navigation Tree',
+      'name' => 'Navigation Tree Single Select',
       'description' => '',
-      'classname' => 'chameleon_system_core.module.navigation_tree',
+      'classname' => 'chameleon_system_core.module.navigation_tree_single_select',
       'icon_list' => 'application.png',
       'icon_font_css_class' => '',
-      'view_mapper_config' => 'standard=NavigationTree/standard.html.twig',
+      'view_mapper_config' => 'standard=NavigationTreeSingleSelect/standard.html.twig',
       'mapper_chain' => '',
       'view_mapping' => '',
       'revision_management_active' => '0',
       'is_copy_allowed' => '0',
-      'show_in_template_engine' => '0',
+      'show_in_template_engine' => '1',
       'is_restricted' => '0',
       'position' => '',
-      'id' => 'c9fee34c-76c5-ef8a-c639-b18c821229e8',
+      'id' => 'e01556f8-9ee5-9cd2-b451-8850da258002',
   ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
 
+
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
-    ->setFields([
-        'name' => 'Navigation',
-    ])
-    ->setWhereEquals([
-        'id' => 'c9fee34c-76c5-ef8a-c639-b18c821229e8',
-    ])
+  ->setFields([
+      'name' => 'Navigation Einzel-Auswahl',
+  ])
+  ->setWhereEquals([
+      'id' => 'e01556f8-9ee5-9cd2-b451-8850da258002',
+  ])
 ;
 TCMSLogChange::update(__LINE__, $data);
-
 
