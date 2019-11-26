@@ -95,8 +95,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     /**
      * To enable sensible module caching.
-     * 
-     * TODO! -> problem with popular entries
      */
     private function restoreDisplayState(): void
     {
@@ -327,8 +325,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         if ('' === $menuId) {
             return;
         }
-
-        // TODO what about the rmhist things?
 
         $activeUser = \TCMSUser::GetActiveUser();
         if (null === $activeUser) {
