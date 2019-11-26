@@ -148,8 +148,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $treeNodeTableRecordId = \TTools::GetCMSTableId('cms_tree_node');
         $currentPageId = $this->inputFilterUtil->getFilteredGetInput('id', '');
         $primaryConnectedNodeIdOfCurrentPage = $this->inputFilterUtil->getFilteredGetInput('primaryTreeNodeId', '');
+        $rootNodeId = $this->inputFilterUtil->getFilteredGetInput('rootID', '');
 
-        $url = $this->urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'getTreeNodesJson', 'currentPageId' => $currentPageId, 'primaryTreeNodeId' => $primaryConnectedNodeIdOfCurrentPage), PATH_CMS_CONTROLLER.'?', '&');
+        $url = $this->urlUtil->getArrayAsUrl(array('pagedef' => 'navigationTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'getTreeNodesJson', 'currentPageId' => $currentPageId, 'primaryTreeNodeId' => $primaryConnectedNodeIdOfCurrentPage, 'rootNodeId' => $rootNodeId), PATH_CMS_CONTROLLER.'?', '&');
         $visitor->SetMappedValue('treeNodesAjaxUrl', $url);
 
         $url = $this->urlUtil->getArrayAsUrl(array('id' => $treeNodeTableRecordId, 'pagedef' => 'tablemanagerframe', 'sRestrictionField' => 'cms_tree_id'), PATH_CMS_CONTROLLER.'?', '&');
@@ -167,19 +168,19 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $url = $this->urlUtil->getArrayAsUrl(array('tableid' => $treeTableRecordId, 'pagedef' => 'tableeditorPopup', 'module_fnc' => array('contentmodule' => 'Insert')), PATH_CMS_CONTROLLER.'?', '&');
         $visitor->SetMappedValue('openTreeNodeEditorAddNewNodeUrl', $url);
 
-        $url = $this->urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'deleteNode', 'tableid' => $treeTableRecordId), PATH_CMS_CONTROLLER.'?', '&');
+        $url = $this->urlUtil->getArrayAsUrl(array('pagedef' => 'navigationTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'deleteNode', 'tableid' => $treeTableRecordId), PATH_CMS_CONTROLLER.'?', '&');
         $visitor->SetMappedValue('deleteNodeUrl', $url);
 
         $url = $this->urlUtil->getArrayAsUrl(array('tableid' => $treeNodeTableRecordId, 'pagedef' => 'tableeditorPopup', 'sRestrictionField' => 'cms_tree_id', 'module_fnc' => array('contentmodule' => 'Insert'), 'active' => '1', 'preventTemplateEngineRedirect' => '1', 'contid' => $currentPageId), PATH_CMS_CONTROLLER.'?', '&');
         $visitor->SetMappedValue('assignPageUrl', $url);
 
-        $url = $this->urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'moveNode', 'tableid' => $treeTableRecordId), PATH_CMS_CONTROLLER.'?', '&');
+        $url = $this->urlUtil->getArrayAsUrl(array('pagedef' => 'navigationTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'moveNode', 'tableid' => $treeTableRecordId), PATH_CMS_CONTROLLER.'?', '&');
         $visitor->SetMappedValue('moveNodeUrl', $url);
 
-        $url = $this->urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'connectPageToNode', 'tableid' => $treeNodeTableRecordId, 'currentPageId' => $currentPageId), PATH_CMS_CONTROLLER.'?', '&');
+        $url = $this->urlUtil->getArrayAsUrl(array('pagedef' => 'navigationTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'connectPageToNode', 'tableid' => $treeNodeTableRecordId, 'currentPageId' => $currentPageId), PATH_CMS_CONTROLLER.'?', '&');
         $visitor->SetMappedValue('connectPageOnSelectUrl', $url);
 
-        $url = $this->urlUtil->getArrayAsUrl(array('pagedef' => 'CMSModulePageTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'disconnectPageFromNode', 'tableid' => $treeNodeTableRecordId, 'currentPageId' => $currentPageId), PATH_CMS_CONTROLLER.'?', '&');
+        $url = $this->urlUtil->getArrayAsUrl(array('pagedef' => 'navigationTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'disconnectPageFromNode', 'tableid' => $treeNodeTableRecordId, 'currentPageId' => $currentPageId), PATH_CMS_CONTROLLER.'?', '&');
         $visitor->SetMappedValue('disconnectPageOnDeselectUrl', $url);
 
         if (true === $cachingEnabled) {
@@ -368,7 +369,13 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $this->currentPageId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
         $this->primaryConnectedNodeIdOfCurrentPage = $this->inputFilterUtil->getFilteredGetInput('primaryTreeNodeId', '');
 
-        $startNodeId = $this->inputFilterUtil->getFilteredGetInput('id');
+        $startNodeId = $this->inputFilterUtil->getFilteredGetInput('id', '#');
+        $rootNodeId = $this->inputFilterUtil->getFilteredGetInput('rootNodeId', '');
+
+        if ('' !== $rootNodeId) {
+            $startNodeId = $rootNodeId;
+        }
+
         $level = 0;
 
         // '#' = first ajax call from jstree AND there're a currentPage

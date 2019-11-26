@@ -14,6 +14,16 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
 {
+    /**
+     * @var string
+     */
+    protected $treeNodeSelectModulePagedef = 'navigationTreeSingleSelect';
+
+    /**
+     * @var string
+     */
+    protected $treeNodeSelectAdditionalNodesPagedef = 'navigationTreePlain';
+
     public function GetHTML()
     {
         $primaryPath = $this->GetHTMLPrimaryTree();
@@ -262,14 +272,8 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
     {
         $aIncludes = parent::GetCMSHtmlHeadIncludes();
 
-        $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript([
-            'pagedef' => 'CMSModulePageTreePlain',
-            'table' => 'cms_tpl_page',
-            'rootID' => TCMSTreeNode::TREE_ROOT_ID,
-            'id' => $this->oTableRow->id,
-            'isInIframe' => '1',
-            'primaryTreeNodeId' => $this->oTableRow->fieldPrimaryTreeIdHidden
-        ]);
+        $navigationTreeUrl = $this->getNavigationTreeModuleUrl();
+
         $aIncludes[] = "<script type=\"text/javascript\">
         function loadTreeNodeSelection(fieldName,id) {
           if(document.getElementById('cms_portal_id').options != undefined) {
@@ -286,7 +290,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
               $('#tooltipcms_portal_id_content').parent('td').prepend('<input type=\"hidden\" name=\"cms_portal_id\" id=\"cms_portal_id\" value=\"' + portalID + '\" />' + portalName);
               $('#tooltipcms_portal_id_content').siblings('.switchToRecordBox').remove();
             }
-            CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=treenodeselect&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID);
+            CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=".TGlobal::OutJS($this->treeNodeSelectModulePagedef)."&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID);
           } else {
             toasterMessage('".TGlobal::Translate('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
           }
@@ -300,14 +304,14 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
               $('#cms_portal_id').remove();
               $('#tooltipcms_portal_id_content').parent('td').prepend('<input type=\"hidden\" name=\"cms_portal_id\" id=\"cms_portal_id\" value=\"' + portalID + '\" />' + portalName);
               $('#tooltipcms_portal_id_content').siblings('.switchToRecordBox').remove();
-              CreateModalIFrameDialogCloseButton('".$url."',0,0,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
+              CreateModalIFrameDialogCloseButton('".$navigationTreeUrl."',0,0,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
             } else {
               toasterMessage('".TGlobal::Translate('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
             }
           } else {
             var portalID = document.getElementById('cms_portal_id').value;
             if(portalID != '0' && portalID != '') {
-              CreateModalIFrameDialogCloseButton('".$url."',0,0,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
+              CreateModalIFrameDialogCloseButton('".$navigationTreeUrl."',0,0,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
             } else {
               toasterMessage('".TGlobal::Translate('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
             }
@@ -318,6 +322,20 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
         return $aIncludes;
     }
 
+    private function getNavigationTreeModuleUrl(): string
+    {
+        $urlUtilService = $this->getUrlUtilService();
+
+        return PATH_CMS_CONTROLLER.'?'.$urlUtilService->getArrayAsUrl([
+                'pagedef' => $this->treeNodeSelectAdditionalNodesPagedef,
+                'table' => 'cms_tpl_page',
+                'rootID' => TCMSTreeNode::TREE_ROOT_ID,
+                'id' => $this->oTableRow->id,
+                'isInIframe' => '1',
+                'primaryTreeNodeId' => $this->oTableRow->fieldPrimaryTreeIdHidden
+            ], '', '&');
+    }
+
     private function getTreeService(): TreeServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.tree_service');
@@ -326,5 +344,10 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
     private function getViewRenderer(): ViewRenderer
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+    }
+
+    private function getUrlUtilService(): \ChameleonSystem\CoreBundle\Util\UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }
