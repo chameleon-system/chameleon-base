@@ -40,8 +40,6 @@ $(document).ready(function () {
     $('.jstree-exit').click(function () {
         parent.CloseModalIFrameDialog();
     });
-
-
 });
 /*
  * TreeNode field: sets selected node
