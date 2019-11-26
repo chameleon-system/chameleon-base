@@ -7,7 +7,7 @@
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'en')
   ->setFields([
-      'name' => 'Navigation Tree',
+      'name' => 'Navigation Tree Backend Module',
       'description' => '',
       'classname' => 'chameleon_system_core.module.navigation_tree',
       'icon_list' => 'application.png',
@@ -27,7 +27,7 @@ TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
     ->setFields([
-        'name' => 'Navigation',
+        'name' => 'Navigationsbaum Backendmodul',
     ])
     ->setWhereEquals([
         'id' => 'c9fee34c-76c5-ef8a-c639-b18c821229e8',
