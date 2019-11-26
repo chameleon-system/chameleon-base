@@ -974,8 +974,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     protected function GetRequestPasswordUserFromField($sFieldName, $sFieldValue)
     {
         $oSendPasswordUser = null;
-        if ('' != $sFieldName && '' != $sFieldValue) {
-            $oUser = $this->getExtranetUserProvider()->getActiveUser();
+        if ('' !== $sFieldName && '' !== $sFieldValue) {
+            $oUser = TdbDataExtranetUser::GetNewInstance();
             if ($oUser->LoadFromField($sFieldName, $sFieldValue)) {
                 $oSendPasswordUser = $oUser;
             }
