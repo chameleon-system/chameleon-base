@@ -10,7 +10,7 @@
  */
 
 /**
- * @deprecated since ? - use NavigationTreeSingleSelect instead
+ * @deprecated since 6.3.7 - use NavigationTreeSingleSelect instead
  */
 class CMSTreeNodeSelect extends TCMSModelBase
 {
