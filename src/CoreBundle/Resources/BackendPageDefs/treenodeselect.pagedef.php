@@ -1,13 +1,8 @@
 <?php
-
+/**
+ * @deprecated since 6.3.7 - use navigationTreeSingleSelect.pagedef.php instead
+ */
 $layoutTemplate = 'popup_iframe';
-
-$moduleList = [
-    'contentmodule' => [
-        'model' => 'chameleon_system_core.module.navigation_tree_single_select',
-        'moduleType' => '@CoreBundle',
-        'view' => 'standard',
-    ],
-];
+$moduleList = array('contentmodule' => array('model' => 'CMSTreeNodeSelect', 'view' => 'standard'));
 
 addDefaultPageTitle($moduleList);
