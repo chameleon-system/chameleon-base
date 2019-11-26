@@ -1,13 +1,8 @@
 <?php
-
+/**
+ * @deprecated since 6.3.7 - use navigationTreePlain.pagedef.php instead
+ */
 $layoutTemplate = 'frame';
-
-$moduleList = [
-    'contentmodule' => [
-        'model' => 'chameleon_system_core.module.navigation_tree',
-        'moduleType' => '@CoreBundle',
-        'view' => 'standard',
-    ],
-];
+$moduleList = array('contentmodule' => array('model' => 'CMSModulePageTree', 'view' => 'standard'));
 
 addDefaultPageTitle($moduleList);
