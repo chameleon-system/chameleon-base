@@ -1,6 +1,5 @@
 {# @var treeNodes \ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel #}
 
-
 {% if isInIframe == false %}
 
 <div class="card">
@@ -322,7 +321,6 @@
         currentNodeId = nodeId; // save nodeId in global var
         var url = "{{ openTreeNodeEditorUrl | raw }}" + '&id=' + nodeId;
         CreateModalIFrameDialogCloseButton(url);
-        //refreshNode with callback function updateTreeNode
     }
 
     /**
@@ -334,7 +332,6 @@
         currentNodeId = nodeId; // save nodeId in global var
         var url = "{{ openTreeNodeEditorAddNewNodeUrl | raw }}" + '&parent_id=' + nodeId;
         CreateModalIFrameDialogCloseButton(url);
-        //refreshNode with callback function updateTreeNode
     }
 
     /**
@@ -451,8 +448,5 @@
         }
 
         $(".navigationTreeContainer.jstree").jstree(true).refresh_node(nodeId);
-
     }
-
-
 </script>
