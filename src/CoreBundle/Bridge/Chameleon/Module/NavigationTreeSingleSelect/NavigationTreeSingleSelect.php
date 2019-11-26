@@ -152,12 +152,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * return an array of all js, css, or other header includes that are required
-     * in the cms for this field. each include should be in one line, and they
-     * should always be typed the same way so that no includes are included mor than once.
-     *
-     * @return array
-     * @throws \ErrorException
+     * @{inheritDoc}
      */
     public function GetHtmlHeadIncludes()
     {
