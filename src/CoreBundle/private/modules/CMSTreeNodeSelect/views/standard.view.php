@@ -1,3 +1,8 @@
+<?php
+/**
+ * @deprecated since 6.3.7 - use NavigationTreeSingleSelect instead.
+ */
+?>
 <script type="text/javascript">
     $(document).ready(function () {
 
