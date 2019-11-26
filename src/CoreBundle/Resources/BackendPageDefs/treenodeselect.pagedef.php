@@ -1,6 +1,13 @@
 <?php
 
 $layoutTemplate = 'popup_iframe';
-$moduleList = array('contentmodule' => array('model' => 'CMSTreeNodeSelect', 'view' => 'standard'));
+
+$moduleList = [
+    'contentmodule' => [
+        'model' => 'chameleon_system_core.module.navigation_tree_single_select',
+        'moduleType' => '@CoreBundle',
+        'view' => 'standard',
+    ],
+];
 
 addDefaultPageTitle($moduleList);
