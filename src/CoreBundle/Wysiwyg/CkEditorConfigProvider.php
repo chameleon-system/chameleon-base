@@ -266,11 +266,11 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
             'filebrowserWindowHeight' => '800',
             'filebrowserWindowWidth' => '1200',
 
-            'filebrowserLinkBrowseUrl' => "'".PATH_CMS_CONTROLLER."?pagedef=treenodeselectWYSIWYG'",
+            'filebrowserLinkBrowseUrl' => "'".PATH_CMS_CONTROLLER."?pagedef=navigationTreeSingleSelectWysiwyg'",
             'filebrowserLinkWindowHeight' => '500',
             'filebrowserLinkWindowWidth' => '992',
 
-            'filebrowserImageBrowseLinkUrl' => "'".PATH_CMS_CONTROLLER."?pagedef=treenodeselectWYSIWYG'",
+            'filebrowserImageBrowseLinkUrl' => "'".PATH_CMS_CONTROLLER."?pagedef=navigationTreeSingleSelectWysiwyg'",
             'filebrowserImageWindowHeight' => '500',
             'filebrowserImageWindowWidth' => '992',
 

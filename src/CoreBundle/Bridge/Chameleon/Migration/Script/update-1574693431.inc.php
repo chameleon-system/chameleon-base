@@ -1,7 +1,7 @@
 <h1>Build #1574693431</h1>
 <h2>Date: 2019-11-25</h2>
 <div class="changelog">
-    - #107: add module: "Backend Navigation Tree" and correction of previous update: new pagedef "navigationTree"
+    - #107: add module: "Navigation Tree Single Select Backend Module" and correction of previous update: new pagedef "navigationTree"
 </div>
 <?php
 

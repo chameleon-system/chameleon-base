@@ -1,3 +1,9 @@
+<?php
+/**
+* @deprecated since 6.3.7 - use NavigationTreeSingleSelectWysiwyg instead.
+*/
+?>
+
 <script type="text/javascript">
     $(document).ready(function () {
 
