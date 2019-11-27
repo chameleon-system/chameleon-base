@@ -1,7 +1,7 @@
 <h1>Build #1574688419</h1>
 <h2>Date: 2019-11-25</h2>
 <div class="changelog">
-    - #508: Connect user to
+    - #508: Connect user to (clicked) menu entries
 </div>
 <?php
 
