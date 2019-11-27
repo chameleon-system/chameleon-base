@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
@@ -98,8 +99,8 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     private function restoreDisplayState(): void
     {
-        $session = $this->requestStack->getCurrentRequest()->getSession();
-        $displayState = $session->get(self::DISPLAY_STATE_SESSION_KEY, '');
+        $session = $this->getSession();
+        $displayState = null !== $session ? $session->get(self::DISPLAY_STATE_SESSION_KEY, '') : '';
         if ('minimized' === $displayState) {
             $value = 'sidebar-minimized';
         } else {
@@ -108,6 +109,16 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         
         $this->responseVariableReplacer->addVariable('sidebarDisplayState', $value);
         $this->responseVariableReplacer->addVariable('sidebarOpenCategoryIds', \TGlobal::OutHTML(implode(',', $this->getOpenCategories())));
+    }
+
+    private function getSession(): ?SessionInterface
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return null;
+        }
+
+        return $request->getSession();
     }
 
     /**
@@ -204,7 +215,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     private function getOpenCategories(): array
     {
-        $session = $this->requestStack->getCurrentRequest()->getSession();
+        $session = $this->getSession();
 
         if (null === $session) {
             return [];
@@ -253,12 +264,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     protected function toggleCategoryOpenState(): void
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            return;
-        }
-
-        $session = $request->getSession();
+        $session = $this->getSession();
         if (null === $session) {
             return;
         }
@@ -314,7 +320,12 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             return;
         }
 
-        $session = $this->requestStack->getCurrentRequest()->getSession();
+
+        $session = $this->getSession();
+        if (null === $session) {
+            return;
+        }
+
         $session->set(self::DISPLAY_STATE_SESSION_KEY, $displayState);
     }
 
@@ -353,6 +364,11 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         if (null !== $cmsUser) {
             $parameters['cmsUserId'] = $cmsUser->id;
             $parameters['backendLanguageId'] = $cmsUser->fieldCmsLanguageId;
+
+            $session = $this->getSession();
+            if (null !== $session) {
+                $parameters['sessionId'] = $session->getId();
+            }
         }
 
         return $parameters;
