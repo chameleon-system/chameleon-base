@@ -1,11 +1,9 @@
 <?php
-/**
- * @deprecated since 6.3.7 - use navigationTreeSingleSelectWysiwyg.pagedef.php instead
- */
+
 $layoutTemplate = 'popup_iframe';
 $moduleList = array(
     'contentmodule' => array(
-        'model' => 'CMSTreeNodeSelectWYSIWYG',
+        'model' => 'chameleon_system_core.module.navigation_tree_single_select_wysiwyg',
         'view' => 'standard',
     ),
 );
