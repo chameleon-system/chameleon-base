@@ -14,7 +14,7 @@
     </parameters>
 
     <services>
-        <service class="ChameleonSystem\CoreBundle\Service\SystemTimeProvider" id="chameleon_system_core.system_time_provider" public="false"/>
+        <service class="ChameleonSystem\CoreBundle\Service\SystemTimeProvider" id="chameleon_system_core.system_time_provider" public="true"/>
 
         <service id="chameleon_system_core.pdo" class="PDO" public="false">
             <factory service="database_connection" method="getWrappedConnection" />
