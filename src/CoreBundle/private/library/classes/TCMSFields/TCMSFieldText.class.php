@@ -52,15 +52,28 @@ class TCMSFieldText extends TCMSField
         }
 
         $html = '';
-        $html .= '<textarea id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name)."\" class=\"fieldtext form-control form-control-sm resizable\" width=\"{$this->fieldWidth}\" style=\"".$cssWidth;
-        if (!is_null($iTextareaSize)) {
-            $html .= ' ;height: '.$iTextareaSize.'px';
-        }
-        $html .= '">';
+        $html .= sprintf(
+            '<textarea id="%s" name="%s" class="fieldtext form-control form-control-sm resizable" width="%s" style="%s" %s>',
+            TGlobal::OutHTML($this->name),
+            TGlobal::OutHTML($this->name),
+            $this->fieldWidth,
+            $cssWidth.';'.(null !== $iTextareaSize ? $iTextareaSize.'px' : ''),
+            true === $this->bReadOnlyMode ? 'readonly' : ''
+        );
         $html .= TGlobal::OutHTML($this->data);
         $html .= '</textarea>';
 
         return $html;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetReadOnly()
+    {
+        $this->bReadOnlyMode = true;
+
+        return $this->GetHTML();
     }
 
     /**
