@@ -508,3 +508,11 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
         }
     });
 };
+
+CHAMELEON.CORE.copyToClipboard = function(text) {
+    const $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val(text).select();
+    document.execCommand("copy");
+    $temp.remove();
+};
