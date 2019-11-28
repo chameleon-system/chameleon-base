@@ -92,7 +92,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     {
         $portalId = $this->inputFilterUtil->getFilteredGetInput('portalID', '');
 
-        $rootTreeId = "";
+        $rootTreeId = \TCMSTreeNode::TREE_ROOT_ID;
         if ('' !== $portalId) {
             // load portal object
             $oPortal = new \TCMSPortal();

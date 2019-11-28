@@ -864,3 +864,7 @@ that are deprecated because they are outdated and replaced by frontend themes or
 ## Page Definitions
 
 - api.pagedef.php
+
+## CMSModulePageTree -> NavigationTree
+
+## CMSTreeNodeSelect -> NavigationTreeSingleSelect
