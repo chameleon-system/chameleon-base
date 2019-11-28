@@ -884,6 +884,12 @@ CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe = function () {
     webpageiFrame.css('height', iFrameHeight);
 };
 
+CHAMELEON.CORE.MTTableEditor.idButtonCopyToClipboard = function () {
+    $(".entry-id-copy-button").on("click", function() {
+        CHAMELEON.CORE.copyToClipboard($(this).data("entry-id"));
+    });
+};
+
 $(document).ready(function () {
     CHAMELEON.CORE.MTTableEditor.initTabs();
     CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
@@ -893,5 +899,6 @@ $(document).ready(function () {
     CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent('label.switch input[type=checkbox]');
     CHAMELEON.CORE.MTTableEditor.initHelpTexts();
     CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe();
+    CHAMELEON.CORE.MTTableEditor.idButtonCopyToClipboard();
     CHAMELEON.CORE.handleFormAndLinkTargetsInModals();
 });

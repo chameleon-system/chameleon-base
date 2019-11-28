@@ -1718,6 +1718,10 @@
             </trans-unit>
 
 
+            <trans-unit id="chameleon_system_core.text.copy_id_to_clipboard">
+                <source>chameleon_system_core.text.copy_id_to_clipboard</source>
+                <target>Copy ID to clipboard</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.text.file_type">
                 <source>chameleon_system_core.text.file_type</source>
                 <target>File type</target>
