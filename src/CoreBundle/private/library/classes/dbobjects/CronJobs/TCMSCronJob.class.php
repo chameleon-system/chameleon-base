@@ -267,11 +267,10 @@ class TCMSCronJob extends TCMSRecord
      */
     public function _Lock()
     {
-        $numberOfRowsAffected = $this->getDatabaseConnection()->update(
-            $this->table,
-            ['lock' => '1'],
-            ['id' => $this->id]
-        );
+        $connection = $this->getDatabaseConnection();
+        $tableNameQuoted = $connection->quoteIdentifier($this->table);
+
+        $numberOfRowsAffected = $connection->executeUpdate("UPDATE $tableNameQuoted SET `lock` = '1' WHERE `id` = :id", ['id' => $this->id]);
         $this->sqlData['lock'] = '1';
 
         return 1 === $numberOfRowsAffected;
@@ -282,11 +281,10 @@ class TCMSCronJob extends TCMSRecord
      */
     public function _Unlock()
     {
-        $this->getDatabaseConnection()->update(
-            $this->table,
-            ['lock' => '0'],
-            ['id' => $this->id]
-        );
+        $connection = $this->getDatabaseConnection();
+        $tableNameQuoted = $connection->quoteIdentifier($this->table);
+
+        $connection->executeUpdate("UPDATE $tableNameQuoted SET `lock` = '0' WHERE `id` = :id", ['id' => $this->id]);
         $this->sqlData['lock'] = '0';
     }
 
