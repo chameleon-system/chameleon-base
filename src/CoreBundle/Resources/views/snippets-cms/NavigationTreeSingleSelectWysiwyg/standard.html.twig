@@ -1,57 +1,41 @@
-W O R K  I N  P R O C E S S !!!!
+{# @var treeNodes \ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel #}
 
-<!--<script type="text/javascript">-->
-<!--    $(document).ready(function () {-->
-<!---->
-<!--        $("#treeNodeSelect").jstree({-->
-<!--            "core":{-->
-<!--                "animation":0,-->
-<!--                "html_titles":true-->
-<!--            },-->
-<!--            "theme":'default',-->
-<!--            "themes":{-->
-<!--                "theme":"default",-->
-<!--                "dots":true,-->
-<!--                "icons":true-->
-<!--            },-->
-<!--            "plugins":[ "themes", "html_data", "cookies" ]-->
-<!--        });-->
-<!---->
-<!--        $("#treeNodeSelect").jstree("open_all");-->
-<!---->
-<!--    });-->
-<!--    /**-->
-<!--     * TreeNode field: sets selected node-->
-<!--     * parameter: treeNode is @deprecated since 6.1.6-->
-<!--     */-->
-<!--    function chooseTreeNode(pagedef, treeNode, text) {-->
-<!--        var url = '/INDEX?pagedef=' + pagedef;-->
-<!---->
-<!--        parent.opener.window.CKEDITOR.tools.callFunction(-->
-{#<?//=$CKEditorFuncNum; ?>//, encodeURI(url), function () {#}
-{#            // Get the reference to a dialog window.#}
-{#            var element,#}
-{#                dialog = this.getDialog(),#}
-{#                editor = dialog.getParentEditor();#}
-{#            // Get the reference to a text field that holds the "alt" attribute.#}
-{#            element = dialog.getContentElement('info', 'linkDisplayText');#}
-{#            if (element && (element.getValue() == '' || editor.plugins.chameleon_link.allowSuggestions)) {#}
-{#                element.setValue(text);#}
-{#            }#}
-{#//#}
-{#//            element = dialog.getContentElement('advanced', 'advTitle');#}
-{#//            if (element && (element.getValue() == '' || editor.plugins.chameleon_link.allowSuggestions)) {#}
-{#//                element.setValue(text);#}
-{#//            }#}
-{#//#}
-{#//            window.close();#}
-{#//        });#}
-{#//    }#}
-{#//</script>#}
-{#//#}
-{#//<div id="treeNodeSelect">#}
-{#//    <ul>#}
-{#//        <?//=$treeHTML; ?>#}
-{#<!--    </ul>-->#}
-{#<!--</div>-->#}
-{#<?//=$treePathHTML; ?>#}
+{% if level == 0 %}
+
+<div class="p-4">
+    <button class="btn btn-success mb-4 jstree-selection-wysiwyg">{{ 'chameleon_system_core.navigation_tree.confirm_selection' | trans }}</button>
+    <button class="btn btn-danger mb-4 jstree-exit-wysiwyg">{{ 'chameleon_system_core.navigation_tree.cancel_selection' | trans }}</button>
+
+    <div id="singleTreeNodeSelectWysiwyg" data-ckeditorfuncnum="{{ CKEditorFuncNum }}">
+        <ul>
+            {% endif %}
+
+            {% if treeNodes.name != "" %}
+                <li id="node{{ treeNodes.cmsIdent }}" class="{% if level <=1 %}no-checkbox{% endif %}{% if level == 0 %} jstree-open{% endif %}"
+                    data-jstree="{&quot;type&quot;: &quot;{% if treeNodes.children | length > 0 %}folder{% else %}page{% endif %}&quot;{% if level <= 1 %}, &quot;disabled&quot;: true{% endif %}}"
+                    data-selection="{&quot;fieldName&quot;: &quot;{{ fieldName }}&quot;, &quot;nodeId&quot;: &quot;{{ treeNodes.id }}&quot;, &quot;connectedPageId&quot;: &quot;{{ treeNodes.connectedPageId }}&quot;}" >
+
+                    <a href="#"{% if activeId == treeNodes.id %} class="jstree-clicked"{% endif %}>
+                        {{ treeNodes.name }}
+                    </a>
+
+                    {% if treeNodes.children | length > 0 %}
+                        <ul>
+                            {% for child in treeNodes.children %}
+                                {% include _self with {'treeNodes': child, 'level': level+1, 'path': path, 'pathComplete': pathComplete} %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endif %}
+
+            {% if level == 0 %}
+        </ul>
+    </div>
+
+    <button class="btn btn-success mt-4 jstree-selection-wysiwyg">{{ 'chameleon_system_core.navigation_tree.confirm_selection' | trans }}</button>
+    <button class="btn btn-danger mt-4 jstree-exit-wysiwyg">{{ 'chameleon_system_core.navigation_tree.cancel_selection' | trans }}</button>
+    {{ treePathHTML | raw }}
+</div>
+
+{% endif %}

@@ -65,13 +65,19 @@ class BackendTreeNodeDataModel implements JsonSerializable
      */
     private $aAttr = [];
 
+    /**
+     * @var string
+     */
+    private $connectedPageId;
 
-    public function __construct($id, $name, $cmsIdent)
+
+    public function __construct($id, $name, $cmsIdent, $connectedPageId)
     {
         $this->id = $id;
         $this->name = $name;
         $this->cmsIdent = $cmsIdent;
         $this->liAttr = ['cmsIdent' => $cmsIdent];
+        $this->connectedPageId = $connectedPageId;
     }
 
     /**
@@ -232,6 +238,14 @@ class BackendTreeNodeDataModel implements JsonSerializable
     public function setAAttr(array $aAttr): void
     {
         $this->aAttr = $aAttr;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConnectedPageId(): string
+    {
+        return $this->connectedPageId;
     }
 
 
