@@ -15,7 +15,7 @@
     </parameters>
 
     <services>
-        <service class="ChameleonSystem\CoreBundle\Service\SystemTimeProvider" id="chameleon_system_core.system_time_provider" public="false"/>
+        <service class="ChameleonSystem\CoreBundle\Service\SystemTimeProvider" id="chameleon_system_core.system_time_provider" public="true"/>
 
         <service id="chameleon_system_core.pdo" class="PDO" public="false">
             <argument>mysql:dbname=%database_name%;host=%database_host%;port=%database_port%;charset=utf8</argument>
