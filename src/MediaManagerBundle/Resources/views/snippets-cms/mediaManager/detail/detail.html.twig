@@ -31,11 +31,11 @@
                     <td><i class="fas fa-expand-arrows-alt mr-2"></i></td>
                     <td>{{ mediaItem.width }} x {{ mediaItem.height }} px</td>
                 </tr>
-                <tr>
-                    <td class="entry-id-copy-button" data-entry-id="{{ mediaItem.id | e("html_attr") }}" title="{{ 'chameleon_system_core.text.copy_id_to_clipboard' | trans | e("html_attr") }}">
+                <tr class="entry-id-copy-button" data-entry-id="{{ mediaItem.id | e("html_attr") }}" title="{{ 'chameleon_system_core.text.copy_id_to_clipboard' | trans | e("html_attr") }}">
+                    <td>
                         <i class="fas fa-info-circle mr-2"></i>
                     </td>
-                    <td>ID {{ mediaItem.id }}</td>
+                    <td>ID {{ mediaItem.id }} <i class="far fa-clipboard"></i></td>
                 </tr>
                 <tr>
                     <td><i class="far fa-file mr-2"></i></td>
