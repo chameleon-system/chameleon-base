@@ -32,7 +32,9 @@
                     <td>{{ mediaItem.width }} x {{ mediaItem.height }} px</td>
                 </tr>
                 <tr>
-                    <td><i class="fas fa-info-circle mr-2"></i></td>
+                    <td class="entry-id-copy-button" data-entry-id="{{ mediaItem.id | e("html_attr") }}" title="{{ 'chameleon_system_core.text.copy_id_to_clipboard' | trans | e("html_attr") }}">
+                        <i class="fas fa-info-circle mr-2"></i>
+                    </td>
                     <td>ID {{ mediaItem.id }}</td>
                 </tr>
                 <tr>

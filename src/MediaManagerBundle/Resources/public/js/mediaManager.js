@@ -622,6 +622,10 @@
                     }
                     self.openLayover(name, jsonData.contentHtml);
                     self.detailsShown();
+
+                    $(".entry-id-copy-button").on("click", function() {
+                        CHAMELEON.CORE.copyToClipboard($(this).data("entry-id"));
+                    });
                 },
                 dataType: 'JSON'
             });
@@ -1262,6 +1266,10 @@
         var configurationObject = $(this).data('configuration');
         var stateObject = $(this).data('state');
         $(this).chameleonSystemMediaManager(stateObject, configurationObject);
+    });
+
+    $(".entry-id-copy-button").on("click", function() {
+        CHAMELEON.CORE.copyToClipboard($(this).data("entry-id"));
     });
 
     //workaround for callback of universal uploader
