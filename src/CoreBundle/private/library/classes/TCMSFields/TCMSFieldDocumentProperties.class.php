@@ -27,9 +27,9 @@ class TCMSFieldDocumentProperties extends TCMSField
 
         $downloadIcon = $oDownloadItem->getDownloadHtmlTag(false, true, true);
         $html .= '<table class="table table-sm table-striped">
-        <tr>
+        <tr class="entry-id-copy-button" data-entry-id="'.TGlobal::OutHTML($oDownloadItem->id).'" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.text.copy_id_to_clipboard')).'">
           <td width="60">ID:</td>
-          <td>'.$oDownloadItem->id.'</td>
+          <td>'.$oDownloadItem->id.' <i class="far fa-clipboard"></i></td>
         </tr>
         <tr>
           <td width="60">'.TGlobal::Translate('chameleon_system_core.text.file_type').':</td>
