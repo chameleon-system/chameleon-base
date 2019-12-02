@@ -566,7 +566,12 @@ class TCMSFieldLookup extends TCMSField
 
         $tableName = $this->GetConnectedTableName();
         $connectedTableConf = TdbCmsTblConf::GetNewInstance();
-        $connectedTableConf->LoadFromField('name', $tableName);
+        $confLoadSuccess = $connectedTableConf->LoadFromField('name', $tableName);
+
+        if (false === $confLoadSuccess) {
+            return '';
+        }
+
         $identifyingColumnName = $connectedTableConf->GetNameColumn();
 
         $databaseConnection = $this->getDatabaseConnection();
