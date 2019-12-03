@@ -36,6 +36,13 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     private $treeTable = 'cms_tree';
 
     /**
+     * rootNodeId.
+     *
+     * @var string
+     */
+    private $rootNodeId = '';
+
+    /**
      * currentPageId.
      *
      * @var string
@@ -148,9 +155,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $treeNodeTableRecordId = \TTools::GetCMSTableId('cms_tree_node');
         $currentPageId = $this->inputFilterUtil->getFilteredGetInput('id', '');
         $primaryConnectedNodeIdOfCurrentPage = $this->inputFilterUtil->getFilteredGetInput('primaryTreeNodeId', '');
-        $rootNodeId = $this->inputFilterUtil->getFilteredGetInput('rootID', '');
+        $this->rootNodeId = $this->inputFilterUtil->getFilteredGetInput('rootID', \TCMSTreeNode::TREE_ROOT_ID);
 
-        $url = $this->urlUtil->getArrayAsUrl(array('pagedef' => 'navigationTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'getTreeNodesJson', 'currentPageId' => $currentPageId, 'primaryTreeNodeId' => $primaryConnectedNodeIdOfCurrentPage, 'rootNodeId' => $rootNodeId), PATH_CMS_CONTROLLER.'?', '&');
+        $url = $this->urlUtil->getArrayAsUrl(array('pagedef' => 'navigationTree', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'getTreeNodesJson', 'currentPageId' => $currentPageId, 'primaryTreeNodeId' => $primaryConnectedNodeIdOfCurrentPage, 'rootID' => $this->rootNodeId), PATH_CMS_CONTROLLER.'?', '&');
         $visitor->SetMappedValue('treeNodesAjaxUrl', $url);
 
         $url = $this->urlUtil->getArrayAsUrl(array('id' => $treeNodeTableRecordId, 'pagedef' => 'tablemanagerframe', 'sRestrictionField' => 'cms_tree_id'), PATH_CMS_CONTROLLER.'?', '&');
@@ -362,42 +369,22 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      * Renders all children of a node.
      * Is called via ajax and converted to JSON.
      *
-     * @return BackendTreeNodeDataModel
+     * @return array
      */
-    public function getTreeNodesJson(): BackendTreeNodeDataModel
+    public function getTreeNodesJson(): array
     {
         $this->currentPageId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
         $this->primaryConnectedNodeIdOfCurrentPage = $this->inputFilterUtil->getFilteredGetInput('primaryTreeNodeId', '');
+        $this->rootNodeId = $this->inputFilterUtil->getFilteredGetInput('rootID', \TCMSTreeNode::TREE_ROOT_ID);
+        $this->restrictedNodes = $this->getPortalNavigationStartNodes();
 
         $startNodeId = $this->inputFilterUtil->getFilteredGetInput('id', '#');
-        $rootNodeId = $this->inputFilterUtil->getFilteredGetInput('rootNodeId', '');
 
-        if ('' !== $rootNodeId) {
-            $startNodeId = $rootNodeId;
-        }
-
-        $level = 0;
-
-        // '#' = first ajax call from jstree AND there're a currentPage
-        if ('#' === $startNodeId && '' !== $this->currentPageId) {
-            $portalBasedRootNodeId = $this->getPortalBasedRootNodeByPageId($this->currentPageId);
-            if ('' !== $portalBasedRootNodeId) {
-                // only load the portal of the current page
-                $startNodeId = $portalBasedRootNodeId;
-                $level = 1;
-            }
-        }
-
-        if ('#' === $startNodeId) {
-            $treeData = $this->createRootTreeWithDefaultPortalItems();
+        if ('#' === $startNodeId) {  //initial loading
+            return $this->createRootTree();
         } else {
-            $treeNode = new \TdbCmsTree();
-            $treeNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
-            $treeNode->Load($startNodeId);
-            $treeData = $this->createTreeDataModel($treeNode, $level);
+            return $this->loadChildrenOfNode($startNodeId);
         }
-
-        return $treeData;
     }
 
     private function getPortalBasedRootNodeByPageId(string $pageId): string
@@ -412,74 +399,101 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         return $portal->fieldMainNodeTree;
     }
 
-    private function createRootTreeWithDefaultPortalItems(): BackendTreeNodeDataModel
+    private function createRootTree(): array
     {
-        $this->restrictedNodes = $this->getPortalNavigationStartNodes();
-
-        $defaultPortal = $this->portalDomainService->getDefaultPortal();
-        $defaultPortalMainNodeId = $defaultPortal->fieldMainNodeTree;
-
-        $rootNodeID = $this->inputFilterUtil->getFilteredGetInput('rootID', \TCMSTreeNode::TREE_ROOT_ID);
-        $rootTreeNode = new \TdbCmsTree();
-        $rootTreeNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
-        $rootTreeNode->Load($rootNodeID);
-
-        $rootTreeNodeDataModel = $this->backendTreeNodeFactory->createTreeNodeDataModelFromTreeRecord($rootTreeNode);
-        $rootTreeNodeDataModel->setOpened(true);
-        $rootTreeNodeDataModel->setType('folderRootRestrictedMenu');
-        $rootTreeNodeDataModel->setLiAttr(['class' => 'no-checkbox']);
-
-        $portalList = \TdbCmsPortalList::GetList();
-        $this->portalCount = $portalList->Length();
-
-        if ($portalList->Length() > 0) {
-            while ($portal = $portalList->Next()) {
-                $portalId = $portal->fieldMainNodeTree;
-
-                $portalTreeNode = new \TdbCmsTree();
-                $portalTreeNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
-                $portalTreeNode->Load($portalId);
-
-//              See https://github.com/vakata/jstree/issues/2324
-//              If the the other portals are loaded later via ajax, the drag&drop functionality freezes the browser.
-//              Until this problem is solved, we load all portals immediately.
-
-//                if ($portalId === $defaultPortalMainNodeId) {
-                    $portalTreeNodeDataModel = $this->createTreeDataModel($portalTreeNode, 1);
-                    $portalTreeNodeDataModel->setOpened(true);
-//                } else {
-//                    $portalTreeNodeDataModel = $this->backendTreeNodeFactory->createTreeNodeDataModelFromTreeRecord($portalTreeNode);
-//                    $portalTreeNodeDataModel->setChildrenAjaxLoad(true);
-//                    $portalTreeNodeDataModel->setType('folder');
-//                    if (in_array($portalTreeNode->id, $this->restrictedNodes)) {
-//                        $typeRestricted = $portalTreeNodeDataModel->getType().'RestrictedMenu';
-//                        $portalTreeNodeDataModel->setType($typeRestricted);
-//                    }
-//                }
-                $liAttr = $portalTreeNodeDataModel->getLiAttr();
-                $liAttr = array_merge($liAttr, ['class' => 'no-checkbox']);
-                $portalTreeNodeDataModel->setLiAttr($liAttr);
-
-                $rootTreeNodeDataModel->addChildren($portalTreeNodeDataModel);
-            }
+        $portalBasedRootNodeId = '';
+        if ('' !== $this->currentPageId) {
+            $portalBasedRootNodeId = $this->getPortalBasedRootNodeByPageId($this->currentPageId);
         }
 
-        return $rootTreeNodeDataModel;
+        $treeData = [];
+        if ('' === $portalBasedRootNodeId) {
+            $rootTreeNode = new \TdbCmsTree();
+            $rootTreeNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+            $rootTreeNode->Load($this->rootNodeId);
+
+            $rootTreeNodeDataModel = $this->backendTreeNodeFactory->createTreeNodeDataModelFromTreeRecord($rootTreeNode);
+            $rootTreeNodeDataModel->setOpened(true);
+            $rootTreeNodeDataModel->setType('folderRootRestrictedMenu');
+            $rootTreeNodeDataModel->setLiAttr(['class' => 'no-checkbox']);
+
+            $defaultPortal = $this->portalDomainService->getDefaultPortal();
+            $defaultPortalMainNodeId = $defaultPortal->fieldMainNodeTree;
+
+            $portalList = \TdbCmsPortalList::GetList();
+            $this->portalCount = $portalList->Length();
+
+            if ($portalList->Length() > 0) {
+                while ($portal = $portalList->Next()) {
+                    $portalId = $portal->fieldMainNodeTree;
+                    $rootTreeNodeDataModel->addChildren($this->getPortalTree($portalId, $defaultPortalMainNodeId));
+                }
+            }
+            array_push($treeData, $rootTreeNodeDataModel);
+        } else {
+            // only load the portal of the current page
+            array_push($treeData, $this->getPortalTree($portalBasedRootNodeId, $portalBasedRootNodeId));
+        }
+        return $treeData;
     }
 
-    private function createTreeDataModel(\TdbCmsTree $node, $level = 0): BackendTreeNodeDataModel
+    private function getPortalTree($portalId, $defaultPortalMainNodeId = ""): BackendTreeNodeDataModel
+    {
+        $portalTreeNode = new \TdbCmsTree();
+        $portalTreeNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        $portalTreeNode->Load($portalId);
+
+        if ($portalId === $defaultPortalMainNodeId) {
+            $portalTreeNodeDataModel = $this->createTreeDataModel($portalTreeNode, 1);
+            $portalTreeNodeDataModel->setOpened(true);
+        } else {
+            $portalTreeNodeDataModel = $this->backendTreeNodeFactory->createTreeNodeDataModelFromTreeRecord($portalTreeNode);
+            $portalTreeNodeDataModel->setChildrenAjaxLoad(true);
+            $portalTreeNodeDataModel->setType('folder');
+            if (in_array($portalTreeNode->id, $this->restrictedNodes)) {
+                $typeRestricted = $portalTreeNodeDataModel->getType().'RestrictedMenu';
+                $portalTreeNodeDataModel->setType($typeRestricted);
+            }
+        }
+        $liAttr = $portalTreeNodeDataModel->getLiAttr();
+        $liAttr = array_merge($liAttr, ['class' => 'no-checkbox']);
+        $portalTreeNodeDataModel->setLiAttr($liAttr);
+
+        return $portalTreeNodeDataModel;
+    }
+
+
+    private function loadChildrenOfNode(string $startNodeId): array
+    {
+        $level = 2; //standard is folder or page
+        if ($startNodeId === $this->rootNodeId) {
+            $level = 1; //children of root are portals
+        }
+
+        $node = new \TdbCmsTree();
+        $node->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        $node->Load($startNodeId);
+
+        $childrenArray = [];
+        $children = $node->GetChildren(true);
+        while ($child = $children->Next()) {
+            array_push($childrenArray, $this->createTreeDataModel($child, $level));
+        }
+        return $childrenArray;
+    }
+
+    private function createTreeDataModel(\TdbCmsTree $node, $level): BackendTreeNodeDataModel
     {
         $treeNodeDataModel = $this->backendTreeNodeFactory->createTreeNodeDataModelFromTreeRecord($node);
 
         $treeNodeDataModel->setName($this->checkNameTranslation($treeNodeDataModel->getName(), $node));
         $this->setTypeAndAttributes($treeNodeDataModel, $node);
 
-        if (2 >= $level) {
+        // $level 0 == RootNode, 1 = Portal, >2 = Folder or Page
+        if ($level < 2) {
             $liAttr = $treeNodeDataModel->getLiAttr();
             $liAttr = array_merge($liAttr, ['class' => 'no-checkbox']);
             $treeNodeDataModel->setLiAttr($liAttr);
-        }
-        if (0 == $level) {
             $treeNodeDataModel->setOpened(true);
         }
 
@@ -487,9 +501,6 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $children = $node->GetChildren(true);
         while ($child = $children->Next()) {
             $childTreeNodeDataModel = $this->createTreeDataModel($child, $level);
-            if ($childTreeNodeDataModel->isOpened()) {
-                $treeNodeDataModel->setOpened(true);
-            }
             $treeNodeDataModel->addChildren($childTreeNodeDataModel);
         }
 
