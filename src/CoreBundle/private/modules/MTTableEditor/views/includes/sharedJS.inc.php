@@ -13,27 +13,6 @@ if ($data['aPermission']['showlist'] && '1' == $data['only_one_record_tbl'] && a
                 }
             });
         });
-
-        isInIframe = function() {
-            try {
-                return window.self !== window.top;
-            } catch (e) {
-                return true;
-            }
-        };
-
-        function getAllContentHeight() {
-            const body = document.body;
-            const html = document.documentElement;
-
-            // TODO +1 is wrong /bad (accumulates)
-            return Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight) + 1;
-        }
-
-        if (isInIframe()) {
-            parent.updateIframeSize('<?=TGlobal::OutHTML($sForeignField); ?>', getAllContentHeight());
-            //TODO $(this).on("resize" ?
-        }
     </script>
     <?php
 }
