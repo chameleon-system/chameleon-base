@@ -14,14 +14,26 @@ if ($data['aPermission']['showlist'] && '1' == $data['only_one_record_tbl'] && a
             });
         });
 
-        // check if iframe size is to small and resize it
-        setInterval(function() {
-            var lastHeight = 0, curHeight = 0;
-            curHeight = document.body.scrollHeight;
-            if ( curHeight != lastHeight ) {
-                parent.updateIframeSize('<?=TGlobal::OutHTML($sForeignField); ?>',document.body.scrollHeight);
+        isInIframe = function() {
+            try {
+                return window.self !== window.top;
+            } catch (e) {
+                return true;
             }
-        },500);
+        };
+
+        function getAllContentHeight() {
+            const body = document.body;
+            const html = document.documentElement;
+
+            // TODO +1 is wrong /bad (accumulates)
+            return Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight) + 1;
+        }
+
+        if (isInIframe()) {
+            parent.updateIframeSize('<?=TGlobal::OutHTML($sForeignField); ?>', getAllContentHeight());
+            //TODO $(this).on("resize" ?
+        }
     </script>
     <?php
 }
