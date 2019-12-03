@@ -563,6 +563,10 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
 };
 
 CHAMELEON.CORE.copyToClipboard = function(text) {
+    if (window.getSelection && "" !== window.getSelection().toString()) {
+        return;
+    }
+
     const $temp = $("<input>");
     $("body").append($temp);
     $temp.val(text).select();
