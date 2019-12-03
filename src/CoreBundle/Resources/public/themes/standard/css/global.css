@@ -5,7 +5,7 @@ html {
 }
 
 body {
-    height: 100%;
+    overflow-x: hidden;
 }
 
 /* overwrite min-height: 100vh; set from coreui */
@@ -28,6 +28,24 @@ body.app {
     flex: 1;
 }
 
+#cmscontainer .main .content #tableEditorContainer .tableeditcontainer {
+    height: 100%;
+}
+
+#cmscontainer .main .content #tableEditorContainer .tableeditcontainer #cmseditform {
+    height: 100%;
+}
+
+#cmscontainer .main .content #tableEditorContainer .tableeditcontainer #cmseditform #tabs-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#cmscontainer .main .content #tableEditorContainer .tableeditcontainer #cmseditform #tabs-wrapper .tab-content {
+    flex: 1;
+}
+
 #cmsbreadcrumb .breadcrumb {
     border-radius: 0;
     margin-bottom: 0; /* overwrite bootstrap */
@@ -42,9 +60,13 @@ a:hover {
 }
 
 iframe {
+    width: 100%;
+    height: 470px; /* */
     background-image: none;
     background-color: #ffffff;
     border: none;
+    margin: 0;
+    padding: 0;
 }
 
 label, .action, .card-action {
