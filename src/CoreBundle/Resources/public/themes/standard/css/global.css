@@ -13,6 +13,30 @@ body.app {
     min-height: 100%;
 }
 
+#cmscontainer .main {
+    display: flex;
+    flex-direction: column;
+}
+
+#cmscontainer .main .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#cmscontainer .main .content #tableEditorContainer {
+    flex: 1;
+}
+
+#cmsbreadcrumb .breadcrumb {
+    border-radius: 0;
+    margin-bottom: 0; /* overwrite bootstrap */
+}
+
+#cmsbreadcrumb .breadcrumb i {
+    color: #098dba;
+}
+
 a:hover {
     text-decoration: underline;
 }
@@ -95,7 +119,7 @@ legend {
 }
 
 .button-element .button-item {
-    padding: 0 3px 6px 3px;
+    padding: 6px 3px;
 }
 
 .typeahead-relative {
@@ -128,14 +152,6 @@ legend {
 .cmsBoxBorder {
     background-color: #fff;
     padding: 5px;
-}
-
-#cmsbreadcrumb .breadcrumb {
-    border-radius: 0;
-}
-
-#cmsbreadcrumb .breadcrumb i {
-    color: #098dba;
 }
 
 .cmsNavIcon {
