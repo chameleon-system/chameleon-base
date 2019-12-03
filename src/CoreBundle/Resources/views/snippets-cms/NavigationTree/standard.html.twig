@@ -254,7 +254,7 @@
         }
 
         if (node.type === "folderRootRestrictedMenu") {
-            delete items.editnode;
+            items = {};
         }
 
         return items;
@@ -360,7 +360,7 @@
         if ('success' === responseMessage && currentNodeId === nodeId) {
             //set to parent of deleted node
             currentNodeId = $(".navigationTreeContainer.jstree #" + nodeId).parent().parent().attr('id');
-            refreshNode(currentNodeId);
+            refreshNode(nodeId);
         }
         window.CHAMELEON.CORE.hideProcessingModal();
     }
@@ -439,14 +439,15 @@
     }
 
     function refreshNode(nodeId) {
-        if (false === $(".navigationTreeContainer.jstree #"+nodeId+"_anchor").hasClass('activeConnetedNode')) {
+        // if (false === $(".navigationTreeContainer.jstree #"+nodeId+"_anchor").hasClass('activeConnetedNode')) {
             // refresh_node does a Selection, but unfortunately no automatic deselection
             // but deselect_node also triggers on("deselect_node.jstree") and this kills an active page-connection, even if only a navigation edit was called.
             // the solution could be, only a normal selection and deselection is possible, when checkboxes are active.
 
             // $(".navigationTreeContainer.jstree").jstree(true).deselect_node(nodeId);
-        }
+        // }
 
-        $(".navigationTreeContainer.jstree").jstree(true).refresh_node(nodeId);
+        var parentId = $(".navigationTreeContainer.jstree").jstree(true).get_parent(nodeId);
+        $(".navigationTreeContainer.jstree").jstree(true).refresh_node(parentId);
     }
 </script>
