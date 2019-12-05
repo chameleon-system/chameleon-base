@@ -246,7 +246,7 @@
             }
         };
 
-        if (node.type === "folderRestrictedMenu" || node.type === "folderRootRestrictedMenu")  {
+        if (node.type === "folderRestrictedMenu")  {
             delete items.editpageconnections;
             delete items.editpage;
             delete items.editpageconfig;
@@ -439,15 +439,16 @@
     }
 
     function refreshNode(nodeId) {
-        // if (false === $(".navigationTreeContainer.jstree #"+nodeId+"_anchor").hasClass('activeConnetedNode')) {
-            // refresh_node does a Selection, but unfortunately no automatic deselection
-            // but deselect_node also triggers on("deselect_node.jstree") and this kills an active page-connection, even if only a navigation edit was called.
-            // the solution could be, only a normal selection and deselection is possible, when checkboxes are active.
+        // if you want to use refresh_node together with checkboxes, you should know, that refresh_node saves
+        // the selection state before refreshing and restores the state after it. So it's impossible to change the
+        // selection state with refresh_node if a page connection was added or deleted, for example with editnode()
+        // if we manually select or deselect the selected node here before refreshing, it also triggers the event
+        // deselect_node and this kills the connection to the active page
+        var tree = $(".navigationTreeContainer.jstree").jstree(true);
 
-            // $(".navigationTreeContainer.jstree").jstree(true).deselect_node(nodeId);
-        // }
-
-        var parentId = $(".navigationTreeContainer.jstree").jstree(true).get_parent(nodeId);
-        $(".navigationTreeContainer.jstree").jstree(true).refresh_node(parentId);
+        // refresh_node can only refresh the children and NOT the node itself, otherwise we get duplicate ids and
+        // after that we have problems with drag&drop, so we have to refresh the siblings too with the parentNode.
+        var parentId = tree.get_parent(nodeId);
+        tree.refresh_node(parentId);
     }
 </script>
