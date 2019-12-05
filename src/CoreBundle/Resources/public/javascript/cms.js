@@ -527,7 +527,19 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
         },
         afterSelect: function(item) {
             if (typeof item.id !== "undefined") {
-                if ("" !== $element.data('record-url')) {
+                var handled = false;
+                if ("" !== item.id) {
+                    // Look for a table row for this entry and its click handler:
+
+                    var $row = $("tr[data-record-id='"+item.id+"']");
+                    var $onClicks = $row.find("td[onClick]");
+                    if ($row.length > 0 && $onClicks.length > 0) {
+                        handled = true;
+                        eval($($onClicks[0]).attr("onClick"));
+                    }
+                }
+                if (false === handled && "" !== $element.data('record-url')) {
+                    // TODO could take the href of the above row td?
                     top.document.location.href = $element.data('record-url') + '&id=' + item.id;
                 }
             }
