@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
@@ -122,8 +123,8 @@ class CMSTemplateEngine extends TCMSModelBase
         $this->sTableID = TTools::GetCMSTableId('cms_tpl_page');
         $this->oTableManager->Init($this->sTableID, $this->sPageId);
 
-        // TODO $page->GetFieldCmsMasterPagedef() does not have the right type here (?)
-        //   but $page itself might have the correct type? (is too low in the hierarchy...)
+        //$this->oPage = $this->getPageDefAccess()->get($this->sPageId);
+        // TODO above is wrong (type) and $page cannot be used here either?
         $this->oPage = TCMSPagedef::GetCachedInstance($this->sPageId);
 
         if ($this->global->UserDataExists('_mode')) {
@@ -711,5 +712,10 @@ class CMSTemplateEngine extends TCMSModelBase
     private function getPageService(): PageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.page_service');
+    }
+
+    private function getPageDefAccess(): DataAccessCmsMasterPagedefInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.data_access_cms_master_pagedef_database');
     }
 }
