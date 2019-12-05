@@ -682,6 +682,9 @@ Three newly defined log channels are deprecated and only necessary for backwards
 
 - \ChameleonSystem\CmsCoreLogBundle\Bridge\Chameleon\ListManager\TCMSListManagerLogEntries
 - \ChameleonSystem\CmsCoreLogBundle\Command\LogShowCommand
+- \CMSModulePageTree
+- \CMSTreeNodeSelect
+- \CMSTreeNodeSelectWYSIWYG
 - \IPkgCmsCoreLog
 - \MTMenuManager
 - \TCMSContentBox
@@ -863,7 +866,3 @@ that are deprecated because they are outdated and replaced by frontend themes or
 ## Page Definitions
 
 - api.pagedef.php
-
-## CMSModulePageTree -> NavigationTree
-
-## CMSTreeNodeSelect -> NavigationTreeSingleSelect
