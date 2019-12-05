@@ -9,12 +9,38 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TCMSTableEditorPage extends TCMSTableEditor
 {
     /**
      * this is the root node of all page trees.
      */
     const ROOT_NODE_ID = 99;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function DeleteExecute()
+    {
+        parent::DeleteExecute();
+
+        $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+
+        if (null === $breadcrumb) {
+            return;
+        }
+
+        $lastUrl = $breadcrumb->GetURL();
+        if (false !== $lastUrl) {
+            if (false !== strpos($lastUrl, 'pagedef=templateengine')) {
+                // If deleted then also the template engine page will not exist anymore
+
+                $breadcrumb->PopURL();
+            }
+        }
+    }
 
     protected function DeleteRecordReferences()
     {
@@ -279,5 +305,10 @@ class TCMSTableEditorPage extends TCMSTableEditor
     private static function getDbConnection()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+    }
+
+    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }
