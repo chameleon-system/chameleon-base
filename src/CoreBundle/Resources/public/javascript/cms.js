@@ -534,12 +534,12 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
                     var $row = $("tr[data-record-id='"+item.id+"']");
                     var $onClicks = $row.find("td[onClick]");
                     if ($row.length > 0 && $onClicks.length > 0) {
+                        $($onClicks[0]).click();
                         handled = true;
-                        eval($($onClicks[0]).attr("onClick"));
                     }
                 }
                 if (false === handled && "" !== $element.data('record-url')) {
-                    // TODO could take the href of the above row td?
+                    // TODO could take the href of the above row td or simply click there?
                     top.document.location.href = $element.data('record-url') + '&id=' + item.id;
                 }
             }
