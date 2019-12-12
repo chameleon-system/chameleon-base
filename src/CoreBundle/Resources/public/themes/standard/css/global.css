@@ -4,10 +4,6 @@ html {
     height: 100%;
 }
 
-body {
-    overflow-x: hidden;
-}
-
 /* overwrite min-height: 100vh; set from coreui */
 body.app {
     min-height: 100%;
