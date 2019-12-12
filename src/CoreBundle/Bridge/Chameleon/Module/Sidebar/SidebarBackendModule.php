@@ -285,8 +285,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         $session->set(self::OPEN_CATEGORIES_SESSION_KEY, $activeCategoryIds);
-
-        // TODO could/should save this connected to the user (and not login session)?
     }
 
     /**
