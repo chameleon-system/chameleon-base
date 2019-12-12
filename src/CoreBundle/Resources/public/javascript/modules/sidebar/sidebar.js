@@ -32,17 +32,7 @@
 
             this.$baseElement.on("keyup", this.handleKeyEvent.bind(this));
 
-            this.$baseElement.find("nav").on("scroll", function(evt) {
-                console.log("Setting "+ $(this).scrollTop());
-                localStorage.setItem('dummy-pos-test', $(this).scrollTop());
-            });
-
             this.$filterElement.focus();
-
-            if (null !== localStorage.getItem('dummy-pos-test')) {
-                setTimeout(function() {$(".sidebar-nav")[0].scrollTop = localStorage.getItem('dummy-pos-test');}, 1000);
-                //$(".sidebar-nav")[0].scrollTop = localStorage.getItem('dummy-pos-test');
-            }
         },
         restoreOpenState: function() {
             const activeCategoryIdsString = this.$baseElement.data('active-categories');
