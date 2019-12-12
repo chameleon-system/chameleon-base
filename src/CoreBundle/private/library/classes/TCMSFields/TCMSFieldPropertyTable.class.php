@@ -74,8 +74,8 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
                 </div>
             </div>
             <div class="card-body p-0">
-                <div id="'.$sEscapedName.'_iframe_block\">
-                    <iframe id="'.$sEscapedName.'_iframe" width="100%" height="470" frameborder="0" class="d-none"></iframe>
+                <div id="'.$sEscapedName.'_iframe_block">
+                    <iframe id="'.$sEscapedName.'_iframe" class="d-none"></iframe>
                 </div>
             </div>
             </div>';

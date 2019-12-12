@@ -4,13 +4,51 @@ html {
     height: 100%;
 }
 
-body {
-    height: 100%;
-}
-
 /* overwrite min-height: 100vh; set from coreui */
 body.app {
     min-height: 100%;
+}
+
+#cmscontainer .main {
+    display: flex;
+    flex-direction: column;
+}
+
+#cmscontainer .main .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#cmscontainer .main .content #tableEditorContainer {
+    flex: 1;
+}
+
+#cmscontainer .main .content #tableEditorContainer .tableeditcontainer {
+    height: 100%;
+}
+
+#cmscontainer .main .content #tableEditorContainer .tableeditcontainer #cmseditform {
+    height: 100%;
+}
+
+#cmscontainer .main .content #tableEditorContainer .tableeditcontainer #cmseditform #tabs-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#cmscontainer .main .content #tableEditorContainer .tableeditcontainer #cmseditform #tabs-wrapper .tab-content {
+    flex: 1;
+}
+
+#cmsbreadcrumb .breadcrumb {
+    border-radius: 0;
+    margin-bottom: 0; /* overwrite bootstrap */
+}
+
+#cmsbreadcrumb .breadcrumb i {
+    color: #098dba;
 }
 
 a:hover {
@@ -18,9 +56,13 @@ a:hover {
 }
 
 iframe {
+    width: 100%;
+    height: 470px;
     background-image: none;
     background-color: #ffffff;
     border: none;
+    margin: 0;
+    padding: 0;
 }
 
 label, .action, .card-action {
@@ -95,7 +137,7 @@ legend {
 }
 
 .button-element .button-item {
-    padding: 0 3px 6px 3px;
+    padding: 6px 3px;
 }
 
 .typeahead-relative {
@@ -128,14 +170,6 @@ legend {
 .cmsBoxBorder {
     background-color: #fff;
     padding: 5px;
-}
-
-#cmsbreadcrumb .breadcrumb {
-    border-radius: 0;
-}
-
-#cmsbreadcrumb .breadcrumb i {
-    color: #098dba;
 }
 
 .cmsNavIcon {
