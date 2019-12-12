@@ -25,6 +25,7 @@ class CustomMenuItemProvider implements MenuItemProviderInterface
         }
 
         return new MenuItem(
+            $menuItem->id,
             $menuItem->fieldName,
             $menuItem->fieldIconFontCssClass,
             $customItem->fieldUrl

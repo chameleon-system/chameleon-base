@@ -716,6 +716,7 @@ Three newly defined log channels are deprecated and only necessary for backwards
 
 ## Methods
 
+- \ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\SidebarBackendModule::saveActiveCategory()
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::GetPostRenderVariables()
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::PreOutputCallbackFunctionReplaceCustomVars()
 - \ChameleonSystem\CoreBundle\CronJob\CronJobFactory::setCronJobs()

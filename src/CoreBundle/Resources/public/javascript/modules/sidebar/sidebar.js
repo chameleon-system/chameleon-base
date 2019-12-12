@@ -20,8 +20,9 @@
             this.$filterElement.on('keyup', this.filter.bind(this));
             this.$baseElement.find('.sidebar-minimizer').on('click', this.onSidebarToggle.bind(this));
             this.$baseElement.find('.nav-dropdown-toggle').on('click', this.onCategoryToggle.bind(this));
+            this.$navItems.not(".nav-dropdown").on("click", this.onElementClick.bind(this));
 
-            this.$baseElement.find('[data-categoryid="' + this.$baseElement.data('active-category') + '"]').addClass('open');
+            this.restoreOpenState();
 
             $.extend($.expr[':'], {
                 'chameleonContainsCaseInsensitive': function(elem, i, match, array) {
@@ -33,6 +34,14 @@
 
             this.$filterElement.focus();
         },
+        restoreOpenState: function() {
+            const activeCategoryIdsString = this.$baseElement.data('active-categories');
+            const activeCategoryIds = activeCategoryIdsString.split(",");
+
+            for (var i = 0; i < activeCategoryIds.length; i++) {
+                this.$baseElement.find('[data-categoryid="' + activeCategoryIds[i] +'"]').addClass('open');
+            }
+        },
         filter: function (event) {
             const searchTerm = this.$filterElement.val();
             if ('' !== this.lastSearchTerm && '' === searchTerm) {
@@ -40,6 +49,8 @@
 
                 this.$navTitles.removeClass('d-none open');
                 this.$navItems.removeClass('d-none');
+
+                this.restoreOpenState();
             }
 
             this.lastSearchTerm = searchTerm;
@@ -146,26 +157,19 @@
             this.toggleCategory(category, false);
         },
         toggleCategory: function($category, byKeyboard) {
+            const categoryId = $category.data('categoryid');
             const categoryOpen = $category.hasClass("open");
-            let categoryId = null;
-
-            if (!categoryOpen) {
-                if ('' === this.$filterElement.val()) {
-                    // Without filter close others before opening this one
-                    this.$baseElement.find('.nav-dropdown.open').not($category).removeClass('open');
-                }
-
-                categoryId = $category.data('categoryid');
-            }
 
             if (byKeyboard) {
                 $category.toggleClass("open");
             }
             // Else dropdown.js will react on the click
 
-            $category.focus();
+            if (!categoryOpen) {
+                $category.focus();
+            }
 
-            const url = this.$baseElement.data('save-active-category-notification-url');
+            const url = this.$baseElement.data('toggle-category-notification-url');
             $.post(url, {
                 categoryId: categoryId
             });
@@ -181,6 +185,21 @@
             }
             $.post(url, {
                 displayState: displayState
+            });
+        },
+        onElementClick: function (event) {
+            this.handleElementClickForPopular($(event.target));
+        },
+        handleElementClickForPopular: function($clickedItem) {
+            const clickedMenuId = $clickedItem.data("entry-id");
+
+            if (0 === clickedMenuId.length) {
+                return;
+            }
+
+            const url = this.$baseElement.data('element-click-notification-url');
+            $.post(url, {
+                clickedMenuId: clickedMenuId
             });
         }
     });
@@ -201,6 +220,7 @@
     };
 })(jQuery, window, document);
 
-(function ($) {
+$(window).on("load.coreui.sidebar.data-api", function() {
+    // Load it after sidebar initialization is finished
     $('.sidebar').chameleonSystemSidebarMenu();
-})(jQuery);
+});
