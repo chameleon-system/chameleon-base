@@ -35,12 +35,8 @@ class TCMSFieldText extends TCMSField
         } elseif (strlen($this->data) <= 1000) {
             $iTextareaSize = 100;
         } else {
-            $iTextareaSize = null;
-        }
-
-        if (!is_null($iTextareaSize) && !empty($this->data)) {
             $count = count(explode("\n", $this->data));
-            $iTextareaSize = $iTextareaSize + ($count * 14);
+            $iTextareaSize = $count * 14 + 50;
             if ($iTextareaSize > 200) {
                 $iTextareaSize = 200;
             }
@@ -52,15 +48,28 @@ class TCMSFieldText extends TCMSField
         }
 
         $html = '';
-        $html .= '<textarea id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name)."\" class=\"fieldtext form-control form-control-sm resizable\" width=\"{$this->fieldWidth}\" style=\"".$cssWidth;
-        if (!is_null($iTextareaSize)) {
-            $html .= ' ;height: '.$iTextareaSize.'px';
-        }
-        $html .= '">';
+        $html .= sprintf(
+            '<textarea id="%s" name="%s" class="fieldtext form-control form-control-sm resizable" width="%s" style="%s" %s>',
+            TGlobal::OutHTML($this->name),
+            TGlobal::OutHTML($this->name),
+            $this->fieldWidth,
+            'height: '.$iTextareaSize.'px;'.$cssWidth,
+            true === $this->bReadOnlyMode ? 'readonly' : ''
+        );
         $html .= TGlobal::OutHTML($this->data);
         $html .= '</textarea>';
 
         return $html;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetReadOnly()
+    {
+        $this->bReadOnlyMode = true;
+
+        return $this->GetHTML();
     }
 
     /**
