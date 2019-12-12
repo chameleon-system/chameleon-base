@@ -230,6 +230,10 @@ legend {
     border: 1px solid #e4e7ea;
 }
 
+.select2-container--default .select2-results>.select2-results__options {
+    max-height: 450px;
+}
+
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
     background-color: #20a8d8 !important;
 }
