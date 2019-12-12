@@ -203,8 +203,6 @@
         handleElementClickForPopular: function($clickedItem) {
             const clickedMenuId = $clickedItem.data("entry-id");
 
-            console.log(clickedMenuId);
-
             if (0 === clickedMenuId.length) {
                 return;
             }
