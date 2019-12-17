@@ -112,7 +112,6 @@ class CMSTemplateEngine extends TCMSModelBase
 
         $this->sPageId = $this->getPageIdFromRequest();
 
-        // TODO what about language?
         $page = $this->getPageService()->getById($this->sPageId);
 
         if (null === $page) {
