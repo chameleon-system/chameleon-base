@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TCMSTableEditorPage extends TCMSTableEditor
 {
     /**

@@ -9,10 +9,13 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * module manages the page-system of the webpage. in it we assume that a page
@@ -108,18 +111,22 @@ class CMSTemplateEngine extends TCMSModelBase
         parent::Init();
 
         $this->sPageId = $this->getPageIdFromRequest();
+        $this->oPage = TCMSPagedef::GetCachedInstance($this->sPageId);
+
+        if (false === $this->oPage->sqlData) {
+            throw new NotFoundHttpException(sprintf('A page with the id %s cannot be found.', $this->sPageId));
+        }
+
         $this->oTableManager = new TCMSTableEditorManager();
         $this->sTableID = TTools::GetCMSTableId('cms_tpl_page');
         $this->oTableManager->Init($this->sTableID, $this->sPageId);
-        $this->oPage = TCMSPagedef::GetCachedInstance($this->sPageId);
         if ($this->global->UserDataExists('_mode')) {
             $this->sMode = $this->global->GetUserData('_mode');
         }
         $this->bPageDefinitionAssigned = (!empty($this->oPage->iMasterPageDefId));
         $this->AddURLHistory();
 
-        // load portal object
-        $this->oPortal = &TdbCmsPortal::GetPagePortal($this->sPageId);
+        $this->oPortal = $this->oPage->GetPortal();
         $this->data['aNavigationBreadCrumbs'] = $this->GetNavigationBreadCrumbs();
 
         $this->bIsReadOnlyMode = $this->oTableManager->oTableEditor->IsRecordInReadOnlyMode();
