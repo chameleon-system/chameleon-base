@@ -701,9 +701,4 @@ class CMSTemplateEngine extends TCMSModelBase
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
-
-    private function getPageService(): PageServiceInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.page_service');
-    }
 }
