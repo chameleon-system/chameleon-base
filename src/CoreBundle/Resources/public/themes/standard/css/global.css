@@ -51,6 +51,16 @@ body.app {
     color: #098dba;
 }
 
+.dropdown-menu .dropdown-item {
+    padding-left: 30px;
+}
+
+.dropdown-menu .dropdown-item.translation-sub {
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 10px;
+}
+
 a:hover {
     text-decoration: underline;
 }
