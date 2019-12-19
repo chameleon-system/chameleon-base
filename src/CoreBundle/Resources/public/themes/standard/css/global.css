@@ -156,6 +156,10 @@ legend {
     padding-left: 28px;
 }
 
+.typeahead.dropdown-menu .dropdown-item {
+    white-space: normal;
+}
+
 .typeahead.dropdown-menu .active .dropdown-item {
     /* highlight keyboard selected entry - Typeahead does not have extra styles */
 
