@@ -42,6 +42,20 @@ body.app {
     flex: 1;
 }
 
+@media (max-width: 991px) {
+    #cmscontainer .main .container-fluid {
+        padding: 10px;
+    }
+
+    #cmscontainer .main .breadcrumb {
+        margin-bottom: 0;
+    }
+
+    #cmscontainer .main .content .card {
+        margin-bottom: 0;
+    }
+}
+
 #cmsbreadcrumb .breadcrumb {
     border-radius: 0;
     margin-bottom: 0; /* overwrite bootstrap */
@@ -154,6 +168,10 @@ legend {
     background-position: 5px center;
     background-repeat: no-repeat;
     padding-left: 28px;
+}
+
+.typeahead.dropdown-menu .dropdown-item {
+    white-space: normal;
 }
 
 .typeahead.dropdown-menu .active .dropdown-item {
