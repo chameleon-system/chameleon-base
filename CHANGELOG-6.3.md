@@ -99,5 +99,5 @@ the controller.
 
 ## Plugin jsTree: update to V 3.3.8
 
-New modules "NavigationTee", "NavigationTreeSingleSelect" and "NavigationTreeSingleSelectWysiwyg" use the new 
+New modules "NavigationTree", "NavigationTreeSingleSelect" and "NavigationTreeSingleSelectWysiwyg" use the new 
 jsTree plugin.  

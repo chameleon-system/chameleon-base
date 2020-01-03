@@ -29,7 +29,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 {
     /**
-     * the mysql tablename of the tree.
+     * The mysql tablename of the tree.
      *
      * @var string
      */
