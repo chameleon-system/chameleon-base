@@ -21,7 +21,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * Treemanagement Module for the CMS Navigation tree.
  *
- * @deprecated since 6.3.7 - use NavigationTree instead
+ * @deprecated since 6.3.8 - use NavigationTree instead
  */
 class CMSModulePageTree extends TCMSModelBase
 {

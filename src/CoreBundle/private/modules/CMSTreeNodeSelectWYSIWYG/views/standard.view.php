@@ -1,6 +1,6 @@
 <?php
 /**
-* @deprecated since 6.3.7 - use NavigationTreeSingleSelectWysiwyg instead.
+* @deprecated since 6.3.8 - use NavigationTreeSingleSelectWysiwyg instead.
 */
 ?>
 

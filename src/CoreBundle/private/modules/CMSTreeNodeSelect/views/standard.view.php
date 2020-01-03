@@ -1,6 +1,6 @@
 <?php
 /**
- * @deprecated since 6.3.7 - use NavigationTreeSingleSelect instead.
+ * @deprecated since 6.3.8 - use NavigationTreeSingleSelect instead.
  */
 ?>
 <script type="text/javascript">

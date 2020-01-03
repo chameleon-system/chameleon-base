@@ -2,7 +2,7 @@
 /**
  * @var \Symfony\Component\Translation\TranslatorInterface
  *
- * @deprecated since 6.3.7
+ * @deprecated since 6.3.8
  */
 $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
 ?>
