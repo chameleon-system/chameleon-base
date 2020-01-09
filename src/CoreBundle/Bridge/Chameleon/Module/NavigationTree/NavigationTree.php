@@ -553,13 +553,13 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
                 && (true === $connectedPage->fieldExtranetPage
                     && false === $node->fieldShowExtranetPage)) {
                 $treeNodeDataModel->addLinkHtmlClass('page-hidden');
-                $treeNodeDataModel->setType('page-hidden');
+                $treeNodeDataModel->setType('pageHidden');
                 $foundSecuredPage = true;
             }
 
             if (true === $connectedPage->fieldExtranetPage) {
-                $treeNodeDataModel->setType('locked');
                 $treeNodeDataModel->addLinkHtmlClass('locked');
+                $treeNodeDataModel->setType('locked');
             }
         }
 
@@ -607,7 +607,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         }
 
         if (true == $node->fieldHidden) {
-            $type = 'node-hidden';
+            $type = 'nodeHidden';
         }
 
         return $type;
@@ -670,11 +670,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * update the cache of the tree path to each node of the given subtree.
-     *
-     * @param int $nodeId
+     * Update the cache of the tree path to each node of the given subtree.
      */
-    private function updateSubtreePathCache($nodeId)
+    private function updateSubtreePathCache(string $nodeId): void
     {
         $oNode = \TdbCmsTree::GetNewInstance();
         $oNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
@@ -713,11 +711,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     {
         $parameters = parent::_GetCacheParameters();
 
-        if (!is_array($parameters)) {
+        if (false === is_array($parameters)) {
             $parameters = [];
         }
 
-        $cmsUser = &\TCMSUser::GetActiveUser();
+        $cmsUser = \TCMSUser::GetActiveUser();
         $parameters['ouserid'] = $cmsUser->id;
         $parameters['noassign'] = $this->inputFilterUtil->getFilteredGetInput('noassign');
         $parameters['id'] = $this->inputFilterUtil->getFilteredGetInput('id');
@@ -727,7 +725,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         return $parameters;
     }
 
-    private function writeSqlLog()
+    private function writeSqlLog(): void
     {
         $command = <<<COMMAND
 \TCMSLogChange::initializeNestedSet('{$this->treeTable}', 'parent_id', 'entry_sort');
