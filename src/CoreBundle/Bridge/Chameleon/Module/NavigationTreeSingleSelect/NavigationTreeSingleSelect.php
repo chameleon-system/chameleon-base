@@ -11,13 +11,12 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelect;
 
-use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
 use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 use MTPkgViewRendererAbstractModuleMapper;
-
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
 {
@@ -40,7 +39,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @var string
      */
-    private $treePathHTML = "";
+    private $treePathHTML = '';
 
     /**
      * nodes that should not be assignable or that should have only a
@@ -48,8 +47,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
      *
      * @var array
      */
-    protected $aRestrictedNodes = array();
-
+    protected $aRestrictedNodes = [];
 
     public function __construct(
         Connection $dbConnection,
@@ -99,13 +97,12 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
             $oPortal->Load($portalId);
             $rootTreeId = $oPortal->sqlData['main_node_tree'];
         }
+
         return $rootTreeId;
     }
 
     /**
-     * Renders all children of a node
-     *
-     * @return BackendTreeNodeDataModel
+     * Renders all children of a node.
      */
     protected function createTreeDataModel(\TdbCmsTree $node, string $fieldName, $path = ''): BackendTreeNodeDataModel
     {
@@ -133,14 +130,12 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     /**
      * Fetches a list of all restricted nodes (of all portals)
      * a restricted node is a startnavigation nodes of a portal.
-     *
-     * @return array
      */
     protected function getPortalNavigationStartNodes(): array
     {
         $oPortalList = \TdbCmsPortalList::GetList();
 
-        $aRestrictedNodes = array();
+        $aRestrictedNodes = [];
         while ($oPortal = $oPortalList->Next()) {
             $aRestrictedNodes[] = $oPortal->fieldMainNodeTree;
             $oNavigationList = $oPortal->GetFieldPropertyNavigationsList();
@@ -148,11 +143,12 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
                 $aRestrictedNodes[] = $oNavigation->fieldTreeNode;
             }
         }
+
         return $aRestrictedNodes;
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritdoc}
      */
     public function GetHtmlHeadIncludes()
     {
@@ -166,6 +162,4 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
 
         return $aIncludes;
     }
-
 }
-

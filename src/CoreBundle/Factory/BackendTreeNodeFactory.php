@@ -1,4 +1,5 @@
 <?php
+
 namespace ChameleonSystem\CoreBundle\Factory;
 
 use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
@@ -8,6 +9,7 @@ class BackendTreeNodeFactory
     public function createTreeNodeDataModelFromTreeRecord(\TdbCmsTree $treeNode): BackendTreeNodeDataModel
     {
         $treeNodeDataModel = new BackendTreeNodeDataModel($treeNode->id, $treeNode->fieldName, $treeNode->sqlData['cmsident'], $this->getConnectedPageId($treeNode));
+
         return $treeNodeDataModel;
     }
 
@@ -15,12 +17,13 @@ class BackendTreeNodeFactory
     {
         $treeNodeConnection = $treeNode->GetActivePageTreeConnectionForTree();
         if (false === $treeNodeConnection) {
-            return "";
+            return '';
         }
         $connectedPage = $treeNodeConnection->GetFieldContid();
         if (null === $connectedPage) {
-            return "";
+            return '';
         }
+
         return $connectedPage->id;
     }
 }

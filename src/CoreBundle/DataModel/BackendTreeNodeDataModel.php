@@ -1,6 +1,5 @@
 <?php
 
-
 namespace ChameleonSystem\CoreBundle\DataModel;
 
 use JsonSerializable;
@@ -37,18 +36,15 @@ class BackendTreeNodeDataModel implements JsonSerializable
      */
     private $type = '';
 
-
     /**
      * @var bool
      */
     private $selected = false;
 
-
     /**
      * @var bool
      */
     private $disabled = false;
-
 
     /**
      * @var bool
@@ -56,57 +52,58 @@ class BackendTreeNodeDataModel implements JsonSerializable
     private $opened = false;
 
     /**
+     * Key = HTML attribute name.
+     *
      * @var array
      */
-    private $liAttr = [];
+    private $listAttributes = [];
+
+    /**
+     * Key = HTML attribute name.
+     *
+     * @var array
+     */
+    private $linkAttributes = [];
 
     /**
      * @var array
      */
-    private $aAttr = [];
+    private $linkHtmlClasses = [];
+
+    /**
+     * @var array
+     */
+    private $listHtmlClasses = [];
 
     /**
      * @var string
      */
     private $connectedPageId;
 
-
     public function __construct($id, $name, $cmsIdent, $connectedPageId)
     {
         $this->id = $id;
         $this->name = $name;
         $this->cmsIdent = $cmsIdent;
-        $this->liAttr = ['cmsIdent' => $cmsIdent];
+        $this->listAttributes = ['cmsIdent' => $cmsIdent];
         $this->connectedPageId = $connectedPageId;
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
     public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getCmsIdent(): string
     {
         return $this->cmsIdent;
@@ -121,139 +118,136 @@ class BackendTreeNodeDataModel implements JsonSerializable
     }
 
     /**
-     * @param BackendTreeNodeDataModel[] $children
+     * @param BackendTreeNodeDataModel $children
      */
     public function addChildren(BackendTreeNodeDataModel $treeNodeDataModel): void
     {
         $this->children[] = $treeNodeDataModel;
     }
 
-    /**
-     * @return bool
-     */
     public function isChildrenAjaxLoad(): bool
     {
         return $this->childrenAjaxLoad;
     }
 
-    /**
-     * @param bool $childrenAjaxLoad
-     */
     public function setChildrenAjaxLoad(bool $childrenAjaxLoad): void
     {
         $this->childrenAjaxLoad = $childrenAjaxLoad;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     */
     public function setType(string $type): void
     {
         $this->type = $type;
     }
 
-    /**
-     * @return bool
-     */
     public function isSelected(): bool
     {
         return $this->selected;
     }
 
-    /**
-     * @param bool $selected
-     */
     public function setSelected(bool $selected): void
     {
         $this->selected = $selected;
     }
 
-    /**
-     * @return bool
-     */
     public function isDisabled(): bool
     {
         return $this->disabled;
     }
 
-    /**
-     * @param bool $disabled
-     */
     public function setDisabled(bool $disabled): void
     {
         $this->disabled = $disabled;
     }
 
-    /**
-     * @return bool
-     */
     public function isOpened(): bool
     {
         return $this->opened;
     }
 
-    /**
-     * @param bool $opened
-     */
     public function setOpened(bool $opened): void
     {
         $this->opened = $opened;
     }
 
-    /**
-     * @return array
-     */
-    public function getLiAttr(): array
+    public function getListAttributes(): array
     {
-        return $this->liAttr;
+        return \array_merge($this->listAttributes, ['class' => \implode(' ', $this->getListHtmlClasses())]);
     }
 
-    /**
-     * @param array $liAttr
-     */
-    public function setLiAttr(array $liAttr): void
+    public function setListAttributes(array $listAttributes): void
     {
-        $this->liAttr = $liAttr;
+        $this->listAttributes = $listAttributes;
     }
 
-    /**
-     * @return array
-     */
-    public function getAAttr(): array
+    public function addListAttribute(string $liAttribute, string $liAttributeValue): void
     {
-        return $this->aAttr;
+        $this->listAttributes[$liAttribute] = $liAttributeValue;
     }
 
-    /**
-     * @param array $aAttr
-     */
-    public function setAAttr(array $aAttr): void
+    public function getLinkAttributes(): array
     {
-        $this->aAttr = $aAttr;
+        return \array_merge($this->linkAttributes, ['class' => \implode(' ', $this->getLinkHtmlClasses())]);
     }
 
-    /**
-     * @return string
-     */
+    public function setLinkAttributes(array $linkAttributes): void
+    {
+        $this->linkAttributes = $linkAttributes;
+    }
+
+    public function addLinkAttribute(string $linkAttribute, string $linkAttributeValue): void
+    {
+        $this->linkAttributes[$linkAttribute] = $linkAttributeValue;
+    }
+
     public function getConnectedPageId(): string
     {
         return $this->connectedPageId;
     }
 
+    public function getLinkHtmlClasses(): array
+    {
+        return $this->linkHtmlClasses;
+    }
+
+    public function setLinkHtmlClasses(array $linkHtmlClasses): void
+    {
+        $this->linkHtmlClasses = $linkHtmlClasses;
+    }
+
+    public function addLinkHtmlClass(string $linkHtmlClass): void
+    {
+        $this->linkHtmlClasses[] = $linkHtmlClass;
+    }
+
+    public function getListHtmlClasses(): array
+    {
+        return $this->listHtmlClasses;
+    }
+
+    public function setListHtmlClasses(array $listHtmlClasses): void
+    {
+        $this->listHtmlClasses = $listHtmlClasses;
+    }
+
+    public function addListHtmlClass(string $listHtmlClass): void
+    {
+        $this->listHtmlClasses[] = $listHtmlClass;
+    }
 
     /**
-     * Specify data which should be serialized to JSON
-     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * Specify data which should be serialized to JSON.
+     *
+     * @see https://php.net/manual/en/jsonserializable.jsonserialize.php
+     *
      * @return mixed data which can be serialized by json_encode,
-     * which is a value of any type other than a resource.
+     *               which is a value of any type other than a resource
+     *
      * @since 5.4.0
      */
     public function jsonSerialize()
@@ -265,12 +259,11 @@ class BackendTreeNodeDataModel implements JsonSerializable
             'state' => [
                 'opened' => $this->opened,
                 'disabled' => $this->disabled,
-                'selected' => $this->selected
+                'selected' => $this->selected,
             ],
-            'li_attr' => $this->liAttr,
-            'a_attr' => $this->aAttr
+            'li_attr' => \array_merge($this->getListAttributes()),
+            'a_attr' => \array_merge($this->getLinkAttributes()),
         ];
-
 
         if ($this->isChildrenAjaxLoad()) {
             $jsTreeItem['children'] = $this->childrenAjaxLoad;
