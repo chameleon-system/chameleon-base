@@ -28,6 +28,7 @@ use MTPkgViewRendererAbstractModuleMapper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use TTools;
+use TGlobal;
 
 class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 {
@@ -514,7 +515,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $node->SetLanguage($editLanguage->id);
 
         if ('' === $name) {
-            $name = \TGlobal::OutHTML($this->translator->trans('chameleon_system_core.text.unnamed_record'));
+            $name = $this->getGlobal()->OutHTML($this->translator->trans('chameleon_system_core.text.unnamed_record'));
         }
 
         if (false === CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE) {
@@ -642,7 +643,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     {
         $entrySortField = 'entry_sort';
         if (\TdbCmsTree::CMSFieldIsTranslated('entry_sort')) {
-            $sLanguagePrefix = \TGlobal::GetLanguagePrefix($user = \TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+            $sLanguagePrefix = $this->getGlobal()->GetLanguagePrefix($user = \TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
             if ('' !== $sLanguagePrefix) {
                 $entrySortField .= '__'.$sLanguagePrefix;
             }
@@ -685,15 +686,14 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      */
     public function GetHtmlHeadIncludes()
     {
-        $aIncludes = parent::GetHtmlHeadIncludes();
-        $aIncludes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/javascript/jsTree/3.3.8/jstree.js').'"></script>';
-        $aIncludes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/javascript/navigationTree.js').'"></script>';
-        $aIncludes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
-        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', \TGlobal::GetStaticURLToWebLib('/javascript/jsTree/3.3.8/themes/default/style.css'));
-        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', \TGlobal::GetStaticURLToWebLib('/javascript/jsTree/customStyles/style.css'));
+        $includes = parent::GetHtmlHeadIncludes();
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jsTree/3.3.8/jstree.js'));
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->getGlobal()->GetStaticURLToWebLib('/javascript/navigationTree.js'));
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js'));
+        $includes[] = sprintf('<link rel="stylesheet" href="%s">', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jsTree/3.3.8/themes/default/style.css'));
+        $includes[] = sprintf('<link rel="stylesheet" href="%s">', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jsTree/customStyles/style.css'));
 
-        return $aIncludes;
+        return $includes;
     }
 
     /**
@@ -755,5 +755,13 @@ COMMAND;
     private function getFlashMessageService()
     {
         return ServiceLocator::get('chameleon_system_core.flash_messages');
+    }
+
+    /**
+     * @return TGlobal
+     */
+    private function getGlobal()
+    {
+        return ServiceLocator::get('chameleon_system_core.global');
     }
 }

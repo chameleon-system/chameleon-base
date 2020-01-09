@@ -13,10 +13,12 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingl
 
 use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
 use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 use MTPkgViewRendererAbstractModuleMapper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use TGlobal;
 
 class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
 {
@@ -42,12 +44,12 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     private $treePathHTML = '';
 
     /**
-     * nodes that should not be assignable or that should have only a
+     * Nodes that should not be assignable or that should have only a
      * restricted context menu.
      *
      * @var array
      */
-    protected $aRestrictedNodes = [];
+    protected $restrictedNodes = [];
 
     public function __construct(
         Connection $dbConnection,
@@ -69,15 +71,15 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         $fieldName = $this->inputFilterUtil->getFilteredGetInput('fieldName', '');
         $nodeID = $this->inputFilterUtil->getFilteredGetInput('id', '');
 
-        $this->aRestrictedNodes = $this->getPortalNavigationStartNodes();
+        $this->restrictedNodes = $this->getPortalNavigationStartNodes();
 
-        $rootTreeId = $this->getPortalTreeRootNode();
+        $rootTreeId = $this->getPortalTreeRootNodeId();
         if ('' !== $rootTreeId) {
-            $oRootNode = new \TdbCmsTree();
-            $oRootNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
-            $oRootNode->Load($rootTreeId);
+            $rootNode = new \TdbCmsTree();
+            $rootNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+            $rootNode->Load($rootTreeId);
 
-            $treeNodes = $this->createTreeDataModel($oRootNode, $fieldName);
+            $treeNodes = $this->createTreeDataModel($rootNode, $fieldName);
             $visitor->SetMappedValue('treeNodes', $treeNodes);
         }
         $visitor->SetMappedValue('treePathHTML', $this->treePathHTML);
@@ -86,30 +88,29 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         $visitor->SetMappedValue('level', 0);
     }
 
-    protected function getPortalTreeRootNode(): string
+    private function getPortalTreeRootNodeId(): string
     {
         $portalId = $this->inputFilterUtil->getFilteredGetInput('portalID', '');
 
-        $rootTreeId = \TCMSTreeNode::TREE_ROOT_ID;
-        if ('' !== $portalId) {
-            // load portal object
-            $oPortal = new \TCMSPortal();
-            $oPortal->Load($portalId);
-            $rootTreeId = $oPortal->sqlData['main_node_tree'];
+        if ('' === $portalId) {
+            return \TCMSTreeNode::TREE_ROOT_ID;
         }
 
-        return $rootTreeId;
+        $portal = new \TCMSPortal();
+        $portal->Load($portalId);
+        if (null === $portal || '' === $portal->sqlData['main_node_tree']) {
+            return \TCMSTreeNode::TREE_ROOT_ID;
+        }
+
+        return $portal->sqlData['main_node_tree'];
     }
 
-    /**
-     * Renders all children of a node.
-     */
-    protected function createTreeDataModel(\TdbCmsTree $node, string $fieldName, $path = ''): BackendTreeNodeDataModel
+    private function createTreeDataModel(\TdbCmsTree $node, string $fieldName, $path = ''): BackendTreeNodeDataModel
     {
         $treeNodeDataModel = $this->backendTreeNodeFactory->createTreeNodeDataModelFromTreeRecord($node);
         $children = $node->GetChildren(true);
 
-        $path = $this->addBreadcrumbHmlForNode($node, $fieldName, $path);
+        $path = $this->addBreadcrumbHtmlForNode($node, $fieldName, $path);
 
         while ($child = $children->Next()) {
             $childTreeNodeObj = $this->createTreeDataModel($child, $fieldName, $path);
@@ -119,7 +120,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         return $treeNodeDataModel;
     }
 
-    protected function addBreadcrumbHmlForNode(\TdbCmsTree $node, string $fieldName, string $path = ''): string
+    protected function addBreadcrumbHtmlForNode(\TdbCmsTree $node, string $fieldName, string $path = ''): string
     {
         $path .= '<li class="breadcrumb-item">'.$node->fieldName."</li>\n";
         $this->treePathHTML .= '<div id="'.$fieldName.'_tmp_path_'.$node->id.'" style="display:none;"><ol class="breadcrumb ml-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
@@ -128,23 +129,23 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * Fetches a list of all restricted nodes (of all portals)
-     * a restricted node is a startnavigation nodes of a portal.
+     * Fetches a list of all restricted nodes (of all portals).
+     * A restricted node is a startnavigation nodes of a portal.
      */
-    protected function getPortalNavigationStartNodes(): array
+    private function getPortalNavigationStartNodes(): array
     {
-        $oPortalList = \TdbCmsPortalList::GetList();
+        $portalList = \TdbCmsPortalList::GetList();
 
-        $aRestrictedNodes = [];
-        while ($oPortal = $oPortalList->Next()) {
-            $aRestrictedNodes[] = $oPortal->fieldMainNodeTree;
-            $oNavigationList = $oPortal->GetFieldPropertyNavigationsList();
-            while ($oNavigation = $oNavigationList->Next()) {
-                $aRestrictedNodes[] = $oNavigation->fieldTreeNode;
+        $restrictedNodes = [];
+        while ($portal = $portalList->Next()) {
+            $restrictedNodes[] = $portal->fieldMainNodeTree;
+            $navigationList = $portal->GetFieldPropertyNavigationsList();
+            while ($navigation = $navigationList->Next()) {
+                $restrictedNodes[] = $navigation->fieldTreeNode;
             }
         }
 
-        return $aRestrictedNodes;
+        return $restrictedNodes;
     }
 
     /**
@@ -152,14 +153,21 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
      */
     public function GetHtmlHeadIncludes()
     {
-        $aIncludes = parent::GetHtmlHeadIncludes();
-        $aIncludes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/jsTree/3.3.8/jstree.js').'"></script>';
-        $aIncludes[] = '<script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/navigationTree.js').'"></script>';
-        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', \TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/jsTree/3.3.8/themes/default/style.css'));
-        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', \TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/jsTree/customStyles/style.css'));
+        $includes = parent::GetHtmlHeadIncludes();
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jsTree/3.3.8/jstree.js'));
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->getGlobal()->GetStaticURLToWebLib('/javascript/navigationTree.js'));
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js'));
+        $includes[] = sprintf('<link rel="stylesheet" href="%s">', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jsTree/3.3.8/themes/default/style.css'));
+        $includes[] = sprintf('<link rel="stylesheet" href="%s">', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jsTree/customStyles/style.css'));
 
-        return $aIncludes;
+        return $includes;
+    }
+
+    /**
+     * @return TGlobal
+     */
+    private function getGlobal()
+    {
+        return ServiceLocator::get('chameleon_system_core.global');
     }
 }
