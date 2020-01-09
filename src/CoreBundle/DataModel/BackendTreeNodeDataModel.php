@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the Chameleon System (https://www.chameleonsystem.com).
+ *
+ * (c) ESONO AG (https://www.esono.de)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace ChameleonSystem\CoreBundle\DataModel;
 
@@ -17,7 +25,7 @@ class BackendTreeNodeDataModel implements JsonSerializable
     private $name = '';
 
     /**
-     * @var string
+     * @var int
      */
     private $cmsIdent = '';
 
@@ -104,7 +112,7 @@ class BackendTreeNodeDataModel implements JsonSerializable
         $this->name = $name;
     }
 
-    public function getCmsIdent(): string
+    public function getCmsIdent(): int
     {
         return $this->cmsIdent;
     }
@@ -240,16 +248,6 @@ class BackendTreeNodeDataModel implements JsonSerializable
         $this->listHtmlClasses[] = $listHtmlClass;
     }
 
-    /**
-     * Specify data which should be serialized to JSON.
-     *
-     * @see https://php.net/manual/en/jsonserializable.jsonserialize.php
-     *
-     * @return mixed data which can be serialized by json_encode,
-     *               which is a value of any type other than a resource
-     *
-     * @since 5.4.0
-     */
     public function jsonSerialize()
     {
         $jsTreeItem = [

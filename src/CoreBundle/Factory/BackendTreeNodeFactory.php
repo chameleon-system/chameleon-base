@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the Chameleon System (https://www.chameleonsystem.com).
+ *
+ * (c) ESONO AG (https://www.esono.de)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace ChameleonSystem\CoreBundle\Factory;
 
@@ -8,9 +16,7 @@ class BackendTreeNodeFactory
 {
     public function createTreeNodeDataModelFromTreeRecord(\TdbCmsTree $treeNode): BackendTreeNodeDataModel
     {
-        $treeNodeDataModel = new BackendTreeNodeDataModel($treeNode->id, $treeNode->fieldName, $treeNode->sqlData['cmsident'], $this->getConnectedPageId($treeNode));
-
-        return $treeNodeDataModel;
+        return new BackendTreeNodeDataModel($treeNode->id, $treeNode->fieldName, $treeNode->sqlData['cmsident'], $this->getConnectedPageId($treeNode));
     }
 
     private function getConnectedPageId(\TdbCmsTree $treeNode): string

@@ -420,6 +420,7 @@ class TCMSTreeWidget
     {
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURL(URL_CMS.'javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURL(URL_CMS.'javascript/jquery/jsTree/jquery.jstree.js').'" type="text/javascript"></script>';
+
         $aIncludes[] = '<style type="text/css">
       .jstree-default.jstree-focused {
         background: none !important;

@@ -12,7 +12,6 @@
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * {@inheritdoc}
  * @deprecated since 6.3.8 - use NavigationTreeSingleSelectWysiwyg instead
  */
 class CMSTreeNodeSelectWYSIWYG extends CMSTreeNodeSelect

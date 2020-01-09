@@ -204,7 +204,6 @@
             "editpageconnections": {
                 "label": "{{ 'chameleon_system_core.cms_module_page_tree.connected_pages'|trans }}",
                 "icon": "fas fa-link",
-                // "_class": "foo-bar",
                 "action": function (obj) {
                     this.openPageConnectionList(obj.reference);
                 }
@@ -283,7 +282,7 @@
     function openPageConnectionList(node) {
         var nodeId = $(node).parent().attr('id');
         currentNodeId = nodeId; // save nodeId in global var
-        var url = "{{ openPageConnectionListUrl | raw }}" + "&sRestriction=" + nodeId;
+        var url = "{{ openPageConnectionListUrl | url_encode }}" + "&sRestriction=" + nodeId;
         CreateModalIFrameDialogCloseButton(url);
         refreshNodeOnModalClose(nodeId);
     }

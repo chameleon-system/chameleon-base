@@ -225,6 +225,7 @@
                 <source>chameleon_system_core.template_tool.show_dynamic_box</source>
                 <target>anzeigen</target>
             </trans-unit>
+
         </body>
     </file>
 </xliff>
