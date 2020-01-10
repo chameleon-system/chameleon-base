@@ -7,7 +7,8 @@
 {%- endset %}
 
 <div class="row dateInput">
-    <div class="col-xs-12 col-md-4 col-lg-2">
+    {# NOTE col-spec corresponds to TCMSFieldDecimal #}
+    <div class="col-xs-12 col-md-6 col-lg-4">
         <input type="hidden" name="{{ fieldName|e('html_attr') }}" value="{{ fieldValue }}" />
         <input type="text" class="form-control form-control-sm datetimepicker-input format-{{ datetimepickerFormat }}" id="{{ fieldName|e('html_attr') }}" data-toggle="datetimepicker" data-target="#{{ fieldName|e('html_attr') }}"
                data-datetimepicker-option='{{ options }}' />
