@@ -923,6 +923,8 @@
             <argument id="chameleon_system_core.util.url" type="service"/>
             <argument id="chameleon_system_core.table_editor_nested_set_helper_factory" type="service" />
             <argument id="chameleon_system_core.cache" type="service"/>
+            <argument id="chameleon_system_core.tools" type="service"/>
+            <argument id="chameleon_system_core.global" type="service"/>
         </service>
 
         <service id="chameleon_system_core.module.navigation_tree_single_select" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelect\NavigationTreeSingleSelect" shared="false">

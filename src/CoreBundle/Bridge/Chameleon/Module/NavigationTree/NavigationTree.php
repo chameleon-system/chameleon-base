@@ -15,9 +15,7 @@ use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
 use ChameleonSystem\CoreBundle\Event\ChangeNavigationTreeNodeEvent;
 use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
-use ChameleonSystem\CoreBundle\Service\FlashMessageService;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperFactoryInterface;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -27,8 +25,8 @@ use esono\pkgCmsCache\CacheInterface;
 use MTPkgViewRendererAbstractModuleMapper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use TTools;
 use TGlobal;
+use TTools;
 
 class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 {
@@ -114,6 +112,14 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      * @var CacheInterface
      */
     private $cache;
+    /**
+     * @var TTools
+     */
+    private $tools;
+    /**
+     * @var TGlobal
+     */
+    private $global;
 
     public function __construct(
         Connection $dbConnection,
@@ -124,7 +130,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         TranslatorInterface $translator,
         UrlUtil $urlUtil,
         NestedSetHelperFactoryInterface $nestedSetHelperFactory,
-        CacheInterface $cache
+        CacheInterface $cache,
+        TTools $tools,
+        TGlobal $global
     ) {
         $this->dbConnection = $dbConnection;
         $this->eventDispatcher = $eventDispatcher;
@@ -135,6 +143,8 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $this->urlUtil = $urlUtil;
         $this->nestedSetHelperFactory = $nestedSetHelperFactory;
         $this->cache = $cache;
+        $this->tools = $tools;
+        $this->global = $global;
     }
 
     /**
@@ -148,12 +158,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $noAssignDialog = $this->inputFilterUtil->getFilteredGetInput('noassign', '0');
         $visitor->SetMappedValue('noAssignDialog', $noAssignDialog);
 
-        $tools = $this->getTools();
-        $pageTableId = $tools->GetCMSTableId('cms_tpl_page');
+        $pageTableId = $this->tools->GetCMSTableId('cms_tpl_page');
         $treeTableName = 'cms_tree';
-        $treeTableRecordId = $tools->GetCMSTableId($treeTableName);
+        $treeTableRecordId = $this->tools->GetCMSTableId($treeTableName);
         $treeNodeTableName = 'cms_tree_node';
-        $treeNodeTableRecordId = $tools->GetCMSTableId($treeNodeTableName);
+        $treeNodeTableRecordId = $this->tools->GetCMSTableId($treeNodeTableName);
         $currentPageId = $this->inputFilterUtil->getFilteredGetInput('id', '');
         $primaryConnectedNodeIdOfCurrentPage = $this->inputFilterUtil->getFilteredGetInput('primaryTreeNodeId', '');
         $this->rootNodeId = $this->inputFilterUtil->getFilteredGetInput('rootID', \TCMSTreeNode::TREE_ROOT_ID);
@@ -213,9 +222,8 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      */
     public function moveNode(): bool
     {
-        $tools = $this->getTools();
         $treeTableName = $this->inputFilterUtil->getFilteredGetInput('table', '');
-        $tableId = $tools->GetCMSTableId($treeTableName);
+        $tableId = $this->tools->GetCMSTableId($treeTableName);
         $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
         $parentNodeId = $this->inputFilterUtil->getFilteredGetInput('parentNodeId', '');
         $position = $this->inputFilterUtil->getFilteredGetInput('position', '');
@@ -234,7 +242,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             $query = 'SELECT * FROM '.$quotedTreeTable.' WHERE parent_id = '.$quotedParentNodeId;
             $cmsTreeList = \TdbCmsTreeList::GetList($query);
             while ($cmsTreeNode = $cmsTreeList->Next()) {
-                $tableEditor = $tools->GetTableEditorManager($treeTableName, $cmsTreeNode->id);
+                $tableEditor = $this->tools->GetTableEditorManager($treeTableName, $cmsTreeNode->id);
                 $newSortOrder = $tableEditor->oTableEditor->oTable->sqlData[$entrySortField] + 1;
                 $tableEditor->SaveField('entry_sort', $newSortOrder);
                 $updatedNodes[] = $cmsTreeNode;
@@ -255,7 +263,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
                     ++$count;
                 }
 
-                $tableEditor = $tools->GetTableEditorManager($treeTableName, $cmsTree->id);
+                $tableEditor = $this->tools->GetTableEditorManager($treeTableName, $cmsTree->id);
                 $tableEditor->SaveField('entry_sort', $count);
                 ++$count;
             }
@@ -279,11 +287,6 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $event = new ChangeNavigationTreeNodeEvent($updatedNodes);
         $this->eventDispatcher->dispatch(CoreEvents::UPDATE_NAVIGATION_TREE_NODE, $event);
 
-        $messageService = $this->getFlashMessageService();
-        if (true === $messageService->consumerHasMessages(\TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER)) {
-            $messageService->addMessage(\TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER, 'ERROR_GENERAL');
-        }
-
         return true;
     }
 
@@ -301,8 +304,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             return null;
         }
 
-        $tools = $this->getTools();
-        $tableEditor = $tools->GetTableEditorManager($this->treeTable, $nodeId);
+        $tableEditor = $this->tools->GetTableEditorManager($this->treeTable, $nodeId);
         $tableEditor->Delete($nodeId);
 
         return $nodeId;
@@ -310,9 +312,8 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
     public function connectPageToNode(): ?string
     {
-        $tools = $this->getTools();
         $treeNodeTableName = $this->inputFilterUtil->getFilteredGetInput('table', '');
-        $tableId = $tools->GetCMSTableId($treeNodeTableName);
+        $tableId = $this->tools->GetCMSTableId($treeNodeTableName);
         $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
         $currentPageId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
 
@@ -320,7 +321,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             return null;
         }
 
-        $tableEditor = $tools->GetTableEditorManager($treeNodeTableName);
+        $tableEditor = $this->tools->GetTableEditorManager($treeNodeTableName);
         $insertSuccessData = $tableEditor->Insert();
         $recordId = $insertSuccessData->id;
 
@@ -358,9 +359,8 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
                  AND `cms_tree_node`.`tbl` = 'cms_tpl_page'
                ";
         $nodePageConnectionList = \TdbCmsTreeNodeList::GetList($query);
-        $tools = $this->getTools();
         while ($nodePageConnection = $nodePageConnectionList->Next()) {
-            $tableEditor = $tools->GetTableEditorManager($treeNodeTableName, $nodePageConnection->id);
+            $tableEditor = $this->tools->GetTableEditorManager($treeNodeTableName, $nodePageConnection->id);
             $tableEditor->Delete($nodePageConnection->id);
         }
 
@@ -405,7 +405,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         if ('' !== $this->currentPageId) {
             // If called from page (further page connections).
             $portalBasedRootNodeId = $this->getPortalBasedRootNodeByPageId($this->currentPageId);
-        } else if (\TCMSTreeNode::TREE_ROOT_ID !== $this->rootNodeId) {
+        } elseif (\TCMSTreeNode::TREE_ROOT_ID !== $this->rootNodeId) {
             // If called from portal record (id is rootID here instead of id for legacy reasons).
             $portalBasedRootNodeId = $this->rootNodeId;
         }
@@ -515,7 +515,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $node->SetLanguage($editLanguage->id);
 
         if ('' === $name) {
-            $name = $this->getGlobal()->OutHTML($this->translator->trans('chameleon_system_core.text.unnamed_record'));
+            $name = $this->global->OutHTML($this->translator->trans('chameleon_system_core.text.unnamed_record'));
         }
 
         if (false === CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE) {
@@ -643,7 +643,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     {
         $entrySortField = 'entry_sort';
         if (\TdbCmsTree::CMSFieldIsTranslated('entry_sort')) {
-            $sLanguagePrefix = $this->getGlobal()->GetLanguagePrefix($user = \TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+            $sLanguagePrefix = $this->global->GetLanguagePrefix($user = \TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
             if ('' !== $sLanguagePrefix) {
                 $entrySortField .= '__'.$sLanguagePrefix;
             }
@@ -657,17 +657,19 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      */
     private function setCaching($cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
-        if (true === $cachingEnabled) {
-            $backendUser = \TCMSUser::GetActiveUser();
-            $cacheTriggerManager->addTrigger('cms_user', $backendUser->id);
-            $cacheTriggerManager->addTrigger('cms_user_cms_language_mlt', null);
-            $cacheTriggerManager->addTrigger('cms_user_cms_portal_mlt', null);
-            $cacheTriggerManager->addTrigger('cms_user_cms_role_mlt', null);
-            $cacheTriggerManager->addTrigger('cms_user_cms_usergroup_mlt', null);
-            $cacheTriggerManager->addTrigger('cms_role_cms_right_mlt', null);
-            $cacheTriggerManager->addTrigger('cms_tree', null);
-            $cacheTriggerManager->addTrigger('cms_tree_node', null);
+        if (false === $cachingEnabled) {
+            return;
         }
+
+        $backendUser = \TCMSUser::GetActiveUser();
+        $cacheTriggerManager->addTrigger('cms_user', $backendUser->id);
+        $cacheTriggerManager->addTrigger('cms_user_cms_language_mlt', null);
+        $cacheTriggerManager->addTrigger('cms_user_cms_portal_mlt', null);
+        $cacheTriggerManager->addTrigger('cms_user_cms_role_mlt', null);
+        $cacheTriggerManager->addTrigger('cms_user_cms_usergroup_mlt', null);
+        $cacheTriggerManager->addTrigger('cms_role_cms_right_mlt', null);
+        $cacheTriggerManager->addTrigger('cms_tree', null);
+        $cacheTriggerManager->addTrigger('cms_tree_node', null);
     }
 
     /**
@@ -687,11 +689,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     public function GetHtmlHeadIncludes()
     {
         $includes = parent::GetHtmlHeadIncludes();
-        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jsTree/3.3.8/jstree.js'));
-        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->getGlobal()->GetStaticURLToWebLib('/javascript/navigationTree.js'));
-        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js'));
-        $includes[] = sprintf('<link rel="stylesheet" href="%s">', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jsTree/3.3.8/themes/default/style.css'));
-        $includes[] = sprintf('<link rel="stylesheet" href="%s">', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jsTree/customStyles/style.css'));
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->global->GetStaticURLToWebLib('/javascript/jsTree/3.3.8/jstree.js'));
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->global->GetStaticURLToWebLib('/javascript/navigationTree.js'));
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->global->GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js'));
+        $includes[] = sprintf('<link rel="stylesheet" href="%s">', $this->global->GetStaticURLToWebLib('/javascript/jsTree/3.3.8/themes/default/style.css'));
+        $includes[] = sprintf('<link rel="stylesheet" href="%s">', $this->global->GetStaticURLToWebLib('/javascript/jsTree/customStyles/style.css'));
 
         return $includes;
     }
@@ -733,35 +735,8 @@ COMMAND;
         \TCMSLogChange::WriteSqlTransactionWithPhpCommands('update nested set for table '.$this->treeTable, [$command]);
     }
 
-    /**
-     * @return NestedSetHelperInterface
-     */
-    protected function getNestedSetHelper()
+    private function getNestedSetHelper(): NestedSetHelperInterface
     {
         return $this->nestedSetHelperFactory->createNestedSetHelper($this->treeTable, 'parent_id', 'entry_sort');
-    }
-
-    /**
-     * @return TTools
-     */
-    protected function getTools()
-    {
-        return ServiceLocator::get('chameleon_system_core.tools');
-    }
-
-    /**
-     * @return FlashMessageService
-     */
-    private function getFlashMessageService()
-    {
-        return ServiceLocator::get('chameleon_system_core.flash_messages');
-    }
-
-    /**
-     * @return TGlobal
-     */
-    private function getGlobal()
-    {
-        return ServiceLocator::get('chameleon_system_core.global');
     }
 }

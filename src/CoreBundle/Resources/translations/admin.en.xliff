@@ -1052,34 +1052,48 @@
                 <source>chameleon_system_core.cms_module_page_tree.headline</source>
                 <target>Navigation Administration</target>
             </trans-unit>
+
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.not_translated">
                 <source>chameleon_system_core.cms_module_page_tree.not_translated</source>
                 <target>Not translated</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.node_has_no_page">
                 <source>chameleon_system_core.cms_module_page_tree.node_has_no_page</source>
                 <target>No page assigned to this navigation node</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.confirm_delete">
                 <source>chameleon_system_core.cms_module_page_tree.confirm_delete</source>
                 <target>Do you want to delete the navigation node "%nodeName%" including all subnodes?</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.connect_page">
                 <source>chameleon_system_core.cms_module_page_tree.action_connect_page</source>
                 <target>Connect page</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.connected_pages">
                 <source>chameleon_system_core.cms_module_page_tree.connected_pages</source>
                 <target>Connected pages</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.action_edit_page">
                 <source>chameleon_system_core.cms_module_page_tree.action_edit_page</source>
                 <target>Edit page</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.action_edit_node">
                 <source>chameleon_system_core.cms_module_page_tree.action_edit_node</source>
                 <target>Edit node</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page">
+                <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page</source>
+                <target>Navigation node with restricted access page</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_header">
                 <source>chameleon_system_core.cms_module_page_tree.legend_header</source>
                 <target>Key</target>
@@ -1103,10 +1117,6 @@
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page">
                 <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page</source>
                 <target>Page has connected navigation node</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page">
-                <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page</source>
-                <target>Navigation node with restricted access page</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_hidden">
                 <source>chameleon_system_core.cms_module_page_tree.legend_hidden</source>

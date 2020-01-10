@@ -1052,34 +1052,48 @@
                 <source>chameleon_system_core.cms_module_page_tree.headline</source>
                 <target>Navigationsverwaltung</target>
             </trans-unit>
+
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.not_translated">
                 <source>chameleon_system_core.cms_module_page_tree.not_translated</source>
                 <target>Nicht übersetzt</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.node_has_no_page">
                 <source>chameleon_system_core.cms_module_page_tree.node_has_no_page</source>
                 <target>Diesem Navigationspunkt ist keine Seite zugewiesen</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.confirm_delete">
                 <source>chameleon_system_core.cms_module_page_tree.confirm_delete</source>
                 <target>Möchten Sie den Navigationpunkt "%nodeName%" inkl. aller Unterpunkte wirklich löschen?</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.connect_page">
                 <source>chameleon_system_core.cms_module_page_tree.action_connect_page</source>
                 <target>Seite verbinden</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.connected_pages">
                 <source>chameleon_system_core.cms_module_page_tree.connected_pages</source>
                 <target>Verbundene Seiten</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.action_edit_page">
                 <source>chameleon_system_core.cms_module_page_tree.action_edit_page</source>
                 <target>Seite editieren</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.action_edit_node">
                 <source>chameleon_system_core.cms_module_page_tree.action_edit_node</source>
                 <target>Navigation editieren</target>
             </trans-unit>
+            <!-- deprecated since 3.3.8 -->
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page">
+                <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page</source>
+                <target>Seite mit verknüpftem Navigationspunkt</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_header">
                 <source>chameleon_system_core.cms_module_page_tree.legend_header</source>
                 <target>Legende</target>
@@ -1099,10 +1113,6 @@
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_has_connected_pages">
                 <source>chameleon_system_core.cms_module_page_tree.legend_has_connected_pages</source>
                 <target>Navigationspunkt mit verknüpfter Seite</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page">
-                <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page</source>
-                <target>Seite mit verknüpftem Navigationspunkt</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page">
                 <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page</source>
