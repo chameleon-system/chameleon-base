@@ -13,7 +13,6 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingl
 
 use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
 use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 use MTPkgViewRendererAbstractModuleMapper;
@@ -51,16 +50,23 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
      */
     protected $restrictedNodes = [];
 
+    /**
+     * @var TGlobal
+     */
+    private $global;
+
     public function __construct(
         Connection $dbConnection,
         EventDispatcherInterface $eventDispatcher,
         InputFilterUtilInterface $inputFilterUtil,
-        BackendTreeNodeFactory $backendTreeNodeFactory
+        BackendTreeNodeFactory $backendTreeNodeFactory,
+        TGlobal $global
     ) {
         $this->dbConnection = $dbConnection;
         $this->eventDispatcher = $eventDispatcher;
         $this->inputFilterUtil = $inputFilterUtil;
         $this->backendTreeNodeFactory = $backendTreeNodeFactory;
+        $this->global = $global;
     }
 
     /**
@@ -96,13 +102,12 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
             return \TCMSTreeNode::TREE_ROOT_ID;
         }
 
-        $portal = new \TCMSPortal();
-        $portal->Load($portalId);
-        if (null === $portal || '' === $portal->sqlData['main_node_tree']) {
+        $portal = new \TdbCmsPortal();
+        if (false === $portal->Load($portalId)) {
             return \TCMSTreeNode::TREE_ROOT_ID;
         }
 
-        return $portal->sqlData['main_node_tree'];
+        return $portal->fieldMainNodeTree;
     }
 
     private function createTreeDataModel(\TdbCmsTree $node, string $fieldName, $path = ''): BackendTreeNodeDataModel
@@ -154,20 +159,12 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     public function GetHtmlHeadIncludes()
     {
         $includes = parent::GetHtmlHeadIncludes();
-        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jsTree/3.3.8/jstree.js'));
-        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->getGlobal()->GetStaticURLToWebLib('/javascript/navigationTree.js'));
-        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js'));
-        $includes[] = sprintf('<link rel="stylesheet" href="%s">', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jsTree/3.3.8/themes/default/style.css'));
-        $includes[] = sprintf('<link rel="stylesheet" href="%s">', $this->getGlobal()->GetStaticURLToWebLib('/javascript/jsTree/customStyles/style.css'));
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->global->GetStaticURLToWebLib('/javascript/jsTree/3.3.8/jstree.js'));
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->global->GetStaticURLToWebLib('/javascript/navigationTree.js'));
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', $this->global->GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js'));
+        $includes[] = sprintf('<link rel="stylesheet" href="%s">', $this->global->GetStaticURLToWebLib('/javascript/jsTree/3.3.8/themes/default/style.css'));
+        $includes[] = sprintf('<link rel="stylesheet" href="%s">', $this->global->GetStaticURLToWebLib('/javascript/jsTree/customStyles/style.css'));
 
         return $includes;
-    }
-
-    /**
-     * @return TGlobal
-     */
-    private function getGlobal()
-    {
-        return ServiceLocator::get('chameleon_system_core.global');
     }
 }

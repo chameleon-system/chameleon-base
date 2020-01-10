@@ -88,7 +88,7 @@ class BackendTreeNodeDataModel implements JsonSerializable
      */
     private $connectedPageId;
 
-    public function __construct($id, $name, $cmsIdent, $connectedPageId)
+    public function __construct(string $id, string $name, int $cmsIdent, string $connectedPageId)
     {
         $this->id = $id;
         $this->name = $name;
