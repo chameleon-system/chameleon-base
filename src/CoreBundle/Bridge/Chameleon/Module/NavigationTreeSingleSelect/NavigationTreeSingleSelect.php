@@ -75,7 +75,9 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
         $fieldName = $this->inputFilterUtil->getFilteredGetInput('fieldName', '');
-        $nodeID = $this->inputFilterUtil->getFilteredGetInput('id', '');
+        $activeNodeId = $this->inputFilterUtil->getFilteredGetInput('id', '');
+        $portalSelect = $this->inputFilterUtil->getFilteredGetInput('portalSelect', 0);
+        $isPortalSelectMode = $portalSelect === '1' ? true : false;
 
         $this->restrictedNodes = $this->getPortalNavigationStartNodes();
 
@@ -89,9 +91,10 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
             $visitor->SetMappedValue('treeNodes', $treeNodes);
         }
         $visitor->SetMappedValue('treePathHTML', $this->treePathHTML);
-        $visitor->SetMappedValue('activeId', $nodeID);
+        $visitor->SetMappedValue('activeId', $activeNodeId);
         $visitor->SetMappedValue('fieldName', $fieldName);
         $visitor->SetMappedValue('level', 0);
+        $visitor->SetMappedValue('isPortalSelectMode', $isPortalSelectMode);
     }
 
     private function getPortalTreeRootNodeId(): string

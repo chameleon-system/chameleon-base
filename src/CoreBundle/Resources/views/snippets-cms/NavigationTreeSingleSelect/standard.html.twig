@@ -10,8 +10,13 @@
             {% endif %}
 
             {% if treeNodes.name != "" %}
-                <li id="node{{ treeNodes.cmsIdent }}" class="{% if level <=1 %}no-checkbox{% endif %}{% if level == 0 %} jstree-open{% endif %}"
-                    data-jstree="{&quot;type&quot;: &quot;{% if treeNodes.children | length > 0 %}folder{% else %}page{% endif %}&quot;{% if level <= 1 %}, &quot;disabled&quot;: true{% endif %}}"
+                {% set isNodeCheckable = true %}
+                {% if (not isPortalSelectMode and level <= 1) or (isPortalSelectMode and level != 1) %}
+                    {% set isNodeCheckable = false %}
+                {% endif %}
+
+                <li id="node{{ treeNodes.cmsIdent }}" class="{% if isNodeCheckable == false %}no-checkbox{% endif %}{% if level == 0 %} jstree-open{% endif %}"
+                    data-jstree="{&quot;type&quot;: &quot;{% if treeNodes.children | length > 0 %}folder{% else %}page{% endif %}&quot;{% if isNodeCheckable == false %}, &quot;disabled&quot;: true{% endif %}}"
                     data-selection="{&quot;fieldName&quot;: &quot;{{ fieldName }}&quot;, &quot;nodeId&quot;: &quot;{{ treeNodes.id }}&quot;}" >
 
                     <a href="#"{% if activeId == treeNodes.id %} class="jstree-clicked"{% endif %}>
