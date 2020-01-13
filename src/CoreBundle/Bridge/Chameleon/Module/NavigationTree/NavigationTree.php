@@ -274,9 +274,6 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             $updatedNodes[] = $cmsTree;
         }
 
-        // update cache
-        // @todo needed? Should be tested
-        // $this->cache->callTrigger($this->treeTable, $nodeId);
         $this->updateSubtreePathCache($nodeId);
 
         $node = \TdbCmsTree::GetNewInstance($nodeId);
