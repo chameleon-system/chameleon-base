@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
 
     $("#singleTreeNodeSelect")
@@ -93,7 +92,7 @@ $(document).ready(function () {
             "core":{
                 "multiple": true,
                 "data": {
-                    "url":  $(navTreeDataContainer).data('tree-nodes-ajax-url'),
+                    "url": navTreeDataContainer.data('tree-nodes-ajax-url'),
                     "data": function(node) {
                         return {
                             'id' : node.id
@@ -149,7 +148,7 @@ $(document).ready(function () {
             "core":{
                 "multiple": true,
                 "data": {
-                    "url": $(navTreeDataContainer).data('tree-nodes-ajax-url'),
+                    "url": navTreeDataContainer.data('tree-nodes-ajax-url'),
                     "data": function(node) {
                         return {
                             'id' : node.id
@@ -337,7 +336,7 @@ function navigationRightClickMenuForCheckboxes(node) {
 function openPageConnectionList(node) {
     var nodeId = $(node).parent().attr('id');
     currentNodeId = nodeId; // save nodeId in global var
-    var url = $(navTreeDataContainer).data('open-page-connection-list-url') + "&sRestriction=" + nodeId;
+    var url = $("#navigationTreeDataContainer").data('open-page-connection-list-url') + "&sRestriction=" + nodeId;
     CreateModalIFrameDialogCloseButton(url);
     refreshNodeOnModalClose(nodeId);
 }
@@ -349,7 +348,7 @@ function openPageEditor(node) {
     var pageId = $(node).parent().attr('isPageId');
 
     if (pageId !== false && typeof(pageId) !== "undefined") {
-        parent.document.location.href = $(navTreeDataContainer).data('open-page-editor-url') + '&id=' + pageId;
+        parent.document.location.href = $("#navigationTreeDataContainer").data('open-page-editor-url') + '&id=' + pageId;
     } else {
         alert(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.cms_module_page_tree.node_has_no_page'));
     }
@@ -361,7 +360,7 @@ function openPageEditor(node) {
 function openPageConfigEditor(node) {
     var pageId = $(node).parent().attr('isPageId');
     if (pageId !== false && typeof(pageId) !== "undefined") {
-        parent.document.location.href = $(navTreeDataContainer).data('open-page-config-editor-url') + '&id=' + pageId;
+        parent.document.location.href = $("#navigationTreeDataContainer").data('open-page-config-editor-url') + '&id=' + pageId;
     } else {
         alert(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.cms_module_page_tree.node_has_no_page'));
     }
@@ -373,7 +372,7 @@ function openPageConfigEditor(node) {
 function openTreeNodeEditor(node) {
     var nodeId = $(node).parent().attr('id');
     currentNodeId = nodeId; // save nodeId in global var
-    var url = $(navTreeDataContainer).data('open-tree-node-editor-url') + '&id=' + nodeId;
+    var url = $("#navigationTreeDataContainer").data('open-tree-node-editor-url') + '&id=' + nodeId;
     CreateModalIFrameDialogCloseButton(url);
 }
 
@@ -384,7 +383,7 @@ function openTreeNodeEditor(node) {
 function openTreeNodeEditorAddNewNode(node) {
     var nodeId = $(node).parent().attr('id');
     currentNodeId = nodeId; // save nodeId in global var
-    var url = $(navTreeDataContainer).data('open-tree-node-editor-add-new-node-url') + '&parent_id=' + nodeId;
+    var url = $("#navigationTreeDataContainer").data('open-tree-node-editor-add-new-node-url') + '&parent_id=' + nodeId;
     CreateModalIFrameDialogCloseButton(url);
 }
 
@@ -401,7 +400,7 @@ function deleteNode(node) {
     if(confirm(confirmMessage)){
         var nodeId = $(node).parent().attr('id');
         currentNodeId = nodeId; // save nodeId in global var
-        var url = $(navTreeDataContainer).data('delete-node-url') + '&nodeId=' + nodeId;
+        var url = $("#navigationTreeDataContainer").data('delete-node-url') + '&nodeId=' + nodeId;
         CHAMELEON.CORE.showProcessingModal();
         GetAjaxCallTransparent(url, deleteNodeSuccess);
     }
@@ -431,7 +430,7 @@ function updateTreeNode(formObject) {
 function assignPage(node) {
     var nodeId = $(node).attr('id');
     currentNodeId = nodeId; // save nodeId in global var
-    var url = $(navTreeDataContainer).data('assign-page-url') + '&sRestriction=' + nodeId + '&nodeId=' + nodeId;
+    var url = $("#navigationTreeDataContainer").data('assign-page-url') + '&sRestriction=' + nodeId + '&nodeId=' + nodeId;
     CreateModalIFrameDialogCloseButton(url);
     refreshNodeOnModalClose(nodeId);
 }
@@ -439,7 +438,7 @@ function assignPage(node) {
 
 function connectPageOnSelect(nodeId) {
     currentNodeId = nodeId; // save nodeId in global var
-    var url = $(navTreeDataContainer).data('connect-page-on-select-url') + '&sRestriction=' + nodeId + '&nodeId=' + nodeId;
+    var url = $("#navigationTreeDataContainer").data('connect-page-on-select-url') + '&sRestriction=' + nodeId + '&nodeId=' + nodeId;
     GetAjaxCallTransparent(url, connectPageSuccess);
 }
 
@@ -454,8 +453,8 @@ function connectPageSuccess(nodeId, responseMessage) {
 
 function disconnectPageOnDeselect(nodeId) {
     currentNodeId = nodeId; // save nodeId in global var
-    var assignedpageId = $(navTreeDataContainer).data('current-page-id');
-    var url = $(navTreeDataContainer).data('disconnect-page-on-deselect-url') + '&sRestriction=' + nodeId + '&pageId=' + assignedpageId + '&nodeId=' + nodeId;
+    var assignedpageId = $("#navigationTreeDataContainer").data('current-page-id');
+    var url = $("#navigationTreeDataContainer").data('disconnect-page-on-deselect-url') + '&sRestriction=' + nodeId + '&pageId=' + assignedpageId + '&nodeId=' + nodeId;
     GetAjaxCallTransparent(url, disconnectPageSuccess);
 }
 
@@ -474,7 +473,7 @@ function disconnectPageSuccess(nodeId, responseMessage) {
 function moveNode(nodeId, parentNodeId, position) {
     if (typeof parentNodeId != 'undefined' && typeof nodeId != 'undefined') {
         CHAMELEON.CORE.showProcessingModal();
-        var url = $(navTreeDataContainer).data('move-node-url') + '&nodeId=' + nodeId + '&parentNodeId=' + parentNodeId + '&position=' + position;
+        var url = $("#navigationTreeDataContainer").data('move-node-url') + '&nodeId=' + nodeId + '&parentNodeId=' + parentNodeId + '&position=' + position;
         GetAjaxCallTransparent(url, moveNodeSuccess);
     }
 }
