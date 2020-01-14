@@ -704,6 +704,12 @@ Three newly defined log channels are deprecated and only necessary for backwards
 - \TPkgSnippetRenderer_TranslationTokenParser
 - \TTemplateTools
 
+## Views
+
+- modules/CMSModulePageTree/views/standard.view.php
+- modules/CMSTreeNodeSelect/views/standard.view.php
+- modules/CMSTreeNodeSelectWYSIWYG/views/standard.view.php
+
 ## Properties
 
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::$sGeneratedPage
@@ -813,6 +819,8 @@ that are deprecated because they are outdated and replaced by frontend themes or
 - web_modules/MTFeedbackCore
 - web_modules/MTGlobalListCore
 - web_modules/MTNewsletterSignupCore
+- chameleon-base/src/CoreBundle/Resources/public/themes/standard/css/simpleTree.css
+- chameleon-base/src/CoreBundle/Resources/public/themes/standard/css/module_CMSTreeNodeSelect.css
 
 ## Translations
 
@@ -841,6 +849,14 @@ that are deprecated because they are outdated and replaced by frontend themes or
 - pkg_cms_core_log.log_table.select_level_all
 - pkg_cms_core_log.log_table.select_level_all_errors
 - pkg_cms_core_log.log_table.select_level_only
+- chameleon_system_core.cms_module_page_tree.not_translated
+- chameleon_system_core.cms_module_page_tree.node_has_no_page
+- chameleon_system_core.cms_module_page_tree.confirm_delete
+- chameleon_system_core.cms_module_page_tree.connect_page
+- chameleon_system_core.cms_module_page_tree.connected_pages
+- chameleon_system_core.cms_module_page_tree.action_edit_page
+- chameleon_system_core.cms_module_page_tree.action_edit_node
+- chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page
 
 ## Database Tables
 
@@ -867,3 +883,8 @@ that are deprecated because they are outdated and replaced by frontend themes or
 ## Page Definitions
 
 - api.pagedef.php
+- CMSModulePageTree.pagedef.php
+- CMSModulePageTreePlain.pagedef.php
+- treenodeselect.pagedef.php
+- treenodeselectWYSIWYG.pagedef.php
+
