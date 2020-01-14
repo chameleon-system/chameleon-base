@@ -379,40 +379,40 @@
             </trans-unit>
 
 
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.connect_page">
-                <source>chameleon_system_core.cms_module_page_tree.action_connect_page</source>
+            <trans-unit id="chameleon_system_core.navigation_tree.connect_page">
+                <source>chameleon_system_core.navigation_tree.action_connect_page</source>
                 <target>Seite verbinden</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.connected_pages">
-                <source>chameleon_system_core.cms_module_page_tree.connected_pages</source>
+            <trans-unit id="chameleon_system_core.navigation_tree.connected_pages">
+                <source>chameleon_system_core.navigation_tree.connected_pages</source>
                 <target>Verbundene Seiten</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.edit_page">
-                <source>chameleon_system_core.cms_module_page_tree.edit_page</source>
+            <trans-unit id="chameleon_system_core.navigation_tree.edit_page">
+                <source>chameleon_system_core.navigation_tree.edit_page</source>
                 <target>Seite editieren</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.page_settings">
-                <source>chameleon_system_core.cms_module_page_tree.page_settings</source>
+            <trans-unit id="chameleon_system_core.navigation_tree.page_settings">
+                <source>chameleon_system_core.navigation_tree.page_settings</source>
                 <target>Seiteneinstellungen</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.edit_node">
-                <source>chameleon_system_core.cms_module_page_tree.edit_node</source>
+            <trans-unit id="chameleon_system_core.navigation_tree.edit_node">
+                <source>chameleon_system_core.navigation_tree.edit_node</source>
                 <target>Navigation editieren</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.new">
-                <source>chameleon_system_core.cms_module_page_tree.new</source>
+            <trans-unit id="chameleon_system_core.navigation_tree.new">
+                <source>chameleon_system_core.navigation_tree.new</source>
                 <target>Neu</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.delete">
-                <source>chameleon_system_core.cms_module_page_tree.delete</source>
+            <trans-unit id="chameleon_system_core.navigation_tree.delete">
+                <source>chameleon_system_core.navigation_tree.delete</source>
                 <target>Löschen</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.node_has_no_page">
-                <source>chameleon_system_core.cms_module_page_tree.node_has_no_page</source>
+            <trans-unit id="chameleon_system_core.navigation_tree.node_has_no_page">
+                <source>chameleon_system_core.navigation_tree.node_has_no_page</source>
                 <target>Diesem Navigationspunkt ist keine Seite zugewiesen</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.confirm_delete">
-                <source>chameleon_system_core.cms_module_page_tree.confirm_delete</source>
+            <trans-unit id="chameleon_system_core.navigation_tree.confirm_delete">
+                <source>chameleon_system_core.navigation_tree.confirm_delete</source>
                 <target>Möchten Sie den Navigationpunkt "%nodeName%" inkl. aller Unterpunkte wirklich löschen?</target>
             </trans-unit>
 

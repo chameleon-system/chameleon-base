@@ -256,42 +256,42 @@ function chooseTreeNodeWysiwyg(CKEditorFuncNum, pagedef, text) {
 function navigationRightClickMenu(node) {
     var items = {
         "editpageconnections": {
-            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.cms_module_page_tree.connected_pages'),
+            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.connected_pages'),
             "icon": "fas fa-link",
             "action": function (obj) {
                 this.openPageConnectionList(obj.reference);
             }
         },
         "editpage": {
-            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.cms_module_page_tree.edit_page'),
+            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.edit_page'),
             "icon": "far fa-edit",
             "action": function (obj) {
                 this.openPageEditor(obj.reference);
             }
         },
         "editpageconfig": {
-            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.cms_module_page_tree.page_settings'),
+            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.page_settings'),
             "icon": "fas fa-cog",
             "action": function (obj) {
                 this.openPageConfigEditor(obj.reference);
             }
         },
         "editnode": {
-            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.cms_module_page_tree.edit_node'),
+            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.edit_node'),
             "icon": "fas fa-sitemap",
             "action": function (obj) {
                 this.openTreeNodeEditor(obj.reference);
             }
         },
         "newnode": {
-            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.cms_module_page_tree.new'),
+            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.new'),
             "icon": "fas fa-plus",
             "action": function (obj) {
                 this.openTreeNodeEditorAddNewNode(obj.reference);
             }
         },
         "deletenode": {
-            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.cms_module_page_tree.delete'),
+            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.delete'),
             "icon": "far fa-trash-alt",
             "action": function (obj) {
                 this.deleteNode(obj.reference);
@@ -316,14 +316,14 @@ function navigationRightClickMenu(node) {
 function navigationRightClickMenuForCheckboxes(node) {
     return {
         "newnode": {
-            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.cms_module_page_tree.new'),
+            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.new'),
             "icon": "fas fa-plus",
             "action": function (obj) {
                 this.openTreeNodeEditorAddNewNode(obj.reference);
             }
         },
         "deletenode": {
-            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.cms_module_page_tree.delete'),
+            "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.delete'),
             "icon": "far fa-trash-alt",
             "action": function (obj) {
                 this.deleteNode(obj.reference);
@@ -350,7 +350,7 @@ function openPageEditor(node) {
     if (pageId !== false && typeof(pageId) !== "undefined") {
         parent.document.location.href = $("#navigationTreeDataContainer").data('open-page-editor-url') + '&id=' + pageId;
     } else {
-        alert(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.cms_module_page_tree.node_has_no_page'));
+        alert(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.node_has_no_page'));
     }
 }
 
@@ -362,7 +362,7 @@ function openPageConfigEditor(node) {
     if (pageId !== false && typeof(pageId) !== "undefined") {
         parent.document.location.href = $("#navigationTreeDataContainer").data('open-page-config-editor-url') + '&id=' + pageId;
     } else {
-        alert(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.cms_module_page_tree.node_has_no_page'));
+        alert(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.node_has_no_page'));
     }
 }
 
@@ -391,7 +391,7 @@ function openTreeNodeEditorAddNewNode(node) {
  * deletes a node and kills the page connections
  */
 function deleteNode(node) {
-    var confirmMessage = CHAMELEON.CORE.i18n.Translate('chameleon_system_core.cms_module_page_tree.confirm_delete');
+    var confirmMessage = CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.confirm_delete');
     confirmMessage = confirmMessage.replace(/&quot;/g, '\"');
 
     var nodeTitle = $(node).text();

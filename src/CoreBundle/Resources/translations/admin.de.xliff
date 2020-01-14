@@ -592,7 +592,7 @@
             <trans-unit id="chameleon_system_core.field_options.option_value_false">
                 <source>chameleon_system_core.field_options.option_value_false</source>
                 <target>Nein</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>                
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.field_page_tree_node.primary_node">
@@ -1053,45 +1053,45 @@
                 <target>Navigationsverwaltung</target>
             </trans-unit>
 
-            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.not_translated">
                 <source>chameleon_system_core.cms_module_page_tree.not_translated</source>
                 <target>Nicht übersetzt</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
-            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.node_has_no_page">
                 <source>chameleon_system_core.cms_module_page_tree.node_has_no_page</source>
                 <target>Diesem Navigationspunkt ist keine Seite zugewiesen</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
-            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.confirm_delete">
                 <source>chameleon_system_core.cms_module_page_tree.confirm_delete</source>
                 <target>Möchten Sie den Navigationpunkt "%nodeName%" inkl. aller Unterpunkte wirklich löschen?</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
-            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.connect_page">
                 <source>chameleon_system_core.cms_module_page_tree.action_connect_page</source>
                 <target>Seite verbinden</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
-            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.connected_pages">
                 <source>chameleon_system_core.cms_module_page_tree.connected_pages</source>
                 <target>Verbundene Seiten</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
-            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.action_edit_page">
                 <source>chameleon_system_core.cms_module_page_tree.action_edit_page</source>
                 <target>Seite editieren</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
-            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.action_edit_node">
                 <source>chameleon_system_core.cms_module_page_tree.action_edit_node</source>
                 <target>Navigation editieren</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
-            <!-- deprecated since 3.3.8 -->
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page">
                 <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page</source>
                 <target>Seite mit verknüpftem Navigationspunkt</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_header">
@@ -1505,27 +1505,27 @@
             <trans-unit id="chameleon_system_core.cms_module_cms_search.headline">
                 <source>chameleon_system_core.cms_module_cms_search.headline</source>
                 <target>Suchindex neu aufbauen</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
+                <note>@@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_cms_search.select_portal">
                 <source>chameleon_system_core.cms_module_cms_search.select_portal</source>
                 <target>Bitte wählen Sie ein Portal aus, für den der Index neu aufgebaut werden soll</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
+                <note>@@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_cms_search.action_start_index">
                 <source>chameleon_system_core.cms_module_cms_search.action_start_index</source>
                 <target>Indizierung starten</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
+                <note>@@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_cms_search.state_index_running">
                 <source>chameleon_system_core.cms_module_cms_search.state_index_running</source>
                 <target>Suchindex wird aufgebaut</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
+                <note>@@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_cms_search.state_indexed">
                 <source>chameleon_system_core.cms_module_cms_search.state_indexed</source>
                 <target>Seiten indiziert</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
+                <note>@@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.cms_module_table_export.state_export_done">
@@ -1790,22 +1790,22 @@
             <trans-unit id="chameleon_system_core.cms_module_header.error_unable_to_create_update_counter">
                 <source>chameleon_system_core.cms_module_header.error_unable_to_create_update_counter</source>
                 <target>Fehler beim Anlegen des Datenbankzählers!</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
+                <note>@@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_header.msg_created_update_counter">
                 <source>chameleon_system_core.cms_module_header.msg_created_update_counter</source>
                 <target>Neuer Datenbankzähler %sSystemName% wurde erfolgreich angelegt.</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
+                <note>@@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_header.msg_update_counter_switched">
                 <source>chameleon_system_core.cms_module_header.msg_update_counter_switched</source>
                 <target>Datenbankcounter erfolgreich gewechselt.</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
+                <note>@@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_header.active_update_counter">
                 <source>chameleon_system_core.cms_module_header.active_update_counter</source>
                 <target>Aktiver Counter</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
+                <note>@@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_header.action_edit_navigation_help">
                 <source>chameleon_system_core.cms_module_header.action_edit_navigation_help</source>
@@ -2467,7 +2467,7 @@
             <trans-unit id="chameleon_system_core.table_editor_files.error_cluster_distribution">
                 <source>chameleon_system_core.table_editor_files.error_cluster_distribution</source>
                 <target>Die Datei konnte nicht im Cluster verteilt werden. File: %name%, fileHandler Error: %error%)</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
+                <note>@@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_files.error_file_to_large">
                 <source>chameleon_system_core.table_editor_files.error_file_to_large</source>
@@ -2492,7 +2492,7 @@
             <trans-unit id="chameleon_system_core.table_editor_media.error_invalid_flv">
                 <source>chameleon_system_core.table_editor_media.error_invalid_flv</source>
                 <target>Die FLV Datei ist defekt oder der Codec wird nicht unterstützt</target>
-                <note>@deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.</note>
+                <note>@@deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_media.error_permission_target_folder">
                 <source>chameleon_system_core.table_editor_media.error_permission_target_folder</source>
