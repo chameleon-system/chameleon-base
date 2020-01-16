@@ -7,7 +7,6 @@
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
   ->setFields([
-//      'translation' => 'Navigationsstartpunkt',
       'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_TREE'),
       'fieldclass' => 'ChameleonSystem\CoreBundle\Field\FieldTreeNodePortalSelect',
   ])

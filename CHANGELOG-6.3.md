@@ -97,7 +97,7 @@ Post render variables are no longer tied to the ChameleonController. Replacement
 `\ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface` and may therefore be called independent from
 the controller.
 
-## Plugin jsTree: update to V 3.3.8
+## Plugin jsTree: Update to 3.3.8
 
 New modules "NavigationTree", "NavigationTreeSingleSelect" and "NavigationTreeSingleSelectWysiwyg" use the new 
 jsTree plugin.  

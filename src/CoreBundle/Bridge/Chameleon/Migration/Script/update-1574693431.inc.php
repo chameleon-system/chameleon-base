@@ -36,7 +36,6 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-// correction of pagedef, setting of previous update
 $data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item', 'en')
     ->setFields([
         'url' => '/cms?pagedef=navigationTree&table=cms_tpl_page&noassign=1',

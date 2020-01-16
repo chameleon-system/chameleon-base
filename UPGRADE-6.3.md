@@ -819,11 +819,19 @@ that are deprecated because they are outdated and replaced by frontend themes or
 - web_modules/MTFeedbackCore
 - web_modules/MTGlobalListCore
 - web_modules/MTNewsletterSignupCore
-- chameleon-base/src/CoreBundle/Resources/public/themes/standard/css/simpleTree.css
-- chameleon-base/src/CoreBundle/Resources/public/themes/standard/css/module_CMSTreeNodeSelect.css
+- themes/standard/css/simpleTree.css
+- themes/standard/css/module_CMSTreeNodeSelect.css
 
 ## Translations
 
+- chameleon_system_core.cms_module_page_tree.action_edit_node
+- chameleon_system_core.cms_module_page_tree.action_edit_page
+- chameleon_system_core.cms_module_page_tree.confirm_delete
+- chameleon_system_core.cms_module_page_tree.connect_page
+- chameleon_system_core.cms_module_page_tree.connected_pages
+- chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page
+- chameleon_system_core.cms_module_page_tree.node_has_no_page
+- chameleon_system_core.cms_module_page_tree.not_translated
 - chameleon_system_core.field_options.option_value_false
 - chameleon_system_core.field_options.option_value_true
 - chameleon_system_core.fields.lookup.no_matches
@@ -849,14 +857,6 @@ that are deprecated because they are outdated and replaced by frontend themes or
 - pkg_cms_core_log.log_table.select_level_all
 - pkg_cms_core_log.log_table.select_level_all_errors
 - pkg_cms_core_log.log_table.select_level_only
-- chameleon_system_core.cms_module_page_tree.not_translated
-- chameleon_system_core.cms_module_page_tree.node_has_no_page
-- chameleon_system_core.cms_module_page_tree.confirm_delete
-- chameleon_system_core.cms_module_page_tree.connect_page
-- chameleon_system_core.cms_module_page_tree.connected_pages
-- chameleon_system_core.cms_module_page_tree.action_edit_page
-- chameleon_system_core.cms_module_page_tree.action_edit_node
-- chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page
 
 ## Database Tables
 
