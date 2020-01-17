@@ -138,7 +138,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * Fetches a list of all restricted nodes (of all portals).
-     * A restricted node is a startnavigation nodes of a portal.
+     * A restricted node is a start navigation node.
      */
     private function getPortalNavigationStartNodes(): array
     {
