@@ -925,6 +925,7 @@
             <argument id="chameleon_system_core.cache" type="service"/>
             <argument id="chameleon_system_core.tools" type="service"/>
             <argument id="chameleon_system_core.global" type="service"/>
+            <argument type="service" id="chameleon_system_core.util.field_translation"/>
         </service>
 
         <service id="chameleon_system_core.module.navigation_tree_single_select" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelect\NavigationTreeSingleSelect" shared="false">
