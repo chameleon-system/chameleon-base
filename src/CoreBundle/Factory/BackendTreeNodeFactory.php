@@ -16,7 +16,12 @@ class BackendTreeNodeFactory
 {
     public function createTreeNodeDataModelFromTreeRecord(\TdbCmsTree $treeNode): BackendTreeNodeDataModel
     {
-        return new BackendTreeNodeDataModel($treeNode->id, $treeNode->fieldName, $treeNode->sqlData['cmsident'], $this->getConnectedPageId($treeNode));
+        return new BackendTreeNodeDataModel(
+            $treeNode->id,
+            $treeNode->fieldName,
+            $treeNode->sqlData['cmsident'],
+            $this->getConnectedPageId($treeNode)
+        );
     }
 
     private function getConnectedPageId(\TdbCmsTree $treeNode): string
