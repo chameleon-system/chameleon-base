@@ -96,3 +96,8 @@ Each routing config defined in the backend (menu "Routing configuration") can no
 Post render variables are no longer tied to the ChameleonController. Replacement is now performed in 
 `\ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface` and may therefore be called independent from
 the controller.
+
+## Plugin jsTree: Update to 3.3.8
+
+New modules "NavigationTree", "NavigationTreeSingleSelect" and "NavigationTreeSingleSelectWysiwyg" use the new 
+jsTree plugin.  

@@ -44,6 +44,7 @@ class ChameleonSystemCoreExtension extends Extension
             $this->loadConfigFile($container, $sConfigDir, 'database_migration.xml');
             $this->loadConfigFile($container, $sConfigDir, 'cronjobs.xml');
             $this->loadConfigFile($container, $sConfigDir, 'mappers.xml');
+            $this->loadConfigFile($container, $sConfigDir, 'factory.xml');
         }
 
         $this->addMailTransformationConfig($config['mail_target_transformation_service'], $container);

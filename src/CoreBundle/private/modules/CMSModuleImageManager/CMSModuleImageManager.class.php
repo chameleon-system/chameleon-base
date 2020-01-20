@@ -341,7 +341,10 @@ class CMSModuleImageManager extends TCMSModelBase
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/table.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/jsTree/jquery.jstree.js').'" type="text/javascript"></script>';
+
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/jsTree/3.3.8/jstree.js').'"></script>';
+        $aIncludes[] = sprintf('<link rel="stylesheet" href="%s">', TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/jsTree/3.3.8/themes/default/style.css'));
+
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tooltip.css" rel="stylesheet" type="text/css" />';
 
         return $aIncludes;

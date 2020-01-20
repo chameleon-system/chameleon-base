@@ -592,7 +592,7 @@
             <trans-unit id="chameleon_system_core.field_options.option_value_false">
                 <source>chameleon_system_core.field_options.option_value_false</source>
                 <target>Nein</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>                
+                <note>@deprecated since 6.3.0 - no longer used.</note>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.field_page_tree_node.primary_node">
@@ -1052,37 +1052,59 @@
                 <source>chameleon_system_core.cms_module_page_tree.headline</source>
                 <target>Navigationsverwaltung</target>
             </trans-unit>
+
             <trans-unit id="chameleon_system_core.cms_module_page_tree.not_translated">
                 <source>chameleon_system_core.cms_module_page_tree.not_translated</source>
                 <target>Nicht übersetzt</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_page_tree.node_has_no_page">
                 <source>chameleon_system_core.cms_module_page_tree.node_has_no_page</source>
                 <target>Diesem Navigationspunkt ist keine Seite zugewiesen</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_page_tree.confirm_delete">
                 <source>chameleon_system_core.cms_module_page_tree.confirm_delete</source>
                 <target>Möchten Sie den Navigationpunkt "%nodeName%" inkl. aller Unterpunkte wirklich löschen?</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_page_tree.connect_page">
                 <source>chameleon_system_core.cms_module_page_tree.action_connect_page</source>
                 <target>Seite verbinden</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_page_tree.connected_pages">
                 <source>chameleon_system_core.cms_module_page_tree.connected_pages</source>
                 <target>Verbundene Seiten</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_page_tree.action_edit_page">
                 <source>chameleon_system_core.cms_module_page_tree.action_edit_page</source>
                 <target>Seite editieren</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_page_tree.action_edit_node">
                 <source>chameleon_system_core.cms_module_page_tree.action_edit_node</source>
                 <target>Navigation editieren</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page">
+                <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page</source>
+                <target>Seite mit verknüpftem Navigationspunkt</target>
+                <note>@deprecated since 6.3.8 - no longer used.</note>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_header">
                 <source>chameleon_system_core.cms_module_page_tree.legend_header</source>
                 <target>Legende</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_active_main_node_of_page">
+                <source>chameleon_system_core.cms_module_page_tree.legend_active_main_node_of_page</source>
+                <target>Aktiver Hauptnavigationspunkt dieser Seite</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_active_further_node_of_page">
+                <source>chameleon_system_core.cms_module_page_tree.legend_active_further_node_of_page</source>
+                <target>Aktiver weiterer Navigationspunkt dieser Seite</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_node_has_no_page">
                 <source>chameleon_system_core.cms_module_page_tree.legend_node_has_no_page</source>
@@ -1091,10 +1113,6 @@
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_has_connected_pages">
                 <source>chameleon_system_core.cms_module_page_tree.legend_has_connected_pages</source>
                 <target>Navigationspunkt mit verknüpfter Seite</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page">
-                <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page</source>
-                <target>Seite mit verknüpftem Navigationspunkt</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page">
                 <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page</source>
@@ -2558,6 +2576,15 @@
             <trans-unit id="chameleon_system_core.sidebar.popular_entries">
                 <source>chameleon_system_core.sidebar.popular_entries</source>
                 <target>Häufig benutzt</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.navigation_tree.confirm_selection">
+                <source>chameleon_system_core.navigation_tree.confirm_selection</source>
+                <target>Auswahl übernehmen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.navigation_tree.cancel_selection">
+                <source>chameleon_system_core.navigation_tree.cancel_selection</source>
+                <target>Abbrechen</target>
             </trans-unit>
         </body>
     </file>

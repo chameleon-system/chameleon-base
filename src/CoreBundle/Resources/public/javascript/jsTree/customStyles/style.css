@@ -1,0 +1,44 @@
+
+.jstree.jstree-checkbox-selection li.no-checkbox > a > i.jstree-checkbox {
+    display: none;
+}
+
+.jstree.jstree-checkbox-selection .jstree-disabled.jstree-clicked {
+    background: unset;
+}
+
+.navigationTreeContainer .node-hidden,
+.treelegend .page-hidden {
+    color: #848484;
+}
+
+.navigationTreeContainer .activeConnectedNode,
+.treelegend .activeConnectedNode {
+    font-style: normal;
+    font-weight: bold;
+    color: #008000;
+}
+
+.navigationTreeContainer .otherConnectedNode,
+.treelegend .otherConnectedNode {
+    font-style: normal;
+    color: #008000;
+}
+
+.navigationTreeContainer .activeConnectedNode.primaryConnectedNode,
+.treelegend .activeConnectedNode.primaryConnectedNode {
+    font-style: normal;
+    color: #005588;
+}
+.treelegend {
+    display: table-cell;
+    width: 350px;
+}
+
+.treelegend .nodeIndicatorIcon {
+    padding-left: 20px;
+}
+
+.treelegend .rightClickMenuDisabled {
+    color: #FF0000;
+}
