@@ -248,6 +248,9 @@ class BackendTreeNodeDataModel implements JsonSerializable
         $this->listHtmlClasses[] = $listHtmlClass;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function jsonSerialize()
     {
         $jsTreeItem = [
