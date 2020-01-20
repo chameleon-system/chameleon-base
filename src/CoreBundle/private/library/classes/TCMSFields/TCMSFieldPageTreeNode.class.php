@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
 {
@@ -346,7 +347,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 
-    private function getUrlUtilService(): \ChameleonSystem\CoreBundle\Util\UrlUtil
+    private function getUrlUtilService(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
     }

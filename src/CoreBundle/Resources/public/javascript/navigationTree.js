@@ -453,8 +453,7 @@ function connectPageSuccess(nodeId, responseMessage) {
 
 function disconnectPageOnDeselect(nodeId) {
     currentNodeId = nodeId; // save nodeId in global var
-    var assignedpageId = $("#navigationTreeDataContainer").data('current-page-id');
-    var url = $("#navigationTreeDataContainer").data('disconnect-page-on-deselect-url') + '&sRestriction=' + nodeId + '&pageId=' + assignedpageId + '&nodeId=' + nodeId;
+    var url = $("#navigationTreeDataContainer").data('disconnect-page-on-deselect-url') + '&sRestriction=' + nodeId + '&nodeId=' + nodeId;
     GetAjaxCallTransparent(url, disconnectPageSuccess);
 }
 

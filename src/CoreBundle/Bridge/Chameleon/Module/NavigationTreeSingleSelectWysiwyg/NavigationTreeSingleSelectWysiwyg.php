@@ -13,37 +13,39 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingl
 
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelect\NavigationTreeSingleSelect;
 use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * {@inheritdoc}
  */
 class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
 {
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
     public function __construct(
         Connection $dbConnection,
         EventDispatcherInterface $eventDispatcher,
         InputFilterUtilInterface $inputFilterUtil,
-        BackendTreeNodeFactory $backendTreeNodeFactory
+        BackendTreeNodeFactory $backendTreeNodeFactory,
+        RequestStack $requestStack
     ) {
         parent::__construct($dbConnection, $eventDispatcher, $inputFilterUtil, $backendTreeNodeFactory);
+        $this->requestStack = $requestStack;
     }
 
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
         parent::Accept($visitor, $cachingEnabled, $cacheTriggerManager);
-        $visitor->SetMappedValue('CKEditorFuncNum', $this->getRequest()->query->getInt('CKEditorFuncNum'));
-    }
-
-    /**
-     * @return Request|null
-     */
-    private function getRequest()
-    {
-        return ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return;
+        }
+        $visitor->SetMappedValue('CKEditorFuncNum', $request->query->getInt('CKEditorFuncNum'));
     }
 }
