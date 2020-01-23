@@ -155,6 +155,9 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
             return;
         }
         $portal = $this->portalDomainService->getActivePortal();
+        if (null === $portal) {
+            return null;
+        }
         $nodeId = null;
         if (404 === $code) {
             $nodeId = $portal->fieldPageNotFoundNode;
