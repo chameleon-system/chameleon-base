@@ -5,7 +5,9 @@
 <div class="fieldLookup row">
     <div class="col-12 col-lg-8">
         <select name="{{ fieldName|e('html_attr') }}" id="{{ fieldName|e('html_attr') }}"
-                class="{{ sClass|e('html_attr') }}" data-select2-option='{{ selectOptions }}'>
+                class="{{ sClass|e('html_attr') }}" data-select2-option='{{ selectOptions }}'
+                {% if onchangeAttr | length > 0 %}{{ onchangeAttr | raw }}{% endif %}
+        >
             {% if allowEmptySelection %}
                 <option value="">{{ 'chameleon_system_core.form.select_box_nothing_selected'|trans }}</option>
             {% endif %}
