@@ -611,6 +611,7 @@ class TCMSTableEditorEndPoint
             $oSubMenuItem->sIcon = TGlobal::GetPathTheme().'/images/icons/language-flags/'.strtolower(
                     $isoCode
                 ).'.png';
+            $oSubMenuItem->sCSSClass = 'translation-sub';
 
             $aAdditionalParams = $this->GetHiddenFieldsHook();
             if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {

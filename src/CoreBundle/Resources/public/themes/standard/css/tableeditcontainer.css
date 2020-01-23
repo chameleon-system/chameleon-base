@@ -10,12 +10,29 @@
     padding-right: 15px;
 }
 
+.tableeditcontainer .fieldSeperator {
+    padding: 5px;
+    color: #EFEFEF;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 1px;
+    background-image: url(../images/fieldSeperator_bg.gif);
+    background-repeat: repeat-x;
+    height: 33px;
+    vertical-align: top;
+    padding-top: 7px;
+}
+
 .tableeditcontainer .fieldnumber {
     width: 70px;
 }
 
 .tableeditcontainer .fieldtext {
     min-height: 200px;
+}
+
+.tableeditcontainer .field-decimal input, .tableeditcontainer .dateInput input {
+    max-width: 300px;
 }
 
 .SnippetmediaUploader {

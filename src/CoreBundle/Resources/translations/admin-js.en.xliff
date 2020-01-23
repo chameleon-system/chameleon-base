@@ -372,6 +372,44 @@
                 <target>Usages</target>
             </trans-unit>
 
+
+            <trans-unit id="chameleon_system_core.navigation_tree.connect_page">
+                <source>chameleon_system_core.navigation_tree.action_connect_page</source>
+                <target>Connect page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.navigation_tree.connected_pages">
+                <source>chameleon_system_core.navigation_tree.connected_pages</source>
+                <target>Connected pages</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.navigation_tree.edit_page">
+                <source>chameleon_system_core.navigation_tree.edit_page</source>
+                <target>Edit page</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.navigation_tree.page_settings">
+                <source>chameleon_system_core.navigation_tree.page_settings</source>
+                <target>Page settings</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.navigation_tree.edit_node">
+                <source>chameleon_system_core.navigation_tree.edit_node</source>
+                <target>Edit node</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.navigation_tree.new">
+                <source>chameleon_system_core.navigation_tree.new</source>
+                <target>New</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.navigation_tree.delete">
+                <source>chameleon_system_core.navigation_tree.delete</source>
+                <target>Delete</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.navigation_tree.node_has_no_page">
+                <source>chameleon_system_core.navigation_tree.node_has_no_page</source>
+                <target>No page assigned to this navigation node</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.navigation_tree.confirm_delete">
+                <source>chameleon_system_core.navigation_tree.confirm_delete</source>
+                <target>Do you want to delete the navigation node "%nodeName%" including all subnodes?</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>

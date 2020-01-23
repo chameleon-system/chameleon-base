@@ -1,0 +1,83 @@
+{# @var treeNodes \ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel #}
+
+{% if isInIframe == false %}
+
+<div class="card">
+    <div class="card-header">
+        <h3>{{ 'chameleon_system_core.cms_module_page_tree.headline' | trans }}</h3>
+    </div>
+    <div class="card-body simple-tree-card">
+{% endif %}
+        <div class="row m-0">
+            <div class="col-12 col-md-6 col-xl-8">
+                <div id="navigationTreeDataContainer"
+                     data-tree-nodes-ajax-url = "{{ treeNodesAjaxUrl | raw }}"
+                     data-open-page-connection-list-url = "{{ openPageConnectionListUrl | raw }}"
+                     data-open-page-editor-url = "{{ openPageEditorUrl | raw }}"
+                     data-open-page-config-editor-url = "{{ openPageConfigEditorUrl | raw }}"
+                     data-open-tree-node-editor-url = "{{ openTreeNodeEditorUrl | raw }}"
+                     data-open-tree-node-editor-add-new-node-url = "{{ openTreeNodeEditorAddNewNodeUrl | raw }}"
+                     data-delete-node-url = "{{ deleteNodeUrl | raw }}"
+                     data-assign-page-url = "{{ assignPageUrl | raw }}"
+                     data-move-node-url = "{{ moveNodeUrl | raw }}"
+                     data-connect-page-on-select-url = "{{ connectPageOnSelectUrl | raw }}"
+                     data-disconnect-page-on-deselect-url = "{{ disconnectPageOnDeselectUrl | raw }}" >
+
+                    <div id="navigationTreeContainer{% if noAssignDialog == false %}-checkboxes{% endif %}" class="navigationTreeContainer"></div>
+
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-xl-4 justify-content-end mt-4 mt-md-0">
+                <div class="treelegend">
+                    <h5>
+                        <span class="nodeIndicatorIcon"></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_header' | trans }}</span>
+                    </h5>
+
+                    {% if noAssignDialog == false %}
+                        <div class="activeConnectedNode primaryConnectedNode">
+                            <span class="nodeIndicatorIcon"></span>
+                            <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_active_main_node_of_page' | trans }}</span>
+                        </div>
+
+
+                        <div class="activeConnectedNode">
+                            <span class="nodeIndicatorIcon"></span>
+                            <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_active_further_node_of_page' | trans }}</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="text">
+                        <span class="nodeIndicatorIcon"></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_node_has_no_page' | trans }}</span>
+                    </div>
+
+                    <div class="otherConnectedNode">
+                        <span class="nodeIndicatorIcon"></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_has_connected_pages' | trans }}</span>
+                    </div>
+
+                    <div class="restrictedPage">
+                        <span class="nodeIndicatorIcon iconRestricted"><i class="fas fa-lock"></i></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page' | trans }}</span>
+                    </div>
+
+                    <div class="node-hidden">
+                        <span class="nodeIndicatorIcon iconHidden"><i class="far fa-eye-slash"></i></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_hidden' | trans }}</span>
+                    </div>
+
+                    <div class="legendLine">
+                        <span class="nodeIndicatorIcon iconExternalLink"><i class="fas fa-external-link-alt"></i></span>
+                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_external_link' | trans }}</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+{% if isInIframe == false %}
+    </div>
+</div>
+{% endif %}
+

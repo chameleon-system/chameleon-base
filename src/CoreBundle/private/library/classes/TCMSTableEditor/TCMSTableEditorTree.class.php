@@ -281,7 +281,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
 
         PostAjaxForm('cmseditform', function(data,statusText) {
           if(SaveViaAjaxCallback(data,statusText)) {
-            parent.updateTreeNodeWithPage(document.cmseditform,data.cmsident,data.id,data.pageID);
+            parent.updateTreeNode(document.cmseditform);
           }
         });
       }

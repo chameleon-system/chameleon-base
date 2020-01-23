@@ -4,13 +4,75 @@ html {
     height: 100%;
 }
 
-body {
-    height: 100%;
-}
-
 /* overwrite min-height: 100vh; set from coreui */
 body.app {
     min-height: 100%;
+}
+
+#cmscontainer .main {
+    display: flex;
+    flex-direction: column;
+}
+
+#cmscontainer .main .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#cmscontainer .main .content #tableEditorContainer {
+    flex: 1;
+}
+
+#cmscontainer .main .content #tableEditorContainer .tableeditcontainer {
+    height: 100%;
+}
+
+#cmscontainer .main .content #tableEditorContainer .tableeditcontainer #cmseditform {
+    height: 100%;
+}
+
+#cmscontainer .main .content #tableEditorContainer .tableeditcontainer #cmseditform #tabs-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#cmscontainer .main .content #tableEditorContainer .tableeditcontainer #cmseditform #tabs-wrapper .tab-content {
+    flex: 1;
+}
+
+@media (max-width: 991px) {
+    #cmscontainer .main .container-fluid {
+        padding: 10px;
+    }
+
+    #cmscontainer .main .breadcrumb {
+        margin-bottom: 0;
+    }
+
+    #cmscontainer .main .content .card {
+        margin-bottom: 0;
+    }
+}
+
+#cmsbreadcrumb .breadcrumb {
+    border-radius: 0;
+    margin-bottom: 0; /* overwrite bootstrap */
+}
+
+#cmsbreadcrumb .breadcrumb i {
+    color: #098dba;
+}
+
+.dropdown-menu .dropdown-item {
+    padding-left: 30px;
+}
+
+.dropdown-menu .dropdown-item.translation-sub {
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 10px;
 }
 
 a:hover {
@@ -18,9 +80,14 @@ a:hover {
 }
 
 iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 470px;
     background-image: none;
     background-color: #ffffff;
     border: none;
+    margin: 0;
+    padding: 0;
 }
 
 label, .action, .card-action {
@@ -90,7 +157,7 @@ legend {
 }
 
 .button-element .button-item {
-    padding: 0 3px 6px 3px;
+    padding: 6px 3px;
 }
 
 .typeahead-relative {
@@ -109,6 +176,10 @@ legend {
     padding-left: 28px;
 }
 
+.typeahead.dropdown-menu .dropdown-item {
+    white-space: normal;
+}
+
 .typeahead.dropdown-menu .active .dropdown-item {
     /* highlight keyboard selected entry - Typeahead does not have extra styles */
 
@@ -123,14 +194,6 @@ legend {
 .cmsBoxBorder {
     background-color: #fff;
     padding: 5px;
-}
-
-#cmsbreadcrumb .breadcrumb {
-    border-radius: 0;
-}
-
-#cmsbreadcrumb .breadcrumb i {
-    color: #098dba;
 }
 
 .cmsNavIcon {
@@ -223,6 +286,10 @@ legend {
 
 .select2-selection.select2-selection--single {
     border: 1px solid #e4e7ea;
+}
+
+.select2-container--default .select2-results>.select2-results__options {
+    max-height: 450px;
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {

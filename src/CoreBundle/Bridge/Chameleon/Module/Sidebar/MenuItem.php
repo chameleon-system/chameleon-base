@@ -26,11 +26,17 @@ class MenuItem
      */
     private $url;
 
-    public function __construct(string $name, string $icon, string $url)
+    /**
+     * @var string
+     */
+    private $id;
+
+    public function __construct(string $id, string $name, string $icon, string $url)
     {
         $this->name = $name;
         $this->icon = $icon;
         $this->url = $url;
+        $this->id = $id;
     }
 
     public function getName(): string
@@ -46,5 +52,10 @@ class MenuItem
     public function getUrl(): string
     {
         return $this->url;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 }
