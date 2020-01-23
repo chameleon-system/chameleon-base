@@ -38,7 +38,7 @@ class TCMSTableEditorCMSConfig extends TCMSTableEditor
 
         $sCallURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'tableeditor', 'id' => $this->sId, 'tableid' => $this->oTableConf->id, 'module_fnc' => array('contentmodule' => 'UpdateTranslationFields'), '_noModuleFunction' => 'true'));
 
-        $oMenuItem->sOnClick = "if (confirm('".TGlobal::Translate('chameleon_system_core.table_editor.regenerate_translatable_fields_confirm')."')) document.location.href='{$sCallURL}';";
+        $oMenuItem->sOnClick = "if (confirm('".TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.table_editor.regenerate_translatable_fields_confirm'))."')) document.location.href='{$sCallURL}';";
         $this->oMenuItems->AddItem($oMenuItem);
     }
 
