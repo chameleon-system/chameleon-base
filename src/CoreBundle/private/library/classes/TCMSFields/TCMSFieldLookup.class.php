@@ -385,7 +385,7 @@ class TCMSFieldLookup extends TCMSField
 
             $query = "SELECT * FROM cms_tbl_conf where `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->GetConnectedTableName())."'";
             $aTargetTable = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query));
-            $aMethodData['sClassType'] = $aTargetTable['dbobject_type'];
+            $aMethodData['sClassType'] = $aTargetTable['dbobject_type'] ?? '';
 
             $oViewParser = new TViewParser();
             $oViewParser->bShowTemplatePathAsHTMLHint = false;
@@ -414,7 +414,7 @@ class TCMSFieldLookup extends TCMSField
         $sInputName = 'i'.ucfirst(TCMSTableToClass::ConvertToClassString($this->name));
         $aParameters = array(
             $sInputName => array(
-                'description' => 'ID for the record in: '.$aTableConf['translation'],
+                'description' => 'ID for the record in: '.($aTableConf['translation'] ?? ' [not found]'),
                 'default' => '',
                 'sType' => 'int',
             ),
@@ -435,12 +435,12 @@ class TCMSFieldLookup extends TCMSField
         $aMethodData['sClassSubType'] = 'CMSDataObjects';
         $aMethodData['sVisibility'] = 'static public';
 
-        $aMethodData['sClassType'] = $aTableConf['dbobject_type'];
+        $aMethodData['sClassType'] = $aTableConf['dbobject_type'] ?? '';
 
         $aMethodData['iLookupFieldName'] = $sInputName;
         $aMethodData['sTableDatabaseName'] = $this->sTableName;
 
-        $aMethodData['aFieldData']['sFieldFullName'] = 'Return all records belonging to the '.$aTableConf['translation'];
+        $aMethodData['aFieldData']['sFieldFullName'] = 'Return all records belonging to the '.($aTableConf['translation'] ?? ' [not found]');
 
         $oViewParser = new TViewParser();
         $oViewParser->bShowTemplatePathAsHTMLHint = false;
