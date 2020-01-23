@@ -11,15 +11,19 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar;
 
+use ChameleonSystem\CoreBundle\DataAccess\UserMenuItemDataAccessInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
-    private const ACTIVE_CATEGORY_SESSION_KEY = 'chameleonSidebarBackendModuleActiveCategory';
+    private const OPEN_CATEGORIES_SESSION_KEY = 'chameleonSidebarBackendModuleOpenCategories';
     private const DISPLAY_STATE_SESSION_KEY = 'chameleonSidebarBackendModuleDisplayState';
+    private const POPULAR_CATEGORY_ID = '0000000-0000-0001-0000-000000000001';
 
     /**
      * @var UrlUtil
@@ -42,14 +46,46 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     private $menuItemFactory;
 
-    public function __construct(UrlUtil $urlUtil, RequestStack $requestStack, InputFilterUtilInterface $inputFilterUtil, ResponseVariableReplacerInterface $responseVariableReplacer, MenuItemFactoryInterface $menuItemFactory)
-    {
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
+     * @var UserMenuItemDataAccessInterface
+     */
+    private $userMenuItemDataAccess;
+
+    public function __construct(
+        UrlUtil $urlUtil,
+        RequestStack $requestStack,
+        InputFilterUtilInterface $inputFilterUtil,
+        ResponseVariableReplacerInterface $responseVariableReplacer,
+        MenuItemFactoryInterface $menuItemFactory,
+        TranslatorInterface $translator,
+        UserMenuItemDataAccessInterface $userMenuItemDataAccess
+    ) {
         parent::__construct();
+
         $this->urlUtil = $urlUtil;
         $this->requestStack = $requestStack;
         $this->inputFilterUtil = $inputFilterUtil;
         $this->responseVariableReplacer = $responseVariableReplacer;
         $this->menuItemFactory = $menuItemFactory;
+        $this->translator = $translator;
+        $this->userMenuItemDataAccess = $userMenuItemDataAccess;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function DefineInterface()
+    {
+        parent::DefineInterface();
+
+        $this->methodCallAllowed[] = 'toggleSidebar';
+        $this->methodCallAllowed[] = 'toggleCategoryOpenState';
+        $this->methodCallAllowed[] = 'reportElementClick';
     }
 
     public function Init()
@@ -58,17 +94,31 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->restoreDisplayState();
     }
 
+    /**
+     * To enable sensible module caching.
+     */
     private function restoreDisplayState(): void
     {
-        $session = $this->requestStack->getCurrentRequest()->getSession();
-        $displayState = $session->get(self::DISPLAY_STATE_SESSION_KEY, '');
+        $session = $this->getSession();
+        $displayState = null !== $session ? $session->get(self::DISPLAY_STATE_SESSION_KEY, '') : '';
         if ('minimized' === $displayState) {
             $value = 'sidebar-minimized';
         } else {
             $value = '';
         }
+        
         $this->responseVariableReplacer->addVariable('sidebarDisplayState', $value);
-        $this->responseVariableReplacer->addVariable('sidebarActiveCategory', \TGlobal::OutHTML($this->getActiveCategory()));
+        $this->responseVariableReplacer->addVariable('sidebarOpenCategoryIds', \TGlobal::OutHTML(implode(',', $this->getOpenCategories())));
+    }
+
+    private function getSession(): ?SessionInterface
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return null;
+        }
+
+        return $request->getSession();
     }
 
     /**
@@ -76,8 +126,9 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
-        $visitor->SetMappedValue('sidebarToggleNotificationUrl', $this->getSidebarToggleNotificationUrl());
-        $visitor->SetMappedValue('sidebarSaveActiveCategoryNotificationUrl', $this->getActiveCategoryNotificationUrl());
+        $visitor->SetMappedValue('sidebarToggleNotificationUrl', $this->getNotificationUrl('toggleSidebar'));
+        $visitor->SetMappedValue('sidebarToggleCategoryNotificationUrl', $this->getNotificationUrl('toggleCategoryOpenState'));
+        $visitor->SetMappedValue('sidebarElementClickNotificationUrl', $this->getNotificationUrl('reportElementClick'));
         $visitor->SetMappedValue('menuItems', $this->getMenuItems());
 
         if (true === $cachingEnabled) {
@@ -88,16 +139,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $cacheTriggerManager->addTrigger('cms_menu_category', null);
             $cacheTriggerManager->addTrigger('cms_menu_item', null);
         }
-    }
-
-    private function getSidebarToggleNotificationUrl(): string
-    {
-        return $this->urlUtil->getArrayAsUrl([
-            'module_fnc' => [
-                $this->sModuleSpotName => 'ExecuteAjaxCall',
-            ],
-            '_fnc' => 'toggleSidebar',
-        ], $this->getBaseUri(), '&');
     }
 
     /**
@@ -115,13 +156,13 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return \PATH_CMS_CONTROLLER.'?pagedef=sidebarDummy&';
     }
 
-    private function getActiveCategoryNotificationUrl(): string
+    private function getNotificationUrl(string $subFunction): string
     {
         return $this->urlUtil->getArrayAsUrl([
             'module_fnc' => [
                 $this->sModuleSpotName => 'ExecuteAjaxCall',
             ],
-            '_fnc' => 'saveActiveCategory',
+            '_fnc' => $subFunction,
         ], $this->getBaseUri(), '&');
     }
 
@@ -132,11 +173,13 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             return [];
         }
 
+        $menuCategories = [];
+        $menuItemMap = [];
+
         $tdbCategoryList = \TdbCmsMenuCategoryList::GetList();
         $tdbCategoryList->ChangeOrderBy([
             '`cms_menu_category`.`position`' => 'ASC',
         ]);
-        $menuCategories = [];
         while (false !== $tdbCategory = $tdbCategoryList->Next()) {
             $menuItems = [];
             $tdbMenuItemList = $tdbCategory->GetFieldCmsMenuItemList();
@@ -148,6 +191,8 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 $menuItem = $this->menuItemFactory->createMenuItem($tdbMenuItem);
                 if (null !== $menuItem) {
                     $menuItems[] = $menuItem;
+
+                    $menuItemMap[$menuItem->getId()] = $menuItem;
                 }
             }
             if (\count($menuItems) > 0) {
@@ -160,25 +205,86 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             }
         }
 
+        $popularCategory = $this->getPopularMenuEntries($menuItemMap);
+        if (null !== $popularCategory) {
+            \array_unshift($menuCategories, $popularCategory);
+        }
+
         return $menuCategories;
     }
 
-    private function getActiveCategory(): ?string
+    private function getOpenCategories(): array
     {
-        $session = $this->requestStack->getCurrentRequest()->getSession();
+        $session = $this->getSession();
 
-        return $session->get(self::ACTIVE_CATEGORY_SESSION_KEY);
-    }
-
-    protected function saveActiveCategory(): void
-    {
-        $activeCategory = $this->inputFilterUtil->getFilteredPostInput('categoryId');
-        if ('' === $activeCategory) {
-            $activeCategory = null;
+        if (null === $session) {
+            return [];
         }
 
-        $session = $this->requestStack->getCurrentRequest()->getSession();
-        $session->set(self::ACTIVE_CATEGORY_SESSION_KEY, $activeCategory);
+        return $session->get(self::OPEN_CATEGORIES_SESSION_KEY, []);
+    }
+
+    private function getPopularMenuEntries(array $menuItemMap): ?MenuCategory
+    {
+        $activeUser = \TCMSUser::GetActiveUser();
+        if (null === $activeUser) {
+            return null;
+        }
+
+        $menuItemsClickedByUser = $this->userMenuItemDataAccess->getMenuItemIds($activeUser->id);
+        $menuItemsClickedByUser = \array_slice($menuItemsClickedByUser, 0, 6);
+
+        $items = [];
+
+        foreach ($menuItemsClickedByUser as $menuId) {
+            if (\array_key_exists($menuId, $menuItemMap)) {
+                $items[] = $menuItemMap[$menuId];
+            }
+        }
+
+        if (0 === $items) {
+            return null;
+        }
+
+        return new MenuCategory(
+            self::POPULAR_CATEGORY_ID,
+            $this->translator->trans('chameleon_system_core.sidebar.popular_entries'),
+            'fas fa-fire',
+            $items
+        );
+    }
+
+    /**
+     * @deprecated since 6.3.8 - use toggleCategoryOpenState
+     */
+    protected function saveActiveCategory(): void
+    {
+        $this->toggleCategoryOpenState();
+    }
+
+    protected function toggleCategoryOpenState(): void
+    {
+        $session = $this->getSession();
+        if (null === $session) {
+            return;
+        }
+
+        $toggledCategoryId = $this->inputFilterUtil->getFilteredPostInput('categoryId', '');
+
+        if ('' === $toggledCategoryId) {
+            return;
+        }
+
+        $activeCategoryIds = $session->get(self::OPEN_CATEGORIES_SESSION_KEY, []);
+
+        $index = array_search($toggledCategoryId, $activeCategoryIds, true);
+        if (false !== $index){
+            unset($activeCategoryIds[$index]);
+        } else {
+            $activeCategoryIds[] = $toggledCategoryId;
+        }
+
+        $session->set(self::OPEN_CATEGORIES_SESSION_KEY, $activeCategoryIds);
     }
 
     /**
@@ -205,16 +311,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $includes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function DefineInterface()
-    {
-        parent::DefineInterface();
-        $this->methodCallAllowed[] = 'toggleSidebar';
-        $this->methodCallAllowed[] = 'saveActiveCategory';
-    }
-
     protected function toggleSidebar(): void
     {
         $displayState = $this->inputFilterUtil->getFilteredPostInput('displayState');
@@ -222,8 +318,29 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             return;
         }
 
-        $session = $this->requestStack->getCurrentRequest()->getSession();
+
+        $session = $this->getSession();
+        if (null === $session) {
+            return;
+        }
+
         $session->set(self::DISPLAY_STATE_SESSION_KEY, $displayState);
+    }
+
+    protected function reportElementClick(): void
+    {
+        $menuId = $this->inputFilterUtil->getFilteredPostInput('clickedMenuId', '');
+
+        if ('' === $menuId) {
+            return;
+        }
+
+        $activeUser = \TCMSUser::GetActiveUser();
+        if (null === $activeUser) {
+            return;
+        }
+
+        $this->userMenuItemDataAccess->trackMenuItem($activeUser->id, $menuId);
     }
 
     /**
@@ -245,6 +362,11 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         if (null !== $cmsUser) {
             $parameters['cmsUserId'] = $cmsUser->id;
             $parameters['backendLanguageId'] = $cmsUser->fieldCmsLanguageId;
+
+            $session = $this->getSession();
+            if (null !== $session) {
+                $parameters['sessionId'] = $session->getId();
+            }
         }
 
         return $parameters;

@@ -58,7 +58,7 @@ class ModuleChooserModuleListMapper extends AbstractViewMapper
                 'icon' => $moduleObject->fieldIconFontCssClass,
                 'views' => array(),
             );
-            $moduleObject->aPermittedViews = $permittedModules[$moduleObject->fieldClassname];
+            $moduleObject->aPermittedViews = $permittedModules[$moduleObject->fieldClassname] ?? null;
             /** @var $views \TIterator */
             $views = $moduleObject->GetViews();
             if (0 === $views->Length()) {

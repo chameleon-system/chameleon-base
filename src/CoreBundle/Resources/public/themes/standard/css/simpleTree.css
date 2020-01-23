@@ -1,3 +1,7 @@
+/**
+ * @deprecated since 6.3.8 - use /javascript/jsTree/customStyles/style.css instead
+ */
+
 .simple-tree-card {
 	padding-left: 2.5rem !important;
 }

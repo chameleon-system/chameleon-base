@@ -374,7 +374,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
             $query = "SELECT * FROM cms_tbl_conf where `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->GetConnectedTableName())."'";
             $aTargetTable = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query));
 
-            $aMethodData['sClassType'] = $aTargetTable['dbobject_type'];
+            $aMethodData['sClassType'] = $aTargetTable['dbobject_type'] ?? '';
 
             $oViewParser = new TViewParser();
             $oViewParser->bShowTemplatePathAsHTMLHint = false;

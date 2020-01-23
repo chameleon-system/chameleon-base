@@ -25,6 +25,7 @@ class ModuleMenuItemProvider implements MenuItemProviderInterface
         }
 
         return new MenuItem(
+            $menuItem->id,
             $menuItem->fieldName,
             $menuItem->fieldIconFontCssClass,
             $this->getModuleTargetUrl($cmsModule)

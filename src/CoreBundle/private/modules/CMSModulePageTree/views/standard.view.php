@@ -1,8 +1,10 @@
 <?php
-    /**
-     * @var \Symfony\Component\Translation\TranslatorInterface
-     */
-    $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+/**
+ * @var \Symfony\Component\Translation\TranslatorInterface
+ *
+ * @deprecated since 6.3.8
+ */
+$translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
 ?>
 
 <script type="text/javascript">

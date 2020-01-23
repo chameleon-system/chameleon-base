@@ -31,13 +31,21 @@ class TCMSFieldDecimal extends TCMSField
         // number of decimals can be retrived from the length set of the field definition
         $sFormatValue = number_format($this->data, $this->_GetNumberOfDecimals(), ',', '.');
 
-        $html = '<input class="fieldnumber form-control form-control-sm" onblur="this.value=NumberFormat(NumberToFloat(this.value, \',\', \'.\'), '.$this->numberOfDecimals.', \',\', \'.\')" type="text" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($sFormatValue).'"';
-
+        $html = '<div class="row field-decimal"><div class="col-xs-12 col-md-6 col-lg-4">';
+        
+        $html .= sprintf('<input class="fieldnumber form-control form-control-sm" onblur="this.value=NumberFormat(NumberToFloat(this.value, \',\', \'.\'), %s, \',\', \'.\')" type="text" id="%s" name="%s" value="%s"',
+            $this->numberOfDecimals,
+            TGlobal::OutHTML($this->name),
+            TGlobal::OutHTML($this->name),
+            TGlobal::OutHTML($sFormatValue)
+        );
+        
         if ('' !== $this->fieldWidth && $this->fieldWidth > 0) {
             $html .= ' size="'.TGlobal::OutHTML($this->fieldWidth).'" maxlength="'.TGlobal::OutHTML($this->fieldWidth).'"';
         }
 
         $html .= ' />';
+        $html .= '</div></div>';
 
         return $html;
     }

@@ -14,7 +14,7 @@
     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         {% for aSubItem in aSubItems %}
             {%- if aSubItem.sIconURL is defined -%}
-                <a class="dropdown-icon dropdown-item" style="background-image: url({{ aSubItem.sIconURL }});" href="javascript:{{ aSubItem.sOnClick }}">{{ aSubItem.sTitle }}</a>
+                <a class="dropdown-icon dropdown-item {{ aSubItem.sCSSClass | e("html_attr") }}" style="background-image: url({{ aSubItem.sIconURL }});" href="javascript:{{ aSubItem.sOnClick }}">{{ aSubItem.sTitle }}</a>
             {%- else -%}
                 <a class="dropdown-item p-2" href="javascript:{{ aSubItem.sOnClick }}"><span class="{{ sIcon }} pr-2"></span>{{ aSubItem.sTitle }}</a>
             {%- endif -%}

@@ -52,7 +52,7 @@ class TCMSFieldTreeNode extends TCMSField
 
     public function _GetOpenWindowJS()
     {
-        $url = PATH_CMS_CONTROLLER.'?pagedef=treenodeselect&fieldName='.urlencode($this->name).'&id='.urlencode($this->data);
+        $url = PATH_CMS_CONTROLLER.'?pagedef=navigationTreeSingleSelect&fieldName='.urlencode($this->name).'&id='.urlencode($this->data);
         $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."')";
 
         return $js;
@@ -67,10 +67,7 @@ class TCMSFieldTreeNode extends TCMSField
      */
     public function GetCMSHtmlHeadIncludes()
     {
-        $aIncludes = array();
-        $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/module_CMSTreeNodeSelect.css" rel="stylesheet" type="text/css" />';
-
-        return $aIncludes;
+        return [];
     }
 
     public function RenderFieldMethodsString()

@@ -13,15 +13,6 @@ if ($data['aPermission']['showlist'] && '1' == $data['only_one_record_tbl'] && a
                 }
             });
         });
-
-        // check if iframe size is to small and resize it
-        setInterval(function() {
-            var lastHeight = 0, curHeight = 0;
-            curHeight = document.body.scrollHeight;
-            if ( curHeight != lastHeight ) {
-                parent.updateIframeSize('<?=TGlobal::OutHTML($sForeignField); ?>',document.body.scrollHeight);
-            }
-        },500);
     </script>
     <?php
 }

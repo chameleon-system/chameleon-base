@@ -1,3 +1,8 @@
+<?php
+/**
+ * @deprecated since 6.3.8 - use NavigationTreeSingleSelect instead.
+ */
+?>
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -39,3 +44,4 @@
 <?php
 echo $data['treePathHTML'];
 ?>
+

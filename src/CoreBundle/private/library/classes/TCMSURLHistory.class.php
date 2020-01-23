@@ -236,4 +236,34 @@ class TCMSURLHistory
 
         return array_key_exists('params', $this->aHistory[0]);
     }
+
+    /**
+     * Removing history entries concerning this table entry.
+     *
+     * @param string $tableId
+     * @param string $entryId
+     */
+    public function removeEntries(string $tableId, string $entryId): void
+    {
+        if ('' === $tableId || '' === $entryId) {
+            return;
+        }
+
+        $length = count($this->aHistory);
+        $changed = false;
+        for ($i = 0; $i < $length; ++$i) {
+            $hasTableId = false !== strpos($this->aHistory[$i]['url'], 'tableid='.$tableId);
+            $hasEntryId = false !== strpos($this->aHistory[$i]['url'], 'id='.$entryId);
+            if (true === $hasTableId && true === $hasEntryId) {
+                $changed = true;
+                unset($this->aHistory[$i]);
+            }
+        }
+
+        if (true === $changed) {
+            // remove now "empty" indices
+
+            $this->aHistory = array_values($this->aHistory);
+        }
+    }
 }

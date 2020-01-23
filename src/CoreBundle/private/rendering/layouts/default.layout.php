@@ -6,7 +6,7 @@
     <?php $modules->GetModule('sidebar'); ?>
     <main class="main" id="cmscontentcontainer">
         <?php $modules->GetModule('breadcrumb'); ?>
-        <div class="container-fluid">
+        <div class="container-fluid content">
         <?php $modules->GetModule('contentmodule'); ?>
         </div>
     </main>
