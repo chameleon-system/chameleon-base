@@ -325,14 +325,6 @@ legend {
     width: 30px;
 }
 
-.sidebar .nav {
-    width: 100%; /* not fixed: make room for scrollbar */
-}
-
-.sidebar .nav-link {
-    padding: .75rem .75rem; /* reduce horizontal padding: some more room for scrollbar */
-}
-
 .sidebar .nav-dropdown-items .nav-item {
     background-color: #FFFFFF;
 }
