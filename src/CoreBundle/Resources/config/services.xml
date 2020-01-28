@@ -944,6 +944,8 @@
             <argument id="event_dispatcher" type="service"/>
             <argument id="chameleon_system_core.util.input_filter" type="service"/>
             <argument id="chameleon_system_core.factory.backend_tree_node" type="service"/>
+            <argument id="chameleon_system_core.global" type="service"/>
+            <argument id="request_stack" type="service"/>
             <argument id="chameleon_system_core.cache" type="service"/>
         </service>
 
