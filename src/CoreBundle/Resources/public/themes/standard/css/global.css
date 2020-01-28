@@ -65,11 +65,16 @@ body.app {
     color: #098dba;
 }
 
+.dropdown-menu.dropdown-menu-right {
+    max-width: calc(100% - 8px);
+}
+
 .dropdown-menu .dropdown-item {
-    padding-left: 30px;
+    padding: 10px;
 }
 
 .dropdown-menu .dropdown-item.translation-sub {
+    padding-left: 30px;
     background-repeat: no-repeat;
     background-position-y: center;
     background-position-x: 10px;
