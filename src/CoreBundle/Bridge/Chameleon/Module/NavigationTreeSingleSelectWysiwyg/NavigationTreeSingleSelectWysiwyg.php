@@ -17,6 +17,7 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use TGlobal;
 
 /**
  * {@inheritdoc}
@@ -33,9 +34,10 @@ class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
         EventDispatcherInterface $eventDispatcher,
         InputFilterUtilInterface $inputFilterUtil,
         BackendTreeNodeFactory $backendTreeNodeFactory,
+        TGlobal $global,
         RequestStack $requestStack
     ) {
-        parent::__construct($dbConnection, $eventDispatcher, $inputFilterUtil, $backendTreeNodeFactory);
+        parent::__construct($dbConnection, $eventDispatcher, $inputFilterUtil, $backendTreeNodeFactory, $global);
         $this->requestStack = $requestStack;
     }
 
