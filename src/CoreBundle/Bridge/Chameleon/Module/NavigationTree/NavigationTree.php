@@ -403,7 +403,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             $updatedNodes[] = $cmsTree;
         }
 
-        $tableEditor->Init($tableId, $nodeId);
+        $tableEditor = $this->tools->GetTableEditorManager($treeTableName, $nodeId);
         $tableEditor->SaveField($this->treeTableSortField, $position);
         $tableEditor->SaveField('parent_id', $parentNodeId);
 
