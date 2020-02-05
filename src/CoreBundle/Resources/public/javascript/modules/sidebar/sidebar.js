@@ -222,24 +222,30 @@
             });
         },
         extractTableId: function(url) {
-            // TODO use some proper url splitting?
+            // TODO use some proper url splitting? ie https://gomakethings.com/getting-all-query-string-values-from-a-url-with-vanilla-js/
 
-            if (url.includes("pagedef=tablemanager") && url.includes("id=")) {
+            if (url.includes("pagedef=tablemanager")) {
                 return this.extractValueOfKey(url, "id");
-            } else if ((url.includes("pagedef=tableeditor") || url.includes("templateengine")) && url.includes("tableid=")) {
+            } else if (url.includes("pagedef=tableeditor") || url.includes("templateengine")) {
                 return this.extractValueOfKey(url, "tableid");
             }
 
             return null;
         },
         extractValueOfKey: function(url, key) {
-            var idx = url.indexOf(key + "=");
+            var search = key + "=";
+            var idx = url.indexOf(search);
+
+            if (-1 === idx) {
+                return null;
+            }
+
             var idx2 = url.indexOf("&", idx);
             if (idx2 === -1) {
                 idx2 = url.length;
             }
 
-            return url.substring(idx + key.length + 1, idx2);
+            return url.substring(idx + search.length, idx2);
         }
     });
 
