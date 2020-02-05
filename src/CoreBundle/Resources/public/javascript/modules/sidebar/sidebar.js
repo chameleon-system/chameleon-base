@@ -23,6 +23,7 @@
             this.$navItems.not(".nav-dropdown").on("click", this.onElementClick.bind(this));
 
             this.restoreOpenState();
+            this.markSelected();
 
             $.extend($.expr[':'], {
                 'chameleonContainsCaseInsensitive': function(elem, i, match, array) {
@@ -41,6 +42,24 @@
             for (var i = 0; i < activeCategoryIds.length; i++) {
                 this.$baseElement.find('[data-categoryid="' + activeCategoryIds[i] +'"]').addClass('open');
             }
+        },
+        markSelected: function() {
+            var currentTableId = this.extractTableId(document.location.href);
+
+            if (null === currentTableId) {
+                return;
+            }
+
+            var outer = this;
+
+            this.$navItems.not(".nav-dropdown").each(function() {
+                var link = $(this).find("a").attr("href");
+                var linkTableId = outer.extractTableId(link);
+
+                if (linkTableId === currentTableId) {
+                    $(this).addClass("selected-entry");
+                }
+            });
         },
         filter: function (event) {
             const searchTerm = this.$filterElement.val();
@@ -201,6 +220,26 @@
             $.post(url, {
                 clickedMenuId: clickedMenuId
             });
+        },
+        extractTableId: function(url) {
+            // TODO use some proper url splitting?
+
+            if (url.includes("pagedef=tablemanager") && url.includes("id=")) {
+                return this.extractValueOfKey(url, "id");
+            } else if ((url.includes("pagedef=tableeditor") || url.includes("templateengine")) && url.includes("tableid=")) {
+                return this.extractValueOfKey(url, "tableid");
+            }
+
+            return null;
+        },
+        extractValueOfKey: function(url, key) {
+            var idx = url.indexOf(key + "=");
+            var idx2 = url.indexOf("&", idx);
+            if (idx2 === -1) {
+                idx2 = url.length;
+            }
+
+            return url.substring(idx + key.length + 1, idx2);
         }
     });
 
