@@ -222,30 +222,21 @@
             });
         },
         extractTableId: function(url) {
-            // TODO use some proper url splitting? ie https://gomakethings.com/getting-all-query-string-values-from-a-url-with-vanilla-js/
-
-            if (url.includes("pagedef=tablemanager")) {
-                return this.extractValueOfKey(url, "id");
-            } else if (url.includes("pagedef=tableeditor") || url.includes("templateengine")) {
-                return this.extractValueOfKey(url, "tableid");
-            }
-
-            return null;
-        },
-        extractValueOfKey: function(url, key) {
-            var search = key + "=";
-            var idx = url.indexOf(search);
+            var idx = url.indexOf("?");
 
             if (-1 === idx) {
                 return null;
             }
 
-            var idx2 = url.indexOf("&", idx);
-            if (idx2 === -1) {
-                idx2 = url.length;
+            var urlParams = new URLSearchParams(url.substring(idx));
+
+            if (url.includes("pagedef=tablemanager")) {
+                return urlParams.get("id");
+            } else if (url.includes("pagedef=tableeditor") || url.includes("templateengine")) {
+                return urlParams.get("tableid");
             }
 
-            return url.substring(idx + search.length, idx2);
+            return null;
         }
     });
 
