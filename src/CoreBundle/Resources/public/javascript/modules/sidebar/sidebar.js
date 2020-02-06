@@ -34,6 +34,8 @@
             this.$baseElement.on("keyup", this.handleKeyEvent.bind(this));
 
             this.$filterElement.focus();
+
+            this.handleScrollPosition();
         },
         restoreOpenState: function() {
             const activeCategoryIdsString = this.$baseElement.data('active-categories');
@@ -65,6 +67,16 @@
                     $(this).addClass("selected-entry");
                 }
             });
+        },
+        handleScrollPosition: function() {
+            this.$baseElement.find("nav").on("scroll", function(evt) {
+                localStorage.setItem('sidebar-scroll-position', $(this).scrollTop());
+            });
+
+            if (null !== localStorage.getItem('sidebar-scroll-position')) {
+                // animate (with default 400msec): needs to wait for "transition" of the css class "open" to finish (?)
+                $(".sidebar-nav").animate({ scrollTop: localStorage.getItem('sidebar-scroll-position') }, 400);
+            }
         },
         filter: function (event) {
             const searchTerm = this.$filterElement.val();
