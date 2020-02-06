@@ -156,7 +156,7 @@ class TPkgViewRendererLessCompiler
     {
         if (false === class_exists('Less_Parser') && false === class_exists('lessc')) {
             throw new ViewRenderException(
-                'You need to install oyejorge/less.php or leafo/lessphp in an appropriate version. See composer.json in chameleon-system/pkgviewrenderer in the suggest section.'
+                'No Less support found. You need to install wikimedia/less.php.'
             );
         }
 
