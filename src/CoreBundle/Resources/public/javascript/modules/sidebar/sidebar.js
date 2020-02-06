@@ -45,18 +45,23 @@
         },
         markSelected: function() {
             var currentTableId = this.extractTableId(document.location.href);
-
-            if (null === currentTableId) {
-                return;
-            }
+            var documentPathAndSearch = document.location.pathname + document.location.search;
 
             var outer = this;
 
             this.$navItems.not(".nav-dropdown").each(function() {
                 var link = $(this).find("a").attr("href");
+                var linkPathAndSearch = outer.getPathAndSearch(link);
+
+                if (true === outer.entryUrlMatches(linkPathAndSearch, documentPathAndSearch)) {
+                    $(this).addClass("selected-entry");
+
+                    return;
+                }
+
                 var linkTableId = outer.extractTableId(link);
 
-                if (linkTableId === currentTableId) {
+                if (linkTableId === currentTableId && linkTableId !== null) {
                     $(this).addClass("selected-entry");
                 }
             });
@@ -237,6 +242,21 @@
             }
 
             return null;
+        },
+        getPathAndSearch: function(url) {
+            var idx = url.indexOf("/");
+
+            if (-1 === idx) {
+                return "/";
+            }
+
+            return url.substring(idx);
+        },
+        entryUrlMatches: function(sidebarLink, documentLink) {
+            // This matches the sidebarLink being part of the documentLink and
+            // also matches if they are exactly equal.
+
+            return sidebarLink === documentLink.substring(0, sidebarLink.length);
         }
     });
 
