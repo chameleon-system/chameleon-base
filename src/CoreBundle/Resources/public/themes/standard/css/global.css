@@ -333,6 +333,14 @@ legend {
     color: #000000 !important;
 }
 
+.sidebar .nav-item.selected-entry {
+    background-color: #20a8d8;
+}
+
+.sidebar .nav-item.selected-entry i {
+    color: #000000;
+}
+
 .sidebar .nav-item:focus {
     background-color: #20a8d8;
 }

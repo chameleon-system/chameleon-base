@@ -23,6 +23,7 @@
             this.$navItems.not(".nav-dropdown").on("click", this.onElementClick.bind(this));
 
             this.restoreOpenState();
+            this.markSelected();
 
             $.extend($.expr[':'], {
                 'chameleonContainsCaseInsensitive': function(elem, i, match, array) {
@@ -43,6 +44,29 @@
             for (var i = 0; i < activeCategoryIds.length; i++) {
                 this.$baseElement.find('[data-categoryid="' + activeCategoryIds[i] +'"]').addClass('open');
             }
+        },
+        markSelected: function() {
+            var currentTableId = this.extractTableId(document.location.href);
+            var documentPathAndSearch = document.location.pathname + document.location.search;
+
+            var outer = this;
+
+            this.$navItems.not(".nav-dropdown").each(function() {
+                var link = $(this).find("a").attr("href");
+                var linkPathAndSearch = outer.getPathAndSearch(link);
+
+                if (true === outer.entryUrlMatches(linkPathAndSearch, documentPathAndSearch)) {
+                    $(this).addClass("selected-entry");
+
+                    return;
+                }
+
+                var linkTableId = outer.extractTableId(link);
+
+                if (linkTableId === currentTableId && linkTableId !== null) {
+                    $(this).addClass("selected-entry");
+                }
+            });
         },
         handleScrollPosition: function() {
             this.$baseElement.find("nav").on("scroll", function(evt) {
@@ -213,6 +237,38 @@
             $.post(url, {
                 clickedMenuId: clickedMenuId
             });
+        },
+        extractTableId: function(url) {
+            var idx = url.indexOf("?");
+
+            if (-1 === idx) {
+                return null;
+            }
+
+            var urlParams = new URLSearchParams(url.substring(idx));
+
+            if (url.includes("pagedef=tablemanager")) {
+                return urlParams.get("id");
+            } else if (url.includes("pagedef=tableeditor") || url.includes("templateengine")) {
+                return urlParams.get("tableid");
+            }
+
+            return null;
+        },
+        getPathAndSearch: function(url) {
+            var idx = url.indexOf("/");
+
+            if (-1 === idx) {
+                return "/";
+            }
+
+            return url.substring(idx);
+        },
+        entryUrlMatches: function(sidebarLink, documentLink) {
+            // This matches the sidebarLink being part of the documentLink and
+            // also matches if they are exactly equal.
+
+            return sidebarLink === documentLink.substring(0, sidebarLink.length);
         }
     });
 
