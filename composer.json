@@ -32,7 +32,7 @@
         "sensio/distribution-bundle": "^5.0.19",
         "symfony/monolog-bundle": "^3.1.0",
         "symfony/polyfill-apcu": "^1.0",
-        "symfony/symfony": "~3.4.35",
+        "symfony/symfony": "~4.0",
         "symfony-cmf/routing-bundle": "~2.1.0",
         "tedivm/jshrink": "~1.0"
     },
