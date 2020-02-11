@@ -36,7 +36,7 @@
         <service id="chameleon_system_newsletter.mapper.signup_config_form" class="TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig_Form">
         </service>
 
-        <service id="chameleon_system_newsletter.mapper.quick_signup" class="TPkgNewsletterMapper_QuickSignup">
+        <service id="chameleon_system_newsletter.mapper.quick_signup" class="TPkgNewsletterMapper_QuickSignup" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.system_page_service" />
         </service>

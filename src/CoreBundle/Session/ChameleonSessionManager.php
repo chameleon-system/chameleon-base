@@ -125,9 +125,10 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         // add decorator to enforce write order (old data may not overwrite new data)
         $sessionHandler = new TPkgCmsSessionHandler_Decorator_EnforceWriteSequence($sessionStorage->getSaveHandler());
 
-        if ($this->metaDataTimeout > 0) {
-            $sessionHandler = new WriteCheckSessionHandler($sessionHandler);
-        }
+        // @todo(md): reenable this behaviour!
+        //if ($this->metaDataTimeout > 0) {
+            //$sessionHandler = new WriteCheckSessionHandler($sessionHandler);
+        //}
 
         // add session locking support if enabled
         if (false === DISABLE_SESSION_LOCKING) {

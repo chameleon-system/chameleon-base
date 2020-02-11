@@ -11,12 +11,14 @@
 
 namespace ChameleonSystem\TwigDebugBundle\Twig\Node;
 
+use Twig\Compiler;
+use Twig\Node\IncludeNode;
+use Twig\Node\Node;
 use Twig\Source;
-use Twig_Compiler;
 use Twig_Node_Include;
 use Twig_NodeOutputInterface;
 
-class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputInterface
+class Twig_Node_Include_Decorator extends Node implements Twig_NodeOutputInterface
 {
     /**
      * @var Twig_Node_Include
@@ -24,14 +26,14 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
     private $original;
 
     /**
-     * @param Twig_Node_Include $original
+     * @param IncludeNode $original
      */
-    public function __construct(Twig_Node_Include $original)
+    public function __construct(IncludeNode $original)
     {
         $this->original = $original;
     }
 
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $snippet = $this->original->getNode('expr')->hasAttribute('value') ? $snippet = $this->original->getNode('expr')->getAttribute('value') : null;
         if ($snippet) {

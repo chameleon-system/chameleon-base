@@ -14,7 +14,7 @@
         <service id="chameleon_system_core.mapper.feedback_success" class="MTFeedbackMapper_Success">
         </service>
 
-        <service id="chameleon_system_core.mapper.text_field_text" class="MTTextFieldMapper_Text">
+        <service id="chameleon_system_core.mapper.text_field_text" class="MTTextFieldMapper_Text" public="true">
         </service>
 
         <service id="chameleon_system_core.mapper.media_field_image_box" class="TCMSMediaFieldImageBoxMapper">
@@ -44,11 +44,11 @@
                       id="chameleon_system_database_migration.recorder.migration_recorder_state_handler"/>
         </service>
 
-        <service id="chameleon_system_core.mapper.view_port_meta" class="TMapper_ViewPortMeta">
+        <service id="chameleon_system_core.mapper.view_port_meta" class="TMapper_ViewPortMeta" public="true">
             <argument type="service" id="chameleon_system_core.view_port_manager" />
         </service>
 
-        <service id="chameleon_system_core.mapper.view_port_switch" class="TMapper_ViewPortSwitch">
+        <service id="chameleon_system_core.mapper.view_port_switch" class="TMapper_ViewPortSwitch" public="true">
             <argument type="service" id="chameleon_system_core.active_page_service" />
             <argument type="service" id="chameleon_system_core.view_port_manager" />
             <argument type="service" id="translator" />
