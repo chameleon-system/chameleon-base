@@ -34,8 +34,7 @@
         "symfony/polyfill-apcu": "^1.0",
         "symfony/symfony": "~3.4.35",
         "symfony-cmf/routing-bundle": "~2.1.0",
-        "tedivm/jshrink": "~1.0",
-        "twig/twig": "~3.0"
+        "tedivm/jshrink": "~1.0"
     },
     "require-dev": {
         "chameleon-system/code-style-config": "dev-master@dev",
