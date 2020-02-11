@@ -45,6 +45,13 @@ $env = $devmode ? 'dev' : 'prod';
 
 $kernel = new AppKernel($env, $devmode);
 $request = Request::createFromGlobals();
-$response = $kernel->handle($request);
+
+try {
+    $response = $kernel->handle($request);
+} catch (Exception $e) {
+    die($e->getMessage());
+}
+
+
 $response->send();
 $kernel->terminate($request, $response);

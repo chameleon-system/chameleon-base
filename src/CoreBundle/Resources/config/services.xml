@@ -59,7 +59,7 @@
             <argument type="service" id="chameleon_system_view_renderer.snippet_directory" />
         </service>
 
-        <service id="chameleon_system_core.http_kernel" class="ChameleonSystem\CoreBundle\ChameleonHttpKernel">
+        <service id="chameleon_system_core.http_kernel" class="ChameleonSystem\CoreBundle\ChameleonHttpKernel" public="true">
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="controller_resolver" />
             <argument type="service" id="request_stack" />

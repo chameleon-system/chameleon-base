@@ -14,14 +14,15 @@ namespace ChameleonSystem\TwigDebugBundle\Twig\Node;
 use Twig\Compiler;
 use Twig\Node\IncludeNode;
 use Twig\Node\Node;
+use Twig\Node\NodeOutputInterface;
 use Twig\Source;
 use Twig_Node_Include;
 use Twig_NodeOutputInterface;
 
-class Twig_Node_Include_Decorator extends Node implements Twig_NodeOutputInterface
+class Twig_Node_Include_Decorator extends Node implements NodeOutputInterface
 {
     /**
-     * @var Twig_Node_Include
+     * @var IncludeNode
      */
     private $original;
 
@@ -45,12 +46,12 @@ class Twig_Node_Include_Decorator extends Node implements Twig_NodeOutputInterfa
         }
     }
 
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return $this->original->getIterator();
     }
 
-    public function getNodeTag()
+    public function getNodeTag(): string
     {
         return $this->original->getNodeTag();
     }
@@ -60,7 +61,7 @@ class Twig_Node_Include_Decorator extends Node implements Twig_NodeOutputInterfa
         return $this->original->count();
     }
 
-    public function getTemplateLine()
+    public function getTemplateLine(): int
     {
         return $this->original->getTemplateLine();
     }
@@ -70,17 +71,17 @@ class Twig_Node_Include_Decorator extends Node implements Twig_NodeOutputInterfa
         $this->original->setTemplateName($name);
     }
 
-    public function getTemplateName()
+    public function getTemplateName(): string
     {
         return $this->original->getTemplateName();
     }
 
-    public function setSourceContext(Source $source)
+    public function setSourceContext(Source $source): void
     {
         $this->original->setSourceContext($source);
     }
 
-    public function getSourceContext()
+    public function getSourceContext(): Source
     {
         return $this->original->getSourceContext();
     }
