@@ -533,6 +533,8 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
                         handled = true;
                         var specificOnClick = $element.data('onclick-function') + "('" + item.id + "')";
                         eval(specificOnClick);
+
+                        // TODO/NOTE \TGroupTableField::getLinkData() potentially supports more than one linked field/id
                     }
 
                     // TODO this case can now be reomved: ?
