@@ -529,6 +529,14 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
             if (typeof item.id !== "undefined") {
                 var handled = false;
                 if ("" !== item.id) {
+                    if ("" !== $element.data('onclick-function')) {
+                        handled = true;
+                        var specificOnClick = $element.data('onclick-function') + "('" + item.id + "')";
+                        eval(specificOnClick);
+                    }
+
+                    // TODO this case can now be reomved: ?
+
                     // Look for a table row for this entry and its click handler:
 
                     var $row = $("tr[data-record-id='"+item.id+"']");
