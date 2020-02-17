@@ -5,29 +5,29 @@
 
     <services>
 
-        <service id="chameleon_system_core.mapper.feedback_additional_fields" class="MTFeedbackMapper_AdditionalFields">
+        <service id="chameleon_system_core.mapper.feedback_additional_fields" class="MTFeedbackMapper_AdditionalFields" public="true">
         </service>
 
-        <service id="chameleon_system_core.mapper.feedback_standard_form" class="MTFeedbackMapper_StandardForm">
+        <service id="chameleon_system_core.mapper.feedback_standard_form" class="MTFeedbackMapper_StandardForm" public="true">
         </service>
 
-        <service id="chameleon_system_core.mapper.feedback_success" class="MTFeedbackMapper_Success">
+        <service id="chameleon_system_core.mapper.feedback_success" class="MTFeedbackMapper_Success" public="true">
         </service>
 
         <service id="chameleon_system_core.mapper.text_field_text" class="MTTextFieldMapper_Text" public="true">
         </service>
 
-        <service id="chameleon_system_core.mapper.media_field_image_box" class="TCMSMediaFieldImageBoxMapper">
+        <service id="chameleon_system_core.mapper.media_field_image_box" class="TCMSMediaFieldImageBoxMapper" public="true">
             <argument type="service" id="chameleon_system_core.util.url" />
         </service>
 
-        <service id="chameleon_system_core.mapper.media_field" class="TCMSMediaFieldMapper">
+        <service id="chameleon_system_core.mapper.media_field" class="TCMSMediaFieldMapper" public="true">
         </service>
 
-        <service id="chameleon_system_core.mapper.media_field_upload" class="TCMSMediaFieldUploadMapper">
+        <service id="chameleon_system_core.mapper.media_field_upload" class="TCMSMediaFieldUploadMapper" public="true">
         </service>
 
-        <service id="chameleon_system_core.mapper.media_multi_field" class="TCMSMediaMultiFieldMapper">
+        <service id="chameleon_system_core.mapper.media_multi_field" class="TCMSMediaMultiFieldMapper" public="true">
         </service>
 
         <service id="chameleon_system_core.mapper.message_manager" class="TCMSMessageManagerMapper" public="true">
