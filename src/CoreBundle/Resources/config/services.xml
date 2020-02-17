@@ -609,7 +609,7 @@
         <service id="chameleon_system_core.i18n.active_user_permission" class="ChameleonSystem\CoreBundle\i18n\ActiveCmsUserPermission">
 
         </service>
-        <service id="chameleon_system_core.i18n.export_translation_db_controller" class="ChameleonSystem\CoreBundle\i18n\Controller\JsTranslationController">
+        <service id="chameleon_system_core.i18n.export_translation_db_controller" class="ChameleonSystem\CoreBundle\i18n\Controller\JsTranslationController" public="true">
             <argument type="service" id="chameleon_system_core.i18n.export_service" />
             <argument type="service" id="chameleon_system_core.i18n.active_user_permission" />
         </service>
