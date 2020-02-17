@@ -30,16 +30,16 @@
         <service id="chameleon_system_core.mapper.media_multi_field" class="TCMSMediaMultiFieldMapper">
         </service>
 
-        <service id="chameleon_system_core.mapper.message_manager" class="TCMSMessageManagerMapper">
+        <service id="chameleon_system_core.mapper.message_manager" class="TCMSMessageManagerMapper" public="true">
         </service>
 
-        <service id="chameleon_system_core.mapper.message_manager_overlay" class="TCMSMessageManagerMapper_Overlay">
+        <service id="chameleon_system_core.mapper.message_manager_overlay" class="TCMSMessageManagerMapper_Overlay" public="true">
         </service>
 
         <service id="chameleon_system_core.mapper.template_engine.module_chooser_module_list" class="ChameleonSystem\CoreBundle\TemplateEngine\Mapper\ModuleChooserModuleListMapper">
         </service>
 
-        <service id="chameleon_system_core.mapper.update_recorder" class="MTUpdateRecorder">
+        <service id="chameleon_system_core.mapper.update_recorder" class="MTUpdateRecorder" public="true">
             <argument type="service"
                       id="chameleon_system_database_migration.recorder.migration_recorder_state_handler"/>
         </service>

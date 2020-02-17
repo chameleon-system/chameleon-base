@@ -11,7 +11,7 @@
         </service>
 
         <service id="chameleon_system_media_manager.media_item.data_access"
-                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\DataAccess\MediaItemDataAccess">
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\DataAccess\MediaItemDataAccess" public="true">
             <argument type="service" id="database_connection"/>
             <argument type="service" id="chameleon_system_core.tools"/>
             <argument type="service" id="chameleon_system_core.flash_messages"/>
@@ -21,7 +21,7 @@
         </service>
 
         <service id="chameleon_system_media_manager.usages.chain_finder"
-                 class="ChameleonSystem\MediaManager\MediaItemChainUsageFinder"/>
+                 class="ChameleonSystem\MediaManager\MediaItemChainUsageFinder" public="true"/>
 
         <service id="chameleon_system_media_manager.usages.delete_service_chain"
                  class="ChameleonSystem\MediaManager\MediaItemUsageChainDeleteService"/>
@@ -204,7 +204,7 @@
         </service>
 
         <!-- Alias for BC -->
-        <service id="chameleon_system_core.media_manager.url_generator" alias="chameleon_system_media_manager.url_generator" />
+        <service id="chameleon_system_core.media_manager.url_generator" alias="chameleon_system_media_manager.url_generator" public="true" />
 
     </services>
 

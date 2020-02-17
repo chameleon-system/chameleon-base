@@ -60,7 +60,7 @@
             <argument type="service" id="kernel"/>
         </service>
 
-        <service id="chameleon_system_view_renderer.less_compiler" class="ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler">
+        <service id="chameleon_system_view_renderer.less_compiler" class="ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler" public="true">
             <argument/> <!-- will be replaced by ChameleonSystemViewRendererExtension -->
             <argument>%chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix%</argument>
         </service>
@@ -91,7 +91,7 @@
         <service id="chameleon_system_view_renderer.mapper.snippet_gallery_navi_tree_to_navigation" class="TPkgViewRendererSnippetGalleryNaviTree_To_Navigation_Mapper">
         </service>
 
-        <service id="chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier" class="ChameleonSystem\ViewRenderer\SnippetChain\SnippetChainModifier">
+        <service id="chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier" class="ChameleonSystem\ViewRenderer\SnippetChain\SnippetChainModifier" public="true">
             <argument type="service" id="chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier_data_access"/>
         </service>
 

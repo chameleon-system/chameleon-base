@@ -38,7 +38,7 @@
             <argument type="service" id="database_connection" />
         </service>
 
-        <service id="chameleon_system_autoclasses.data_access.autoclasses_request_cache" class="ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesRequestCacheDataAccess" decorates="chameleon_system_autoclasses.data_access.autoclasses">
+        <service id="chameleon_system_autoclasses.data_access.autoclasses_request_cache" class="ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesRequestCacheDataAccess" decorates="chameleon_system_autoclasses.data_access.autoclasses" public="true">
             <argument type="service" id="chameleon_system_autoclasses.data_access.autoclasses_request_cache.inner" />
         </service>
 

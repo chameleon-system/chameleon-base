@@ -9,7 +9,7 @@
             <tag name="chameleon_system.cronjob" />
         </service>
 
-        <service id="chameleon_system_newsletter.post_processor_collector" class="ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorCollectionService">
+        <service id="chameleon_system_newsletter.post_processor_collector" class="ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorCollectionService" public="true">
 
         </service>
         <service id="chameleon_system_newsletter.post_processor_user_content" class="ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorUserContent" public="false">
@@ -21,7 +21,7 @@
             <argument type="service" id="chameleon_system_newsletter.post_processor_collector" />
         </service>
 
-        <service id="chameleon_system_newsletter.user_data_factory" class="ChameleonSystem\NewsletterBundle\PostProcessing\Bridge\NewsletterUserDataFactory">
+        <service id="chameleon_system_newsletter.user_data_factory" class="ChameleonSystem\NewsletterBundle\PostProcessing\Bridge\NewsletterUserDataFactory" public="true">
         </service>
 
         <service id="chameleon_system_newsletter.mapper.signout_config" class="TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig">

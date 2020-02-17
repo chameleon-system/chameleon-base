@@ -14,14 +14,13 @@ namespace ChameleonSystem\CoreBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class SetChameleonHttpKernelPass implements CompilerPassInterface
+class MakeLoggerPublicPass implements CompilerPassInterface
 {
     /**
      * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {
-        $container->setAlias('http_kernel', 'chameleon_system_core.http_kernel');
-        $container->getAlias('http_kernel')->setPublic(true);
+        $container->getAlias('logger')->setPublic(true);
     }
 }

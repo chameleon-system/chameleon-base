@@ -9,10 +9,10 @@
                  class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\DataAccess\ImageCropPresetDataAccess"/>
 
         <service id="chameleon_system_image_crop.cms_media_data_access"
-                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\DataAccess\CmsMediaDataAccess"/>
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\DataAccess\CmsMediaDataAccess" public="true"/>
 
         <service id="chameleon_system_image_crop.image_crop_data_access"
-                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\DataAccess\ImageCropDataAccess">
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\DataAccess\ImageCropDataAccess" public="true">
             <argument type="service" id="database_connection"/>
             <argument type="service" id="chameleon_system_image_crop.image_crop_preset_data_access"/>
             <argument type="service" id="chameleon_system_core.tools"/>
