@@ -529,15 +529,13 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
             if (typeof item.id !== "undefined") {
                 var handled = false;
                 if ("" !== item.id) {
-                    // Look for a table row for this entry and its click handler:
-
-                    var $row = $("tr[data-record-id='"+item.id+"']");
-                    var $onClicks = $row.find("td[onClick]");
-                    if ($row.length > 0 && $onClicks.length > 0) {
-                        $($onClicks[0]).click();
+                    if ("" !== $element.data('onclick-function')) {
                         handled = true;
+                        var specificOnClick = $element.data('onclick-function') + "('" + item.id + "')";
+                        eval(specificOnClick);
                     }
                 }
+
                 if (false === handled && "" !== $element.data('record-url')) {
                     top.document.location.href = $element.data('record-url') + '&id=' + item.id;
                 }
