@@ -533,21 +533,9 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
                         handled = true;
                         var specificOnClick = $element.data('onclick-function') + "('" + item.id + "')";
                         eval(specificOnClick);
-
-                        // TODO/NOTE \TGroupTableField::getLinkData() potentially supports more than one linked field/id
-                    }
-
-                    // TODO this case can now be reomved: ?
-
-                    // Look for a table row for this entry and its click handler:
-
-                    var $row = $("tr[data-record-id='"+item.id+"']");
-                    var $onClicks = $row.find("td[onClick]");
-                    if ($row.length > 0 && $onClicks.length > 0) {
-                        $($onClicks[0]).click();
-                        handled = true;
                     }
                 }
+
                 if (false === handled && "" !== $element.data('record-url')) {
                     top.document.location.href = $element.data('record-url') + '&id=' + item.id;
                 }
