@@ -51,11 +51,7 @@
                     <div class="col-12 col-md-10 col-xl-5 info">
                         <table>
                             <tr>
-                                <td>
-                                    {% if mediaItem.type|lower in ['jpg', 'png', 'gif'] %}
-                                        <img class="mr-1" src="/chameleon/blackbox/images/filetype_icons/16x16/{{ mediaItem.type|lower }}.png" alt="">
-                                    {% endif %}
-                                </td>
+                                <td class="first-column">{{ mediaItem.iconHtml | raw }}</td>
                                 <td>{{ mediaItem.type }}</td>
                             </tr>
                             <tr>
