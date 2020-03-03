@@ -1,4 +1,4 @@
-<div class="row button-element">
+<div data-table-function-bar class="row button-element">
         <?php
         $data['oMenuItems']->GoToStart();
         /** @var $oMenuItem TCMSTableEditorMenuItem */
