@@ -282,6 +282,7 @@ class TCMSMessageManager
         $oMessages = $this->ConsumeMessages($sConsumerName, $bRemove);
         if (!is_null($oMessages)) {
             $oMessages->GoToStart();
+            /** @var TdbCmsMessageManagerMessage $oMessage */
             while ($oMessage = $oMessages->Next()) {
                 $sMsg .= $oMessage->Render($sViewName, $sViewType, $aCallTimeVars);
             }
