@@ -299,6 +299,15 @@
     vertical-align: top;
 }
 
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .info td:first-child {
+    padding-right: 5px;
+    text-align: center;
+}
+
+.snippetMediaManagerBackendModuleStandard .snippetMediaManagerListList .info td i {
+    margin-right: 0 !important;
+}
+
 .snippetMediaManagerBackendModuleStandard .snippetMediaManagerDeleteConfirmDelete .item-to-delete-name {
     font-weight: bold;
 }
