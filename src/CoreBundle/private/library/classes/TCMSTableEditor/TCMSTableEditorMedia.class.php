@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\DeleteMediaEvent;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use esono\pkgCmsCache\CacheInterface;
 
 class TCMSTableEditorMedia extends TCMSTableEditorFiles
 {
@@ -829,14 +831,21 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
      */
     public function ClearCacheOfObjectsUsingImage($sImageId)
     {
-        if (true === TCacheManager::IsCachingEnabled()) {
+        $cache = $this->getCache();
+
+        if (true === $cache->isActive()) {
             $aData = $this->FetchConnections($sImageId);
             if (is_array($aData)) {
                 /** @var $oConnection TCMSMediaConnections */
                 foreach ($aData as $oConnection) {
-                    TCacheManager::PerformeTableChange($oConnection->tableName, $oConnection->id);
+                    $cache->callTrigger($oConnection->tableName, $oConnection->id);
                 }
             }
         }
+    }
+
+    private function getCache(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }
