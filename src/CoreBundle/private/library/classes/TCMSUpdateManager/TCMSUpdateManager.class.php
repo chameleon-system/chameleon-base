@@ -222,6 +222,7 @@ class TCMSUpdateManager
                 $updateFileResults[] = $tmp;
             }
         }
+
         if (count($updateFileResults) > 0) {
             $result = '<script type="text/javascript">';
             foreach ($updateFileResults as $oUpdateFile) {
@@ -336,7 +337,39 @@ class TCMSUpdateManager
         $result->setErrorQueries($this->errorQueries);
         $this->errorQueries = array();
 
+        $this->renderMessageOutputToResult($result, $bundleName, $sFileName);
+
         return $result;
+    }
+
+    private function renderMessageOutputToResult(MigrationResult $result, string $bundleName, string $fileName): void
+    {
+        $viewRenderer = $this->getViewRenderer();
+        $viewRenderer->AddSourceObject('bundleName', $bundleName);
+        $viewRenderer->AddSourceObject('buildNumber', $this->GetBuildNumberFromFileName($fileName));
+
+        if (count($result->getExceptions()) > 0) {
+            $viewRenderer->AddSourceObject('messages', $result->getExceptions());
+            $result->setRenderedExceptionsGlobal($viewRenderer->Render('CMSUpdateManager/exceptionGlobal.html.twig'));
+            $result->setRenderedExceptionsUpdate($viewRenderer->Render('CMSUpdateManager/exceptionUpdate.html.twig'));
+        }
+
+        if (count($result->getErrorQueries()) > 0) {
+            $viewRenderer->AddSourceObject('messages', $result->getErrorQueries());
+            $result->setRenderedErrorQueriesGlobal($viewRenderer->Render('CMSUpdateManager/errorQueriesGlobal.html.twig'));
+            $result->setRenderedErrorQueriesUpdate($viewRenderer->Render('CMSUpdateManager/errorQueriesUpdate.html.twig'));
+        }
+
+        if (count($result->getInfoMessages()) > 0) {
+            $viewRenderer->AddSourceObject('messages', $result->getInfoMessages());
+            $result->setRenderedInfoMessagesGlobal($viewRenderer->Render('CMSUpdateManager/infoGlobal.html.twig'));
+            $result->setRenderedInfoMessagesUpdate($viewRenderer->Render('CMSUpdateManager/infoUpdate.html.twig'));
+        }
+
+        if (count($result->getSuccessQueries()) > 0) {
+            $viewRenderer->AddSourceObject('messages', $result->getSuccessQueries());
+            $result->setRenderedSuccessQueriesUpdate($viewRenderer->Render('CMSUpdateManager/successQueriesUpdate.html.twig'));
+        }
     }
 
     /**
@@ -540,5 +573,10 @@ class TCMSUpdateManager
     private function getProcessedMigrationDataModelFactory()
     {
         return ServiceLocator::get('chameleon_system_core.database_migration.processed_factory');
+    }
+
+    private function getViewRenderer(): ViewRenderer
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }
