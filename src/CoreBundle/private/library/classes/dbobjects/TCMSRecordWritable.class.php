@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
+use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -356,17 +357,19 @@ class TCMSRecordWritable extends TCMSRecord
             $oEditor->Init($oTableConf->id, null);
             $oEditor->AllowDeleteByAll(true);
 
-            $bCurrentCacheSetting = TCacheManager::IsCachingEnabled();
+            $bCurrentCacheSetting = $this->getCache()->isActive();
             if ($bCurrentCacheSetting) {
                 $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->table);
                 if (class_exists($sClassName) && method_exists($sClassName, 'isFrontendAutoCacheClearEnabled')) {
                     if (false === $sClassName::isFrontendAutoCacheClearEnabled()) {
-                        TCacheManager::SetDisableCaching(true);
+                        $this->getCache()->disable();
                     }
                 }
             }
             $oEditor->Delete($this->id);
-            TCacheManager::SetDisableCaching($bCurrentCacheSetting);
+            if (true === $bCurrentCacheSetting) {
+                $this->getCache()->enable();
+            }
             $oEditor->AllowDeleteByAll(false);
             $this->id = null;
             $this->sqlData = false;
@@ -607,7 +610,7 @@ class TCMSRecordWritable extends TCMSRecord
             $query .= implode(', ', $aQItems);
             MySqlLegacySupport::getInstance()->query($query);
 
-            TCacheManager::PerformeTableChange($this->table.'_'.$sFieldName);
+            $this->getCache()->callTrigger($this->table.'_'.$sFieldName);
             $this->UpdateCacheTrigger($this->id);
         }
     }
@@ -911,7 +914,7 @@ class TCMSRecordWritable extends TCMSRecord
             return false;
         }
 
-        TCacheManager::PerformeTableChange($this->table, $sRecordId);
+        $this->getCache()->callTrigger($this->table, $sRecordId);
 
         if (false === $this->GetChangeTriggerCacheChangeOnParentTable()) {
             return false;
@@ -925,11 +928,11 @@ class TCMSRecordWritable extends TCMSRecord
             $sConnectedTable = $oParentFieldObject->GetConnectedTableName();
             if (array_key_exists($oParentField->sqlData['name'], $aOldData)) {
                 if (!empty($aOldData[$oParentField->sqlData['name']])) {
-                    TCacheManager::PerformeTableChange($sConnectedTable, $aOldData[$oParentField->sqlData['name']]);
+                    $this->getCache()->callTrigger($sConnectedTable, $aOldData[$oParentField->sqlData['name']]);
                 }
             }
             if (!empty($this->sqlData[$oParentField->sqlData['name']])) {
-                TCacheManager::PerformeTableChange($sConnectedTable, $this->sqlData[$oParentField->sqlData['name']]);
+                $this->getCache()->callTrigger($sConnectedTable, $this->sqlData[$oParentField->sqlData['name']]);
             }
         }
     }
@@ -971,5 +974,10 @@ class TCMSRecordWritable extends TCMSRecord
     private function getSecurityLogger(): LoggerInterface
     {
         return ServiceLocator::get('monolog.logger.security');
+    }
+
+    private function getCache(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }
