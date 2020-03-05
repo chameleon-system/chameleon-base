@@ -914,7 +914,9 @@ class TCMSRecordWritable extends TCMSRecord
             return false;
         }
 
-        $this->getCache()->callTrigger($this->table, $sRecordId);
+        $cache = $this->getCache();
+
+        $cache->callTrigger($this->table, $sRecordId);
 
         if (false === $this->GetChangeTriggerCacheChangeOnParentTable()) {
             return false;
@@ -928,11 +930,11 @@ class TCMSRecordWritable extends TCMSRecord
             $sConnectedTable = $oParentFieldObject->GetConnectedTableName();
             if (array_key_exists($oParentField->sqlData['name'], $aOldData)) {
                 if (!empty($aOldData[$oParentField->sqlData['name']])) {
-                    $this->getCache()->callTrigger($sConnectedTable, $aOldData[$oParentField->sqlData['name']]);
+                    $cache->callTrigger($sConnectedTable, $aOldData[$oParentField->sqlData['name']]);
                 }
             }
             if (!empty($this->sqlData[$oParentField->sqlData['name']])) {
-                $this->getCache()->callTrigger($sConnectedTable, $this->sqlData[$oParentField->sqlData['name']]);
+                $cache->callTrigger($sConnectedTable, $this->sqlData[$oParentField->sqlData['name']]);
             }
         }
     }
