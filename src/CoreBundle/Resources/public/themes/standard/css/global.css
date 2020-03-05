@@ -42,6 +42,14 @@ body.app {
     flex: 1;
 }
 
+#cmscontainer .main .content .card {
+    margin-top: 30px;
+}
+
+[data-table-function-bar] + .card {
+    margin-top: 0 !important;
+}
+
 @media (max-width: 991px) {
     #cmscontainer .main .container-fluid {
         padding: 10px;
@@ -53,6 +61,10 @@ body.app {
 
     #cmscontainer .main .content .card {
         margin-bottom: 0;
+    }
+
+    #cmscontainer .main .content .card {
+        margin-top: 10px;
     }
 }
 
@@ -326,6 +338,14 @@ legend {
 
 .sidebar .nav-dropdown-items .nav-link {
     color: #000000 !important;
+}
+
+.sidebar .nav-item.selected-entry {
+    background-color: #20a8d8;
+}
+
+.sidebar .nav-item.selected-entry i {
+    color: #000000;
 }
 
 .sidebar .nav-item:focus {

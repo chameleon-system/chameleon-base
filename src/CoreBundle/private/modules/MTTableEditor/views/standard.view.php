@@ -3,7 +3,6 @@ require_once __DIR__.'/includes/sharedJS.inc.php';
 require_once __DIR__.'/includes/rightClickMenu.inc.php';
 require __DIR__.'/includes/menuItems.inc.php';
 ?>
-</div>
 <div class="card card-accent-primary mb-0" id="tableEditorContainer">
     <div class="card-header p-1">
         <?php
