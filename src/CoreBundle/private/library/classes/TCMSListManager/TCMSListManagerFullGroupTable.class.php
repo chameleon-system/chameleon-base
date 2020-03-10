@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\Field\Provider\ClassFromTableFieldProviderInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 
 require_once PATH_LIBRARY.'/classes/TCMSListManager/tcms_functionblock_callback.fun.php';
@@ -42,14 +43,12 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     {
         parent::Init($oTableConf);
 
-        $oGlobal = TGlobal::instance();
         $this->tableObj = null;
         $this->columnCount = 0;
         $_SESSION['_tmpCurrentTableName'] = $this->oTableConf->sqlData['name']; // needed for the callback functions...
         $_SESSION['_tmpCurrentTableID'] = $this->oTableConf->sqlData['id']; // needed for the callback functions...
 
-        $listName = $oGlobal->GetUserData('_listName');
-        $objectChangeRequest = (isset($listName) && $listName == 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident']);
+        $isTableCacheChangeRequest = $this->isTableCacheChangeRequest();
 
         $oOldTableObj = null;
         $sListCacheKey = $this->GetListCacheKey();
@@ -79,6 +78,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $this->AddSortInformation();
             $this->AddTableGrouping();
         } else { // table is in cache, load it from there and inject current post parameters
+            $oGlobal = TGlobal::instance();
             $postData = $oGlobal->GetUserData();
             $this->tableObj = $oOldTableObj;
             $this->tableObj->_postData = array_merge($this->tableObj->_postData, $postData); // overwrite anything that is passed via get or post
@@ -99,11 +99,28 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $this->PostCreateTableObjectHook();
         }
 
-        if (($objectChangeRequest || is_null($oOldTableObj)) && $this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE) {
+        if (($isTableCacheChangeRequest || is_null($oOldTableObj)) && $this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE) {
             $tmp = serialize($this->tableObj);
             $tmp = gzcompress($tmp, 9);
             $_SESSION['_listObjCache'][$sListCacheKey] = base64_encode($tmp);
         }
+    }
+
+    private function isTableCacheChangeRequest(): bool
+    {
+        $inputFilter = $this->getInputFilterUtil();
+
+        if (null !== $inputFilter->getFilteredInput('_fnc')) {
+            return false;
+        }
+
+        $listName = $inputFilter->getFilteredInput('_listName');
+
+        if (null === $listName) {
+            return false;
+        }
+
+        return $listName === 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
     }
 
     protected function isRecordEditPossible(): bool
@@ -867,5 +884,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     private function getClassFromTableFieldProvider()
     {
         return ServiceLocator::get('chameleon_system_core.field.provider.class_from_table_field');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }
