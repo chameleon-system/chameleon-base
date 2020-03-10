@@ -1,13 +1,14 @@
 <div id="exceptionContainer-{{ bundleName }}-{{ buildNumber }}" class="card card-accent-danger">
     <div class="card-header">
-        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-                aria-expanded="false" aria-controls="collapseOne">
+        <button class="btn btn-danger collapsed" type="button" data-toggle="collapse"
+                data-target="#errorList-{{ bundleName }}-{{ buildNumber }}" aria-expanded="false"
+                aria-controls="errorList-{{ bundleName }}-{{ buildNumber }}">
             <i class="fas fa-plus-square"></i> {{ 'chameleon_system_core.cms_module_update.error_messages'|trans }}
         </button>
         <span class="badge badge-pill badge-danger float-right">{{ messages|length }}</span>
     </div>
     <div class="card-body p-0">
-        <ul class="queryList list-group" id="queryList-{{ bundleName }}-{{ buildNumber }}">
+        <ul class="queryList list-group collapse" id="errorList-{{ bundleName }}-{{ buildNumber }}">
             {% for message in messages %}
                 <li class="list-group-item"><a id="exception-{{ bundleName }}-{{ buildNumber }}-{{ loop.index0 }}"></a>
                     {{ 'chameleon_system_core.cms_module_update.error_message'|trans }}
