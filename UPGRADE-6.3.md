@@ -546,6 +546,21 @@ If you have no custom icons the new icons should fit without any changes.
 A twig template which renders the download link can now be overridden: "/common/download/download.html.twig" (backend
 and frontend).
 
+### CDN - Content Delivery Network
+
+If your project uses a CDN for assets the backend will make use of this for the icon font. However security restrictions in many browsers prevent loading fonts from third party domains, even your subdomains, so you need to add the an "Access-Control-Allow-Origin" header to font file types. For Apache web servers this looks like this:
+
+```apacheconf
+<IfModule mod_headers.c>
+  <FilesMatch "\.(ttf|ttc|otf|eot|woff|woff2)$">
+    Header set Access-Control-Allow-Origin *
+  </FilesMatch>
+</IfModule>
+```  
+
+Please note, that you should add your hostname instead of * here (works only if you call the backend with only one 
+hostname, otherwise * is necessary)
+
 # Optional
 
 The steps in this section are not strictly required but are recommended to make use of new features.
@@ -887,4 +902,3 @@ that are deprecated because they are outdated and replaced by frontend themes or
 - CMSModulePageTreePlain.pagedef.php
 - treenodeselect.pagedef.php
 - treenodeselectWYSIWYG.pagedef.php
-
