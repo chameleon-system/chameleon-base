@@ -107,7 +107,7 @@ CHAMELEON.UPDATE_MANAGER = {
     addUpdateSuccessQueries: function (currentUpdate, successQueries, renderedSuccessQueriesUpdate)
     {
         var self = this;
-        this._getMessageContainerForUpdate(currentUpdate).find('.runFilesInfo').html(renderedSuccessQueriesUpdate);
+        this._getMessageContainerForUpdate(currentUpdate).find('.runFilesInfo').append(renderedSuccessQueriesUpdate);
     },
     addUpdateErrors: function (currentUpdate, errorQueries, renderedErrorQueriesGlobal, renderedErrorQueriesUpdate)
     {
@@ -115,7 +115,8 @@ CHAMELEON.UPDATE_MANAGER = {
             $globalErrorCountContainer = $('#count-errors');
 
         $globalErrorListContainer.append(renderedErrorQueriesGlobal);
-        this._getMessageContainerForUpdate(currentUpdate).find('.runFilesInfo').html(renderedErrorQueriesUpdate);
+
+        this._getMessageContainerForUpdate(currentUpdate).find('.runFilesInfo').append(renderedErrorQueriesUpdate);
 
         $globalErrorCountContainer.text(parseInt($globalErrorCountContainer.text()) + errorQueries.length);
         $('#updateErrorContainer').removeClass('d-none');
@@ -126,7 +127,7 @@ CHAMELEON.UPDATE_MANAGER = {
             $globalInfoCountContainer = $('#count-info');
 
         $globalInfoListContainer.append(renderedMessagesGlobal);
-        this._getMessageContainerForUpdate(currentUpdate).find('.runFilesInfo').html(renderedMessagesUpdate);
+        this._getMessageContainerForUpdate(currentUpdate).find('.runFilesInfo').append(renderedMessagesUpdate);
 
         $globalInfoCountContainer.text(parseInt($globalInfoCountContainer.text()) + messages.length);
         $('#updateInfoContainer').removeClass('d-none');
