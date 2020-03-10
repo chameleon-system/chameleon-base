@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgCmsCache\CacheInterface;
 
 ini_set('unserialize_callback_func', 'ClearCacheOnFailedLoad');
@@ -30,7 +31,6 @@ class TCacheManager implements ICacheManager
      * @var ICacheManagerStorage
      */
     private $oCacheStorage = null;
-    private static $bDisableCaching = false;
 
     /**
      * @static
@@ -72,12 +72,16 @@ class TCacheManager implements ICacheManager
      */
     public static function SetDisableCaching($bDisableCaching)
     {
-        self::$bDisableCaching = $bDisableCaching;
+        if (true === $bDisableCaching) {
+            self::getCache()->disable();
+        } else {
+            self::getCache()->enable();
+        }
     }
 
     public static function IsCachingEnabled()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_core.cache.allow') && false == self::$bDisableCaching;
+        return self::getCache()->isActive();
     }
 
     /**
@@ -266,6 +270,6 @@ class TCacheManager implements ICacheManager
      */
     private static function getCache()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }

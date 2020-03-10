@@ -89,36 +89,8 @@ class CMSUpdateManager extends TModelBase
         $bundleName = $oGlobal->GetUserData('bundleName');
 
         $oUpdateManager = &TCMSUpdateManager::GetInstance();
-        $result = $oUpdateManager->runSingleUpdate($fileName, $bundleName);
 
-        $viewRenderer = $this->getViewRenderer();
-        $viewRenderer->AddSourceObject('bundleName', $bundleName);
-        $viewRenderer->AddSourceObject('buildNumber', $oUpdateManager->GetBuildNumberFromFileName($fileName));
-
-        if (count($result->getExceptions()) > 0) {
-            $viewRenderer->AddSourceObject('messages', $result->getExceptions());
-            $result->setRenderedExceptionsGlobal($viewRenderer->Render('CMSUpdateManager/exceptionGlobal.html.twig'));
-            $result->setRenderedExceptionsUpdate($viewRenderer->Render('CMSUpdateManager/exceptionUpdate.html.twig'));
-        }
-
-        if (count($result->getErrorQueries()) > 0) {
-            $viewRenderer->AddSourceObject('messages', $result->getErrorQueries());
-            $result->setRenderedErrorQueriesGlobal($viewRenderer->Render('CMSUpdateManager/errorQueriesGlobal.html.twig'));
-            $result->setRenderedErrorQueriesUpdate($viewRenderer->Render('CMSUpdateManager/errorQueriesUpdate.html.twig'));
-        }
-
-        if (count($result->getInfoMessages()) > 0) {
-            $viewRenderer->AddSourceObject('messages', $result->getInfoMessages());
-            $result->setRenderedInfoMessagesGlobal($viewRenderer->Render('CMSUpdateManager/infoGlobal.html.twig'));
-            $result->setRenderedInfoMessagesUpdate($viewRenderer->Render('CMSUpdateManager/infoUpdate.html.twig'));
-        }
-
-        if (count($result->getSuccessQueries()) > 0) {
-            $viewRenderer->AddSourceObject('messages', $result->getSuccessQueries());
-            $result->setRenderedSuccessQueriesUpdate($viewRenderer->Render('CMSUpdateManager/successQueriesUpdate.html.twig'));
-        }
-
-        return $result;
+        return $oUpdateManager->runSingleUpdate($fileName, $bundleName);
     }
 
     /*

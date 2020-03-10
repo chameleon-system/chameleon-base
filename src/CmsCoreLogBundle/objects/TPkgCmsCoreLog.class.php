@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface in conjunction with Monolog logging instead
@@ -196,6 +197,7 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
         if (false === $this->logMetaData) {
             return $context;
         }
+        /** @var Request $request */
         $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         if (null === $request) {
             return $context;
@@ -217,12 +219,12 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
             'requestURL' => '',
             'referrerURL' => '',
             'httpMethod' => $request->getMethod(),
-            'server' => $request->server->get('SERVER_NAME', null),
+            'server' => $request->server->get('SERVER_NAME', ''),
         );
 
-        $aRequestDetails['ip'] = $request->getClientIp();
+        $aRequestDetails['ip'] = $request->getClientIp() ?? '';
 
-        $aRequestDetails['referrerURL'] = $request->server->get('HTTP_REFERER', null);
+        $aRequestDetails['referrerURL'] = $request->server->get('HTTP_REFERER', '');
 
         if ($this->isFrontendRequest()) {
             $frontendUserDetails = $this->getFrontendUserDetails();
@@ -261,8 +263,8 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
         }
 
         return array(
-            'data_extranet_user_name' => $oUser->fieldName,
-            'data_extranet_user_id' => $oUser->id,
+            'data_extranet_user_name' => $oUser->fieldName ?? '',
+            'data_extranet_user_id' => $oUser->id ?? '',
         );
     }
 

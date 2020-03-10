@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\DeleteMediaEvent;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use esono\pkgCmsCache\CacheInterface;
 
 class TCMSTableEditorMedia extends TCMSTableEditorFiles
 {
@@ -507,5 +509,10 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
          *   dispatch. The caller of this method implies it should only be dispatched on significant changes, but in
          *   reality it is called on every save. This should be investigated first.
          */
+    }
+
+    private function getCache(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }
