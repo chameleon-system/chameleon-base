@@ -548,11 +548,7 @@ and frontend).
 
 ### CDN - Content Delivery Network
 
-If your project uses a CDN for assets, the backend assets will make use of this.
-On one hand this makes the asset loading faster, on the other hand, you need a little tweak.
-The backend will load the icon font via the CDN host, too. Security restrictions in many browsers prevent loading
-fonts from third party domains, even subdomains, so you need to add the an "Access-Control-Allow-Origin" header to
-font file types. For Apache web servers this looks like this:
+If your project uses a CDN for assets the backend will make use of this for the icon font. However security restrictions in many browsers prevent loading fonts from third party domains, even your subdomains, so you need to add the an "Access-Control-Allow-Origin" header to font file types. For Apache web servers this looks like this:
 
 ```apacheconf
 <IfModule mod_headers.c>
@@ -906,4 +902,3 @@ that are deprecated because they are outdated and replaced by frontend themes or
 - CMSModulePageTreePlain.pagedef.php
 - treenodeselect.pagedef.php
 - treenodeselectWYSIWYG.pagedef.php
-
