@@ -777,15 +777,16 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
         });
     });
 
-    // workaround for tempusdominus bug: https://github.com/tempusdominus/bootstrap-4/issues/123
-    $('*[data-toggle="datetimepicker"]').removeClass('datetimepicker-input');
-
-    $(document).on('toggle change hide keydown keyup', '*[data-toggle="datetimepicker"]', function() {
-        $(this).addClass('datetimepicker-input');
-    });
-
     $('[data-datetimepicker-option]').each(function () {
-        $(this).datetimepicker($(this).data('datetimepicker-option'));
+        var options = $(this).data('datetimepicker-option');
+
+        if (true === options.hasOwnProperty("defaultDate")) {
+            // Workaround for https://github.com/tempusdominus/bootstrap-4/issues/39 on browser back: avoid parsing
+
+            options["date"] = moment(options["defaultDate"]);
+        }
+
+        $(this).datetimepicker(options);
     });
 };
 
