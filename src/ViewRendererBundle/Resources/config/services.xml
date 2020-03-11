@@ -15,7 +15,7 @@
 
     <services>
         <service id="chameleon_system_view_renderer.controller.generate_css_controller"
-                 class="ChameleonSystem\ViewRendererBundle\Controller\GenerateCssController">
+                 class="ChameleonSystem\ViewRendererBundle\Controller\GenerateCssController" public="true">
             <argument type="service" id="chameleon_system_view_renderer.less_compiler"/>
             <argument>%chameleon_system_core.cache.cache_less_files%</argument>
         </service>
