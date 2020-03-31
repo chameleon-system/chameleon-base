@@ -99,7 +99,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $this->PostCreateTableObjectHook();
         }
 
-        if (($isTableCacheChangeRequest || is_null($oOldTableObj)) && $this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE) {
+        if (($isTableCacheChangeRequest && null === $oOldTableObj) && $this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE) {
             $tmp = serialize($this->tableObj);
             $tmp = gzcompress($tmp, 9);
             $_SESSION['_listObjCache'][$sListCacheKey] = base64_encode($tmp);
