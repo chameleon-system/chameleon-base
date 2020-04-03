@@ -1,4 +1,7 @@
 <?php
+
+// TODO deprecate / remove?
+
 if (isset($data['oUser'])) {
     $sMainMenuText = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_main_menu')); ?>
     <div id="cmsbreadcrumb">

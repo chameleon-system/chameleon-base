@@ -1,0 +1,18 @@
+{# @var items \ChameleonSystem\CoreBundle\DataModel\BackendBreadcrumbItem[] #}
+
+<div id="cmsbreadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <i class="fas fa-home"></i>&nbsp;&nbsp;
+            <a href="{{ pathCmsRoot | e('html_attr') }}">{{ 'chameleon_system_core.cms_module_header.action_main_menu' | trans }}</a>
+        </li>
+
+        {% for item in items %}
+            <li class="breadcrumb-item">
+                {% if item.url != '' %}<a href="{{ item.url | e('html_attr') }}">{% endif %}
+                    {{ item.name }}
+                {% if item.url != '' %}</a>{% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+</div>

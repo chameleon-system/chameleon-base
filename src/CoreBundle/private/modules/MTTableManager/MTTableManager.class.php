@@ -298,7 +298,7 @@ class MTTableManager extends TCMSModelBase
         );
 
         if ('true' === $inputFilterUtil->getFilteredInput('bOnlyOneRecord')) {
-            $parameters['bOnlyOneRecord'] = 'true';
+
         }
 
         if ($this->global->UserDataExists('sTableEditorPagdef')) {

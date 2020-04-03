@@ -19,8 +19,9 @@ function addDefaultHeader(array &$moduleList): void
 function addDefaultBreadcrumb(array &$moduleList): void
 {
     $moduleList['breadcrumb'] = [
-        'model' => 'MTHeader',
-        'view' => 'breadcrumb',
+        'model' => 'chameleon_system_core.module.breadcrumb_backend',
+        'moduleType' => '@ChameleonSystemCoreBundle',
+        'view' => 'standard',
     ];
 }
 
