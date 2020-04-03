@@ -5,8 +5,6 @@
 </div>
 <?php
 
-$fieldTypeId = TCMSLogChange::createUnusedRecordId('cms_field_type');
-
 $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'en')
     ->setFields([
         '049_trans' => 'Sidebar menu entry lookup',
@@ -22,7 +20,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'en')
         'indextype' => 'none',
         'class_subtype' => '',
         'class_type' => 'Core',
-        'id' => $fieldTypeId,
+        'id' => 'c15bdac0-e953-68f2-0294-e8a60345a698',
     ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
@@ -32,37 +30,35 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'de')
         '049_trans' => 'Menü-Eintrag Lookup',
     ])
     ->setWhereEquals([
-        'id' => $fieldTypeId,
+        'id' => 'c15bdac0-e953-68f2-0294-e8a60345a698',
     ])
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-$fieldConfId = TCMSLogChange::createUnusedRecordId('cms_field_conf');
-
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
-  ->setFields([
-      'name' => 'shown_in_menu_as',
-      'translation' => 'Found in the menu as',
-      'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_SIDEBAR_LOOKUP'),
-      'cms_tbl_field_tab' => '',
-      'isrequired' => '0',
-      'fieldclass' => 'ChameleonSystem\CoreBundle\Field\FieldSidebarConnected',
-      'modifier' => 'readonly',
-      'field_default_value' => '',
-      'length_set' => '',
-      'fieldtype_config' => '',
-      'restrict_to_groups' => '0',
-      'field_width' => '0',
-      'position' => '2182',
-      '049_helptext' => 'Shows the first location if any where this table is accessible in the sidebar menu.',
-      'row_hexcolor' => '',
-      'is_translatable' => '0',
-      'validation_regex' => '',
-      'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_tbl_conf'),
-      'fieldclass_subtype' => '',
-      'class_type' => 'Core',
-      'id' => $fieldConfId,
-  ])
+->setFields([
+    'name' => 'shown_in_menu_as',
+    'translation' => 'Found in the menu as',
+    'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_SIDEBAR_LOOKUP'),
+    'cms_tbl_field_tab' => '',
+    'isrequired' => '0',
+    'fieldclass' => 'ChameleonSystem\CoreBundle\Field\FieldSidebarConnected',
+    'modifier' => 'readonly',
+    'field_default_value' => '',
+    'length_set' => '',
+    'fieldtype_config' => '',
+    'restrict_to_groups' => '0',
+    'field_width' => '0',
+    'position' => '2182',
+    '049_helptext' => 'Shows the first location if any where this table is accessible in the sidebar menu.',
+    'row_hexcolor' => '',
+    'is_translatable' => '0',
+    'validation_regex' => '',
+    'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_tbl_conf'),
+    'fieldclass_subtype' => '',
+    'class_type' => 'Core',
+    'id' => 'de07ce14-0168-f459-1ffe-f345eef640fa',
+])
 ;
 TCMSLogChange::insert(__LINE__, $data);
 
@@ -74,7 +70,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
         '049_helptext' => 'Zeigt den ersten Eintrag, falls vorhanden, unter dem diese Tabelle im Seitenmenü angezeigt wird.',
     ])
     ->setWhereEquals([
-        'id' => $fieldConfId,
+        'id' => 'de07ce14-0168-f459-1ffe-f345eef640fa',
     ])
 ;
 TCMSLogChange::update(__LINE__, $data);
