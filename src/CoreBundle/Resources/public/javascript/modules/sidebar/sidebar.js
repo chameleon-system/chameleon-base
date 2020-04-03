@@ -215,9 +215,17 @@
             }
             // Else dropdown.js will react on the click
 
+            var openArray = this.$baseElement.data('active-categories').split(",");
+
             if (!categoryOpen) {
                 $category.focus();
+
+                openArray.push(categoryId);
+            } else {
+                openArray = openArray.filter(function(value, index, arr) { return value !== categoryId });
             }
+
+            this.$baseElement.data('active-categories', openArray.join(","));
 
             const url = this.$baseElement.data('toggle-category-notification-url');
             $.post(url, {
