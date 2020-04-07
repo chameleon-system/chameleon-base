@@ -14,13 +14,11 @@ if (false === $editorRoleId || false === $navigationEditRightId) {
     return;
 }
 
-$result = $connection->executeQuery(
-        "DELETE FROM `cms_role_cms_right_mlt` WHERE `source_id` = :editorRoleId AND `target_id` = :navigationEditRightId",
-        [
-            'editorRoleId' => $editorRoleId,
-            'navigationEditRightId' => $navigationEditRightId
-        ]);
+$affectedRows = $connection->delete('cms_role_cms_right_mlt', [
+    'source_id' => $editorRoleId,
+    'target_id' => $navigationEditRightId
+]);
 
-if ($result->columnCount() > 0) {
+if ($affectedRows > 0) {
     TCMSLogChange::addInfoMessage("Backend user right 'navigation_edit' was removed from role 'editor'.", TCMSLogChange::INFO_MESSAGE_LEVEL_WARNING);
 }
