@@ -245,6 +245,15 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         $this->moduleLoader->LoadModules($pagedefData['moduleList']);
 
+        if (false === $this->checkModuleAccess()) {
+
+            // TODO this is what others (ie MTTableEditor are doing:
+            //\TCMSUser::Logout();
+            //$this->redirect->redirect(PATH_CMS_CONTROLLER);
+
+            return new Response('Forbidden', Response::HTTP_FORBIDDEN);
+        }
+
         foreach ($this->moduleLoader->modules as $sSpotName => $module) {
             $this->moduleLoader->modules[$sSpotName]->InjectVirtualModuleSpots($this->moduleLoader);
         }
@@ -305,6 +314,50 @@ abstract class ChameleonController implements ChameleonControllerInterface
             'moduleList' => $pagedefData->getModuleList(),
             'sLayoutFile' => $pagedefData->getLayoutFile(),
         ];
+    }
+
+    private function checkModuleAccess(): bool
+    {
+        $activeUser = \TCMSUser::GetActiveUser();
+        if (null === $activeUser) {
+            // TODO this is a sensible default?
+
+            return true;
+        }
+
+        $allowed = true;
+
+        foreach ($this->moduleLoader->modules as $module) {
+            $allowedGroups = $this->getModuleGroups($module);
+
+            if (\count($allowedGroups) > 0) {
+                if (false === $activeUser->oAccessManager->user->IsInGroups($allowedGroups)) {
+                    $allowed = false;
+                    break;
+                }
+            }
+        }
+
+        return $allowed;
+    }
+
+    private function getModuleGroups(TModelBase $modelBase): array
+    {
+        $moduleModel = $modelBase->aModuleConfig['model'] ?? null;
+
+        if (null === $moduleModel || '' === $moduleModel) {
+            return [];
+        }
+
+        // TODO compare \TModuleLoader::CreateModuleInstance() for module loading (should reuse the data there)?
+
+        $tdbModule = \TdbCmsTplModule::GetNewInstance();
+
+        if (false === $tdbModule->LoadFromField('classname', $moduleModel)) {
+            return [];
+        }
+
+        return $tdbModule->GetFieldCmsUsergroupIdList();
     }
 
     /**
