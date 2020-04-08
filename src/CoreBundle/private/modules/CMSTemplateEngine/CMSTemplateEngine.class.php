@@ -553,6 +553,8 @@ class CMSTemplateEngine extends TCMSModelBase
       </script>";
         }
 
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
+
         return $aIncludes;
     }
 
@@ -562,7 +564,6 @@ class CMSTemplateEngine extends TCMSModelBase
     public function GetHtmlFooterIncludes()
     {
         $aIncludes = parent::GetHtmlFooterIncludes();
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
 
         if ('cmp_loadmoduleinstance' == $this->aModuleConfig['view']) {
             $aChooseModuleViewDialog = $this->getChooseModuleViewDialog();

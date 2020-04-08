@@ -391,31 +391,12 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
             );
         }
 
-        return $includes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function GetHtmlFooterIncludes()
-    {
-        $includes = parent::GetHtmlFooterIncludes();
-        $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemcore/javascript/jsTree/3.3.8/jstree.js'
-            ).'"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemmediamanager/lib/xselectable/xselectable.js'
-            ).'"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemmediamanager/lib/Split.js/split.js'
-            ).'"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemmediamanager/lib/Jeditable/jquery.jeditable.js'
-            ).'"></script>';
+        $includes[] = '<script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/jsTree/3.3.8/jstree.js').'"></script>';
+        $includes[] = '<script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/xselectable/xselectable.js').'"></script>';
+        $includes[] = '<script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/Split.js/split.js').'"></script>';
+        $includes[] = '<script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/lib/Jeditable/jquery.jeditable.js').'"></script>';
         $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemmediamanager/js/mediaManager.js'
-            ).'"></script>';
+        $includes[] = '<script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/js/mediaManager.js').'"></script>';
 
         return $includes;
     }

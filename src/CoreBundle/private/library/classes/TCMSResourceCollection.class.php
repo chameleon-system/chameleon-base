@@ -74,7 +74,6 @@ class TCMSResourceCollection implements ResourceCollectorInterface
             $bAllowResourceCollection = true;
             $oGlobal = TGlobal::instance();
             $bIsModuleChooser = $oGlobal->GetUserData('__modulechooser');
-            $bAllowResourceCollection = ($bAllowResourceCollection && !TGlobal::IsCMSMode()); // not in cms backend
             if ($bAllowResourceCollection) {
                 $bIsTemplateEngine = (TCMSUser::CMSUserDefined() && 'true' == $bIsModuleChooser);
                 $bAllowResourceCollection = ($bAllowResourceCollection && !$bIsTemplateEngine); // not in cms template engine
@@ -166,7 +165,8 @@ class TCMSResourceCollection implements ResourceCollectorInterface
 
     private function getFilesRefreshAndDomainPrefix(): string
     {
-        $filesPrefix = ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix');
+        $filesPrefix = true === TGlobal::IsCMSMode() ? 'backend_' : '';
+        $filesPrefix .= ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix');
 
         $portal = $this->portalDomainService->getActivePortal();
 
