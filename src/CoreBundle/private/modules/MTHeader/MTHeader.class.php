@@ -715,6 +715,9 @@ class MTHeader extends TCMSModelBase
         $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fontawesome-free-5.8.1/css/all.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/bootstrap/css/glyph-icons.css?v4.1').'" media="screen" rel="stylesheet" type="text/css" />';
         $includes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fileIconVectors/file-icon-square-o.css').'" media="screen" rel="stylesheet" type="text/css" />';
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->';
+        $includes[] = '<link href="/chameleon/blackbox/iconFonts/foundation/foundation-icons.css" media="screen" rel="stylesheet" type="text/css" />';
+        $includes[] = '<link href="/chameleon/blackbox/iconFonts/ionicons/ionicons.css" media="screen" rel="stylesheet" type="text/css" />';
 
         return $includes;
     }
@@ -729,10 +732,6 @@ class MTHeader extends TCMSModelBase
         if (false === TGlobal::CMSUserDefined()) {
             return $includes;
         }
-
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
-        $includes[] = '<link href="/chameleon/blackbox/iconFonts/foundation/foundation-icons.css" media="screen" rel="stylesheet" type="text/css" />';
-        $includes[] = '<link href="/chameleon/blackbox/iconFonts/ionicons/ionicons.css" media="screen" rel="stylesheet" type="text/css" />';
 
         $sessionTimeout = @ini_get('session.gc_maxlifetime');
         if (!empty($sessionTimeout)) {
