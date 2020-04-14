@@ -316,8 +316,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     {
         $activeUser = \TCMSUser::GetActiveUser();
         if (null === $activeUser) {
-            // TODO this is a sensible default? Why is this necessary?
-            // TODO especially edge cases: cronjobs, module_fnc, 404,?
+            // For a number of edge cases: cronjobs, 404, ...
 
             return true;
         }
