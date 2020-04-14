@@ -197,10 +197,8 @@ class TModelBase
     /**
      * @return bool - false if access is forbidden
      */
-    public function checkAccessRightsLegacy(): bool
+    public function checkAccessRightsOnTable(): bool
     {
-        // TODO "Legacy"
-
         return true;
     }
 

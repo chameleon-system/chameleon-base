@@ -204,9 +204,9 @@ class MTTableEditor extends TCMSModelBase
     /**
      * {@inheritDoc}
      */
-    public function checkAccessRightsLegacy(): bool
+    public function checkAccessRightsOnTable(): bool
     {
-        $parentAccess = parent::checkAccessRightsLegacy();
+        $parentAccess = parent::checkAccessRightsOnTable();
 
         if (false === $parentAccess) {
             return false;
@@ -215,6 +215,9 @@ class MTTableEditor extends TCMSModelBase
         if (null === $this->oTableManager || null === $this->oTableManager->oTableEditor) {
             return true;
         }
+
+        // TODO move to service? Use the same (service) for MTTableManager?
+        // TODO unify with ModuleAccessCheckService::checkAccess?
 
         $bUserHasReadOnlyRight = $this->oTableManager->oTableEditor->AllowReadOnly();
         $bIsReadOnlyRequest = $this->IsReadOnlyRequest();

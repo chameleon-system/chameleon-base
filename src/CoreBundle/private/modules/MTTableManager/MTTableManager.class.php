@@ -72,9 +72,9 @@ class MTTableManager extends TCMSModelBase
     /**
      * {@inheritDoc}
      */
-    public function checkAccessRightsLegacy(): bool
+    public function checkAccessRightsOnTable(): bool
     {
-        $parentAccess = parent::checkAccessRightsLegacy();
+        $parentAccess = parent::checkAccessRightsOnTable();
 
         if (false === $parentAccess) {
             return false;

@@ -15,7 +15,7 @@ class ModuleAccessCheckService implements ModuleAccessCheckServiceInterface
 {
     public function checkAccess(\TdbCmsUser $user, \TModelBase $module): bool
     {
-        if (false === $module->checkAccessRightsLegacy()) {
+        if (false === $module->checkAccessRightsOnTable()) {
             return false;
         }
 
