@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
 use ChameleonSystem\CoreBundle\Event\ChangeNavigationTreeNodeEvent;
 use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperFactoryInterface;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface;
@@ -22,7 +23,6 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Doctrine\DBAL\Connection;
-use esono\pkgCmsCache\CacheInterface;
 use MTPkgViewRendererAbstractModuleMapper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -37,13 +37,6 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      * @var string
      */
     private $treeTable = 'cms_tree';
-
-    /**
-     * The mysql tablename of the tree-node.
-     *
-     * @var string
-     */
-    private $treeNodeTable = 'cms_tree_node';
 
     /**
      * @var string
@@ -114,11 +107,6 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     private $nestedSetHelperFactory;
 
     /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
      * @var TTools
      */
     private $tools;
@@ -133,6 +121,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      */
     private $fieldTranslationUtil;
 
+    /**
+     * @var \TdbCmsLanguage
+     */
+    private $editLanguage;
+
     public function __construct(
         Connection $dbConnection,
         EventDispatcherInterface $eventDispatcher,
@@ -142,11 +135,13 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         TranslatorInterface $translator,
         UrlUtil $urlUtil,
         NestedSetHelperFactoryInterface $nestedSetHelperFactory,
-        CacheInterface $cache,
         TTools $tools,
         TGlobal $global,
-        FieldTranslationUtil $fieldTranslationUtil
+        FieldTranslationUtil $fieldTranslationUtil,
+        LanguageServiceInterface $languageService
     ) {
+        parent::__construct();
+
         $this->dbConnection = $dbConnection;
         $this->eventDispatcher = $eventDispatcher;
         $this->inputFilterUtil = $inputFilterUtil;
@@ -155,10 +150,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $this->translator = $translator;
         $this->urlUtil = $urlUtil;
         $this->nestedSetHelperFactory = $nestedSetHelperFactory;
-        $this->cache = $cache;
         $this->tools = $tools;
         $this->global = $global;
         $this->fieldTranslationUtil = $fieldTranslationUtil;
+
+        $this->editLanguage = $this->languageService->getActiveEditLanguage();
     }
 
     /**
@@ -535,9 +531,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $treeData = [];
 
         // menu item "Navigation" was called
-        if ('' === $this->currentPageId and $this->rootNodeId  === \TCMSTreeNode::TREE_ROOT_ID) {
+        if ('' === $this->currentPageId && $this->rootNodeId  === \TCMSTreeNode::TREE_ROOT_ID) {
             $rootTreeNode = new \TdbCmsTree();
-            $rootTreeNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+            $rootTreeNode->SetLanguage($this->editLanguage->id);
             $rootTreeNode->Load($this->rootNodeId);
 
             $rootTreeNodeDataModel = $this->backendTreeNodeFactory->createTreeNodeDataModelFromTreeRecord($rootTreeNode);
@@ -579,7 +575,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     private function getPortalTree(string $portalId, string $defaultPortalMainNodeId = ''): BackendTreeNodeDataModel
     {
         $portalTreeNode = new \TdbCmsTree();
-        $portalTreeNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        $portalTreeNode->SetLanguage($this->editLanguage->id);
         $portalTreeNode->Load($portalId);
 
         if ($portalId === $defaultPortalMainNodeId) {
@@ -607,7 +603,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         }
 
         $node = new \TdbCmsTree();
-        $node->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        $node->SetLanguage($this->editLanguage->id);
         $node->Load($startNodeId);
 
         $childrenArray = [];
@@ -633,6 +629,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         }
 
         ++$level;
+
         $children = $node->GetChildren(true);
         while ($child = $children->Next()) {
             $childTreeNodeDataModel = $this->createTreeDataModel($child, $level);
@@ -644,9 +641,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
     private function translateNodeName(string $name, \TdbCmsTree $node): string
     {
-        $cmsUser = \TCMSUser::GetActiveUser();
-        $editLanguage = $cmsUser->GetCurrentEditLanguageObject();
-        $node->SetLanguage($editLanguage->id);
+        $node->SetLanguage($this->editLanguage->id);
 
         if ('' === $name) {
             $name = $this->global->OutHTML($this->translator->trans('chameleon_system_core.text.unnamed_record'));
@@ -656,8 +651,8 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             return $name;
         }
 
-        if ($this->fieldTranslationUtil->isTranslationNeeded($editLanguage)) {
-            $nodeNameFieldName = $this->fieldTranslationUtil->getTranslatedFieldName($this->treeTable, 'name', $editLanguage);
+        if ($this->fieldTranslationUtil->isTranslationNeeded($this->editLanguage)) {
+            $nodeNameFieldName = $this->fieldTranslationUtil->getTranslatedFieldName($this->treeTable, 'name', $this->editLanguage);
 
             if ('' === $node->sqlData[$nodeNameFieldName]) {
                 $name .= ' <span class="bg-danger px-1"><i class="fas fa-language" title="' . $this->translator->trans('chameleon_system_core.cms_module_table_editor.not_translated') . '"></i></span>';
@@ -754,7 +749,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getPortalNavigationStartNodes(): array
     {
-        $portalList = \TdbCmsPortalList::GetList(null, \TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        $portalList = \TdbCmsPortalList::GetList(null, $this->editLanguage->id);
 
         $restrictedNodes = [];
         while ($portal = $portalList->Next()) {
@@ -790,7 +785,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     private function updateSubtreePathCache(string $nodeId): void
     {
         $oNode = \TdbCmsTree::GetNewInstance();
-        $oNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        $oNode->SetLanguage($this->editLanguage->id);
         $oNode->Load($nodeId);
         $oNode->TriggerUpdateOfPathCache();
     }
