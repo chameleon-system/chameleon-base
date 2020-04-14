@@ -212,12 +212,9 @@ class MTTableEditor extends TCMSModelBase
             return false;
         }
 
-        if (null === $this->oTableManager || null === $this->oTableManager->oTableEditor) {
+        if (null === $this->oTableManager->oTableEditor) {
             return true;
         }
-
-        // TODO move to service? Use the same (service) for MTTableManager?
-        // TODO unify with ModuleAccessCheckService::checkAccess?
 
         $bUserHasReadOnlyRight = $this->oTableManager->oTableEditor->AllowReadOnly();
         $bIsReadOnlyRequest = $this->IsReadOnlyRequest();
