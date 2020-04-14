@@ -154,7 +154,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $this->global = $global;
         $this->fieldTranslationUtil = $fieldTranslationUtil;
 
-        $this->editLanguage = $this->languageService->getActiveEditLanguage();
+        $this->editLanguage = $languageService->getActiveEditLanguage();
     }
 
     /**
