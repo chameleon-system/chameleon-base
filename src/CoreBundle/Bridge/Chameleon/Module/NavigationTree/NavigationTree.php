@@ -607,7 +607,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $node->Load($startNodeId);
 
         $childrenArray = [];
-        $children = $node->GetChildren(true);
+        $children = $node->GetChildren(true, $this->editLanguage->id);
         while ($child = $children->Next()) {
             $childrenArray[] = $this->createTreeDataModel($child, $level);
         }
