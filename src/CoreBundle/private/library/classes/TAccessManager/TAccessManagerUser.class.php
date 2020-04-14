@@ -135,7 +135,7 @@ class TAccessManagerUser
             // user not found... throw an error.. :)
             trigger_error('User with id ['.MySqlLegacySupport::getInstance()->real_escape_string($user_id).'] does not exist!', E_USER_WARNING);
             // and logout user
-            TCMSUser::Logout();
+            TCMSUser::Logout(); // TODO (also below) is this proper (vs normal exception)? At least log accordingly?
         }
     }
 

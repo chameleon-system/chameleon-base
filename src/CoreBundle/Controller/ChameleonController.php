@@ -245,21 +245,17 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         $this->moduleLoader->LoadModules($pagedefData['moduleList']);
 
-        if (false === $this->checkModuleAccess()) {
-
-            // TODO this is what others (ie MTTableEditor are doing:
-            //\TCMSUser::Logout();
-            //$this->redirect->redirect(PATH_CMS_CONTROLLER);
-
-            return new Response('Forbidden', Response::HTTP_FORBIDDEN);
-        }
-
         foreach ($this->moduleLoader->modules as $sSpotName => $module) {
             $this->moduleLoader->modules[$sSpotName]->InjectVirtualModuleSpots($this->moduleLoader);
         }
         reset($this->moduleLoader->modules);
 
         $this->InitializeModules();
+
+        if (false === $this->checkModuleAccess()) {
+            return new Response('You have no sufficient rights to view this page.', Response::HTTP_FORBIDDEN);
+        }
+
         $this->ExecuteModuleMethod($this->moduleLoader);
 
         $templatePath = $this->LoadLayoutTemplate($pagedefData['sLayoutFile']);
@@ -328,6 +324,12 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $allowed = true;
 
         foreach ($this->moduleLoader->modules as $module) {
+            if (false === $module->checkAccessRightsLegacy()) {
+                $allowed = false;
+                break;
+            }
+
+            // TODO move to module?? (as legacy method above)
             $allowedGroups = $this->getModuleGroups($module);
 
             if (\count($allowedGroups) > 0) {

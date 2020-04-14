@@ -67,12 +67,24 @@ class MTTableManager extends TCMSModelBase
             $this->HandleOneRecordTables();
         }
         $this->AddURLHistory();
+    }
 
-        if (false === $this->oTableList->CheckTableRights()) {
-            $oCMSUser = &TCMSUser::GetActiveUser();
-            $oCMSUser->Logout();
-            $this->getRedirectService()->redirect(PATH_CMS_CONTROLLER);
+    /**
+     * {@inheritDoc}
+     */
+    public function checkAccessRightsLegacy(): bool
+    {
+        $parentAccess = parent::checkAccessRightsLegacy();
+
+        if (false === $parentAccess) {
+            return false;
         }
+
+        if (null === $this->oTableList) {
+            return true;
+        }
+
+        return $this->oTableList->CheckTableRights();
     }
 
     public function &Execute()

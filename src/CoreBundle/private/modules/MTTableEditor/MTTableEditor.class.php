@@ -183,22 +183,6 @@ class MTTableEditor extends TCMSModelBase
                 $this->data['only_one_record_tbl'] = '0';
             }
             $this->bIsReadOnlyMode = $this->oTableManager->oTableEditor->IsRecordInReadOnlyMode();
-            $bUserHasReadOnlyRight = $this->oTableManager->oTableEditor->AllowReadOnly();
-
-            // check rights
-            $bIsReadOnlyRequest = $this->IsReadOnlyRequest();
-            if (empty($this->sId)) {
-                $bIsInsert = true;
-            } else {
-                $bIsInsert = false;
-            }
-            $bUserHasEditRight = $this->oTableManager->oTableEditor->AllowEdit();
-
-            if (!$bIsReadOnlyRequest && ((!$bUserHasEditRight && !$bIsInsert && !$this->bIsReadOnlyMode) || ($this->bIsReadOnlyMode && !$bUserHasReadOnlyRight))) {
-                $oCMSUser = &TCMSUser::GetActiveUser();
-                $oCMSUser->Logout();
-                $this->controller->HeaderURLRedirect(PATH_CMS_CONTROLLER);
-            }
 
             $this->data['oTabs'] = $this->GetTabsForTable();
         } else { // record is missing - redirect to home
@@ -216,6 +200,34 @@ class MTTableEditor extends TCMSModelBase
 
         $this->AddURLHistory();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function checkAccessRightsLegacy(): bool
+    {
+        $parentAccess = parent::checkAccessRightsLegacy();
+
+        if (false === $parentAccess) {
+            return false;
+        }
+
+        if (null === $this->oTableManager || null === $this->oTableManager->oTableEditor) {
+            return true;
+        }
+
+        $bUserHasReadOnlyRight = $this->oTableManager->oTableEditor->AllowReadOnly();
+        $bIsReadOnlyRequest = $this->IsReadOnlyRequest();
+        $bIsInsert = empty($this->sId);
+        $bUserHasEditRight = $this->oTableManager->oTableEditor->AllowEdit();
+
+        if (!$bIsReadOnlyRequest && ((!$bUserHasEditRight && !$bIsInsert && !$this->bIsReadOnlyMode) || ($this->bIsReadOnlyMode && !$bUserHasReadOnlyRight))) {
+            return false;
+        }
+
+        return true;
+    }
+
 
     /**
      * loads workflow relevant data.

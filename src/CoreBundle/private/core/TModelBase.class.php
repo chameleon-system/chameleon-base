@@ -195,6 +195,16 @@ class TModelBase
     }
 
     /**
+     * @return bool - false if access is forbidden
+     */
+    public function checkAccessRightsLegacy(): bool
+    {
+        // TODO "Legacy"
+
+        return true;
+    }
+
+    /**
      * this function should fill the data array and return a pointer to it
      * (pointer because it may contain objects).
      *
