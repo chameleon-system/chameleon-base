@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
+use ChameleonSystem\CoreBundle\ModuleService\ModuleAccessCheckServiceInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
@@ -138,18 +139,16 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @var ResponseVariableReplacerInterface
      */
     private $responseVariableReplacer;
-
     /**
-     * @param RequestStack                 $requestStack
-     * @param EventDispatcherInterface     $eventDispatcher
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param TModuleLoader                $moduleLoader
-     * @param IViewPathManager|null        $viewPathManager
+     * @var ModuleAccessCheckServiceInterface
      */
+    private $moduleAccessCheckService;
+
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         PortalDomainServiceInterface $portalDomainService,
+        ModuleAccessCheckServiceInterface $moduleAccessCheckService,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
         IViewPathManager $viewPathManager = null
@@ -161,6 +160,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->eventDispatcher = $eventDispatcher;
         $this->portalDomainService = $portalDomainService;
         $this->dataAccessCmsMasterPagedef = $dataAccessCmsMasterPagedef;
+        $this->moduleAccessCheckService = $moduleAccessCheckService;
     }
 
     /**
@@ -316,50 +316,19 @@ abstract class ChameleonController implements ChameleonControllerInterface
     {
         $activeUser = \TCMSUser::GetActiveUser();
         if (null === $activeUser) {
-            // TODO this is a sensible default?
+            // TODO this is a sensible default? Why is this necessary?
+            // TODO especially edge cases: cronjobs, module_fnc, 404,?
 
             return true;
         }
 
-        $allowed = true;
-
         foreach ($this->moduleLoader->modules as $module) {
-            if (false === $module->checkAccessRightsLegacy()) {
-                $allowed = false;
-                break;
-            }
-
-            // TODO move to module?? (as legacy method above)
-            $allowedGroups = $this->getModuleGroups($module);
-
-            if (\count($allowedGroups) > 0) {
-                if (false === $activeUser->oAccessManager->user->IsInGroups($allowedGroups)) {
-                    $allowed = false;
-                    break;
-                }
+            if (false === $this->moduleAccessCheckService->checkAccess($activeUser, $module)) {
+                return false;
             }
         }
 
-        return $allowed;
-    }
-
-    private function getModuleGroups(TModelBase $modelBase): array
-    {
-        $moduleModel = $modelBase->aModuleConfig['model'] ?? null;
-
-        if (null === $moduleModel || '' === $moduleModel) {
-            return [];
-        }
-
-        // TODO compare \TModuleLoader::CreateModuleInstance() for module loading (should reuse the data there)?
-
-        $tdbModule = \TdbCmsTplModule::GetNewInstance();
-
-        if (false === $tdbModule->LoadFromField('classname', $moduleModel)) {
-            return [];
-        }
-
-        return $tdbModule->GetFieldCmsUsergroupIdList();
+        return true;
     }
 
     /**
