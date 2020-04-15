@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuCategory;
+use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItem;
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItemFactoryInterface;
 
 class MenuItemDataAccess implements MenuItemDataAccessInterface
@@ -70,5 +71,24 @@ class MenuItemDataAccess implements MenuItemDataAccessInterface
         }
 
         return $menuCategories;
+    }
+
+    /**
+     * @return MenuItem[] - assoc array: table id => menu item
+     */
+    public function getMenuItemsPointingToTables(): array
+    {
+        $tdbMenuItemList = \TdbCmsMenuItemList::GetList();
+        $tdbMenuItemList->AddFilterString("`target_table_name` = 'cms_tbl_conf'");
+        $tdbMenuItemList->GoToStart();
+
+        $menuItems = [];
+        while (false !== $tdbMenuItem = $tdbMenuItemList->Next()) {
+            $menuItem = $this->menuItemFactory->createMenuItem($tdbMenuItem);
+
+            $menuItems[$tdbMenuItem->fieldTarget] = $menuItem;
+        }
+
+        return $menuItems;
     }
 }

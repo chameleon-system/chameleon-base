@@ -11,6 +11,8 @@
 
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
+use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItem;
+
 class MenuItemDataAccessRuntimeCache implements MenuItemDataAccessInterface
 {
     private $categoryCache = null;
@@ -35,5 +37,14 @@ class MenuItemDataAccessRuntimeCache implements MenuItemDataAccessInterface
         }
 
         return $this->categoryCache;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMenuItemsPointingToTables(): array
+    {
+        // TODO?
+        return $this->subject->getMenuItemsPointingToTables();
     }
 }

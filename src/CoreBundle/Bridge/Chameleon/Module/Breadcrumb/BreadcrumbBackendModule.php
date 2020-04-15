@@ -86,8 +86,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         // TODO entfernen/deprecaten? \TCMSURLHistory::AddItem <- \MTTableEditor::AddURLHistory
 
-        $menuItemUrls = $this->getMenuItemUrls();
-
         $request = $this->requestStack->getCurrentRequest();
 
         if (null === $request) {
@@ -118,6 +116,8 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $parentTdb = $this->loadParent($tableConf, $tdb);
         }
 
+        $menuItemUrls = $this->getMenuItemUrls();
+
         $items = [];
 
         if (null !== $parentTdb) {
@@ -135,7 +135,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         // TODO this is heuristic - note sidebar.js (markSelected, extractTableId) for equal code
-        // TODO tableIdsMatch should/can use the "link to table" information from the menu directly
 
         $currentItems = $this->getBreadcrumbItems($menuItemUrls, $currentTableId, $currentUrl, $tdb);
         $items = \array_merge($items, $currentItems);
@@ -182,12 +181,23 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     {
         $items = [];
 
+        // TODO this overlaps with $menuItemUrls
+        $tablePointerMenuItems = $this->menuItemDataAccess->getMenuItemsPointingToTables();
+
         $foundMenuEntry = false;
-        foreach ($menuItemUrls as $url => $name) {
-            if ((null !== $entryUrl && $url === $entryUrl) || (null !== $tableId && true === $this->tableIdsMatch($url, $tableId))) {
-                $items[] = new BackendBreadcrumbItem($url, $name);
-                $foundMenuEntry = true;
-                break;
+        if (null !== $tableId && true === \array_key_exists($tableId, $tablePointerMenuItems)) {
+            $menuItem = $tablePointerMenuItems[$tableId];
+            $items[] = new BackendBreadcrumbItem($menuItem->getUrl(), $menuItem->getName());
+            $foundMenuEntry = true;
+        }
+
+        if (false === $foundMenuEntry && null !== $entryUrl) {
+            foreach ($menuItemUrls as $url => $name) {
+                if ($url === $entryUrl){
+                    $items[] = new BackendBreadcrumbItem($url, $name);
+                    $foundMenuEntry = true;
+                    break;
+                }
             }
         }
 
@@ -209,13 +219,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $items;
     }
 
-    private function tableIdsMatch(string $url, string $currentTableId): bool
-    {
-        $tableId = $this->extractTableId($url);
-
-        return $tableId === $currentTableId;
-    }
-
     private function extractTableId(string $url): ?string
     {
         if (false === \strpos($url, '?')) {
@@ -224,7 +227,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $urlParameters = $this->urlUtil->getUrlParametersAsArray($url);
         $pagedef = true === \array_key_exists('pagedef', $urlParameters) ? $urlParameters['pagedef'] : null;
-        // TODO? $pagedef = $this->requestStack->getCurrentRequest()->attributes->get('pagedef');
 
         if (null === $pagedef) {
             return null;
@@ -237,8 +239,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         if (($pagedef === 'tableeditor' || $pagedef === 'templateengine') && true === \array_key_exists('tableid', $urlParameters)) {
             return $urlParameters['tableid'];
         }
-
-        // TODO named constants
 
         return null;
     }
