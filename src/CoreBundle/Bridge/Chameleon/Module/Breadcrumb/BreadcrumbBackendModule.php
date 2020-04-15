@@ -136,7 +136,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $currentItems = $this->getBreadcrumbItems($menuItemUrls, $currentTableId, $currentUrl, $tdb);
         $items = \array_merge($items, $currentItems);
 
-        $visitor->SetMappedValue('pathCmsRoot', PATH_CMS_CONTROLLER);
         $visitor->SetMappedValue('items', $items);
     }
 
@@ -251,6 +250,8 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     private function getTdb(string $tableName, string $id): ?\TCMSRecord
     {
+        // Does the same as \TCMSTableConf::GetTableObjectInstance() but with more direct error checking.
+
         $tdbName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $tableName);
 
         if (false === \class_exists($tdbName)) {
@@ -267,47 +268,18 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $tdb;
     }
 
-/*    private function getTdbName(string $fieldName): string
-    {
-        return 'Tdb' . $this->underscoreToCamelCase($fieldName, true);
-    }
-
-    private function underscoreToCamelCase($string, $capitalizeFirstCharacter = false)
-    {
-        $str = str_replace('_', '', ucwords($string, '_'));
-
-        if (false === $capitalizeFirstCharacter) {
-            $str = lcfirst($str);
-        }
-
-        return $str;
-    }*/
-
     private function loadParent(\TdbCmsTblConf $tableConf, \TCMSRecord $tdb): ?\TCMSRecord
     {
         // TODO there are also other tables which simply have a "belongs to" - esp Order status codes ?
 
-        /** @var \TdbCmsFieldConfList $parentKeyField */
         $parentKeyFields = $tableConf->GetFieldDefinitions(['CMSFIELD_PROPERTY_PARENT_ID']);
 
         if ($parentKeyFields->Length() <= 0) {
             return null;
         }
 
-        // TODO also this parent loading from field should be solved somewhere?
-
         $parentKeyField = $parentKeyFields->Next();
 
-        $parentTableName = $parentKeyField->fieldName;
-
-        // TODO can be different name!
-        if ('_id' === \substr($parentTableName, -3)) {
-            $parentTableName = \substr($parentTableName, 0, -3);
-        }
-
-        $parentFieldName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_PROPERTY, $parentKeyField->fieldName); //'field'.$this->underscoreToCamelCase($parentKeyField->fieldName, true);
-        $parentId = $tdb->$parentFieldName;
-
-        return $this->getTdb($parentTableName, $parentId);
+        return $tdb->GetLookup($parentKeyField->fieldName);
     }
 }
