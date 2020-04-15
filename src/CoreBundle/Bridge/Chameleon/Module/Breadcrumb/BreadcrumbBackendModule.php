@@ -123,8 +123,12 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         if (null !== $parentTdb) {
             $parentTableConf = $parentTdb->GetTableConf();
 
-            // TODO oida! - where is such an url normally generated? (also see below "link to table") - see for example MTTableManager::HandleOneRecordTables
-            $parentEntryUrl = PATH_CMS_CONTROLLER . '?' . 'pagedef=tableeditor&tableid='.$parentTableConf->id.'&id='.$parentTdb->id;
+            // TODO see for example MTTableManager::HandleOneRecordTables - is there a "routing" for this?
+            $parentEntryUrl = $this->urlUtil->getArrayAsUrl([
+                'pagedef' => 'tableeditor',
+                'tableid' => $parentTableConf->id,
+                'id' => $parentTdb->id,
+            ], PATH_CMS_CONTROLLER . '?', '&');
 
             $parentItems = $this->getBreadcrumbItems($menuItemUrls, $parentTableConf->id, $parentEntryUrl, $parentTdb);
             $items = \array_merge($items, $parentItems);
@@ -270,8 +274,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     private function loadParent(\TdbCmsTblConf $tableConf, \TCMSRecord $tdb): ?\TCMSRecord
     {
-        // TODO there are also other tables which simply have a "belongs to" - esp Order status codes ?
-
         $parentKeyFields = $tableConf->GetFieldDefinitions(['CMSFIELD_PROPERTY_PARENT_ID']);
 
         if ($parentKeyFields->Length() <= 0) {
