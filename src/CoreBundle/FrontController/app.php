@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
+
 use Symfony\Component\HttpFoundation\Request;
 
 require_once dirname(__DIR__).'/Resources/config/const.inc.php';
@@ -46,12 +49,7 @@ $env = $devmode ? 'dev' : 'prod';
 $kernel = new AppKernel($env, $devmode);
 $request = Request::createFromGlobals();
 
-try {
-    $response = $kernel->handle($request);
-} catch (Exception $e) {
-    die($e->getMessage());
-}
-
+$response = $kernel->handle($request);
 
 $response->send();
 $kernel->terminate($request, $response);
