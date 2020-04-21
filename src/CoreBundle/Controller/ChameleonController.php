@@ -314,6 +314,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     private function checkModuleAccess(): bool
     {
+        // TODO restrict to backend? (is already the case with GetActiveUser()?)
+
         $activeUser = \TCMSUser::GetActiveUser();
         if (null === $activeUser) {
             // For a number of edge cases: cronjobs, 404, ...

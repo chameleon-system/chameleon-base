@@ -15,6 +15,9 @@ class ModuleAccessCheckService implements ModuleAccessCheckServiceInterface
 {
     public function checkAccess(\TdbCmsUser $user, \TModelBase $module): bool
     {
+        // TODO this _could_ also be solved with a table rights check for the frontend modules (cms_tree and cms_media)
+        // TODO / NOTE why groups and not roles here?
+
         if (false === $module->checkAccessRightsOnTable()) {
             return false;
         }
