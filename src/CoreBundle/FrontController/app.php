@@ -9,9 +9,6 @@
  * file that was distributed with this source code.
  */
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-
 use Symfony\Component\HttpFoundation\Request;
 
 require_once dirname(__DIR__).'/Resources/config/const.inc.php';
