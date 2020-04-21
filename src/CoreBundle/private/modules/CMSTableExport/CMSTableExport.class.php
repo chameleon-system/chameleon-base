@@ -99,6 +99,9 @@ class CMSTableExport extends TCMSModelBase
      */
     public function GenerateExport()
     {
+        // TODO do this for more than this export?
+        $this->provideEnoughMemory();
+
         $listClass = $this->global->GetUserData('listClass');
 
         if (empty($listClass)) {
@@ -143,6 +146,24 @@ class CMSTableExport extends TCMSModelBase
             fclose($this->pTempFilePointer);
         }
         $this->getDownload($sFileType);
+    }
+
+    private function provideEnoughMemory(): void
+    {
+        $oneGiga = 1 * 1024 * 1024 * 1024;
+        if ($this->unitToInt(ini_get('memory_limit')) < $oneGiga) {
+            ini_set('memory_limit', '1G');
+        }
+    }
+
+    /**
+     * Converts a number with byte unit (B / K / M / G) into an integer of bytes.
+     */
+    function unitToInt($units): int
+    {
+        return (int)preg_replace_callback('/(\-?\d+)(.?)/', function ($matches) {
+            return $matches[1] * (1024 ** strpos('BKMG', $matches[2]));
+        }, strtoupper($units));
     }
 
     /**
