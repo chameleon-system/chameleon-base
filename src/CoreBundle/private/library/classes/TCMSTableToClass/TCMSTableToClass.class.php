@@ -65,13 +65,6 @@ class TCMSTableToClass
      */
     public function Update($sOldName = '', $aOldData = array())
     {
-
-        if ($sOldName === 'TdbShopArticle') {
-            print('writing article...');
-            print("\n");
-            print_r($aOldData);
-        }
-
         // overwrite the auto class
         $this->WriteAutoClass();
         $aData = $this->GetClassData();
