@@ -395,3 +395,6 @@ Bootstrap 4 addons.
     }
 }
 
+.modal .modal-body {
+    overflow: auto;
+}

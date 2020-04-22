@@ -111,4 +111,9 @@
                 CloseModalIFrameDialog();
                 toasterMessage(data, 'SUCCESS');
             }
+
+            $(".generateVariantCheckall").on("click", function() {
+                var checkBoxes = $("#generateVariantTable input.generateVariantItem[type=checkbox]").not(':disabled');
+                checkBoxes.prop("checked", !checkBoxes.prop("checked"));
+            });
         </script>
