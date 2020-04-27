@@ -7,36 +7,26 @@
     background: unset;
 }
 
-.navigationTreeContainer .node-hidden,
-.treelegend .page-hidden {
-    color: #848484;
-}
-
-.navigationTreeContainer .activeConnectedNode,
 .treelegend .activeConnectedNode {
     font-style: normal;
-    font-weight: bold;
-    color: #008000;
+    color: #23282c;
+    background: #beebff;
+    background: -webkit-linear-gradient(top, #beebff 0%, #a8e4ff 100%);
+    background: linear-gradient(to bottom, #beebff 0%, #a8e4ff 100%);
 }
 
-.navigationTreeContainer .otherConnectedNode,
-.treelegend .otherConnectedNode {
-    font-style: normal;
-    color: #008000;
-}
-
-.navigationTreeContainer .activeConnectedNode.primaryConnectedNode,
 .treelegend .activeConnectedNode.primaryConnectedNode {
-    font-style: normal;
-    color: #005588;
-}
-.treelegend {
-    display: table-cell;
-    width: 350px;
+    color: #666;
 }
 
-.treelegend .nodeIndicatorIcon {
-    padding-left: 20px;
+.treelegend > div {
+    display: flex;
+    align-items: flex-start;
+}
+
+.treelegend > div .nodeIndicatorIcon {
+    width: 2.5em;
+    text-align: center;
 }
 
 .treelegend .rightClickMenuDisabled {

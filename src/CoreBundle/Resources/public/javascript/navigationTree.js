@@ -103,7 +103,7 @@ $(document).ready(function () {
             },
             "types": {
                 "default": {
-                    "icon": "fas fa-folder-open"
+                    "icon": "fas fa-genderless"
                 },
                 "folder": {
                     "icon": "fas fa-folder-open"
@@ -114,9 +114,8 @@ $(document).ready(function () {
                 "folderRootRestrictedMenu": {
                     "icon": "fas fa-folder-open"
                 },
-                "folderWithPage": {
-                    "icon": "fas fa-folder-open",
-                    "check_node": false
+                "noPage": {
+                    "icon": "fas fa-genderless"
                 },
                 "page": {
                     "icon": "far fa-file"
@@ -124,11 +123,11 @@ $(document).ready(function () {
                 "locked": {
                     "icon": "fas fa-lock"
                 },
-                "pageHidden": {
+                "extranetpageHidden": {
                     "icon": "far fa-eye-slash"
                 },
                 "nodeHidden": {
-                    "icon": "far fa-eye-slash"
+                    "icon": "fas fa-eye-slash"
                 },
                 "externalLink": {
                     "icon": "fas fa-external-link-alt"
@@ -159,23 +158,19 @@ $(document).ready(function () {
             },
             "types": {
                 "default": {
-                    "icon": "fas fa-folder-open"
+                    "icon": "fas fa-genderless"
                 },
                 "folder": {
-                    "icon": "fas fa-folder-open",
-                    "check_node": false
+                    "icon": "fas fa-folder-open"
                 },
                 "folderRestrictedMenu": {
-                    "icon": "fas fa-folder-open",
-                    "check_node": false
+                    "icon": "fas fa-folder-open"
                 },
                 "folderRootRestrictedMenu": {
-                    "icon": "fas fa-folder-open",
-                    "check_node": false
+                    "icon": "fas fa-folder-open"
                 },
-                "folderWithPage": {
-                    "icon": "fas fa-folder-open",
-                    "check_node": false
+                "noPage": {
+                    "icon": "fas fa-genderless"
                 },
                 "page": {
                     "icon": "far fa-file"
@@ -183,11 +178,11 @@ $(document).ready(function () {
                 "locked": {
                     "icon": "fas fa-lock"
                 },
-                "pageHidden": {
+                "extranetpageHidden": {
                     "icon": "far fa-eye-slash"
                 },
                 "nodeHidden": {
-                    "icon": "far fa-eye-slash"
+                    "icon": "fas fa-eye-slash"
                 },
                 "externalLink": {
                     "icon": "fas fa-external-link-alt"

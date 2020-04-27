@@ -664,83 +664,69 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
     private function setTypeAndAttributes(BackendTreeNodeDataModel $treeNodeDataModel, \TdbCmsTree $node)
     {
-        $treeNodeDataModel->setType($this->getInitialType($node));
+        $treeNodeDataModel->setType('');
 
-        $nodeHidden = false;
-        if (true == $node->fieldHidden) {
-            $nodeHidden = true;
-            $treeNodeDataModel->addLinkHtmlClass('node-hidden');
-        }
-
-        $pages = [];
-        $connectedPages = $node->GetAllLinkedPages();
-        $foundSecuredPage = false;
-        while ($connectedPage = $connectedPages->Next()) {
-            $pages[] = $connectedPage->id;
-
-            if (false === $nodeHidden
-                && false === $foundSecuredPage
-                && (true === $connectedPage->fieldExtranetPage
-                    && false === $node->fieldShowExtranetPage)) {
-                $treeNodeDataModel->addLinkHtmlClass('page-hidden');
-                $treeNodeDataModel->setType('pageHidden');
-                $foundSecuredPage = true;
-            }
-
-            if (true === $connectedPage->fieldExtranetPage) {
-                $treeNodeDataModel->addLinkHtmlClass('locked');
-                $treeNodeDataModel->setType('locked');
-            }
-        }
-
-        if (count($pages) > 0) {
-            if ('folder' === $treeNodeDataModel->getType()) {
-                $treeNodeDataModel->setType('folderWithPage');
-            }
-
-            $primaryPageID = $node->GetLinkedPage(true);
-            if (false !== $primaryPageID) {
-                $treeNodeDataModel->addListAttribute('isPageId', $primaryPageID);
-            }
-
-            // current page is connected to this node
-            if ('' !== $this->currentPageId && true === in_array($this->currentPageId, $pages)) {
-                $treeNodeDataModel->addLinkHtmlClass('activeConnectedNode');
-                $treeNodeDataModel->setOpened(true);
-                $treeNodeDataModel->setSelected(true);
-
-                if ($this->primaryConnectedNodeIdOfCurrentPage === $node->id) {
-                    $treeNodeDataModel->addLinkHtmlClass('primaryConnectedNode');
-                    $treeNodeDataModel->setDisabled(true);
-                }
-            } else {
-                $treeNodeDataModel->addLinkHtmlClass('otherConnectedNode');
-            }
-        }
-    }
-
-    private function getInitialType(\TdbCmsTree $node): string
-    {
         $children = $node->GetChildren(true);
         if ($children->Length() > 0) {
-            $type = 'folder';
-        } else {
-            $type = 'page';
-        }
-
-        if ('' !== $node->sqlData['link']) {
-            $type = 'externalLink';
-        }
-
-        if (true === in_array($node->id, $this->restrictedNodes)) {
-            $type .= 'RestrictedMenu';
+            $treeNodeDataModel->setType('folder');
+            if (true === in_array($node->id, $this->restrictedNodes)) {
+                $treeNodeDataModel->setType('folderRestrictedMenu');
+            }
         }
 
         if (true === $node->fieldHidden) {
-            $type = 'nodeHidden';
+            $this->addIconToTreeNode($treeNodeDataModel, 'nodeHidden', 'fas fa-eye-slash');
+            $treeNodeDataModel->addLinkHtmlClass('node-hidden');
         }
 
-        return $type;
+        if ('' !== $node->sqlData['link']) {
+            $this->addIconToTreeNode($treeNodeDataModel, 'externalLink', 'fas fa-external-link-alt');
+        }
+
+        $linkedPageOfNode = $node->GetLinkedPageObject(true);
+
+        if (false === $linkedPageOfNode) {
+            if ('' === $treeNodeDataModel->getType()) {
+                $this->addIconToTreeNode($treeNodeDataModel, 'noPage', 'fas fa-genderless');
+            }
+            return;
+        }
+
+        $this->addIconToTreeNode($treeNodeDataModel, 'page', 'far fa-file');
+        $treeNodeDataModel->addListAttribute('isPageId', $linkedPageOfNode->id);
+        $treeNodeDataModel->setDisabled(true);
+
+        if (true === $linkedPageOfNode->fieldExtranetPage) {
+            $treeNodeDataModel->addLinkHtmlClass('locked');
+            $this->addIconToTreeNode($treeNodeDataModel, 'locked', 'fas fa-user-lock');
+            if (false === $node->fieldShowExtranetPage) {
+                $this->addIconToTreeNode($treeNodeDataModel, 'extranetpageHidden', 'far fa-eye-slash');
+                $treeNodeDataModel->addLinkHtmlClass('extranetpage-hidden');
+            }
+        }
+
+        // current page is connected to this node
+        if ($this->currentPageId === $linkedPageOfNode->id) {
+            $treeNodeDataModel->addLinkHtmlClass('activeConnectedNode');
+            $treeNodeDataModel->setOpened(true);
+            $treeNodeDataModel->setSelected(true);
+            $treeNodeDataModel->setDisabled(false);
+
+            if ($this->primaryConnectedNodeIdOfCurrentPage === $node->id) {
+                $treeNodeDataModel->addLinkHtmlClass('primaryConnectedNode');
+                $treeNodeDataModel->setDisabled(true);
+            }
+        } else {
+            $treeNodeDataModel->addLinkHtmlClass('otherConnectedNode');
+        }
+    }
+
+    private function addIconToTreeNode (BackendTreeNodeDataModel $treeNodeDataModel, string $type, string $fontawesomeIcon) {
+        if ('' === $treeNodeDataModel->getType()) {
+            $treeNodeDataModel->setType($type);
+        } else {
+            $treeNodeDataModel->addFurtherIcon('<i class="'. $fontawesomeIcon .' mr-2"></i>');
+        }
     }
 
     /**

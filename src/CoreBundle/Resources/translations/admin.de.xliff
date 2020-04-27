@@ -1106,6 +1106,20 @@
                 <source>chameleon_system_core.cms_module_page_tree.legend_active_further_node_of_page</source>
                 <target>Aktiver weiterer Navigationspunkt dieser Seite</target>
             </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_folder">
+                <source>chameleon_system_core.cms_module_page_tree.legend_folder</source>
+                <target>Ordner / Verzeichnis</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_node_hidden">
+                <source>chameleon_system_core.cms_module_page_tree.legend_node_hidden</source>
+                <target>Navigationspunkt versteckt</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_external_link">
+                <source>chameleon_system_core.cms_module_page_tree.legend_external_link</source>
+                <target>Link auf externe Website</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_node_has_no_page">
                 <source>chameleon_system_core.cms_module_page_tree.legend_node_has_no_page</source>
                 <target>Navigationspunkt ohne verknüpfte Seite</target>
@@ -1118,15 +1132,10 @@
                 <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page</source>
                 <target>Navigationspunkt mit zugriffsbeschränkter Seite</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_hidden">
-                <source>chameleon_system_core.cms_module_page_tree.legend_hidden</source>
-                <target>Navigationspunkt versteckt</target>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_extranetpage_hidden">
+                <source>chameleon_system_core.cms_module_page_tree.legend_extranetpage_hidden</source>
+                <target>Zugriffsbeschränkte Seite, in der Navigation versteckt</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_external_link">
-                <source>chameleon_system_core.cms_module_page_tree.legend_external_link</source>
-                <target>Link auf externe Website</target>
-            </trans-unit>
-
 
             <trans-unit id="chameleon_system_core.cms_module_media_local_import.error_path_not_found">
                 <source>chameleon_system_core.cms_module_media_local_import.error_path_not_found</source>
