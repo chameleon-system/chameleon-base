@@ -42,7 +42,7 @@ body.app {
     flex: 1;
 }
 
-#cmscontainer .main .content .card {
+#cmscontainer .main > .content > .card {
     margin-top: 30px;
 }
 
@@ -390,3 +390,6 @@ Bootstrap 4 addons.
     }
 }
 
+.modal .modal-body {
+    overflow: auto;
+}
