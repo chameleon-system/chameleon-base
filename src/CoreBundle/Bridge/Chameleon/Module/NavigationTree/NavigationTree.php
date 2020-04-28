@@ -694,7 +694,10 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
         $this->addIconToTreeNode($treeNodeDataModel, 'page', 'far fa-file');
         $treeNodeDataModel->addListAttribute('isPageId', $linkedPageOfNode->id);
-        $treeNodeDataModel->setDisabled(true);
+
+        if ('' !== $this->currentPageId) {
+            $treeNodeDataModel->setDisabled(true);
+        }
 
         if (true === $linkedPageOfNode->fieldExtranetPage) {
             $treeNodeDataModel->addLinkHtmlClass('locked');
@@ -710,7 +713,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             $treeNodeDataModel->addLinkHtmlClass('activeConnectedNode');
             $treeNodeDataModel->setOpened(true);
             $treeNodeDataModel->setSelected(true);
-            $treeNodeDataModel->setDisabled(false);
+            if ('' !== $this->currentPageId) {
+                $treeNodeDataModel->setDisabled(false);
+            }
 
             if ($this->primaryConnectedNodeIdOfCurrentPage === $node->id) {
                 $treeNodeDataModel->addLinkHtmlClass('primaryConnectedNode');
