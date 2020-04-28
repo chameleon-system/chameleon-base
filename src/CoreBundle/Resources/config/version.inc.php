@@ -1,4 +1,4 @@
 <?php
 
 define('CMS_VERSION_MAJOR', '6');
-define('CMS_VERSION_MINOR', '2.14');
+define('CMS_VERSION_MINOR', '2.14.1');
