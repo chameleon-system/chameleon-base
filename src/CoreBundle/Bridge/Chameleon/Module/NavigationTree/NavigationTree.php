@@ -695,10 +695,6 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $this->addIconToTreeNode($treeNodeDataModel, 'page', 'far fa-file');
         $treeNodeDataModel->addListAttribute('isPageId', $linkedPageOfNode->id);
 
-        if ('' !== $this->currentPageId) {
-            $treeNodeDataModel->setDisabled(true);
-        }
-
         if (true === $linkedPageOfNode->fieldExtranetPage) {
             $treeNodeDataModel->addLinkHtmlClass('locked');
             $this->addIconToTreeNode($treeNodeDataModel, 'locked', 'fas fa-user-lock');
@@ -710,19 +706,23 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
         // current page is connected to this node
         if ($this->currentPageId === $linkedPageOfNode->id) {
-            $treeNodeDataModel->addLinkHtmlClass('activeConnectedNode');
+            $treeNodeDataModel->addListHtmlClass('activeConnectedNode');
             $treeNodeDataModel->setOpened(true);
             $treeNodeDataModel->setSelected(true);
-            if ('' !== $this->currentPageId) {
-                $treeNodeDataModel->setDisabled(false);
-            }
 
             if ($this->primaryConnectedNodeIdOfCurrentPage === $node->id) {
-                $treeNodeDataModel->addLinkHtmlClass('primaryConnectedNode');
-                $treeNodeDataModel->setDisabled(true);
+                $treeNodeDataModel->addListHtmlClass('primaryConnectedNodeOfCurrentPage');
+                if ('' !== $this->currentPageId) {
+                    $treeNodeDataModel->setDisabled(true);
+                    $treeNodeDataModel->addListHtmlClass('no-checkbox');
+                }
             }
         } else {
             $treeNodeDataModel->addLinkHtmlClass('otherConnectedNode');
+            if ('' !== $this->currentPageId) {
+                $treeNodeDataModel->setDisabled(true);
+                $treeNodeDataModel->addListHtmlClass('no-checkbox');
+            }
         }
     }
 
