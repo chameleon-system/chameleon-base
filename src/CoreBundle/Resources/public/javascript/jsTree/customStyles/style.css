@@ -15,8 +15,12 @@
     background: linear-gradient(to bottom, #beebff 0%, #a8e4ff 100%);
 }
 
-.treelegend .activeConnectedNode.primaryConnectedNode {
+.navigationTreeContainer .activeConnectedNode.primaryConnectedNodeOfCurrentPage .jstree-wholerow,
+.treelegend .activeConnectedNode.primaryConnectedNodeOfCurrentPage {
     color: #666;
+    background: #beebff;
+    background: -webkit-linear-gradient(top, #7ABAFF 0%, #7ABAFF 100%);
+    background: linear-gradient(to bottom, #7ABAFF 0%, #7ABAFF 100%);
 }
 
 .treelegend > div {

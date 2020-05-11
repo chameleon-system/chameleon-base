@@ -1,21 +1,47 @@
 $(document).ready(function () {
 
+    let singleNavTreeDataContainer = $("#singleNavigationTreeDataContainer");
+
     $("#singleTreeNodeSelect")
         .jstree({
             "core":{
                 "multiple": false,
-                "open_all": true
+                "open_all": true,
+                "data": {
+                    "url": singleNavTreeDataContainer.data('tree-nodes-ajax-url'),
+                    "data": function(node) {
+                        return {
+                            'id' : node.id
+                        };
+                    }
+                },
+                "check_callback" : true
             },
             "types": {
                 "default": {
-                    "icon": ""
+                    "icon": "fas fa-genderless"
                 },
                 "folder": {
                     "icon": "fas fa-folder-open",
                     "check_node": false
                 },
+                "noPage": {
+                    "icon": "fas fa-genderless"
+                },
                 "page": {
                     "icon": "far fa-file"
+                },
+                "locked": {
+                    "icon": "fas fa-lock"
+                },
+                "extranetpageHidden": {
+                    "icon": "far fa-eye-slash"
+                },
+                "nodeHidden": {
+                    "icon": "fas fa-eye-slash"
+                },
+                "externalLink": {
+                    "icon": "fas fa-external-link-alt"
                 }
             },
             "checkbox": {
@@ -23,23 +49,27 @@ $(document).ready(function () {
                 "cascade": "none"
             },
             "plugins":[ "types", "wholerow", "changed", "checkbox" ]
+        })
+        .on("select_node.jstree", function (e, data) {
+            updatePrimaryNodeOfCurrentPage(data.node.id);
+        })
+        .on("deselect_node.jstree", function (e, data) {
+            updatePrimaryNodeOfCurrentPage('');
         });
 
+    function updatePrimaryNodeOfCurrentPage(newNodeId) {
+        var url = singleNavTreeDataContainer.data('update-primary-node-of-page-url') + '&sRestriction=' + newNodeId + '&nodeId=' + newNodeId;
+        GetAjaxCallTransparent(url, updatePrimaryNodeSuccess);
+    }
 
-    $('.jstree-selection').click(function () {
-        var selectedItem = $("#singleTreeNodeSelect").jstree('get_selected');
-
-        if (selectedItem.length > 0) {
-            var singleSelection = $('#'+selectedItem[0]);
-            var fieldName = singleSelection.data('selection').fieldName;
-            var newId = singleSelection.data('selection').nodeId;
-            chooseTreeNode(fieldName, newId);
+    function updatePrimaryNodeSuccess(nodeId, responseMessage) {
+        if ('success' === responseMessage) {
+            let fieldName = singleNavTreeDataContainer.data('field-name');
+            chooseTreeNode(fieldName, nodeId);
+            parent.CloseModalIFrameDialog();
         }
-    });
+    }
 
-    $('.jstree-exit').click(function () {
-        parent.CloseModalIFrameDialog();
-    });
 
     var singleTreeNodeSelectWysiwyg = $("#singleTreeNodeSelectWysiwyg");
     singleTreeNodeSelectWysiwyg.jstree({
@@ -218,7 +248,10 @@ $(document).ready(function () {
  */
 function chooseTreeNode(fieldName, newId) {
     parent.$('#' + fieldName).val(newId);
-    var newPath = $('#' + fieldName + '_tmp_path_' + newId).html();
+    var newPath = "";
+    if (newId !== "") {
+        newPath = $('#' + fieldName + '_tmp_path_' + newId).html();
+    }
     parent.$('#' + fieldName + '_path').html(newPath);
     parent.CloseModalIFrameDialog();
 }
@@ -440,7 +473,7 @@ function connectPageOnSelect(nodeId) {
 function connectPageSuccess(nodeId, responseMessage) {
     if ('success' === responseMessage) {
         //don't do a refresh here, because refresh_node triggers "selected" again from state
-        $(".navigationTreeContainer.jstree #"+nodeId+"_anchor").addClass('activeConnectedNode');
+        $(".navigationTreeContainer.jstree #"+nodeId).addClass('activeConnectedNode');
     } else {
         $(".navigationTreeContainer.jstree #" + nodeId + "_anchor").addClass('jstree-clicked');
     }
@@ -455,7 +488,7 @@ function disconnectPageOnDeselect(nodeId) {
 function disconnectPageSuccess(nodeId, responseMessage) {
     if ('success' === responseMessage) {
         //don't do a refresh here, because refresh_node triggers "selected" again from state
-        $(".navigationTreeContainer.jstree #" + nodeId + "_anchor").removeClass('activeConnectedNode');
+        $(".navigationTreeContainer.jstree #" + nodeId).removeClass('activeConnectedNode');
     } else {
         $(".navigationTreeContainer.jstree #" + nodeId + "_anchor").addClass('jstree-clicked');
     }

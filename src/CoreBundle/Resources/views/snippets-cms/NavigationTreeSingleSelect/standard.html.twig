@@ -1,43 +1,11 @@
 {# @var treeNodes \ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel #}
 
-{% if level == 0 %}
+<div id="singleNavigationTreeDataContainer"
+     data-field-name = "{{ fieldName }}"
+     data-tree-nodes-ajax-url = "{{ treeNodesAjaxUrl | raw }}"
+     data-update-primary-node-of-page-url = "{{ updatePrimaryNodeUrl | raw }}" >
 
-    <button class="btn btn-success mb-4 jstree-selection">{{ 'chameleon_system_core.navigation_tree.confirm_selection' | trans }}</button>
-    <button class="btn btn-danger mb-4 jstree-exit">{{ 'chameleon_system_core.navigation_tree.cancel_selection' | trans }}</button>
+    <div id="singleTreeNodeSelect" class="navigationTreeContainer"></div>
+</div>
 
-    <div id="singleTreeNodeSelect">
-        <ul>
-            {% endif %}
-
-            {% if treeNodes.name != "" %}
-                {% set isNodeCheckable = true %}
-                {% if (not isPortalSelectMode and level <= 1) or (isPortalSelectMode and level != 1) %}
-                    {% set isNodeCheckable = false %}
-                {% endif %}
-
-                <li id="node{{ treeNodes.cmsIdent }}" class="{% if isNodeCheckable == false %}no-checkbox{% endif %}{% if level == 0 %} jstree-open{% endif %}"
-                    data-jstree="{&quot;type&quot;: &quot;{% if treeNodes.children | length > 0 %}folder{% else %}page{% endif %}&quot;{% if isNodeCheckable == false %}, &quot;disabled&quot;: true{% endif %}}"
-                    data-selection="{&quot;fieldName&quot;: &quot;{{ fieldName }}&quot;, &quot;nodeId&quot;: &quot;{{ treeNodes.id }}&quot;}" >
-
-                    <a href="#"{% if activeId == treeNodes.id %} class="jstree-clicked"{% endif %}>
-                        {{ treeNodes.name }}
-                    </a>
-
-                    {% if treeNodes.children | length > 0 %}
-                        <ul>
-                            {% for child in treeNodes.children %}
-                                {% include _self with {'treeNodes': child, 'level': level+1, 'path': path, 'pathComplete': pathComplete} %}
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </li>
-            {% endif %}
-
-            {% if level == 0 %}
-        </ul>
-    </div>
-
-    <button class="btn btn-success mt-4 jstree-selection">{{ 'chameleon_system_core.navigation_tree.confirm_selection' | trans }}</button>
-    <button class="btn btn-danger mt-4 jstree-exit">{{ 'chameleon_system_core.navigation_tree.cancel_selection' | trans }}</button>
-    {{ treePathHTML | raw }}
-{% endif %}
+{{ breadcrumbStorageHTML | raw }}
