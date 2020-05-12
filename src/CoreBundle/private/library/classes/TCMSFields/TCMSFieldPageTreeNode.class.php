@@ -333,6 +333,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
                 'rootID' => TCMSTreeNode::TREE_ROOT_ID,
                 'id' => $this->oTableRow->id,
                 'isInIframe' => '1',
+                'fieldName' => $this->name,
                 'primaryTreeNodeId' => $this->oTableRow->fieldPrimaryTreeIdHidden
             ], '', '&');
     }

@@ -56,6 +56,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @var string
      */
+    private $fieldName = '';
+
+    /**
+     * @var string
+     */
     private $primaryConnectedNodeIdOfCurrentPage = '';
 
     /**
@@ -165,6 +170,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $isInIframe = $this->inputFilterUtil->getFilteredInput('isInIframe', '0');
         $visitor->SetMappedValue('isInIframe', $isInIframe);
 
+        $this->fieldName = $this->inputFilterUtil->getFilteredGetInput('fieldName', '');
+        $visitor->SetMappedValue('fieldName', $this->fieldName);
+
         $noAssignDialog = $this->inputFilterUtil->getFilteredGetInput('noassign', '0');
         $visitor->SetMappedValue('noAssignDialog', $noAssignDialog);
 
@@ -176,6 +184,13 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $currentPageId = $this->inputFilterUtil->getFilteredGetInput('id', '');
         $primaryConnectedNodeIdOfCurrentPage = $this->inputFilterUtil->getFilteredGetInput('primaryTreeNodeId', '');
         $this->rootNodeId = $this->inputFilterUtil->getFilteredGetInput('rootID', \TCMSTreeNode::TREE_ROOT_ID);
+        if ('' !== $currentPageId) {
+            $rootNode = new \TdbCmsTree();
+            $rootNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+            $rootNode->Load($this->rootNodeId);
+            $visitor->SetMappedValue('breadcrumbStorageHTML', $this->createBreadcrumbStorage($rootNode));
+        }
+
 
         $url = $this->urlUtil->getArrayAsUrl(
             [
@@ -332,6 +347,19 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         if (true === $cachingEnabled) {
             $this->addCachingTriggers($cacheTriggerManager);
         }
+    }
+
+    private function createBreadcrumbStorage(\TdbCmsTree $node, $path = ''): string
+    {
+        $path .= '<li class="breadcrumb-item">'.$node->fieldName.'</li>';
+        $breadcrumbStorageHTML = '<div id="'.$this->fieldName.'_tmp_path_'.$node->id.'" style="display:none;"><ol class="breadcrumb ml-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
+
+        $children = $node->GetChildren(true);
+        while ($child = $children->Next()) {
+            $breadcrumbStorageHTML .= $this->createBreadcrumbStorage($child, $path);
+        }
+
+        return $breadcrumbStorageHTML;
     }
 
     /**
@@ -590,6 +618,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
                 $portalTreeNodeDataModel->setType($typeRestricted);
             }
         }
+        if ('' !== $this->currentPageId) {
+            $portalTreeNodeDataModel->setDisabled(true);
+        }
         $portalTreeNodeDataModel->addListHtmlClass('no-checkbox');
 
         return $portalTreeNodeDataModel;
@@ -622,8 +653,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $treeNodeDataModel->setName($this->translateNodeName($treeNodeDataModel->getName(), $node));
         $this->setTypeAndAttributes($treeNodeDataModel, $node);
 
-        // $level 0 == rootNode, 1 = portal, >2 = folder or page
-        if ($level < 2) {
+        // $level 0 == rootNode, 1 = portal, 2 = Navigations (top, main, footer, system),  >2 = folder or page
+        if ($level <= 2) {
+            if ('' !== $this->currentPageId) {
+                $treeNodeDataModel->setDisabled(true);
+            }
             $treeNodeDataModel->addListHtmlClass('no-checkbox');
             $treeNodeDataModel->setOpened(true);
         }
