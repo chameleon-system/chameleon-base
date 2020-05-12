@@ -10,7 +10,8 @@
 {% endif %}
         <div class="row m-0">
             <div class="col-12 col-md-6 col-xl-8">
-                <div id="navigationTreeDataContainer"
+                <div id="navigationTreeDataContainer" class="mb-4"
+                     data-field-name = "{{ fieldName }}"
                      data-tree-nodes-ajax-url = "{{ treeNodesAjaxUrl | raw }}"
                      data-open-page-connection-list-url = "{{ openPageConnectionListUrl | raw }}"
                      data-open-page-editor-url = "{{ openPageEditorUrl | raw }}"
@@ -86,4 +87,6 @@
     </div>
 </div>
 {% endif %}
+
+{{ breadcrumbStorageHTML | raw }}
 
