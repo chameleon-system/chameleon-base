@@ -947,9 +947,13 @@
             <argument id="database_connection" type="service"/>
             <argument id="event_dispatcher" type="service"/>
             <argument id="chameleon_system_core.util.input_filter" type="service"/>
-<!--            <argument id="chameleon_system_core.util.url" type="service"/>-->
+            <argument id="chameleon_system_core.util.url" type="service"/>
             <argument id="chameleon_system_core.factory.backend_tree_node" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_core.tools" type="service"/>
             <argument id="chameleon_system_core.global" type="service"/>
+            <argument type="service" id="chameleon_system_core.util.field_translation"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
             <argument id="request_stack" type="service"/>
             <argument id="chameleon_system_core.cache" type="service"/>
         </service>

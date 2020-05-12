@@ -19,7 +19,6 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Doctrine\DBAL\Connection;
 use MTPkgViewRendererAbstractModuleMapper;
-use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use TGlobal;
@@ -69,7 +68,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @var string
      */
-    private $activeNodeId;
+    protected $activeNodeId;
 
 
     /**
@@ -139,9 +138,9 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         $this->activeNodeId = $this->inputFilterUtil->getFilteredGetInput('id', '');
         $currentPageId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
         $portalSelect = $this->inputFilterUtil->getFilteredGetInput('portalSelect', 0);
+        $pagedef = $this->inputFilterUtil->getFilteredGetInput('pagedef', 'navigationTreeSingleSelect');
         $this->isPortalSelectMode = $portalSelect === '1' ? true : false;
         $pagesTableName = 'cms_tpl_page';
-
 
         $this->restrictedNodes = $this->getPortalNavigationStartNodes();
 
@@ -153,16 +152,11 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
             $visitor->SetMappedValue('breadcrumbStorageHTML', $this->createBreadcrumbStorage($rootNode));
         }
 
-        // activeNodeId = aktuell gewählter Node, nötig um die checkbox zu selektieren
-        $visitor->SetMappedValue('activeId', $this->activeNodeId);
         $visitor->SetMappedValue('fieldName', $this->fieldName);
-        $visitor->SetMappedValue('level', 0);
-        $visitor->SetMappedValue('isPortalSelectMode', $this->isPortalSelectMode);
-
 
         $url = $this->urlUtil->getArrayAsUrl(
             [
-                'pagedef' => 'navigationTreeSingleSelect',
+                'pagedef' => $pagedef,
                 'module_fnc' =>
                     [
                         'contentmodule' => 'ExecuteAjaxCall'
@@ -180,12 +174,12 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
 
         $url = $this->urlUtil->getArrayAsUrl(
             [
-                'pagedef' => 'navigationTreeSingleSelect',
+                'pagedef' => $pagedef,
                 'module_fnc' =>
                     [
                         'contentmodule' => 'ExecuteAjaxCall'
                     ],
-                '_fnc' => 'updatePrimaryNode',
+                '_fnc' => 'updateSelection',
                 'table' => $pagesTableName,
                 'currentPageId' => $currentPageId,
                 'fieldName' => $this->fieldName
@@ -193,7 +187,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
             PATH_CMS_CONTROLLER.'?',
             '&'
         );
-        $visitor->SetMappedValue('updatePrimaryNodeUrl', $url);
+        $visitor->SetMappedValue('updateSelectionUrl', $url);
     }
 
     /**
@@ -205,7 +199,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         $externalFunctions =
             [
                 'getTreeNodes',
-                'updatePrimaryNode'
+                'updateSelection'
             ];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
@@ -235,7 +229,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     /**
      * Is called via ajax.
      */
-    protected function updatePrimaryNode(): ?string
+    protected function updateSelection(): ?string
     {
         $pagesTableName = $this->inputFilterUtil->getFilteredGetInput('table', '');
         $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
@@ -278,6 +272,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
             $treeNodeDataModel->setOpened(true);
         }
         if ($level <= 1) {
+            $treeNodeDataModel->setDisabled(true);
             $treeNodeDataModel->addListHtmlClass('no-checkbox');
         }
 
@@ -329,24 +324,34 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         }
         if ('' !== $node->sqlData['link']) {
             $this->addIconToTreeNode($treeNodeDataModel, 'externalLink', 'fas fa-external-link-alt');
+            return;
         }
 
+        $this->setPageAttributes($treeNodeDataModel, $node);
+    }
+
+    private function addIconToTreeNode(BackendTreeNodeDataModel $treeNodeDataModel, string $type, string $fontawesomeIcon): void
+    {
+        if ('' === $treeNodeDataModel->getType()) {
+            $treeNodeDataModel->setType($type);
+        } else {
+            $treeNodeDataModel->addFurtherIcon('<i class="'. $fontawesomeIcon .' mr-2"></i>');
+        }
+    }
+
+    private function setPageAttributes(BackendTreeNodeDataModel $treeNodeDataModel, \TdbCmsTree $node): void
+    {
         $linkedPageOfNode = $node->GetLinkedPageObject(true);
         if (false === $linkedPageOfNode) {
             if ('' === $treeNodeDataModel->getType()) {
                 $this->addIconToTreeNode($treeNodeDataModel, 'noPage', 'fas fa-genderless');
+                $this->disableSelectionWysiwyg($treeNodeDataModel);
             }
             return;
         }
 
         $this->addIconToTreeNode($treeNodeDataModel, 'page', 'far fa-file');
-
-        if ($this->activeNodeId === $node->id) {
-            $treeNodeDataModel->setSelected(true);
-        } else {
-            $treeNodeDataModel->setDisabled(true);
-            $treeNodeDataModel->addListHtmlClass('no-checkbox');
-        }
+        $treeNodeDataModel->addListAttribute('isPageId', $linkedPageOfNode->id);
 
         if (true === $linkedPageOfNode->fieldExtranetPage) {
             $treeNodeDataModel->addLinkHtmlClass('locked');
@@ -356,15 +361,22 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
                 $treeNodeDataModel->addLinkHtmlClass('extranetpage-hidden');
             }
         }
+        $this->setCheckStatus($treeNodeDataModel, $node->id);
+
     }
 
-    private function addIconToTreeNode (BackendTreeNodeDataModel $treeNodeDataModel, string $type, string $fontawesomeIcon): void
+    protected function setCheckStatus(BackendTreeNodeDataModel $treeNodeDataModel, $nodeId): void
     {
-        if ('' === $treeNodeDataModel->getType()) {
-            $treeNodeDataModel->setType($type);
+        if ($this->activeNodeId === $nodeId) {
+            $treeNodeDataModel->setSelected(true);
         } else {
-            $treeNodeDataModel->addFurtherIcon('<i class="'. $fontawesomeIcon .' mr-2"></i>');
+            $treeNodeDataModel->setDisabled(true);
+            $treeNodeDataModel->addListHtmlClass('no-checkbox');
         }
+    }
+
+    protected function disableSelectionWysiwyg(BackendTreeNodeDataModel $treeNodeDataModel): void
+    {
     }
 
     private function createBreadcrumbStorage(\TdbCmsTree $node, $path = ''): string

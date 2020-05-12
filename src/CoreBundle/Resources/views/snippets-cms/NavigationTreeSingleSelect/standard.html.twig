@@ -1,9 +1,9 @@
 {# @var treeNodes \ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel #}
 
-<div id="singleNavigationTreeDataContainer"
+<div id="navigationTreeDataContainer" class="mb-4"
      data-field-name = "{{ fieldName }}"
      data-tree-nodes-ajax-url = "{{ treeNodesAjaxUrl | raw }}"
-     data-update-primary-node-of-page-url = "{{ updatePrimaryNodeUrl | raw }}" >
+     data-update-selection-url = "{{ updateSelectionUrl | raw }}" >
 
     <div id="singleTreeNodeSelect" class="navigationTreeContainer"></div>
 </div>
