@@ -352,7 +352,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     private function createBreadcrumbStorage(\TdbCmsTree $node, $path = ''): string
     {
         $path .= '<li class="breadcrumb-item">'.$node->fieldName.'</li>';
-        $breadcrumbStorageHTML = '<div id="'.$this->fieldName.'_tmp_path_'.$node->id.'" style="display:none;"><ol class="breadcrumb ml-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
+        $breadcrumbStorageHTML = '<div id="'.$this->fieldName.'_tmp_path_'.$node->id.'" style="display:none;"><ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
 
         $children = $node->GetChildren(true);
         while ($child = $children->Next()) {

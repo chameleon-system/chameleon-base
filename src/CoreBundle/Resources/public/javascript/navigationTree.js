@@ -51,10 +51,10 @@ $(document).ready(function () {
             "plugins":[ "types", "wholerow", "changed", "checkbox" ]
         })
         .on("select_node.jstree", function (e, data) {
-            updatePrimaryNodeOfCurrentPage(data.node.id);
+            updateCurrentPageOrPortal(data.node.id);
         })
         .on("deselect_node.jstree", function (e, data) {
-            updatePrimaryNodeOfCurrentPage('');
+            updateCurrentPageOrPortal('');
         });
 
 
@@ -234,12 +234,12 @@ $(document).ready(function () {
         });
 });
 
-function updatePrimaryNodeOfCurrentPage(newNodeId) {
+function updateCurrentPageOrPortal(newNodeId) {
     let url = navTreeDataContainer.data('update-selection-url') + '&sRestriction=' + newNodeId + '&nodeId=' + newNodeId;
-    GetAjaxCallTransparent(url, updatePrimaryNodeSuccess);
+    GetAjaxCallTransparent(url, updateCurrentPageOrPortalSuccess);
 }
 
-function updatePrimaryNodeSuccess(nodeId, responseMessage) {
+function updateCurrentPageOrPortalSuccess(nodeId, responseMessage) {
     if ('success' === responseMessage) {
         const fieldName = navTreeDataContainer.data('field-name');
         chooseTreeNode(fieldName, nodeId);
