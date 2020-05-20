@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\Event\ResourceCollectionJavaScriptCollectedEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use MatthiasMullie\Minify\CSS;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -297,7 +298,12 @@ class TCMSResourceCollection implements ResourceCollectorInterface
 
                             $minify = ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_minify');
                             if ($minify) {
-                                $sSubString = CssMin::minify($sSubString);
+                                // TODO use a service here (see MinifyJsJshrinkService) - if there are any problems with customer css content with new lib?
+
+                                $minifier = new CSS();
+                                $minifier->add($sSubString);
+
+                                $sSubString = $minifier->minify();
                             }
                             if (_DEVELOPMENT_MODE) {
                                 $sContent .= "/* FROM: {$aCSS[$iIndex]} */\n".$sSubString."\n";
