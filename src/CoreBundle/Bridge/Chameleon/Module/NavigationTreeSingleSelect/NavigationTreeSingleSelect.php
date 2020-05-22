@@ -82,11 +82,6 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     private $isPortalHomeNodeSelectMode;
 
     /**
-     * @var boolean
-     */
-    private $isPortal404PageSelectMode;
-
-    /**
      * Nodes that should not be assignable or that should have only a
      * restricted context menu.
      *
@@ -230,7 +225,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         $this->fieldName = $this->inputFilterUtil->getFilteredGetInput('fieldName', '');
         $portalSelectMode = $this->inputFilterUtil->getFilteredGetInput('portalSelectMode', '');
         $this->isPortalSelectMode = $portalSelectMode === 'portalSelect' ? true : false;
-        $this->isPortalHomeNodeSelectMode = $portalSelectMode === 'portalHomePage' ? true : false;
+        $this->isPortalHomeNodeSelectMode = $portalSelectMode === 'portalHomePage' ? true : false;  //also 404-page-selection
 
         $this->activeNodeId = $this->inputFilterUtil->getFilteredGetInput('activeNodeId', '');
         $rootTreeId = $this->inputFilterUtil->getFilteredGetInput('rootTreeId', '');
@@ -293,7 +288,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         //"primary-node-selection (from page)" starts with the active portal:
         //   $level: 0 = portal, 1 = Navigation-Nodes, >1 = folder or page
 
-        //"portal-selection" and "portal-404-page-selection" start with root node:
+        //"portal-selection" and "portal-home-page-selection" and "portal-404-page-selection start with root node:
         //   $level: 0 = rootNode (Website), 1 = portal, 2 = Navigation-Nodes, >2 folder or page
         if (true === $this->isPortalSelectMode) {
             if ($level !== 1) {
