@@ -63,21 +63,15 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @var string
      */
-    private $fieldName;
-
-    /**
-     * @var string
-     */
     protected $activeNodeId;
 
-
     /**
-     * @var boolean
+     * @var bool
      */
     private $isPortalSelectMode;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $isPortalHomeNodeSelectMode;
 
@@ -139,7 +133,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
      */
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
-        $this->fieldName = $this->inputFilterUtil->getFilteredGetInput('fieldName', '');
+        $fieldName = $this->inputFilterUtil->getFilteredGetInput('fieldName', '');
         $this->activeNodeId = $this->inputFilterUtil->getFilteredGetInput('id', '');
         $portalSelectMode = $this->inputFilterUtil->getFilteredGetInput('portalSelectMode', '');
         $visitor->SetMappedValue('portalSelectMode', $portalSelectMode);
@@ -160,45 +154,43 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
             $rootNode = new \TdbCmsTree();
             $rootNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
             $rootNode->Load($rootTreeId);
-            $visitor->SetMappedValue('breadcrumbStorageHTML', $this->createBreadcrumbStorage($rootNode));
+            $visitor->SetMappedValue('breadcrumbStorageHTML', $this->createBreadcrumbStorage($rootNode, $fieldName));
         }
 
-        $visitor->SetMappedValue('fieldName', $this->fieldName);
+        $visitor->SetMappedValue('fieldName', $fieldName);
 
-        $url = $this->urlUtil->getArrayAsUrl(
+        $treeNodesAjaxUrl = $this->urlUtil->getArrayAsUrl(
             [
                 'pagedef' => $pagedef,
-                'module_fnc' =>
-                    [
-                        'contentmodule' => 'ExecuteAjaxCall'
+                'module_fnc' => [
+                        'contentmodule' => 'ExecuteAjaxCall',
                     ],
                 '_fnc' => 'getTreeNodes',
                 'activeNodeId' => $this->activeNodeId,
                 'rootTreeId' => $rootTreeId,
-                'fieldName' => $this->fieldName,
+                'fieldName' => $fieldName,
                 'portalSelectMode' => $portalSelectMode,
             ],
             PATH_CMS_CONTROLLER.'?',
             '&'
         );
-        $visitor->SetMappedValue('treeNodesAjaxUrl', $url);
+        $visitor->SetMappedValue('treeNodesAjaxUrl', $treeNodesAjaxUrl);
 
-        $url = $this->urlUtil->getArrayAsUrl(
+        $updateSelectionUrl = $this->urlUtil->getArrayAsUrl(
             [
                 'pagedef' => $pagedef,
-                'module_fnc' =>
-                    [
-                        'contentmodule' => 'ExecuteAjaxCall'
+                'module_fnc' => [
+                        'contentmodule' => 'ExecuteAjaxCall',
                     ],
                 '_fnc' => 'updateSelection',
                 'table' => $tableName,
                 'currentRecordId' => $currentRecordId,
-                'fieldName' => $this->fieldName
+                'fieldName' => $fieldName,
             ],
             PATH_CMS_CONTROLLER.'?',
             '&'
         );
-        $visitor->SetMappedValue('updateSelectionUrl', $url);
+        $visitor->SetMappedValue('updateSelectionUrl', $updateSelectionUrl);
     }
 
     /**
@@ -207,25 +199,15 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions =
-            [
-                'getTreeNodes',
-                'updateSelection'
-            ];
-        $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
+        $this->methodCallAllowed[] = 'getTreeNodes';
+        $this->methodCallAllowed[] = 'updateSelection';
     }
 
-    /**
-     * Is called via ajax.
-     * Returns requested treeNode or rootTreeNode (id = "#") with all its children.
-     * The return value is converted to JSON with array brackets around it, jstree.js needs it that way
-     */
     protected function getTreeNodes(): array
     {
-        $this->fieldName = $this->inputFilterUtil->getFilteredGetInput('fieldName', '');
         $portalSelectMode = $this->inputFilterUtil->getFilteredGetInput('portalSelectMode', '');
-        $this->isPortalSelectMode = $portalSelectMode === 'portalSelect' ? true : false;
-        $this->isPortalHomeNodeSelectMode = $portalSelectMode === 'portalHomePage' ? true : false;  //also 404-page-selection
+        $this->isPortalSelectMode = 'portalSelect' === $portalSelectMode ? true : false;
+        $this->isPortalHomeNodeSelectMode = 'portalHomePage' === $portalSelectMode ? true : false;  //also 404-page-selection
 
         $this->activeNodeId = $this->inputFilterUtil->getFilteredGetInput('activeNodeId', '');
         $rootTreeId = $this->inputFilterUtil->getFilteredGetInput('rootTreeId', '');
@@ -237,12 +219,10 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         $rootNode->Load($rootTreeId);
 
         $treeData[] = $this->createTreeDataModel($rootNode, 0);
+
         return $treeData;
     }
 
-    /**
-     * Is called via ajax.
-     */
     protected function updateSelection(): ?string
     {
         $tableName = $this->inputFilterUtil->getFilteredGetInput('table', '');
@@ -256,6 +236,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
 
         $tableEditor = $this->tools->GetTableEditorManager($tableName, $currentRecordId);
         $tableEditor->SaveField($fieldName, $nodeId);
+
         return $nodeId;
     }
 
@@ -281,27 +262,26 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         $treeNodeDataModel->setName($this->translateNodeName($treeNodeDataModel->getName(), $node));
         $this->setTypeAndAttributes($treeNodeDataModel, $node);
 
-        if ($level === 0) {
+        if (0 === $level) {
             $treeNodeDataModel->setOpened(true);
         }
 
-        //"primary-node-selection (from page)" starts with the active portal:
-        //   $level: 0 = portal, 1 = Navigation-Nodes, >1 = folder or page
-
-        //"portal-selection" and "portal-home-page-selection" and "portal-404-page-selection start with root node:
-        //   $level: 0 = rootNode (Website), 1 = portal, 2 = Navigation-Nodes, >2 folder or page
         if (true === $this->isPortalSelectMode) {
-            if ($level !== 1) {
+            $portalLevel = 1;
+            if ($portalLevel !== $level) {
                 $treeNodeDataModel->setDisabled(true);
                 $treeNodeDataModel->addListHtmlClass('no-checkbox');
             }
         } elseif (true === $this->isPortalHomeNodeSelectMode) {
-            if ($level < 2) {
+            $portalLevel = 1;
+            if ($level <= $portalLevel) {
                 $treeNodeDataModel->setDisabled(true);
                 $treeNodeDataModel->addListHtmlClass('no-checkbox');
             }
-        } else {  // primary-node-selection from page
-            if ($level <= 1) {
+        } else {
+            $portalLevel = 0;
+            $navigationLevel = $portalLevel + 1;
+            if ($level <= $navigationLevel) {
                 $treeNodeDataModel->setDisabled(true);
                 $treeNodeDataModel->addListHtmlClass('no-checkbox');
             }
@@ -316,7 +296,6 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
 
         return $treeNodeDataModel;
     }
-
 
     private function translateNodeName(string $name, \TdbCmsTree $node): string
     {
@@ -334,7 +313,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
             $nodeNameFieldName = $this->fieldTranslationUtil->getTranslatedFieldName($this->treeTable, 'name', $this->editLanguage);
 
             if ('' === $node->sqlData[$nodeNameFieldName]) {
-                $name .= ' <span class="bg-danger px-1"><i class="fas fa-language" title="' . $this->translator->trans('chameleon_system_core.cms_module_table_editor.not_translated') . '"></i></span>';
+                $name .= ' <span class="bg-danger px-1"><i class="fas fa-language" title="'.$this->translator->trans('chameleon_system_core.cms_module_table_editor.not_translated').'"></i></span>';
             }
         }
 
@@ -355,6 +334,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         }
         if ('' !== $node->sqlData['link']) {
             $this->addIconToTreeNode($treeNodeDataModel, 'externalLink', 'fas fa-external-link-alt');
+
             return;
         }
 
@@ -370,7 +350,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         if ('' === $treeNodeDataModel->getType()) {
             $treeNodeDataModel->setType($type);
         } else {
-            $treeNodeDataModel->addFurtherIcon('<i class="'. $fontawesomeIcon .' mr-2"></i>');
+            $treeNodeDataModel->addFurtherIconHTML('<i class="'.$fontawesomeIcon.' mr-2"></i>');
         }
     }
 
@@ -382,6 +362,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
                 $this->addIconToTreeNode($treeNodeDataModel, 'noPage', 'fas fa-genderless');
                 $this->disableSelectionWysiwyg($treeNodeDataModel);
             }
+
             return;
         }
 
@@ -397,7 +378,6 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
             }
         }
         $this->setCheckStatus($treeNodeDataModel, $node->id);
-
     }
 
     protected function setCheckStatus(BackendTreeNodeDataModel $treeNodeDataModel, $nodeId): void
@@ -416,14 +396,14 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     {
     }
 
-    private function createBreadcrumbStorage(\TdbCmsTree $node, $path = ''): string
+    private function createBreadcrumbStorage(\TdbCmsTree $node, $fieldName, $path = ''): string
     {
-        $path .= '<li class="breadcrumb-item">'.$node->fieldName.'</li>';
-        $breadcrumbStorageHTML = '<div id="'.$this->fieldName.'_tmp_path_'.$node->id.'" style="display:none;"><ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
+        $path .= '<li class="breadcrumb-item">'.$fieldName.'</li>';
+        $breadcrumbStorageHTML = '<div id="'.$fieldName.'_tmp_path_'.$node->id.'" style="display:none;"><ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
 
         $children = $node->GetChildren(true);
         while ($child = $children->Next()) {
-            $breadcrumbStorageHTML .= $this->createBreadcrumbStorage($child, $path);
+            $breadcrumbStorageHTML .= $this->createBreadcrumbStorage($child, $fieldName, $path);
         }
 
         return $breadcrumbStorageHTML;

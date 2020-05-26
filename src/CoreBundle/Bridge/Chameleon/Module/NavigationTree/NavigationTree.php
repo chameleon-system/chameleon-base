@@ -764,7 +764,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         if ('' === $treeNodeDataModel->getType()) {
             $treeNodeDataModel->setType($type);
         } else {
-            $treeNodeDataModel->addFurtherIcon('<i class="'. $fontawesomeIcon .' mr-2"></i>');
+            $treeNodeDataModel->addFurtherIconHTML('<i class="'. $fontawesomeIcon .' mr-2"></i>');
         }
     }
 
