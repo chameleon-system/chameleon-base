@@ -44,7 +44,7 @@ class TCMSTidyHTMLCleaner
      */
     protected function GetOptions($aOverwiteOptions)
     {
-        $aDefaulOptions = array('clean' => false, 'drop-proprietary-attributes' => false, 'drop-font-tags' => true, 'drop-empty-paras' => false, 'enclose-text' => true, 'fix-backslash' => false, 'force-output' => true, 'hide-comments' => true, 'indent' => true, 'indent-spaces' => 2, 'join-classes' => true, 'join-styles' => true, 'logical-emphasis' => true, 'output-xhtml' => true, 'merge-divs' => true, 'show-body-only' => true, 'word-2000' => true, 'wrap' => 0, 'tidy-mark' => false, 'char-encoding' => 'utf8', 'quote-marks' => false, 'bare' => false, 'doctype' => 'omit', 'break-before-br' => true, 'enclose-block-text' => true);
+        $aDefaulOptions = array('clean' => false, 'drop-proprietary-attributes' => false, 'drop-empty-paras' => false, 'enclose-text' => true, 'fix-backslash' => false, 'force-output' => true, 'hide-comments' => true, 'indent' => true, 'indent-spaces' => 2, 'join-classes' => true, 'join-styles' => true, 'logical-emphasis' => true, 'output-xhtml' => true, 'merge-divs' => true, 'show-body-only' => true, 'word-2000' => true, 'wrap' => 0, 'tidy-mark' => false, 'char-encoding' => 'utf8', 'quote-marks' => false, 'bare' => false, 'doctype' => 'omit', 'break-before-br' => true, 'enclose-block-text' => true);
         if (count($aOverwiteOptions) > 0) {
             foreach ($aOverwiteOptions as $sOption => $sValue) {
                 if (array_key_exists($sOption, $aDefaulOptions) && $aDefaulOptions[$sOption] != $aOverwiteOptions[$sOption]) {
