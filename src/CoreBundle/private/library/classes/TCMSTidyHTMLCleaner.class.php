@@ -47,7 +47,6 @@ class TCMSTidyHTMLCleaner
         $aDefaulOptions = array(
             'clean' => false,
             'drop-proprietary-attributes' => false,
-            'drop-font-tags' => true,
             'drop-empty-paras' => false,
             'enclose-text' => true,
             'fix-backslash' => false,
