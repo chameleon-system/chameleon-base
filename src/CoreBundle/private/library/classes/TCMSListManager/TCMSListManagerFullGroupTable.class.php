@@ -48,31 +48,18 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $_SESSION['_tmpCurrentTableName'] = $this->oTableConf->sqlData['name']; // needed for the callback functions...
         $_SESSION['_tmpCurrentTableID'] = $this->oTableConf->sqlData['id']; // needed for the callback functions...
 
-        $isTableCacheChangeRequest = $this->isTableCacheChangeRequest();
-
-        $oOldTableObj = null;
-        $sListCacheKey = $this->GetListCacheKey();
-
-        if ($this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE) {
-            if (!array_key_exists('_listObjCache', $_SESSION)) {
-                $_SESSION['_listObjCache'] = array();
-            }
-            $objectInSession = (array_key_exists($sListCacheKey, $_SESSION['_listObjCache']));
-
-            if ($objectInSession) {
-                $tmp = base64_decode($_SESSION['_listObjCache'][$sListCacheKey]);
-                $oOldTableObj = unserialize(gzuncompress($tmp));
-            }
-        }
+        $listCacheKey = $this->GetListCacheKey();
+        $cachedTableObj = $this->getTableFromSessionCache($listCacheKey);
 
         $aOrderData = array();
-        if (!is_null($oOldTableObj) && false !== $oOldTableObj) {
-            $aOrderData = $oOldTableObj->orderList;
+        if (null !== $cachedTableObj) {
+            $aOrderData = $cachedTableObj->orderList;
         }
 
         // table is not in cache, load it
-        if (is_null($oOldTableObj) || false === $oOldTableObj) {
+        if (null === $cachedTableObj) {
             $this->CreateTableObj();
+            $this->PostCreateTableObjectHook();
             $this->tableObj->orderList = $aOrderData;
             $this->AddFields();
             $this->AddSortInformation();
@@ -80,7 +67,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         } else { // table is in cache, load it from there and inject current post parameters
             $oGlobal = TGlobal::instance();
             $postData = $oGlobal->GetUserData();
-            $this->tableObj = $oOldTableObj;
+            $this->tableObj = $cachedTableObj;
             $this->tableObj->_postData = array_merge($this->tableObj->_postData, $postData); // overwrite anything that is passed via get or post
             foreach ($this->tableObj->customSearchFieldParameter as $key => $val) {
                 if (!array_key_exists($key, $this->tableObj->_postData)) {
@@ -99,11 +86,49 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $this->PostCreateTableObjectHook();
         }
 
-        if (($isTableCacheChangeRequest && null === $oOldTableObj) && $this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE) {
-            $tmp = serialize($this->tableObj);
-            $tmp = gzcompress($tmp, 9);
-            $_SESSION['_listObjCache'][$sListCacheKey] = base64_encode($tmp);
+        if (null === $cachedTableObj) {
+            $this->saveTableInSessionCache($listCacheKey, $this->tableObj);
         }
+    }
+
+    private function getTableFromSessionCache(string $cacheKey): ?TFullGroupTable
+    {
+        if (false === ($this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE)) {
+            return null;
+        }
+
+        if (false === \array_key_exists('_listObjCache', $_SESSION)) {
+            $_SESSION['_listObjCache'] = [];
+        }
+
+        $isObjectInSession = \array_key_exists($cacheKey, $_SESSION['_listObjCache']);
+
+        if (false === $isObjectInSession) {
+            return null;
+        }
+
+        $tmp = base64_decode($_SESSION['_listObjCache'][$cacheKey]);
+
+        return unserialize(gzuncompress($tmp));
+    }
+
+    private function saveTableInSessionCache(string $cacheKey, TFullGroupTable $table): void
+    {
+        if (false === ($this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE)) {
+            return;
+        }
+
+        if (false === $this->isTableCacheChangeRequest()) {
+            return;
+        }
+
+        if (false === \array_key_exists('_listObjCache', $_SESSION)) {
+            $_SESSION['_listObjCache'] = [];
+        }
+
+        $tmp = serialize($table);
+        $tmp = gzcompress($tmp, 9);
+        $_SESSION['_listObjCache'][$cacheKey] = base64_encode($tmp);
     }
 
     private function isTableCacheChangeRequest(): bool
@@ -288,8 +313,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         $this->tableObj->showRowsPerPageChooser = true;
         $this->AddRowCallback();
-
-        $this->PostCreateTableObjectHook();
     }
 
     protected function AddRowCallback()
