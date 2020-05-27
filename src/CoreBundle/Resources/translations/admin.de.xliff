@@ -1114,7 +1114,7 @@
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_hidden">
                 <source>chameleon_system_core.cms_module_page_tree.legend_hidden</source>
                 <target>Navigationspunkt versteckt</target>
-                <note>@deprecated since 6.3.9 - no longer used, use "chameleon_system_core.cms_module_page_tree.legend_node_hidden" instead</note>
+                <note>@deprecated since 6.3.10 - no longer used, use "chameleon_system_core.cms_module_page_tree.legend_node_hidden" instead</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_node_hidden">
                 <source>chameleon_system_core.cms_module_page_tree.legend_node_hidden</source>
