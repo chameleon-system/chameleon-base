@@ -188,7 +188,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             $rootNode = new \TdbCmsTree();
             $rootNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
             $rootNode->Load($this->rootNodeId);
-            $visitor->SetMappedValue('breadcrumbStorageHTML', $this->createBreadcrumbStorage($rootNode));
+            $visitor->SetMappedValue('pageBreadcrumbsHTML', $this->createPageBreadcrumbs($rootNode));
         }
 
 
@@ -349,17 +349,17 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         }
     }
 
-    private function createBreadcrumbStorage(\TdbCmsTree $node, $path = ''): string
+    private function createPageBreadcrumbs(\TdbCmsTree $node, $path = ''): string
     {
         $path .= '<li class="breadcrumb-item">'.$node->fieldName.'</li>';
-        $breadcrumbStorageHTML = '<div id="'.$this->fieldName.'_tmp_path_'.$node->id.'" style="display:none;"><ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
+        $pageBreadcrumbsHTML = '<div id="'.$this->fieldName.'_tmp_path_'.$node->id.'" style="display:none;"><ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
 
         $children = $node->GetChildren(true);
         while ($child = $children->Next()) {
-            $breadcrumbStorageHTML .= $this->createBreadcrumbStorage($child, $path);
+            $pageBreadcrumbsHTML .= $this->createPageBreadcrumbs($child, $path);
         }
 
-        return $breadcrumbStorageHTML;
+        return $pageBreadcrumbsHTML;
     }
 
     /**
