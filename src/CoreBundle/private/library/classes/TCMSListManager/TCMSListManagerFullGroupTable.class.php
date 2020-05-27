@@ -86,9 +86,9 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $this->PostCreateTableObjectHook();
         }
 
-        if (null === $cachedTableObj) {
+//        if (null === $cachedTableObj) {
             $this->saveTableInSessionCache($listCacheKey, $this->tableObj);
-        }
+//        }
     }
 
     private function getTableFromSessionCache(string $cacheKey): ?TFullGroupTable
