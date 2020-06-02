@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
+use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\ModuleService\ModuleAccessCheckServiceInterface;
@@ -238,12 +239,12 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     protected function GeneratePage($pagedef)
     {
-        $pagedefData = $this->getPagedefData($pagedef);
-        if (false === $pagedefData) {
+        $pagedefData = $this->dataAccessCmsMasterPagedef->get($pagedef);
+        if (null === $pagedefData) {
             return new Response('<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error: invalid page definition: '.TGlobal::OutHTML($pagedef).'</div>', Response::HTTP_NOT_FOUND);
         }
 
-        $this->moduleLoader->LoadModules($pagedefData['moduleList']);
+        $this->moduleLoader->LoadModules($pagedefData->getModuleList());
 
         foreach ($this->moduleLoader->modules as $sSpotName => $module) {
             $this->moduleLoader->modules[$sSpotName]->InjectVirtualModuleSpots($this->moduleLoader);
@@ -252,13 +253,13 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         $this->InitializeModules();
 
-        if (false === $this->checkModuleAccess()) {
+        if (false === $this->checkAccess($pagedefData)) {
             return new Response('You have no sufficient rights to view this page.', Response::HTTP_FORBIDDEN);
         }
 
         $this->ExecuteModuleMethod($this->moduleLoader);
 
-        $templatePath = $this->LoadLayoutTemplate($pagedefData['sLayoutFile']);
+        $templatePath = $this->LoadLayoutTemplate($pagedefData->getLayoutFile());
         if (false === file_exists($templatePath)) {
             $sErrorMessage = '<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error: Invalid template: '.TGlobal::OutHTML($templatePath).' ('.TGlobal::OutHTML($pagedefData['sLayoutFile']).")</div>\n";
             /** @noinspection CallableInLoopTerminationConditionInspection */
@@ -294,25 +295,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         return new Response($sPageContent);
     }
 
-    /**
-     * @param string $pagedef
-     *
-     * @return array|bool
-     */
-    private function getPagedefData($pagedef)
-    {
-        $pagedefData = $this->dataAccessCmsMasterPagedef->get($pagedef);
-        if (null === $pagedefData) {
-            return false;
-        }
-
-        return             [
-            'moduleList' => $pagedefData->getModuleList(),
-            'sLayoutFile' => $pagedefData->getLayoutFile(),
-        ];
-    }
-
-    private function checkModuleAccess(): bool
+    private function checkAccess(CmsMasterPagdef $pagedef): bool
     {
         // TODO restrict to backend? (is already the case with GetActiveUser()?)
 
@@ -324,7 +307,27 @@ abstract class ChameleonController implements ChameleonControllerInterface
         }
 
         foreach ($this->moduleLoader->modules as $module) {
-            if (false === $this->moduleAccessCheckService->checkAccess($activeUser, $module)) {
+            if (false === $module->checkAccessRightsOnTable()) {
+                return false;
+            }
+        }
+
+        if (false === $this->checkPageRoles($activeUser, $pagedef)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function checkPageRoles(\TdbCmsUser $activeUser, CmsMasterPagdef $pagedef): bool
+    {
+        $allowedRoles = $pagedef->getAllowedRoles();
+        if (\count($allowedRoles) > 0) {
+            $roleIds = [];
+            foreach ($allowedRoles as $allowedRole) {
+                $roleIds[] = $allowedRole->id;
+            }
+            if (false === $activeUser->oAccessManager->user->IsInRoles($roleIds)) {
                 return false;
             }
         }

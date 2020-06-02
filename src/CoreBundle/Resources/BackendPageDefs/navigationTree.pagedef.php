@@ -18,6 +18,8 @@ $moduleList = [
     ],
 ];
 
+$allowedRoles = 'cms_manager';
+
 addDefaultPageTitle($moduleList);
 addDefaultHeader($moduleList);
 addDefaultBreadcrumb($moduleList);

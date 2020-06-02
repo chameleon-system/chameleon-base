@@ -71,6 +71,11 @@ class TCMSPageDefinitionFile
     public $staticModuleList;
 
     /**
+     * @var \TdbCmsRole[]
+     */
+    public $allowedRoles = [];
+
+    /**
      * name of the pagedef (without the .pagedef.php).
      *
      * @var string
@@ -235,6 +240,18 @@ class TCMSPageDefinitionFile
             }
             if (isset($staticModuleList)) {
                 $this->staticModuleList = $staticModuleList;
+            }
+            if (isset($allowedRoles) && \strlen($allowedRoles) > 0) {
+                $roleNames = \explode(',', $allowedRoles);
+                if (false === \in_array('cms_admin', $roleNames)) {
+                    $roleNames[] = 'cms_admin'; // TODO do?
+                }
+                foreach ($roleNames as $roleName) {
+                    $role = TdbCmsRole::GetNewInstance();
+                    if (true === $role->LoadFromField('name', $roleName)) {
+                        $this->allowedRoles[] = $role;
+                    }
+                }
             }
 
             if (!is_null($this->sMasterPageDefinitionName)) {

@@ -7,7 +7,6 @@ $layoutTemplate = 'default';
 if ($urlGenerator->openStandaloneMediaManagerInNewWindow()) {
     $layoutTemplate = 'popup_iframe';
 }
-
 $moduleList = [
     'contentmodule' => [
         'model' => 'chameleon_system_media_manager.backend_module.media_manager',
@@ -15,6 +14,8 @@ $moduleList = [
         'view' => 'full',
     ],
 ];
+$allowedRoles = 'editor'; // TODO this (here) quite unfortunate as it can't be configured on any system
+
 addDefaultPageTitle($moduleList);
 addDefaultHeader($moduleList);
 addDefaultBreadcrumb($moduleList);

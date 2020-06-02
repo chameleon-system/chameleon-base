@@ -140,9 +140,6 @@
         <service id="chameleon_system_core.module_execution_strategy.inline" class="ChameleonSystem\CoreBundle\ModuleService\ModuleExecutionStrategyInline" public="false">
         </service>
 
-        <service id="chamelon_system_core.module_access_check" class="ChameleonSystem\CoreBundle\ModuleService\ModuleAccessCheckService">
-        </service>
-
         <service id="chameleon_system_core.moduleloader" class="TModuleLoader" public="false">
             <argument type="service" id="request_stack" />
             <argument type="service" id="chameleon_system_core.module_resolver" />

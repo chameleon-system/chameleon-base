@@ -51,7 +51,8 @@ class DataAccessCmsMasterPagedefDatabase implements DataAccessCmsMasterPagedefIn
         return new CmsMasterPagdef(
             $id,
             $oPageDefinitionFile->GetModuleList(),
-            $oPageDefinitionFile->GetLayoutFile()
+            $oPageDefinitionFile->GetLayoutFile(),
+            []
         );
     }
 }
