@@ -140,16 +140,11 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @var ResponseVariableReplacerInterface
      */
     private $responseVariableReplacer;
-    /**
-     * @var ModuleAccessCheckServiceInterface
-     */
-    private $moduleAccessCheckService;
 
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         PortalDomainServiceInterface $portalDomainService,
-        ModuleAccessCheckServiceInterface $moduleAccessCheckService,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
         IViewPathManager $viewPathManager = null
@@ -161,7 +156,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->eventDispatcher = $eventDispatcher;
         $this->portalDomainService = $portalDomainService;
         $this->dataAccessCmsMasterPagedef = $dataAccessCmsMasterPagedef;
-        $this->moduleAccessCheckService = $moduleAccessCheckService;
     }
 
     /**
