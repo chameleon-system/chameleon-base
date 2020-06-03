@@ -37,7 +37,7 @@ class DataAccessCmsMasterPagedefFile implements DataAccessCmsMasterPagedefInterf
             $id,
             $oPageDefinitionFile->GetModuleList(),
             $oPageDefinitionFile->GetLayoutFile(),
-            $oPageDefinitionFile->allowedRoles
+            $oPageDefinitionFile->allowedRights
         );
     }
 

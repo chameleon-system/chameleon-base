@@ -20,20 +20,20 @@ class CmsMasterPagdef
     /**
      * @var array|\TdbCmsRole[]
      */
-    private $allowedRoles;
+    private $allowedRights;
 
     /**
-     * @param string        $id
-     * @param array         $moduleList
-     * @param string        $layoutFile
-     * @param \TdbCmsRole[] $allowedRoles
+     * @param string         $id
+     * @param array          $moduleList
+     * @param string         $layoutFile
+     * @param \TdbCmsRight[] $allowedRights
      */
-    public function __construct(string $id, array $moduleList, string $layoutFile, array $allowedRoles)
+    public function __construct(string $id, array $moduleList, string $layoutFile, array $allowedRights)
     {
         $this->id = $id;
         $this->moduleList = $moduleList;
         $this->layoutFile = $layoutFile;
-        $this->allowedRoles = $allowedRoles;
+        $this->allowedRights = $allowedRights;
     }
 
     public function getId(): string
@@ -51,8 +51,8 @@ class CmsMasterPagdef
         return $this->layoutFile;
     }
 
-    public function getAllowedRoles()
+    public function getAllowedRights()
     {
-        return $this->allowedRoles;
+        return $this->allowedRights;
     }
 }

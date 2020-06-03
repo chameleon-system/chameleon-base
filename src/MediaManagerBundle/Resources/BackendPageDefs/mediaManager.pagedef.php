@@ -14,7 +14,8 @@ $moduleList = [
         'view' => 'full',
     ],
 ];
-$allowedRoles = 'editor'; // TODO this (here) quite unfortunate as it can't be configured on any system
+
+$allowedRights = 'cms_image_pool_upload'; // TODO? media_edit
 
 addDefaultPageTitle($moduleList);
 addDefaultHeader($moduleList);

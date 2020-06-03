@@ -315,15 +315,29 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     private function checkPageRoles(\TdbCmsUser $activeUser, CmsMasterPagdef $pagedef): bool
     {
-        $allowedRoles = $pagedef->getAllowedRoles();
-        if (\count($allowedRoles) > 0) {
-            $roleIds = [];
-            foreach ($allowedRoles as $allowedRole) {
-                $roleIds[] = $allowedRole->id;
+        $allowedRights = $pagedef->getAllowedRights();
+        if (\count($allowedRights) > 0) {
+            foreach ($allowedRights as $right) {
+                if (true === $activeUser->oAccessManager->PermitFunction($right->fieldName)) {
+                    return true;
+                }
             }
-            if (false === $activeUser->oAccessManager->user->IsInRoles($roleIds)) {
-                return false;
+
+            return false;
+
+            /* check manually - the above is a db query..
+            $rolesList = $activeUser->GetFieldCmsRoleList();
+            while (false !== ($role = $rolesList->Next())) {
+                $rightsList = $role->GetFieldCmsRightList();
+
+                while (false !== ($right = $rightsList->Next())) {
+                    if (true === \in_array($right, $allowedRights, true)) {
+                        return true;
+                    }
+                }
             }
+
+            return false;*/
         }
 
         return true;
