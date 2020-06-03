@@ -11,11 +11,12 @@
 
 namespace ChameleonSystem\CoreBundle\Security;
 
+use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
 use ICmsCoreRedirect;
 use Symfony\Component\HttpFoundation\RequestStack;
 use TGlobal;
 
-class BackendAccessCheck
+class BackendAccessCheck implements PageAccessCheckInterface
 {
     /**
      * @var \TGlobal
@@ -109,6 +110,25 @@ class BackendAccessCheck
             $allowedIps = $this->ipRestrictedPageDefs[$pagedef];
 
             return 0 === count($allowedIps) || in_array($clientIp, $allowedIps);
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function checkPageAccess(\TdbCmsUser $activeUser, CmsMasterPagdef $pagedef): bool
+    {
+        $allowedRights = $pagedef->getAllowedRights();
+        if (0 === \count($allowedRights)) {
+            return true; // no restriction
+        }
+
+        foreach ($allowedRights as $right) {
+            if (true === $activeUser->oAccessManager->PermitFunction($right->fieldName)) {
+                return true;
+            }
         }
 
         return false;

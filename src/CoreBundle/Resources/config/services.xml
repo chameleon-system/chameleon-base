@@ -156,6 +156,7 @@
             <argument type="service" id="request_stack"/>
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.security.backend_access_check"/>
             <call method="setCache">
                 <argument type="service" id="chameleon_system_cms_cache.cache" />
             </call>

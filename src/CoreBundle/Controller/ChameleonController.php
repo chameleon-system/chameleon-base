@@ -20,6 +20,7 @@ use ChameleonSystem\CoreBundle\ModuleService\ModuleAccessCheckServiceInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
+use ChameleonSystem\CoreBundle\Security\PageAccessCheckInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
@@ -141,10 +142,16 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private $responseVariableReplacer;
 
+    /**
+     * @var PageAccessCheckInterface
+     */
+    private $pageAccessCheck;
+
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         PortalDomainServiceInterface $portalDomainService,
+        PageAccessCheckInterface $pageAccessCheck,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
         IViewPathManager $viewPathManager = null
@@ -156,6 +163,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->eventDispatcher = $eventDispatcher;
         $this->portalDomainService = $portalDomainService;
         $this->dataAccessCmsMasterPagedef = $dataAccessCmsMasterPagedef;
+        $this->pageAccessCheck = $pageAccessCheck;
     }
 
     /**
@@ -306,38 +314,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
             }
         }
 
-        if (false === $this->checkPageRoles($activeUser, $pagedef)) {
+        if (false === $this->pageAccessCheck->checkPageAccess($activeUser, $pagedef)) {
             return false;
-        }
-
-        return true;
-    }
-
-    private function checkPageRoles(\TdbCmsUser $activeUser, CmsMasterPagdef $pagedef): bool
-    {
-        $allowedRights = $pagedef->getAllowedRights();
-        if (\count($allowedRights) > 0) {
-            foreach ($allowedRights as $right) {
-                if (true === $activeUser->oAccessManager->PermitFunction($right->fieldName)) {
-                    return true;
-                }
-            }
-
-            return false;
-
-            /* check manually - the above is a db query..
-            $rolesList = $activeUser->GetFieldCmsRoleList();
-            while (false !== ($role = $rolesList->Next())) {
-                $rightsList = $role->GetFieldCmsRightList();
-
-                while (false !== ($right = $rightsList->Next())) {
-                    if (true === \in_array($right, $allowedRights, true)) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;*/
         }
 
         return true;

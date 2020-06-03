@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\ModuleService\ModuleAccessCheckServiceInterface;
+use ChameleonSystem\CoreBundle\Security\PageAccessCheckInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -41,13 +42,14 @@ class ChameleonFrontendController extends ChameleonController
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         PortalDomainServiceInterface $portalDomainService,
+        PageAccessCheckInterface $pageAccessCheck,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
         $viewPathManager,
         ContainerInterface $container,
         TPkgViewRendererConfigToLessMapper $configToLessMapper
     ) {
-        parent::__construct($requestStack, $eventDispatcher, $portalDomainService, $dataAccessCmsMasterPagedef, $moduleLoader, $viewPathManager);
+        parent::__construct($requestStack, $eventDispatcher, $portalDomainService, $pageAccessCheck, $dataAccessCmsMasterPagedef, $moduleLoader, $viewPathManager);
         $this->container = $container; // for ViewRenderer instantiation
         $this->configToLessMapper = $configToLessMapper;
     }
