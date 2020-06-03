@@ -11,8 +11,37 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar;
 
+use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
+use ChameleonSystem\CoreBundle\Security\PageAccessCheckInterface;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
+
 class CustomMenuItemProvider implements MenuItemProviderInterface
 {
+    /**
+     * @var PageAccessCheckInterface
+     */
+    private $pageAccessCheck;
+
+    /**
+     * @var DataAccessCmsMasterPagedefInterface
+     */
+    private $accessCmsMasterPagedef;
+
+    /**
+     * @var UrlUtil
+     */
+    private $urlUtil;
+
+    public function __construct(
+        PageAccessCheckInterface $pageAccessCheck,
+        DataAccessCmsMasterPagedefInterface $accessCmsMasterPagedef,
+        UrlUtil $urlUtil
+    ) {
+        $this->pageAccessCheck = $pageAccessCheck;
+        $this->accessCmsMasterPagedef = $accessCmsMasterPagedef;
+        $this->urlUtil = $urlUtil;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -39,6 +68,27 @@ class CustomMenuItemProvider implements MenuItemProviderInterface
             return false;
         }
 
+        $urlParameters = $this->urlUtil->getUrlParametersAsArray($customItem->fieldUrl);
+
+        $pagedefParam = $urlParameters['pagedef'] ?? null;
+
+        if (null === $pagedefParam) {
+            return true; // only pages can be restricted
+        }
+
+        $pagedefType = $urlParameters['_pagedefType'] ?? 'Core'; // TODO this duplicates DataAccessCmsMasterPagedefFile::getPageDefinitionFilePath
+
+        $pagedef = $this->accessCmsMasterPagedef->get($pagedefParam, $pagedefType);
+
+        if (null === $pagedef) {
+            return true; // bogus but not to judge here
+        }
+
+        return $this->pageAccessCheck->checkPageAccess($activeUser, $pagedef);
+
+        // TODO does this have bearing on "Frequently used"?
+
+        /* TODO remove
         $rightList = $customItem->GetFieldCmsRightList();
         while (false !== $right = $rightList->Next()) {
             if (false === $activeUser->oAccessManager->PermitFunction($right->fieldName)) {
@@ -46,6 +96,6 @@ class CustomMenuItemProvider implements MenuItemProviderInterface
             }
         }
 
-        return true;
+        return true;*/
     }
 }

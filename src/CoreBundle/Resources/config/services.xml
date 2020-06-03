@@ -883,6 +883,10 @@
         </service>
         <service id="chameleon_system_core.bridge.chameleon.module.sidebar.custom_item_provider" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\CustomMenuItemProvider">
             <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsMenuCustomItem" />
+
+            <argument type="service" id="chameleon_system_core.security.backend_access_check"/>
+            <argument type="service" id="chameleon_system_core.data_access_cms_master_pagedef_file"/>
+            <argument type="service" id="chameleon_system_core.util.url"/>
         </service>
 
         <service id="chameleon_system_core.sidebar.user_menu_access" class="ChameleonSystem\CoreBundle\DataAccess\UserMenuItemDataAccess" shared="false">

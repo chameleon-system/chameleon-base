@@ -25,11 +25,12 @@ class DataAccessCmsMasterPagedefDatabase implements DataAccessCmsMasterPagedefIn
         $this->inputFilterUtil = $inputFilterUtil;
     }
 
-    public function get(string $id): ?CmsMasterPagdef
+    public function get(string $id, ?string $type = null): ?CmsMasterPagdef
     {
         //check if the pagedef exists in the database... if it does, use it. if not, use the file
         $oPageDefinitionFile = null;
 
+        // TODO querying the request is quite unfortunate (unexpected) here.
         $requestMasterPageDef = $this->inputFilterUtil->getFilteredInput('__masterPageDef', false);
 
         if (true === $requestMasterPageDef && true ===  TGlobal::CMSUserDefined()) {
@@ -45,7 +46,7 @@ class DataAccessCmsMasterPagedefDatabase implements DataAccessCmsMasterPagedefIn
         }
 
         if (false === $oPageDefinitionFile->sqlData) {
-            return $this->fallbackLoader->get($id);
+            return $this->fallbackLoader->get($id, $type);
         }
 
         return new CmsMasterPagdef(

@@ -23,10 +23,10 @@ class DataAccessCmsMasterPagedefFile implements DataAccessCmsMasterPagedefInterf
         $this->global = $global;
     }
 
-    public function get(string $id): ?CmsMasterPagdef
+    public function get(string $id, ?string $type = null): ?CmsMasterPagdef
     {
         $oPageDefinitionFile = new TCMSPageDefinitionFile();
-        $fullPageDefPath = $this->PageDefinitionFile($id);
+        $fullPageDefPath = $this->getPageDefinitionFilePath($id, $type);
         $pagePath = substr($fullPageDefPath, 0, -strlen($id.'.pagedef.php'));
 
         if (false === $oPageDefinitionFile->Load($id, $pagePath)) {
@@ -48,13 +48,17 @@ class DataAccessCmsMasterPagedefFile implements DataAccessCmsMasterPagedefInterf
      *
      * @return string
      */
-    private function PageDefinitionFile(string $pagedef)
+    private function getPageDefinitionFilePath(string $pagedef, ?string $type)
     {
-        // we can select a location using a get parameter (_pagedefType). it may be one of: Core, Custom-Core, and Customer
-        if (null === $pagedefType = $this->inputFilterUtil->getFilteredInput('_pagedefType')) {
-            $pagedefType = 'Core';
+        if (null === $type) {
+            // TODO querying the request is quite unfortunate (unexpected) here. Thus the whole "type" business here is.
+
+            // we can select a location using a get parameter (_pagedefType). it may be one of: Core, Custom-Core, and Customer
+            if (null === $type = $this->inputFilterUtil->getFilteredInput('_pagedefType')) {
+                $type = 'Core';
+            }
         }
-        $path = $this->global->_GetPagedefRootPath($pagedefType);
+        $path = $this->global->_GetPagedefRootPath($type);
 
         return $path.'/'.$pagedef.'.pagedef.php';
     }

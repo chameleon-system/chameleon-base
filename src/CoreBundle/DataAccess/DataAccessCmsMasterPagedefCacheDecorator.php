@@ -32,7 +32,7 @@ class DataAccessCmsMasterPagedefCacheDecorator implements DataAccessCmsMasterPag
         $this->inputFilterUtil = $inputFilterUtil;
     }
 
-    public function get(string $id): ?CmsMasterPagdef
+    public function get(string $id, ?string $type = null): ?CmsMasterPagdef
     {
         $cacheKeyParameter = $this->getCacheKeyParameters($id);
 
@@ -42,7 +42,7 @@ class DataAccessCmsMasterPagedefCacheDecorator implements DataAccessCmsMasterPag
             return $pagedefData;
         }
 
-        $pagedefData = $this->subject->get($id);
+        $pagedefData = $this->subject->get($id, $type);
         if (null === $pagedefData) {
             return null;
         }

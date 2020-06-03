@@ -6,5 +6,5 @@ use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
 
 interface DataAccessCmsMasterPagedefInterface
 {
-    public function get(string $id): ?CmsMasterPagdef;
+    public function get(string $id, ?string $type = null): ?CmsMasterPagdef;
 }
