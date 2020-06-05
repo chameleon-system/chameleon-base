@@ -736,9 +736,10 @@ class TCMSImageEndpoint
         /** @var string|null $dataPath */
         $dataPath = $this->aData['path'] ?? '';
 
-        $sImageURL = URL_MEDIA_LIBRARY_THUMBS_PATH.$this->GetThumbPathExtension().'/'.$dataPath;
         if (false === $this->_isThumbnail) {
             $sImageURL = $this->GetImageUrlPathPrefix().$dataPath;
+        }else{
+            $sImageURL = URL_MEDIA_LIBRARY_THUMBS_PATH.$this->GetThumbPathExtension().'/'.$dataPath;
         }
 
         $sImageURL = $this->addRefreshToken($sImageURL);
