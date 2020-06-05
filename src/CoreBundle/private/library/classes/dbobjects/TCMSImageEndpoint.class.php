@@ -733,10 +733,13 @@ class TCMSImageEndpoint
      */
     public function GetRelativeURL()
     {
+        /** @var string|null $dataPath */
+        $dataPath = $this->aData['path'] ?? '';
+
         if (!$this->_isThumbnail) {
-            $sImageURL = $this->GetImageUrlPathPrefix().$this->aData['path'];
+            $sImageURL = $this->GetImageUrlPathPrefix().$dataPath;
         } else {
-            $sImageURL = URL_MEDIA_LIBRARY_THUMBS_PATH.$this->GetThumbPathExtension().'/'.$this->aData['path'];
+            $sImageURL = URL_MEDIA_LIBRARY_THUMBS_PATH.$this->GetThumbPathExtension().'/'.$dataPath;
         }
         $sImageURL = $this->addRefreshToken($sImageURL);
 
