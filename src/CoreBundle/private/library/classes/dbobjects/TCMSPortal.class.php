@@ -192,9 +192,9 @@ class TCMSPortal extends TCMSRecord
     public function &GetLogo()
     {
         if (!array_key_exists('_portalLogo', $this->_aCache)) {
-            $portalLogo = new TCMSImage();
-            if(false !== $portalLogo->Load($this->sqlData['images'])){
-                $this->_aCache['_portalLogo'] = $portalLogo;
+            $this->_aCache['_portalLogo'] = new TCMSImage();
+            if(true === $this->_aCache['_portalLogo']->Load($this->sqlData['images'])){
+                $this->_aCache['_portalLogo'] = $this->_aCache['_portalLogo'];
             }
         }
 
