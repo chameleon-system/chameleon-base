@@ -89,7 +89,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $this->PostCreateTableObjectHook();
         }
 
-        if (true === $this->isTableCachingEnabled() && (true === $this->isTableCacheChangeRequest() || null === $cachedTableObj)) {
+        if (true === $this->isTableCachingEnabled() && false === $this->isModuleFunction() && (true === $this->isTableCacheChangeRequest() || null === $cachedTableObj)) {
             $this->saveTableInSessionCache($listCacheKey, $this->tableObj);
         }
     }
@@ -131,10 +131,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     {
         $inputFilter = $this->getInputFilterUtil();
 
-        if (null !== $inputFilter->getFilteredInput('_fnc')) {
-            return false;
-        }
-
         $listName = $inputFilter->getFilteredInput('_listName');
 
         if (null === $listName) {
@@ -142,6 +138,13 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         }
 
         return $listName === 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
+    }
+
+    private function isModuleFunction(): bool
+    {
+        $inputFilter = $this->getInputFilterUtil();
+
+        return null !== $inputFilter->getFilteredInput('_fnc');
     }
 
     protected function isRecordEditPossible(): bool
