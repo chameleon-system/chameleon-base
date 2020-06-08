@@ -49,7 +49,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $_SESSION['_tmpCurrentTableID'] = $this->oTableConf->sqlData['id']; // needed for the callback functions...
 
         $listCacheKey = $this->GetListCacheKey();
-        $cachedTableObj = $this->getTableFromSessionCache($listCacheKey);
+        $cachedTableObj = null;
+        if (true === $this->isTableCachingEnabled()) {
+            $cachedTableObj = $this->getTableFromSessionCache($listCacheKey);
+        }
 
         $aOrderData = array();
         if (null !== $cachedTableObj) {
@@ -86,17 +89,18 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $this->PostCreateTableObjectHook();
         }
 
-//        if (null === $cachedTableObj) {
+        if (true === $this->isTableCachingEnabled() && (true === $this->isTableCacheChangeRequest() || null === $cachedTableObj)) {
             $this->saveTableInSessionCache($listCacheKey, $this->tableObj);
-//        }
+        }
+    }
+
+    private function isTableCachingEnabled(): bool
+    {
+        return $this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE;
     }
 
     private function getTableFromSessionCache(string $cacheKey): ?TFullGroupTable
     {
-        if (false === ($this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE)) {
-            return null;
-        }
-
         if (false === \array_key_exists('_listObjCache', $_SESSION)) {
             $_SESSION['_listObjCache'] = [];
         }
@@ -114,14 +118,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
     private function saveTableInSessionCache(string $cacheKey, TFullGroupTable $table): void
     {
-        if (false === ($this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE)) {
-            return;
-        }
-
-        if (false === $this->isTableCacheChangeRequest()) {
-            return;
-        }
-
         if (false === \array_key_exists('_listObjCache', $_SESSION)) {
             $_SESSION['_listObjCache'] = [];
         }
