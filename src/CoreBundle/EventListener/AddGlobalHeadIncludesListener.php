@@ -38,12 +38,16 @@ class AddGlobalHeadIncludesListener
      */
     public function onGlobalHtmlHeaderInclude(HtmlIncludeEventInterface $event)
     {
+        $event->addData([
+            '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>',
+        ]);
+
         $event->addData($this->viewRendererSnippetDirectory->getResourcesForSnippetPackage(''));
 
-        $event->addData(array(
+        $event->addData([
             '<script src="'.TGlobal::GetStaticURLToWebLib('/wysiwyg/functions.js').'" type="text/javascript"></script>',
             '<link href="'.TGlobal::GetStaticURLToWebLib('/css/cms_user_style/main.css').'" rel="stylesheet" type="text/css" />',
             '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fileIconVectors/file-icon-square-o.css').'" rel="stylesheet" type="text/css" />',
-        ));
+        ]);
     }
 }

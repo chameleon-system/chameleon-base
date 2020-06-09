@@ -1,3 +1,7 @@
+if (typeof CHAMELEON === "undefined" || !CHAMELEON) {
+    var CHAMELEON = {}; // Remove dependency from cms.js being loaded first
+}
+
 CHAMELEON.UPDATE_MANAGER = {
     config: {
         sRunUpdatesButtonId: '#btnRunUpdates',
