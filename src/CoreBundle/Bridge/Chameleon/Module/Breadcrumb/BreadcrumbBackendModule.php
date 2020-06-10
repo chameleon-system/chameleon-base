@@ -84,7 +84,8 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     ) {
         $visitor->SetMappedValue('pathCmsRoot', PATH_CMS_CONTROLLER);
 
-        // TODO entfernen/deprecaten? \TCMSURLHistory::AddItem <- \MTTableEditor::AddURLHistory
+        // TODO entfernen/deprecaten? \TCMSURLHistory <- \MTTableEditor::AddURLHistory
+        //   interessante URL-Parameter: _rmhist, popLastURL, _histid
 
         $request = $this->requestStack->getCurrentRequest();
 
