@@ -39,4 +39,4 @@ if (false === isset($bodyAttributes)) {
 <script src="<?= TGlobal::GetPathTheme(); ?>/coreui/js/coreui.min.js" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->
 <script src="<?= TGlobal::GetPathTheme(); ?>/coreui/js/coreui-utilities.min.js" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->
 </head>
-<body class="<?=$cssClasses; ?>" <?=$bodyAttributes; ?>
+<body class="<?=$cssClasses; ?>" <?=$bodyAttributes; ?>>
