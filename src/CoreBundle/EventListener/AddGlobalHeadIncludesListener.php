@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEventInterface;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use TGlobal;
 
 /**
@@ -26,11 +27,14 @@ class AddGlobalHeadIncludesListener
     private $viewRendererSnippetDirectory;
 
     /**
-     * @param \TPkgViewRendererSnippetDirectoryInterface $viewRendererSnippetDirectory
+     * @var RequestInfoServiceInterface
      */
-    public function __construct(\TPkgViewRendererSnippetDirectoryInterface $viewRendererSnippetDirectory)
+    private $requestInfoService;
+
+    public function __construct(\TPkgViewRendererSnippetDirectoryInterface $viewRendererSnippetDirectory, RequestInfoServiceInterface $requestInfoService)
     {
         $this->viewRendererSnippetDirectory = $viewRendererSnippetDirectory;
+        $this->requestInfoService = $requestInfoService;
     }
 
     /**
@@ -38,9 +42,13 @@ class AddGlobalHeadIncludesListener
      */
     public function onGlobalHtmlHeaderInclude(HtmlIncludeEventInterface $event)
     {
-        $event->addData([
-            '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.js').'" type="text/javascript"></script>',
-        ]);
+        if (true === $this->requestInfoService->isBackendMode()) {
+            $event->addData(
+                [
+                    '<script src="'.TGlobal::GetStaticURLToWebLib( '/javascript/cms.js').'" type="text/javascript"></script>',
+                ]
+            );
+        }
 
         $event->addData($this->viewRendererSnippetDirectory->getResourcesForSnippetPackage(''));
 
