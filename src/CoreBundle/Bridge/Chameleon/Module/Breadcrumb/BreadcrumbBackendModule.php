@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Breadcrumb;
 
+use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItem;
 use ChameleonSystem\CoreBundle\DataAccess\MenuItemDataAccessInterface;
 use ChameleonSystem\CoreBundle\DataModel\BackendBreadcrumbItem;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
@@ -180,16 +181,19 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     private function getBreadcrumbItems(array $menuItemUrls, ?string $tableId, ?string $entryUrl, ?\TCMSRecord $entry): array
     {
+        // TODO!! this misses the menu category ?!
+
+
         $items = [];
 
-        // TODO this overlaps with $menuItemUrls
-        $tablePointerMenuItems = $this->menuItemDataAccess->getMenuItemsPointingToTables();
-
         $foundMenuEntry = false;
-        if (null !== $tableId && true === \array_key_exists($tableId, $tablePointerMenuItems)) {
-            $menuItem = $tablePointerMenuItems[$tableId];
-            $items[] = new BackendBreadcrumbItem($menuItem->getUrl(), $menuItem->getName());
-            $foundMenuEntry = true;
+        if (null !== $tableId) {
+            $menuItem = $this->getMatchingEntryFromMenu($tableId);
+
+            if (null !== $menuItem) {
+                $items[] = new BackendBreadcrumbItem($menuItem->getUrl(), $menuItem->getName());
+                $foundMenuEntry = true;
+            }
         }
 
         if (false === $foundMenuEntry && null !== $entryUrl) {
@@ -202,7 +206,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             }
         }
 
-        // TODO similar code should be used to show "menu entry" for a table conf - and remove field "view in category window"
+        // TODO similar code should be used to show "menu entry" for a table conf - and remove field "view in category window" (-> there is still a legacy case for it?)
 
         if (false === $foundMenuEntry && null !== $tableId) {
             $tableConf = \TdbCmsTblConf::GetNewInstance();
@@ -218,6 +222,19 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         return $items;
+    }
+
+    private function getMatchingEntryFromMenu(string $tableId): ?MenuItem
+    {
+        // TODO getMenuItemsPointingToTables() overlaps with getMenuItemUrls() above - potentially add a "points to table" there?
+
+        $tablePointerMenuItems = $this->menuItemDataAccess->getMenuItemsPointingToTables();
+
+        if (false === \array_key_exists($tableId, $tablePointerMenuItems)) {
+            return null;
+        }
+
+        return $tablePointerMenuItems[$tableId];
     }
 
     private function extractTableId(string $url): ?string
