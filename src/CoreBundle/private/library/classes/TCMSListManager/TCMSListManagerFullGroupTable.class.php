@@ -61,8 +61,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         // table is not in cache, load it
         if (null === $cachedTableObj) {
-            $this->CreateTableObj();
-            $this->PostCreateTableObjectHook();
+            $this->CreateTableObj(); // also calls PostCreateTableObjectHook();
             $this->tableObj->orderList = $aOrderData;
             $this->AddFields();
             $this->AddSortInformation();
@@ -312,6 +311,8 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         $this->tableObj->showRowsPerPageChooser = true;
         $this->AddRowCallback();
+
+        $this->PostCreateTableObjectHook();
     }
 
     protected function AddRowCallback()
