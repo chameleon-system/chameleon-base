@@ -102,7 +102,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     private function getTableFromSessionCache(string $cacheKey): ?TFullGroupTable
     {
         if (false === \array_key_exists('_listObjCache', $_SESSION)) {
-            $_SESSION['_listObjCache'] = [];
+            return null;
         }
 
         $isObjectInSession = \array_key_exists($cacheKey, $_SESSION['_listObjCache']);
