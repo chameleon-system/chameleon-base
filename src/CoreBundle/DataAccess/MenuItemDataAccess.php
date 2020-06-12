@@ -56,8 +56,6 @@ class MenuItemDataAccess implements MenuItemDataAccessInterface
                 $menuItem = $this->menuItemFactory->createMenuItem($tdbMenuItem);
                 if (null !== $menuItem) {
                     $menuItems[] = $menuItem;
-
-                    $menuItemMap[$menuItem->getId()] = $menuItem;
                 }
             }
             if (\count($menuItems) > 0) {
