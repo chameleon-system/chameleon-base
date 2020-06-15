@@ -79,16 +79,21 @@
     margin-right: 0;
 }
 
+.checkbox-matrix {
+    display: flex;
+    flex-direction: row;
+}
+
 .checkboxGroupTitle {
-    clear:both;
-    padding-top:10px;
+    margin-top: 10px;
     font-weight:bold;
     border-bottom: 1px solid black;
 }
 
 .checkboxDIV {
+    display: inline-flex;
+    flex-direction: row;
     width: 250px;
-    float: left;
     padding: 3px;
     border-bottom: 1px solid #C1BEBE;
     border-right: 1px solid #C1BEBE;
@@ -98,11 +103,20 @@
 .checkboxDIV label {
     font-weight: normal;
     line-height: 25px;
+    flex: 1;
 }
 
-.checkboxDIV input {
+.checkboxDIV input[type="checkbox"] {
     margin-right: 5px;
-    float: left;
+
+    /* Overwrite from bootstrap: */
+    position: inherit;
+    margin-left: 0;
+    margin-top: 0;
+}
+
+.checkboxDIV .entry-edit {
+    margin-left: 5px;
 }
 
 .checkBoxHeaderActionLink {

@@ -60,7 +60,8 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         }
         $html .= '
         </div>
-        <div class="card-body p-1">';
+        <div class="card-body p-1">
+        <div class="checkbox-matrix"';
 
         $mltRecords = $this->getMltRecordData($oTargetTableConf->sqlData['list_group_field_column']);
         $activeGroup = '';
@@ -93,10 +94,11 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             $escapedId = $sEscapedNameField.'_'.$escapedRecordId;
 
             $html .= '<div class="checkboxDIV">';
-            $html .= '<div class="form-check form-check-inline">
+            $html .= '
+                          <label class="form-check-label" for="'.$escapedId.'">
                           <input class="form-check-input" type="checkbox" name="'.$sEscapedNameField.'['.$escapedRecordId.']" value="'.$escapedRecordId.'" id="'.$escapedId.'" '.$checked.' '.$disabled.'>
-                          <label class="form-check-label" for="'.$escapedId.'">'.TGlobal::OutHTML($displayValue).'</label>
-                      </div>';
+                          '.TGlobal::OutHTML($displayValue).'
+                          </label>';
 
             if (true === $hasEditPermissionForForeignTable) {
                 $url = $urlUtil->getArrayAsUrl(
@@ -107,14 +109,13 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
                     ),
                     PATH_CMS_CONTROLLER.'?'
                 );
-                $html .= '<div class="float-right"><a href="'.$url.'"><i class="fas fa-edit"></i></a></div>';
+                $html .= '<div class="entry-edit"><a href="'.$url.'"><i class="fas fa-edit"></i></a></div>';
             }
 
             $html .= '</div>';
         }
 
-        $html .= '</div>
-      </div>';
+        $html .= '</div></div></div>';
 
         return $html;
     }
@@ -232,9 +233,17 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             $oTableList->sRestriction = null; // do not include the restriction - it is part of the parent table, not the mlt!
 
             $sFilterQuery = $oTableList->FilterQuery().$this->GetMLTRecordRestrictions();
-            $sFilterQueryOrderInfo = $oTableList->GetSortInfoAsString();
-            if (!empty($sFilterQueryOrderInfo)) {
-                $sFilterQuery .= ' ORDER BY '.$sFilterQueryOrderInfo;
+//            $sFilterQueryOrderInfo = $oTableList->GetSortInfoAsString();
+//            if (!empty($sFilterQueryOrderInfo)) {
+//                $sFilterQuery .= ' ORDER BY '.$sFilterQueryOrderInfo;
+//            }
+
+            // TODO check for tabname and cms_field_conf ?? restrict special case to cms_field_conf?
+            // TODO also how does this relate to $bShowCustomsort above?
+
+            if (false !== \strpos($sFilterQuery, 'AS tabname') && false !== \strpos($sFilterQuery, 'cms_field_conf')) {
+                // TODO multilanguage sort! Also for tabname!
+                $sFilterQuery .= ' ORDER BY tabname ASC, `cms_field_conf`.`translation` ASC ';
             }
         } else {
             $sFilterQuery = parent::GetMLTFilterQuery();
