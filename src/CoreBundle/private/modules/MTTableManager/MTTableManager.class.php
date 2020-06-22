@@ -540,9 +540,9 @@ class MTTableManager extends TCMSModelBase
     public function GetHtmlHeadIncludes()
     {
         $includeLines = parent::GetHtmlHeadIncludes();
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->';
+        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/flash/flash.js').'" type="text/javascript"></script>';
         $includeLines[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />';
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/table.js').'" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->';
+        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/table.js').'" type="text/javascript"></script>';
         $includeLines[] = '<link href="'.TGlobal::GetPathTheme().'/css/tooltip.css" rel="stylesheet" type="text/css" />';
         $includeLines[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css').'" media="screen" rel="stylesheet" type="text/css" />';
 
@@ -571,9 +571,18 @@ class MTTableManager extends TCMSModelBase
         }
         $includeLines = array_merge($includeLines, $tableListIncludeLines);
 
-        $includeLines[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
-
         return $includeLines;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetHtmlFooterIncludes()
+    {
+        $includes = parent::GetHtmlFooterIncludes();
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
+
+        return $includes;
     }
 
     /**
