@@ -24,7 +24,7 @@ Execute the updates by calling the console command `app/console chameleon_system
 
 ## Add A Tag To Mappers
 
-All mappers (classes inheriting from IViewMapper) must now be tagged with `chameleon_system.mapper` if they are defined
+All mappers (classes inheriting from AbstractViewMapper) must now be tagged with `chameleon_system.mapper` if they are defined
 as service.
 
 ## Make Legacy Services Public
