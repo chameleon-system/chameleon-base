@@ -690,7 +690,7 @@
             <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
         </service>
 
-        <service id="chameleon_system_core.translator" class="ChameleonSystem\CoreBundle\Translation\ChameleonTranslator" decorates="translator" decoration-priority="-255">
+        <service id="chameleon_system_core.translator" class="ChameleonSystem\CoreBundle\Translation\ChameleonTranslator" decorates="translator" decoration-priority="-255" public="true">
             <argument type="service" id="chameleon_system_core.translator.inner" />
             <argument type="service" id="chameleon_system_core.request_info_service" />
         </service>

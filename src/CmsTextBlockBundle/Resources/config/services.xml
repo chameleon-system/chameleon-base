@@ -9,7 +9,7 @@
             <tag name="chameleon_system.mapper"/>
         </service>
 
-        <service id="chameleon_system_cms_text_block.text_block_lookup" class="ChameleonSystem\CmsTextBlockBundle\Service\TextBlockLookup">
+        <service id="chameleon_system_cms_text_block.text_block_lookup" class="ChameleonSystem\CmsTextBlockBundle\Service\TextBlockLookup" public="true">
         </service>
     </services>
 
