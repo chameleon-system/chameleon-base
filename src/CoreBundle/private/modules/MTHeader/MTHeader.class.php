@@ -634,6 +634,8 @@ class MTHeader extends TCMSModelBase
         }
 
         $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
+        $includes[] = '<link href="/chameleon/blackbox/iconFonts/foundation/foundation-icons.css" media="screen" rel="stylesheet" type="text/css" />';
+        $includes[] = '<link href="/chameleon/blackbox/iconFonts/ionicons/ionicons.css" media="screen" rel="stylesheet" type="text/css" />';
 
         $sessionTimeout = @ini_get('session.gc_maxlifetime');
         if (!empty($sessionTimeout)) {
