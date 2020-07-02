@@ -293,11 +293,20 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     public function GetHtmlHeadIncludes()
     {
         $includes = parent::GetHtmlHeadIncludes();
-        $includes[] = sprintf('<link rel="stylesheet" href="%s/coreui/css/perfect-scrollbar.css" type="text/css" />', \TGlobal::GetPathTheme());
-        $includes[] = sprintf(
-            '<script src="%s" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->',
-            \TGlobal::GetStaticURLToWebLib('/javascript/modules/sidebar/sidebar.js')
-        );
+        $includes[] = sprintf('<link rel="stylesheet" href="%s/coreui/css/perfect-scrollbar.css" type="text/css" />',
+            \TGlobal::GetPathTheme());
+
+        return $includes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function GetHtmlFooterIncludes()
+    {
+        $includes = parent::GetHtmlFooterIncludes();
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>',
+            \TGlobal::GetStaticURLToWebLib('/javascript/modules/sidebar/sidebar.js'));
 
         return $includes;
     }

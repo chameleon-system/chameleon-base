@@ -291,7 +291,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
               $('#tooltipcms_portal_id_content').parent('td').prepend('<input type=\"hidden\" name=\"cms_portal_id\" id=\"cms_portal_id\" value=\"' + portalID + '\" />' + portalName);
               $('#tooltipcms_portal_id_content').siblings('.switchToRecordBox').remove();
             }
-            CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=".TGlobal::OutJS($this->treeNodeSelectModulePagedef)."&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID);
+            CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=".TGlobal::OutJS($this->treeNodeSelectModulePagedef)."&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID + '&currentPageId=".$this->oTableRow->id."', 0, 0, '".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_primary_node')."');
           } else {
             toasterMessage('".TGlobal::Translate('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
           }
@@ -333,6 +333,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
                 'rootID' => TCMSTreeNode::TREE_ROOT_ID,
                 'id' => $this->oTableRow->id,
                 'isInIframe' => '1',
+                'fieldName' => $this->name,
                 'primaryTreeNodeId' => $this->oTableRow->fieldPrimaryTreeIdHidden
             ], '', '&');
     }

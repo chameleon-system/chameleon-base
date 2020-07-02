@@ -56,6 +56,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @var string
      */
+    private $fieldName = '';
+
+    /**
+     * @var string
+     */
     private $primaryConnectedNodeIdOfCurrentPage = '';
 
     /**
@@ -165,6 +170,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $isInIframe = $this->inputFilterUtil->getFilteredInput('isInIframe', '0');
         $visitor->SetMappedValue('isInIframe', $isInIframe);
 
+        $this->fieldName = $this->inputFilterUtil->getFilteredGetInput('fieldName', '');
+        $visitor->SetMappedValue('fieldName', $this->fieldName);
+
         $noAssignDialog = $this->inputFilterUtil->getFilteredGetInput('noassign', '0');
         $visitor->SetMappedValue('noAssignDialog', $noAssignDialog);
 
@@ -176,6 +184,13 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $currentPageId = $this->inputFilterUtil->getFilteredGetInput('id', '');
         $primaryConnectedNodeIdOfCurrentPage = $this->inputFilterUtil->getFilteredGetInput('primaryTreeNodeId', '');
         $this->rootNodeId = $this->inputFilterUtil->getFilteredGetInput('rootID', \TCMSTreeNode::TREE_ROOT_ID);
+        if ('' !== $currentPageId) {
+            $rootNode = new \TdbCmsTree();
+            $rootNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+            $rootNode->Load($this->rootNodeId);
+            $visitor->SetMappedValue('pageBreadcrumbsHTML', $this->createPageBreadcrumbs($rootNode));
+        }
+
 
         $url = $this->urlUtil->getArrayAsUrl(
             [
@@ -332,6 +347,19 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         if (true === $cachingEnabled) {
             $this->addCachingTriggers($cacheTriggerManager);
         }
+    }
+
+    private function createPageBreadcrumbs(\TdbCmsTree $node, $path = ''): string
+    {
+        $path .= '<li class="breadcrumb-item">'.$node->fieldName.'</li>';
+        $pageBreadcrumbsHTML = '<div id="'.$this->fieldName.'_tmp_path_'.$node->id.'" style="display:none;"><ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
+
+        $children = $node->GetChildren(true);
+        while ($child = $children->Next()) {
+            $pageBreadcrumbsHTML .= $this->createPageBreadcrumbs($child, $path);
+        }
+
+        return $pageBreadcrumbsHTML;
     }
 
     /**
@@ -590,6 +618,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
                 $portalTreeNodeDataModel->setType($typeRestricted);
             }
         }
+        if ('' !== $this->currentPageId) {
+            $portalTreeNodeDataModel->setDisabled(true);
+        }
         $portalTreeNodeDataModel->addListHtmlClass('no-checkbox');
 
         return $portalTreeNodeDataModel;
@@ -622,8 +653,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $treeNodeDataModel->setName($this->translateNodeName($treeNodeDataModel->getName(), $node));
         $this->setTypeAndAttributes($treeNodeDataModel, $node);
 
-        // $level 0 == rootNode, 1 = portal, >2 = folder or page
-        if ($level < 2) {
+        // $level 0 == rootNode, 1 = portal, 2 = Navigations (top, main, footer, system),  >2 = folder or page
+        if ($level <= 2) {
+            if ('' !== $this->currentPageId) {
+                $treeNodeDataModel->setDisabled(true);
+            }
             $treeNodeDataModel->addListHtmlClass('no-checkbox');
             $treeNodeDataModel->setOpened(true);
         }
@@ -664,83 +698,74 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
     private function setTypeAndAttributes(BackendTreeNodeDataModel $treeNodeDataModel, \TdbCmsTree $node)
     {
-        $treeNodeDataModel->setType($this->getInitialType($node));
+        $treeNodeDataModel->setType('');
 
-        $nodeHidden = false;
-        if (true == $node->fieldHidden) {
-            $nodeHidden = true;
+        $children = $node->GetChildren(true);
+        if ($children->Length() > 0) {
+            $treeNodeDataModel->setType('folder');
+            if (true === in_array($node->id, $this->restrictedNodes)) {
+                $treeNodeDataModel->setType('folderRestrictedMenu');
+            }
+        }
+
+        if (true === $node->fieldHidden) {
+            $this->addIconToTreeNode($treeNodeDataModel, 'nodeHidden', 'fas fa-eye-slash');
             $treeNodeDataModel->addLinkHtmlClass('node-hidden');
         }
 
-        $pages = [];
-        $connectedPages = $node->GetAllLinkedPages();
-        $foundSecuredPage = false;
-        while ($connectedPage = $connectedPages->Next()) {
-            $pages[] = $connectedPage->id;
+        if ('' !== $node->sqlData['link']) {
+            $this->addIconToTreeNode($treeNodeDataModel, 'externalLink', 'fas fa-external-link-alt');
+        }
 
-            if (false === $nodeHidden
-                && false === $foundSecuredPage
-                && (true === $connectedPage->fieldExtranetPage
-                    && false === $node->fieldShowExtranetPage)) {
-                $treeNodeDataModel->addLinkHtmlClass('page-hidden');
-                $treeNodeDataModel->setType('pageHidden');
-                $foundSecuredPage = true;
+        $linkedPageOfNode = $node->GetLinkedPageObject(true);
+
+        if (false === $linkedPageOfNode) {
+            if ('' === $treeNodeDataModel->getType()) {
+                $this->addIconToTreeNode($treeNodeDataModel, 'noPage', 'fas fa-genderless');
             }
+            return;
+        }
 
-            if (true === $connectedPage->fieldExtranetPage) {
-                $treeNodeDataModel->addLinkHtmlClass('locked');
-                $treeNodeDataModel->setType('locked');
+        $this->addIconToTreeNode($treeNodeDataModel, 'page', 'far fa-file');
+        $treeNodeDataModel->addListAttribute('isPageId', $linkedPageOfNode->id);
+
+        if (true === $linkedPageOfNode->fieldExtranetPage) {
+            $treeNodeDataModel->addLinkHtmlClass('locked');
+            $this->addIconToTreeNode($treeNodeDataModel, 'locked', 'fas fa-user-lock');
+            if (false === $node->fieldShowExtranetPage) {
+                $this->addIconToTreeNode($treeNodeDataModel, 'extranetpageHidden', 'far fa-eye-slash');
+                $treeNodeDataModel->addLinkHtmlClass('extranetpage-hidden');
             }
         }
 
-        if (count($pages) > 0) {
-            if ('folder' === $treeNodeDataModel->getType()) {
-                $treeNodeDataModel->setType('folderWithPage');
-            }
+        // current page is connected to this node
+        if ($this->currentPageId === $linkedPageOfNode->id) {
+            $treeNodeDataModel->addListHtmlClass('activeConnectedNode');
+            $treeNodeDataModel->setOpened(true);
+            $treeNodeDataModel->setSelected(true);
 
-            $primaryPageID = $node->GetLinkedPage(true);
-            if (false !== $primaryPageID) {
-                $treeNodeDataModel->addListAttribute('isPageId', $primaryPageID);
-            }
-
-            // current page is connected to this node
-            if ('' !== $this->currentPageId && true === in_array($this->currentPageId, $pages)) {
-                $treeNodeDataModel->addLinkHtmlClass('activeConnectedNode');
-                $treeNodeDataModel->setOpened(true);
-                $treeNodeDataModel->setSelected(true);
-
-                if ($this->primaryConnectedNodeIdOfCurrentPage === $node->id) {
-                    $treeNodeDataModel->addLinkHtmlClass('primaryConnectedNode');
+            if ($this->primaryConnectedNodeIdOfCurrentPage === $node->id) {
+                $treeNodeDataModel->addListHtmlClass('primaryConnectedNodeOfCurrentPage');
+                if ('' !== $this->currentPageId) {
                     $treeNodeDataModel->setDisabled(true);
+                    $treeNodeDataModel->addListHtmlClass('no-checkbox');
                 }
-            } else {
-                $treeNodeDataModel->addLinkHtmlClass('otherConnectedNode');
+            }
+        } else {
+            $treeNodeDataModel->addLinkHtmlClass('otherConnectedNode');
+            if ('' !== $this->currentPageId) {
+                $treeNodeDataModel->setDisabled(true);
+                $treeNodeDataModel->addListHtmlClass('no-checkbox');
             }
         }
     }
 
-    private function getInitialType(\TdbCmsTree $node): string
-    {
-        $children = $node->GetChildren(true);
-        if ($children->Length() > 0) {
-            $type = 'folder';
+    private function addIconToTreeNode (BackendTreeNodeDataModel $treeNodeDataModel, string $type, string $fontawesomeIcon) {
+        if ('' === $treeNodeDataModel->getType()) {
+            $treeNodeDataModel->setType($type);
         } else {
-            $type = 'page';
+            $treeNodeDataModel->addFurtherIconHTML('<i class="'. $fontawesomeIcon .' mr-2"></i>');
         }
-
-        if ('' !== $node->sqlData['link']) {
-            $type = 'externalLink';
-        }
-
-        if (true === in_array($node->id, $this->restrictedNodes)) {
-            $type .= 'RestrictedMenu';
-        }
-
-        if (true === $node->fieldHidden) {
-            $type = 'nodeHidden';
-        }
-
-        return $type;
     }
 
     /**

@@ -25,6 +25,11 @@ class BackendTreeNodeDataModel implements JsonSerializable
     private $name = '';
 
     /**
+     * @var string
+     */
+    private $furtherIconsHTML = '';
+
+    /**
      * @var int
      */
     private $cmsIdent = '';
@@ -110,6 +115,21 @@ class BackendTreeNodeDataModel implements JsonSerializable
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getFurtherIconsHTML(): string
+    {
+        return $this->furtherIconsHTML;
+    }
+
+    public function setFurtherIconsHTML(string $furtherIconsHTML): void
+    {
+        $this->furtherIconsHTML = $furtherIconsHTML;
+    }
+
+    public function addFurtherIconHTML(string $furtherIconHTML): void
+    {
+        $this->furtherIconsHTML .= $furtherIconHTML;
     }
 
     public function getCmsIdent(): int
@@ -255,7 +275,7 @@ class BackendTreeNodeDataModel implements JsonSerializable
     {
         $jsTreeItem = [
             'id' => $this->id,
-            'text' => $this->name,
+            'text' => $this->furtherIconsHTML . $this->name,
             'type' => $this->type,
             'state' => [
                 'opened' => $this->opened,

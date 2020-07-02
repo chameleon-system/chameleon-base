@@ -220,12 +220,24 @@ function changeColorPreview(previewDivID, hex) {
     }
 }
 
-function loadHomeTreeNodeSelection(fieldName, id) {
-    //var portalID = document.getElementById('main_node_tree').value;
-    var portalID = document.cmseditform.id.value;
+function loadTreeNodePortalSelection(fieldName) {
+    let portalId = document.cmseditform.id.value;
+    let selectedPortalNodeId = $('#'+fieldName).val();
 
-    if (portalID !== '0' && portalID !== '') {
-        CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=navigationTreeSingleSelect&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID, 400, 500);
+    if (portalId !== '0' && portalId !== '') {
+        let url = window.location.pathname + '?pagedef=navigationTreeSingleSelect' + '&portalSelectMode=portalSelect' + '&fieldName='+fieldName+'&id='+selectedPortalNodeId+'&portalId='+portalId;
+        CreateModalIFrameDialogCloseButton(url, 0, 0);
+    } else {
+        toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_portal_required'), 'WARNING');
+    }
+}
+
+function loadHomeTreeNodeSelection(fieldName) {
+    let portalId = document.cmseditform.id.value;
+    let selectedHomeNodeId = $('#'+fieldName).val();
+
+    if (portalId !== '0' && portalId !== '') {
+        CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=navigationTreeSingleSelect' + '&portalSelectMode=portalHomePage' + '&fieldName=' + fieldName + '&id=' + selectedHomeNodeId + '&portalId=' + portalId, 0, 0);
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_portal_required'), 'WARNING');
     }
