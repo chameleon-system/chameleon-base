@@ -85,7 +85,6 @@ class TCMSResourceCollection implements ResourceCollectorInterface
             return false;
         }
 
-        $bAllowResourceCollection = true;
         $oGlobal = TGlobal::instance();
         $bIsModuleChooser = $oGlobal->GetUserData('__modulechooser');
         if (true === TGlobal::IsCMSMode()) {
@@ -112,130 +111,130 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         if (false === $this->IsAllowed()) {
             return $sPageContent;
         }
-            if (false === \stripos($sPageContent, '</head>')) {
-                return $sPageContent;
+        if (false === \stripos($sPageContent, '</head>')) {
+            return $sPageContent;
+        }
+        $filesPrefix = $this->getFilesRefreshAndDomainPrefix();
+
+        // we only work on the <head></head> content - everything else is kept as is
+        $aPageParts = \explode('</head>', $sPageContent);
+        if (\count($aPageParts) < 2) {
+            $aPageParts = \explode('</HEAD>', $sPageContent);
+        }
+        if (2 !== \count($aPageParts)) {
+            return $sPageContent;
+        }
+
+        $sReworkContent = $aPageParts[0];
+
+        // also exclude anything that is marked as exclude
+        $matchString = '/<!--#CMSRESOURCEIGNORE#-->(.+?)<!--#ENDCMSRESOURCEIGNORE#-->/si';
+        $sReworkContent = preg_replace_callback(
+            $matchString,
+            array($this, 'CollectExternalResourcesCommentsCallback'),
+            $sReworkContent
+        );
+
+        // we want to ignore css/js in comments. easy if we strip comments first
+        $matchString = '/<!--(.+?)-->/si';
+        $sReworkContent = preg_replace_callback(
+            $matchString,
+            array($this, 'CollectExternalResourcesCommentsCallback'),
+            $sReworkContent
+        );
+
+        // create resource collection for dynamic css
+        $matchString = "/<link([^>]+?)href=[\"]([^'\"]+?).css([\?][^[:space:]]+)?[\"]([^>]*?)>(?!\\s*?<!--(.*?)#GLOBALRESOURCECOLLECTION#)/i";
+        $sReworkContent = preg_replace_callback(
+            $matchString,
+            array($this, 'CollectExternalResourcesCSSCallback'),
+            $sReworkContent
+        );
+        $aCSS = $this->StaticContentCollector('css');
+
+
+        // create resource collection for static global css
+        $matchString = "/<link([^>]+?)href=[\"]([^'\"]+?).css([\?][^[:space:]]+)?[\"]([^>]*?)>\\s*(<!--.*?#GLOBALRESOURCECOLLECTION#.?-->)/i";
+        $sReworkContent = preg_replace_callback(
+            $matchString,
+            array($this, 'CollectExternalResourcesCSSCallback'),
+            $sReworkContent
+        );
+        $aGlobalCSS = $this->StaticContentCollector('cssglobal');
+
+
+        // repeat for js
+        $matchString = "/<script([^>]+?)src=[\"]([^'\"]+?).js([\?][^[:space:]]+)?[\"]([^>]*?)><\/script>(?!\\s*?<!--(.*?)#GLOBALRESOURCECOLLECTION#)/i";
+        $sReworkContent = preg_replace_callback(
+            $matchString,
+            array($this, 'CollectExternalResourcesJSCallback'),
+            $sReworkContent
+        );
+        $aJS = $this->StaticContentCollector('js');
+        $minify = ServiceLocator::getParameter(
+            'chameleon_system_core.resources.enable_external_resource_collection_minify'
+        );
+        if ($minify) {
+            $sMinifyStatus = 'true';
+        } else {
+            $sMinifyStatus = 'false';
+        }
+
+
+        $matchString = "/<script([^>]+?)src=[\"]([^'\"]+?).js([\?][^[:space:]]+)?[\"]([^>]*?)><\/script>\\s*(<!--.*?#GLOBALRESOURCECOLLECTION#.?-->)/i";
+        $sReworkContent = preg_replace_callback(
+            $matchString,
+            array($this, 'CollectExternalResourcesJSCallback'),
+            $sReworkContent
+        );
+        $aJSGlobal = $this->StaticContentCollector('jsglobal');
+
+        $hasCollectedCss = \count($aCSS) > 0 && \count($aGlobalCSS);
+        $hasCollectedJs = \count($aJS) > 0 && \count($aJSGlobal);
+        if (false === $hasCollectedCss && false === $hasCollectedJs) {
+            return $sPageContent;
+        }
+
+        $sFileCSSMD5 = $filesPrefix.'.css.'.md5(implode(';', $aCSS)).'.css';
+        $sFileJSMD5 = $filesPrefix.'.js.'.md5(implode(';', $aJS).$sMinifyStatus).'.js';
+        $sFileCSSGlobalMD5 = $filesPrefix.'.global_css.'.md5(implode(';', $aGlobalCSS)).'.css';
+        $sFileJSGlobalMD5 = $filesPrefix.'.global_js.'.md5(implode(';', $aJSGlobal).$sMinifyStatus).'.js';
+        $resourceFilesExist = \file_exists($sFileCSSMD5);
+        $resourceFilesExist = $resourceFilesExist && \file_exists($sFileJSMD5);
+        $resourceFilesExist = $resourceFilesExist && \file_exists($sFileCSSGlobalMD5);
+        $resourceFilesExist = $resourceFilesExist && \file_exists($sFileJSGlobalMD5);
+
+        if (false === $resourceFilesExist) {
+            $this->setResourceCollectionProcessRunning(true);
+        }
+        try {
+            if (false === $this->CreateCSSResourceCollectionFile($sFileCSSMD5, $aCSS)) {
+                $sFileCSSMD5 = ''; // reset file because we don`t have includes
             }
-            $filesPrefix = $this->getFilesRefreshAndDomainPrefix();
-
-            // we only work on the <head></head> content - everything else is kept as is
-            $aPageParts = \explode('</head>', $sPageContent);
-            if (\count($aPageParts) < 2) {
-                $aPageParts = \explode('</HEAD>', $sPageContent);
+            if (false === $this->CreateJSResourceCollectionFile($sFileJSMD5, $aJS)) {
+                $sFileJSMD5 = ''; // reset file because we don`t have includes
             }
-            if (2 !== \count($aPageParts)) {
-                return $sPageContent;
+            if (false === $this->CreateCSSResourceCollectionFile($sFileCSSGlobalMD5, $aGlobalCSS)) {
+                $sFileCSSGlobalMD5 = ''; // reset global file because we don`t have global includes
             }
+            if (false === $this->CreateJSResourceCollectionFile($sFileJSGlobalMD5, $aJSGlobal)) {
+                $sFileJSGlobalMD5 = ''; // reset global file because we don`t have global includes
+            }
+        } finally {
+            if (false === $resourceFilesExist) {
+                $this->setResourceCollectionProcessRunning(false);
+            }
+        }
 
-                $sReworkContent = $aPageParts[0];
+        $sPageContent = $sReworkContent.'</head>'.$aPageParts[1];
 
-                // also exclude anything that is marked as exclude
-                $matchString = '/<!--#CMSRESOURCEIGNORE#-->(.+?)<!--#ENDCMSRESOURCEIGNORE#-->/si';
-                $sReworkContent = preg_replace_callback(
-                    $matchString,
-                    array($this, 'CollectExternalResourcesCommentsCallback'),
-                    $sReworkContent
-                );
-
-                // we want to ignore css/js in comments. easy if we strip comments first
-                $matchString = '/<!--(.+?)-->/si';
-                $sReworkContent = preg_replace_callback(
-                    $matchString,
-                    array($this, 'CollectExternalResourcesCommentsCallback'),
-                    $sReworkContent
-                );
-
-                // create resource collection for dynamic css
-                $matchString = "/<link([^>]+?)href=[\"]([^'\"]+?).css([\?][^[:space:]]+)?[\"]([^>]*?)>(?!\\s*?<!--(.*?)#GLOBALRESOURCECOLLECTION#)/i";
-                $sReworkContent = preg_replace_callback(
-                    $matchString,
-                    array($this, 'CollectExternalResourcesCSSCallback'),
-                    $sReworkContent
-                );
-                $aCSS = $this->StaticContentCollector('css');
-
-
-                // create resource collection for static global css
-                $matchString = "/<link([^>]+?)href=[\"]([^'\"]+?).css([\?][^[:space:]]+)?[\"]([^>]*?)>\\s*(<!--.*?#GLOBALRESOURCECOLLECTION#.?-->)/i";
-                $sReworkContent = preg_replace_callback(
-                    $matchString,
-                    array($this, 'CollectExternalResourcesCSSCallback'),
-                    $sReworkContent
-                );
-                $aGlobalCSS = $this->StaticContentCollector('cssglobal');
-
-
-                // repeat for js
-                $matchString = "/<script([^>]+?)src=[\"]([^'\"]+?).js([\?][^[:space:]]+)?[\"]([^>]*?)><\/script>(?!\\s*?<!--(.*?)#GLOBALRESOURCECOLLECTION#)/i";
-                $sReworkContent = preg_replace_callback(
-                    $matchString,
-                    array($this, 'CollectExternalResourcesJSCallback'),
-                    $sReworkContent
-                );
-                $aJS = $this->StaticContentCollector('js');
-                $minify = ServiceLocator::getParameter(
-                    'chameleon_system_core.resources.enable_external_resource_collection_minify'
-                );
-                if ($minify) {
-                    $sMinifyStatus = 'true';
-                } else {
-                    $sMinifyStatus = 'false';
-                }
-
-
-                $matchString = "/<script([^>]+?)src=[\"]([^'\"]+?).js([\?][^[:space:]]+)?[\"]([^>]*?)><\/script>\\s*(<!--.*?#GLOBALRESOURCECOLLECTION#.?-->)/i";
-                $sReworkContent = preg_replace_callback(
-                    $matchString,
-                    array($this, 'CollectExternalResourcesJSCallback'),
-                    $sReworkContent
-                );
-                $aJSGlobal = $this->StaticContentCollector('jsglobal');
-
-                $hasCollectedCss = \count($aCSS) > 0 && \count($aGlobalCSS);
-                $hasCollectedJs = \count($aJS) > 0 && \count($aJSGlobal);
-                if (false === $hasCollectedCss && false === $hasCollectedJs) {
-                    return $sPageContent;
-                }
-
-                $sFileCSSMD5 = $filesPrefix.'.css.'.md5(implode(';', $aCSS)).'.css';
-                $sFileJSMD5 = $filesPrefix.'.js.'.md5(implode(';', $aJS).$sMinifyStatus).'.js';
-                $sFileCSSGlobalMD5 = $filesPrefix.'.global_css.'.md5(implode(';', $aGlobalCSS)).'.css';
-                $sFileJSGlobalMD5 = $filesPrefix.'.global_js.'.md5(implode(';', $aJSGlobal).$sMinifyStatus).'.js';
-                $resourceFilesExist = \file_exists($sFileCSSMD5);
-                $resourceFilesExist = $resourceFilesExist && $sFileJSMD5;
-                $resourceFilesExist = $resourceFilesExist && $sFileCSSGlobalMD5;
-                $resourceFilesExist = $resourceFilesExist && $sFileJSGlobalMD5;
-
-                if (false === $resourceFilesExist) {
-                    $this->setResourceCollectionProcessRunning(true);
-                }
-                try {
-                    if (false === $this->CreateCSSResourceCollectionFile($sFileCSSMD5, $aCSS)) {
-                        $sFileCSSMD5 = ''; // reset file because we don`t have includes
-                    }
-                    if (false === $this->CreateJSResourceCollectionFile($sFileJSMD5, $aJS)) {
-                        $sFileJSMD5 = ''; // reset file because we don`t have includes
-                    }
-                    if (false === $this->CreateCSSResourceCollectionFile($sFileCSSGlobalMD5, $aGlobalCSS)) {
-                        $sFileCSSGlobalMD5 = ''; // reset global file because we don`t have global includes
-                    }
-                    if (false === $this->CreateJSResourceCollectionFile($sFileJSGlobalMD5, $aJSGlobal)) {
-                        $sFileJSGlobalMD5 = ''; // reset global file because we don`t have global includes
-                    }
-                } finally {
-                    if (false === $resourceFilesExist) {
-                        $this->setResourceCollectionProcessRunning(false);
-                    }
-                }
-
-                $sPageContent = $sReworkContent.'</head>'.$aPageParts[1];
-
-                $sPageContent = $this->AddResourceCollectionToHead(
-                    $sPageContent,
-                    $sFileCSSMD5,
-                    $sFileJSMD5,
-                    $sFileCSSGlobalMD5,
-                    $sFileJSGlobalMD5
-                );
+        $sPageContent = $this->AddResourceCollectionToHead(
+            $sPageContent,
+            $sFileCSSMD5,
+            $sFileJSMD5,
+            $sFileCSSGlobalMD5,
+            $sFileJSGlobalMD5
+        );
 
         return $sPageContent;
     }
@@ -813,11 +812,15 @@ class TCMSResourceCollection implements ResourceCollectorInterface
 
     private function resourceCollectionProcessRunning(): bool
     {
-
+        return file_exists($this->assetPath.'/lock.tmp');
     }
 
     private function setResourceCollectionProcessRunning(bool $state): void
     {
-
+        if (true === $state) {
+            touch($this->assetPath.'/lock.tmp');
+            return;
+        }
+        unlink($this->assetPath.'/lock.tmp');
     }
 }
