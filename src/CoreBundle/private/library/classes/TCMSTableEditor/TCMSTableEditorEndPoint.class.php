@@ -1728,7 +1728,13 @@ class TCMSTableEditorEndPoint
             }
         }
 
-        $setFields = $this->filterUnchangedFieldsFromPostData($postFieldsLanguageConvertedWithAccessRights, $tableName, $this->sId);
+        if(null !== $this->sId) {
+            $setFields = $this->filterUnchangedFieldsFromPostData(
+                $postFieldsLanguageConvertedWithAccessRights,
+                $tableName,
+                $this->sId
+            );
+        }
 
         if ($isFirst) {
             return false;
@@ -1831,8 +1837,9 @@ class TCMSTableEditorEndPoint
         $dataBeforeUpdateQueryResult =  $stmt->fetchAll();
         $dataBeforeUpdate = $dataBeforeUpdateQueryResult[0];
         $filteredSetFields = [];
-        foreach ($postFieldsLanguageConvertedWithAccessRights as $postKey => $postValue){
-            if (array_key_exists($postKey, $dataBeforeUpdate) && $dataBeforeUpdate[$postKey] !== $postValue) {
+        foreach ($postFieldsLanguageConvertedWithAccessRights as $postKey => $postValue) {
+            $arrayKeyExists = array_key_exists($postKey, $dataBeforeUpdate);
+            if (false === $arrayKeyExists || (true === $arrayKeyExists && $dataBeforeUpdate[$postKey] !== $postValue)) {
                 $filteredSetFields[$postKey] = $postValue;
             }
         }
