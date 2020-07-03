@@ -45,15 +45,27 @@ class TCMSResourceCollection implements ResourceCollectorInterface
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+    /**
+     * @var string
+     */
+    private $assetUrl;
+    /**
+     * @var string
+     */
+    private $assetPath;
 
     public function __construct(
         ?IPkgCmsFileManager $cmsFileManager = null,
         ?PortalDomainServiceInterface $portalDomainService = null,
-        ?EventDispatcherInterface $eventDispatcher = null
+        ?EventDispatcherInterface $eventDispatcher = null,
+        string $assetUrl = URL_OUTBOX.'static/',
+        string $assetPath = PATH_OUTBOX.'/static/'
     ) {
         $this->cmsFileManager = $cmsFileManager ?? ServiceLocator::get('chameleon_system_core.filemanager');
         $this->portalDomainService = $portalDomainService ?? ServiceLocator::get('chameleon_system_core.portal_domain_service');
         $this->eventDispatcher = $eventDispatcher ?? ServiceLocator::get('event_dispatcher');
+        $this->assetUrl = rtrim($assetUrl, '/');
+        $this->assetPath = rtrim($assetPath, '/');
     }
 
     /**
@@ -196,16 +208,16 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         $sCompressLinkJsGlobal = '';
 
         if (!empty($sFileMD5)) {
-            $sCompressLinkCSS = '<link href="'.TGlobal::GetStaticURL(URL_OUTBOX.'static/css/'.$sFileMD5).'" rel="stylesheet" type="text/css" />'."\n";
+            $sCompressLinkCSS = '<link href="'.TGlobal::GetStaticURL($this->assetUrl.'/css/'.$sFileMD5).'" rel="stylesheet" type="text/css" />'."\n";
         }
         if (!empty($sFileCSSGlobalMD5)) {
-            $sCompressLinkCSSGlobal = '<link href="'.TGlobal::GetStaticURL(URL_OUTBOX.'static/css/'.$sFileCSSGlobalMD5).'" rel="stylesheet" type="text/css" />'."\n";
+            $sCompressLinkCSSGlobal = '<link href="'.TGlobal::GetStaticURL($this->assetUrl.'/css/'.$sFileCSSGlobalMD5).'" rel="stylesheet" type="text/css" />'."\n";
         }
         if (!empty($sFileJSMD5)) {
-            $sCompressLinkJs = '<script src="'.TGlobal::GetStaticURL(URL_OUTBOX.'static/js/'.$sFileJSMD5).'" type="text/javascript"></script>'."\n";
+            $sCompressLinkJs = '<script src="'.TGlobal::GetStaticURL($this->assetUrl.'/js/'.$sFileJSMD5).'" type="text/javascript"></script>'."\n";
         }
         if (!empty($sFileJSGlobalMD5)) {
-            $sCompressLinkJsGlobal = '<script src="'.TGlobal::GetStaticURL(URL_OUTBOX.'static/js/'.$sFileJSGlobalMD5).'" type="text/javascript"></script>'."\n";
+            $sCompressLinkJsGlobal = '<script src="'.TGlobal::GetStaticURL($this->assetUrl.'/js/'.$sFileJSGlobalMD5).'" type="text/javascript"></script>'."\n";
         }
 
         $sPreHeadText = $sCompressLinkCSSGlobal.$sCompressLinkCSS.$sCompressLinkJsGlobal.$sCompressLinkJs;
@@ -249,7 +261,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         $bFileCreated = false;
         if (is_array($aCSS) && count($aCSS) > 0) {
             $bFileCreated = true;
-            $sCSSStaticPath = PATH_OUTBOX.'/static/css/';
+            $sCSSStaticPath = $this->assetPath.'/css/';
             if (!file_exists($sCSSStaticPath.$sFileMD5)) {
                 $bTargetDirectoryIsWritable = true;
                 if (!is_dir($sCSSStaticPath)) {
@@ -328,7 +340,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         $bFileCreated = false;
         if (is_array($aJS) && count($aJS) > 0) {
             $bFileCreated = true;
-            $sJSStaticPath = PATH_OUTBOX.'/static/js/';
+            $sJSStaticPath = $this->assetPath.'/js/';
             if (!file_exists($sJSStaticPath.$sFileJSMD5)) {
                 $bTargetDirectoryIsWritable = true;
                 if (!is_dir($sJSStaticPath)) {
