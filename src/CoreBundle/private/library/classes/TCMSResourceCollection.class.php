@@ -58,8 +58,8 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         ?IPkgCmsFileManager $cmsFileManager = null,
         ?PortalDomainServiceInterface $portalDomainService = null,
         ?EventDispatcherInterface $eventDispatcher = null,
-        string $assetUrl = URL_OUTBOX.'static/',
-        string $assetPath = PATH_OUTBOX.'/static/'
+        string $assetUrl = URL_OUTBOX.'static',
+        string $assetPath = PATH_OUTBOX.'/static'
     ) {
         $this->cmsFileManager = $cmsFileManager ?? ServiceLocator::get('chameleon_system_core.filemanager');
         $this->portalDomainService = $portalDomainService ?? ServiceLocator::get('chameleon_system_core.portal_domain_service');

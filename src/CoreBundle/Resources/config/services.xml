@@ -5,8 +5,6 @@
 
     <parameters>
         <parameter key="vendor_dir">%kernel.root_dir%/../vendors</parameter>
-        <parameter key="chameleon_system_core.const.path_outbox" type="constant">PATH_OUTBOX</parameter>
-        <parameter key="chameleon_system_core.const.url_outbox" type="constant">URL_OUTBOX</parameter>
         <parameter key="chameleon_system_core.pdo.mysql_attr_init_command" type="constant">\PDO::MYSQL_ATTR_INIT_COMMAND</parameter>
         <parameter key="chameleon_system_core.pdo.mysql_attr_compression_name" type="constant">\PDO::MYSQL_ATTR_COMPRESS</parameter>
         <parameter key="chameleon_system_core.pdo.enable_mysql_compression">false</parameter>
@@ -14,9 +12,6 @@
         <parameter key="chameleon_system_core.controller_invoke_listener.class">ChameleonSystem\CoreBundle\Controller\ChameleonControllerInvokeListener</parameter>
         <parameter key="chameleon_system_core.tpl_page_controller.class">TPkgCmsRouteControllerCmsTplPage</parameter>
         <parameter key="chameleon_system_core.render_media_properties_field">true</parameter>
-
-        <parameter key="chameleon_system_core.resource_collector.asset_base_url">%chameleon_system_core.const.url_outbox%/static</parameter>
-        <parameter key="chameleon_system_core.resource_collector.asset_base_path">%chameleon_system_core.const.path_outbox%/static</parameter>
     </parameters>
 
     <services>
@@ -811,8 +806,8 @@
             <argument type="service" id="chameleon_system_core.filemanager"/>
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
             <argument type="service" id="event_dispatcher"/>
-            <argument>%chameleon_system_core.resource_collector.asset_base_url%</argument>
-            <argument>%chameleon_system_core.resource_collector.asset_base_path%</argument>
+            <argument /><!-- set via DI chameleon_system_core.resource_collection.cache_url -->
+            <argument /><!-- set via DI chameleon_system_core.resource_collection.cache_path -->
         </service>
 
         <service id="chameleon_system_core.command.update.count" class="ChameleonSystem\CoreBundle\Command\CountUpdateCommand">
