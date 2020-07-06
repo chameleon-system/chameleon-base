@@ -205,7 +205,9 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         $resourceFilesExist = $resourceFilesExist && \file_exists($sFileJSGlobalMD5);
 
         if (false === $resourceFilesExist) {
-            $this->setsResourceCollectionWriteProcessRunning(true);
+            if (false === $this->setsResourceCollectionWriteProcessRunning(true)) {
+                return $sPageContent;
+            }
         }
         try {
             if (false === $this->CreateCSSResourceCollectionFile($sFileCSSMD5, $aCSS)) {
@@ -815,12 +817,12 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         return file_exists($this->assetPath.'/lock.tmp');
     }
 
-    private function setsResourceCollectionWriteProcessRunning(bool $state): void
+    private function setsResourceCollectionWriteProcessRunning(bool $state): bool
     {
         if (true === $state) {
-            touch($this->assetPath.'/lock.tmp');
-            return;
+            return false === $this->hasResourceCollectionWriteProcessRunning() && touch($this->assetPath.'/lock.tmp');
         }
-        unlink($this->assetPath.'/lock.tmp');
+
+        return true === $this->hasResourceCollectionWriteProcessRunning() && unlink($this->assetPath.'/lock.tmp');
     }
 }
