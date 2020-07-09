@@ -205,7 +205,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         $resourceFilesExist = $resourceFilesExist && \file_exists($sFileJSGlobalMD5);
 
         if (false === $resourceFilesExist) {
-            if (false === $this->setsResourceCollectionWriteProcessRunning(true)) {
+            if (false === $this->setResourceCollectionWriteProcessRunning(true)) {
                 return $sPageContent;
             }
         }
@@ -224,7 +224,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
             }
         } finally {
             if (false === $resourceFilesExist) {
-                $this->setsResourceCollectionWriteProcessRunning(false);
+                $this->setResourceCollectionWriteProcessRunning(false);
             }
         }
 
@@ -817,7 +817,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         return file_exists($this->assetPath.'/lock.tmp');
     }
 
-    private function setsResourceCollectionWriteProcessRunning(bool $state): bool
+    private function setResourceCollectionWriteProcessRunning(bool $state): bool
     {
         if (true === $state) {
             return false === $this->hasResourceCollectionWriteProcessRunning() && touch($this->assetPath.'/lock.tmp');
