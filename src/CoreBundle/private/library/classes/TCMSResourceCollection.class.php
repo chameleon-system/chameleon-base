@@ -820,9 +820,9 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     private function setResourceCollectionWriteProcessRunning(bool $state): bool
     {
         if (true === $state) {
-            return false === $this->hasResourceCollectionWriteProcessRunning() && touch($this->assetPath.'/lock.tmp');
+            return false === file_exists($this->assetPath.'/lock.tmp') && touch($this->assetPath.'/lock.tmp');
         }
 
-        return true === $this->hasResourceCollectionWriteProcessRunning() && unlink($this->assetPath.'/lock.tmp');
+        return true === file_exists($this->assetPath.'/lock.tmp') && unlink($this->assetPath.'/lock.tmp');
     }
 }
