@@ -793,6 +793,8 @@
             <argument type="service" id="chameleon_system_core.filemanager"/>
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
             <argument type="service" id="event_dispatcher"/>
+            <argument /><!-- set via DI chameleon_system_core.resource_collection.cache_url -->
+            <argument /><!-- set via DI chameleon_system_core.resource_collection.cache_path -->
         </service>
 
         <service id="chameleon_system_core.command.update.count" class="ChameleonSystem\CoreBundle\Command\CountUpdateCommand">
