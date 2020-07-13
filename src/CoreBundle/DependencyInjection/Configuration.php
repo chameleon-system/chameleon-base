@@ -45,7 +45,7 @@ class Configuration implements ConfigurationInterface
                 ->append($this->getMailTargetTransformationServiceConfig())
                 ->append($this->getMailerConfig())
                 ->append($this->getGoogleMapsApiConfig())
-                ->append($this->getBackendConfig());
+                ->append($this->getBackendConfig())
                 ->append($this->getModuleExecutionConfig())
                 ->append($this->getResourceCollectionConfig())
         ;
