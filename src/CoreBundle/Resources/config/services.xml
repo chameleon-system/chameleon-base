@@ -804,6 +804,12 @@
             <argument type="service" id="request_stack"/>
         </service>
 
+        <service class="ChameleonSystem\CoreBundle\ResourceCollection\ResourceCollectionInformationService"
+                 id="chameleon_system_core.resource_collector.info"
+                 public="true">
+            <argument id="chameleon_system_core.resource_collector" type="service"/>
+        </service>
+
         <service id="chameleon_system_core.resource_collector" class="TCMSResourceCollection" shared="false">
             <argument type="service" id="chameleon_system_core.filemanager"/>
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
