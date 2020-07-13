@@ -33,8 +33,9 @@ class SnippetChainModifier
      *
      * @param string   $pathToAdd
      * @param string   $afterThisPath The new path is added after this path (provide the complete line as shown in the
-     *                                theme view in the backend without \n). If the path is null or not found in the chain,
-     *                                the $pathToAdd will be appended at the end.
+     *                                theme view in the backend without \n).
+     *                                Use ^ to add the new $pathToAdd as first element.
+     *                                If the path is null or not found in the chain the $pathToAdd will be appended at the end.
      * @param string[] $toTheseThemes an array of theme IDs for which to add the element. Add to all themes if empty.
      *
      * @throws DataAccessException
@@ -64,12 +65,17 @@ class SnippetChainModifier
         if ('' === $snippetChain) {
             return $pathToAdd;
         }
-        $quotedAfterThisPath = preg_quote($afterThisPath, '#');
-        $pattern = '#(\s+|^)'.$quotedAfterThisPath.'(\s+|$)#';
-        if (null === $afterThisPath || 1 !== preg_match($pattern, $snippetChain)) {
-            $snippetChain .= "\n$pathToAdd";
+
+        if ('^' === $afterThisPath) {
+            $snippetChain = $pathToAdd."\n".$snippetChain;
         } else {
-            $snippetChain = preg_replace($pattern, "\$1$afterThisPath\n$pathToAdd\$2", $snippetChain);
+            $quotedAfterThisPath = preg_quote($afterThisPath, '#');
+            $pattern = '#(\s+|^)'.$quotedAfterThisPath.'(\s+|$)#';
+            if (null === $afterThisPath || 1 !== preg_match($pattern, $snippetChain)) {
+                $snippetChain .= "\n$pathToAdd";
+            } else {
+                $snippetChain = preg_replace($pattern, "\$1$afterThisPath\n$pathToAdd\$2", $snippetChain);
+            }
         }
 
         return $this->optimizeSnippetChainString($snippetChain);
