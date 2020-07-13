@@ -189,8 +189,8 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         );
         $aJSGlobal = $this->StaticContentCollector('jsglobal');
 
-        $hasCollectedCss = \count($aCSS) > 0 && \count($aGlobalCSS) > 0;
-        $hasCollectedJs = \count($aJS) > 0 && \count($aJSGlobal) > 0;
+        $hasCollectedCss = \count($aCSS) > 0 || \count($aGlobalCSS) > 0;
+        $hasCollectedJs = \count($aJS) > 0 || \count($aJSGlobal) > 0;
         if (false === $hasCollectedCss && false === $hasCollectedJs) {
             return $sPageContent;
         }
