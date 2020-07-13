@@ -67,7 +67,7 @@ class ChameleonSystemCoreExtension extends Extension
         ContainerBuilder $container
     ): void {
         $resourceCollectionDefinition = $container->getDefinition('chameleon_system_core.resource_collector');
-        $resourceCollectionDefinition->replaceArgument(3, $resourceCollectionConfiguration['cache_url']);
+        $resourceCollectionDefinition->replaceArgument(3, $resourceCollectionConfiguration['cache_url_path']);
         $resourceCollectionDefinition->replaceArgument(4, $resourceCollectionConfiguration['cache_path']);
     }
 
