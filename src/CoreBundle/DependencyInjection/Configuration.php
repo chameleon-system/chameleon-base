@@ -172,7 +172,7 @@ class Configuration implements ConfigurationInterface
         $subTree->addDefaultsIfNotSet();
         $outboxUrl = rtrim(URL_OUTBOX, '/');
         // the outboxurl may be an absolute url - we want a relative url instead. Reason:
-        // 1. if the container is build using the console, then the URL_OUTBOX will have "console" as a domain
+        // 1. if the container is built using the console, then the URL_OUTBOX will have "console" as a domain
         // 2. The URL is added via \TGlobalBase::GetStaticURL which will take care of adding the correct url.
         $defaultCacheUrlPath = parse_url($outboxUrl, PHP_URL_PATH);
         $subTree->children()
