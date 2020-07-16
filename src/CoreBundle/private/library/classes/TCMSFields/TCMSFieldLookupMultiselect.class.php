@@ -450,11 +450,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return $html;
     }
 
-    public function RenderFieldPropertyString()
-    {
-        return '';
-    }
-
     public function RenderFieldPostLoadString()
     {
         return '';

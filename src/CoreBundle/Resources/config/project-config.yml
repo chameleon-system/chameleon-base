@@ -73,7 +73,6 @@ framework:
     cookie_httponly: true
     cookie_lifetime: 7200
     gc_maxlifetime: 7200
-    use_strict_mode: true
   templating:
     engines: ['twig']
   translator: { fallback: en }

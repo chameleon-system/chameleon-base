@@ -12,8 +12,9 @@
 namespace ChameleonSystem\TwigDebugBundle\Twig\Extension;
 
 use ChameleonSystem\TwigDebugBundle\Twig\Parser\IncludeNodeParser;
+use Twig\Extension\AbstractExtension;
 
-class DebugExtension extends \Twig_Extension
+class DebugExtension extends AbstractExtension
 {
     /**
      * Returns the name of the extension.

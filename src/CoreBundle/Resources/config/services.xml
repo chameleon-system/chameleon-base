@@ -59,7 +59,7 @@
             <argument type="service" id="chameleon_system_view_renderer.snippet_directory" />
         </service>
 
-        <service id="chameleon_system_core.http_kernel" class="ChameleonSystem\CoreBundle\ChameleonHttpKernel">
+        <service id="chameleon_system_core.http_kernel" class="ChameleonSystem\CoreBundle\ChameleonHttpKernel" public="true">
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="controller_resolver" />
             <argument type="service" id="request_stack" />
@@ -428,7 +428,7 @@
             <tag name="console.command" />
         </service>
 
-        <service id="chameleon_system_core.tpl_page_controller" class="%chameleon_system_core.tpl_page_controller.class%">
+        <service id="chameleon_system_core.tpl_page_controller" class="%chameleon_system_core.tpl_page_controller.class%" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.language_service" />
             <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
@@ -609,7 +609,7 @@
         <service id="chameleon_system_core.i18n.active_user_permission" class="ChameleonSystem\CoreBundle\i18n\ActiveCmsUserPermission">
 
         </service>
-        <service id="chameleon_system_core.i18n.export_translation_db_controller" class="ChameleonSystem\CoreBundle\i18n\Controller\JsTranslationController">
+        <service id="chameleon_system_core.i18n.export_translation_db_controller" class="ChameleonSystem\CoreBundle\i18n\Controller\JsTranslationController" public="true">
             <argument type="service" id="chameleon_system_core.i18n.export_service" />
             <argument type="service" id="chameleon_system_core.i18n.active_user_permission" />
         </service>
@@ -690,7 +690,7 @@
             <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
         </service>
 
-        <service id="chameleon_system_core.translator" class="ChameleonSystem\CoreBundle\Translation\ChameleonTranslator" decorates="translator" decoration-priority="-255">
+        <service id="chameleon_system_core.translator" class="ChameleonSystem\CoreBundle\Translation\ChameleonTranslator" decorates="translator" decoration-priority="-255" public="true">
             <argument type="service" id="chameleon_system_core.translator.inner" />
             <argument type="service" id="chameleon_system_core.request_info_service" />
         </service>
@@ -724,7 +724,7 @@
         </service>
 
         <service id="chameleon_system_core.mapper_loader" class="ChameleonSystem\CoreBundle\MapperLoader\MapperLoader" public="true">
-            <argument type="service" id="service_container" />
+            <argument /> <!-- Will be set by AddMappersPass. -->
         </service>
 
         <service id="chameleon_system_core.field.provider.class_from_table_field" class="ChameleonSystem\CoreBundle\Field\Provider\ClassFromTableFieldProvider" public="true">
@@ -807,7 +807,7 @@
             <tag name="console.command"/>
         </service>
 
-        <service id="chameleon_system_core.maintenance_mode_service" class="ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeService">
+        <service id="chameleon_system_core.maintenance_mode_service" class="ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeService" public="true">
             <argument type="service" id="database_connection"/>
             <argument type="service" id="chameleon_system_cms_cache.cache"/>
         </service>
@@ -878,15 +878,15 @@
             <tag name="chameleon_system.module" />
         </service>
 
-        <service id="chameleon_system_core.service.backend_breadcrumb" class="ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService">
+        <service id="chameleon_system_core.service.backend_breadcrumb" class="ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService" public="true">
             <argument type="service" id="request_stack"/>
         </service>
 
-        <service id="chameleon_system_core.service.main_menu_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator">
+        <service id="chameleon_system_core.service.main_menu_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator" public="true">
             <argument id="database_connection" type="service"/>
             <argument id="chameleon_system_core.util.field_translation" type="service"/>
         </service>
-        <service id="chameleon_system_core.service.module_icon_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\ModuleIconMigrator">
+        <service id="chameleon_system_core.service.module_icon_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\ModuleIconMigrator" public="true">
             <argument id="database_connection" type="service"/>
         </service>
 
