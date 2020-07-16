@@ -23,8 +23,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
 use TCMSTableToClass;
 
-// TODO there is some code (for history; #101) in BackendBreadcrumbService for example
-
 class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
     /**
@@ -87,6 +85,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         // TODO entfernen/deprecaten? \TCMSURLHistory <- \MTTableEditor::AddURLHistory
         //   interessante URL-Parameter: _rmhist, popLastURL, _histid
+        // TODO there is some code (for history; #101) in BackendBreadcrumbService for example
 
         $request = $this->requestStack->getCurrentRequest();
 
@@ -118,7 +117,9 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $parentTdb = $this->loadParent($tableConf, $tdb);
         }
 
+        // TODO these two are (conceptually) doubled - and only cached one level lower
         $menuItemUrls = $this->getMenuItemUrls();
+        $menuItemsPointingToTables = $this->getMenuItemsPointingToTable();
 
         $items = [];
 
@@ -132,13 +133,13 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 'id' => $parentTdb->id,
             ], PATH_CMS_CONTROLLER . '?', '&');
 
-            $parentItems = $this->getBreadcrumbItems($menuItemUrls, $parentTableConf->id, $parentEntryUrl, $parentTdb);
+            $parentItems = $this->getBreadcrumbItems($menuItemsPointingToTables, $menuItemUrls, $parentTableConf->id, $parentEntryUrl, $parentTdb);
             $items = \array_merge($items, $parentItems);
         }
 
         // TODO this is heuristic - note sidebar.js (markSelected, extractTableId) for equal code
 
-        $currentItems = $this->getBreadcrumbItems($menuItemUrls, $currentTableId, $currentUrl, $tdb);
+        $currentItems = $this->getBreadcrumbItems($menuItemsPointingToTables, $menuItemUrls, $currentTableId, $currentUrl, $tdb);
         $items = \array_merge($items, $currentItems);
 
         $visitor->SetMappedValue('items', $items);
@@ -179,7 +180,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     /**
      * @return BackendBreadcrumbItem[]
      */
-    private function getBreadcrumbItems(array $menuItemUrls, ?string $tableId, ?string $entryUrl, ?\TCMSRecord $entry): array
+    private function getBreadcrumbItems(array $menuItemsPointingToTables, array $menuItemUrls, ?string $tableId, ?string $entryUrl, ?\TCMSRecord $entry): array
     {
         // TODO!! this misses the menu category ?!
 
@@ -188,7 +189,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $foundMenuEntry = false;
         if (null !== $tableId) {
-            $menuItem = $this->getMatchingEntryFromMenu($tableId);
+            $menuItem = $this->getMatchingEntryFromMenu($tableId, $menuItemsPointingToTables);
 
             if (null !== $menuItem) {
                 $items[] = new BackendBreadcrumbItem($menuItem->getUrl(), $menuItem->getName());
@@ -224,17 +225,13 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $items;
     }
 
-    private function getMatchingEntryFromMenu(string $tableId): ?MenuItem
+    private function getMatchingEntryFromMenu(string $tableId, array $menuItemsPointingToTables): ?MenuItem
     {
-        // TODO getMenuItemsPointingToTables() overlaps with getMenuItemUrls() above - potentially add a "points to table" there?
-
-        $tablePointerMenuItems = $this->menuItemDataAccess->getMenuItemsPointingToTables();
-
-        if (false === \array_key_exists($tableId, $tablePointerMenuItems)) {
+        if (false === \array_key_exists($tableId, $menuItemsPointingToTables)) {
             return null;
         }
 
-        return $tablePointerMenuItems[$tableId];
+        return $menuItemsPointingToTables[$tableId];
     }
 
     private function extractTableId(string $url): ?string
@@ -288,6 +285,25 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         return $tdb;
+    }
+
+    private function getMenuItemsPointingToTable(): array
+    {
+        // TODO / NOTE this loop is basically the same as in getMenuItemUrls()
+
+        $tableMenuItems = [];
+
+        $menuCategories = $this->menuItemDataAccess->getMenuCategories();
+
+        foreach ($menuCategories as $menuCategory) {
+            foreach ($menuCategory->getMenuItems() as $menuItem) {
+                if (null !== $menuItem->getTableId()) {
+                    $tableMenuItems[$menuItem->getTableId()] = $menuItem;
+                }
+            }
+        }
+
+        return $tableMenuItems;
     }
 
     private function loadParent(\TdbCmsTblConf $tableConf, \TCMSRecord $tdb): ?\TCMSRecord

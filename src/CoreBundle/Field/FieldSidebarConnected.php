@@ -35,42 +35,57 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
 
     private function getMenuPath(string $tableId): string
     {
-        $menuCategories = $this->menuItemDataAccess->getMenuCategories();
-
-        foreach ($menuCategories as $menuCategory) {
-            foreach ($menuCategory->getMenuItems() as $menuItem) {
-                // TODO also this needs the information which table is linked (see todo in BreadcrumbBackendModule::getMatchingEntryFromMenu)
-                if (false !== \strpos($menuItem->getUrl(), '='.$tableId)) {
-                    return $menuCategory->getName() . ' > ' . $menuItem->getName();
-                }
-            }
-        }
-
-        return '';
-
-
-
-        // TODO this more light-weight does not work
-//        $menuEntry = $this->getMatchingEntryFromMenu($tableId);
+        // Heavy-weight AND heuristic approach
+//        $menuCategories = $this->menuItemDataAccess->getMenuCategories();
 //
-//        if (null === $menuEntry) {
-//            return '';
+//        foreach ($menuCategories as $menuCategory) {
+//            foreach ($menuCategory->getMenuItems() as $menuItem) {
+//                // TODO also this needs the information which table is linked (see todo in BreadcrumbBackendModule::getMatchingEntryFromMenu)
+//                if (false !== \strpos($menuItem->getUrl(), '='.$tableId)) {
+//                    return $menuCategory->getName() . ' > ' . $menuItem->getName();
+//                }
+//            }
 //        }
 //
-//        return $menuEntry->getName();
+//        return '';
+
+        $menuEntry = $this->getMatchingEntryFromMenu($tableId);
+
+        if (null === $menuEntry) {
+            return '';
+        }
+
+        return $menuEntry->getName();
     }
 
     private function getMatchingEntryFromMenu(string $tableId): ?MenuItem
     {
-        // TODO see todo in BreadcrumbBackendModule::getMatchingEntryFromMenu
-
-        $tablePointerMenuItems = $this->menuItemDataAccess->getMenuItemsPointingToTables();
+        $tablePointerMenuItems = $this->getMenuItemsPointingToTable();
 
         if (false === \array_key_exists($tableId, $tablePointerMenuItems)) {
             return null;
         }
 
         return $tablePointerMenuItems[$tableId];
+    }
+
+    private function getMenuItemsPointingToTable(): array
+    {
+        // TODO / NOTE this method also exists in BreadcrumbBackendModule
+
+        $tableMenuItems = [];
+
+        $menuCategories = $this->menuItemDataAccess->getMenuCategories();
+
+        foreach ($menuCategories as $menuCategory) {
+            foreach ($menuCategory->getMenuItems() as $menuItem) {
+                if (null !== $menuItem->getTableId()) {
+                    $tableMenuItems[$menuItem->getTableId()] = $menuItem;
+                }
+            }
+        }
+
+        return $tableMenuItems;
     }
 
     /**

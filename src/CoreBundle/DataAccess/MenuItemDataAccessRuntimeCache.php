@@ -38,13 +38,4 @@ class MenuItemDataAccessRuntimeCache implements MenuItemDataAccessInterface
 
         return $this->categoryCache;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getMenuItemsPointingToTables(): array
-    {
-        // TODO?
-        return $this->subject->getMenuItemsPointingToTables();
-    }
 }
