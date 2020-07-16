@@ -14,6 +14,7 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Breadcrumb;
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItem;
 use ChameleonSystem\CoreBundle\DataAccess\MenuItemDataAccessInterface;
 use ChameleonSystem\CoreBundle\DataModel\BackendBreadcrumbItem;
+use ChameleonSystem\CoreBundle\DataModel\MenuCategoryAndItem;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -151,7 +152,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         foreach ($menuCategories as $menuCategory) {
             foreach ($menuCategory->getMenuItems() as $menuItem) {
-                $menuItemUrls[$menuItem->getUrl()] = [$menuCategory, $menuItem];
+                $menuItemUrls[$menuItem->getUrl()] = new MenuCategoryAndItem($menuCategory, $menuItem);
             }
         }
 
@@ -197,8 +198,8 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $menuItem = $this->getMatchingEntryFromMenu($tableId, $menuItemsPointingToTables);
 
             if (null !== $menuItem) {
-                $items[] = new BackendBreadcrumbItem('', $menuItem[0]->getName());
-                $items[] = new BackendBreadcrumbItem($menuItem[1]->getUrl(), $menuItem[1]->getName());
+                $items[] = new BackendBreadcrumbItem('', $menuItem->getMenuCategory()->getName());
+                $items[] = new BackendBreadcrumbItem($menuItem->getMenuItem()->getUrl(), $menuItem->getMenuItem()->getName());
                 $foundMenuEntry = true;
             }
         }
@@ -206,8 +207,8 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         if (false === $foundMenuEntry && null !== $entryUrl) {
             foreach ($menuItemsByUrl as $url => $menuItem) {
                 if ($url === $entryUrl){
-                    $items[] = new BackendBreadcrumbItem('', $menuItem[0]->getName());
-                    $items[] = new BackendBreadcrumbItem($menuItem[1]->getUrl(), $menuItem[1]->getName());
+                    $items[] = new BackendBreadcrumbItem('', $menuItem->getMenuCategory()->getName());
+                    $items[] = new BackendBreadcrumbItem($menuItem->getMenuItem()->getUrl(), $menuItem->getMenuItem()->getName());
                     $foundMenuEntry = true;
                     break;
                 }
@@ -232,7 +233,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $items;
     }
 
-    private function getMatchingEntryFromMenu(string $tableId, array $menuItemsPointingToTables): ?array
+    private function getMatchingEntryFromMenu(string $tableId, array $menuItemsPointingToTables): ?MenuCategoryAndItem
     {
         if (false === \array_key_exists($tableId, $menuItemsPointingToTables)) {
             return null;
@@ -305,7 +306,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         foreach ($menuCategories as $menuCategory) {
             foreach ($menuCategory->getMenuItems() as $menuItem) {
                 if (null !== $menuItem->getTableId()) {
-                    $tableMenuItems[$menuItem->getTableId()] = [$menuCategory, $menuItem];
+                    $tableMenuItems[$menuItem->getTableId()] = new MenuCategoryAndItem($menuCategory, $menuItem);
                 }
             }
         }

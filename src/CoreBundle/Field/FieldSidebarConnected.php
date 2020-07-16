@@ -4,6 +4,7 @@ namespace ChameleonSystem\CoreBundle\Field;
 
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItem;
 use ChameleonSystem\CoreBundle\DataAccess\MenuItemDataAccessInterface;
+use ChameleonSystem\CoreBundle\DataModel\MenuCategoryAndItem;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class FieldSidebarConnected extends \TCMSFieldVarchar
@@ -35,30 +36,16 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
 
     private function getMenuPath(string $tableId): string
     {
-        // Heavy-weight AND heuristic approach
-//        $menuCategories = $this->menuItemDataAccess->getMenuCategories();
-//
-//        foreach ($menuCategories as $menuCategory) {
-//            foreach ($menuCategory->getMenuItems() as $menuItem) {
-//                // TODO also this needs the information which table is linked (see todo in BreadcrumbBackendModule::getMatchingEntryFromMenu)
-//                if (false !== \strpos($menuItem->getUrl(), '='.$tableId)) {
-//                    return $menuCategory->getName() . ' > ' . $menuItem->getName();
-//                }
-//            }
-//        }
-//
-//        return '';
-
         $menuEntry = $this->getMatchingEntryFromMenu($tableId);
 
         if (null === $menuEntry) {
             return '';
         }
 
-        return $menuEntry[0]->getName().' / '.$menuEntry[1]->getName();
+        return $menuEntry->getMenuCategory()->getName().' / '.$menuEntry->getMenuItem()->getName();
     }
 
-    private function getMatchingEntryFromMenu(string $tableId): ?array
+    private function getMatchingEntryFromMenu(string $tableId): ?MenuCategoryAndItem
     {
         $tablePointerMenuItems = $this->getMenuItemsPointingToTable();
 
@@ -80,12 +67,11 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
         foreach ($menuCategories as $menuCategory) {
             foreach ($menuCategory->getMenuItems() as $menuItem) {
                 if (null !== $menuItem->getTableId()) {
-                    $tableMenuItems[$menuItem->getTableId()] = [$menuCategory, $menuItem];
+                    $tableMenuItems[$menuItem->getTableId()] = new MenuCategoryAndItem($menuCategory, $menuItem);
                 }
             }
         }
 
-        // TODO return type
         return $tableMenuItems;
     }
 
