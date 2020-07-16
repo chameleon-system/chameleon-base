@@ -42,6 +42,8 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
             return '';
         }
 
+        // TODO remove field "view in category window" (-> there is still a legacy case for it?)
+
         return $menuEntry->getMenuCategory()->getName().' / '.$menuEntry->getMenuItem()->getName();
     }
 

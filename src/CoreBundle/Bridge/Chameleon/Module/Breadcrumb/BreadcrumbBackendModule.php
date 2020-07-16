@@ -179,17 +179,12 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     private function getBreadcrumbItems(array $menuItemsPointingToTables, array $menuItemsByUrl, ?string $tableId, ?string $entryUrl, ?\TCMSRecord $entry): array
     {
-        // TODO odd special case (is also the last "if" down here)
-        // TODO this is basically not right (?): should/must list the menu entry (if any) and not the url directly without question - see adding the category below
-        if (null !== $entry  && null !== $tableId) {
-            $tableConf = \TdbCmsTblConf::GetNewInstance();
+        $isSingleTableEntry = false;
 
-            if (true === $tableConf->Load($tableId)) {
-                if (true === $tableConf->fieldOnlyOneRecordTbl) {
-                    return [new BackendBreadcrumbItem($entryUrl, $this->getNameString($entry->GetName()))];
-                }
-            }
+        if (null !== $entry) {
+            $isSingleTableEntry = $entry->GetTableConf()->fieldOnlyOneRecordTbl;
         }
+
 
         $items = [];
 
@@ -199,7 +194,12 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
             if (null !== $menuItem) {
                 $items[] = new BackendBreadcrumbItem('', $menuItem->getMenuCategory()->getName());
-                $items[] = new BackendBreadcrumbItem($menuItem->getMenuItem()->getUrl(), $menuItem->getMenuItem()->getName());
+                if (false === $isSingleTableEntry) {
+                    $items[] = new BackendBreadcrumbItem(
+                        $menuItem->getMenuItem()->getUrl(),
+                        $menuItem->getMenuItem()->getName()
+                    );
+                }
                 $foundMenuEntry = true;
             }
         }
@@ -208,17 +208,25 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             foreach ($menuItemsByUrl as $url => $menuItem) {
                 if ($url === $entryUrl){
                     $items[] = new BackendBreadcrumbItem('', $menuItem->getMenuCategory()->getName());
-                    $items[] = new BackendBreadcrumbItem($menuItem->getMenuItem()->getUrl(), $menuItem->getMenuItem()->getName());
+                    if (false === $isSingleTableEntry) {
+                        $items[] = new BackendBreadcrumbItem(
+                            $menuItem->getMenuItem()->getUrl(),
+                            $menuItem->getMenuItem()->getName()
+                        );
+                    }
                     $foundMenuEntry = true;
+
                     break;
                 }
             }
         }
 
-        // TODO similar code should be used to show "menu entry" for a table conf - and remove field "view in category window" (-> there is still a legacy case for it?)
-
         if (false === $foundMenuEntry && null !== $tableId) {
+            // Simply show the table name if there is no menu entry
+
             $tableConf = \TdbCmsTblConf::GetNewInstance();
+
+            // TODO does this (always) exist as $entry->GetTableConf() ?
 
             if (true === $tableConf->Load($tableId)) {
                 // TODO could use a valid tablemanager url - however there might be no valid view configured for this table (?)
