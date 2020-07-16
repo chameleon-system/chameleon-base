@@ -25,18 +25,24 @@
         </service>
 
         <service id="chameleon_system_newsletter.mapper.signout_config" class="TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig">
+            <tag name="chameleon_system.mapper"/>
         </service>
 
         <service id="chameleon_system_newsletter.mapper.signout_config_form" class="TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form">
+            <tag name="chameleon_system.mapper"/>
         </service>
 
         <service id="chameleon_system_newsletter.mapper.signup_config" class="TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig">
+            <tag name="chameleon_system.mapper"/>
         </service>
 
         <service id="chameleon_system_newsletter.mapper.signup_config_form" class="TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig_Form">
+            <tag name="chameleon_system.mapper"/>
         </service>
 
-        <service id="chameleon_system_newsletter.mapper.quick_signup" class="TPkgNewsletterMapper_QuickSignup" public="true">
+        <service id="chameleon_system_newsletter.mapper.quick_signup" class="TPkgNewsletterMapper_QuickSignup">
+            <tag name="chameleon_system.mapper"/>
+
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.system_page_service" />
         </service>

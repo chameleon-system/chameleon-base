@@ -690,7 +690,7 @@
             <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
         </service>
 
-        <service id="chameleon_system_core.translator" class="ChameleonSystem\CoreBundle\Translation\ChameleonTranslator" decorates="translator" decoration-priority="-255">
+        <service id="chameleon_system_core.translator" class="ChameleonSystem\CoreBundle\Translation\ChameleonTranslator" decorates="translator" decoration-priority="-255" public="true">
             <argument type="service" id="chameleon_system_core.translator.inner" />
             <argument type="service" id="chameleon_system_core.request_info_service" />
         </service>
@@ -724,7 +724,7 @@
         </service>
 
         <service id="chameleon_system_core.mapper_loader" class="ChameleonSystem\CoreBundle\MapperLoader\MapperLoader" public="true">
-            <argument type="service" id="service_container" />
+            <argument /> <!-- Will be set by AddMappersPass. -->
         </service>
 
         <service id="chameleon_system_core.field.provider.class_from_table_field" class="ChameleonSystem\CoreBundle\Field\Provider\ClassFromTableFieldProvider" public="true">

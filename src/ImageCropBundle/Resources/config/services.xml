@@ -68,22 +68,30 @@
 
         <service id="chameleon_system_image_crop.mapper.media_field_image_box_with_crop"
                  class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Mapper\ImageCropMediaFieldImageBoxMapper">
+            <tag name="chameleon_system.mapper"/>
+
             <argument type="service" id="chameleon_system_media_manager.url_generator"/>
         </service>
 
         <service id="chameleon_system_image_crop.mapper.media_manager_media_item_crops"
                  class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper\MediaManagerMediaItemCropsMapper">
+            <tag name="chameleon_system.mapper"/>
+
             <argument type="service" id="chameleon_system_image_crop.image_crop_data_access"/>
             <argument type="service" id="chameleon_system_image_crop.cms_media_data_access"/>
         </service>
 
         <service id="chameleon_system_image_crop.mapper.media_manager_image_crop_editor_url"
                  class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper\ImageCropEditorUrlMapper">
+            <tag name="chameleon_system.mapper"/>
+
             <argument type="service" id="chameleon_system_core.util.url"/>
         </service>
 
         <service id="chameleon_system_image_crop.mapper.media_manager_image_crop_access_rights"
                  class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper\ImageCropAccessRightsMapper">
+            <tag name="chameleon_system.mapper"/>
+
             <argument type="service" id="chameleon_system_core.util.url"/>
         </service>
 
@@ -93,7 +101,9 @@
         </service>
 
         <service id="chameleon_system_image_crop.mapper.usages_add_crops_mapper"
-                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper\MediaManagerMediaItemUsagesAddCropsMapper"/>
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper\MediaManagerMediaItemUsagesAddCropsMapper">
+            <tag name="chameleon_system.mapper"/>
+        </service>
 
     </services>
 </container>
