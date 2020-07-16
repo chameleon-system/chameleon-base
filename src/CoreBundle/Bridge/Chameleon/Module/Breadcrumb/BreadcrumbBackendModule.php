@@ -185,6 +185,17 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         // TODO!! this misses the menu category ?!
 
 
+        // TODO odd special case (is also the last "if" down here)
+        if (null !== $entry  && null !== $tableId) {
+            $tableConf = \TdbCmsTblConf::GetNewInstance();
+
+            if (true === $tableConf->Load($tableId)) {
+                if (true === $tableConf->fieldOnlyOneRecordTbl) {
+                    return [new BackendBreadcrumbItem($entryUrl, $this->getNameString($entry->GetName()))];
+                }
+            }
+        }
+
         $items = [];
 
         $foundMenuEntry = false;
