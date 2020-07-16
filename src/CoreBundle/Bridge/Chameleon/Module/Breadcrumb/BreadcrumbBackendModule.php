@@ -94,8 +94,8 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         $currentUrl = $request->getRequestUri();
-        $currentTableId = $this->extractTableId($currentUrl);
-        $tableConf = $this->getTableConf($currentTableId);
+        $currentTableAndEntryId = $this->extractTableAndEntryId($currentUrl);
+        $tableConf = $this->getTableConf($currentTableAndEntryId[0] ?? null);
 
         // TODO MTTableManager considers a field ? $fieldName = $inputFilterUtil->getFilteredInput('field');
         // TODO MTTableManager considers sTableEditorPagdef as pagedef (for one record redirect)
@@ -103,22 +103,18 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         // TODO errors (log?) on load errors?
 
-        $tdb = null;
-        if (null !== $tableConf) {
-            $id = $this->inputFilterUtil->getFilteredInput('id');
-
-            if (null !== $id) {
-                $tdb = $this->getTdb($tableConf->fieldName, $id);
-            }
+        $tdbEntry = null;
+        if (null !== $tableConf && null !== $currentTableAndEntryId[1]) {
+            $tdbEntry = $this->getTdb($tableConf->fieldName, $currentTableAndEntryId[1]);
         }
 
         $parentTdb = null;
-        if (null !== $tableConf && null !== $tdb) {
-            $parentTdb = $this->loadParent($tableConf, $tdb);
+        if (null !== $tableConf && null !== $tdbEntry) {
+            $parentTdb = $this->loadParent($tableConf, $tdbEntry);
         }
 
         // TODO these two are (conceptually) doubled - and only cached one level lower
-        $menuItemUrls = $this->getMenuItemUrls();
+        $menuItemsByUrl = $this->getMenuItemsByUrl();
         $menuItemsPointingToTables = $this->getMenuItemsPointingToTable();
 
         $items = [];
@@ -133,13 +129,13 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 'id' => $parentTdb->id,
             ], PATH_CMS_CONTROLLER . '?', '&');
 
-            $parentItems = $this->getBreadcrumbItems($menuItemsPointingToTables, $menuItemUrls, $parentTableConf->id, $parentEntryUrl, $parentTdb);
+            $parentItems = $this->getBreadcrumbItems($menuItemsPointingToTables, $menuItemsByUrl, $parentTableConf->id, $parentEntryUrl, $parentTdb);
             $items = \array_merge($items, $parentItems);
         }
 
         // TODO this is heuristic - note sidebar.js (markSelected, extractTableId) for equal code
 
-        $currentItems = $this->getBreadcrumbItems($menuItemsPointingToTables, $menuItemUrls, $currentTableId, $currentUrl, $tdb);
+        $currentItems = $this->getBreadcrumbItems($menuItemsPointingToTables, $menuItemsByUrl, $currentTableAndEntryId[0] ?? null, $currentUrl, $tdbEntry);
         $items = \array_merge($items, $currentItems);
 
         $visitor->SetMappedValue('items', $items);
@@ -147,7 +143,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     // TODO caching?
 
-    private function getMenuItemUrls(): array
+    private function getMenuItemsByUrl(): array
     {
         $menuCategories = $this->menuItemDataAccess->getMenuCategories();
 
@@ -155,7 +151,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         foreach ($menuCategories as $menuCategory) {
             foreach ($menuCategory->getMenuItems() as $menuItem) {
-                $menuItemUrls[$menuItem->getUrl()] = $menuItem->getName();
+                $menuItemUrls[$menuItem->getUrl()] = [$menuCategory, $menuItem];
             }
         }
 
@@ -180,12 +176,10 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     /**
      * @return BackendBreadcrumbItem[]
      */
-    private function getBreadcrumbItems(array $menuItemsPointingToTables, array $menuItemUrls, ?string $tableId, ?string $entryUrl, ?\TCMSRecord $entry): array
+    private function getBreadcrumbItems(array $menuItemsPointingToTables, array $menuItemsByUrl, ?string $tableId, ?string $entryUrl, ?\TCMSRecord $entry): array
     {
-        // TODO!! this misses the menu category ?!
-
-
         // TODO odd special case (is also the last "if" down here)
+        // TODO this is basically not right (?): should/must list the menu entry (if any) and not the url directly without question - see adding the category below
         if (null !== $entry  && null !== $tableId) {
             $tableConf = \TdbCmsTblConf::GetNewInstance();
 
@@ -203,15 +197,17 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $menuItem = $this->getMatchingEntryFromMenu($tableId, $menuItemsPointingToTables);
 
             if (null !== $menuItem) {
-                $items[] = new BackendBreadcrumbItem($menuItem->getUrl(), $menuItem->getName());
+                $items[] = new BackendBreadcrumbItem('', $menuItem[0]->getName());
+                $items[] = new BackendBreadcrumbItem($menuItem[1]->getUrl(), $menuItem[1]->getName());
                 $foundMenuEntry = true;
             }
         }
 
         if (false === $foundMenuEntry && null !== $entryUrl) {
-            foreach ($menuItemUrls as $url => $name) {
+            foreach ($menuItemsByUrl as $url => $menuItem) {
                 if ($url === $entryUrl){
-                    $items[] = new BackendBreadcrumbItem($url, $name);
+                    $items[] = new BackendBreadcrumbItem('', $menuItem[0]->getName());
+                    $items[] = new BackendBreadcrumbItem($menuItem[1]->getUrl(), $menuItem[1]->getName());
                     $foundMenuEntry = true;
                     break;
                 }
@@ -236,7 +232,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $items;
     }
 
-    private function getMatchingEntryFromMenu(string $tableId, array $menuItemsPointingToTables): ?MenuItem
+    private function getMatchingEntryFromMenu(string $tableId, array $menuItemsPointingToTables): ?array
     {
         if (false === \array_key_exists($tableId, $menuItemsPointingToTables)) {
             return null;
@@ -245,7 +241,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $menuItemsPointingToTables[$tableId];
     }
 
-    private function extractTableId(string $url): ?string
+    private function extractTableAndEntryId(string $url): ?array
     {
         if (false === \strpos($url, '?')) {
             return null;
@@ -259,11 +255,11 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         if ($pagedef === 'tablemanager' && true === \array_key_exists('id', $urlParameters)) {
-            return $urlParameters['id'];
+            return [$urlParameters['id'], null];
         }
 
         if (($pagedef === 'tableeditor' || $pagedef === 'templateengine') && true === \array_key_exists('tableid', $urlParameters)) {
-            return $urlParameters['tableid'];
+            return [$urlParameters['tableid'], $urlParameters['id'] ?? null];
         }
 
         return null;
@@ -309,7 +305,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         foreach ($menuCategories as $menuCategory) {
             foreach ($menuCategory->getMenuItems() as $menuItem) {
                 if (null !== $menuItem->getTableId()) {
-                    $tableMenuItems[$menuItem->getTableId()] = $menuItem;
+                    $tableMenuItems[$menuItem->getTableId()] = [$menuCategory, $menuItem];
                 }
             }
         }

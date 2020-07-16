@@ -55,10 +55,10 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
             return '';
         }
 
-        return $menuEntry->getName();
+        return $menuEntry[0]->getName().' / '.$menuEntry[1]->getName();
     }
 
-    private function getMatchingEntryFromMenu(string $tableId): ?MenuItem
+    private function getMatchingEntryFromMenu(string $tableId): ?array
     {
         $tablePointerMenuItems = $this->getMenuItemsPointingToTable();
 
@@ -80,11 +80,12 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
         foreach ($menuCategories as $menuCategory) {
             foreach ($menuCategory->getMenuItems() as $menuItem) {
                 if (null !== $menuItem->getTableId()) {
-                    $tableMenuItems[$menuItem->getTableId()] = $menuItem;
+                    $tableMenuItems[$menuItem->getTableId()] = [$menuCategory, $menuItem];
                 }
             }
         }
 
+        // TODO return type
         return $tableMenuItems;
     }
 
