@@ -114,9 +114,8 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $parentTdb = $this->loadParent($tableConf, $tdbEntry);
         }
 
-        // TODO these two are (conceptually) doubled - and only cached one level lower
         $menuItemsByUrl = $this->getMenuItemsByUrl();
-        $menuItemsPointingToTables = $this->getMenuItemsPointingToTable();
+        $menuItemsPointingToTables = $this->menuItemDataAccess->getMenuItemsPointingToTable();
 
         $items = [];
 
@@ -301,25 +300,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         return $tdb;
-    }
-
-    private function getMenuItemsPointingToTable(): array
-    {
-        // TODO / NOTE this loop is basically the same as in getMenuItemUrls()
-
-        $tableMenuItems = [];
-
-        $menuCategories = $this->menuItemDataAccess->getMenuCategories();
-
-        foreach ($menuCategories as $menuCategory) {
-            foreach ($menuCategory->getMenuItems() as $menuItem) {
-                if (null !== $menuItem->getTableId()) {
-                    $tableMenuItems[$menuItem->getTableId()] = new MenuCategoryAndItem($menuCategory, $menuItem);
-                }
-            }
-        }
-
-        return $tableMenuItems;
     }
 
     private function loadParent(\TdbCmsTblConf $tableConf, \TCMSRecord $tdb): ?\TCMSRecord

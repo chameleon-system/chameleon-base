@@ -14,6 +14,7 @@ namespace ChameleonSystem\CoreBundle\DataAccess;
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuCategory;
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItem;
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItemFactoryInterface;
+use ChameleonSystem\CoreBundle\DataModel\MenuCategoryAndItem;
 
 class MenuItemDataAccess implements MenuItemDataAccessInterface
 {
@@ -69,5 +70,25 @@ class MenuItemDataAccess implements MenuItemDataAccessInterface
         }
 
         return $menuCategories;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMenuItemsPointingToTable(): array
+    {
+        $tableMenuItems = [];
+
+        $menuCategories = $this->getMenuCategories();
+
+        foreach ($menuCategories as $menuCategory) {
+            foreach ($menuCategory->getMenuItems() as $menuItem) {
+                if (null !== $menuItem->getTableId()) {
+                    $tableMenuItems[$menuItem->getTableId()] = new MenuCategoryAndItem($menuCategory, $menuItem);
+                }
+            }
+        }
+
+        return $tableMenuItems;
     }
 }

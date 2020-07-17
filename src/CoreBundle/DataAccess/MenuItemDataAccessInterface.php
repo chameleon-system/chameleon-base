@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuCategory;
+use ChameleonSystem\CoreBundle\DataModel\MenuCategoryAndItem;
 
 interface MenuItemDataAccessInterface
 {
@@ -19,4 +20,9 @@ interface MenuItemDataAccessInterface
      * @return MenuCategory[]
      */
     public function getMenuCategories(): array;
+
+    /**
+     * @return MenuCategoryAndItem[] - assoc array with the table id as key
+     */
+    public function getMenuItemsPointingToTable(): array;
 }

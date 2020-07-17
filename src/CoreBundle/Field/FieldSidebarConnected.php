@@ -49,32 +49,13 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
 
     private function getMatchingEntryFromMenu(string $tableId): ?MenuCategoryAndItem
     {
-        $tablePointerMenuItems = $this->getMenuItemsPointingToTable();
+        $tablePointerMenuItems = $this->menuItemDataAccess->getMenuItemsPointingToTable();
 
         if (false === \array_key_exists($tableId, $tablePointerMenuItems)) {
             return null;
         }
 
         return $tablePointerMenuItems[$tableId];
-    }
-
-    private function getMenuItemsPointingToTable(): array
-    {
-        // TODO / NOTE this method also exists in BreadcrumbBackendModule
-
-        $tableMenuItems = [];
-
-        $menuCategories = $this->menuItemDataAccess->getMenuCategories();
-
-        foreach ($menuCategories as $menuCategory) {
-            foreach ($menuCategory->getMenuItems() as $menuItem) {
-                if (null !== $menuItem->getTableId()) {
-                    $tableMenuItems[$menuItem->getTableId()] = new MenuCategoryAndItem($menuCategory, $menuItem);
-                }
-            }
-        }
-
-        return $tableMenuItems;
     }
 
     /**
