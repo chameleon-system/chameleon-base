@@ -253,7 +253,6 @@ function chooseTreeNode(fieldName, newId) {
         newPath = $('#' + fieldName + '_tmp_path_' + newId).html();
     }
     parent.$('#' + fieldName + '_path').html(newPath);
-    parent.CloseModalIFrameDialog();
 }
 
 function updateSelectionWysiwyg(selectedItem) {
@@ -261,7 +260,7 @@ function updateSelectionWysiwyg(selectedItem) {
     let selectedItemText = selectedItem.text;
     let connectedPageId = selectedItem.li_attr.isPageId;
     chooseTreeNodeWysiwyg(CKEditorFuncNum, connectedPageId, selectedItemText);
-    parent.CloseModalIFrameDialog()
+    parent.CloseModalIFrameDialog();
 }
 
 function chooseTreeNodeWysiwyg(CKEditorFuncNum, pagedef, text) {
