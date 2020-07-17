@@ -2,7 +2,6 @@
 
 namespace ChameleonSystem\CoreBundle\Field;
 
-use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItem;
 use ChameleonSystem\CoreBundle\DataAccess\MenuItemDataAccessInterface;
 use ChameleonSystem\CoreBundle\DataModel\MenuCategoryAndItem;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -30,7 +29,6 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
     public function GetReadOnly(){
         $menuPath = $this->getMenuPath($this->recordId);
 
-        // TODO propery render "readonly" also without class "form-control" ?
         return sprintf('<div class="form-control form-control-sm" readonly>%s</div>', $menuPath);
     }
 

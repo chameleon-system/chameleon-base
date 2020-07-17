@@ -948,7 +948,6 @@
 
             <argument type="service" id="chameleon_system_core.sidebar.menu_access"/>
             <argument type="service" id="request_stack"/>
-            <argument type="service" id="chameleon_system_core.util.input_filter"/>
             <argument type="service" id="chameleon_system_core.util.url"/>
             <argument type="service" id="chameleon_system_core.language_service"/>
             <argument type="service" id="translator"/>

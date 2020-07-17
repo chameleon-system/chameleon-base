@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Breadcrumb;
 
-use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItem;
 use ChameleonSystem\CoreBundle\DataAccess\MenuItemDataAccessInterface;
 use ChameleonSystem\CoreBundle\DataModel\BackendBreadcrumbItem;
 use ChameleonSystem\CoreBundle\DataModel\MenuCategoryAndItem;
@@ -59,7 +58,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     public function __construct(
         MenuItemDataAccessInterface $menuItemDataAccess,
         RequestStack $requestStack,
-        InputFilterUtilInterface $inputFilterUtil,
         UrlUtil $urlUtil,
         LanguageServiceInterface $languageService,
         TranslatorInterface $translator
@@ -67,12 +65,14 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         parent::__construct();
 
         $this->menuItemDataAccess = $menuItemDataAccess;
-        $this->inputFilterUtil = $inputFilterUtil;
         $this->requestStack = $requestStack;
         $this->urlUtil = $urlUtil;
         $this->languageService = $languageService;
         $this->translator = $translator;
     }
+
+    // NOTE caching is difficult here because cache delete triggers would need to include virtually every table
+    //   as any entry's name might end up in the breadcrumb.
 
     /**
      * {@inheritDoc}
@@ -102,8 +102,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         // TODO MTTableManager considers sTableEditorPagdef as pagedef (for one record redirect)
         // TODO MTTableManager considers $parameters['bOnlyOneRecord'] = 'true';
 
-        // TODO errors (log?) on load errors?
-
         $tdbEntry = null;
         if (null !== $tableConf && null !== $currentTableAndEntryId[1]) {
             $tdbEntry = $this->getTdb($tableConf->fieldName, $currentTableAndEntryId[1]);
@@ -112,6 +110,9 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $parentTdb = null;
         if (null !== $tableConf && null !== $tdbEntry) {
             $parentTdb = $this->loadParent($tableConf, $tdbEntry);
+
+            // TODO (at least odd/long) for a product variant this loads the variant parent and displays something like
+            //   Home / Products & categories / Products / Ocean Jewelry Set (Necklace & Bracelet) / Products & categories / Products / Ocean Jewelry Set (Necklace & Bracelet) - 80 cm, 17 cm
         }
 
         $menuItemsByUrl = $this->getMenuItemsByUrl();
@@ -133,15 +134,13 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $items = \array_merge($items, $parentItems);
         }
 
-        // TODO this is heuristic - note sidebar.js (markSelected, extractTableId) for equal code
+        // NOTE sidebar.js (markSelected, extractTableId) for something similar
 
         $currentItems = $this->getBreadcrumbItems($menuItemsPointingToTables, $menuItemsByUrl, $currentTableAndEntryId[0] ?? null, $currentUrl, $tdbEntry);
         $items = \array_merge($items, $currentItems);
 
         $visitor->SetMappedValue('items', $items);
     }
-
-    // TODO caching?
 
     private function getMenuItemsByUrl(): array
     {
@@ -184,7 +183,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $isSingleTableEntry = $entry->GetTableConf()->fieldOnlyOneRecordTbl;
         }
 
-
         $items = [];
 
         $foundMenuEntry = false;
@@ -225,7 +223,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
             $tableConf = \TdbCmsTblConf::GetNewInstance();
 
-            // TODO does this (always) exist as $entry->GetTableConf() ?
+            // NOTE this also (always?) exist as $entry->GetTableConf().
 
             if (true === $tableConf->Load($tableId)) {
                 // TODO could use a valid tablemanager url - however there might be no valid view configured for this table (?)
@@ -310,8 +308,21 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             return null;
         }
 
+        // TODO this is wrong? /** @var \TCMSFieldLookup $parentKeyField */
+        // TODO this usable? $parentKeyField->GetConnectedTableName();
+
         $parentKeyField = $parentKeyFields->Next();
 
-        return $tdb->GetLookup($parentKeyField->fieldName);
+        $lookupName = $parentKeyField->fieldName;
+        if ('_id' === \substr($lookupName, -3)) {
+            $lookupName = \substr($lookupName, 0, -3);
+        }
+
+        $fieldAccessor = 'GetField'.\TCMSTableToClass::ConvertToClassString($lookupName);
+
+        return $tdb->$fieldAccessor();
+
+        // TODO this is broken for "connectedTableName" but does more than the above: return $tdb->GetLookup($parentKeyField->fieldName);
+        //   and this does not work down there (breaks whole system): ' !== $sTargetTable ? $sTargetTable : substr($sFieldName, 0, -3);
     }
 }
