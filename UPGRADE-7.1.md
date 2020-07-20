@@ -17,6 +17,30 @@ Logout from the Chameleon backend.
 In `composer.json`, adjust version constraints for all Chameleon dependencies from `~7.0.0` to `~7.1.0` and run
 `composer update`.
 
+## Upgrade you scripts section
+
+In `composer.json`, change the following lines under `symfony-scripts`
+
+```
+"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+```
+
+to:
+
+```
+"app/console cache:clear --env prod",
+"app/console cache:clear",
+"app/console assets:install --symlink --relative web"
+```
+
+Then remove the line
+
+`"ChameleonSystem\\DistributionBundle\\VersionCheck\\PostUpdateVersionCheck::checkVersion"`
+
+from the `post-update-cmd` section.
+
 ## Regenerate Autoclasses And Run Updates
 
 Regenerate autoclasses by calling the console command `app/console chameleon_system:autoclasses:generate`.
