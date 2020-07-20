@@ -30,7 +30,6 @@ In `composer.json`, change the following lines under `symfony-scripts`
 to:
 
 ```
-"app/console cache:clear --env prod",
 "app/console cache:clear",
 "app/console assets:install --symlink --relative web"
 ```
