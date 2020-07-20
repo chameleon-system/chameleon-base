@@ -1,11 +1,20 @@
 {# @var treeNodes \ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel #}
 
-<div id="navigationTreeDataContainer" class="p-4"
-     data-field-name = "{{ fieldName }}"
-     data-tree-nodes-ajax-url = "{{ treeNodesAjaxUrl | raw }}"
-     data-ckeditorfuncnum="{{ CKEditorFuncNum }}">
+<div class="row m-0">
+    <div class="col-12 col-md-6 col-xl-8">
+        <div id="navigationTreeDataContainer" class="p-4"
+             data-field-name = "{{ fieldName }}"
+             data-tree-nodes-ajax-url = "{{ treeNodesAjaxUrl | raw }}"
+             data-ckeditorfuncnum="{{ CKEditorFuncNum }}">
 
-    <div id="singleTreeNodeSelectWysiwyg" class="navigationTreeContainer"></div>
+            <div id="singleTreeNodeSelectWysiwyg" class="navigationTreeContainer"></div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 justify-content-end mt-4">
+
+        {% include 'NavigationTree/treeLegend.html.twig' with { 'noAssignDialog': true } %}
+    </div>
 </div>
 
 {{ pageBreadcrumbsHTML | raw }}

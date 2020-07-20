@@ -154,7 +154,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
             $rootNode = new \TdbCmsTree();
             $rootNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
             $rootNode->Load($rootTreeId);
-            $visitor->SetMappedValue('breadcrumbStorageHTML', $this->createPageBreadcrumbs($rootNode, $fieldName));
+            $visitor->SetMappedValue('pageBreadcrumbsHTML', $this->createPageBreadcrumbs($rootNode, $fieldName));
         }
 
         $visitor->SetMappedValue('fieldName', $fieldName);
@@ -398,7 +398,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
 
     private function createPageBreadcrumbs(\TdbCmsTree $node, $fieldName, $path = ''): string
     {
-        $path .= '<li class="breadcrumb-item">'.$fieldName.'</li>';
+        $path .= '<li class="breadcrumb-item">'.$node->fieldName.'</li>';
         $pageBreadcrumbsHTML = '<div id="'.$fieldName.'_tmp_path_'.$node->id.'" style="display:none;"><ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
 
         $children = $node->GetChildren(true);
