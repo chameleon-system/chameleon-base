@@ -1,0 +1,51 @@
+
+<div class="treelegend">
+    <h5>{{ 'chameleon_system_core.cms_module_page_tree.legend_header' | trans }}</h5>
+
+    {% if noAssignDialog == false %}
+        <div class="activeConnectedNode primaryConnectedNodeOfCurrentPage">
+            <div class="nodeIndicatorIcon"><i class="far fa-check-square"></i></div>
+            <div>{{ 'chameleon_system_core.cms_module_page_tree.legend_active_main_node_of_page' | trans }}</div>
+        </div>
+        <div class="activeConnectedNode">
+            <div class="nodeIndicatorIcon"><i class="far fa-check-square"></i></div>
+            <div>{{ 'chameleon_system_core.cms_module_page_tree.legend_active_further_node_of_page' | trans }}</div>
+        </div>
+        <br>
+    {% endif %}
+
+    <div class="text">
+        <div class="nodeIndicatorIcon"><i class="fas fa-folder-open"></i></div>
+        <div>{{ 'chameleon_system_core.cms_module_page_tree.legend_folder' | trans }}</div>
+    </div>
+
+    <div class="node-hidden">
+        <div class="nodeIndicatorIcon iconHidden"><i class="fas fa-eye-slash"></i></div>
+        <div>{{ 'chameleon_system_core.cms_module_page_tree.legend_node_hidden' | trans }}</div>
+    </div>
+
+    <div class="legendLine">
+        <div class="nodeIndicatorIcon iconExternalLink"><i class="fas fa-external-link-alt"></i></div>
+        <div>{{ 'chameleon_system_core.cms_module_page_tree.legend_external_link' | trans }}</div>
+    </div>
+
+    <div class="text">
+        <div class="nodeIndicatorIcon"><i class="fas fa-genderless"></i></div>
+        <div>{{ 'chameleon_system_core.cms_module_page_tree.legend_node_has_no_page' | trans }}</div>
+    </div>
+
+    <div class="otherConnectedNode">
+        <div class="nodeIndicatorIcon"><i class="far fa-file"></i></div>
+        <div>{{ 'chameleon_system_core.cms_module_page_tree.legend_has_connected_pages' | trans }}</div>
+    </div>
+
+    <div class="restrictedPage">
+        <div class="nodeIndicatorIcon iconRestricted"><i class="fas fa-user-lock"></i></div>
+        <div>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page' | trans }}</div>
+    </div>
+
+    <div class="extranetpage-hidden">
+        <div class="nodeIndicatorIcon iconHidden"><i class="far fa-eye-slash"></i></div>
+        <div>{{ 'chameleon_system_core.cms_module_page_tree.legend_extranetpage_hidden' | trans }}</div>
+    </div>
+</div>
