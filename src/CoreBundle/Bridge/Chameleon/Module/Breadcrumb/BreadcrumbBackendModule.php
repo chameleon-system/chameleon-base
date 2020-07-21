@@ -15,7 +15,6 @@ use ChameleonSystem\CoreBundle\DataAccess\MenuItemDataAccessInterface;
 use ChameleonSystem\CoreBundle\DataModel\BackendBreadcrumbItem;
 use ChameleonSystem\CoreBundle\DataModel\MenuCategoryAndItem;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
-use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use IMapperCacheTriggerRestricted;
 use IMapperVisitorRestricted;
@@ -30,11 +29,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      * @var MenuItemDataAccessInterface
      */
     private $menuItemDataAccess;
-
-    /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
 
     /**
      * @var RequestStack
@@ -84,10 +78,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
         $visitor->SetMappedValue('pathCmsRoot', PATH_CMS_CONTROLLER);
-
-        // TODO remove or deprecate? \TCMSURLHistory <- \MTTableEditor::AddURLHistory
-        //   interesting url parameters: _rmhist, popLastURL, _histid
-        // TODO there is some code (for history; #101) in BackendBreadcrumbService for example
 
         $request = $this->requestStack->getCurrentRequest();
 

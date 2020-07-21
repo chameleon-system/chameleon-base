@@ -17,6 +17,9 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
+/**
+ * @deprecated since 6.3.10 - the breadcrumb in the backend is now a true breadcrumb (BreadcrumbBackendModule)
+ */
 class BackendBreadcrumbListener
 {
     /**

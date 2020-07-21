@@ -11,6 +11,9 @@
 
 namespace ChameleonSystem\CoreBundle\Service;
 
+/**
+ * @deprecated since 6.3.10 - the breadcrumb in the backend is now a true breadcrumb (BreadcrumbBackendModule)
+ */
 interface BackendBreadcrumbServiceInterface
 {
     public function getBreadcrumb(): ?\TCMSURLHistory;

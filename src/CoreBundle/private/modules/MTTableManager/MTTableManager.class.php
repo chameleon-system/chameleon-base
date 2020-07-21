@@ -325,6 +325,9 @@ class MTTableManager extends TCMSModelBase
         $this->getRedirectService()->redirectToActivePage($parameters);
     }
 
+    /**
+     * @deprecated since 6.3.10 - the breadcrumb in the backend is now a true breadcrumb (BreadcrumbBackendModule)
+     */
     protected function AddURLHistory()
     {
         if (false === $this->AllowAddingURLToHistory()) {

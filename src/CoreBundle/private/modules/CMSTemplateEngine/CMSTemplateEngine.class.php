@@ -188,6 +188,9 @@ class CMSTemplateEngine extends TCMSModelBase
         return $this->data['oCmsLock'];
     }
 
+    /**
+     * @deprecated since 6.3.10 - the breadcrumb in the backend is now a true breadcrumb (BreadcrumbBackendModule)
+     */
     public function AddURLHistory()
     {
         if (false === $this->AllowAddingURLToHistory()) {

@@ -10,6 +10,8 @@
  */
 
 /**
+ * @deprecated since 6.3.10 - the breadcrumb in the backend is now a true breadcrumb (BreadcrumbBackendModule)
+ *
  * Used to manage the breadcrumb navigation in CMS backend.
  */
 class TCMSURLHistory
