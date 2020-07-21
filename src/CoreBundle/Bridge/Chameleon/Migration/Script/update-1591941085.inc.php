@@ -5,6 +5,7 @@
 </div>
 <?php
 
+$fieldTypeId = TCMSLogChange::createUnusedRecordId('cms_field_type');
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'en')
     ->setFields([
@@ -21,7 +22,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'en')
         'indextype' => 'none',
         'class_subtype' => '',
         'class_type' => 'Core',
-        'id' => '39bffe51-143d-875d-bdaa-1f6c270c041e',
+        'id' => $fieldTypeId,
     ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
@@ -31,10 +32,12 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'de')
         'translation' => 'Menü-Eintrag Lookup',
     ])
     ->setWhereEquals([
-        'id' => '39bffe51-143d-875d-bdaa-1f6c270c041e',
+        'id' => $fieldTypeId,
     ])
 ;
 TCMSLogChange::update(__LINE__, $data);
+
+$fieldConfId = TCMSLogChange::createUnusedRecordId('cms_field_conf');
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
@@ -51,14 +54,14 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
       'restrict_to_groups' => '0',
       'field_width' => '0',
       'position' => '2182',
-      '049_helptext' => '', // TODO
+      '049_helptext' => 'Shows the first location if any where this table is accessible in the sidebar menu.',
       'row_hexcolor' => '',
       'is_translatable' => '0',
       'validation_regex' => '',
       'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_tbl_conf'),
       'fieldclass_subtype' => '',
       'class_type' => 'Core',
-      'id' => '68aed6eb-5511-75a8-050b-da33b2fc11ab', // TODO ? also below
+      'id' => $fieldConfId,
   ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
@@ -68,15 +71,10 @@ TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_tbl_conf'), 'show
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields([
         'translation' => 'Im Menü unter',
+        '049_helptext' => 'Zeigt den ersten Eintrag, falls vorhanden, unter dem diese Tabelle im Seitenmenü angezeigt wird.',
     ])
     ->setWhereEquals([
-        'id' => '68aed6eb-5511-75a8-050b-da33b2fc11ab',
+        'id' => $fieldConfId,
     ])
 ;
 TCMSLogChange::update(__LINE__, $data);
-
-// TODO use virtual field? add "isVirtual"
-//   wegen TCMSTableConf.class.php:185 muss ein Tabellenfeld existieren (wenn man keinen eigenen Typ verwendet..)
-//$query ="ALTER TABLE `cms_tbl_conf`
-//                 ADD `shown_in_menu_as` VARCHAR(255) NOT NULL COMMENT 'Im Seitenmenü unter: '";
-//TCMSLogChange::RunQuery(__LINE__, $query);
