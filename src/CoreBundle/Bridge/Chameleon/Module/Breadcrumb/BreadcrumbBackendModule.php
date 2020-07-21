@@ -19,6 +19,7 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use IMapperCacheTriggerRestricted;
 use IMapperVisitorRestricted;
+use Symfony\Component\Debug\Exception\UndefinedMethodException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
 use TCMSTableToClass;
@@ -98,13 +99,11 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $currentTableAndEntryId = $this->extractTableAndEntryId($currentUrl);
         $tableConf = $this->getTableConf($currentTableAndEntryId[0] ?? null);
 
-        // TODO MTTableManager considers a field ? $fieldName = $inputFilterUtil->getFilteredInput('field');
-        // TODO MTTableManager considers sTableEditorPagdef as pagedef (for one record redirect)
-        // TODO MTTableManager considers $parameters['bOnlyOneRecord'] = 'true';
+        // NOTE see MTTableManager for potentially missing features (ie special cases for 'field' in url, one record redirect, bOnlyOneRecord, ...)
 
         $tdbEntry = null;
         if (null !== $tableConf && null !== $currentTableAndEntryId[1]) {
-            $tdbEntry = $this->getTdb($tableConf->fieldName, $currentTableAndEntryId[1]);
+            $tdbEntry = $tableConf->GetTableObjectInstance($currentTableAndEntryId[1]);
         }
 
         $parentTdb = null;
@@ -177,6 +176,9 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     private function getBreadcrumbItems(array $menuItemsPointingToTables, array $menuItemsByUrl, ?string $tableId, ?string $entryUrl, ?\TCMSRecord $entry): array
     {
+        // TODO use recursive "breadcrumb handler" approach here?
+        //   breadcrumb node: name + url
+
         $isSingleTableEntry = false;
 
         if (null !== $entry) {
@@ -280,26 +282,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $this->translator->trans('chameleon_system_core.text.unnamed_record', [], null, $this->languageService->getActiveLocale());
     }
 
-    private function getTdb(string $tableName, string $id): ?\TCMSRecord
-    {
-        // Does the same as \TCMSTableConf::GetTableObjectInstance() but with more direct error checking.
-
-        $tdbName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $tableName);
-
-        if (false === \class_exists($tdbName)) {
-            return null;
-        }
-
-        /** @var \TCMSRecord $tdb */
-        $tdb = $tdbName::GetNewInstance();
-
-        if (false === $tdb->Load($id)) {
-            return null;
-        }
-
-        return $tdb;
-    }
-
     private function loadParent(\TdbCmsTblConf $tableConf, \TCMSRecord $tdb): ?\TCMSRecord
     {
         $parentKeyFields = $tableConf->GetFieldDefinitions(['CMSFIELD_PROPERTY_PARENT_ID']);
@@ -311,7 +293,14 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         // TODO this is wrong? /** @var \TCMSFieldLookup $parentKeyField */
         // TODO this usable? $parentKeyField->GetConnectedTableName();
 
+        /** @var \TdbCmsFieldConf $parentKeyField */
         $parentKeyField = $parentKeyFields->Next();
+
+        /** @var \TCMSFieldLookupParentID $fieldObject */
+        $fieldObject = $parentKeyField->GetFieldObject();
+
+        // TODO $fieldObject is not loaded here
+        // $x = $fieldObject->GetConnectedTableName();
 
         $lookupName = $parentKeyField->fieldName;
         if ('_id' === \substr($lookupName, -3)) {
@@ -320,7 +309,11 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $fieldAccessor = 'GetField'.\TCMSTableToClass::ConvertToClassString($lookupName);
 
-        return $tdb->$fieldAccessor();
+        try {
+            return $tdb->$fieldAccessor();
+        } catch (UndefinedMethodException $exception) {
+            return null;
+        }
 
         // TODO this is broken for "connectedTableName" but does more than the above: return $tdb->GetLookup($parentKeyField->fieldName);
         //   and this does not work down there (breaks whole system): ' !== $sTargetTable ? $sTargetTable : substr($sFieldName, 0, -3);
