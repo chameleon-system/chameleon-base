@@ -21,7 +21,6 @@ use IMapperVisitorRestricted;
 use Symfony\Component\Debug\Exception\UndefinedMethodException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
-use TCMSTableToClass;
 
 class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
@@ -168,12 +167,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         // TODO use recursive "breadcrumb handler" approach here?
         //   breadcrumb node: name + url
 
-        $isSingleTableEntry = false;
-
-        if (null !== $entry) {
-            $isSingleTableEntry = $entry->GetTableConf()->fieldOnlyOneRecordTbl;
-        }
-
         $items = [];
 
         $foundMenuEntry = false;
@@ -182,12 +175,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
             if (null !== $menuItem) {
                 $items[] = new BackendBreadcrumbItem('', $menuItem->getMenuCategory()->getName());
-                if (false === $isSingleTableEntry) {
-                    $items[] = new BackendBreadcrumbItem(
-                        $menuItem->getMenuItem()->getUrl(),
-                        $menuItem->getMenuItem()->getName()
-                    );
-                }
+                $items[] = new BackendBreadcrumbItem($menuItem->getMenuItem()->getUrl(), $menuItem->getMenuItem()->getName());
                 $foundMenuEntry = true;
             }
         }
@@ -196,12 +184,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             foreach ($menuItemsByUrl as $url => $menuItem) {
                 if ($url === $entryUrl){
                     $items[] = new BackendBreadcrumbItem('', $menuItem->getMenuCategory()->getName());
-                    if (false === $isSingleTableEntry) {
-                        $items[] = new BackendBreadcrumbItem(
-                            $menuItem->getMenuItem()->getUrl(),
-                            $menuItem->getMenuItem()->getName()
-                        );
-                    }
+                    $items[] = new BackendBreadcrumbItem($menuItem->getMenuItem()->getUrl(), $menuItem->getMenuItem()->getName());
                     $foundMenuEntry = true;
 
                     break;
