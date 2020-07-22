@@ -99,9 +99,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $parentTdb = null;
         if (null !== $tableConf && null !== $tdbEntry) {
             $parentTdb = $this->loadParent($tableConf, $tdbEntry);
-
-            // TODO (at least odd/long) for a product variant this loads the variant parent and displays something like
-            //   Home / Products & categories / Products / Ocean Jewelry Set (Necklace & Bracelet) / Products & categories / Products / Ocean Jewelry Set (Necklace & Bracelet) - 80 cm, 17 cm
         }
 
         $menuItemsByUrl = $this->getMenuItemsByUrl();
@@ -127,6 +124,8 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $currentItems = $this->getBreadcrumbItems($menuItemsPointingToTables, $menuItemsByUrl, $currentTableAndEntryId[0] ?? null, $currentUrl, $tdbEntry);
         $items = \array_merge($items, $currentItems);
+
+        $items = $this->removeDuplicatePaths($items);
 
         $visitor->SetMappedValue('items', $items);
     }
@@ -307,5 +306,40 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         // TODO this is broken for "connectedTableName" but does more than the above: return $tdb->GetLookup($parentKeyField->fieldName);
         //   and this does not work down there (breaks whole system): ' !== $sTargetTable ? $sTargetTable : substr($sFieldName, 0, -3);
+    }
+
+    /**
+     * @param BackendBreadcrumbItem[] $items
+     * @return BackendBreadcrumbItem[]
+     */
+    private function removeDuplicatePaths(array $items): array
+    {
+        // NOTE for a product variant without this method the breadcrumb would look something like this
+        //   Home / Products & categories / Products / Ocean Jewelry Set (Necklace & Bracelet) / Products & categories / Products / Ocean Jewelry Set (Necklace & Bracelet) - 80 cm, 17 cm
+
+        $itemCount = \count($items);
+        if ($itemCount < 2) {
+            return $items;
+        }
+
+        $shortenedItems = [$items[0]];
+
+        // TODO the same name (when url is empty) might not sufficient for duplicate detection
+
+        for ($i = 1; $i < $itemCount; $i++) {
+            $duplicateFound = false;
+            for ($j = $i-1; $j > -1; $j--) {
+                if (true === $items[$j]->equals($items[$i])) {
+                    $duplicateFound = true;
+                    break;
+                }
+            }
+
+            if (false === $duplicateFound) {
+                $shortenedItems[] = $items[$i];
+            }
+        }
+
+        return $shortenedItems;
     }
 }

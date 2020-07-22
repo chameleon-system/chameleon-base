@@ -29,4 +29,9 @@ class BackendBreadcrumbItem
     {
         return $this->name;
     }
+
+    public function equals(BackendBreadcrumbItem $other): bool
+    {
+        return $this->name === $other->name && $this->url === $other->url;
+    }
 }
