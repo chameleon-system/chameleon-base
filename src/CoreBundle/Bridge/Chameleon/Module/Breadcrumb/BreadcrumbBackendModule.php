@@ -85,7 +85,8 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         $currentUrl = $request->getRequestUri();
-        $currentTableAndEntryId = $this->extractTableAndEntryId($currentUrl);
+        $urlParameters = $this->urlUtil->getUrlParametersAsArray($currentUrl);
+        $currentTableAndEntryId = $this->extractTableAndEntryId($urlParameters);
         $tableConf = $this->getTableConf($currentTableAndEntryId[0] ?? null);
 
         // NOTE see MTTableManager for potentially missing features (ie special cases for 'field' in url, one record redirect, bOnlyOneRecord, ...)
@@ -97,7 +98,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $parentTdb = null;
         if (null !== $tableConf && null !== $tdbEntry) {
-            $parentTdb = $this->loadParent($tableConf, $tdbEntry);
+            $parentTdb = $this->loadParent($tableConf, $tdbEntry, $urlParameters['sRestrictionField'] ?? null, $urlParameters['sRestriction'] ?? null);
         }
 
         $menuItemsByUrl = $this->getMenuItemsByUrl();
@@ -221,13 +222,12 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $menuItemsPointingToTables[$tableId];
     }
 
-    private function extractTableAndEntryId(string $url): ?array
+    /**
+     * @param string[] $urlParameters
+     * @return array|null - tuple array of two values
+     */
+    private function extractTableAndEntryId(array $urlParameters): ?array
     {
-        if (false === \strpos($url, '?')) {
-            return null;
-        }
-
-        $urlParameters = $this->urlUtil->getUrlParametersAsArray($url);
         $pagedef = true === \array_key_exists('pagedef', $urlParameters) ? $urlParameters['pagedef'] : null;
 
         if (null === $pagedef) {
@@ -254,11 +254,23 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $this->translator->trans('chameleon_system_core.text.unnamed_record', [], null, $this->languageService->getActiveLocale());
     }
 
-    private function loadParent(\TdbCmsTblConf $tableConf, \TCMSRecord $tdb): ?\TCMSRecord
+    private function loadParent(\TdbCmsTblConf $tableConf, \TCMSRecord $tdb, ?string $restrictionField, ?string $restriction): ?\TCMSRecord
     {
         $parentKeyFields = $tableConf->GetFieldDefinitions(['CMSFIELD_PROPERTY_PARENT_ID']);
 
         if ($parentKeyFields->Length() <= 0) {
+            // TODO consider sRestrictionField=cms_tbl_conf_id&sRestriction=75 - for example for a module text
+            //   but only if no other parent is found?
+
+            if (null !== $restrictionField && '' !== $restrictionField && null !== $restriction && '' !== $restriction) {
+                $parentRestricition = $tdb->GetLookup($restrictionField);
+
+                // TODO however the logic for module configs is complex: you'd additionally need to find the page
+                //   from the cms_tpl_module_instance entry - across cms_tpl_page_cms_master_pagedef_spot
+
+                return $parentRestricition;
+            }
+
             return null;
         }
 
@@ -307,7 +319,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $shortenedItems = [$items[0]];
 
-        // TODO the same name (when url is empty) might not sufficient for duplicate detection
+        // TODO the same name (when url is empty) might not be sufficient for duplicate detection
 
         for ($i = 1; $i < $itemCount; $i++) {
             $duplicateFound = false;
