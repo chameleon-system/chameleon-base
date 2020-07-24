@@ -1,6 +1,6 @@
 <?php
 
-// TODO deprecate / remove?
+// deprecated since 6.3.10 - the breadcrumb in the backend is now a true breadcrumb (Breadcrumb/standard.html.twig)
 
 if (isset($data['oUser'])) {
     $sMainMenuText = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_main_menu')); ?>
