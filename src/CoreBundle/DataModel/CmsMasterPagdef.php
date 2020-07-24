@@ -18,7 +18,7 @@ class CmsMasterPagdef
     private $layoutFile;
 
     /**
-     * @var array|\TdbCmsRole[]
+     * @var \TdbCmsRight[]
      */
     private $allowedRights;
 
@@ -51,7 +51,10 @@ class CmsMasterPagdef
         return $this->layoutFile;
     }
 
-    public function getAllowedRights()
+    /**
+     * @return \TdbCmsRight[]
+     */
+    public function getAllowedRights(): array
     {
         return $this->allowedRights;
     }

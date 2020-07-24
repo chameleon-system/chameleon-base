@@ -15,7 +15,7 @@ $moduleList = [
     ],
 ];
 
-$allowedRights = 'cms_image_pool_upload'; // TODO? media_edit
+$allowedRights = 'media_edit';
 
 addDefaultPageTitle($moduleList);
 addDefaultHeader($moduleList);

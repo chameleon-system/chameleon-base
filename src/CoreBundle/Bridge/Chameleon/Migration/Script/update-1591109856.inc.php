@@ -1,7 +1,7 @@
 <h1>Build #1591109859</h1>
 <h2>Date: 2020-06-02</h2>
 <div class="changelog">
-    - #574: Make sure right for navigation edit exists; add right for media edit and connect to "editor"
+    - #574: Make sure right for navigation edit exists; add right for media edit and give to "image_pool_upload"
 </div>
 <?php
 
@@ -55,11 +55,7 @@ if (false === $currentNavigationEditId) {
     }
 }
 
-/*
 // Now do something similar to media_edit
-
-// TODO current menu entry uses existing "cms_image_pool_upload" for this.
-
 
 $mediaRightId = TCMSLogChange::createUnusedRecordId('cms_right');
 
@@ -72,8 +68,6 @@ $data = TCMSLogChange::createMigrationQueryData('cms_right', 'en')
         ]
     );
 TCMSLogChange::insert(__LINE__, $data);
-
-// TODO / NOTE if this fails nothing happens??
 
 $data = TCMSLogChange::createMigrationQueryData('cms_right', 'de')
     ->setFields(
@@ -108,4 +102,3 @@ foreach ($roleRows as $roleRow) {
 }
 
 // TODO adapt rights management for menu groups!
-*/
