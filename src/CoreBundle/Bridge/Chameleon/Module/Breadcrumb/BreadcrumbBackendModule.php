@@ -116,13 +116,13 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 'id' => $parentTdb->id,
             ], PATH_CMS_CONTROLLER . '?', '&');
 
-            $parentItems = $this->getBreadcrumbItems($menuItemsPointingToTables, $menuItemsByUrl, $parentTableConf->id, $parentEntryUrl, $parentTdb);
+            $parentItems = $this->getBreadcrumbItems($parentTableConf->id, $parentEntryUrl, $parentTdb, $menuItemsPointingToTables, $menuItemsByUrl);
             $items = \array_merge($items, $parentItems);
         }
 
         // NOTE sidebar.js (markSelected, extractTableId) for something similar
 
-        $currentItems = $this->getBreadcrumbItems($menuItemsPointingToTables, $menuItemsByUrl, $currentTableAndEntryId[0] ?? null, $currentUrl, $tdbEntry);
+        $currentItems = $this->getBreadcrumbItems($currentTableAndEntryId[0] ?? null, $currentUrl, $tdbEntry, $menuItemsPointingToTables, $menuItemsByUrl);
         $items = \array_merge($items, $currentItems);
 
         $items = $this->removeDuplicatePaths($items);
@@ -163,7 +163,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     /**
      * @return BackendBreadcrumbItem[]
      */
-    private function getBreadcrumbItems(array $menuItemsPointingToTables, array $menuItemsByUrl, ?string $tableId, ?string $entryUrl, ?\TCMSRecord $entry): array
+    private function getBreadcrumbItems(?string $tableId, ?string $entryUrl, ?\TCMSRecord $entry, array $menuItemsPointingToTables, array $menuItemsByUrl): array
     {
         // TODO use recursive "breadcrumb handler" approach here?
         //   breadcrumb node: name + url
@@ -294,6 +294,7 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $fieldAccessor = 'GetField'.\TCMSTableToClass::ConvertToClassString($lookupName);
 
         try {
+            // NOTE this works - with only the fieldName - as the TAdb does have an accessor method with that name.
             return $tdb->$fieldAccessor();
         } catch (UndefinedMethodException $exception) {
             return null;
