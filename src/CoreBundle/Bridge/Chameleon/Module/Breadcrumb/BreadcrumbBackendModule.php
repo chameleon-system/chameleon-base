@@ -201,7 +201,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             // NOTE this also (always?) exist as $entry->GetTableConf().
 
             if (true === $tableConf->Load($tableId)) {
-                // TODO could use a valid tablemanager url - however there might be no valid view configured for this table (?)
                 $items[] = new BackendBreadcrumbItem('', $this->getNameString($tableConf->fieldTranslation));
             }
         }
@@ -259,32 +258,18 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $parentKeyFields = $tableConf->GetFieldDefinitions(['CMSFIELD_PROPERTY_PARENT_ID']);
 
         if ($parentKeyFields->Length() <= 0) {
-            // TODO consider sRestrictionField=cms_tbl_conf_id&sRestriction=75 - for example for a module text
-            //   but only if no other parent is found?
-
             if (null !== $restrictionField && '' !== $restrictionField && null !== $restriction && '' !== $restriction) {
-                $parentRestricition = $tdb->GetLookup($restrictionField);
+                return $tdb->GetLookup($restrictionField);
 
                 // TODO however the logic for module configs is complex: you'd additionally need to find the page
                 //   from the cms_tpl_module_instance entry - across cms_tpl_page_cms_master_pagedef_spot
-
-                return $parentRestricition;
             }
 
             return null;
         }
 
-        // TODO this is wrong? /** @var \TCMSFieldLookup $parentKeyField */
-        // TODO this usable? $parentKeyField->GetConnectedTableName();
-
         /** @var \TdbCmsFieldConf $parentKeyField */
         $parentKeyField = $parentKeyFields->Next();
-
-        /** @var \TCMSFieldLookupParentID $fieldObject */
-        $fieldObject = $parentKeyField->GetFieldObject();
-
-        // TODO $fieldObject is not loaded here
-        // $x = $fieldObject->GetConnectedTableName();
 
         $lookupName = $parentKeyField->fieldName;
         if ('_id' === \substr($lookupName, -3)) {
@@ -299,9 +284,6 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         } catch (UndefinedMethodException $exception) {
             return null;
         }
-
-        // TODO this is broken for "connectedTableName" but does more than the above: return $tdb->GetLookup($parentKeyField->fieldName);
-        //   and this does not work down there (breaks whole system): ' !== $sTargetTable ? $sTargetTable : substr($sFieldName, 0, -3);
     }
 
     /**
