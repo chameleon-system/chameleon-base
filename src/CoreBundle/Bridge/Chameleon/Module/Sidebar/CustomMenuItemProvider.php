@@ -76,8 +76,7 @@ class CustomMenuItemProvider implements MenuItemProviderInterface
             return true; // only pages can be restricted
         }
 
-        $pagedefType = $urlParameters['_pagedefType'] ?? 'Core'; // TODO this duplicates DataAccessCmsMasterPagedefFile::getPageDefinitionFilePath
-        //  and the "unfortunate" todo there ; note only other user: ChameleonController::GeneratePage
+        $pagedefType = $urlParameters['_pagedefType'] ?? 'Core'; // NOTE the default duplicates DataAccessCmsMasterPagedefFile::getPageDefinitionFilePath
 
         $pagedef = $this->accessCmsMasterPagedef->get($pagedefParam, $pagedefType);
 

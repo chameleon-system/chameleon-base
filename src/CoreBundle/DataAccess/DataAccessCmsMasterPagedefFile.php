@@ -44,15 +44,13 @@ class DataAccessCmsMasterPagedefFile implements DataAccessCmsMasterPagedefInterf
     /**
      * returns the full path to a page definition file given the page definition name.
      *
-     * @param string $pagedef - name of the pagedef
-     *
+     * @param string      $pagedef - name of the pagedef
+     * @param string|null $type - if null will be determined from the request parameters ("_pagedefType"; "Core" is default)
      * @return string
      */
     private function getPageDefinitionFilePath(string $pagedef, ?string $type)
     {
         if (null === $type) {
-            // TODO querying the request is quite unfortunate (unexpected) here. Thus the whole "type" business here is.
-
             // we can select a location using a get parameter (_pagedefType). it may be one of: Core, Custom-Core, and Customer
             if (null === $type = $this->inputFilterUtil->getFilteredInput('_pagedefType')) {
                 $type = 'Core';
