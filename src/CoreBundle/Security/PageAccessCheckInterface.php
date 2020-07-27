@@ -15,10 +15,10 @@ interface PageAccessCheckInterface
     public function assertAccess();
 
     /**
-     * @param \TdbCmsUser     $activeUser
+     * @param \TdbCmsUser     $user
      * @param CmsMasterPagdef $pagedef
      *
      * @return bool - false if page access is forbidden
      */
-    public function checkPageAccess(\TdbCmsUser $activeUser, CmsMasterPagdef $pagedef): bool;
+    public function checkPageAccess(\TdbCmsUser $user, CmsMasterPagdef $pagedef): bool;
 }

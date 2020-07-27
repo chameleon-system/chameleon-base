@@ -118,7 +118,7 @@ class BackendAccessCheck implements PageAccessCheckInterface
     /**
      * {@inheritDoc}
      */
-    public function checkPageAccess(\TdbCmsUser $activeUser, CmsMasterPagdef $pagedef): bool
+    public function checkPageAccess(\TdbCmsUser $user, CmsMasterPagdef $pagedef): bool
     {
         $allowedRights = $pagedef->getAllowedRights();
         if (0 === \count($allowedRights)) {
@@ -126,7 +126,7 @@ class BackendAccessCheck implements PageAccessCheckInterface
         }
 
         foreach ($allowedRights as $right) {
-            if (true === $activeUser->oAccessManager->PermitFunction($right->fieldName)) {
+            if (true === $user->oAccessManager->PermitFunction($right->fieldName)) {
                 return true;
             }
         }
