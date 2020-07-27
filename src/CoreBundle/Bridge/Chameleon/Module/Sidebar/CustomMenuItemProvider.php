@@ -77,6 +77,7 @@ class CustomMenuItemProvider implements MenuItemProviderInterface
         }
 
         $pagedefType = $urlParameters['_pagedefType'] ?? 'Core'; // TODO this duplicates DataAccessCmsMasterPagedefFile::getPageDefinitionFilePath
+        //  and the "unfortunate" todo there ; note only other user: ChameleonController::GeneratePage
 
         $pagedef = $this->accessCmsMasterPagedef->get($pagedefParam, $pagedefType);
 
@@ -85,17 +86,5 @@ class CustomMenuItemProvider implements MenuItemProviderInterface
         }
 
         return $this->pageAccessCheck->checkPageAccess($activeUser, $pagedef);
-
-        // TODO does this have bearing on "Frequently used"?
-
-        /* TODO remove
-        $rightList = $customItem->GetFieldCmsRightList();
-        while (false !== $right = $rightList->Next()) {
-            if (false === $activeUser->oAccessManager->PermitFunction($right->fieldName)) {
-                return false;
-            }
-        }
-
-        return true;*/
     }
 }
