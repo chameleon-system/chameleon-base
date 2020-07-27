@@ -20,8 +20,6 @@ $moduleList = [
 
 $allowedRights = 'navigation_edit';
 
-// TODO / NOTE there are also other pages like this (ie navigationTreePlain)?
-
 addDefaultPageTitle($moduleList);
 addDefaultHeader($moduleList);
 addDefaultBreadcrumb($moduleList);

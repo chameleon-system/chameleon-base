@@ -18,4 +18,6 @@ $moduleList = [
     ],
 ];
 
+$allowedRights = 'navigation_edit';
+
 addDefaultPageTitle($moduleList);
