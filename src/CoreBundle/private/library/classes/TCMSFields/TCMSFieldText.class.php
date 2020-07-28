@@ -26,16 +26,21 @@ class TCMSFieldText extends TCMSField
     {
         parent::GetHTML();
 
+        return $this->renderTextArea($this->data, false);
+    }
+
+    private function renderTextArea(string $data, bool $readOnly): string
+    {
         // make usage of the textarea resizer and save scrolling by setting variable textarea size based on field content
 
-        if (empty($this->data)) {
+        if (empty($data)) {
             $iTextareaSize = 30;
-        } elseif (strlen($this->data) <= 400) {
+        } elseif (strlen($data) <= 400) {
             $iTextareaSize = 50;
-        } elseif (strlen($this->data) <= 1000) {
+        } elseif (strlen($data) <= 1000) {
             $iTextareaSize = 100;
         } else {
-            $count = count(explode("\n", $this->data));
+            $count = count(explode("\n", $data));
             $iTextareaSize = $count * 14 + 50;
             if ($iTextareaSize > 200) {
                 $iTextareaSize = 200;
@@ -54,9 +59,9 @@ class TCMSFieldText extends TCMSField
             TGlobal::OutHTML($this->name),
             $this->fieldWidth,
             'height: '.$iTextareaSize.'px;'.$cssWidth,
-            true === $this->bReadOnlyMode ? 'readonly' : ''
+            true === $readOnly ? 'readonly' : ''
         );
-        $html .= TGlobal::OutHTML($this->data);
+        $html .= TGlobal::OutHTML($data);
         $html .= '</textarea>';
 
         return $html;
@@ -67,9 +72,12 @@ class TCMSFieldText extends TCMSField
      */
     public function GetReadOnly()
     {
-        $this->bReadOnlyMode = true;
+        // todo: remove need to call _GetFieldWidth here
+        // instead of just returning the field width, the method sets some properties on $this - which are needed
+        // by renderTextArea.
+        $this->_GetFieldWidth();
 
-        return $this->GetHTML();
+        return $this->renderTextArea($this->data, true);
     }
 
     /**
