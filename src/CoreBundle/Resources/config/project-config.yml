@@ -60,8 +60,6 @@ parameters:
 
   database_port: 3306
 
-  twig.exception_listener.class: ChameleonSystem\CoreBundle\EventListener\ChameleonExceptionListener
-
   chameleon_system_core.google.api_key: ''
 
 chameleon_system_core:
