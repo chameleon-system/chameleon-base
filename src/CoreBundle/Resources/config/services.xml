@@ -914,8 +914,6 @@
 
         <service id="chameleon_system_core.module.navigation_tree_single_select" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelect\NavigationTreeSingleSelect" shared="false">
             <tag name="chameleon_system.module"/>
-            <argument id="database_connection" type="service"/>
-            <argument id="event_dispatcher" type="service"/>
             <argument id="chameleon_system_core.util.input_filter" type="service"/>
             <argument id="chameleon_system_core.util.url" type="service"/>
             <argument id="chameleon_system_core.factory.backend_tree_node" type="service"/>
