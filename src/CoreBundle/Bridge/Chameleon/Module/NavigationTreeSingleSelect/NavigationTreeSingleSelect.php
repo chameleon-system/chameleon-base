@@ -70,7 +70,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @var bool
      */
-    private $isSelectModeForPage = false;
+    private $isSelectModeForPage;
 
     /**
      * Nodes that should not be assignable or that should have only a
