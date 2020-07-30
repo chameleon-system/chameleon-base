@@ -34,14 +34,6 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     private $treeTable = 'cms_tree';
 
     /**
-     * @var Connection
-     */
-    private $dbConnection;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
      * @var InputFilterUtilInterface
      */
     private $inputFilterUtil;
@@ -76,6 +68,11 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     private $isPortalHomeNodeSelectMode;
 
     /**
+     * @var bool
+     */
+    private $isSelectModeForPage;
+
+    /**
      * Nodes that should not be assignable or that should have only a
      * restricted context menu.
      *
@@ -104,8 +101,6 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     private $editLanguage;
 
     public function __construct(
-        Connection $dbConnection,
-        EventDispatcherInterface $eventDispatcher,
         InputFilterUtilInterface $inputFilterUtil,
         UrlUtil $urlUtil,
         BackendTreeNodeFactory $backendTreeNodeFactory,
@@ -115,8 +110,6 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         FieldTranslationUtil $fieldTranslationUtil,
         LanguageServiceInterface $languageService
     ) {
-        $this->dbConnection = $dbConnection;
-        $this->eventDispatcher = $eventDispatcher;
         $this->inputFilterUtil = $inputFilterUtil;
         $this->urlUtil = $urlUtil;
         $this->backendTreeNodeFactory = $backendTreeNodeFactory;
@@ -131,20 +124,50 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     /**
      * {@inheritdoc}
      */
+    public function Init()
+    {
+        parent::Init();
+
+        $portalSelectMode = $this->inputFilterUtil->getFilteredGetInput('portalSelectMode', '');
+
+        // variables are needed in module functions:
+        $this->isPortalSelectMode = 'portalSelect' === $portalSelectMode;
+        $this->isPortalHomeNodeSelectMode = 'portalHomePage' === $portalSelectMode;  // also 404-page-selection
+        // NOTE the selection of "Page not found" for a portal is handled special (old) with TCMSFieldPortalHomeTreeNode.
+        //   The "normal" selection of a tree node anywhere (i. e. for system pages) is handled with TCMSFieldTreeNode.
+
+        $this->isSelectModeForPage = 'true' === $this->inputFilterUtil->getFilteredGetInput('selectModeForPage', 'false');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
         $fieldName = $this->inputFilterUtil->getFilteredGetInput('fieldName', '');
         $this->activeNodeId = $this->inputFilterUtil->getFilteredGetInput('id', '');
         $portalSelectMode = $this->inputFilterUtil->getFilteredGetInput('portalSelectMode', '');
         $visitor->SetMappedValue('portalSelectMode', $portalSelectMode);
+        $isSelectModeForPage = false;
 
         $pagedef = $this->inputFilterUtil->getFilteredGetInput('pagedef', 'navigationTreeSingleSelect');
         if ('' !== $portalSelectMode) {
-            $tableName = 'cms_portal';
+            $tableNameForUpdate = 'cms_portal';
             $currentRecordId = $this->inputFilterUtil->getFilteredGetInput('portalId', '');
         } else {
-            $tableName = 'cms_tpl_page';
-            $currentRecordId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
+            $tableNameForUpdate = 'cms_tpl_page';
+            $currentRecordId = $this->inputFilterUtil->getFilteredGetInput('currentRecordId', '');
+
+            $tableNameSubmitted = $this->inputFilterUtil->getFilteredGetInput('tableName');
+            if (null !== $tableNameSubmitted) {
+                $tableNameForUpdate = $tableNameSubmitted; // TODO this always right?
+            }
+
+            $isSelectModeForPage = 'cms_tpl_page' === $tableNameForUpdate;
+
+            if (true === $isSelectModeForPage) {
+                $currentRecordId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
+            }
         }
 
         $this->restrictedNodes = $this->getPortalNavigationStartNodes();
@@ -170,6 +193,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
                 'rootTreeId' => $rootTreeId,
                 'fieldName' => $fieldName,
                 'portalSelectMode' => $portalSelectMode,
+                'selectModeForPage' => $isSelectModeForPage ? 'true' : 'false',
             ],
             PATH_CMS_CONTROLLER.'?',
             '&'
@@ -183,7 +207,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
                         'contentmodule' => 'ExecuteAjaxCall',
                     ],
                 '_fnc' => 'updateSelection',
-                'table' => $tableName,
+                'table' => $tableNameForUpdate,
                 'currentRecordId' => $currentRecordId,
                 'fieldName' => $fieldName,
             ],
@@ -205,10 +229,6 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
 
     protected function getTreeNodes(): array
     {
-        $portalSelectMode = $this->inputFilterUtil->getFilteredGetInput('portalSelectMode', '');
-        $this->isPortalSelectMode = 'portalSelect' === $portalSelectMode ? true : false;
-        $this->isPortalHomeNodeSelectMode = 'portalHomePage' === $portalSelectMode ? true : false;  //also 404-page-selection
-
         $this->activeNodeId = $this->inputFilterUtil->getFilteredGetInput('activeNodeId', '');
         $rootTreeId = $this->inputFilterUtil->getFilteredGetInput('rootTreeId', '');
         if ('' === $rootTreeId) {
@@ -385,7 +405,9 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         if ($this->activeNodeId === $nodeId) {
             $treeNodeDataModel->setSelected(true);
         } else {
-            if (false === $this->isPortalHomeNodeSelectMode) {
+            if (true === $this->isSelectModeForPage) {
+                // TODO _always_ disable?
+
                 $treeNodeDataModel->setDisabled(true);
                 $treeNodeDataModel->addListHtmlClass('no-checkbox');
             }
