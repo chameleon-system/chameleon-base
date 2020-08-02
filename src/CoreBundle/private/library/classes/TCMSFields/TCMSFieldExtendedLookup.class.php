@@ -137,11 +137,9 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
     protected function _GetOpenWindowJS(&$oPopupTableConf)
     {
         $aParams = array('pagedef' => 'extendedLookupList', 'id' => $oPopupTableConf->id, 'fieldName' => $this->name, 'sourceTblConfId' => $this->oDefinition->fieldCmsTblConfId);
-        $sRestriction = $this->oDefinition->GetFieldtypeConfigKey('restriction');
-        $aRestrictionParts = explode('=', $sRestriction);
-        if (2 == count($aRestrictionParts) && property_exists($this, 'oTableRow') && is_object($this->oTableRow) && property_exists($this->oTableRow, 'sqlData') && is_array($this->oTableRow->sqlData) && array_key_exists($aRestrictionParts[0], $this->oTableRow->sqlData)) {
-            $aParams['sRestriction'] = $aRestrictionParts[1];
-            $aParams['sRestrictionField'] = $aRestrictionParts[0];
+        $restriction = $this->getTargetListRestriction();
+        if (0 !== \count($restriction)) {
+            $aParams = array_merge($aParams, $restriction);
         }
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParams);
         $translator = $this->getTranslationService();
@@ -150,6 +148,30 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sURL)."',0,0,'".$sWindowTitle."');return false;";
 
         return $js;
+    }
+
+    private function getTargetListRestriction(): array
+    {
+        $restrictionExpression = $this->oDefinition->GetFieldtypeConfigKey('restriction');
+        if (null === $restrictionExpression) {
+            return [];
+        }
+        if (false === \strpos($restrictionExpression, '=')) {
+            return [];
+        }
+        $equalPosition = \mb_strpos($restrictionExpression, '=');
+        $restrictionField = trim(\mb_substr($restrictionExpression, 0, $equalPosition));
+        $restrictionValue = trim(\mb_substr($restrictionExpression, $equalPosition+1));
+        $restrictionValue = mb_substr($restrictionValue, 2, -2); // ignore [{}]
+        if (\property_exists($this, 'oTableRow') && \is_object($this->oTableRow) && \property_exists($this->oTableRow, 'sqlData') && is_array($this->oTableRow->sqlData)) {
+            if (isset($this->oTableRow->sqlData[$restrictionValue])) {
+                $restrictionValue = $this->oTableRow->sqlData[$restrictionValue];
+            }
+        }
+        return [
+            'sRestrictionField' => $restrictionField,
+            'sRestriction' => $restrictionValue,
+        ];
     }
 
     /**
