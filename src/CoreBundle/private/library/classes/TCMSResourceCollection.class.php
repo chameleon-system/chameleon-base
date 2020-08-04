@@ -12,9 +12,9 @@
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ResourceCollectionJavaScriptCollectedEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
+use ChameleonSystem\CoreBundle\Service\CssMinifierServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use MatthiasMullie\Minify\CSS;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -47,14 +47,21 @@ class TCMSResourceCollection implements ResourceCollectorInterface
      */
     private $eventDispatcher;
 
+    /**
+     * @var CssMinifierServiceInterface|null
+     */
+    private $cssMinifierService;
+
     public function __construct(
         ?IPkgCmsFileManager $cmsFileManager = null,
         ?PortalDomainServiceInterface $portalDomainService = null,
-        ?EventDispatcherInterface $eventDispatcher = null
+        ?EventDispatcherInterface $eventDispatcher = null,
+        ?CssMinifierServiceInterface $cssMinifierService = null
     ) {
         $this->cmsFileManager = $cmsFileManager ?? ServiceLocator::get('chameleon_system_core.filemanager');
         $this->portalDomainService = $portalDomainService ?? ServiceLocator::get('chameleon_system_core.portal_domain_service');
         $this->eventDispatcher = $eventDispatcher ?? ServiceLocator::get('event_dispatcher');
+        $this->cssMinifierService = $cssMinifierService ?? ServiceLocator::get('chameleon_system_core.service.css_minifier');
     }
 
     /**
@@ -297,13 +304,8 @@ class TCMSResourceCollection implements ResourceCollectorInterface
                             $sSubString = $this->ProcessCSSRecursive($sPath, $sSubString);
 
                             $minify = ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_minify');
-                            if ($minify) {
-                                // TODO use a service here (see MinifyJsJshrinkService) - if there are any problems with customer css content with new lib?
-
-                                $minifier = new CSS();
-                                $minifier->add($sSubString);
-
-                                $sSubString = $minifier->minify();
+                            if (true === $minify) {
+                                $sSubString = $this->cssMinifierService->minify($sSubString);
                             }
                             if (_DEVELOPMENT_MODE) {
                                 $sContent .= "/* FROM: {$aCSS[$iIndex]} */\n".$sSubString."\n";
