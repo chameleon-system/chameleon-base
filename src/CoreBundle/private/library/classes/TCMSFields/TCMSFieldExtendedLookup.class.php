@@ -160,10 +160,10 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
             return [];
         }
         $equalPosition = \mb_strpos($restrictionExpression, '=');
-        $restrictionField = trim(\mb_substr($restrictionExpression, 0, $equalPosition));
-        $restrictionValue = trim(\mb_substr($restrictionExpression, $equalPosition+1));
-        $restrictionValue = mb_substr($restrictionValue, 2, -2); // ignore [{}]
-        if (\property_exists($this, 'oTableRow') && \is_object($this->oTableRow) && \property_exists($this->oTableRow, 'sqlData') && is_array($this->oTableRow->sqlData)) {
+        $restrictionField = \trim(\mb_substr($restrictionExpression, 0, $equalPosition));
+        $restrictionValue = \trim(\mb_substr($restrictionExpression, $equalPosition+1));
+        $restrictionValue = \mb_substr($restrictionValue, 2, -2); // ignore [{}]
+        if (\property_exists($this, 'oTableRow') && \is_object($this->oTableRow) && \property_exists($this->oTableRow, 'sqlData') && \is_array($this->oTableRow->sqlData)) {
             if (isset($this->oTableRow->sqlData[$restrictionValue])) {
                 $restrictionValue = $this->oTableRow->sqlData[$restrictionValue];
             }
