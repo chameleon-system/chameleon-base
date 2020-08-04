@@ -162,15 +162,15 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         $equalPosition = \mb_strpos($restrictionExpression, '=');
         $restrictionField = \trim(\mb_substr($restrictionExpression, 0, $equalPosition));
         $restrictionValue = \trim(\mb_substr($restrictionExpression, $equalPosition + 1));
-        $restrictionValue = \mb_substr($restrictionValue, 2, -2); // ignore [{}]
-        if (\property_exists($this, 'oTableRow')
-            && \is_object($this->oTableRow)
-            && \property_exists($this->oTableRow, 'sqlData')
-            && \is_array($this->oTableRow->sqlData)) {
-            if (isset($this->oTableRow->sqlData[$restrictionValue])) {
-                $restrictionValue = $this->oTableRow->sqlData[$restrictionValue];
+
+        if (\mb_strpos($restrictionValue, '[{') === 0 && '}]' === \mb_substr($restrictionValue, -2)) {
+            $restrictionValueReplaced = $this->getFieldValueFromFieldToken($restrictionValue);
+            if (null === $restrictionValueReplaced) {
+                $restrictionValueReplaced = \sprintf('field token %s not found in record.', $restrictionValue);
             }
+            $restrictionValue = $restrictionValueReplaced;
         }
+
         if ('' === $restrictionField || '' === $restrictionValue) {
             return [];
         }
@@ -179,6 +179,27 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
             'sRestrictionField' => $restrictionField,
             'sRestriction' => $restrictionValue,
         ];
+    }
+
+    /**
+     * Returns field value in current record if token matches a known field. Otherwise, null will be returned.
+     * @param string $fieldToken - token in the form [{fieldName}]
+     * @return string|null
+     */
+    private function getFieldValueFromFieldToken(string $fieldToken): ?string
+    {
+        if (false === \property_exists($this, 'oTableRow')) {
+            return null;
+        }
+        if (false === \is_object($this->oTableRow)) {
+            return null;
+        }
+        if (false === \is_array($this->oTableRow->sqlData)) {
+            return null;
+        }
+        $fieldName = \trim(\mb_substr($fieldToken, 2, -2));
+
+        return $this->oTableRow->sqlData[$fieldName] ?? null;
     }
 
     /**
