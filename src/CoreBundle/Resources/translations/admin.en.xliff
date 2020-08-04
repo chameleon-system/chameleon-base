@@ -1088,9 +1088,9 @@
                 <target>Edit node</target>
                 <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page">
-                <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page</source>
-                <target>Navigation node with restricted access page</target>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page">
+                <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page</source>
+                <target>Page has connected navigation node</target>
                 <note>@deprecated since 6.3.8 - no longer used.</note>
             </trans-unit>
 
@@ -1106,6 +1106,25 @@
                 <source>chameleon_system_core.cms_module_page_tree.legend_active_further_node_of_page</source>
                 <target>Active further navigation node of this page</target>
             </trans-unit>
+
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_folder">
+                <source>chameleon_system_core.cms_module_page_tree.legend_folder</source>
+                <target>Folder</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_hidden">
+                <source>chameleon_system_core.cms_module_page_tree.legend_hidden</source>
+                <target>Navigation node hidden</target>
+                <note>@deprecated since 6.3.10 - no longer used, use "chameleon_system_core.cms_module_page_tree.legend_node_hidden" instead</note>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_node_hidden">
+                <source>chameleon_system_core.cms_module_page_tree.legend_node_hidden</source>
+                <target>Navigation node hidden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_external_link">
+                <source>chameleon_system_core.cms_module_page_tree.legend_external_link</source>
+                <target>Link to external page</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_node_has_no_page">
                 <source>chameleon_system_core.cms_module_page_tree.legend_node_has_no_page</source>
                 <target>Navigation node without connected page</target>
@@ -1114,17 +1133,14 @@
                 <source>chameleon_system_core.cms_module_page_tree.legend_has_connected_pages</source>
                 <target>Navigation node with connected page</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page">
-                <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page</source>
-                <target>Page has connected navigation node</target>
+
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page">
+                <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page</source>
+                <target>Navigation node with restricted access page</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_hidden">
-                <source>chameleon_system_core.cms_module_page_tree.legend_hidden</source>
-                <target>Navigation node hidden</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_external_link">
-                <source>chameleon_system_core.cms_module_page_tree.legend_external_link</source>
-                <target>Link to external page</target>
+            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_extranetpage_hidden">
+                <source>chameleon_system_core.cms_module_page_tree.legend_extranetpage_hidden</source>
+                <target>Access restricted page, hidden in the navigation</target>
             </trans-unit>
 
 

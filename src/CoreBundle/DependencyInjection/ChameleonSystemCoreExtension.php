@@ -58,6 +58,17 @@ class ChameleonSystemCoreExtension extends Extension
         $this->addBackendConfig($config['backend'], $container);
 
         $this->addResources($container);
+
+        $this->configureResourceCollectorService($config['resource_collection'], $container);
+    }
+
+    private function configureResourceCollectorService(
+        array $resourceCollectionConfiguration,
+        ContainerBuilder $container
+    ): void {
+        $resourceCollectionDefinition = $container->getDefinition('chameleon_system_core.resource_collector');
+        $resourceCollectionDefinition->replaceArgument(3, $resourceCollectionConfiguration['cache_url_path']);
+        $resourceCollectionDefinition->replaceArgument(4, $resourceCollectionConfiguration['cache_path']);
     }
 
     private function loadConfigFile(ContainerBuilder $container, string $sConfigDir, string $filename): void

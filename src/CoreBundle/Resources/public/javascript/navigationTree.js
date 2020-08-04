@@ -1,21 +1,47 @@
 $(document).ready(function () {
+    currentNodeId = null;
+    navTreeDataContainer = $("#navigationTreeDataContainer");
 
     $("#singleTreeNodeSelect")
         .jstree({
             "core":{
                 "multiple": false,
-                "open_all": true
+                "open_all": true,
+                "data": {
+                    "url": navTreeDataContainer.data('tree-nodes-ajax-url'),
+                    "data": function(node) {
+                        return {
+                            'id' : node.id
+                        };
+                    }
+                },
+                "check_callback" : true
             },
             "types": {
                 "default": {
-                    "icon": ""
+                    "icon": "fas fa-genderless"
                 },
                 "folder": {
                     "icon": "fas fa-folder-open",
                     "check_node": false
                 },
+                "noPage": {
+                    "icon": "fas fa-genderless"
+                },
                 "page": {
                     "icon": "far fa-file"
+                },
+                "locked": {
+                    "icon": "fas fa-lock"
+                },
+                "extranetpageHidden": {
+                    "icon": "far fa-eye-slash"
+                },
+                "nodeHidden": {
+                    "icon": "fas fa-eye-slash"
+                },
+                "externalLink": {
+                    "icon": "fas fa-external-link-alt"
                 }
             },
             "checkbox": {
@@ -23,69 +49,68 @@ $(document).ready(function () {
                 "cascade": "none"
             },
             "plugins":[ "types", "wholerow", "changed", "checkbox" ]
+        })
+        .on("select_node.jstree", function (e, data) {
+            updateCurrentPageOrPortal(data.node.id);
+        })
+        .on("deselect_node.jstree", function (e, data) {
+            updateCurrentPageOrPortal('');
         });
 
 
-    $('.jstree-selection').click(function () {
-        var selectedItem = $("#singleTreeNodeSelect").jstree('get_selected');
-
-        if (selectedItem.length > 0) {
-            var singleSelection = $('#'+selectedItem[0]);
-            var fieldName = singleSelection.data('selection').fieldName;
-            var newId = singleSelection.data('selection').nodeId;
-            chooseTreeNode(fieldName, newId);
-        }
-    });
-
-    $('.jstree-exit').click(function () {
-        parent.CloseModalIFrameDialog();
-    });
-
-    var singleTreeNodeSelectWysiwyg = $("#singleTreeNodeSelectWysiwyg");
-    singleTreeNodeSelectWysiwyg.jstree({
-        "core":{
-            "multiple": false
-        },
-        "types": {
-            "default": {
-                "icon": ""
+    $("#singleTreeNodeSelectWysiwyg")
+        .jstree({
+            "core":{
+                "multiple": false,
+                "data": {
+                    "url": navTreeDataContainer.data('tree-nodes-ajax-url'),
+                    "data": function(node) {
+                        return {
+                            'id' : node.id
+                        };
+                    }
+                },
+                "check_callback" : true
             },
-            "folder": {
-                "icon": "fas fa-folder-open",
-                "check_node": false
+            "types": {
+                "default": {
+                    "icon": "fas fa-genderless"
+                },
+                "folder": {
+                    "icon": "fas fa-folder-open",
+                    "check_node": false
+                },
+                "noPage": {
+                    "icon": "fas fa-genderless"
+                },
+                "page": {
+                    "icon": "far fa-file"
+                },
+                "locked": {
+                    "icon": "fas fa-lock"
+                },
+                "extranetpageHidden": {
+                    "icon": "far fa-eye-slash"
+                },
+                "nodeHidden": {
+                    "icon": "fas fa-eye-slash"
+                },
+                "externalLink": {
+                    "icon": "fas fa-external-link-alt"
+                }
             },
-            "page": {
-                "icon": "far fa-file"
-            }
-        },
-        "checkbox": {
-            "three_state": false,
-            "cascade": "none"
-        },
-        "plugins":[ "types", "wholerow", "changed", "checkbox" ]
-    }).on('ready.jstree', function() {
-        $(this).jstree("open_all");
-    });
-
-    $('.jstree-selection-wysiwyg').click(function () {
-        var CKEditorFuncNum = singleTreeNodeSelectWysiwyg.data('ckeditorfuncnum');
-        var selectedItem = singleTreeNodeSelectWysiwyg.jstree('get_selected');
-        var selectedItemText = singleTreeNodeSelectWysiwyg.jstree('get_selected').text;
-
-        if (selectedItem.length > 0) {
-            var singleSelection = $('#' + selectedItem[0]);
-            var connectedPageId = singleSelection.data('selection').connectedPageId;
-            chooseTreeNodeWysiwyg(CKEditorFuncNum, connectedPageId, selectedItemText);
-        }
-        window.close();
-    });
-
-    $('.jstree-exit-wysiwyg').click(function () {
-        window.close();
-    });
-
-    var currentNodeId = null;
-    var navTreeDataContainer = $("#navigationTreeDataContainer");
+            "checkbox": {
+                "three_state": false,
+                "cascade": "none"
+            },
+            "plugins":[ "types", "wholerow", "changed", "checkbox" ]
+        })
+        .on('ready.jstree', function() {
+            $(this).jstree("open_all");
+        })
+        .on("select_node.jstree", function (e, data) {
+            updateSelectionWysiwyg(data.node);
+        });
 
     $("#navigationTreeContainer")
         .jstree({
@@ -103,7 +128,7 @@ $(document).ready(function () {
             },
             "types": {
                 "default": {
-                    "icon": "fas fa-folder-open"
+                    "icon": "fas fa-genderless"
                 },
                 "folder": {
                     "icon": "fas fa-folder-open"
@@ -114,9 +139,8 @@ $(document).ready(function () {
                 "folderRootRestrictedMenu": {
                     "icon": "fas fa-folder-open"
                 },
-                "folderWithPage": {
-                    "icon": "fas fa-folder-open",
-                    "check_node": false
+                "noPage": {
+                    "icon": "fas fa-genderless"
                 },
                 "page": {
                     "icon": "far fa-file"
@@ -124,11 +148,11 @@ $(document).ready(function () {
                 "locked": {
                     "icon": "fas fa-lock"
                 },
-                "pageHidden": {
+                "extranetpageHidden": {
                     "icon": "far fa-eye-slash"
                 },
                 "nodeHidden": {
-                    "icon": "far fa-eye-slash"
+                    "icon": "fas fa-eye-slash"
                 },
                 "externalLink": {
                     "icon": "fas fa-external-link-alt"
@@ -159,23 +183,19 @@ $(document).ready(function () {
             },
             "types": {
                 "default": {
-                    "icon": "fas fa-folder-open"
+                    "icon": "fas fa-genderless"
                 },
                 "folder": {
-                    "icon": "fas fa-folder-open",
-                    "check_node": false
+                    "icon": "fas fa-folder-open"
                 },
                 "folderRestrictedMenu": {
-                    "icon": "fas fa-folder-open",
-                    "check_node": false
+                    "icon": "fas fa-folder-open"
                 },
                 "folderRootRestrictedMenu": {
-                    "icon": "fas fa-folder-open",
-                    "check_node": false
+                    "icon": "fas fa-folder-open"
                 },
-                "folderWithPage": {
-                    "icon": "fas fa-folder-open",
-                    "check_node": false
+                "noPage": {
+                    "icon": "fas fa-genderless"
                 },
                 "page": {
                     "icon": "far fa-file"
@@ -183,11 +203,11 @@ $(document).ready(function () {
                 "locked": {
                     "icon": "fas fa-lock"
                 },
-                "pageHidden": {
+                "extranetpageHidden": {
                     "icon": "far fa-eye-slash"
                 },
                 "nodeHidden": {
-                    "icon": "far fa-eye-slash"
+                    "icon": "fas fa-eye-slash"
                 },
                 "externalLink": {
                     "icon": "fas fa-external-link-alt"
@@ -197,7 +217,7 @@ $(document).ready(function () {
                 "three_state": false,
                 "cascade": "none"
             },
-            "plugins":[ "types", "wholerow", "changed", "checkbox", "contextmenu", "dnd"],
+            "plugins":[ "types", "wholerow", "changed", "checkbox", "contextmenu"],
             "contextmenu": {
                 "items": navigationRightClickMenuForCheckboxes,
                 "select_node": false
@@ -206,35 +226,50 @@ $(document).ready(function () {
                 "drag_selection": false
             }
         })
-        .on("move_node.jstree", function (e, data) {
-            moveNode(data.node.id, data.parent, data.position);
-        })
         .on("select_node.jstree", function (e, data) {
             connectPageOnSelect(data.node.id);
         })
         .on("deselect_node.jstree", function (e, data) {
             disconnectPageOnDeselect(data.node.id);
         });
-
 });
 
-/*
- * TreeNode field: sets selected node
- */
+function updateCurrentPageOrPortal(newNodeId) {
+    let url = navTreeDataContainer.data('update-selection-url') + '&sRestriction=' + newNodeId + '&nodeId=' + newNodeId;
+    GetAjaxCallTransparent(url, updateCurrentPageOrPortalSuccess);
+}
+
+function updateCurrentPageOrPortalSuccess(nodeId, responseMessage) {
+    if ('success' === responseMessage) {
+        const fieldName = navTreeDataContainer.data('field-name');
+        chooseTreeNode(fieldName, nodeId);
+    }
+}
+
 function chooseTreeNode(fieldName, newId) {
     parent.$('#' + fieldName).val(newId);
-    var newPath = $('#' + fieldName + '_tmp_path_' + newId).html();
+    let newPath = "";
+    if (newId !== "") {
+        newPath = $('#' + fieldName + '_tmp_path_' + newId).html();
+    }
     parent.$('#' + fieldName + '_path').html(newPath);
+}
+
+function updateSelectionWysiwyg(selectedItem) {
+    let CKEditorFuncNum = navTreeDataContainer.data('ckeditorfuncnum');
+    let selectedItemText = selectedItem.text;
+    let connectedPageId = selectedItem.li_attr.isPageId;
+    chooseTreeNodeWysiwyg(CKEditorFuncNum, connectedPageId, selectedItemText);
     parent.CloseModalIFrameDialog();
 }
 
 function chooseTreeNodeWysiwyg(CKEditorFuncNum, pagedef, text) {
-    var url = '/INDEX?pagedef=' + pagedef;
+    let url = '/INDEX?pagedef=' + pagedef;
 
     parent.opener.window.CKEDITOR.tools.callFunction(
         CKEditorFuncNum, encodeURI(url), function () {
             // Get the reference to a dialog window.
-            var element,
+            let element,
                 dialog = this.getDialog(),
                 editor = dialog.getParentEditor();
             // Get the reference to a text field that holds the "alt" attribute.
@@ -254,7 +289,7 @@ function chooseTreeNodeWysiwyg(CKEditorFuncNum, pagedef, text) {
 
 
 function navigationRightClickMenu(node) {
-    var items = {
+    let items = {
         "editpageconnections": {
             "label": CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.connected_pages'),
             "icon": "fas fa-link",
@@ -334,9 +369,9 @@ function navigationRightClickMenuForCheckboxes(node) {
 
 
 function openPageConnectionList(node) {
-    var nodeId = $(node).parent().attr('id');
+    const nodeId = $(node).parent().attr('id');
     currentNodeId = nodeId; // save nodeId in global var
-    var url = $("#navigationTreeDataContainer").data('open-page-connection-list-url') + "&sRestriction=" + nodeId;
+    const url = navTreeDataContainer.data('open-page-connection-list-url') + "&sRestriction=" + nodeId;
     CreateModalIFrameDialogCloseButton(url);
     refreshNodeOnModalClose(nodeId);
 }
@@ -345,10 +380,10 @@ function openPageConnectionList(node) {
  * opens the page in edit mode
  */
 function openPageEditor(node) {
-    var pageId = $(node).parent().attr('isPageId');
+    const pageId = $(node).parent().attr('isPageId');
 
     if (pageId !== false && typeof(pageId) !== "undefined") {
-        parent.document.location.href = $("#navigationTreeDataContainer").data('open-page-editor-url') + '&id=' + pageId;
+        parent.document.location.href = navTreeDataContainer.data('open-page-editor-url') + '&id=' + pageId;
     } else {
         alert(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.node_has_no_page'));
     }
@@ -358,9 +393,9 @@ function openPageEditor(node) {
  * opens the page in config edit mode
  */
 function openPageConfigEditor(node) {
-    var pageId = $(node).parent().attr('isPageId');
+    const pageId = $(node).parent().attr('isPageId');
     if (pageId !== false && typeof(pageId) !== "undefined") {
-        parent.document.location.href = $("#navigationTreeDataContainer").data('open-page-config-editor-url') + '&id=' + pageId;
+        parent.document.location.href = navTreeDataContainer.data('open-page-config-editor-url') + '&id=' + pageId;
     } else {
         alert(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.node_has_no_page'));
     }
@@ -370,9 +405,9 @@ function openPageConfigEditor(node) {
  * opens the tree node editor
  */
 function openTreeNodeEditor(node) {
-    var nodeId = $(node).parent().attr('id');
+    const nodeId = $(node).parent().attr('id');
     currentNodeId = nodeId; // save nodeId in global var
-    var url = $("#navigationTreeDataContainer").data('open-tree-node-editor-url') + '&id=' + nodeId;
+    const url = navTreeDataContainer.data('open-tree-node-editor-url') + '&id=' + nodeId;
     CreateModalIFrameDialogCloseButton(url);
 }
 
@@ -381,9 +416,9 @@ function openTreeNodeEditor(node) {
  *
  */
 function openTreeNodeEditorAddNewNode(node) {
-    var nodeId = $(node).parent().attr('id');
+    const nodeId = $(node).parent().attr('id');
     currentNodeId = nodeId; // save nodeId in global var
-    var url = $("#navigationTreeDataContainer").data('open-tree-node-editor-add-new-node-url') + '&parent_id=' + nodeId;
+    const url = navTreeDataContainer.data('open-tree-node-editor-add-new-node-url') + '&parent_id=' + nodeId;
     CreateModalIFrameDialogCloseButton(url);
 }
 
@@ -391,16 +426,16 @@ function openTreeNodeEditorAddNewNode(node) {
  * deletes a node and kills the page connections
  */
 function deleteNode(node) {
-    var confirmMessage = CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.confirm_delete');
+    let confirmMessage = CHAMELEON.CORE.i18n.Translate('chameleon_system_core.navigation_tree.confirm_delete');
     confirmMessage = confirmMessage.replace(/&quot;/g, '\"');
 
-    var nodeTitle = $(node).text();
+    let nodeTitle = $(node).text();
     confirmMessage = confirmMessage.replace('%nodeName%', nodeTitle);
 
     if(confirm(confirmMessage)){
-        var nodeId = $(node).parent().attr('id');
+        const nodeId = $(node).parent().attr('id');
         currentNodeId = nodeId; // save nodeId in global var
-        var url = $("#navigationTreeDataContainer").data('delete-node-url') + '&nodeId=' + nodeId;
+        const url = navTreeDataContainer.data('delete-node-url') + '&nodeId=' + nodeId;
         CHAMELEON.CORE.showProcessingModal();
         GetAjaxCallTransparent(url, deleteNodeSuccess);
     }
@@ -428,9 +463,9 @@ function updateTreeNode(formObject) {
 }
 
 function assignPage(node) {
-    var nodeId = $(node).attr('id');
+    const nodeId = $(node).attr('id');
     currentNodeId = nodeId; // save nodeId in global var
-    var url = $("#navigationTreeDataContainer").data('assign-page-url') + '&sRestriction=' + nodeId + '&nodeId=' + nodeId;
+    const url = navTreeDataContainer.data('assign-page-url') + '&sRestriction=' + nodeId + '&nodeId=' + nodeId;
     CreateModalIFrameDialogCloseButton(url);
     refreshNodeOnModalClose(nodeId);
 }
@@ -438,14 +473,15 @@ function assignPage(node) {
 
 function connectPageOnSelect(nodeId) {
     currentNodeId = nodeId; // save nodeId in global var
-    var url = $("#navigationTreeDataContainer").data('connect-page-on-select-url') + '&sRestriction=' + nodeId + '&nodeId=' + nodeId;
+    const url = navTreeDataContainer.data('connect-page-on-select-url') + '&sRestriction=' + nodeId + '&nodeId=' + nodeId;
     GetAjaxCallTransparent(url, connectPageSuccess);
 }
 
 function connectPageSuccess(nodeId, responseMessage) {
     if ('success' === responseMessage) {
         //don't do a refresh here, because refresh_node triggers "selected" again from state
-        $(".navigationTreeContainer.jstree #"+nodeId+"_anchor").addClass('activeConnectedNode');
+        $(".navigationTreeContainer.jstree #"+nodeId).addClass('activeConnectedNode');
+        updateTreeBreadcrumbs();
     } else {
         $(".navigationTreeContainer.jstree #" + nodeId + "_anchor").addClass('jstree-clicked');
     }
@@ -453,17 +489,31 @@ function connectPageSuccess(nodeId, responseMessage) {
 
 function disconnectPageOnDeselect(nodeId) {
     currentNodeId = nodeId; // save nodeId in global var
-    var url = $("#navigationTreeDataContainer").data('disconnect-page-on-deselect-url') + '&sRestriction=' + nodeId + '&nodeId=' + nodeId;
+    const url = navTreeDataContainer.data('disconnect-page-on-deselect-url') + '&sRestriction=' + nodeId + '&nodeId=' + nodeId;
     GetAjaxCallTransparent(url, disconnectPageSuccess);
 }
 
 function disconnectPageSuccess(nodeId, responseMessage) {
     if ('success' === responseMessage) {
         //don't do a refresh here, because refresh_node triggers "selected" again from state
-        $(".navigationTreeContainer.jstree #" + nodeId + "_anchor").removeClass('activeConnectedNode');
+        $(".navigationTreeContainer.jstree #" + nodeId).removeClass('activeConnectedNode');
+        updateTreeBreadcrumbs();
     } else {
         $(".navigationTreeContainer.jstree #" + nodeId + "_anchor").addClass('jstree-clicked');
     }
+}
+
+function updateTreeBreadcrumbs() {
+    const fieldName = navTreeDataContainer.data('field-name');
+    let newPath = "";
+    const selectedItemIds = $("#navigationTreeContainer-checkboxes").jstree('get_selected');
+
+    selectedItemIds.forEach(function (itemId){
+        if (false === $('#'+itemId).hasClass('primaryConnectedNodeOfCurrentPage')) {
+            newPath += $('#' + fieldName + '_tmp_path_' + itemId).html();
+        }
+    });
+    parent.$('#' + fieldName + '_additional_paths').html(newPath);
 }
 
 /**
@@ -472,7 +522,7 @@ function disconnectPageSuccess(nodeId, responseMessage) {
 function moveNode(nodeId, parentNodeId, position) {
     if (typeof parentNodeId != 'undefined' && typeof nodeId != 'undefined') {
         CHAMELEON.CORE.showProcessingModal();
-        var url = $("#navigationTreeDataContainer").data('move-node-url') + '&nodeId=' + nodeId + '&parentNodeId=' + parentNodeId + '&position=' + position;
+        const url = navTreeDataContainer.data('move-node-url') + '&nodeId=' + nodeId + '&parentNodeId=' + parentNodeId + '&position=' + position;
         GetAjaxCallTransparent(url, moveNodeSuccess);
     }
 }
@@ -496,10 +546,10 @@ function refreshNode(nodeId) {
     // selection state with refresh_node if a page connection was added or deleted, for example with editnode()
     // if we manually select or deselect the selected node here before refreshing, it also triggers the event
     // deselect_node and this kills the connection to the active page
-    var tree = $(".navigationTreeContainer.jstree").jstree(true);
+    let tree = $(".navigationTreeContainer.jstree").jstree(true);
 
     // refresh_node can only refresh the children and NOT the node itself, otherwise we get duplicate ids and
     // after that we have problems with drag&drop, so we have to refresh the siblings too with the parentNode.
-    var parentId = tree.get_parent(nodeId);
+    const parentId = tree.get_parent(nodeId);
     tree.refresh_node(parentId);
 }

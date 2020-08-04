@@ -267,7 +267,7 @@ class TCMSImageEndpoint
         $this->id = $id;
 
         $oCmsMedia = $this->getMediaDataAccessService()->loadMediaFromId($id);
-        if (null !== $oCmsMedia && null !== $oCmsMedia->id) {
+        if (null !== $oCmsMedia && null !== $oCmsMedia->id && false !== $oCmsMedia->sqlData) {
             if (is_array($oCmsMedia->sqlData)) {
                 $this->aData = $this->getFieldTranslationUtil()->copyTranslationsToDefaultFields($oCmsMedia->sqlData);
             } else {
@@ -733,7 +733,7 @@ class TCMSImageEndpoint
      */
     public function GetRelativeURL()
     {
-        if (!$this->_isThumbnail) {
+        if (false === $this->_isThumbnail) {
             $sImageURL = $this->GetImageUrlPathPrefix().$this->aData['path'];
         } else {
             $sImageURL = URL_MEDIA_LIBRARY_THUMBS_PATH.$this->GetThumbPathExtension().'/'.$this->aData['path'];

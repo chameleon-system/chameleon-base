@@ -10,7 +10,8 @@
 {% endif %}
         <div class="row m-0">
             <div class="col-12 col-md-6 col-xl-8">
-                <div id="navigationTreeDataContainer"
+                <div id="navigationTreeDataContainer" class="mb-4"
+                     data-field-name = "{{ fieldName }}"
                      data-tree-nodes-ajax-url = "{{ treeNodesAjaxUrl | raw }}"
                      data-open-page-connection-list-url = "{{ openPageConnectionListUrl | raw }}"
                      data-open-page-editor-url = "{{ openPageEditorUrl | raw }}"
@@ -28,51 +29,7 @@
                 </div>
             </div>
             <div class="col-12 col-md-6 col-xl-4 justify-content-end mt-4 mt-md-0">
-                <div class="treelegend">
-                    <h5>
-                        <span class="nodeIndicatorIcon"></span>
-                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_header' | trans }}</span>
-                    </h5>
-
-                    {% if noAssignDialog == false %}
-                        <div class="activeConnectedNode primaryConnectedNode">
-                            <span class="nodeIndicatorIcon"></span>
-                            <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_active_main_node_of_page' | trans }}</span>
-                        </div>
-
-
-                        <div class="activeConnectedNode">
-                            <span class="nodeIndicatorIcon"></span>
-                            <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_active_further_node_of_page' | trans }}</span>
-                        </div>
-                    {% endif %}
-
-                    <div class="text">
-                        <span class="nodeIndicatorIcon"></span>
-                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_node_has_no_page' | trans }}</span>
-                    </div>
-
-                    <div class="otherConnectedNode">
-                        <span class="nodeIndicatorIcon"></span>
-                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_has_connected_pages' | trans }}</span>
-                    </div>
-
-                    <div class="restrictedPage">
-                        <span class="nodeIndicatorIcon iconRestricted"><i class="fas fa-lock"></i></span>
-                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_connected_to_protected_page' | trans }}</span>
-                    </div>
-
-                    <div class="node-hidden">
-                        <span class="nodeIndicatorIcon iconHidden"><i class="far fa-eye-slash"></i></span>
-                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_hidden' | trans }}</span>
-                    </div>
-
-                    <div class="legendLine">
-                        <span class="nodeIndicatorIcon iconExternalLink"><i class="fas fa-external-link-alt"></i></span>
-                        <span>{{ 'chameleon_system_core.cms_module_page_tree.legend_external_link' | trans }}</span>
-                    </div>
-                </div>
-
+                {% include 'NavigationTree/treeLegend.html.twig' %}
             </div>
         </div>
 
@@ -80,4 +37,6 @@
     </div>
 </div>
 {% endif %}
+
+{{ pageBreadcrumbsHTML | raw }}
 
