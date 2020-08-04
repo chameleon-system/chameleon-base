@@ -529,7 +529,7 @@ CHAMELEON.CORE.initializeEntryAutocomplete = function($element) {
             if (typeof item.id !== "undefined") {
                 var handled = false;
                 if ("" !== item.id) {
-                    if ("" !== $element.data('onclick-function')) {
+                    if (undefined !== $element.data('onclick-function') && "" !== $element.data('onclick-function')) {
                         handled = true;
                         var specificOnClick = $element.data('onclick-function') + "('" + item.id + "')";
                         eval(specificOnClick);
