@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * exports table data as TAB, CSV or RTF.
 /**/
@@ -99,8 +101,7 @@ class CMSTableExport extends TCMSModelBase
      */
     public function GenerateExport()
     {
-        // TODO do this for more than this export?
-        $this->provideEnoughMemory();
+        $this->provideExportMemory();
 
         $listClass = $this->global->GetUserData('listClass');
 
@@ -148,18 +149,22 @@ class CMSTableExport extends TCMSModelBase
         $this->getDownload($sFileType);
     }
 
-    private function provideEnoughMemory(): void
+    private function provideExportMemory(): void
     {
-        $oneGiga = 1 * 1024 * 1024 * 1024;
-        if ($this->unitToInt(ini_get('memory_limit')) < $oneGiga) {
-            ini_set('memory_limit', '1G');
+        $exportMemoryUnits = ServiceLocator::getParameter('chameleon_system.core.export_memory');
+
+        $inBytes = $this->unitToInt($exportMemoryUnits);
+
+        if ($inBytes > 256*1024*1024) {
+            ini_set('memory_limit', $exportMemoryUnits);
         }
+        // else filter out bogus values
     }
 
     /**
      * Converts a number with byte unit (B / K / M / G) into an integer of bytes.
      */
-    function unitToInt($units): int
+    private function unitToInt($units): int
     {
         return (int)preg_replace_callback('/(\-?\d+)(.?)/', function ($matches) {
             return $matches[1] * (1024 ** strpos('BKMG', $matches[2]));

@@ -173,6 +173,11 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('home_pagedef')
                 ->defaultValue('welcome')
                 ->info('The pagedef that is displayed after login and when clicking any "to home" button.')
+            ->end()
+            ->scalarNode('export_memory')
+                ->defaultValue('1G')
+                ->cannotBeEmpty()
+                ->info('Configure php memory setting for backend exports as a byte unit (for example "180M"). Default value is 1G.')
             ->end();
 
         return $subTree;
