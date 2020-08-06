@@ -168,14 +168,10 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         if (true === $this->isFieldToken($restrictionValue)) {
             $restrictionValueReplaced = $this->getFieldValueFromFieldToken($restrictionValue);
             if (null === $restrictionValueReplaced) {
-                $error = $this->getTranslationService()->trans(
-                    'chameleon_system_core.field_lookup.invalid_restriction',
-                    [
-                        '%field%' => $this->oDefinition->GetName(),
-                        '%restriction%' => $restrictionExpression
-                    ]
-                );
-                $this->getFlashMessageService()->addBackendToasterMessage($error);
+                $this->getFlashMessageService()->addBackendToasterMessage('chameleon_system_core.field_lookup.invalid_restriction', 'ERROR', [
+                    '%field%' => $this->oDefinition->GetName(),
+                    '%restriction%' => $restrictionExpression
+                ]);
                 $restrictionValueReplaced = \sprintf('field token %s not found in record.', $restrictionValue);
             }
             $restrictionValue = $restrictionValueReplaced;
@@ -250,6 +246,6 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
      */
     private function getTranslationService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
     }
 }
