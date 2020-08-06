@@ -400,6 +400,10 @@
                 <target>hh:mm:ss</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_core.field_lookup.invalid_restriction">
+                <source>chameleon_system_core.field_lookup.invalid_restriction</source>
+                <target>The restriction "%restriction%" specified for the field "%field%" is invalid.</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.field_lookup.switch_to">
                 <source>chameleon_system_core.field_lookup.switch_to</source>
                 <target>Switch to record</target>
