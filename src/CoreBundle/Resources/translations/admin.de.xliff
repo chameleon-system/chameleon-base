@@ -405,6 +405,10 @@
                 <target>hh:mm:ss</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_core.field_lookup.invalid_restriction">
+                <source>chameleon_system_core.field_lookup.invalid_restriction</source>
+                <target>Die für das Feld "%field%" hinterlegte Einschränkung "%restriction%" ist nicht zulässig.</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.field_lookup.switch_to">
                 <source>chameleon_system_core.field_lookup.switch_to</source>
                 <target>Zu Datensatz wechseln</target>
