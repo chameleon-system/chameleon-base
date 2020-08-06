@@ -61,7 +61,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         $html .= '
         </div>
         <div class="card-body p-1">
-        <div class="checkbox-matrix"';
+        <div class="checkbox-matrix">';
 
         $mltRecords = $this->getMltRecordData($oTargetTableConf->sqlData['list_group_field_column']);
         $activeGroup = '';

@@ -82,9 +82,11 @@
 .checkbox-matrix {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .checkboxGroupTitle {
+    width: 100%;
     margin-top: 10px;
     font-weight:bold;
     border-bottom: 1px solid black;
