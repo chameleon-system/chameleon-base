@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -166,6 +168,14 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         if (true === $this->isFieldToken($restrictionValue)) {
             $restrictionValueReplaced = $this->getFieldValueFromFieldToken($restrictionValue);
             if (null === $restrictionValueReplaced) {
+                $error = $this->getTranslationService()->trans(
+                    'chameleon_system_core.field_lookup.invalid_restriction',
+                    [
+                        '%field%' => $this->oDefinition->GetName(),
+                        '%restriction%' => $restrictionExpression
+                    ]
+                );
+                $this->getFlashMessageService()->addBackendToasterMessage($error);
                 $restrictionValueReplaced = \sprintf('field token %s not found in record.', $restrictionValue);
             }
             $restrictionValue = $restrictionValueReplaced;
@@ -179,6 +189,10 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
             'sRestrictionField' => $restrictionField,
             'sRestriction' => $restrictionValue,
         ];
+    }
+    private function getFlashMessageService(): FlashMessageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
     private function isFieldToken(string $string): bool
