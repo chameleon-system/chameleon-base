@@ -161,9 +161,9 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         }
         $equalPosition = \mb_strpos($restrictionExpression, '=');
         $restrictionField = \trim(\mb_substr($restrictionExpression, 0, $equalPosition));
-        $restrictionValue = \trim(\mb_substr($restrictionExpression, $equalPosition + 1));
+        $restrictionValue = \mb_substr($restrictionExpression, $equalPosition + 1);
 
-        if (\mb_strpos($restrictionValue, '[{') === 0 && '}]' === \mb_substr($restrictionValue, -2)) {
+        if (true === $this->isFieldToken($restrictionValue)) {
             $restrictionValueReplaced = $this->getFieldValueFromFieldToken($restrictionValue);
             if (null === $restrictionValueReplaced) {
                 $restrictionValueReplaced = \sprintf('field token %s not found in record.', $restrictionValue);
@@ -181,6 +181,12 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         ];
     }
 
+    private function isFieldToken(string $string): bool
+    {
+        $string = \trim($string);
+        return \mb_strpos($string, '[{') === 0 && '}]' === \mb_substr($string, -2);
+    }
+
     /**
      * Returns field value in current record if token matches a known field. Otherwise, null will be returned.
      * @param string $fieldToken - token in the form [{fieldName}]
@@ -188,15 +194,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
      */
     private function getFieldValueFromFieldToken(string $fieldToken): ?string
     {
-        if (false === \property_exists($this, 'oTableRow')) {
-            return null;
-        }
-        if (false === \is_object($this->oTableRow)) {
-            return null;
-        }
-        if (false === \is_array($this->oTableRow->sqlData)) {
-            return null;
-        }
+        $fieldToken = \trim($fieldToken);
         $fieldName = \trim(\mb_substr($fieldToken, 2, -2));
 
         return $this->oTableRow->sqlData[$fieldName] ?? null;
