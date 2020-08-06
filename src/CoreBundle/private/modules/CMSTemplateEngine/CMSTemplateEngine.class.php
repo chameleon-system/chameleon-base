@@ -482,12 +482,26 @@ class CMSTemplateEngine extends TCMSModelBase
      */
     protected function filterMainNavigation(): void
     {
-        $this->data['oMenuItems'] = $this->oTableManager->oTableEditor->GetMenuItems();
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'save');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'copy');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'new');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'delete');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'copy_translation');
+        /**
+         * @var $menuItems TIterator
+         */
+        $menuItems = $this->oTableManager->oTableEditor->GetMenuItems();
+
+        $menuItems->RemoveItem('sItemKey', 'save');
+        $menuItems->RemoveItem('sItemKey', 'copy');
+        $menuItems->RemoveItem('sItemKey', 'new');
+        $menuItems->RemoveItem('sItemKey', 'delete');
+        $menuItems->RemoveItem('sItemKey', 'copy_translation');
+
+        $tableEditorButton = $menuItems->FindItemWithProperty('sItemKey', 'edittableconf');
+        if (false !== $tableEditorButton) {
+            /**
+             * @var $tableEditorButton TCMSTableEditorMenuItem
+             */
+            $tableEditorButton->sOnClick = str_replace('pagedef=templateengine', 'pagedef=tableeditor', $tableEditorButton->sOnClick);
+        }
+
+        $this->data['oMenuItems'] = $menuItems;
     }
 
     /**
