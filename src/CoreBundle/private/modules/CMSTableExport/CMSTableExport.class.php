@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * exports table data as TAB, CSV or RTF.
 /**/
@@ -99,13 +101,15 @@ class CMSTableExport extends TCMSModelBase
      */
     public function GenerateExport()
     {
+        $this->provideExportMemory();
+
         $listClass = $this->global->GetUserData('listClass');
 
         if (empty($listClass)) {
             $listClass = null;
         }
 
-        $this->oTableList = &$this->oTableConf->GetListObject($listClass);
+        $this->oTableList = &$this->oTableConf->GetListObject($listClass)->tableObj;
 
         $sListCacheKey = $this->global->GetUserData('listCacheKey');
 
@@ -143,6 +147,32 @@ class CMSTableExport extends TCMSModelBase
             fclose($this->pTempFilePointer);
         }
         $this->getDownload($sFileType);
+    }
+
+    private function provideExportMemory(): void
+    {
+        $exportMemoryUnits = ServiceLocator::getParameter('chameleon_system.core.export_memory');
+
+        $configuredBytes = $this->unitToInt($exportMemoryUnits);
+        $currentBytes = $this->unitToInt(ini_get('memory_limit'));
+
+        if ($configuredBytes > $currentBytes) {
+            ini_set('memory_limit', $exportMemoryUnits);
+        }
+    }
+
+    /**
+     * Converts a number with byte unit (B / K / M / G) into an integer of bytes.
+     */
+    private function unitToInt(string $units): int
+    {
+        if ('' === $units || false === strpos('BKMG', substr($units, -1))) {
+            return 0;
+        }
+
+        return (int)preg_replace_callback('/(\-?\d+)(.?)/', function ($matches) {
+            return $matches[1] * (1024 ** strpos('BKMG', $matches[2]));
+        }, strtoupper($units));
     }
 
     /**

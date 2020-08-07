@@ -191,6 +191,8 @@ class ChameleonSystemCoreExtension extends Extension
     {
         $definition = $container->getDefinition('chameleon_system_core.backend_controller');
         $definition->addMethodCall('setHomePagedef', [$backendConfig['home_pagedef']]);
+
+        $container->setParameter('chameleon_system.core.export_memory', $backendConfig['export_memory']); // make available for non-DI-dependencies
     }
 
     /**
