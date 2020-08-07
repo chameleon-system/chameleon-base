@@ -153,19 +153,23 @@ class CMSTableExport extends TCMSModelBase
     {
         $exportMemoryUnits = ServiceLocator::getParameter('chameleon_system.core.export_memory');
 
-        $inBytes = $this->unitToInt($exportMemoryUnits);
+        $configuredBytes = $this->unitToInt($exportMemoryUnits);
+        $currentBytes = $this->unitToInt(ini_get('memory_limit'));
 
-        if ($inBytes > 256*1024*1024) {
+        if ($configuredBytes > $currentBytes) {
             ini_set('memory_limit', $exportMemoryUnits);
         }
-        // else filter out bogus values
     }
 
     /**
      * Converts a number with byte unit (B / K / M / G) into an integer of bytes.
      */
-    private function unitToInt($units): int
+    private function unitToInt(string $units): int
     {
+        if ('' === $units || false === strpos('BKMG', substr($units, -1))) {
+            return 0;
+        }
+
         return (int)preg_replace_callback('/(\-?\d+)(.?)/', function ($matches) {
             return $matches[1] * (1024 ** strpos('BKMG', $matches[2]));
         }, strtoupper($units));
