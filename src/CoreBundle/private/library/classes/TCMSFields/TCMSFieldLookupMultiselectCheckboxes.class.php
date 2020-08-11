@@ -265,6 +265,8 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             $oTableConf->LoadFromField('name', $this->sTableName);
 
             if (is_array($this->data)) {
+                // TODO this is the same as \TCMSMLTField::getMltValues()?
+
                 $aConnectedIds = array();
 
                 if (TGlobal::IsCMSMode()) {
@@ -274,13 +276,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
                 $sAlreadyConnectedQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTableName)."` WHERE `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($recordId)."'";
                 $tRes = MySqlLegacySupport::getInstance()->query($sAlreadyConnectedQuery);
                 while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-                    if (TGlobal::IsCMSMode()) {
-                        if ($oAllForeignRecordsFiltered->FindItemsWithProperty('id', $aRow['target_id'])) {
-                            $aConnectedIds[] = $aRow['target_id'];
-                        }
-                    } else {
-                        $aConnectedIds[] = $aRow['target_id'];
-                    }
+                    $aConnectedIds[] = $aRow['target_id'];
                 }
 
                 $aNewConnections = array_diff($this->data, $aConnectedIds);
