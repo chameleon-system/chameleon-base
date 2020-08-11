@@ -258,26 +258,13 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         } // prevent read only fields from saving
 
         if (is_array($this->oTableRow->sqlData) && array_key_exists('id', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData['id'])) {
-            $mltTableName = $this->GetMLTTableName();
             $recordId = $this->oTableRow->sqlData['id'];
 
             $oTableConf = new TCMSTableConf();
             $oTableConf->LoadFromField('name', $this->sTableName);
 
             if (is_array($this->data)) {
-                // TODO this is the same as \TCMSMLTField::getMltValues()?
-
-                $aConnectedIds = array();
-
-                if (TGlobal::IsCMSMode()) {
-                    $oAllForeignRecordsFiltered = $this->FetchMLTRecords();
-                }
-
-                $sAlreadyConnectedQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTableName)."` WHERE `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($recordId)."'";
-                $tRes = MySqlLegacySupport::getInstance()->query($sAlreadyConnectedQuery);
-                while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-                    $aConnectedIds[] = $aRow['target_id'];
-                }
+                $aConnectedIds = $this->getMltValues();
 
                 $aNewConnections = array_diff($this->data, $aConnectedIds);
                 $aDeletedConnections = array_diff($aConnectedIds, $this->data);
