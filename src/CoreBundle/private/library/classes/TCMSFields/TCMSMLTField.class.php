@@ -28,20 +28,10 @@ abstract class TCMSMLTField extends TCMSField
             $oTableConf = new TCMSTableConf();
             $oTableConf->LoadFromField('name', $this->sTableName);
 
-            if (TGlobal::IsCMSMode()) {
-                $oAllForeignRecordsFiltered = $this->FetchMLTRecords();
-            }
-
             $sAlreadyConnectedQuery = 'SELECT * FROM `'.\MySqlLegacySupport::getInstance()->real_escape_string($sMltTableName)."` WHERE `source_id` = '".\MySqlLegacySupport::getInstance()->real_escape_string($recordId)."'";
             $tRes = \MySqlLegacySupport::getInstance()->query($sAlreadyConnectedQuery);
             while ($aRow = \MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-                if (TGlobal::IsCMSMode()) {
-                    if ($oAllForeignRecordsFiltered->FindItemsWithProperty('id', $aRow['target_id'])) {
-                        $aConnectedIds[] = $aRow['target_id'];
-                    }
-                } else {
-                    $aConnectedIds[] = $aRow['target_id'];
-                }
+                $aConnectedIds[] = $aRow['target_id'];
             }
         }
 
