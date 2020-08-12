@@ -672,13 +672,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
                 }
                 fclose($handle);
 
-                if (substr($contents, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
-                    $this->LogError($sFilename, 'UTF-8 BOM FOUND IN');
-
-                    return true;
-                }
-
-                return false;
+                return substr($contents, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf);
             } else {
                 $this->LogError($sFilename.' is not a file or not readable');
             }
