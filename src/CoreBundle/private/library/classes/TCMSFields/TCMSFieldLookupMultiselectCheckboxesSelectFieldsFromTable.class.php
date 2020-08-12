@@ -24,8 +24,6 @@ class TCMSFieldLookupMultiselectCheckboxesSelectFieldsFromTable extends TCMSFiel
             $orderClauseCheck = 'ORDER BY position ASC';
             $orderPosition = \strpos($filterQuery, $orderClauseCheck);
 
-            // TODO "tabname" is the configuration "group field" or "group field column name" of the table - however that must be present in the custom list query.
-
             if (false !== $orderPosition) {
                 // NOTE translations are handled later (EntityList?)
                 $filterQuery = \str_replace($orderClauseCheck, 'ORDER BY tabname ASC, `cms_field_conf`.`translation` ASC', $filterQuery);
