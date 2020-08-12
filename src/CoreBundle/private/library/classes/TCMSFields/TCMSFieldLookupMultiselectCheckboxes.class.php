@@ -75,8 +75,6 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             $connected = $mltRecord['connected'];
             $displayValue = $mltRecord['display_value'];
 
-            // TODO "display_value" can contain html (which is then rendered as text) - for example with gcf_CMSUserWithImage/callbackCmsUserWithImage for cms_user
-
             $editable = $mltRecord['editable'];
             if ($currentGroup !== $activeGroup) {
                 $activeGroup = $currentGroup;
@@ -164,7 +162,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
                 'id' => $mltRecord->id,
                 'group' => '' === $listGroupFieldColumn ? '' : $mltRecord->sqlData[$listGroupFieldColumn],
                 'connected' => $mltRecord->isConnected($this->sTableName, $this->oTableRow->sqlData['id'], $mltTableName),
-                'display_value' => $mltRecord->GetDisplayValue(),
+                'display_value' => $mltRecord->GetName(),
                 'editable' => true,
             );
         }
