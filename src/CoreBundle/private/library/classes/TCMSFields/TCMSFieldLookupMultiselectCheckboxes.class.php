@@ -74,6 +74,9 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             $currentGroup = $mltRecord['group'];
             $connected = $mltRecord['connected'];
             $displayValue = $mltRecord['display_value'];
+
+            // TODO "display_value" can contain html (which is then rendered as text) - for example with gcf_CMSUserWithImage/callbackCmsUserWithImage for cms_user
+
             $editable = $mltRecord['editable'];
             if ($currentGroup !== $activeGroup) {
                 $activeGroup = $currentGroup;
@@ -233,17 +236,10 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             $oTableList->sRestriction = null; // do not include the restriction - it is part of the parent table, not the mlt!
 
             $sFilterQuery = $oTableList->FilterQuery().$this->GetMLTRecordRestrictions();
-//            $sFilterQueryOrderInfo = $oTableList->GetSortInfoAsString();
-//            if (!empty($sFilterQueryOrderInfo)) {
-//                $sFilterQuery .= ' ORDER BY '.$sFilterQueryOrderInfo;
-//            }
 
-            // TODO check for tabname and cms_field_conf ?? restrict special case to cms_field_conf?
-            // TODO also how does this relate to $bShowCustomsort above?
-
-            if (false !== \strpos($sFilterQuery, 'AS tabname') && false !== \strpos($sFilterQuery, 'cms_field_conf')) {
-                // TODO multilanguage sort! Also for tabname!
-                $sFilterQuery .= ' ORDER BY tabname ASC, `cms_field_conf`.`translation` ASC ';
+            $sFilterQueryOrderInfo = $oTableList->GetSortInfoAsString();
+            if (!empty($sFilterQueryOrderInfo)) {
+                $sFilterQuery .= ' ORDER BY '.$sFilterQueryOrderInfo;
             }
         } else {
             $sFilterQuery = parent::GetMLTFilterQuery();
