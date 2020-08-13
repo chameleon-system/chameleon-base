@@ -823,6 +823,7 @@
             <argument type="service" id="chameleon_system_core.filemanager"/>
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
             <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="chameleon_system_core.service.css_minifier"/>
             <argument /><!-- set via DI chameleon_system_core.resource_collection.cache_url -->
             <argument /><!-- set via DI chameleon_system_core.resource_collection.cache_path -->
         </service>
@@ -964,5 +965,7 @@
             <argument id="chameleon_system_core.cache" type="service"/>
         </service>
 
+        <service id="chameleon_system_core.service.css_minifier" class="ChameleonSystem\CoreBundle\Service\CssMinifierService">
+        </service>
     </services>
 </container>
