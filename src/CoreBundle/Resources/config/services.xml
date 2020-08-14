@@ -950,8 +950,6 @@
 
         <service id="chameleon_system_core.module.navigation_tree_single_select_wysiwyg" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelectWysiwyg\NavigationTreeSingleSelectWysiwyg" shared="false">
             <tag name="chameleon_system.module"/>
-            <argument id="database_connection" type="service"/>
-            <argument id="event_dispatcher" type="service"/>
             <argument id="chameleon_system_core.util.input_filter" type="service"/>
             <argument id="chameleon_system_core.util.url" type="service"/>
             <argument id="chameleon_system_core.factory.backend_tree_node" type="service"/>
@@ -961,7 +959,6 @@
             <argument type="service" id="chameleon_system_core.util.field_translation"/>
             <argument type="service" id="chameleon_system_core.language_service"/>
             <argument id="request_stack" type="service"/>
-            <argument id="chameleon_system_core.cache" type="service"/>
         </service>
 
     </services>
