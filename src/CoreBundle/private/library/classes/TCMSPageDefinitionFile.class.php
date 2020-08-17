@@ -241,11 +241,10 @@ class TCMSPageDefinitionFile
             if (isset($staticModuleList)) {
                 $this->staticModuleList = $staticModuleList;
             }
-            if (isset($allowedRights) && \strlen($allowedRights) > 0) {
-                $rightAbbreviations = \explode(',', $allowedRights);
-                foreach ($rightAbbreviations as $rightAbbreviation) {
+            if (isset($allowedRights) && true === \is_array($allowedRights) && \count($allowedRights) > 0) {
+                foreach ($allowedRights as $rightName) {
                     $right = TdbCmsRight::GetNewInstance();
-                    if (true === $right->LoadFromField('name', $rightAbbreviation)) {
+                    if (true === $right->LoadFromField('name', $rightName)) {
                         $this->allowedRights[] = $right;
                     }
                 }

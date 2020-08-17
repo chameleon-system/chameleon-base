@@ -8,7 +8,7 @@ $moduleList = [
     ],
 ];
 
-$allowedRights = 'cms_data_pool_upload';
+$allowedRights = ['cms_data_pool_upload'];
 
 addDefaultPageTitle($moduleList);
 addDefaultHeader($moduleList);
