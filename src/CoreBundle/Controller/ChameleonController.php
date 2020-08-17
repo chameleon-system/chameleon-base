@@ -114,8 +114,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     protected $portalDomainService;
     /**
      * @var RequestInfoServiceInterface
-     *
-     * @deprecated since 6.1.9 - no longer used in this class.
      */
     protected $requestInfoService;
     /**
@@ -144,13 +142,14 @@ abstract class ChameleonController implements ChameleonControllerInterface
     /**
      * @var BackendPageAccessCheckInterface
      */
-    private $pageAccessCheck;
+    protected $pageAccessCheck;
 
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         PortalDomainServiceInterface $portalDomainService,
         BackendPageAccessCheckInterface $pageAccessCheck,
+        RequestInfoServiceInterface $requestInfoService,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
         IViewPathManager $viewPathManager = null
@@ -163,6 +162,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->portalDomainService = $portalDomainService;
         $this->dataAccessCmsMasterPagedef = $dataAccessCmsMasterPagedef;
         $this->pageAccessCheck = $pageAccessCheck;
+        $this->requestInfoService = $requestInfoService;
     }
 
     /**
@@ -296,27 +296,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
         return new Response($sPageContent);
     }
 
-    private function checkAccess(CmsMasterPagdef $pagedef): bool
+    protected function checkAccess(CmsMasterPagdef $pagedef): bool
     {
-        // TODO restrict to backend? (is already the case with GetActiveUser()?)
-
-        $activeUser = \TCMSUser::GetActiveUser();
-        if (null === $activeUser) {
-            // For a number of edge cases: cronjobs, 404, ...
-
-            return true;
-        }
-
-        foreach ($this->moduleLoader->modules as $module) {
-            if (false === $module->checkAccessRightsOnTable()) {
-                return false;
-            }
-        }
-
-        if (false === $this->pageAccessCheck->checkPageAccess($activeUser, $pagedef)) {
-            return false;
-        }
-
         return true;
     }
 

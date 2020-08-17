@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Controller;
 
+use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
 use ChameleonSystem\CoreBundle\Security\BackendPageAccessCheckInterface;
 
 class ChameleonBackendController extends ChameleonController
@@ -76,5 +77,30 @@ class ChameleonBackendController extends ChameleonController
     public function setHomePagedef(string $homePagedef): void
     {
         $this->homePagedef = $homePagedef;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function checkAccess(CmsMasterPagdef $pagedef): bool
+    {
+        $activeUser = \TCMSUser::GetActiveUser();
+        if (null === $activeUser) {
+            // For a number of edge cases: cronjobs, 404, ...
+
+            return true;
+        }
+
+        foreach ($this->moduleLoader->modules as $module) {
+            if (false === $module->checkAccessRightsOnTable()) {
+                return false;
+            }
+        }
+
+        if (false === $this->pageAccessCheck->checkPageAccess($activeUser, $pagedef)) {
+            return false;
+        }
+
+        return true;
     }
 }
