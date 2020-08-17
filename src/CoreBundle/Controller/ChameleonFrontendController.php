@@ -12,8 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
-use ChameleonSystem\CoreBundle\ModuleService\ModuleAccessCheckServiceInterface;
-use ChameleonSystem\CoreBundle\Security\PageAccessCheckInterface;
+use ChameleonSystem\CoreBundle\Security\BackendPageAccessCheckInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -42,7 +41,7 @@ class ChameleonFrontendController extends ChameleonController
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         PortalDomainServiceInterface $portalDomainService,
-        PageAccessCheckInterface $pageAccessCheck,
+        BackendPageAccessCheckInterface $pageAccessCheck,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
         $viewPathManager,

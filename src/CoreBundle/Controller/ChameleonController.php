@@ -16,11 +16,10 @@ use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
-use ChameleonSystem\CoreBundle\ModuleService\ModuleAccessCheckServiceInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
-use ChameleonSystem\CoreBundle\Security\PageAccessCheckInterface;
+use ChameleonSystem\CoreBundle\Security\BackendPageAccessCheckInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
@@ -143,7 +142,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     private $responseVariableReplacer;
 
     /**
-     * @var PageAccessCheckInterface
+     * @var BackendPageAccessCheckInterface
      */
     private $pageAccessCheck;
 
@@ -151,7 +150,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         PortalDomainServiceInterface $portalDomainService,
-        PageAccessCheckInterface $pageAccessCheck,
+        BackendPageAccessCheckInterface $pageAccessCheck,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
         IViewPathManager $viewPathManager = null

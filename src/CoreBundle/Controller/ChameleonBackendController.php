@@ -11,12 +11,12 @@
 
 namespace ChameleonSystem\CoreBundle\Controller;
 
-use ChameleonSystem\CoreBundle\Security\PageAccessCheckInterface;
+use ChameleonSystem\CoreBundle\Security\BackendPageAccessCheckInterface;
 
 class ChameleonBackendController extends ChameleonController
 {
     /**
-     * @var PageAccessCheckInterface
+     * @var BackendPageAccessCheckInterface
      */
     private $backendAccessCheck;
     /**
@@ -66,7 +66,7 @@ class ChameleonBackendController extends ChameleonController
     }
 
     /**
-     * @param PageAccessCheckInterface $backendAccessCheck
+     * @param BackendPageAccessCheckInterface $backendAccessCheck
      */
     public function setBackendAccessCheck($backendAccessCheck)
     {

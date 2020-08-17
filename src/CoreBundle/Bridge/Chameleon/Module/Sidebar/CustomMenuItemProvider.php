@@ -12,13 +12,13 @@
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar;
 
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
-use ChameleonSystem\CoreBundle\Security\PageAccessCheckInterface;
+use ChameleonSystem\CoreBundle\Security\BackendPageAccessCheckInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 class CustomMenuItemProvider implements MenuItemProviderInterface
 {
     /**
-     * @var PageAccessCheckInterface
+     * @var BackendPageAccessCheckInterface
      */
     private $pageAccessCheck;
 
@@ -33,7 +33,7 @@ class CustomMenuItemProvider implements MenuItemProviderInterface
     private $urlUtil;
 
     public function __construct(
-        PageAccessCheckInterface $pageAccessCheck,
+        BackendPageAccessCheckInterface $pageAccessCheck,
         DataAccessCmsMasterPagedefInterface $accessCmsMasterPagedef,
         UrlUtil $urlUtil
     ) {

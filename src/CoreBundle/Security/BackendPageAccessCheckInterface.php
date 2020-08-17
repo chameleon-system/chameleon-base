@@ -4,7 +4,7 @@ namespace ChameleonSystem\CoreBundle\Security;
 
 use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
 
-interface PageAccessCheckInterface
+interface BackendPageAccessCheckInterface
 {
     /**
      * Checks for page access of the current user/client to the current page.

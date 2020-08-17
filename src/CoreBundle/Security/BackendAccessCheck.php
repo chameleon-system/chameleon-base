@@ -16,7 +16,7 @@ use ICmsCoreRedirect;
 use Symfony\Component\HttpFoundation\RequestStack;
 use TGlobal;
 
-class BackendAccessCheck implements PageAccessCheckInterface
+class BackendAccessCheck implements BackendPageAccessCheckInterface
 {
     /**
      * @var \TGlobal
