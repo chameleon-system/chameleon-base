@@ -715,9 +715,13 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
 
         // This custom-event of the datetimepicker only works with the ID of the element.
         $('#' + id).on('change.datetimepicker', function (e) {
+            var $field = $('input[name=' + id + ']');
+
             var moment = e.date;
 
             if (moment === undefined) {
+                $field.val('');
+
                 return;
             }
 
@@ -727,7 +731,7 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
                 var cmsDate = moment.format('YYYY-MM-DD');
             }
             // We need a SQL date format for BC reasons.
-            $('input[name=' + id + ']').val(cmsDate);
+            $field.val(cmsDate);
         });
     });
 
