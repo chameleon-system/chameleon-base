@@ -621,9 +621,9 @@ class TFullGroupTable extends TGroupTable
                         }
 
                         if ('ASC' == $tmpOrderList[$cellObj->name]) {
-                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-up" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_asc')).'"></i>';
+                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-down" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_asc')).'"></i>';
                         } else {
-                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-down" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_desc')).'"></i>';
+                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-up" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_desc')).'"></i>';
                         }
 
                         $row[$cellObj->name] = '<nobr>'.$row[$cellObj->name].$orderImage;
