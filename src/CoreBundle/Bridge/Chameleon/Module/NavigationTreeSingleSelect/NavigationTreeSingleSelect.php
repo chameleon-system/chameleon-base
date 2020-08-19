@@ -17,9 +17,7 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use Doctrine\DBAL\Connection;
 use MTPkgViewRendererAbstractModuleMapper;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use TGlobal;
 use TTools;
@@ -117,7 +115,6 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         $this->tools = $tools;
         $this->global = $global;
         $this->fieldTranslationUtil = $fieldTranslationUtil;
-
         $this->editLanguage = $languageService->getActiveEditLanguage();
     }
 
