@@ -17,6 +17,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -1645,7 +1646,7 @@ class TCMSTableEditorEndPoint
         }
         $setFields = array();
         $setLanguageFields = array();
-        $postFieldsLanguageConvertedWithAccessRights = [];
+        $editablePostFields = [];
         /** @var $oField TCMSField */
         while ($oField = $oFields->Next()) {
             $sFieldDisplayType = 'none';
@@ -1693,7 +1694,7 @@ class TCMSTableEditorEndPoint
                     $aPropertyFields[] = $oField;
                 }
                 // now convert field name (if this is a multi-language field)
-                $sTargetFieldName = $oField->oDefinition->GetRealEditFieldName($languageId);
+                $sqlFieldNameWithLanguagCode = $oField->oDefinition->GetRealEditFieldName($languageId);
                 if (false !== $sqlValue && false !== $writeField) {
                     if ($isFirst) {
                         $isFirst = false;
@@ -1702,27 +1703,27 @@ class TCMSTableEditorEndPoint
                         $query .= ', ';
                     }
 
-                    $postFieldsLanguageConvertedWithAccessRights[$sTargetFieldName] = $sqlValue;
+                    $editablePostFields[$sqlFieldNameWithLanguagCode] = $sqlValue;
 
                     if ($bCopyAllLanguages && '1' == $oField->oDefinition->sqlData['is_translatable']) {
-                        $sTargetFieldName = $oField->oDefinition->sqlData['name'];
-                        $sqlValue = $oField->oTableRow->sqlData[$sTargetFieldName];
+                        $sqlFieldNameWithLanguagCode = $oField->oDefinition->sqlData['name'];
+                        $sqlValue = $oField->oTableRow->sqlData[$sqlFieldNameWithLanguagCode];
                         $oLanguageCopyList->GoToStart();
                         while ($oLanguageCopy = $oLanguageCopyList->Next()) {
                             $sTargetFieldNameLanguage = $oField->oDefinition->GetEditFieldNameForLanguage($oLanguageCopy);
-                            if ($sTargetFieldNameLanguage && $sTargetFieldNameLanguage !== $sTargetFieldName) {
+                            if ($sTargetFieldNameLanguage && $sTargetFieldNameLanguage !== $sqlFieldNameWithLanguagCode) {
                                 $sqlValueLanguage = $oField->oTableRow->sqlData[$sTargetFieldNameLanguage];
                                 $query .= ' `'.MySqlLegacySupport::getInstance()->real_escape_string($sTargetFieldNameLanguage)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValueLanguage)."', ";
 
                                 if (false === isset($setLanguageFields[$oLanguageCopy->fieldIso6391])) {
                                     $setLanguageFields[$oLanguageCopy->fieldIso6391] = array();
                                 }
-                                $setLanguageFields[$oLanguageCopy->fieldIso6391][$sTargetFieldName] = $sqlValueLanguage;
+                                $setLanguageFields[$oLanguageCopy->fieldIso6391][$sqlFieldNameWithLanguagCode] = $sqlValueLanguage;
                             }
                         }
                     }
 
-                    $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sTargetFieldName)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
+                    $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguagCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
                     $setFields[$oField->name] = $sqlValue;
                 }
             }
@@ -1730,7 +1731,7 @@ class TCMSTableEditorEndPoint
 
         if(null !== $this->sId) {
             $setFields = $this->filterUnchangedFieldsFromPostData(
-                $postFieldsLanguageConvertedWithAccessRights,
+                $editablePostFields,
                 $tableName,
                 $this->sId
             );
@@ -1753,7 +1754,7 @@ class TCMSTableEditorEndPoint
         $sourceRecordID = $this->sId;
 
         if (false === $bIsUpdateCall) {
-            // insert query
+            // handle insert query
             $bWasInserted = false;
 
             // need to create an id.. try to insert until we have a free id. We will try at most 3 times
@@ -1780,7 +1781,7 @@ class TCMSTableEditorEndPoint
                 }
                 --$iMaxTry;
             } while ($iMaxTry > 0 && false === $bWasInserted);
-        } else { // update query
+        } else { // handle update query
             if (MySqlLegacySupport::getInstance()->query($query)) {
                 $bWasInserted = true;
             } else {
@@ -1791,7 +1792,7 @@ class TCMSTableEditorEndPoint
         // we need this because we use a redirect later and would not see the error message, we need to change this later to a nice error_logging or something
         if ($bWasInserted) {
             $this->LoadDataFromDatabase();
-            /** @var  $migrationRecorderStateHandler \ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler*/
+            /** @var  $migrationRecorderStateHandler MigrationRecorderStateHandler */
             $migrationRecorderStateHandler = ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');
             if ($this->IsQueryLoggingAllowed() && $migrationRecorderStateHandler->isDatabaseLoggingActive() && count($setFields) >= 1) {
                 $this->writePostWriteLogChangeData($bIsUpdateCall, $setFields, $whereConditions, $setLanguageFields);
@@ -1827,7 +1828,7 @@ class TCMSTableEditorEndPoint
         return $bSaveSuccess;
     }
 
-    private function filterUnchangedFieldsFromPostData(array $postFieldsLanguageConvertedWithAccessRights, string $tableName, string $id): array
+    private function filterUnchangedFieldsFromPostData(array $editableFields, string $tableName, string $id): array
     {
         $escapedTableName = $this->databaseConnection->quoteIdentifier($tableName);
         $dataBeforeUpdateQuery = 'SELECT * FROM '.$escapedTableName.' WHERE `id` = :id';
@@ -1837,10 +1838,10 @@ class TCMSTableEditorEndPoint
         $dataBeforeUpdateQueryResult =  $stmt->fetchAll();
         $dataBeforeUpdate = $dataBeforeUpdateQueryResult[0];
         $filteredSetFields = [];
-        foreach ($postFieldsLanguageConvertedWithAccessRights as $postKey => $postValue) {
-            $arrayKeyExists = array_key_exists($postKey, $dataBeforeUpdate);
-            if (false === $arrayKeyExists || (true === $arrayKeyExists && $dataBeforeUpdate[$postKey] !== $postValue)) {
-                $filteredSetFields[$postKey] = $postValue;
+        foreach ($editableFields as $fieldName => $value) {
+            $arrayKeyExists = array_key_exists($fieldName, $dataBeforeUpdate);
+            if (false === $arrayKeyExists || (true === $arrayKeyExists && $dataBeforeUpdate[$fieldName] !== $value)) {
+                $filteredSetFields[$fieldName] = $value;
             }
         }
 
