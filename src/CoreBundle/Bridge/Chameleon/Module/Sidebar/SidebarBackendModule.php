@@ -83,7 +83,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     {
         parent::DefineInterface();
 
-        $this->methodCallAllowed[] = 'toggleSidebar';
         $this->methodCallAllowed[] = 'toggleCategoryOpenState';
         $this->methodCallAllowed[] = 'reportElementClick';
     }
@@ -126,7 +125,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
-        $visitor->SetMappedValue('sidebarToggleNotificationUrl', $this->getNotificationUrl('toggleSidebar'));
         $visitor->SetMappedValue('sidebarToggleCategoryNotificationUrl', $this->getNotificationUrl('toggleCategoryOpenState'));
         $visitor->SetMappedValue('sidebarElementClickNotificationUrl', $this->getNotificationUrl('reportElementClick'));
         $visitor->SetMappedValue('menuItems', $this->getMenuItems());
@@ -309,22 +307,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             \TGlobal::GetStaticURLToWebLib('/javascript/modules/sidebar/sidebar.js'));
 
         return $includes;
-    }
-
-    protected function toggleSidebar(): void
-    {
-        $displayState = $this->inputFilterUtil->getFilteredPostInput('displayState');
-        if (false === \in_array($displayState, ['minimized', 'shown'])) {
-            return;
-        }
-
-
-        $session = $this->getSession();
-        if (null === $session) {
-            return;
-        }
-
-        $session->set(self::DISPLAY_STATE_SESSION_KEY, $displayState);
     }
 
     protected function reportElementClick(): void
