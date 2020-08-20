@@ -1730,7 +1730,7 @@ class TCMSTableEditorEndPoint
         }
 
         if(null !== $this->sId) {
-            $setFields = $this->filterUnchangedFieldsFromPostData(
+            $setFields = $this->filterUnchangedFields(
                 $editablePostFields,
                 $tableName,
                 $this->sId
@@ -1828,7 +1828,7 @@ class TCMSTableEditorEndPoint
         return $bSaveSuccess;
     }
 
-    private function filterUnchangedFieldsFromPostData(array $editableFields, string $tableName, string $id): array
+    private function filterUnchangedFields(array $editableFields, string $tableName, string $id): array
     {
         $escapedTableName = $this->databaseConnection->quoteIdentifier($tableName);
         $dataBeforeUpdateQuery = 'SELECT * FROM '.$escapedTableName.' WHERE `id` = :id';
