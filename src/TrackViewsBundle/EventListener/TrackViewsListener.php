@@ -29,13 +29,13 @@ class TrackViewsListener
 
         TPkgTrackObjectViews::GetInstance()->WriteView();
 
-        $name = '/bundles/chameleonsystemtrackviews/images/pixel.gif';
+        $dummyGifData = \base64_decode('R0lGODlhAQABAJAAAP8AAAAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==');
 
         $response = new Response();
         $response->headers->set('Content-Type', 'image/gif');
-        $response->headers->set('Content-Length', ''.filesize($name));
+        $response->headers->set('Content-Length', (string)\strlen($dummyGifData));
 
-        $response->setContent(file_get_contents($name));
+        $response->setContent($dummyGifData);
 
         $event->stopPropagation();
         $event->setResponse($response);
