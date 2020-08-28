@@ -1644,7 +1644,7 @@ class TCMSTableEditorEndPoint
         } else {
             $oLanguageCopyList = new TIterator();
         }
-        $setFields = array();
+        $dataForChangeRecorder = array();
         $setLanguageFields = array();
         $editablePostFields = [];
         /** @var $oField TCMSField */
@@ -1724,13 +1724,13 @@ class TCMSTableEditorEndPoint
                     }
 
                     $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguagCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
-                    $setFields[$oField->name] = $sqlValue;
+                    $dataForChangeRecorder[$oField->name] = $sqlValue;
                 }
             }
         }
 
         if(null !== $this->sId) {
-            $setFields = $this->filterUnchangedFields(
+            $dataForChangeRecorder = $this->filterUnchangedFields(
                 $editablePostFields,
                 $tableName,
                 $this->sId
@@ -1764,7 +1764,7 @@ class TCMSTableEditorEndPoint
             do {
                 $uid = TTools::GetUUID();
                 $sInsertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($uid)."'";
-                $setFields['id'] = $uid;
+                $dataForChangeRecorder['id'] = $uid;
                 MySqlLegacySupport::getInstance()->query($sInsertQuery);
                 $error = MySqlLegacySupport::getInstance()->error();
                 if (!empty($error)) {
@@ -1794,8 +1794,8 @@ class TCMSTableEditorEndPoint
             $this->LoadDataFromDatabase();
             /** @var  $migrationRecorderStateHandler MigrationRecorderStateHandler */
             $migrationRecorderStateHandler = ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');
-            if ($this->IsQueryLoggingAllowed() && $migrationRecorderStateHandler->isDatabaseLoggingActive() && count($setFields) >= 1) {
-                $this->writePostWriteLogChangeData($bIsUpdateCall, $setFields, $whereConditions, $setLanguageFields);
+            if ($this->IsQueryLoggingAllowed() && $migrationRecorderStateHandler->isDatabaseLoggingActive() && count($dataForChangeRecorder) >= 1) {
+                $this->writePostWriteLogChangeData($bIsUpdateCall, $dataForChangeRecorder, $whereConditions, $setLanguageFields);
             }
 
             TCacheManager::PerformeTableChange($tableName, $this->sId);
