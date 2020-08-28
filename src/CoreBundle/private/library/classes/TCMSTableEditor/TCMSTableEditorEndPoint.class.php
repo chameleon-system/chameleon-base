@@ -1781,12 +1781,9 @@ class TCMSTableEditorEndPoint
             }
         }
 
-        // we need this because we use a redirect later and would not see the error message, we need to change this later to a nice error_logging or something
         if ($bWasInserted) {
             $this->LoadDataFromDatabase();
-            /** @var  $migrationRecorderStateHandler MigrationRecorderStateHandler */
-            $migrationRecorderStateHandler = ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');
-            if ($this->IsQueryLoggingAllowed() && $migrationRecorderStateHandler->isDatabaseLoggingActive() && count($dataForChangeRecorder) >= 1) {
+            if (true === $this->isRecordingActive() && \count($dataForChangeRecorder) > 0) {
                 if (null !== $this->sId) {
                     $dataForChangeRecorder = $this->filterUnchangedFields(
                         $editablePostFields,
@@ -1800,6 +1797,7 @@ class TCMSTableEditorEndPoint
 
             TCacheManager::PerformeTableChange($tableName, $this->sId);
         } else {
+            // we need this because we use a redirect later and would not see the error message
             TTools::WriteLogEntrySimple('SQL Error: '.$error, 1, __FILE__, __LINE__);
         }
 
@@ -1826,6 +1824,13 @@ class TCMSTableEditorEndPoint
         }
 
         return $bSaveSuccess;
+    }
+    
+    private function isRecordingActive(): bool
+    {
+        $migrationRecorderStateHandler = $this->getMigrationRecorderStateHandler();
+        
+        return $this->IsQueryLoggingAllowed() && $migrationRecorderStateHandler->isDatabaseLoggingActive();
     }
 
     private function filterUnchangedFields(array $editableFields, string $tableName, string $id): array
@@ -3147,5 +3152,10 @@ class TCMSTableEditorEndPoint
     private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+    
+    private function getMigrationRecorderStateHandler(): MigrationRecorderStateHandler
+    {
+        return ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');
     }
 }
