@@ -1785,12 +1785,19 @@ class TCMSTableEditorEndPoint
             $this->LoadDataFromDatabase();
             if (true === $bIsUpdateCall && true === $this->isRecordingActive() && \count($dataForChangeRecorder) > 0) {
                 $dataForChangeRecorder = $this->filterUnchangedFields(
-                    $editablePostFields,
+                    $dataForChangeRecorder,
                     $tableName,
                     $this->sId
                 );
-                
-                $this->writePostWriteLogChangeData($bIsUpdateCall, $dataForChangeRecorder, $whereConditions, $setLanguageFields);
+
+                if (\count($dataForChangeRecorder) > 0) {
+                    $this->writePostWriteLogChangeData(
+                        $bIsUpdateCall,
+                        $dataForChangeRecorder,
+                        $whereConditions,
+                        $setLanguageFields
+                    );
+                }
             }
 
             TCacheManager::PerformeTableChange($tableName, $this->sId);
@@ -1833,22 +1840,26 @@ class TCMSTableEditorEndPoint
 
     private function filterUnchangedFields(array $editableFields, string $tableName, string $id): array
     {
-        $escapedTableName = $this->databaseConnection->quoteIdentifier($tableName);
-        $dataBeforeUpdateQuery = 'SELECT * FROM '.$escapedTableName.' WHERE `id` = :id';
-        $stmt = $this->databaseConnection->prepare($dataBeforeUpdateQuery);
-        $stmt->bindValue('id', $id);
-        $stmt->execute();
-        $dataBeforeUpdateQueryResult =  $stmt->fetchAll();
-        $dataBeforeUpdate = $dataBeforeUpdateQueryResult[0];
-        $filteredSetFields = [];
+        // TODO / NOTE TCMSShopTableEditor_ShopArticle.class.php:PostSaveHook():108
+        //  calls this with different languages set for the table conf but the oTablePreChangeData
+        //  here remains unchanged. => Language mismatch during comparisson.
+        
+        $dataBeforeUpdate = $this->oTablePreChangeData->sqlData;
+
+        $filteredFields = [];
+
         foreach ($editableFields as $fieldName => $value) {
-            $arrayKeyExists = array_key_exists($fieldName, $dataBeforeUpdate);
-            if (false === $arrayKeyExists || (true === $arrayKeyExists && $dataBeforeUpdate[$fieldName] !== $value)) {
-                $filteredSetFields[$fieldName] = $value;
+            $oldDataExists = \array_key_exists($fieldName, $dataBeforeUpdate);
+            
+            // TODO / NOTE \TCMSTableEditorChangeLog::computeDifferences() is much more complex than the
+            //  following !== - is this a problem?
+            
+            if (false === $oldDataExists || (true === $oldDataExists && $dataBeforeUpdate[$fieldName] !== $value)) {
+                $filteredFields[$fieldName] = $value;
             }
         }
 
-       return $filteredSetFields;
+       return $filteredFields;
     }
 
     /**
