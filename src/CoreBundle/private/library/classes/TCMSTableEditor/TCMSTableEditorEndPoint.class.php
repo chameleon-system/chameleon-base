@@ -1627,7 +1627,7 @@ class TCMSTableEditorEndPoint
             $bRecordExists = TTools::RecordExists($tableName, 'id', $oData->id);
         }
         $bIsUpdateCall = (!is_null($oData->id) && !empty($oData->id));
-        $bIsUpdateCall = (($bIsUpdateCall && $bRecordExists && $bForceInsert) || ($bIsUpdateCall && !$bForceInsert));
+        $bIsUpdateCall = $bIsUpdateCall && ($bRecordExists && $bForceInsert) || (!$bForceInsert);
 
         $this->bIsUpdateCall = $bIsUpdateCall;
 
@@ -1733,7 +1733,7 @@ class TCMSTableEditorEndPoint
             return false;
         } // no changes made... no fields to write
 
-        $bWasInserted = false;
+        $databaseChanged = false;
         $error = '';
         $sourceRecordID = null;
         $whereConditions = array();
@@ -1747,7 +1747,7 @@ class TCMSTableEditorEndPoint
 
         if (false === $bIsUpdateCall) {
             // handle insert query
-            $bWasInserted = false;
+            $databaseChanged = false;
 
             // need to create an id.. try to insert until we have a free id. We will try at most 3 times
 
@@ -1768,29 +1768,27 @@ class TCMSTableEditorEndPoint
                     }
                 } else {
                     $query = $sInsertQuery;
-                    $bWasInserted = true;
+                    $databaseChanged = true;
                     $this->sId = $uid;
                 }
                 --$iMaxTry;
-            } while ($iMaxTry > 0 && false === $bWasInserted);
+            } while ($iMaxTry > 0 && false === $databaseChanged);
         } else { // handle update query
             if (MySqlLegacySupport::getInstance()->query($query)) {
-                $bWasInserted = true;
+                $databaseChanged = true;
             } else {
                 $error = MySqlLegacySupport::getInstance()->error();
             }
         }
 
-        if ($bWasInserted) {
+        if ($databaseChanged) {
             $this->LoadDataFromDatabase();
-            if (true === $this->isRecordingActive() && \count($dataForChangeRecorder) > 0) {
-                if (null !== $this->sId) {
-                    $dataForChangeRecorder = $this->filterUnchangedFields(
-                        $editablePostFields,
-                        $tableName,
-                        $this->sId
-                    );
-                }
+            if (true === $bIsUpdateCall && true === $this->isRecordingActive() && \count($dataForChangeRecorder) > 0) {
+                $dataForChangeRecorder = $this->filterUnchangedFields(
+                    $editablePostFields,
+                    $tableName,
+                    $this->sId
+                );
                 
                 $this->writePostWriteLogChangeData($bIsUpdateCall, $dataForChangeRecorder, $whereConditions, $setLanguageFields);
             }
@@ -1801,7 +1799,7 @@ class TCMSTableEditorEndPoint
             TTools::WriteLogEntrySimple('SQL Error: '.$error, 1, __FILE__, __LINE__);
         }
 
-        if ($bWasInserted) {
+        if ($databaseChanged) {
             // handle MLT and Property Tables only if we do a copy
             if ($isCopy && !is_null($sourceRecordID)) { // copy fields only if there is no current record ID and it's not a table create
                 // copy MLT fields
