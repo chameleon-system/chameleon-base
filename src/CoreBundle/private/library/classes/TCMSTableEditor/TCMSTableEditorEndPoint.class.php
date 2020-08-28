@@ -1729,14 +1729,6 @@ class TCMSTableEditorEndPoint
             }
         }
 
-        if(null !== $this->sId) {
-            $dataForChangeRecorder = $this->filterUnchangedFields(
-                $editablePostFields,
-                $tableName,
-                $this->sId
-            );
-        }
-
         if ($isFirst) {
             return false;
         } // no changes made... no fields to write
@@ -1795,6 +1787,14 @@ class TCMSTableEditorEndPoint
             /** @var  $migrationRecorderStateHandler MigrationRecorderStateHandler */
             $migrationRecorderStateHandler = ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');
             if ($this->IsQueryLoggingAllowed() && $migrationRecorderStateHandler->isDatabaseLoggingActive() && count($dataForChangeRecorder) >= 1) {
+                if (null !== $this->sId) {
+                    $dataForChangeRecorder = $this->filterUnchangedFields(
+                        $editablePostFields,
+                        $tableName,
+                        $this->sId
+                    );
+                }
+                
                 $this->writePostWriteLogChangeData($bIsUpdateCall, $dataForChangeRecorder, $whereConditions, $setLanguageFields);
             }
 
