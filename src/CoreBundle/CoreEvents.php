@@ -64,4 +64,12 @@ final class CoreEvents
     const BEFORE_DELETE_MEDIA = 'chameleon_system_core.before_delete_media';
 
     const DISPLAY_LISTMANAGER_CELL = 'chameleon_system_core.display_listmanager_cell';
+
+    /**
+     * chameleon_system_core.pre_output is dispatched right before the content is sent to the client.
+     * It can be used to manipulate the content in a way where the
+     * \ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface is not sufficient.
+     * See \ChameleonSystem\ShopBundle\Basket\BasketVariableReplacer for an example.
+     */
+    const PRE_OUTPUT = 'chameleon_system_core.pre_output';
 }

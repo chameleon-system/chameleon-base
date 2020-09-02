@@ -14,6 +14,7 @@ namespace ChameleonSystem\CoreBundle\Controller;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
+use ChameleonSystem\CoreBundle\Event\PreOutputEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
@@ -535,7 +536,13 @@ abstract class ChameleonController implements ChameleonControllerInterface
                 $bHeaderParsed = true;
             }
         }
+
+        $event = new PreOutputEvent($sPageContent, $this->getRequest());
+        $this->eventDispatcher->dispatch($event, CoreEvents::PRE_OUTPUT);
+        $sPageContent = $event->getContent();
+
         $sPageContent = $this->responseVariableReplacer->replaceVariables($sPageContent);
+
         $this->sGeneratedPage .= $sPageContent;
 
         return $sPageContent;
