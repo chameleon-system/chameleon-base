@@ -13,7 +13,7 @@ namespace ChameleonSystem\CoreBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
 
-final class FilterResponseEvent extends Event
+final class FilterContentEvent extends Event
 {
     /**
      * @var string

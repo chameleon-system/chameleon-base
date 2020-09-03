@@ -840,7 +840,7 @@
         <service id="chameleon_system_core.response.response_variable_replacer" class="ChameleonSystem\CoreBundle\Response\ResponseVariableReplacer" public="true">
             <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager"/>
             <argument type="service" id="chameleon_system_core.flash_messages"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.filter_response" method="handleResponse" priority="253"/>
+            <tag name="kernel.event_listener" event="chameleon_system_core.filter_content" method="handleResponse" priority="253"/>
         </service>
 
         <service id="cmsPkgCore.tableEditorListFieldState" class="TTableEditorListFieldState" public="true" />

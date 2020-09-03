@@ -14,7 +14,7 @@ namespace ChameleonSystem\CoreBundle\Controller;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
-use ChameleonSystem\CoreBundle\Event\FilterResponseEvent;
+use ChameleonSystem\CoreBundle\Event\FilterContentEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
@@ -537,7 +537,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
             }
         }
 
-        $event = new FilterResponseEvent($sPageContent);
+        $event = new FilterContentEvent($sPageContent);
         $this->eventDispatcher->dispatch($event, CoreEvents::FILTER_RESPONSE);
         $sPageContent = $event->getContent();
         $this->sGeneratedPage .= $sPageContent;

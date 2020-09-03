@@ -66,10 +66,10 @@ final class CoreEvents
     const DISPLAY_LISTMANAGER_CELL = 'chameleon_system_core.display_listmanager_cell';
 
     /**
-     * chameleon_system_core.filter_response is dispatched right before the content is sent to the client.
+     * chameleon_system_core.filter_content is dispatched right before the content is sent to the client.
      * It has to be used instead of symfony's kernel.response when the content is flushed to the client
      * before it reaches the end of execution. This is the case in layouts which use
      * \ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface::FlushContentToBrowser
      */
-    const FILTER_RESPONSE = 'chameleon_system_core.filter_response';
+    const FILTER_RESPONSE = 'chameleon_system_core.filter_content';
 }
