@@ -393,3 +393,8 @@ Bootstrap 4 addons.
 .modal .modal-body {
     overflow: auto;
 }
+
+.cke_panel iframe {
+    min-height: initial;
+}
+
