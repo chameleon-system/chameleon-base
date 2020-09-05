@@ -86,7 +86,7 @@ class CronJobScheduler implements CronJobSchedulerInterface
 
         $timePassedSinceLastPlannedExecution = $now->diff($lastPlannedExecution);
 
-        if ($timePassedSinceLastPlannedExecution < $executionInterval) {
+        if ($this->isLess($timePassedSinceLastPlannedExecution, $executionInterval)) {
             return $lastPlannedExecution;
         }
 
@@ -101,6 +101,17 @@ class CronJobScheduler implements CronJobSchedulerInterface
         }
 
         return $plannedExecution;
+    }
+
+    private function isLess(\DateInterval $a, \DateInterval  $b): bool
+    {
+        $now = $this->timeProvider->getDateTime();
+        $aNow = clone $now;
+        $aNow = $aNow->add($a);
+        $bNow = clone $now;
+        $bNow->add($b);
+
+        return ($aNow >= $bNow);
     }
 
     /**

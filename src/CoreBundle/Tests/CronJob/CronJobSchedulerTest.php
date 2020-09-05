@@ -266,7 +266,7 @@ class CronJobSchedulerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockCurrentUtcTime = null;
         $this->mockTimeZone = new \DateTimeZone('UTC');
