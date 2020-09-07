@@ -112,7 +112,11 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
             trigger_error('File permissions are handled by the administrator. Do not try to set the mode by hand.', E_USER_DEPRECATED);
         }
 
-        return mkdir($path, 0777, $recursive);
+        try {
+            return mkdir($path, 0777, $recursive);
+        } catch (Exception $e) {
+            throw new Exception(sprintf("Cannot creating folder %s. Error: %s", $path, $e->getMessage()));
+        }
     }
 
     /**
