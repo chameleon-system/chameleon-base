@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\CronJob\CronjobEnablingServiceInterface;
 use ChameleonSystem\CoreBundle\CronJob\CronJobFactoryInterface;
 use ChameleonSystem\CoreBundle\SanityCheck\CronJobDataAccess;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -71,23 +72,36 @@ class CMSRunCrons extends TModelBase
             }
 
             $now = date('Y-m-d');
-            $sQuery = "SELECT * FROM `cms_cronjobs`
-                   WHERE `start_execution` <= '".MySqlLegacySupport::getInstance()->real_escape_string($now)."'
-                     AND (`end_execution` >= '".MySqlLegacySupport::getInstance()->real_escape_string($now)."' || `end_execution` = '0000-00-00')
+            $sQuery = "SELECT `id` FROM `cms_cronjobs`
+                   WHERE `start_execution` <= :now
+                     AND (`end_execution` >= :now || `end_execution` = '0000-00-00')
                      AND `active` = '1'
                 ORDER BY `execute_every_n_minutes`
                  ";
+            $cronJobRows = $this->getDatabaseConnection()->fetchAll($sQuery, ['now' => $now]);
+            foreach ($cronJobRows as $cronJobRow) {
+                $cronJobDb = TdbCmsCronjobs::GetNewInstance();
+                // cronjobs may run for a long time - in the meantime other jobs could have been executed by another thread. So load
+                // each job from db just before execution.
+                if (false === $cronJobDb->Load($cronJobRow['id'])) {
+                    continue;
+                }
 
-            $oTdbCmsCronjobsList = TdbCmsCronjobsList::GetList($sQuery);
-            /** @var $oTdbCmsCronJob TdbCmsCronjobs */
-            while ($oTdbCmsCronJob = $oTdbCmsCronjobsList->Next()) {
+                if (false === $cronJobDb->fieldActive) {
+                    continue;
+                }
+
+                if ('0000-00-00' !== $cronJobDb->fieldEndExecution && $cronJobDb->fieldEndExecution < $now) {
+                    continue;
+                }
                 if (false === $this->isCronjobExecutionEnabled()) {
-                    $this->getLogger()->info(sprintf('Cronjob execution was disabled before executing %s', $oTdbCmsCronJob->id));
+                    $this->getLogger()->info(sprintf('Cronjob execution was disabled before executing %s', $cronJobDb->id));
 
                     return $this->data;
                 }
 
-                $this->RunCronJob($oTdbCmsCronJob);
+                $this->RunCronJob($cronJobDb);
+
             }
         }
 
@@ -168,5 +182,10 @@ class CMSRunCrons extends TModelBase
     private function getTranslator(): TranslatorInterface
     {
         return ServiceLocator::get('translator');
+    }
+
+    private function getDatabaseConnection(): Connection
+    {
+        return ServiceLocator::get('database_connection');
     }
 }
