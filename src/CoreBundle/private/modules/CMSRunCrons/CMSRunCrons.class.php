@@ -80,27 +80,27 @@ class CMSRunCrons extends TModelBase
                  ";
             $cronJobRows = $this->getDatabaseConnection()->fetchAll($sQuery, ['now' => $now]);
             foreach ($cronJobRows as $cronJobRow) {
-                $cronJobDb = TdbCmsCronjobs::GetNewInstance();
+                $cronJobObject = TdbCmsCronjobs::GetNewInstance();
                 // cronjobs may run for a long time - in the meantime other jobs could have been executed by another thread. So load
                 // each job from db just before execution.
-                if (false === $cronJobDb->Load($cronJobRow['id'])) {
+                if (false === $cronJobObject->Load($cronJobRow['id'])) {
                     continue;
                 }
 
-                if (false === $cronJobDb->fieldActive) {
+                if (false === $cronJobObject->fieldActive) {
                     continue;
                 }
 
-                if ('0000-00-00' !== $cronJobDb->fieldEndExecution && $cronJobDb->fieldEndExecution < $now) {
+                if ('0000-00-00' !== $cronJobObject->fieldEndExecution && $cronJobObject->fieldEndExecution < date('Y-m-d')) {
                     continue;
                 }
                 if (false === $this->isCronjobExecutionEnabled()) {
-                    $this->getLogger()->info(sprintf('Cronjob execution was disabled before executing %s', $cronJobDb->id));
+                    $this->getLogger()->info(sprintf('Cronjob execution was disabled before executing %s', $cronJobObject->id));
 
                     return $this->data;
                 }
 
-                $this->RunCronJob($cronJobDb);
+                $this->RunCronJob($cronJobObject);
 
             }
         }
