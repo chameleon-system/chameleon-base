@@ -697,6 +697,7 @@ Three newly defined log channels are deprecated and only necessary for backwards
 
 - \ChameleonSystem\CmsCoreLogBundle\Bridge\Chameleon\ListManager\TCMSListManagerLogEntries
 - \ChameleonSystem\CmsCoreLogBundle\Command\LogShowCommand
+- \ChameleonSystem\CoreBundle\EventListener\ChameleonExceptionListener
 - \CMSModulePageTree
 - \CMSTreeNodeSelect
 - \CMSTreeNodeSelectWYSIWYG
