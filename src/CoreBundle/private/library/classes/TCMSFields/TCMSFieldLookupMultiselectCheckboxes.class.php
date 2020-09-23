@@ -67,6 +67,8 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         $activeGroup = '';
         $hasEditPermissionForForeignTable = $this->isRecordChangingAllowed($foreignTableName);
 
+        $mltRecords = $this->sortRecordsAlphabetically($mltRecords);
+
         $inputFilter = $this->getInputFilterUtil();
 
         foreach ($mltRecords as $mltRecord) {
@@ -121,6 +123,19 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         return $html;
     }
 
+    private function sortRecordsAlphabetically(array $mltRecords): array
+    {
+        \usort($mltRecords, static function(array $entry1, array $entry2) {
+            if ($entry1['group'] !== $entry2['group']) {
+                return \strcasecmp($entry1['group'], $entry2['group']);
+            }
+
+            return \strcasecmp($entry1['display_value'], $entry2['display_value']);
+        });
+
+        return $mltRecords;
+    }
+
     protected function isRecordCreationAllowed(string $foreignTableName): bool
     {
         $activeUser = TCMSUser::GetActiveUser();
@@ -162,7 +177,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
                 'id' => $mltRecord->id,
                 'group' => '' === $listGroupFieldColumn ? '' : $mltRecord->sqlData[$listGroupFieldColumn],
                 'connected' => $mltRecord->isConnected($this->sTableName, $this->oTableRow->sqlData['id'], $mltTableName),
-                'display_value' => $mltRecord->GetName(),
+                'display_value' => $mltRecord->GetName(), // use name here (and not GetDisplayValue) as this will be used as simple label
                 'editable' => true,
             );
         }

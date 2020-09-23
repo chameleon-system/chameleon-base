@@ -14,25 +14,6 @@
 /**/
 class TCMSFieldLookupMultiselectCheckboxesSelectFieldsFromTable extends TCMSFieldLookupMultiselectCheckboxes
 {
-    protected function GetMLTFilterQuery()
-    {
-        $filterQuery = parent::GetMLTFilterQuery();
-
-        // NOTE these conditions are _very_ specific to the current configuration of cms_field_conf
-
-        if (false !== \strpos($filterQuery, 'AS tabname') && false !== \strpos($filterQuery, 'cms_field_conf')) {
-            $orderClauseCheck = 'ORDER BY position ASC';
-            $orderPosition = \strpos($filterQuery, $orderClauseCheck);
-
-            if (false !== $orderPosition) {
-                // NOTE translations are handled later (EntityList?)
-                $filterQuery = \str_replace($orderClauseCheck, 'ORDER BY tabname ASC, `cms_field_conf`.`translation` ASC', $filterQuery);
-            }
-        }
-
-        return $filterQuery;
-    }
-
     protected function GetMLTRecordRestrictions()
     {
         $sRestriction = parent::GetMLTRecordRestrictions();
