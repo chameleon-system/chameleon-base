@@ -450,13 +450,21 @@ class TGroupTable
             $oRecordList = new TCMSRecordList();
             $oRecordList->sTableName = $this->sTableName;
             $oRecordList->Load($sql);
-            $iLength = intval($oRecordList->Length());
-            $maxForGroup = $iLength - $this->startRecord;
-            if ($this->showRecordCount > 0) {
-                $maxForGroup = min($maxForGroup, $this->showRecordCount);
+            $iLength = $oRecordList->Length();
+
+            $startPos = $this->startRecord; // TODO this might be an "old" paging value; searching (or other?) should reset it
+            $limitLength = $iLength - $this->startRecord;
+
+            if ($this->startRecord >= $iLength) {
+                $this->startRecord = 0;
+                $limitLength = $iLength;
             }
+            if ($this->showRecordCount > 0) {
+                $limitLength = min($limitLength, $this->showRecordCount);
+            }
+
             $sql .= ' '.$this->_GetOrderString();
-            $sql .= ' LIMIT '.intval($this->startRecord).', '.$maxForGroup;
+            $sql .= ' LIMIT '.$this->startRecord.', '.$limitLength;
             $sGroupedQuery = 'SELECT * FROM ('.$sql.') AS originalQuery GROUP BY '.MySqlLegacySupport::getInstance()->real_escape_string($this->groupByCell->name);
             $rGroupRes = MySqlLegacySupport::getInstance()->query($sGroupedQuery);
             while ($aGroup = MySqlLegacySupport::getInstance()->fetch_assoc($rGroupRes)) {
