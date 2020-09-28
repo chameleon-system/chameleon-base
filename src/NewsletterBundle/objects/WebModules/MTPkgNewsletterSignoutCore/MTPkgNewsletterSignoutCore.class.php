@@ -89,7 +89,7 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
             $aUserData = [];
         }
         $newsletterUserId = null;
-        if (array_key_exists(self::URL_PARAM_NEWSLETTER_USER_ID, $aUserData)) {
+        if (true === array_key_exists(self::URL_PARAM_NEWSLETTER_USER_ID, $aUserData)) {
             $newsletterUserId = $aUserData[self::URL_PARAM_NEWSLETTER_USER_ID];
         }
         if (array_key_exists(self::URL_PARAM_MAIL, $aUserData)) {
