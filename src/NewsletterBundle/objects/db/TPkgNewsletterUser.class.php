@@ -275,7 +275,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         if (false === $sUnsubscribeCode) {
             $aParams = array(
                 MTPkgNewsletterSignoutCore::URL_PARAM_DATA => array(
-                    self::URL_USER_ID_PARAMETER => $this->id,
+                    MTPkgNewsletterSignoutCore::URL_PARAM_NEWSLETTER_USER_ID => $this->id,
                     MTPkgNewsletterSignoutCore::URL_PARAM_GROUP_ID => $sPkgNewsletterGroupId,
                 ),
             );

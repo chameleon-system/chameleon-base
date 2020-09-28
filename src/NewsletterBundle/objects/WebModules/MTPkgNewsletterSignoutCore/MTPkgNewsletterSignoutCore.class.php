@@ -17,6 +17,7 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
 {
     const URL_PARAM_DATA = 'aPkgNewsletter';
     const URL_PARAM_MAIL = 'mail';
+    public const URL_PARAM_NEWSLETTER_USER_ID = \TdbPkgNewsletterUser::URL_USER_ID_PARAMETER;
     const URL_PARAM_GROUP_ID = 'groupid';
     const URL_PARAM_UNSUBSCRIBE_KEY = 'unsbkey';
     const MSG_MANAGER_NAME = 'aPkgNewsletter';
@@ -38,19 +39,21 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
             $this->sStep = 'ConfirmSignout';
         } else {
             $aUserData = $this->global->GetUserData(self::URL_PARAM_DATA);
-            $requestHasNewsletterUserId = null !== $this->getInputFilterUtil()->getFilteredGetInput(\TdbPkgNewsletterUser::URL_USER_ID_PARAMETER);
+            $requestHasNewsletterUserId = is_array($aUserData) && array_key_exists(self::URL_PARAM_NEWSLETTER_USER_ID, $aUserData);
             $requestHasNewsletterUserEmail = !empty($aUserData) && is_array($aUserData) && count($aUserData) > 0 && array_key_exists(self::URL_PARAM_MAIL, $aUserData);
-            if ($requestHasNewsletterUserId || $requestHasNewsletterUserEmail) {
+            if (true === $requestHasNewsletterUserId || true === $requestHasNewsletterUserEmail) {
                 if (!defined('CHAMELEON_PKG_NEWSLETTER_NEW_MODULE') || CHAMELEON_PKG_NEWSLETTER_NEW_MODULE === false) {
                     $this->UnsubscribeUser();
                     $this->sStep = 'SignedOut';
                 } else {
-                    if ($requestHasNewsletterUserId) {
-                        $oUserNewsletter = TdbPkgNewsletterUser::GetInstanceFromURLId();
-                    } elseif($requestHasNewsletterUserEmail) {
+                    $oUserNewsletter = null;
+                    if (true === $requestHasNewsletterUserId) {
+                        $oUserNewsletter = \TdbPkgNewsletterUser::GetNewInstance();
+                        if (false === $oUserNewsletter->Load($aUserData[self::URL_PARAM_NEWSLETTER_USER_ID])) {
+                            $oUserNewsletter = null;
+                        }
+                    } elseif (true === $requestHasNewsletterUserEmail) {
                         $oUserNewsletter = TdbPkgNewsletterUser::GetInstanceForMail($aUserData[self::URL_PARAM_MAIL]);
-                    } else {
-                        $oUserNewsletter = null;
                     }
                     if (!is_null($oUserNewsletter)) {
                         $oUserNewsletter->SignOut();
@@ -85,6 +88,10 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
         if (false === is_array($aUserData)) {
             $aUserData = [];
         }
+        $newsletterUserId = null;
+        if (array_key_exists(self::URL_PARAM_NEWSLETTER_USER_ID, $aUserData)) {
+            $newsletterUserId = $aUserData[self::URL_PARAM_NEWSLETTER_USER_ID];
+        }
         if (array_key_exists(self::URL_PARAM_MAIL, $aUserData)) {
             $sPkgNewsletterUserMail = $aUserData[self::URL_PARAM_MAIL];
         }
@@ -96,9 +103,8 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
             $sUnsubscribeCode = $aUserData[self::URL_PARAM_UNSUBSCRIBE_KEY];
         }
         $oMsgManager = TCMSMessageManager::GetInstance();
-        $oNewsUser = TdbPkgNewsletterUser::GetInstanceFromURLId();
-        /** @var $oNewsUser TdbPkgNewsletterUser */
-        if (null === $oNewsUser || false === $oNewsUser) { // Fallback to email.
+        $oNewsUser = TdbPkgNewsletterUser::GetNewInstance();
+        if (null === $newsletterUserId || false === $oNewsUser->Load($newsletterUserId)) { // Fallback to email.
             $oNewsUser = TdbPkgNewsletterUser::GetNewInstance();
             if ('' === trim($sPkgNewsletterUserMail) || !$oNewsUser->LoadFromField('email', $sPkgNewsletterUserMail)) {
                 $oMsgManager->AddMessage(self::INPUT_DATA_NAME.'-confirmoptout', 'ERROR-UNSUBSCRIBE-NEWSLETTER-USER-NOT-FOUND');
