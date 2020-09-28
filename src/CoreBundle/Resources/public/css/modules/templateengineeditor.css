@@ -267,14 +267,14 @@
   color: #000;
 }
 
-#menuWrapper .menueicon {
+#menuWrapper li {
   display: block;
   padding-left: 5px;
   font-size: 11px !important;
   line-height: 20px;
 }
 
-#menuWrapper .menueicon i {
+#menuWrapper li i {
   font-size: 14px !important;
   margin-right: 3px;
   width: 15px;

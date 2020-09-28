@@ -160,12 +160,11 @@ if (!is_null($oField->oModuleInstance)) {
                     echo ' class="hasChildren" onclick="openMenuLevel(this);return false"';
                 } else { // edit table
                     echo " onclick=\"EditTable('".TGlobal::OutJS($oRelatedTable->id)."','".TGlobal::OutJS($oField->oModuleInstance->id)."','');return false;\"";
-                } ?>><span class="menueicon"
-                         style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_edit.gif'); ?>);"><?=TGlobal::Translate('chameleon_system_core.link.edit'); ?></span></a>
+                } ?>><i class="fas fa-edit"></i> <?=TGlobal::Translate('chameleon_system_core.link.edit'); ?></a>
                 <ul>
                     <?php while ($oTmpRelatedTable = $oRelatedTables->Next()) {
                     $sJS = " onclick=\"EditTable('".TGlobal::OutJS($oTmpRelatedTable->id)."','".TGlobal::OutJS(urlencode($oField->oModuleInstance->id))."','');return false;\"";
-                    echo "<li><a href=\"#\" {$sJS}><span class=\"menueicon\" style=\"background-image: url(".TGlobal::GetStaticURLToWebLib('/images/icons/page_edit.gif').');">'.TGlobal::OutHTML($oTmpRelatedTable->GetName())."</span></a></li>\n";
+                    echo "<li><a href=\"#\" {$sJS}><i class=\"fas fa-edit\"></i> ".TGlobal::OutHTML($oTmpRelatedTable->GetName())."</a></li>\n";
                 } ?>
                 </ul>
             </li>
@@ -176,29 +175,24 @@ if (!is_null($oField->oModuleInstance)) {
             <?php
             if (\count($viewMappings) > 1) {
                 ?>
-                <li><a href="#;" class="hasChildren" onclick="openMenuLevel(this);return false;"><span class="menueicon"
-                                                                                                       style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/layout.png'); ?>);"><?=TGlobal::Translate('chameleon_system_core.template_engine.action_change_template'); ?></span></a>
+                <li><a href="#;" class="hasChildren" onclick="openMenuLevel(this);return false;"><i class="fas fa-desktop"></i> <?=TGlobal::Translate('chameleon_system_core.template_engine.action_change_template'); ?></a>
                     <?php
                     echo "<ul>\n";
                 $viewCount = 0;
                 foreach ($viewMappings as $internalName => $displayName) {
                     ++$viewCount;
                     $jsFunction = " onClick=\"ChangeView('".TGlobal::OutJS($oField->name)."','".TGlobal::OutJS($internalName)."'); return false;\"";
-                    echo "<li><a href=\"#\" {$jsFunction}><span class=\"menueicon\" style=\"background-image: url(".TGlobal::GetStaticURLToWebLib('/images/icons/layout_content.png').');">'.TGlobal::OutHTML($displayName)."</span></a></li>\n";
+                    echo "<li><a href=\"#\" {$jsFunction}><i class=\"fas fa-desktop\"></i> ".TGlobal::OutHTML($displayName)."</a></li>\n";
                 }
                 echo "</ul>\n"; ?>
                 </li>
                 <?php
             } ?>
             <li><a href="#"
-                   onclick="Rename('<?=TGlobal::OutJS($oField->name); ?>','<?=TGlobal::OutJS($oField->oModuleInstance->sqlData['name']); ?>');return false;"><span
-                class="menueicon"
-                style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/style.png'); ?>);"><?=TGlobal::Translate('chameleon_system_core.template_engine.slot_rename'); ?></span></a>
+                   onclick="Rename('<?=TGlobal::OutJS($oField->name); ?>','<?=TGlobal::OutJS($oField->oModuleInstance->sqlData['name']); ?>');return false;"><i class="fab fa-fonticons"></i> <?=TGlobal::Translate('chameleon_system_core.template_engine.slot_rename'); ?></a>
             </li>
             <li><a href="#"
-                   onclick="DeleteModuleInstance('<?=TGlobal::OutJS($oField->name); ?>','<?=TGlobal::OutJS($oField->oModuleInstance->id); ?>');return false;"><span
-                class="menueicon"
-                style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_cross.gif'); ?>);"><?=TGlobal::Translate('chameleon_system_core.template_engine.action_delete_instance_content'); ?></span></a>
+                   onclick="DeleteModuleInstance('<?=TGlobal::OutJS($oField->name); ?>','<?=TGlobal::OutJS($oField->oModuleInstance->id); ?>');return false;"><i class="fas fa-file-excel"></i> <?=TGlobal::Translate('chameleon_system_core.template_engine.action_delete_instance_content'); ?></a>
             </li>
             <?php
         }
@@ -209,8 +203,7 @@ if (!is_null($oField->oModuleInstance)) {
     <?php
     if ($oAccessManager->PermitFunction('cms_template_module_edit')) {
         ?>
-      <li><a href="#" class="hasChildren" onclick="openMenuLevel(this);return false;"><span class="menueicon"
-                                                                                            style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/page_new.gif'); ?>);"><?=TGlobal::Translate('chameleon_system_core.template_engine.action_create_module_instance'); ?></span></a>
+      <li><a href="#" class="hasChildren" onclick="openMenuLevel(this);return false;"><i class="fas fa-plus"></i> <?=TGlobal::Translate('chameleon_system_core.template_engine.action_create_module_instance'); ?></a>
         <ul>
         <?php
         while ($oModule = $oModuleList->Next()) {
@@ -224,16 +217,14 @@ if (!is_null($oField->oModuleInstance)) {
                     $hasChildren = 'hasChildren';
                     $jsFunction = ' onclick="openMenuLevel(this);return false;"';
                 } ?>
-            <li><a href="#" class="<?=$hasChildren; ?>"<?=$jsFunction; ?>><span class="menueicon"
-                                                                            style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/'.$oModule->sqlData['icon_list']); ?>);"><?=TGlobal::OutHTML($oModule->GetName()); ?></span></a>
+            <li><a href="#" class="<?=$hasChildren; ?>"<?=$jsFunction; ?>><i class="<?=TGlobal::OutHTML($oModule->fieldIconFontCssClass); ?>"></i> <?=TGlobal::OutHTML($oModule->GetName()); ?></a>
                 <?php
                 if (\count($viewMappings) > 0) {
                     echo "<ul>\n";
                     $moduleViewJSFunction = '';
                     foreach ($viewMappings as $internalName => $displayName) {
                         $moduleViewJSFunction = " onclick=\"CreateModuleInstance('".TGlobal::OutJS($oField->name)."','".TGlobal::OutJS($oModule->id)."', '".TGlobal::OutJS($internalName)."');return false;\""; ?>
-                        <li><a href="#"<?=$moduleViewJSFunction; ?>><span class="menueicon"
-                                                                        style="background-image: url(<?=TGlobal::GetStaticURLToWebLib('/images/icons/layout_content.png'); ?>);"><?=TGlobal::OutHTML($displayName); ?></span></a>
+                        <li><a href="#"<?=$moduleViewJSFunction; ?>><i class="fas fa-desktop"></i> <?=TGlobal::OutHTML($displayName); ?></a>
                         </li>
                         <?php
                     }
