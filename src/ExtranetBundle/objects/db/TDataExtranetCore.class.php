@@ -22,6 +22,9 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
      */
     protected $bInternalCacheMarkedAsDirty = true;
 
+    /**
+     * @deprecated - This was only used by the forgot password email which does not include login name anymore.
+     */
     const URL_PARAMETER_LOGINNAME = 'loginname';
     const URL_PARAMETER_CHANGE_PASSWORD = 'pwchangekey';
 
@@ -222,7 +225,6 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
         $node->Load($this->sqlData['forgot_password_treenode_id']);
         $data = array(
             'module_fnc' => array($spotName => 'ChangeForgotPassword'),
-            self::URL_PARAMETER_LOGINNAME => $loginname,
             self::URL_PARAMETER_CHANGE_PASSWORD => $key,
         );
         $link = static::getTreeService()->getLinkToPageForTreeAbsolute($node, $data);

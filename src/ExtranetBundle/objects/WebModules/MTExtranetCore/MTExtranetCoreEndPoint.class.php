@@ -1032,20 +1032,13 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                         $this->data['bPasswordChanged'] = true;
                     }
                 }
+            } elseif (null !== $oUser && false === $oUser->IsPasswordChangeKeyValid()) {
+                $oMessage->AddMessage(TdbDataExtranetUser::MSG_FORM_FIELD, 'EXTRANET-FORGOT-PASSWORD-CHANGE-KEY-INVALID');
             } else {
                 $oMessage->AddMessage(TdbDataExtranetUser::MSG_FORM_FIELD, 'EXTRANET-FORGOT-PASSWORD-WRONG-USER-NAME');
             }
         } else { // show password change form
-            $oUser = $oUser->GetValidatedLoginUser($inputFilterUtil->getFilteredGetInput(TDataExtranetCore::URL_PARAMETER_LOGINNAME));
-            if (null !== $oUser && $passwordHashGenerator->verify($sToken, $oUser->fieldPasswordChangeKey)) {
-                $bPasswordChangeKeyValid = $oUser->IsPasswordChangeKeyValid();
-                if (!$bPasswordChangeKeyValid) {
-                    $oMessage->AddMessage(TdbDataExtranetUser::MSG_FORM_FIELD, 'EXTRANET-FORGOT-PASSWORD-CHANGE-KEY-INVALID');
-                }
-                $sUsername = $oUser->fieldName;
-            } else {
-                $oMessage->AddMessage(TdbDataExtranetUser::MSG_FORM_FIELD, 'EXTRANET-FORGOT-PASSWORD-USER-NOT-FOUND');
-            }
+            $oUser = null;
         }
 
         $this->data['sUsername'] = $sUsername;
