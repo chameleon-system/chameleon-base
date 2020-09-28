@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
 class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
 {
@@ -36,13 +38,20 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
             $this->sStep = 'ConfirmSignout';
         } else {
             $aUserData = $this->global->GetUserData(self::URL_PARAM_DATA);
-            if (!empty($aUserData) && is_array($aUserData) && count($aUserData) > 0 && array_key_exists('mail', $aUserData)) {
+            $requestHasNewsletterUserId = null !== $this->getInputFilterUtil()->getFilteredGetInput(\TdbPkgNewsletterUser::URL_USER_ID_PARAMETER);
+            $requestHasNewsletterUserEmail = !empty($aUserData) && is_array($aUserData) && count($aUserData) > 0 && array_key_exists(self::URL_PARAM_MAIL, $aUserData);
+            if ($requestHasNewsletterUserId || $requestHasNewsletterUserEmail) {
                 if (!defined('CHAMELEON_PKG_NEWSLETTER_NEW_MODULE') || CHAMELEON_PKG_NEWSLETTER_NEW_MODULE === false) {
                     $this->UnsubscribeUser();
                     $this->sStep = 'SignedOut';
                 } else {
-                    $oUserNewsletter = TdbPkgNewsletterUser::GetInstanceForMail($aUserData['mail']);
-                    /** @var $oNewsUser TdbPkgNewsletterUser */
+                    if ($requestHasNewsletterUserId) {
+                        $oUserNewsletter = TdbPkgNewsletterUser::GetInstanceFromURLId();
+                    } elseif($requestHasNewsletterUserEmail) {
+                        $oUserNewsletter = TdbPkgNewsletterUser::GetInstanceForMail($aUserData[self::URL_PARAM_MAIL]);
+                    } else {
+                        $oUserNewsletter = null;
+                    }
                     if (!is_null($oUserNewsletter)) {
                         $oUserNewsletter->SignOut();
                     }
@@ -73,6 +82,9 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
     {
         $bError = false;
         $aUserData = $this->global->GetUserData(self::URL_PARAM_DATA);
+        if (false === is_array($aUserData)) {
+            $aUserData = [];
+        }
         if (array_key_exists(self::URL_PARAM_MAIL, $aUserData)) {
             $sPkgNewsletterUserMail = $aUserData[self::URL_PARAM_MAIL];
         }
@@ -84,11 +96,14 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
             $sUnsubscribeCode = $aUserData[self::URL_PARAM_UNSUBSCRIBE_KEY];
         }
         $oMsgManager = TCMSMessageManager::GetInstance();
-        $oNewsUser = TdbPkgNewsletterUser::GetNewInstance();
+        $oNewsUser = TdbPkgNewsletterUser::GetInstanceFromURLId();
         /** @var $oNewsUser TdbPkgNewsletterUser */
-        if (!$oNewsUser->LoadFromField('email', $sPkgNewsletterUserMail)) {
-            $oMsgManager->AddMessage(self::INPUT_DATA_NAME.'-confirmoptout', 'NEWSLETTER_ERROR_EMAIL_NOT_FOUND');
-            $bError = true;
+        if (null === $oNewsUser || false === $oNewsUser) { // Fallback to email.
+            $oNewsUser = TdbPkgNewsletterUser::GetNewInstance();
+            if ('' === trim($sPkgNewsletterUserMail) || !$oNewsUser->LoadFromField('email', $sPkgNewsletterUserMail)) {
+                $oMsgManager->AddMessage(self::INPUT_DATA_NAME.'-confirmoptout', 'ERROR-UNSUBSCRIBE-NEWSLETTER-USER-NOT-FOUND');
+                $bError = true;
+            }
         }
 
         if (!$bError) {
@@ -412,5 +427,9 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
     private function getPortalDomainService()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }
