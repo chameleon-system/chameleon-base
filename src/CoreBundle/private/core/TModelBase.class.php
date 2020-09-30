@@ -195,6 +195,14 @@ class TModelBase
     }
 
     /**
+     * @return bool - false if access is forbidden
+     */
+    public function checkAccessRightsOnTable(): bool
+    {
+        return true;
+    }
+
+    /**
      * this function should fill the data array and return a pointer to it
      * (pointer because it may contain objects).
      *

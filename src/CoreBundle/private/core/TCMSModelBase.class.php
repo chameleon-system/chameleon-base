@@ -16,14 +16,6 @@ use Symfony\Component\Routing\RouterInterface;
 class TCMSModelBase extends TModelBase
 {
     /**
-     * @return bool - false if access is forbidden
-     */
-    public function checkAccessRightsOnTable(): bool
-    {
-        return true;
-    }
-
-    /**
      * returns true if the module may add its url to the history object.
      *
      * @return bool
