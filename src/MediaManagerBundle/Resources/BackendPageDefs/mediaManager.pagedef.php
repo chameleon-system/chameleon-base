@@ -15,7 +15,7 @@ $moduleList = [
     ],
 ];
 
-$allowedRights = ['media_edit'];
+$cmsRightAllowList = ['media_edit'];
 
 addDefaultPageTitle($moduleList);
 addDefaultHeader($moduleList);

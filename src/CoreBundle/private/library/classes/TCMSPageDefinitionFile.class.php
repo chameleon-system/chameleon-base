@@ -241,8 +241,8 @@ class TCMSPageDefinitionFile
             if (isset($staticModuleList)) {
                 $this->staticModuleList = $staticModuleList;
             }
-            if (isset($allowedRights) && true === \is_array($allowedRights) && \count($allowedRights) > 0) {
-                foreach ($allowedRights as $rightName) {
+            if (isset($cmsRightAllowList) && true === \is_array($cmsRightAllowList) && \count($cmsRightAllowList) > 0) {
+                foreach ($cmsRightAllowList as $rightName) {
                     $right = TdbCmsRight::GetNewInstance();
                     if (true === $right->LoadFromField('name', $rightName)) {
                         $this->allowedRights[] = $right;
