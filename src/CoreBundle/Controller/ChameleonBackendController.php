@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
+use ChameleonSystem\CoreBundle\Interfaces\CheckTableAccessRightsInterface;
 use ChameleonSystem\CoreBundle\Security\BackendPageAccessCheckInterface;
 
 class ChameleonBackendController extends ChameleonController
@@ -92,6 +93,9 @@ class ChameleonBackendController extends ChameleonController
         }
 
         foreach ($this->moduleLoader->modules as $module) {
+            if (false === ($module instanceof CheckTableAccessRightsInterface)) {
+                continue;
+            }
             if (false === $module->checkAccessRightsOnTable()) {
                 return false;
             }

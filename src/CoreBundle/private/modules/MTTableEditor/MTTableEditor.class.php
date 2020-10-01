@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Interfaces\CheckTableAccessRightsInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -18,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
  * edit a table record
  * Note: you can put the editor in "only one record mode" by passing bOnlyOneRecord via get or post.
  * /**/
-class MTTableEditor extends TCMSModelBase
+class MTTableEditor extends TCMSModelBase implements CheckTableAccessRightsInterface
 {
     /**
      * the table manager.
@@ -206,12 +207,6 @@ class MTTableEditor extends TCMSModelBase
      */
     public function checkAccessRightsOnTable(): bool
     {
-        $parentAccess = parent::checkAccessRightsOnTable();
-
-        if (false === $parentAccess) {
-            return false;
-        }
-
         if (null === $this->oTableManager->oTableEditor) {
             return true;
         }

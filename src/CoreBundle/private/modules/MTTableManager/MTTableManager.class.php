@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Interfaces\CheckTableAccessRightsInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use Doctrine\DBAL\Connection;
@@ -20,7 +21,7 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
  * list a table
  * it is possible to overwrite the list object used by parameter "listClass" via pagedef.
  */
-class MTTableManager extends TCMSModelBase
+class MTTableManager extends TCMSModelBase implements CheckTableAccessRightsInterface
 {
     /**
      * Table conf.
@@ -74,12 +75,6 @@ class MTTableManager extends TCMSModelBase
      */
     public function checkAccessRightsOnTable(): bool
     {
-        $parentAccess = parent::checkAccessRightsOnTable();
-
-        if (false === $parentAccess) {
-            return false;
-        }
-
         if (null === $this->oTableList) {
             return true;
         }
