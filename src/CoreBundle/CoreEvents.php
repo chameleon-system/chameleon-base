@@ -71,5 +71,5 @@ final class CoreEvents
      * before it reaches the end of execution. This is the case in layouts which use
      * \ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface::FlushContentToBrowser
      */
-    const FILTER_RESPONSE = 'chameleon_system_core.filter_content';
+    const FILTER_CONTENT = 'chameleon_system_core.filter_content';
 }

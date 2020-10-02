@@ -538,7 +538,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         }
 
         $event = new FilterContentEvent($sPageContent);
-        $this->eventDispatcher->dispatch($event, CoreEvents::FILTER_RESPONSE);
+        $this->eventDispatcher->dispatch($event, CoreEvents::FILTER_CONTENT);
         $sPageContent = $event->getContent();
         $this->sGeneratedPage .= $sPageContent;
 
