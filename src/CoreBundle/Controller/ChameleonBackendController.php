@@ -67,10 +67,7 @@ class ChameleonBackendController extends ChameleonController
         }
     }
 
-    /**
-     * @param BackendPageAccessCheckInterface $backendAccessCheck
-     */
-    public function setBackendAccessCheck($backendAccessCheck)
+    public function setBackendAccessCheck(BackendPageAccessCheckInterface $backendAccessCheck): void
     {
         $this->backendAccessCheck = $backendAccessCheck;
     }
@@ -92,7 +89,7 @@ class ChameleonBackendController extends ChameleonController
             return true;
         }
 
-        if (false === $this->pageAccessCheck->checkPageAccess($activeUser, $pagedef)) {
+        if (false === $this->backendAccessCheck->checkPageAccess($activeUser, $pagedef)) {
             return false;
         }
 

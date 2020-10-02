@@ -43,7 +43,6 @@ class ChameleonFrontendController extends ChameleonController
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         PortalDomainServiceInterface $portalDomainService,
-        BackendPageAccessCheckInterface $pageAccessCheck,
         RequestInfoServiceInterface $requestInfoService,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
@@ -51,7 +50,7 @@ class ChameleonFrontendController extends ChameleonController
         ContainerInterface $container,
         TPkgViewRendererConfigToLessMapper $configToLessMapper
     ) {
-        parent::__construct($requestStack, $eventDispatcher, $portalDomainService, $pageAccessCheck, $requestInfoService, $dataAccessCmsMasterPagedef, $moduleLoader, $viewPathManager);
+        parent::__construct($requestStack, $eventDispatcher, $portalDomainService, $requestInfoService, $dataAccessCmsMasterPagedef, $moduleLoader, $viewPathManager);
         $this->container = $container; // for ViewRenderer instantiation
         $this->configToLessMapper = $configToLessMapper;
     }

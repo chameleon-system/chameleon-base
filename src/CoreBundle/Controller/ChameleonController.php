@@ -19,7 +19,6 @@ use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
-use ChameleonSystem\CoreBundle\Security\BackendPageAccessCheckInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
@@ -139,16 +138,10 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private $responseVariableReplacer;
 
-    /**
-     * @var BackendPageAccessCheckInterface
-     */
-    protected $pageAccessCheck;
-
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         PortalDomainServiceInterface $portalDomainService,
-        BackendPageAccessCheckInterface $pageAccessCheck,
         RequestInfoServiceInterface $requestInfoService,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
@@ -161,7 +154,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->eventDispatcher = $eventDispatcher;
         $this->portalDomainService = $portalDomainService;
         $this->dataAccessCmsMasterPagedef = $dataAccessCmsMasterPagedef;
-        $this->pageAccessCheck = $pageAccessCheck;
         $this->requestInfoService = $requestInfoService;
     }
 
