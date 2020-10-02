@@ -745,10 +745,11 @@ class TCMSField implements TCMSFieldVisitableInterface
         $connection = $this->getDatabaseConnection();
         $inputFilterUtil = $this->getInputFilterUtil();
 
-        $lengthSet = $inputFilterUtil->getFilteredInput('length_set');
+        $lengthSet = '';
+        $cmsFieldTypeId = '';
+        $fieldDefaultValue = '';
 
         if (null !== $postData) {
-            $fieldDefaultValue = '';
             if (isset($postData['field_default_value'])) {
                 $fieldDefaultValue = $postData['field_default_value'];
             }
@@ -759,6 +760,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         } else {
             $fieldDefaultValue = $inputFilterUtil->getFilteredInput('field_default_value');
             $cmsFieldTypeId = $inputFilterUtil->getFilteredInput('cms_field_type_id');
+            $lengthSet = $inputFilterUtil->getFilteredInput('length_set');
         }
 
         $fieldType = null;
