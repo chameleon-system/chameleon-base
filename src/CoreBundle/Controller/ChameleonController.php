@@ -296,10 +296,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         return new Response($sPageContent);
     }
 
-    protected function checkAccess(CmsMasterPagdef $pagedef): bool
-    {
-        return true;
-    }
+    abstract protected function checkAccess(CmsMasterPagdef $pagedef): bool;
 
     /**
      * {@inheritdoc}

@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
+use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
 use ChameleonSystem\CoreBundle\Security\BackendPageAccessCheckInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
@@ -160,5 +161,13 @@ class ChameleonFrontendController extends ChameleonController
         $aAllParameter = $request->query->keys();
         $aSeoParameterList = array_diff($aAllParameter, $aNonSeoParameter);
         \TCMSSmartURLData::GetActive()->setSeoURLParameters($aSeoParameterList);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function checkAccess(CmsMasterPagdef $pagedef): bool
+    {
+        return true;
     }
 }
