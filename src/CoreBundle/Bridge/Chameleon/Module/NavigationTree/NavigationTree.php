@@ -572,12 +572,12 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             $defaultPortal = $this->portalDomainService->getDefaultPortal();
             $defaultPortalMainNodeId = $defaultPortal->fieldMainNodeTree;
 
-            $portalsInMainTreeNodeOrderQuery = '
+            $orderedPortalsQuery = '
                 SELECT `cms_portal`.* FROM `cms_portal` 
                     LEFT JOIN `cms_tree` ON `cms_portal`.`main_node_tree` = `cms_tree`.`id` 
                 ORDER BY `cms_tree`.`lft`, `cms_portal`.`sort_order`
             ';
-            $portalList = \TdbCmsPortalList::GetList($portalsInMainTreeNodeOrderQuery);
+            $portalList = \TdbCmsPortalList::GetList($orderedPortalsQuery);
 
             while ($portal = $portalList->Next()) {
                 $portalId = $portal->fieldMainNodeTree;
