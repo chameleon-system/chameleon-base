@@ -84,9 +84,9 @@ class ChameleonBackendController extends ChameleonController
     {
         $activeUser = \TCMSUser::GetActiveUser();
         if (null === $activeUser) {
-            // For a number of edge cases: cronjobs, 404, ...
+            // For some edge cases: cronjobs, ...
 
-            return true;
+            return 0 === \count($pagedef->getAllowedRights());
         }
 
         if (false === $this->backendAccessCheck->checkPageAccess($activeUser, $pagedef)) {
