@@ -115,7 +115,7 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
         try {
             return mkdir($path, 0777, $recursive);
         } catch (Exception $e) {
-            throw new Exception(sprintf("Cannot create folder %s. Error: %s", $path, $e->getMessage()));
+            throw new Exception(sprintf("Cannot create folder %s. Error: %s", $path, $e->getMessage()), $e->getCode(), $e);
         }
     }
 
