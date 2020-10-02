@@ -92,6 +92,10 @@ class ChameleonBackendController extends ChameleonController
             return true;
         }
 
+        if (false === $this->pageAccessCheck->checkPageAccess($activeUser, $pagedef)) {
+            return false;
+        }
+
         foreach ($this->moduleLoader->modules as $module) {
             if (false === ($module instanceof CheckTableAccessRightsInterface)) {
                 continue;
@@ -99,10 +103,6 @@ class ChameleonBackendController extends ChameleonController
             if (false === $module->checkAccessRightsOnTable()) {
                 return false;
             }
-        }
-
-        if (false === $this->pageAccessCheck->checkPageAccess($activeUser, $pagedef)) {
-            return false;
         }
 
         return true;
