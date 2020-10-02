@@ -386,11 +386,11 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField
      * generate the field definition part of the sql statement
      * we assume that $oFieldDefinition holds the correct default value.
      *
-     * @param array $postData
+     * @param array $fieldDefinition
      *
      * @return string
      */
-    public function _GetSQLDefinition(&$postData = null)
+    public function _GetSQLDefinition(&$fieldDefinition = null)
     {
         return '';
     }
