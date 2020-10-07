@@ -1784,12 +1784,6 @@ class TCMSTableEditorEndPoint
         if ($databaseChanged) {
             $this->LoadDataFromDatabase();
             if (true === $bIsUpdateCall && true === $this->isRecordingActive() && \count($dataForChangeRecorder) > 0) {
-                $dataForChangeRecorder = $this->filterUnchangedFields(
-                    $dataForChangeRecorder,
-                    $tableName,
-                    $this->sId
-                );
-
                 if (\count($dataForChangeRecorder) > 0) {
                     $this->writePostWriteLogChangeData(
                         $bIsUpdateCall,
@@ -1836,30 +1830,6 @@ class TCMSTableEditorEndPoint
         $migrationRecorderStateHandler = $this->getMigrationRecorderStateHandler();
         
         return $this->IsQueryLoggingAllowed() && $migrationRecorderStateHandler->isDatabaseLoggingActive();
-    }
-
-    private function filterUnchangedFields(array $editableFields, string $tableName, string $id): array
-    {
-        // TODO / NOTE TCMSShopTableEditor_ShopArticle.class.php:PostSaveHook():108
-        //  calls this with different languages set for the table conf but the oTablePreChangeData
-        //  here remains unchanged. => Language mismatch during comparisson.
-        
-        $dataBeforeUpdate = $this->oTablePreChangeData->sqlData;
-
-        $filteredFields = [];
-
-        foreach ($editableFields as $fieldName => $value) {
-            $oldDataExists = \array_key_exists($fieldName, $dataBeforeUpdate);
-            
-            // TODO / NOTE \TCMSTableEditorChangeLog::computeDifferences() is much more complex than the
-            //  following !== - is this a problem?
-            
-            if (false === $oldDataExists || (true === $oldDataExists && $dataBeforeUpdate[$fieldName] !== $value)) {
-                $filteredFields[$fieldName] = $value;
-            }
-        }
-
-       return $filteredFields;
     }
 
     /**
