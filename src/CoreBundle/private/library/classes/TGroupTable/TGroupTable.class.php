@@ -9,7 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * class TGroupTable is used to display a flexible table with, and without data groupings.
@@ -371,6 +374,8 @@ class TGroupTable
         $recordsDisplayed = 0;
         if (!empty($sqlError)) {
             $showGroup = false;
+            $groupContent .= '<div class="alert alert-danger">'.$this->getTranslator()->trans('chameleon_system_core.record_list.sql_error').'</div>';
+            $this->getLogger()->error(sprintf('SQL error occurred during _DisplayGroup in TGroupTable: %s', $sqlError));
         }
 
         $recordLimitOK = true;
@@ -643,5 +648,15 @@ class TGroupTable
     protected function getDatabaseConnection()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
     }
 }
