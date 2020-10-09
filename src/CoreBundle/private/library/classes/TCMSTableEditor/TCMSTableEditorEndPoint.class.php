@@ -1646,7 +1646,6 @@ class TCMSTableEditorEndPoint
         }
         $dataForChangeRecorder = array();
         $setLanguageFields = array();
-        $editablePostFields = [];
         /** @var $oField TCMSField */
         while ($oField = $oFields->Next()) {
             $sFieldDisplayType = 'none';
@@ -1694,7 +1693,7 @@ class TCMSTableEditorEndPoint
                     $aPropertyFields[] = $oField;
                 }
                 // now convert field name (if this is a multi-language field)
-                $sqlFieldNameWithLanguagCode = $oField->oDefinition->GetRealEditFieldName($languageId);
+                $sqlFieldNameWithLanguageCode = $oField->oDefinition->GetRealEditFieldName($languageId);
                 if (false !== $sqlValue && false !== $writeField) {
                     if ($isFirst) {
                         $isFirst = false;
@@ -1703,27 +1702,25 @@ class TCMSTableEditorEndPoint
                         $query .= ', ';
                     }
 
-                    $editablePostFields[$sqlFieldNameWithLanguagCode] = $sqlValue;
-
                     if ($bCopyAllLanguages && '1' == $oField->oDefinition->sqlData['is_translatable']) {
-                        $sqlFieldNameWithLanguagCode = $oField->oDefinition->sqlData['name'];
-                        $sqlValue = $oField->oTableRow->sqlData[$sqlFieldNameWithLanguagCode];
+                        $sqlFieldNameWithLanguageCode = $oField->oDefinition->sqlData['name'];
+                        $sqlValue = $oField->oTableRow->sqlData[$sqlFieldNameWithLanguageCode];
                         $oLanguageCopyList->GoToStart();
                         while ($oLanguageCopy = $oLanguageCopyList->Next()) {
                             $sTargetFieldNameLanguage = $oField->oDefinition->GetEditFieldNameForLanguage($oLanguageCopy);
-                            if ($sTargetFieldNameLanguage && $sTargetFieldNameLanguage !== $sqlFieldNameWithLanguagCode) {
+                            if ($sTargetFieldNameLanguage && $sTargetFieldNameLanguage !== $sqlFieldNameWithLanguageCode) {
                                 $sqlValueLanguage = $oField->oTableRow->sqlData[$sTargetFieldNameLanguage];
                                 $query .= ' `'.MySqlLegacySupport::getInstance()->real_escape_string($sTargetFieldNameLanguage)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValueLanguage)."', ";
 
                                 if (false === isset($setLanguageFields[$oLanguageCopy->fieldIso6391])) {
                                     $setLanguageFields[$oLanguageCopy->fieldIso6391] = array();
                                 }
-                                $setLanguageFields[$oLanguageCopy->fieldIso6391][$sqlFieldNameWithLanguagCode] = $sqlValueLanguage;
+                                $setLanguageFields[$oLanguageCopy->fieldIso6391][$sqlFieldNameWithLanguageCode] = $sqlValueLanguage;
                             }
                         }
                     }
 
-                    $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguagCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
+                    $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguageCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
                     $dataForChangeRecorder[$oField->name] = $sqlValue;
                 }
             }
@@ -1746,7 +1743,6 @@ class TCMSTableEditorEndPoint
         $sourceRecordID = $this->sId;
 
         if (false === $bIsUpdateCall) {
-            // handle insert query
             $databaseChanged = false;
 
             // need to create an id.. try to insert until we have a free id. We will try at most 3 times
@@ -1773,7 +1769,7 @@ class TCMSTableEditorEndPoint
                 }
                 --$iMaxTry;
             } while ($iMaxTry > 0 && false === $databaseChanged);
-        } else { // handle update query
+        } else {
             if (MySqlLegacySupport::getInstance()->query($query)) {
                 $databaseChanged = true;
             } else {
