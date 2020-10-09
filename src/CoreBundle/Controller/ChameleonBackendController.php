@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
+use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdefFile;
 use ChameleonSystem\CoreBundle\Interfaces\CheckTableAccessRightsInterface;
 use ChameleonSystem\CoreBundle\Security\BackendPageAccessCheckInterface;
 
@@ -86,7 +87,7 @@ class ChameleonBackendController extends ChameleonController
         if (null === $activeUser) {
             // For some edge cases: cronjobs, ...
 
-            return 0 === \count($pagedef->getAllowedRights());
+            return false === ($pagedef instanceof CmsMasterPagdefFile) || 0 === \count($pagedef->getAllowedRights());
         }
 
         if (false === $this->backendAccessCheck->checkPageAccess($activeUser, $pagedef)) {

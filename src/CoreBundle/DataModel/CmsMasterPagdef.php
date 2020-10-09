@@ -17,23 +17,11 @@ class CmsMasterPagdef
      */
     private $layoutFile;
 
-    /**
-     * @var \TdbCmsRight[]
-     */
-    private $allowedRights;
-
-    /**
-     * @param string         $id
-     * @param array          $moduleList
-     * @param string         $layoutFile
-     * @param \TdbCmsRight[] $allowedRights
-     */
-    public function __construct(string $id, array $moduleList, string $layoutFile, array $allowedRights)
+    public function __construct(string $id, array $moduleList, string $layoutFile)
     {
         $this->id = $id;
         $this->moduleList = $moduleList;
         $this->layoutFile = $layoutFile;
-        $this->allowedRights = $allowedRights;
     }
 
     public function getId(): string
@@ -49,13 +37,5 @@ class CmsMasterPagdef
     public function getLayoutFile(): string
     {
         return $this->layoutFile;
-    }
-
-    /**
-     * @return \TdbCmsRight[]
-     */
-    public function getAllowedRights(): array
-    {
-        return $this->allowedRights;
     }
 }

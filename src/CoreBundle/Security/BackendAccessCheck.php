@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Security;
 
 use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
+use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdefFile;
 use ICmsCoreRedirect;
 use Symfony\Component\HttpFoundation\RequestStack;
 use TGlobal;
@@ -120,6 +121,10 @@ class BackendAccessCheck implements BackendPageAccessCheckInterface
      */
     public function checkPageAccess(\TdbCmsUser $user, CmsMasterPagdef $pagedef): bool
     {
+        if (false === ($pagedef instanceof CmsMasterPagdefFile)) {
+            return true;
+        }
+
         $allowedRights = $pagedef->getAllowedRights();
         if (0 === \count($allowedRights)) {
             return true; // no restriction

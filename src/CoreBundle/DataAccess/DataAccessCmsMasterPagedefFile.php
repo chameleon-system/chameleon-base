@@ -3,6 +3,7 @@
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
 use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
+use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdefFile;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use TCMSPageDefinitionFile;
 
@@ -33,7 +34,7 @@ class DataAccessCmsMasterPagedefFile implements DataAccessCmsMasterPagedefInterf
             return null;
         }
 
-        return new CmsMasterPagdef(
+        return new CmsMasterPagdefFile(
             $id,
             $oPageDefinitionFile->GetModuleList(),
             $oPageDefinitionFile->GetLayoutFile(),
