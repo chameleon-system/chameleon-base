@@ -67,8 +67,8 @@ class ChameleonSystemCoreExtension extends Extension
         ContainerBuilder $container
     ): void {
         $resourceCollectionDefinition = $container->getDefinition('chameleon_system_core.resource_collector');
-        $resourceCollectionDefinition->replaceArgument(3, $resourceCollectionConfiguration['cache_url_path']);
-        $resourceCollectionDefinition->replaceArgument(4, $resourceCollectionConfiguration['cache_path']);
+        $resourceCollectionDefinition->replaceArgument(4, $resourceCollectionConfiguration['cache_url_path']);
+        $resourceCollectionDefinition->replaceArgument(5, $resourceCollectionConfiguration['cache_path']);
     }
 
     private function loadConfigFile(ContainerBuilder $container, string $sConfigDir, string $filename): void
@@ -191,6 +191,8 @@ class ChameleonSystemCoreExtension extends Extension
     {
         $definition = $container->getDefinition('chameleon_system_core.backend_controller');
         $definition->addMethodCall('setHomePagedef', [$backendConfig['home_pagedef']]);
+
+        $container->setParameter('chameleon_system.core.export_memory', $backendConfig['export_memory']); // make available for non-DI-dependencies
     }
 
     /**

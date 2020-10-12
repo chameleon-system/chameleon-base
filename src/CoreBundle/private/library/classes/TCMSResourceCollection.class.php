@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ResourceCollectionJavaScriptCollectedEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
+use ChameleonSystem\CoreBundle\Service\CssMinifierServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -54,16 +55,23 @@ class TCMSResourceCollection implements ResourceCollectorInterface
      */
     private $assetPath;
 
+    /**
+     * @var CssMinifierServiceInterface|null
+     */
+    private $cssMinifierService;
+
     public function __construct(
         ?IPkgCmsFileManager $cmsFileManager = null,
         ?PortalDomainServiceInterface $portalDomainService = null,
         ?EventDispatcherInterface $eventDispatcher = null,
+        ?CssMinifierServiceInterface $cssMinifierService = null,
         string $assetUrl = URL_OUTBOX.'static',
         string $assetPath = PATH_OUTBOX.'/static'
     ) {
         $this->cmsFileManager = $cmsFileManager ?? ServiceLocator::get('chameleon_system_core.filemanager');
         $this->portalDomainService = $portalDomainService ?? ServiceLocator::get('chameleon_system_core.portal_domain_service');
         $this->eventDispatcher = $eventDispatcher ?? ServiceLocator::get('event_dispatcher');
+        $this->cssMinifierService = $cssMinifierService ?? ServiceLocator::get('chameleon_system_core.service.css_minifier');
         $this->assetUrl = rtrim($assetUrl, '/');
         $this->assetPath = rtrim($assetPath, '/');
     }
@@ -373,8 +381,8 @@ class TCMSResourceCollection implements ResourceCollectorInterface
                             $sSubString = $this->ProcessCSSRecursive($sPath, $sSubString);
 
                             $minify = ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_minify');
-                            if ($minify) {
-                                $sSubString = CssMin::minify($sSubString);
+                            if (true === $minify) {
+                                $sSubString = $this->cssMinifierService->minify($sSubString);
                             }
                             if (_DEVELOPMENT_MODE) {
                                 $sContent .= "/* FROM: {$aCSS[$iIndex]} */\n".$sSubString."\n";

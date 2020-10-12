@@ -11,8 +11,8 @@
 
 namespace ChameleonSystem\ViewRendererBundle\objects;
 
-use CssMin;
 use Exception;
+use MatthiasMullie\Minify\CSS;
 use TdbCmsPortal;
 use TPkgViewRendererSnippetResourceCollector;
 use ViewRenderException;
@@ -272,7 +272,10 @@ class TPkgViewRendererLessCompiler
         $generatedCss = $less->compile($this->getImportStatementsForFiles($lessFiles));
 
         if ($minifyCss) {
-            $generatedCss = CssMin::minify($generatedCss);
+            $minifier = new CSS();
+            $minifier->add($generatedCss);
+
+            $generatedCss = $minifier->minify();
         }
 
         return $generatedCss;

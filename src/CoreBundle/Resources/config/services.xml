@@ -799,6 +799,7 @@
             <argument type="service" id="chameleon_system_core.filemanager"/>
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
             <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="chameleon_system_core.service.css_minifier"/>
             <argument /><!-- set via DI chameleon_system_core.resource_collection.cache_url -->
             <argument /><!-- set via DI chameleon_system_core.resource_collection.cache_path -->
         </service>
@@ -924,21 +925,12 @@
             <argument type="service" id="chameleon_system_core.language_service"/>
         </service>
 
-        <service id="chameleon_system_core.module.navigation_tree_single_select_wysiwyg" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelectWysiwyg\NavigationTreeSingleSelectWysiwyg" shared="false">
+        <service id="chameleon_system_core.module.navigation_tree_single_select_wysiwyg" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelectWysiwyg\NavigationTreeSingleSelectWysiwyg" parent="chameleon_system_core.module.navigation_tree_single_select" shared="false">
             <tag name="chameleon_system.module"/>
-            <argument id="database_connection" type="service"/>
-            <argument id="event_dispatcher" type="service"/>
-            <argument id="chameleon_system_core.util.input_filter" type="service"/>
-            <argument id="chameleon_system_core.util.url" type="service"/>
-            <argument id="chameleon_system_core.factory.backend_tree_node" type="service"/>
-            <argument id="chameleon_system_core.translator" type="service"/>
-            <argument id="chameleon_system_core.tools" type="service"/>
-            <argument id="chameleon_system_core.global" type="service"/>
-            <argument type="service" id="chameleon_system_core.util.field_translation"/>
-            <argument type="service" id="chameleon_system_core.language_service"/>
             <argument id="request_stack" type="service"/>
-            <argument id="chameleon_system_core.cache" type="service"/>
         </service>
 
+        <service id="chameleon_system_core.service.css_minifier" class="ChameleonSystem\CoreBundle\Service\CssMinifierService">
+        </service>
     </services>
 </container>

@@ -84,17 +84,10 @@ class CronJobScheduler implements CronJobSchedulerInterface
 
         $executionInterval = new \DateInterval(sprintf('PT%sM', $schedule->getExecuteEveryNMinutes()));
 
-        $timePassedSinceLastPlannedExecution = $now->diff($lastPlannedExecution);
-
-        if ($timePassedSinceLastPlannedExecution < $executionInterval) {
-            return $lastPlannedExecution;
-        }
-
         $plannedExecution = clone $lastPlannedExecution;
-
-        do {
+        while($plannedExecution < $now) {
             $plannedExecution->add($executionInterval);
-        } while ($plannedExecution < $now);
+        }
 
         if ($plannedExecution > $now) {
             $plannedExecution->sub($executionInterval);

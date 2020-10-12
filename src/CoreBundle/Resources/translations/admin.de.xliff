@@ -400,6 +400,10 @@
                 <target>hh:mm:ss</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_core.field_lookup.invalid_restriction">
+                <source>chameleon_system_core.field_lookup.invalid_restriction</source>
+                <target>Die für das Feld "%field%" hinterlegte Einschränkung "%restriction%" ist nicht zulässig.</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.field_lookup.switch_to">
                 <source>chameleon_system_core.field_lookup.switch_to</source>
                 <target>Zu Datensatz wechseln</target>
@@ -2343,6 +2347,11 @@
             <trans-unit id="chameleon_system_core.navigation_tree.cancel_selection">
                 <source>chameleon_system_core.navigation_tree.cancel_selection</source>
                 <target>Abbrechen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.record_list.sql_error">
+                <source>chameleon_system_core.record_list.sql_error</source>
+                <target>Beim Erstellen der Liste ist ein Datenbank-Fehler aufgetreten. Vermutlich handelt es sich um ein Konfigurationsproblem in den Tabelleneinstellungen. Der Fehler wurde geloggt.</target>
             </trans-unit>
         </body>
     </file>
