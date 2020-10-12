@@ -18,8 +18,6 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use Doctrine\DBAL\Connection;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
 use TGlobal;
@@ -36,8 +34,6 @@ class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
     private $requestStack;
 
     public function __construct(
-        Connection $dbConnection,
-        EventDispatcherInterface $eventDispatcher,
         InputFilterUtilInterface $inputFilterUtil,
         UrlUtil $urlUtil,
         BackendTreeNodeFactory $backendTreeNodeFactory,
@@ -49,8 +45,6 @@ class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
         RequestStack $requestStack
     ) {
         parent::__construct(
-            $dbConnection,
-            $eventDispatcher,
             $inputFilterUtil,
             $urlUtil,
             $backendTreeNodeFactory,

@@ -675,18 +675,46 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
     }
 };
 
-CHAMELEON.CORE.MTTableEditor.initTabs = function () {
-    var hash = window.location.hash;
+CHAMELEON.CORE.MTTableEditor.handleTabChanges = function($tabsWrapper) {
+    const $tabHeaders = $tabsWrapper.find(".nav .nav-item .nav-link");
+    const $tabContents = $tabsWrapper.find(".tab-content .tab-pane");
 
-    $('.nav-tabs').find('li a').each(function (key, tabLinkItem) {
-        var $tabLinkItem = $(tabLinkItem);
-        if (hash === tabLinkItem.getAttribute('href')) {
-            $tabLinkItem.click();
-        }
-        $tabLinkItem.click(function () {
-            window.location.hash = this.getAttribute('href');
+    if ($tabHeaders.length > 0 && $tabContents.length > 0) {
+        // react on clicks
+        $tabHeaders.on("click", function(event) {
+            let actualHash = window.location.hash;
+            if (actualHash.length === 0) {
+                actualHash = $tabHeaders.first()[0].getAttribute('href');
+            }
+
+            if (actualHash !== this.getAttribute('href')) {
+                // NOTE coreui changes the tab on click but that state is not stored anywhere: so use the hash
+
+                window.location.hash = this.getAttribute('href'); // leads to a hashchange event
+            } else {
+                event.preventDefault(); // stop coreui from generating a false back for the first tab or a second back for any tab
+            }
         });
-    });
+
+        $(window).on("hashchange", function(event) {
+            let $currentHeader = null;
+
+            if (window.location.hash.length > 0) {
+                $currentHeader = $tabHeaders.filter("[href='" + window.location.hash + "']");
+            } else {
+                $currentHeader = $tabHeaders.first();
+            }
+
+            // NOTE clicking also handles the gui side.
+            //   It will also trigger "onclick" above but is totally filtered there because the hashes are the same.
+            $currentHeader.click();
+        });
+
+        // restore on page load
+        if (window.location.hash.length > 0) {
+            $tabHeaders.filter("[href='" + window.location.hash + "']").click();
+        }
+    }
 };
 
 CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle = function (chameleonMessageTypeName) {
@@ -907,8 +935,11 @@ CHAMELEON.CORE.MTTableEditor.idButtonCopyToClipboard = function () {
     });
 };
 
-$(document).ready(function () {
-    CHAMELEON.CORE.MTTableEditor.initTabs();
+$(function () {
+    const $tabsWrapper = $("#tabs-wrapper");
+    if ($tabsWrapper.length > 0) {
+        CHAMELEON.CORE.MTTableEditor.handleTabChanges($tabsWrapper);
+    }
     CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
     CHAMELEON.CORE.MTTableEditor.initEntrySwitcherAutocomplete();
     CHAMELEON.CORE.MTTableEditor.initSelectBoxes();

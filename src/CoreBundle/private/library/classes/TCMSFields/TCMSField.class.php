@@ -736,29 +736,31 @@ class TCMSField implements TCMSFieldVisitableInterface
      * generate the field definition part of the sql statement
      * we assume that $oFieldDefinition holds the correct default value.
      *
-     * @param array $postData
+     * @param array $fieldDefinition
      *
      * @return string
      */
-    public function _GetSQLDefinition(&$postData = null)
+    public function _GetSQLDefinition(&$fieldDefinition = null)
     {
         $connection = $this->getDatabaseConnection();
         $inputFilterUtil = $this->getInputFilterUtil();
 
-        $lengthSet = $inputFilterUtil->getFilteredInput('length_set');
+        $lengthSet = '';
+        $cmsFieldTypeId = '';
+        $fieldDefaultValue = '';
 
-        if (null !== $postData) {
-            $fieldDefaultValue = '';
-            if (isset($postData['field_default_value'])) {
-                $fieldDefaultValue = $postData['field_default_value'];
+        if (null !== $fieldDefinition) {
+            if (isset($fieldDefinition['field_default_value'])) {
+                $fieldDefaultValue = $fieldDefinition['field_default_value'];
             }
-            $cmsFieldTypeId = $postData['cms_field_type_id'];
-            if (!empty($postData['length_set'])) {
-                $lengthSet = $postData['length_set'];
+            $cmsFieldTypeId = $fieldDefinition['cms_field_type_id'];
+            if (!empty($fieldDefinition['length_set'])) {
+                $lengthSet = $fieldDefinition['length_set'];
             }
         } else {
             $fieldDefaultValue = $inputFilterUtil->getFilteredInput('field_default_value');
             $cmsFieldTypeId = $inputFilterUtil->getFilteredInput('cms_field_type_id');
+            $lengthSet = $inputFilterUtil->getFilteredInput('length_set');
         }
 
         $fieldType = null;

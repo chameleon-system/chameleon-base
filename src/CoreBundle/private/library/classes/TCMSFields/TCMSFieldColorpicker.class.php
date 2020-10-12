@@ -61,7 +61,7 @@ class TCMSFieldColorpicker extends TCMSField
         $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/bootstrap-colorpicker-3.0.3/js/bootstrap-colorpicker.min.js').'" type="text/javascript"></script>';
         $includes[] = "<script>
     $(function() {
-        $('#colorPickerContainer".TGlobal::OutHTML($this->name)."').colorpicker({ format: 'hex', useHashPrefix: true });
+        $('#colorPickerContainer".TGlobal::OutHTML($this->name)."').colorpicker({ format: 'hex', useHashPrefix: true, autoInputFallback: false });
     });
     </script>";
 
