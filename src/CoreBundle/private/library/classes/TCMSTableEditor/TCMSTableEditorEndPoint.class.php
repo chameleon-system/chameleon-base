@@ -17,6 +17,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -1626,7 +1627,7 @@ class TCMSTableEditorEndPoint
             $bRecordExists = TTools::RecordExists($tableName, 'id', $oData->id);
         }
         $bIsUpdateCall = (!is_null($oData->id) && !empty($oData->id));
-        $bIsUpdateCall = (($bIsUpdateCall && $bRecordExists && $bForceInsert) || ($bIsUpdateCall && !$bForceInsert));
+        $bIsUpdateCall = $bIsUpdateCall && ($bRecordExists && $bForceInsert) || (!$bForceInsert);
 
         $this->bIsUpdateCall = $bIsUpdateCall;
 
@@ -1643,7 +1644,7 @@ class TCMSTableEditorEndPoint
         } else {
             $oLanguageCopyList = new TIterator();
         }
-        $setFields = array();
+        $dataForChangeRecorder = array();
         $setLanguageFields = array();
         /** @var $oField TCMSField */
         while ($oField = $oFields->Next()) {
@@ -1657,13 +1658,13 @@ class TCMSTableEditorEndPoint
             }
 
             if ($this->bForceHiddenFieldWriteOnSave) {
-                $bAllowChangingField = true;
+                $isFieldChangeAllowed = true;
             } else {
-                $bAllowChangingField = (!$bIsUpdateCall || ('hidden' != $sFieldDisplayType && 'edit-on-click' != $sFieldDisplayType && 'readonly-if-filled' != $sFieldDisplayType && 'readonly' != $sFieldDisplayType));
+                $isFieldChangeAllowed = (false === $bIsUpdateCall || ('hidden' != $sFieldDisplayType && 'edit-on-click' != $sFieldDisplayType && 'readonly-if-filled' != $sFieldDisplayType && 'readonly' != $sFieldDisplayType));
             }
 
             // prevent saving fields the user has no access to
-            if ($bAllowChangingField) {
+            if (true === $isFieldChangeAllowed) {
                 $sqlValue = '';
                 $writeField = true;
                 if (!$this->bPreventPreGetSQLHookOnFields && empty($isCopy) && !empty($bIsUpdateCall)) {
@@ -1692,7 +1693,7 @@ class TCMSTableEditorEndPoint
                     $aPropertyFields[] = $oField;
                 }
                 // now convert field name (if this is a multi-language field)
-                $sTargetFieldName = $oField->oDefinition->GetRealEditFieldName($languageId);
+                $sqlFieldNameWithLanguageCode = $oField->oDefinition->GetRealEditFieldName($languageId);
                 if (false !== $sqlValue && false !== $writeField) {
                     if ($isFirst) {
                         $isFirst = false;
@@ -1700,33 +1701,36 @@ class TCMSTableEditorEndPoint
                     } else {
                         $query .= ', ';
                     }
+
                     if ($bCopyAllLanguages && '1' == $oField->oDefinition->sqlData['is_translatable']) {
-                        $sTargetFieldName = $oField->oDefinition->sqlData['name'];
-                        $sqlValue = $oField->oTableRow->sqlData[$sTargetFieldName];
+                        $sqlFieldNameWithLanguageCode = $oField->oDefinition->sqlData['name'];
+                        $sqlValue = $oField->oTableRow->sqlData[$sqlFieldNameWithLanguageCode];
                         $oLanguageCopyList->GoToStart();
                         while ($oLanguageCopy = $oLanguageCopyList->Next()) {
                             $sTargetFieldNameLanguage = $oField->oDefinition->GetEditFieldNameForLanguage($oLanguageCopy);
-                            if ($sTargetFieldNameLanguage && $sTargetFieldNameLanguage !== $sTargetFieldName) {
+                            if ($sTargetFieldNameLanguage && $sTargetFieldNameLanguage !== $sqlFieldNameWithLanguageCode) {
                                 $sqlValueLanguage = $oField->oTableRow->sqlData[$sTargetFieldNameLanguage];
                                 $query .= ' `'.MySqlLegacySupport::getInstance()->real_escape_string($sTargetFieldNameLanguage)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValueLanguage)."', ";
 
                                 if (false === isset($setLanguageFields[$oLanguageCopy->fieldIso6391])) {
                                     $setLanguageFields[$oLanguageCopy->fieldIso6391] = array();
                                 }
-                                $setLanguageFields[$oLanguageCopy->fieldIso6391][$sTargetFieldName] = $sqlValueLanguage;
+                                $setLanguageFields[$oLanguageCopy->fieldIso6391][$sqlFieldNameWithLanguageCode] = $sqlValueLanguage;
                             }
                         }
                     }
-                    $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sTargetFieldName)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
-                    $setFields[$oField->name] = $sqlValue;
+
+                    $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguageCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
+                    $dataForChangeRecorder[$oField->name] = $sqlValue;
                 }
             }
         }
+
         if ($isFirst) {
             return false;
         } // no changes made... no fields to write
 
-        $bWasInserted = false;
+        $databaseChanged = false;
         $error = '';
         $sourceRecordID = null;
         $whereConditions = array();
@@ -1738,8 +1742,8 @@ class TCMSTableEditorEndPoint
 
         $sourceRecordID = $this->sId;
 
-        if (!$bIsUpdateCall) {
-            $bWasInserted = false;
+        if (false === $bIsUpdateCall) {
+            $databaseChanged = false;
 
             // need to create an id.. try to insert until we have a free id. We will try at most 3 times
 
@@ -1748,7 +1752,7 @@ class TCMSTableEditorEndPoint
             do {
                 $uid = TTools::GetUUID();
                 $sInsertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($uid)."'";
-                $setFields['id'] = $uid;
+                $dataForChangeRecorder['id'] = $uid;
                 MySqlLegacySupport::getInstance()->query($sInsertQuery);
                 $error = MySqlLegacySupport::getInstance()->error();
                 if (!empty($error)) {
@@ -1760,32 +1764,39 @@ class TCMSTableEditorEndPoint
                     }
                 } else {
                     $query = $sInsertQuery;
-                    $bWasInserted = true;
+                    $databaseChanged = true;
                     $this->sId = $uid;
                 }
                 --$iMaxTry;
-            } while ($iMaxTry > 0 && !$bWasInserted);
+            } while ($iMaxTry > 0 && false === $databaseChanged);
         } else {
             if (MySqlLegacySupport::getInstance()->query($query)) {
-                $bWasInserted = true;
+                $databaseChanged = true;
             } else {
                 $error = MySqlLegacySupport::getInstance()->error();
             }
         }
 
-        // we need this because we use a redirect later and would not see the error message, we need to change this later to a nice error_logging or something
-        if ($bWasInserted) {
+        if ($databaseChanged) {
             $this->LoadDataFromDatabase();
-            if ($this->IsQueryLoggingAllowed()) {
-                $this->writePostWriteLogChangeData($bIsUpdateCall, $setFields, $whereConditions, $setLanguageFields);
+            if (true === $bIsUpdateCall && true === $this->isRecordingActive() && \count($dataForChangeRecorder) > 0) {
+                if (\count($dataForChangeRecorder) > 0) {
+                    $this->writePostWriteLogChangeData(
+                        $bIsUpdateCall,
+                        $dataForChangeRecorder,
+                        $whereConditions,
+                        $setLanguageFields
+                    );
+                }
             }
 
             TCacheManager::PerformeTableChange($tableName, $this->sId);
         } else {
+            // we need this because we use a redirect later and would not see the error message
             TTools::WriteLogEntrySimple('SQL Error: '.$error, 1, __FILE__, __LINE__);
         }
 
-        if ($bWasInserted) {
+        if ($databaseChanged) {
             // handle MLT and Property Tables only if we do a copy
             if ($isCopy && !is_null($sourceRecordID)) { // copy fields only if there is no current record ID and it's not a table create
                 // copy MLT fields
@@ -1808,6 +1819,13 @@ class TCMSTableEditorEndPoint
         }
 
         return $bSaveSuccess;
+    }
+    
+    private function isRecordingActive(): bool
+    {
+        $migrationRecorderStateHandler = $this->getMigrationRecorderStateHandler();
+        
+        return $this->IsQueryLoggingAllowed() && $migrationRecorderStateHandler->isDatabaseLoggingActive();
     }
 
     /**
@@ -3109,5 +3127,10 @@ class TCMSTableEditorEndPoint
     private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+    
+    private function getMigrationRecorderStateHandler(): MigrationRecorderStateHandler
+    {
+        return ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');
     }
 }
