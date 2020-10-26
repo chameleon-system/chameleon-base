@@ -56,11 +56,7 @@ abstract class TCMSMLTField extends TCMSField
         if (!$this->data) {
             return '';
         }
-        $sTableName = $this->name;
-        if ('_mlt' === substr($sTableName, -4)) {
-            $sTableName = substr($this->name, 0, -4);
-        }
-
+        $sTableName = $this->GetConnectedTableName();
         $sTableId = TTools::GetCMSTableId($sTableName);
         if (!$sTableId) {
             return '';
