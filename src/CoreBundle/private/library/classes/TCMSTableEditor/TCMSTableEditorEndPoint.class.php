@@ -1503,7 +1503,7 @@ class TCMSTableEditorEndPoint
             $bRecordExists = TTools::RecordExists($tableName, 'id', $oData->id);
         }
         $bIsUpdateCall = (!is_null($oData->id) && !empty($oData->id));
-        $bIsUpdateCall = $bIsUpdateCall && ($bRecordExists && $bForceInsert) || (!$bForceInsert);
+        $bIsUpdateCall = $bIsUpdateCall && (($bRecordExists && $bForceInsert) || (!$bForceInsert));
 
         $this->bIsUpdateCall = $bIsUpdateCall;
 
