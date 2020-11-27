@@ -4,6 +4,10 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <parameters>
+        <parameter key="chameleon_system_extranet.login_by_transfer_token.transfer_token_service.algorithm">aes128</parameter>
+    </parameters>
+
     <services>
         <service id="chameleon_system_extranet.cronjob.cleanup_extranet_login_history_cronjob" class="TCMSCronJob_CleanupExtranetLoginHistory" shared="false">
             <tag name="chameleon_system.cronjob" />
@@ -34,6 +38,31 @@
 
         <service id="chameleon_system_extranet.util.extranet_authentication" class="ChameleonSystem\ExtranetBundle\Util\ExtranetAuthenticationUtil" public="true">
             <argument type="service" id="request_stack" />
+        </service>
+
+        <service
+            id="chameleon_system_extranet.login_by_tranfer_token.route_generator"
+            class="ChameleonSystem\ExtranetBundle\LoginByTransferToken\RouteGenerator"
+            public="true"
+        />
+        <service
+                id="chameleon_system_extranet.login_by_transfer_token.login_controller"
+                class="ChameleonSystem\ExtranetBundle\LoginByTransferToken\LoginController"
+                public="true"
+        >
+            <argument type="service" id="chameleon_system_extranet.login_by_transfer_token.transfer_token_service" />
+            <argument type="service" id="chameleon_system_extranet.extranet_user_provider" />
+            <argument type="service" id="chameleon_system_core.page_service" />
+            <argument type="service" id="request_stack" />
+        </service>
+        <service
+                id="chameleon_system_extranet.login_by_transfer_token.transfer_token_service"
+                class="ChameleonSystem\ExtranetBundle\LoginByTransferToken\TransferTokenService"
+                public="true"
+        >
+            <argument type="service" id="chameleon_system_core.system_time_provider" />
+            <argument>%kernel.secret%</argument>
+            <argument>%chameleon_system_extranet.login_by_transfer_token.transfer_token_service.algorithm%</argument>
         </service>
     </services>
 
