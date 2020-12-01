@@ -452,8 +452,9 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
                     }
                 }
             }
+
             // if there was a change of the image, we need to clear related cache elements
-            if (is_object($this->oTablePreChangeData)) {
+            if ($this->bIsUpdateCall) {
                 $this->ClearCacheOfObjectsUsingImage($media->id);
             }
         }
