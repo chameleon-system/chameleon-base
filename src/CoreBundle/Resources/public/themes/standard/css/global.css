@@ -355,6 +355,7 @@ legend {
 
 .sidebar .nav-item:focus {
     background-color: #20a8d8;
+    outline: none;
 }
 
 .sidebar-filter-input, .sidebar-filter-input:focus {
