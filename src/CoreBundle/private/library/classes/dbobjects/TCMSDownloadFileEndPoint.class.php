@@ -38,9 +38,18 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
      */
     public $fileURL = null;
 
-    public function TCMSDownloadFileEndPoint($id = null)
+    public function __construct($id = null)
     {
-        parent::TCMSRecord('cms_document', $id);
+        parent::__construct('cms_document', $id);
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSDownloadFileEndPoint()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**

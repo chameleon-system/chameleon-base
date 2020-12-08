@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\BackendLoginEvent;
 use ChameleonSystem\CoreBundle\Event\BackendLogoutEvent;
@@ -44,12 +45,21 @@ class TCMSUser extends TCMSRecord
      */
     private static $oActiveUser = null;
 
-    public function TCMSUser($id = null)
+    public function __construct($id = null)
     {
-        parent::TCMSRecord('cms_user', $id);
+        parent::__construct('cms_user', $id);
         if (!is_null($id)) {
             $this->Load($id);
         }
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSUser()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**

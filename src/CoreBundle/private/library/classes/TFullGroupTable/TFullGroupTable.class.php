@@ -234,12 +234,22 @@ class TFullGroupTable extends TGroupTable
      */
     protected $tableCSS = 'table table-sm table-striped table-hover TCMSListManagerFullGroupTable';
 
-    public function TFullGroupTable($postData = array())
+    public function __construct($postData = array())
     {
-        parent::TGroupTable();
+        parent::__construct();
         $this->style = new TFullGroupTableStyle();
         $this->_postData = $postData;
     }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TFullGroupTable()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
+    }
+
 
     /**
      * initialises the class, set postdata here.
