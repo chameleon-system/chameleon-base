@@ -134,7 +134,54 @@ class TIteratorTest extends TestCase
         $this->assertEquals($foo, $iterator->next());
         $this->assertEquals($baz, $iterator->next());
     }
-    
+
+    public function testCanBeIterated(): void
+    {
+        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+
+        foreach ($iterator as $index => $item) {
+            switch ($index) {
+                case 0:
+                    $this->assertEquals('foo', $item);
+                    break;
+                case 1:
+                    $this->assertEquals('bar', $item);
+                    break;
+                case 2:
+                    $this->assertEquals('baz', $item);
+                    break;
+                default:
+                    throw new \Exception('Invalid index ' . index);
+            }
+        }
+    }
+
+    public function testResetsItemPointerBeforeIterating(): void
+    {
+        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+        $iterator->next();
+
+        $this->assertEquals(1, $iterator->_itemPointer);
+        $i = 0;
+        foreach ($iterator as $_) {
+            $i++;
+        }
+
+        // If the item pointer wasn't reset we'd assume to see 2 here
+        // as the first item would be skipped.
+        $this->assertEquals(3, $i);
+    }
+
+    public function testCanBeConvertedToArrayUsingIteratorMethods(): void
+    {
+        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+        $array = iterator_to_array($iterator);
+        $this->assertIsArray($array);
+        $this->assertEquals('foo', $array[0]);
+        $this->assertEquals('bar', $array[1]);
+        $this->assertEquals('baz', $array[2]);
+    }
+
     private function iterator(array $items): TIterator
     {
         $iterator = new TIterator();
