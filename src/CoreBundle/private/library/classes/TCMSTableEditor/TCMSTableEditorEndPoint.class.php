@@ -1779,15 +1779,13 @@ class TCMSTableEditorEndPoint
 
         if ($databaseChanged) {
             $this->LoadDataFromDatabase();
-            if (true === $bIsUpdateCall && true === $this->isRecordingActive() && \count($dataForChangeRecorder) > 0) {
-                if (\count($dataForChangeRecorder) > 0) {
-                    $this->writePostWriteLogChangeData(
-                        $bIsUpdateCall,
-                        $dataForChangeRecorder,
-                        $whereConditions,
-                        $setLanguageFields
-                    );
-                }
+            if (true === $this->isRecordingActive() && \count($dataForChangeRecorder) > 0) {
+                $this->writePostWriteLogChangeData(
+                    $bIsUpdateCall,
+                    $dataForChangeRecorder,
+                    $whereConditions,
+                    $setLanguageFields
+                );
             }
 
             TCacheManager::PerformeTableChange($tableName, $this->sId);
