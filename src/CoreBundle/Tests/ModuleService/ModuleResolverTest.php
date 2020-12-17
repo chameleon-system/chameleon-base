@@ -23,7 +23,7 @@ class ModuleResolverTest extends TestCase
      */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $containerMock = $this->prophesize(ContainerInterface::class);
@@ -35,7 +35,7 @@ class ModuleResolverTest extends TestCase
         $this->subject = new ModuleResolver($containerMock->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->subject = null;

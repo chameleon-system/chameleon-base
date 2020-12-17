@@ -34,7 +34,7 @@ namespace esono\pkgcmscache\tests {
          */
         private $cache;
 
-        protected function setUp()
+        protected function setUp(): void
         {
             parent::setUp();
 

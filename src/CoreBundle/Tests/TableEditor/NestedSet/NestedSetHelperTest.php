@@ -39,13 +39,13 @@ class NestedSetHelperTest extends TestCase
     private $parentNodeName;
     private $nodePosition;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         self::$fixtureDir = __DIR__.'/fixtures/';
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->db = null;
@@ -140,7 +140,7 @@ class NestedSetHelperTest extends TestCase
         $this->then_we_should_get_a_tree_matching('initial-tree.txt');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->db->close();

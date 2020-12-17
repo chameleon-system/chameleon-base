@@ -55,7 +55,7 @@ class TransformOutgoingMailTargetsServiceTest extends TestCase
      */
     private $sourceSubject;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->targetMail = null;

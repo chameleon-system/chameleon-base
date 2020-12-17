@@ -43,12 +43,12 @@ class AbstractQueryTestCase extends TestCase
      */
     protected $actualQueryParams;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->prophet = new Prophet();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->prophet->checkPredictions();
     }

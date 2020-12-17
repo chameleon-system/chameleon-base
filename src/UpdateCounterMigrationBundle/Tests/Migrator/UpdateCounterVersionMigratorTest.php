@@ -34,7 +34,7 @@ class UpdateCounterVersionMigratorTest extends TestCase
      */
     private $bundleDataAccessMock;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->subject = null;

@@ -35,7 +35,7 @@ class DataMappingServiceResponseFactoryTest extends TestCase
      */
     private $response;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->response = null;

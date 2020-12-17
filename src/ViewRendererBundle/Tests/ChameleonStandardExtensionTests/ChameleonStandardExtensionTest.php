@@ -27,7 +27,7 @@ class ChameleonStandardExtensionTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $loaderMock = $this->prophesize(LoaderInterface::class);

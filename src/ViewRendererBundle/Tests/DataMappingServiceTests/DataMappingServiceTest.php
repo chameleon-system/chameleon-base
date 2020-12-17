@@ -33,7 +33,7 @@ class DataMappingServiceTest extends TestCase
      */
     private $transformationResult;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->dataMappingService = null;

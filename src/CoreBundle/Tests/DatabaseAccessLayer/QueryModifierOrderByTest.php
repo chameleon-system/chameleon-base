@@ -22,7 +22,7 @@ class QueryModifierOrderByTest extends TestCase
     private $modifier;
     private $resultQuery;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->modifier = null;

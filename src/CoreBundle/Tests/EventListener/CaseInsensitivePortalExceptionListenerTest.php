@@ -42,7 +42,7 @@ class CaseInsensitivePortalExceptionListenerTest extends TestCase
      */
     private $request;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->subject = null;

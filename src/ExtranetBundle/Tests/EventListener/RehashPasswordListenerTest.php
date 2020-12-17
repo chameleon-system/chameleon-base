@@ -32,7 +32,7 @@ class RehashPasswordListenerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!defined('TCMSUSERINPUT_DEFAULTFILTER')) {
             define('TCMSUSERINPUT_DEFAULTFILTER', 'TCMSUserInput_BaseText');
@@ -42,7 +42,7 @@ class RehashPasswordListenerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->inputFilterUtilMock = null;
         $this->passwordHashGeneratorMock = null;

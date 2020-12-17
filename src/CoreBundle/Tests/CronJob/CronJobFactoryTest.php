@@ -25,7 +25,7 @@ class CronJobFactoryTest extends TestCase
      */
     private $actualResult;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->containerMock = null;
@@ -88,11 +88,10 @@ class CronJobFactoryTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testConstructNonExistingCronJob()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->givenACronJobFactory();
         $this->whenConstructCronJobIsCalledForANonExistingCronJob();
     }
@@ -102,11 +101,10 @@ class CronJobFactoryTest extends TestCase
         $this->cronJobFactory->constructCronJob('unknown_identifier', []);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testConstructCronJobWithWrongType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->givenACronJobFactory();
         $this->whenConstructCronJobIsCalledForAServiceThatDoesNotExtendTCMSCronJob();
     }
@@ -116,11 +114,10 @@ class CronJobFactoryTest extends TestCase
         $this->cronJobFactory->constructCronJob(fixtures\CronJobThatDoesNotExtendTCMSCronJob::class, []);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testConstructCronJobUnknownToTheServiceContainer()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->givenACronJobFactory();
         $this->whenConstructCronJobIsCalledForARegisteredCronJobUnknownToTheServiceContainer();
     }

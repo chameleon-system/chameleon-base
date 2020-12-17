@@ -31,7 +31,7 @@ class ClassFromTableFieldProviderTest extends TestCase
      */
     private $actualResult;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->classFromTableFieldProvider = null;

@@ -52,7 +52,7 @@ class RequestStateHashProviderTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockHashArray = $this->prophesize(HashInterface::class);
         $this->mockHashArray->hash32(Argument::any())->willReturn('fake-hash');

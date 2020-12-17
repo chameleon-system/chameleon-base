@@ -22,7 +22,7 @@ class AutoclassesCacheWarmerTest extends TestCase
     /** @var AutoclassesCacheWarmer */
     private $warmer;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->warmer = null;

@@ -61,7 +61,7 @@ class RequestInfoServiceTest extends TestCase
      */
     private $returnedValue2;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

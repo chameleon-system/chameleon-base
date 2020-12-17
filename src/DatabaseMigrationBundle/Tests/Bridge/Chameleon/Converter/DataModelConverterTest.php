@@ -26,7 +26,7 @@ class DataModelConverterTest extends TestCase
     private $target;
     private $output;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->output = null;

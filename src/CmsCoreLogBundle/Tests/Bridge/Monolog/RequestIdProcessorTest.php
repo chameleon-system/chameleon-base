@@ -33,7 +33,7 @@ class RequestIdProcessorTest extends TestCase
      */
     private $actualResult;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

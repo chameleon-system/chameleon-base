@@ -40,7 +40,7 @@ class RequestStateHashProviderCacheTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockSubject = $this->prophesize(RequestStateHashProviderInterface::class);
         $this->mockSubject->getHash(Argument::any())->willReturn('some-fake-hash');

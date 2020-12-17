@@ -58,7 +58,7 @@ class AuthenticityTokenManagerTest extends TestCase
      */
     private $actualResult;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -70,7 +70,7 @@ class AuthenticityTokenManagerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
