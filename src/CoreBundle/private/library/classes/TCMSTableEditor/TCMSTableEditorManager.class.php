@@ -327,7 +327,7 @@ class TCMSTableEditorManager
             $this->RefreshLock();
 
             if ('_mlt' === substr($this->sRestrictionField, -4)) {
-                $this->oTableEditor->AddMLTConnection($this->sRestrictionField, $this->sRestriction);
+                $this->addInverseRestrictingMLTConnection($this->sRestrictionField, $this->sRestriction);
             }
         }
 
@@ -494,6 +494,16 @@ class TCMSTableEditorManager
                 $this->RefreshLock();
             }
         }
+    }
+
+    private function addInverseRestrictingMLTConnection(string $restrictionField, string $restriction): void
+    {
+        $sourceTable = substr($restrictionField, 0, -4);
+        $targetTable = $this->oTableConf->sqlData['name'];
+
+        $tableEditor = new TCMSTableEditorManager();
+        $tableEditor->Init(TTools::GetCMSTableId($sourceTable), $restriction);
+        $tableEditor->AddMLTConnection($targetTable . '_mlt', $this->sId);
     }
 
     /**
