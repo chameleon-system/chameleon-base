@@ -327,13 +327,7 @@ class TCMSTableEditorManager
             $this->RefreshLock();
 
             if ('_mlt' === substr($this->sRestrictionField, -4)) {
-                $sourceID = $this->sRestriction;
-                $sourceTable = substr($this->sRestrictionField, 0, -4);
-
-                $targetTable = $this->oTableConf->sqlData['name'];
-                $MLTTable = $sourceTable.'_'.$targetTable.'_mlt';
-                $mltQuery = 'INSERT INTO `'.MySqlLegacySupport::getInstance()->real_escape_string($MLTTable)."` SET `source_id` ='".MySqlLegacySupport::getInstance()->real_escape_string($this->sRestriction)."', `target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'";
-                MySqlLegacySupport::getInstance()->query($mltQuery);
+                $this->oTableEditor->AddMLTConnection($this->sRestrictionField, $this->sRestriction);
             }
         }
 
