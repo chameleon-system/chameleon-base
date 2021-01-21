@@ -66,18 +66,6 @@
             <call method="setTrustedProxies">
                 <argument>%chameleon_system_core.request.trusted_proxies%</argument>
             </call>
-            <call method="setTrustedHeaderClientIp">
-                <argument>%chameleon_system_core.request.trusted_header_client_ip%</argument>
-            </call>
-            <call method="setTrustedHeaderClientHost">
-                <argument>%chameleon_system_core.request.trusted_header_client_host%</argument>
-            </call>
-            <call method="setTrustedHeaderClientPort">
-                <argument>%chameleon_system_core.request.trusted_header_client_port%</argument>
-            </call>
-            <call method="setTrustedHeaderClientProtocol">
-                <argument>%chameleon_system_core.request.trusted_header_client_protocol%</argument>
-            </call>
         </service>
 
         <service id="chameleon_system_core.controller_resolver" class="ChameleonSystem\CoreBundle\Controller\ChameleonControllerResolver">
