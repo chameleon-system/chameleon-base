@@ -589,7 +589,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      * The `_sort_order` GET parameter is being used in order to cycle through different sorting
      * modes for the property used as value. The modes being cycled are: ascending, descending, no sorting.
      *
-     * If there is no object currently cached in the session, then the sorting is initialized to it's
+     * If there is no object currently cached in the session, then the sorting is initialized to its
      * defaults based on the table configuration.
      *
      * NOTE: The reliance on the session cache means that cycling through the modes and having multiple
