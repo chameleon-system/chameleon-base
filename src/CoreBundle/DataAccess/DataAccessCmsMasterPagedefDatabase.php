@@ -30,7 +30,7 @@ class DataAccessCmsMasterPagedefDatabase implements DataAccessCmsMasterPagedefIn
         //check if the pagedef exists in the database... if it does, use it. if not, use the file
         $oPageDefinitionFile = null;
 
-        $requestMasterPageDef = $this->inputFilterUtil->getFilteredInput('__masterPageDef', false);
+        $requestMasterPageDef = 'true' === $this->inputFilterUtil->getFilteredInput('__masterPageDef');
 
         if (true === $requestMasterPageDef && true ===  TGlobal::CMSUserDefined()) {
             // load master pagedef...
