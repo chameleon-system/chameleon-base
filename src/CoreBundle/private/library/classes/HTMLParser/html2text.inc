@@ -18,6 +18,8 @@ include ("HTMLParser.class.php");
  */
 class Html2Text
 {
+    use \ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
+
     // Private fields
     var $iCurrentLine = "";
     var $iCurrentWord = "";
@@ -36,11 +38,21 @@ class Html2Text
     var $TOKEN_UL = 4;
     var $TOKEN_ENDUL = 5;
 
-    function Html2Text($aHtmlText, $aMaxColumns)
+    function __construct($aHtmlText, $aMaxColumns)
     {
         $this->iHtmlText = $aHtmlText;
         $this->iMaxColumns = $aMaxColumns;
     }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function Html2Text()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
+    }
+
 
     function convert()
     {

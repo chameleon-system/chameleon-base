@@ -57,7 +57,7 @@ class TCMSMasterPagedef extends TCMSMasterPagedefAutoParent
     public function __construct($id = null, $iLanguageId = null)
     {
         $this->table = 'cms_master_pagedef';
-        parent::TCMSRecord($this->table, $id, $iLanguageId);
+        parent::__construct($this->table, $id, $iLanguageId);
     }
 
     /**

@@ -13,7 +13,7 @@ class TCMSPortalDomain extends TCMSRecord
 {
     public function __construct($id = null, $iLanguage = null)
     {
-        parent::TCMSRecord('cms_portal_domains', $id, $iLanguage);
+        parent::__construct('cms_portal_domains', $id, $iLanguage);
     }
 
     /**

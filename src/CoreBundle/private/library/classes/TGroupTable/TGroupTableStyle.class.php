@@ -14,12 +14,14 @@
 */
 class TGroupTableStyle
 {
+    use \ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
+
     public $group; // style class name for the group field (default = NULL)
     public $emptyGroup; // style to use for the fill td's in the group by row (default = NULL)
     public $groupSpacer; // style class name to use for the row between the groups (default = NULL)
     public $columnList; // assoc array holding column name => style class name (default = array);
 
-    public function TGroupTableStyle()
+    public function __construct()
     {
         $this->group = null;
         $this->emptyGroup = null;
@@ -29,6 +31,15 @@ class TGroupTableStyle
         $this->oddColumn = null;
         $this->evenColumn = null;
         $this->columnList = array();
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TGroupTableStyle()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     public function GetGroup()
