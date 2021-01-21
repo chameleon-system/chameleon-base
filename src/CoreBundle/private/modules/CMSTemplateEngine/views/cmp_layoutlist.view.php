@@ -43,6 +43,7 @@ if (null === $editLanguage) {
             'previewLanguageId' => $previewLanguageId,
         ];
         $url = $urlUtil->getArrayAsUrl($urlParameters, URL_WEB_CONTROLLER.'?', '&'); ?>
+
         <div class="card <?php if ($bIsActiveLayout) {
             ?>text-white bg-success<?php
         } ?>">
@@ -70,16 +71,18 @@ if (null === $editLanguage) {
             if (false === $bIsActiveLayout) {
                 ?>
             <div class="card-footer p-2">
-                <div class="btn-group">
-                    <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:parent.document.getElementById('userwebpageiframe').src='".$url."';", 'far fa-eye'); ?>
-                    <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_use_page_template'), "javascript:document.setpagedef.sourcepagedef.value='".TGlobal::OutHTML($oPageLayout->id)."';document.setpagedef.submit();", 'far fa-check-circle'); ?>
+                <div class="btn-group button-element">
+                    <div class="button-item"><?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:console.log('".$url."');parent.document.getElementById('userwebpageiframe').src='".$url."';", 'far fa-eye'); ?></div>
+                    <div class="button-item"><?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_use_page_template'), "javascript:document.setpagedef.sourcepagedef.value='".TGlobal::OutHTML($oPageLayout->id)."';document.setpagedef.submit();", 'far fa-check-circle'); ?></div>
                 </div>
             </div>
             <?php
             } else {
                 ?>
             <div class="card-footer p-2 bg-success">
-                <?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:parent.document.getElementById('userwebpageiframe').src='".$url."';", 'far fa-eye'); ?>
+                <div class="btn-group button-element">
+                    <div class="button-item"><?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:parent.document.getElementById('userwebpageiframe').src='".$url."';", 'far fa-eye'); ?></div>
+                </div>
             </div>
             <?php
             } ?>
