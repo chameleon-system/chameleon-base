@@ -12,7 +12,7 @@
 /**
  * manages lists of data, provided methods to move forward and back in the list.
 /**/
-class TIterator
+class TIterator implements Iterator
 {
     private $itemPointer = 0;
     /**
@@ -377,4 +377,20 @@ class TIterator
     {
         $this->itemPointer = $itemPointer;
     }
+
+    public function key(): int
+    {
+        return $this->getItemPointer();
+    }
+
+    public function valid(): bool
+    {
+        return $this->getItemPointer() < $this->Length();
+    }
+
+    public function rewind(): void
+    {
+        $this->setItemPointer(0);
+    }
+
 }

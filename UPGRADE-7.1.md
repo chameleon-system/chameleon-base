@@ -17,6 +17,17 @@ Logout from the Chameleon backend.
 In `composer.json`, adjust version constraints for all Chameleon dependencies from `~7.0.0` to `~7.1.0` and run
 `composer update`.
 
+If your project requires `sensio/generator-bundle`, then remove it as the bundle has no support for symfony 4. You will
+also need to remove `\Sensio\Bundle\DistributionBundle\SensioDistributionBundle` and 
+`\Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle` from your `AppKernel`.
+
+Remove `\Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle` from your AppKernel as well.
+
+## Update your config*.yml
+
+If you are referencing parameters via `%parametername%` in your config files, you will need to make sure that these parameters
+are quoted.
+
 ## Upgrade you scripts section
 
 In `composer.json`, change the following lines under `symfony-scripts`
