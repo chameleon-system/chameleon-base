@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\ModuleService\ModuleExecutionStrategyInterface;
 use ChameleonSystem\CoreBundle\ModuleService\ModuleResolverInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\ViewRendererBundle\Twig\Loader\ChameleonTwigLoader;
 use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -71,9 +72,21 @@ class TModuleLoader
      * @var RequestInfoServiceInterface
      */
     private $requestInfoService;
+    /**
+     * @var ChameleonTwigLoader
+     */
+    private $twigLoader;
 
-    public function __construct(RequestStack $requestStack, ModuleResolverInterface $moduleResolver, IViewPathManager $viewPathManager, CacheInterface $cache, TGlobalBase $global, ModuleExecutionStrategyInterface $moduleExecutionStrategy, RequestInfoServiceInterface $requestInfoService)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        ModuleResolverInterface $moduleResolver,
+        IViewPathManager $viewPathManager,
+        CacheInterface $cache,
+        TGlobalBase $global,
+        ModuleExecutionStrategyInterface $moduleExecutionStrategy,
+        RequestInfoServiceInterface $requestInfoService,
+        ChameleonTwigLoader $twigLoader
+    ) {
         $this->requestStack = $requestStack;
         $this->moduleResolver = $moduleResolver;
         $this->viewPathManager = $viewPathManager;
@@ -81,6 +94,7 @@ class TModuleLoader
         $this->global = $global;
         $this->moduleExecutionStrategy = $moduleExecutionStrategy;
         $this->requestInfoService = $requestInfoService;
+        $this->twigLoader = $twigLoader;
     }
 
     /**
@@ -134,6 +148,22 @@ class TModuleLoader
         foreach ($moduleList as $name => $config) {
             // @TODO: check if the class is a descendant of TModelBase
             $this->modules[$name] = &$this->_SetModuleConfigData($name, $config, $templateLanguage);
+
+            if (false === \array_key_exists('moduleType', $config)) {
+                // NOTE this is only set for backend modules (in pagedef file)
+
+                continue;
+            }
+
+            // TODO the name "type" is wrong here (at least modern it is a resource identifier)
+
+            $moduleType = $config['moduleType'];
+
+            if (null === $moduleType || '' === $moduleType || '@' !== $moduleType[0]) {
+                continue;
+            }
+
+            $this->twigLoader->addBackendModuleResource($moduleType);
         }
     }
 
