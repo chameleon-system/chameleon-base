@@ -18,7 +18,10 @@ require_once PATH_LIBRARY.'/classes/TCMSListManager/tcms_functionblock_callback.
 require_once PATH_LIBRARY.'/classes/TCMSListManager/LoadCallbackLibrary.inc.php';
 
 /**
- * uses the TFullGroupTable to manage the list.
+ * Uses the TFullGroupTable to manage the list.
+ *
+ * Saves the current table object in the `_listObjCache` session variable in order to
+ * support stateful lists (e.g. for sorting). {@see getTableFromSessionCache} {@see saveTableInSessionCache}
  */
 class TCMSListManagerFullGroupTable extends TCMSListManager
 {
@@ -576,7 +579,21 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     }
 
     /**
-     * adds the orderby info to the table.
+     * Adds / modifies the `orderList` of the table object. This method relies on the fact, that
+     * the table object (including the `orderList`) is saved in the session {@see saveTableInSessionCache}
+     * in order to build complex filters.
+     *
+     * The `_sort_order` GET parameter is being used in order to cycle through different sorting
+     * modes for the property used as value. The modes being cycled are: ascending, descending, no sorting.
+     *
+     * If there is no object currently cached in the session, then the sorting is initialized to its
+     * defaults based on the table configuration.
+     *
+     * NOTE: The reliance on the session cache means that cycling through the modes and having multiple
+     *       sorted fields will not work correctly, if the session cache is disabled {@see isTableCachingEnabled}
+     *       as the current sorting state is not persisted in the session.
+     *
+     * @return void
      */
     public function AddSortInformation()
     {
@@ -591,6 +608,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         $objectChangeRequest = (isset($postdata['_listName']) && $postdata['_listName'] == 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident']);
         if (array_key_exists('_sort_order', $postdata) && !empty($postdata['_sort_order']) && $objectChangeRequest) {
+            // Toggling of existing filters
             if (array_key_exists($postdata['_sort_order'], $this->tableObj->orderList)) {
                 if ('ASC' === $this->tableObj->orderList[$postdata['_sort_order']]) {
                     $this->tableObj->orderList[$postdata['_sort_order']] = 'DESC';
@@ -601,6 +619,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 $this->tableObj->orderList[$postdata['_sort_order']] = 'ASC';
             }
         } elseif (false == $objectInSession) {
+            // Initialization of default filters
             $query = "SELECT `cms_tbl_display_orderfields`.*
                     FROM `cms_tbl_display_orderfields`
                    WHERE `cms_tbl_display_orderfields`.`cms_tbl_conf_id` = '{$this->oTableConf->id}'
