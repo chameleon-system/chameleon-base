@@ -11,9 +11,7 @@
 
 namespace ChameleonSystem\ViewRendererBundle\Twig\Loader;
 
-use Symfony\Component\HttpKernel\KernelInterface;
 use TPkgViewRendererSnippetDirectoryInterface;
-use Twig\Error\LoaderError;
 
 class ChameleonTwigLoader extends \Twig_Loader_Filesystem
 {
@@ -23,10 +21,6 @@ class ChameleonTwigLoader extends \Twig_Loader_Filesystem
     private $snippetDirectory;
 
     private $initialized = false;
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
 
     public function __construct(TPkgViewRendererSnippetDirectoryInterface $snippetDirectory)
     {

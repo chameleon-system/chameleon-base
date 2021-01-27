@@ -16,7 +16,6 @@ use ChameleonSystem\CoreBundle\ModuleService\ModuleExecutionStrategyInterface;
 use ChameleonSystem\CoreBundle\ModuleService\ModuleResolverInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\ViewRendererBundle\Twig\Loader\ChameleonTwigLoader;
 use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -72,10 +71,6 @@ class TModuleLoader
      * @var RequestInfoServiceInterface
      */
     private $requestInfoService;
-    /**
-     * @var ChameleonTwigLoader
-     */
-    private $twigLoader;
 
     public function __construct(
         RequestStack $requestStack,
