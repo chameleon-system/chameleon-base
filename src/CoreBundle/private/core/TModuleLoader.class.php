@@ -84,8 +84,7 @@ class TModuleLoader
         CacheInterface $cache,
         TGlobalBase $global,
         ModuleExecutionStrategyInterface $moduleExecutionStrategy,
-        RequestInfoServiceInterface $requestInfoService,
-        ChameleonTwigLoader $twigLoader
+        RequestInfoServiceInterface $requestInfoService
     ) {
         $this->requestStack = $requestStack;
         $this->moduleResolver = $moduleResolver;
@@ -94,7 +93,6 @@ class TModuleLoader
         $this->global = $global;
         $this->moduleExecutionStrategy = $moduleExecutionStrategy;
         $this->requestInfoService = $requestInfoService;
-        $this->twigLoader = $twigLoader;
     }
 
     /**
@@ -148,22 +146,6 @@ class TModuleLoader
         foreach ($moduleList as $name => $config) {
             // @TODO: check if the class is a descendant of TModelBase
             $this->modules[$name] = &$this->_SetModuleConfigData($name, $config, $templateLanguage);
-
-            if (false === \array_key_exists('moduleType', $config)) {
-                // NOTE this is only set for backend modules (in pagedef file)
-
-                continue;
-            }
-
-            // TODO the name "type" is wrong here (at least modern it is a resource identifier)
-
-            $moduleType = $config['moduleType'];
-
-            if (null === $moduleType || '' === $moduleType || '@' !== $moduleType[0]) {
-                continue;
-            }
-
-            $this->twigLoader->addBackendModuleResource($moduleType);
         }
     }
 

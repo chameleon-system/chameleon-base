@@ -13,7 +13,7 @@ $layoutTemplate = 'default';
 $moduleList = [
     'contentmodule' => [
         'model' => 'chameleon_system_core.module.navigation_tree',
-        'moduleType' => '@ChameleonSystemCoreBundle',
+        'moduleType' => '@CoreBundle',
         'view' => 'standard',
     ],
 ];
