@@ -12,7 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Service;
 
 /**
- * @deprecated since 6.3.10 - the breadcrumb in the backend is now a true breadcrumb (BreadcrumbBackendModule)
+ * @deprecated since 7.0.12 - the breadcrumb in the backend is now a true breadcrumb (BreadcrumbBackendModule)
  */
 interface BackendBreadcrumbServiceInterface
 {

@@ -189,7 +189,7 @@ class CMSTemplateEngine extends TCMSModelBase
     }
 
     /**
-     * @deprecated since 6.3.10 - the breadcrumb in the backend is now a true breadcrumb (BreadcrumbBackendModule)
+     * @deprecated since 7.0.12 - the breadcrumb in the backend is now a true breadcrumb (BreadcrumbBackendModule)
      */
     public function AddURLHistory()
     {

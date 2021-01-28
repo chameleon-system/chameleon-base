@@ -262,7 +262,7 @@
         </service>
 
         <service id="chameleon_system_core.listener.backend_breadcrumb" class="ChameleonSystem\CoreBundle\EventListener\BackendBreadcrumbListener">
-            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3.10 and will be removed in a later version.</deprecated>
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 7.0.12 and will be removed in a later version.</deprecated>
             <argument type="service" id="request_stack"/>
             <argument type="service" id="chameleon_system_core.request_info_service"/>
             <argument type="service" id="chameleon_system_core.util.input_filter" />
@@ -891,7 +891,7 @@
         </service>
 
         <service id="chameleon_system_core.service.backend_breadcrumb" class="ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService">
-            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3.10 and will be removed in a later version.</deprecated>
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 7.0.12 and will be removed in a later version.</deprecated>
             <argument type="service" id="request_stack"/>
         </service>
 
@@ -904,7 +904,7 @@
         </service>
 
         <service id="chameleon_system_core.event_listener.cleanup_breadcrumb_after_delete_listener" class="ChameleonSystem\CoreBundle\EventListener\CleanupBreadcrumbAfterDeleteListener">
-            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3.10 and will be removed in a later version.</deprecated>
+            <deprecated>The "%service_id%" service is deprecated since Chameleon 7.0.12 and will be removed in a later version.</deprecated>
             <tag name="kernel.event_listener" event="chameleon_system_core.delete_record" method="onRecordDelete" />
 
             <argument type="service" id="chameleon_system_core.service.backend_breadcrumb"/>

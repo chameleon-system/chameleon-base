@@ -16,7 +16,7 @@ use Symfony\Component\Routing\RouterInterface;
 class TCMSModelBase extends TModelBase
 {
     /**
-     * @deprecated since 6.3.10 - the breadcrumb in the backend is now a true breadcrumb (BreadcrumbBackendModule)
+     * @deprecated since 7.0.12 - the breadcrumb in the backend is now a true breadcrumb (BreadcrumbBackendModule)
      *
      * returns true if the module may add its url to the history object.
      *
