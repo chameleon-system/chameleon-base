@@ -29,7 +29,7 @@ TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'de')
     ->setFields([
-        'translation' => 'Menü-Eintrag Lookup',
+        '049_trans' => 'Menü-Eintrag Lookup',
     ])
     ->setWhereEquals([
         'id' => $fieldTypeId,
