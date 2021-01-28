@@ -409,17 +409,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
         }
 
         if (true === $this->requestInfoService->isBackendMode()) {
-            $allBundles = $this->kernel->getBundles();
-
-            foreach($allBundles as $resource => $bundle) {
-                $path = $bundle->getPath().'/Resources/views/'.$sBaseDirectory;
-
-                if (false === \is_dir($path)) {
-                    continue;
-                }
-
-                $aBasePaths[$sPortalCacheId][] = $path;
-            }
+            $aBasePaths[$sPortalCacheId] = $this->addBundlePaths($aBasePaths[$sPortalCacheId], $sBaseDirectory);
 
             // TODO or also use a "snippet chain" field for the backend theme? (table cms_config_themes)
         }
@@ -464,5 +454,22 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
     public function getBasePathsFromInstance($oPortal = null, $sBaseDirectory = null)
     {
         return $this->getBasePaths($oPortal, $sBaseDirectory);
+    }
+
+    private function addBundlePaths(array $paths, string $directorySuffix): array
+    {
+        $allBundles = $this->kernel->getBundles();
+
+        foreach($allBundles as $resource => $bundle) {
+            $path = $bundle->getPath().'/Resources/views/'.$directorySuffix;
+
+            if (false === \is_dir($path)) {
+                continue;
+            }
+
+            $paths[] = $path;
+        }
+
+        return $paths;
     }
 }
