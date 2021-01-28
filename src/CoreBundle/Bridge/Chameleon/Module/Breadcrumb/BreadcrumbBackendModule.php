@@ -65,8 +65,13 @@ class BreadcrumbBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->translator = $translator;
     }
 
-    // NOTE caching is difficult here because cache delete triggers would need to include virtually every table
-    //   as any entry's name might end up in the breadcrumb.
+    public function _AllowCache()
+    {
+        // NOTE caching is difficult here because cache delete triggers would need to include virtually every table
+        //   as any entry's name might end up in the breadcrumb.
+
+        return false;
+    }
 
     /**
      * {@inheritDoc}
