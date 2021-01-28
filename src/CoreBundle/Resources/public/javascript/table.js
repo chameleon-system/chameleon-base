@@ -112,8 +112,7 @@ $(document).ready(function () {
 
     // force links inside table cells to fixed height based on TR height
     $('.TCMSListManagerFullGroupTable tr.TGroupTableItemRow').each(function () {
-        var TRHeight = $(this).innerHeight() - 13; // - TD padding and borders
-        $(this).find('a.TGroupTableLink').css('height', TRHeight);
+        $(this).find('a.TGroupTableLink').css('height', $(this).height());
     });
 
     CHAMELEON.CORE.initializeEntryAutocomplete($('input#searchLookup'));
