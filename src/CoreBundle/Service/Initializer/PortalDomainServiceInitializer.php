@@ -115,7 +115,7 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
             $frontController = '/'.$frontController;
         }
         if ($frontController === $sRelativePath) {
-            $pagedef = $request->query->get('pagedef');
+            $pagedef = $request->attributes->get('pagedef');
             if (null !== $pagedef) {
                 $oPage = \TdbCmsTplPage::GetNewInstance();
                 if ($oPage->Load($pagedef)) {

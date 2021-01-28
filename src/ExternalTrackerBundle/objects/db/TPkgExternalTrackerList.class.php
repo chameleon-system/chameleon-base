@@ -228,20 +228,16 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
      */
     public static function GetActiveItemSQLSnippet()
     {
-        $sActive = '';
-        if (!TGlobal::IsCMSMode()) {
-            $oGlobal = TGlobal::instance();
-            $sFieldActive = 'active';
-            if (TdbPkgExternalTracker::CMSFieldIsTranslated($sFieldActive)) {
-                $sFieldActive .= $oGlobal->GetActiveLanguagePrefix('__');
-            }
-            $sActive = " (`pkg_external_tracker`.`{$sFieldActive}` = '1')";
-            $sActive .= TdbPkgExternalTrackerList::GetActiveForPortalItemSQLSnippet();
-        } else {
-            $sActive = ' 1 = 1';
+        if (true === TGlobal::IsCMSMode()) {
+            return ' 1 = 1';
         }
 
-        return $sActive;
+        $sFieldActive = 'active';
+        if (TdbPkgExternalTracker::CMSFieldIsTranslated($sFieldActive)) {
+            $sFieldActive = self::getFieldTranslationUtil()->getTranslatedFieldName('pkg_external_tracker', 'active');
+        }
+
+        return " (`pkg_external_tracker`.`{$sFieldActive}` = '1')".TdbPkgExternalTrackerList::GetActiveForPortalItemSQLSnippet();
     }
 
     public static function GetActiveForPortalItemSQLSnippet()

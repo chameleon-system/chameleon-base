@@ -224,7 +224,6 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                 $oUser->Register();
 
                 $this->UpdateUserAddress(null, null, true);
-                $this->PostRegistrationHook();
                 // redirect to registration success page
                 if (!is_null($sSuccessURL)) {
                     $this->RedirectToURL($sSuccessURL, true);
@@ -237,15 +236,6 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         if (!is_null($sFailureURL)) {
             $this->RedirectToURL($sFailureURL, true);
         }
-    }
-
-    /**
-     * Called after a successful registration.
-     *
-     * @deprecated - you should consider placing your login in TDataExtranetUser::PostRegistrationHook
-     */
-    protected function PostRegistrationHook()
-    {
     }
 
     /**
@@ -745,9 +735,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             if (is_array($oOldUser->sqlData) && array_key_exists($sFieldName, $oOldUser->sqlData) && is_array($oUser->sqlData) && array_key_exists($sFieldName, $oUser->sqlData)) {
                 $sNewValue = $oUser->sqlData[$sFieldName];
                 if ('password' == $sFieldName) {
-                    /** @var IPkgCmsSecurity_Password $oPwd */
-                    $oPwd = ServiceLocator::get('password');
-                    if (false === $oPwd->verify($sNewValue, $oOldUser->sqlData[$sFieldName])) {
+                    if (false === $this->getPasswordHashGenerator()->verify($sNewValue, $oOldUser->sqlData[$sFieldName])) {
                         $bPasswordIsRequired = true;
                         break;
                     }
@@ -1032,20 +1020,13 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                         $this->data['bPasswordChanged'] = true;
                     }
                 }
+            } elseif (null !== $oUser && false === $oUser->IsPasswordChangeKeyValid()) {
+                $oMessage->AddMessage(TdbDataExtranetUser::MSG_FORM_FIELD, 'EXTRANET-FORGOT-PASSWORD-CHANGE-KEY-INVALID');
             } else {
                 $oMessage->AddMessage(TdbDataExtranetUser::MSG_FORM_FIELD, 'EXTRANET-FORGOT-PASSWORD-WRONG-USER-NAME');
             }
         } else { // show password change form
-            $oUser = $oUser->GetValidatedLoginUser($inputFilterUtil->getFilteredGetInput(TDataExtranetCore::URL_PARAMETER_LOGINNAME));
-            if (null !== $oUser && $passwordHashGenerator->verify($sToken, $oUser->fieldPasswordChangeKey)) {
-                $bPasswordChangeKeyValid = $oUser->IsPasswordChangeKeyValid();
-                if (!$bPasswordChangeKeyValid) {
-                    $oMessage->AddMessage(TdbDataExtranetUser::MSG_FORM_FIELD, 'EXTRANET-FORGOT-PASSWORD-CHANGE-KEY-INVALID');
-                }
-                $sUsername = $oUser->fieldName;
-            } else {
-                $oMessage->AddMessage(TdbDataExtranetUser::MSG_FORM_FIELD, 'EXTRANET-FORGOT-PASSWORD-USER-NOT-FOUND');
-            }
+            $oUser = null;
         }
 
         $this->data['sUsername'] = $sUsername;

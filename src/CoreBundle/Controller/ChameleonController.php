@@ -15,12 +15,12 @@ use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
+use ChameleonSystem\CoreBundle\Event\FilterContentEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ErrorException;
@@ -65,12 +65,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     public $moduleLoader;
     /**
-     * @var string
-     *
-     * @deprecated since 6.2.0 - not used anymore
-     */
-    protected $redirectPageDef;
-    /**
      * @var array
      *
      * @deprecated since 6.3.0 - not used anymore
@@ -106,15 +100,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private $eventDispatcher;
     /**
-     * @var PortalDomainServiceInterface
-     *
-     * @deprecated since 6.1.9 - no longer used in this class.
-     */
-    protected $portalDomainService;
-    /**
      * @var RequestInfoServiceInterface
      */
-    protected $requestInfoService;
+    private $requestInfoService;
     /**
      * @var ICmsCoreRedirect
      *
@@ -141,7 +129,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
-        PortalDomainServiceInterface $portalDomainService,
         RequestInfoServiceInterface $requestInfoService,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
@@ -152,7 +139,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->moduleLoader->setController($this);
         $this->viewPathManager = $viewPathManager;
         $this->eventDispatcher = $eventDispatcher;
-        $this->portalDomainService = $portalDomainService;
         $this->dataAccessCmsMasterPagedef = $dataAccessCmsMasterPagedef;
         $this->requestInfoService = $requestInfoService;
     }
@@ -542,7 +528,10 @@ abstract class ChameleonController implements ChameleonControllerInterface
                 $bHeaderParsed = true;
             }
         }
-        $sPageContent = $this->responseVariableReplacer->replaceVariables($sPageContent);
+
+        $event = new FilterContentEvent($sPageContent);
+        $this->eventDispatcher->dispatch($event, CoreEvents::FILTER_CONTENT);
+        $sPageContent = $event->getContent();
         $this->sGeneratedPage .= $sPageContent;
 
         return $sPageContent;
@@ -700,8 +689,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * return an array of variables to search/replace in the rendered page
-     * use this hook to add vars that should never be cached
-     * note: see TGlobalBase::ReplaceCustomVariablesInString() to find out what format the variables must have in your html code.
+     * use this hook to add vars that should never be cached.
      *
      * @return array
      *
@@ -718,18 +706,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         }
 
         return $this->postRenderVariables;
-    }
-
-    /**
-     * return the time the process has run so far.
-     *
-     * @return float
-     *
-     * @deprecated since 6.2.0 - use a proper external tool to measure performance.
-     */
-    public function GetExecutionTime()
-    {
-        return 0;
     }
 
     /**
@@ -845,29 +821,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     protected function handleRequest($pagedef)
     {
-        $request = $this->getRequest();
-        if (null !== $pagedef) {
-            $request->query->set('pagedef', $pagedef);
-        }
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @deprecated since 6.1.9 - use an event listener for Symfony or Chameleon lifecycle events instead. The event that
-     * corresponds to this method in terms of execution order is CoreEvents::CHANGE_ACTIVE_PAGE.
-     */
-    protected function postRoutingHook(Request $request)
-    {
-    }
-
-    /**
-     * @param bool $outputPageLoadTimeInfo
-     *
-     * @deprecated since 6.2.0 - use a proper external tool to measure performance.
-     */
-    public function setOutputPageLoadTimeInfo($outputPageLoadTimeInfo)
-    {
     }
 
     /**
@@ -896,8 +849,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * @param RequestInfoServiceInterface $requestInfoService
-     *
-     * @deprecated since 6.1.9 - no longer used in this class.
      */
     public function setRequestInfoService($requestInfoService)
     {

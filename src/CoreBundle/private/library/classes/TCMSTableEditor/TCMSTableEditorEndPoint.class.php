@@ -17,6 +17,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,15 +32,6 @@ class TCMSTableEditorEndPoint
      * this is needed to prevent recursive deletes with DeleteRecordReferences.
      */
     const DELETE_BLACKLIST_SESSION_VAR = 'aDeleteBlacklist';
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * session variable name for whitelists of all record revisions that will be loaded and may be
-     * deleted in DeleteRecordReferences
-     * holds an TIterator object of all record revisions.
-     */
-    const DELETE_REFERENCES_REVISION_DATA_WHITELIST_SESSION_VAR = 'oDeleteReferencesRevisionDataWhitelist';
 
     /**
      * pointer to the oTableConf item.
@@ -102,16 +94,6 @@ class TCMSTableEditorEndPoint
     protected $editOnly = false;
 
     /**
-     * array of errors to show on ajax save requests.
-     *
-     * @deprecated use TCMSMessagemanger instead
-     * @see TCMSField::CheckMandatoryField()
-     *
-     * @var array
-     */
-    protected $aErrors = array();
-
-    /**
      * if set to true, no user access rights will be checked.
      *
      * @var bool
@@ -147,34 +129,6 @@ class TCMSTableEditorEndPoint
      * @var array
      */
     public $methodCallAllowed = array();
-
-    /**
-     * indicates if Save/Insert/Delete should bypass the workflow handling
-     * (needed for publishing a record).
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected $bBypassWorkflow = false;
-
-    /**
-     * indicates if the workflow engine is active in CMS and for the current table.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public $bWorkflowActive = false;
-
-    /**
-     * is true if a record was saved using workflow and has "insert" state.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected $bWorkflowIsUpdateFollowingAnInsert = false;
 
     /**
      * if true the PostSaveHook function for fields wont be execute.
@@ -271,18 +225,6 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * sets the workflow bypass switch
-     * don`t forget to reset the switch after use.
-     *
-     * @param bool $bBypassWorkflow
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function SetWorkflowByPass($bBypassWorkflow = false)
-    {
-    }
-
-    /**
      * use this to change the "allow edit by all" setting.
      *
      * @param bool $bSetting
@@ -324,22 +266,6 @@ class TCMSTableEditorEndPoint
     public function ForceHiddenFieldWriteOnSave($bForceHiddenFieldWriteOnSave = true)
     {
         $this->bForceHiddenFieldWriteOnSave = $bForceHiddenFieldWriteOnSave;
-    }
-
-    /**
-     * sets the workflow state
-     * checks cms config, workflow activation for the table and bypass switch
-     * if not optional $bState parameter is set.
-     *
-     * @param bool $bState - optional
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function SetWorkflowState($bState = null)
-    {
-        return false;
     }
 
     /**
@@ -392,19 +318,6 @@ class TCMSTableEditorEndPoint
         }
 
         return $bIsOwner;
-    }
-
-    /**
-     * checks transaction ownership if table is marked for workflow.
-     *
-     * @return bool - returns true if current user is owner or record has
-     *              no active transaction
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function IsTransactionOwner()
-    {
-        return true;
     }
 
     /**
@@ -784,14 +697,14 @@ class TCMSTableEditorEndPoint
         if (!is_null($this->sId) && !empty($this->sId)) {
             $this->oTable = $this->GetNewTableObjectForEditor();
             $oCmsConfiguration = TdbCmsConfig::GetInstance();
-            $sActiveLanguageId = TGlobal::GetActiveLanguageId();
+            $sActiveLanguageId = $this->getLanguageService()->getActiveLanguageId();
             $oDefaultLanguage = $oCmsConfiguration->GetFieldTranslationBaseLanguage();
             if ($oDefaultLanguage && $sActiveLanguageId != $oDefaultLanguage->id) {
                 $oCmsConfiguration->SetLanguage($oDefaultLanguage->id);
                 $this->oTable->SetLanguage($oDefaultLanguage->id);
             }
             $this->oTable->Load($this->sId);
-            if ($oDefaultLanguage && $sActiveLanguageId = !$oDefaultLanguage->id) {
+            if ($oDefaultLanguage && $sActiveLanguageId !== $oDefaultLanguage->id) {
                 $oCmsConfiguration->SetLanguage($oCmsConfiguration->GetLanguage());
             }
         }
@@ -1360,37 +1273,6 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * inserts/updates log entry in cms_workflow_action.
-     *
-     * @param string $sType               - 1=INSERT,2=UPDATE,3=DELETE
-     * @param string $sActionLogID        - NULL or id of existing action log
-     * @param array  $aWorkflowActionData - additional log record data
-     *
-     * @return false
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function SaveWorkflowActionLog($sType = '1', $sActionLogID = null, $aWorkflowActionData = array())
-    {
-        return false;
-    }
-
-    /**
-     * returns the title for the workflow transaction.
-     *
-     * @param string $sType          - 1,2,3 new, edited, deleted
-     * @param string $sPreviewPageID - id of the connected page of the record
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function GetTransactionTitle($sType = '1', $sPreviewPageID = null)
-    {
-        return '';
-    }
-
-    /**
      * is called only from Delete method and calls all delete relevant methods
      * executes the final SQL Delete Query.
      */
@@ -1433,7 +1315,6 @@ class TCMSTableEditorEndPoint
      */
     public function &CopyClass($id)
     {
-        $oClass = null;
         $oClass = clone $this;
         $oClass->Init($this->sTableId, $id);
         $oClass->sRestriction = $this->sRestriction;
@@ -1590,11 +1471,7 @@ class TCMSTableEditorEndPoint
      */
     protected function GetLanguageListForDatabaseCopy()
     {
-        $oLanguageList = null;
-        $oCmsConfig = &TdbCmsConfig::GetInstance();
-        $oLanguageList = $oCmsConfig->GetFieldCmsLanguageList();
-
-        return $oLanguageList;
+        return TdbCmsConfig::GetInstance()->GetFieldCmsLanguageList();
     }
 
     /**
@@ -1626,7 +1503,7 @@ class TCMSTableEditorEndPoint
             $bRecordExists = TTools::RecordExists($tableName, 'id', $oData->id);
         }
         $bIsUpdateCall = (!is_null($oData->id) && !empty($oData->id));
-        $bIsUpdateCall = (($bIsUpdateCall && $bRecordExists && $bForceInsert) || ($bIsUpdateCall && !$bForceInsert));
+        $bIsUpdateCall = $bIsUpdateCall && (($bRecordExists && $bForceInsert) || (!$bForceInsert));
 
         $this->bIsUpdateCall = $bIsUpdateCall;
 
@@ -1643,7 +1520,7 @@ class TCMSTableEditorEndPoint
         } else {
             $oLanguageCopyList = new TIterator();
         }
-        $setFields = array();
+        $dataForChangeRecorder = array();
         $setLanguageFields = array();
         /** @var $oField TCMSField */
         while ($oField = $oFields->Next()) {
@@ -1657,13 +1534,13 @@ class TCMSTableEditorEndPoint
             }
 
             if ($this->bForceHiddenFieldWriteOnSave) {
-                $bAllowChangingField = true;
+                $isFieldChangeAllowed = true;
             } else {
-                $bAllowChangingField = (!$bIsUpdateCall || ('hidden' != $sFieldDisplayType && 'edit-on-click' != $sFieldDisplayType && 'readonly-if-filled' != $sFieldDisplayType && 'readonly' != $sFieldDisplayType));
+                $isFieldChangeAllowed = (false === $bIsUpdateCall || ('hidden' != $sFieldDisplayType && 'edit-on-click' != $sFieldDisplayType && 'readonly-if-filled' != $sFieldDisplayType && 'readonly' != $sFieldDisplayType));
             }
 
             // prevent saving fields the user has no access to
-            if ($bAllowChangingField) {
+            if (true === $isFieldChangeAllowed) {
                 $sqlValue = '';
                 $writeField = true;
                 if (!$this->bPreventPreGetSQLHookOnFields && empty($isCopy) && !empty($bIsUpdateCall)) {
@@ -1692,7 +1569,7 @@ class TCMSTableEditorEndPoint
                     $aPropertyFields[] = $oField;
                 }
                 // now convert field name (if this is a multi-language field)
-                $sTargetFieldName = $oField->oDefinition->GetRealEditFieldName($languageId);
+                $sqlFieldNameWithLanguageCode = $oField->oDefinition->GetRealEditFieldName($languageId);
                 if (false !== $sqlValue && false !== $writeField) {
                     if ($isFirst) {
                         $isFirst = false;
@@ -1700,35 +1577,37 @@ class TCMSTableEditorEndPoint
                     } else {
                         $query .= ', ';
                     }
+
                     if ($bCopyAllLanguages && '1' == $oField->oDefinition->sqlData['is_translatable']) {
-                        $sTargetFieldName = $oField->oDefinition->sqlData['name'];
-                        $sqlValue = $oField->oTableRow->sqlData[$sTargetFieldName];
+                        $sqlFieldNameWithLanguageCode = $oField->oDefinition->sqlData['name'];
+                        $sqlValue = $oField->oTableRow->sqlData[$sqlFieldNameWithLanguageCode];
                         $oLanguageCopyList->GoToStart();
                         while ($oLanguageCopy = $oLanguageCopyList->Next()) {
                             $sTargetFieldNameLanguage = $oField->oDefinition->GetEditFieldNameForLanguage($oLanguageCopy);
-                            if ($sTargetFieldNameLanguage && $sTargetFieldNameLanguage !== $sTargetFieldName) {
+                            if ($sTargetFieldNameLanguage && $sTargetFieldNameLanguage !== $sqlFieldNameWithLanguageCode) {
                                 $sqlValueLanguage = $oField->oTableRow->sqlData[$sTargetFieldNameLanguage];
                                 $query .= ' `'.MySqlLegacySupport::getInstance()->real_escape_string($sTargetFieldNameLanguage)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValueLanguage)."', ";
 
                                 if (false === isset($setLanguageFields[$oLanguageCopy->fieldIso6391])) {
                                     $setLanguageFields[$oLanguageCopy->fieldIso6391] = array();
                                 }
-                                $setLanguageFields[$oLanguageCopy->fieldIso6391][$sTargetFieldName] = $sqlValueLanguage;
+                                $setLanguageFields[$oLanguageCopy->fieldIso6391][$sqlFieldNameWithLanguageCode] = $sqlValueLanguage;
                             }
                         }
                     }
-                    $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sTargetFieldName)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
-                    $setFields[$oField->name] = $sqlValue;
+
+                    $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguageCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
+                    $dataForChangeRecorder[$oField->name] = $sqlValue;
                 }
             }
         }
+
         if ($isFirst) {
             return false;
         } // no changes made... no fields to write
 
-        $bWasInserted = false;
+        $databaseChanged = false;
         $error = '';
-        $sourceRecordID = null;
         $whereConditions = array();
 
         if ($bIsUpdateCall) {
@@ -1738,17 +1617,16 @@ class TCMSTableEditorEndPoint
 
         $sourceRecordID = $this->sId;
 
-        if (!$bIsUpdateCall) {
-            $bWasInserted = false;
+        if (false === $bIsUpdateCall) {
+            $databaseChanged = false;
 
             // need to create an id.. try to insert until we have a free id. We will try at most 3 times
 
             $iMaxTry = 3;
-            $uid = null;
             do {
                 $uid = TTools::GetUUID();
                 $sInsertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($uid)."'";
-                $setFields['id'] = $uid;
+                $dataForChangeRecorder['id'] = $uid;
                 MySqlLegacySupport::getInstance()->query($sInsertQuery);
                 $error = MySqlLegacySupport::getInstance()->error();
                 if (!empty($error)) {
@@ -1760,32 +1638,37 @@ class TCMSTableEditorEndPoint
                     }
                 } else {
                     $query = $sInsertQuery;
-                    $bWasInserted = true;
+                    $databaseChanged = true;
                     $this->sId = $uid;
                 }
                 --$iMaxTry;
-            } while ($iMaxTry > 0 && !$bWasInserted);
+            } while ($iMaxTry > 0 && false === $databaseChanged);
         } else {
             if (MySqlLegacySupport::getInstance()->query($query)) {
-                $bWasInserted = true;
+                $databaseChanged = true;
             } else {
                 $error = MySqlLegacySupport::getInstance()->error();
             }
         }
 
-        // we need this because we use a redirect later and would not see the error message, we need to change this later to a nice error_logging or something
-        if ($bWasInserted) {
+        if ($databaseChanged) {
             $this->LoadDataFromDatabase();
-            if ($this->IsQueryLoggingAllowed()) {
-                $this->writePostWriteLogChangeData($bIsUpdateCall, $setFields, $whereConditions, $setLanguageFields);
+            if (true === $this->isRecordingActive() && \count($dataForChangeRecorder) > 0) {
+                $this->writePostWriteLogChangeData(
+                    $bIsUpdateCall,
+                    $dataForChangeRecorder,
+                    $whereConditions,
+                    $setLanguageFields
+                );
             }
 
             TCacheManager::PerformeTableChange($tableName, $this->sId);
         } else {
+            // we need this because we use a redirect later and would not see the error message
             TTools::WriteLogEntrySimple('SQL Error: '.$error, 1, __FILE__, __LINE__);
         }
 
-        if ($bWasInserted) {
+        if ($databaseChanged) {
             // handle MLT and Property Tables only if we do a copy
             if ($isCopy && !is_null($sourceRecordID)) { // copy fields only if there is no current record ID and it's not a table create
                 // copy MLT fields
@@ -1808,6 +1691,13 @@ class TCMSTableEditorEndPoint
         }
 
         return $bSaveSuccess;
+    }
+    
+    private function isRecordingActive(): bool
+    {
+        $migrationRecorderStateHandler = $this->getMigrationRecorderStateHandler();
+        
+        return $this->IsQueryLoggingAllowed() && $migrationRecorderStateHandler->isDatabaseLoggingActive();
     }
 
     /**
@@ -1887,29 +1777,6 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * calls SaveWorkflowActionLog for an insert and saves the new action id to the current record.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function AddInsertWorkflowAction()
-    {
-    }
-
-    /**
-     * updates or inserts a workflow action log for current Update/Insert Request.
-     *
-     * @param array $aWorkflowData - array of sql data to be saved in workflow_action log
-     *
-     * @return false
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function AddUpdateWorkflowAction($aWorkflowData = array())
-    {
-        return false;
-    }
-
-    /**
      * copy multiple linked foreign record connections.
      *
      * @param TCMSMLTField $oField
@@ -1966,9 +1833,8 @@ class TCMSTableEditorEndPoint
      * called by the DeleteRecordReferences method on every property field for the current record being deleted.
      *
      * @param TCMSFieldDefinition $oPropertyField
-     * @param $bRevisionActivationMode bool - (@deprecated since 6.3.0 - revision management is no longer supported)
      */
-    protected function DeleteRecordReferencesProperties(&$oPropertyField, $bRevisionActivationMode = false)
+    protected function DeleteRecordReferencesProperties(&$oPropertyField)
     {
         $oPropertyFieldObject = $this->oTableConf->GetField($oPropertyField->sqlData['name'], $this->oTable, true);
         /** @var $oPropertyFieldObject TCMSFieldPropertyTable */
@@ -1982,26 +1848,22 @@ class TCMSTableEditorEndPoint
 
             $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($propertyTable).'` WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($foreignKeyName)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'";
 
-            $sRecordIdWhiteList = '';
-
-            if (!$bRevisionActivationMode || ($bRevisionActivationMode && !empty($sRecordIdWhiteList))) {
-                $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $propertyTable).'List';
-                $oRecordList = call_user_func_array(array($sClassName, 'GetList'), array($query, null, false, true, true));
-                while ($oRecord = $oRecordList->Next()) {
-                    /** @var $oRecord TCMSRecord */
-                    $oTableConf = $oRecord->GetTableConf();
-                    $oEditor = new TCMSTableEditorManager();
-                    $oEditor->Init($oTableConf->id, $oRecord->id);
-                    $oEditor->AllowEditByAll(true);
-                    $oEditor->AllowDeleteByAll(true);
-                    if ($bAllowRecordReferenceDeletion) {
-                        $oEditor->Delete($oRecord->id);
-                    } else {
-                        $oEditor->SaveField($foreignKeyName, '');
-                    }
-                    $oEditor->AllowDeleteByAll(false);
-                    $oEditor->AllowEditByAll(false);
+            $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $propertyTable).'List';
+            $oRecordList = call_user_func_array(array($sClassName, 'GetList'), array($query, null, false, true, true));
+            while ($oRecord = $oRecordList->Next()) {
+                /** @var $oRecord TCMSRecord */
+                $oTableConf = $oRecord->GetTableConf();
+                $oEditor = new TCMSTableEditorManager();
+                $oEditor->Init($oTableConf->id, $oRecord->id);
+                $oEditor->AllowEditByAll(true);
+                $oEditor->AllowDeleteByAll(true);
+                if ($bAllowRecordReferenceDeletion) {
+                    $oEditor->Delete($oRecord->id);
+                } else {
+                    $oEditor->SaveField($foreignKeyName, '');
                 }
+                $oEditor->AllowDeleteByAll(false);
+                $oEditor->AllowEditByAll(false);
             }
         }
     }
@@ -2211,16 +2073,14 @@ class TCMSTableEditorEndPoint
     /**
      * deletes all references from the deleted record to other records
      * property records and mlt connections.
-     *
-     * @param bool $bRevisionActivationMode (@deprecated since 6.3.0 - revision management is no longer supported)
      */
-    public function DeleteRecordReferencesFromSource($bRevisionActivationMode = false)
+    public function DeleteRecordReferencesFromSource()
     {
         // we need to delete any entries in related property tables...
         $oPropertyFields = &$this->oTableConf->GetFieldDefinitions(array('CMSFIELD_PROPERTY'));
         /* @var $oPropertyField TCMSFieldPropertyTable */
         while ($oPropertyField = $oPropertyFields->Next()) {
-            $this->DeleteRecordReferencesProperties($oPropertyField, $bRevisionActivationMode);
+            $this->DeleteRecordReferencesProperties($oPropertyField);
         }
 
         // now delete all mlt connections
@@ -2310,135 +2170,6 @@ class TCMSTableEditorEndPoint
      */
     public function ProcessFieldsBeforeDisplay(&$oFields)
     {
-    }
-
-    /**
-     * execute a rollback (resets all workflow changes).
-     *
-     *  @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function RollBack()
-    {
-    }
-
-    /**
-     * removes the record inserted using workflow.
-     *
-     *  @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function RollBackInsert()
-    {
-    }
-
-    /**
-     * removes the "update" state from record.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function RollBackUpdate()
-    {
-    }
-
-    /**
-     * removes the "delete" state from record.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function RollBackDelete()
-    {
-    }
-
-    /**
-     * publishes workflow changes.
-     *
-     * @return TCMSstdClass
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function Publish()
-    {
-        return new TCMSstdClass();
-    }
-
-    /**
-     * removes the "insert" state from record.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function PublishInsert()
-    {
-    }
-
-    /**
-     * saves the serialized data from workflow action log to the record
-     * and removes the "update" state from record.
-     *
-     * @return TCMSstdClass
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function PublishUpdate()
-    {
-        return new TCMSstdClass();
-    }
-
-    /**
-     * deletes the record.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function PublishDelete()
-    {
-    }
-
-    /**
-     * sets ownership of a transaction to current user and send notify email to old owner.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function GetTransactionOwnership()
-    {
-    }
-
-    /**
-     * generates a html table with all actions of the current transaction.
-     *
-     * @param string $sTransactionID
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function GetActionLogAsHTMLTable($sTransactionID)
-    {
-        return '';
-    }
-
-    /**
-     * send an email to the target user of a transaction delegation.
-     *
-     * @param string $sOldTransactionOwner
-     * @param array  $aData
-     * @param object $oLogRecordData       - stdClass
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function SendOwnershipMovedNotifyEmail($sOldTransactionOwner, $aData, $oLogRecordData)
-    {
-    }
-
-    /**
-     * adds an record to the cms_workflow_transaction_log table.
-     *
-     * @param array $aData
-     *
-     * @return TCMSstdClass|bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function InsertForwardLog($aData)
-    {
-        return false;
     }
 
     /**
@@ -2560,19 +2291,6 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * checks if current user is owner and no other transaction than the
-     * current active transaction is connected with this record.
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function IsRecordLockedByTransaction()
-    {
-        return false;
-    }
-
-    /**
      * returns true if record is locked by another user, a transaction or edit rights are missing.
      *
      * @return TdbCmsLock|bool
@@ -2588,171 +2306,6 @@ class TCMSTableEditorEndPoint
         }
 
         return $bIsReadOnlyMode;
-    }
-
-    /**
-     * tries to fetch a preview page if the table has a module instance id field.
-     *
-     * @return string|null - cms_tpl_page_id or NULL if no page available
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function GetWorkflowPreviewPageID()
-    {
-        return null;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * checks for the last revision number for this record,
-     * if no revisions are found it returns 0.
-     *
-     * @return int
-     */
-    public function GetLastRevisionNumber()
-    {
-        return 0;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * saves the record with data from database.
-     *
-     * @param TIterator  $oFields
-     * @param TCMSRecord $oTablerecord
-     * @param array      $postData
-     * @param string     $sParentId
-     *
-     * @return TCMSstdClass|bool - stdclass from GetObjectShortInfo - returns false if revision could not be saved
-     */
-    public function AddNewRevisionFromDatabase($oFields, $oTablerecord, $postData, $sParentId = '')
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * saves the record with $postData
-     * checks if postdata is valid and calls PostSaveHook after save.
-     *
-     * @param array $postData
-     * @param bool  $bPreventMessage - if true the save success message will be suppressed
-     *
-     * @return TCMSstdClass|bool - stdclass from GetObjectShortInfo - returns false if revision could not be saved
-     */
-    public function AddNewRevision(&$postData, $bPreventMessage = false)
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * save record inc. mlt connections and properties.
-     *
-     * @param TIterator  $oFields
-     * @param TCMSRecord $oPostTable
-     * @param array      $postData   post data from main object
-     * @param string     $sParentId  parent revision id
-     *
-     * @return TCMSstdClass|bool - stdclass from GetObjectShortInfo - returns false if revision could not be saved
-     */
-    protected function AddNewRevision_Execute($oFields, $oPostTable, $postData, $sParentId = '')
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * Get array with field name as key and field value.
-     *
-     * @param array     $aRevisionData
-     * @param TCMSField $oField
-     *
-     * @return array $aRevisionData
-     */
-    protected function AddNewRevisionForSingleFields($aRevisionData, $oField)
-    {
-        return $aRevisionData;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * Get connected record ids.
-     *
-     * @param TCMSField  $oField
-     * @param array      $aRevisionData
-     * @param TCMSRecord $oPostTable
-     *
-     * @return array $aRevisionData
-     */
-    protected function AddNewRevisionForMLTConnectedRecords($aRevisionData, $oField, $oPostTable)
-    {
-        return $aRevisionData;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * save revision for connected properties.
-     *
-     * @param TCMSField $oField
-     * @param array     $postData          post data from main object
-     * @param array     $sRevisionRecordId record id from main revision
-     *
-     * @return bool
-     */
-    protected function AddNewRevisionForConnectedPropertyRecords($oField, $postData, $sRevisionRecordId)
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * save revision.
-     *
-     * @param array  $postData
-     * @param array  $aRevisionData
-     * @param string $sParentId
-     *
-     * @return TCMSstdClass|bool
-     */
-    protected function SaveNewRevision($postData, $aRevisionData, $sParentId = '')
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * returns true if revision managament is activated for the CMS and the current table.
-     *
-     * @return bool
-     */
-    public function IsRevisionManagementActive()
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * loads record revision and saves it as the current record.
-     *
-     * @param string|null $sRevisionID
-     * @param bool        $bIsChildRevision
-     *
-     * @return TCMSstdClass|null
-     */
-    public function ActivateRecordRevision($sRevisionID = null, $bIsChildRevision = false)
-    {
-        return null;
     }
 
     /**
@@ -2805,88 +2358,6 @@ class TCMSTableEditorEndPoint
     }
 
     /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * loads revision and saves it as the current record.
-     *
-     * @param TdbCmsRecordRevision $oCMSRevisionToActivate
-     *
-     * @return TCMSstdClass
-     */
-    protected function ActivateRecordRevision_Execute($oCMSRevisionToActivate)
-    {
-        return new TCMSstdClass();
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * get all child revisions recursively.
-     *
-     * @param string $sCmsRecordRevisionId
-     * @param array  $aCMSChildRevisions
-     *
-     * @return array $aCMSChildRevisions
-     */
-    protected function GetRecordChildRevisions($sCmsRecordRevisionId, $aCMSChildRevisions = array())
-    {
-        return [];
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * get mlt target ids for mlt fields.
-     *
-     * @param TIterator $oFields
-     *
-     * @return array $aMLTRevisionIds
-     */
-    protected function GetMLTRevisionIds(&$oFields)
-    {
-        return [];
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * Get connected record ids.
-     *
-     * @param TIterator  $oFields
-     * @param TCMSRecord $oDBRecordTable
-     * @param array      $aMLTRevisionIds
-     */
-    protected function ActivateMLTRecordRevisions($oFields, $oDBRecordTable, $aMLTRevisionIds)
-    {
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * returns the revision number the current record is based on
-     * if no revisions are found it returns 1.
-     *
-     * @return int
-     */
-    public function GetLastActivatedRevision()
-    {
-        return 0;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * returns the revision object the current record is based on
-     * if no revisions are found it returns null.
-     *
-     * @return TdbCmsRecordRevision|null - returns null if no revision was found
-     */
-    public function GetLastActivatedRevisionObject()
-    {
-        return null;
-    }
-
-    /**
      * change position of current record
      * currently expects a list of ids to sort via get/post aPosOrder.
      *
@@ -2933,23 +2404,6 @@ class TCMSTableEditorEndPoint
         }
 
         return $iNewPositionOfCurrentRecord;
-    }
-
-    /**
-     * change position of current record
-     * currently expects a list of ids to sort via get/post aPosOrder
-     * (this is from the original code from CMSFieldPositionRPC from
-     * which this method was moved to here.).
-     *
-     * @param string $sPositionField
-     *
-     * @return int|null - returns NULL if position of current record did not change
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore - use UpdatePositionField() instead
-     */
-    public function UpdatePositionFieldIgnoringWorkflow($sPositionField)
-    {
-        return $this->UpdatePositionField($sPositionField);
     }
 
     /**
@@ -3109,5 +2563,10 @@ class TCMSTableEditorEndPoint
     private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+    
+    private function getMigrationRecorderStateHandler(): MigrationRecorderStateHandler
+    {
+        return ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');
     }
 }

@@ -9,10 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TCMSPkgCmsTextBlockTCMSTextField extends TCMSPkgCmsTextBlockTCMSTextFieldAutoParent
 {
-    private $aInternalTextBlockReplaceCache = array();
-
     /**
      * Replace CmsTextBlocks in String.
      *
@@ -53,12 +54,16 @@ class TCMSPkgCmsTextBlockTCMSTextField extends TCMSPkgCmsTextBlockTCMSTextFieldA
      */
     protected function AddCmsTextBlockVariables($iWidth)
     {
-        $aCmsTextBlockPortalArray = array();
-        $oPortal = TTools::GetActivePortal();
-        if (!is_null($oPortal)) {
-            $aCmsTextBlockPortalArray = $oPortal->GetPortalCmsTextBlockArray($iWidth);
+        $portal = $this->getPortalDomainService()->getActivePortal();
+        if (null === $portal) {
+            return [];
         }
 
-        return $aCmsTextBlockPortalArray;
+        return $portal->GetPortalCmsTextBlockArray($iWidth);
+    }
+
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

@@ -201,7 +201,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
             $sConnectedTableName = $this->GetConnectedTableNameFromFieldConfig($aFieldData);
             $sName = $aFieldData['name'];
         } else {
-            $sConnectedTableName = $this->oDefinition->GetFieldtypeConfigKey('connectedTableName');
+            $sConnectedTableName = $this->getConnectedTableNameFromDefinition();
             $sName = $this->name;
         }
         if ($sConnectedTableName) {
@@ -214,6 +214,11 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         }
 
         return $mltTableName;
+    }
+
+    protected function getConnectedTableNameFromDefinition(): ?string
+    {
+        return $this->oDefinition->GetFieldtypeConfigKey('connectedTableName');
     }
 
     /**
@@ -291,7 +296,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         $bAllowRenameRelatedTables = false;
         if ('mlt' == $aOldFieldTypeRow['base_type'] && 'mlt' == $aNewFieldTypeRow['base_type']) {
             $sFieldConfigConnectedTableForNewField = $this->GetConnectedTableNameFromFieldConfig($aNewFieldData);
-            $sFieldConfigConnectedTableForOldField = $this->oDefinition->GetFieldtypeConfigKey('connectedTableName');
+            $sFieldConfigConnectedTableForOldField = $this->getConnectedTableNameFromDefinition();
             if (!empty($sFieldConfigConnectedTableForNewField) && !empty($sFieldConfigConnectedTableForOldField)) {
                 if ($sFieldConfigConnectedTableForNewField == $sFieldConfigConnectedTableForOldField && $this->name != $aNewFieldData['name']) {
                     $bAllowRenameRelatedTables = true;
@@ -340,7 +345,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      */
     public function GetConnectedTableName($bExistingCount = true)
     {
-        $sTableName = $this->oDefinition->GetFieldtypeConfigKey('connectedTableName');
+        $sTableName = $this->getConnectedTableNameFromDefinition();
 
         return $this->GetClearedTableName($sTableName);
     }
@@ -443,11 +448,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         }
 
         return $html;
-    }
-
-    public function RenderFieldPropertyString()
-    {
-        return '';
     }
 
     public function RenderFieldPostLoadString()

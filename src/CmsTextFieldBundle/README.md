@@ -12,7 +12,7 @@ This package parses CMS WYSIWYG Editor fields (based on CKEditor) and does some 
 * Renders 3 types of Chameleon document links, <span> based and placeholder based '[{123...}]'.
 * Replaces invalid DIVs that where added by the old WYSWIYGPro under some circumstances.
 * Replaces empty align properties with 'bottom'.
-* Parses image tags and renders images, flash video embed codes or external video embed codes.
+* Parses image tags and renders images or external video embed codes.
 * Removes \<script\> tags (disabled by default).
 
 pkgCmsTextblock

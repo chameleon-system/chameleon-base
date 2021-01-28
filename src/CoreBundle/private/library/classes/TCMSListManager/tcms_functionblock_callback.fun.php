@@ -98,17 +98,12 @@ function tcms_image_callback($path, $row)
     $oImage->Load($row['id']);
     $image = '';
 
-    $imageType = $oImage->GetImageType();
-    if ('flv' == $imageType || 'swf' == $imageType || 'f4v' == $imageType) {
-        $image = $oImage->GetThumbnailTag(100, 75, null, null, '');
-    } else {
-        $oThumb = $oImage->GetThumbnail(80, 80);
-        /** @var $oThumb TCMSImage */
-        if (!is_null($oThumb)) {
-            $oBigThumbnail = $oImage->GetThumbnail(400, 400);
-            $imageZoomFnc = "CreateMediaZoomDialogFromImageURL('".$oBigThumbnail->GetFullURL()."','".TGlobal::OutHTML($oBigThumbnail->aData['width'])."','".TGlobal::OutHTML($oBigThumbnail->aData['height'])."');event.cancelBubble=true;return false;";
-            $image = '<img src="'.$oThumb->GetFullURL()."\" id=\"cmsimage_{$row['id']}\" style=\"padding:3px\" width=\"{$oThumb->aData['width']}\" height=\"{$oThumb->aData['height']}\" border=\"0\" onclick=\"{$imageZoomFnc}\" />";
-        }
+    $oThumb = $oImage->GetThumbnail(80, 80);
+    /** @var $oThumb TCMSImage */
+    if (!is_null($oThumb)) {
+        $oBigThumbnail = $oImage->GetThumbnail(400, 400);
+        $imageZoomFnc = "CreateMediaZoomDialogFromImageURL('".$oBigThumbnail->GetFullURL()."','".TGlobal::OutHTML($oBigThumbnail->aData['width'])."','".TGlobal::OutHTML($oBigThumbnail->aData['height'])."');event.cancelBubble=true;return false;";
+        $image = '<img src="'.$oThumb->GetFullURL()."\" id=\"cmsimage_{$row['id']}\" style=\"padding:3px\" width=\"{$oThumb->aData['width']}\" height=\"{$oThumb->aData['height']}\" border=\"0\" onclick=\"{$imageZoomFnc}\" />";
     }
 
     return $image;
@@ -130,16 +125,11 @@ function tcms_Fullimage_callback($path, $row)
     $oImage->Load($row['id']);
     $image = '';
 
-    $sImageType = $oImage->GetImageType();
-    if ('flv' === $sImageType || 'f4v' === $sImageType) {
-        $image = $oImage->GetThumbnailTag(100, 75, null, null, '');
-    } else {
-        $oThumb = $oImage->GetThumbnail(100, 100);
+    $oThumb = $oImage->GetThumbnail(100, 100);
 
-        if (null !== $oThumb) {
-            $imageZoomFnc = "CreateMediaZoomDialogFromImageURL('".$oImage->GetFullURL()."','".TGlobal::OutHTML($oImage->aData['width'])."','".TGlobal::OutHTML($oImage->aData['height'])."');event.cancelBubble=true;return false;";
-            $image = '<img src="'.$oThumb->GetFullURL()."\" id=\"cmsimage_{$row['id']}\" style=\"padding:3px\" width=\"{$oThumb->aData['width']}\" height=\"{$oThumb->aData['height']}\" border=\"0\" onclick=\"{$imageZoomFnc}\" />";
-        }
+    if (null !== $oThumb) {
+        $imageZoomFnc = "CreateMediaZoomDialogFromImageURL('".$oImage->GetFullURL()."','".TGlobal::OutHTML($oImage->aData['width'])."','".TGlobal::OutHTML($oImage->aData['height'])."');event.cancelBubble=true;return false;";
+        $image = '<img src="'.$oThumb->GetFullURL()."\" id=\"cmsimage_{$row['id']}\" style=\"padding:3px\" width=\"{$oThumb->aData['width']}\" height=\"{$oThumb->aData['height']}\" border=\"0\" onclick=\"{$imageZoomFnc}\" />";
     }
 
     return $image;

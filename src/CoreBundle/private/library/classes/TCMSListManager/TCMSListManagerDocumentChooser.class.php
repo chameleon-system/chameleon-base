@@ -113,13 +113,7 @@ class TCMSListManagerDocumentChooser extends TCMSListManagerFullGroupTable
         $oGlobal = TGlobal::instance();
         $cms_document_tree_id = $oGlobal->GetUserData('cms_document_tree_id');
 
-        if (!empty($cms_document_tree_id)) {
-            if (!empty($query)) {
-                $query .= ' AND ';
-            }
-            $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($this->oTableConf->sqlData['name'])."`.`cms_document_tree_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($cms_document_tree_id)."'";
-        } elseif (!empty($this->tableObj->_postData['cms_document_tree_id'])) {
-            $cms_media_tree_id = $this->tableObj->_postData['cms_document_tree_id'];
+        if (!empty($cms_document_tree_id) || !empty($this->tableObj->_postData['cms_document_tree_id'])) {
             if (!empty($query)) {
                 $query .= ' AND ';
             }

@@ -16,18 +16,6 @@ interface RequestTypeInterface
     const REQUEST_TYPE_FRONTEND = 1;
     const REQUEST_TYPE_BACKEND = 2;
     /**
-     * boot - start db and autoloader, but not the session.
-     *
-     * @deprecated since 6.1.6 - not used anymore.
-     */
-    const REQUEST_TYPE_UNITTEST = 3;
-    /**
-     * boot only (autoloader, session and db are initialized).
-     *
-     * @deprecated since 6.1.6 - not used anymore.
-     */
-    const REQUEST_TYPE_BOOT_ONLY = 4;
-    /**
      * @deprecated since 6.1.6 - see deprecation note for \ChameleonSystem\CoreBundle\RequestType\AssetRequestType.
      */
     const REQUEST_TYPE_ASSETS = 5;

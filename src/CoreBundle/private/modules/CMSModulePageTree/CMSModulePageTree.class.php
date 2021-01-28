@@ -286,7 +286,7 @@ class CMSModulePageTree extends TCMSModelBase
         }
 
         if (!empty($oParentTreeNode->sqlData['link'])) {
-            $sIconHTML .= $this->getNodeIndicatorIcon('/images/icon_external_link.gif', 'iconExternalLink', $oParentTreeNode->sqlData['link']);
+            $sIconHTML .= $this->getNodeIndicatorIcon('/images/tree/icon_external_link.gif', 'iconExternalLink', $oParentTreeNode->sqlData['link']);
         }
 
         $sIsTranslatedIdent = '';
@@ -608,18 +608,6 @@ class CMSModulePageTree extends TCMSModelBase
         $oNode->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
         $oNode->Load($iNodeId);
         $oNode->TriggerUpdateOfPathCache();
-    }
-
-    /**
-     * loads workflow transaction infos to show them in toaster messages.
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function GetTransactionDetails()
-    {
-        return '';
     }
 
     /**

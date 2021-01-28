@@ -9,7 +9,7 @@
         <parameter key="chameleon_system_cms_string_utilities.array_utility_service.class">ChameleonSystem\CmsStringUtilitiesBundle\Service\ArrayUtilityService</parameter>
     </parameters>
     <services>
-        <service id="chameleon_system_cms_string_utilities.url_utility_service" class="%chameleon_system_cms_string_utilities.url_utility_service.class%" />
-        <service id="chameleon_system_cms_string_utilities.array_utility_service" class="%chameleon_system_cms_string_utilities.array_utility_service.class%" />
+        <service id="chameleon_system_cms_string_utilities.url_utility_service" class="%chameleon_system_cms_string_utilities.url_utility_service.class%" public="true"/>
+        <service id="chameleon_system_cms_string_utilities.array_utility_service" class="%chameleon_system_cms_string_utilities.array_utility_service.class%" public="true"/>
     </services>
 </container>

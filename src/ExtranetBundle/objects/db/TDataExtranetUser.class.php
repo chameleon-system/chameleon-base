@@ -16,7 +16,6 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ExtranetBundle\Exception\PasswordGenerationFailedException;
 use ChameleonSystem\ExtranetBundle\ExtranetEvents;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
@@ -26,7 +25,6 @@ use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use Doctrine\DBAL\DBALException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 if (!defined('PKG_EXTRANET_USE_CASE_INSENSITIVE_LOGIN_NAMES')) {
     define('PKG_EXTRANET_USE_CASE_INSENSITIVE_LOGIN_NAMES', false);
@@ -35,15 +33,6 @@ if (!defined('PKG_EXTRANET_USE_CASE_INSENSITIVE_LOGIN_NAMES')) {
 class TDataExtranetUser extends TDataExtranetUserAutoParent
 {
     const VIEW_PATH = 'pkgExtranet/views/db/TDataExtranetUser';
-
-    /**
-     * how long a salt is valid before a duplicate request of the page will generate a new salt
-     * we need this to prevent a new salt from being generated if the page is resubmitted
-     * in the background using javascript (as is the case for some reason with etracker... although not always).
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    const MAX_SALT_AGE_IN_SECONDS = 5;
 
     const SESSION_KEY_NAME = 'esono/pkgExtranet/frontendUser';
 
@@ -649,7 +638,21 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         }
 
         $aProtectedVariables = $this->GetProtectedSessionVariables();
-        TCMSSessionHandler::CleanUpSession($aProtectedVariables);
+        $request = $this->getCurrentRequest();
+        if (null !== $request) {
+            $session = $request->getSession();
+            if (null !== $session) {
+                $all = $session->all();
+                $new = array();
+                foreach ($aProtectedVariables as $key) {
+                    if (isset($all[$key])) {
+                        $new[$key] = $all[$key];
+                    }
+                }
+                $_SESSION = array();
+                $session->replace($new);
+            }
+        }
 
         $this->resetPageAccessCache();
         $this->sqlData = false;
@@ -689,26 +692,6 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         }
 
         $_SESSION = $aNewSession;
-    }
-
-    /**
-     * returns the password salt stored in the session (false if none exists).
-     *
-     * @return string - the password salt
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public static function GetPasswordSalt()
-    {
-        $saltSessionId = TdbDataExtranetUser::SESSION_KEY_NAME.'_tmp';
-        $salt = false;
-        if (array_key_exists($saltSessionId, $_SESSION)) {
-            if (array_key_exists('passwordsalt', $_SESSION[$saltSessionId])) {
-                $salt = $_SESSION[$saltSessionId]['passwordsalt'];
-            }
-        }
-
-        return $salt;
     }
 
     /**
@@ -903,67 +886,6 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         }
 
         return $this->pageAccessCache[$iPage];
-    }
-
-    /**
-     * redirects to the access denied page.
-     *
-     * @throws AccessDeniedHttpException
-     *
-     * @deprecated since 6.2.0 - method is not called anymore.
-     */
-    public function RedirectToAccessDeniedPage()
-    {
-        throw new AccessDeniedHttpException('Access denied.');
-    }
-
-    /**
-     * return link to the access denied page that is defined in the extranet config.
-     *
-     * @deprecated since v6.0.8 - method is not called anymore.
-     *
-     * @return string
-     */
-    public function getRedirectToAccessDeniedPageLink()
-    {
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
-        $sLink = $oExtranetConfig->GetLinkLoginPage();
-        $sLinkAccessDeniedPage = $oExtranetConfig->GetLinkAccessDeniedPage();
-        if (!empty($sLinkAccessDeniedPage)) {
-            $sLink = $sLinkAccessDeniedPage;
-        }
-
-        if ($this->isLoggedIn) {
-            $sLinkGroupRightDeniedPage = $oExtranetConfig->GetLinkGroupRightDeniedPage();
-            if (!empty($sLinkGroupRightDeniedPage)) {
-                $sLink = $sLinkGroupRightDeniedPage;
-            }
-        }
-
-        if (!empty($sLink)) {
-            $request = $this->getCurrentRequest();
-            if (null !== $request) {
-                $sReferrer = urlencode($request->getPathInfo());
-                if (false !== strpos($sLink, '?')) {
-                    $sLink .= '&sSuccessURL='.$sReferrer;
-                } else {
-                    $sLink .= '?sSuccessURL='.$sReferrer;
-                }
-            }
-        }
-
-        return $sLink;
-    }
-
-    /**
-     * commits the user to session
-     * this method is called through the register_shutdown_function so there is
-     * no need to call the method directly (although it is safe to do so).
-     *
-     * @deprecated
-     */
-    public function CommitToSession()
-    {
     }
 
     /**
@@ -1715,40 +1637,6 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         }
 
         return $oMail;
-    }
-
-    /**
-     * Returns a link to the double-opt-in page for the currently logged-in user.
-     * By default the method returns the complete HTML a tag with the given link text and CSS class(es).
-     * Function returns an empty string if the user is not allowed to receive the double-opt-in email.
-     *
-     * @param string $linkText
-     * @param string $cssClass
-     * @param bool   $asCompleteATag Set to false if you want only the url
-     *
-     * @return string
-     *
-     * @deprecated since 6.1.4 - this method is no longer in use. Use TDataExtranetCore::GetConfirmRegistrationURL instead.
-     */
-    public function GetLinkSendDoubleOptInEmail($linkText = '', $cssClass = '', $asCompleteATag = true)
-    {
-        $link = '';
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
-        if ($this->IsLoggedIn() && !$this->IsConfirmedUser() && $oExtranetConfig->fieldUserMustConfirmRegistration) {
-            $data = array(
-                'module_fnc' => array(
-                    $oExtranetConfig->fieldExtranetSpotName => 'SendDoubleOptInEMail',
-                ),
-                'sUserKey' => $this->id,
-            );
-            $link = $this->getActivePageService()->getActivePage()->GetRealURLPlain($data);
-            $link = $this->getUrlUtil()->removeAuthenticityTokenFromUrl($link);
-        }
-        if ($asCompleteATag && '' !== $link) {
-            $link = '<a href="'.$link.'" class="'.TGlobal::OutHTML($cssClass).'">'.TGlobal::OutHTML($linkText).'</a> ';
-        }
-
-        return $link;
     }
 
     /**
@@ -2531,13 +2419,5 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     private function getShopService()
     {
         return ServiceLocator::get('chameleon_system_shop.shop_service');
-    }
-
-    /**
-     * @return UrlUtil
-     */
-    private function getUrlUtil()
-    {
-        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

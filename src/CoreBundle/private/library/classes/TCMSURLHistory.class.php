@@ -223,27 +223,6 @@ class TCMSURLHistory
     }
 
     /**
-     * @deprecated since 6.3.0 - use getSimilarHistoryElementIndex() instead.
-     *
-     * use this function to find the LAST matching history url for a set of
-     * parameters.
-     *
-     * @param array $aParameters
-     *
-     * @return int|bool (array key or false, if not found)
-     */
-    public function FindHistoryId($aParameters)
-    {
-        $foundIndex = $this->getSimilarHistoryElementIndex($aParameters);
-
-        if (null === $foundIndex) {
-            return false;
-        }
-
-        return $foundIndex;
-    }
-
-    /**
      * checks if "param" parameter exists in first history element
      * (session may contain "old" history elements).
      *

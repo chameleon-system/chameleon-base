@@ -403,20 +403,6 @@ class TCMSMail extends PHPMailer
         return $sValue;
     }
 
-    /**
-     * Replaces email-addresses with _DEVELOPMENT_MAIL if needed.
-     *
-     * @param string $sEmail
-     *
-     * @return string
-     *
-     * @deprecated since 6.0.0 - use chameleon_system_core.mail_target_transformation_service::transform() instead
-     */
-    protected function TransformEmailInDevelopmentMode($sEmail)
-    {
-        return $this->getTransformationService()->transform($sEmail);
-    }
-
     public function setTransformationService(TransformOutgoingMailTargetsServiceInterface $transformationService)
     {
         $this->transformationService = $transformationService;

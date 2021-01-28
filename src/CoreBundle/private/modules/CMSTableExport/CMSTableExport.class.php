@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * exports table data as TAB, CSV or RTF.
 /**/
@@ -99,13 +101,15 @@ class CMSTableExport extends TCMSModelBase
      */
     public function GenerateExport()
     {
+        $this->provideExportMemory();
+
         $listClass = $this->global->GetUserData('listClass');
 
         if (empty($listClass)) {
             $listClass = null;
         }
 
-        $this->oTableList = &$this->oTableConf->GetListObject($listClass);
+        $this->oTableList = &$this->oTableConf->GetListObject($listClass)->tableObj;
 
         $sListCacheKey = $this->global->GetUserData('listCacheKey');
 
@@ -143,6 +147,32 @@ class CMSTableExport extends TCMSModelBase
             fclose($this->pTempFilePointer);
         }
         $this->getDownload($sFileType);
+    }
+
+    private function provideExportMemory(): void
+    {
+        $exportMemoryUnits = ServiceLocator::getParameter('chameleon_system.core.export_memory');
+
+        $configuredBytes = $this->unitToInt($exportMemoryUnits);
+        $currentBytes = $this->unitToInt(ini_get('memory_limit'));
+
+        if ($configuredBytes > $currentBytes) {
+            ini_set('memory_limit', $exportMemoryUnits);
+        }
+    }
+
+    /**
+     * Converts a number with byte unit (B / K / M / G) into an integer of bytes.
+     */
+    private function unitToInt(string $units): int
+    {
+        if ('' === $units || false === strpos('BKMG', substr($units, -1))) {
+            return 0;
+        }
+
+        return (int)preg_replace_callback('/(\-?\d+)(.?)/', function ($matches) {
+            return $matches[1] * (1024 ** strpos('BKMG', $matches[2]));
+        }, strtoupper($units));
     }
 
     /**
@@ -361,44 +391,6 @@ class CMSTableExport extends TCMSModelBase
             $rtfData .= '<br><br><br>';
             $this->writeTempFile($rtfData);
         }
-
-        // require_once(PATH_LIBRARY."/classes/rtfGenerator/rtf_class.php");
-
-        // echo $rtfData;
-        // exit();
-
-        $rtfData = $this->FilterHTML4RTF($rtfData);
-        // echo $rtfData;
-        // exit();
-
-        // $oRTF = new RTF(PATH_LIBRARY."/classes/rtfGenerator/rtf_config.inc");
-        //$oRTF->parce_HTML($rtfData);
-        // getting RTF code:
-        $rtfFileContent = ''; //$oRTF->get_rtf();
-
-        // old! needs to be refactured
-        // $this->data['RtfDownloadUrl'] = $this->WriteFile($rtfFileContent, 'rtf');
-    }
-
-    /**
-     * @param array $aFieldConfig
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function GenerateHTMLExport($aFieldConfig)
-    {
-    }
-
-    /**
-     * @param string $userCSSURL
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function getCMSCustomerStyles($userCSSURL)
-    {
-        return '';
     }
 
     /**

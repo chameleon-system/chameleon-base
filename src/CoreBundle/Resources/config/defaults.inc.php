@@ -41,16 +41,6 @@ if (!defined('URL_CMS')) {
 }
 
 /**
- * location of update files.
- */
-if (!defined('PATH_CMS_UPDATE')) {
-    /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    define('PATH_CMS_UPDATE', PATH_CORE_BASE.'/private/engine/updates/');
-}
-
-/**
  * CMS customer data path.
  */
 if (!defined('PATH_CMS_CUSTOMER_DATA')) {
@@ -87,35 +77,6 @@ if (!defined('PATH_USER_CMS_PUBLIC')) {
  */
 if (!defined('PATH_MEDIA_LIBRARY')) {
     define('PATH_MEDIA_LIBRARY', PATH_USER_CMS_PUBLIC.'/mediapool/');
-}
-
-/**
- * @deprecated since 6.3.0 - not used anymore
- * Path to filetype icons.
- */
-if (!defined('PATH_FILETYPE_ICONS')) {
-    define('PATH_FILETYPE_ICONS', PATH_USER_CMS_PUBLIC.'/blackbox/images/filetype_icons/');
-}
-/**
- * @deprecated since 6.3.0 - not used anymore
- * Path to low-quality filetype icons.
- */
-if (!defined('PATH_FILETYPE_ICONS_LOW_QUALITY')) {
-    define('PATH_FILETYPE_ICONS_LOW_QUALITY', PATH_FILETYPE_ICONS.'16x16/');
-}
-/**
- * @deprecated since 6.3.0 - not used anymore
- * URL path to filetype icons relative to TGlobal::GetStaticURLToWebLib().
- */
-if (!defined('URL_FILETYPE_ICONS')) {
-    define('URL_FILETYPE_ICONS', '/images/filetype_icons/');
-}
-/**
- * @deprecated since 6.3.0 - not used anymore
- * URL path to low-quality filetype icons relative to TGlobal::GetStaticURLToWebLib().
- */
-if (!defined('URL_FILETYPE_ICONS_LOW_QUALITY')) {
-    define('URL_FILETYPE_ICONS_LOW_QUALITY', URL_FILETYPE_ICONS.'16x16/');
 }
 
 /**
@@ -182,16 +143,6 @@ if (!defined('URL_DOCUMENT_VIRTUAL_OUTBOX')) {
  */
 if (!defined('PATH_OUTBOX')) {
     define('PATH_OUTBOX', PATH_USER_CMS_PUBLIC.'/outbox/');
-}
-
-/**
- * Path for font files.
- */
-if (!defined('PATH_CMS_FONTS')) {
-    /**
-     * @deprecated
-     */
-    define('PATH_CMS_FONTS', PATH_CUSTOMER_FRAMEWORK.'/fonts/');
 }
 
 /**
@@ -268,109 +219,9 @@ if (!defined('CHAMELEON_PATH_THEMES')) {
 
 /**
  * -------------------------------------------------------------------------------------------------------------------
- * WORKFLOW AND REVISIONS
- * -------------------------------------------------------------------------------------------------------------------.
- */
-
-/**
- * if set to true, then the workflow engine is enabled.
- */
-if (!defined('_CONFIG_USE_WORKFLOW_ENGINE')) {
-    /**
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    define('_CONFIG_USE_WORKFLOW_ENGINE', false);
-}
-
-/**
- * CMS workflow temp dir for uploaded media files.
- */
-if (!defined('PATH_CMS_CUSTOMER_WORKFLOW_MEDIA')) {
-    /**
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    define('PATH_CMS_CUSTOMER_WORKFLOW_MEDIA', PATH_CMS_CUSTOMER_DATA.'/workflow/media/');
-}
-
-/**
- * CMS workflow temp dir for uploaded media file thumbnails.
- */
-if (!defined('PATH_CMS_CUSTOMER_WORKFLOW_MEDIA_THUMBS')) {
-    /**
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    define('PATH_CMS_CUSTOMER_WORKFLOW_MEDIA_THUMBS', PATH_CMS_CUSTOMER_DATA.'/workflow/media/thumbs/');
-}
-
-/**
- * CMS workflow temp dir for uploaded documents.
- */
-if (!defined('PATH_CMS_CUSTOMER_WORKFLOW_DOCUMENT')) {
-    /**
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    define('PATH_CMS_CUSTOMER_WORKFLOW_DOCUMENT', PATH_CMS_CUSTOMER_DATA.'/workflow/documents/');
-}
-
-/*
- * Set to true if you want to see tasks in cms
- * note: needs to be enabled for workflow
- */
-if (!defined('CMS_SHOW_TASKS')) {
-    /**
-     * @deprecated since 6.2.0 - dashboard widgets are not supported anymore
-     */
-    define('CMS_SHOW_TASKS', true);
-}
-
-/*
- * Set to true if you want to see information tasks in cms
- * note: needs to be enabled for workflow
- */
-if (!defined('CMS_SHOW_TASKS_INFORMATION')) {
-    /**
-     * @deprecated since 6.2.0 - dashboard widgets are not supported anymore
-     */
-    define('CMS_SHOW_TASKS_INFORMATION', false);
-}
-
-/*
-* set this to true to activate record revision management in CMS backend
-* you need to set revision management active for every table manually in table configuration also
-*/
-if (!defined('CMS_ACTIVE_REVISION_MANAGEMENT')) {
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     */
-    define('CMS_ACTIVE_REVISION_MANAGEMENT', false);
-}
-
-/*
- * if true a revision will be created for all pages of a workflow transaction if revision management is active
-*/
-if (!defined('CREATE_PAGE_REVISION_ON_WORKFLOW_PUBLISH')) {
-    /**
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    define('CREATE_PAGE_REVISION_ON_WORKFLOW_PUBLISH', false);
-}
-
-/**
- * -------------------------------------------------------------------------------------------------------------------
  * SECURITY
  * -------------------------------------------------------------------------------------------------------------------.
  */
-
-/**
- * force the use of cookies in the website frontend?
- */
-if (!defined('USE_ONLY_COOKIES_FOR_SESSION_ID')) {
-    /**
-     * @deprecated since 6.2.0 - this feature will be removed for security reasons. Projects should always use cookies
-     * and not change this value.
-     */
-    define('USE_ONLY_COOKIES_FOR_SESSION_ID', true);
-}
 
 /**
  * safe php directories (these may be accessed via include/require
@@ -396,17 +247,6 @@ if (!defined('SECURITY_REGENERATE_SESSION_ON_USER_CHANGE')) {
 }
 
 /*
-* force a check for an install folder in productive mode and prevent the cms from running if found
-* if you have such a folder that you want to keep, you can disable the check by setting this constant to false
-*/
-if (!defined('CMS_INSTALL_FOLDER_CHECK')) {
-    /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    define('CMS_INSTALL_FOLDER_CHECK', true);
-}
-
-/*
  * if true non admins will not be able to login while open locks for the user are present
 */
 if (!defined('PREVENT_PARALLEL_LOGINS_FOR_NON_ADMINS')) {
@@ -418,17 +258,6 @@ if (!defined('PREVENT_PARALLEL_LOGINS_FOR_NON_ADMINS')) {
  */
 if (!defined('TCMSUSERINPUT_DEFAULTFILTER')) {
     define('TCMSUSERINPUT_DEFAULTFILTER', 'TCMSUserInput_BaseText');
-}
-
-/**
- * if set to true, cookie interaction is reduced to http only giving higher security to prevent XSS attacks
- * this is supported as of PHP 5.2.
- */
-if (!defined('CMS_COOKIE_HTTP_ONLY')) {
-    /**
-     * @deprecated since 6.0.12 - use the Symfony FrameworkBundle's framework: session: cookie_httponly option instead.
-     */
-    define('CMS_COOKIE_HTTP_ONLY', false);
 }
 
 /**
@@ -499,33 +328,11 @@ if (!defined('PATH_OUTBOX_MEDIA_LIBRARY_SEO_LINKS')) {
 }
 
 /**
- * auto rewrite urls with "_" to "-" (activate for older websites to support old google links)
- * DO NOT activate this if you use custom SmartURLHandlers or the pkgArticle package, this may kill your id matches in URLs
- * like "_AID_".
- */
-if (!defined('CMS_URL_AUTO_REWRITE_UNDERSCORE')) {
-    /**
-     * @deprecated since 6.1.5 - no longer used.
-     */
-    define('CMS_URL_AUTO_REWRITE_UNDERSCORE', false);
-}
-
-/**
  * Rewrite uppercase URL to lowercase url for example www.mysite.de/MySite gets www.mysite.de/mysite
  * The complete cache including Symfony routing cache need to be deleted after this setting is changed.
  */
 if (!defined('CHAMELEON_SEO_URL_REWRITE_TO_LOWERCASE')) {
     define('CHAMELEON_SEO_URL_REWRITE_TO_LOWERCASE', false);
-}
-
-/**
- * Clean URL to correct URL for example www.mysite.de///MySite gets www.mysite.de/MySite.
- */
-if (!defined('CHAMELEON_SEO_URL_REWRITE_TO_CLEAN')) {
-    /**
-     * @deprecated since 6.1.6 - no longer used.
-     */
-    define('CHAMELEON_SEO_URL_REWRITE_TO_CLEAN', true);
 }
 
 /**
@@ -559,16 +366,6 @@ if (!defined('CMS_USE_SEO_HANDLER_FOR_PUBLIC_DOWNLOADS')) {
  * DEBUGGING, ERROR HANDLING AND DEVELOPMENT
  * -------------------------------------------------------------------------------------------------------------------.
  */
-
-/**
- * disable firephp by default.
- */
-if (!defined('CMS_ENABLE_FIREPHP')) {
-    /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    define('CMS_ENABLE_FIREPHP', false);
-}
 
 /**
  * defile a logfile to which changes in the database should be logged.
@@ -637,17 +434,6 @@ if (!defined('CMS_LOG_FILE_NAME')) {
  */
 
 /**
- * if set to true, then the TCMSSmartURL handler uses caching
- * disable if you want to use multiple page connections on one tree node with timeframe configuration.
- */
-if (!defined('CMS_ACTIVE_SMART_URL_HANDLER_CACHING')) {
-    /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    define('CMS_ACTIVE_SMART_URL_HANDLER_CACHING', true);
-}
-
-/**
  * enable writes to cache info table
  * Attention: set this to false, and cache will only be emptied on flush.
  */
@@ -676,49 +462,6 @@ if (!defined('DISABLE_SESSION_LOCKING')) {
     define('DISABLE_SESSION_LOCKING', false);
 }
 
-/*
-* prevent bots from using session locking. since all bots get the same session id, they lock each other if session locking is active.
-* setting this to true prevents this from happening
-*/
-if (!defined('CMS_BOT_DISABLE_SESSION_LOCKING')) {
-    /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    define('CMS_BOT_DISABLE_SESSION_LOCKING', true);
-}
-
-/**
- * use standard file based sessions instead of database storage engine
- * if you want to use the native php memcached session handling you need to set this to true, too.
- */
-if (!defined('USE_FILE_BASED_SESSION_HANDLING')) {
-    /**
-     * @deprecated since 6.2.0 - no longer used. Only memcached and database sessions are supported.
-     */
-    define('USE_FILE_BASED_SESSION_HANDLING', false);
-}
-
-/**
- * how long sessions live.
- */
-if (!defined('CMS_MAX_SESSION_LIFETIME')) {
-    /**
-     * @deprecated since 6.0.12 - use the Symfony FrameworkBundle's framework: session: cookie_lifetime option instead.
-     */
-    define('CMS_MAX_SESSION_LIFETIME', -1);
-}
-
-/**
- * if set to true, then the system will keep the session cookie in the browser for as long CMS_MAX_SESSION_LIFETIME.
- */
-if (!defined('CMS_SESSION_KEEP_ACTIVE_ON_BROWER_CLOSE')) {
-    /**
-     * @deprecated since 6.0.12 - set the Symfony FrameworkBundle's framework: session: cookie_lifetime option to a value
-     *                            different than 0 instead.
-     */
-    define('CMS_SESSION_KEEP_ACTIVE_ON_BROWER_CLOSE', false);
-}
-
 /**
  * -------------------------------------------------------------------------------------------------------------------
  * MULTILANGUAGE SUPPORT
@@ -742,48 +485,11 @@ if (!defined('ACTIVE_BACKEND_TRANSLATION')) {
 }
 
 /**
- * active backend translation API.
- */
-if (!defined('ACTIVE_BACKEND_TRANSLATION_API')) {
-    /**
-     * @deprecated since 6.2.0 - translation service is no longer supported.
-     */
-    define('ACTIVE_BACKEND_TRANSLATION_API', 'NONE');
-} // NONE | GOOGLE | MICROSOFT
-
-/**
- * Microsoft Translator (API).
- */
-if (!defined('AZURE_CLIENT_ID')) {
-    /**
-     * @deprecated since 6.2.0 - translation service is no longer supported.
-     */
-    define('AZURE_CLIENT_ID', '');
-}
-if (!defined('AZURE_CLIENT_SECRET')) {
-    /**
-     * @deprecated since 6.2.0 - translation service is no longer supported.
-     */
-    define('AZURE_CLIENT_SECRET', '');
-}
-
-/**
  * if set to true, then translated fields in field based translation will default to the base language if the field is empty
  * that is, the translation is only loaded if not empty. if you set this switch to false, the translation will also be used if empty.
  */
 if (!defined('CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE')) {
     define('CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE', true);
-}
-
-/**
- * if set to true, then the list manager shows a translation fallback for field based translations if the translation is empty.
- */
-if (!defined('CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE_IN_LISTMANAGER')) {
-    /**
-     * @deprecated since 6.1.2 - the value of CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE will
-     *                           now also be used in the list manager.
-     */
-    define('CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE_IN_LISTMANAGER', true);
 }
 
 /**
@@ -793,27 +499,6 @@ if (!defined('CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LAN
  */
 if (!defined('IMAGE_RENDERING_RESPONSIVE')) {
     define('IMAGE_RENDERING_RESPONSIVE', false);
-}
-
-/*
-* Set to true if you want to use the default imagelayer (like the light or thickbox)
-* you can specify which box should be used with other parameters (e.g. USE_LIGHTBOX)
-*/
-if (!defined('USE_IMAGELAYER')) {
-    /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    define('USE_IMAGELAYER', true);
-}
-
-/**
- * use lightbox clone instead of thickbox.
- */
-if (!defined('USE_LIGHTBOX')) {
-    /**
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    define('USE_LIGHTBOX', false);
 }
 
 /*
@@ -903,31 +588,6 @@ if (!defined('SHOP_CLEAR_BASKET_CONTENTS_ON_LOGOUT')) {
 */
 if (!defined('SHOP_ALLOW_SAVING_ARTICLE_HISTORY_IN_COOKIE')) {
     define('SHOP_ALLOW_SAVING_ARTICLE_HISTORY_IN_COOKIE', false);
-}
-
-/**
- * if set to true external payment services should be run in live mode else paymentservice should run on test mode.
- * On some payment services like Ogone payment handler sends request to different payment urls.
- */
-if (!defined('USE_LIVE_PAYMENT')) {
-    /**
-     * @deprecated This constant should no longer be in use. Use the environment config in the payment handler group config
-     *              to switch between sandbox and production.
-     */
-    define('USE_LIVE_PAYMENT', false);
-}
-
-/**
- * some payment methods support a sandbox mode - usually this can be enabled/disabled via the config of the payment handler
- * use this constant to force enable sandbox mode even if it is disabled - this is useful if you want to test sandbox mode online
- * for a specific IP (ie the developer would like to test online).
- */
-if (!defined('CMS_PAYMENT_USE_SANDBOX')) {
-    /**
-     * @deprecated This constant should no longer be in use. Use the environment config in the payment handler group config
-     *              to switch between sandbox and production.
-     */
-    define('CMS_PAYMENT_USE_SANDBOX', false);
 }
 
 /**
@@ -1156,13 +816,6 @@ if (!defined('CMS_PKG_VIEW_RENDERER_ENABLE_LESS_COMPILER')) {
  */
 if (!defined('CHAMELEON_ENABLE_RECORD_LOCK')) {
     define('CHAMELEON_ENABLE_RECORD_LOCK', true);
-}
-
-if (!defined('_DEVELOPMENT_DOMAIN')) {
-    /**
-     * @deprecated since 6.2.0 - use the service container to provide environment-dependent behavior.
-     */
-    define('_DEVELOPMENT_DOMAIN', '.intra');
 }
 
 /**

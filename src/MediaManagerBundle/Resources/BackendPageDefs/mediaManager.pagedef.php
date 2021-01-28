@@ -2,7 +2,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
-$urlGenerator = ServiceLocator::get('chameleon_system_core.media_manager.url_generator');
+$urlGenerator = ServiceLocator::get('chameleon_system_media_manager.url_generator');
 $layoutTemplate = 'default';
 if ($urlGenerator->openStandaloneMediaManagerInNewWindow()) {
     $layoutTemplate = 'popup_iframe';

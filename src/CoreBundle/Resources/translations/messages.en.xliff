@@ -14,11 +14,6 @@
                 <source>chameleon_system_core.text.wait_for_processing</source>
                 <target>processing...</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.error.flash_required">
-                <source>chameleon_system_core.error.flash_required</source>
-                <target>You need Adobe Flash Player version %iVersion% to view this video</target>
-                <note>@deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.</note>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.text.redirect_text">
                 <source>chameleon_system_core.text.redirect_text</source>
                 <target>Click %linkstart%here%linkend% if you're not redirected automatically.</target>
@@ -73,23 +68,6 @@
             <trans-unit id="chameleon_system_shop_service_item_wrapping.form.apply_to_none">
                 <source>chameleon_system_shop_service_item_wrapping.form.apply_to_none</source>
                 <target>Apply to none</target>
-            </trans-unit>
-
-            <trans-unit id="chameleon_system_core.module_search.result_headline">
-                <source>chameleon_system_core.module_search.result_headline</source>
-                <target>Search results</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.module_search.no_results">
-                <source>chameleon_system_core.module_search.no_results</source>
-                <target>There is no content matching your search</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.module_search.search_box_headline">
-                <source>chameleon_system_core.module_search.search_box_headline</source>
-                <target>Search</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.module_search.action_run_search">
-                <source>chameleon_system_core.module_search.action_run_search</source>
-                <target>search</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.module_send_a_friend.from_name">

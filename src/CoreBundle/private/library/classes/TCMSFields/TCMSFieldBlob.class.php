@@ -60,7 +60,6 @@ class TCMSFieldBlob extends TCMSFieldText
 
     public function GetReadOnly()
     {
-        $sReturnVal = '';
         if (is_string($this->data)) {
             $html = parent::GetReadOnly();
         } else {

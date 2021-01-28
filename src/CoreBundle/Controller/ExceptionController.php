@@ -79,12 +79,11 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
 
         $request->attributes->set('currentContent', $currentContent);
 
-        $exceptionPageDef = $this->getExceptionPageDef($request, $exception, $code);
+        $exceptionPageDef = $this->getExceptionPageDef($code);
         if (null === $exceptionPageDef) {
             return parent::showAction($request, $exception, $logger);
         }
         $request->attributes->set('pagedef', $exceptionPageDef);
-        $request->query->set('pagedef', $exceptionPageDef);
 
         // Do not execute (original) module_fnc for error pages
         $request->request->remove('module_fnc');
@@ -143,13 +142,11 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
     }
 
     /**
-     * @param Request          $request
-     * @param FlattenException $exception
-     * @param int              $code
+     * @param int $code
      *
      * @return string|null
      */
-    private function getExceptionPageDef(Request $request, FlattenException $exception, $code)
+    private function getExceptionPageDef($code)
     {
         if (true === $this->requestInfoService->isBackendMode()) {
             return;

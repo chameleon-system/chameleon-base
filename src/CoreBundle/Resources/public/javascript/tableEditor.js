@@ -26,11 +26,7 @@ function GetUsages(tableId, type) {
     var sPageDef = '';
     var sModuleSpotName = '';
     var sType = '';
-    if (type == null || type == 'media') { //@deprecated since 6.2.0 - we don't need this part anymore once the old media manager has been removed
-        sPageDef = 'CMSMediaManager';
-        sModuleSpotName = 'content';
-        sType = 'fileIDs'
-    }
+
     if (type == 'document') {
         sPageDef = 'CMSDocumentManager';
         sModuleSpotName = 'contentmodule';
@@ -126,11 +122,7 @@ function SetImageResponse(data, responseMessage) {
         imageDiv.style.display = 'block';
         noImageDiv.style.display = 'none';
 
-        if (data.isFlashVideo) {
-            InitVideoPlayer(data.uniqueID, data.FLVPlayerURL, data.maxThumbWidth, data.FLVPlayerHeight);
-        } else {
-            initLightBox();
-        }
+        initLightBox();
     }
 
     CloseModalIFrameDialog();
@@ -228,12 +220,24 @@ function changeColorPreview(previewDivID, hex) {
     }
 }
 
-function loadHomeTreeNodeSelection(fieldName, id) {
-    //var portalID = document.getElementById('main_node_tree').value;
-    var portalID = document.cmseditform.id.value;
+function loadTreeNodePortalSelection(fieldName) {
+    let portalId = document.cmseditform.id.value;
+    let selectedPortalNodeId = $('#'+fieldName).val();
 
-    if (portalID !== '0' && portalID !== '') {
-        CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=navigationTreeSingleSelect&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID, 400, 500);
+    if (portalId !== '0' && portalId !== '') {
+        let url = window.location.pathname + '?pagedef=navigationTreeSingleSelect' + '&portalSelectMode=portalSelect' + '&fieldName='+fieldName+'&id='+selectedPortalNodeId+'&portalId='+portalId;
+        CreateModalIFrameDialogCloseButton(url, 0, 0);
+    } else {
+        toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_portal_required'), 'WARNING');
+    }
+}
+
+function loadHomeTreeNodeSelection(fieldName) {
+    let portalId = document.cmseditform.id.value;
+    let selectedHomeNodeId = $('#'+fieldName).val();
+
+    if (portalId !== '0' && portalId !== '') {
+        CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=navigationTreeSingleSelect' + '&portalSelectMode=portalHomePage' + '&fieldName=' + fieldName + '&id=' + selectedHomeNodeId + '&portalId=' + portalId, 0, 0);
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_portal_required'), 'WARNING');
     }
@@ -352,14 +356,6 @@ function removeMLTConnection(sourceTable, fieldName, sourceID, targetID) {
 }
 
 /*
- * media manager field: opens media manager popup
- */
-function loadMediaManager(recordID, tableID, fieldName) {
-    _mediaManagerWindow = window.open(window.location.pathname + '?pagedef=CMSMediaManager&recordID=' + recordID + '&tableID=' + tableID + '&fieldName=' + fieldName, '_blank', 'width=1000,height=700,resizable=yes,scrollbars=no');
-}
-
-
-/*
  * Position field: loads list of Positions
  */
 function loadPositionList(tableID, tableSQLName, fieldName, recordID, sRestriction, sRestrictionField) {
@@ -392,24 +388,6 @@ function loadMltPositionList(tableSQLName, sRestriction, sRestrictionField) {
     url += '&sRestrictionField=' + sRestrictionField;
 
     CreateModalIFrameDialogCloseButton(url, 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.change_position'));
-}
-
-/**
- * @deprecated since 6.3.0
- * use: CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(iFrameId, url) instead.
- *
- * MLT field: show/hide MLT content
- */
-function showMLTField(objID, outerObjID, url) {
-    var mltID = document.getElementById(objID);
-
-    var $objID = $('#' + objID);
-    if ($objID.is(':hidden')) {
-        mltID.src = url;
-        $objID.removeClass('d-none');
-    } else {
-        $objID.addClass('d-none');
-    }
 }
 
 function setTableEditorListFieldState(triggerDiv, requestURL) {
@@ -458,30 +436,6 @@ function CheckRefreshReturn(data) {
         }
     }
     window.setTimeout("RefreshRecordEditLock()", 30000);
-}
-
-/*
- * @deprecated since 6.3.0 - workflow is not supported anymore
- */
-function PublishViaAjaxCallback(data, statusText) {
-    CloseModalIFrameDialog();
-
-    if (data != false && data != null) {
-        if (data.error) {
-            top.toasterMessage('Fehler: ' + data.error, 'ERROR');
-        } else {
-            if (data.message && data.message != '') {
-                top.toasterMessage(data.message, 'MESSAGE');
-            } else {
-                top.toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.msg_published'), 'MESSAGE');
-                setTimeout('ReloadMainPage()', 2000);
-
-            }
-            if (data.name && data.name != '' && document.getElementById('breadcrumbLastNode')) document.getElementById('breadcrumbLastNode').innerHTML = data.name;
-        }
-    } else {
-        top.toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_publish'), 'ERROR');
-    }
 }
 
 function ReloadMainPage() {
@@ -721,18 +675,46 @@ CHAMELEON.CORE.MTTableEditor.DeleteRecordWithCustomConfirmMessage = function (sC
     }
 };
 
-CHAMELEON.CORE.MTTableEditor.initTabs = function () {
-    var hash = window.location.hash;
+CHAMELEON.CORE.MTTableEditor.handleTabChanges = function($tabsWrapper) {
+    const $tabHeaders = $tabsWrapper.find(".nav .nav-item .nav-link");
+    const $tabContents = $tabsWrapper.find(".tab-content .tab-pane");
 
-    $('.nav-tabs').find('li a').each(function (key, tabLinkItem) {
-        var $tabLinkItem = $(tabLinkItem);
-        if (hash === tabLinkItem.getAttribute('href')) {
-            $tabLinkItem.click();
-        }
-        $tabLinkItem.click(function () {
-            window.location.hash = this.getAttribute('href');
+    if ($tabHeaders.length > 0 && $tabContents.length > 0) {
+        // react on clicks
+        $tabHeaders.on("click", function(event) {
+            let actualHash = window.location.hash;
+            if (actualHash.length === 0) {
+                actualHash = $tabHeaders.first()[0].getAttribute('href');
+            }
+
+            if (actualHash !== this.getAttribute('href')) {
+                // NOTE coreui changes the tab on click but that state is not stored anywhere: so use the hash
+
+                window.location.hash = this.getAttribute('href'); // leads to a hashchange event
+            } else {
+                event.preventDefault(); // stop coreui from generating a false back for the first tab or a second back for any tab
+            }
         });
-    });
+
+        $(window).on("hashchange", function(event) {
+            let $currentHeader = null;
+
+            if (window.location.hash.length > 0) {
+                $currentHeader = $tabHeaders.filter("[href='" + window.location.hash + "']");
+            } else {
+                $currentHeader = $tabHeaders.first();
+            }
+
+            // NOTE clicking also handles the gui side.
+            //   It will also trigger "onclick" above but is totally filtered there because the hashes are the same.
+            $currentHeader.click();
+        });
+
+        // restore on page load
+        if (window.location.hash.length > 0) {
+            $tabHeaders.filter("[href='" + window.location.hash + "']").click();
+        }
+    }
 };
 
 CHAMELEON.CORE.MTTableEditor.mapChameleonMessageTypeToBootstrapStyle = function (chameleonMessageTypeName) {
@@ -761,9 +743,13 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
 
         // This custom-event of the datetimepicker only works with the ID of the element.
         $('#' + id).on('change.datetimepicker', function (e) {
+            var $field = $('input[name=' + id + ']');
+
             var moment = e.date;
 
             if (moment === undefined) {
+                $field.val('');
+
                 return;
             }
 
@@ -773,7 +759,7 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
                 var cmsDate = moment.format('YYYY-MM-DD');
             }
             // We need a SQL date format for BC reasons.
-            $('input[name=' + id + ']').val(cmsDate);
+            $field.val(cmsDate);
         });
     });
 
@@ -898,13 +884,6 @@ CHAMELEON.CORE.MTTableEditor.initInputChangeObservation = function () {
     });
 };
 
-/**
- * @deprecated since 6.3.0 - use CHAMELEON.CORE.MTTableEditor.initInputChangeObservation(); instead
- */
-function SetChangedDataMessage() {
-    CHAMELEON.CORE.MTTableEditor.initInputChangeObservation();
-}
-
 CHAMELEON.CORE.MTTableEditor.initHelpTexts = function () {
     $(".help-text-button").click(function () {
         var helpTextId = '#helptext-' + $(this).attr("data-helptextId");
@@ -956,8 +935,11 @@ CHAMELEON.CORE.MTTableEditor.idButtonCopyToClipboard = function () {
     });
 };
 
-$(document).ready(function () {
-    CHAMELEON.CORE.MTTableEditor.initTabs();
+$(function () {
+    const $tabsWrapper = $("#tabs-wrapper");
+    if ($tabsWrapper.length > 0) {
+        CHAMELEON.CORE.MTTableEditor.handleTabChanges($tabsWrapper);
+    }
     CHAMELEON.CORE.MTTableEditor.initDateTimePickers();
     CHAMELEON.CORE.MTTableEditor.initEntrySwitcherAutocomplete();
     CHAMELEON.CORE.MTTableEditor.initSelectBoxes();

@@ -17,6 +17,8 @@ use Symfony\Component\HttpKernel\EventListener\ExceptionListener;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 /**
+ * @deprecated since 6.3.11 - this does not work anymore (overwriting a class in parameters)
+ *
  * ChameleonExceptionListener avoids logging of 404 errors, as 1) they will be handled after the call to logException()
  * and not be worth logging (but the log might get quite flooded in some projects), and 2) the web server's access log
  * will contain information on those errors.

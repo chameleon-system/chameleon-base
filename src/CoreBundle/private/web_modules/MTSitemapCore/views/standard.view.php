@@ -1,1 +1,0 @@
-<div class="ModuleSitemap"><?=$data['oNavigation']->Render(); ?></div>

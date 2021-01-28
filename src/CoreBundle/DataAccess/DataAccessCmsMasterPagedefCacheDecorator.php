@@ -3,6 +3,7 @@
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
 use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use esono\pkgCmsCache\CacheInterface;
 use TGlobal;
@@ -22,14 +23,21 @@ class DataAccessCmsMasterPagedefCacheDecorator implements DataAccessCmsMasterPag
      */
     private $inputFilterUtil;
 
+    /**
+     * @var RequestInfoServiceInterface
+     */
+    private $requestInfoService;
+
     public function __construct(
         DataAccessCmsMasterPagedefInterface $subject,
         InputFilterUtilInterface $inputFilterUtil,
-        CacheInterface $cache
+        CacheInterface $cache,
+        RequestInfoServiceInterface $requestInfoService
     ) {
         $this->subject = $subject;
         $this->cache = $cache;
         $this->inputFilterUtil = $inputFilterUtil;
+        $this->requestInfoService = $requestInfoService;
     }
 
     public function get(string $id, ?string $type = null): ?CmsMasterPagdef
@@ -63,7 +71,7 @@ class DataAccessCmsMasterPagedefCacheDecorator implements DataAccessCmsMasterPag
             'type' => 'pagedefdata',
             'pagedef' => $pagedef,
             'requestMasterPageDef' => $this->inputFilterUtil->getFilteredInput('__masterPageDef', false),
-            'isTemplateEngineMode' => TGlobal::IsCMSTemplateEngineEditMode(),
+            'isTemplateEngineMode' => $this->requestInfoService->isCmsTemplateEngineEditMode(),
             'cmsuserdefined' => TGlobal::CMSUserDefined(),
         );
 

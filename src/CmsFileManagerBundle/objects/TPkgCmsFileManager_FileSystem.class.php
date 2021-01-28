@@ -98,14 +98,6 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
     /**
      * {@inheritdoc}
      */
-    public function setDriver(IClusterDriver $driver)
-    {
-        // we don't need a driver
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function chmod($file, $mode)
     {
         return chmod($file, $mode);
@@ -120,7 +112,11 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
             trigger_error('File permissions are handled by the administrator. Do not try to set the mode by hand.', E_USER_DEPRECATED);
         }
 
-        return mkdir($path, 0777, $recursive);
+        try {
+            return mkdir($path, 0777, $recursive);
+        } catch (Exception $e) {
+            throw new Exception(sprintf("Cannot create folder %s.", $path), $e->getCode(), $e);
+        }
     }
 
     /**

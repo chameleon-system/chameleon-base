@@ -153,8 +153,6 @@ class CMSTemplateEngine extends TCMSModelBase
      */
     public function IsMainNavigationSet()
     {
-        $oRecordData = null;
-
         $bMainNavigationIsSet = false;
         $oCmsTplPage = TdbCmsTplPage::GetNewInstance();
         /** @var $oCmsTplPage TdbCmsTplPage */
@@ -244,8 +242,6 @@ class CMSTemplateEngine extends TCMSModelBase
 
         $this->data['id'] = $this->sPageId;
 
-        $this->LoadRevisionData();
-
         $this->data['oPage'] = $this->oPage;
         if ($this->bPageDefinitionAssigned) {
             $this->data['sActivePageDef'] = $this->oPage->iMasterPageDefId;
@@ -293,38 +289,6 @@ class CMSTemplateEngine extends TCMSModelBase
         }
 
         $this->SetTemplate('CMSTemplateEngine', $viewName);
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * loads revision management relevant data if active.
-     */
-    protected function LoadRevisionData()
-    {
-        $this->data['bRevisionManagementActive'] = false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * checks for the last revision number for this record,
-     * if no revisions are found it returns 0.
-     *
-     * @return int
-     */
-    protected function GetLastRevisionNumber()
-    {
-        return 0;
-    }
-
-    /**
-     * loads workflow relevant data.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function LoadWorkflowData()
-    {
     }
 
     /**
@@ -482,12 +446,26 @@ class CMSTemplateEngine extends TCMSModelBase
      */
     protected function filterMainNavigation(): void
     {
-        $this->data['oMenuItems'] = $this->oTableManager->oTableEditor->GetMenuItems();
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'save');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'copy');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'new');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'delete');
-        $this->data['oMenuItems']->RemoveItem('sItemKey', 'copy_translation');
+        /**
+         * @var $menuItems TIterator
+         */
+        $menuItems = $this->oTableManager->oTableEditor->GetMenuItems();
+
+        $menuItems->RemoveItem('sItemKey', 'save');
+        $menuItems->RemoveItem('sItemKey', 'copy');
+        $menuItems->RemoveItem('sItemKey', 'new');
+        $menuItems->RemoveItem('sItemKey', 'delete');
+        $menuItems->RemoveItem('sItemKey', 'copy_translation');
+
+        $tableEditorButton = $menuItems->FindItemWithProperty('sItemKey', 'edittableconf');
+        if (false !== $tableEditorButton) {
+            /**
+             * @var $tableEditorButton TCMSTableEditorMenuItem
+             */
+            $tableEditorButton->sOnClick = str_replace('pagedef=templateengine', 'pagedef=tableeditor', $tableEditorButton->sOnClick);
+        }
+
+        $this->data['oMenuItems'] = $menuItems;
     }
 
     /**
@@ -513,16 +491,6 @@ class CMSTemplateEngine extends TCMSModelBase
         }
 
         return $view;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - renamed and split into 2 methods: filterMainNavigation and getActiveModuleLayout.
-     */
-    protected function GetMainNavigation()
-    {
-        $this->filterMainNavigation();
-
-        return $this->getActiveModuleLayout();
     }
 
     public function GetHtmlHeadIncludes()

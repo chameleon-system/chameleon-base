@@ -9,7 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * class TGroupTable is used to display a flexible table with, and without data groupings.
@@ -351,7 +354,6 @@ class TGroupTable
             if ($recordSetCount <= $offset) {
                 // not enough in this set. increase counter and exit function
                 $recordCount += $recordSetCount;
-                $showGroup = false;
             } else { // otherwise position it into the subset
                 $sql .= " LIMIT {$offset}";
                 if ($this->showRecordCount > 0) {
@@ -371,6 +373,8 @@ class TGroupTable
         $recordsDisplayed = 0;
         if (!empty($sqlError)) {
             $showGroup = false;
+            $groupContent .= '<div class="alert alert-danger">'.$this->getTranslator()->trans('chameleon_system_core.record_list.sql_error').'</div>';
+            $this->getLogger()->error(sprintf('SQL error occurred during _DisplayGroup in TGroupTable: %s', $sqlError));
         }
 
         $recordLimitOK = true;
@@ -451,13 +455,21 @@ class TGroupTable
             $oRecordList = new TCMSRecordList();
             $oRecordList->sTableName = $this->sTableName;
             $oRecordList->Load($sql);
-            $iLength = intval($oRecordList->Length());
-            $maxForGroup = $iLength - $this->startRecord;
-            if ($this->showRecordCount > 0) {
-                $maxForGroup = min($maxForGroup, $this->showRecordCount);
+            $iLength = $oRecordList->Length();
+
+            $startPos = $this->startRecord; // TODO this might be an "old" paging value; searching (or other?) should reset it
+            $limitLength = $iLength - $this->startRecord;
+
+            if ($this->startRecord >= $iLength) {
+                $this->startRecord = 0;
+                $limitLength = $iLength;
             }
+            if ($this->showRecordCount > 0) {
+                $limitLength = min($limitLength, $this->showRecordCount);
+            }
+
             $sql .= ' '.$this->_GetOrderString();
-            $sql .= ' LIMIT '.intval($this->startRecord).', '.$maxForGroup;
+            $sql .= ' LIMIT '.$this->startRecord.', '.$limitLength;
             $sGroupedQuery = 'SELECT * FROM ('.$sql.') AS originalQuery GROUP BY '.MySqlLegacySupport::getInstance()->real_escape_string($this->groupByCell->name);
             $rGroupRes = MySqlLegacySupport::getInstance()->query($sGroupedQuery);
             while ($aGroup = MySqlLegacySupport::getInstance()->fetch_assoc($rGroupRes)) {
@@ -643,5 +655,15 @@ class TGroupTable
     protected function getDatabaseConnection()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
     }
 }

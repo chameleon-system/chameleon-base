@@ -61,24 +61,6 @@ class CMSModuleChooser extends TCMSModelBase
     private $oCmsTplPageCmsMasterPagedefSpot = null;
 
     /**
-     * is true if the current page is under workflow control and locked by another transaction.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected $bPageIsLockedByWorkflowTransaction = false;
-
-    /**
-     * is true if the current module instance is under workflow control and locked by another transaction.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected $bModuleInstanceIsLockedByWorkflowTransaction = false;
-
-    /**
      * is true if the page is locked by a user.
      *
      * @var bool
@@ -1037,21 +1019,11 @@ class CMSModuleChooser extends TCMSModelBase
         if (false === $sPageId) {
             $sPageId = $this->global->GetUserData('pagedef');
         }
-        $oCmsTplPage = TCMSActivePage::GetInstance();
+        $oCmsTplPage = $this->getActivePageService()->getActivePage();
         $iTableID = TTools::GetCMSTableId('cms_tpl_page');
-        /** @var $oTableEditor TCMSTableEditorManager */
         $oTableEditor = new TCMSTableEditorManager();
         $oTableEditor->Init($iTableID, $sPageId);
         $oTableEditor->SaveField('name', $oCmsTplPage->sqlData['name']);
-    }
-
-    /**
-     * loads workflow relevant data.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function LoadWorkflowData()
-    {
     }
 
     private function createModuleMenuHtml()

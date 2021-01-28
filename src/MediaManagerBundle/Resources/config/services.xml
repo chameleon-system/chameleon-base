@@ -11,7 +11,7 @@
         </service>
 
         <service id="chameleon_system_media_manager.media_item.data_access"
-                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\DataAccess\MediaItemDataAccess">
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\DataAccess\MediaItemDataAccess" public="true">
             <argument type="service" id="database_connection"/>
             <argument type="service" id="chameleon_system_core.tools"/>
             <argument type="service" id="chameleon_system_core.flash_messages"/>
@@ -21,7 +21,7 @@
         </service>
 
         <service id="chameleon_system_media_manager.usages.chain_finder"
-                 class="ChameleonSystem\MediaManager\MediaItemChainUsageFinder"/>
+                 class="ChameleonSystem\MediaManager\MediaItemChainUsageFinder" public="true"/>
 
         <service id="chameleon_system_media_manager.usages.delete_service_chain"
                  class="ChameleonSystem\MediaManager\MediaItemUsageChainDeleteService"/>
@@ -131,32 +131,44 @@
 
         <service id="chameleon_system_media_manager.backend_module_mapper.list_result"
                  class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerListResultsMapper">
+            <tag name="chameleon_system.mapper"/>
+
             <argument type="service" id="chameleon_system_media_manager.list_request_service"/>
             <argument type="service" id="chameleon_system_media_manager.media_item.data_access"/>
         </service>
 
         <service id="chameleon_system_media_manager.backend_module_mapper.list_sort"
                  class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerListSortMapper">
+            <tag name="chameleon_system.mapper"/>
+
             <argument type="service" id="chameleon_system_media_manager.sort.sort_column_collection"/>
         </service>
 
         <service id="chameleon_system_media_manager.backend_module_mapper.page_size"
                  class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerPageSizeMapper">
+            <tag name="chameleon_system.mapper"/>
+
             <argument type="collection"/>
             <argument type="service" id="translator"/>
         </service>
 
         <service id="chameleon_system_media_manager.backend_module_mapper.pick_images"
-                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerPickImagesMapper"/>
+                 class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerPickImagesMapper">
+            <tag name="chameleon_system.mapper"/>
+        </service>
 
         <service id="chameleon_system_media_manager.backend_module_mapper.media_item_usages"
                  class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerMediaItemUsagesMapper">
+            <tag name="chameleon_system.mapper"/>
+
             <argument type="service" id="chameleon_system_media_manager.usages.chain_finder"/>
             <argument type="service" id="chameleon_system_core.translator"/>
         </service>
 
         <service id="chameleon_system_media_manager.backend_module_mapper.media_item_confirm_delete"
                  class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerConfirmDeleteMapper">
+            <tag name="chameleon_system.mapper"/>
+
             <argument type="service" id="chameleon_system_media_manager.usages.chain_finder"/>
             <argument type="service" id="chameleon_system_media_manager.media_item.data_access"/>
             <argument type="service" id="chameleon_system_core.translator"/>
@@ -164,6 +176,8 @@
 
         <service id="chameleon_system_media_manager.backend_module_mapper.search_auto_complete"
                  class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper\MediaManagerSearchAutoCompleteMapper">
+            <tag name="chameleon_system.mapper"/>
+
             <argument type="service" id="chameleon_system_media_manager.media_item.data_access"/>
         </service>
 
@@ -189,9 +203,22 @@
         <service id="chameleon_system_media_manager.mapper.media_field_decorator" class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\Mapper\TCMSMediaFieldMapperDecorator"
                  decorates="chameleon_system_core.mapper.media_field">
             <argument id="chameleon_system_media_manager.mapper.media_field_decorator.inner" type="service"/>
-            <argument id="chameleon_system_core.media_manager.url_generator" type="service"/>
+            <argument id="chameleon_system_media_manager.url_generator" type="service"/>
             <argument id="translator" type="service"/>
         </service>
+
+        <service
+                id="chameleon_system_media_manager.url_generator"
+                class="ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\MediaManagerUrlGenerator"
+                public="true"
+        >
+            <argument type="service" id="chameleon_system_core.util.url"/>
+            <argument /> <!-- Is set by ChameleonSystemMediaManagerExtension -->
+            <argument type="service" id="chameleon_system_core.util.input_filter"/>
+        </service>
+
+        <!-- Alias for BC -->
+        <service id="chameleon_system_core.media_manager.url_generator" alias="chameleon_system_media_manager.url_generator" public="true" />
 
     </services>
 

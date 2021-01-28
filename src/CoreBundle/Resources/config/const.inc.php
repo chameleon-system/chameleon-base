@@ -48,12 +48,6 @@ define('PATH_CUSTOMER_FRAMEWORK', PATH_PROJECT_BASE.'/src/framework/');
  */
 define('PATH_CUSTOMER_PAGELAYOUTS', PATH_CUSTOMER_FRAMEWORK.'/layoutTemplates/');
 /**
- * the core cms files (controller, etc...).
- *
- * @deprecated since 6.2.0 - no longer used.
- */
-define('_CMS_CORE_ENGINE', _CMS_CORE.'/core');
-/**
  * path to the customer pagedefinitions
  * trailing slash "/" needed.
  */

@@ -295,10 +295,7 @@ class TCMSLocal extends TCMSRecord
      */
     public function StringToDate($sDateString)
     {
-        $sSQLDate = '';
-
         $parts = explode(' ', $sDateString); // split into date and time
-        $sDatePart = '';
         $sTimePart = '';
         $sDatePart = $parts[0];
         if (count($parts) > 1) {

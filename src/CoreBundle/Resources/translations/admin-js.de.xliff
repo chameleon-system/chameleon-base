@@ -3,12 +3,6 @@
     <file source-language="en" target-language="de" datatype="plaintext" original="admin-js.en.xliff">
         <body>
 
-            <trans-unit id="chameleon_system_core.fields.lookup.no_matches">
-                <source>chameleon_system_core.fields.lookup.no_matches</source>
-                <target>Keine Treffer für</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_core.universal_uploader.invalid_file_type">
                 <source>chameleon_system_core.universal_uploader.invalid_file_type</source>
                 <target>Falscher Dateityp.</target>

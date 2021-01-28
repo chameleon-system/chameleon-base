@@ -330,9 +330,6 @@ class MTFeedbackCoreEndPoint extends TUserCustomModelBase
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
-        $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib(
-                '/web_modules/MTFeedbackCore/css/MTFeedbackCore.css'
-            ).'" rel="stylesheet" type="text/css" media="screen" />';
 
         // load optional custm css from /chameleon/web_modules/ directory
         if (file_exists(PATH_USER_CMS_PUBLIC.'/web_modules/MTFeedbackCore/css/MTFeedbackCore.css')) {

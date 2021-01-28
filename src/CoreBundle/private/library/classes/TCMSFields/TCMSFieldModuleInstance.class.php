@@ -159,7 +159,6 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     public function GetCMSHtmlHeadIncludes()
     {
         $aIncludes = parent::GetCMSHtmlHeadIncludes();
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/bgiframe/jquery.bgiframe.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/css/modules/templateengineeditor.css').'" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/modules/TemplateEngine.js').'" type="text/javascript"></script>';
@@ -253,17 +252,13 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
      */
     public function RenameInstance()
     {
-        $returnVal = false;
         $oTdbCmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
-        /** @var $oTdbCmsTplModuleInstance TdbCmsTplModuleInstance */
         $oTableConf = &$oTdbCmsTplModuleInstance->GetTableConf();
 
         $oTableEditor = new TCMSTableEditorModuleInstance();
-        /** @var $oTableEditor TCMSTableEditorModuleInstance */
         $oTableEditor->Init($oTableConf->id, $this->data);
-        $returnVal = $oTableEditor->RenameInstance();
 
-        return $returnVal;
+        return $oTableEditor->RenameInstance();
     }
 
     public function CreateNewInstance()

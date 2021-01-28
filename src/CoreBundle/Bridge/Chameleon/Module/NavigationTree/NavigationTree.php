@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
 use ChameleonSystem\CoreBundle\Event\ChangeNavigationTreeNodeEvent;
 use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperFactoryInterface;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface;
@@ -22,7 +23,6 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Doctrine\DBAL\Connection;
-use esono\pkgCmsCache\CacheInterface;
 use MTPkgViewRendererAbstractModuleMapper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -39,13 +39,6 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     private $treeTable = 'cms_tree';
 
     /**
-     * The mysql tablename of the tree-node.
-     *
-     * @var string
-     */
-    private $treeNodeTable = 'cms_tree_node';
-
-    /**
      * @var string
      */
     private $treeTableSortField = 'entry_sort';
@@ -59,6 +52,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      * @var string
      */
     private $currentPageId = '';
+
+    /**
+     * @var string
+     */
+    private $fieldName = '';
 
     /**
      * @var string
@@ -114,11 +112,6 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     private $nestedSetHelperFactory;
 
     /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
      * @var TTools
      */
     private $tools;
@@ -133,6 +126,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      */
     private $fieldTranslationUtil;
 
+    /**
+     * @var \TdbCmsLanguage
+     */
+    private $editLanguage;
+
     public function __construct(
         Connection $dbConnection,
         EventDispatcherInterface $eventDispatcher,
@@ -142,11 +140,13 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         TranslatorInterface $translator,
         UrlUtil $urlUtil,
         NestedSetHelperFactoryInterface $nestedSetHelperFactory,
-        CacheInterface $cache,
         TTools $tools,
         TGlobal $global,
-        FieldTranslationUtil $fieldTranslationUtil
+        FieldTranslationUtil $fieldTranslationUtil,
+        LanguageServiceInterface $languageService
     ) {
+        parent::__construct();
+
         $this->dbConnection = $dbConnection;
         $this->eventDispatcher = $eventDispatcher;
         $this->inputFilterUtil = $inputFilterUtil;
@@ -155,10 +155,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $this->translator = $translator;
         $this->urlUtil = $urlUtil;
         $this->nestedSetHelperFactory = $nestedSetHelperFactory;
-        $this->cache = $cache;
         $this->tools = $tools;
         $this->global = $global;
         $this->fieldTranslationUtil = $fieldTranslationUtil;
+
+        $this->editLanguage = $languageService->getActiveEditLanguage();
     }
 
     /**
@@ -168,6 +169,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     {
         $isInIframe = $this->inputFilterUtil->getFilteredInput('isInIframe', '0');
         $visitor->SetMappedValue('isInIframe', $isInIframe);
+
+        $this->fieldName = $this->inputFilterUtil->getFilteredGetInput('fieldName', '');
+        $visitor->SetMappedValue('fieldName', $this->fieldName);
 
         $noAssignDialog = $this->inputFilterUtil->getFilteredGetInput('noassign', '0');
         $visitor->SetMappedValue('noAssignDialog', $noAssignDialog);
@@ -180,6 +184,13 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $currentPageId = $this->inputFilterUtil->getFilteredGetInput('id', '');
         $primaryConnectedNodeIdOfCurrentPage = $this->inputFilterUtil->getFilteredGetInput('primaryTreeNodeId', '');
         $this->rootNodeId = $this->inputFilterUtil->getFilteredGetInput('rootID', \TCMSTreeNode::TREE_ROOT_ID);
+        if ('' !== $currentPageId) {
+            $rootNode = new \TdbCmsTree();
+            $rootNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+            $rootNode->Load($this->rootNodeId);
+            $visitor->SetMappedValue('pageBreadcrumbsHTML', $this->createPageBreadcrumbs($rootNode));
+        }
+
 
         $url = $this->urlUtil->getArrayAsUrl(
             [
@@ -336,6 +347,19 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         if (true === $cachingEnabled) {
             $this->addCachingTriggers($cacheTriggerManager);
         }
+    }
+
+    private function createPageBreadcrumbs(\TdbCmsTree $node, $path = ''): string
+    {
+        $path .= '<li class="breadcrumb-item">'.$node->fieldName.'</li>';
+        $pageBreadcrumbsHTML = '<div id="'.$this->fieldName.'_tmp_path_'.$node->id.'" style="display:none;"><ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li>'.$path.'</ol></div>'."\n";
+
+        $children = $node->GetChildren(true);
+        while ($child = $children->Next()) {
+            $pageBreadcrumbsHTML .= $this->createPageBreadcrumbs($child, $path);
+        }
+
+        return $pageBreadcrumbsHTML;
     }
 
     /**
@@ -535,9 +559,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $treeData = [];
 
         // menu item "Navigation" was called
-        if ('' === $this->currentPageId and $this->rootNodeId  === \TCMSTreeNode::TREE_ROOT_ID) {
+        if ('' === $this->currentPageId && $this->rootNodeId  === \TCMSTreeNode::TREE_ROOT_ID) {
             $rootTreeNode = new \TdbCmsTree();
-            $rootTreeNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+            $rootTreeNode->SetLanguage($this->editLanguage->id);
             $rootTreeNode->Load($this->rootNodeId);
 
             $rootTreeNodeDataModel = $this->backendTreeNodeFactory->createTreeNodeDataModelFromTreeRecord($rootTreeNode);
@@ -548,7 +572,12 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             $defaultPortal = $this->portalDomainService->getDefaultPortal();
             $defaultPortalMainNodeId = $defaultPortal->fieldMainNodeTree;
 
-            $portalList = \TdbCmsPortalList::GetList();
+            $orderedPortalsQuery = '
+                SELECT `cms_portal`.* FROM `cms_portal` 
+                    LEFT JOIN `cms_tree` ON `cms_portal`.`main_node_tree` = `cms_tree`.`id` 
+                ORDER BY `cms_tree`.`lft`, `cms_portal`.`sort_order`
+            ';
+            $portalList = \TdbCmsPortalList::GetList($orderedPortalsQuery);
 
             while ($portal = $portalList->Next()) {
                 $portalId = $portal->fieldMainNodeTree;
@@ -579,7 +608,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     private function getPortalTree(string $portalId, string $defaultPortalMainNodeId = ''): BackendTreeNodeDataModel
     {
         $portalTreeNode = new \TdbCmsTree();
-        $portalTreeNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        $portalTreeNode->SetLanguage($this->editLanguage->id);
         $portalTreeNode->Load($portalId);
 
         if ($portalId === $defaultPortalMainNodeId) {
@@ -594,6 +623,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
                 $portalTreeNodeDataModel->setType($typeRestricted);
             }
         }
+        if ('' !== $this->currentPageId) {
+            $portalTreeNodeDataModel->setDisabled(true);
+        }
         $portalTreeNodeDataModel->addListHtmlClass('no-checkbox');
 
         return $portalTreeNodeDataModel;
@@ -607,11 +639,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         }
 
         $node = new \TdbCmsTree();
-        $node->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        $node->SetLanguage($this->editLanguage->id);
         $node->Load($startNodeId);
 
         $childrenArray = [];
-        $children = $node->GetChildren(true);
+        $children = $node->GetChildren(true, $this->editLanguage->id);
         while ($child = $children->Next()) {
             $childrenArray[] = $this->createTreeDataModel($child, $level);
         }
@@ -626,14 +658,18 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $treeNodeDataModel->setName($this->translateNodeName($treeNodeDataModel->getName(), $node));
         $this->setTypeAndAttributes($treeNodeDataModel, $node);
 
-        // $level 0 == rootNode, 1 = portal, >2 = folder or page
-        if ($level < 2) {
+        // $level 0 == rootNode, 1 = portal, 2 = Navigations (top, main, footer, system),  >2 = folder or page
+        if ($level <= 2) {
+            if ('' !== $this->currentPageId) {
+                $treeNodeDataModel->setDisabled(true);
+            }
             $treeNodeDataModel->addListHtmlClass('no-checkbox');
             $treeNodeDataModel->setOpened(true);
         }
 
         ++$level;
-        $children = $node->GetChildren(true);
+
+        $children = $node->GetChildren(true, $this->editLanguage->id);
         while ($child = $children->Next()) {
             $childTreeNodeDataModel = $this->createTreeDataModel($child, $level);
             $treeNodeDataModel->addChildren($childTreeNodeDataModel);
@@ -644,9 +680,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
     private function translateNodeName(string $name, \TdbCmsTree $node): string
     {
-        $cmsUser = \TCMSUser::GetActiveUser();
-        $editLanguage = $cmsUser->GetCurrentEditLanguageObject();
-        $node->SetLanguage($editLanguage->id);
+        $node->SetLanguage($this->editLanguage->id);
 
         if ('' === $name) {
             $name = $this->global->OutHTML($this->translator->trans('chameleon_system_core.text.unnamed_record'));
@@ -656,8 +690,8 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             return $name;
         }
 
-        if ($this->fieldTranslationUtil->isTranslationNeeded($editLanguage)) {
-            $nodeNameFieldName = $this->fieldTranslationUtil->getTranslatedFieldName($this->treeTable, 'name', $editLanguage);
+        if ($this->fieldTranslationUtil->isTranslationNeeded($this->editLanguage)) {
+            $nodeNameFieldName = $this->fieldTranslationUtil->getTranslatedFieldName($this->treeTable, 'name', $this->editLanguage);
 
             if ('' === $node->sqlData[$nodeNameFieldName]) {
                 $name .= ' <span class="bg-danger px-1"><i class="fas fa-language" title="' . $this->translator->trans('chameleon_system_core.cms_module_table_editor.not_translated') . '"></i></span>';
@@ -669,83 +703,74 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
     private function setTypeAndAttributes(BackendTreeNodeDataModel $treeNodeDataModel, \TdbCmsTree $node)
     {
-        $treeNodeDataModel->setType($this->getInitialType($node));
+        $treeNodeDataModel->setType('');
 
-        $nodeHidden = false;
-        if (true == $node->fieldHidden) {
-            $nodeHidden = true;
+        $children = $node->GetChildren(true);
+        if ($children->Length() > 0) {
+            $treeNodeDataModel->setType('folder');
+            if (true === in_array($node->id, $this->restrictedNodes)) {
+                $treeNodeDataModel->setType('folderRestrictedMenu');
+            }
+        }
+
+        if (true === $node->fieldHidden) {
+            $this->addIconToTreeNode($treeNodeDataModel, 'nodeHidden', 'fas fa-eye-slash');
             $treeNodeDataModel->addLinkHtmlClass('node-hidden');
         }
 
-        $pages = [];
-        $connectedPages = $node->GetAllLinkedPages();
-        $foundSecuredPage = false;
-        while ($connectedPage = $connectedPages->Next()) {
-            $pages[] = $connectedPage->id;
+        if ('' !== $node->sqlData['link']) {
+            $this->addIconToTreeNode($treeNodeDataModel, 'externalLink', 'fas fa-external-link-alt');
+        }
 
-            if (false === $nodeHidden
-                && false === $foundSecuredPage
-                && (true === $connectedPage->fieldExtranetPage
-                    && false === $node->fieldShowExtranetPage)) {
-                $treeNodeDataModel->addLinkHtmlClass('page-hidden');
-                $treeNodeDataModel->setType('pageHidden');
-                $foundSecuredPage = true;
+        $linkedPageOfNode = $node->GetLinkedPageObject(true);
+
+        if (false === $linkedPageOfNode) {
+            if ('' === $treeNodeDataModel->getType()) {
+                $this->addIconToTreeNode($treeNodeDataModel, 'noPage', 'fas fa-genderless');
             }
+            return;
+        }
 
-            if (true === $connectedPage->fieldExtranetPage) {
-                $treeNodeDataModel->addLinkHtmlClass('locked');
-                $treeNodeDataModel->setType('locked');
+        $this->addIconToTreeNode($treeNodeDataModel, 'page', 'far fa-file');
+        $treeNodeDataModel->addListAttribute('isPageId', $linkedPageOfNode->id);
+
+        if (true === $linkedPageOfNode->fieldExtranetPage) {
+            $treeNodeDataModel->addLinkHtmlClass('locked');
+            $this->addIconToTreeNode($treeNodeDataModel, 'locked', 'fas fa-user-lock');
+            if (false === $node->fieldShowExtranetPage) {
+                $this->addIconToTreeNode($treeNodeDataModel, 'extranetpageHidden', 'far fa-eye-slash');
+                $treeNodeDataModel->addLinkHtmlClass('extranetpage-hidden');
             }
         }
 
-        if (count($pages) > 0) {
-            if ('folder' === $treeNodeDataModel->getType()) {
-                $treeNodeDataModel->setType('folderWithPage');
-            }
+        // current page is connected to this node
+        if ($this->currentPageId === $linkedPageOfNode->id) {
+            $treeNodeDataModel->addListHtmlClass('activeConnectedNode');
+            $treeNodeDataModel->setOpened(true);
+            $treeNodeDataModel->setSelected(true);
 
-            $primaryPageID = $node->GetLinkedPage(true);
-            if (false !== $primaryPageID) {
-                $treeNodeDataModel->addListAttribute('isPageId', $primaryPageID);
-            }
-
-            // current page is connected to this node
-            if ('' !== $this->currentPageId && true === in_array($this->currentPageId, $pages)) {
-                $treeNodeDataModel->addLinkHtmlClass('activeConnectedNode');
-                $treeNodeDataModel->setOpened(true);
-                $treeNodeDataModel->setSelected(true);
-
-                if ($this->primaryConnectedNodeIdOfCurrentPage === $node->id) {
-                    $treeNodeDataModel->addLinkHtmlClass('primaryConnectedNode');
+            if ($this->primaryConnectedNodeIdOfCurrentPage === $node->id) {
+                $treeNodeDataModel->addListHtmlClass('primaryConnectedNodeOfCurrentPage');
+                if ('' !== $this->currentPageId) {
                     $treeNodeDataModel->setDisabled(true);
+                    $treeNodeDataModel->addListHtmlClass('no-checkbox');
                 }
-            } else {
-                $treeNodeDataModel->addLinkHtmlClass('otherConnectedNode');
+            }
+        } else {
+            $treeNodeDataModel->addLinkHtmlClass('otherConnectedNode');
+            if ('' !== $this->currentPageId) {
+                $treeNodeDataModel->setDisabled(true);
+                $treeNodeDataModel->addListHtmlClass('no-checkbox');
             }
         }
     }
 
-    private function getInitialType(\TdbCmsTree $node): string
-    {
-        $children = $node->GetChildren(true);
-        if ($children->Length() > 0) {
-            $type = 'folder';
+    private function addIconToTreeNode (BackendTreeNodeDataModel $treeNodeDataModel, string $type, string $fontawesomeIcon) {
+        if ('' === $treeNodeDataModel->getType()) {
+            $treeNodeDataModel->setType($type);
         } else {
-            $type = 'page';
+            $treeNodeDataModel->addFurtherIconHTML('<i class="'. $fontawesomeIcon .' mr-2"></i>');
         }
-
-        if ('' !== $node->sqlData['link']) {
-            $type = 'externalLink';
-        }
-
-        if (true === in_array($node->id, $this->restrictedNodes)) {
-            $type .= 'RestrictedMenu';
-        }
-
-        if (true === $node->fieldHidden) {
-            $type = 'nodeHidden';
-        }
-
-        return $type;
     }
 
     /**
@@ -754,7 +779,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getPortalNavigationStartNodes(): array
     {
-        $portalList = \TdbCmsPortalList::GetList(null, \TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        $portalList = \TdbCmsPortalList::GetList(null, $this->editLanguage->id);
 
         $restrictedNodes = [];
         while ($portal = $portalList->Next()) {
@@ -790,7 +815,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     private function updateSubtreePathCache(string $nodeId): void
     {
         $oNode = \TdbCmsTree::GetNewInstance();
-        $oNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        $oNode->SetLanguage($this->editLanguage->id);
         $oNode->Load($nodeId);
         $oNode->TriggerUpdateOfPathCache();
     }

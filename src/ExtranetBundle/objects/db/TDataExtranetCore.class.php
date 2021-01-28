@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 class TDataExtranetCore extends TDataExtranetCoreAutoParent
@@ -22,6 +23,9 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
      */
     protected $bInternalCacheMarkedAsDirty = true;
 
+    /**
+     * @deprecated - This was only used by the forgot password email which does not include login name anymore.
+     */
     const URL_PARAMETER_LOGINNAME = 'loginname';
     const URL_PARAMETER_CHANGE_PASSWORD = 'pwchangekey';
 
@@ -222,7 +226,6 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
         $node->Load($this->sqlData['forgot_password_treenode_id']);
         $data = array(
             'module_fnc' => array($spotName => 'ChangeForgotPassword'),
-            self::URL_PARAMETER_LOGINNAME => $loginname,
             self::URL_PARAMETER_CHANGE_PASSWORD => $key,
         );
         $link = static::getTreeService()->getLinkToPageForTreeAbsolute($node, $data);
@@ -247,19 +250,6 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
         }
 
         return $aTrigger;
-    }
-
-    /**
-     * commit the current content to cache - needs only be called if something relevant
-     * changes in the object.
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public function CacheCommit()
-    {
-        if ($this->bInternalCacheMarkedAsDirty) {
-            $this->bInternalCacheMarkedAsDirty = false;
-        }
     }
 
     /**
@@ -293,38 +283,18 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
         $this->bInternalCacheMarkedAsDirty = true;
     }
 
-    /**
-     * @return bool
-     *
-     * @deprecated since 6.1.0 - unencrypted passwords are no longer supported (and to prevent heart attacks: haven't
-     * been used for many years).
-     */
-    public static function IsExtranetUsingCryptedPassword()
+    private static function getActivePageService(): ActivePageServiceInterface
     {
-        return true;
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private static function getActivePageService()
+    private static function getMyPortalDomainService(): PortalDomainServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private static function getMyPortalDomainService()
+    private static function getUrlUtil(): UrlUtil
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
-    }
-
-    /**
-     * @return UrlUtil
-     */
-    private static function getUrlUtil()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

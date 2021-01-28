@@ -50,14 +50,6 @@ class RoutingUtil implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getRouteForTree(TdbCmsTree $tree, $controller, TdbCmsPortal $portal, TdbCmsLanguage $language)
-    {
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getLinkForTreeNode(TdbCmsTree $tree, TdbCmsLanguage $language)
     {
         $url = null;
@@ -144,19 +136,6 @@ class RoutingUtil implements RoutingUtilInterface
         }
 
         return $domain->fieldName;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPageDataForPagePath($pagePath, TdbCmsPortal $portal, TdbCmsLanguage $language)
-    {
-        $naviLookup = $this->routingUtilDataAccess->getNaviLookup($portal, $language);
-        if (isset($naviLookup[$pagePath])) {
-            return $naviLookup[$pagePath];
-        }
-
-        return null;
     }
 
     /**

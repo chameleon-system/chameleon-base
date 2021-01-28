@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
+
 /**
  * picks a node from a tree.
 /**/
@@ -52,10 +55,24 @@ class TCMSFieldTreeNode extends TCMSField
 
     public function _GetOpenWindowJS()
     {
-        $url = PATH_CMS_CONTROLLER.'?pagedef=navigationTreeSingleSelect&fieldName='.urlencode($this->name).'&id='.urlencode($this->data);
-        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."')";
+        $urlParts = [
+            'pagedef' => 'navigationTreeSingleSelect',
+            'fieldName' => $this->name,
+            'id' => $this->data,
+            'currentRecordId' => $this->recordId,
+        ];
 
-        return $js;
+        if (null !== $this->sTableName && '' !== $this->sTableName) {
+            $urlParts['tableName'] = $this->sTableName;
+        }
+
+        if (true === \array_key_exists('cms_portal_id', $this->oTableRow->sqlData)) {
+            $urlParts['portalID'] = $this->oTableRow->sqlData['cms_portal_id'];
+        }
+
+        $url = $this->getUrlUtil()->getArrayAsUrl($urlParts, PATH_CMS_CONTROLLER.'?', '&');
+
+        return "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."')";
     }
 
     /**
@@ -100,18 +117,8 @@ class TCMSFieldTreeNode extends TCMSField
         return $oViewParser->RenderObjectView('method', 'TCMSFields/TCMSField');
     }
 
-    /**
-     * @deprecated since 6.3.0 - date related tree nodes are not working anymore, functionality will be removed.
-     *
-     * Get page tree connection date information as rendered html.
-     *
-     * @param string $sTreeId
-     * @param string $sPageId
-     *
-     * @return string
-     */
-    protected function GetPageTreeConnectionDateInformationHTML($sTreeId, $sPageId)
+    private function getUrlUtil(): UrlUtil
     {
-        return '';
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

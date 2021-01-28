@@ -48,31 +48,20 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $_SESSION['_tmpCurrentTableName'] = $this->oTableConf->sqlData['name']; // needed for the callback functions...
         $_SESSION['_tmpCurrentTableID'] = $this->oTableConf->sqlData['id']; // needed for the callback functions...
 
-        $isTableCacheChangeRequest = $this->isTableCacheChangeRequest();
-
-        $oOldTableObj = null;
-        $sListCacheKey = $this->GetListCacheKey();
-
-        if ($this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE) {
-            if (!array_key_exists('_listObjCache', $_SESSION)) {
-                $_SESSION['_listObjCache'] = array();
-            }
-            $objectInSession = (array_key_exists($sListCacheKey, $_SESSION['_listObjCache']));
-
-            if ($objectInSession) {
-                $tmp = base64_decode($_SESSION['_listObjCache'][$sListCacheKey]);
-                $oOldTableObj = unserialize(gzuncompress($tmp));
-            }
+        $listCacheKey = $this->GetListCacheKey();
+        $cachedTableObj = null;
+        if (true === $this->isTableCachingEnabled()) {
+            $cachedTableObj = $this->getTableFromSessionCache($listCacheKey);
         }
 
         $aOrderData = array();
-        if (!is_null($oOldTableObj) && false !== $oOldTableObj) {
-            $aOrderData = $oOldTableObj->orderList;
+        if (null !== $cachedTableObj) {
+            $aOrderData = $cachedTableObj->orderList;
         }
 
         // table is not in cache, load it
-        if (is_null($oOldTableObj) || false === $oOldTableObj) {
-            $this->CreateTableObj();
+        if (null === $cachedTableObj) {
+            $this->CreateTableObj(); // also calls PostCreateTableObjectHook();
             $this->tableObj->orderList = $aOrderData;
             $this->AddFields();
             $this->AddSortInformation();
@@ -80,7 +69,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         } else { // table is in cache, load it from there and inject current post parameters
             $oGlobal = TGlobal::instance();
             $postData = $oGlobal->GetUserData();
-            $this->tableObj = $oOldTableObj;
+            $this->tableObj = $cachedTableObj;
             $this->tableObj->_postData = array_merge($this->tableObj->_postData, $postData); // overwrite anything that is passed via get or post
             foreach ($this->tableObj->customSearchFieldParameter as $key => $val) {
                 if (!array_key_exists($key, $this->tableObj->_postData)) {
@@ -99,20 +88,47 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $this->PostCreateTableObjectHook();
         }
 
-        if (($isTableCacheChangeRequest || is_null($oOldTableObj)) && $this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE) {
-            $tmp = serialize($this->tableObj);
-            $tmp = gzcompress($tmp, 9);
-            $_SESSION['_listObjCache'][$sListCacheKey] = base64_encode($tmp);
+        if (true === $this->isTableCachingEnabled() && false === $this->isModuleFunction() && (true === $this->isTableCacheChangeRequest() || null === $cachedTableObj)) {
+            $this->saveTableInSessionCache($listCacheKey, $this->tableObj);
         }
+    }
+
+    private function isTableCachingEnabled(): bool
+    {
+        return $this->bListCacheEnabled && CMS_ACTIVE_BACKEND_LIST_CACHE;
+    }
+
+    private function getTableFromSessionCache(string $cacheKey): ?TFullGroupTable
+    {
+        if (false === \array_key_exists('_listObjCache', $_SESSION)) {
+            return null;
+        }
+
+        $isObjectInSession = \array_key_exists($cacheKey, $_SESSION['_listObjCache']);
+
+        if (false === $isObjectInSession) {
+            return null;
+        }
+
+        $tmp = base64_decode($_SESSION['_listObjCache'][$cacheKey]);
+
+        return unserialize(gzuncompress($tmp));
+    }
+
+    private function saveTableInSessionCache(string $cacheKey, TFullGroupTable $table): void
+    {
+        if (false === \array_key_exists('_listObjCache', $_SESSION)) {
+            $_SESSION['_listObjCache'] = [];
+        }
+
+        $tmp = serialize($table);
+        $tmp = gzcompress($tmp, 9);
+        $_SESSION['_listObjCache'][$cacheKey] = base64_encode($tmp);
     }
 
     private function isTableCacheChangeRequest(): bool
     {
         $inputFilter = $this->getInputFilterUtil();
-
-        if (null !== $inputFilter->getFilteredInput('_fnc')) {
-            return false;
-        }
 
         $listName = $inputFilter->getFilteredInput('_listName');
 
@@ -121,6 +137,13 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         }
 
         return $listName === 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
+    }
+
+    private function isModuleFunction(): bool
+    {
+        $inputFilter = $this->getInputFilterUtil();
+
+        return null !== $inputFilter->getFilteredInput('_fnc');
     }
 
     protected function isRecordEditPossible(): bool
@@ -384,9 +407,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         if (count($listFieldsConfig) > 0) {
             foreach ($listFieldsConfig as $fieldConfig) {
-                if ('cms_workflow_actiontype_id' === $fieldConfig['name']) {
-                    continue;
-                }
                 $fieldConfig = $this->TransformFieldForTranslations($fieldConfig);
                 $dbfieldname = trim($fieldConfig['name']);
                 $originalField = trim($fieldConfig['db_alias']);
@@ -632,20 +652,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         return $sSortOrder;
     }
 
-    /**
-     * @param string $field
-     * @param array  $row
-     * @param string $name
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function CallBackWorkflowActionType($field, $row, $name)
-    {
-        return '';
-    }
-
     public function CallBackLockingStatus($field, $row, $name)
     {
         $userLock = TTools::IsRecordLocked($_SESSION['_tmpCurrentTableID'], $row['id']);
@@ -791,8 +797,8 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $oImage->Load($row['id']);
         $image = '';
 
-        if ($oImage->IsFlashMovie() || $oImage->IsExternalMovie()) {
-            $image = $oImage->GetThumbnailTag(100, 75, null, null, '');
+        if ($oImage->IsExternalMovie()) {
+            $image = $oImage->renderImage(100, 75);
         } else {
             $oThumb = $oImage->GetThumbnail(80, 80);
             /** @var $oThumb TCMSImage */
@@ -885,22 +891,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     public function CallBackRowStyling($sRecordID, $row)
     {
         return '';
-    }
-
-    /**
-     * tests, whether $row has a workflow_action and the record is part of the
-     * current workflow transaction
-     * returns always true on tables without activated transaction handling.
-     *
-     * @param array $row
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function IsCmsWorkflowTransaction($row)
-    {
-        return true;
     }
 
     /**

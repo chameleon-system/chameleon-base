@@ -47,15 +47,6 @@ class RequestInitializer
         $this->transformParameters($request);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @deprecated since 6.1.6 - not used anymore.
-     */
-    protected function handleUnitTestCase(Request $request)
-    {
-    }
-
     protected function defineVersion()
     {
         require_once PATH_CORE_CONFIG.'/version.inc.php';

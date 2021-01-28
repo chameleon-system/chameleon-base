@@ -28,20 +28,10 @@ abstract class TCMSMLTField extends TCMSField
             $oTableConf = new TCMSTableConf();
             $oTableConf->LoadFromField('name', $this->sTableName);
 
-            if (TGlobal::IsCMSMode()) {
-                $oAllForeignRecordsFiltered = $this->FetchMLTRecords();
-            }
-
             $sAlreadyConnectedQuery = 'SELECT * FROM `'.\MySqlLegacySupport::getInstance()->real_escape_string($sMltTableName)."` WHERE `source_id` = '".\MySqlLegacySupport::getInstance()->real_escape_string($recordId)."'";
             $tRes = \MySqlLegacySupport::getInstance()->query($sAlreadyConnectedQuery);
             while ($aRow = \MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-                if (TGlobal::IsCMSMode()) {
-                    if ($oAllForeignRecordsFiltered->FindItemsWithProperty('id', $aRow['target_id'])) {
-                        $aConnectedIds[] = $aRow['target_id'];
-                    }
-                } else {
-                    $aConnectedIds[] = $aRow['target_id'];
-                }
+                $aConnectedIds[] = $aRow['target_id'];
             }
         }
 
@@ -66,11 +56,7 @@ abstract class TCMSMLTField extends TCMSField
         if (!$this->data) {
             return '';
         }
-        $sTableName = $this->name;
-        if ('_mlt' === substr($sTableName, -4)) {
-            $sTableName = substr($this->name, 0, -4);
-        }
-
+        $sTableName = $this->GetConnectedTableName();
         $sTableId = TTools::GetCMSTableId($sTableName);
         if (!$sTableId) {
             return '';

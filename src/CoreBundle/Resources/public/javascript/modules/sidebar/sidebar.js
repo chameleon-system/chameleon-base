@@ -8,10 +8,12 @@
 
     function Plugin(baseElement) {
         this.$baseElement = $(baseElement);
+        this.$navElement = this.$baseElement.find("nav");
         this.$navItems = this.$baseElement.find(".nav-item");
         this.$navTitles = this.$baseElement.find('.nav-dropdown');
         this.$filterElement = this.$baseElement.find('.sidebar-filter-input');
         this.lastSearchTerm = '';
+        this.scrollTopBeforeFilter = 0;
 
         this.init();
     }
@@ -69,7 +71,7 @@
             });
         },
         handleScrollPosition: function() {
-            this.$baseElement.find("nav").on("scroll", function(evt) {
+            this.$navElement.on("scroll", function(evt) {
                 localStorage.setItem('sidebar-scroll-position', $(this).scrollTop());
             });
 
@@ -87,6 +89,10 @@
                 this.$navItems.removeClass('d-none');
 
                 this.restoreOpenState();
+
+                if (this.scrollTopBeforeFilter > 0) {
+                    this.$navElement.scrollTop(this.scrollTopBeforeFilter);
+                }
             }
 
             this.lastSearchTerm = searchTerm;
@@ -101,6 +107,14 @@
             let $matchingNavItems = this.$navItems.find(":chameleonContainsCaseInsensitive('" + searchTerm + "')").closest('.nav-item');
             $matchingNavItems.removeClass('d-none');
             $matchingNavItems.parents('.nav-item').addClass('open').removeClass('d-none');
+
+            let currentScrollTop = this.$navElement.scrollTop();
+            if (this.$navElement.innerHeight() <= this.$baseElement.innerHeight() && currentScrollTop > 0) {
+                // There are now fewer visible items than the scroll position shows
+
+                this.scrollTopBeforeFilter = currentScrollTop;
+                this.$navElement.scrollTop(0);
+            }
         },
         handleKeyEvent: function(evt) {
             if ("ArrowDown" !== evt.key && "ArrowUp" !== evt.key && "Enter" !== evt.key) {
@@ -201,9 +215,17 @@
             }
             // Else dropdown.js will react on the click
 
+            var openArray = this.$baseElement.data('active-categories').split(",");
+
             if (!categoryOpen) {
                 $category.focus();
+
+                openArray.push(categoryId);
+            } else {
+                openArray = openArray.filter(function(value, index, arr) { return value !== categoryId });
             }
+
+            this.$baseElement.data('active-categories', openArray.join(","));
 
             const url = this.$baseElement.data('toggle-category-notification-url');
             $.post(url, {

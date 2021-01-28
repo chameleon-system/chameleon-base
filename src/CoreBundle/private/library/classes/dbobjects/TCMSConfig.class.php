@@ -28,18 +28,7 @@ class TCMSConfig extends TCMSRecord
      */
     protected $oImageMagick = null;
 
-    private static $bObjectInitialized = false;
     private $aConfigValues = null;
-
-    /**
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public static function ObjectIsInitialized()
-    {
-        return self::$bObjectInitialized;
-    }
 
     /**
      * constructor. do not call directly.
@@ -49,18 +38,6 @@ class TCMSConfig extends TCMSRecord
     public function TCMSConfig()
     {
         parent::TCMSRecord('cms_config');
-    }
-
-    /**
-     * returns true if the extranet module is installed.
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - no longer used. Assume that the extranet bundle is always installed.
-     */
-    public function ExtranetModuleInstalled()
-    {
-        return true;
     }
 
     /**
@@ -199,8 +176,6 @@ class TCMSConfig extends TCMSRecord
             $instance = $cache->get($cacheKey);
 
             if (null !== $instance) {
-                self::$bObjectInitialized = true;
-
                 return $instance;
             }
         }
@@ -209,7 +184,6 @@ class TCMSConfig extends TCMSRecord
         $cache->set($cacheKey, $instance, [
             ['table' => 'cms_config', 'id' => '1'],
         ]);
-        self::$bObjectInitialized = true;
 
         return $instance;
     }
@@ -519,25 +493,6 @@ class TCMSConfig extends TCMSRecord
         }
 
         return $bIsBot;
-    }
-
-    /**
-     * can be used to return parameters that should be part of any cache key (language, currency, user group, etc)
-     * we place this in the config class so we can easily overwrite the method (doing so in the cache manager can be tricky).
-     *
-     * @static
-     *
-     * @return array
-     *
-     * @deprecated since 6.2.0 - use chameleon_system_core.request_state_hash_provider instead.
-     */
-    public static function GetGlobalCacheKeyParameter()
-    {
-        return [
-            'hash' => ServiceLocator::get(
-                'chameleon_system_core.request_state_hash_provider'
-            )->getHash(null),
-        ];
     }
 
     /**

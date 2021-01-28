@@ -35,7 +35,6 @@ class ChameleonBackendController extends ChameleonController
         $request = $this->getRequest();
         $pagedef = $this->getInputFilterUtil()->getFilteredInput('pagedef', $this->homePagedef);
         $request->attributes->set('pagedef', $pagedef);
-        $request->query->set('pagedef', $pagedef);
 
         $this->backendAccessCheck->assertAccess();
 

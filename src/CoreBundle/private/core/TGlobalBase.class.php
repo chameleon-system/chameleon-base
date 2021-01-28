@@ -12,8 +12,8 @@
 use ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -74,15 +74,6 @@ class TGlobalBase
      */
     public $oHTMLPurifyConfig = null;
 
-    /**
-     * an array holding mocked objects for unit testing.
-     *
-     * @var array
-     *
-     * @deprecated since 6.2.0 - no longer supported.
-     */
-    protected $aUnitTestMockedObjects = array();
-
     /** @var RequestStack */
     private $requestStack;
     /**
@@ -131,7 +122,7 @@ class TGlobalBase
      */
     public static function instance()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.global');
+        return ServiceLocator::get('chameleon_system_core.global');
     }
 
     /**
@@ -163,19 +154,7 @@ class TGlobalBase
      */
     public static function GetController()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller');
-    }
-
-    /**
-     * returns the path to the blackbox directory with mod_rewrite build number.
-     *
-     * @deprecated use GetStaticURLToWebLib instead of this function
-     *
-     * @return string
-     */
-    public static function GetPathWebLibrary()
-    {
-        return TGlobal::GetStaticURLToWebLib();
+        return ServiceLocator::get('chameleon_system_core.chameleon_controller');
     }
 
     /**
@@ -348,31 +327,6 @@ class TGlobalBase
         }
     }
 
-    /**
-     * returns true if the webpage is loaded in template engine edit mode
-     * use this to disable frontend javascript for example.
-     *
-     * @deprecated - use RequestInfoServiceInterface::isCmsTemplateEngineEditMode() instead
-     *
-     * @return bool
-     */
-    public static function IsCMSTemplateEngineEditMode()
-    {
-        static $isCmsTemplateEngineEditMode = null;
-        if (null !== $isCmsTemplateEngineEditMode) {
-            return $isCmsTemplateEngineEditMode;
-        }
-
-        $oGlobal = TGlobal::instance();
-        if (!TGlobal::IsCMSMode() && 'true' == $oGlobal->GetUserData('__modulechooser', array(), TCMSUserInput::FILTER_NONE)) {
-            $isCmsTemplateEngineEditMode = true;
-        } else {
-            $isCmsTemplateEngineEditMode = false;
-        }
-
-        return $isCmsTemplateEngineEditMode;
-    }
-
     public function GetLanguageIdList()
     {
         if (is_null($this->aLangaugeIds)) {
@@ -382,19 +336,6 @@ class TGlobalBase
         }
 
         return $this->aLangaugeIds;
-    }
-
-    /**
-     * return the current active language (language is loaded from page or user -depending on mode).
-     *
-     * @return string
-     *
-     * @deprecated since 6.0.0 - use \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service')->getActiveLanguageId() instead
-     */
-    public static function GetActiveLanguageId()
-    {
-        // the method must be called through TGlobal
-        trigger_error('error: call this method through TGlobal::GetActiveLanguageId()');
     }
 
     /**
@@ -606,123 +547,6 @@ class TGlobalBase
     }
 
     /**
-     * returns the userdata (GET/POST) as hidden html input fields.
-     *
-     * @param array $excludeArray
-     *
-     * @return string
-     *
-     * @deprecated - use \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest() instead
-     */
-    public function OutputDataAsFormFields($excludeArray = array())
-    {
-        $returnValue = '';
-        $aData = $this->GetUserData(null, $excludeArray);
-        foreach ($aData as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $subKey => $subValue) { // only 1-dimensional arrays are supported yet
-                    $returnValue .= '<input type="hidden" name="'.$key."[{$subKey}]\" value=\"".$subValue."\">\n";
-                }
-            } else {
-                $returnValue .= '<input type="hidden" name="'.$key.'" value="'.$value."\">\n";
-            }
-        }
-
-        return $returnValue;
-    }
-
-    /**
-     * returns all POST and GET parameters as url.
-     *
-     * @param array $excludeArray
-     *
-     * @return string
-     *
-     * @deprecated - use \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest() instead
-     */
-    public function OutputDataAsURL($excludeArray = array())
-    {
-        $aData = $this->GetUserData();
-        if (is_array($aData)) {
-            foreach ($excludeArray as $key) {
-                if ('' === $key) {
-                    continue;
-                }
-                if (isset($aData[$key])) {
-                    unset($aData[$key]);
-                    continue;
-                }
-                // if the key contains [ and ], then we need to regex
-                $iOpen = strpos($key, '[');
-                if (false !== $iOpen) {
-                    $iClose = strpos($key, ']', $iOpen);
-                    if (false !== $iClose) {
-                        if (preg_match("/^(.*?)(\[.*\])+/", $key, $aMatch)) {
-                            if (3 == count($aMatch)) {
-                                $aArrayKeys = explode('][', substr($aMatch[2], 1, -1));
-                                $sPathString = $aMatch[1].'-';
-                                foreach ($aArrayKeys as $Value) {
-                                    $sPathString .= $Value.'-';
-                                }
-                                $aData = TTools::DeleteArrayKeyByPath($aData, $sPathString);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return TTools::GetArrayAsURL($aData);
-        } else {
-            return '';
-        }
-    }
-
-    /**
-     * create an instance of a db object.
-     *
-     * @param string $sClassName - name of the class
-     * @deprecated: use GetNewInstance of the Tdb Object (or new $sClass() for lists)
-     *
-     * @return TCMSRecord
-     */
-    public static function NewDBObject($sClassName)
-    {
-        return new $sClassName();
-    }
-
-    /**
-     * Load class definition.
-     *
-     * @param string $sClassName
-     * @param bool   $bIsAutoloadCall       - autoload
-     * @param bool   $bTriggerErrorOnNoLoad - triggers a user error if loading failed
-     *
-     * @deprecated
-     *
-     * @return bool
-     */
-    public static function LoadDBObjectClassDefinition($sClassName, $bIsAutoloadCall = false, $bTriggerErrorOnNoLoad = true)
-    {
-        return true;
-    }
-
-    /**
-     * loads a class.
-     *
-     * @param string $sClass   - the class name
-     * @param string $sSubType - the subdirectory below /classes/... in engine/blackbox or extensions/
-     * @param string $sType    - Core, Custom or Customer
-     * @param bool   $force    - deprecated, handled by autoloader
-     * @deprecated: just use new
-     *
-     * @return object
-     */
-    public static function ClassFactory($sClass, $sSubType = '', $sType = 'Core', $force = false)
-    {
-        return false === $sClass ? null : new $sClass();
-    }
-
-    /**
      * loads a callback function where gcf_ means "global" (CoreBundle/private/library/functions...)
      * and ccf_ = custom (/extentions/library/functions...).
      *
@@ -759,23 +583,6 @@ class TGlobalBase
         if (!function_exists($name)) {
             trigger_error('Error: Could not find callback function ['.$fncPath.']', E_USER_ERROR);
         }
-    }
-
-    /**
-     * loads a class and transforms the class if it was overwritten via cms configuration.
-     *
-     * @param string $sClass         - the class name
-     * @param string $sSubType       - the subdirectory below /classes/... in engine/blackbox or extensions/
-     * @param string $sType          - Core, Custom or Customer
-     * @param bool   $force          - overrides class transformation if true
-     * @param bool   $bSuppressError - set to true if you want to suppress a load error - if this is set, we return false on error
-     *
-     * @deprecated - classes will be loaded by the auto loader. if you need to load a class by hand, use TGlobal::LoadClass
-     *
-     * @return object
-     */
-    public static function LoadClassDefinition($sClass, $sSubType = '', $sType = 'Core', $force = false, $bSuppressError = false)
-    {
     }
 
     /**
@@ -842,7 +649,7 @@ class TGlobalBase
                 $rootPath = realpath(PATH_CORE.'/../web_modules/');
                 break;
             case 'autoclasses':
-                $rootPath = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_autoclasses.cache_warmer.autoclasses_dir');
+                $rootPath = ServiceLocator::getParameter('chameleon_system_autoclasses.cache_warmer.autoclasses_dir');
                 break;
             default:
             case 'Core':
@@ -859,18 +666,6 @@ class TGlobalBase
         }
 
         return $rootPath;
-    }
-
-    /**
-     * @param string $sType - core, custom-core, customer or package name
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - use getModuleRootPath() instead.
-     */
-    public static function _GetModuleRootPath($sType)
-    {
-        return self::instance()->getModuleRootPath($sType);
     }
 
     /**
@@ -1000,21 +795,6 @@ class TGlobalBase
     }
 
     /**
-     * checks if a field exists in a table.
-     *
-     * @deprecated - please use TTools::FieldExists($sTableName,$sFieldName);
-     *
-     * @param string $sTableName
-     * @param string $sFieldName
-     *
-     * @return bool
-     */
-    public static function FieldExists($sTableName, $sFieldName)
-    {
-        return TTools::FieldExists($sTableName, $sFieldName);
-    }
-
-    /**
      * checks if a table exists.
      *
      * @param string $sTableName
@@ -1046,18 +826,6 @@ class TGlobalBase
     }
 
     /**
-     * write a debug log.
-     *
-     * @deprecated use TTools::WriteLogEntrySimple() instead!
-     *
-     * @param string $text
-     */
-    public static function WriteLog($text)
-    {
-        TTools::WriteLogEntrySimple($text, 2, __FILE__, __LINE__);
-    }
-
-    /**
      * returns the language prefix for the current page
      * returns empty string if current language is base language.
      *
@@ -1082,21 +850,6 @@ class TGlobalBase
         }
 
         return $languageService->getLanguageIsoCode($sLanguageId);
-    }
-
-    /**
-     * add a file to the php file cache. returns the cache if no file is passed.
-     *
-     * @param string $sClassName
-     * @param string $sFile
-     * @param bool
-     *
-     * @return array
-     *
-     * @deprecated file cache isn't supported anymore - rely on the PHP OpCode cache
-     */
-    public static function AddFileToPHPFileCache($sClassName = null, $sFile = null, $isAutoLoadBlock = false)
-    {
     }
 
     /**
@@ -1156,43 +909,6 @@ class TGlobalBase
     }
 
     /**
-     * replaces custom var or cms text blocks in the text
-     * These variables in the text must have the following format: [{name:format}]
-     * "format" ist either string, date, or number. It is possible to specify the number of decimals
-     * used when formating a number: [{variable:number:decimalplaces}]
-     * example [{costs:number:2}].
-     *
-     * @param string $sString
-     * @param array  $aCustomVariables
-     * @param bool   $bPassVarsThroughOutHTML - set to true, if you want to pass the vars through TGlobal::OutHTML
-     * @param $iWidth bool|int - max image width, default = false, used in pkgCmsTextBlock package
-     *
-     * @return string
-     *
-     * @deprecated - use TPkgCmsStringUtilities_VariableInjection instead
-     */
-    public function ReplaceCustomVariablesInString($sString, $aCustomVariables, $bPassVarsThroughOutHTML = false, $iWidth = false)
-    {
-        $oStringReplace = new TPkgCmsStringUtilities_VariableInjection();
-
-        return $oStringReplace->replace($sString, $aCustomVariables, $bPassVarsThroughOutHTML, $iWidth);
-    }
-
-    /**
-     * return instance of TCMSMemcache object that holds the memcache object internal.
-     *
-     * @return TCMSMemcache
-     *
-     * @deprecated inject chameleon_system_cms_cache.memcache_cache instead
-     */
-    public static function &GetMemcacheInstance()
-    {
-        $instance = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_cache.memcache_cache');
-
-        return $instance;
-    }
-
-    /**
      * returns the parameter wrapped in the executing module pointer spot name
      * - note: to retrive a parameter within the module, use the method GetUserInput(...).
      *
@@ -1230,26 +946,6 @@ class TGlobalBase
             $oGlobal->$sNewMethodName(implode(', ', $arguments));
             // we should trigger notices if in development mode
         }
-    }
-
-    /** get the Prefix for the active language. If active language is default language function returns empty string
-     *
-     * @param string $sAddString (added before language prefix if not default language)
-     *
-     * @return string $sActLanguagPrefix
-     *
-     * @deprecated use chameleon_system_core.util.url_prefix_generator::getLanguagePrefix() instead
-     */
-    public function GetActiveLanguagePrefix($sAddString = '')
-    {
-        $activePortal = self::getPortalDomainService()->getActivePortal();
-        $activeLanguage = self::getLanguageService()->getActiveLanguage();
-        $prefix = $this->getUrlPrefixGenerator()->getLanguagePrefix($activePortal, $activeLanguage);
-        if (!empty($prefix)) {
-            return $sAddString.$prefix;
-        }
-
-        return $prefix;
     }
 
     /**
@@ -1313,48 +1009,6 @@ class TGlobalBase
         return $sTmpPath;
     }
 
-    /**
-     * get an instance of an object in unit test mode - so you can get specially
-     * prepared instances for singletons like the user object
-     * you have to register the object via $oGlobal->RegisterUnitTestMockedObject().
-     *
-     * @param string $sClassName - name of the class
-     *
-     * @return TCMSRecord
-     *
-     * @deprecated since 6.2.0 - no longer supported.
-     */
-    public function GetUnitTestMockedObject($sClassName)
-    {
-        return new $sClassName();
-    }
-
-    /**
-     * register a mocked object in unit test mode - so you can get specially
-     * prepared instances for singletons like the user object
-     * via $oGlobal->GetUnitTestMockedObject().
-     *
-     * @param string $sClassName - name of the class
-     * @param object $oObject    - the mocked object to use
-     *
-     * @deprecated since 6.2.0 - no longer supported.
-     */
-    public function RegisterUnitTestMockedObject($sClassName, $oObject)
-    {
-    }
-
-    /**
-     * delete a mocked object in unit test mode that has been registered
-     * via $oGlobal->RegisterUnitTestMockedObject().
-     *
-     * @param string $sClassName - name of the class
-     *
-     * @deprecated since 6.2.0 - no longer supported.
-     */
-    public function DeleteUnitTestMockedObject($sClassName)
-    {
-    }
-
     public function isFrontendJSDisabled()
     {
         $bExclude = ($this->UserDataExists('esdisablefrontendjs') && 'true' == $this->GetUserData('esdisablefrontendjs'));
@@ -1373,7 +1027,7 @@ class TGlobalBase
      */
     private static function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -1381,15 +1035,7 @@ class TGlobalBase
      */
     private static function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
-    }
-
-    /**
-     * @return UrlPrefixGeneratorInterface
-     */
-    private function getUrlPrefixGenerator()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_prefix_generator');
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     /**
@@ -1397,7 +1043,7 @@ class TGlobalBase
      */
     private static function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -1405,6 +1051,6 @@ class TGlobalBase
      */
     private static function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 }

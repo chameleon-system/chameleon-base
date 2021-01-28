@@ -12,12 +12,16 @@
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelectWysiwyg;
 
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelect\NavigationTreeSingleSelect;
+use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
 use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use Doctrine\DBAL\Connection;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Translation\TranslatorInterface;
 use TGlobal;
+use TTools;
 
 /**
  * {@inheritdoc}
@@ -30,14 +34,26 @@ class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
     private $requestStack;
 
     public function __construct(
-        Connection $dbConnection,
-        EventDispatcherInterface $eventDispatcher,
         InputFilterUtilInterface $inputFilterUtil,
+        UrlUtil $urlUtil,
         BackendTreeNodeFactory $backendTreeNodeFactory,
+        TranslatorInterface $translator,
+        TTools $tools,
         TGlobal $global,
+        FieldTranslationUtil $fieldTranslationUtil,
+        LanguageServiceInterface $languageService,
         RequestStack $requestStack
     ) {
-        parent::__construct($dbConnection, $eventDispatcher, $inputFilterUtil, $backendTreeNodeFactory, $global);
+        parent::__construct(
+            $inputFilterUtil,
+            $urlUtil,
+            $backendTreeNodeFactory,
+            $translator,
+            $tools,
+            $global,
+            $fieldTranslationUtil,
+            $languageService
+        );
         $this->requestStack = $requestStack;
     }
 
@@ -49,5 +65,15 @@ class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
             return;
         }
         $visitor->SetMappedValue('CKEditorFuncNum', $request->query->getInt('CKEditorFuncNum'));
+    }
+
+    protected function disableSelectionWysiwyg(BackendTreeNodeDataModel $treeNodeDataModel): void
+    {
+        $treeNodeDataModel->setDisabled(true);
+        $treeNodeDataModel->addListHtmlClass('no-checkbox');
+    }
+
+    protected function setCheckStatus(BackendTreeNodeDataModel $treeNodeDataModel, $nodeId): void
+    {
     }
 }

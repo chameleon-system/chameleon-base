@@ -60,11 +60,14 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         }
         $html .= '
         </div>
-        <div class="card-body p-1">';
+        <div class="card-body p-1">
+        <div class="checkbox-matrix">';
 
         $mltRecords = $this->getMltRecordData($oTargetTableConf->sqlData['list_group_field_column']);
         $activeGroup = '';
         $hasEditPermissionForForeignTable = $this->isRecordChangingAllowed($foreignTableName);
+
+        $mltRecords = $this->sortRecordsAlphabetically($mltRecords);
 
         $inputFilter = $this->getInputFilterUtil();
 
@@ -73,6 +76,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             $currentGroup = $mltRecord['group'];
             $connected = $mltRecord['connected'];
             $displayValue = $mltRecord['display_value'];
+
             $editable = $mltRecord['editable'];
             if ($currentGroup !== $activeGroup) {
                 $activeGroup = $currentGroup;
@@ -93,10 +97,11 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             $escapedId = $sEscapedNameField.'_'.$escapedRecordId;
 
             $html .= '<div class="checkboxDIV">';
-            $html .= '<div class="form-check form-check-inline">
+            $html .= '
+                          <label class="form-check-label" for="'.$escapedId.'">
                           <input class="form-check-input" type="checkbox" name="'.$sEscapedNameField.'['.$escapedRecordId.']" value="'.$escapedRecordId.'" id="'.$escapedId.'" '.$checked.' '.$disabled.'>
-                          <label class="form-check-label" for="'.$escapedId.'">'.TGlobal::OutHTML($displayValue).'</label>
-                      </div>';
+                          '.TGlobal::OutHTML($displayValue).'
+                          </label>';
 
             if (true === $hasEditPermissionForForeignTable) {
                 $url = $urlUtil->getArrayAsUrl(
@@ -107,16 +112,28 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
                     ),
                     PATH_CMS_CONTROLLER.'?'
                 );
-                $html .= '<div class="float-right"><a href="'.$url.'"><i class="fas fa-edit"></i></a></div>';
+                $html .= '<div class="entry-edit"><a href="'.$url.'"><i class="fas fa-edit"></i></a></div>';
             }
 
             $html .= '</div>';
         }
 
-        $html .= '</div>
-      </div>';
+        $html .= '</div></div></div>';
 
         return $html;
+    }
+
+    private function sortRecordsAlphabetically(array $mltRecords): array
+    {
+        \usort($mltRecords, static function(array $entry1, array $entry2) {
+            if ($entry1['group'] !== $entry2['group']) {
+                return \strcasecmp($entry1['group'], $entry2['group']);
+            }
+
+            return \strcasecmp($entry1['display_value'], $entry2['display_value']);
+        });
+
+        return $mltRecords;
     }
 
     protected function isRecordCreationAllowed(string $foreignTableName): bool
@@ -160,7 +177,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
                 'id' => $mltRecord->id,
                 'group' => '' === $listGroupFieldColumn ? '' : $mltRecord->sqlData[$listGroupFieldColumn],
                 'connected' => $mltRecord->isConnected($this->sTableName, $this->oTableRow->sqlData['id'], $mltTableName),
-                'display_value' => $mltRecord->GetDisplayValue(),
+                'display_value' => $mltRecord->GetName(), // use name here (and not GetDisplayValue) as this will be used as simple label
                 'editable' => true,
             );
         }
@@ -232,6 +249,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             $oTableList->sRestriction = null; // do not include the restriction - it is part of the parent table, not the mlt!
 
             $sFilterQuery = $oTableList->FilterQuery().$this->GetMLTRecordRestrictions();
+
             $sFilterQueryOrderInfo = $oTableList->GetSortInfoAsString();
             if (!empty($sFilterQueryOrderInfo)) {
                 $sFilterQuery .= ' ORDER BY '.$sFilterQueryOrderInfo;
@@ -258,30 +276,13 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         } // prevent read only fields from saving
 
         if (is_array($this->oTableRow->sqlData) && array_key_exists('id', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData['id'])) {
-            $mltTableName = $this->GetMLTTableName();
             $recordId = $this->oTableRow->sqlData['id'];
 
             $oTableConf = new TCMSTableConf();
             $oTableConf->LoadFromField('name', $this->sTableName);
 
             if (is_array($this->data)) {
-                $aConnectedIds = array();
-
-                if (TGlobal::IsCMSMode()) {
-                    $oAllForeignRecordsFiltered = $this->FetchMLTRecords();
-                }
-
-                $sAlreadyConnectedQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTableName)."` WHERE `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($recordId)."'";
-                $tRes = MySqlLegacySupport::getInstance()->query($sAlreadyConnectedQuery);
-                while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-                    if (TGlobal::IsCMSMode()) {
-                        if ($oAllForeignRecordsFiltered->FindItemsWithProperty('id', $aRow['target_id'])) {
-                            $aConnectedIds[] = $aRow['target_id'];
-                        }
-                    } else {
-                        $aConnectedIds[] = $aRow['target_id'];
-                    }
-                }
+                $aConnectedIds = $this->getMltValues();
 
                 $aNewConnections = array_diff($this->data, $aConnectedIds);
                 $aDeletedConnections = array_diff($aConnectedIds, $this->data);

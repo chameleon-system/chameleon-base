@@ -164,7 +164,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
                     } elseif (!array_key_exists('email', $aData) && $oUser->IsLoggedIn()) {
                         $aData['email'] = $oUser->GetUserEMail();
                     }
-                    $oPortal = TTools::GetActivePortal();
+                    $oPortal = $this->getPortalDomainService()->getActivePortal();
                     if (!is_null($oPortal)) {
                         $aData['cms_portal_id'] = $oPortal->id;
                     }

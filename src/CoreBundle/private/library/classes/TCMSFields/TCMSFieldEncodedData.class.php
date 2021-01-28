@@ -85,9 +85,4 @@ class TCMSFieldEncodedData extends TCMSFieldBlob
 
         return $sResponse;
     }
-
-    public function RenderInputFrontend()
-    {
-        return serialize($this->data);
-    }
 }

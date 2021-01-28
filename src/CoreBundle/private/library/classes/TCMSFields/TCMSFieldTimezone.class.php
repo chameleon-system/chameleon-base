@@ -189,7 +189,6 @@ class TCMSFieldTimezone extends TCMSField
      */
     public function DataIsValid()
     {
-        $bDataIsValid = false;
         $bDataIsValid = parent::DataIsValid();
         if ($this->HasContent() && $bDataIsValid) {
             if (intval($this->data) < 12 && intval($this->data) >= -11) {

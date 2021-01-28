@@ -12,8 +12,9 @@
 namespace ChameleonSystem\ViewRendererBundle\Twig\Loader;
 
 use TPkgViewRendererSnippetDirectoryInterface;
+use Twig\Loader\FilesystemLoader;
 
-class ChameleonTwigLoader extends \Twig_Loader_Filesystem
+class ChameleonTwigLoader extends FilesystemLoader
 {
     /**
      * @var TPkgViewRendererSnippetDirectoryInterface

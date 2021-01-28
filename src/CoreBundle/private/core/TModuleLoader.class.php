@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\Exception\ModuleException;
 use ChameleonSystem\CoreBundle\Exception\ModuleExecutionFailedException;
 use ChameleonSystem\CoreBundle\ModuleService\ModuleExecutionStrategyInterface;
 use ChameleonSystem\CoreBundle\ModuleService\ModuleResolverInterface;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
@@ -66,8 +67,12 @@ class TModuleLoader
      * @var ModuleExecutionStrategyInterface
      */
     private $moduleExecutionStrategy;
+    /**
+     * @var RequestInfoServiceInterface
+     */
+    private $requestInfoService;
 
-    public function __construct(RequestStack $requestStack, ModuleResolverInterface $moduleResolver, IViewPathManager $viewPathManager, CacheInterface $cache, TGlobalBase $global, ModuleExecutionStrategyInterface $moduleExecutionStrategy)
+    public function __construct(RequestStack $requestStack, ModuleResolverInterface $moduleResolver, IViewPathManager $viewPathManager, CacheInterface $cache, TGlobalBase $global, ModuleExecutionStrategyInterface $moduleExecutionStrategy, RequestInfoServiceInterface $requestInfoService)
     {
         $this->requestStack = $requestStack;
         $this->moduleResolver = $moduleResolver;
@@ -75,6 +80,7 @@ class TModuleLoader
         $this->cache = $cache;
         $this->global = $global;
         $this->moduleExecutionStrategy = $moduleExecutionStrategy;
+        $this->requestInfoService = $requestInfoService;
     }
 
     /**
@@ -347,7 +353,7 @@ class TModuleLoader
         }
 
         if (false === empty($sContent)) {
-            if ($bAllowAutoWrap && (RENDER_DIV_WITH_MODULE_AND_VIEW_NAME_ON_MODULE_LOAD && (!TGlobal::IsCMSMode() || TGlobal::IsCMSTemplateEngineEditMode()))) {
+            if ($bAllowAutoWrap && (RENDER_DIV_WITH_MODULE_AND_VIEW_NAME_ON_MODULE_LOAD && (!TGlobal::IsCMSMode() || $this->requestInfoService->isCmsTemplateEngineEditMode()))) {
                 if ('MTEmpty' !== get_class($module) && $module->IsHTMLDivWrappingAllowed()) {
                     $sViewName = substr($module->viewTemplate, strrpos($module->viewTemplate, '/') + 1);
                     $sViewName = substr($sViewName, 0, strpos($sViewName, '.'));
