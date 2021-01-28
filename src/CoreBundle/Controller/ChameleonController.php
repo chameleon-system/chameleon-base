@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
+use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
 use ChameleonSystem\CoreBundle\Event\FilterContentEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
@@ -128,6 +129,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
+        RequestInfoServiceInterface $requestInfoService,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
         IViewPathManager $viewPathManager = null
@@ -138,6 +140,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->viewPathManager = $viewPathManager;
         $this->eventDispatcher = $eventDispatcher;
         $this->dataAccessCmsMasterPagedef = $dataAccessCmsMasterPagedef;
+        $this->requestInfoService = $requestInfoService;
     }
 
     /**
@@ -215,12 +218,12 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     protected function GeneratePage($pagedef)
     {
-        $pagedefData = $this->getPagedefData($pagedef);
-        if (false === $pagedefData) {
+        $pagedefData = $this->dataAccessCmsMasterPagedef->get($pagedef);
+        if (null === $pagedefData) {
             return new Response('<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error: invalid page definition: '.TGlobal::OutHTML($pagedef).'</div>', Response::HTTP_NOT_FOUND);
         }
 
-        $this->moduleLoader->LoadModules($pagedefData['moduleList']);
+        $this->moduleLoader->LoadModules($pagedefData->getModuleList());
 
         foreach ($this->moduleLoader->modules as $sSpotName => $module) {
             $this->moduleLoader->modules[$sSpotName]->InjectVirtualModuleSpots($this->moduleLoader);
@@ -228,9 +231,14 @@ abstract class ChameleonController implements ChameleonControllerInterface
         reset($this->moduleLoader->modules);
 
         $this->InitializeModules();
+
+        if (false === $this->checkAccess($pagedefData)) {
+            return new Response('You have no sufficient rights to view this page.', Response::HTTP_FORBIDDEN);
+        }
+
         $this->ExecuteModuleMethod($this->moduleLoader);
 
-        $templatePath = $this->LoadLayoutTemplate($pagedefData['sLayoutFile']);
+        $templatePath = $this->LoadLayoutTemplate($pagedefData->getLayoutFile());
         if (false === file_exists($templatePath)) {
             $sErrorMessage = '<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error: Invalid template: '.TGlobal::OutHTML($templatePath).' ('.TGlobal::OutHTML($pagedefData['sLayoutFile']).")</div>\n";
             /** @noinspection CallableInLoopTerminationConditionInspection */
@@ -266,23 +274,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         return new Response($sPageContent);
     }
 
-    /**
-     * @param string $pagedef
-     *
-     * @return array|bool
-     */
-    private function getPagedefData($pagedef)
-    {
-        $pagedefData = $this->dataAccessCmsMasterPagedef->get($pagedef);
-        if (null === $pagedefData) {
-            return false;
-        }
-
-        return             [
-            'moduleList' => $pagedefData->getModuleList(),
-            'sLayoutFile' => $pagedefData->getLayoutFile(),
-        ];
-    }
+    abstract protected function checkAccess(CmsMasterPagdef $pagedef): bool;
 
     /**
      * {@inheritdoc}

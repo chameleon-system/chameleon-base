@@ -8,6 +8,8 @@ $moduleList = [
     ],
 ];
 
+$cmsRightAllowList = ['cms_data_pool_upload'];
+
 addDefaultPageTitle($moduleList);
 addDefaultHeader($moduleList);
 addDefaultBreadcrumb($moduleList);

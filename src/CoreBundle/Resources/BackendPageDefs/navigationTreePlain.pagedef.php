@@ -18,4 +18,6 @@ $moduleList = [
     ],
 ];
 
+$cmsRightAllowList = ['navigation_edit'];
+
 addDefaultPageTitle($moduleList);

@@ -29,7 +29,7 @@ class TCMSListManagerPagedefinitions extends TCMSListManagerFullGroupTable
 
         $sQuery = '';
         $portalRestriction = $oGlobal->oUser->oAccessManager->user->portals->PortalList();
-        if (!$oGlobal->oUser->oAccessManager->user->roles->IsInRole('cms_admin')) {
+        if (false !== $portalRestriction && false === $oGlobal->oUser->oAccessManager->user->roles->IsInRole('cms_admin')) {
             $sQuery = " (`cms_portal`.`id` IN ({$portalRestriction}) OR `cms_master_pagedef`.`restrict_to_portals`='0')";
         }
 

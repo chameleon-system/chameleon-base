@@ -12,6 +12,9 @@
 namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
+use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
+use ChameleonSystem\CoreBundle\Security\BackendPageAccessCheckInterface;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -38,13 +41,14 @@ class ChameleonFrontendController extends ChameleonController
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
+        RequestInfoServiceInterface $requestInfoService,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
         $viewPathManager,
         ContainerInterface $container,
         TPkgViewRendererConfigToLessMapper $configToLessMapper
     ) {
-        parent::__construct($requestStack, $eventDispatcher, $dataAccessCmsMasterPagedef, $moduleLoader, $viewPathManager);
+        parent::__construct($requestStack, $eventDispatcher, $requestInfoService, $dataAccessCmsMasterPagedef, $moduleLoader, $viewPathManager);
         $this->container = $container; // for ViewRenderer instantiation
         $this->configToLessMapper = $configToLessMapper;
     }
@@ -152,5 +156,13 @@ class ChameleonFrontendController extends ChameleonController
         $aAllParameter = $request->query->keys();
         $aSeoParameterList = array_diff($aAllParameter, $aNonSeoParameter);
         \TCMSSmartURLData::GetActive()->setSeoURLParameters($aSeoParameterList);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function checkAccess(CmsMasterPagdef $pagedef): bool
+    {
+        return true;
     }
 }

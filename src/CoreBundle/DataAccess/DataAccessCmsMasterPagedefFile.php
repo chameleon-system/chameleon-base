@@ -3,6 +3,7 @@
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
 use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
+use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdefFile;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use TCMSPageDefinitionFile;
 
@@ -23,37 +24,40 @@ class DataAccessCmsMasterPagedefFile implements DataAccessCmsMasterPagedefInterf
         $this->global = $global;
     }
 
-    public function get(string $id): ?CmsMasterPagdef
+    public function get(string $id, ?string $type = null): ?CmsMasterPagdef
     {
         $oPageDefinitionFile = new TCMSPageDefinitionFile();
-        $fullPageDefPath = $this->PageDefinitionFile($id);
+        $fullPageDefPath = $this->getPageDefinitionFilePath($id, $type);
         $pagePath = substr($fullPageDefPath, 0, -strlen($id.'.pagedef.php'));
 
         if (false === $oPageDefinitionFile->Load($id, $pagePath)) {
             return null;
         }
 
-        return new CmsMasterPagdef(
+        return new CmsMasterPagdefFile(
             $id,
             $oPageDefinitionFile->GetModuleList(),
-            $oPageDefinitionFile->GetLayoutFile()
+            $oPageDefinitionFile->GetLayoutFile(),
+            $oPageDefinitionFile->allowedRights
         );
     }
 
     /**
      * returns the full path to a page definition file given the page definition name.
      *
-     * @param string $pagedef - name of the pagedef
-     *
+     * @param string      $pagedef - name of the pagedef
+     * @param string|null $type - if null will be determined from the request parameters ("_pagedefType"; "Core" is default)
      * @return string
      */
-    private function PageDefinitionFile(string $pagedef)
+    private function getPageDefinitionFilePath(string $pagedef, ?string $type)
     {
-        // we can select a location using a get parameter (_pagedefType). it may be one of: Core, Custom-Core, and Customer
-        if (null === $pagedefType = $this->inputFilterUtil->getFilteredInput('_pagedefType')) {
-            $pagedefType = 'Core';
+        if (null === $type) {
+            // we can select a location using a get parameter (_pagedefType). it may be one of: Core, Custom-Core, and Customer
+            if (null === $type = $this->inputFilterUtil->getFilteredInput('_pagedefType')) {
+                $type = 'Core';
+            }
         }
-        $path = $this->global->_GetPagedefRootPath($pagedefType);
+        $path = $this->global->_GetPagedefRootPath($type);
 
         return $path.'/'.$pagedef.'.pagedef.php';
     }

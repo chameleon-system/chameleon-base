@@ -7,7 +7,6 @@ $layoutTemplate = 'default';
 if ($urlGenerator->openStandaloneMediaManagerInNewWindow()) {
     $layoutTemplate = 'popup_iframe';
 }
-
 $moduleList = [
     'contentmodule' => [
         'model' => 'chameleon_system_media_manager.backend_module.media_manager',
@@ -15,6 +14,9 @@ $moduleList = [
         'view' => 'full',
     ],
 ];
+
+$cmsRightAllowList = ['media_edit'];
+
 addDefaultPageTitle($moduleList);
 addDefaultHeader($moduleList);
 addDefaultBreadcrumb($moduleList);

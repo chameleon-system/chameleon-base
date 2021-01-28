@@ -11,12 +11,15 @@
 
 namespace ChameleonSystem\CoreBundle\Controller;
 
-use ChameleonSystem\CoreBundle\Security\BackendAccessCheck;
+use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
+use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdefFile;
+use ChameleonSystem\CoreBundle\Interfaces\CheckTableAccessRightsInterface;
+use ChameleonSystem\CoreBundle\Security\BackendPageAccessCheckInterface;
 
 class ChameleonBackendController extends ChameleonController
 {
     /**
-     * @var BackendAccessCheck
+     * @var BackendPageAccessCheckInterface
      */
     private $backendAccessCheck;
     /**
@@ -64,10 +67,7 @@ class ChameleonBackendController extends ChameleonController
         }
     }
 
-    /**
-     * @param BackendAccessCheck $backendAccessCheck
-     */
-    public function setBackendAccessCheck($backendAccessCheck)
+    public function setBackendAccessCheck(BackendPageAccessCheckInterface $backendAccessCheck): void
     {
         $this->backendAccessCheck = $backendAccessCheck;
     }
@@ -75,5 +75,33 @@ class ChameleonBackendController extends ChameleonController
     public function setHomePagedef(string $homePagedef): void
     {
         $this->homePagedef = $homePagedef;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function checkAccess(CmsMasterPagdef $pagedef): bool
+    {
+        $activeUser = \TCMSUser::GetActiveUser();
+        if (null === $activeUser) {
+            // For some edge cases: cronjobs, ...
+
+            return false === ($pagedef instanceof CmsMasterPagdefFile) || 0 === \count($pagedef->getAllowedRights());
+        }
+
+        if (false === $this->backendAccessCheck->checkPageAccess($activeUser, $pagedef)) {
+            return false;
+        }
+
+        foreach ($this->moduleLoader->modules as $module) {
+            if (false === ($module instanceof CheckTableAccessRightsInterface)) {
+                continue;
+            }
+            if (false === $module->checkAccessRightsOnTable()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

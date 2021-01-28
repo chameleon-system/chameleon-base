@@ -136,7 +136,9 @@ class TCMSTreeWidget
         $this->bHasNewPermission = $oUser->oAccessManager->HasNewPermission($this->sTreeTableName);
         $this->bHasEditPermission = $oUser->oAccessManager->HasEditPermission($this->sTreeTableName);
         $this->bHasDeletePermission = $oUser->oAccessManager->HasDeletePermission($this->sTreeTableName);
-        $this->bHasUploadPermission = $oUser->oAccessManager->functions->HasRight('cms_image_pool_upload');
+        $this->bHasUploadPermission = $oUser->oAccessManager->functions->HasRight('media_edit');
+
+        // TODO this is used from media manager and document manager (so media_edit is the right role)?
     }
 
     /**

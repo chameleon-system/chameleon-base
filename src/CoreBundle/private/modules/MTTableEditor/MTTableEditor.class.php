@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Interfaces\CheckTableAccessRightsInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
  * edit a table record
  * Note: you can put the editor in "only one record mode" by passing bOnlyOneRecord via get or post.
  * /**/
-class MTTableEditor extends TCMSModelBase
+class MTTableEditor extends TCMSModelBase implements CheckTableAccessRightsInterface
 {
     /**
      * the table manager.
@@ -184,22 +185,6 @@ class MTTableEditor extends TCMSModelBase
                 $this->data['only_one_record_tbl'] = '0';
             }
             $this->bIsReadOnlyMode = $this->oTableManager->oTableEditor->IsRecordInReadOnlyMode();
-            $bUserHasReadOnlyRight = $this->oTableManager->oTableEditor->AllowReadOnly();
-
-            // check rights
-            $bIsReadOnlyRequest = $this->IsReadOnlyRequest();
-            if (empty($this->sId)) {
-                $bIsInsert = true;
-            } else {
-                $bIsInsert = false;
-            }
-            $bUserHasEditRight = $this->oTableManager->oTableEditor->AllowEdit();
-
-            if (!$bIsReadOnlyRequest && ((!$bUserHasEditRight && !$bIsInsert && !$this->bIsReadOnlyMode) || ($this->bIsReadOnlyMode && !$bUserHasReadOnlyRight))) {
-                $oCMSUser = &TCMSUser::GetActiveUser();
-                $oCMSUser->Logout();
-                $this->controller->HeaderURLRedirect(PATH_CMS_CONTROLLER);
-            }
 
             $this->data['oTabs'] = $this->GetTabsForTable();
         } else { // record is missing - redirect to home
@@ -216,6 +201,27 @@ class MTTableEditor extends TCMSModelBase
         }
 
         $this->AddURLHistory();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function checkAccessRightsOnTable(): bool
+    {
+        if (null === $this->oTableManager->oTableEditor) {
+            return true;
+        }
+
+        $bUserHasReadOnlyRight = $this->oTableManager->oTableEditor->AllowReadOnly();
+        $bIsReadOnlyRequest = $this->IsReadOnlyRequest();
+        $bIsInsert = empty($this->sId);
+        $bUserHasEditRight = $this->oTableManager->oTableEditor->AllowEdit();
+
+        if (!$bIsReadOnlyRequest && ((!$bUserHasEditRight && !$bIsInsert && !$this->bIsReadOnlyMode) || ($this->bIsReadOnlyMode && !$bUserHasReadOnlyRight))) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

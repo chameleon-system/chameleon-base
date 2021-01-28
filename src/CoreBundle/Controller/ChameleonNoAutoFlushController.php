@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Controller;
 
+use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
 use esono\pkgCmsCache\CacheInterface;
 
 class ChameleonNoAutoFlushController implements ChameleonControllerInterface
@@ -76,5 +77,13 @@ class ChameleonNoAutoFlushController implements ChameleonControllerInterface
     public function FlushContentToBrowser($enableAutoFlush = false)
     {
         $this->controller->FlushContentToBrowser($enableAutoFlush);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function checkAccess(CmsMasterPagdef $pagedef): bool
+    {
+        return true;
     }
 }
