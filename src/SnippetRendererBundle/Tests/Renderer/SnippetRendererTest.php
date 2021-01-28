@@ -29,7 +29,8 @@ class SnippetRendererTest extends TestCase
     public function setUp()
     {
         //$twigEnv = $this->getMockBuilder('Twig_Environment')->getMock();
-        $snippetRenderer = new TPkgSnippetRenderer(new Twig_Environment(new TwigStringLoader()));
+        $environment = new Twig_Environment(new TwigStringLoader());
+        $snippetRenderer = new TPkgSnippetRenderer($environment, $environment, new \Psr\Log\NullLogger());
         $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
         $container->set('chameleon_system_snippet_renderer.snippet_renderer', $snippetRenderer);
         ServiceLocator::setContainer($container);
