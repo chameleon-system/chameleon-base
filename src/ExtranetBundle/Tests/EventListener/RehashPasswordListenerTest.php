@@ -8,10 +8,13 @@ use ChameleonSystem\ExtranetBundle\objects\ExtranetUserEvent;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class RehashPasswordListenerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var \TdbDataExtranetUser|PHPUnit_Framework_MockObject_MockObject
      */

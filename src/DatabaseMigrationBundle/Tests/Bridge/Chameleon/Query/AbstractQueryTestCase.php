@@ -15,13 +15,13 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\DataAccess\AbstractQueryDataAccessInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
 
 class AbstractQueryTestCase extends TestCase
 {
-    /** @var Prophet */
-    protected $prophet;
+    use ProphecyTrait;
 
     /**
      * @var ObjectProphecy
@@ -43,23 +43,18 @@ class AbstractQueryTestCase extends TestCase
      */
     protected $actualQueryParams;
 
-    protected function setUp(): void
-    {
-        $this->prophet = new Prophet();
-    }
-
     protected function tearDown(): void
     {
-        $this->prophet->checkPredictions();
+        $this->getProphet()->checkPredictions();
     }
 
     protected function givenDependencies()
     {
-        $this->databaseConnection = $this->prophet->prophesize('Doctrine\DBAL\Connection');
+        $this->databaseConnection = $this->prophesize('Doctrine\DBAL\Connection');
         $this->mockQuoteIdentifier();
         $this->mockQuote();
 
-        $this->dataAccess = $this->prophet->prophesize('ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\DataAccess\AbstractQueryDataAccessInterface');
+        $this->dataAccess = $this->prophesize('ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\DataAccess\AbstractQueryDataAccessInterface');
         $this->dataAccess->getBaseLanguageIso()->willReturn('en');
         $this->dataAccess->getTranslatedFieldsForTable('foo_table')->willReturn(array('translatedField'));
     }

@@ -6,6 +6,7 @@ use ChameleonSystem\CoreBundle\RequestState\Interfaces\RequestStateHashProviderI
 use ChameleonSystem\CoreBundle\RequestState\RequestStateHashProviderCache;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class RequestStateHashProviderCacheTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var RequestStateHashProviderCache
      */

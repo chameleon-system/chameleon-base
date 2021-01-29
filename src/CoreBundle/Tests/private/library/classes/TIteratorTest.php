@@ -10,20 +10,19 @@ class TIteratorTest extends TestCase
     {
         $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
 
-        $this->assertEquals(0, $iterator->_itemPointer);
+        $this->assertEquals(0, $this->getItemPointer($iterator));
         $this->assertEquals('foo', $iterator->current());
         $this->assertEquals('foo', $iterator->next());
 
-        $this->assertEquals(1, $iterator->_itemPointer);
+        $this->assertEquals(1, $this->getItemPointer($iterator));
         $this->assertEquals('bar', $iterator->current());
         $this->assertEquals('bar', $iterator->next());
 
-        $this->assertEquals(2, $iterator->_itemPointer);
+        $this->assertEquals(2, $this->getItemPointer($iterator));
         $this->assertEquals('baz', $iterator->current());
         $this->assertEquals('baz', $iterator->next());
 
-        $this->assertEquals(3, $iterator->_itemPointer);
-        $this->assertEquals(false, $iterator->current());
+        $this->assertEquals(3, $this->getItemPointer($iterator));
         $this->assertEquals(false, $iterator->next());
     }
 
@@ -37,7 +36,7 @@ class TIteratorTest extends TestCase
         $iterator->next();
         $iterator->next();
         $iterator->next();
-        $this->assertEquals(3, $iterator->_itemPointer);
+        $this->assertEquals(3, $this->getItemPointer($iterator));
         $this->assertEquals('test', $iterator->current());
     }
 
@@ -48,7 +47,7 @@ class TIteratorTest extends TestCase
         $test = 'test';
         $iterator->AddItemToStart($test);
 
-        $this->assertEquals(0, $iterator->_itemPointer);
+        $this->assertEquals(0, $this->getItemPointer($iterator));
         $this->assertEquals('test', $iterator->current());
     }
 
@@ -57,7 +56,7 @@ class TIteratorTest extends TestCase
         $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
         $iterator->ReverseItemList();
 
-        $this->assertEquals(0, $iterator->_itemPointer);
+        $this->assertEquals(0, $this->getItemPointer($iterator));
         $this->assertEquals('baz', $iterator->next());
         $this->assertEquals('bar', $iterator->next());
         $this->assertEquals('foo', $iterator->next());
@@ -69,20 +68,20 @@ class TIteratorTest extends TestCase
 
         $iterator->next();
         $iterator->next();
-        $this->assertEquals(2, $iterator->_itemPointer);
+        $this->assertEquals(2, $this->getItemPointer($iterator));
 
         $iterator->GoToStart();
-        $this->assertEquals(0, $iterator->_itemPointer);
+        $this->assertEquals(0, $this->getItemPointer($iterator));
     }
 
     public function testCanGoToEnd(): void
     {
         $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
 
-        $this->assertEquals(0, $iterator->_itemPointer);
+        $this->assertEquals(0, $this->getItemPointer($iterator));
 
         $iterator->GoToEnd();
-        $this->assertEquals(2, $iterator->_itemPointer);
+        $this->assertEquals(2, $this->getItemPointer($iterator));
         $this->assertEquals('baz', $iterator->current());
     }
 
@@ -161,7 +160,7 @@ class TIteratorTest extends TestCase
         $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
         $iterator->next();
 
-        $this->assertEquals(1, $iterator->_itemPointer);
+        $this->assertEquals(1, $this->getItemPointer($iterator));
         $i = 0;
         foreach ($iterator as $_) {
             $i++;
@@ -189,6 +188,13 @@ class TIteratorTest extends TestCase
             $iterator->AddItem($item);
         }
         return $iterator;
+    }
+
+    private function getItemPointer(TIterator $iterator): int
+    {
+        $reflection = new \ReflectionMethod($iterator, 'getItemPointer');
+        $reflection->setAccessible(true);
+        return $reflection->invoke($iterator);
     }
 
 }

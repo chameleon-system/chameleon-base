@@ -16,10 +16,13 @@ use ChameleonSystem\DatabaseMigration\Factory\MigrationDataModelFactoryInterface
 use ChameleonSystem\UpdateCounterMigrationBundle\DataAccess\CounterMigrationDataAccessInterface;
 use ChameleonSystem\UpdateCounterMigrationBundle\Migrator\UpdateCounterMigrator;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TCMSConfig;
 
 class UpdateCounterMigratorTest extends TestCase
 {
+    use ProphecyTrait;
+
     private $mapping = null;
 
     /**

@@ -21,9 +21,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use TdbCmsLanguage;
 use TdbCmsPortal;
 use TdbCmsPortalDomains;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class ChameleonFrontendRouterTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ChameleonFrontendRouterTestHelper
      */

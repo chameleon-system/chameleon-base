@@ -17,10 +17,13 @@ use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManag
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class ResponseVariableReplacerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var AuthenticityTokenManagerInterface|ObjectProphecy
      */

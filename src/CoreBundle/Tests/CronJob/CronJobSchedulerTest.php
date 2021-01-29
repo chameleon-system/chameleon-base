@@ -16,11 +16,14 @@ use ChameleonSystem\CoreBundle\CronJob\CronJobScheduler;
 use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 class CronJobSchedulerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var DateTime|null
      */

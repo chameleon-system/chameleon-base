@@ -16,10 +16,13 @@ use ChameleonSystem\ViewRendererBundle\objects\interfaces\DataMappingServiceHelp
 use ChameleonSystem\ViewRendererBundle\objects\interfaces\DataMappingServiceResponseInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class DataMappingServiceTest extends TestCase
 {
+    use ProphecyTrait;
+    
     /**
      * @var DataMappingService
      */

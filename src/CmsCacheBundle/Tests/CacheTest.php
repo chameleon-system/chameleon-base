@@ -26,9 +26,12 @@ namespace esono\pkgcmscache\tests {
     use Symfony\Component\HttpFoundation\RequestStack;
     use esono\pkgCmsCache\StorageInterface;
     use Doctrine\DBAL\Connection;
+    use Prophecy\PhpUnit\ProphecyTrait;
 
     class CacheTest extends TestCase
     {
+        use ProphecyTrait;
+
         /**
          * @var Cache
          */

@@ -10,9 +10,12 @@
  */
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class TPkgCmsSessionHandler_Decorator_EnforceWriteSequenceTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */

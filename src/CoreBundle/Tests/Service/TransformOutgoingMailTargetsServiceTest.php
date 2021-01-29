@@ -14,10 +14,13 @@ namespace ChameleonSystem\CoreBundle\Tests\Service;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class TransformOutgoingMailTargetsServiceTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var string
      */

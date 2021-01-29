@@ -18,10 +18,13 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class NestedSetHelperTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Connection
      */

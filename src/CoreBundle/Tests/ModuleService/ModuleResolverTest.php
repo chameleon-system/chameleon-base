@@ -14,10 +14,13 @@ namespace ChameleonSystem\CoreBundle\Tests\moduleservice;
 use ChameleonSystem\CoreBundle\ModuleService\ModuleResolver;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 
 class ModuleResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ModuleResolver
      */

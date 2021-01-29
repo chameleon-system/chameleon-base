@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface;
 use ChameleonSystem\CoreBundle\EventListener\CaseInsensitivePortalExceptionListener;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +26,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class CaseInsensitivePortalExceptionListenerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var CaseInsensitivePortalExceptionListener
      */

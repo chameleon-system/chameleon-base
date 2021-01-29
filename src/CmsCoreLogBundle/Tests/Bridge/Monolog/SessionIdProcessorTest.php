@@ -13,6 +13,7 @@ namespace ChameleonSystem\CmsCoreLogBundle\Tests\Bridge\Monolog;
 
 use ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\SessionIdProcessor;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -20,6 +21,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SessionIdProcessorTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var RequestStack|ObjectProphecy
      */

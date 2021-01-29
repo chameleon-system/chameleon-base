@@ -15,10 +15,13 @@ use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapterInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class AutoclassesCacheWarmerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /** @var AutoclassesCacheWarmer */
     private $warmer;
 

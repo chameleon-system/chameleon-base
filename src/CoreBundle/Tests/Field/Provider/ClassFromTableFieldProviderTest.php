@@ -14,10 +14,13 @@ namespace ChameleonSystem\CoreBundle\Tests\Field\Provider;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessClassFromTableFieldProviderInterface;
 use ChameleonSystem\CoreBundle\Field\Provider\ClassFromTableFieldProvider;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class ClassFromTableFieldProviderTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ClassFromTableFieldProvider
      */

@@ -6,10 +6,13 @@ use ChameleonSystem\ViewRenderer\SnippetChain\SnippetChainModifier;
 use PHPUnit\Framework\TestCase;
 use ChameleonSystem\ViewRenderer\SnippetChain\SnippetChainModifierDataAccessInterface;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class SnippetChainModifierTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var SnippetChainModifierDataAccessInterface|ObjectProphecy
      */

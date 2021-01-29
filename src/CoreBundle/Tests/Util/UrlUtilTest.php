@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManag
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\HttpFoundation\Request;
 use ChameleonSystem\CoreBundle\Routing\DomainValidatorInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
@@ -23,6 +24,8 @@ use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 
 class UrlUtilTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Request
      */
