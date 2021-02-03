@@ -868,6 +868,19 @@ class TFullGroupTable extends TGroupTable
 
             $filterContent .= '<div class="form-group mr-2 typeahead-relative">';
 
+            $filterContent .= '<script>
+                function resetPagingAndSearch(event) {
+                    if (event !== undefined && typeof event.key !== "undefined") {
+                        if (event.key !== "Enter") {
+                            return;
+                        }
+                    }
+                    
+                    document.'.$this->listName.'._startRecord.value = 0;
+                    document.'.$this->listName.'.submit();
+                }
+                </script>';
+
             $formatString = '<input id="searchLookup" name="_search_word" class="form-control form-control-sm" placeholder="%s" value="%s" autocomplete="off" data-source-url="%s" data-record-url="%s" data-onclick-function="%s">';
             $filterContent .= sprintf(
                 $formatString,
@@ -878,11 +891,16 @@ class TFullGroupTable extends TGroupTable
                 TGlobal::OutHTML($this->onClick)
             );
 
+            // We need the key event; that is not given when simply specifying "onkeypress" in the input:
+            $filterContent .= '<script>
+                    document.querySelector("#searchLookup").addEventListener("keypress", resetPagingAndSearch);
+                </script>';
+
             $filterContent .= '</div>
                                 <div class="form-group">';
 
-            $formatString = '<input type="button" class="form-control form-control-sm btn btn-sm btn-primary" value="%1$s" onClick="document.%2$s._startRecord.value=0;document.%2$s.submit();">';
-            $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchButtonText), TGlobal::OutHTML($this->listName));
+            $formatString = '<input type="button" class="form-control form-control-sm btn btn-sm btn-primary" value="%s" onclick="resetPagingAndSearch()">';
+            $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchButtonText));
 
             $filterContent .= '</div>';
         }
