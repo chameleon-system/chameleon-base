@@ -870,7 +870,7 @@ class TFullGroupTable extends TGroupTable
 
             $filterContent .= '<script>
                 function resetPagingAndSearch(event) {
-                    if (event !== undefined && typeof event.key !== "undefined") {
+                    if (event instanceof InputEvent) {
                         if (event.key !== "Enter") {
                             return;
                         }
@@ -893,7 +893,7 @@ class TFullGroupTable extends TGroupTable
 
             // We need the key event; that is not given when simply specifying "onkeypress" in the input:
             $filterContent .= '<script>
-                    document.querySelector("#searchLookup").addEventListener("keypress", resetPagingAndSearch);
+                    document.querySelector("#searchLookup").addEventListener("input", resetPagingAndSearch);
                 </script>';
 
             $filterContent .= '</div>
