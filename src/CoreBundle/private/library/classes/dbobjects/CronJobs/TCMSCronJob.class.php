@@ -26,9 +26,18 @@ class TCMSCronJob extends TCMSRecord
      */
     protected $sMessageOutput = '';
 
-    public function TCMSCronJob($id = null)
+    public function __construct($id = null)
     {
-        parent::TCMSRecord('cms_cronjobs', $id);
+        parent::__construct('cms_cronjobs', $id);
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSCronJob()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**

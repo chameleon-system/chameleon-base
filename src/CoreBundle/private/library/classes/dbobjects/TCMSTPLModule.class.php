@@ -28,11 +28,21 @@ class TCMSTPLModule extends TCMSRecord
      */
     public $aPermittedViews = null;
 
-    public function TCMSTPLModule($id = null)
+    public function __construct($id = null)
     {
         $table = 'cms_tpl_module';
-        parent::TCMSRecord($table, $id);
+        parent::__construct($table, $id);
     }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSTPLModule()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
+    }
+
 
     public function isLegacy()
     {

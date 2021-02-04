@@ -16,12 +16,21 @@ class TCMSPortalList extends TCMSRecordList
 {
     public $_aNodeIds = null;
 
-    public function TCMSPortalList()
+    public function __construct()
     {
         $sTableObject = 'TCMSRecord';
         $sTableName = 'cms_portal';
         $sQuery = 'SELECT * FROM `cms_portal` ORDER BY `name`';
-        parent::TCMSRecordList($sTableObject, $sTableName, $sQuery);
+        parent::__construct($sTableObject, $sTableName, $sQuery);
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSPortalList()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     public function GetTreeNodes()
