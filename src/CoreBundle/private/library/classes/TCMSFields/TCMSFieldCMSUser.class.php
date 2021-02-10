@@ -67,7 +67,7 @@ class TCMSFieldCMSUser extends TCMSFieldExtendedLookup
             $name .= ' ['.$oUser->sqlData['company'].']';
         }
 
-        $returnVal = $this->_GetHiddenField()."<div>{$imageTag}".TGlobal::OutHTML($name).'<div class="cleardiv">&nbsp;</div></div>';
+        $returnVal = $this->_GetHiddenField()."<div>{$imageTag} ".TGlobal::OutHTML($name).'<div class="cleardiv">&nbsp;</div></div>';
 
         return $returnVal;
     }
