@@ -891,7 +891,7 @@ class TFullGroupTable extends TGroupTable
                 TGlobal::OutHTML($this->onClick)
             );
 
-            // We need the key event; that is not given when simply specifying "onkeypress" in the input:
+            // We need the key event; that is not given when simply specifying "oninput" in the input tag:
             $filterContent .= '<script>
                     document.querySelector("#searchLookup").addEventListener("input", resetPagingAndSearch);
                 </script>';
