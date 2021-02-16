@@ -389,6 +389,9 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
                 $snippetChain = $oTheme->getSnippetChainAsArray();
             }
         }
+
+        // TODO quite unfortunate here that there is no "this is backend" (only the fact that is has no portal and thus no snippet chain paths)
+
         if (false !== CHAMELEON_PATH_THEMES && count($snippetChain) > 0) {
             $aBasePaths[$sPortalCacheId] = array();
             foreach ($snippetChain as $element) {
@@ -409,9 +412,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
         }
 
         if (true === $this->requestInfoService->isBackendMode()) {
-            $aBasePaths[$sPortalCacheId] = $this->addBundlePaths($aBasePaths[$sPortalCacheId], $sBaseDirectory);
-
-            // TODO or also use a "snippet chain" field for the backend theme? (table cms_config_themes)
+            $aBasePaths[$sPortalCacheId] = $this->addBackendThemePaths($aBasePaths[$sPortalCacheId], $sBaseDirectory);
         }
 
         return $aBasePaths[$sPortalCacheId];
@@ -456,14 +457,21 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
         return $this->getBasePaths($oPortal, $sBaseDirectory);
     }
 
-    private function addBundlePaths(array $paths, string $directorySuffix): array
+    private function addBackendThemePaths(array $paths, string $directorySuffix): array
     {
-        $allBundles = $this->kernel->getBundles();
+        $config = TdbCmsConfig::GetInstance();
+        $backendTheme = $config->GetFieldPkgCmsTheme();
 
-        foreach($allBundles as $resource => $bundle) {
-            $path = $bundle->getPath().'/Resources/views/'.$directorySuffix;
+        if (null === $backendTheme) {
+            return $paths;
+        }
 
-            if (false === \is_dir($path)) {
+        $snippetChainElements = $backendTheme->getSnippetChainAsArray();
+
+        foreach ($snippetChainElements as $element) {
+            $path = $this->getVerifiedPath($element, $directorySuffix);
+
+            if (null === $path) {
                 continue;
             }
 
