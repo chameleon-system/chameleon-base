@@ -298,7 +298,7 @@ class MTTableManager extends TCMSModelBase
         );
 
         if ('true' === $inputFilterUtil->getFilteredInput('bOnlyOneRecord')) {
-            $parameters['bOnlyOneRecord'] = 'true';
+
         }
 
         if ($this->global->UserDataExists('sTableEditorPagdef')) {
@@ -325,6 +325,9 @@ class MTTableManager extends TCMSModelBase
         $this->getRedirectService()->redirectToActivePage($parameters);
     }
 
+    /**
+     * @deprecated since 7.0.12 - the breadcrumb in the backend is now a true breadcrumb (BreadcrumbBackendModule)
+     */
     protected function AddURLHistory()
     {
         if (false === $this->AllowAddingURLToHistory()) {
