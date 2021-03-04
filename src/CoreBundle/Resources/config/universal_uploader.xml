@@ -14,7 +14,7 @@
             <argument type="service" id="request_stack" />
             <argument type="service" id="translator" />
         </service>
-        <service id="chameleon_system_core.universal_uploader.uploader_controller" class="ChameleonSystem\CoreBundle\UniversalUploader\Controller\UploaderController">
+        <service id="chameleon_system_core.universal_uploader.uploader_controller" class="ChameleonSystem\CoreBundle\UniversalUploader\Controller\UploaderController" public="true">
             <argument type="service" id="chameleon_system_core.universal_uploader.uploader_post_handler" />
             <argument type="service" id="chameleon_system_core.universal_uploader.save_to_media_library_service" />
         </service>
