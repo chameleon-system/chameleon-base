@@ -18,10 +18,31 @@ TCMSLogChange::update(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
-      'translation' => 'Belongs to spot',
+      'translation' => 'belongs to cms page template spot',
   ])
   ->setWhereEquals([
       'name' => 'cms_master_pagedef_spot_id',
   ])
+;
+TCMSLogChange::update(__LINE__, $data);
+
+
+$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
+    ->setFields([
+        'translation' => 'Name',
+    ])
+    ->setWhereEquals([
+        'id' => '1522',
+    ])
+;
+TCMSLogChange::update(__LINE__, $data);
+
+$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
+    ->setFields([
+        'translation' => 'Value',
+    ])
+    ->setWhereEquals([
+        'id' => '1523',
+    ])
 ;
 TCMSLogChange::update(__LINE__, $data);
