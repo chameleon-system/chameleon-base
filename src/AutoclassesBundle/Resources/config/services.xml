@@ -26,7 +26,7 @@
         <service id="chameleon_system_autoclasses.autoclasses_map_generator" class="ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGenerator" public="false">
         </service>
 
-        <service id="chameleon_system_autoclasses.cache_warmer" class="%chameleon_system_autoclasses.cache_warmer.class%">
+        <service id="chameleon_system_autoclasses.cache_warmer" class="%chameleon_system_autoclasses.cache_warmer.class%" public="true">
             <argument type="service" id="chameleon_system_autoclasses.auto_class_manager" />
             <argument type="service" id="chameleon_system_autoclasses.autoclasses_db_adapter" />
             <argument type="service" id="chameleon_system_autoclasses.autoclasses_map_generator" />
@@ -34,11 +34,11 @@
             <argument>%chameleon_system_autoclasses.cache_warmer.autoclasses_dir%</argument>
         </service>
 
-        <service id="chameleon_system_autoclasses.data_access.autoclasses" class="ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccess">
+        <service id="chameleon_system_autoclasses.data_access.autoclasses" class="ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccess" public="true">
             <argument type="service" id="database_connection" />
         </service>
 
-        <service id="chameleon_system_autoclasses.data_access.autoclasses_request_cache" class="ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesRequestCacheDataAccess" decorates="chameleon_system_autoclasses.data_access.autoclasses">
+        <service id="chameleon_system_autoclasses.data_access.autoclasses_request_cache" class="ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesRequestCacheDataAccess" decorates="chameleon_system_autoclasses.data_access.autoclasses" public="true">
             <argument type="service" id="chameleon_system_autoclasses.data_access.autoclasses_request_cache.inner" />
         </service>
 

@@ -30,6 +30,8 @@ define('NODE_TYPE_DONE', 5);
  */
 class HtmlParser
 {
+    use \ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
+
     /**
      * Field iNodeType.
      * May be one of the NODE_TYPE_* constants above.
@@ -69,7 +71,7 @@ class HtmlParser
      * Constructs an HtmlParser instance with
      * the HTML text given.
      */
-    public function HtmlParser($aHtmlText)
+    public function __construct($aHtmlText)
     {
         $this->iHtmlText = $aHtmlText;
         $this->iHtmlTextLength = mb_strlen($aHtmlText);
@@ -79,6 +81,15 @@ class HtmlParser
         $this->BOE_ARRAY = array(' ', "\t", "\r", "\n", '=');
         $this->B_ARRAY = array(' ', "\t", "\r", "\n");
         $this->BOS_ARRAY = array(' ', "\t", "\r", "\n", '/');
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function HTMLParser()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**

@@ -7,14 +7,14 @@
         <parameter key="chameleon_system_core.universal_uploader.plugin_integration_service_class">ChameleonSystem\CoreBundle\UniversalUploader\Bridge\JqueryFileUpload\JqueryFileUploadIntegrationService</parameter>
     </parameters>
     <services>
-        <service id="chameleon_system_core.universal_uploader.uploader_parameter_service" class="ChameleonSystem\CoreBundle\UniversalUploader\Library\UploaderParameterFromRequestService">
+        <service id="chameleon_system_core.universal_uploader.uploader_parameter_service" class="ChameleonSystem\CoreBundle\UniversalUploader\Library\UploaderParameterFromRequestService" public="true">
             <argument type="service" id="chameleon_system_core.util.input_filter" />
         </service>
         <service id="chameleon_system_core.universal_uploader.uploader_post_handler" class="%chameleon_system_core.universal_uploader.post_handler_class%">
             <argument type="service" id="request_stack" />
             <argument type="service" id="translator" />
         </service>
-        <service id="chameleon_system_core.universal_uploader.uploader_controller" class="ChameleonSystem\CoreBundle\UniversalUploader\Controller\UploaderController">
+        <service id="chameleon_system_core.universal_uploader.uploader_controller" class="ChameleonSystem\CoreBundle\UniversalUploader\Controller\UploaderController" public="true">
             <argument type="service" id="chameleon_system_core.universal_uploader.uploader_post_handler" />
             <argument type="service" id="chameleon_system_core.universal_uploader.save_to_media_library_service" />
         </service>
@@ -22,6 +22,6 @@
             <argument type="service" id="chameleon_system_core.universal_uploader.uploader_parameter_service" />
             <argument type="service" id="request_stack" />
         </service>
-        <service id="chameleon_system_core.universal_uploader.plugin_integration_service" class="%chameleon_system_core.universal_uploader.plugin_integration_service_class%"/>
+        <service id="chameleon_system_core.universal_uploader.plugin_integration_service" class="%chameleon_system_core.universal_uploader.plugin_integration_service_class%" public="true" />
     </services>
 </container>

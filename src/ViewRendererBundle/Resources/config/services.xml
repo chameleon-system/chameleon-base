@@ -15,7 +15,7 @@
 
     <services>
         <service id="chameleon_system_view_renderer.controller.generate_css_controller"
-                 class="ChameleonSystem\ViewRendererBundle\Controller\GenerateCssController">
+                 class="ChameleonSystem\ViewRendererBundle\Controller\GenerateCssController" public="true">
             <argument type="service" id="chameleon_system_view_renderer.less_compiler"/>
             <argument>%chameleon_system_core.cache.cache_less_files%</argument>
         </service>
@@ -54,19 +54,20 @@
             <argument type="service" id="chameleon_system_view_renderer.twig.loader.string"/>
         </service>
 
-        <service id="chameleon_system_view_renderer.snippet_directory" class="%chameleon_system_view_renderer.snippet_directory.class%">
+        <service id="chameleon_system_view_renderer.snippet_directory" class="%chameleon_system_view_renderer.snippet_directory.class%" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="kernel"/>
         </service>
 
-        <service id="chameleon_system_view_renderer.less_compiler" class="ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler">
+        <service id="chameleon_system_view_renderer.less_compiler" class="ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler" public="true">
             <argument/> <!-- will be replaced by ChameleonSystemViewRendererExtension -->
             <argument>%chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix%</argument>
         </service>
 
         <service id="chameleon_system_view_renderer.routing.generate_css_route_collection_generator"
-                 class="ChameleonSystem\ViewRendererBundle\Bridge\Chameleon\RouteGenerator\GenerateCssRouteCollectionGenerator">
+                 class="ChameleonSystem\ViewRendererBundle\Bridge\Chameleon\RouteGenerator\GenerateCssRouteCollectionGenerator"
+                 public="true">
             <argument type="service" id="chameleon_system_view_renderer.less_compiler"/>
         </service>
 
@@ -76,21 +77,27 @@
         </service>
 
         <service id="chameleon_system_view_renderer.mapper.config_to_less" class="TPkgViewRendererConfigToLessMapper">
+            <tag name="chameleon_system.mapper"/>
+
             <argument type="service" id="chameleon_system_view_renderer.less_compiler" />
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
         </service>
 
-        <service id="chameleon_system_view_renderer.mapper.list_handler" class="TPkgViewRendererMapper_ListHandler">
-            <argument type="service" id="service_container" />
+        <service id="chameleon_system_view_renderer.mapper.list_handler" class="TPkgViewRendererMapper_ListHandler" shared="false">
+            <tag name="chameleon_system.mapper"/>
+
+            <argument type="service" id="service_container"/>
         </service>
 
         <service id="chameleon_system_view_renderer.mapper.snippet_gallery_to_list" class="TPkgViewRendererSnippetGallery_To_List_Mapper">
+            <tag name="chameleon_system.mapper"/>
         </service>
 
         <service id="chameleon_system_view_renderer.mapper.snippet_gallery_navi_tree_to_navigation" class="TPkgViewRendererSnippetGalleryNaviTree_To_Navigation_Mapper">
+            <tag name="chameleon_system.mapper"/>
         </service>
 
-        <service id="chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier" class="ChameleonSystem\ViewRenderer\SnippetChain\SnippetChainModifier">
+        <service id="chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier" class="ChameleonSystem\ViewRenderer\SnippetChain\SnippetChainModifier" public="true">
             <argument type="service" id="chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier_data_access"/>
         </service>
 

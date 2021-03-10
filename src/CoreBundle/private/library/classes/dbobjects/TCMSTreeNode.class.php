@@ -35,11 +35,20 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      */
     private $_cache = array();
 
-    public function TCMSTreeNode($id = null)
+    public function __construct($id = null, $table = 'cms_tree')
     {
-        $table = 'cms_tree';
-        parent::TCMSRecord($table, $id);
+        parent::__construct($table, $id);
     }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSTreeNode()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
+    }
+
 
     /**
      * @param string $name
