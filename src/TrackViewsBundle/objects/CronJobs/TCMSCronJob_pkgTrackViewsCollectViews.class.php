@@ -24,7 +24,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
      */
     public function __construct($targetTable, $timeToLive)
     {
-        parent::TCMSCronJob();
+        parent::__construct();
         $this->targetTable = $targetTable;
         $this->timeToLive = $timeToLive;
     }
