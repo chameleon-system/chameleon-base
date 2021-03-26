@@ -18,7 +18,7 @@ TCMSLogChange::update(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
-      'translation' => 'belongs to cms page template spot',
+      'translation' => 'Belongs to cms page template spot',
   ])
   ->setWhereEquals([
       'name' => 'cms_master_pagedef_spot_id',
