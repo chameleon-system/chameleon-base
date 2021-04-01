@@ -30,9 +30,31 @@ class TransferTokenService implements TransferTokenServiceInterface
         string $userId,
         int $expiresAfterSeconds
     ): string {
-        $salt = md5(random_bytes(16));
-        $expires = $this->timeProvider->getUnixTimestamp() + $expiresAfterSeconds;
-        $json = json_encode(compact('userId', 'expires', 'salt'));
+        return $this->encodeToken([
+            'userId' => $userId,
+            'expires' => $this->timeProvider->getUnixTimestamp() + $expiresAfterSeconds
+        ]);
+    }
+
+    /** {@inheritdoc} */
+    public function getUserIdFromTransferToken(string $token): ?string
+    {
+       $data = $this->decodeToken($token);
+       if (null === $token || false === array_key_exists('expires', $data) || false === array_key_exists('userId', $data)) {
+           return null;
+       }
+
+        if ($this->timeProvider->getUnixTimestamp() > $data['expires']) {
+            return null;
+        }
+
+        return $data['userId'];
+    }
+
+    private function encodeToken(array $data): string
+    {
+        $data['_salt'] = md5(random_bytes(16));
+        $json = json_encode($data);
         $encrypted = openssl_encrypt(
             $json,
             $this->algorithm,
@@ -44,8 +66,7 @@ class TransferTokenService implements TransferTokenServiceInterface
         return base64_encode($encrypted);
     }
 
-    /** {@inheritdoc} */
-    public function validateTransferToken(string $token): ?string
+    private function decodeToken(string $token): ?array
     {
         $encrypted = base64_decode($token);
         if (false === $encrypted) {
@@ -68,11 +89,7 @@ class TransferTokenService implements TransferTokenServiceInterface
             return null;
         }
 
-        if ($this->timeProvider->getUnixTimestamp() > $data['expires']) {
-            return null;
-        }
-
-        return $data['userId'];
+        return $data;
     }
 
     private function initializationVector(): string

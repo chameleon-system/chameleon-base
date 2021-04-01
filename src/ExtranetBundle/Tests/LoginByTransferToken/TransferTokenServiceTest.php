@@ -40,7 +40,7 @@ class TransferTokenServiceTest extends TestCase
     {
         $service = $this->service('secret');
         $token = $service->createTransferTokenForUser(11, 120);
-        $this->assertEquals(11, $service->validateTransferToken($token));
+        $this->assertEquals(11, $service->getUserIdFromTransferToken($token));
     }
 
     public function testTokenIsInvalidIfExpired(): void
@@ -51,18 +51,18 @@ class TransferTokenServiceTest extends TestCase
         $token = $service->createTransferTokenForUser(11, 120);
 
         $this->pretendTimeIs('2020-10-10 10:03:00');
-        $this->assertNull($service->validateTransferToken($token));
+        $this->assertNull($service->getUserIdFromTransferToken($token));
     }
 
     public function testRandomStringIsNotValidToken(): void
     {
-        $this->assertNull($this->service('secret')->validateTransferToken('foobar'));
+        $this->assertNull($this->service('secret')->getUserIdFromTransferToken('foobar'));
     }
 
     public function testTokenCreatedWithDifferentSecretIsNotValid(): void
     {
         $token = $this->service('secret1')->createTransferTokenForUser(11, 120);
-        $this->assertNull($this->service('secret2')->validateTransferToken($token));
+        $this->assertNull($this->service('secret2')->getUserIdFromTransferToken($token));
     }
 
     private function service(string $secret): TransferTokenService

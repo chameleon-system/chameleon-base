@@ -43,7 +43,7 @@ class LoginController
     {
         $this->invalidateCurrentSession();
 
-        $userId = $this->transferTokenService->validateTransferToken($token);
+        $userId = $this->transferTokenService->getUserIdFromTransferToken($token);
         if (null === $userId || false === $this->loginAsUser($userId)) {
             throw new AccessDeniedHttpException();
         }

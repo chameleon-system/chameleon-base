@@ -21,5 +21,5 @@ interface TransferTokenServiceInterface
      * in the token if it is valid. If the expiry time of a token is over, then
      * the token must be invalid.
      */
-    public function validateTransferToken(string $token): ?string;
+    public function getUserIdFromTransferToken(string $token): ?string;
 }
