@@ -23,6 +23,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TableEditorExtranetUser extends TCMSTableEditor
 {
+    private const TRANSFER_TOKEN_LIFETIME_SECONDS = 20;
+
     /**
      * {@inheritdoc}
      */
@@ -136,7 +138,10 @@ class TableEditorExtranetUser extends TCMSTableEditor
 
     private function redirectUserToTokenLoginOnPortal(string $userId, TdbCmsPortal $portal): void
     {
-        $token = $this->transferTokenService()->createTransferTokenForUser($userId, 120);
+        $token = $this->transferTokenService()->createTransferTokenForUser(
+            $userId,
+            self::TRANSFER_TOKEN_LIFETIME_SECONDS
+        );
         $url = $this->router()->generateWithPrefixes(
             RouteGenerator::ROUTE_NAME,
             [ 'token' => $token ],
