@@ -68,7 +68,7 @@ class TransferTokenServiceTest extends TestCase
         $this->assertNull($service->getUserIdFromTransferToken($token));
 
         $this->assertTrue(
-            $this->logger->hasErrorThatContains('Refusing to encode or decode transfer transfer token with default secret'),
+            $this->logger->hasErrorThatContains('Refusing to encode or decode transfer tokens with default secret'),
             'Should log message detailing why decoding failed'
         );
     }
