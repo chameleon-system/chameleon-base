@@ -110,17 +110,17 @@ class TransferTokenService implements TransferTokenServiceInterface
 
     public function isReadyToEncodeTokens(): bool
     {
-        if (self::DEFAULT_TOKEN !== $this->secret) {
-            return true;
+        if (self::DEFAULT_TOKEN === $this->secret) {
+            $this->logger->error(sprintf('
+                Refusing to encode or decode transfer tokens with default secret.
+                Please ensure that the secret is set to a random string that is not 
+                `%s`
+            ', self::DEFAULT_TOKEN));
+
+            return false;
         }
 
-        $this->logger->error('
-            Refusing to encode or decode transfer tokens with default secret.
-            Please ensure that the secret is set to a random string that is not 
-            `!ThisTokenIsNotSoSecretChangeIt!`
-        ');
-
-        return false;
+        return true;
     }
 
     private function initializationVector(): string
