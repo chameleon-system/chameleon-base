@@ -77,7 +77,7 @@ class TableEditorExtranetUser extends TCMSTableEditor
             'tableid' => $this->oTableConf->id,
         ];
 
-        if (true === $this->isKernelSecretDefault()) {
+        if (false === $this->transferTokenService()->isReadyToEncodeTokens()) {
             $menuItem->sCSSClass = 'disabled';
         } else {
             $url = PATH_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($urlData, '?', '&');
@@ -214,12 +214,5 @@ class TableEditorExtranetUser extends TCMSTableEditor
     private function router(): PortalAndLanguageAwareRouterInterface
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.router.chameleon_frontend');
-    }
-
-    private function isKernelSecretDefault(): bool
-    {
-        $secret = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('kernel.secret');
-
-        return '!ThisTokenIsNotSoSecretChangeIt!' === $secret;
     }
 }

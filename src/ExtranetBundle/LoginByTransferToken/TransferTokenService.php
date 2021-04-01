@@ -7,6 +7,8 @@ use Psr\Log\LoggerInterface;
 
 class TransferTokenService implements TransferTokenServiceInterface
 {
+    private const DEFAULT_TOKEN = '!ThisTokenIsNotSoSecretChangeIt!';
+
     /** @var TimeProviderInterface */
     private $timeProvider;
 
@@ -77,7 +79,7 @@ class TransferTokenService implements TransferTokenServiceInterface
 
     private function decodeToken(string $token): ?array
     {
-        if (true === $this->isSecretIsDefaultFromQuickstartTemplate()) {
+        if (false === $this->isReadyToEncodeTokens()) {
             return null;
         }
 
@@ -105,19 +107,20 @@ class TransferTokenService implements TransferTokenServiceInterface
         return $data;
     }
 
-    private function isSecretIsDefaultFromQuickstartTemplate(): bool
+
+    public function isReadyToEncodeTokens(): bool
     {
-        if ('!ThisTokenIsNotSoSecretChangeIt!' !== $this->secret) {
-            return false;
+        if (self::DEFAULT_TOKEN !== $this->secret) {
+            return true;
         }
 
         $this->logger->error('
-            Refusing to encode or decode transfer transfer token with default secret.
+            Refusing to encode or decode transfer tokens with default secret.
             Please ensure that the secret is set to a random string that is not 
             `!ThisTokenIsNotSoSecretChangeIt!`
         ');
 
-        return true;
+        return false;
     }
 
     private function initializationVector(): string

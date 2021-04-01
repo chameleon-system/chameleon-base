@@ -8,6 +8,13 @@ namespace ChameleonSystem\ExtranetBundle\LoginByTransferToken;
  */
 interface TransferTokenServiceInterface
 {
+
+    /**
+     * Returns false if the service is not ready to encode or decode tokens.
+     * This can be the case if certain preconditions for safety are not met.
+     */
+    public function isReadyToEncodeTokens(): bool;
+
     /**
      * Creates a transfer token for the given user id that expires after
      * the given number of seconds. The returned token must be safe for
