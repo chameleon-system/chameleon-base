@@ -76,8 +76,13 @@ class TableEditorExtranetUser extends TCMSTableEditor
             'id' => $this->sId,
             'tableid' => $this->oTableConf->id,
         ];
-        $url = PATH_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($urlData, '?', '&');
-        $menuItem->sOnClick = sprintf("window.location.href = '%s'; return false;", $url);
+
+        if (true === $this->isKernelSecretDefault()) {
+            $menuItem->sCSSClass = 'disabled';
+        } else {
+            $url = PATH_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($urlData, '?', '&');
+            $menuItem->sOnClick = sprintf("window.location.href = '%s'; return false;", $url);
+        }
 
         return $menuItem;
     }
@@ -209,5 +214,12 @@ class TableEditorExtranetUser extends TCMSTableEditor
     private function router(): PortalAndLanguageAwareRouterInterface
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.router.chameleon_frontend');
+    }
+
+    private function isKernelSecretDefault(): bool
+    {
+        $secret = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('kernel.secret');
+
+        return '!ThisTokenIsNotSoSecretChangeIt!' === $secret;
     }
 }
