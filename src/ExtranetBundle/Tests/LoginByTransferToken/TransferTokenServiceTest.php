@@ -3,17 +3,17 @@
 namespace ChameleonSystem\ExtranetBundle\Tests\LoginByTransferToken;
 
 use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockClass;
 use ChameleonSystem\ExtranetBundle\LoginByTransferToken\TransferTokenService;
-use Psr\Log\Test\TestLogger;
+use Psr\Log\LoggerInterface;
 
 class TransferTokenServiceTest extends TestCase
 {
-    /** @var MockClass<TimeProviderInterface> */
+    /** @var MockObject<TimeProviderInterface> */
     protected $timeProvider;
 
-    /** @var TestLogger */
+    /** @var MockObject<LoggerInterface> */
     protected $logger;
 
     /** @var int */
@@ -23,7 +23,7 @@ class TransferTokenServiceTest extends TestCase
     {
         $this->currentTime = time();
 
-        $this->logger = new TestLogger();
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->timeProvider = $this->createMock(TimeProviderInterface::class);
         $this->timeProvider
@@ -64,13 +64,15 @@ class TransferTokenServiceTest extends TestCase
     {
         $service = $this->service('!ThisTokenIsNotSoSecretChangeIt!');
 
+        $this->logger
+            ->expects($this->once())
+            ->method('error')
+            ->with($this->callback(function($message) {
+                return str_contains($message, 'Refusing to encode or decode transfer tokens with default secret');
+            }));
+
         $token = $service->createTransferTokenForUser(11, 120);
         $this->assertNull($service->getUserIdFromTransferToken($token));
-
-        $this->assertTrue(
-            $this->logger->hasErrorThatContains('Refusing to encode or decode transfer tokens with default secret'),
-            'Should log message detailing why decoding failed'
-        );
     }
 
     public function testRandomStringIsNotValidToken(): void
