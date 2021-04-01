@@ -38,7 +38,7 @@ class TransferTokenServiceTest extends TestCase
         $service = $this->service('secret');
         $this->assertNotEquals(
             $service->createTransferTokenForUser(11, 120),
-            $service->createTransferTokenForUser(11, 120),
+            $service->createTransferTokenForUser(11, 120)
         );
     }
 
