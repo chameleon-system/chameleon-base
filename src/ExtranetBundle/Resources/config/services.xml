@@ -61,6 +61,7 @@
                 public="true"
         >
             <argument type="service" id="chameleon_system_core.system_time_provider" />
+            <argument type="service" id="logger" />
             <argument>%kernel.secret%</argument>
             <argument>%chameleon_system_extranet.login_by_transfer_token.transfer_token_service.algorithm%</argument>
         </service>

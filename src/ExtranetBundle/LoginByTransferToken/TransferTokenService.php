@@ -3,11 +3,15 @@
 namespace ChameleonSystem\ExtranetBundle\LoginByTransferToken;
 
 use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
+use Psr\Log\LoggerInterface;
 
 class TransferTokenService implements TransferTokenServiceInterface
 {
     /** @var TimeProviderInterface */
     private $timeProvider;
+
+    /** @var LoggerInterface */
+    private $logger;
 
     /** @var string */
     private $secret;
@@ -17,10 +21,12 @@ class TransferTokenService implements TransferTokenServiceInterface
 
     public function __construct(
         TimeProviderInterface $timeProvider,
+        LoggerInterface $logger,
         string $secret,
         string $algorithm
     ) {
         $this->timeProvider = $timeProvider;
+        $this->logger = $logger;
         $this->secret = $secret;
         $this->algorithm = $algorithm;
     }
@@ -40,7 +46,10 @@ class TransferTokenService implements TransferTokenServiceInterface
     public function getUserIdFromTransferToken(string $token): ?string
     {
        $data = $this->decodeToken($token);
-       if (null === $token || false === array_key_exists('expires', $data) || false === array_key_exists('userId', $data)) {
+       if (null === $data
+           || false === array_key_exists('expires', $data)
+           || false === array_key_exists('userId', $data)
+       ) {
            return null;
        }
 
@@ -68,6 +77,10 @@ class TransferTokenService implements TransferTokenServiceInterface
 
     private function decodeToken(string $token): ?array
     {
+        if (true === $this->isSecretIsDefaultFromQuickstartTemplate()) {
+            return null;
+        }
+
         $encrypted = base64_decode($token);
         if (false === $encrypted) {
             return null;
@@ -90,6 +103,21 @@ class TransferTokenService implements TransferTokenServiceInterface
         }
 
         return $data;
+    }
+
+    private function isSecretIsDefaultFromQuickstartTemplate(): bool
+    {
+        if ('!ThisTokenIsNotSoSecretChangeIt!' !== $this->secret) {
+            return false;
+        }
+
+        $this->logger->error('
+            Refusing to encode or decode transfer transfer token with default secret.
+            Please ensure that the secret is set to a random string that is not 
+            `!ThisTokenIsNotSoSecretChangeIt!`
+        ');
+
+        return true;
     }
 
     private function initializationVector(): string
