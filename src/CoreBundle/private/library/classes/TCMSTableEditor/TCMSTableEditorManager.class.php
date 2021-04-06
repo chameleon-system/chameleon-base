@@ -10,6 +10,7 @@
  */
 
 use Doctrine\DBAL\Connection;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
 /**
  * manages the TableEditor classes.
@@ -501,9 +502,12 @@ class TCMSTableEditorManager
         $sourceTable = substr($restrictionField, 0, -4);
         $targetTable = $this->oTableConf->sqlData['name'];
 
+        /** @var string $fieldName */
+        $fieldName = $this->getInputFilterUtil()->getFilteredInput('field') ?? ($targetTable . '_mlt');
+
         $tableEditor = new TCMSTableEditorManager();
         $tableEditor->Init(TTools::GetCMSTableId($sourceTable), $restriction);
-        $tableEditor->AddMLTConnection($targetTable . '_mlt', $this->sId);
+        $tableEditor->AddMLTConnection($fieldName, $this->sId);
     }
 
     /**
@@ -638,5 +642,10 @@ class TCMSTableEditorManager
         }
 
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }
