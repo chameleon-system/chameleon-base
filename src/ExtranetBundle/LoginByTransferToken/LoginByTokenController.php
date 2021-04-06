@@ -12,16 +12,16 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 class LoginByTokenController
 {
     /** @var TransferTokenServiceInterface */
-    protected $transferTokenService;
+    private $transferTokenService;
 
     /** @var ExtranetUserProviderInterface */
-    protected $extranetUserProvider;
+    private $extranetUserProvider;
 
     /** @var PageServiceInterface */
-    protected $pageService;
+    private $pageService;
 
     /** @var RequestStack */
-    protected $requestStack;
+    private $requestStack;
 
     public function __construct(
         TransferTokenServiceInterface $transferTokenService,

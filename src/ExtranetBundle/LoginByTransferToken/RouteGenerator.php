@@ -9,8 +9,8 @@ use Symfony\Component\Routing\RouteCollection;
 class RouteGenerator implements CollectionGeneratorInterface
 {
     public const ROUTE_NAME = 'chameleon_system_extranet.login_by_transfer_token';
-    protected const CONTROLLER_SERVICE = 'chameleon_system_extranet.login_by_transfer_token.login_controller';
-    protected const ACTION_REFERENCE = self::CONTROLLER_SERVICE.':loginAction';
+    private const CONTROLLER_SERVICE = 'chameleon_system_extranet.login_by_transfer_token.login_by_token_controller';
+    private const ACTION_REFERENCE = self::CONTROLLER_SERVICE.':loginAction';
 
     /**
      * @param array $config

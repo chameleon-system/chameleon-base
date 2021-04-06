@@ -107,7 +107,9 @@ class TransferTokenService implements TransferTokenServiceInterface
         return $data;
     }
 
-
+    /**
+     * @inheritDoc
+     */
     public function isReadyToEncodeTokens(): bool
     {
         if (self::DEFAULT_TOKEN === $this->secret) {
