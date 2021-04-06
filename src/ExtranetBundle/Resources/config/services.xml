@@ -46,9 +46,9 @@
             public="true"
         />
         <service
-                id="chameleon_system_extranet.login_by_transfer_token.login_controller"
-                class="ChameleonSystem\ExtranetBundle\LoginByTransferToken\LoginController"
-                public="true"
+            id="chameleon_system_extranet.login_by_transfer_token.login_by_token_controller"
+            class="ChameleonSystem\ExtranetBundle\LoginByTransferToken\LoginByTokenController"
+            public="true"
         >
             <argument type="service" id="chameleon_system_extranet.login_by_transfer_token.transfer_token_service" />
             <argument type="service" id="chameleon_system_extranet.extranet_user_provider" />
@@ -56,9 +56,9 @@
             <argument type="service" id="request_stack" />
         </service>
         <service
-                id="chameleon_system_extranet.login_by_transfer_token.transfer_token_service"
-                class="ChameleonSystem\ExtranetBundle\LoginByTransferToken\TransferTokenService"
-                public="true"
+            id="chameleon_system_extranet.login_by_transfer_token.transfer_token_service"
+            class="ChameleonSystem\ExtranetBundle\LoginByTransferToken\TransferTokenService"
+            public="true"
         >
             <argument type="service" id="chameleon_system_core.system_time_provider" />
             <argument type="service" id="logger" />

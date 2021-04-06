@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class LoginController
+class LoginByTokenController
 {
     /** @var TransferTokenServiceInterface */
     protected $transferTokenService;

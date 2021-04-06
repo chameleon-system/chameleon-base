@@ -17,7 +17,7 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use ChameleonSystem\ExtranetBundle\LoginByTransferToken\TransferTokenServiceInterface;
-use ChameleonSystem\ExtranetBundle\LoginByTransferToken\LoginController;
+use ChameleonSystem\ExtranetBundle\LoginByTransferToken\LoginByTokenController;
 use ChameleonSystem\ExtranetBundle\LoginByTransferToken\RouteGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -93,7 +93,7 @@ class TableEditorExtranetUser extends TCMSTableEditor
      * redirecting the user to a route on the domain of the corresponding site
      * which uses said token to log the user in.
      *
-     * @see LoginController::loginAction()
+     * @see LoginByTokenController::loginAction()
      */
     public function LoginAsExtranetUser(): void
     {
