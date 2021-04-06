@@ -115,7 +115,9 @@ class TableEditorExtranetUser extends TCMSTableEditor
     {
         $cmsUser = TCMSUser::GetActiveUser();
 
-        return $cmsUser && $cmsUser->oAccessManager && $cmsUser->oAccessManager->PermitFunction($permission);
+        return null !== $cmsUser
+            && null !== $cmsUser->oAccessManager
+            && true === $cmsUser->oAccessManager->PermitFunction($permission);
     }
 
     private function loadExtranetUser(string $userId): TdbDataExtranetUser
