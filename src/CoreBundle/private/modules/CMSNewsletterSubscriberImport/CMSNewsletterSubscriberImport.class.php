@@ -36,9 +36,6 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
         $oCMSUser = &TCMSUser::GetActiveUser();
         $aPortals = $oCMSUser->GetMLTIdList('cms_portal', 'cms_portal_mlt');
 
-        if (empty($sPortalIDs)) {
-            $sPortalIDs = '0';
-        }
         $databaseConnection = $this->getDatabaseConnection();
         $idListString = implode(',', array_map(array($databaseConnection, 'quote'), $aPortals));
 
@@ -72,11 +69,9 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
             $bReplaceAllSubscriber = $this->global->GetUserData('replaceAllSubscriber');
             $pkg_newsletter_group_id = $this->global->GetUserData('pkg_newsletter_group_id');
             $bDoNotUpdateDataForExistingUsers = $this->global->GetUserData('notupdateSubscriber');
-            $oPkgNewsletterGroup = null;
             if ('noGroup' == $pkg_newsletter_group_id) {
                 $sPortalId = $this->global->GetUserData('cms_portal_id');
             } else {
-                /** @var $oTdbPkgNewsletterGroup TdbPkgNewsletterGroup */
                 $oPkgNewsletterGroup = TdbPkgNewsletterGroup::GetNewInstance();
                 if ($oPkgNewsletterGroup->Load($pkg_newsletter_group_id)) {
                     $sPortalId = $oPkgNewsletterGroup->fieldCmsPortalId;
@@ -251,7 +246,7 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
    INNER JOIN `pkg_newsletter_user_pkg_newsletter_group_mlt`
         WHERE `pkg_newsletter_user_pkg_newsletter_group_mlt`.`source_id` = `pkg_newsletter_user`.`id`
           AND `pkg_newsletter_user_pkg_newsletter_group_mlt`.`target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iNewsletterGroupID)."'";
-            $result = MySqlLegacySupport::getInstance()->query($query);
+            MySqlLegacySupport::getInstance()->query($query);
         }
     }
 

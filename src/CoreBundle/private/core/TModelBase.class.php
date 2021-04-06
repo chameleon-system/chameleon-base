@@ -78,15 +78,6 @@ class TModelBase
     public $methodCallAllowed = array();
 
     /**
-     * is true if the module was called via export method.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - export was removed due to security considerations.
-     */
-    public $isExportCall = false;
-
-    /**
      * this is set automatically when the class is restored from session.
      *
      * @var bool
@@ -231,7 +222,7 @@ class TModelBase
 
     protected function DefineInterface()
     {
-        $externalFunctions = array('ExecuteAjaxCall', 'ExecuteExport');
+        $externalFunctions = ['ExecuteAjaxCall'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
         $this->allowedMethodCallsInitialized = true;
     }
@@ -275,35 +266,6 @@ class TModelBase
                     break;
             }
         }
-    }
-
-    /**
-     * executes the web module and shows a different view
-     * use this method for exports like RSS feeds.
-     *
-     * @param bool $bExit - set this to false if you want to grab the output and write it to a file
-     *
-     * @deprecated since 6.2.0 - export was removed due to security considerations.
-     */
-    public function ExecuteExport($bExit = true)
-    {
-        echo '';
-
-        if ($bExit) {
-            exit();
-        }
-    }
-
-    /**
-     * overwrite this method to set a default export view.
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - export was removed due to security considerations.
-     */
-    protected function GetExportView()
-    {
-        return '';
     }
 
     /**
@@ -465,7 +427,7 @@ class TModelBase
      */
     protected function SetTemplate($modelName, $name)
     {
-        $sType = $this->GetModuleType();
+        $sType = $this->aModuleConfig['moduleType'] ?? 'Core';
 
         $this->aModuleConfig['model'] = $modelName;
         $this->aModuleConfig['view'] = $name;
@@ -498,26 +460,6 @@ class TModelBase
     }
 
     /**
-     * get the type of the module (Core, Customer, Customer Core).
-     *
-     * @return string
-     *
-     * @deprecated
-     *
-     * @todo refactor calls
-     */
-    protected function GetModuleType()
-    {
-        $type = 'Core';
-
-        if (array_key_exists('moduleType', $this->aModuleConfig)) {
-            $type = $this->aModuleConfig['moduleType'];
-        }
-
-        return $type;
-    }
-
-    /**
      * returns an array of variables that should be replaced in the rendered module. Use this method to inject not-cachable data into
      * the complete module html.
      *
@@ -540,29 +482,6 @@ class TModelBase
     public function _AllowCache()
     {
         return false;
-    }
-
-    /**
-     * if this function returns true and all modules within the page are cacheable
-     * then the entire page will be cached. Set this to false if your module uses internal
-     * parameters for caching. Example: using date('Ym'); in _GetCacheParameters.
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     *
-     * @return bool
-     */
-    public function AllowPageCache()
-    {
-        return false;
-    }
-
-    /**
-     * clear cache of current version - needed if the output is changed dynamically.
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public function ClearCache()
-    {
     }
 
     /**
@@ -606,21 +525,6 @@ class TModelBase
         $oMessageManager = TCMSMessageManager::GetInstance();
 
         return $oMessageManager->ConsumerHasMessages($this->sModuleSpotName);
-    }
-
-    /**
-     * returns the link to the export for an export view.
-     *
-     * @param string $sViewPath
-     * @param array  $aAdditionalParameters
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - export was removed due to security considerations.
-     */
-    protected function GetExportLink($sViewPath, $aAdditionalParameters = array())
-    {
-        return '';
     }
 
     /**
@@ -752,7 +656,6 @@ class TModelBase
     final public function __invoke(Request $request, $isLegacyModule)
     {
         $response = new Response();
-        $cachedContent = null;
         if (true === $this->_AllowCache()) {
             $cache = $this->getCache();
             $cacheKey = $cache->getKey($this->_GetCacheParameters());

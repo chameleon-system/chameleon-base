@@ -391,44 +391,6 @@ class CMSTableExport extends TCMSModelBase
             $rtfData .= '<br><br><br>';
             $this->writeTempFile($rtfData);
         }
-
-        // require_once(PATH_LIBRARY."/classes/rtfGenerator/rtf_class.php");
-
-        // echo $rtfData;
-        // exit();
-
-        $rtfData = $this->FilterHTML4RTF($rtfData);
-        // echo $rtfData;
-        // exit();
-
-        // $oRTF = new RTF(PATH_LIBRARY."/classes/rtfGenerator/rtf_config.inc");
-        //$oRTF->parce_HTML($rtfData);
-        // getting RTF code:
-        $rtfFileContent = ''; //$oRTF->get_rtf();
-
-        // old! needs to be refactured
-        // $this->data['RtfDownloadUrl'] = $this->WriteFile($rtfFileContent, 'rtf');
-    }
-
-    /**
-     * @param array $aFieldConfig
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function GenerateHTMLExport($aFieldConfig)
-    {
-    }
-
-    /**
-     * @param string $userCSSURL
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function getCMSCustomerStyles($userCSSURL)
-    {
-        return '';
     }
 
     /**

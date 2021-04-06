@@ -24,31 +24,6 @@ class TViewParser
     protected $aTemplateData = array();
 
     /**
-     * defines key/value pairs of parameters that describe the unique cache element.
-     *
-     * @var array
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected $aCacheParameters = array();
-
-    /**
-     * @var array
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected $aCacheClearTriggers = array();
-
-    /**
-     * rendered output is loaded from cache if available.
-     *
-     * @var bool - default false
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected $bUseCaching = false;
-
-    /**
      * shows a comment hint block with the template path.
      *
      * @var bool - default true
@@ -80,39 +55,6 @@ class TViewParser
     }
 
     /**
-     * allow caching the result, and using that cached result.
-     *
-     * @param bool $bUse
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public function UseCaching($bUse = true)
-    {
-    }
-
-    /**
-     * parameters identifying a cached instance.
-     *
-     * @param array $aParameters - assoc array: key=>value,...
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public function SetCacheParameters($aParameters)
-    {
-    }
-
-    /**
-     * Changes to which tables will trigger the cached instance to be deleted.
-     *
-     * @param array $aClearTriggers - of the form array(array('table'=>'','id'=>''),....)
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public function SetCacheClearTriggers($aClearTriggers)
-    {
-    }
-
-    /**
      * render content.
      *
      * @param string $sModuleName - module name
@@ -125,30 +67,6 @@ class TViewParser
         $sTemplatePath = $this->getViewPathManager()->getModuleViewPath($sModuleName, $sViewName);
 
         return $this->GetContent($sTemplatePath);
-    }
-
-    /**
-     * clear cache for instance.
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public function ClearCache()
-    {
-    }
-
-    /**
-     * renders from cache. returns falls if the object is not in cache
-     * throws an exception if the object is not in cache.
-     *
-     * @return string
-     *
-     * @throws Exception
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public function RenderFromCache()
-    {
-        throw new Exception('object not in cache');
     }
 
     /**

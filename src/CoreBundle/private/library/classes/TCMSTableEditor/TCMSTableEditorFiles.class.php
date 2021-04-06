@@ -109,7 +109,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
             } else {
                 $oGlobal = TGlobal::instance();
                 /** @var $oGlobal TGlobal */
-                $sAllowedFileTypesFromExternal = $oGlobal->GetUserData('sAllowedFileTypes'); // comma seperated list of filetype endings e.g. jpg,gif,swf
+                $sAllowedFileTypesFromExternal = $oGlobal->GetUserData('sAllowedFileTypes'); // comma separated list of filetype endings e.g. jpg,gif
                 if (!empty($sAllowedFileTypesFromExternal)) {
                     $sAllowedFileTypesFromExternal = strtoupper($sAllowedFileTypesFromExternal);
                     $sAllowedFileTypesFromExternal = str_replace(',', ', ', $sAllowedFileTypesFromExternal);
@@ -127,8 +127,6 @@ class TCMSTableEditorFiles extends TCMSTableEditor
 
     /**
      * gets called after save if all posted data was valid.
-     *
-     * @throws TPkgCmsFileManagerException
      *
      * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
@@ -155,7 +153,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
                     $this->Delete($this->sId);
                 }
 
-                throw new TPkgCmsFileManagerException($e->getMessage(), $e->getCode());
+                throw $e;
             }
         }
 

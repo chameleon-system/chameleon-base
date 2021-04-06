@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * module generates an xml listing of a module.
  * requires as input:
@@ -38,7 +41,7 @@ class MTCMSExportModuleCore extends TUserCustomModelBase
         $bAllowExport = (array_key_exists(self::SESSION_INFO_NAME, $_SESSION) && array_key_exists($this->iInstId.$this->sView, $_SESSION[self::SESSION_INFO_NAME]));
         $bAllowExport = ($bAllowExport && $_SESSION[self::SESSION_INFO_NAME][$this->iInstId.$this->sView]);
         if (!$bAllowExport) {
-            $this->controller->HeaderURLRedirect(TTools::GetActivePortal()->GetPortalHomeURL());
+            $this->controller->HeaderURLRedirect($this->getPageService()->getLinkToPortalHomePageAbsolute());
         }
 
         parent::Init();
@@ -54,5 +57,10 @@ class MTCMSExportModuleCore extends TUserCustomModelBase
         $this->data['sContent'] = $this->oListModule->RenderModule();
 
         return $this->data;
+    }
+
+    private function getPageService(): PageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.page_service');
     }
 }

@@ -266,7 +266,6 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
     {
         $modifier = parent::GetDisplayType();
         $oGlobal = TGlobal::instance();
-        $sPropertyTable = $this->GetPropertyTableName();
         if ('1' == $this->oDefinition->sqlData['restrict_to_groups']) {
             // check if the user is in one of the connected groups
 

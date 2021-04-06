@@ -424,7 +424,7 @@ class TCMSTableEditorManager
      * @param array $aOverloadedFields fields to copy with given value
      * @param bool  $bCopyAllLanguages Set to true if you want top copy alle language fields
      *
-     * @return bool
+     * @return TCMSstdClass|bool
      */
     public function DatabaseCopy($languageCopy = false, $aOverloadedFields = array(), $bCopyAllLanguages = true)
     {
@@ -541,41 +541,6 @@ class TCMSTableEditorManager
     }
 
     /**
-     * execute a rollback (resets all workflow changes).
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function RollBack()
-    {
-    }
-
-    /**
-     * publishs workflow changes.
-     *
-     * @return TCMSstdClass
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function Publish()
-    {
-        return new TCMSstdClass();
-    }
-
-    /**
-     * updates or inserts a workflow action log for current Update/Insert Request.
-     *
-     * @param array $aWorkflowData - array of postdata to be saved in workflow_action log
-     *
-     * @return false
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function AddUpdateWorkflowAction($aWorkflowData = array())
-    {
-        return false;
-    }
-
-    /**
      * inserts or refreshes the lock for the current record.
      *
      * @return TCMSstdClass
@@ -605,62 +570,6 @@ class TCMSTableEditorManager
     }
 
     /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     */
-    public function AddNewRevision(&$postData, $bPreventMessage = false)
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     */
-    public function AddNewRevisionFromDatabase($oFields, $oProperty, $postData, $sParentId = '')
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * returns true if revision managament is activated for the CMS and the current table.
-     *
-     * @return bool
-     */
-    public function IsRevisionManagementActive()
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * loads record revision and saves it as the current record.
-     *
-     * @param string $sRevisionID
-     * @param bool   $bIsChildRevision
-     *
-     * @return TCMSstdClass|null
-     */
-    public function ActivateRecordRevision($sRevisionID = null, $bIsChildRevision = false)
-    {
-        return null;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - revision management is no longer supported
-     *
-     * returns the revision number the current record is based on
-     * if no revisions are found it returns 0.
-     *
-     * @return int
-     */
-    public function GetLastActivatedRevision()
-    {
-        return 0;
-    }
-
-    /**
      * returns true if record is locked by another user, a transaction or edit rights are missing.
      *
      * @return bool
@@ -668,19 +577,6 @@ class TCMSTableEditorManager
     public function IsRecordInReadOnlyMode()
     {
         return $this->oTableEditor->IsRecordInReadOnlyMode();
-    }
-
-    /**
-     * checks if current user is owner and no other transaction than the
-     * current active transaction is connected with this record.
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function IsRecordLockedByTransaction()
-    {
-        return false;
     }
 
     /**
@@ -692,18 +588,6 @@ class TCMSTableEditorManager
     public function _PostDeleteRelationTableEntry($tableName)
     {
         $this->oTableEditor->_PostDeleteRelationTableEntry($tableName);
-    }
-
-    /**
-     * sets the workflow bypass switch
-     * don`t forget to reset the switch after use.
-     *
-     * @param bool $bBypassWorkflow
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function SetWorkflowByPass($bBypassWorkflow = false)
-    {
     }
 
     /**

@@ -65,7 +65,6 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
 
         $pagedef = $this->getPagedef($request, $pagePath);
 
-        $request->query->set('pagedef', $pagedef);
         $request->attributes->set('pagedef', $pagedef);
 
         return call_user_func($this->controller);
@@ -153,19 +152,6 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
         $redirectUrl = str_replace($pathInfo, $canonicalUrl, $requestUri);
 
         $this->redirect->redirect($redirectUrl, Response::HTTP_MOVED_PERMANENTLY);
-    }
-
-    /**
-     * @param Request $request
-     * @param string  $pagePath
-     *
-     * @return bool
-     *
-     * @deprecated since 6.1.5 - no longer needed
-     */
-    protected function isNonSeoLink(Request $request, $pagePath)
-    {
-        return '/' === $pagePath && ($request->query->has('pagedef') || $request->request->has('pagedef'));
     }
 
     /**

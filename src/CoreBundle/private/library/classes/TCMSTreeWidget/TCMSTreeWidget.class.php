@@ -19,7 +19,7 @@ class TCMSTreeWidget
     protected $sTreeTableName = '';
 
     /**
-     * defines the ajax page definition name (e.g. CMSDocumentManager, CMSMediaManager).
+     * defines the ajax page definition name (e.g. CMSDocumentManager).
      *
      * @var string
      */
@@ -427,11 +427,8 @@ class TCMSTreeWidget
       }
       </style>';
 
-        /** @var $oViewParser TViewParser */
         $oViewParser = new TViewParser();
         $oViewParser->bShowTemplatePathAsHTMLHint = false;
-        //$oViewParser->UseCaching(true);
-        //$oViewParser->SetCacheParameters();
         $oViewParser->AddVar('sAjaxModuleSpot', $this->sAjaxModuleSpot);
         $oViewParser->AddVar('sAjaxPageDef', $this->sAjaxPageDef);
         $oViewParser->AddVar('sRootNodeID', $this->sRootNodeID);

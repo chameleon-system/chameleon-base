@@ -195,23 +195,11 @@ class TDataMailProfile extends TDataMailProfileAutoParent
     protected function PostLoadHook()
     {
         parent::PostLoadHook();
-        $this->sToMail = $this->GetEMailAddress('mailto');
+        $this->sToMail = $this->sqlData['mailto'];
         $this->sToMailName = $this->GetMailName('mailto_name');
-        $this->sFromMail = $this->GetEMailAddress('mailfrom');
+        $this->sFromMail = $this->sqlData['mailfrom'];
         $this->sFromMailName = $this->GetMailName('mailfrom_name');
         $this->SetSubject($this->fieldSubject);
-    }
-
-    /**
-     * @deprecated since 6.1.9 - the method had a never used fallback to a default address from portal config feature
-     *
-     * @param string $sFieldName
-     *
-     * @return string
-     */
-    protected function GetEMailAddress($sFieldName)
-    {
-        return $this->sqlData[$sFieldName];
     }
 
     /**

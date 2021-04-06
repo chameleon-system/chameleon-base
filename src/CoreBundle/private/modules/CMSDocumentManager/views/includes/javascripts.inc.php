@@ -42,9 +42,9 @@
      */
     function cutSelectedFiles() {
         if (selectedFiles.length > 0) {
-            toasterMessage('<?php echo TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.msg_select_move_target')); ?>', 'WARNING');
+            toasterMessage('<?php echo TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_select_target_folder')); ?>', 'WARNING');
         } else {
-            toasterMessage('<?php echo TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.error_no_move_source_selected')); ?>', 'WARNING');
+            toasterMessage('<?php echo TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_no_files_selected_for_move')); ?>', 'WARNING');
         }
     }
 
@@ -59,7 +59,7 @@
             var url = '<?=PATH_CMS_CONTROLLER; ?>?pagedef=CMSDocumentManager&module_fnc[contentmodule]=ExecuteAjaxCall&_fnc=PasteFiles&documents=' + filesCommaList + '&nodeID=' + selectedNodeID;
             GetAjaxCall(url, PasteFilesResponse);
         } else {
-            toasterMessage('<?php echo TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_media_manager.error_no_past_source_selected')); ?>', 'WARNING');
+            toasterMessage('<?php echo TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_no_files_selected_for_insert')); ?>', 'WARNING');
         }
     }
 

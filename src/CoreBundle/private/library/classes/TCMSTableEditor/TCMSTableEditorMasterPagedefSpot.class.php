@@ -16,7 +16,6 @@ class TCMSTableEditorMasterPagedefSpot extends TCMSTableEditor
         // delete the spot connections
         $query = "SELECT * FROM `cms_tpl_page_cms_master_pagedef_spot`
                       WHERE `cms_master_pagedef_spot_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'";
-        $result = MySqlLegacySupport::getInstance()->query($query);
 
         $oCmsTplPageCmsMasterPagedefSpotList = TdbCmsTplPageCmsMasterPagedefSpotList::GetList($query);
         /** @var $oCmsTplPageCmsMasterPagedefSpotList TdbCmsTplPageCmsMasterPagedefSpotList */

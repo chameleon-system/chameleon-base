@@ -172,11 +172,6 @@
                 <source>chameleon_system_core.template_engine.header_lock</source>
                 <target>Record lock</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.template_engine.header_revision">
-                <source>chameleon_system_core.template_engine.header_revision</source>
-                <target>Version</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.template_engine.header_navigation">
                 <source>chameleon_system_core.template_engine.header_navigation</source>
                 <target>Navigation nodes</target>
@@ -897,11 +892,6 @@
                 <source>chameleon_system_core.record_lock.lock_owner_phone</source>
                 <target>Tel.</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.record_lock.lock_owner_fax">
-                <source>chameleon_system_core.record_lock.lock_owner_fax</source>
-                <target>Fax</target>
-                 <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.record_lock.locked_by">
                 <source>chameleon_system_core.record_lock.locked_by</source>
                 <target>locked by</target>
@@ -910,88 +900,6 @@
                 <source>chameleon_system_core.record_lock.lock_owner_city</source>
                 <target>City</target>
             </trans-unit>
-
-            <trans-unit id="chameleon_system_core.record_revision.based_on">
-                <source>chameleon_system_core.record_revision.based_on</source>
-                <target>based on rev.</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.revision_number">
-                <source>chameleon_system_core.record_revision.revision_number</source>
-                <target>Revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.last_used_date">
-                <source>chameleon_system_core.record_revision.last_used_date</source>
-                <target>last used</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.name">
-                <source>chameleon_system_core.record_revision.name</source>
-                <target>Title</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.description">
-                <source>chameleon_system_core.record_revision.description</source>
-                <target>Description</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.no_revision_exists">
-                <source>chameleon_system_core.record_revision.no_revision_exists</source>
-                <target>unversioned</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_restore_revision">
-                <source>chameleon_system_core.record_revision.action_restore_revision</source>
-                <target>restore record revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.confirm_restore_revision">
-                <source>chameleon_system_core.record_revision.confirm_restore_revision</source>
-                <target>The current record will be overwritten by an older revision, are you sure?&lt;br/&gt;You should create a new revision&lt;br/&gt;if you're not sure</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_confirm_restore_revision">
-                <source>chameleon_system_core.record_revision.action_confirm_restore_revision</source>
-                <target>OK</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.header_new_revision">
-                <source>chameleon_system_core.record_revision.header_new_revision</source>
-                <target>Create revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.new_revision_help">
-                <source>chameleon_system_core.record_revision.new_revision_help</source>
-                <target>Please note: All unsaved data will not be revisioned and therefore be lost.</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.new_revision_number">
-                <source>chameleon_system_core.record_revision.new_revision_number</source>
-                <target>New revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_new_revision">
-                <source>chameleon_system_core.record_revision.action_new_revision</source>
-                <target>Create revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_load_revision">
-                <source>chameleon_system_core.record_revision.action_load_revision</source>
-                <target>Load revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_create_page_revision">
-                <source>chameleon_system_core.record_revision.action_create_page_revision</source>
-                <target>Create page revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.record_revision.action_load_page_revision">
-                <source>chameleon_system_core.record_revision.action_load_page_revision</source>
-                <target>Load page revision</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-
 
             <trans-unit id="chameleon_system_core.list.no_entries">
                 <source>chameleon_system_core.list.no_entries</source>
@@ -1145,155 +1053,6 @@
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_extranetpage_hidden">
                 <source>chameleon_system_core.cms_module_page_tree.legend_extranetpage_hidden</source>
                 <target>Access restricted page, hidden in the navigation</target>
-            </trans-unit>
-
-
-            <trans-unit id="chameleon_system_core.cms_module_media_local_import.error_path_not_found">
-                <source>chameleon_system_core.cms_module_media_local_import.error_path_not_found</source>
-                <target>Folder %path% does not exist</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_import.error_no_read_access_to_path">
-                <source>chameleon_system_core.cms_module_media_local_import.error_no_read_access_to_path</source>
-                <target>Folder %path% is not readable</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_import.select_source_path">
-                <source>chameleon_system_core.cms_module_media_local_import.select_source_path</source>
-                <target>Please choose the folder to import the media files from.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_import.root_path">
-                <source>chameleon_system_core.cms_module_media_local_import.root_path</source>
-                <target>Root path</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_media.file_count">
-                <source>chameleon_system_core.cms_module_media_local_media.file_count</source>
-                <target>%count% files</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_media.action_import">
-                <source>chameleon_system_core.cms_module_media_local_media.action_import</source>
-                <target>Import</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_media.import_result">
-                <source>chameleon_system_core.cms_module_media_local_media.import_result</source>
-                <target>Successfully imported media files</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_media.select_target_folder">
-                <source>chameleon_system_core.document_local_import.select_target_folder</source>
-                <target>Please choose the folder to import document files from.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_local_media.mark_as_private">
-                <source>chameleon_system_core.cms_module_media_local_media.mark_as_private</source>
-                <target>mark as private</target>
-            </trans-unit>
-
-
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.root_folder">
-                <source>chameleon_system_core.cms_module_media_manager.root_folder</source>
-                <target>Media</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.action_new_folder">
-                <source>chameleon_system_core.cms_module_media_manager.action_new_folder</source>
-                <target>Create new folder</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.action_upload">
-                <source>chameleon_system_core.cms_module_media_manager.action_upload</source>
-                <target>Upload</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.action_delete">
-                <source>chameleon_system_core.cms_module_media_manager.action_delete</source>
-                <target>delete</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.upload_more_files">
-                <source>chameleon_system_core.cms_module_media_manager.upload_more_files</source>
-                <target>upload more files</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_delete_success">
-                <source>chameleon_system_core.cms_module_media_manager.msg_delete_success</source>
-                <target>Media file(s) successfully deleted</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_upload_success">
-                <source>chameleon_system_core.cms_module_media_manager.msg_upload_success</source>
-                <target>Successfully uploaded files</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_select_move_target">
-                <source>chameleon_system_core.cms_module_media_manager.msg_select_move_target</source>
-                <target>Select a folder you want to move the files into</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_single_file_upload_success">
-                <source>chameleon_system_core.cms_module_media_manager.msg_single_file_upload_success</source>
-                <target>File successfully uploaded</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_on_delete_file_in_use">
-                <source>chameleon_system_core.cms_module_media_manager.msg_on_delete_file_in_use</source>
-                <target>The file you want to delete is still used in the following records. It will be removed from these records if you still want to delete it.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_file_in_use">
-                <source>chameleon_system_core.cms_module_media_manager.msg_file_in_use</source>
-                <target>This file is still used by the following records:</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.msg_attention">
-                <source>chameleon_system_core.cms_module_media_manager.msg_attention</source>
-                <target>Attention</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.used_in_table">
-                <source>chameleon_system_core.cms_module_media_manager.used_in_table</source>
-                <target>Table</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.used_in_record">
-                <source>chameleon_system_core.cms_module_media_manager.used_in_record</source>
-                <target>Record</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.used_in_field">
-                <source>chameleon_system_core.cms_module_media_manager.used_in_field</source>
-                <target>Field</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.file_id">
-                <source>chameleon_system_core.cms_module_media_manager.file_id</source>
-                <target>Media file ID %id%</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.folder">
-                <source>chameleon_system_core.cms_module_media_manager.folder</source>
-                <target>Folder</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.confirm_none_empty_folder_delete">
-                <source>chameleon_system_core.cms_module_media_manager.confirm_none_empty_folder_delete</source>
-                <target>Force delete folder</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.confirm_used_image">
-                <source>chameleon_system_core.cms_module_media_manager.confirm_used_image</source>
-                <target>Force delete</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.confirm_delete">
-                <source>chameleon_system_core.cms_module_media_manager.confirm_delete</source>
-                <target>Are you sure you want to delete this file?</target>
-            </trans-unit>
-
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_folder_name_missing">
-                <source>chameleon_system_core.cms_module_media_manager.error_folder_name_missing</source>
-                <target>You haven't entered a folder name!</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_upload_error">
-                <source>chameleon_system_core.cms_module_media_manager.error_upload_error</source>
-                <target>Upload failed</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_no_file_selected">
-                <source>chameleon_system_core.cms_module_media_manager.error_no_file_selected</source>
-                <target>You did not select a file to upload</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_upload_to_root_folder_not_permitted">
-                <source>chameleon_system_core.cms_module_media_manager.error_upload_to_root_folder_not_permitted</source>
-                <target>You can't upload a file into the root folder</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_no_move_source_selected">
-                <source>chameleon_system_core.cms_module_media_manager.error_no_move_source_selected</source>
-                <target>You haven't selected a file to move</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.error_no_past_source_selected">
-                <source>chameleon_system_core.cms_module_media_manager.error_no_past_source_selected</source>
-                <target>No files selected to paste</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_media_manager.image_size">
-                <source>chameleon_system_core.cms_module_media_manager.image_size</source>
-                <target>Image size</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.table_editor_media.media_usage">
@@ -1520,32 +1279,6 @@
             <trans-unit id="chameleon_system_core.cms_module_newsletter_import.action_confirm_replace">
                 <source>chameleon_system_core.cms_module_newsletter_import.action_confirm_replace</source>
                 <target>Yes, import CSV file</target>
-            </trans-unit>
-
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.headline">
-                <source>chameleon_system_core.cms_module_cms_search.headline</source>
-                <target>Create search index</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.select_portal">
-                <source>chameleon_system_core.cms_module_cms_search.select_portal</source>
-                <target>Select a portal for which to create the search index</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.action_start_index">
-                <source>chameleon_system_core.cms_module_cms_search.action_start_index</source>
-                <target>Start indexing</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.state_index_running">
-                <source>chameleon_system_core.cms_module_cms_search.state_index_running</source>
-                <target>Creating search index</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_cms_search.state_indexed">
-                <source>chameleon_system_core.cms_module_cms_search.state_indexed</source>
-                <target>pages indexed</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.cms_module_table_export.state_export_done">
@@ -1806,26 +1539,6 @@
             <trans-unit id="chameleon_system_core.cms_module_header.migration_recording_deactivated">
                 <source>chameleon_system_core.cms_module_header.migration_recording_deactivated</source>
                 <target>Database recording deactivated.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_header.error_unable_to_create_update_counter">
-                <source>chameleon_system_core.cms_module_header.error_unable_to_create_update_counter</source>
-                <target>Error creating database update counter!</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_header.msg_created_update_counter">
-                <source>chameleon_system_core.cms_module_header.msg_created_update_counter</source>
-                <target>Successfully created new database update counter %sSystemName%.</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_header.msg_update_counter_switched">
-                <source>chameleon_system_core.cms_module_header.msg_update_counter_switched</source>
-                <target>Successfully switched database update counter.</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_header.active_update_counter">
-                <source>chameleon_system_core.cms_module_header.active_update_counter</source>
-                <target>Active database update counter</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_header.action_edit_navigation_help">
                 <source>chameleon_system_core.cms_module_header.action_edit_navigation_help</source>
@@ -2400,7 +2113,47 @@
                 <source>chameleon_system_core.document_manager.close</source>
                 <target>close</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.confirm_delete">
+                <source>chameleon_system_core.document_manager.confirm_delete</source>
+                <target>Are you sure you want to delete this file?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.image_size">
+                <source>chameleon_system_core.document_manager.image_size</source>
+                <target>Image size</target>
+            </trans-unit>
 
+            <trans-unit id="chameleon_system_core.document_local_import.action_import">
+                <source>chameleon_system_core.document_local_import.action_import</source>
+                <target>Import</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.file_count">
+                <source>chameleon_system_core.document_local_import.file_count</source>
+                <target>%count% files</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.import_result">
+                <source>chameleon_system_core.document_local_import.import_result</source>
+                <target>Successfully imported document files</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.mark_as_private">
+                <source>chameleon_system_core.document_local_import.mark_as_private</source>
+                <target>mark as private</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.root_path">
+                <source>chameleon_system_core.document_local_import.root_path</source>
+                <target>Root path</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.select_target_folder">
+                <source>chameleon_system_core.document_local_import.select_target_folder</source>
+                <target>Please choose the folder to import document files from.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.error_path_not_found">
+                <source>chameleon_system_core.document_local_import.error_path_not_found</source>
+                <target>Folder %path% does not exist.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.document_local_import.error_no_read_access_to_path">
+                <source>chameleon_system_core.document_local_import.error_no_read_access_to_path</source>
+                <target>Folder %path% is not readable.</target>
+            </trans-unit>
 
             <trans-unit id="chameleon_system_core.table_editor.regenerate_translatable_fields">
                 <source>chameleon_system_core.table_editor.regenerate_translatable_fields</source>
@@ -2484,11 +2237,6 @@
                 <source>chameleon_system_core.table_editor_files.error_unable_to_move_or_copy_file</source>
                 <target>Unable to move or copy uploaded file to target location</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.table_editor_files.error_cluster_distribution">
-                <source>chameleon_system_core.table_editor_files.error_cluster_distribution</source>
-                <target>Could not share file in cluster. File: %name%, fileHandler Error: %error%)</target>
-                <note>@deprecated since 6.2.0 - no longer used.</note>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_files.error_file_to_large">
                 <source>chameleon_system_core.table_editor_files.error_file_to_large</source>
                 <target>Uploaded file is too large: %size% bytes (max: %allowed%)</target>
@@ -2508,11 +2256,6 @@
             <trans-unit id="chameleon_system_core.table_editor_media.error_invalid_format">
                 <source>chameleon_system_core.table_editor_media.error_invalid_format</source>
                 <target>Invalid file format</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.table_editor_media.error_invalid_flv">
-                <source>chameleon_system_core.table_editor_media.error_invalid_flv</source>
-                <target>FLV file invalid or unsupported codec detected</target>
-                <note>@deprecated since 6.2.0 - Flash support will be removed in Chameleon 7.0.</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.table_editor_media.error_permission_target_folder">
                 <source>chameleon_system_core.table_editor_media.error_permission_target_folder</source>

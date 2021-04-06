@@ -21,13 +21,6 @@ class UploaderParametersDataModel
 
     /**
      * @var bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    private $bIgnoreWorkflow = false;
-
-    /**
-     * @var bool
      */
     private $proportionExactMatch = false;
 
@@ -90,26 +83,6 @@ class UploaderParametersDataModel
      * @var string|null
      */
     private $uploadSuccessCallback;
-
-    /**
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function isBIgnoreWorkflow()
-    {
-        return $this->bIgnoreWorkflow;
-    }
-
-    /**
-     * @param bool $bIgnoreWorkflow
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public function setBIgnoreWorkflow($bIgnoreWorkflow)
-    {
-        $this->bIgnoreWorkflow = $bIgnoreWorkflow;
-    }
 
     /**
      * @return bool
@@ -395,12 +368,6 @@ class UploaderParametersDataModel
             $parameterArray['bProportionExactMatch'] = '1';
         } else {
             $parameterArray['bProportionExactMatch'] = '0';
-        }
-
-        if ($this->isBIgnoreWorkflow()) {
-            $parameterArray['bIgnoreWorkflow'] = '1';
-        } else {
-            $parameterArray['bIgnoreWorkflow'] = '0';
         }
 
         if ($this->isSingleMode()) {

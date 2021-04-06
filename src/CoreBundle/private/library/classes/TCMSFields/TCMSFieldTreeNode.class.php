@@ -117,21 +117,6 @@ class TCMSFieldTreeNode extends TCMSField
         return $oViewParser->RenderObjectView('method', 'TCMSFields/TCMSField');
     }
 
-    /**
-     * @deprecated since 6.3.0 - date related tree nodes are not working anymore, functionality will be removed.
-     *
-     * Get page tree connection date information as rendered html.
-     *
-     * @param string $sTreeId
-     * @param string $sPageId
-     *
-     * @return string
-     */
-    protected function GetPageTreeConnectionDateInformationHTML($sTreeId, $sPageId)
-    {
-        return '';
-    }
-
     private function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');

@@ -500,10 +500,8 @@ JAVASCRIPTCODE;
                         'error' => 0,
                     );
                     $oMediaTableConf = new TCMSTableConf();
-                    /** @var $oMediaTableConf TCMSTableConf */
                     $oMediaTableConf->LoadFromField('name', 'cms_media');
                     $oMediaManagerEditor = new TCMSTableEditorMedia();
-                    /** @var $oMediaManagerEditor TCMSTableEditorMedia */
                     $oMediaManagerEditor->AllowEditByAll(true);
                     $oMediaManagerEditor->Init($oMediaTableConf->id);
                     $oMediaManagerEditor->SetUploadData($aImageFileData, true);

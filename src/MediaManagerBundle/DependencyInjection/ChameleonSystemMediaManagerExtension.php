@@ -14,18 +14,19 @@ namespace ChameleonSystem\MediaManagerBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
-class ChameleonSystemMediaManagerExtension extends Extension
+class ChameleonSystemMediaManagerExtension extends ConfigurableExtension
 {
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {
-        $this->processConfiguration(new Configuration(), $configs);
-
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('services.xml');
+
+        $serviceDefinitionUrlGenerator = $container->getDefinition('chameleon_system_media_manager.url_generator');
+        $serviceDefinitionUrlGenerator->replaceArgument(1, $mergedConfig['open_in_new_window']);
     }
 }

@@ -85,7 +85,6 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
         */
 
         if ($isValid) {
-            $isValid = false;
             // Array of valid extensions
             $allowedFileTypes = TTools::GetCMSFileTypes();
             $isValid = $this->IsValidFileExtension($allowedFileTypes);
@@ -259,12 +258,10 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
      */
     public function FetchConnections($fileID, $aTableBlackList = null)
     {
-        $aDocConnections = array();
         $aDownloadRefFromWysiwygFields = $this->GetDownloadRefFromWysiwygFields($aTableBlackList);
         $aMltConnectedRecordReferences = $this->GetMltConnectedRecordReferences($aTableBlackList);
-        $aDocConnections = array_merge_recursive($aDownloadRefFromWysiwygFields, $aMltConnectedRecordReferences);
 
-        return $aDocConnections;
+        return array_merge_recursive($aDownloadRefFromWysiwygFields, $aMltConnectedRecordReferences);
     }
 
     /**
@@ -311,7 +308,6 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
                     /** @var $oRecord TCMSRecord */
                     while ($oTableRecord = $oTableRecordList->Next()) {
                         $sWysiwygText = $this->RemoveDownloadFromWysiwygText($oTableRecord->sqlData[$field]);
-                        $s = strcmp($oTableRecord->sqlData[$field], $sWysiwygText);
                         if (strlen($oTableRecord->sqlData[$field]) != strlen($sWysiwygText)) {
                             $oTableRecordEditorManager = TTools::GetTableEditorManager($tableName, $oTableRecord->id);
                             $oTableRecordEditorManager->SaveField($field, $sWysiwygText);
@@ -352,23 +348,6 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
         }
 
         return $aMltConnectedRecordReferences;
-    }
-
-    /**
-     * Gets record list of references from MLT table. If caching allowed is,
-     * gets the record list from cache that performances changing table.
-     *
-     * @param string $sTableName
-     * @param string $sFieldName
-     * @param string $sMltTableName
-     *
-     * @return TCMSRecordList $oTableRecordList
-     *
-     * @deprecated since 6.2.0 - use QueryMltReferencesRecordList() instead.
-     */
-    protected function GetMltReferencesRecordList($sTableName, $sFieldName, $sMltTableName)
-    {
-        return $this->QueryMltReferencesRecordList($sTableName, $sMltTableName);
     }
 
     /**
@@ -443,22 +422,6 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
                 }
             }
         }
-    }
-
-    /**
-     * Get all record from given table field where download item was added. If caching allowed is,
-     * gets the record list from cache that performances changing table.
-     *
-     * @param string $sTableName
-     * @param string $sFieldName
-     *
-     * @return TCMSRecordList $oTableRecordList
-     *
-     * @deprecated since 6.2.0 - use QueryRecordsWithWysiwygDownload() instead.
-     */
-    protected function GetRecordsWithWysiwygDownload($sTableName, $sFieldName)
-    {
-        return $this->QueryRecordsWithWysiwygDownload($sTableName, $sFieldName);
     }
 
     /**
@@ -574,7 +537,6 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
             $sLinkName = '';
             if (!empty($aMatch[3])) {
                 if (preg_match("#^(\[ico\])?(.*\\s*.*\\s*.*)(\[kb\])?$#", $aMatch[3], $aSubMatch)) {
-                    $iStart = 0;
                     $iLen = strlen($aSubMatch[0]);
                     $iStart = strpos($aSubMatch[0], '[ico]');
                     if (false !== strpos($aSubMatch[0], '[ico]')) {
@@ -731,15 +693,6 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
         }
 
         return $bDeleteSuccess;
-    }
-
-    /**
-     * copy uploaded workflow temp image to document repository.
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    protected function MoveWorkflowDocumentToDocumentPool()
-    {
     }
 
     /**

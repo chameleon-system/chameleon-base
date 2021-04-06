@@ -201,17 +201,6 @@ class TCMSTableWriter extends TCMSTableEditor
     }
 
     /**
-     * adds cms_workflow_action_id and cms_workflow_actiontype_id if not exist.
-     *
-     * @param string $sMLTTableName
-     *
-     * @deprecated since 6.2.0 - workflow is not supported anymore
-     */
-    public static function AddWorkflowFieldsToMLT($sMLTTableName)
-    {
-    }
-
-    /**
      * Renames related tables like mlt tables for source and target connections.
      *
      * @param  $sOldName

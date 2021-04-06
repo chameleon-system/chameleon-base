@@ -23,14 +23,6 @@ class TCMSFile
     public $sDir = '';
     public $sFileName = '';
     public $sExtension = '';
-
-    /**
-     * @deprecated since 6.3.0
-     *
-     * @var string
-     */
-    public $sTypeIcon = '';
-
     public $dSizeByte = 0;
     public $sCreated = '';
 
@@ -105,7 +97,6 @@ class TCMSFile
         $bLoaded = false;
         if ('http://' == substr($sPath, 0, 7)) {
             $this->bIsHTTPResource = true;
-            $this->sTypeIcon = '';
             $this->sPath = $sPath;
             $this->sDir = dirname($sPath);
             $this->sFileName = basename($sPath);
@@ -126,7 +117,6 @@ class TCMSFile
             $bLoaded = true;
         } else {
             if (file_exists($sPath)) {
-                $this->sTypeIcon = '';
                 $this->sPath = $sPath;
                 $aFileData = pathinfo($this->sPath);
 

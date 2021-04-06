@@ -9,24 +9,14 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
-use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class TGlobal extends TGlobalBase
 {
-    /**
-     * url history management.
-     *
-     * @var TCMSURLHistory
-     *
-     * @deprecated since 6.0.14 - use service BackendBreadCrumbService::getBreadcrumb() instead.
-     */
-    protected $oURLHistory = null;
-
     const MODE_BACKEND = 0;
     const MODE_FRONTEND = 1;
+
     private static $mode = self::MODE_FRONTEND;
 
     public static function setMode($mode)
@@ -53,8 +43,6 @@ class TGlobal extends TGlobalBase
         } else {
             if ('oUser' === $sParameterName) {
                 return TCMSUser::GetActiveUser();
-            } elseif ('oURLHistory' === $sParameterName) {
-                return $this->getBreadcrumbService()->getBreadcrumb();
             } else {
                 trigger_error('ERROR - parameter requested from TGlobal that does not exist', E_USER_ERROR);
             }
@@ -93,24 +81,6 @@ class TGlobal extends TGlobalBase
     public static function Translate($id, $parameters = array(), $domain = null, $locale = null)
     {
         return self::getTranslator()->trans($id, is_array($parameters) ? $parameters : array(), $domain, $locale);
-    }
-
-    /**
-     * return the current active language (language is loaded from page , url prefix  or user -depending on mode)
-     * If in template engine get language from active edit language.
-     *
-     * @param string $sSetActiveLanguageId - sets the active language so we can use language simulation
-     *
-     * @return string
-     *
-     * @deprecated since 6.0.0 - use \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service')->getActiveLanguageId() instead
-     */
-    public static function GetActiveLanguageId($sSetActiveLanguageId = null)
-    {
-        /** @var LanguageServiceInterface $languageService */
-        $languageService = ServiceLocator::get('chameleon_system_core.language_service');
-
-        return $languageService->getActiveLanguageId();
     }
 
     /**
@@ -166,25 +136,10 @@ class TGlobal extends TGlobalBase
     }
 
     /**
-     * @deprecated since 6.3.0 - use service BackendBreadCrumbService::getBreadcrumb() instead.
-     *
-     * @return TCMSURLHistory|null - returns null if not in backend
-     */
-    public function &GetURLHistory()
-    {
-        return $this->getBreadcrumbService()->getBreadcrumb();
-    }
-
-    /**
      * @return TranslatorInterface
      */
     private static function getTranslator()
     {
         return ServiceLocator::get('translator');
-    }
-
-    private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 }

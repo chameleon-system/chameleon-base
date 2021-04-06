@@ -136,11 +136,6 @@ legend {
     height: 20px;
 }
 
-/* jquery.flash alt Text */
-.flash-replaced .alt {
-    display: none;
-}
-
 .actionButton, .actionButton:hover {
     background-color: #e7f3ff;
     background-image: url(../images/icons/action_go.gif);
@@ -355,6 +350,7 @@ legend {
 
 .sidebar .nav-item:focus {
     background-color: #20a8d8;
+    outline: none;
 }
 
 .sidebar-filter-input, .sidebar-filter-input:focus {
@@ -398,3 +394,8 @@ Bootstrap 4 addons.
 .modal .modal-body {
     overflow: auto;
 }
+
+.cke_panel iframe {
+    min-height: initial;
+}
+

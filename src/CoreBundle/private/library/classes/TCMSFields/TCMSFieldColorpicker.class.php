@@ -21,13 +21,13 @@ class TCMSFieldColorpicker extends TCMSField
             $value = '#'.$value;
         }
 
-        return '<div class="input-group input-group-sm" id="colorPickerContainer'.TGlobal::OutHTML($this->name).'">
-    <span class="input-group-append">
-        <span class="input-group-text colorpicker-input-addon"><i></i></span>
-    </span>    
-    <input type="text" value="'.TGlobal::OutHTML($value).'" class="form-control" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" />
-</div>
-';
+        return '
+            <div class="input-group input-group-sm" id="colorPickerContainer'.TGlobal::OutHTML($this->name).'">
+                <input type="hidden" value="'.TGlobal::OutHTML(
+                $value
+            ).'" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'">
+            </div>
+        ';
     }
 
     public function _GetHTMLValue()
@@ -59,30 +59,53 @@ class TCMSFieldColorpicker extends TCMSField
     {
         $includes = parent::GetCMSHtmlFooterIncludes();
         $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/bootstrap-colorpicker-3.0.3/js/bootstrap-colorpicker.min.js').'" type="text/javascript"></script>';
+
         $includes[] = "<script>
-    $(function() {
-        $('#colorPickerContainer".TGlobal::OutHTML($this->name)."').colorpicker({ format: 'hex', useHashPrefix: true });
-    });
-    </script>";
+            $(function() {
+                $('#colorPickerContainer".TGlobal::OutHTML($this->name)."').colorpicker({
+                  format: 'hex', 
+                  useHashPrefix: true,
+                  autoInputFallback: false,
+                  inline: true,
+                  container: true,
+                  template: '<div class=\"colorpicker\">' +
+                  '<div class=\"colorpicker-saturation\"><i class=\"colorpicker-guide\"></i></div>' +
+                  '<div class=\"colorpicker-hue\"><i class=\"colorpicker-guide\"></i></div>' +
+                  '<div class=\"colorpicker-alpha\">' +
+                  '   <div class=\"colorpicker-alpha-color\"></div>' +
+                  '   <i class=\"colorpicker-guide\"></i>' +
+                  '</div>' +
+                  '<div class=\"colorpicker-bar\">' +
+                  '   <div class=\"input-group\">' +
+                  '       <input class=\"form-control input-block color-io\" />' +
+                  '   </div>' +
+                  '</div>' +
+                  '</div>'
+                })
+                .on('colorpickerCreate', function (e) {
+                  var io = e.colorpicker.element.find('.color-io');
+                  ".('' !== $this->data ? 'io.val(e.color.string());' : '')."
+                  io.on('change keyup', function () {
+                    e.colorpicker.setValue(io.val());
+                  });
+                })
+                .on('colorpickerChange', function (e) {
+                  var io = e.colorpicker.element.find('.color-io');
+                  if (e.color === null) {
+                      e.colorpicker.inputHandler.input.val('');
+                      return;
+                  }
+                  if (e.value === io.val() || !e.color || !e.color.isValid()) {
+                    // Do not replace the input value if the color is invalid or equals the current value.
+                    return;
+                  }
+        
+                  io.val(e.color.string());
+                });
+            });
+            </script>";
 
         return $includes;
-    }
-
-    /**
-     * @deprecated since 6.3.0 - no longer used in Chameleon (looks like this is an orphan which was used by an older color picker).
-     *
-     * @return bool
-     */
-    public static function isFirstInstance()
-    {
-        static $isFirst;
-        if (!$isFirst && true !== $isFirst && false !== $isFirst) {
-            $isFirst = false;
-
-            return true;
-        }
-
-        return $isFirst;
     }
 
     /**

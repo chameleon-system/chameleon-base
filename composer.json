@@ -13,7 +13,7 @@
     ],
     "require": {
         "bassjobsen/bootstrap-3-typeahead": "~4.0",
-        "chameleon-system/sanitycheck-bundle": "~6.3.0",
+        "chameleon-system/sanitycheck-bundle": "~7.0.0",
         "ckeditor/ckeditor": "4.6.2",
         "coreui/coreui": "^2.1",
         "dmhendricks/file-icon-vectors": "~1.0",
@@ -39,7 +39,7 @@
     },
     "require-dev": {
         "chameleon-system/code-style-config": "dev-master@dev",
-        "chameleon-system/sanitycheck": "~6.3.0",
+        "chameleon-system/sanitycheck": "~7.0.0",
         "phpunit/phpunit": "~7.0"
     },
     "autoload": {
@@ -76,7 +76,6 @@
             "src/ExternalTrackerBundle/pkgExtranet",
             "src/ExternalTrackerBundle/pkgSearch",
             "src/ExternalTrackerBundle/pkgShop",
-            "src/ExternalTrackerGoogleAnalyticsBundle/objects",
             "src/ExtranetBundle/mapper",
             "src/ExtranetBundle/objects",
             "src/GenericTableExportBundle/objects",
@@ -89,7 +88,6 @@
             "src/PkgCoreBundle/interfaces",
             "src/PkgCoreBundle/mappers",
             "src/PkgCoreBundle/objects",
-            "src/RevisionManagementBundle/objects",
             "src/SnippetRendererBundle/Filter",
             "src/SnippetRendererBundle/interfaces",
             "src/SnippetRendererBundle/objects",

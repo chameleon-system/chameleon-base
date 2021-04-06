@@ -15,15 +15,6 @@ use Symfony\Component\Translation\TranslatorInterface;
 class antiSpam
 {
     /**
-     * optional path to email icon.
-     *
-     * @var string
-     *
-     * @deprecated not used anymore... use CSS class "antispam" to style the icon
-     */
-    public $emailIcon = null;
-
-    /**
      * default strings to replace the at symbol and dot symbol.
      *
      * @var array

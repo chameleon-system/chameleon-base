@@ -17,15 +17,6 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
 {
     /**
-     * the original data of the row before a save overwrites the data.
-     *
-     * @var TCMSField[]
-     *
-     * @deprecated since 6.3.0 - determined from $this->oTablePreChangeData
-     */
-    protected $oOldFields = array();
-
-    /**
      * @var bool
      */
     protected $bIsUpdate;
@@ -70,57 +61,6 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
         }
 
         return parent::Save($postData, $bDataIsInSQLForm);
-    }
-
-    /**
-     * @param array $postData
-     *
-     * @deprecated since 6.3.0 - Not used anymore. Handled with $this->oTablePreChangeData.
-     */
-    protected function savePreSaveValues(array $postData)
-    {
-        $oPostTable = $this->GetNewTableObjectForEditor();
-        if (isset($postData['id'])) {
-            $oPostTable->Load($postData['id']);
-            $this->oOldFields = $this->getArrayFromIterator($this->oTableConf->GetFields($oPostTable));
-            $this->bIsUpdate = true;
-        } else {
-            $this->bIsUpdate = false;
-        }
-
-        $aFieldsToRemove = array();
-
-        foreach ($this->oOldFields as $oOldField) {
-            // values that weren't given in the change operation cannot be changed
-            if (!array_key_exists($oOldField->name, $postData)) {
-                $aFieldsToRemove[] = $oOldField;
-            } else {
-                if ($oOldField instanceof TCMSMLTField) {
-                    /** @var TCMSMLTField $oOldField */
-                    $oOldField->data = $oOldField->getMltValues();
-                }
-            }
-        }
-
-        foreach ($aFieldsToRemove as $oOldField) {
-            unset($this->oOldFields[$oOldField->name]);
-        }
-    }
-
-    /**
-     * @param TIterator $iterator
-     *
-     * @return TCMSField[]
-     */
-    private function getArrayFromIterator(TIterator $iterator)
-    {
-        $retValue = array();
-        while (false !== $item = $iterator->Next()) {
-            /** @var $item TCMSField */
-            $retValue[$item->name] = $item;
-        }
-
-        return $retValue;
     }
 
     /**

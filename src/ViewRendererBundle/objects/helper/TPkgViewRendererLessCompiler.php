@@ -24,9 +24,28 @@ class TPkgViewRendererLessCompiler
      */
     private $cssDir;
 
-    public function __construct(string $cssDirRelativeToWebRoot)
+    /**
+     * @var string
+     */
+    private $resourceCollectionRefreshPrefix;
+
+    /**
+     * @var array
+     */
+    private $additionalVariables = [];
+
+    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix)
     {
         $this->cssDir = trim($cssDirRelativeToWebRoot, '/');
+        $this->resourceCollectionRefreshPrefix = $resourceCollectionRefreshPrefix;
+    }
+
+    /**
+     * @param array $variables - key-value pairs that are passed to the less compiler.
+     */
+    public function addAdditionalVariables(array $variables): void
+    {
+        $this->additionalVariables = \array_merge($this->additionalVariables, $variables);
     }
 
     /**
@@ -56,7 +75,7 @@ class TPkgViewRendererLessCompiler
     {
         $path = $this->getLessDirUrlPath();
         $filename = $this->getCompiledCssFilename($portal);
-        $versionSuffix = '?'.ENABLE_EXTERNAL_RESOURCE_COLLECTION_REFRESH_PREFIX;
+        $versionSuffix = '?'.$this->resourceCollectionRefreshPrefix;
 
         return $path.'/'.$filename.$versionSuffix;
     }
@@ -196,13 +215,13 @@ class TPkgViewRendererLessCompiler
             if (_DEVELOPMENT_MODE) {
                 \Less_Cache::SetCacheDir($cachedLessDir);
                 try {
-                    $cssFile = \Less_Cache::Get($filesForLessParsing, $options);
+                    $cssFile = \Less_Cache::Get($filesForLessParsing, $options, $this->additionalVariables);
                 } catch (Exception $exc) {
                     if (false !== strpos($exc->getMessage(), 'stat failed')) {
                         // Consider this as a 'File removed! Halp!' and clear the cache and try again
                         array_map('unlink', glob($cachedLessDir.'/*'));
 
-                        $cssFile = \Less_Cache::Get($filesForLessParsing, $options);
+                        $cssFile = \Less_Cache::Get($filesForLessParsing, $options, $this->additionalVariables);
                     } else {
                         throw new ViewRenderException('Exception during less compile', 0, $exc);
                     }
@@ -214,6 +233,10 @@ class TPkgViewRendererLessCompiler
             } else {
                 try {
                     $parser = new \Less_Parser($options);
+                    if (\count($this->additionalVariables) > 0) {
+                        $parser->parse(\Less_Parser::serializeVars($this->additionalVariables));
+                    }
+
                     foreach ($filesForLessParsing as $file => $root) {
                         $parser->parseFile($file, $root);
                     }

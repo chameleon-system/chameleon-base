@@ -41,56 +41,6 @@ class TCMSLogChange
     const INFO_MESSAGE_LEVEL_TODO = 'TODO';
 
     /**
-     * @param string $sActiveDbCounterName
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public static function setActiveDbCounterName($sActiveDbCounterName)
-    {
-    }
-
-    /**
-     * @return string|null
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public static function getActiveDbCounterName()
-    {
-        return null;
-    }
-
-    /**
-     * saves the passed buildNumber associated with the bundle in the database.
-     *
-     * @param string      $bundleName
-     * @param string|null $sSubFolder   @deprecated since 6.2.0 - no longer used.
-     * @param int         $iBuildNumber
-     *
-     * @deprecated since 6.2.0 - use \ChameleonSystem\DatabaseMigration\Counter\MigrationCounterManagerInterface::markMigrationFileAsProcessed() instead.
-     * External code should not be required to call this method though.
-     */
-    public static function EndTransaction($bundleName, $sSubFolder = null, $iBuildNumber)
-    {
-        self::getMigrationCounterManager()->markMigrationFileAsProcessed($bundleName, $iBuildNumber);
-    }
-
-    /**
-     * returns true if the package exists (checks if the update counter exists).
-     *
-     * @param string $bundleName
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - should no longer be required by external code. Migration scripts should just be run and
-     * the system handles duplicate executions. To check for the installation status of a bundle, query for the required
-     * database state or the existence of a required class instead of purely technical information like counter names.
-     */
-    public static function UpdateCounterExists($bundleName)
-    {
-        return self::getMigrationCounterManager()->doesCounterExist($bundleName);
-    }
-
-    /**
      * @param string $bundleName
      *
      * @throws TCMSConfigException
@@ -443,76 +393,8 @@ class TCMSLogChange
                 ]
             );
 
-            self::outputError($line, $e);
+            self::outputError($e);
         }
-    }
-
-    /**
-     * @param resource $fp
-     * @param string   $sName
-     * @param int      $transactionNr
-     * @param int      $systemBuild
-     * @param string   $sActiveTrackName
-     *
-     * @deprecated since 6.2.0 - header is written implicitly when starting a new migration script. Transaction checking
-     * is no longer used.
-     */
-    public static function _WriteTransactionHeader($fp, $sName, $transactionNr, $systemBuild, $sActiveTrackName)
-    {
-        $oUser = &TCMSUser::GetActiveUser();
-        $sUserName = 'Unknown (e.g. cron)';
-        if (!is_null($oUser)) {
-            $sUserName = $oUser->GetName();
-        }
-        if (false === self::DisablePHPCommentsInDbLog()) {
-            $comment = "\n"."/*\n".' * Date:      '.date('d.m.Y H:i:s')."\n".' * User:      '.$sUserName."\n"." * DBVersion: {$transactionNr}\n"." * Build:     {$systemBuild}\n"." * Change:    {$sName}\n"."*/\n";
-        } else {
-            $comment = "\n";
-        }
-        $header = $comment."if (TCMSLogChange::AllowTransaction({$transactionNr}, '{$sActiveTrackName}')) { \n";
-        fwrite($fp, $header, strlen($header));
-    }
-
-    /**
-     * Will always return true.
-     *
-     * In ancient days there used to be a way to disable the comments. Now they are always disabled as no one used them.
-     *
-     * The code writing the comments is still there, though, just in case some developer comes screaming that those comments where the light of
-     * her life and everything is dark now. Then maybe we can restore them easily by reintroducing the mechanism to disable them by hand.
-     *
-     * @return bool
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function DisablePHPCommentsInDbLog()
-    {
-        return true;
-    }
-
-    /**
-     * @param resource $filePointer
-     *
-     * @deprecated since 6.2.0 - transaction checking is no longer used.
-     */
-    public static function _WriteTransactionFooter($filePointer)
-    {
-        $footer = "}\n\n";
-        fwrite($filePointer, $footer, strlen($footer));
-    }
-
-    /**
-     * moves a field behind a given fieldname.
-     *
-     * @deprecated - use TCMSLogChange::SetFieldPosition instead (without "_")
-     *
-     * @param int    $tableId
-     * @param string $fieldName
-     * @param string $beforeFieldName - field where we want to set the new field behind
-     */
-    public static function _SetFieldPosition($tableId, $fieldName, $beforeFieldName)
-    {
-        self::SetFieldPosition($tableId, $fieldName, $beforeFieldName);
     }
 
     /**
@@ -767,12 +649,11 @@ class TCMSLogChange
      * 4 = add new language
      * 5 = publish record using workflow (deprecated since 6.2.0 - do not use)
      * 6 = show all records
-     * 7 = revision management (@deprecated since 6.3.0 - revision management is no longer supported)
      *
      * @param string     $sRoleName
      * @param string     $sTableName
      * @param bool       $bResetRoles  - indicates if all other roles will be kicked and the new role has the exclusive right
-     * @param array|bool $aPermissions - array of the role fieldnr. 0,1,2,3,4,5,6,7, default = false
+     * @param array|bool $aPermissions - array of the role fieldnr. 0,1,2,3,4,5,6, default = false
      */
     public static function SetTableRolePermissions($sRoleName = 'cms_admin', $sTableName, $bResetRoles = false, $aPermissions = false)
     {
@@ -1414,43 +1295,6 @@ class TCMSLogChange
     }
 
     /**
-     * return id of the content-box with the name passed. return empty string, if the
-     * content box does not exist.
-     *
-     * @static
-     *
-     * @param  $sContentBoxName
-     *
-     * @return string
-     *
-     * @deprecated use TCMSLogChange::GetCmsContentBoxIdFromSystemName() instead
-     */
-    public static function GetCmsContentBoxIdFromName($sContentBoxName)
-    {
-        $query = "SELECT * FROM `cms_content_box` WHERE `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sContentBoxName)."'";
-
-        $aNameMappingArray = array(
-            'CMS / Portal Einstellungen' => array('CMS / Portal Einstellungen', 'CMS / Portal-Einstellungen'),
-            'CMS / Portal-Einstellungen' => array('CMS / Portal Einstellungen', 'CMS / Portal-Einstellungen'),
-        );
-
-        if (array_key_exists($sContentBoxName, $aNameMappingArray)) {
-            foreach ($aNameMappingArray[$sContentBoxName] as $sContentBoxNameAlternative) {
-                $query .= " OR `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sContentBoxNameAlternative)."'";
-            }
-        }
-
-        $sId = '';
-        if ($aContentBox = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-            $sId = $aContentBox['id'];
-        } else {
-            self::addInfoMessage('Unable to find cms_content_box with name "'.$sContentBoxName.'"', self::INFO_MESSAGE_LEVEL_ERROR);
-        }
-
-        return $sId;
-    }
-
-    /**
      * get the id of a content box by its system_name.
      *
      * @param string $sSystemName of the content box
@@ -1919,16 +1763,6 @@ class TCMSLogChange
         return $sTabId;
     }
 
-    /**
-     * @return IPkgCmsCoreLog
-     *
-     * @deprecated since 6.3.0 - use getLogger()
-     */
-    public static function getUpdateLogger()
-    {
-        return  \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.cmsUpdates');
-    }
-
     public static function getLogger(): LoggerInterface
     {
         return  \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.cms_update');
@@ -2376,7 +2210,7 @@ class TCMSLogChange
             self::outputSuccess($line, $query, $queryParams);
             self::logSuccess($line, $query, $queryParams);
         } catch (\Exception $e) {
-            self::outputError($line, $e);
+            self::outputError($e);
             self::logError($line, $e);
         }
     }
@@ -2417,10 +2251,9 @@ class TCMSLogChange
     }
 
     /**
-     * @param int       $line
      * @param Exception $exception
      */
-    private static function outputError($line, $exception)
+    private static function outputError($exception)
     {
         TCMSUpdateManager::GetInstance()->addException($exception);
     }

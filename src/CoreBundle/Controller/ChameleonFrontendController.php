@@ -12,7 +12,6 @@
 namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -39,14 +38,13 @@ class ChameleonFrontendController extends ChameleonController
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
-        PortalDomainServiceInterface $portalDomainService,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         TModuleLoader $moduleLoader,
         $viewPathManager,
         ContainerInterface $container,
         TPkgViewRendererConfigToLessMapper $configToLessMapper
     ) {
-        parent::__construct($requestStack, $eventDispatcher, $portalDomainService, $dataAccessCmsMasterPagedef, $moduleLoader, $viewPathManager);
+        parent::__construct($requestStack, $eventDispatcher, $dataAccessCmsMasterPagedef, $moduleLoader, $viewPathManager);
         $this->container = $container; // for ViewRenderer instantiation
         $this->configToLessMapper = $configToLessMapper;
     }
@@ -150,8 +148,6 @@ class ChameleonFrontendController extends ChameleonController
 
         $referrerPageId = $this->getInputFilterUtil()->getFilteredInput('refererPageId', null, false, TCMSUserInput::FILTER_FILENAME);
         $this->activePageService->setActivePage($pagedef, $referrerPageId);
-
-        $this->postRoutingHook($request);
 
         $aAllParameter = $request->query->keys();
         $aSeoParameterList = array_diff($aAllParameter, $aNonSeoParameter);

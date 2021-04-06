@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
 {
     /**
@@ -154,7 +157,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
 
     protected function LoadInstances()
     {
-        if (!$this->IsStatic() || ($this->IsStatic() && !TGlobal::IsCMSTemplateEngineEditMode())) {
+        if (!$this->IsStatic() || ($this->IsStatic() && false === $this->getRequestInfoService()->isCmsTemplateEngineEditMode())) {
             if (is_null($this->aModuleInstances)) {
                 $oModuleList = $this->GetModuleList();
                 if (is_object($oModuleList)) {
@@ -314,7 +317,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      */
     public function InjectVirtualModuleSpots(&$oModuleLoader)
     {
-        if (!$this->IsStatic() || ($this->IsStatic() && !TGlobal::IsCMSTemplateEngineEditMode())) {
+        if (!$this->IsStatic() || ($this->IsStatic() && false === $this->getRequestInfoService()->isCmsTemplateEngineEditMode())) {
             $this->LoadInstances();
 
             if (is_array($this->aModuleInstances)) {
@@ -399,5 +402,10 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
     {
         // the sub modules will be cached...
         return false;
+    }
+
+    private function getRequestInfoService(): RequestInfoServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.request_info_service');
     }
 }
