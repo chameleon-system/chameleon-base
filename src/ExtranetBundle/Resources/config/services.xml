@@ -41,11 +41,6 @@
         </service>
 
         <service
-            id="chameleon_system_extranet.login_by_tranfer_token.route_generator"
-            class="ChameleonSystem\ExtranetBundle\LoginByTransferToken\RouteGenerator"
-            public="true"
-        />
-        <service
             id="chameleon_system_extranet.login_by_transfer_token.login_by_token_controller"
             class="ChameleonSystem\ExtranetBundle\LoginByTransferToken\LoginByTokenController"
             public="true"

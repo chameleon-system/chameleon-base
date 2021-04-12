@@ -150,7 +150,7 @@ class TableEditorExtranetUser extends TCMSTableEditor
             self::TRANSFER_TOKEN_LIFETIME_SECONDS
         );
         $url = $this->router()->generateWithPrefixes(
-            RouteGenerator::ROUTE_NAME,
+            'chameleon_system_extranet.login_by_transfer_token',
             [ 'token' => $token ],
             $portal,
             null,

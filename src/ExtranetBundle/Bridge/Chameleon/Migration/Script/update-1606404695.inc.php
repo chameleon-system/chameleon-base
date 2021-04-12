@@ -9,8 +9,8 @@ $data = TCMSLogChange::createMigrationQueryData('pkg_cms_routing', 'de')
   ->setFields([
       'name' => 'chameleon_system_extranet.login_by_tranfer_token.route_generator',
       'short_description' => '',
-      'type' => 'service',
-      'resource' => 'chameleon_system_extranet.login_by_tranfer_token.route_generator',
+      'type' => 'yaml',
+      'resource' => '@ChameleonSystemExtranetBundle/Resources/config/route.yml',
       'position' => '5',
       'system_page_name' => '',
       'active' => '1',
