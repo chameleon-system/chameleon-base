@@ -68,7 +68,7 @@
             </call>
         </service>
 
-        <service id="chameleon_system_core.controller_resolver" class="ChameleonSystem\CoreBundle\Controller\ChameleonControllerResolver">
+        <service id="chameleon_system_core.controller_resolver" class="ChameleonSystem\CoreBundle\Controller\ChameleonControllerResolver" public="true">
             <argument type="service" id="service_container" />
             <argument type="service" id="default.controller_resolver" />
             <argument type="collection">
@@ -179,7 +179,7 @@
             </call>
         </service>
 
-        <service id="chameleon_system_core.image_not_found_controller" class="ChameleonSystem\CoreBundle\Controller\ImageNotFoundController">
+        <service id="chameleon_system_core.image_not_found_controller" class="ChameleonSystem\CoreBundle\Controller\ImageNotFoundController" public="true">
         </service>
 
         <service id="chameleon_system_core.controller_invoke_listener" class="%chameleon_system_core.controller_invoke_listener.class%">
@@ -505,7 +505,7 @@
         <service id="chameleon_system_core.updatemanager.update_filter_service" class="ChameleonSystem\CoreBundle\UpdateManager\UpdateFilterService" public="true">
         </service>
 
-        <service id="chameleon_system_core.controller_proxy_disabled_autoflushing" class="ChameleonSystem\CoreBundle\Controller\ChameleonNoAutoFlushController">
+        <service id="chameleon_system_core.controller_proxy_disabled_autoflushing" class="ChameleonSystem\CoreBundle\Controller\ChameleonNoAutoFlushController" public="true">
             <argument type="service" id="chameleon_system_core.frontend_controller" />
         </service>
 
