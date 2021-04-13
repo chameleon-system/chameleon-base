@@ -21,13 +21,13 @@ class ChameleonControllerBackendCallDecisionTest extends TestCase
      */
     private $originalServerVars;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         define('REQUEST_PROTOCOL', 'https');
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         include_once __DIR__.'/../../FrontController/chameleon.php';
@@ -38,7 +38,7 @@ class ChameleonControllerBackendCallDecisionTest extends TestCase
         $this->originalServerVars = $_SERVER;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->controller = null;

@@ -13,14 +13,6 @@ use PHPUnit\Framework\TestCase;
 
 class ViewMapperConfigTest extends TestCase
 {
-    public function SetUp()
-    {
-    }
-
-    public function tearDown()
-    {
-    }
-
     public function testGetConfigs()
     {
         $config = new ViewMapperConfig("one=foobar.html.twig;MapperOne,MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo");

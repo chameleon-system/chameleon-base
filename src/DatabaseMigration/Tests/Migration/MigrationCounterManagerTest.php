@@ -14,9 +14,12 @@ namespace ChameleonSystem\DatabaseMigration\Counter;
 use ChameleonSystem\DatabaseMigration\DataAccess\MigrationDataAccessInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class MigrationCounterManagerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var MigrationDataAccessInterface
      */

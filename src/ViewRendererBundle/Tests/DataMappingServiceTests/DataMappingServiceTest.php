@@ -16,10 +16,13 @@ use ChameleonSystem\ViewRendererBundle\objects\interfaces\DataMappingServiceHelp
 use ChameleonSystem\ViewRendererBundle\objects\interfaces\DataMappingServiceResponseInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class DataMappingServiceTest extends TestCase
 {
+    use ProphecyTrait;
+    
     /**
      * @var DataMappingService
      */
@@ -33,7 +36,7 @@ class DataMappingServiceTest extends TestCase
      */
     private $transformationResult;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->dataMappingService = null;

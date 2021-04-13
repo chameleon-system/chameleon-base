@@ -22,7 +22,7 @@ class ViewRendererTest extends TestCase
     protected $oViewRenderer = null;
     protected $oTestRenderer = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockContainer();
 
@@ -31,7 +31,7 @@ class ViewRendererTest extends TestCase
         $this->oViewRenderer = new ViewRenderer($dataMappingService, $this->oTestRenderer);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->oViewRenderer = null;
         $this->oTestRenderer = null;
@@ -92,11 +92,10 @@ class ViewRendererTest extends TestCase
         $this->assertEquals($result[1]['title'], 'default title');
     }
 
-    /**
-     * @expectedException \MapperException
-     */
     public function testUnsatisfiedMapper()
     {
+        $this->expectException(MapperException::class);
+
         $this->oViewRenderer->AddMappers(array(new ModifyingViewMapper()));
         $this->oViewRenderer->AddSourceObject('article', new Article());
         $result = $this->oViewRenderer->Render('testView', $this->oTestRenderer);
@@ -129,11 +128,10 @@ class ViewRendererTest extends TestCase
         $this->assertEquals($oTestObject, $oSource);
     }
 
-    /**
-     * @expectedException \MapperException
-     */
     public function testObjectInputInValidType()
     {
+        $this->expectException(MapperException::class);
+
         $oTestObject = new stdClass();
 
         $oVisitor = new MapperVisitor(array('oTest' => $oTestObject));
@@ -216,11 +214,10 @@ class ViewRendererTest extends TestCase
         $this->assertEquals(10, $oSource);
     }
 
-    /**
-     * @expectedException \MapperException
-     */
     public function testMissingNonOptionalRequirement()
     {
+        $this->expectException(MapperException::class);
+
         $oVisitor = new MapperVisitor();
         $oRequirements = new MapperRequirements();
         $oRequirements->NeedsSourceObject('oTest');
@@ -228,11 +225,10 @@ class ViewRendererTest extends TestCase
         $oSource = $oVisitor->GetSourceObject('oTest');
     }
 
-    /**
-     * @expectedException \MapperException
-     */
     public function testMissingExplicitNonOptionalRequirement()
     {
+        $this->expectException(MapperException::class);
+
         $oVisitor = new MapperVisitor();
         $oRequirements = new MapperRequirements();
         $oRequirements->NeedsSourceObject('oTest', null, null, false);
