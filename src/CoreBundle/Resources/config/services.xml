@@ -919,7 +919,7 @@
             <argument id="request_stack" type="service"/>
         </service>
 
-        <service id="chameleon_system_core.service.css_minifier" class="ChameleonSystem\CoreBundle\Service\CssMinifierService">
+        <service id="chameleon_system_core.service.css_minifier" class="ChameleonSystem\CoreBundle\Service\CssMinifierService" public="true">
         </service>
     </services>
 </container>
