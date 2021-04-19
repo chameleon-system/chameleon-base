@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="chameleon_system_extranet.login_by_transfer_token.transfer_token_service.algorithm">aes128</parameter>
+        <parameter key="chameleon_system_extranet.login_by_token.service.login_token.algorithm">aes128</parameter>
     </parameters>
 
     <services>
@@ -41,24 +41,24 @@
         </service>
 
         <service
-            id="chameleon_system_extranet.login_by_transfer_token.login_by_token_controller"
-            class="ChameleonSystem\ExtranetBundle\LoginByTransferToken\LoginByTokenController"
+            id="chameleon_system_extranet.login_by_token.login_by_token_controller"
+            class="ChameleonSystem\ExtranetBundle\LoginByToken\LoginByTokenController"
             public="true"
         >
-            <argument type="service" id="chameleon_system_extranet.login_by_transfer_token.transfer_token_service" />
+            <argument type="service" id="chameleon_system_extranet.login_by_token.service.login_token" />
             <argument type="service" id="chameleon_system_extranet.extranet_user_provider" />
             <argument type="service" id="chameleon_system_core.page_service" />
             <argument type="service" id="request_stack" />
         </service>
         <service
-            id="chameleon_system_extranet.login_by_transfer_token.transfer_token_service"
-            class="ChameleonSystem\ExtranetBundle\LoginByTransferToken\TransferTokenService"
+            id="chameleon_system_extranet.login_by_token.service.login_token"
+            class="ChameleonSystem\ExtranetBundle\LoginByToken\LoginTokenService"
             public="true"
         >
             <argument type="service" id="chameleon_system_core.system_time_provider" />
             <argument type="service" id="logger" />
             <argument>%kernel.secret%</argument>
-            <argument>%chameleon_system_extranet.login_by_transfer_token.transfer_token_service.algorithm%</argument>
+            <argument>%chameleon_system_extranet.login_by_token.service.login_token.algorithm%</argument>
         </service>
     </services>
 

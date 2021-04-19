@@ -1,14 +1,14 @@
 <?php
 
-namespace ChameleonSystem\ExtranetBundle\Tests\LoginByTransferToken;
+namespace ChameleonSystem\ExtranetBundle\Tests\LoginByToken;
 
 use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
+use ChameleonSystem\ExtranetBundle\LoginByToken\LoginTokenService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use ChameleonSystem\ExtranetBundle\LoginByTransferToken\TransferTokenService;
 use Psr\Log\LoggerInterface;
 
-class TransferTokenServiceTest extends TestCase
+class LoginTokenServiceTest extends TestCase
 {
     /** @var MockObject<TimeProviderInterface> */
     protected $timeProvider;
@@ -37,16 +37,16 @@ class TransferTokenServiceTest extends TestCase
     {
         $service = $this->service('secret');
         $this->assertNotEquals(
-            $service->createTransferTokenForUser(11, 120),
-            $service->createTransferTokenForUser(11, 120)
+            $service->createTokenForUser(11, 120),
+            $service->createTokenForUser(11, 120)
         );
     }
 
     public function testTokenCreatedByServiceCanBeInterpretedByService(): void
     {
         $service = $this->service('secret');
-        $token = $service->createTransferTokenForUser(11, 120);
-        $this->assertEquals(11, $service->getUserIdFromTransferToken($token));
+        $token = $service->createTokenForUser(11, 120);
+        $this->assertEquals(11, $service->getUserIdFromToken($token));
     }
 
     public function testTokenIsInvalidIfExpired(): void
@@ -54,10 +54,10 @@ class TransferTokenServiceTest extends TestCase
         $service = $this->service('secret');
 
         $this->pretendTimeIs('2020-10-10 10:00:00');
-        $token = $service->createTransferTokenForUser(11, 120);
+        $token = $service->createTokenForUser(11, 120);
 
         $this->pretendTimeIs('2020-10-10 10:03:00');
-        $this->assertNull($service->getUserIdFromTransferToken($token));
+        $this->assertNull($service->getUserIdFromToken($token));
     }
 
     public function testRefusesToDecodeTokenWhenSecretIsDefault(): void
@@ -68,27 +68,27 @@ class TransferTokenServiceTest extends TestCase
             ->expects($this->once())
             ->method('error')
             ->with($this->callback(function($message) {
-                return str_contains($message, 'Refusing to encode or decode transfer tokens with default secret');
+                return str_contains($message, 'Refusing to encode or decode tokens with default secret');
             }));
 
-        $token = $service->createTransferTokenForUser(11, 120);
-        $this->assertNull($service->getUserIdFromTransferToken($token));
+        $token = $service->createTokenForUser(11, 120);
+        $this->assertNull($service->getUserIdFromToken($token));
     }
 
     public function testRandomStringIsNotValidToken(): void
     {
-        $this->assertNull($this->service('secret')->getUserIdFromTransferToken('foobar'));
+        $this->assertNull($this->service('secret')->getUserIdFromToken('foobar'));
     }
 
     public function testTokenCreatedWithDifferentSecretIsNotValid(): void
     {
-        $token = $this->service('secret1')->createTransferTokenForUser(11, 120);
-        $this->assertNull($this->service('secret2')->getUserIdFromTransferToken($token));
+        $token = $this->service('secret1')->createTokenForUser(11, 120);
+        $this->assertNull($this->service('secret2')->getUserIdFromToken($token));
     }
 
-    private function service(string $secret): TransferTokenService
+    private function service(string $secret): LoginTokenService
     {
-        return new TransferTokenService(
+        return new LoginTokenService (
             $this->timeProvider,
             $this->logger,
             $secret,

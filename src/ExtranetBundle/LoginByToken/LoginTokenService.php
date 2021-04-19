@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace ChameleonSystem\ExtranetBundle\LoginByTransferToken;
+namespace ChameleonSystem\ExtranetBundle\LoginByToken;
 
 use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
 use Psr\Log\LoggerInterface;
 
-class TransferTokenService implements TransferTokenServiceInterface
+class LoginTokenService implements LoginTokenServiceInterface
 {
     private const DEFAULT_TOKEN = '!ThisTokenIsNotSoSecretChangeIt!';
 
@@ -43,7 +43,7 @@ class TransferTokenService implements TransferTokenServiceInterface
     }
 
     /** {@inheritdoc} */
-    public function createTransferTokenForUser(
+    public function createTokenForUser(
         string $userId,
         int $expiresAfterSeconds
     ): string {
@@ -54,7 +54,7 @@ class TransferTokenService implements TransferTokenServiceInterface
     }
 
     /** {@inheritdoc} */
-    public function getUserIdFromTransferToken(string $token): ?string
+    public function getUserIdFromToken(string $token): ?string
     {
        $data = $this->decodeToken($token);
        if (null === $data
@@ -123,7 +123,7 @@ class TransferTokenService implements TransferTokenServiceInterface
     {
         if (self::DEFAULT_TOKEN === $this->secret) {
             $this->logger->error(sprintf('
-                Refusing to encode or decode transfer tokens with default secret.
+                Refusing to encode or decode tokens with default secret.
                 Please ensure that the secret is set to a random string that is not 
                 `%s`
             ', self::DEFAULT_TOKEN));

@@ -1,3 +1,3 @@
-chameleon_system_extranet.login_by_transfer_token:
-  path: /_login_by_transfer_token_/{token}/
-  controller: chameleon_system_extranet.login_by_transfer_token.login_by_token_controller::loginAction
+chameleon_system_extranet.login_by_token:
+  path: /_login_by_token_/{token}/
+  controller: chameleon_system_extranet.login_by_token.login_by_token_controller::loginAction

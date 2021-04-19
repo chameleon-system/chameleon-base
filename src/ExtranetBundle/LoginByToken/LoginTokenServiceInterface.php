@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace ChameleonSystem\ExtranetBundle\LoginByTransferToken;
+namespace ChameleonSystem\ExtranetBundle\LoginByToken;
 
 /**
- * Handles transfer tokens: Creates a token for the given user id that can
- * then be validated the `validateTransferToken` method.
+ * Handles login tokens: Creates a token for the given user id that can
+ * then be validated the `getUserIdFromToken` method.
  */
-interface TransferTokenServiceInterface
+interface LoginTokenServiceInterface
 {
 
     /**
@@ -25,17 +25,17 @@ interface TransferTokenServiceInterface
     public function isReadyToEncodeTokens(): bool;
 
     /**
-     * Creates a transfer token for the given user id that expires after
+     * Creates a token for the given user id that expires after
      * the given number of seconds. The returned token must be safe for
      * usage in URLs as is.
      */
-    public function createTransferTokenForUser(string $userId, int $expiresAfterSeconds): string;
+    public function createTokenForUser(string $userId, int $expiresAfterSeconds): string;
 
     /**
-     * Validates the given token as created by {@see createTransferTokenForUser}.
+     * Validates the given token as created by {@see createTokenForUser}.
      * The method must return `null` if the token is invalid or the user id contained
      * in the token if it is valid. If the expiry time of a token is over, then
      * the token must be invalid.
      */
-    public function getUserIdFromTransferToken(string $token): ?string;
+    public function getUserIdFromToken(string $token): ?string;
 }

@@ -11,19 +11,18 @@
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
-use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use ChameleonSystem\ExtranetBundle\LoginByTransferToken\TransferTokenServiceInterface;
-use ChameleonSystem\ExtranetBundle\LoginByTransferToken\LoginByTokenController;
-use ChameleonSystem\ExtranetBundle\LoginByTransferToken\RouteGenerator;
+use ChameleonSystem\ExtranetBundle\LoginByToken\LoginTokenServiceInterface;
+use ChameleonSystem\ExtranetBundle\LoginByToken\LoginByTokenController;
+use ChameleonSystem\ExtranetBundle\LoginByToken\RouteGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TableEditorExtranetUser extends TCMSTableEditor
 {
-    private const TRANSFER_TOKEN_LIFETIME_SECONDS = 20;
+    private const LOGIN_TOKEN_LIFETIME_SECONDS = 20;
 
     /**
      * {@inheritdoc}
@@ -77,7 +76,7 @@ class TableEditorExtranetUser extends TCMSTableEditor
             'tableid' => $this->oTableConf->id,
         ];
 
-        if (false === $this->transferTokenService()->isReadyToEncodeTokens()) {
+        if (false === $this->loginTokenService()->isReadyToEncodeTokens()) {
             $menuItem->sCSSClass = 'disabled';
         } else {
             $url = PATH_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($urlData, '?', '&');
@@ -94,6 +93,8 @@ class TableEditorExtranetUser extends TCMSTableEditor
      * which uses said token to log the user in.
      *
      * @see LoginByTokenController::loginAction()
+     *
+     * @return never-returns - Ends request by redirecting
      */
     public function LoginAsExtranetUser(): void
     {
@@ -143,14 +144,17 @@ class TableEditorExtranetUser extends TCMSTableEditor
         return TdbCmsPortal::GetNewInstance($extranetUser->fieldCmsPortalId);
     }
 
+    /**
+     * @return never-returns - Ends request by redirecting
+     */
     private function redirectUserToTokenLoginOnPortal(string $userId, TdbCmsPortal $portal): void
     {
-        $token = $this->transferTokenService()->createTransferTokenForUser(
+        $token = $this->loginTokenService()->createTokenForUser(
             $userId,
-            self::TRANSFER_TOKEN_LIFETIME_SECONDS
+            self::LOGIN_TOKEN_LIFETIME_SECONDS
         );
         $url = $this->router()->generateWithPrefixes(
-            'chameleon_system_extranet.login_by_transfer_token',
+            'chameleon_system_extranet.login_by_token',
             [ 'token' => $token ],
             $portal,
             null,
@@ -208,9 +212,9 @@ class TableEditorExtranetUser extends TCMSTableEditor
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 
-    private function transferTokenService(): TransferTokenServiceInterface
+    private function loginTokenService(): LoginTokenServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.login_by_transfer_token.transfer_token_service');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.login_by_token.service.login_token');
     }
 
     private function router(): PortalAndLanguageAwareRouterInterface
