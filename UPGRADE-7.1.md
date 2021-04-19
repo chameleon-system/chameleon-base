@@ -65,27 +65,27 @@ as service.
 
 All service classes that are loaded by `ServiceLocator::get()` must now be `public="true"` in their service definitions.
 
-# Cleanup
-# Informational
-# Changed Features
-## Cronjobs
-All Cron Jobs should now call the superclass constructor.
+## Correct Cronjob Hierarchy
+
+All Cron Jobs (instead of TCMSCronJob or TdbCmsCronjobs) should now call the superclass constructor.
 
 Before:
-```php
+```
  public function __construct()
     {
-        parent::TCMSCronJob();
+        parent::TCMSCronJob(); // or parent::TdbCmsCronjobs(); 
     }
 ```
 Should Be:
-```php
+```
  public function __construct()
     {
         parent::__construct();
     }
 ```
-
+# Cleanup
+# Informational
+# Changed Features
 ## Changed Interfaces and Method Signatures
 
 # Removed Features

@@ -14,7 +14,7 @@ use esono\pkgCmsCache\CacheInterface;
 /**
  * clear cache.
 /**/
-class TCMSCronJob_ClearCompleteCache extends TCMSCronJob
+class TCMSCronJob_ClearCompleteCache extends TdbCmsCronjobs
 {
 
     public function __construct()

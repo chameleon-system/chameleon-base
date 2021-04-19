@@ -12,7 +12,7 @@
 /**
  * Cronjob for archiving changelog data.
 /**/
-class TCMSCronJob_ArchiveChangeLog extends TCMSCronJob
+class TCMSCronJob_ArchiveChangeLog extends TdbCmsCronjobs
 {
 
     public function __construct()

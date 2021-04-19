@@ -12,8 +12,14 @@
 /**
  * deletes old tokens.
 /**/
-class TCMSCronJob_ClearOldDownloadTokens extends TCMSCronJob
+class TCMSCronJob_ClearOldDownloadTokens extends TdbCmsCronjobs
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     protected function _ExecuteCron()
     {
         $this->clearAuthenticityToken();

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-class TCMSCronJobSendNewsletter extends TCMSCronJob
+class TCMSCronJobSendNewsletter extends TdbCmsCronjobs
 {
 
     public function __construct()

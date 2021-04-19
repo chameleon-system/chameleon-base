@@ -13,7 +13,7 @@
  * Collect all views from history and add them to view count.
  *
 /**/
-class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
+class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
 {
     private $targetTable;
     private $timeToLive;

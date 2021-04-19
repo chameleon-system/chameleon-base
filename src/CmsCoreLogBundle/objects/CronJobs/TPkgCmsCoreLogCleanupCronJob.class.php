@@ -27,6 +27,12 @@ if (!defined('PKG_CMS_CORE_LOG_DEFAULT_MAX_AGE_IN_SECONDS_LEVEL_BELOW_WARNING'))
  */
 class TPkgCmsCoreLogCleanupCronJob extends TdbCmsCronjobs
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     protected function _ExecuteCron()
     {
         parent::_ExecuteCron();

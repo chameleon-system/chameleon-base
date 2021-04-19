@@ -12,13 +12,8 @@
 /**
  * clear expired result cache entries.
 /**/
-class TCMSCronJob_PkgCmsResultCache_GarbageCollector extends TCMSCronJob
+class TCMSCronJob_PkgCmsResultCache_GarbageCollector extends TdbCmsCronjobs
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * runs result cache manager garbage collector to delete expired content.

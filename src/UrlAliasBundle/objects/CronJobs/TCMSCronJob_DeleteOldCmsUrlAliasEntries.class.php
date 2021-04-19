@@ -12,8 +12,13 @@
 /**
  * cleanup old url alias entries.
 /**/
-class TCMSCronJob_DeleteOldCmsUrlAliasEntries extends TCMSCronJob
+class TCMSCronJob_DeleteOldCmsUrlAliasEntries extends TdbCmsCronjobs
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     protected function _ExecuteCron()
     {
         $iCutoff = time();

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-class TCMSCronJob_CleanOrphanedMLTConnections extends TCMSCronJob
+class TCMSCronJob_CleanOrphanedMLTConnections extends TdbCmsCronjobs
 {
 
     public function __construct()

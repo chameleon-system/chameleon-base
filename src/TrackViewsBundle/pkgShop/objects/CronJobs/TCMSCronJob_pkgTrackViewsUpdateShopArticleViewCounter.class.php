@@ -12,8 +12,13 @@
 /**
  * updates the total view count - we do this to easily allow ordering by the value.
 /**/
-class TCMSCronJob_pkgTrackViewsUpdateShopArticleViewCounter extends TCMSCronJob
+class TCMSCronJob_pkgTrackViewsUpdateShopArticleViewCounter extends TdbCmsCronjobs
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     protected function _ExecuteCron()
     {
         // make sure every article has an entry
