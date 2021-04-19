@@ -14,6 +14,12 @@
 /**/
 class TCMSCronJob_PkgCmsResultCache_GarbageCollector extends TCMSCronJob
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * runs result cache manager garbage collector to delete expired content.
      */

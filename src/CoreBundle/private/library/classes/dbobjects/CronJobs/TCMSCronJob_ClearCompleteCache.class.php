@@ -16,6 +16,12 @@ use esono\pkgCmsCache\CacheInterface;
 /**/
 class TCMSCronJob_ClearCompleteCache extends TCMSCronJob
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     protected function _ExecuteCron()
     {
         /** @var CacheInterface $cache */

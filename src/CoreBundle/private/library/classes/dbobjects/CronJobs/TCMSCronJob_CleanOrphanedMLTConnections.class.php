@@ -11,6 +11,12 @@
 
 class TCMSCronJob_CleanOrphanedMLTConnections extends TCMSCronJob
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * @deprecated since 6.3.0 - not used anymore
      */

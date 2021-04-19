@@ -14,6 +14,12 @@
 /**/
 class TCMSCronJob_ArchiveChangeLog extends TCMSCronJob
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     protected function _ExecuteCron()
     {
         $archiver = new TCMSChangeLogArchiver();

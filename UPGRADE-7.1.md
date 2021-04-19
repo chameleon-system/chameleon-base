@@ -68,6 +68,24 @@ All service classes that are loaded by `ServiceLocator::get()` must now be `publ
 # Cleanup
 # Informational
 # Changed Features
+## Cronjobs
+All Cron Jobs should now call the superclass constructor.
+
+Before:
+```php
+ public function __construct()
+    {
+        parent::TCMSCronJob();
+    }
+```
+Should Be:
+```php
+ public function __construct()
+    {
+        parent::__construct();
+    }
+```
+
 ## Changed Interfaces and Method Signatures
 
 # Removed Features
