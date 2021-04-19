@@ -203,7 +203,14 @@
                 <source>chameleon_system_core.template_tool.show_dynamic_box</source>
                 <target>show</target>
             </trans-unit>
-
+            <trans-unit id="chameleon_system.table_editor_twig_body_parse_error">
+                <source>chameleon_system.table_editor_twig_body_parse_error</source>
+                <target>Failed to parse Body field in E-Mail Template.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system.table_editor_twig_body_text_parse_error">
+                <source>chameleon_system.table_editor_twig_body_text_parse_error</source>
+                <target>Failed to parse Body(Text) field in E-Mail Template.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

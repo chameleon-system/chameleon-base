@@ -19,11 +19,10 @@ class DataMailProfileTableEditor extends TCMSTableEditor
         $twig = $this->getTwigEnvironment();
         try {
             $twig->tokenize(new Source($postData['body'], 'body'));
-            $twig->tokenize(new Source($postData['body_text'], 'body_text'));
         }catch (SyntaxError $e) {
 
             $this->getLogger()->error(
-                sprintf('failed to pares body field in E-Mail Template %s', $postData['name']),
+                sprintf('failed to parse body field in E-Mail Template %s', $postData['name']),
                 [
                     'sFieldName' => 'body',
                     'message' => $e->getMessage(),
@@ -35,9 +34,37 @@ class DataMailProfileTableEditor extends TCMSTableEditor
 
             $this->getFlashMessageService()->addMessage(
                 self::MESSAGE_MANAGER_CONSUMER,
-                'chameleon_system.table_editor_twig_error',
+                'chameleon_system.table_editor_twig_body_parse_error',
                 [
                     'sFieldName' => 'body',
+                    'message' => $e->getMessage(),
+                    'guess' => $e->guess(),
+                ]
+            );
+            return false;
+        }
+
+
+        try {
+            $twig->tokenize(new Source($postData['body_text'], 'body_text'));
+        }catch (SyntaxError $e) {
+
+            $this->getLogger()->error(
+                sprintf('failed to parse body_text field in E-Mail Template %s', $postData['name']),
+                [
+                    'sFieldName' => 'body_text',
+                    'message' => $e->getMessage(),
+                    'guess' => $e->guess(),
+                    'context' => $e->getSourceContext()->getCode(),
+                    'exception' => $e,
+                ]
+            );
+
+            $this->getFlashMessageService()->addMessage(
+                self::MESSAGE_MANAGER_CONSUMER,
+                'chameleon_system.table_editor_twig_body_text_parse_error',
+                [
+                    'sFieldName' => 'body_text',
                     'message' => $e->getMessage(),
                     'guess' => $e->guess(),
                 ]
