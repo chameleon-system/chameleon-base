@@ -67,21 +67,39 @@ All service classes that are loaded by `ServiceLocator::get()` must now be `publ
 
 ## Correct Cronjob Hierarchy
 
-All Cron Jobs (instead of TCMSCronJob or TdbCmsCronjobs) should now call the superclass constructor.
+Cronjob classes need to extend the class TdbCmsCronjobs. Currently the often used class TCMSCronJob does not have all the necessary field.
+So searching for "TCMSCronJob" in the project code should give you a complete list for this task.
+Furthermore every cronjob should only calls the parent constructor like so:
 
 Before:
 ```
+class ... extends TCMSCronJob {
+
  public function __construct()
     {
-        parent::TCMSCronJob(); // or parent::TdbCmsCronjobs(); 
+        parent::TCMSCronJob();
     }
+}
+
+// or
+
+class ...Cronjob extends TdbCmsCronjobs {
+
+public function __construct()
+    {
+        parent::TdbCmsCronjobs();
+    }
+}
 ```
 Should Be:
 ```
+class ...Cronjob extends TdbCmsCronjobs {
+
  public function __construct()
     {
         parent::__construct();
     }
+}
 ```
 # Cleanup
 # Informational
