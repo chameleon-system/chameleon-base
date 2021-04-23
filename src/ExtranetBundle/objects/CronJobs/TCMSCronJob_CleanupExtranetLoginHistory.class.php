@@ -15,12 +15,6 @@
 /**/
 class TCMSCronJob_CleanupExtranetLoginHistory extends TdbCmsCronjobs
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /**
      * fetch a list of all user ids that have too many entries, then delete entries via subquery.
      */

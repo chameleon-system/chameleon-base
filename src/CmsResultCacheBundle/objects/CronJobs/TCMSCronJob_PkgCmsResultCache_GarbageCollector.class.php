@@ -14,7 +14,6 @@
 /**/
 class TCMSCronJob_PkgCmsResultCache_GarbageCollector extends TdbCmsCronjobs
 {
-
     /**
      * runs result cache manager garbage collector to delete expired content.
      */

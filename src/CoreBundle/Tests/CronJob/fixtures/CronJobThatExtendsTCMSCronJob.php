@@ -2,14 +2,9 @@
 
 namespace ChameleonSystem\CoreBundle\Tests\CronJob\fixtures;
 
-use TdbCmsCronjobs;
+use TCMSCronJob;
 
-class CronJobThatExtendsTCMSCronJob extends TdbCmsCronjobs
+class CronJobThatExtendsTCMSCronJob extends TCMSCronJob
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
 }

@@ -11,12 +11,6 @@
 
 class TCMSCronJob_CleanTags extends TdbCmsCronjobs
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     protected function _ExecuteCron()
     {
         $query = "DELETE

@@ -14,11 +14,6 @@
 /**/
 class TCMSCronJob_DeleteOldCmsUrlAliasEntries extends TdbCmsCronjobs
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     protected function _ExecuteCron()
     {
         $iCutoff = time();

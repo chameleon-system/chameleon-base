@@ -15,12 +15,6 @@
 /**/
 class TCMSCronJob_CleanupModuleContents extends TdbCmsCronjobs
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     protected function _ExecuteCron()
     {
         // delete module instances of modules that are not installed anymore

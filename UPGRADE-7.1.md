@@ -95,9 +95,11 @@ Should Be:
 ```
 class ...Cronjob extends TdbCmsCronjobs {
 
- public function __construct()
+ // If construct needed
+ public function __construct(string $...)
     {
         parent::__construct();
+        $this->... = $..;
     }
 }
 ```

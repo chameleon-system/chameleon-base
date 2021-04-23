@@ -12,11 +12,6 @@
 class TCMSCronjob_ClearAtomicLocks extends TdbCmsCronjobs
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function _ExecuteCron()
     {
         $this->clearTable();

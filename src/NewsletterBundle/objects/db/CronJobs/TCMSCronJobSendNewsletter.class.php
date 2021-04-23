@@ -11,12 +11,6 @@
 
 class TCMSCronJobSendNewsletter extends TdbCmsCronjobs
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     protected function _ExecuteCron()
     {
         $now = date('Y-m-d H:i:s');
