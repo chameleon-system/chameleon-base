@@ -20,7 +20,7 @@ class TCMSMediaManagerTreeNode extends TCMSTreeNode
 
     public function __construct($id = null)
     {
-        parent::__construct('cms_media_tree', $id);
+        parent::__construct($id, 'cms_media_tree');
     }
 
     /**
