@@ -72,8 +72,15 @@ class TModuleLoader
      */
     private $requestInfoService;
 
-    public function __construct(RequestStack $requestStack, ModuleResolverInterface $moduleResolver, IViewPathManager $viewPathManager, CacheInterface $cache, TGlobalBase $global, ModuleExecutionStrategyInterface $moduleExecutionStrategy, RequestInfoServiceInterface $requestInfoService)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        ModuleResolverInterface $moduleResolver,
+        IViewPathManager $viewPathManager,
+        CacheInterface $cache,
+        TGlobalBase $global,
+        ModuleExecutionStrategyInterface $moduleExecutionStrategy,
+        RequestInfoServiceInterface $requestInfoService
+    ) {
         $this->requestStack = $requestStack;
         $this->moduleResolver = $moduleResolver;
         $this->viewPathManager = $viewPathManager;

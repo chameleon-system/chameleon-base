@@ -389,6 +389,9 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
                 $snippetChain = $oTheme->getSnippetChainAsArray();
             }
         }
+
+        // TODO quite unfortunate here that there is no "this is backend" (only the fact that is has no portal and thus no snippet chain paths)
+
         if (false !== CHAMELEON_PATH_THEMES && count($snippetChain) > 0) {
             $aBasePaths[$sPortalCacheId] = array();
             foreach ($snippetChain as $element) {
@@ -406,6 +409,10 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
                     $aBasePaths[$sPortalCacheId][] = realpath($sCandidate.'/'.$sBaseDirectory);
                 }
             }
+        }
+
+        if (true === $this->requestInfoService->isBackendMode()) {
+            $aBasePaths[$sPortalCacheId] = $this->addBackendThemePaths($aBasePaths[$sPortalCacheId], $sBaseDirectory);
         }
 
         return $aBasePaths[$sPortalCacheId];
@@ -448,5 +455,29 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
     public function getBasePathsFromInstance($oPortal = null, $sBaseDirectory = null)
     {
         return $this->getBasePaths($oPortal, $sBaseDirectory);
+    }
+
+    private function addBackendThemePaths(array $paths, string $directorySuffix): array
+    {
+        $config = TdbCmsConfig::GetInstance();
+        $backendTheme = $config->GetFieldPkgCmsTheme();
+
+        if (null === $backendTheme) {
+            return $paths;
+        }
+
+        $snippetChainElements = $backendTheme->getSnippetChainAsArray();
+
+        foreach ($snippetChainElements as $element) {
+            $path = $this->getVerifiedPath($element, $directorySuffix);
+
+            if (null === $path) {
+                continue;
+            }
+
+            $paths[] = $path;
+        }
+
+        return $paths;
     }
 }
