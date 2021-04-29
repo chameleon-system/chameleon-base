@@ -33,7 +33,8 @@ class TableMenuItemProvider implements MenuItemProviderInterface
             $menuItem->id,
             $menuItem->fieldName,
             $menuItem->fieldIconFontCssClass,
-            PATH_CMS_CONTROLLER."?pagedef=tablemanager&id={$tableConf->id}&_histid=0&_rmhist=true"
+            PATH_CMS_CONTROLLER."?pagedef=tablemanager&id={$tableConf->id}",
+            $tableConf->id
         );
     }
 
