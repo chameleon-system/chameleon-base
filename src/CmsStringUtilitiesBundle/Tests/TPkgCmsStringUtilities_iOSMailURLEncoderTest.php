@@ -20,13 +20,13 @@ class TPkgCmsStringUtilities_iOSMailURLEncoderTest extends TestCase
      */
     private $util;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->util = new \TPkgCmsStringUtilities_iOSMailURLEncoder();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->util = null;

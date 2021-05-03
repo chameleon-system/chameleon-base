@@ -14,10 +14,13 @@ namespace ChameleonSystem\ViewRendererBundle\Tests\VisitorTests;
 use ChameleonSystem\ViewRendererBundle\objects\interfaces\DataMappingServiceInterface;
 use ChameleonSystem\ViewRendererBundle\objects\interfaces\DataMappingServiceResponseInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class MapperVisitorTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var \MapperVisitor
      */

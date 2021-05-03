@@ -20,7 +20,7 @@ class TCMSDocumentManagerTreeNode extends TCMSTreeNode
 
     public function __construct($id = null)
     {
-        parent::__construct('cms_document_tree', $id);
+        parent::__construct($id, 'cms_document_tree');
     }
 
     /**

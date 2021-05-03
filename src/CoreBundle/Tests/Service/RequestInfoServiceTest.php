@@ -16,11 +16,14 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoService;
 use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class RequestInfoServiceTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var RequestStack|ObjectProphecy
      */
@@ -61,7 +64,7 @@ class RequestInfoServiceTest extends TestCase
      */
     private $returnedValue2;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -24,7 +24,7 @@ class UrlUtilityServiceTest extends TestCase
     private $service;
     private $responseUrl;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->url = null;

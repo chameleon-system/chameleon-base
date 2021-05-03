@@ -18,6 +18,7 @@ use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Tests\Security\AuthenticityToken\fixtures\AuthenticityTokenStorageMock;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -25,6 +26,8 @@ use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 class AuthenticityTokenManagerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var bool
      */
@@ -58,7 +61,7 @@ class AuthenticityTokenManagerTest extends TestCase
      */
     private $actualResult;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -70,7 +73,7 @@ class AuthenticityTokenManagerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
