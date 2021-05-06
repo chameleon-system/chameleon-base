@@ -23,13 +23,13 @@ class MigrationDataModelTest extends TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->model = new MigrationDataModel(self::TESTBUNDLE);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->model = null;

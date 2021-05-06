@@ -21,14 +21,14 @@ class MigrationPathUtilTest extends TestCase
      */
     private $util;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->util = new MigrationPathUtil();
         $this->util->addPathToUpdatesInBundle('/Bridge\/Chameleon\/Migration\/Script\/.*updates/');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->util = null;
@@ -141,11 +141,12 @@ class MigrationPathUtilTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage File does not contain a build number
      */
     public function it_throws_an_exception_if_no_build_number_can_be_extracted()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('File does not contain a build number');
+
         $this->util->getBuildNumberFromUpdateFile('foobar');
     }
 }

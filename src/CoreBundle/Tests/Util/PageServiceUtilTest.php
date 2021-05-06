@@ -18,11 +18,14 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\DependencyInjection\Container;
 
 class PageServiceUtilTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var PageServiceUtil
      */

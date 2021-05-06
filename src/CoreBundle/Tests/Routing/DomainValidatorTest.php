@@ -10,6 +10,7 @@ use PHPUnit\Framework\MockObject\Stub\ReturnStub;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\RequestStack;
 use TdbCmsLanguage;
@@ -18,6 +19,8 @@ use TdbCmsPortalDomains;
 
 class DomainValidatorTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var DomainValidator
      */
@@ -62,7 +65,7 @@ class DomainValidatorTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

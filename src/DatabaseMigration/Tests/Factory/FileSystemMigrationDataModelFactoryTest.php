@@ -15,9 +15,12 @@ use ChameleonSystem\DatabaseMigration\DataModel\MigrationDataModel;
 use ChameleonSystem\DatabaseMigration\Factory\FileSystemMigrationDataModelFactory;
 use ChameleonSystem\DatabaseMigration\Tests\Factory\fixtures\TestBundle\TestBundle;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class FileSystemMigrationDataModelFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @test
      */

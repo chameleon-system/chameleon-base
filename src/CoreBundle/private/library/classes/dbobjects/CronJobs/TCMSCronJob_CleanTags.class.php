@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-class TCMSCronJob_CleanTags extends TCMSCronJob
+class TCMSCronJob_CleanTags extends TdbCmsCronjobs
 {
     protected function _ExecuteCron()
     {
