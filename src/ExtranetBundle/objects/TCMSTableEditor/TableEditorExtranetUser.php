@@ -80,7 +80,7 @@ class TableEditorExtranetUser extends TCMSTableEditor
             $menuItem->sCSSClass = 'disabled';
         } else {
             $url = PATH_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($urlData, '?', '&');
-            $menuItem->sOnClick = sprintf("window.location.href = '%s'; return false;", $url);
+            $menuItem->sOnClick = sprintf("window.open('%s'); return false;", $url);
         }
 
         return $menuItem;
