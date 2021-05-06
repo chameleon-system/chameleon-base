@@ -57,15 +57,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $cachedTableObj = $this->getTableFromSessionCache($listCacheKey);
         }
 
-        $aOrderData = array();
-        if (null !== $cachedTableObj) {
-            $aOrderData = $cachedTableObj->orderList;
-        }
-
         // table is not in cache, load it
         if (null === $cachedTableObj) {
             $this->CreateTableObj(); // also calls PostCreateTableObjectHook();
-            $this->tableObj->orderList = $aOrderData;
+            $this->tableObj->orderList = array();
             $this->AddFields();
             $this->AddSortInformation();
             $this->AddTableGrouping();
