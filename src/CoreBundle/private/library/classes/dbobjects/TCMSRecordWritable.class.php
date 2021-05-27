@@ -100,7 +100,7 @@ class TCMSRecordWritable extends TCMSRecord
     /**
      * Save active data... create new record if no id present.
      *
-     * @return string|bool - id on success... else false
+     * @return string|false - id on success... else false
      */
     public function Save()
     {

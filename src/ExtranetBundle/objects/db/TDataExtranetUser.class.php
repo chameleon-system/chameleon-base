@@ -225,12 +225,13 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * @param bool $bForceUserConfirmMail
      * @param bool $bAutoLoginAfterRegistration
      *
-     * @return bool
+     * @return string|false - id on success, `false` if failed
      */
     public function Register($bForceUserConfirmMail = false, $bAutoLoginAfterRegistration = true)
     {
         $bRegistered = $this->Save($bForceUserConfirmMail);
-        if ($bRegistered) {
+
+        if (false !== $bRegistered) {
             if ($bAutoLoginAfterRegistration) {
                 $this->DirectLogin($this->fieldName, $this->fieldPassword);
                 $this->GetShippingAddress(true, true);
