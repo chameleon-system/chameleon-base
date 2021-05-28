@@ -221,10 +221,11 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             }
 
             if (true === $bDataValid) {
-                $bDataValid = $oUser->Register();
+                $registrationResult = $oUser->Register();
+                $bDataValid = false !== $registrationResult;
             }
 
-            if (false !== $bDataValid) {
+            if (true === $bDataValid) {
                 $this->UpdateUserAddress(null, null, true);
                 // redirect to registration success page
                 if (!is_null($sSuccessURL)) {
