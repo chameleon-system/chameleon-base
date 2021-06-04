@@ -222,21 +222,23 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *   b) call the PostRegistrationHook (which will send the registration info & auto login the user IF the extranet setting
      *      allows that.
      *
+     * @param bool $bForceUserConfirmMail
+     * @param bool $bAutoLoginAfterRegistration
+     *
+     * @return bool|string
      */
-    public function Register(bool $bForceUserConfirmMail = false, bool $bAutoLoginAfterRegistration = true): bool
+    public function Register($bForceUserConfirmMail = false, $bAutoLoginAfterRegistration = true)
     {
-        $register = $this->Save($bForceUserConfirmMail);
-        if ('' === $register) {
-            return false;
+        $bRegistered = $this->Save($bForceUserConfirmMail);
+        if ($bRegistered) {
+            if ($bAutoLoginAfterRegistration) {
+                $this->DirectLogin($this->fieldName, $this->fieldPassword);
+                $this->GetShippingAddress(true, true);
+            }
+            $this->PostRegistrationHook();
         }
 
-        if (true === $bAutoLoginAfterRegistration) {
-            $this->DirectLogin($this->fieldName, $this->fieldPassword);
-            $this->GetShippingAddress(true, true);
-        }
-        $this->PostRegistrationHook();
-
-        return true;
+        return $bRegistered;
     }
 
     /**
