@@ -221,7 +221,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             }
 
             if (true === $bDataValid) {
-                $bDataValid = $oUser->Register();
+                $registrationResult = $oUser->Register();
+                $bDataValid = false !== $registrationResult;
             }
 
             if (true === $bDataValid) {
