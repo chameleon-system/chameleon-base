@@ -225,7 +225,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * @param bool $bForceUserConfirmMail
      * @param bool $bAutoLoginAfterRegistration
      *
-     * @return bool|string
+     * @return bool|string the id or false for an error
      */
     public function Register($bForceUserConfirmMail = false, $bAutoLoginAfterRegistration = true)
     {
