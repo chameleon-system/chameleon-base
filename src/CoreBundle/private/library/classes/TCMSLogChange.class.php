@@ -950,7 +950,7 @@ class TCMSLogChange
         $existsCheckArray = [ 'name' => $sIdentifierName, ];
 
         if ('' !== $sPortalID) {
-            $existsCheckQuery .= ' AND `portal_id` = :portalId';
+            $existsCheckQuery .= ' AND `cms_portal_id` = :portalId';
             $existsCheckArray['portalId'] = $sPortalID;
         }
 
