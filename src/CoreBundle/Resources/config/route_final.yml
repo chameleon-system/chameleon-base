@@ -8,4 +8,4 @@ cms_tpl_page:
   path: /{pagePath}
   defaults: { _controller: chameleon_system_core.tpl_page_controller:getPage }
   requirements:
-    pagePath: ".*"
+    pagePath: ".+"
