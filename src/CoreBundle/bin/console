@@ -36,11 +36,6 @@ $input = new ArgvInput();
 $env = $input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'dev');
 $debug = '0' !== getenv('SYMFONY_DEBUG') && !$input->hasParameterOption(array('--no-debug', '')) && 'prod' !== $env;
 
-try {
-    $kernel = new AppKernel($env, $debug);
-    $application = new Application($kernel);
-    $application->setCatchExceptions(false);
-    $application->run($input);
-} catch (Exception $e) {
-    echo $e;
-}
+$kernel = new AppKernel($env, $debug);
+$application = new Application($kernel);
+$application->run($input);
