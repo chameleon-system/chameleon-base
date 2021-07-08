@@ -10,6 +10,7 @@
  */
 
 use Doctrine\DBAL\Connection;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
 /**
  * manages the TableEditor classes.
@@ -327,12 +328,7 @@ class TCMSTableEditorManager
             $this->RefreshLock();
 
             if ('_mlt' === substr($this->sRestrictionField, -4)) {
-                $sourceTable = substr($this->sRestrictionField, 0, -4);
-
-                $targetTable = $this->oTableConf->sqlData['name'];
-                $MLTTable = $sourceTable.'_'.$targetTable.'_mlt';
-                $mltQuery = 'INSERT INTO `'.MySqlLegacySupport::getInstance()->real_escape_string($MLTTable)."` SET `source_id` ='".MySqlLegacySupport::getInstance()->real_escape_string($this->sRestriction)."', `target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'";
-                MySqlLegacySupport::getInstance()->query($mltQuery);
+                $this->addInverseRestrictingMLTConnection($this->sRestrictionField, $this->sRestriction);
             }
         }
 
@@ -501,6 +497,19 @@ class TCMSTableEditorManager
         }
     }
 
+    private function addInverseRestrictingMLTConnection(string $restrictionField, string $restriction): void
+    {
+        $sourceTable = substr($restrictionField, 0, -4);
+        $targetTable = $this->oTableConf->sqlData['name'];
+
+        /** @var string $fieldName */
+        $fieldName = $this->getInputFilterUtil()->getFilteredInput('field') ?? ($targetTable . '_mlt');
+
+        $tableEditor = new TCMSTableEditorManager();
+        $tableEditor->Init(TTools::GetCMSTableId($sourceTable), $restriction);
+        $tableEditor->AddMLTConnection($fieldName, $this->sId);
+    }
+
     /**
      * adds one connection to mlt.
      *
@@ -633,5 +642,10 @@ class TCMSTableEditorManager
         }
 
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

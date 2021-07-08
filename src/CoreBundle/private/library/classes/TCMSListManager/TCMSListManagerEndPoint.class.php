@@ -545,7 +545,7 @@ class TCMSListManagerEndPoint
     {
         $oGlobal = TGlobal::instance();
         $aAdditionalParameterData = array();
-        $aAdditionalParameters = array('sRestrictionField', 'sRestriction', 'bIsLoadedFromIFrame');
+        $aAdditionalParameters = array('sRestrictionField', 'sRestriction', 'bIsLoadedFromIFrame', 'field');
         foreach ($aAdditionalParameters as $sKey) {
             if ($oGlobal->UserDataExists($sKey)) {
                 $aAdditionalParameterData[$sKey] = $oGlobal->GetUserData($sKey);

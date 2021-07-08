@@ -31,6 +31,9 @@ if (!defined('MYSQL_BOTH')) {
  */
 class MySqlLegacySupport
 {
+    /** @var self|null */
+    private static $instance;
+
     /**
      * @var Connection
      */
@@ -39,6 +42,7 @@ class MySqlLegacySupport
      * @var Statement|null
      */
     private $lastStatement = null;
+
     /**
      * @var DBALException|null
      */
@@ -630,14 +634,24 @@ class MySqlLegacySupport
      */
     public static function getInstance()
     {
-        static $instance = null;
-
-        if (null !== $instance) {
-            return $instance;
+        if (null !== self::$instance) {
+            return self::$instance;
         }
 
-        $instance = new self(ServiceLocator::get('database_connection'));
+        self::$instance = new self(ServiceLocator::get('database_connection'));
 
-        return $instance;
+        return self::$instance;
+    }
+
+    /**
+     * Resets the instance re-used by `getInstance`.
+     *
+     * @warning
+     * This method is only meant to be called in Tests in order to clear the state and not
+     * leave behind a dirty / unknown global state for the next test.
+     */
+    public static function resetInstance(): void
+    {
+        self::$instance = null;
     }
 }
