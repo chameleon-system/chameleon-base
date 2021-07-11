@@ -201,7 +201,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             $this->PrepareSubmittedData($aData);
             $extranetUserProvider->reset();
             $oUser = $extranetUserProvider->getActiveUser();
-            $oUser->LoadFromRow($aData);
+            $oUser->LoadFromRow($aData, true);
 
             $bDataValid = $this->ValidateUserLoginData();
             $bDataValid = $this->ValidateUserData() && $bDataValid;
