@@ -58,12 +58,13 @@ class TCMSFieldMedia extends TCMSField
         parent::GetHTML();
         $aImageData = array();
         $iPosition = 0;
+        $this->oTableConf = $this->oTableRow->GetTableConf();
+        
         /* @var $oImage TCMSImage */
         while ($oImage = $oImages->Next()) {
             $oViewRenderer = $this->getViewRenderer();
             $oViewRenderer->addMapperFromIdentifier('chameleon_system_core.mapper.media_field_image_box');
             $oViewRenderer->AddMapper(new TPkgCmsTextfieldImage());
-            $this->oTableConf = $this->oTableRow->GetTableConf();
             $oViewRenderer->AddSourceObject('sFieldName', $this->name);
             $oViewRenderer->AddSourceObject('sTableId', $this->oTableConf->id);
             $oViewRenderer->AddSourceObject('sRecordId', $this->recordId);
@@ -73,12 +74,29 @@ class TCMSFieldMedia extends TCMSField
 
             $iWidth = 0;
             $iHeight = 0;
-            if (isset($oImage->aData) && isset($oImage->aData['height'])) {
-                $iHeight = $oImage->aData['height'];
+            if (isset($oImage->aData)) {
+                if (isset($oImage->aData['height'])) {
+                    $iHeight = $oImage->aData['height'];
+                } else {
+                    if (isset($this->oTableRow->sqlData['width'])) {
+                        $oImage->aData['height'] = $this->oTableRow->sqlData['height'];
+                        $iHeight = $oImage->aData['height'];
+                    } else {
+                        $oImage->aData['height'] = $iHeight;
+                    }
+                }
+                if (isset($oImage->aData['width'])) {
+                    $iWidth = $oImage->aData['width'];
+                } else {
+                    if (isset($this->oTableRow->sqlData['width'])) {
+                        $oImage->aData['width'] = $this->oTableRow->sqlData['width'];
+                        $iWidth = $oImage->aData['width'];
+                    } else {
+                        $oImage->aData['width'] = $iWidth;
+                    }
+                }
             }
-            if (isset($oImage->aData) && isset($oImage->aData['width'])) {
-                $iWidth = $oImage->aData['width'];
-            }
+
             if (0 == $iHeight) {
                 $iHeight = 150;
             }
