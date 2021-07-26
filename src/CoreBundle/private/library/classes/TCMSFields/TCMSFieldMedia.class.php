@@ -74,25 +74,25 @@ class TCMSFieldMedia extends TCMSField
 
             $iWidth = 0;
             $iHeight = 0;
-            if (isset($oImage->aData)) {
-                if (isset($oImage->aData['height'])) {
+            if (is_array($oImage->aData)) {
+                if (array_key_exists('height', $oImage->aData)) {
                     $iHeight = $oImage->aData['height'];
                 } else {
-                    if (isset($this->oTableRow->sqlData['width'])) {
+                    if (array_key_exists('height', $this->oTableRow->sqlData)) {
                         $oImage->aData['height'] = $this->oTableRow->sqlData['height'];
                         $iHeight = $oImage->aData['height'];
                     } else {
-                        $oImage->aData['height'] = $iHeight;
+                        $oImage->aData['height'] = 0;
                     }
                 }
-                if (isset($oImage->aData['width'])) {
+                if (array_key_exists('width', $oImage->aData)) {
                     $iWidth = $oImage->aData['width'];
                 } else {
-                    if (isset($this->oTableRow->sqlData['width'])) {
+                    if (array_key_exists('width', $this->oTableRow->sqlData)) {
                         $oImage->aData['width'] = $this->oTableRow->sqlData['width'];
                         $iWidth = $oImage->aData['width'];
                     } else {
-                        $oImage->aData['width'] = $iWidth;
+                        $oImage->aData['width'] = 0;
                     }
                 }
             }
