@@ -58,12 +58,13 @@ class TCMSFieldMedia extends TCMSField
         parent::GetHTML();
         $aImageData = array();
         $iPosition = 0;
+        $this->oTableConf = $this->oTableRow->GetTableConf();
+        
         /* @var $oImage TCMSImage */
         while ($oImage = $oImages->Next()) {
             $oViewRenderer = $this->getViewRenderer();
             $oViewRenderer->addMapperFromIdentifier('chameleon_system_core.mapper.media_field_image_box');
             $oViewRenderer->AddMapper(new TPkgCmsTextfieldImage());
-            $this->oTableConf = $this->oTableRow->GetTableConf();
             $oViewRenderer->AddSourceObject('sFieldName', $this->name);
             $oViewRenderer->AddSourceObject('sTableId', $this->oTableConf->id);
             $oViewRenderer->AddSourceObject('sRecordId', $this->recordId);
