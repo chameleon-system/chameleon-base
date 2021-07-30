@@ -88,7 +88,7 @@ class TCMSURLHistory
         $this->aHistory = array_values($this->aHistory);
     }
 
-    public function getSimilarHistoryElementIndex(array $newElementParameters, string $breadcrumbName = ''): ?int
+    public function getSimilarHistoryElementIndex(array $newElementParameters, string $historyElementName = ''): ?int
     {
         $newElementUrl = $this->EncodeParameters($newElementParameters, false);
 
@@ -98,7 +98,7 @@ class TCMSURLHistory
                 return $key;
             }
 
-            if (true === $this->isSamePageExists($historyElement, $breadcrumbName)) {
+            if (true === $this->isSameNameExists($historyElement, $historyElementName)) {
                 return $key;
             }
         }
@@ -272,12 +272,12 @@ class TCMSURLHistory
         }
     }
 
-    private function isSamePageExists(array $historyElement, string $breadcrumbName = ''): bool
+    private function isSameNameExists(array $historyElement, string $historyElementName = ''): bool
     {
-        if ('' === $breadcrumbName) {
+        if ('' === $historyElementName) {
             return false;
         }
 
-        return strpos($historyElement['name'], $breadcrumbName);
+        return strpos($historyElement['name'], $historyElementName);
     }
 }
