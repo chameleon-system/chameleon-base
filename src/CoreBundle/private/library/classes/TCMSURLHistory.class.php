@@ -66,7 +66,7 @@ class TCMSURLHistory
      */
     public function AddItem($aParameter, $name = '')
     {
-        $foundHistoryElementIndex = $this->getSimilarHistoryElementIndex($aParameter);
+        $foundHistoryElementIndex = $this->getSimilarHistoryElementIndex($aParameter, $name);
 
         if (null !== $foundHistoryElementIndex) {
             // element found, so remove it and add the new one at the end.
@@ -88,7 +88,7 @@ class TCMSURLHistory
         $this->aHistory = array_values($this->aHistory);
     }
 
-    public function getSimilarHistoryElementIndex(array $newElementParameters): ?int
+    public function getSimilarHistoryElementIndex(array $newElementParameters, string $breadcrumbName = ''): ?int
     {
         $newElementUrl = $this->EncodeParameters($newElementParameters, false);
 
@@ -97,7 +97,12 @@ class TCMSURLHistory
             if ($this->EncodeParameters($historyElement['params'], false) === $newElementUrl) {
                 return $key;
             }
+
+            if (true === $this->isSamePageExists($historyElement, $breadcrumbName)) {
+                return $key;
+            }
         }
+
         reset($this->aHistory);
 
         return null;
@@ -265,5 +270,14 @@ class TCMSURLHistory
 
             $this->aHistory = array_values($this->aHistory);
         }
+    }
+
+    private function isSamePageExists(array $historyElement, string $breadcrumbName = ''): bool
+    {
+        if ('' === $breadcrumbName) {
+            return false;
+        }
+
+        return strpos($historyElement['name'], $breadcrumbName);
     }
 }
