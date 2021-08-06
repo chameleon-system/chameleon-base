@@ -894,23 +894,44 @@ class TCMSLogChange
     }
 
     /**
-     * Get id of cms_message_manager_message_type my name (e.g. "Popup Notice").
+     * Get id of cms_message_manager_message_type by name (e.g. "Popup Notice").
      *
-     * @param $sMessageTypeName
+     * @param string $sMessageTypeName
      *
      * @return string
      */
     public static function GetMessageTypeByName($sMessageTypeName)
     {
-        $sRet = '';
-        if (!empty($sMessageTypeName)) {
-            $oMsgType = TdbCmsMessageManagerMessageType::GetNewInstance();
-            if ($oMsgType->LoadFromField('name', $sMessageTypeName)) {
-                $sRet = $oMsgType->id;
-            }
+        if (true === empty($sMessageTypeName)) {
+            return '';
         }
 
-        return $sRet;
+        $language = self::getLanguageService()->getActiveEditLanguage();
+        $translatedFieldName = self::getFieldTranslationUtil()->getTranslatedFieldName('cms_message_manager_message', 'name', $language);
+        $dbConnection = self::getDatabaseConnection();
+        $quotedMessageTypeName = $dbConnection->quote($sMessageTypeName);
+
+        if ('name' === $translatedFieldName) {
+            $query = "SELECT 
+                            `cms_message_manager_message_type`.`id` 
+                        FROM `cms_message_manager_message_type` 
+                       WHERE ".$dbConnection->quoteIdentifier('name')." = ".$quotedMessageTypeName;
+        } else {
+            $query = "SELECT 
+                            `cms_message_manager_message_type`.`id` 
+                        FROM `cms_message_manager_message_type` 
+                       WHERE ".$dbConnection->quoteIdentifier($translatedFieldName)." = ".$quotedMessageTypeName."
+                          OR (".$dbConnection->quoteIdentifier('name')." = ".$quotedMessageTypeName." 
+                             AND ".$dbConnection->quoteIdentifier($translatedFieldName)." = '')
+                ";
+        }
+
+        $messageTypeList = \TdbCmsMessageManagerMessageTypeList::GetList($query);
+        if ($messageTypeList->Length() === 0) {
+            return '';
+        }
+
+        return $messageTypeList->Current()->id;
     }
 
     /**
@@ -2394,6 +2415,6 @@ class TCMSLogChange
      */
     private static function getSnippetChainModifier()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier');
+        return ServiceLocator::get('chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier');
     }
 }
