@@ -76,9 +76,9 @@ class FlashMessageService implements FlashMessageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function consumeMessages($consumer, $remove = true)
+    public function consumeMessages($consumer, $remove = true, bool $includeGlobalConsumer = true)
     {
-        return $this->getHandler()->ConsumeMessages($consumer, $remove);
+        return $this->getHandler()->ConsumeMessages($consumer, $remove, $includeGlobalConsumer);
     }
 
     /**
@@ -105,17 +105,17 @@ class FlashMessageService implements FlashMessageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function consumerHasMessages($sConsumerName)
+    public function consumerHasMessages($sConsumerName, bool $includeGlobalConsumer = true)
     {
-        return $this->getHandler()->ConsumerHasMessages($sConsumerName);
+        return $this->getHandler()->ConsumerHasMessages($sConsumerName, $includeGlobalConsumer);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function consumerMessageCount($sConsumerName)
+    public function consumerMessageCount($sConsumerName, bool $includeGlobalConsumer = true)
     {
-        return $this->getHandler()->ConsumerMessageCount($sConsumerName);
+        return $this->getHandler()->ConsumerMessageCount($sConsumerName, $includeGlobalConsumer);
     }
 
     /**

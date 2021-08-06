@@ -223,11 +223,12 @@ class TCMSMessageManager
      * the end of the list.
      *
      * @param string $sConsumerName
-     * @param bool   $bRemove
+     * @param bool $bRemove
+     * @param bool $includeGlobalConsumer
      *
      * @return TIterator
      */
-    public function ConsumeMessages($sConsumerName, $bRemove = true)
+    public function ConsumeMessages($sConsumerName, $bRemove = true, bool $includeGlobalConsumer = true)
     {
         $oMessages = null;
         if (array_key_exists($sConsumerName, $this->aMessages)) {
@@ -237,7 +238,7 @@ class TCMSMessageManager
             }
         }
         // add global parameters
-        if (array_key_exists(self::GLOBAL_CONSUMER_NAME, $this->aMessages)) {
+        if (true === $includeGlobalConsumer && array_key_exists(self::GLOBAL_CONSUMER_NAME, $this->aMessages)) {
             if (is_null($oMessages)) {
                 $oMessages = $this->aMessages[self::GLOBAL_CONSUMER_NAME];
             } else {
@@ -299,13 +300,14 @@ class TCMSMessageManager
      * are global messages.
      *
      * @param string $sConsumerName
+     * @param bool $includeGlobalConsumer
      *
      * @return bool
      */
-    public function ConsumerHasMessages($sConsumerName)
+    public function ConsumerHasMessages($sConsumerName, bool $includeGlobalConsumer = true)
     {
         $bHasMessages = false;
-        if ($this->ConsumerMessageCount($sConsumerName) > 0) {
+        if ($this->ConsumerMessageCount($sConsumerName, $includeGlobalConsumer) > 0) {
             $bHasMessages = true;
         }
 
@@ -313,20 +315,20 @@ class TCMSMessageManager
     }
 
     /**
-     * return the number of messages assigned to the consumer (global message will be included in the count).
+     * return the number of messages assigned to the consumer (global message will be included in the count by default).
      *
      * @param string $sConsumerName
      *
      * @return int
      */
-    public function ConsumerMessageCount($sConsumerName)
+    public function ConsumerMessageCount($sConsumerName, bool $includeGlobalConsumer = true)
     {
         $iMessageCount = 0;
-        if (array_key_exists(self::GLOBAL_CONSUMER_NAME, $this->aMessages)) {
+        if (true === $includeGlobalConsumer && array_key_exists(self::GLOBAL_CONSUMER_NAME, $this->aMessages)) {
             $iMessageCount = $this->aMessages[self::GLOBAL_CONSUMER_NAME]->Length();
         }
         if (array_key_exists($sConsumerName, $this->aMessages)) {
-            $iMessageCount = $iMessageCount + $this->aMessages[$sConsumerName]->Length();
+            $iMessageCount += $this->aMessages[$sConsumerName]->Length();
         }
 
         return $iMessageCount;
