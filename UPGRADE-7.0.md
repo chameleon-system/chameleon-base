@@ -161,6 +161,7 @@ Entities that were NOT removed include (incomplete list):
 - TGlobal::Translate()
 - TTools::GetArrayAsURL() and TTools::GetArrayAsURLForJavascript()
 - TCMSLogChange::_RunQuery()
+- TCMSLogChange::GetMessageTypeByName()
 - MySQLLegacySupport
 - instance() methods
 
