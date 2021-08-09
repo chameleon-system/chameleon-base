@@ -897,41 +897,27 @@ class TCMSLogChange
      * Get id of cms_message_manager_message_type by name (e.g. "Popup Notice").
      *
      * @param string $sMessageTypeName
+     * @param string $languageIso - default is "DE" for backwards compatibility reasons.
      *
      * @return string
      */
-    public static function GetMessageTypeByName($sMessageTypeName)
+    public static function GetMessageTypeByName(string $sMessageTypeName, string $languageIso = 'de')
     {
         if (true === empty($sMessageTypeName)) {
             return '';
         }
 
-        $language = self::getLanguageService()->getActiveEditLanguage();
-        $translatedFieldName = self::getFieldTranslationUtil()->getTranslatedFieldName('cms_message_manager_message', 'name', $language);
-        $dbConnection = self::getDatabaseConnection();
-        $quotedMessageTypeName = $dbConnection->quote($sMessageTypeName);
+        $language = self::getLanguageService()->getLanguageFromIsoCode(\strtolower($languageIso));
 
-        if ('name' === $translatedFieldName) {
-            $query = "SELECT 
-                            `cms_message_manager_message_type`.`id` 
-                        FROM `cms_message_manager_message_type` 
-                       WHERE ".$dbConnection->quoteIdentifier('name')." = ".$quotedMessageTypeName;
-        } else {
-            $query = "SELECT 
-                            `cms_message_manager_message_type`.`id` 
-                        FROM `cms_message_manager_message_type` 
-                       WHERE ".$dbConnection->quoteIdentifier($translatedFieldName)." = ".$quotedMessageTypeName."
-                          OR (".$dbConnection->quoteIdentifier('name')." = ".$quotedMessageTypeName." 
-                             AND ".$dbConnection->quoteIdentifier($translatedFieldName)." = '')
-                ";
+        $messageType = \TdbCmsMessageManagerMessageType::GetNewInstance();
+        if (null !== $language) {
+            $messageType->SetLanguage($language->id);
         }
-
-        $messageTypeList = \TdbCmsMessageManagerMessageTypeList::GetList($query);
-        if ($messageTypeList->Length() === 0) {
+        if (false === $messageType->LoadFromField('name', $sMessageTypeName)) {
             return '';
         }
 
-        return $messageTypeList->Current()->id;
+        return $messageType->id;
     }
 
     /**
