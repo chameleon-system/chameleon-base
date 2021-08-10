@@ -165,6 +165,16 @@ $data = TCMSLogChange::createMigrationQueryData('cms_message_manager_message_typ
 ;
 TCMSLogChange::update(__LINE__, $data);
 
+$data = TCMSLogChange::createMigrationQueryData('cms_message_manager_message_type', 'en')
+    ->setFields([
+        'systemname' => 'error_striking',
+    ])
+    ->setWhereEquals([
+        'id' => '6',
+    ])
+;
+TCMSLogChange::update(__LINE__, $data);
+
 $query = "UPDATE `cms_message_manager_message_type` SET `systemname` = 'popup' WHERE `name` LIKE 'Popup%'";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
