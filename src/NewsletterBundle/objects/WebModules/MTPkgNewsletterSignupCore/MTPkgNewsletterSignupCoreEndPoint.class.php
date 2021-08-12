@@ -360,7 +360,11 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
             $aReturnArray = array();
             if (!empty($this->instanceID) && $this->instanceID == $oConfig->fieldCmsTplModuleInstanceId) {
                 $aReturnArray['spotname'] = $this->sModuleSpotName;
-                $aReturnArray['URL'] = $this->getActivePageService()->getLinkToActivePageRelative();
+                $aReturnArray['URL'] = preg_replace(
+                    '/\?.*/',
+                    '',
+                    $this->getActivePageService()->getLinkToActivePageRelative()
+                );
             } else {
                 $oPortal = $this->getPortalDomainService()->getActivePortal();
                 $oModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
