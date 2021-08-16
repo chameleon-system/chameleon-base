@@ -300,14 +300,14 @@ class TCMSMessageManager
      * are global messages.
      *
      * @param string $sConsumerName
-     * @param bool $includeGlobalConsumer
+     * @param bool $includeGlobal
      *
      * @return bool
      */
-    public function ConsumerHasMessages($sConsumerName, bool $includeGlobalConsumer = true)
+    public function ConsumerHasMessages($sConsumerName, bool $includeGlobal = true)
     {
         $bHasMessages = false;
-        if ($this->ConsumerMessageCount($sConsumerName, $includeGlobalConsumer) > 0) {
+        if ($this->ConsumerMessageCount($sConsumerName, $includeGlobal) > 0) {
             $bHasMessages = true;
         }
 
@@ -321,10 +321,10 @@ class TCMSMessageManager
      *
      * @return int
      */
-    public function ConsumerMessageCount($sConsumerName, bool $includeGlobalConsumer = true)
+    public function ConsumerMessageCount($sConsumerName, bool $includeGlobal = true)
     {
         $iMessageCount = 0;
-        if (true === $includeGlobalConsumer && array_key_exists(self::GLOBAL_CONSUMER_NAME, $this->aMessages)) {
+        if (true === $includeGlobal && array_key_exists(self::GLOBAL_CONSUMER_NAME, $this->aMessages)) {
             $iMessageCount = $this->aMessages[self::GLOBAL_CONSUMER_NAME]->Length();
         }
         if (array_key_exists($sConsumerName, $this->aMessages)) {
