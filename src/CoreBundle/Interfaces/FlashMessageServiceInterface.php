@@ -26,11 +26,11 @@ interface FlashMessageServiceInterface
     /**
      * @param string $consumer
      * @param bool $remove
-     * @param bool $includeGlobalConsumer
+     * @param bool $includeGlobal
      *
      * @return TIterator
      */
-    public function consumeMessages($consumer, $remove = true, bool $includeGlobalConsumer = true);
+    public function consumeMessages($consumer, $remove = true, bool $includeGlobal = true);
 
     /**
      * @param string      $sConsumerName
@@ -50,19 +50,19 @@ interface FlashMessageServiceInterface
 
     /**
      * @param string $sConsumerName
-     * @param bool $includeGlobalConsumer
+     * @param bool $includeGlobal
      *
      * @return bool
      */
-    public function consumerHasMessages($sConsumerName, bool $includeGlobalConsumer = true);
+    public function consumerHasMessages($sConsumerName, bool $includeGlobal = true);
 
     /**
      * @param string $sConsumerName
-     * @param bool $includeGlobalConsumer
+     * @param bool $includeGlobal
      *
      * @return int
      */
-    public function consumerMessageCount($sConsumerName, bool $includeGlobalConsumer = true);
+    public function consumerMessageCount($sConsumerName, bool $includeGlobal = true);
 
     /**
      * @return int
