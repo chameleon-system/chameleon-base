@@ -915,6 +915,12 @@ class TCMSLogChange
         return $sRet;
     }
 
+    /**
+     * The available default system names are: unknown, notice, warning, error, error_striking.
+     *
+     * @param string $messageTypeName
+     * @return string|null
+     */
     public static function getMessageTypeIdBySystemName(string $messageTypeName): ?string
     {
         $messageType = TdbCmsMessageManagerMessageType::GetNewInstance();
