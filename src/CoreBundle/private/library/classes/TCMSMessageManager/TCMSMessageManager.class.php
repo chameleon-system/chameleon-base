@@ -224,11 +224,11 @@ class TCMSMessageManager
      *
      * @param string $sConsumerName
      * @param bool $bRemove
-     * @param bool $includeGlobalConsumer
+     * @param bool $includeGlobal
      *
      * @return TIterator
      */
-    public function ConsumeMessages($sConsumerName, $bRemove = true, bool $includeGlobalConsumer = true)
+    public function ConsumeMessages($sConsumerName, $bRemove = true, bool $includeGlobal = true)
     {
         $oMessages = null;
         if (array_key_exists($sConsumerName, $this->aMessages)) {
@@ -238,7 +238,7 @@ class TCMSMessageManager
             }
         }
         // add global parameters
-        if (true === $includeGlobalConsumer && array_key_exists(self::GLOBAL_CONSUMER_NAME, $this->aMessages)) {
+        if (true === $includeGlobal && array_key_exists(self::GLOBAL_CONSUMER_NAME, $this->aMessages)) {
             if (is_null($oMessages)) {
                 $oMessages = $this->aMessages[self::GLOBAL_CONSUMER_NAME];
             } else {
