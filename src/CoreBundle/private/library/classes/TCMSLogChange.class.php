@@ -896,6 +896,8 @@ class TCMSLogChange
     /**
      * Get id of cms_message_manager_message_type by name (e.g. "Popup Notice").
      *
+     * @deprecated since 7.0.13 - use TCMSLogChange::getMessageTypeIdBySystemName() instead.
+     *
      * @param string $sMessageTypeName
      * @param string $languageIso - default is "DE" for backwards compatibility reasons.
      *
@@ -915,6 +917,22 @@ class TCMSLogChange
         }
         if (false === $messageType->LoadFromField('name', $sMessageTypeName)) {
             return '';
+        }
+
+        return $messageType->id;
+    }
+
+    /**
+     * The available default system names are: unknown, notice, warning, error, error_striking.
+     *
+     * @param string $messageTypeName
+     * @return string|null
+     */
+    public static function getMessageTypeIdBySystemName(string $messageTypeName): ?string
+    {
+        $messageType = TdbCmsMessageManagerMessageType::GetNewInstance();
+        if (false === $messageType->LoadFromField('systemname', $messageTypeName)) {
+            return null;
         }
 
         return $messageType->id;
