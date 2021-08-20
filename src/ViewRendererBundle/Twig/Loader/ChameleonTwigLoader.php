@@ -22,9 +22,6 @@ class ChameleonTwigLoader extends \Twig_Loader_Filesystem
 
     private $initialized = false;
 
-    /**
-     * @param TPkgViewRendererSnippetDirectoryInterface $snippetDirectory
-     */
     public function __construct(TPkgViewRendererSnippetDirectoryInterface $snippetDirectory)
     {
         $this->snippetDirectory = $snippetDirectory;
