@@ -31,7 +31,7 @@ class MigrationDataModelReducerTest extends TestCase
      */
     private $reducedModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->dataModel = null;

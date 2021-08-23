@@ -30,10 +30,6 @@ parameters:
   chameleon_system_core.mail_target_transformation_service.white_list: '@@PORTAL-DOMAINS'
 
   chameleon_system_core.request.trusted_proxies: "" # IP addresses (separated by comma) from which the forwarded headers are to be trusted. Make sure you define this when working in multi-server configurations
-  chameleon_system_core.request.trusted_header_client_ip: "" # the header under which the trusted proxy forwards the client IP address. defaults to X-Forwarded-For. See Symfony\Component\HttpFoundation\Request::setTrustedHeaderName for details
-  chameleon_system_core.request.trusted_header_client_host: "" # the header under which the trusted proxy forwards the client host. defaults to X-Forwarded-Host. See Symfony\Component\HttpFoundation\Request::setTrustedHeaderName for details
-  chameleon_system_core.request.trusted_header_client_port: "" # the header under which the trusted proxy forwards the client port. defaults to X-Forwarded-Port. See Symfony\Component\HttpFoundation\Request::setTrustedHeaderName for details
-  chameleon_system_core.request.trusted_header_client_protocol: "" # the header under which the trusted proxy forwards the client protocol. defaults to X-Forwarded-Proto. See Symfony\Component\HttpFoundation\Request::setTrustedHeaderName for details
 
   chameleon_system_core.resources.enable_external_resource_collection: true # if set to true, all external resources (css/js) are combined into one file
   chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix: "v0" # if CSS & JS are combined into one file, you can use this prefix to force a reload for clients

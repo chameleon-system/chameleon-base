@@ -63,20 +63,18 @@ class SnippetRendererTest extends TestCase
         $this->assertEquals($aExpected, $aSubstitutes);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testWrongEndingOfCapture()
     {
+        $this->expectException(BadMethodCallException::class);
+
         $renderer = TPkgSnippetRenderer::GetNewInstance('', false);
         $renderer->setCapturedVarStop();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testWrongStartingOfCapture()
     {
+        $this->expectException(BadMethodCallException::class);
+
         $renderer = TPkgSnippetRenderer::GetNewInstance('', false);
         $renderer->setCapturedVarStart('foo');
         try {

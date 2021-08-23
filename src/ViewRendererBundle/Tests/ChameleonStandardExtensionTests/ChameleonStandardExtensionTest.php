@@ -13,12 +13,15 @@ namespace ChameleonSystem\ViewRendererBundle\Tests\ChameleonStandardExtensionTes
 
 use ChameleonSystem\ViewRendererBundle\Twig\Extension\ChameleonStandardExtension;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
 use Twig\Markup;
 
 class ChameleonStandardExtensionTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var \Twig_Environment
      */
@@ -27,7 +30,7 @@ class ChameleonStandardExtensionTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $loaderMock = $this->prophesize(LoaderInterface::class);

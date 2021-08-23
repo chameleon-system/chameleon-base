@@ -21,7 +21,7 @@ class ModuleMapperChainConfigTest extends TestCase
     private $mapperChainConfig;
     private $exceptionThrown;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->mapperChainConfig = null;
