@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 class SnippetRendererTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         if (!defined('TESTSUITE')) {
@@ -26,7 +26,7 @@ class SnippetRendererTest extends TestCase
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         //$twigEnv = $this->getMockBuilder('Twig_Environment')->getMock();
         $snippetRenderer = new TPkgSnippetRenderer(new \Twig\Environment(new \Twig\Loader\FilesystemLoader()), new \Twig\Environment(new TwigStringLoader()), new \Psr\Log\NullLogger());
