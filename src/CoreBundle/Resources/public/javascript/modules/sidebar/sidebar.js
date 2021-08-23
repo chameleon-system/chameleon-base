@@ -20,7 +20,6 @@
     $.extend(Plugin.prototype, {
         init: function () {
             this.$filterElement.on('keyup', this.filter.bind(this));
-            this.$baseElement.find('.sidebar-minimizer').on('click', this.onSidebarToggle.bind(this));
             this.$baseElement.find('.nav-dropdown-toggle').on('click', this.onCategoryToggle.bind(this));
             this.$navItems.not(".nav-dropdown").on("click", this.onElementClick.bind(this));
 
@@ -230,19 +229,6 @@
             const url = this.$baseElement.data('toggle-category-notification-url');
             $.post(url, {
                 categoryId: categoryId
-            });
-        },
-        onSidebarToggle: function () {
-            const url = this.$baseElement.data('toggle-notification-url');
-            let displayState;
-            // The following condition is inverted, as this handler will be executed before the actual class change.
-            if (document.body.classList.contains('sidebar-minimized')) {
-                displayState = 'shown';
-            } else {
-                displayState = 'minimized';
-            }
-            $.post(url, {
-                displayState: displayState
             });
         },
         onElementClick: function (event) {

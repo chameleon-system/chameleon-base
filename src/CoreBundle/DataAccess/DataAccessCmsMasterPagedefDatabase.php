@@ -31,7 +31,7 @@ class DataAccessCmsMasterPagedefDatabase implements DataAccessCmsMasterPagedefIn
         $oPageDefinitionFile = null;
 
         // TODO querying the request is quite unfortunate (unexpected) here.
-        $requestMasterPageDef = $this->inputFilterUtil->getFilteredInput('__masterPageDef', false);
+        $requestMasterPageDef = 'true' === $this->inputFilterUtil->getFilteredInput('__masterPageDef');
 
         if (true === $requestMasterPageDef && true ===  TGlobal::CMSUserDefined()) {
             // load master pagedef...
