@@ -31,26 +31,20 @@ class TCMSFieldText extends TCMSField
 
     private function renderTextArea(string $data, bool $readOnly): string
     {
-        // make usage of the textarea resizer and save scrolling by setting variable textarea size based on field content
+        $cssParts = [];
+        if ('100%' !== $this->fieldCSSwidth) {
+            $cssParts[] = 'width:'.$this->fieldCSSwidth;
+        }
 
-        if (empty($data)) {
-            $iTextareaSize = 30;
-        } elseif (strlen($data) <= 400) {
-            $iTextareaSize = 50;
-        } elseif (strlen($data) <= 1000) {
-            $iTextareaSize = 100;
-        } else {
-            $count = count(explode("\n", $data));
-            $iTextareaSize = $count * 14 + 50;
-            if ($iTextareaSize > 200) {
-                $iTextareaSize = 200;
+        if ('' !== $data) {
+            $lineCount = count(explode("\n", $data));
+            $height = min(300, 18 * ($lineCount + 2)); // 18 should correspond to the actual line height
+            if ($height > 100) {
+                $cssParts[] = 'height:'.$height.'px';
             }
         }
 
-        $cssWidth = '';
-        if ('100%' !== $this->fieldCSSwidth) {
-            $cssWidth = 'width: '.$this->fieldCSSwidth;
-        }
+        $cssStyle = \implode(';', $cssParts);
 
         $html = '';
         $html .= sprintf(
@@ -58,7 +52,7 @@ class TCMSFieldText extends TCMSField
             TGlobal::OutHTML($this->name),
             TGlobal::OutHTML($this->name),
             $this->fieldWidth,
-            'height: '.$iTextareaSize.'px;'.$cssWidth,
+            $cssStyle,
             true === $readOnly ? 'readonly' : ''
         );
         $html .= TGlobal::OutHTML($data);
