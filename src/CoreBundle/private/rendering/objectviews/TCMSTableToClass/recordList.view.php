@@ -90,7 +90,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      * if we are at the end of the record, then the function will return false (like after GoToLast)
      * if we are at the start of the record (like after GoToStart), then it will return the first element
      *
-     * @return bool|<?php echo $sClassName."\n"; ?>
+     * @return <?php echo $sClassName."\n"; ?>
      */
     public function &Current()
     {
@@ -101,7 +101,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      * returns the next element from the list, moving the pointer to the next
      * record
      *
-     * @return bool|<?php echo $sClassName."\n"; ?>
+     * @return false|<?php echo $sClassName."\n"; ?>
      */
     public function &Next()
     {
@@ -111,7 +111,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
     /**
      * returns the previous record from the list, moving the pointer back one
      *
-     * @return bool|<?php echo $sClassName."\n"; ?>
+     * @return false|<?php echo $sClassName."\n"; ?>
      */
     public function &Previous()
     {

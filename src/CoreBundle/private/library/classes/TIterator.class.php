@@ -141,7 +141,7 @@ class TIterator
      * @param string $propertyValue - property value
      * @param bool   $bIgnoreCase   - do a case insenstive compare
      *
-     * @return object|bool
+     * @return object|false
      */
     public function FindItemWithProperty($propertyName, $propertyValue, $bIgnoreCase = false)
     {
@@ -267,7 +267,7 @@ class TIterator
     /**
      * returns the current item in the list and advances the list pointer by 1.
      *
-     * @return object
+     * @return object|false
      */
     public function &next()
     {
@@ -296,6 +296,8 @@ class TIterator
 
     /**
      * Resets the pointer back to the start of the list.
+     *
+     * @return void
      */
     public function GoToStart()
     {
@@ -305,6 +307,8 @@ class TIterator
 
     /**
      * Returns the number of elements in the list.
+     *
+     * @return int
      */
     public function Length()
     {
@@ -332,7 +336,7 @@ class TIterator
     /**
      * returns one random element from the list.
      *
-     * @return object|bool $item
+     * @return object|false $item
      */
     public function &Random()
     {
@@ -347,6 +351,7 @@ class TIterator
 
     /**
      * shuffle list.
+     * @return void
      */
     public function ShuffleList()
     {
@@ -356,6 +361,7 @@ class TIterator
 
     /**
      * reverses the item list.
+     * @return void
      */
     public function ReverseItemList()
     {

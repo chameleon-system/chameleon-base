@@ -118,7 +118,17 @@ class TCMSRecordList extends TIterator
     private $databaseConnection;
 
     protected $estimationLowerLimit;
+
+    /**
+     * PDO style parameters
+     * @var array
+     */
     private $queryParameters;
+
+    /**
+     * PDO style parameters types
+     * @var array
+     */
     private $queryParameterTypes;
 
     protected function getItemPointer()
@@ -488,6 +498,8 @@ class TCMSRecordList extends TIterator
      * @param string $sQuery
      * @param array  $queryParameters     - PDO style parameters
      * @param array  $queryParameterTypes - PDO style parameter types
+     *
+     * @return void
      */
     public function Load($sQuery, array $queryParameters = array(), array $queryParameterTypes = array())
     {
@@ -497,11 +509,17 @@ class TCMSRecordList extends TIterator
         $this->ResetList();
     }
 
+    /**
+     * @return array
+     */
     protected function getQueryParameters()
     {
         return $this->queryParameters;
     }
 
+    /**
+     * @return array
+     */
     protected function getQueryParameterTypes()
     {
         return $this->queryParameterTypes;
@@ -514,7 +532,7 @@ class TCMSRecordList extends TIterator
      * @param string $propertyName
      * @param string $propertyValue
      *
-     * @return bool|void
+     * @return void
      */
     public function RemoveItem($propertyName, $propertyValue)
     {
@@ -559,6 +577,8 @@ class TCMSRecordList extends TIterator
 
     /**
      * jumps to start of list.
+     *
+     * @return void
      */
     public function GoToStart()
     {
@@ -567,6 +587,8 @@ class TCMSRecordList extends TIterator
 
     /**
      * jump to end of list.
+     *
+     * @return void
      */
     public function GoToEnd()
     {
@@ -619,7 +641,7 @@ class TCMSRecordList extends TIterator
      * if we are at the end of the record, then the function will return false (like after GoToLast)
      * if we are at the start of the record (like after GoToStart), then it will return the first element.
      *
-     * @return TCMSRecord|bool
+     * @return TCMSRecord|false
      */
     public function &current()
     {
@@ -635,7 +657,7 @@ class TCMSRecordList extends TIterator
      * returns the next element from the list, moving the pointer to the next
      * record.
      *
-     * @return TCMSRecord|bool
+     * @return TCMSRecord|false
      */
     public function &next()
     {
@@ -654,7 +676,7 @@ class TCMSRecordList extends TIterator
     /**
      * returns the previous record from the list, moving the pointer back one.
      *
-     * @return TCMSRecord|bool
+     * @return TCMSRecord|false
      */
     public function &Previous()
     {
@@ -779,7 +801,7 @@ class TCMSRecordList extends TIterator
     /**
      * Returns the number of the page we're currently on.
      *
-     * @return integer: Page number
+     * @return int Page number
      */
     public function GetCurrentPageNumber()
     {
@@ -797,7 +819,7 @@ class TCMSRecordList extends TIterator
     /**
      * Returns the total number of pages in this list.
      *
-     * @return integer: Number of pages
+     * @return int Number of pages
      */
     public function GetTotalPageCount()
     {
@@ -896,6 +918,7 @@ class TCMSRecordList extends TIterator
      * Set or change the active list limit.
      *
      * @param int $iNewListLimit
+     * @return void
      */
     public function SetActiveListLimit($iNewListLimit)
     {

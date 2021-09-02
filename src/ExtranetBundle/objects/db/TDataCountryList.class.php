@@ -13,6 +13,8 @@ class TDataCountryList extends TDataCountryListAutoParent
 {
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function Load($sQuery, array $queryParameters = array(), array $queryParameterTypes = array())
     {

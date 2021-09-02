@@ -71,7 +71,7 @@ class TCMSFileList extends TIterator
      * @param string $sString
      * @param string $sPattern - regex
      *
-     * @return array|bool
+     * @return array|false
      */
     protected function StringMatchesPattern($sString, $sPattern)
     {
@@ -98,7 +98,7 @@ class TCMSFileList extends TIterator
     /**
      * returns the current item in the list and advances the list pointer by 1.
      *
-     * @return TCMSFile
+     * @return TCMSFile|false
      */
     public function &next()
     {
@@ -108,7 +108,7 @@ class TCMSFileList extends TIterator
     /**
      * returns the current item in the list and moves the list pointer back by 1.
      *
-     * @return TCMSFile
+     * @return TCMSFile|false
      */
     public function &Previous()
     {
@@ -118,7 +118,7 @@ class TCMSFileList extends TIterator
     /**
      * returns one random element from the list.
      *
-     * @return TCMSFile
+     * @return TCMSFile|false
      */
     public function &Random()
     {
