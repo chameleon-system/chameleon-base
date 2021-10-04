@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\CmsConfigDataAccessInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -39,17 +40,21 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
      * @var KernelInterface
      */
     private $kernel;
-
     /**
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param RequestInfoServiceInterface  $requestInfoService
-     * @param KernelInterface              $kernel
+     * @var CmsConfigDataAccessInterface
      */
-    public function __construct(PortalDomainServiceInterface $portalDomainService, RequestInfoServiceInterface $requestInfoService, KernelInterface $kernel)
-    {
+    private $cmsConfigDataAccess;
+
+    public function __construct(
+        PortalDomainServiceInterface $portalDomainService,
+        RequestInfoServiceInterface $requestInfoService,
+        KernelInterface $kernel,
+        CmsConfigDataAccessInterface $cmsConfigDataAccess
+    ) {
         $this->portalDomainService = $portalDomainService;
         $this->requestInfoService = $requestInfoService;
         $this->kernel = $kernel;
+        $this->cmsConfigDataAccess = $cmsConfigDataAccess;
     }
 
     /**
@@ -459,8 +464,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
 
     private function addBackendThemePaths(array $paths, string $directorySuffix): array
     {
-        $config = TdbCmsConfig::GetInstance();
-        $backendTheme = $config->GetFieldPkgCmsTheme();
+        $backendTheme = $this->cmsConfigDataAccess->getBackendTheme();
 
         if (null === $backendTheme) {
             return $paths;
