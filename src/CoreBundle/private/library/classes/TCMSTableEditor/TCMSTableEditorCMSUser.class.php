@@ -1,5 +1,9 @@
 <?php
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Symfony\Component\Translation\TranslatorInterface;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+
 /*
  * This file is part of the Chameleon System (https://www.chameleonsystem.com).
  *
@@ -14,6 +18,8 @@
 /**/
 class TCMSTableEditorCMSUser extends TCMSTableEditor
 {
+    private TranslatorInterface $translator;
+
     public function DefineInterface()
     {
         parent::DefineInterface();
@@ -51,15 +57,16 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
     protected function GetCustomMenuItems()
     {
         parent::GetCustomMenuItems();
+        $this->translator = $this->getTranslator();
 
         if (true === $this->isSwitchToUserAllowed()) {
             $oMenuItem = new TCMSTableEditorMenuItem();
-            $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor_user.action_login_as_user');
+            $oMenuItem->setTitle($this->translator->trans('chameleon_system_core.table_editor_user.action_login_as_user'));
             $oMenuItem->sItemKey = 'changeuser';
             $oMenuItem->sIcon = 'fas fa-user-check';
 
             $aParam = array(
-                'pagedef' => TGlobal::instance()->GetUserData('pagedef'),
+                'pagedef' => $this->getInputFilterUtil()->getFilteredInput('pagedef'),
                 'tableid' => $this->oTableConf->id,
                 'id' => $this->sId,
                 'module_fnc' => array('contentmodule' => 'SwitchToUser'),
@@ -72,7 +79,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         }
         if (true === $this->isCopyPermissionsAllowed()) {
             $oMenuItem = new TCMSTableEditorMenuItem();
-            $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor_cms_user.clone_permissions');
+            $oMenuItem->setTitle($this->translator->trans('chameleon_system_core.table_editor_cms_user.clone_permissions'));
             $oMenuItem->sItemKey = 'copyUserRights';
             $oMenuItem->sIcon = 'fas fa-user-plus';
             $oMenuItem->sOnClick = 'openCopyUserRightsDialog();';
@@ -80,7 +87,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         }
         if (true === $this->isActivateUserAllowed()) {
             $oMenuItem = new TCMSTableEditorMenuItem();
-            $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor_cms_user.mail_login_data');
+            $oMenuItem->setTitle($this->translator->trans('chameleon_system_core.table_editor_cms_user.mail_login_data'));
             $oMenuItem->sItemKey = 'activateUser';
             $oMenuItem->sIcon = 'fas fa-check';
             $oMenuItem->sOnClick = 'ActivateUser();';
@@ -309,9 +316,9 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         if (false === $this->isCopyPermissionsAllowed()) {
             return;
         }
-        $oGlobal = TGlobal::instance();
-        if ($oGlobal->UserDataExists('copyUserRightsUserID')) {
-            $copyUserRightsUserID = $oGlobal->GetUserData('copyUserRightsUserID');
+
+        if (null !== $this->getInputFilterUtil()->getFilteredInput('copyUserRightsUserID')) {
+            $copyUserRightsUserID = $this->getInputFilterUtil()->getFilteredInput('copyUserRightsUserID');
             $oCmsUser = TdbCmsUser::GetNewInstance();
             if ($oCmsUser->Load($copyUserRightsUserID)) {
                 // reset group, role and portal rights
@@ -370,8 +377,8 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         if ($bValidEmail) {
             $oMailProfile->SendUsingObjectView('TDataMailProfile', 'Core');
 
-            $oGlobal = TGlobal::instance();
-            $aPostTmpData = $oGlobal->GetUserData();
+            $global = $this->getGlobal();
+            $aPostTmpData = $global->GetUserData();
 
             $postData = $this->oTable->sqlData;
             foreach ($postData as $key => $value) {
@@ -395,10 +402,11 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
+        $this->translator = $this->getTranslator();
 
         $aIncludes[] = "<script type=\"text/javascript\">
       function openCopyUserRightsDialog() {
-        CreateModalDialogFromContainer('copyUserRightsDialog');
+        CreateModalIFrameDialogFromContent($('#copyUserRightsDialog').html(), 0, 0, '".$this->translator->trans('chameleon_system_core.table_editor_cms_user.select_source_user')."');
       }
 
       function ActivateUser()
@@ -416,88 +424,100 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
     public function GetHtmlFooterIncludes()
     {
         $aIncludes = parent::GetHtmlFooterIncludes();
+        $this->translator = $this->getTranslator();
 
-        $oGlobal = TGlobal::instance();
-
-        $sSubmitButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.table_editor_cms_user.action_copy_permissions'), "javascript:$('#copyUserRightsForm').submit();", 'far fa-clone');
-
-        $sDialogContent = '<div id="copyUserRightsDialog" style="display:none;">
-      <h2>'.TGlobal::Translate('chameleon_system_core.table_editor_cms_user.select_source_user').'</h2>
+        $sDialogContent = '<div id="copyUserRightsDialog" class="d-none">
         <form name="copyUserRightsForm" id="copyUserRightsForm">
-          <input type="hidden" name="pagedef" value="'.$oGlobal->GetUserData('pagedef').'" />
+          <input type="hidden" name="pagedef" value="'.$this->getInputFilterUtil()->getFilteredInput('pagedef').'" />
           <input type="hidden" name="tableid" value="'.$this->oTableConf->id.'" />
           <input type="hidden" name="id" value="'.$this->sId."\" />
           <input type=\"hidden\" name=\"module_fnc[contentmodule]\" value=\"CopyUserRights\" />
           <input type=\"hidden\" name=\"_noModuleFunction\" value=\"true\" />\n";
 
         $query = "SELECT * FROM `cms_user` WHERE `id` != '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."' ORDER BY `name`, `firstname`";
-        $oCmsUserList = &TdbCmsUserList::GetList($query);
+        $cmsUserList = &TdbCmsUserList::GetList($query);
         $count = 0;
-        $oCmsUserList->SetPagingInfo(0, 50); // limit to at most 50 users
+        $cmsUserList->SetPagingInfo(0, 50); // limit to at most 50 users
 
-        $sListContent = '';
+        $listContent = '';
 
-        while ($oCmsUser = &$oCmsUserList->Next()) {
-            if ('www' !== $oCmsUser->fieldLogin && $oCmsUser->fieldShowAsRightsTemplate) {
+        while ($cmsUser = $cmsUserList->Next()) {
+            if ('www' !== $cmsUser->fieldLogin && $cmsUser->fieldShowAsRightsTemplate) {
                 ++$count;
-                $rowClass = 'oddrow';
-                if ($count % 2) {
-                    $rowClass = 'evenrow';
-                }
 
-                $sListContent .= '<div class="'.$rowClass.'" style="padding: 5px;">
-                <div style="float: left; width: 30px;"><input type="radio" name="copyUserRightsUserID" value="'.TGlobal::OutHTML($oCmsUser->id).'"></div>
-                <div style="float: left; width: 620px;">
-                  <h1 style="margin: 0px; line-height: 12px;">'.$oCmsUser->GetName().'</h1>
-                  ';
+                $listContent .= '
+                <div class="mt-5 mb-3">
+                    <label>
+                        <input class="" id="radioUser'. $count .'" type="radio" name="copyUserRightsUserID" value="'.TGlobal::OutHTML($cmsUser->id).'" />
+                        <span class="pl-2 font-weight-bold font-xl">'.$cmsUser->GetName().'</span>
+                    </label>
+                </div>';
 
-                $oUserGroups = $oCmsUser->GetFieldCmsUsergroupList();
-                if ($oUserGroups->Length() > 0) {
-                    $sListContent .= '<h2 style="line-height: 12px;">'.TGlobal::Translate('chameleon_system_core.table_editor_cms_user.user_group')."</h2>\n";
-                    while ($oUserGroup = &$oUserGroups->Next()) {
-                        $sListContent .= '<div style="width: 140px;" class="checkboxDIV">'.$oUserGroup->GetName().'</div>';
+                $listContent .= '<div class="parts ml-5">';
+
+                $userGroups = $cmsUser->GetFieldCmsUsergroupList();
+                if ($userGroups->Length() > 0) {
+                    $listContent .= '<div class="font-weight-bold mt-3">'.$this->translator->trans('chameleon_system_core.table_editor_cms_user.user_group')."</div>\n";
+                    $listContent .= '<div class="row mt-2">';
+                    while ($userGroup = &$userGroups->Next()) {
+                        $listContent .= '
+                            <div class="col-12 col-lg-4 col-xl-3 my-1">
+                                <div class="border-bottom border-right pl-2 py-1">
+                                '.$userGroup->GetName().'
+                                </div>
+                            </div>';
                     }
+                    $listContent .= '</div>';
                 }
 
-                $oRoles = $oCmsUser->GetFieldCmsRoleList();
-                if ($oRoles->Length() > 0) {
-                    $sListContent .= '<div class="cleardiv">&nbsp;</div>
-                  <h2 style="line-height: 12px;">'.TGlobal::Translate('chameleon_system_core.table_editor_cms_user.user_rolls').'</h2>';
-
-                    while ($oRole = &$oRoles->Next()) {
-                        $sListContent .= '<div style="width: 140px;" class="checkboxDIV">'.$oRole->GetName().'</div>';
+                $roles = $cmsUser->GetFieldCmsRoleList();
+                if ($roles->Length() > 0) {
+                    $listContent .= '<div class="font-weight-bold mt-3">'.$this->translator->trans('chameleon_system_core.table_editor_cms_user.user_rolls').'</div>';
+                    
+                    $listContent .= '<div class="row mt-2">';
+                    while ($role = &$roles->Next()) {
+                        $listContent .= '
+                            <div class="col-12 col-lg-4 col-xl-3 my-1">
+                                <div class="border-bottom border-right pl-2 py-1">
+                                '.$role->GetName().'
+                                </div>
+                            </div>';
                     }
+                    $listContent .= '</div>';
                 }
 
-                $oPortals = $oCmsUser->GetFieldCmsPortalList();
-                if ($oPortals->Length() > 0) {
-                    $sListContent .= '<div class="cleardiv">&nbsp;</div>
-                  <h2 style="line-height: 12px;">'.TGlobal::Translate('chameleon_system_core.table_editor_cms_user.portal').'</h2>';
+                $portals = $cmsUser->GetFieldCmsPortalList();
+                if ($portals->Length() > 0) {
+                    $listContent .= '<div class="font-weight-bold font mt-3">'.$this->translator->trans('chameleon_system_core.table_editor_cms_user.portal').'</div>';
 
-                    while ($oPortal = &$oPortals->Next()) {
-                        $sListContent .= '<div style="width: 140px;" class="checkboxDIV">'.$oPortal->GetName().'</div>';
+                    $listContent .= '<div class="row mt-2">';
+                    while ($portal = &$portals->Next()) {
+                        $listContent .= '
+                            <div class="col-12 col-lg-4 col-xl-3 my-1">
+                                <div class="border-bottom border-right pl-2 py-1">
+                                '.$portal->GetName().'
+                                </div>
+                            </div>';
                     }
+                    $listContent .= '</div>';
                 }
 
-                $sListContent .= "</div>
-              <div class=\"cleardiv\">&nbsp;</div>
-              </div>
-              <div class=\"cleardiv\">&nbsp;</div>
+                $listContent .= "</div>
               \n";
             }
         }
-        if (0 == $count) {
-            $sSubmitButton = '';
+
+        $submitButton = '';
+        if (0 !== $count) {
+            $submitButton = TCMSRender::DrawButton($this->translator->trans('chameleon_system_core.table_editor_cms_user.action_copy_permissions'), "javascript:$('#copyUserRightsForm').submit();", 'far fa-clone', "mt-4 mb-1");
         }
-        $sDialogContent .= $sSubmitButton."<div class=\"cleardiv\" style=\"margin-bottom: 10px;\">&nbsp;</div>\n".$sListContent.'<div style="padding-top: 10px;">
-          '.$sSubmitButton."
-          </div>
+        $sDialogContent .= $submitButton . $listContent . $submitButton."
         </form>
       </div>\n";
 
         $aIncludes[] = $sDialogContent;
         $aIncludes[] = '<form name="activateUserForm" id="activateUserForm">
-          <input type="hidden" name="pagedef" value="'.$oGlobal->GetUserData('pagedef').'" />
+          <input type="hidden" name="pagedef" value="'.$this->getInputFilterUtil()->getFilteredInput('pagedef').'" />
           <input type="hidden" name="tableid" value="'.$this->oTableConf->id.'" />
           <input type="hidden" name="id" value="'.$this->sId."\" />
           <input type=\"hidden\" name=\"module_fnc[contentmodule]\" value=\"ActivateUser\" />
@@ -634,6 +654,21 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ServiceLocator::get('chameleon_system_core.redirect');
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getGlobal(): TGlobalBase
+    {
+        return ServiceLocator::get('chameleon_system_core.global');
     }
 }
