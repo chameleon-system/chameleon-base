@@ -377,13 +377,12 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         if ($bValidEmail) {
             $oMailProfile->SendUsingObjectView('TDataMailProfile', 'Core');
 
-            $global = $this->getGlobal();
-            $aPostTmpData = $global->GetUserData();
-
+            $filterUtil = $this->getInputFilterUtil();
             $postData = $this->oTable->sqlData;
             foreach ($postData as $key => $value) {
-                if (array_key_exists($key, $aPostTmpData)) {
-                    $postData[$key] = $aPostTmpData[$key];
+                $valueOfKey = $filterUtil->getFilteredInput($key);
+                if (null !== $valueOfKey) {
+                    $postData[$key] = $valueOfKey;
                 }
             }
 
@@ -649,10 +648,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         }
     }
 
-    /**
-     * @return ICmsCoreRedirect
-     */
-    private function getRedirect()
+    private function getRedirect(): ICmsCoreRedirect
     {
         return ServiceLocator::get('chameleon_system_core.redirect');
     }
@@ -665,10 +661,5 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
     private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
-    }
-
-    private function getGlobal(): TGlobalBase
-    {
-        return ServiceLocator::get('chameleon_system_core.global');
     }
 }
