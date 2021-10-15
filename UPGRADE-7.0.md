@@ -116,6 +116,16 @@ less files. Currently this is used to inject STATIC_CONTENT_URL which can be use
 
 For the usage in a .less file use this exact notation: url("@{STATIC_CONTENT_URL}").
 
+## CmsTextBlockBundle
+
+The text block rendering now passes all callTimeVars to the wysiwyg rendering.
+If youre theme has a copy of: pkgCmsTextBlock/views/db/TPkgCmsTextBlock/standard.view.php, 
+you should add the third parameter to GetTextField()
+
+```php
+echo $oTextBlock->GetTextField("content", $iWidth, false, $replaceableVars);
+```
+
 ## Changed Interfaces and Method Signatures
 
 ### TCMSTableEditorEndPoint
