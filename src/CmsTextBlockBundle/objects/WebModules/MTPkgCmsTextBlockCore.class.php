@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
  * loads and renders a wysiwyg text block from pkg_cms_text_block based
@@ -102,11 +103,8 @@ class MTPkgCmsTextBlockCore extends TUserCustomModelBase
         return $this->oPkgCmsTextBlock;
     }
 
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private function getPortalDomainService()
+    private function getPortalDomainService(): PortalDomainServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }
