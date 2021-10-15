@@ -126,6 +126,21 @@ you should add the third parameter to GetTextField()
 echo $oTextBlock->GetTextField("content", $iWidth, false, $replaceableVars);
 ```
 
+TextBlockLookup now has 2 new methods that allow to set additional placeholder variables, that are passed to the wysiwyg text rendering.
+
+- TextBlockLookup::getRenderedText()
+- TextBlockLookup::getRenderedTextFromTextBlock()
+- TextBlockLookup::getHeadlineFromTextBlock()
+
+### Deprecations
+
+- TextBlockLookup::getHeadlineFormTextBlock()
+- TextBlockLookup::getTextFromTextBlock()
+- TextBlockLookup::getText()
+
+There was a typo in TextBlockLookup::getHeadlineFormTextBlock. This was fixed
+and the old method got deprecated.
+
 ## Changed Interfaces and Method Signatures
 
 ### TCMSTableEditorEndPoint

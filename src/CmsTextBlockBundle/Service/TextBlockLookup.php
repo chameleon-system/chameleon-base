@@ -17,6 +17,8 @@ use TdbPkgCmsTextBlock;
 class TextBlockLookup implements TextBlockLookupInterface
 {
     /**
+     * @deprecated since version 7.0.13 use getRenderedText instead
+     *
      * @param string $systemName
      * @param $textContainerWidth
      *
@@ -24,10 +26,18 @@ class TextBlockLookup implements TextBlockLookupInterface
      */
     public function getText($systemName, $textContainerWidth)
     {
-        $textBlock = $this->getTextBlock($systemName);
-        $text = $this->getTextFromTextBlock($textBlock, $textContainerWidth);
+        return $this->getRenderedText($systemName, $textContainerWidth);
+    }
 
-        return $text;
+    public function getRenderedText(string $systemName, int $textContainerWidth = 1200, array $placeholders = []): string
+    {
+        $textBlock = $this->getTextBlock($systemName);
+
+        if (null === $textBlock) {
+            return '';
+        }
+
+        return $this->getRenderedTextFromTextBlock($textBlock, $textContainerWidth, $placeholders);
     }
 
     /**
@@ -38,24 +48,23 @@ class TextBlockLookup implements TextBlockLookupInterface
     public function getHeadline($systemName)
     {
         $textBlock = $this->getTextBlock($systemName);
-        $headline = $this->getHeadlineFormTextBlock($textBlock);
 
-        return $headline;
+        return $this->getHeadlineFromTextBlock($textBlock);
     }
 
     /**
      * @param string $systemName
      *
-     * @return TdbPkgCmsTextBlock
+     * @return null|TdbPkgCmsTextBlock
      */
     public function getTextBlock($systemName)
     {
-        $textBlock = TdbPkgCmsTextBlock::GetInstanceFromSystemName($systemName);
-
-        return $textBlock;
+        return TdbPkgCmsTextBlock::GetInstanceFromSystemName($systemName);
     }
 
     /**
+     * @deprecated since version 7.0.13 use getRenderedTextFromTextBlock instead
+     *
      * @param TdbPkgCmsTextBlock $textBlock
      * @param $textContainerWidth
      *
@@ -63,25 +72,36 @@ class TextBlockLookup implements TextBlockLookupInterface
      */
     public function getTextFromTextBlock($textBlock, $textContainerWidth)
     {
-        $text = '';
-        if (null !== $textBlock) {
-            $text = $textBlock->GetTextField('content', $textContainerWidth);
+        return $this->getRenderedTextFromTextBlock($textBlock, $textContainerWidth);
+    }
+
+    public function getRenderedTextFromTextBlock(?TdbPkgCmsTextBlock $textBlock, int $textContainerWidth = 1200, array $placeHolders = []): string
+    {
+        if (null === $textBlock) {
+            return '';
         }
 
-        return $text;
+        return $textBlock->GetTextField('content', $textContainerWidth, false, $placeHolders);
     }
 
     /**
+     * @deprecated since version 7.0.13 use getHeadlineFromTextBlock instead
+     *
      * @param TdbPkgCmsTextBlock $textBlock
      *
      * @return string
      */
     public function getHeadlineFormTextBlock($textBlock)
     {
-        if (null !== $textBlock) {
-            return $textBlock->fieldName;
+        return $this->getHeadlineFromTextBlock($textBlock);
+    }
+
+    public function getHeadlineFromTextBlock(?TdbPkgCmsTextBlock $textBlock): string
+    {
+        if (null === $textBlock) {
+            return '';
         }
 
-        return '';
+        return $textBlock->fieldName;
     }
 }
