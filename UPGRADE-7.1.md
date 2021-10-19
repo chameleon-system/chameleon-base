@@ -64,6 +64,7 @@ as service.
 ## Make Legacy Services Public
 
 All service classes that are loaded by `ServiceLocator::get()` must now be `public="true"` in their service definitions.
+You can use the Chameleon System Upgrade Helper tool to determine the services that should be made public: https://github.com/bestform/Chameleon-System-Upgrade-Helper
 
 ## Correct Cronjob Hierarchy
 
