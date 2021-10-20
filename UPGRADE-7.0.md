@@ -120,7 +120,7 @@ For the usage in a .less file use this exact notation: url("@{STATIC_CONTENT_URL
 
 The text block rendering now passes all callTimeVars to the wysiwyg rendering.
 If youre theme has a copy of: pkgCmsTextBlock/views/db/TPkgCmsTextBlock/standard.view.php, 
-you should add the third parameter to GetTextField()
+you should add the fourth parameter to GetTextField()
 
 ```php
 echo $oTextBlock->GetTextField("content", $iWidth, false, $replaceableVars);
