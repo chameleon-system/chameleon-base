@@ -48,7 +48,6 @@
             <argument type="service" id="chameleon_system_extranet.login_by_token.service.login_token" />
             <argument type="service" id="chameleon_system_extranet.extranet_user_provider" />
             <argument type="service" id="chameleon_system_core.page_service" />
-            <argument type="service" id="request_stack" />
         </service>
         <service
             id="chameleon_system_extranet.login_by_token.service.login_token"

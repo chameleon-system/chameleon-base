@@ -107,8 +107,7 @@ class TableEditorExtranetUser extends TCMSTableEditor
             return;
         }
 
-        $extranetUser = $this->loadExtranetUser($userId);
-        $portal = $this->portalForExtranetUser($extranetUser);
+        $portal = $this->getPortalForExtranetUserId($userId);
         $this->redirectUserToTokenLoginOnPortal($userId, $portal);
     }
 
@@ -121,23 +120,14 @@ class TableEditorExtranetUser extends TCMSTableEditor
             && true === $cmsUser->oAccessManager->PermitFunction($permission);
     }
 
-    private function loadExtranetUser(string $userId): TdbDataExtranetUser
+    private function getPortalForExtranetUserId(string $userId): TdbCmsPortal
     {
-        $extranetUserProvider = $this->getExtranetUserProvider();
-        $extranetUserProvider->reset();
+        $extranetUser = TdbDataExtranetUser::GetNewInstance();
 
-        /** @var TdbDataExtranetUser $extranetUser */
-        $extranetUser = $extranetUserProvider->getActiveUser();
-        $extranetUser->Load($userId);
-
-        return $extranetUser;
-    }
-
-    private function portalForExtranetUser(TdbDataExtranetUser $extranetUser): TdbCmsPortal
-    {
-        if (empty($extranetUser->fieldCmsPortalId)) {
+        if (false === $extranetUser->Load($userId) || empty($extranetUser->fieldCmsPortalId)) {
             $portalList = TdbCmsPortalList::GetList();
             $portalList->GoToStart();
+
             return $portalList->Current();
         }
 
