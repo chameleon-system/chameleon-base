@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Chameleon System (https://www.chameleonsystem.com).
  *
  * (c) ESONO AG (https://www.esono.de)
