@@ -3,7 +3,6 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 
-$iTextFieldCount = 0;
 $sLastTextFieldName = '';
 $data['oFields']->GoToStart();
 $sTmpFormTabsContent = '';
@@ -57,13 +56,12 @@ while ($oField = $data['oFields']->Next()) {
                 }
 
                 if (ACTIVE_TRANSLATION) {
-                    $bIsTextField = false;
-                    $aAllowedTypes = array('CMSFIELD_STRING', 'CMSFIELD_TEXT', 'CMSFIELD_STRING_UNIQUE');
+                    $lastFieldIsTextField = false;
+                    $aAllowedTypes = ['CMSFIELD_STRING', 'CMSFIELD_STRING_UNIQUE'];
                     $oFieldType = $oField->oDefinition->GetFieldType();
                     if (in_array($oFieldType->sqlData['constname'], $aAllowedTypes)) {
-                        $bIsTextField = true;
+                        $lastFieldIsTextField = true;
                         $sLastTextFieldName = $oField->name;
-                        ++$iTextFieldCount;
                     }
 
                     if ('1' === $oField->oDefinition->sqlData['is_translatable']) {
@@ -130,8 +128,8 @@ if (!empty($sTmpFormTabsContent)) {
     $sFormTabsContent .= '</div></div>';
 }
 
-/** add handling of ENTER key to trigger the save button if we have a form with only one text field */
-if (!empty($sLastTextFieldName) && 1 == $iTextFieldCount) {
+/** add handling of ENTER key to trigger the save button if we have a form with a text field as last field */
+if (true === $lastFieldIsTextField && '' !== $sLastTextFieldName) {
     ?>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -139,7 +137,7 @@ if (!empty($sLastTextFieldName) && 1 == $iTextFieldCount) {
             code = e.keyCode ? e.keyCode : e.which;
             if (code.toString() == 13) { // ENTER key
                 e.preventDefault();
-                $('.btn-group button.itemsave').click();
+                $('.button-element button.itemsave').click();
             }
         });
     });
