@@ -3,7 +3,6 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 
-$sLastTextFieldName = '';
 $data['oFields']->GoToStart();
 $sTmpFormTabsContent = '';
 while ($oField = $data['oFields']->Next()) {
@@ -56,14 +55,7 @@ while ($oField = $data['oFields']->Next()) {
                 }
 
                 if (ACTIVE_TRANSLATION) {
-                    $lastFieldIsTextField = false;
-                    $aAllowedTypes = ['CMSFIELD_STRING', 'CMSFIELD_STRING_UNIQUE'];
                     $oFieldType = $oField->oDefinition->GetFieldType();
-                    if (in_array($oFieldType->sqlData['constname'], $aAllowedTypes)) {
-                        $lastFieldIsTextField = true;
-                        $sLastTextFieldName = $oField->name;
-                    }
-
                     if ('1' === $oField->oDefinition->sqlData['is_translatable']) {
                         $sPrefix = TGlobal::GetLanguagePrefix($oTable->GetLanguage());
                         if (empty($sPrefix)) {
@@ -126,21 +118,4 @@ if (!empty($sTmpFormTabsContent)) {
     $sFormTabsContent .= '<div class="mt-3">';
     $sFormTabsContent .= $sTmpFormTabsContent;
     $sFormTabsContent .= '</div></div>';
-}
-
-/** add handling of ENTER key to trigger the save button if we have a form with a text field as last field */
-if (true === $lastFieldIsTextField && '' !== $sLastTextFieldName) {
-    ?>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#<?=$sLastTextFieldName; ?>').keypress(function (e) {
-            code = e.keyCode ? e.keyCode : e.which;
-            if (code.toString() == 13) { // ENTER key
-                e.preventDefault();
-                $('.button-element button.itemsave').click();
-            }
-        });
-    });
-</script>
-<?php
 }
