@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
+use Psr\Log\LoggerInterface;
 
 class CmsConfigDataAccess implements CmsConfigDataAccessInterface
 {
@@ -20,10 +21,15 @@ class CmsConfigDataAccess implements CmsConfigDataAccessInterface
      * @var Connection
      */
     private $connection;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, LoggerInterface $logger)
     {
         $this->connection = $connection;
+        $this->logger = $logger;
     }
 
     /**
@@ -37,8 +43,7 @@ class CmsConfigDataAccess implements CmsConfigDataAccessInterface
             $themeId = $this->connection->fetchOne('SELECT `pkg_cms_theme_id` FROM `cms_config`');
         } catch (Exception $exception) {
             // The field might still be missing
-
-            // TODO ? log it still
+            $this->logger->error('CmsConfigDataAccess: Cannot determine theme', ['exception' => $exception]);
 
             return null;
         }
