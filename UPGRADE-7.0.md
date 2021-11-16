@@ -118,7 +118,7 @@ For the usage in a .less file use this exact notation: url("@{STATIC_CONTENT_URL
 
 ## CmsTextBlockBundle
 
-The text block rendering now passes all callTimeVars to the wysiwyg rendering.
+The text block rendering now passes all $callTimeVars as placeholder variables to the wysiwyg rendering.
 If your theme has a copy of: pkgCmsTextBlock/views/db/TPkgCmsTextBlock/standard.view.php, 
 you should add the fourth parameter to GetTextField()
 
