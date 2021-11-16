@@ -225,42 +225,16 @@ class TCMSTableEditorManager
     }
 
     /**
-     * load the table editor class that is configured in cms_tbl_conf.
-     *
-     * @deprecated the hardcoded switch by table name is deprecated and can be deleted after upgrading all customers
-     *
-     * @return TCMSTableEditor
+     * load the table editor class that is configured in cms_tbl_conf.*
      */
-    public function &TableEditorFactory()
+    public function &TableEditorFactory(): TCMSTableEditor
     {
-        $oTableEditor = null;
-
         // check if table editor is extended
         if (!empty($this->oTableConf->sqlData['table_editor_class'])) {
             $sClassName = $this->oTableConf->sqlData['table_editor_class'];
             $oTableEditor = new $sClassName();
         } else {
-            switch ($this->oTableConf->sqlData['name']) {
-                case 'cms_tbl_conf':
-                    trigger_error('old code! Please run Update!!', E_USER_ERROR);
-                    $oTableEditor = new TCMSTableWriter();
-                    break;
-                case 'cms_field_conf':
-                    trigger_error('old code! Please run Update!!', E_USER_ERROR);
-                    $oTableEditor = new TCMSTableFieldWriter();
-                    break;
-                case 'images':
-                    trigger_error('old code! Please run Update!!', E_USER_ERROR);
-                    $oTableEditor = new TCMSTableMediaManager();
-                    break;
-                case 'cms_tpl_page':
-                    trigger_error('old code! Please run Update!!', E_USER_ERROR);
-                    $oTableEditor = new TCMSTableEditorPage();
-                    break;
-                default:
-                    $oTableEditor = new TCMSTableEditor();
-                    break;
-            }
+            $oTableEditor = new TCMSTableEditor();
         }
         $oTableEditor->setDatabaseConnection($this->getDatabaseConnection());
         $oTableEditor->AllowEditByAll($this->bAllowEditByAll);
