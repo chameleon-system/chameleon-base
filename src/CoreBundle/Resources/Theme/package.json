@@ -13,12 +13,24 @@
     "perfectscrollbardir": ""
   },
   "dependencies": {
+    "browserslist": "^4.16.5",
     "clean-css-cli": "^4.3.0",
-    "perfect-scrollbar": "^1.4.0"
+    "glob-parent": "^5.1.2",
+    "hosted-git-info": "^2.8.9",
+    "lodash": "^4.17.21",
+    "path-parse": "^1.0.7",
+    "perfect-scrollbar": "^1.5.3",
+    "postcss": "^7.0.36",
+    "tar": "^4.4.18",
+    "trim": "^0.0.3",
+    "trim-newlines": "^3.0.1",
+    "y18n": "^3.2.2",
+    "yargs-parser": "^5.0.1"
   },
   "devDependencies": {
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.14.1",
     "nodemon": "^1.19.4",
+    "path-parse": "^1.0.7",
     "stylelint": "^10.1.0",
     "stylelint-config-standard": "^18.3.0"
   },
