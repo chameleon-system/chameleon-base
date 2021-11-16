@@ -17,12 +17,7 @@ use TdbPkgCmsTextBlock;
 class TextBlockLookup implements TextBlockLookupInterface
 {
     /**
-     * @deprecated since version 7.0.13 use getRenderedText instead
-     *
-     * @param string $systemName
-     * @param $textContainerWidth
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getText($systemName, $textContainerWidth)
     {
