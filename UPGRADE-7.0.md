@@ -132,14 +132,7 @@ TextBlockLookup now has 2 new methods that allow to set additional placeholder v
 - TextBlockLookup::getRenderedTextFromTextBlock()
 - TextBlockLookup::getHeadlineFromTextBlock()
 
-### Deprecations
-
-- TextBlockLookup::getHeadlineFormTextBlock()
-- TextBlockLookup::getTextFromTextBlock()
-- TextBlockLookup::getText()
-
-There was a typo in TextBlockLookup::getHeadlineFormTextBlock. This was fixed
-and the old method got deprecated.
+There was a typo in TextBlockLookup::getHeadlineFormTextBlock. This was fixed and the old method got deprecated.
 
 ## Changed Interfaces and Method Signatures
 
@@ -677,6 +670,9 @@ None.
 - TDataExtranetUser::getRedirectToAccessDeniedPageLink()
 - TDataExtranetUser::RedirectToAccessDeniedPage()
 - TDataMailProfile::GetEMailAddress()
+- TextBlockLookup::getHeadlineFormTextBlock()
+- TextBlockLookup::getTextFromTextBlock()
+- TextBlockLookup::getText()
 - TGlobal::GetActiveLanguageId()
 - TGlobal::GetURLHistory()
 - TGlobalBase::_GetModuleRootPath()
