@@ -649,8 +649,11 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
                         $new[$key] = $all[$key];
                     }
                 }
-                $_SESSION = array();
-                $session->replace($new);
+
+                $session->invalidate(); // also clears $_SESSION
+                if (\count($new) > 0) {
+                    $session->replace($new);
+                }
             }
         }
 
