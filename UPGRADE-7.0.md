@@ -119,11 +119,11 @@ For the usage in a .less file use this exact notation: url("@{STATIC_CONTENT_URL
 ## CmsTextBlockBundle
 
 The text block rendering now passes all callTimeVars to the wysiwyg rendering.
-If youre theme has a copy of: pkgCmsTextBlock/views/db/TPkgCmsTextBlock/standard.view.php, 
+If your theme has a copy of: pkgCmsTextBlock/views/db/TPkgCmsTextBlock/standard.view.php, 
 you should add the fourth parameter to GetTextField()
 
 ```php
-echo $oTextBlock->GetTextField("content", $iWidth, false, $replaceableVars);
+echo $oTextBlock->GetTextField("content", $iWidth, false, $placeholders);
 ```
 
 TextBlockLookup now has 2 new methods that allow to set additional placeholder variables, that are passed to the wysiwyg text rendering.

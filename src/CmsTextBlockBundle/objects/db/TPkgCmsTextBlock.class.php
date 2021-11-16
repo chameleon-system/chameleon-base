@@ -29,7 +29,7 @@ class TPkgCmsTextBlock extends TPkgCmsTextBlockAutoParent
             $iWidth = $aCallTimeVars['iWidth'];
         }
         $oView->AddVarArray($aCallTimeVars);
-        $oView->AddVar('callTimeVars', $aCallTimeVars);
+        $oView->AddVar('placeholders', $aCallTimeVars);
         $oView->AddVar('iWidth', $iWidth);
         $oView->AddVar('oTextBlock', $this);
 
