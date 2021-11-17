@@ -16,12 +16,16 @@ use TdbPkgCmsTextBlock;
 interface TextBlockLookupInterface
 {
     /**
+     * @deprecated since version 7.0.13 use getRenderedText instead
+     *
      * @param string $systemName
      * @param $textContainerWidth
      *
      * @return string
      */
     public function getText($systemName, $textContainerWidth);
+
+    public function getRenderedText(string $systemName, int $textContainerWidth = 1200, array $placeholders = []): string;
 
     /**
      * @param string $systemName
@@ -33,11 +37,13 @@ interface TextBlockLookupInterface
     /**
      * @param string $systemName
      *
-     * @return TdbPkgCmsTextBlock
+     * @return  null|TdbPkgCmsTextBlock
      */
     public function getTextBlock($systemName);
 
     /**
+     * @deprecated since version 7.0.13 use getRenderedTextFromTextBlock instead
+     *
      * @param TdbPkgCmsTextBlock $textBlock
      * @param $textContainerWidth
      *
@@ -45,10 +51,16 @@ interface TextBlockLookupInterface
      */
     public function getTextFromTextBlock($textBlock, $textContainerWidth);
 
+    public function getRenderedTextFromTextBlock(?TdbPkgCmsTextBlock $textBlock, int $textContainerWidth = 1200, array $placeHolders = []): string;
+
     /**
+     * @deprecated since version 7.0.13 use getHeadlineFromTextBlock instead
+     *
      * @param TdbPkgCmsTextBlock $textBlock
      *
      * @return string
      */
     public function getHeadlineFormTextBlock($textBlock);
+
+    public function getHeadlineFromTextBlock(TdbPkgCmsTextBlock $textBlock): string;
 }

@@ -116,6 +116,24 @@ less files. Currently this is used to inject STATIC_CONTENT_URL which can be use
 
 For the usage in a .less file use this exact notation: url("@{STATIC_CONTENT_URL}").
 
+## CmsTextBlockBundle
+
+The text block rendering now passes all $callTimeVars as placeholder variables to the wysiwyg rendering.
+If your theme has a copy of: pkgCmsTextBlock/views/db/TPkgCmsTextBlock/standard.view.php, 
+you should add the fourth parameter to GetTextField()
+
+```php
+echo $oTextBlock->GetTextField("content", $iWidth, false, $placeholders);
+```
+
+TextBlockLookup now has 2 new methods that allow to set additional placeholder variables, that are passed to the wysiwyg text rendering.
+
+- TextBlockLookup::getRenderedText()
+- TextBlockLookup::getRenderedTextFromTextBlock()
+- TextBlockLookup::getHeadlineFromTextBlock()
+
+There was a typo in TextBlockLookup::getHeadlineFormTextBlock. This was fixed and the old method got deprecated.
+
 ## Changed Interfaces and Method Signatures
 
 ### TCMSTableEditorEndPoint
@@ -652,6 +670,9 @@ None.
 - TDataExtranetUser::getRedirectToAccessDeniedPageLink()
 - TDataExtranetUser::RedirectToAccessDeniedPage()
 - TDataMailProfile::GetEMailAddress()
+- TextBlockLookup::getHeadlineFormTextBlock()
+- TextBlockLookup::getTextFromTextBlock()
+- TextBlockLookup::getText()
 - TGlobal::GetActiveLanguageId()
 - TGlobal::GetURLHistory()
 - TGlobalBase::_GetModuleRootPath()
