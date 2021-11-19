@@ -225,9 +225,10 @@ class TCMSTableEditorManager
     }
 
     /**
-     * load the table editor class that is configured in cms_tbl_conf.*
+     * load the table editor class that is configured in cms_tbl_conf
+     * @return TCMSTableEditor
      */
-    public function &TableEditorFactory(): TCMSTableEditor
+    public function &TableEditorFactory()
     {
         // check if table editor is extended
         if (!empty($this->oTableConf->sqlData['table_editor_class'])) {
