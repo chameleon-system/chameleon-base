@@ -40,7 +40,9 @@ class CmsConfigDataAccess implements CmsConfigDataAccessInterface
         // TODO ? use a runtime-cache; this might be called several times...
 
         try {
-            $themeId = $this->connection->fetchOne('SELECT `pkg_cms_theme_id` FROM `cms_config`');
+            $row = $this->connection->fetchAssoc('SELECT `pkg_cms_theme`.*
+                                                            FROM `pkg_cms_theme`
+                                                      INNER JOIN `cms_config` ON `pkg_cms_theme`.`id` = `cms_config`.`pkg_cms_theme_id``');
         } catch (Exception $exception) {
             // The field might still be missing
             $this->logger->error('CmsConfigDataAccess: Cannot determine theme', ['exception' => $exception]);
@@ -48,15 +50,12 @@ class CmsConfigDataAccess implements CmsConfigDataAccessInterface
             return null;
         }
 
-        if (false === $themeId) {
+        if (false === $row || \count($row) === 0) {
             return null;
         }
 
         $theme = \TdbPkgCmsTheme::GetNewInstance();
-
-        if (false === $theme->Load($themeId)) {
-            return null;
-        }
+        $theme->LoadFromRow($row);
 
         return $theme;
     }
