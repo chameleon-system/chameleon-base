@@ -37,12 +37,10 @@ class CmsConfigDataAccess implements CmsConfigDataAccessInterface
      */
     public function getBackendTheme(): ?\TdbPkgCmsTheme
     {
-        // TODO ? use a runtime-cache; this might be called several times...
-
         try {
             $row = $this->connection->fetchAssociative('SELECT `pkg_cms_theme`.*
                                                                 FROM `pkg_cms_theme`
-                                                          INNER JOIN `cms_config` ON `pkg_cms_theme`.`id` = `cms_config`.`pkg_cms_theme_id``');
+                                                          INNER JOIN `cms_config` ON `pkg_cms_theme`.`id` = `cms_config`.`pkg_cms_theme_id`');
         } catch (Exception $exception) {
             // The field might still be missing
             $this->logger->error('CmsConfigDataAccess: Cannot determine theme', ['exception' => $exception]);
