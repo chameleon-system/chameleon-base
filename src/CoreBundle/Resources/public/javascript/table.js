@@ -107,6 +107,29 @@ function ChangeListMarking(fieldValue, formName) {
     );
 }
 
+function resetPagingAndSearch(event) {
+    if (typeof event !== "undefined" && typeof event.originalEvent !== "undefined") {
+        event = event.originalEvent; // extract from jquery event
+    }
+
+    if (event instanceof KeyboardEvent) {
+        if (event.key !== "Enter") {
+            return;
+        }
+    }
+
+    $form = $(event.target).closest("form");
+
+    if (0 === $form.length) {
+        return;
+    }
+
+    event.preventDefault();
+
+    $form[0]._startRecord.value = 0;
+    $form.submit();
+}
+
 $(document).ready(function () {
     CHAMELEON.CORE.handleFormAndLinkTargetsInModals();
 
@@ -117,4 +140,8 @@ $(document).ready(function () {
     });
 
     CHAMELEON.CORE.initializeEntryAutocomplete($('input#searchLookup'));
+
+    var $searchFields = $(".entry-search-field");
+    $searchFields.on("keypress", resetPagingAndSearch); // NOTE "input" is not called for a RETURN (which immediately sends the form)
+    $searchFields.closest("form").find("input[type='button']").on("click", resetPagingAndSearch);
 });

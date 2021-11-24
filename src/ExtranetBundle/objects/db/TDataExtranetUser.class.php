@@ -225,7 +225,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * @param bool $bForceUserConfirmMail
      * @param bool $bAutoLoginAfterRegistration
      *
-     * @return bool
+     * @return bool|string the id or false for an error
      */
     public function Register($bForceUserConfirmMail = false, $bAutoLoginAfterRegistration = true)
     {
@@ -649,8 +649,11 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
                         $new[$key] = $all[$key];
                     }
                 }
-                $_SESSION = array();
-                $session->replace($new);
+
+                $session->invalidate(); // also clears $_SESSION
+                if (\count($new) > 0) {
+                    $session->replace($new);
+                }
             }
         }
 

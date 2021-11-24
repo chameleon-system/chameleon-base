@@ -29,19 +29,14 @@ class LoginByTokenController
     /** @var PageServiceInterface */
     private $pageService;
 
-    /** @var RequestStack */
-    private $requestStack;
-
     public function __construct(
         LoginTokenServiceInterface $loginTokenService,
         ExtranetUserProviderInterface $extranetUserProvider,
-        PageServiceInterface $pageService,
-        RequestStack $requestStack
+        PageServiceInterface $pageService
     ) {
         $this->loginTokenService = $loginTokenService;
         $this->extranetUserProvider = $extranetUserProvider;
         $this->pageService = $pageService;
-        $this->requestStack = $requestStack;
     }
 
     /**
@@ -50,8 +45,6 @@ class LoginByTokenController
      */
     public function loginAction(string $token): Response
     {
-        $this->invalidateCurrentSession();
-
         $userId = $this->loginTokenService->getUserIdFromToken($token);
         if (null === $userId || false === $this->loginAsUser($userId)) {
             throw new AccessDeniedHttpException();
@@ -71,13 +64,5 @@ class LoginByTokenController
         }
 
         return $user->DirectLoginWithoutPassword($user->GetName());
-    }
-
-    private function invalidateCurrentSession(): void
-    {
-        $this->requestStack
-            ->getCurrentRequest()
-            ->getSession()
-            ->invalidate();
     }
 }

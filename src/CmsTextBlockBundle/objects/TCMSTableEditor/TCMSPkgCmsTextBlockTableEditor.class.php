@@ -9,11 +9,14 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use esono\pkgCmsCache\CacheInterface;
+
 class TCMSPkgCmsTextBlockTableEditor extends TCMSTableEditor
 {
     /**
-     * gets called after save if all posted data was valid
-     * clear cache for linked portals and text fields containing the placeholder from the text block item.
+     * Gets called after save if all posted data was valid.
+     * Clear cache for linked portals and text fields containing the placeholder from the text block item.
      *
      * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
@@ -35,12 +38,15 @@ class TCMSPkgCmsTextBlockTableEditor extends TCMSTableEditor
     {
         $aNewPortalConnectionIdList = $postData['cms_portal_mlt'];
         $aOldPortalConnectionIdList = $this->oTable->getFieldCmsPortalIdList();
+
+        $cacheService = $this->getCacheService();
+
         foreach ($aOldPortalConnectionIdList as $sOldPortalId) {
-            TCacheManager::PerformeTableChange('cms_portal', $sOldPortalId);
+            $cacheService->callTrigger('cms_portal', $sOldPortalId);
             unset($aNewPortalConnectionIdList[$sOldPortalId]);
         }
         foreach ($aNewPortalConnectionIdList as $sNewPortalId) {
-            TCacheManager::PerformeTableChange('cms_portal', $sNewPortalId);
+            $cacheService->callTrigger('cms_portal', $sNewPortalId);
         }
     }
 
@@ -51,6 +57,8 @@ class TCMSPkgCmsTextBlockTableEditor extends TCMSTableEditor
      */
     protected function ClearWysiwygTextFieldCache($postData)
     {
+        $cacheService = $this->getCacheService();
+
         $sQuery = "SELECT `cms_field_conf`.`name` as sFieldName, `cms_tbl_conf`.`name` AS sTableName FROM `cms_field_conf`
                     INNER JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id`
                     INNER JOIN `cms_field_type` ON `cms_field_type`.`id` = `cms_field_conf`.`cms_field_type_id`
@@ -62,9 +70,15 @@ class TCMSPkgCmsTextBlockTableEditor extends TCMSTableEditor
                            WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($aRow['sTableName']).'`.`'.MySqlLegacySupport::getInstance()->real_escape_string($aRow['sFieldName'])."` LIKE '%".MySqlLegacySupport::getInstance()->real_escape_string('[{cmsblock_'.$postData['systemname'].'}]')."%'
                               OR `".MySqlLegacySupport::getInstance()->real_escape_string($aRow['sTableName']).'`.`'.MySqlLegacySupport::getInstance()->real_escape_string($aRow['sFieldName'])."` LIKE '%".MySqlLegacySupport::getInstance()->real_escape_string('[{cmsblock_'.$this->oTable->fieldSystemname.'}]')."%'";
             $oTableFieldRes = MySqlLegacySupport::getInstance()->query($sTableFieldQuery);
+
             while ($aTableFieldRow = MySqlLegacySupport::getInstance()->fetch_assoc($oTableFieldRes)) {
-                TCacheManager::PerformeTableChange($aRow['sTableName'], $aTableFieldRow['id']);
+                $cacheService->callTrigger($aRow['sTableName'], $aTableFieldRow['id']);
             }
         }
+    }
+
+    private function getCacheService(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_cms_cache.cache');
     }
 }

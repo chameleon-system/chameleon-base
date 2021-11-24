@@ -1,4 +1,4 @@
-<h1>pkgnewsletter - Build #1527064944</h1>
+<h1>Build #1527064944</h1>
 <div class="changelog">
     - turn mappers into services
 </div>

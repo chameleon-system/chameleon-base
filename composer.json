@@ -13,6 +13,13 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
+        "bassjobsen/bootstrap-3-typeahead": "~4.0",
+        "chameleon-system/sanitycheck-bundle": "~7.0.0",
+        "ckeditor/ckeditor": "4.6.2",
+        "coreui/coreui": "^2.1",
+        "dmhendricks/file-icon-vectors": "~1.0",
+        "doctrine/dbal": "~2.13",
+        "doctrine/doctrine-bundle": "^1.6.10",
         "ext-curl": "*",
         "ext-pdo": "*",
         "ext-pdo_mysql": "*",

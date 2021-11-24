@@ -921,5 +921,10 @@
 
         <service id="chameleon_system_core.service.css_minifier" class="ChameleonSystem\CoreBundle\Service\CssMinifierService" public="true">
         </service>
+
+        <service id="chameleon_system_core.service.cms_config_data_access" class="ChameleonSystem\CoreBundle\Service\CmsConfigDataAccess">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="logger"/>
+        </service>
     </services>
 </container>

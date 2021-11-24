@@ -24,7 +24,7 @@
 }
 
 .tableeditcontainer .fieldtext {
-    min-height: 200px;
+    min-height: 100px;
 }
 
 .tableeditcontainer .field-decimal input, .tableeditcontainer .dateInput input {

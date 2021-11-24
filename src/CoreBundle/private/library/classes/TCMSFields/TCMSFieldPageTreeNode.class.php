@@ -59,7 +59,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
     }
 
     /**
-     * Returns constructed tree items for secondary navigtion references (additionals in view / no inheritance).
+     * Returns constructed tree items for secondary navigation references (additionals in view / no inheritance).
      *
      * @return string
      */
@@ -94,16 +94,20 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
             return TGlobal::Translate('chameleon_system_core.field_page_tree_node.no_node_assigned');
         }
         // Retrieve portal through referenced linked page.
-        $portal = $tree->GetLinkedPageObject()->GetPortal();
         $path = $tree->GetTextPathToNode('/', false, true);
-        if (null !== $portal) {
-            $path = $portal->GetName().'/'.$path;
+
+        // Add portal name to path.
+        $linkedPageObject = $tree->GetLinkedPageObject();
+        if (false !== $linkedPageObject) {
+            $portal = $linkedPageObject->GetPortal();
+            if (null !== $portal) {
+                $path = $portal->GetName() . '/' . $path;
+            }
         }
         // Form rendered path from slash separated path string.
         $treeSubPath = str_replace('/', '</li><li class="breadcrumb-item">', $path);
-        $renderedPath = sprintf('<ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li><li class="breadcrumb-item">%s</li></ol>', $treeSubPath);
 
-        return $renderedPath;
+        return sprintf('<ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li><li class="breadcrumb-item">%s</li></ol>', $treeSubPath);
     }
 
     /**
@@ -263,11 +267,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
     }
 
     /**
-     * Returns an array of all js, css, or other header includes that are required
-     * in the cms for this field. each include should be in one line, and they
-     * should always be typed the same way so that no includes are included mor than once.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function GetCMSHtmlHeadIncludes()
     {
@@ -352,4 +352,5 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
     }
+
 }

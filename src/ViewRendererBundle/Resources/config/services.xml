@@ -43,8 +43,8 @@
         </service>
 
         <service id="chameleon_system_view_renderer.twig.loader" class="%chameleon_system_view_renderer.twig.loader.class%">
-            <argument type="service" id="chameleon_system_view_renderer.snippet_directory" />
             <tag name="twig.loader" priority="128" />
+            <argument type="service" id="chameleon_system_view_renderer.snippet_directory" />
         </service>
 
         <service id="chameleon_system_view_renderer.twig.loader.string" class="ChameleonSystem\ViewRendererBundle\Bridge\Twig\Loader\TwigStringLoader">
@@ -58,6 +58,7 @@
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="kernel"/>
+            <argument type="service" id="chameleon_system_core.service.cms_config_data_access"/>
         </service>
 
         <service id="chameleon_system_view_renderer.less_compiler" class="ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler" public="true">

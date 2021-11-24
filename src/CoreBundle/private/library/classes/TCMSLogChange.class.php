@@ -894,23 +894,48 @@ class TCMSLogChange
     }
 
     /**
-     * Get id of cms_message_manager_message_type my name (e.g. "Popup Notice").
+     * Get id of cms_message_manager_message_type by name (e.g. "Popup Notice").
      *
-     * @param $sMessageTypeName
+     * @deprecated since 7.0.13 - use TCMSLogChange::getMessageTypeIdBySystemName() instead.
+     *
+     * @param string $sMessageTypeName
+     * @param string $languageIso - default is "DE" for backwards compatibility reasons.
      *
      * @return string
      */
-    public static function GetMessageTypeByName($sMessageTypeName)
+    public static function GetMessageTypeByName(string $sMessageTypeName, string $languageIso = 'de')
     {
-        $sRet = '';
-        if (!empty($sMessageTypeName)) {
-            $oMsgType = TdbCmsMessageManagerMessageType::GetNewInstance();
-            if ($oMsgType->LoadFromField('name', $sMessageTypeName)) {
-                $sRet = $oMsgType->id;
-            }
+        if (true === empty($sMessageTypeName)) {
+            return '';
         }
 
-        return $sRet;
+        $language = self::getLanguageService()->getLanguageFromIsoCode(\strtolower($languageIso));
+
+        $messageType = \TdbCmsMessageManagerMessageType::GetNewInstance();
+        if (null !== $language) {
+            $messageType->SetLanguage($language->id);
+        }
+        if (false === $messageType->LoadFromField('name', $sMessageTypeName)) {
+            return '';
+        }
+
+        return $messageType->id;
+    }
+
+    /**
+     * The available default system names are: unknown, notice, warning, error, error_striking.
+     *
+     * @param string $messageTypeName
+     * @return string|null
+     */
+    public static function getMessageTypeIdBySystemName(string $messageTypeName): ?string
+    {
+        $messageType = TdbCmsMessageManagerMessageType::GetNewInstance();
+        if (false === $messageType->LoadFromField('systemname', $messageTypeName)) {
+            return null;
+        }
+
+        return $messageType->id;
     }
 
     /**
@@ -2394,6 +2419,6 @@ class TCMSLogChange
      */
     private static function getSnippetChainModifier()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier');
+        return ServiceLocator::get('chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier');
     }
 }
