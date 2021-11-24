@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\CmsConfigDataAccessInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -39,17 +40,21 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
      * @var KernelInterface
      */
     private $kernel;
-
     /**
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param RequestInfoServiceInterface  $requestInfoService
-     * @param KernelInterface              $kernel
+     * @var CmsConfigDataAccessInterface
      */
-    public function __construct(PortalDomainServiceInterface $portalDomainService, RequestInfoServiceInterface $requestInfoService, KernelInterface $kernel)
-    {
+    private $cmsConfigDataAccess;
+
+    public function __construct(
+        PortalDomainServiceInterface $portalDomainService,
+        RequestInfoServiceInterface $requestInfoService,
+        KernelInterface $kernel,
+        CmsConfigDataAccessInterface $cmsConfigDataAccess
+    ) {
         $this->portalDomainService = $portalDomainService;
         $this->requestInfoService = $requestInfoService;
         $this->kernel = $kernel;
+        $this->cmsConfigDataAccess = $cmsConfigDataAccess;
     }
 
     /**
@@ -389,6 +394,9 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
                 $snippetChain = $oTheme->getSnippetChainAsArray();
             }
         }
+
+        // TODO quite unfortunate here that there is no "this is backend" (only the fact that is has no portal and thus no snippet chain paths)
+
         if (false !== CHAMELEON_PATH_THEMES && count($snippetChain) > 0) {
             $aBasePaths[$sPortalCacheId] = array();
             foreach ($snippetChain as $element) {
@@ -406,6 +414,10 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
                     $aBasePaths[$sPortalCacheId][] = realpath($sCandidate.'/'.$sBaseDirectory);
                 }
             }
+        }
+
+        if (true === $this->requestInfoService->isBackendMode()) {
+            $aBasePaths[$sPortalCacheId] = $this->addBackendThemePaths($aBasePaths[$sPortalCacheId], $sBaseDirectory);
         }
 
         return $aBasePaths[$sPortalCacheId];
@@ -448,5 +460,28 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
     public function getBasePathsFromInstance($oPortal = null, $sBaseDirectory = null)
     {
         return $this->getBasePaths($oPortal, $sBaseDirectory);
+    }
+
+    private function addBackendThemePaths(array $paths, string $directorySuffix): array
+    {
+        $backendTheme = $this->cmsConfigDataAccess->getBackendTheme();
+
+        if (null === $backendTheme) {
+            return $paths;
+        }
+
+        $snippetChainElements = $backendTheme->getSnippetChainAsArray();
+
+        foreach ($snippetChainElements as $element) {
+            $path = $this->getVerifiedPath($element, $directorySuffix);
+
+            if (null === $path) {
+                continue;
+            }
+
+            $paths[] = $path;
+        }
+
+        return $paths;
     }
 }

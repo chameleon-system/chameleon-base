@@ -103,7 +103,8 @@ class TPkgCmsTextfieldImage extends AbstractViewMapper
 
             $oVisitor->SetMappedValue('iMediumScreenSize', $iMediumSize);
 
-            if ($oThumb->aData['width'] > $iMediumSize) {
+            $thumbWidth = $oThumb->aData['width'] ?? 0;
+            if ($thumbWidth > $iMediumSize) {
                 $oThumb = $oImage->GetThumbnail($iMediumSize, 2000, true, $aEffects);
                 $sMediumThumbnailURL = $oThumb->GetFullURL();
             } else {
@@ -120,7 +121,7 @@ class TPkgCmsTextfieldImage extends AbstractViewMapper
 
             $oVisitor->SetMappedValue('iSmallScreenSize', $iSmallSize);
 
-            if ($oThumb->aData['width'] > $iSmallSize) {
+            if ($thumbWidth > $iSmallSize) {
                 $oThumb = $oImage->GetThumbnail($iSmallSize, 2000, true, $aEffects);
                 $sSmallThumbnailURL = $oThumb->GetFullURL();
             } else {

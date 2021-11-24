@@ -878,7 +878,7 @@ class TFullGroupTable extends TGroupTable
 
             $filterContent .= '<div class="form-group mr-2 typeahead-relative">';
 
-            $formatString = '<input id="searchLookup" name="_search_word" class="form-control form-control-sm" placeholder="%s" value="%s" autocomplete="off" data-source-url="%s" data-record-url="%s" data-onclick-function="%s">';
+            $formatString = '<input id="searchLookup" name="_search_word" class="form-control form-control-sm entry-search-field" placeholder="%s" value="%s" autocomplete="off" data-source-url="%s" data-record-url="%s" data-onclick-function="%s">';
             $filterContent .= sprintf(
                 $formatString,
                 TGlobal::OutHTML($this->searchFieldText),
@@ -891,8 +891,8 @@ class TFullGroupTable extends TGroupTable
             $filterContent .= '</div>
                                 <div class="form-group">';
 
-            $formatString = '<input type="button" class="form-control form-control-sm btn btn-sm btn-primary" value="%1$s" onClick="document.%2$s._startRecord.value=0;document.%2$s.submit();">';
-            $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchButtonText), TGlobal::OutHTML($this->listName));
+            $formatString = '<input type="button" class="form-control form-control-sm btn btn-sm btn-primary" value="%s">';
+            $filterContent .= sprintf($formatString, TGlobal::OutHTML($this->searchButtonText));
 
             $filterContent .= '</div>';
         }

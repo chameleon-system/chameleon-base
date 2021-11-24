@@ -3,8 +3,6 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 
-$iTextFieldCount = 0;
-$sLastTextFieldName = '';
 $data['oFields']->GoToStart();
 $sTmpFormTabsContent = '';
 while ($oField = $data['oFields']->Next()) {
@@ -57,15 +55,7 @@ while ($oField = $data['oFields']->Next()) {
                 }
 
                 if (ACTIVE_TRANSLATION) {
-                    $bIsTextField = false;
-                    $aAllowedTypes = array('CMSFIELD_STRING', 'CMSFIELD_TEXT', 'CMSFIELD_STRING_UNIQUE');
                     $oFieldType = $oField->oDefinition->GetFieldType();
-                    if (in_array($oFieldType->sqlData['constname'], $aAllowedTypes)) {
-                        $bIsTextField = true;
-                        $sLastTextFieldName = $oField->name;
-                        ++$iTextFieldCount;
-                    }
-
                     if ('1' === $oField->oDefinition->sqlData['is_translatable']) {
                         $sPrefix = TGlobal::GetLanguagePrefix($oTable->GetLanguage());
                         if (empty($sPrefix)) {
@@ -128,21 +118,4 @@ if (!empty($sTmpFormTabsContent)) {
     $sFormTabsContent .= '<div class="mt-3">';
     $sFormTabsContent .= $sTmpFormTabsContent;
     $sFormTabsContent .= '</div></div>';
-}
-
-/** add handling of ENTER key to trigger the save button if we have a form with only one text field */
-if (!empty($sLastTextFieldName) && 1 == $iTextFieldCount) {
-    ?>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#<?=$sLastTextFieldName; ?>').keypress(function (e) {
-            code = e.keyCode ? e.keyCode : e.which;
-            if (code.toString() == 13) { // ENTER key
-                e.preventDefault();
-                $('.btn-group button.itemsave').click();
-            }
-        });
-    });
-</script>
-<?php
 }
