@@ -225,7 +225,7 @@ class TCMSTableEditorManager
     }
 
     /**
-     * load the table editor class that is configured in cms_tbl_conf
+     * Load the table editor class that is configured in cms_tbl_conf.
      * @return TCMSTableEditor
      */
     public function &TableEditorFactory()
