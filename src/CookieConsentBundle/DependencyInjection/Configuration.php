@@ -12,8 +12,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('chameleon_system_cookie_consent');
+        $treeBuilder = new TreeBuilder('chameleon_system_cookie_consent');
+        $root = $treeBuilder->getRootNode();
         $root->isRequired();
         $root->addDefaultsIfNotSet()
                 ->children()

@@ -21,8 +21,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('chameleon_system_update_counter_migration');
+        $treeBuilder = new TreeBuilder('chameleon_system_update_counter_migration');
+        $root = $treeBuilder->getRootNode();
         $root->isRequired();
 
         $root
