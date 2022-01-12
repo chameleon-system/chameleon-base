@@ -58,24 +58,22 @@ chameleon_system_core:
 
 framework:
   csrf_protection: ~
+  error_controller: chameleon_system_core.controller.exception:showAction
   validation:      { enable_annotations: true }
   router:
-    resource: "%kernel.root_dir%/config/routing.yml"
+    resource: "%kernel.project_dir%/config/routing.yml"
     strict_requirements: ~
   session:
     metadata_update_threshold: 120
     cookie_httponly: true
     cookie_lifetime: 7200
     gc_maxlifetime: 7200
-  templating:
-    engines: ['twig']
   translator: { fallback: en }
 
 twig:
   debug:            "%kernel.debug%"
   charset:          "%kernel.charset%"
   strict_variables:          false
-  exception_controller: chameleon_system_core.controller.exception:showAction
 #  auto_reload:               ~
 #  optimizations:             ~
 

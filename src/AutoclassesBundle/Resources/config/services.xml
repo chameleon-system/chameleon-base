@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="chameleon_system_autoclasses.cache_warmer.class">ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer</parameter>
-        <parameter key="chameleon_system_autoclasses.cache_warmer.autoclasses_dir">%kernel.root_dir%/cache/autoclasses/</parameter>
+        <parameter key="chameleon_system_autoclasses.cache_warmer.autoclasses_dir">%kernel.project_dir%/cache/autoclasses/</parameter>
         <parameter key="chameleon_system_autoclasses.request_listener.class">ChameleonSystem\AutoclassesBundle\Listener\RequestListener</parameter>
     </parameters>
 
