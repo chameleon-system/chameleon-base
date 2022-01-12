@@ -26,7 +26,7 @@ use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Converter\DataModel
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\MigrationDataModelFactory\ChameleonProcessedMigrationDataModelFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * update file management, loads and executes database updates.

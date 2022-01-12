@@ -15,7 +15,7 @@ use ChameleonSystem\CoreBundle\Interfaces\MediaManagerUrlGeneratorInterface;
 use IMapperCacheTriggerRestricted;
 use IMapperRequirementsRestricted;
 use IMapperVisitorRestricted;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TCMSMediaFieldMapperDecorator implements \IViewMapper
 {

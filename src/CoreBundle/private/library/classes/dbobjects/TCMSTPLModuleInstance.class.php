@@ -11,7 +11,7 @@
 
 use ChameleonSystem\CoreBundle\Exception\ModuleException;
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * holds a record from the "cms_tpl_module_instance" table.

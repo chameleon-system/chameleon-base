@@ -11,7 +11,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * manages the webpage list (links to the template engine interface).

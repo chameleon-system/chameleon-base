@@ -30,7 +30,7 @@ use ICmsCoreRedirect;
 use IMapperCacheTriggerRestricted;
 use IMapperVisitorRestricted;
 use MTPkgViewRendererAbstractModuleMapper;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use TdbCmsImageCropPresetList;
 use TGlobal;
 

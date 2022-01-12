@@ -40,7 +40,7 @@ use IMapperVisitorRestricted;
 use LogicException;
 use MapperException;
 use MTPkgViewRendererAbstractModuleMapper;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use TdbCmsUser;
 use TGlobal;
 use TPkgSnippetRenderer_SnippetRenderingException;
