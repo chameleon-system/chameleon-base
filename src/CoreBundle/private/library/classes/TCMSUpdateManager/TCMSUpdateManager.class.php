@@ -26,6 +26,7 @@ use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Converter\DataModel
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\MigrationDataModelFactory\ChameleonProcessedMigrationDataModelFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -87,7 +88,7 @@ class TCMSUpdateManager
      */
     private function getAllMigrationDataModels()
     {
-        $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_BEFORE_COLLECTION);
+        $this->getEventDispatcher()->dispatch(new Event(), CoreEvents::UPDATE_BEFORE_COLLECTION);
 
         return $this->getFileSystemMigrationDataModelFactory()->createMigrationDataModels();
     }

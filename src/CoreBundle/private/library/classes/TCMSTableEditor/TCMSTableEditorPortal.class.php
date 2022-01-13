@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class TCMSTableEditorPortal extends TCMSTableEditor
 {
@@ -550,7 +551,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
             $languageIsoBeforeChange = $languageService->getLanguageIsoCode($defaultLanguageBeforeChange);
 
             $event = new LocaleChangedEvent($languageIsoAfterChange, $languageIsoBeforeChange);
-            $eventDispatcher->dispatch(CoreEvents::CHANGE_DEFAULT_LANGUAGE_FOR_PORTAL, $event);
+            $eventDispatcher->dispatch($event, CoreEvents::CHANGE_DEFAULT_LANGUAGE_FOR_PORTAL);
         }
     }
 
@@ -563,7 +564,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         $languagesAfterChange = $this->oTable->GetMLTIdList('cms_language');
         if (array_diff($languagesBeforeChange, $languagesAfterChange) !== array_diff($languagesAfterChange, $languagesBeforeChange)) {
             $event = new ChangeActiveLanguagesForPortalEvent($this->oTable, $languagesBeforeChange, $languagesAfterChange);
-            $eventDispatcher->dispatch(CoreEvents::CHANGE_ACTIVE_LANGUAGES_FOR_PORTAL, $event);
+            $eventDispatcher->dispatch($event, CoreEvents::CHANGE_ACTIVE_LANGUAGES_FOR_PORTAL);
         }
     }
 
@@ -575,7 +576,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     {
         $useSlashInSeoUrlsAfterChange = $this->oTable->fieldUseSlashInSeoUrls;
         if ($useSlashInSeoUrlsBeforeChange !== $useSlashInSeoUrlsAfterChange) {
-            $eventDispatcher->dispatch(CoreEvents::CHANGE_USE_SLASH_IN_SEO_URLS_FOR_PORTAL);
+            $eventDispatcher->dispatch(new Event(), CoreEvents::CHANGE_USE_SLASH_IN_SEO_URLS_FOR_PORTAL);
         }
     }
 

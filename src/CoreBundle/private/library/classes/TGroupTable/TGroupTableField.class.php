@@ -254,7 +254,7 @@ class TGroupTableField
         $event->setCssClasses(\explode(' ', $style));
         $event->setCellValue($cellValue);
 
-        $this->getEventDispatcher()->dispatch(CoreEvents::DISPLAY_LISTMANAGER_CELL, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::DISPLAY_LISTMANAGER_CELL);
 
         $tag = true === $event->isHeader() ? 'th' : 'td';
         $onclick = $event->getOnclickEvent();

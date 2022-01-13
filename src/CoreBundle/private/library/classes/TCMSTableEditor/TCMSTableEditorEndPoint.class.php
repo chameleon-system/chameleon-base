@@ -816,7 +816,7 @@ class TCMSTableEditorEndPoint
         }
 
         $event = new RecordChangeEvent($this->oTableConf->sqlData['name'], $this->sId);
-        $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_RECORD, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_RECORD);
     }
 
     /**
@@ -1210,7 +1210,7 @@ class TCMSTableEditorEndPoint
         TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $sCacheTriggerID);
 
         $event = new RecordChangeEvent($this->oTableConf->sqlData['name'], $this->sId);
-        $this->getEventDispatcher()->dispatch(CoreEvents::INSERT_RECORD, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::INSERT_RECORD);
     }
 
     /**
@@ -1300,7 +1300,7 @@ class TCMSTableEditorEndPoint
         TCMSLogChange::WriteTransaction($aQuery);
 
         $event = new RecordChangeEvent($this->oTableConf->sqlData['name'], $sDeleteId);
-        $this->getEventDispatcher()->dispatch(CoreEvents::DELETE_RECORD, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_RECORD);
 
         $this->sId = null;
     }
