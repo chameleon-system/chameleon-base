@@ -24,7 +24,7 @@ use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 /**
  * {@inheritdoc}
  */
-class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\ExceptionController
+class ExceptionController
 {
     /**
      * @var ChameleonControllerInterface
@@ -66,28 +66,28 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
 
     /**
      * @param Request                   $request
-     * @param FlattenException          $exception
+     * @param \Throwable                $exception
      * @param DebugLoggerInterface|null $logger
      *
      * @return Response
      */
-    public function showAction(Request $request, FlattenException $exception, DebugLoggerInterface $logger = null)
+    public function showAction(Request $request, \Throwable $exception, DebugLoggerInterface $logger = null)
     {
-        $currentContent = $this->getAndCleanOutputBuffering($request->headers->get('X-Php-Ob-Level', -1));
+        //$currentContent = $this->getAndCleanOutputBuffering($request->headers->get('X-Php-Ob-Level', -1));
 
-        $code = $exception->getStatusCode();
-
-        $request->attributes->set('currentContent', $currentContent);
-
-        $exceptionPageDef = $this->getExceptionPageDef($code);
-        if (null === $exceptionPageDef) {
-            return parent::showAction($request, $exception, $logger);
-        }
-        $request->attributes->set('pagedef', $exceptionPageDef);
-
-        // Do not execute (original) module_fnc for error pages
-        $request->request->remove('module_fnc');
-        $request->query->remove('module_fnc');
+//        $code = $exception->getStatusCode();
+//
+//        //$request->attributes->set('currentContent', $currentContent);
+//
+//        $exceptionPageDef = $this->getExceptionPageDef($code);
+//        if (null === $exceptionPageDef) {
+//            return parent::showAction($request, $exception, $logger);
+//        }
+//        $request->attributes->set('pagedef', $exceptionPageDef);
+//
+//        // Do not execute (original) module_fnc for error pages
+//        $request->request->remove('module_fnc');
+//        $request->query->remove('module_fnc');
 
         return $this->mainController->__invoke();
     }

@@ -40,8 +40,8 @@ abstract class ChameleonBaseRouter extends Router
         parent::__construct($container, $resource, $options, $context);
         $this->environment = $container->getParameter('kernel.environment');
 
-        $options['matcher_cache_class'] = $this->getMatcherCacheClassName();
-        $options['generator_cache_class'] = $this->getGeneratorCacheClassName();
+        //$options['matcher_cache_class'] = $this->getMatcherCacheClassName();
+        //$options['generator_cache_class'] = $this->getGeneratorCacheClassName();
         $options['resource_type'] = 'chameleon';
         $options['cache_dir'] = $container->getParameter('kernel.cache_dir');
 

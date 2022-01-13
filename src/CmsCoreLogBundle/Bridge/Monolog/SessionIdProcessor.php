@@ -37,6 +37,8 @@ class SessionIdProcessor implements ProcessorInterface
             return $record;
         }
 
+        return $record;
+
         if (null === $request->getSession()) {
             return $record;
         }
