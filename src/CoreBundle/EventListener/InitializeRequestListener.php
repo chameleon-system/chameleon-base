@@ -14,7 +14,7 @@ namespace ChameleonSystem\CoreBundle\EventListener;
 use ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeServiceInterface;
 use ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class InitializeRequestListener
 {
@@ -43,12 +43,9 @@ class InitializeRequestListener
         $this->requestInfoService = $requestInfoService;
     }
 
-    /**
-     * @param GetResponseEvent $event
-     */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 

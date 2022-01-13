@@ -12,7 +12,7 @@
 namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use TCMSUser;
 
@@ -36,12 +36,9 @@ class TemplateEngineAccessListener
         $this->requestInfoService = $requestInfoService;
     }
 
-    /**
-     * @param GetResponseEvent $event
-     */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
         if (!$this->requestInfoService->isCmsTemplateEngineEditMode()) {

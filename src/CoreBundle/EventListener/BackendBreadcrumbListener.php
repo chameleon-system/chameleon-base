@@ -15,7 +15,7 @@ use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class BackendBreadcrumbListener
 {
@@ -51,9 +51,9 @@ class BackendBreadcrumbListener
         $this->backendBreadcrumbService = $backendBreadcrumbService;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
-        if (false === $event->isMasterRequest()) {
+        if (false === $event->isMainRequest()) {
             return;
         }
 
