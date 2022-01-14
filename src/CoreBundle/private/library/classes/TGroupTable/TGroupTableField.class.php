@@ -422,15 +422,20 @@ class TGroupTableField
         $format = $this->format;
         $name = $this->name;
         if (is_array($format)) {
-            $className = $format[0];
+            $classNameOrObject = $format[0];
             $callbackFunctionName = $format[1];
-            $recordObject =  new $className;
 
-            if (false === is_callable(array($recordObject, $callbackFunctionName))) {
-                return sprintf('[Error: callback function "%s" does not exist in "%s" for field "%s"]', $callbackFunctionName, $className, $name);
+            $callableObject = $classNameOrObject;
+            if (\is_string($classNameOrObject)) {
+                $callableObject = new $classNameOrObject; // TODO wip this unsolicited new on anything is problematic
+                // Or directly support calling (static) methods of classes?
             }
 
-            return call_user_func(array($className, $callbackFunctionName), $cellValue, $row, $name);
+            if (false === is_callable(array($callableObject, $callbackFunctionName))) {
+                return sprintf('[Error: function "%s" is not present or callable in "%s" for field "%s"]', $callbackFunctionName, \get_class($callableObject), $name);
+            }
+
+            return call_user_func(array($callableObject, $callbackFunctionName), $cellValue, $row, $name);
         }
         if (function_exists($format)) {
             return call_user_func($format, $cellValue, $row, $name);
