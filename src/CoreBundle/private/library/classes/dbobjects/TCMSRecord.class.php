@@ -2245,12 +2245,12 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         return array($tdbClassName, $cellFormattingFunctionName);
     }
 
-    public function callBackUuid(string $id)
+    public static function callBackUuid(string $id)
     {
         return '<span title="'.TGlobal::OutHTML($id).'"><i class="fas fa-fingerprint"></i> '.self::getShortUuid($id).'</span>';
     }
 
-    protected function getShortUuid(string $uuid)
+    protected static function getShortUuid(string $uuid)
     {
         if (strlen($uuid) > 8) {
             return substr($uuid, 0, 8);
