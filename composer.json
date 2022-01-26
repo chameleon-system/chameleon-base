@@ -22,6 +22,7 @@
         "ckeditor/ckeditor": "4.6.2",
         "coreui/coreui": "^2.1",
         "dmhendricks/file-icon-vectors": "~1.0",
+        "doctrine/annotations": "^1.13",
         "doctrine/dbal": "^2.13",
         "doctrine/doctrine-bundle": "~2.2.0",
         "ezyang/htmlpurifier": "~4.6",
