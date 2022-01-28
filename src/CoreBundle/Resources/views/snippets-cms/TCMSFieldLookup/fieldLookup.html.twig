@@ -12,7 +12,7 @@
                 <option value="">{{ 'chameleon_system_core.form.select_box_nothing_selected'|trans }}</option>
             {% endif %}
             {% for key, option in options %}
-                {% if key == connectedRecordId %}
+                {% if key ~ '' == connectedRecordId %}
                     {% set selected = 'selected' %}
                 {% else %}
                     {% set selected = '' %}
