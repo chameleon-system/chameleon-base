@@ -19,7 +19,7 @@ class TUserModelBaseCore extends TModelBase
     /**
      * holds the instance id of the module (points to a record in the table cms_tpl_module_instance).
      *
-     * @var int
+     * @var string
      */
     public $instanceID = null;
 

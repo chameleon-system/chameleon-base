@@ -96,7 +96,7 @@ class EntityList implements EntityListInterface
     }
 
     /**
-     * @return array|bool
+     * @return array|false
      */
     public function current()
     {

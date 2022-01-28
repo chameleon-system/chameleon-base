@@ -133,7 +133,7 @@ class TDataMailProfile extends TDataMailProfileAutoParent
      * @param string $sProfileName
      * @param string $iLanguage
      *
-     * @return TdbDataMailProfile
+     * @return TdbDataMailProfile|null
      */
     public static function GetProfile($sProfileName, $iLanguage = null)
     {
