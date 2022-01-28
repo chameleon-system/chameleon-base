@@ -8,7 +8,7 @@
                 data-select2-option='{{ selectOptions|e('html_attr') }}'>
             {% set helpText = "" %}
             {% for key, option in options %}
-                {% if key ~ '' == connectedRecordId %}
+                {% if key == connectedRecordId %}
                     {% set selected = "selected" %}
                     {% set helpText = fieldsHelpText[key] %}
                 {% else %}
