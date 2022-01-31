@@ -612,7 +612,6 @@ class TFullGroupTable extends TGroupTable
                     if (isset($this->orderList) && is_array($this->orderList) && array_key_exists($cellObj->name, $this->orderList)) {
                         // find orderCount
                         $orderCount = 1;
-                        $found = false;
                         reset($this->orderList);
 
                         $tmpOrderList = $this->orderList;
@@ -626,7 +625,6 @@ class TFullGroupTable extends TGroupTable
                             if (0 != strcmp($cellObj->name, $field)) {
                                 ++$orderCount;
                             } else {
-                                $found = true;
                                 break;
                             }
                         }
