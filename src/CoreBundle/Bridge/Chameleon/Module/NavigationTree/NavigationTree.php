@@ -439,7 +439,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
         $updatedNodes[] = $node;
         $event = new ChangeNavigationTreeNodeEvent($updatedNodes);
-        $this->eventDispatcher->dispatch(CoreEvents::UPDATE_NAVIGATION_TREE_NODE, $event);
+        $this->eventDispatcher->dispatch($event, CoreEvents::UPDATE_NAVIGATION_TREE_NODE);
 
         return true;
     }

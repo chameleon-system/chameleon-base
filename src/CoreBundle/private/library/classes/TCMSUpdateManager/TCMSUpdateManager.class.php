@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\CoreEvents;
+use ChameleonSystem\CoreBundle\Event\UpdateBeforeMigrationFilesCollectionEvent;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\DatabaseMigration\Constant\DatabaseMigrationConstants;
 use ChameleonSystem\DatabaseMigration\Counter\MigrationCounterManagerInterface;
@@ -87,7 +88,7 @@ class TCMSUpdateManager
      */
     private function getAllMigrationDataModels()
     {
-        $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_BEFORE_COLLECTION);
+        $this->getEventDispatcher()->dispatch(new UpdateBeforeMigrationFilesCollectionEvent(), CoreEvents::UPDATE_BEFORE_COLLECTION);
 
         return $this->getFileSystemMigrationDataModelFactory()->createMigrationDataModels();
     }
