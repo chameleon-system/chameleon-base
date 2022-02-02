@@ -36,6 +36,10 @@
             <tag name="monolog.processor"/>
         </service>
 
+        <service id="chameleon_system_cms_core_log.processor.route_match_message" class="ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\DemoteRouteMessageProcessor" public="false">
+            <tag name="monolog.processor"/>
+        </service>
+
         <service id="cmsPkgCore.logHandler.files" class="Monolog\Handler\StreamHandler" public="false">
             <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
             <argument>%kernel.logs_dir%/core.log</argument>
