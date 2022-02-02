@@ -17,6 +17,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - Event dispatcher: The argument order is swapped. (search for ->dispatch( )
 - Session: Instead of `getSession()` `hasSession()` should be used for a null check. (search for ->getSession( with a following null check)
 - Some event classes have been renamed. Especially FilterResponseEvent and GetResponseEvent.
+- Change the event base class to \Symfony\Contracts\EventDispatcher\Event.
 - Take care that all yaml string values have quotes. For example in any config.yml.
 
 This list might not be complete. Also take a look at the official Symfony migration documentation:

@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\ViewRendererBundle\objects;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class ViewRendererEvent extends Event
 {
