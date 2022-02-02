@@ -61,18 +61,17 @@ class TCMSViewPortManager
     {
         $bDesktopViewPort = $this->inputFilterUtil->getFilteredInput('showDesktopMode', null, false, TCMSUserInput::FILTER_URL_INTERNAL);
         $request = $this->requestStack->getCurrentRequest();
+        if (false === $request->hasSession()) {
+            return false;
+        }
         $oSession = $request->getSession();
         if (null !== $bDesktopViewPort) {
-            $bDesktopViewPort = ('1' === $bDesktopViewPort) ? true : false;
-            if (null !== $oSession) {
-                $oSession->set('bDesktopViewPort', $bDesktopViewPort);
-            }
-        } elseif (null !== $oSession && true === $oSession->has('bDesktopViewPort')) {
+            $bDesktopViewPort = '1' === $bDesktopViewPort;
+            $oSession->set('bDesktopViewPort', $bDesktopViewPort);
+        } elseif (true === $oSession->has('bDesktopViewPort')) {
             $bDesktopViewPort = $oSession->get('bDesktopViewPort');
         } else {
-            if (null !== $oSession) {
-                $oSession->set('bDesktopViewPort', false);
-            }
+            $oSession->set('bDesktopViewPort', false);
             $bDesktopViewPort = false;
         }
 

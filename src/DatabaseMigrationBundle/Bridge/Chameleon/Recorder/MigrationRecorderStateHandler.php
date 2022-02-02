@@ -119,10 +119,10 @@ class MigrationRecorderStateHandler
         if (null === $request) {
             return null;
         }
-        $session = $request->getSession();
-        if (null === $session) {
+        if (false === $request->hasSession()) {
             return null;
         }
+        $session = $request->getSession();
         if (false === $session->isStarted()) {
             return null;
         }

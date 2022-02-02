@@ -640,8 +640,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         $aProtectedVariables = $this->GetProtectedSessionVariables();
         $request = $this->getCurrentRequest();
         if (null !== $request) {
-            $session = $request->getSession();
-            if (null !== $session) {
+            if (true === $request->hasSession()) {
+                $session = $request->getSession();
                 $all = $session->all();
                 $new = array();
                 foreach ($aProtectedVariables as $key) {

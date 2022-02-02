@@ -239,9 +239,11 @@ class TCMSUser extends TCMSRecord
         unset($_SESSION['_listObjCache']);
         $request = self::getRequest();
         if (null !== $request) {
-            $session = $request->getSession();
-            if (null === $session) {
-                $session->clear();
+            if (true === $request->hasSession()) {
+                $session = $request->getSession();
+                if (null === $session) {
+                    $session->clear();
+                }
             }
         }
 
