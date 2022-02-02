@@ -34,6 +34,7 @@ class DemoteRouteMessageProcessor implements ProcessorInterface
         }
 
         $record['level'] = Logger::DEBUG;
+        $record['level_name'] = Logger::getLevelName(Logger::DEBUG);
 
         return $record;
     }
