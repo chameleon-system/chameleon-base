@@ -23,8 +23,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('chameleon_system_java_script_minification');
+        $treeBuilder = new TreeBuilder('chameleon_system_java_script_minification');
+        $root = $treeBuilder->getRootNode();
         $root->isRequired();
         $root->addDefaultsIfNotSet()
                 ->children()
