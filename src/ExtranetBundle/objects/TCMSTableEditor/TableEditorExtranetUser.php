@@ -14,7 +14,7 @@ use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use ChameleonSystem\ExtranetBundle\LoginByToken\LoginTokenServiceInterface;
 use ChameleonSystem\ExtranetBundle\LoginByToken\LoginByTokenController;
 use ChameleonSystem\ExtranetBundle\LoginByToken\RouteGenerator;

@@ -12,7 +12,7 @@
 namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\Event\LocaleChangedEvent;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ChangeTranslationLocaleListener
 {

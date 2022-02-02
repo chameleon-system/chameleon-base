@@ -12,7 +12,7 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * class TGroupTable is used to display a flexible table with, and without data groupings.

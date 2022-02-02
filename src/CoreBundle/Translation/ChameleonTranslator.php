@@ -14,9 +14,10 @@ namespace ChameleonSystem\CoreBundle\Translation;
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\LocaleAwareInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
+class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
 {
     /**
      * @var TranslatorInterface|TranslatorBagInterface

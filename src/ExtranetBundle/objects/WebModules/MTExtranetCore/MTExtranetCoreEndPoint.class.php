@@ -17,7 +17,7 @@ use ChameleonSystem\ExtranetBundle\Exception\PasswordGenerationFailedException;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 use ChameleonSystem\ExtranetBundle\objects\ExtranetUserConstants;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MTExtranetCoreEndPoint extends TUserCustomModelBase
 {

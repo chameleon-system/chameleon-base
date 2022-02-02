@@ -25,7 +25,7 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Doctrine\DBAL\Connection;
 use MTPkgViewRendererAbstractModuleMapper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use TGlobal;
 use TTools;
 
