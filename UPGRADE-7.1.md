@@ -111,6 +111,9 @@ class ...Cronjob extends TdbCmsCronjobs {
 
 # Removed Features
 # Deprecated Code Entities
+
+* TCMSChangeLogArchiver
+
 # Removed Code Entities
 
 The code entities in this list were marked as deprecated in previous releases and have now been removed.
