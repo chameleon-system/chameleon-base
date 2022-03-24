@@ -11,6 +11,8 @@
 
 /**
  * Archives and deletes old changelog sets and changelog items.
+ *
+ * @deprecated - replaced by \ChameleonSystem\CmsChangeLogBundle\DataAccess\CmsChangeLogDataAccess::deleteOlderThan()
 /**/
 class TCMSChangeLogArchiver
 {
