@@ -55,15 +55,16 @@
         </service>
 
         <service id="chameleon_system_view_renderer.snippet_directory" class="%chameleon_system_view_renderer.snippet_directory.class%">
-            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
             <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="kernel"/>
-            <argument type="service" id="chameleon_system_core.service.cms_config_data_access"/>
+            <argument type="service" id="chameleon_system_view_renderer.theme_service"/>
         </service>
 
         <service id="chameleon_system_view_renderer.less_compiler" class="ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler">
             <argument/> <!-- will be replaced by ChameleonSystemViewRendererExtension -->
             <argument>%chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix%</argument>
+            <argument type="service" id="chameleon_system_view_renderer.theme_service"/>
         </service>
 
         <service id="chameleon_system_view_renderer.routing.generate_css_route_collection_generator"
@@ -99,6 +100,10 @@
             public="false">
             <argument type="service" id="database_connection"/>
         </service>
-        
+
+        <service id="chameleon_system_view_renderer.theme_service" class="ChameleonSystem\ViewRendererBundle\Service\ThemeService">
+            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
+            <argument type="service" id="chameleon_system_core.service.cms_config_data_access"/>
+        </service>
     </services>
 </container>

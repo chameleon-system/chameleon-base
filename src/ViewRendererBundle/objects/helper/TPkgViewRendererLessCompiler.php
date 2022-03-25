@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\ViewRendererBundle\objects;
 
+use ChameleonSystem\ViewRenderer\Interfaces\ThemeServiceInterface;
 use Exception;
 use MatthiasMullie\Minify\CSS;
 use TdbCmsPortal;
@@ -19,25 +20,16 @@ use ViewRenderException;
 
 class TPkgViewRendererLessCompiler
 {
-    /**
-     * @var string
-     */
-    private $cssDir;
+    private string $cssDir;
+    private string $resourceCollectionRefreshPrefix;
+    private array $additionalVariables = [];
+    private ThemeServiceInterface $themeService;
 
-    /**
-     * @var string
-     */
-    private $resourceCollectionRefreshPrefix;
-
-    /**
-     * @var array
-     */
-    private $additionalVariables = [];
-
-    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix)
+    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix, ThemeServiceInterface $themeService)
     {
         $this->cssDir = trim($cssDirRelativeToWebRoot, '/');
         $this->resourceCollectionRefreshPrefix = $resourceCollectionRefreshPrefix;
+        $this->themeService = $themeService;
     }
 
     /**
@@ -139,15 +131,18 @@ class TPkgViewRendererLessCompiler
      */
     protected function getLessFilesFromSnippetsAndTheme($portal)
     {
-        $resourceCollector = new TPkgViewRendererSnippetResourceCollector();
-        $resources = $resourceCollector->getLessResources($portal, CMS_SNIPPET_PATH);
-
         $theme = null;
-        if (is_object($portal)) {
+        if (null !== $portal) {
             $theme = $portal->GetFieldPkgCmsTheme();
         }
 
-        if (!$theme || empty($theme->fieldLessFile)) {
+        $resourceCollector = new TPkgViewRendererSnippetResourceCollector();
+        $this->themeService->setOverrideTheme($theme);
+        $resources = $resourceCollector->getLessResources($portal, CMS_SNIPPET_PATH);
+        // TODO this is very side-effectish...
+        $this->themeService->setOverrideTheme(null);
+
+        if (null === $theme || empty($theme->fieldLessFile)) {
             $lessFileToImport = '/assets/less/chameleon.less';
         } else {
             $lessFileToImport = $theme->fieldLessFile;
