@@ -12,25 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
-use TCMSUser;
 
-class BackendLoginEvent extends Event
+class ChangeUseSlashInSeoUrlsEvent extends Event
 {
-    /**
-     * @var TCMSUser
-     */
-    private $user;
-
-    public function __construct(TCMSUser $user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * @return TCMSUser
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
 }

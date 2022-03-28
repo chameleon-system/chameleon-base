@@ -13,7 +13,7 @@ namespace ChameleonSystem\NewsletterBundle\Listener;
 
 use ChameleonSystem\NewsletterBundle\PostProcessing\Bridge\NewsletterUserDataFactory;
 use ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorCollectionService;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class NewsletterPostProcessorListener
 {
@@ -27,7 +27,7 @@ class NewsletterPostProcessorListener
         $this->postProcessorCollectionService = $postProcessorCollectionService;
     }
 
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         $newsletterUserId = $event->getRequest()->query->get('TPkgNewsletterUserId', null);
         if (null === $newsletterUserId) {

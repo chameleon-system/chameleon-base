@@ -12,7 +12,7 @@
 namespace ChameleonSystem\ExtranetBundle\objects;
 
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserEventInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class ExtranetUserEvent extends Event implements ExtranetUserEventInterface
 {

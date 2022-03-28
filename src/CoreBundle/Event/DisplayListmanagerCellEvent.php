@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Holds information on a single backend table cell. This information can be changed to alter display of the cell.

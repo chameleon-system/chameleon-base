@@ -17,7 +17,7 @@ use ChameleonSystem\SanityCheck\Output\AbstractTranslatingCheckOutput;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * DefaultCheckOutput is used to echo a CheckOutcome to the current output (usually browser or console).

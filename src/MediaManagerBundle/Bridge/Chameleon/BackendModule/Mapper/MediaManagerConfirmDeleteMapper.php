@@ -20,7 +20,7 @@ use ChameleonSystem\MediaManager\MediaManagerListState;
 use IMapperCacheTriggerRestricted;
 use IMapperRequirementsRestricted;
 use IMapperVisitorRestricted;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use TdbCmsLanguage;
 
 class MediaManagerConfirmDeleteMapper extends AbstractViewMapper

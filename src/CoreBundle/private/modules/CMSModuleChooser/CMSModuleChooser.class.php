@@ -14,7 +14,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * used to pick the module, and configure it

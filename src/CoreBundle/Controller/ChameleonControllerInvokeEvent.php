@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Controller;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class ChameleonControllerInvokeEvent extends Event
 {

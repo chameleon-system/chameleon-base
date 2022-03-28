@@ -489,7 +489,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             }
         }
         if (false === $this->isLoggedIn) {
-            $this->getEventDispatcher()->dispatch(ExtranetEvents::USER_LOGIN_FAILURE, new ExtranetUserEvent($this));
+            $this->getEventDispatcher()->dispatch(new ExtranetUserEvent($this), ExtranetEvents::USER_LOGIN_FAILURE);
         }
 
         return $this->isLoggedIn;
@@ -545,7 +545,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         }
         $this->CreateLoginHistoryEntry();
 
-        $this->getEventDispatcher()->dispatch(ExtranetEvents::USER_LOGIN_SUCCESS, new ExtranetUserEvent($this));
+        $this->getEventDispatcher()->dispatch(new ExtranetUserEvent($this), ExtranetEvents::USER_LOGIN_SUCCESS);
     }
 
     /**
@@ -620,7 +620,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     public function Logout()
     {
-        $this->getEventDispatcher()->dispatch(ExtranetEvents::USER_BEFORE_LOGOUT, new ExtranetUserEvent($this));
+        $this->getEventDispatcher()->dispatch(new ExtranetUserEvent($this), ExtranetEvents::USER_BEFORE_LOGOUT);
         $wasLoggedOut = false;
         if ($this->IsLoggedIn() && $this->ValidateSessionData()) {
             // invalidate user record
@@ -640,8 +640,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         $aProtectedVariables = $this->GetProtectedSessionVariables();
         $request = $this->getCurrentRequest();
         if (null !== $request) {
-            $session = $request->getSession();
-            if (null !== $session) {
+            if (true === $request->hasSession()) {
+                $session = $request->getSession();
                 $all = $session->all();
                 $new = array();
                 foreach ($aProtectedVariables as $key) {
@@ -664,7 +664,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         static::getExtranetUserProvider()->reset();
 
         if ($wasLoggedOut) {
-            $this->getEventDispatcher()->dispatch(ExtranetEvents::USER_LOGOUT_SUCCESS, new ExtranetUserEvent($this));
+            $this->getEventDispatcher()->dispatch(new ExtranetUserEvent($this), ExtranetEvents::USER_LOGOUT_SUCCESS);
         }
     }
 

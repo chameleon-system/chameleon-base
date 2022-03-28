@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CmsRoutingBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class RoutingConfigChangedEvent extends Event
 {
