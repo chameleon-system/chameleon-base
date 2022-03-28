@@ -40,6 +40,7 @@ use IMapperVisitorRestricted;
 use LogicException;
 use MapperException;
 use MTPkgViewRendererAbstractModuleMapper;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use TdbCmsUser;
 use TGlobal;
@@ -107,6 +108,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
      * @var ResponseVariableReplacerInterface
      */
     private $responseVariableReplacer;
+    private LoggerInterface $logger;
 
     public function __construct(
         MediaTreeDataAccessInterface $mediaTreeDataAccess,
@@ -118,7 +120,8 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         MediaManagerListRequestFactoryInterface $mediaManagerListRequestService,
         TranslatorInterface $translator,
         MediaManagerExtensionCollection $mediaManagerExtensionCollection,
-        ResponseVariableReplacerInterface $responseVariableReplacer
+        ResponseVariableReplacerInterface $responseVariableReplacer,
+        LoggerInterface $logger
     ) {
         parent::__construct();
         $this->mediaTreeDataAccess = $mediaTreeDataAccess;
@@ -131,6 +134,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->translator = $translator;
         $this->mediaManagerExtensionCollection = $mediaManagerExtensionCollection;
         $this->responseVariableReplacer = $responseVariableReplacer;
+        $this->logger = $logger;
     }
 
     /**
@@ -495,8 +499,10 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsAjaxResponse($listReturn);
     }
 
-    private function returnGeneralErrorMessageForAjax()
+    private function returnGeneralErrorMessageForAjax(?string $logMessage = null, ?\Throwable $exception = null)
     {
+        $this->logger->error($logMessage ?? 'A media error occured', ['exception'=>$exception]);
+
         $return = new JavascriptPluginMessage();
         $return->message = $this->translator->trans(
             'chameleon_system_media_manager.general_error_message',
@@ -577,14 +583,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 $this->returnGeneralErrorMessageForAjax();
             }
         } catch (DataAccessException $e) {
-            $return = [];
-            $return['hasError'] = true;
-            $return['errorMessage'] = $this->translator->trans(
-                'chameleon_system_media_manager.general_error_message',
-                array(),
-                TranslationConstants::DOMAIN_BACKEND
-            );
-            $this->returnAsAjaxError($return);
+            $this->returnGeneralErrorMessageForAjax();
         }
 
         $viewRenderer = $this->createViewRendererInstance();
@@ -834,7 +833,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 }
             }
         } catch (DataAccessException $e) {
-            $this->returnGeneralErrorMessageForAjax();
+            $this->returnGeneralErrorMessageForAjax('Cannot move media item(s)', $e);
         }
 
         $return = new JavascriptPluginMessage();
@@ -943,13 +942,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 }
             }
         } catch (DataAccessException $e) {
-            $return->hasError = true;
-            $return->errorMessage = $this->translator->trans(
-                'chameleon_system_media_manager.general_error_message',
-                array(),
-                TranslationConstants::DOMAIN_BACKEND
-            );
-            $this->returnAsAjaxError($return);
+            $this->returnGeneralErrorMessageForAjax();
         }
 
         $this->returnAsAjaxResponse($return);
