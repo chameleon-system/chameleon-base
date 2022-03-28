@@ -51,7 +51,8 @@ class ThemeService implements ThemeServiceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * Replace the "default" theme with a specific one.
+     * As long as it is not null it will always be returned by getTheme() without any further checks.
      */
     public function setOverrideTheme(?\TdbPkgCmsTheme $themeOverride): void
     {

@@ -23,13 +23,11 @@ class TPkgViewRendererLessCompiler
     private string $cssDir;
     private string $resourceCollectionRefreshPrefix;
     private array $additionalVariables = [];
-    private ThemeServiceInterface $themeService;
 
-    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix, ThemeServiceInterface $themeService)
+    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix)
     {
         $this->cssDir = trim($cssDirRelativeToWebRoot, '/');
         $this->resourceCollectionRefreshPrefix = $resourceCollectionRefreshPrefix;
-        $this->themeService = $themeService;
     }
 
     /**
@@ -137,10 +135,7 @@ class TPkgViewRendererLessCompiler
         }
 
         $resourceCollector = new TPkgViewRendererSnippetResourceCollector();
-        $this->themeService->setOverrideTheme($theme);
         $resources = $resourceCollector->getLessResources($portal, CMS_SNIPPET_PATH);
-        // TODO this is very side-effectish...
-        $this->themeService->setOverrideTheme(null);
 
         if (null === $theme || empty($theme->fieldLessFile)) {
             $lessFileToImport = '/assets/less/chameleon.less';

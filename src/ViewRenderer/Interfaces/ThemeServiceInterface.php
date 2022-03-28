@@ -20,6 +20,4 @@ interface ThemeServiceInterface
      * @return \TdbPkgCmsTheme|null
      */
     public function getTheme(?\TdbCmsPortal $portal): ?\TdbPkgCmsTheme;
-
-    public function setOverrideTheme(?\TdbPkgCmsTheme $themeOverride): void;
 }
