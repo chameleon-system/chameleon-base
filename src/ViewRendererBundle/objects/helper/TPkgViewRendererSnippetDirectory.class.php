@@ -29,10 +29,22 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
     const PATH_OBJECTVIEWS = 'objectviews';
     const PATH_LAYOUTS = 'layoutTemplates';
 
-    private RequestInfoServiceInterface $requestInfoService;
-    private KernelInterface $kernel;
-    private ThemeServiceInterface $themeService;
-    private PortalDomainServiceInterface $portalDomainService;
+    /**
+     * @var PortalDomainServiceInterface
+     */
+    private $portalDomainService;
+    /**
+     * @var RequestInfoServiceInterface
+     */
+    private $requestInfoService;
+    /**
+     * @var KernelInterface
+     */
+    private $kernel;
+    /**
+     * @var ThemeServiceInterface
+     */
+    private $themeService;
 
     public function __construct(
         PortalDomainServiceInterface $portalDomainService,
