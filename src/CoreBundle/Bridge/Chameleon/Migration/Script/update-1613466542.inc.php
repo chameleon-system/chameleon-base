@@ -5,12 +5,17 @@
 </div>
 <?php
 
-$backendThemeId = '5f047d9b-0c20-0bfb-2dce-f8193653965c';
+$connection = TCMSLogChange::getDatabaseConnection();
 
-// Make sure to have the same starting point
-TCMSLogChange::removeFromSnippetChain('@ChameleonSystemCoreBundle/Resources/views', [$backendThemeId]);
+$backendThemeId = $connection->fetchOne('SELECT `pkg_cms_theme_id` FROM `cms_config`');
 
-// Add correctly ordered "default" elements (now removed from \TPkgViewRendererSnippetDirectory::getBasePaths())
-TCMSLogChange::addToSnippetChain('@ChameleonSystemCoreBundle/Resources/views', '^', [$backendThemeId]);
-TCMSLogChange::addToSnippetChain('../extensions', '@ChameleonSystemCoreBundle/Resources/views', [$backendThemeId]);
+if (false !== $backendThemeId) {
+    // Make sure to have the same starting point
+    TCMSLogChange::removeFromSnippetChain('@ChameleonSystemCoreBundle/Resources/views', [$backendThemeId]);
+    TCMSLogChange::removeFromSnippetChain('../extensions', [$backendThemeId]);
+
+    // Add correctly ordered "default" elements (now removed from \TPkgViewRendererSnippetDirectory::getBasePaths())
+    TCMSLogChange::addToSnippetChain('@ChameleonSystemCoreBundle/Resources/views', '^', [$backendThemeId]);
+    TCMSLogChange::addToSnippetChain('../extensions', '@ChameleonSystemCoreBundle/Resources/views', [$backendThemeId]);
+}
 
