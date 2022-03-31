@@ -711,6 +711,20 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function ConvertPostDataToSQL()
+    {
+        $data = parent::ConvertPostDataToSQL();
+
+        // make sure line endings are always consistent (simple \n)
+        $data = \str_replace("\r\n", "\n", $data);
+        $data = \str_replace("\r", "\n", $data);
+
+        return $data;
+    }
+
+    /**
      * @param $sEditorHeight
      */
     protected function setEditorHeight($sEditorHeight)
