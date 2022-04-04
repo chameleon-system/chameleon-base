@@ -490,11 +490,11 @@ class TCMSTableConf extends TCMSRecord
     }
 
     /**
-     * @param string|null $id - the id of the record to load, if any
+     * @param string|null $recordID - the id of the record to load, if any
      *
      * @return TCMSRecord|null - null if the class does not exist or the loading of the id fails if given
      */
-    public function GetTableObjectInstance($id = null)
+    public function GetTableObjectInstance($recordID = null)
     {
         $tdbName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->sqlData['name']);
 
@@ -505,11 +505,11 @@ class TCMSTableConf extends TCMSRecord
         /** @var \TCMSRecord $tdb */
         $tdb = $tdbName::GetNewInstance();
 
-        if (null === $id) {
+        if (null === $recordID) {
             return $tdb;
         }
 
-        if (false === $tdb->Load($id)) {
+        if (false === $tdb->Load($recordID)) {
             return null;
         }
 
