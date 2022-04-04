@@ -35,7 +35,7 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
     /**
      * {@inheritDoc}
      */
-    public function GetReadOnly(){
+    public function GetReadOnly() {
         $menuPath = $this->getMenuPath($this->recordId);
 
         return sprintf('<div class="form-control form-control-sm" readonly>%s</div>', $menuPath);
