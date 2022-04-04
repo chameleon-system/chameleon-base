@@ -105,6 +105,7 @@
         <service id="chameleon_system_view_renderer.theme_service" class="ChameleonSystem\ViewRendererBundle\Service\ThemeService">
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
             <argument type="service" id="chameleon_system_core.service.cms_config_data_access"/>
+            <argument type="service" id="chameleon_system_core.request_info_service"/>
         </service>
     </services>
 </container>

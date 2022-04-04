@@ -12,21 +12,25 @@ namespace ChameleonSystem\ViewRendererBundle\Service;
 
 use ChameleonSystem\CoreBundle\Service\CmsConfigDataAccessInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\ViewRenderer\Interfaces\ThemeServiceInterface;
 
 class ThemeService implements ThemeServiceInterface
 {
     private PortalDomainServiceInterface $portalDomainService;
     private CmsConfigDataAccessInterface $cmsConfigDataAccess;
+    private RequestInfoServiceInterface $requestInfoService;
 
     private ?\TdbPkgCmsTheme $themeOverride = null;
 
     public function __construct(
         PortalDomainServiceInterface $portalDomainService,
-        CmsConfigDataAccessInterface $cmsConfigDataAccess
+        CmsConfigDataAccessInterface $cmsConfigDataAccess,
+        RequestInfoServiceInterface $requestInfoService
     ) {
         $this->portalDomainService = $portalDomainService;
         $this->cmsConfigDataAccess = $cmsConfigDataAccess;
+        $this->requestInfoService = $requestInfoService;
     }
 
     /**
@@ -41,13 +45,16 @@ class ThemeService implements ThemeServiceInterface
         if (null === $portal) {
             $portal = $this->portalDomainService->getActivePortal();
         }
-        if (null === $portal) {
-            $theme = $this->cmsConfigDataAccess->getBackendTheme();
-        } else {
-            $theme = $portal->GetFieldPkgCmsTheme();
+
+        if (null !== $portal) {
+            return $portal->GetFieldPkgCmsTheme();
         }
 
-        return $theme;
+        if (true === $this->requestInfoService->isBackendMode()) {
+            return $this->cmsConfigDataAccess->getBackendTheme();
+        }
+
+        return null;
     }
 
     /**
