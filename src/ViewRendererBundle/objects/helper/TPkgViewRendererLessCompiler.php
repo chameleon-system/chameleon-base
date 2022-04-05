@@ -20,14 +20,31 @@ use ViewRenderException;
 
 class TPkgViewRendererLessCompiler
 {
-    private string $cssDir;
-    private string $resourceCollectionRefreshPrefix;
-    private array $additionalVariables = [];
+    /**
+     * @var string
+     */
+    private $cssDir;
 
-    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix)
+    /**
+     * @var string
+     */
+    private $resourceCollectionRefreshPrefix;
+
+    /**
+     * @var array
+     */
+    private $additionalVariables = [];
+
+    /**
+     * @var ThemeServiceInterface
+     */
+    private $themeService;
+
+    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix, ThemeServiceInterface $themeService)
     {
         $this->cssDir = trim($cssDirRelativeToWebRoot, '/');
         $this->resourceCollectionRefreshPrefix = $resourceCollectionRefreshPrefix;
+        $this->themeService = $themeService;
     }
 
     /**
@@ -129,10 +146,7 @@ class TPkgViewRendererLessCompiler
      */
     protected function getLessFilesFromSnippetsAndTheme($portal)
     {
-        $theme = null;
-        if (null !== $portal) {
-            $theme = $portal->GetFieldPkgCmsTheme();
-        }
+        $theme = $this->themeService->getTheme($portal);
 
         $resourceCollector = new TPkgViewRendererSnippetResourceCollector();
         $resources = $resourceCollector->getLessResources($portal, CMS_SNIPPET_PATH);
