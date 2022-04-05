@@ -55,10 +55,10 @@
         </service>
 
         <service id="chameleon_system_view_renderer.snippet_directory" class="%chameleon_system_view_renderer.snippet_directory.class%">
-            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
             <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="kernel"/>
-            <argument type="service" id="chameleon_system_core.service.cms_config_data_access"/>
+            <argument type="service" id="chameleon_system_view_renderer.theme_service"/>
         </service>
 
         <service id="chameleon_system_view_renderer.less_compiler" class="ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler">
@@ -72,8 +72,10 @@
         </service>
 
         <service id="chameleon_system_view_renderer.compile_less_command" class="ChameleonSystem\ViewRendererBundle\Command\CompileLessCommand">
-            <argument type="service" id="chameleon_system_view_renderer.less_compiler" />
             <tag name="console.command" />
+
+            <argument type="service" id="chameleon_system_view_renderer.less_compiler" />
+            <argument type="service" id="chameleon_system_view_renderer.theme_service"/>
         </service>
 
         <service id="chameleon_system_view_renderer.mapper.config_to_less" class="TPkgViewRendererConfigToLessMapper">
@@ -99,6 +101,11 @@
             public="false">
             <argument type="service" id="database_connection"/>
         </service>
-        
+
+        <service id="chameleon_system_view_renderer.theme_service" class="ChameleonSystem\ViewRendererBundle\Service\ThemeService">
+            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
+            <argument type="service" id="chameleon_system_core.service.cms_config_data_access"/>
+            <argument type="service" id="chameleon_system_core.request_info_service"/>
+        </service>
     </services>
 </container>
