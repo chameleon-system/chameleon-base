@@ -17,11 +17,25 @@ use ChameleonSystem\ViewRenderer\Interfaces\ThemeServiceInterface;
 
 class ThemeService implements ThemeServiceInterface
 {
-    private PortalDomainServiceInterface $portalDomainService;
-    private CmsConfigDataAccessInterface $cmsConfigDataAccess;
-    private RequestInfoServiceInterface $requestInfoService;
+    /**
+     * @var PortalDomainServiceInterface
+     */
+    private $portalDomainService;
 
-    private ?\TdbPkgCmsTheme $themeOverride = null;
+    /**
+     * @var CmsConfigDataAccessInterface
+     */
+    private $cmsConfigDataAccess;
+
+    /**
+     * @var RequestInfoServiceInterface
+     */
+    private $requestInfoService;
+
+    /**
+     * @var null|\TdbPkgCmsTheme
+     */
+    private $themeOverride = null;
 
     public function __construct(
         PortalDomainServiceInterface $portalDomainService,
