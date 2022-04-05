@@ -146,7 +146,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     public function __invoke()
     {
         $event = new ChameleonControllerInvokeEvent($this);
-        $this->eventDispatcher->dispatch(ChameleonControllerEvents::INVOKE, $event);
+        $this->eventDispatcher->dispatch($event, ChameleonControllerEvents::INVOKE);
 
         $pagedef = $this->getRequest()->attributes->get('pagedef');
         $this->handleRequest($pagedef);
@@ -602,7 +602,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
             TPkgCmsEvent::GetNewInstance($this, TPkgCmsEvent::CONTEXT_CORE, TPkgCmsEvent::NAME_GET_CUSTOM_HEADER_DATA));
 
         $event = new HtmlIncludeEvent();
-        $event = $this->eventDispatcher->dispatch(CoreEvents::GLOBAL_HTML_HEADER_INCLUDE, $event);
+        $event = $this->eventDispatcher->dispatch($event, CoreEvents::GLOBAL_HTML_HEADER_INCLUDE);
 
         if ($bAsArray) {
             return $event->getData();
@@ -662,7 +662,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         $event = new HtmlIncludeEvent();
 
-        $event = $this->eventDispatcher->dispatch(CoreEvents::GLOBAL_HTML_FOOTER_INCLUDE, $event);
+        $event = $this->eventDispatcher->dispatch($event, CoreEvents::GLOBAL_HTML_FOOTER_INCLUDE);
 
         $aModuleFooterData = $event->getData();
 

@@ -14,7 +14,7 @@ namespace ChameleonSystem\CoreBundle\EventListener;
 use ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CaseInsensitivePortalExceptionListener
@@ -29,9 +29,9 @@ class CaseInsensitivePortalExceptionListener
         $this->cmsPortalDomainsDataAccess = $cmsPortalDomainsDataAccess;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event): void
+    public function onKernelException(ExceptionEvent $event): void
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
 
         if (false === $exception instanceof NotFoundHttpException) {
             return;

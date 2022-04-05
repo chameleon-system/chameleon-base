@@ -15,7 +15,7 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class cmsCoreRedirect implements ICmsCoreRedirect
@@ -100,9 +100,9 @@ class cmsCoreRedirect implements ICmsCoreRedirect
         $this->redirect($this->getActivePageService()->getLinkToActivePageRelative($parameters, $excludeParameters));
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
         if (!($exception instanceof ChameleonRedirectException)) {
             return;
         }

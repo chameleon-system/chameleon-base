@@ -10,7 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class antiSpam
 {

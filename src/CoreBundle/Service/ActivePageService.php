@@ -128,7 +128,7 @@ class ActivePageService implements ActivePageServiceInterface
 
         if ($this->activePage !== $oldActivePage) {
             $event = new ChangeActivePageEvent($this->activePage, $oldActivePage);
-            $this->eventDispatcher->dispatch(CoreEvents::CHANGE_ACTIVE_PAGE, $event);
+            $this->eventDispatcher->dispatch($event, CoreEvents::CHANGE_ACTIVE_PAGE);
         }
 
         $languageOfPage = $activePage->GetLanguageID();

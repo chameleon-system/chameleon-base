@@ -254,7 +254,7 @@ class TGroupTableField
         $event->setCssClasses(\explode(' ', $style));
         $event->setCellValue($cellValue);
 
-        $this->getEventDispatcher()->dispatch(CoreEvents::DISPLAY_LISTMANAGER_CELL, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::DISPLAY_LISTMANAGER_CELL);
 
         $tag = true === $event->isHeader() ? 'th' : 'td';
         $onclick = $event->getOnclickEvent();
@@ -422,16 +422,17 @@ class TGroupTableField
         $format = $this->format;
         $name = $this->name;
         if (is_array($format)) {
-            $className = $format[0];
+            $classNameOrObject = $format[0];
             $callbackFunctionName = $format[1];
-            $recordObject =  new $className;
+            $className = true === \is_string($classNameOrObject) ? $classNameOrObject : \get_class($classNameOrObject);
 
-            if (false === is_callable(array($recordObject, $callbackFunctionName))) {
-                return sprintf('[Error: callback function "%s" does not exist in "%s" for field "%s"]', $callbackFunctionName, $className, $name);
+            if (false === is_callable([$classNameOrObject, $callbackFunctionName])) {
+                return sprintf('[Error: function "%s" is not present or callable in "%s" for field "%s"]', $callbackFunctionName, $className, $name);
             }
 
-            return call_user_func(array($className, $callbackFunctionName), $cellValue, $row, $name);
+            return call_user_func([$classNameOrObject, $callbackFunctionName], $cellValue, $row, $name);
         }
+
         if (function_exists($format)) {
             return call_user_func($format, $cellValue, $row, $name);
         }

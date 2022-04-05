@@ -181,9 +181,9 @@ class TCMSUser extends TCMSRecord
         $eventDispatcher = self::getEventDispatcher();
         $event = new BackendLoginEvent($this);
         if ($this->bLoggedIn) {
-            $eventDispatcher->dispatch(CoreEvents::BACKEND_LOGIN_SUCCESS, $event);
+            $eventDispatcher->dispatch($event, CoreEvents::BACKEND_LOGIN_SUCCESS);
         } else {
-            $eventDispatcher->dispatch(CoreEvents::BACKEND_LOGIN_FAILURE, $event);
+            $eventDispatcher->dispatch($event, CoreEvents::BACKEND_LOGIN_FAILURE);
         }
 
         return $this->bLoggedIn;
@@ -239,13 +239,15 @@ class TCMSUser extends TCMSRecord
         unset($_SESSION['_listObjCache']);
         $request = self::getRequest();
         if (null !== $request) {
-            $session = $request->getSession();
-            if (null === $session) {
-                $session->clear();
+            if (true === $request->hasSession()) {
+                $session = $request->getSession();
+                if (null === $session) {
+                    $session->clear();
+                }
             }
         }
 
-        self::getEventDispatcher()->dispatch(CoreEvents::BACKEND_LOGOUT_SUCCESS, new BackendLogoutEvent($user));
+        self::getEventDispatcher()->dispatch(new BackendLogoutEvent($user), CoreEvents::BACKEND_LOGOUT_SUCCESS);
     }
 
     /**

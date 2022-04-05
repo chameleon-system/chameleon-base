@@ -3,7 +3,7 @@
 namespace ChameleonSystem\CoreBundle\RequestState;
 
 use ChameleonSystem\CoreBundle\RequestState\Interfaces\RequestStateHashProviderInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 

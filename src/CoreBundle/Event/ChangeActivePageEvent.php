@@ -2,7 +2,7 @@
 
 namespace ChameleonSystem\CoreBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use TCMSActivePage;
 
 class ChangeActivePageEvent extends Event

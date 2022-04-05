@@ -12,7 +12,7 @@
 use ChameleonSystem\CoreBundle\Interfaces\MediaManagerUrlGeneratorInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
 {

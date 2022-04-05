@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\EventListener;
 
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class AddBackendToasterMessageListener
 {
@@ -34,10 +34,7 @@ class AddBackendToasterMessageListener
         $this->type = $type;
     }
 
-    /**
-     * @param FilterResponseEvent $event
-     */
-    public function addMessage(FilterResponseEvent $event)
+    public function addMessage(ResponseEvent $event)
     {
         if (!$event->isMasterRequest()) {
             return;

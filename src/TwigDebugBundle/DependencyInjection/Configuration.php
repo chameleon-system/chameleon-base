@@ -23,8 +23,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $builder = new TreeBuilder();
-        $root = $builder->root('chameleon_system_twig_debug');
+        $builder = new TreeBuilder('chameleon_system_twig_debug');
+        $root = $builder->getRootNode();
         $root
             ->children()
                 ->booleanNode('enabled')

@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\ViewRendererBundle\objects;
 
+use ChameleonSystem\ViewRenderer\Interfaces\ThemeServiceInterface;
 use Exception;
 use MatthiasMullie\Minify\CSS;
 use TdbCmsPortal;
@@ -34,10 +35,16 @@ class TPkgViewRendererLessCompiler
      */
     private $additionalVariables = [];
 
-    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix)
+    /**
+     * @var ThemeServiceInterface
+     */
+    private $themeService;
+
+    public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix, ThemeServiceInterface $themeService)
     {
         $this->cssDir = trim($cssDirRelativeToWebRoot, '/');
         $this->resourceCollectionRefreshPrefix = $resourceCollectionRefreshPrefix;
+        $this->themeService = $themeService;
     }
 
     /**
@@ -139,15 +146,12 @@ class TPkgViewRendererLessCompiler
      */
     protected function getLessFilesFromSnippetsAndTheme($portal)
     {
+        $theme = $this->themeService->getTheme($portal);
+
         $resourceCollector = new TPkgViewRendererSnippetResourceCollector();
         $resources = $resourceCollector->getLessResources($portal, CMS_SNIPPET_PATH);
 
-        $theme = null;
-        if (is_object($portal)) {
-            $theme = $portal->GetFieldPkgCmsTheme();
-        }
-
-        if (!$theme || empty($theme->fieldLessFile)) {
+        if (null === $theme || empty($theme->fieldLessFile)) {
             $lessFileToImport = '/assets/less/chameleon.less';
         } else {
             $lessFileToImport = $theme->fieldLessFile;

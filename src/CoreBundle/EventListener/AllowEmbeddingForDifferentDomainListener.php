@@ -12,9 +12,8 @@
 namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface;
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
  * Allow the calling domain to see this page (e.g. in an iframe).
@@ -31,10 +30,7 @@ class AllowEmbeddingForDifferentDomainListener
         $this->domainsDataAccess = $domainsDataAccess;
     }
 
-    /**
-     * @param GetResponseEvent $event
-     */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
 
