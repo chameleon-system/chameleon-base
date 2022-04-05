@@ -42,16 +42,16 @@ class ThemeService implements ThemeServiceInterface
             return $this->themeOverride;
         }
 
+        if (true === $this->requestInfoService->isBackendMode()) {
+            return $this->cmsConfigDataAccess->getBackendTheme();
+        }
+
         if (null === $portal) {
             $portal = $this->portalDomainService->getActivePortal();
         }
 
         if (null !== $portal) {
             return $portal->GetFieldPkgCmsTheme();
-        }
-
-        if (true === $this->requestInfoService->isBackendMode()) {
-            return $this->cmsConfigDataAccess->getBackendTheme();
         }
 
         return null;
