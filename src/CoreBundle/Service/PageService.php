@@ -211,7 +211,8 @@ class PageService implements PageServiceInterface
      * @param TdbCmsPortal|null   $portal
      * @param TdbCmsLanguage|null $language
      * @param bool                $forceSecure
-     * @param string|bool         $referenceType
+     * @param int                 $referenceType
+     * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
      *

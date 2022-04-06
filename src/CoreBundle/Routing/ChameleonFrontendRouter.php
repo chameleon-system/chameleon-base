@@ -243,7 +243,8 @@ SQL;
      * @param TdbCmsLanguage $language
      * @param array          $parameters
      * @param string         $domainParamName
-     * @param string|bool    $referenceType
+     * @param int                 $referenceType
+     * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
      */
@@ -261,7 +262,8 @@ SQL;
     }
 
     /**
-     * @param string|bool $referenceType
+     * @param int $referenceType
+     * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return bool
      */
@@ -276,7 +278,8 @@ SQL;
      * @param TdbCmsLanguage $language
      * @param array          $parameters
      * @param string         $domainParamName
-     * @param string|bool    $referenceType
+     * @param int            $referenceType
+     * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
      */

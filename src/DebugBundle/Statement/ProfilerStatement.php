@@ -194,6 +194,9 @@ class ProfilerStatement extends PDOStatement
         return $result;
     }
 
+    /**
+     * @psalm-suppress AssignmentToVoid - Psalm thinks that `debugDumpParams` is a void function
+     */
     public function debugDumpParams()
     {
         $startTime = microtime(true);

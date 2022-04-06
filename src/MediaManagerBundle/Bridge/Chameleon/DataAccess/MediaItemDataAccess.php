@@ -437,7 +437,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     }
 
     /**
-     * @param Statement|PDOStatement  $stm
+     * @param Statement|\PDOStatement $stm
      * @param MediaManagerListRequest $mediaManagerListRequest
      * @param string                  $query
      * @param array                   $params

@@ -12,10 +12,10 @@
 namespace ChameleonSystem\CoreBundle\Command;
 
 use ChameleonSystem\CoreBundle\CronJob\CronjobEnablingServiceInterface;
-use ChameleonSystem\CoreBundle\Exception\CronjobEnableException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use ChameleonSystem\CoreBundle\Exception\CronjobHandlingException;
 
 class EnableCronjobsCommand extends Command
 {
@@ -52,7 +52,7 @@ EOF
     {
         try {
             $this->cronjobEnablingService->enableCronjobExecution();
-        } catch (CronjobEnableException $exception) {
+        } catch (CronjobHandlingException $exception) {
             $output->writeln(sprintf('Cron job execution could not be enabled: %s', $exception->getMessage()));
 
             return 1;
