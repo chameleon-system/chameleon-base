@@ -11,6 +11,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    cacheDirectory="/tmp"
     autoloader="../../autoload.php"
 >
 
@@ -48,10 +49,13 @@
         <RedundantCastGivenDocblockType errorLevel="suppress" />
 
         <UndefinedDocblockClass>
-            <errorLevel type="suppress" />
             <errorLevel type="suppress">
                 <!-- Symfony references enum that only exists in later PHP versions -->
                 <referencedClass name="UnitEnum" />
+
+                <!-- Composer classes do not exist on the filesystem -->
+                <referencedClass name="Composer\Package\Package" />
+
             </errorLevel>
         </UndefinedDocblockClass>
 
@@ -66,7 +70,6 @@
 
                 <!-- Composer classes do not exist on the filesystem -->
                 <referencedClass name="Composer\Script\Event" />
-<!--                <referencedClass name="Composer\Package\Package" />-->
             </errorLevel>
         </UndefinedClass>
 

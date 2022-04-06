@@ -12,20 +12,40 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @psalm-suppress UndefinedDocblockClass
+ * @psalm-suppress UndefinedClass
+ * @see https://github.com/chameleon-system/chameleon-system/issues/773
+ */
 class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
 {
+    /**
+     * @var string
+     */
     protected $sTimeStampFormat = 'Ymd_His';
 
+    /**
+     * @var bool
+     */
     protected $bDebugMode = false;
 
     /**
      * @deprecated since 6.3.0 - not used anymore
+     * @var string
      */
     protected $sLogFileName = 'csv2sql_import.log';
 
+    /**
+     * @var array{
+     *     start: int|null,
+     *     end: int|null,
+     *     bHasErrors: bool,
+     * }
+     */
     protected $aImportStats = array('start' => null, 'end' => null, 'bHasErrors' => false);
 
     /**
+     * @psalm-suppress UndefinedDocblockClass - https://github.com/chameleon-system/chameleon-system/issues/773
      * @var TPkgCmsBulkSql_LoadDataInfile
      */
     protected $oBulkInsert = null;
@@ -296,6 +316,8 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      * @param IPkgCmsBulkSql|null $oBulkInsertManager alternative bulk insert manager if not passed TPkgCmsBulkSql_LoadDataInfile will be used
      *
      * @return array|bool - array of error strings or false on error
+     *
+     * @psalm-suppress UndefinedClass - https://github.com/chameleon-system/chameleon-system/issues/773
      */
     public function Import($sLogName = null, IPkgCmsBulkSql $oBulkInsertManager = null)
     {

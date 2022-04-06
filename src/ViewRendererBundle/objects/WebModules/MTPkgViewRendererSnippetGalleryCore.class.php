@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class MTPkgViewRendererSnippetGalleryCore extends MTPkgViewRendererAbstractModuleMapper
 {
     private $sActiveRelativePath = '';
@@ -49,12 +51,17 @@ class MTPkgViewRendererSnippetGalleryCore extends MTPkgViewRendererAbstractModul
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        $oSnippetDirectory = new TPkgViewRendererSnippetDirectory();
+        $oSnippetDirectory = $this->getSnippetDirectory();
 
         $aDirTree = $oSnippetDirectory->getDirTree(true);
         $oVisitor->SetMappedValue('aTree', $aDirTree);
         $oVisitor->SetMappedValue('bHideNavigation', $this->bHideNavigation);
         $oVisitor->SetMappedValue('sActiveRelativePath', $this->sActiveRelativePath);
         $oVisitor->SetMappedValue('aSnippetList', $oSnippetDirectory->getSnippetList($aDirTree, $this->sActiveRelativePath));
+    }
+
+    private function getSnippetDirectory(): TPkgViewRendererSnippetDirectoryInterface
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
     }
 }

@@ -2054,7 +2054,9 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     }
 
     /**
-     * @return TdbDataExtranetUserProfile|bool
+     * @return TdbDataExtranetUserProfile|false
+     *
+     * @psalm-suppress UndefinedDocblockClass - Tdb is used dynamically here: If it exists then it is used, otherwise `false` is returned.
      */
     public function &GetFieldDataExtranetUserProfile()
     {
