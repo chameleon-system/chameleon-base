@@ -15,16 +15,19 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use Doctrine\DBAL\Connection;
 
 /**
- * creates an iterator of TCMSRecord and exposes its interface
- * the idea is to provide a simply and quick to use class to fetch a collection
- * of records.
-/**/
+ * creates an iterator of TCMSRecord and exposes its interface the idea is to
+ * provide a simply and quick to use class to fetch a collection of records.
+ *
+ * @template T of TCMSRecord
+ * @extends TIterator<T>
+ */
 class TCMSRecordList extends TIterator
 {
     /**
      * class name used for each record.
      *
      * @var string
+     * @psalm-var class-string<T>
      */
     public $sTableObject = null;
 
@@ -42,6 +45,7 @@ class TCMSRecordList extends TIterator
      * @var string
      */
     protected $sQuery = null;
+
     /**
      * table name of the sql object (optional - only required if sTableObject is set).
      *
@@ -117,6 +121,9 @@ class TCMSRecordList extends TIterator
      */
     private $databaseConnection;
 
+    /**
+     * @var int|null
+     */
     protected $estimationLowerLimit;
 
     /**
@@ -131,17 +138,27 @@ class TCMSRecordList extends TIterator
      */
     private $queryParameterTypes;
 
+    /**
+     * @return int
+     */
     protected function getItemPointer()
     {
         return $this->getEntityList()->getCurrentPosition();
     }
 
+    /**
+     * @param int $itemPointer
+     * @return void
+     */
     protected function setItemPointer($itemPointer)
     {
         parent::setItemPointer($itemPointer);
         $this->getEntityList()->seek($itemPointer);
     }
 
+    /**
+     * @return int
+     */
     protected function getEstimationLowerLimit()
     {
         if (null === $this->estimationLowerLimit) {
@@ -151,12 +168,14 @@ class TCMSRecordList extends TIterator
         return $this->estimationLowerLimit;
     }
 
+    /**
+     * @param int $lowerLimit
+     * @return void
+     */
     protected function setEstimationLowerLimit($lowerLimit)
     {
         $this->estimationLowerLimit = $lowerLimit;
     }
-
-    //private $_items = array();
 
     /**
      * return a key identifying the list (ignores current paging info).
@@ -293,6 +312,8 @@ class TCMSRecordList extends TIterator
 
     /**
      * reset the list (call this when the base query changes to ensure that the new query takes effekt).
+     *
+     * @return void
      */
     protected function ResetList()
     {
@@ -309,6 +330,7 @@ class TCMSRecordList extends TIterator
      * table name, and sTableObject is the CMSTable object name.
      *
      * @param string $sTableObject
+     * @psalm-param class-string<T> $sTableObject
      * @param string $sTableName
      * @param string $sQuery
      * @param string $sLanguageId
@@ -328,6 +350,7 @@ class TCMSRecordList extends TIterator
      * before calling anything else!
      *
      * @param string $iLanguageId - id from table: cms_language
+     * @return void
      */
     public function SetLanguage($iLanguageId)
     {
@@ -560,6 +583,9 @@ class TCMSRecordList extends TIterator
         return $estimate;
     }
 
+    /**
+     * @return int
+     */
     public function ExactLength()
     {
         return $this->getEntityList()->count();
@@ -598,7 +624,7 @@ class TCMSRecordList extends TIterator
     /**
      * returns a random element from the list (list pointer stays as it is).
      *
-     * @return TCMSRecord
+     * @return T
      */
     public function &Random()
     {
@@ -641,7 +667,7 @@ class TCMSRecordList extends TIterator
      * if we are at the end of the record, then the function will return false (like after GoToLast)
      * if we are at the start of the record (like after GoToStart), then it will return the first element.
      *
-     * @return TCMSRecord|false
+     * @return T|false
      */
     public function &current()
     {
@@ -657,7 +683,7 @@ class TCMSRecordList extends TIterator
      * returns the next element from the list, moving the pointer to the next
      * record.
      *
-     * @return TCMSRecord|false
+     * @return T|false
      */
     public function &next()
     {
@@ -676,7 +702,7 @@ class TCMSRecordList extends TIterator
     /**
      * returns the previous record from the list, moving the pointer back one.
      *
-     * @return TCMSRecord|false
+     * @return T|false
      */
     public function &Previous()
     {
@@ -690,7 +716,7 @@ class TCMSRecordList extends TIterator
     }
 
     /**
-     * @return EntityList
+     * @return EntityList<T>
      */
     protected function getEntityList()
     {
@@ -701,6 +727,9 @@ class TCMSRecordList extends TIterator
         return $this->entityList;
     }
 
+    /**
+     * @return void
+     */
     protected function resetEntityList()
     {
         $this->getEntityList()->setQuery($this->sQuery);
@@ -711,7 +740,7 @@ class TCMSRecordList extends TIterator
      *
      * @param array $aData
      *
-     * @return TCMSRecord
+     * @return T
      */
     protected function &_NewElement(&$aData)
     {
@@ -723,7 +752,7 @@ class TCMSRecordList extends TIterator
         } else {
             $oElement = new $this->sTableObject();
         }
-        /** @var $oElement TCMSRecord */
+        /** @var $oElement T */
         $oElement->SetLanguage($this->iLanguageId);
         $oElement->LoadFromRow($aData);
 
@@ -733,10 +762,16 @@ class TCMSRecordList extends TIterator
     /**
      * returns an array or mysql compatible string holding all the ids for the result set of the list.
      *
+     * Returns
+     * - An array of ids if ids exist and `$bReturnAsCommaSeparatedString=false` was specified
+     * - An empty string if not ids exist and `$bReturnAsCommaSeparatedString=false` was specified
+     * - A comma separated string of ids if `$bReturnAsCommaSeparatedString=true` was specified
+     *
      * @param string $sFieldName                    - the name of the field from which we want the values
      * @param bool   $bReturnAsCommaSeparatedString - set this to true if you need the id list for a query e.g. WHERE `related_record_id` IN ('1','2','abcd-234')
      *
-     * @return array|string - returns array or string (empty string if no records found)
+     * @return string[]|string - returns array or string (empty string if no records found)
+     * @psalm-return ($bReturnAsCommaSeparatedString is true ? string : string[]|'')
      */
     public function GetIdList($sFieldName = 'id', $bReturnAsCommaSeparatedString = false)
     {
@@ -1070,6 +1105,8 @@ class TCMSRecordList extends TIterator
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
     public function setDatabaseConnection(Connection $connection)
     {

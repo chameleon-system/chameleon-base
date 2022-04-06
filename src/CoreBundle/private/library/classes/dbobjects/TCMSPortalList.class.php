@@ -11,7 +11,7 @@
 
 /**
  * holds a list of all portals of the webpage.
-/**/
+ */
 class TCMSPortalList extends TCMSRecordList
 {
     public $_aNodeIds = null;

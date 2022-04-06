@@ -11,7 +11,9 @@
 
 /**
  * holds a breadcrumb to a page.
-/**/
+ *
+ * @extends TIterator<TShopBreadcrumbItem>
+ */
 class TCMSPageBreadcrumb extends TIterator
 {
     /**
@@ -21,6 +23,9 @@ class TCMSPageBreadcrumb extends TIterator
      */
     public $bIsPrimary = false;
 
+    /**
+     * @var string|null
+     */
     protected $sPathString = null;
 
     /**
