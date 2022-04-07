@@ -13,6 +13,9 @@ namespace ChameleonSystem\CoreBundle\TableEditor\NestedSet;
 
 class NodeFactory implements NodeFactoryInterface
 {
+    /**
+     * @var array<string, class-string>
+     */
     private $tableToClassCache = array();
 
     /**
@@ -35,6 +38,10 @@ class NodeFactory implements NodeFactoryInterface
         return call_user_func(array($className, 'GetNewInstance'), $nodeId);
     }
 
+    /**
+     * @param string $tableName
+     * @return class-string
+     */
     private function getClassNameForTable($tableName)
     {
         if (isset($this->tableToClassCache[$tableName])) {

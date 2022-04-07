@@ -80,6 +80,7 @@ class TPkgCmsActionPluginManager
             $oPageDef = $this->oActivePage->GetFieldCmsMasterPagedef();
             $sList = '';
             if (property_exists($this->oActivePage->oActivePortal, 'fieldActionPluginList')) {
+                /** @psalm-suppress UndefinedPropertyFetch - Property is checked above. */
                 $sList .= trim($this->oActivePage->oActivePortal->fieldActionPluginList);
             }
             if (!empty($sList)) {

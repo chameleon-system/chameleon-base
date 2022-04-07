@@ -180,6 +180,7 @@ class TModelBase
 
     /**
      * Called before any external functions get called, but after the constructor.
+     * @return void
      */
     public function Init()
     {
@@ -191,7 +192,7 @@ class TModelBase
      *
      * @deprecated - use a mapper instead (see getMapper)
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function &Execute()
     {
@@ -220,6 +221,9 @@ class TModelBase
         return 'ExecuteAjaxCall' === $sMethodName;
     }
 
+    /**
+     * @return void
+     */
     protected function DefineInterface()
     {
         $externalFunctions = ['ExecuteAjaxCall'];
@@ -277,7 +281,7 @@ class TModelBase
      * the controller (the controller will replace the tag "<!--#CMSHEADERCODE#-->" with
      * the results).
      *
-     * @return array()
+     * @return string[]
      */
     public function GetHtmlHeadIncludes()
     {
@@ -293,7 +297,7 @@ class TModelBase
      * the controller (the controller will replace the tag "<!--#CMSFOOTERCODE#-->" with
      * the results).
      *
-     * @return array()
+     * @return string[]
      */
     public function GetHtmlFooterIncludes()
     {
@@ -384,7 +388,7 @@ class TModelBase
      * call a method of this module. validates request.
      *
      * @param string $sMethodName      - name of the function
-     * @param array  $aMethodParameter - parameters to pass to the method
+     * @param mixed[] $aMethodParameter - parameters to pass to the method
      *
      * @return mixed
      */

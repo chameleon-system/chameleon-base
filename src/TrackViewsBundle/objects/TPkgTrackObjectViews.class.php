@@ -19,7 +19,15 @@ use Symfony\Component\HttpFoundation\Request;
 class TPkgTrackObjectViews
 {
     const VIEW_PATH = 'pkgTrackViews/views/';
+
+    /**
+     * @var array<string, array{ table_name: string, owner_id: string }>
+     */
     protected $aObjects = array();
+
+    /**
+     * @var list<array{ table_name: string, owner_id: string }>
+     */
     protected $aClickObjects = array();
 
     /**
@@ -37,11 +45,14 @@ class TPkgTrackObjectViews
         return $oInstance;
     }
 
-    /*
+    /**
      * track a view - note: only none-bot-requests will be tracked
      * @var TCMSRecord|mixed $oObject
-     * @param boolean $bCountReloads
-     * @param boolean $bAllowMultipleViewsPerPage
+     * @param bool $bCountReloads
+     * @param bool $bAllowMultipleViewsPerPage
+     *
+     * @psalm-suppress UndefinedPropertyFetch
+     * @FIXME Static access to non-static property. Should probably be $this->aObjects
     */
     public function TrackObject($oObject, $bCountReloads = true, $bAllowMultipleViewsPerPage = false)
     {

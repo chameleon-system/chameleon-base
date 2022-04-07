@@ -11,6 +11,8 @@
 
 /**
  * holds a list of all portals of the webpage.
+ *
+ * @extends TCMSRecordList<TCMSRecord>
  */
 class TCMSPortalList extends TCMSRecordList
 {

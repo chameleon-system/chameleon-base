@@ -83,5 +83,7 @@ EOF
             }
         }
         $output->writeln('<info>Done.</info>');
+
+        return 0;
     }
 }

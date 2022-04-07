@@ -87,6 +87,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
      */
     private function determineLanguageForCmsTemplateEngineMode()
     {
+        /** @var string|null $previewLanguageId */
         $previewLanguageId = $this->inputFilterUtil->getFilteredInput('previewLanguageId');
 
         if (null !== $previewLanguageId) {
@@ -132,7 +133,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
      *
      * @param Request $request
      *
-     * @return string
+     * @return string|null
      *
      * @throws \ErrorException
      * @throws \TPkgCmsException_Log
@@ -143,7 +144,9 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         $sLanguageId = null;
 
         // special rule: can be overwritten by previewLanguageId in __previewmode
+        /** @var string|null $previewMode */
         $previewMode = $this->inputFilterUtil->getFilteredInput('__previewmode', null);
+        /** @var string|null $previewLanguageId */
         $previewLanguageId = $this->inputFilterUtil->getFilteredInput('previewLanguageId', null);
         if (null !== $previewMode && null !== $previewLanguageId) {
             return $previewLanguageId;

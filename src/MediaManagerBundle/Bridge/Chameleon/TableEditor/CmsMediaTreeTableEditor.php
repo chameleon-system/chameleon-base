@@ -30,12 +30,18 @@ class CmsMediaTreeTableEditor extends TCMSTableEditorMediaTree
         $mediaTreeNode = $this->getMediaTreeNodeDataAccess()->getMediaTreeNode($treeNodeId, $languageId);
         if (null !== $mediaTreeNode) {
             /**
-             * @var $imageTableEditor CmsMediaTableEditor
+             * @var CmsMediaTableEditor $imageTableEditor
              */
             $imageTableEditor = TTools::GetTableEditorManager('cms_media')->oTableEditor;
+
             try {
                 $images = $this->getMediaItemDataAccess()->getMediaItemsInMediaTreeNode($mediaTreeNode, $languageId);
             } catch (DataAccessException $e) {
+                /**
+                 * @psalm-suppress InvalidArgument
+                 * @FIXME Incorrect constructor arguments to `ErrorException`. Should be the following:
+                 * throw new ErrorException($e->getMessage(), 0, 1, $e->getFile(), $e->getLine(), $e);
+                 */
                 throw new ErrorException($e->getMessage(), 0, $e);
             }
             foreach ($images as $image) {

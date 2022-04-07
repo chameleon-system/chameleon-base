@@ -16,8 +16,8 @@ interface NestedSetHelperInterface
     /**
      * call after creating a new node to update all siblings.
      *
-     * @param $nodeId
-     * @param $parentId
+     * @param string $nodeId
+     * @param string $parentId
      */
     public function newNode($nodeId, $parentId);
 
@@ -29,9 +29,9 @@ interface NestedSetHelperInterface
     /**
      * call before removing a node - will update all siblings.
      *
-     * @param $nodeId
+     * @param string $nodeId
      *
-     * @return mixed
+     * @return void
      */
     public function deleteNode($nodeId);
 

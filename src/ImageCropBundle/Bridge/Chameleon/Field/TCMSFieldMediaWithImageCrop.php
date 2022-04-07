@@ -13,7 +13,7 @@ namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field;
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
-use ChameleonSystem\Corebundle\Util\UrlUtil;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\ImageCrop\Interfaces\CmsMediaDataAccessInterface;

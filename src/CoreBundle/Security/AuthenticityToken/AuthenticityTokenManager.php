@@ -86,9 +86,11 @@ class AuthenticityTokenManager implements AuthenticityTokenManagerInterface
 
     private function getSubmittedToken(): ?string
     {
+        /** @var string|null $token */
         $token = $this->inputFilterUtil->getFilteredPostInput(AuthenticityTokenManagerInterface::TOKEN_ID);
 
         if (null === $token) {
+            /** @var string|null $token */
             $token = $this->inputFilterUtil->getFilteredGetInput(AuthenticityTokenManagerInterface::TOKEN_ID);
         }
 

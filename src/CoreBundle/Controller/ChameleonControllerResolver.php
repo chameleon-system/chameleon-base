@@ -29,7 +29,7 @@ class ChameleonControllerResolver extends ControllerResolver
      */
     private $controllerList;
     /**
-     * @var string
+     * @var ChameleonController
      */
     private $defaultChameleonController;
 

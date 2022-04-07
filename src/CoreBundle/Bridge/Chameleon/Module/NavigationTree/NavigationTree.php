@@ -451,7 +451,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      */
     protected function deleteNode(): ?string
     {
+        /** @var string|null $tableId */
         $tableId = $this->inputFilterUtil->getFilteredGetInput('tableid', '');
+        /** @var string|null $nodeId */
         $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
 
         if ('' === $tableId || '' === $nodeId) {
@@ -466,9 +468,13 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
     protected function connectPageToNode(): ?string
     {
+        /** @var string|null $treeNodeTableName */
         $treeNodeTableName = $this->inputFilterUtil->getFilteredGetInput('table', '');
+        /** @var string|null $tableId */
         $tableId = $this->tools->GetCMSTableId($treeNodeTableName);
+        /** @var string|null $nodeId */
         $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
+        /** @var string|null $currentPageId */
         $currentPageId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
 
         if ('' === $treeNodeTableName || '' === $nodeId || '' === $currentPageId) {
@@ -498,8 +504,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
     protected function disconnectPageFromNode(): ?string
     {
+        /** @var string|null $treeNodeTableName */
         $treeNodeTableName = $this->inputFilterUtil->getFilteredGetInput('table', '');
+        /** @var string|null $nodeId */
         $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
+        /** @var string|null $currentPageId */
         $currentPageId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
 
         if ('' === $treeNodeTableName || '' === $nodeId || '' === $currentPageId) {

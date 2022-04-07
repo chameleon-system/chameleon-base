@@ -16,7 +16,7 @@ use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use ChameleonSystem\Corebundle\Util\UrlUtil;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ImageCrop\DataModel\CmsMediaDataModel;
 use ChameleonSystem\ImageCrop\DataModel\ImageCropDataModel;
 use ChameleonSystem\ImageCrop\DataModel\ImageCropPresetDataModel;
@@ -262,6 +262,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @return string|null
+     * @psalm-suppress InvalidReturnStatement - We know that this is string|null here
      */
     private function getPresetSystemName()
     {

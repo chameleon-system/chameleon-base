@@ -454,6 +454,9 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         $this->sqlData['session_key'] = $dbKey;
         $this->sqlData['login_timestamp'] = $aKeyData['logintime'];
         $this->fieldSessionKey = $this->sqlData['session_key'];
+        /**
+         * @psalm-suppress InvalidPropertyAssignmentValue - Tdb type annotation is incorrect
+         */
         $this->fieldLoginTimestamp = $this->sqlData['login_timestamp'];
 
         return $this->ValidateSessionData();
@@ -785,14 +788,17 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @param bool $bForceReload
      *
-     * @return array
+     * @return string[]
      */
     public function GetUserGroupIds($bForceReload = false)
     {
+        /** @var string[]|null $aActiveGroups */
         $aActiveGroups = $this->GetFromInternalCache('_user_group_ids');
+
         if (null === $aActiveGroups || $bForceReload) {
             $aActiveGroups = $this->GetMLTIdList('data_extranet_group');
             sort($aActiveGroups);
+
             $this->SetInternalCache('_user_group_ids', $aActiveGroups);
         }
 
@@ -2247,6 +2253,11 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             throw new PasswordGenerationFailedException($e->getMessage(), $e->getCode(), $e);
         }
         $this->AllowEditByAll(true);
+
+        /**
+         * `$bSuccess` is actually an id or false. But through the if-block it'll always be a boolean.
+         * @var bool $bSuccess
+         */
         $bSuccess = $this->SaveFieldsFast(array('password_change_key' => $this->getPasswordHashGenerator()->hash($sForgotPasswordKey), 'password_change_time_stamp' => date('Y-m-d H:i:s')));
         $this->AllowEditByAll(false);
         if ($bSuccess) {

@@ -56,11 +56,11 @@ class TPkgExtranetMapper_AddressFormEndPoint extends AbstractPkgExtranetMapper_A
     /**
      * set errors and values for given field list.
      *
-     * @param array                      $aFieldList       (MappedFieldName(name used in template) => RealFieldName (user input field name) )
+     * @param array<string, string>      $aFieldList       (MappedFieldName(name used in template) => RealFieldName (user input field name) )
      * @param IMapperVisitorRestricted   $oVisitor
      * @param TdbDataExtranetUserAddress $oAddress
      * @param string                     $sFieldType
-     * @param TCMSRecordList             $oFieldOptionList
+     * @param TCMSRecordList|null        $oFieldOptionList
      *
      * @internal param string $sMSGConsumer
      */

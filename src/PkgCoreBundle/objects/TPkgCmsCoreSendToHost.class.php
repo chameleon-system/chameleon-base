@@ -22,13 +22,45 @@ class TPkgCmsCoreSendToHost
     const METHOD_GET = 'GET';
     const METHOD_HEAD = 'HEAD';
     const METHOD_POST = 'POST';
+
+    /**
+     * @var array<string, mixed>
+     */
     private $aConfig = array();
+
+    /**
+     * @var string|null
+     */
     private $lastRequest = null;
+
+    /**
+     * @var string|null
+     */
     private $lastResponseHeader = null;
+
+    /**
+     * @var array<string, string|non-empty-list<string>>
+     */
     private $lastResponseHeaderVariables = null;
+
+    /**
+     * @var int|null
+     */
     private $lastResponseCode = null;
+
+    /**
+     * @var string|null
+     */
     private $lastResponseCodeRaw = null;
+
+    /**
+     * @var string|null
+     */
     private $lastResponseBody = null;
+
+    /**
+     * @var bool
+     */
     private $logRequest = false;
 
     /**
@@ -117,7 +149,7 @@ class TPkgCmsCoreSendToHost
      *
      * @param $sVarName
      *
-     * @return string|null
+     * @return string|non-empty-list<string>|null
      */
     public function getLastResponseHeaderVariable($sVarName)
     {
@@ -374,8 +406,9 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param $key
-     * @param null $default
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
      */
     private function getConfigVar($key, $default = null)
     {

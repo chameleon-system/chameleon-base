@@ -55,7 +55,7 @@ EOF
         if (0 === count($migrationConfigData)) {
             $output->writeln('No bundles need to be migrated. Off to the pub!');
 
-            return;
+            return 0;
         }
 
         $output->writeln('chameleon_system_update_counter_migration:');
@@ -63,5 +63,7 @@ EOF
         foreach ($migrationConfigData as $source => $target) {
             $output->writeln('    - '.$source.': '.$target);
         }
+
+        return 0;
     }
 }

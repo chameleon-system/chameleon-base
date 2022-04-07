@@ -14,7 +14,6 @@ namespace ChameleonSystem\DistributionBundle\VersionCheck;
 use ChameleonSystem\DistributionBundle\VersionCheck\Filter\ChameleonPackageFilter;
 use ChameleonSystem\DistributionBundle\VersionCheck\Version\ChameleonVersion;
 use ChameleonSystem\DistributionBundle\VersionCheck\Version\MatchLevel;
-use Composer\Package\Package;
 use Composer\Script\Event;
 
 class PostUpdateVersionCheck
@@ -26,6 +25,7 @@ class PostUpdateVersionCheck
         $localRepo = $e->getComposer()->getRepositoryManager()->getLocalRepository();
 
         $packages = $localRepo->getPackages();
+        /** @var ChameleonVersion[] $chameleonPackages */
         $chameleonPackages = array();
         $filter = new ChameleonPackageFilter();
         $core = null;
@@ -48,7 +48,6 @@ class PostUpdateVersionCheck
         echo 'The chameleon base system is installed in version '.$core->getPrettyVersion()."\n\n";
         echo "Checking other versions...\n\n";
 
-        /** @var Package $chameleonPackage */
         foreach ($chameleonPackages as $chameleonPackage) {
             $matchLevel = $core->match($chameleonPackage);
             if ($matchLevel->getMatchLevel() === MatchLevel::$MATCH_SAME) {

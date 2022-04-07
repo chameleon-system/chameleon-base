@@ -1498,7 +1498,7 @@ class TTools
      *
      * @static
      *
-     * @param array $aVariables
+     * @param array<string, string>|null $aVariables
      * @param bool  $bEscapeViaOutHTML - set to true, if you want to pass each value through TGlobal::OutHTML
      *
      * @return array|null
@@ -1508,7 +1508,9 @@ class TTools
      */
     public static function AddStaticPageVariables($aVariables, $bEscapeViaOutHTML = false)
     {
+        /** @var array<string, string> $aPageVars */
         static $aPageVars = array();
+
         if (is_array($aVariables)) {
             $responseVariableReplacer = self::getResponseVariableReplacer();
             foreach ($aVariables as $sKey => $value) {

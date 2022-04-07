@@ -52,6 +52,10 @@ class RequestInitializer
         require_once PATH_CORE_CONFIG.'/version.inc.php';
     }
 
+    /**
+     * @psalm-suppress InvalidArgument TCMSErrorHandler::ShutdownHandler exists
+     * @return void
+     */
     protected function registerErrorHandler()
     {
         if (!_DEVELOPMENT_MODE && USE_DEFAULT_ERROR_HANDLER) {

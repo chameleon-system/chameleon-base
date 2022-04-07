@@ -63,6 +63,10 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
         return $this->original->getTemplateLine();
     }
 
+    /**
+     * @psalm-suppress UndefinedMethod
+     * @FIXME `setTemplateName` does not exist on the original class. This method should probably be removed.
+     */
     public function setTemplateName($name)
     {
         $this->original->setTemplateName($name);

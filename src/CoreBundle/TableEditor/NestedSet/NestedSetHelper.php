@@ -142,6 +142,8 @@ class NestedSetHelper implements NestedSetHelperInterface
     /**
      * call before removing a node - will update all siblings
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function deleteNode($nodeId)
     {
@@ -193,7 +195,7 @@ class NestedSetHelper implements NestedSetHelperInterface
     }
 
     /**
-     * @param $nodeId
+     * @param string $nodeId
      *
      * @return NodeInterface
      */

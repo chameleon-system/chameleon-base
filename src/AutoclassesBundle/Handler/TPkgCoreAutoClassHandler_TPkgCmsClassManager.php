@@ -58,13 +58,14 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
      *
      * @param string $sKey
      *
-     * @return string
+     * @return string|false
      */
     public function getClassNameFromKey($sKey)
     {
         $sClassName = false;
         $query = 'SELECT `name_of_entry_point` FROM `pkg_cms_class_manager` WHERE `id` = :key';
         if ($aClass = $this->getDatabaseConnection()->fetchAssoc($query, array('key' => $sKey))) {
+            /** @psalm-suppress InvalidArrayOffset */
             $sClassName = $aClass[0];
         }
 

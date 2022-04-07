@@ -79,9 +79,15 @@ EOF
                     $helper->render($result->getMessage());
                 }
                 if (count($result->getExceptions()) > 0) {
+                    /**
+                     * @psalm-suppress InvalidArgument - Passing an array to HtmlHelper::render() is valid but not annotated.
+                     */
                     $helper->render($result->getExceptions());
                 }
                 if (count($result->getInfoMessages()) > 0) {
+                    /**
+                     * @psalm-suppress InvalidArgument - Passing an array to HtmlHelper::render() is valid but not annotated.
+                     */
                     $helper->render($result->getInfoMessages());
                 }
                 $output->writeln('');
@@ -100,5 +106,7 @@ EOF
         $output->writeln('Starting cache clearing.');
         $this->cache->clearAll();
         $output->writeln('Finished cache clearing.');
+
+        return 0;
     }
 }

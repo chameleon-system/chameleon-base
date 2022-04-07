@@ -315,11 +315,19 @@ class ProfilerDatabaseConnection extends Connection
         return $this->connection->lastInsertId($seqName);
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @FIXME Parent method returns `mixed`, we should add a `return` statement here.
+     */
     public function transactional(Closure $func)
     {
         $this->connection->transactional($func);
     }
 
+    /**
+     * @psalm-suppress InvalidReturnStatement
+     * @FIXME This is a `void` method, it should not return
+     */
     public function setNestTransactionsWithSavepoints($nestTransactionsWithSavepoints)
     {
         return $this->connection->setNestTransactionsWithSavepoints(
@@ -332,16 +340,28 @@ class ProfilerDatabaseConnection extends Connection
         return $this->connection->getNestTransactionsWithSavepoints();
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @FIXME Parent method returns `mixed`, we should add a `return` statement here.
+     */
     public function beginTransaction()
     {
         $this->connection->beginTransaction();
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @FIXME Parent method returns `mixed`, we should add a `return` statement here.
+     */
     public function commit()
     {
         $this->connection->commit();
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @FIXME Parent method returns `mixed`, we should add a `return` statement here.
+     */
     public function rollBack()
     {
         $this->connection->rollBack();

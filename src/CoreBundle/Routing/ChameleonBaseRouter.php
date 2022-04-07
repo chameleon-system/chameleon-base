@@ -38,6 +38,9 @@ abstract class ChameleonBaseRouter extends Router
     public function __construct(ContainerInterface $container, $resource, array $options = array(), RequestContext $context = null)
     {
         parent::__construct($container, $resource, $options, $context);
+        /**
+         * @psalm-suppress InvalidPropertyAssignmentValue - We know that this is a string in this instance.
+         */
         $this->environment = $container->getParameter('kernel.environment');
 
         $options['matcher_cache_class'] = $this->getMatcherCacheClassName();

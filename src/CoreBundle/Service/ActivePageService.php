@@ -149,7 +149,8 @@ class ActivePageService implements ActivePageServiceInterface
      * @param array               $additionalParameters
      * @param array               $excludeParameters
      * @param TdbCmsLanguage|null $language
-     * @param bool|string|int     $referenceType
+     * @param int                 $referenceType
+     * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
      */

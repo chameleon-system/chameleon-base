@@ -66,7 +66,7 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
      * add an object to the state data.
      *
      * @param string $sStateDataKey
-     * @param object $oObject
+     * @param mixed $oObject
      */
     public function AddStateData($sStateDataKey, $oObject)
     {

@@ -129,6 +129,8 @@ class ViewRenderer
 
     /**
      * @param IViewMapper $oMapper
+     * @param array<string, string>|null $transformations
+     * @param string|null $mapToArray
      */
     public function AddMapper(IViewMapper $oMapper, $transformations = null, $mapToArray = null)
     {
@@ -139,8 +141,8 @@ class ViewRenderer
      * Adds a mapper by either its service ID or fully qualified class name.
      *
      * @param string     $identifier
-     * @param array|null $transformations
-     * @param array|null $mapToArray
+     * @param array<string, string>|null $transformations
+     * @param string|null $mapToArray
      *
      * @throws LogicException if no service could be found for the passed identifier
      */

@@ -46,6 +46,8 @@ class ResponseVariableReplacer implements ResponseVariableReplacerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress InvalidReturnType, InvalidReturnStatement - We know that the return type is correct here.
      */
     public function replaceVariables($content)
     {

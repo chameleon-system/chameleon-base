@@ -16,10 +16,13 @@ use Symfony\Component\EventDispatcher\Event;
 class ResourceCollectionJavaScriptCollectedEvent extends Event implements ResourceCollectionJavaScriptCollectedEventInterface
 {
     /**
-     * @var string
+     * @var string|empty-array
      */
     private $content = array();
 
+    /**
+     * @param string|null $content
+     */
     public function __construct($content = null)
     {
         if (null !== $content) {

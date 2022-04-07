@@ -15,7 +15,14 @@
 /**/
 class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
 {
+    /**
+     * @var string
+     */
     private $targetTable;
+
+    /**
+     * @var string
+     */
     private $timeToLive;
 
     /**
@@ -106,11 +113,14 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
         if (!MySqlLegacySupport::getInstance()->num_rows($res) || 0 == MySqlLegacySupport::getInstance()->num_rows($res)) {
             $aData = array('table_name' => $aHistoryRow['table_name'], 'owner_id' => $aHistoryRow['owner_id'], 'count' => $aHistoryRow['views'], 'time_block' => $aDateGroup[$sDate]);
 
-            /** @var TCMSRecord $sClassName */
+            /**
+             * @var class-string<TCMSRecordWritable> $sClassName
+             */
             $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $targetTable);
 
-            $oViewCount = $sClassName::GetNewInstance();
             /** @var $oViewCount TCMSRecordWritable* */
+            $oViewCount = $sClassName::GetNewInstance();
+
             $oViewCount->LoadFromRow($aData);
             $oViewCount->AllowEditByAll(true);
             $oViewCount->Save();
@@ -191,7 +201,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
     /**
      * get counted tracking item live time in sec.
      *
-     * @param $sTableName
+     * @param string $sTableName
      *
      * @return string
      */

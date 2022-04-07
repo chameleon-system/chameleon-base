@@ -17,14 +17,14 @@ interface RequestStateElementProviderInterface
      *
      * @param Request $request
      *
-     * @return array[]
+     * @return array<string, mixed>
      */
     public function getStateElements(Request $request);
 
     /**
      * Returns a list of events that trigger a reset of the current state.
      *
-     * @return array
+     * @return string[]
      */
     public static function getResetStateEvents();
 }

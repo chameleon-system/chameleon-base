@@ -12,7 +12,7 @@
 /**
  * holds a breadcrumb to a page.
  *
- * @extends TIterator<TShopBreadcrumbItem>
+ * @extends TIterator<TdbCmsTree>
  */
 class TCMSPageBreadcrumb extends TIterator
 {

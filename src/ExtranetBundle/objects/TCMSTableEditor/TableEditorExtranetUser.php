@@ -62,6 +62,13 @@ class TableEditorExtranetUser extends TCMSTableEditor
 
     /**
      * Login as the currently selected extranet user (permissions needed).
+     * This process works by creating a temporary token to verify the login and
+     * redirecting the user to a route on the domain of the corresponding site
+     * which uses said token to log the user in.
+     *
+     * @see LoginByTokenController::loginAction()
+     *
+     * @return void
      */
     public function LoginAsExtranetUser()
     {

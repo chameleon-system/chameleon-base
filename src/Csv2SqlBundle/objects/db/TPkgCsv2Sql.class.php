@@ -724,7 +724,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      *
      * @param string $csvfile
      *
-     * @return bool
+     * @return void
      */
     public function removeUTF8BOM($csvfile = '')
     {

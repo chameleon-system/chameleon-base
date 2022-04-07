@@ -58,5 +58,7 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->initialBackendUserCreator->create($input, $output, $this->getHelper('question'));
+
+        return 0;
     }
 }

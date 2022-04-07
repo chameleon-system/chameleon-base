@@ -22,8 +22,8 @@ interface NodeFactoryInterface
     public function createNodeFromArray($tableName, array $nodeData);
 
     /**
-     * @param $tableName
-     * @param array $nodeId
+     * @param string $tableName
+     * @param string $nodeId
      *
      * @return mixed
      */

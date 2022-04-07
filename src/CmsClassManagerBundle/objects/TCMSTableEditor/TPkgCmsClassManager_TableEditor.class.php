@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @property TdbPkgCmsClassManager $oTable
+ * @property TdbPkgCmsClassManager $oTablePreChangeData
+ */
 class TPkgCmsClassManager_TableEditor extends TCMSTableEditor
 {
     /**

@@ -38,15 +38,15 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      * holds the record list of all module configurations
      * null by default.
      *
-     * @var TdbCmsTplModule|null
+     * @var TdbCmsTplModule|TdbPkgMultiModuleSetItemList|null
      */
     protected $oModuleList = null;
 
     /**
      * holds the array of TdbPkgMultiModuleSetItem objects
-     * null by default.
+     * null by default. Uses module instance id as key.
      *
-     * @var array|null
+     * @var array<string, TdbPkgMultiModuleSetItem>|null
      */
     protected $aSetItems = null;
 
@@ -55,7 +55,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      * key = instance ID
      * value = spotName like: spotNameOfMultiModule__10.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $aModuleInstanceSpots = array();
 
@@ -65,7 +65,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      * key = module instance id
      * value = ModuleObject
      *
-     * @var array
+     * @var array<string, TModelBase>
      */
     protected $aModuleObjects = array();
 
@@ -85,6 +85,8 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
 
     /**
      * Defines interface to allow them to be called from web.
+     *
+     * @return void
      */
     protected function DefineInterface()
     {
@@ -95,7 +97,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
     /**
      * call a method of this module. validates request.
      *
-     * @param array  $aMethodParameter - parameters to pass to the method
+     * @param mixed[] $aMethodParameter - parameters to pass to the method
      * @param string $sMethodName      - name of the function
      *
      * @return mixed
@@ -155,6 +157,9 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
         return $this->oConfig;
     }
 
+    /**
+     * @return void
+     */
     protected function LoadInstances()
     {
         if (!$this->IsStatic() || ($this->IsStatic() && false === $this->getRequestInfoService()->isCmsTemplateEngineEditMode())) {
@@ -194,6 +199,9 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
         }
     }
 
+    /**
+     * @return TdbPkgMultiModuleSetItemList|null
+     */
     protected function GetModuleList()
     {
         $oModuleList = null;
@@ -239,7 +247,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
     /**
      * Renders module content for an instance via ajax call.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function RenderModuleAjax()
     {
@@ -266,11 +274,16 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      *
      * @param TdbPkgMultiModuleSetItem $oSetItem
      * @param TdbCmsTplModuleInstance  $oModuleInstance
+     *
+     * @return void
      */
     protected function PostAssertInstanceHook($oSetItem, $oModuleInstance)
     {
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlFooterIncludes()
     {
         $aIncludes = parent::GetHtmlFooterIncludes();
@@ -290,6 +303,9 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
         return $aIncludes;
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
@@ -314,6 +330,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      * injects virtual module spots with modules in $oModuleLoader->modules.
      *
      * @param TUserModuleLoader $oModuleLoader
+     * @return void
      */
     public function InjectVirtualModuleSpots(&$oModuleLoader)
     {
@@ -335,6 +352,10 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
         }
     }
 
+    /**
+     * @param TdbCmsTplModuleInstance $oModuleInstance
+     * @return TModelBase|null
+     */
     protected function GetModuleObjectByInstance(TdbCmsTplModuleInstance $oModuleInstance)
     {
         $oModule = null;
@@ -383,6 +404,9 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
         return $sModuleSetName;
     }
 
+    /**
+     * @return int|string|null
+     */
     protected function GetInstanceValueIdentifier()
     {
         $sInstanceValueIdentifier = $this->instanceID;

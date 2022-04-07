@@ -100,6 +100,7 @@ class RehashBackendUserPasswordListener
         if (true === $isDummyUser) {
             $plainPassword = $dummyUserData['password'];
         } else {
+            /** @var string|null $plainPassword */
             $plainPassword = $this->inputFilterUtil->getFilteredPostInput('password');
         }
 

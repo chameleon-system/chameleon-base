@@ -266,10 +266,10 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * Get link parameter for unsubscribe link.
      *
      * @param string $sPkgNewsletterGroupId
-     * @param bool   $sUnsubscribeCode      if given, add opt-out-key to link (use with new newsletter module).O
+     * @param string|false   $sUnsubscribeCode      if given, add opt-out-key to link (use with new newsletter module).O
      *                                      Otherwise generate link for old newsletter module.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function GetUnsubscribeLinkParameter($sPkgNewsletterGroupId, $sUnsubscribeCode = false)
     {
@@ -508,7 +508,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      *
      * @param TdbPkgNewsletterModuleSignupConfig $oNewsletterConfig
      *
-     * @return bool $rReturnValue
+     * @return string|false - id on success... else false
      */
     public function Save($oNewsletterConfig = null)
     {
@@ -772,6 +772,8 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
 
     /**
      * send double opt out mail to newsletter user with a link for each signed in newsletter.
+     *
+     * @return bool
      */
     protected function SendDoubleOptOutMail()
     {
@@ -909,7 +911,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * @param array $aNewsletterGroupSignOutList if is only a string then the signout came from old singout module so confirmed is set to true
      * @param bool  $bConfirmSignOut             sign out was confirmed -> delete all confirmations with newslettergroups in $aNewsletterGroupSignOutList
      *
-     * @return TdbPkgNewsletterUser
+     * @return bool
      */
     public function SignOut($aNewsletterGroupSignOutList = array(), $bConfirmSignOut = false)
     {
@@ -952,7 +954,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      *
      * @param array $aNewsletterGroupSignOutList if is only a string then the signout came from old singout module so confirmed is set to true
      *
-     * @return TdbPkgNewsletterUser
+     * @return void
      */
     public function SendSignOutConfirmation($aNewsletterGroupSignOutList = array())
     {

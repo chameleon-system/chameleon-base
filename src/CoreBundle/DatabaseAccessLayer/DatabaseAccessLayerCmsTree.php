@@ -90,6 +90,10 @@ class DatabaseAccessLayerCmsTree extends AbstractDatabaseAccessLayer
         /** @var \TdbCmsTree[] $matches */
         $matches = $this->findDbObjectFromFieldInCache('parent_id', $id, $languageId);
 
+        /**
+         * @psalm-suppress InvalidArgument
+         * @FIXME returning `null` from a sorting method is not allowed, should probably return `0`.
+         */
         usort($matches, function (\TdbCmsTree $a, \TdbCmsTree $b) {
             if ($a->fieldEntrySort === $b->fieldEntrySort) {
                 return null;

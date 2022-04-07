@@ -392,9 +392,13 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
     {
         $oConfirmation = TdbPkgNewsletterConfirmation::GetNewInstance();
         if ($oConfirmation->LoadFromField('optout_key', $sOptOutConfirmationKey)) {
+
+            /** @var TCMSRecordList<TdbPkgNewsletterUser> $oSignupList */
             $oSignupList = $oConfirmation->GetMLTSourceRecords('pkg_newsletter_user', 'pkg_newsletter_confirmation_mlt', '', 'TdbPkgNewsletterUser', 'CMSDataObjects', 'Core');
+
+            /** @var TdbPkgNewsletterUser $oNewsletterUser */
             $oNewsletterUser = $oSignupList->Current();
-            /** @var $oNewsletterUser TdbPkgNewsletterUser */
+
             if ($oNewsletterUser) {
                 $oNewsletterUser->SignOut(array($oConfirmation->fieldPkgNewsletterGroupId), true);
                 $bConfirmed = true;

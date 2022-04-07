@@ -38,8 +38,9 @@ class ChameleonExceptionListener extends ExceptionListener
 
             return;
         }
+
         /**
-         * @var HttpExceptionInterface $exception
+         * @var HttpExceptionInterface&Exception $exception
          */
         if (Response::HTTP_NOT_FOUND !== $exception->getStatusCode()) {
             parent::logException($exception, $message);

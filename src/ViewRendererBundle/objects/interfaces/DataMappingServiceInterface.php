@@ -28,14 +28,14 @@ interface DataMappingServiceInterface
 
     /**
      * @param IViewMapper $oMapper
-     * @param array|null  $transformations
-     * @param array|null  $mapToArray
+     * @param array<string, string>|null  $transformations
+     * @param string  $mapToArray
      */
     public function addMapper(IViewMapper $oMapper, $transformations = null, $mapToArray = null);
 
     /**
      * @param string $key
-     * @param object $value
+     * @param mixed $value
      */
     public function addSourceObject($key, $value);
 

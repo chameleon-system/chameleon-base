@@ -100,6 +100,9 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
      * this method is always called at the end of RunImport (even if the import failed) to do any cleanup work.
      *
      * @param bool $bImportSucceeded - set to true if the import succeeded
+     *
+     * @FIXME Parent return `$bImportSucceeded` (bool). This method should probably do the same?
+     * @return void
      */
     protected function Cleanup($bImportSucceeded)
     {

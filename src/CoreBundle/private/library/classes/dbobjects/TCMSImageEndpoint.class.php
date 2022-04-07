@@ -28,7 +28,7 @@ class TCMSImageEndpoint
     /**
      * id of the image.
      *
-     * @var int
+     * @var string
      */
     public $id = null;
 

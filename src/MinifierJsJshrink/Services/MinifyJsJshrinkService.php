@@ -23,6 +23,7 @@ class MinifyJsJshrinkService implements MinifyJsIntegrationInterface
     public function minifyJsContent($jsContent)
     {
         try {
+            /** @var string|false $newJsContent */
             $newJsContent = Minifier::minify($jsContent);
             if (false === $newJsContent) {
                 $newJsContent = '';

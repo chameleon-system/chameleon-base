@@ -45,7 +45,7 @@ class TGroupTableField
     /**
      * Callback formatting function, receiving the cell value and row array.
      *
-     * @var string|null
+     * @var callable(string, array<string, mixed>, string):string|null
      */
     public $format;
 
@@ -94,11 +94,11 @@ class TGroupTableField
     /**
      * Table cell configuration.
      *
-     * @param string|array  $name           - if it is an array it should be of the form 'name'=>'full_name'
+     * @param string|non-empty-array<string, string>  $name - if it is an array it should be of the form 'name'=>'full_name'
      * @param string        $align
-     * @param resource|null $formatCallBack - a callback function to use for the column (the function will get 2 parameters,
-     *                                      the value, and the row. The string returned by the function will be displayed
-     *                                      in the cell
+     * @param callable(string, array<string, mixed>, string):string|null $formatCallBack - a callback function to use for the column (the function will get 3 parameters,
+     *                                 the value, the row and the name. The string returned by the function will be displayed
+     *                                 in the cell
      * @param array|null    $linkFields
      * @param int           $colSpan
      * @param object|null   $selectFormat   - callback function for option titles
@@ -147,7 +147,7 @@ class TGroupTableField
     /**
      * return cell HTML.
      *
-     * @param array  $row           - assoc array of data for that row
+     * @param array<string, mixed>  $row           - assoc array of data for that row
      * @param string $style         - the style class to apply
      * @param string $onClickEvent  - the js function to call onClick
      * @param bool   $isTableHeader
@@ -166,7 +166,7 @@ class TGroupTableField
     }
 
     /**
-     * @param array $row
+     * @param array<string, mixed> $row
      * @param bool  $isTableHeader
      *
      * @return string
@@ -198,7 +198,7 @@ class TGroupTableField
     }
 
     /**
-     * @param array  $row
+     * @param array<string, mixed> $row
      * @param string $onClickEvent
      *
      * @return array
@@ -238,7 +238,7 @@ class TGroupTableField
     }
 
     /**
-     * @param array  $row
+     * @param array<string, mixed> $row
      * @param bool   $isTableHeader
      * @param string $linkEvent
      * @param string $style
@@ -318,7 +318,7 @@ class TGroupTableField
     }
 
     /**
-     * @param array  $row
+     * @param array<string, mixed> $row
      * @param string $linkField
      *
      * @return string
@@ -412,7 +412,7 @@ class TGroupTableField
     }
 
     /**
-     * @param array  $row
+     * @param array<string, mixed>  $row
      * @param string $cellValue
      *
      * @return string
@@ -440,7 +440,7 @@ class TGroupTableField
     }
 
     /**
-     * @param array  $row
+     * @param array<string, mixed> $row
      * @param string $cellValue
      *
      * @return string
@@ -474,7 +474,7 @@ class TGroupTableField
     }
 
     /**
-     * @param array  $row
+     * @param array<string, mixed> $row
      * @param string $linkField
      *
      * @return string

@@ -248,5 +248,7 @@ class LogShowCommand extends Command
         } else {
             $output->writeln('<error>No log entries found</error>');
         }
+
+        return 0;
     }
 }

@@ -242,9 +242,16 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
 
     protected function updateSelection(): ?string
     {
+        /** @var string|null $tableName */
         $tableName = $this->inputFilterUtil->getFilteredGetInput('table', '');
+
+        /** @var string|null $nodeId */
         $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
+
+        /** @var string|null $currentRecordId */
         $currentRecordId = $this->inputFilterUtil->getFilteredGetInput('currentRecordId', '');
+
+        /** @var string|null $fieldName */
         $fieldName = $this->inputFilterUtil->getFilteredGetInput('fieldName', '');
 
         if ('' === $tableName || '' === $currentRecordId || '' === $fieldName) {

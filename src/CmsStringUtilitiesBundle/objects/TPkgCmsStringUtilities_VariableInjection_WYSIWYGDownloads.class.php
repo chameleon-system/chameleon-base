@@ -39,6 +39,10 @@ class TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads extends TPkgCmsS
         return $sString;
     }
 
+    /**
+     * @param string $sContent
+     * @return string[]
+     */
     protected function getMatches($sContent)
     {
         $sPattern = '#\[\{\s*?((\w|-){36}|\d+)\s*?,\s*?dl\s*?,[^,\[\{\}\]]*?\s*?(|,\s*?(ico|kb)|,\s*?ico\s*?,\s*?kb|,\s*?kb\s*?,\s*?ico)\s*?\}\]#';
@@ -50,7 +54,7 @@ class TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads extends TPkgCmsS
     /**
      * method called by the regex to replace the variables in the message string.
      *
-     * @param array $sMatch
+     * @param string $sMatch
      *
      * @return string
      */

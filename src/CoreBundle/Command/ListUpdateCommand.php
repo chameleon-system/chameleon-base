@@ -69,5 +69,7 @@ EOF
         $table->render();
         $output->writeln('');
         $output->writeln($updateCount.' updates total.');
+
+        return 0;
     }
 }

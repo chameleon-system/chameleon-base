@@ -12,6 +12,9 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgCmsCache\CacheInterface;
 
+/**
+ * @property TdbPkgCmsTextBlock $oTable
+ */
 class TCMSPkgCmsTextBlockTableEditor extends TCMSTableEditor
 {
     /**

@@ -18,7 +18,7 @@ use Doctrine\DBAL\Connection;
  * creates an iterator of TCMSRecord and exposes its interface the idea is to
  * provide a simply and quick to use class to fetch a collection of records.
  *
- * @template T of TCMSRecord
+ * @template T extends TCMSRecord
  * @extends TIterator<T>
  */
 class TCMSRecordList extends TIterator
@@ -329,8 +329,7 @@ class TCMSRecordList extends TIterator
      * create record - query is used to fetch the data, sTableName is the database
      * table name, and sTableObject is the CMSTable object name.
      *
-     * @param string $sTableObject
-     * @psalm-param class-string<T> $sTableObject
+     * @param class-string<T> $sTableObject
      * @param string $sTableName
      * @param string $sQuery
      * @param string $sLanguageId

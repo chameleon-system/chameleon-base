@@ -49,7 +49,7 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * record id.
      *
-     * @var int
+     * @var string
      */
     public $recordId;
 

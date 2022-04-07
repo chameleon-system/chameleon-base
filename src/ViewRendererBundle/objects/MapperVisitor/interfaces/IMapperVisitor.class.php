@@ -96,7 +96,7 @@ interface IMapperVisitor
     public function getCacheTriggerCollectedForMapperChainsExecuted();
 
     /**
-     * @param array $transformations
+     * @param array<string, string> $transformations
      */
     public function setTransformations($transformations);
 

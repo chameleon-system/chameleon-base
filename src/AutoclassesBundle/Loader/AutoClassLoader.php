@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 class AutoClassLoader
 {
     /**
-     * @var bool
+     * @var array<string, string>|false
      */
     private static $aClassRepository = false;
     /**

@@ -71,7 +71,8 @@ class ChameleonFrontendController extends ChameleonController
     }
 
     /**
-     * {@inheritdoc}
+     * @var string $pagedef
+     * @return \TCMSPageDefinitionFile|\TCMSPagedef|\TdbCmsMasterPagedef|false
      */
     public function &GetPagedefObject($pagedef)
     {

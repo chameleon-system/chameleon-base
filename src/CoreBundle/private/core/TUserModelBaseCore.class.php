@@ -19,14 +19,14 @@ class TUserModelBaseCore extends TModelBase
     /**
      * holds the instance id of the module (points to a record in the table cms_tpl_module_instance).
      *
-     * @var string
+     * @var string|null
      */
     public $instanceID = null;
 
     /**
      * holds the language shortname of the template (example: de, en, ...).
      *
-     * @var string
+     * @var string|null
      */
     public $templateLanguage = null;
 
@@ -38,6 +38,9 @@ class TUserModelBaseCore extends TModelBase
         return $aSleep;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function &Execute()
     {
         parent::Execute();

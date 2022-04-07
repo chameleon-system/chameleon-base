@@ -1109,7 +1109,10 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     protected function GetFilteredUserData($sInputArrayName, $fieldBlacklistType = self::FIELD_BLACKLIST_TYPE_USER)
     {
         $inputFilterUtil = $this->getInputFilterUtil();
+
+        /** @var array $aData */
         $aData = $inputFilterUtil->getFilteredPostInput($sInputArrayName);
+
         if ($aData) {
             $aFieldBlacklist = $this->getFieldBlackList($fieldBlacklistType);
             if (!empty($aFieldBlacklist)) {

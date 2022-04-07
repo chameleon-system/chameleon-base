@@ -138,7 +138,7 @@ while ($oField = $oFields->Next()) {
      * factory returning an element for the list
      *
      * @param array $aData
-     * @return TCMSRecord
+     * @return <?=$sClassName; ?>
      */
     protected function &_NewElement(&$aData)
     {

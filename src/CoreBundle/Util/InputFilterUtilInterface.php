@@ -28,7 +28,11 @@ interface InputFilterUtilInterface
      * @param bool   $deep
      * @param string $filter
      *
-     * @return array|string
+     * @return string|null
+     *
+     * @psalm-template TDefault
+     * @psalm-param TDefault $default
+     * @psalm-return string|TDefault
      */
     public function getFilteredInput($key, $default = null, $deep = false, $filter = TCMSUSERINPUT_DEFAULTFILTER);
 
@@ -41,7 +45,11 @@ interface InputFilterUtilInterface
      * @param bool   $deep
      * @param string $filter
      *
-     * @return array|string
+     * @return string|null
+     *
+     * @psalm-template TDefault
+     * @psalm-param TDefault $default
+     * @psalm-return string|TDefault
      */
     public function getFilteredGetInput($key, $default = null, $deep = false, $filter = TCMSUSERINPUT_DEFAULTFILTER);
 
@@ -54,17 +62,22 @@ interface InputFilterUtilInterface
      * @param bool   $deep
      * @param string $filter
      *
-     * @return array|string
+     * @return string|null
+     *
+     * @psalm-template TDefault
+     * @psalm-param TDefault $default
+     * @psalm-return string|TDefault
      */
     public function getFilteredPostInput($key, $default = null, $deep = false, $filter = TCMSUSERINPUT_DEFAULTFILTER);
 
     /**
      * Applies a filter to one or more values.
      *
-     * @param array|string $value
-     * @param $filterClass - form: classname;path;type|classname;path;type
+     * @param string|null $filter
+     * @param string $filterClass - form: classname;path;type|classname;path;type
+     * @return string|null - null if $filter is null
      *
-     * @return array|string
+     * @psalm-return ($filter is null ? null : string)
      */
     public function filterValue($value, $filterClass);
 

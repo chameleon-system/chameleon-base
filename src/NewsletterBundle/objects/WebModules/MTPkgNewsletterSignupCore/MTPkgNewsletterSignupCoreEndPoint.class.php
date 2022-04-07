@@ -16,8 +16,14 @@ use esono\pkgCmsCache\CacheInterface;
 
 class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
 {
+    /**
+     * @var string
+     */
     protected $sStep = '';
 
+    /**
+     * @var bool
+     */
     protected $bDeleteAvailableNewsletter = false;
 
     /**
@@ -25,6 +31,9 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
      */
     protected $oNewsletterSignup = null;
 
+    /**
+     * @var bool
+     */
     protected $bAllowHTMLDivWrapping = true;
 
     const INPUT_DATA_NAME = 'aPkgNewsletter';
@@ -42,6 +51,9 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
      */
     protected $bAllowSigningUpEMailsNotBelongingToUser = false;
 
+    /**
+     * @return void
+     */
     public function Init()
     {
         parent::Init();
@@ -96,6 +108,9 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
         return $this->oModuleConfig;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function &Execute()
     {
         parent::Execute();
@@ -132,6 +147,9 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
         return $this->data;
     }
 
+    /**
+     * @return void
+     */
     protected function DefineInterface()
     {
         parent::DefineInterface();
@@ -180,7 +198,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
      * returns array of all fields, that are marked as required in pkg_newsletter_user table
      * always sets email as mandatory field.
      *
-     * @return array
+     * @return string[]
      */
     protected function getRequiredFields()
     {
@@ -192,6 +210,9 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
         return $aRequiredFields;
     }
 
+    /**
+     * @return bool
+     */
     protected function ValidateInput()
     {
         $bContinue = true;
@@ -235,6 +256,8 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
 
     /**
      * sign up selected newsletter.
+     *
+     * @return void
      */
     public function SignUp()
     {
@@ -313,6 +336,10 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
         }
     }
 
+    /**
+     * @param $aNewsletterList
+     * @return string[]
+     */
     protected function TransformInputNewsletterList($aNewsletterList)
     {
         $aNewNewsletterList = array();

@@ -20,6 +20,8 @@ class TPkgCmsFileManager_Utilities
     {
         $code_size = (($input_size * 4) / 3);
         $padding_size = ($input_size % 3) ? (3 - ($input_size % 3)) : 0;
+
+        /** @var int $total_size */
         $total_size = ceil($code_size + $padding_size);
 
         return $total_size;
@@ -39,7 +41,8 @@ class TPkgCmsFileManager_Utilities
      *
      * @param $path
      * @param $patternInPath
-     * @param null $flags
+     * @param int|null $flags
+     * @psalm-param GLOB_* $flags
      *
      * @return array
      */

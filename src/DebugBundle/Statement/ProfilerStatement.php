@@ -196,6 +196,7 @@ class ProfilerStatement extends PDOStatement
 
     /**
      * @psalm-suppress AssignmentToVoid - Psalm thinks that `debugDumpParams` is a void function
+     * @psalm-suppress InvalidReturnStatement - Psalm thinks that `debugDumpParams` is a void function
      */
     public function debugDumpParams()
     {
