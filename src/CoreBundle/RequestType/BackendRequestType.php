@@ -14,7 +14,7 @@ namespace ChameleonSystem\CoreBundle\RequestType;
 class BackendRequestType extends AbstractRequestType
 {
     /**
-     * @return int
+     * {@inheritDoc}
      */
     public function getRequestType()
     {

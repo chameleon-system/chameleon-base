@@ -116,7 +116,7 @@ class cmsCoreRedirect implements ICmsCoreRedirect
     }
 
     /**
-     * @return Request
+     * @return Request|null
      */
     protected function getRequest()
     {

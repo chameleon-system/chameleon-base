@@ -17,6 +17,9 @@ use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query;
 
+/**
+ * @psalm-suppress UndefinedInterfaceMethod
+ */
 class ProfilerDatabaseConnection extends Connection
 {
     /**

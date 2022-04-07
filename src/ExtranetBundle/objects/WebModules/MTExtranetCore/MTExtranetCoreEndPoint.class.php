@@ -973,7 +973,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     /**
      * Loads a user based on the username or email field.
      *
-     * @return TdbDataExtranetUser
+     * @return TdbDataExtranetUser|null
      */
     protected function GetRequestPasswordUser()
     {
@@ -995,7 +995,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      * @param string $sFieldName
      * @param string $sFieldValue
      *
-     * @return TdbDataExtranetUser
+     * @return TdbDataExtranetUser|null
      */
     protected function GetRequestPasswordUserFromField($sFieldName, $sFieldValue)
     {

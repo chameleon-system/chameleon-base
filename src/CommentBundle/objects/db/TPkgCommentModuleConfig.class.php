@@ -67,7 +67,7 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
     /**
      * Returns the comment type configured in the module config.
      *
-     * @return TdbPkgCommentType
+     * @return TdbPkgCommentType|null
      */
     public function &GetFieldPkgCommentType()
     {
@@ -245,7 +245,7 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
     /**
      * return active item.
      *
-     * @return object
+     * @return object|null
      */
     public function GetActiveItem()
     {

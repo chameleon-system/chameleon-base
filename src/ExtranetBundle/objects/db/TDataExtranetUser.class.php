@@ -1038,6 +1038,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * @param string $sSessionKey
      *
      * @return array
+     * @psalm-suppress FalsableReturnStatement
      */
     private function getUserDataFromSessionKey($sSessionKey)
     {
@@ -1185,7 +1186,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * @param bool $bReset        - set to true if you want to reload the info
      * @param bool $bGetFromInput - set to true if you want to fetch the data from the GET/POST
      *
-     * @return TdbDataExtranetUserAddress
+     * @return TdbDataExtranetUserAddress|null|false
      */
     public function GetShippingAddress($bReset = false, $bGetFromInput = false)
     {
@@ -1244,7 +1245,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @param bool $bReset
      *
-     * @return TdbDataExtranetUserAddress|null
+     * @return TdbDataExtranetUserAddress|null|false
      */
     public function GetBillingAddress($bReset = false)
     {
@@ -1288,7 +1289,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @param string $sAddressId
      *
-     * @return TdbDataExtranetUserAddress|null
+     * @return TdbDataExtranetUserAddress|null|false
      */
     public function SetAddressAsBillingAddress($sAddressId)
     {
@@ -1540,7 +1541,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @param bool $bUseExistingAddress - set to false if you want to create an address even if an address exists in the address list
      *
-     * @return TdbDataExtranetUserAddress|null
+     * @return TdbDataExtranetUserAddress|false|null
      */
     public function &CreateAddressBasedOnRegistrationData($bUseExistingAddress = true)
     {

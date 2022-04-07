@@ -154,7 +154,7 @@ class MediaManagerListState
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPageNumber()
     {
@@ -177,7 +177,7 @@ class MediaManagerListState
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPageSize()
     {
@@ -185,7 +185,7 @@ class MediaManagerListState
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getSearchTerm()
     {
@@ -209,7 +209,7 @@ class MediaManagerListState
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function isShowSubtree()
     {
@@ -217,7 +217,7 @@ class MediaManagerListState
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function isDeleteWithUsageSearch()
     {
@@ -233,7 +233,7 @@ class MediaManagerListState
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function isPickImageMode()
     {
@@ -241,7 +241,7 @@ class MediaManagerListState
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPickImageCallback()
     {
@@ -249,7 +249,7 @@ class MediaManagerListState
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function isPickImageWithCrop()
     {

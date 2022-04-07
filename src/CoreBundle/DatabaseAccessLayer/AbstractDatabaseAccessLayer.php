@@ -45,7 +45,7 @@ abstract class AbstractDatabaseAccessLayer
      * @param string $value
      * @param null|string $languageId
      *
-     * @return \TCMSRecord[]
+     * @return list<\TCMSRecord|null>
      */
     protected function findDbObjectFromFieldInCache($field, $value, $languageId = null)
     {

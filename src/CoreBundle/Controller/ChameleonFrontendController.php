@@ -134,6 +134,9 @@ class ChameleonFrontendController extends ChameleonController
 
     /**
      * {@inheritdoc}
+     *
+     * @param string $layoutTemplate - name of the layout template
+     * @return null|string
      */
     protected function LoadLayoutTemplate($layoutTemplate)
     {

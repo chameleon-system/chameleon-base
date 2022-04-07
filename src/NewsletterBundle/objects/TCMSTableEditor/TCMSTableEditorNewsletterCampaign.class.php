@@ -189,7 +189,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
      *
      * @param array $postData
      *
-     * @return object TCMSstdClass
+     * @return TCMSstdClass
      */
     public function GetObjectShortInfo($postData = array())
     {

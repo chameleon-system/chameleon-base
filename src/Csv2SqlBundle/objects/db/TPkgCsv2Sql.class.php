@@ -680,7 +680,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      *
      * @param string $sFilename
      *
-     * @return bool
+     * @return bool|null
      */
     protected function _CheckUTF8BOMExists($sFilename = '')
     {

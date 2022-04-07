@@ -80,7 +80,7 @@ class TCMSListManagerChangeLogSet extends TCMSListManagerFullGroupTable
      * @param string $cellValue
      * @param array<string, mixed> $row
      * @param string $name
-     * @return string
+     * @return string|null
      */
     public function CallbackFormatChangeType($cellValue, $row, $name)
     {

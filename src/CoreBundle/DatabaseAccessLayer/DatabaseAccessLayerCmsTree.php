@@ -48,7 +48,7 @@ class DatabaseAccessLayerCmsTree extends AbstractDatabaseAccessLayer
      * @param string $id
      * @param string $languageId
      *
-     * @return \TdbCmsTree
+     * @return \TdbCmsTree|null
      */
     public function loadFromId($id, $languageId = null)
     {
@@ -61,7 +61,7 @@ class DatabaseAccessLayerCmsTree extends AbstractDatabaseAccessLayer
      * @param string $id
      * @param string $languageId
      *
-     * @return \TdbCmsTree
+     * @return \TdbCmsTree|null
      */
     private function getFromObjectCache($id, $languageId = null)
     {

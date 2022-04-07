@@ -43,11 +43,17 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
         }
     }
 
+    /**
+     * @return \Traversable
+     */
     public function getIterator()
     {
         return $this->original->getIterator();
     }
 
+    /**
+     * @return string|null
+     */
     public function getNodeTag()
     {
         return $this->original->getNodeTag();
@@ -58,6 +64,9 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
         return $this->original->count();
     }
 
+    /**
+     * @return int
+     */
     public function getTemplateLine()
     {
         return $this->original->getTemplateLine();
@@ -75,6 +84,9 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
         $this->original->setTemplateName($name);
     }
 
+    /**
+     * @return string|null
+     */
     public function getTemplateName()
     {
         return $this->original->getTemplateName();
@@ -85,6 +97,9 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
         $this->original->setSourceContext($source);
     }
 
+    /**
+     * @return \Twig_Source|null
+     */
     public function getSourceContext()
     {
         return $this->original->getSourceContext();

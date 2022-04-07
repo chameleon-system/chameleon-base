@@ -133,7 +133,7 @@ class ProfilerStatement extends PDOStatement
 
     /**
      * @param int $column_number
-     * @return false|mixed
+     * @return null|scalar
      */
     public function fetchColumn($column_number = 0)
     {

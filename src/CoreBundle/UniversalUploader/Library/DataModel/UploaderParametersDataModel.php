@@ -103,7 +103,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getMaxUploadHeight()
     {
@@ -129,7 +129,7 @@ class UploaderParametersDataModel
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getMaxUploadWidth()
     {

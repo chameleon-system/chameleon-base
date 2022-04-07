@@ -105,7 +105,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      * return instance based on the id in the url
      * TdbPkgNewsletterCampaign.
      *
-     * @return TdbPkgNewsletterCampaign
+     * @return TdbPkgNewsletterCampaign|null
      */
     public static function &GetInstanceFromURLId()
     {
@@ -191,7 +191,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      * @param TdbPkgNewsletterUser      $oNewsletterUser
      * @param TdbPkgNewsletterGroupList $oNewsletterGroupList
      *
-     * @return TdbPkgNewsletterGroup
+     * @return TdbPkgNewsletterGroup|false
      */
     protected function GetNewsletterGroupForNewsletterUserBestFit(TdbPkgNewsletterUser $oNewsletterUser, TdbPkgNewsletterGroupList &$oNewsletterGroupList)
     {

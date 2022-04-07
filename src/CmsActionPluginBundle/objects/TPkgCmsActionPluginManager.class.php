@@ -68,7 +68,7 @@ class TPkgCmsActionPluginManager
     /**
      * @param string $sPluginName
      *
-     * @return AbstractPkgActionPlugin
+     * @return AbstractPkgActionPlugin|null
      */
     protected function getActionPlugin($sPluginName)
     {

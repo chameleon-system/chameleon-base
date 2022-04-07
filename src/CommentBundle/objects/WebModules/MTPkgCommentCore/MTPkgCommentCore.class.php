@@ -77,7 +77,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
     /**
      * Returns the active comment.
      *
-     * @return TdbPkgComment
+     * @return TdbPkgComment|null
      */
     protected function GetActiveComment()
     {
@@ -137,7 +137,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
     /**
      * Get the module config.
      *
-     * @return TdbPkgCommentModuleConfig
+     * @return TdbPkgCommentModuleConfig|null
      */
     public function GetConfig()
     {
@@ -633,7 +633,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
     /**
      * Returns the active comment item.
      *
-     * @return TCMSRecord
+     * @return TCMSRecord|null
      */
     protected function GetActiveCommentTypeItem()
     {

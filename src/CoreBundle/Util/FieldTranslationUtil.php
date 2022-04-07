@@ -105,7 +105,7 @@ class FieldTranslationUtil
     }
 
     /**
-     * @return \TdbCmsLanguage
+     * @return \TdbCmsLanguage|null
      */
     private function getBaseLanguage()
     {

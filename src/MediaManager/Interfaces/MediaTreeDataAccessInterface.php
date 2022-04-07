@@ -50,7 +50,7 @@ interface MediaTreeDataAccessInterface
      * @param string $name
      * @param string $languageId
      *
-     * @return MediaTreeNodeDataModel
+     * @return MediaTreeNodeDataModel|null
      *
      * @throws DataAccessException
      */
@@ -63,7 +63,7 @@ interface MediaTreeDataAccessInterface
      * @param string $name
      * @param string $languageId
      *
-     * @return MediaTreeNodeDataModel
+     * @return MediaTreeNodeDataModel|null
      *
      * @throws DataAccessException
      */

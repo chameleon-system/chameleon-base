@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle;
 
-use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -34,6 +34,8 @@ class ServiceLocator
      *
      * @throws ServiceCircularReferenceException if a circular reference is detected
      * @throws ServiceNotFoundException          if the service is not defined or the container isn't set yet
+     *
+     * @psalm-suppress InvalidNullableReturnType, NullableReturnStatement
      */
     public static function get($serviceId)
     {

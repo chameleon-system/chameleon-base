@@ -49,6 +49,8 @@ class ChameleonControllerResolver extends ControllerResolver
 
     /**
      * {@inheritdoc}
+     *
+     * @return callable|false|null
      */
     public function getController(Request $request)
     {

@@ -30,7 +30,7 @@ interface LanguageServiceInterface
      * Returns the language defined in the backend as the base language.
      * This is the language used for all multi-language fields if you do not specify the locale as part of the field name.
      *
-     * @return TdbCmsLanguage
+     * @return TdbCmsLanguage|null
      */
     public function getCmsBaseLanguage();
 
@@ -81,7 +81,7 @@ interface LanguageServiceInterface
      * request is available or the language could not be determined for other reasons (mostly because we're in the backend
      * without a valid user, e.g. for cron jobs), we return the system's base language.
      *
-     * @return TdbCmsLanguage
+     * @return TdbCmsLanguage|null
      */
     public function getActiveLanguage();
 

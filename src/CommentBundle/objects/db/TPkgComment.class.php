@@ -38,7 +38,7 @@ class TPkgComment extends TPkgCommentAutoParent
      *
      * @static TdbPkgComment
      *
-     * @return TdbPkgComment
+     * @return TdbPkgComment|null
      */
     public static function &GetInstance()
     {
@@ -60,7 +60,7 @@ class TPkgComment extends TPkgCommentAutoParent
      * @param string $sId
      * @param bool   $bReload
      *
-     * @return TdbPkgComment
+     * @return TdbPkgComment|null
      */
     public static function GetInstanceFromId($sId, $bReload = false)
     {
@@ -396,11 +396,12 @@ class TPkgComment extends TPkgCommentAutoParent
     /**
      * return object being commented on.
      *
-     * @return TCMSRecord
+     * @return TCMSRecord|false|null
      */
     public function GetCommentedObject()
     {
         $oCommentedObject = $this->GetFromInternalCache('oCommentedObject');
+
         if (is_null($oCommentedObject)) {
             $query = "SELECT `cms_tbl_conf`.`name`
                     FROM `cms_tbl_conf`

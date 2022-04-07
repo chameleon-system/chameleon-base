@@ -83,6 +83,7 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
 
     /**
      * @return TCMSActivePage
+     * @psalm-suppress FalsableReturnStatement
      */
     public function GetActivePage()
     {

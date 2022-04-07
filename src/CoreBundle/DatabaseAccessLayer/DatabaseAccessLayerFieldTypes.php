@@ -21,7 +21,7 @@ class DatabaseAccessLayerFieldTypes extends AbstractDatabaseAccessLayer
     /**
      * @param string $id
      *
-     * @return \TdbCmsFieldType
+     * @return \TdbCmsFieldType|null
      */
     public function getFieldType($id)
     {

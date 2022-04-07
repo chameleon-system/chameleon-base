@@ -381,7 +381,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     private function getImageCropPresetSystemName()
     {

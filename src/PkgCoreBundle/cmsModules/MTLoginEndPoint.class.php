@@ -39,6 +39,10 @@ class MTLoginEndPoint extends TCMSModelBase
         }
 
         if ($this->global->CMSUserDefined()) {
+            /**
+             * @psalm-suppress UndefinedInterfaceMethod
+             * @FIXME The `HeaderRedirect` method only exists on 1 of the 2 interface implementations.
+             */
             $this->controller->HeaderRedirect([]);
         }
 
@@ -103,6 +107,7 @@ class MTLoginEndPoint extends TCMSModelBase
      * @param string $username
      *
      * @return string
+     * @psalm-suppress FalsableReturnStatement
      */
     private function getCurrentHashedUserPassword($username)
     {
@@ -139,6 +144,11 @@ class MTLoginEndPoint extends TCMSModelBase
                 }
             }
         }
+
+        /**
+         * @psalm-suppress UndefinedInterfaceMethod
+         * @FIXME The `HeaderRedirect` method only exists on 1 of the 2 interface implementations.
+         */
         $this->controller->HeaderRedirect($aRedirectParams);
     }
 

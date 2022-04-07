@@ -605,6 +605,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         return $treeData;
     }
 
+    /**
+     * @return null|string
+     */
     private function getPortalBasedRootNodeId(): string
     {
         if ('' !== $this->currentPageId) {

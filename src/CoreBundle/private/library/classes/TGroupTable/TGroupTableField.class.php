@@ -45,7 +45,7 @@ class TGroupTableField
     /**
      * Callback formatting function, receiving the cell value and row array.
      *
-     * @var callable(string, array<string, mixed>, string):string|null
+     * @var null|callable(string, array<string, mixed>, string):(string|null)
      */
     public $format;
 
@@ -96,7 +96,7 @@ class TGroupTableField
      *
      * @param string|non-empty-array<string, string>  $name - if it is an array it should be of the form 'name'=>'full_name'
      * @param string        $align
-     * @param callable(string, array<string, mixed>, string):string|null $formatCallBack - a callback function to use for the column (the function will get 3 parameters,
+     * @param callable(string, array<string, mixed>, string):(string|null) $formatCallBack - a callback function to use for the column (the function will get 3 parameters,
      *                                 the value, the row and the name. The string returned by the function will be displayed
      *                                 in the cell
      * @param array|null    $linkFields

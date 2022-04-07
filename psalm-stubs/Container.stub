@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * Container is stubbed away in order to make the retur value of `get` non-nullable
+ * to prevent unactionable errors.
+ */
+
+namespace Symfony\Component\DependencyInjection {
+
+    /**
+     * @mixin ContainerInterface
+     */
+    class Container {
+        /**
+         * Pretend like the container can never return `null` on `get`
+         *
+         * @param string $id              The service identifier
+         * @param int    $invalidBehavior The behavior when the service does not exist
+         *
+         * @return object The associated service
+         */
+        public function get($id, $invalidBehavior = /* self::EXCEPTION_ON_INVALID_REFERENCE */ 1) {}
+    }
+}

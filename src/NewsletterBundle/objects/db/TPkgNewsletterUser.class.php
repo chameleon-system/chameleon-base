@@ -50,11 +50,12 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      *
      * @param bool $bRefresh
      *
-     * @return TdbPkgNewsletterUser
+     * @return TdbPkgNewsletterUser|null
      */
     public static function &GetInstanceForActiveUser($bRefresh = false)
     {
         static $oInst = false;
+
         if (false === $oInst || $bRefresh) {
             $oInst = null;
             $user = self::getExtranetUserProvider()->getActiveUser();
@@ -127,11 +128,12 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * return instance based on the id in the url
      * TdbPkgNewsletterUser.
      *
-     * @return TdbPkgNewsletterUser
+     * @return TdbPkgNewsletterUser|null
      */
     public static function &GetInstanceFromURLId()
     {
         static $oInstance = false;
+
         if (false === $oInstance) {
             $oGlobal = TGlobal::instance();
             $sId = $oGlobal->GetUserData(TdbPkgNewsletterUser::URL_USER_ID_PARAMETER);

@@ -39,7 +39,7 @@ interface ExtranetConfigurationInterface
     public function getLink($page);
 
     /**
-     * @return \TdbDataExtranet
+     * @return \TdbDataExtranet|false
      */
     public function getExtranetConfigObject();
 }

@@ -142,7 +142,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
      * @param string $fileExtension
      * @param string $sFileName
      *
-     * @return int - id of file type... false if file type wasn't found
+     * @return int|false - id of file type... false if file type wasn't found
      */
     public static function GetContentType($sFileName)
     {

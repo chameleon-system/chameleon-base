@@ -35,7 +35,7 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
      *
      * @param bool $refresh
      *
-     * @return TdbDataExtranetSalutation
+     * @return TdbDataExtranetSalutation|null
      */
     public function GetSalutation($refresh = false)
     {
@@ -54,7 +54,7 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
      *
      * @param bool $refresh
      *
-     * @return TdbDataCountry
+     * @return TdbDataCountry|null
      */
     public function GetCountry($refresh = false)
     {

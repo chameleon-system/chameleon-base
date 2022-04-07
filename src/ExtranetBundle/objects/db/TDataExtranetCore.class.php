@@ -59,7 +59,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     /**
      * @param bool $bForcePortal
      *
-     * @return string
+     * @return string|null
      */
     public function GetLinkLoginPage($bForcePortal = false)
     {
@@ -69,7 +69,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     /**
      * @param bool $bForcePortal
      *
-     * @return string
+     * @return string|null
      */
     public function GetLinkRegisterPage($bForcePortal = false)
     {
@@ -79,7 +79,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     /**
      * @param bool $bForcePortal
      *
-     * @return string
+     * @return string|null
      */
     public function GetLinkRegisterSuccessPage($bForcePortal = false)
     {
@@ -89,7 +89,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     /**
      * @param bool $bForcePortal
      *
-     * @return string
+     * @return string|null
      */
     public function GetLinkForgotPasswordPage($bForcePortal = false)
     {
@@ -99,7 +99,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     /**
      * @param bool $bForcePortal
      *
-     * @return string
+     * @return string|null
      */
     public function GetLinkAccessDeniedPage($bForcePortal = false)
     {
@@ -109,7 +109,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     /**
      * @param bool $bForcePortal
      *
-     * @return string
+     * @return string|null
      */
     public function GetLinkGroupRightDeniedPage($bForcePortal = false)
     {
@@ -119,7 +119,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     /**
      * @param bool $bForcePortal
      *
-     * @return string
+     * @return string|null
      */
     public function GetLinkLogoutPage($bForcePortal = false)
     {
@@ -129,7 +129,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     /**
      * @param bool $bForcePortal
      *
-     * @return string
+     * @return string|null
      */
     public function GetLinkConfirmRegistrationPage($bForcePortal = false)
     {
@@ -151,7 +151,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     /**
      * @param bool $bForcePortal
      *
-     * @return string
+     * @return string|null
      */
     public function GetLinkMyAccountPage($bForcePortal = false)
     {
@@ -166,7 +166,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
      * @param int  $iNodeId
      * @param bool $bForcePortal - include domain?
      *
-     * @return string
+     * @return string|null
      */
     protected function GetLinkForNode($iNodeId, $bForcePortal = false)
     {
@@ -174,7 +174,10 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
         if ($bForcePortal) {
             $sKey .= '-withportal';
         }
+
+        /** @var string|null $sLink */
         $sLink = $this->GetFromInternalCache($sKey);
+
         if (null === $sLink) {
             $oNode = self::getTreeService()->getById($iNodeId);
             if (null !== $oNode) {

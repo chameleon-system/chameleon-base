@@ -184,7 +184,7 @@ class TGroupTable
      *
      * @param string   $name           - database name of the column
      * @param string   $align          - horizontal alignment to use in the cell
-     * @param callable(string, array<string, mixed>, string):string|null $formatCallBack - a callback function to use for the column (the function will get 3 parameters,
+     * @param null|callable(string, array<string, mixed>, string):(string|null) $formatCallBack - a callback function to use for the column (the function will get 3 parameters,
      *                                 the value, the row and the name. The string returned by the function will be displayed
      *                                 in the cell
      * @param array    $linkField      - an array of dbfield names whoes value will be passed to the javascript

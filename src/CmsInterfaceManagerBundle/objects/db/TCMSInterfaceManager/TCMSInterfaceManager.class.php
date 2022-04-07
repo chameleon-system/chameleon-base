@@ -17,7 +17,7 @@ class TCMSInterfaceManager extends TAdbCmsInterfaceManager
      *
      * @param int $id
      *
-     * @return TCMSInterfaceManagerBase
+     * @return null|object
      */
     public static function &GetInterfaceManagerObject($id)
     {
@@ -40,7 +40,7 @@ class TCMSInterfaceManager extends TAdbCmsInterfaceManager
      *
      * @param int $sSystemName
      *
-     * @return TCMSInterfaceManagerBase
+     * @return null|object
      */
     public static function &GetInterfaceManagerObjectBySystemName($sSystemName)
     {

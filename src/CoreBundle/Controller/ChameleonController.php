@@ -154,7 +154,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * @return Request
+     * @return Request|null
      */
     protected function getRequest()
     {

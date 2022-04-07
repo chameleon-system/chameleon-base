@@ -41,11 +41,12 @@ class TCMSTableEditor_PkgComment extends TCMSTableEditor
      *
      * @param array $postData
      *
-     * @return object TCMSstdClass
+     * @return TCMSstdClass
      */
     public function GetObjectShortInfo($postData = array())
     {
         $oRecordData = parent::GetObjectShortInfo($postData);
+
         if (array_key_exists('item_id', $postData)) {
             $oRecordData->fieldItemId = $postData['item_id'];
         }

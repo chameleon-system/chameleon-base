@@ -34,7 +34,7 @@ class TPkgCmsEvent implements IPkgCmsEvent
     private $oSubject = null;
 
     /**
-     * @return object
+     * @return null|object
      */
     public function GetSubject()
     {

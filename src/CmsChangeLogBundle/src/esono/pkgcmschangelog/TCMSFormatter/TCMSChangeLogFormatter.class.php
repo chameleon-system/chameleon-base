@@ -66,7 +66,7 @@ class TCMSChangeLogFormatter
     /**
      * @param string $sChangeType
      *
-     * @return string
+     * @return null|string
      */
     public static function formatChangeType($sChangeType)
     {

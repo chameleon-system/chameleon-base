@@ -36,7 +36,7 @@ interface IMapperVisitorRestricted
     public function GetSourceObject($key);
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getSnippetName();
 

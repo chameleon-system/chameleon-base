@@ -143,7 +143,7 @@ abstract class AbstractPkgCmsNavigationNode
     }
 
     /**
-     * @return TdbCmsTree
+     * @return TdbCmsTree|null
      */
     protected function getNodeCopy()
     {

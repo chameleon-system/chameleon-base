@@ -41,7 +41,7 @@ class TDataCountry extends TDataCountryAutoParent
      *
      * @param string $sIsoCode
      *
-     * @return TdbDataCountry
+     * @return TdbDataCountry|null
      */
     public static function GetInstanceForIsoCode($sIsoCode)
     {

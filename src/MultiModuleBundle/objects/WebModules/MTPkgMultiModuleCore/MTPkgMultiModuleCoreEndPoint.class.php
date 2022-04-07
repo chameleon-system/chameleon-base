@@ -221,7 +221,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
     /**
      * Returns the multi module set form module configuration or from configured module set name (static mode).
      *
-     * @return TdbPkgMultiModuleSet
+     * @return TdbPkgMultiModuleSet|null
      */
     protected function GetMultiModuleSet()
     {
