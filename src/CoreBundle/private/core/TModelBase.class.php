@@ -605,7 +605,7 @@ class TModelBase
      * if you need to change the state of $this->bAllowHTMLDivWrapping within
      * e.g. the execute proccess of the module you can use this function.
      *
-     * @param $bState
+     * @param bool $bState
      */
     protected function SetHTMLDivWrappingStatus($bState)
     {

@@ -28,6 +28,8 @@ class MapperRequirementsRestrictedProxy implements IMapperRequirementsRestricted
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress InvalidReturnStatement - void functions should not return
      */
     public function NeedsSourceObject($key, $sType = null, $sDefault = null, $bOptional = false)
     {

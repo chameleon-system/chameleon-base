@@ -100,6 +100,9 @@ class cmsCoreRedirect implements ICmsCoreRedirect
         $this->redirect($this->getActivePageService()->getLinkToActivePageRelative($parameters, $excludeParameters));
     }
 
+    /**
+     * @return void
+     */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();

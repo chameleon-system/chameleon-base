@@ -47,7 +47,7 @@ class MediaManagerListResultsMapper extends AbstractViewMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
     {
@@ -56,7 +56,7 @@ class MediaManagerListResultsMapper extends AbstractViewMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(
         IMapperVisitorRestricted $oVisitor,

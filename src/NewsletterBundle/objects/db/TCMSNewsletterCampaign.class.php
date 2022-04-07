@@ -18,6 +18,11 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
 {
     const URL_USER_ID_PARAMETER = 'TPkgNewsletterCampaign';
 
+    /**
+     * @param TdbPkgNewsletterUser|false|null $oNewsletterUser
+     *
+     * @return false|null|string
+     */
     protected function CreateEmailFromTemplate($oNewsletterUser = null)
     {
         $sFullURL = $this->GetLinkToHTMLNewsletter($oNewsletterUser);
@@ -99,6 +104,8 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
     /**
      * return instance based on the id in the url
      * TdbPkgNewsletterCampaign.
+     *
+     * @return TdbPkgNewsletterCampaign
      */
     public static function &GetInstanceFromURLId()
     {
@@ -106,7 +113,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
         if (false === $oInstance) {
             $oGlobal = TGlobal::instance();
             $sId = $oGlobal->GetuserData(TdbPkgNewsletterCampaign::URL_USER_ID_PARAMETER);
-            $oInstance = TdbPkgNewsletterCampaign::GetNewInstance(); /*@var $oInstance TdbPkgNewsletterCampaign*/
+            $oInstance = TdbPkgNewsletterCampaign::GetNewInstance();
             if (!$oInstance->Load($sId)) {
                 $oInstance = null;
             }
@@ -117,6 +124,8 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
 
     /**
      * send newsletter for current campaign.
+     *
+     * @return void
      */
     public function SendNewsletter()
     {
@@ -349,6 +358,11 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
         return $oNewsletterUserList;
     }
 
+    /**
+     * @param TdbPkgNewsletterUser|null $oNewsletterUser
+     *
+     * @return string
+     */
     public function GetLinkToHTMLNewsletter($oNewsletterUser = null)
     {
         $sFullURL = '';
@@ -374,6 +388,10 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
         return $sFullURL;
     }
 
+    /**
+     * @param array<string, string> $matches
+     * @return string
+     */
     public function replaceFloatInStyleAttributesCallback($matches)
     {
         $return = $matches['imageTagStart'];

@@ -11,10 +11,26 @@
 
 class TPkgCmsCoreParameterContainerParameterDefinition
 {
+    /**
+     * @var string
+     */
     private $propertyName = null;
+
+    /**
+     * @var class-string|null
+     */
     private $type = null;
+
+    /**
+     * @var bool
+     */
     private $required = false;
 
+    /**
+     * @param string $propertyName
+     * @param bool $required
+     * @param class-string $type
+     */
     public function __construct($propertyName, $required, $type = null)
     {
         $this->propertyName = $propertyName;
@@ -22,6 +38,10 @@ class TPkgCmsCoreParameterContainerParameterDefinition
         $this->required = $required;
     }
 
+    /**
+     * @param object|null $val - Instance of $this->type or null.
+     * @return void
+     */
     public function validate($val)
     {
         if (null !== $this->type) {
@@ -48,6 +68,9 @@ class TPkgCmsCoreParameterContainerParameterDefinition
         }
     }
 
+    /**
+     * @return string
+     */
     public function getPropertyName()
     {
         return $this->propertyName;

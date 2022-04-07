@@ -33,7 +33,9 @@ class GenerateMigrationConfigCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function configure()
     {

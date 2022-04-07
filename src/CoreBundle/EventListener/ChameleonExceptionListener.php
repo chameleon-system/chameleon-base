@@ -29,7 +29,10 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 class ChameleonExceptionListener extends ExceptionListener
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param string $message
+     * @return void
      */
     protected function logException(Exception $exception, $message)
     {

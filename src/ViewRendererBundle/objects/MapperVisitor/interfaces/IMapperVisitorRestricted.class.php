@@ -14,6 +14,8 @@ interface IMapperVisitorRestricted
     /**
      * @param string $key
      * @param mixed  $value
+     *
+     * @return void
      */
     public function SetMappedValue($key, $value);
 
@@ -22,7 +24,7 @@ interface IMapperVisitorRestricted
      *
      * @param array $aData
      *
-     * @return
+     * @return void
      */
     public function SetMappedValueFromArray($aData);
 

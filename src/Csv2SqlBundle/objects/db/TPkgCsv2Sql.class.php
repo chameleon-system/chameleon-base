@@ -73,9 +73,9 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     /**
      * Log error message to logfile.
      *
-     * @param $sMsg
-     * @param null $sFileName
-     * @param null $sFileLine
+     * @param string $sFileName
+     * @param string $sFileLine
+     * @param string $sMsg
      *
      * @return bool
      */
@@ -396,10 +396,10 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      *
      * @static
      *
-     * @param  $aFirst array
-     * @param  $aSecond array
+     * @param array $aFirst
+     * @param array $aSecond
      *
-     * @return array|mixed
+     * @return array
      */
     public static function ArrayConcat($aFirst, $aSecond)
     {
@@ -420,7 +420,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     }
 
     /**
-     * @param  $sSource
+     * @param string $sSource
      *
      * @return array|int|mixed
      */
@@ -465,9 +465,9 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     }
 
     /**
-     * @param  $sFileName
+     * @param string $sFileName
      *
-     * @return array
+     * @return string[]
      */
     protected function _ImportFile($sFileName)
     {
@@ -603,7 +603,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     }
 
     /**
-     * @param  $sSource
+     * @param string $sSource
      *
      * @return array
      */
@@ -627,9 +627,9 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     }
 
     /**
-     * @param  $SourceFile
+     * @param string $SourceFile
      *
-     * @return array
+     * @return string[]
      */
     protected function _ValidateFile($SourceFile)
     {
@@ -739,7 +739,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     }
 
     /**
-     * @param $SourceFile
+     * @param string $SourceFile
      *
      * @return bool|string
      */
@@ -749,7 +749,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     }
 
     /**
-     * @param $SourceFile
+     * @param string $SourceFile
      *
      * @return bool|string
      */
@@ -759,7 +759,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     }
 
     /**
-     * @param $SourceFile
+     * @param string $SourceFile
      *
      * @return bool|string
      */
@@ -771,8 +771,8 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     /**
      * Move file to new directory.
      *
-     * @param $SourceFile
      * @param string $sDestinationType
+     * @param string $SourceFile
      *
      * @return bool|string
      */
@@ -838,6 +838,10 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         return $sRet;
     }
 
+    /**
+     * @param string $sSource
+     * @return string
+     */
     protected function ConvertFromGermanDecimal($sSource)
     {
         $sSource = str_replace('.', '', $sSource);
@@ -846,6 +850,10 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         return $sSource;
     }
 
+    /**
+     * @param string $sSource
+     * @return string
+     */
     protected function ConvertFromGermanDate($sSource)
     {
         static $oLocal = null;

@@ -28,6 +28,9 @@ class TPkgComment extends TPkgCommentAutoParent
 
     const VIEW_PATH = 'pkgComment/views/db/TPkgComment';
 
+    /**
+     * @var string[]
+     */
     protected $aActionModes = array('edit', 'recomment');
 
     /**
@@ -339,6 +342,10 @@ class TPkgComment extends TPkgCommentAutoParent
         return $oView->RenderObjectPackageView($sViewName, self::VIEW_PATH, 'Customer');
     }
 
+    /**
+     * @param string $sViewName
+     * @return string[][]
+     */
     protected function GetCacheTrigger($sViewName)
     {
         $aClearCacheParameter = array();
@@ -358,8 +365,9 @@ class TPkgComment extends TPkgCommentAutoParent
     /**
      * Get additional variable to show in view.
      *
-     * @param  TViewParser
-     * @param  string
+     * @param TViewParser $oView
+     * @param string $sViewName
+     * @param array $aCallTimeVars
      *
      * @return TViewParser
      */

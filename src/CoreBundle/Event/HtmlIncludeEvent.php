@@ -33,6 +33,8 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
      *   - if it does not, the md5 sum of the content will be used.
      *
      * @param array $data
+     *
+     * @return void
      */
     public function addData(array $data)
     {
@@ -56,6 +58,12 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
         return $this->data;
     }
 
+    /**
+     * @param mixed $value
+     *
+     * @return bool
+     * @psalm-assert-if-true string $mixed
+     */
     private function isInteger($value)
     {
         if (true === is_numeric($value)) {

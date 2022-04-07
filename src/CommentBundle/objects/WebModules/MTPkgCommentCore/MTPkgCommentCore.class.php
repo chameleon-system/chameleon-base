@@ -23,8 +23,14 @@ class MTPkgCommentCore extends TUserCustomModelBase
      */
     private $oActiveCommentTypeItem = null;
 
+    /**
+     * @var TdbPkgComment|null
+     */
     protected $oActiveComment = null;
 
+    /**
+     * @var bool
+     */
     protected $bSuppressRedirectAfterAction = false;
 
     /**
@@ -38,6 +44,10 @@ class MTPkgCommentCore extends TUserCustomModelBase
         $this->GetActiveComment();
     }
 
+    /**
+     * @param TdbPkgCommentModuleConfig $oModuleConfiguration
+     * @return void
+     */
     public function SetModuleConfig($oModuleConfiguration)
     {
         $this->oModConf = $oModuleConfiguration;
@@ -46,13 +56,19 @@ class MTPkgCommentCore extends TUserCustomModelBase
     /**
      * method allows us to inject an object that we want to comment on.
      *
-     * @param $oActiveCommentTypeItem
+     * @param TCMSRecord $oActiveCommentTypeItem
+     *
+     * @return void
      */
     public function SetActiveCommentTypeItem($oActiveCommentTypeItem)
     {
         $this->oActiveCommentTypeItem = $oActiveCommentTypeItem;
     }
 
+    /**
+     * @param bool $bSuppressRedirectAfterAction
+     * @return void
+     */
     public function SetSuppressRedirectAfterAction($bSuppressRedirectAfterAction)
     {
         $this->bSuppressRedirectAfterAction = $bSuppressRedirectAfterAction;
@@ -89,6 +105,8 @@ class MTPkgCommentCore extends TUserCustomModelBase
 
     /**
      * Execute for view report.
+     *
+     * @return void
      */
     protected function ExecuteReportView()
     {
@@ -98,6 +116,8 @@ class MTPkgCommentCore extends TUserCustomModelBase
 
     /**
      * Execute for view standard.
+     *
+     * @return void
      */
     protected function ExecuteStandardView()
     {
@@ -136,6 +156,8 @@ class MTPkgCommentCore extends TUserCustomModelBase
      * If you set parameter $sCommentId this comment will be saved with new comment.
      *
      * @param string $sCommentId
+     *
+     * @return TCMSstdClass|false
      */
     public function WriteComment($sCommentId = null)
     {
@@ -194,7 +216,9 @@ class MTPkgCommentCore extends TUserCustomModelBase
      * hook is called if the comment save was a success.
      *
      * @param TdbPkgComment $oComment
-     * @param $aRawData
+     * @param array $aRawData
+     *
+     * @return void
      */
     protected function CommentSaveSuccessHook($oComment, $aRawData)
     {
@@ -211,9 +235,8 @@ class MTPkgCommentCore extends TUserCustomModelBase
      * use this method to modify data of a comment before saving it, e.g. when
      * you have custom fields for you comment you need to fill.
      *
-     * @param  $aData
-     *
-     * @return array
+     * @param array<string, mixed> $aData
+     * @return array<string, mixed>
      */
     protected function AddCustomDataToCommentBeforeSave($aData)
     {
@@ -262,7 +285,9 @@ class MTPkgCommentCore extends TUserCustomModelBase
     }
 
     /**
-     *  Edit active comment if is allowed.
+     * Edit active comment if is allowed.
+     *
+     * @return TCMSstdClass|false
      */
     public function EditComment()
     {
@@ -292,6 +317,8 @@ class MTPkgCommentCore extends TUserCustomModelBase
 
     /**
      * If user is allowed comment will be deleted.
+     *
+     * @return bool
      */
     public function DeleteComment()
     {
@@ -331,6 +358,8 @@ class MTPkgCommentCore extends TUserCustomModelBase
     /**
      * Validates input data and report comment per email.
      * Comment was marked as reported.
+     *
+     * @return bool
      */
     public function ReportComment()
     {
@@ -366,6 +395,8 @@ class MTPkgCommentCore extends TUserCustomModelBase
      * Validate input for report comment.
      *
      * @param array $aData
+     *
+     * @return bool
      */
     protected function ValidateReportData($aData)
     {
@@ -413,6 +444,8 @@ class MTPkgCommentCore extends TUserCustomModelBase
      * Redirect to comment item page and set anchor to comment.
      *
      * @param array $aAddParameter
+     *
+     * @return void
      */
     protected function RedirectToItemPage($aAddParameter = array())
     {
@@ -427,6 +460,8 @@ class MTPkgCommentCore extends TUserCustomModelBase
      *
      * @param string $sCommentId
      * @param string $sReportText
+     *
+     * @return void
      */
     protected function SendEMail($sCommentId, $sReportText)
     {
@@ -456,6 +491,8 @@ class MTPkgCommentCore extends TUserCustomModelBase
     /**
      * If user is allowed to re comment a comment validate input data and create
      * a child comment.
+     *
+     * @return bool
      */
     public function RespondToComment()
     {
@@ -560,6 +597,9 @@ class MTPkgCommentCore extends TUserCustomModelBase
         $this->methodCallAllowed[] = 'GetRssFeed';
     }
 
+    /**
+     * @return void
+     */
     public function GetRssFeed()
     {
         $oConfig = $this->GetConfig();

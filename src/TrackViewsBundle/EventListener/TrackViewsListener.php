@@ -17,6 +17,9 @@ use TPkgTrackObjectViews;
 
 class TrackViewsListener
 {
+    /**
+     * @return void
+     */
     public function onKernelRequest(GetResponseEvent $event)
     {
         if (!$event->isMasterRequest()) {

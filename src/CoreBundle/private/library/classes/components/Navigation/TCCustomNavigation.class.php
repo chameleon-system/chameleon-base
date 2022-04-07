@@ -376,8 +376,8 @@ class TCCustomNavigation
      * returns false if you want to hide the children of $oNode.
      *
      * @param TdbCmsTree $oNode - parent node
-     * @param $row - row within current submenu
-     * @param $level - level within navi of the parent node
+     * @param int $row - row within current submenu
+     * @param int $level - level within navi of the parent node
      *
      * @return bool
      */
@@ -390,8 +390,8 @@ class TCCustomNavigation
      * return false if you do not want to show the node $oNode.
      *
      * @param TdbCmsTree $oNode - node in question
-     * @param $level - level within the navi
-     * @param $row - position within current level
+     * @param int $level - level within the navi
+     * @param int $row - position within current level
      *
      * @return bool
      */

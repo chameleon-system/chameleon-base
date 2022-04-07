@@ -39,6 +39,9 @@ class ViewRenderer
      */
     private $mapperChainMappingService;
 
+    /**
+     * @var bool
+     */
     private $showHTMLHints = false;
     /**
      * @var DataMappingServiceResponseInterface
@@ -95,8 +98,10 @@ class ViewRenderer
     }
 
     /**
-     * @param $mapperChainName
+     * @param string $mapperChainName
      * @param array $mapperIdentifiers
+     *
+     * @return void
      */
     public function addMapperChain($mapperChainName, array $mapperIdentifiers)
     {
@@ -121,6 +126,8 @@ class ViewRenderer
 
     /**
      * @param array $aMappers
+     *
+     * @return void
      */
     public function AddMappers($aMappers)
     {
@@ -131,6 +138,8 @@ class ViewRenderer
      * @param IViewMapper $oMapper
      * @param array<string, string>|null $transformations
      * @param string|null $mapToArray
+     *
+     * @return void
      */
     public function AddMapper(IViewMapper $oMapper, $transformations = null, $mapToArray = null)
     {
@@ -145,6 +154,8 @@ class ViewRenderer
      * @param string|null $mapToArray
      *
      * @throws LogicException if no service could be found for the passed identifier
+     *
+     * @return void
      */
     public function addMapperFromIdentifier($identifier, array $transformations = null, array $mapToArray = null)
     {
@@ -167,7 +178,9 @@ class ViewRenderer
     /**
      * add all SourceObjects from array (use for traditional data arrays).
      *
-     * @param $aVars
+     * @param array $aVars
+     *
+     * @return void
      */
     public function AddSourceObjectsFromArray($aVars)
     {
@@ -182,6 +195,8 @@ class ViewRenderer
      * @param string $sSourceItemName - each item in the list will be passed by this name to the snippet used to render each item
      * @param string $sSnippet        - the snippet path (relative to the ./snippet folder)
      * @param array  $aMapperChain    - the mapper chain used to generate the data for each item in the list
+     *
+     * @return void
      */
     public function generateSourceObjectForObjectList($sTargetName, $sSourceListName, $sSourceItemName, $sSnippet, $aMapperChain)
     {
@@ -250,6 +265,8 @@ class ViewRenderer
 
     /**
      * @param bool $bShow
+     *
+     * @return void
      */
     public function setShowHTMLHints($bShow)
     {
@@ -264,6 +281,9 @@ class ViewRenderer
         return count($this->listMapHandler) > 0;
     }
 
+    /**
+     * @return void
+     */
     private function injectListMapHandler()
     {
         $this->addMapperFromIdentifier('chameleon_system_view_renderer.mapper.list_handler');

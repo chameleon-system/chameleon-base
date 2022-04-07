@@ -21,10 +21,12 @@ interface IPkgSnippetRenderer
      *
      * @static
      *
-     * @param $sSource - the snippet source (or path to a file containing it)
+     * @param string $sSource - the snippet source (or path to a file containing it)
      * @param int $iSourceType - set to one of self::SOURCE_TYPE_*
      *
-     * @return TPkgSnippetRenderer
+     * @psalm-param self::SOURCE_TYPE_* $iSourceType
+     *
+     * @return IPkgSnippetRenderer
      */
     public static function GetNewInstance($sSource, $iSourceType = self::SOURCE_TYPE_STRING);
 
@@ -32,7 +34,9 @@ interface IPkgSnippetRenderer
      * Set the snippet source.
      * It is possible to override the initially given source this way afterwards.
      *
-     * @param $sSource - the snippet source
+     * @param string $sSource - the snippet source
+     *
+     * @return void
      */
     public function setSource($sSource);
 
@@ -40,15 +44,19 @@ interface IPkgSnippetRenderer
      * Set the path to the snippet code.
      * It is possible to override the initially given source this way afterwards.
      *
-     * @param $sPath - the path to the snippet code
+     * @param string $sPath - the path to the snippet code
+     *
+     * @return void
      */
     public function setFilename($sPath);
 
     /**
      * Set a variable/block to be substituted in the snippet.
      *
-     * @param $sName - variable/block name
-     * @param $sValue - the string to use in place of the variable/block
+     * @param string $sName - variable/block name
+     * @param string $sValue - the string to use in place of the variable/block
+     *
+     * @return void
      */
     public function setVar($sName, $sValue);
 
@@ -67,7 +75,9 @@ interface IPkgSnippetRenderer
      * The method will throw a <code>badMethodCallException</code> if it is called while another
      * similar call is already active,
      *
-     * @param $sName - the variable/block name
+     * @param string $sName - the variable/block name
+     *
+     * @return void
      *
      * @throws BadMethodCallException
      */
@@ -77,6 +87,8 @@ interface IPkgSnippetRenderer
      * Stops the active captured variable call and writes the buffer to the variable.
      *
      * The method will throw a <code>badMethodCallException</code> if it is called while no capturing session is active.
+     *
+     * @return void
      *
      * @throws BadMethodCallException
      */
@@ -91,10 +103,21 @@ interface IPkgSnippetRenderer
      */
     public function render();
 
+    /**
+     * @param string|TModelBase $sSource
+     * @param int $iSourceType
+     *
+     * @psalm-param IPkgSnippetRenderer::SOURCE_TYPE_* $sourceType
+     * @psalm-param ($iSourceType is IPkgSnippetRenderer::SOURCE_TYPE_CMSMODULE ? TModelBase : string) $sSource
+     *
+     * @return void
+     */
     public function InitializeSource($sSource, $iSourceType = self::SOURCE_TYPE_STRING);
 
     /**
      * clears the objects state.
+     *
+     * @return void
      */
     public function clear();
 }

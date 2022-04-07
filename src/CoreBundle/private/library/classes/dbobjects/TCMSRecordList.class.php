@@ -965,7 +965,7 @@ class TCMSRecordList extends TIterator
     /**
      * add active limit to query.
      *
-     * @param $sOriginalQuery
+     * @param string $sOriginalQuery
      *
      * @return string
      */
@@ -1047,7 +1047,7 @@ class TCMSRecordList extends TIterator
     /**
      * remove order by from source query.
      *
-     * @param $sSourceQuery
+     * @param string $sSourceQuery
      *
      * @return string
      */

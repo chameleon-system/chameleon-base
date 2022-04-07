@@ -26,6 +26,8 @@ class CmsMediaTableEditor extends TCMSTableEditorMedia
      * Don't call parent - parent is completely replaced by this.
      *
      * @param string $sImageId
+     *
+     * @return void
      */
     public function ClearCacheOfObjectsUsingImage($sImageId)
     {

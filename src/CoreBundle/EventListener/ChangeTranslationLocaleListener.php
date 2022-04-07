@@ -26,6 +26,9 @@ class ChangeTranslationLocaleListener
         $this->translator = $translator;
     }
 
+    /**
+     * @return void
+     */
     public function onLocaleChangedEvent(LocaleChangedEvent $event)
     {
         $this->translator->setLocale($event->getNewLocal());

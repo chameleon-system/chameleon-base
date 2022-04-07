@@ -189,6 +189,8 @@ class FieldTranslationUtil
      * @param string $fieldId
      *
      * @throws InvalidArgumentException
+     *
+     * @return void
      */
     public function makeFieldMultilingual($fieldId)
     {
@@ -201,6 +203,8 @@ class FieldTranslationUtil
      * @param string $fieldId
      *
      * @throws InvalidArgumentException
+     *
+     * @return void
      */
     public function makeFieldMonolingual($fieldId)
     {
@@ -212,6 +216,8 @@ class FieldTranslationUtil
      * @param bool   $translatable
      *
      * @throws InvalidArgumentException
+     *
+     * @return void
      */
     private function changeTranslatableState($fieldId, $translatable)
     {

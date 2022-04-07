@@ -66,6 +66,9 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
     /**
      * @psalm-suppress UndefinedMethod
      * @FIXME `setTemplateName` does not exist on the original class. This method should probably be removed.
+     *
+     * @param string $name
+     * @return void
      */
     public function setTemplateName($name)
     {

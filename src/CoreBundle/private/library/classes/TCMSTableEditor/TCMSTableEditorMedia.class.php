@@ -423,7 +423,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
      * call the delete method without removing ids connected to the image. use this ONLY if you are sure, that there
      * are no other connections.
      *
-     * @param  $fileID
+     * @param string $fileID
      */
     public function DeleteWithoutRemovingOldConnections($fileID)
     {

@@ -252,6 +252,8 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
      * @param array                   $queryRestrictions
      * @param array                   $params
      * @param array                   $paramTypes
+     *
+     * @return void
      */
     private function addMediaTreeNodeRestrictions(
         MediaManagerListRequest $mediaManagerListRequest,
@@ -279,6 +281,8 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
      * @param array                   $queryRestrictions
      * @param array                   $params
      * @param array                   $paramTypes
+     *
+     * @return void
      */
     private function addSearchRestrictions(
         MediaManagerListRequest $mediaManagerListRequest,

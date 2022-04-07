@@ -24,11 +24,24 @@ class ProfilerDatabaseConnection extends Connection
      */
     private $connection;
 
+    /**
+     * @var bool
+     */
     private $backtraceEnabled = false;
 
+    /**
+     * @var int
+     */
     private $backtraceLimit = 10;
 
+    /**
+     * @var array{ 0: string, 1: string, 2: array, 3: float }[]
+     */
     private $queries = array();
+
+    /**
+     * @var numeric
+     */
     private $queryTimer = 0;
 
     public function __construct(Connection $connection)
@@ -36,6 +49,11 @@ class ProfilerDatabaseConnection extends Connection
         $this->connection = $connection;
     }
 
+    /**
+     * @param float $time
+     *
+     * @return void
+     */
     public function addToQueryTimer($time)
     {
         $this->queryTimer += $time;
@@ -422,9 +440,17 @@ class ProfilerDatabaseConnection extends Connection
         return $this->connection->createQueryBuilder();
     }
 
-    /* This function will return the name string of the function that called $function. To return the
-        caller of your function, either call get_caller(), or get_caller(__FUNCTION__).
+    /*
     */
+    /**
+     * This function will return the name string of the function that called $function. To return the
+     * caller of your function, either call get_caller(), or get_caller(__FUNCTION__).
+     *
+     * @param null|string $function
+     * @param null|array $use_stack
+     *
+     * @return string
+     */
     public function get_caller($function = null, $use_stack = null)
     {
         if (is_array($use_stack)) {
@@ -451,6 +477,9 @@ class ProfilerDatabaseConnection extends Connection
         return 'unknown';
     }
 
+    /**
+     * @return array<string, mixed>[]
+     */
     protected function getBacktraceForQuery()
     {
         $backtrace = array();
@@ -470,7 +499,7 @@ class ProfilerDatabaseConnection extends Connection
     }
 
     /**
-     * @return int
+     * @return numeric
      */
     public function getQueryTimer()
     {
@@ -479,6 +508,8 @@ class ProfilerDatabaseConnection extends Connection
 
     /**
      * @param bool $backtraceEnabled
+     *
+     * @return void
      */
     public function setBacktraceEnabled($backtraceEnabled)
     {
@@ -487,6 +518,8 @@ class ProfilerDatabaseConnection extends Connection
 
     /**
      * @param int $backtraceLimit
+     *
+     * @return void
      */
     public function setBacktraceLimit($backtraceLimit)
     {

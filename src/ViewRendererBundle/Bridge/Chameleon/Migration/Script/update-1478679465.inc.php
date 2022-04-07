@@ -7,7 +7,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
-function delTree($dir)
+function delTree($dir): void
 {
     // Delete all contents recursively; but not the directory/ies itself
 

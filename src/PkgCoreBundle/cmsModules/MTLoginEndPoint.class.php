@@ -45,6 +45,9 @@ class MTLoginEndPoint extends TCMSModelBase
         return $this->data;
     }
 
+    /**
+     * @return bool
+     */
     public static function CheckBrowser()
     {
         $validBrowser = true;
@@ -64,6 +67,8 @@ class MTLoginEndPoint extends TCMSModelBase
     /**
      * Check login request. if the credentials check out, we redirect to the
      * main page, else we stay at the login page.
+     *
+     * @return void
      */
     public function Login()
     {
@@ -106,6 +111,11 @@ class MTLoginEndPoint extends TCMSModelBase
         ));
     }
 
+    /**
+     * @param bool $bIsRefreshLogin
+     *
+     * @return void
+     */
     protected function postLoginRedirect($bIsRefreshLogin)
     {
         $aRedirectParams = [];
@@ -160,6 +170,10 @@ class MTLoginEndPoint extends TCMSModelBase
         return $bOpenLocksFound;
     }
 
+    /**
+     * @param bool $noRedirect
+     * @return void
+     */
     public function Logout($noRedirect = false)
     {
         TCMSUser::Logout();
@@ -169,6 +183,9 @@ class MTLoginEndPoint extends TCMSModelBase
         }
     }
 
+    /**
+     * @return void
+     */
     private function redirectOnPendingUpdates()
     {
         try {

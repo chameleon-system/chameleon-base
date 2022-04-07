@@ -114,6 +114,8 @@ abstract class AbstractPkgCmsNavigationNode
 
     /**
      * @param bool $bDisableSubmenu
+     *
+     * @return void
      */
     public function setDisableSubmenu($bDisableSubmenu)
     {
@@ -122,6 +124,8 @@ abstract class AbstractPkgCmsNavigationNode
 
     /**
      * @param array $aChildren
+     *
+     * @return void
      */
     public function setChildren($aChildren)
     {
@@ -130,6 +134,8 @@ abstract class AbstractPkgCmsNavigationNode
 
     /**
      * @param bool $bIsActive
+     *
+     * @return void
      */
     public function setIsActive($bIsActive)
     {
@@ -146,6 +152,8 @@ abstract class AbstractPkgCmsNavigationNode
 
     /**
      * @param TdbCmsTree $oNodeCopy
+     *
+     * @return void
      */
     protected function setNodeCopy($oNodeCopy)
     {

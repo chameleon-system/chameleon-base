@@ -13,7 +13,9 @@ use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenStora
 class SetCsrfTokenStoragePass implements CompilerPassInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function process(ContainerBuilder $container)
     {

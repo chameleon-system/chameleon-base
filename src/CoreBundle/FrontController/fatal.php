@@ -11,7 +11,10 @@
 
 header($_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error', true, 500);
 
-function OutHTML($nonEscapedString)
+/**
+ * @param string $nonEscapedString
+ */
+function OutHTML($nonEscapedString): string
 {
     $sEscapedHTML = htmlentities($nonEscapedString, ENT_QUOTES, 'UTF-8');
     $sEscapedHTML = str_replace('=', '&#61;', $sEscapedHTML);

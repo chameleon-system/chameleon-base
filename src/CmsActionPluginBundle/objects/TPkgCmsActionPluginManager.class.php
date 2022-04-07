@@ -11,7 +11,14 @@
 
 class TPkgCmsActionPluginManager
 {
+    /**
+     * @var array<string, object>|null
+     */
     private $aActionPluginList = null;
+
+    /**
+     * @var TCMSActivePage|null
+     */
     private $oActivePage = null;
 
     public function __construct(TCMSActivePage $oActivePage)
@@ -20,7 +27,7 @@ class TPkgCmsActionPluginManager
     }
 
     /**
-     * @param $sPluginName
+     * @param string $sPluginName
      *
      * @return bool
      */
@@ -38,6 +45,8 @@ class TPkgCmsActionPluginManager
      *
      * @throws TPkgCmsActionPluginException_ActionNotFound
      * @throws TPkgCmsActionPluginException_ActionNotPublic
+     *
+     * @return void
      */
     public function callAction($sPluginName, $sActionName, $aParameter)
     {
@@ -57,7 +66,7 @@ class TPkgCmsActionPluginManager
     }
 
     /**
-     * @param $sPluginName
+     * @param string $sPluginName
      *
      * @return AbstractPkgActionPlugin
      */
@@ -72,6 +81,11 @@ class TPkgCmsActionPluginManager
         }
     }
 
+    /**
+     * @return object[]
+     *
+     * @psalm-return array<string, object>
+     */
     protected function getActionPluginList()
     {
         if (null === $this->aActionPluginList) {

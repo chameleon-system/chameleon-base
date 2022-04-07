@@ -34,6 +34,8 @@ class UpdateCounterVersionMigrator
 
     /**
      * @throws InvalidMigrationCounterException
+     *
+     * @return void
      */
     public function migrate()
     {
@@ -45,6 +47,8 @@ class UpdateCounterVersionMigrator
 
     /**
      * @throws InvalidMigrationCounterException
+     *
+     * @return void
      */
     private function migrateToVersionTwo()
     {

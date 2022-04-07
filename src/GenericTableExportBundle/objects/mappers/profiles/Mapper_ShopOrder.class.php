@@ -24,6 +24,8 @@ class Mapper_ShopOrder extends AbstractViewMapper
      * @abstract
      *
      * @param IMapperRequirementsRestricted $oRequirements
+     *
+     * @return void
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
     {
@@ -48,6 +50,8 @@ class Mapper_ShopOrder extends AbstractViewMapper
      * @param \IMapperVisitorRestricted     $oVisitor
      * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
+     *
+     * @return void
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {

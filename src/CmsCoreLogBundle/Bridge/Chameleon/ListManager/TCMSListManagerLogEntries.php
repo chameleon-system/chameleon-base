@@ -26,6 +26,10 @@ class TCMSListManagerLogEntries extends TCMSListManagerFullGroupTable
     const ALL_SELECTION_VALUE = '0';
     const ALL_ERROR_SELECTION_VALUE = '1';
 
+    /**
+     * @var array<string, int>
+     * @psalm-type array<string, Logger::*>
+     */
     private static $levels = [
         'DEBUG' => Logger::DEBUG,
         'INFO' => Logger::INFO,
@@ -38,7 +42,9 @@ class TCMSListManagerLogEntries extends TCMSListManagerFullGroupTable
     ];
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function PostCreateTableObjectHook()
     {

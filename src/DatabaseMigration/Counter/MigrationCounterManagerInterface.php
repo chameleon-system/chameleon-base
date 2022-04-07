@@ -30,6 +30,8 @@ interface MigrationCounterManagerInterface
      * Creates a migration counter for the passed $bundleName. If the counter already exists, no further action is taken.
      *
      * @param string $bundleName
+     *
+     * @return void
      */
     public function createMigrationCounter($bundleName);
 
@@ -37,6 +39,8 @@ interface MigrationCounterManagerInterface
      * Deletes a migration counter for the passed $bundleName. If the counter does not exist, no further action is taken.
      *
      * @param string $bundleName
+     *
+     * @return void
      */
     public function deleteMigrationCounter($bundleName);
 
@@ -45,6 +49,8 @@ interface MigrationCounterManagerInterface
      *
      * @param string $bundleName
      * @param int    $buildNumber
+     *
+     * @return void
      */
     public function markMigrationFileAsProcessed($bundleName, $buildNumber);
 }

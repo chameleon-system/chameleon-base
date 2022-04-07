@@ -99,6 +99,8 @@ class TCMSImageImageCrop extends ChameleonSystemImageCropBundleBridgeChameleonTC
      * @param int    $y
      * @param string $thumbPath
      * @param string $originalExtension
+     *
+     * @return void
      */
     protected function cropImageUsingImageMagick(
         $targetWidth,
@@ -178,6 +180,8 @@ class TCMSImageImageCrop extends ChameleonSystemImageCropBundleBridgeChameleonTC
      * @param int    $x
      * @param int    $y
      * @param int    $jpgQuality
+     *
+     * @return void
      */
     protected function cropImageUsingGdLib(
         $targetThumbPath,

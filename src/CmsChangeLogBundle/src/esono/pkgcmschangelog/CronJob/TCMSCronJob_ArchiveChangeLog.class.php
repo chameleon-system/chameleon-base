@@ -14,6 +14,9 @@
 /**/
 class TCMSCronJob_ArchiveChangeLog extends TCMSCronJob
 {
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         $archiver = new TCMSChangeLogArchiver();

@@ -29,10 +29,10 @@ class Mapper_PkgCmsChangelog extends AbstractViewMapper
      * To use this mapper add this query to query field in your export item:
      *
      *
-    SELECT cs.cms_tbl_conf AS Geaenderte_Tabelle, cs.modified_name AS Geaenderter_Datensatz, cs.modify_date AS Aenderungsdatum, cs.cms_user AS Geaendert_durch, cs.change_type AS Aenderung, ci.cms_field_conf AS Geaendertes_Feld, ci.value_old AS Alter_Wert, ci.value_new AS Neuer_Wert
-    FROM pkg_cms_changelog_set AS cs
-    LEFT OUTER JOIN pkg_cms_changelog_item AS ci ON cs.id = ci.pkg_cms_changelog_set_id
-    ORDER BY cs.modify_date DESC
+     *    SELECT cs.cms_tbl_conf AS Geaenderte_Tabelle, cs.modified_name AS Geaenderter_Datensatz, cs.modify_date AS Aenderungsdatum, cs.cms_user AS Geaendert_durch, cs.change_type AS Aenderung, ci.cms_field_conf AS Geaendertes_Feld, ci.value_old AS Alter_Wert, ci.value_new AS Neuer_Wert
+     *    FROM pkg_cms_changelog_set AS cs
+     *    LEFT OUTER JOIN pkg_cms_changelog_item AS ci ON cs.id = ci.pkg_cms_changelog_set_id
+     *    ORDER BY cs.modify_date DESC
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {

@@ -32,6 +32,9 @@ class MigrationDataAccessRequestLevelCacheDecorator implements MigrationDataAcce
         $this->subject = $subject;
     }
 
+    /**
+     * @return void
+     */
     private function clearCache()
     {
         $this->cache = [];

@@ -48,6 +48,9 @@ class AutoclassesRequestCacheDataAccess implements AutoclassesDataAccessInterfac
         $this->decorated = $decorated;
     }
 
+    /**
+     * @return void
+     */
     public function clearCache()
     {
         $this->tableExtensionData = null;

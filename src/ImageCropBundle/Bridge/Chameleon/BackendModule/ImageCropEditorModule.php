@@ -143,7 +143,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(
         IMapperVisitorRestricted $oVisitor,
@@ -465,6 +465,9 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         return $includes;
     }
 
+    /**
+     * @return void
+     */
     public function getImageFieldInformation()
     {
         $return = [];
@@ -506,6 +509,8 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @param array $returnValues
+     *
+     * @return never
      */
     private function returnAsAjaxError($returnValues)
     {
@@ -517,6 +522,8 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @param array $returnValues
+     *
+     * @return never
      */
     private function returnAsAjaxResponse($returnValues)
     {
@@ -537,6 +544,9 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         $this->methodCallAllowed[] = 'deleteCrop';
     }
 
+    /**
+     * @return never
+     */
     protected function saveCrop()
     {
         $cmsImage = $this->getCmsImage();
@@ -598,6 +608,9 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         );
     }
 
+    /**
+     * @return void
+     */
     protected function deleteCrop()
     {
         $cropId = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_CROP_ID);

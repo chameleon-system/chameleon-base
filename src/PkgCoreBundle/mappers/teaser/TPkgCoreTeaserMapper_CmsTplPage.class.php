@@ -12,7 +12,7 @@
 class TPkgCoreTeaserMapper_CmsTplPage extends AbstractViewMapper
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
     {
@@ -20,7 +20,7 @@ class TPkgCoreTeaserMapper_CmsTplPage extends AbstractViewMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {

@@ -32,6 +32,10 @@ class AutoClassLoader
      */
     private static $autoclassesDir;
 
+    /**
+     * @param class-string $sClassName
+     * @return bool
+     */
     public static function loadClassDefinition($sClassName)
     {
         try {
@@ -94,7 +98,9 @@ class AutoClassLoader
     /**
      * fills class repository with a complete lookup of all classes.
      *
-     * @var bool $bForceRegenerate - regenerate content
+     * @param bool $bForceRegenerate
+     *
+     * @return void
      */
     private static function loadClassRepository($bForceRegenerate = false)
     {

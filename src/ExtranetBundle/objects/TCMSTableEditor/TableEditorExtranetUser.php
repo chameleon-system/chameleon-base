@@ -19,7 +19,9 @@ use Symfony\Component\Translation\TranslatorInterface;
 class TableEditorExtranetUser extends TCMSTableEditor
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function DefineInterface()
     {
@@ -29,7 +31,9 @@ class TableEditorExtranetUser extends TCMSTableEditor
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function GetCustomMenuItems()
     {

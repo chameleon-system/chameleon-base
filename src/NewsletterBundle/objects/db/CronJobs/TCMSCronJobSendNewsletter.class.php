@@ -11,6 +11,9 @@
 
 class TCMSCronJobSendNewsletter extends TCMSCronJob
 {
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         parent::TCMSCronJob();

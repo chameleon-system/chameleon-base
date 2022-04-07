@@ -51,6 +51,9 @@ class BackendBreadcrumbListener
         $this->backendBreadcrumbService = $backendBreadcrumbService;
     }
 
+    /**
+     * @return void
+     */
     public function onKernelRequest(GetResponseEvent $event)
     {
         if (false === $event->isMasterRequest()) {

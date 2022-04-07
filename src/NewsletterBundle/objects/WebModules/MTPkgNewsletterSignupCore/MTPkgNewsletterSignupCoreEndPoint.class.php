@@ -337,7 +337,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
     }
 
     /**
-     * @param $aNewsletterList
+     * @param array $aNewsletterList
      * @return string[]
      */
     protected function TransformInputNewsletterList($aNewsletterList)

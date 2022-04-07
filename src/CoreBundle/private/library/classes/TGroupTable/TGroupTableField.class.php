@@ -135,7 +135,7 @@ class TGroupTableField
     }
 
     /**
-     * @param $sCellValue
+     * @param string $sCellValue
      *
      * @return string
      */

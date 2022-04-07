@@ -20,6 +20,8 @@ interface IMapperVisitor
 
     /**
      * @param IMapperRequirements $oRequirements
+     *
+     * @return void
      */
     public function SetCurrentRequirements(IMapperRequirements $oRequirements);
 
@@ -43,6 +45,8 @@ interface IMapperVisitor
     /**
      * @param string $key
      * @param mixed  $value
+     *
+     * @return void
      */
     public function SetMappedValue($key, $value);
 
@@ -51,12 +55,14 @@ interface IMapperVisitor
      *
      * @param array $aData
      *
-     * @return
+     * @return void
      */
     public function SetMappedValueFromArray($aData);
 
     /**
      * @param string $sSnippet
+     *
+     * @return void
      */
     public function setSnippetName($sSnippet);
 
@@ -86,7 +92,9 @@ interface IMapperVisitor
     public function runMapperChainOn($mapperChainName, array $mapperInputData);
 
     /**
-     * @param DataMappingServiceInterface[] $mapperChains assoc array. name => DataMappingServiceInterface
+     * @param array<string, DataMappingServiceInterface> $mapperChains assoc array. name => DataMappingServiceInterface
+     *
+     * @return void
      */
     public function addMapperChains(array $mapperChains);
 
@@ -97,11 +105,15 @@ interface IMapperVisitor
 
     /**
      * @param array<string, string> $transformations
+     *
+     * @return void
      */
     public function setTransformations($transformations);
 
     /**
      * @param string $arrayName
+     *
+     * @return void
      */
     public function setMapToArray($arrayName);
 }

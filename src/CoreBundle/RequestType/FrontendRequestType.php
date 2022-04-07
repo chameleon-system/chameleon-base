@@ -21,12 +21,18 @@ class FrontendRequestType extends AbstractRequestType
         return RequestTypeInterface::REQUEST_TYPE_FRONTEND;
     }
 
+    /**
+     * @return void
+     */
     public function initialize()
     {
         $this->initFrontend();
         $this->sendDefaultHeaders();
     }
 
+    /**
+     * @return void
+     */
     private function initFrontend()
     {
         // force users to use cookies
@@ -34,6 +40,9 @@ class FrontendRequestType extends AbstractRequestType
         @ini_set('session.use_trans_sid', 0);
     }
 
+    /**
+     * @return void
+     */
     protected function sendDefaultHeaders()
     {
         parent::sendDefaultHeaders();

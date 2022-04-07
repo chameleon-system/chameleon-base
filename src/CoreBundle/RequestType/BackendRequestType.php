@@ -21,12 +21,18 @@ class BackendRequestType extends AbstractRequestType
         return RequestTypeInterface::REQUEST_TYPE_BACKEND;
     }
 
+    /**
+     * @return void
+     */
     public function initialize()
     {
         $this->initBackend();
         $this->sendDefaultHeaders();
     }
 
+    /**
+     * @return void
+     */
     private function initBackend()
     {
         set_time_limit(1800);

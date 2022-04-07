@@ -255,6 +255,8 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
      * aRow or that are in the protected list.
      *
      * @param array $aRow
+     *
+     * @return void
      */
     public function LoadFromRowProtected($aRow)
     {

@@ -1588,7 +1588,7 @@ class TTools
      *
      * @static
      *
-     * @param $string
+     * @param string $string
      * @param int    $format
      * @param string $charlist
      *
@@ -1768,7 +1768,7 @@ class TTools
      *
      * @static
      *
-     * @param $aArray
+     * @param array $aArray
      *
      * @return mixed
      */
@@ -1785,8 +1785,8 @@ class TTools
      *
      * @static
      *
-     * @param $a
-     * @param $b
+     * @param array{weight: numeric} $a
+     * @param array{weight: numeric} $b
      *
      * @return int
      */
@@ -1802,7 +1802,7 @@ class TTools
     /**
      * checks string for GUID pattern like "A98C5A1E-A742-4808-96FA-6F409E799937".
      *
-     * @param $sID
+     * @param string $sID
      *
      * @return bool
      */

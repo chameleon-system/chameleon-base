@@ -15,6 +15,8 @@ class TPkgCmsActionPlugin_ChangeLanguage extends AbstractPkgActionPlugin
 {
     /**
      * @param array $data
+     *
+     * @return void
      */
     public function changeLanguage(array $data)
     {

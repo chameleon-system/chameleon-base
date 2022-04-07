@@ -265,7 +265,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
     }
 
     /**
-     * @param $bAsDownload bool if true deliver download original header. If false deliver download with streming header
+     * @param bool $bAsDownload if true deliver download original header. If false deliver download with streming header
      *
      * @return string
      */

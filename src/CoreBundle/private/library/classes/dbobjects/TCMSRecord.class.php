@@ -138,8 +138,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * @param string $table
      * @param string $id
      * @param string $iLanguageId
-     *
-     * @return TCMSRecord
      */
     public function TCMSRecord($table = null, $id = null, $iLanguageId = null)
     {

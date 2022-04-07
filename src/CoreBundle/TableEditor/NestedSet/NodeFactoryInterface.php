@@ -14,7 +14,7 @@ namespace ChameleonSystem\CoreBundle\TableEditor\NestedSet;
 interface NodeFactoryInterface
 {
     /**
-     * @param $tableName
+     * @param string $tableName
      * @param array $nodeData
      *
      * @return NodeInterface

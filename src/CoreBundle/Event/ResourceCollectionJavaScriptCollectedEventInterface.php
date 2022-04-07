@@ -14,12 +14,14 @@ namespace ChameleonSystem\CoreBundle\Event;
 interface ResourceCollectionJavaScriptCollectedEventInterface
 {
     /**
-     * @param string|null $content
+     * @param string $content
+     *
+     * @return void
      */
     public function setContent($content);
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getContent();
 }

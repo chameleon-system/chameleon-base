@@ -27,6 +27,9 @@ class NewsletterPostProcessorListener
         $this->postProcessorCollectionService = $postProcessorCollectionService;
     }
 
+    /**
+     * @return void
+     */
     public function onKernelResponse(FilterResponseEvent $event)
     {
         $newsletterUserId = $event->getRequest()->query->get('TPkgNewsletterUserId', null);

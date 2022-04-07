@@ -162,7 +162,7 @@ class TCMSMail extends PHPMailer
     }
 
     /**
-     * @param $aData
+     * @param array<string, mixed> $aData
      *
      * @return bool - found body
      */

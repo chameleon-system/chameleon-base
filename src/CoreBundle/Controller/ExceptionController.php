@@ -58,6 +58,8 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
 
     /**
      * @param ChameleonControllerInterface $mainController
+     *
+     * @return void
      */
     public function setMainController(ChameleonControllerInterface $mainController)
     {
@@ -94,6 +96,8 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
 
     /**
      * @param ExtranetConfigurationInterface $extranetConfiguration
+     *
+     * @return void
      */
     public function setExtranetConfiguration(ExtranetConfigurationInterface $extranetConfiguration)
     {
@@ -102,6 +106,8 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
 
     /**
      * @param ExtranetUserProviderInterface $extranetUserProvider
+     *
+     * @return void
      */
     public function setExtranetUserProvider(ExtranetUserProviderInterface $extranetUserProvider)
     {
@@ -127,6 +133,8 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
 
     /**
      * @param PortalDomainServiceInterface $portalDomainService
+     *
+     * @return void
      */
     public function setPortalDomainService(PortalDomainServiceInterface $portalDomainService)
     {
@@ -135,6 +143,8 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
 
     /**
      * @param RequestInfoServiceInterface $requestInfoService
+     *
+     * @return void
      */
     public function setRequestInfoService(RequestInfoServiceInterface $requestInfoService)
     {
@@ -203,6 +213,8 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
 
     /**
      * @param PageServiceInterface $pageService
+     *
+     * @return void
      */
     public function setPageService(PageServiceInterface $pageService)
     {

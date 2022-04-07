@@ -21,13 +21,18 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ListUpdateCommand extends Command
 {
+    /**
+     * @param string|null $name
+     */
     public function __construct($name = null)
     {
         parent::__construct('chameleon_system:update:list');
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function configure()
     {

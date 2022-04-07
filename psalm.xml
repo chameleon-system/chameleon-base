@@ -18,6 +18,7 @@
     <projectFiles>
         <directory name="./src" />
         <ignoreFiles>
+            <directory name="../../symfony" />
             <directory name="src/**/views/" />
             <directory name="src/**/Resources/" />
             <directory name="src/**/private/" />
@@ -26,6 +27,7 @@
             <directory name="src/**/Tests" />
             <directory name="src/**/objects/**/**/views" />
             <directory name="src/**/objects/Tests" />
+            <directory name="src/**/Bridge/Chameleon/Migration" />
             <file name="src/CoreBundle/Maintenance/Migrator62/autoloadTemplate.php" />
         </ignoreFiles>
     </projectFiles>
@@ -56,6 +58,9 @@
         <RedundantCastGivenDocblockType errorLevel="suppress" />
 
         <UnusedPsalmSuppress errorLevel="error" />
+        <MissingReturnType errorLevel="error" />
+        <MissingParamType errorLevel="error" />
+        <MissingPropertyType errorLevel="error" />
 
         <UndefinedDocblockClass>
             <errorLevel type="suppress">

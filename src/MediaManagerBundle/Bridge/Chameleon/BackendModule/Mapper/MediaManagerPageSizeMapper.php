@@ -42,14 +42,14 @@ class MediaManagerPageSizeMapper extends AbstractViewMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
     {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(
         IMapperVisitorRestricted $oVisitor,

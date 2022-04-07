@@ -25,14 +25,28 @@ class BundlesLoadedCheck extends AbstractCheck
      */
     private $kernel;
 
+    /**
+     * @var string
+     */
     private $composerLockPath;
 
-    private $vendorPath;
     /**
-     * @var
+     * @var string
+     */
+    private $vendorPath;
+
+    /**
+     * @var bool
      */
     private $includeDev;
 
+    /**
+     * @param int $level
+     * @param Kernel $kernel
+     * @param string $composerLockPath
+     * @param string $vendorPath
+     * @param bool $includeDev
+     */
     public function __construct($level, Kernel $kernel, $composerLockPath, $vendorPath, $includeDev)
     {
         parent::__construct($level);
@@ -43,7 +57,7 @@ class BundlesLoadedCheck extends AbstractCheck
     }
 
     /**
-     * @return array(CheckOutcome)
+     * @return CheckOutcome[]
      */
     public function performCheck()
     {

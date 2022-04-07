@@ -19,7 +19,10 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 class ChameleonSystemViewRendererExtension extends ConfigurableExtension
 {
     /**
-     * {@inheritdoc}
+     * @param array<string, mixed> $mergedConfig
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {

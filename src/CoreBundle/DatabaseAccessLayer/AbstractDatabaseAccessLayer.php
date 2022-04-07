@@ -20,11 +20,20 @@ abstract class AbstractDatabaseAccessLayer
      */
     private $databaseConnection;
 
+    /**
+     * @var array<string, mixed>
+     */
     private $cache = array();
+
+    /**
+     * @var array<string, string>
+     */
     private $keyMapping = array();
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
     public function setDatabaseConnection(Connection $connection)
     {
@@ -33,10 +42,10 @@ abstract class AbstractDatabaseAccessLayer
 
     /**
      * @param string $field
-     * @param $value
-     * @param string $languageId
+     * @param string $value
+     * @param null|string $languageId
      *
-     * @return array
+     * @return \TCMSRecord[]
      */
     protected function findDbObjectFromFieldInCache($field, $value, $languageId = null)
     {
@@ -64,13 +73,19 @@ abstract class AbstractDatabaseAccessLayer
         return $this->databaseConnection;
     }
 
+    /**
+     * @param string $id
+     * @param mixed $object
+     *
+     * @return void
+     */
     protected function setCache($id, $object)
     {
         $this->cache[$id] = $object;
     }
 
     /**
-     * @param $id
+     * @param string $id
      *
      * @return mixed|null
      */
@@ -95,6 +110,8 @@ abstract class AbstractDatabaseAccessLayer
 
     /**
      * @param array $cacheLookupData
+     *
+     * @return void
      */
     private function normalize(&$cacheLookupData)
     {
@@ -109,6 +126,8 @@ abstract class AbstractDatabaseAccessLayer
     /**
      * @param string $mappedKey
      * @param string $id
+     *
+     * @return void
      */
     protected function setCacheKeyMapping($mappedKey, $id)
     {

@@ -18,12 +18,7 @@ class TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads extends TPkgCmsS
      * used when formating a number: [{variable:number:decimalplaces}]
      * example [{costs:number:2}].
      *
-     * @param string $sString
-     * @param array  $aCustomVariables
-     * @param bool   $bPassVarsThroughOutHTML - set to true, if you want to pass the vars through TGlobal::OutHTML
-     * @param $iWidth bool|int - max image width, default = false, used in pkgCmsTextBlock package
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function replace($sString, $aCustomVariables, $bPassVarsThroughOutHTML = false, $iWidth = false)
     {

@@ -42,6 +42,8 @@ class MediaManagerListState
 
     /**
      * @param int $pageNumber
+     *
+     * @return void
      */
     public function setPageNumber($pageNumber)
     {
@@ -51,6 +53,8 @@ class MediaManagerListState
     /**
      * @param string $stateParameterName
      * @param mixed  $stateParameterValue
+     *
+     * @return void
      */
     private function setStateParameter($stateParameterName, $stateParameterValue)
     {
@@ -59,6 +63,8 @@ class MediaManagerListState
 
     /**
      * @param int $pageSize
+     *
+     * @return void
      */
     public function setPageSize($pageSize)
     {
@@ -67,6 +73,8 @@ class MediaManagerListState
 
     /**
      * @param string $searchTerm
+     *
+     * @return void
      */
     public function setSearchTerm($searchTerm)
     {
@@ -75,6 +83,8 @@ class MediaManagerListState
 
     /**
      * @param string $id
+     *
+     * @return void
      */
     public function setMediaTreeNodeId($id)
     {
@@ -83,6 +93,8 @@ class MediaManagerListState
 
     /**
      * @param string $listView
+     *
+     * @return void
      */
     public function setListView($listView)
     {
@@ -91,6 +103,8 @@ class MediaManagerListState
 
     /**
      * @param bool $showSubtree
+     *
+     * @return void
      */
     public function setShowSubtree($showSubtree)
     {
@@ -102,6 +116,8 @@ class MediaManagerListState
 
     /**
      * @param bool $deleteWithUsageSearch
+     *
+     * @return void
      */
     public function setDeleteWithUsageSearch($deleteWithUsageSearch)
     {
@@ -113,6 +129,8 @@ class MediaManagerListState
 
     /**
      * @param string $sortColumnSystemName
+     *
+     * @return void
      */
     public function setSortColumn($sortColumnSystemName)
     {
@@ -123,6 +141,8 @@ class MediaManagerListState
      * @param bool   $isPickImageMode
      * @param string $callback
      * @param bool   $hasCrop
+     *
+     * @return void
      */
     public function setPickImageMode($isPickImageMode, $callback, $hasCrop)
     {

@@ -14,6 +14,9 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
 {
     // export path after CustomerData path (cmsdata)
+    /**
+     * @var string
+     */
     protected $sExportPath = 'export';
 
     /**
@@ -67,6 +70,11 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
         return $bSuccess;
     }
 
+    /**
+     * @param null|string $sId
+     *
+     * @return string
+     */
     public function getExportFilePath($sId = null)
     {
         $sFileName = $this->GetFileName($sId);
@@ -82,6 +90,8 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
      *
      * @param string|null $sId
      * @param bool        $bUtf8Decode
+     *
+     * @return never
      */
     public function WriteExportToDownload($sId = null, $bUtf8Decode = false)
     {
@@ -110,7 +120,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
     /**
      * Builds the file name for the current export, based on the configuration given by the user.
      *
-     * @param $sId
+     * @param null|string $sId
      *
      * @return string
      */
@@ -130,6 +140,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
      * or false if file type could not be found in cms database.
      *
      * @param string $fileExtension
+     * @param string $sFileName
      *
      * @return int - id of file type... false if file type wasn't found
      */
@@ -186,6 +197,11 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
         return $sOutput;
     }
 
+    /**
+     * @return string
+     *
+     * @param string $sHeaderViewPath
+     */
     protected function RenderHeader($sHeaderViewPath)
     {
         /** @var $oViewRenderer ViewRenderer */
@@ -229,6 +245,9 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
         return $oViewRenderer->Render($sViewPath);
     }
 
+    /**
+     * @return string
+     */
     public function GetViewName()
     {
         if (empty($this->fieldViewPath)) {
@@ -242,6 +261,9 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
         return $sViewPath;
     }
 
+    /**
+     * @return string
+     */
     public function GetHeaderViewName()
     {
         $sViewPath = '';
@@ -283,7 +305,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
     }
 
     /**
-     * @param $sSystemName
+     * @param string $sSystemName
      *
      * @return TdbPkgGenericTableExport|null
      */

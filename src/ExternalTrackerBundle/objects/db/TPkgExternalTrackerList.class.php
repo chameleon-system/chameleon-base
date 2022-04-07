@@ -16,6 +16,10 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
 {
     const SESSION_KEY_NAME = 'esono/pkgExternalTracker/trackerData';
 
+    /**
+     * @param string|null $sQuery
+     * @param string|null $sLanguageId
+     */
     public function __construct($sQuery = null, $sLanguageId = null)
     {
         parent::__construct($sQuery, $sLanguageId);
@@ -41,6 +45,8 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
      * this should be called just after the opening body tag. It outputs / injects the tracking code.
      *
      * @param TdbCmsTplPage $oPage
+     *
+     * @return void
      */
     public function TrackPage(TdbCmsTplPage $oPage)
     {
@@ -53,6 +59,12 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
         echo $sClosingLines;
     }
 
+    /**
+     * @param string $sEventName
+     * @param mixed $aParameter
+     *
+     * @return void
+     */
     public function AddEvent($sEventName, $aParameter = array())
     {
         $state = $this->GetStateData();
@@ -67,6 +79,8 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
      *
      * @param string $sStateDataKey
      * @param mixed $oObject
+     *
+     * @return void
      */
     public function AddStateData($sStateDataKey, $oObject)
     {
@@ -77,6 +91,9 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
         $state->AddStateData($sStateDataKey, $oObject);
     }
 
+    /**
+     * @return void
+     */
     private function SetPage(TdbCmsTplPage $oPage)
     {
         $state = $this->GetStateData();
@@ -88,6 +105,8 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
 
     /**
      * inject head includes into controller.
+     *
+     * @return void
      */
     private function AddHTMLHeadIncludesToController()
     {
@@ -98,6 +117,9 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
         }
     }
 
+    /**
+     * @return void
+     */
     private function AddHtmlFooterIncludesToController()
     {
         $aIncludes = $this->GetPreBodyClosingCode();
@@ -201,7 +223,7 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
      * return an instance for the query passed.
      *
      * @param string $sQuery                                 - custom query instead of default query
-     * @param int    $iLanguage                              - the language id for record overloading
+     * @param int    $iLanguageId                            - the language id for record overloading
      * @param bool   $bAllowCaching                          - set this to true if you want to cache the recordlist object
      * @param bool   $bForceWorkflow                         - set this to true to force adding the workflow query part even in cms backend mode
      * @param bool   $bUseGlobalFilterInsteadOfPreviewFilter - set this to true if you want to overload all workflow data instead of only the records that are marked for preview
@@ -240,6 +262,9 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
         return " (`pkg_external_tracker`.`{$sFieldActive}` = '1')".TdbPkgExternalTrackerList::GetActiveForPortalItemSQLSnippet();
     }
 
+    /**
+     * @return string
+     */
     public static function GetActiveForPortalItemSQLSnippet()
     {
         $sPortalActive = '';

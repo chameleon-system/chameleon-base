@@ -27,6 +27,10 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     const FIELD_BLACKLIST_TYPE_USER = 'user';
     const FIELD_BLACKLIST_TYPE_ADDRESS = 'address';
 
+    /**
+     * @var array<string, string[]>
+     * @psalm-var array<self::FIELD_BLACKLIST_TYPE_*, string[]>
+     */
     private static $fieldBlacklist = array(
         self::FIELD_BLACKLIST_TYPE_USER => array('id', 'isadmin', 'data_extranet_group_mlt', 'cms_portal_id', 'session_key', 'login_salt', 'datecreated', 'confirmed', 'confirmedon', 'reg_email_send'),
         self::FIELD_BLACKLIST_TYPE_ADDRESS => array(),
@@ -74,6 +78,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
     /**
      * @param bool $bAllowRedirect
+     *
+     * @return void
      */
     public function SetPreventRedirects($bAllowRedirect)
     {
@@ -140,6 +146,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
     /**
      * Confirms a user registration.
+     *
+     * @return void
      */
     public function ConfirmUser()
     {
@@ -174,6 +182,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      *
      * @param string|null $sSuccessURL - optional success redirect URL
      * @param string|null $sFailureURL - optional failure redirect URL
+     *
+     * @return void
      */
     public function Register($sSuccessURL = null, $sFailureURL = null)
     {
@@ -456,6 +466,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      * @param string|null $selectedAddressId - new billing address - can also be set via GET/POST
      * @param string|null $sRedirectToURL
      * @param bool        $bInternalCall     - if set to true the redirect URLs will be ignored
+     *
+     * @return void
      */
     public function SelectBillingAddress($selectedAddressId = null, $sRedirectToURL = null, $bInternalCall = false)
     {
@@ -516,6 +528,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      * @param string|null $selectedAddressId - new billing address - can also be set via GET/POST
      * @param string|null $sRedirectToURL
      * @param bool        $bInternalCall     - if set to true the redirect URLs will be ignored
+     *
+     * @return void
      */
     public function SelectShippingAddress($selectedAddressId = null, $sRedirectToURL = null, $bInternalCall = false)
     {
@@ -626,6 +640,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      *
      * @param string|null $sSuccessURL
      * @param string|null $sFailureURL
+     *
+     * @return void
      */
     public function UpdateUserPasswordRequired($sSuccessURL = null, $sFailureURL = null)
     {
@@ -639,6 +655,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      * @param string|null $sSuccessURL       - redirect on success (can also be passed via POST)
      * @param string|null $sFailureURL       - redirect on failure (can also be passed via POST)
      * @param bool        $bPasswordRequired
+     *
+     * @return void
      */
     public function UpdateUser($sSuccessURL = null, $sFailureURL = null, $bPasswordRequired = false)
     {
@@ -789,12 +807,17 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         return $PasswordIsRequiredForUserActionValid;
     }
 
+    /**
+     * @return void
+     */
     protected function Redirect()
     {
     }
 
     /**
      * Called after the user is saved via UpdateUser().
+     *
+     * @return void
      */
     protected function PostUpdateUserHook()
     {
@@ -802,6 +825,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
     /**
      * @param array $aData
+     *
+     * @return void
      */
     protected function PrepareSubmittedData(&$aData)
     {
@@ -809,6 +834,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
     /**
      * @param array $aData
+     *
+     * @return void
      */
     protected function PrepareSubmittedDataForUserAddress(&$aData)
     {
@@ -827,10 +854,12 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     }
 
     /**
-     *  Sends a double-opt-in email to the active user.
+     * Sends a double-opt-in email to the active user.
      *
      * @param bool $sRequestUserKey user id of the user who get the double opt in email
      * @param bool $bIsExternalCall if true redirects to calling page; set to false to avoid the redirect
+     *
+     * @return void
      */
     protected function SendDoubleOptInEMail($sRequestUserKey = false, $bIsExternalCall = true)
     {
@@ -862,6 +891,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      *
      * @param string|null $sSuccessURL
      * @param string|null $sFailureURL
+     *
+     * @return void
      */
     public function Login($sSuccessURL = null, $sFailureURL = null)
     {
@@ -902,6 +933,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      * Called after a successful login.
      *
      * @param string|null $successURL
+     *
+     * @return void
      */
     protected function OnLoginSuccess($successURL = null)
     {
@@ -918,6 +951,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      * User logout.
      *
      * @param string $sRedirectToURL - optional URL to redirect after logout
+     *
+     * @return void
      */
     public function Logout($sRedirectToURL = null)
     {
@@ -977,6 +1012,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
     /**
      * Change view to enter new password and update user with new password.
+     *
+     * @return void
      */
     public function ChangeForgotPassword()
     {
@@ -1170,6 +1207,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      *
      * @param string $sURL
      * @param bool   $bAllowOnlyRelativeURLs
+     *
+     * @return void
      */
     protected function RedirectToURL($sURL, $bAllowOnlyRelativeURLs = false)
     {
@@ -1227,6 +1266,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
     /**
      * Hook is executed when a user successfully changed his email address.
+     *
+     * @return void
      */
     protected function ChangeUserEmailSuccessHook()
     {
@@ -1238,6 +1279,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
     /**
      * Hook is executed when changing email address of a user failed.
+     *
+     * @return void
      */
     protected function ChangeUserEmailFailureHook()
     {
@@ -1309,6 +1352,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
     /**
      * Hook is executed when user changed her/his password successfully.
+     *
+     * @return void
      */
     protected function ChangeUserPasswordSuccessHook()
     {
@@ -1320,6 +1365,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
     /**
      * Hook is executed when changing password of a user failed.
+     *
+     * @return void
      */
     protected function ChangeUserPasswordFailureHook()
     {
@@ -1331,6 +1378,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
     /**
      * Sends an email containing password recovery information if the email address is valid.
+     *
+     * @return void
      */
     public function SendPassword()
     {
@@ -1398,6 +1447,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     /**
      * Hook is executed when the forgot-password function was successful
      * (which is also true if we didn't find a user for the given email address).
+     *
+     * @return void
      */
     protected function SendPasswordSuccessHook()
     {
@@ -1406,6 +1457,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
     /**
      * Hook is executed when the forgot-password function failed.
+     *
+     * @return void
      */
     protected function SendPasswordFailureHook()
     {

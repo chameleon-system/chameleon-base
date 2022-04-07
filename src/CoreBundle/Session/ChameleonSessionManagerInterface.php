@@ -19,6 +19,8 @@ interface ChameleonSessionManagerInterface
 {
     /**
      * Starts the session.
+     *
+     * @return void
      */
     public function boot();
 

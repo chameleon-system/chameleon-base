@@ -16,6 +16,9 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 
 class SearchResultTriggerCmsObserverListener
 {
+    /**
+     * @return void
+     */
     public function onArticleListResultGenerated(ArticleListFilterExecutedEvent $event)
     {
         if (false === $this->isSearchEvent($event)) {
@@ -33,6 +36,9 @@ class SearchResultTriggerCmsObserverListener
         );
     }
 
+    /**
+     * @return bool
+     */
     private function isSearchEvent(ArticleListFilterExecutedEvent $event)
     {
         $searchClass = '\TShopModuleArticlelistFilterSearch';
@@ -40,16 +46,26 @@ class SearchResultTriggerCmsObserverListener
         return $event->getFilter() instanceof $searchClass;
     }
 
+    /**
+     * @return \TdbShopArticle[]
+     */
     private function getResultItems(ArticleListFilterExecutedEvent $event)
     {
         return $event->getResultData()->asArray();
     }
 
+    /**
+     * @param ArticleListFilterExecutedEvent $event
+     * @return int
+     */
     private function getNumberOfResults(ArticleListFilterExecutedEvent $event)
     {
         return $event->getResultData()->getTotalNumberOfResults();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getSearchParameters(ArticleListFilterExecutedEvent $event)
     {
         $stateQuery = $event->getState()->getState(StateInterface::QUERY, array());

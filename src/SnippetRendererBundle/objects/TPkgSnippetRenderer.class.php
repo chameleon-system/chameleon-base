@@ -98,8 +98,8 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
      *
      * @static
      *
-     * @param $sSource - the snippet source (or path to a file containing it)
      * @param int $iSourceType
+     * @param string $sSource - the snippet source (or path to a file containing it)
      *
      * @return \TPkgSnippetRenderer
      */
@@ -117,7 +117,9 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
      * Set the snippet source.
      * It is possible to override the initially given source this way afterwards.
      *
-     * @param $sSource - the snippet source
+     * @param string $sSource - the snippet source
+     *
+     * @return void
      */
     public function setSource($sSource)
     {
@@ -144,7 +146,9 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
      * Set the path to the snippet code.
      * It is possible to override the initially given source this way afterwards.
      *
-     * @param $sPath - the path to the snippet code
+     * @param string $sPath - the path to the snippet code
+     *
+     * @return void
      */
     public function setFilename($sPath)
     {

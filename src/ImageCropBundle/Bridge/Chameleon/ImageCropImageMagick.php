@@ -57,6 +57,8 @@ class ImageCropImageMagick extends imageMagick
      * @param int $yPos
      *
      * @throws ImagickException
+     *
+     * @return void
      */
     protected function cropImageWithCoordinatesUsingImagickExtension($width, $height, $xPos = 0, $yPos = 0)
     {
@@ -80,6 +82,8 @@ class ImageCropImageMagick extends imageMagick
      * @param int $yPos
      *
      * @throws ImagickException
+     *
+     * @return void
      */
     protected function cropImageWithCoordinatesUsingImagickViaShellCommand($width, $height, $xPos = 0, $yPos = 0)
     {

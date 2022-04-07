@@ -16,7 +16,14 @@
  */
 class TPkgCmsException_LogAndMessage extends TPkgCmsException_Log
 {
+    /**
+     * @var null|string
+     */
     private $messageCode = null;
+
+    /**
+     * @var array|null
+     */
     private $additionalData = null;
 
     /**
@@ -50,11 +57,17 @@ class TPkgCmsException_LogAndMessage extends TPkgCmsException_Log
         return $sString;
     }
 
+    /**
+     * @return array|null
+     */
     public function getAdditionalData()
     {
         return $this->additionalData;
     }
 
+    /**
+     * @return null|string
+     */
     public function getMessageCode()
     {
         return $this->messageCode;

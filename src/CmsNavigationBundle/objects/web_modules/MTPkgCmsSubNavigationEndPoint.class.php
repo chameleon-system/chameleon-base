@@ -14,7 +14,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 class MTPkgCmsSubNavigationEndPoint extends MTPkgViewRendererAbstractModuleMapper
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
@@ -48,6 +48,9 @@ class MTPkgCmsSubNavigationEndPoint extends MTPkgViewRendererAbstractModuleMappe
         return $parameter;
     }
 
+    /**
+     * @return string[]
+     */
     private function getActiveUserExtranetGroups()
     {
         $activeUser = $this->getActiveUser();
@@ -66,6 +69,9 @@ class MTPkgCmsSubNavigationEndPoint extends MTPkgViewRendererAbstractModuleMappe
         return TdbDataExtranetUser::GetInstance();
     }
 
+    /**
+     * @return bool
+     */
     private function activeUserIsLoggedIn()
     {
         $activeUser = $this->getActiveUser();
@@ -76,6 +82,9 @@ class MTPkgCmsSubNavigationEndPoint extends MTPkgViewRendererAbstractModuleMappe
         return $activeUser->IsLoggedIn();
     }
 
+    /**
+     * @return null|string
+     */
     private function getRootNodeId()
     {
         $rootNode = $this->getRootNode();

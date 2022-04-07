@@ -18,6 +18,9 @@ use Composer\Script\Event;
 
 class PostUpdateVersionCheck
 {
+    /**
+     * @return void
+     */
     public static function checkVersion(Event $e)
     {
         echo "\n\n*** Chameleon Version Check ***\n\n";

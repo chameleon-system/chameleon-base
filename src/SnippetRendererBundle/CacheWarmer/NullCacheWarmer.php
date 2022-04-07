@@ -16,6 +16,9 @@ class NullCacheWarmer implements CacheWarmerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param string $cacheDir
+     * @return void
      */
     public function warmUp($cacheDir)
     {

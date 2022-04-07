@@ -23,6 +23,8 @@ interface DataMappingServiceInterface
 
     /**
      * @param IViewMapper[] $aMappers
+     *
+     * @return void
      */
     public function addMappers(array $aMappers);
 
@@ -30,12 +32,16 @@ interface DataMappingServiceInterface
      * @param IViewMapper $oMapper
      * @param array<string, string>|null  $transformations
      * @param string  $mapToArray
+     *
+     * @return void
      */
     public function addMapper(IViewMapper $oMapper, $transformations = null, $mapToArray = null);
 
     /**
      * @param string $key
      * @param mixed $value
+     *
+     * @return void
      */
     public function addSourceObject($key, $value);
 
@@ -46,6 +52,8 @@ interface DataMappingServiceInterface
 
     /**
      * @param array $aVars
+     *
+     * @return void
      */
     public function addSourceObjectsFromArray(array $aVars);
 
@@ -62,18 +70,22 @@ interface DataMappingServiceInterface
     public function hasMappers();
 
     /**
-     * @return array
+     * @return class-string<IViewMapper>[]
      */
     public function getMapperNameList();
 
     /**
      * resets service so it can be used with new source data.
+     *
+     * @return void
      */
     public function reset();
 
     /**
      * @param string                      $mappingServiceName
      * @param DataMappingServiceInterface $mappingService
+     *
+     * @return void
      */
     public function addMappingService($mappingServiceName, self $mappingService);
 }

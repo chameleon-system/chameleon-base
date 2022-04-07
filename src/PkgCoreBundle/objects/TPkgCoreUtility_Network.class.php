@@ -17,9 +17,10 @@ class TPkgCoreUtility_Network
     const IP_RANGE_TYPE_NONE = 4;
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return int
+     * @psalm-return self::IP_RANGE_TYPE_*
      */
     public function getRangeType($string)
     {
@@ -75,6 +76,11 @@ class TPkgCoreUtility_Network
     // The function will return true if the supplied IP is within the range.
     // Note little validation is done on the range inputs - it expects you to
     // use one of the above 3 formats.
+    /**
+     * @param string $ip
+     * @param string $range
+     * @return bool
+     */
     public function ipIsInRange($ip, $range)
     {
         $sFormat = $this->getRangeType($range);

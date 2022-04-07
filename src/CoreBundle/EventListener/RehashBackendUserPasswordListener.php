@@ -58,6 +58,8 @@ class RehashBackendUserPasswordListener
 
     /**
      * @param BackendLoginEvent $backendLoginEvent
+     *
+     * @return void
      */
     public function rehashPassword(BackendLoginEvent $backendLoginEvent)
     {
@@ -110,6 +112,8 @@ class RehashBackendUserPasswordListener
     /**
      * @param string $userId
      * @param string $hashedPassword
+     *
+     * @return void
      */
     private function saveHashedPassword($userId, $hashedPassword)
     {

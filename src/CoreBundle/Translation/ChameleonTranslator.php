@@ -59,7 +59,12 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $id
+     * @param int $number
+     * @param array $parameters
+     * @param string $domain
+     * @param string $locale
+     * @return string
      */
     public function transChoice($id, $number, array $parameters = array(), $domain = null, $locale = null)
     {
@@ -67,7 +72,8 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $locale
+     * @return void
      */
     public function setLocale($locale)
     {

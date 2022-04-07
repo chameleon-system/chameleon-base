@@ -60,6 +60,10 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
         return $oDataObjct->sqlData;
     }
 
+    /**
+     * @return string
+     * @throws TPkgCmsException_Log
+     */
     protected function GetExportTableName()
     {
         static $sTable;
@@ -115,6 +119,8 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
      * save order row to tmp table.
      *
      * @param array $aRow
+     *
+     * @return void
      */
     protected function SaveRow($aRow)
     {
@@ -173,6 +179,9 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
         return PATH_OUTBOX.'/'.$this->GetExportTableName().'.csv';
     }
 
+    /**
+     * @return string
+     */
     protected function CreateCSV()
     {
         $sFile = $this->GetAbsoluteFilePath();
@@ -195,6 +204,12 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
         return $sFile;
     }
 
+    /**
+     * @param resource $fp
+     * @param mixed[] $aRow
+     *
+     * @return void
+     */
     protected function WriteRow(&$fp, $aRow)
     {
         $sLine = '';

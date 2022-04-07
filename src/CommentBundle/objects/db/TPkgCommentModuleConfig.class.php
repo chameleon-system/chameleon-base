@@ -16,14 +16,33 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
 {
     const VIEW_PATH = 'pkgComment/views/db/TPkgCommentModuleConfig';
 
+    /**
+     * @var int|string
+     * @psalm-var positive-int|0
+     */
     protected $iPageSize = 0;
 
+    /**
+     * @var int
+     * @psalm-var positive-int
+     */
     protected $iPage = 1;
 
+    /**
+     * @var float|int
+     * @psalm-var positive-int|0
+     */
     protected $iMaxPage = 0;
 
+    /**
+     * @var int
+     * @psalm-var positive-int|0
+     */
     protected $iCommentNr = 0;
 
+    /**
+     * @var null|mixed
+     */
     protected $oActiveItem = null;
 
     /**
@@ -36,6 +55,10 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
         return $this->fieldGuestCommentAllowed;
     }
 
+    /**
+     * @param mixed $oActiveItem
+     * @return void
+     */
     public function SetActiveItem($oActiveItem)
     {
         $this->oActiveItem = $oActiveItem;
@@ -63,6 +86,12 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
         return $oItem;
     }
 
+    /**
+     * @param object $oActiveCommentType
+     * @param TdbPkgCommentType $oPkgCommentType
+     *
+     * @return string
+     */
     private function getCommentInternalCacheKey($oActiveCommentType, $oPkgCommentType)
     {
         $sActiveTypeId = null === $oActiveCommentType ? 'null' : $oActiveCommentType->id;
@@ -87,6 +116,7 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
                 $oCommentList = $this->GetListForItemTable($oActiveCommentType->id, $oPkgCommentType->id);
                 $this->iCommentNr = $oCommentList->GetNrOfComments();
                 if ($this->iPageSize > 0) {
+                    /** @psalm-suppress InvalidPropertyAssignmentValue */
                     $this->iMaxPage = ceil($oCommentList->Length() / $this->iPageSize);
                 } else {
                     $this->iMaxPage = 1;
@@ -138,6 +168,9 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
 
     /**
      * set page size from db.
+     *
+     * @return void
+     * @psalm-suppress InvalidPropertyAssignmentValue
      */
     protected function SetPageInfo()
     {
@@ -146,6 +179,8 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
 
     /**
      * set page from userdata.
+     *
+     * @return void
      */
     protected function SetPage()
     {
@@ -244,6 +279,9 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
         return $oView->RenderObjectPackageView($sViewName, self::VIEW_PATH, 'Customer');
     }
 
+    /**
+     * @return string[][]
+     */
     public function GetCacheTrigger()
     {
         $aClearCacheParameter = array();
@@ -268,7 +306,7 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
     /**
      * Get additional data to show in view.
      *
-     * @param  TViewParser
+     * @param TViewParser $oView
      *
      * @return TViewParser
      */

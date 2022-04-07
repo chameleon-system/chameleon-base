@@ -163,7 +163,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
@@ -349,6 +349,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         }
     }
 
+    /**
+     * @param string $path
+     */
     private function createPageBreadcrumbs(\TdbCmsTree $node, $path = ''): string
     {
         $path .= '<li class="breadcrumb-item">'.$node->fieldName.'</li>';
@@ -710,6 +713,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         return $name;
     }
 
+    /**
+     * @return void
+     */
     private function setTypeAndAttributes(BackendTreeNodeDataModel $treeNodeDataModel, \TdbCmsTree $node)
     {
         $treeNodeDataModel->setType('');
@@ -774,6 +780,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         }
     }
 
+    /**
+     * @return void
+     */
     private function addIconToTreeNode (BackendTreeNodeDataModel $treeNodeDataModel, string $type, string $fontawesomeIcon) {
         if ('' === $treeNodeDataModel->getType()) {
             $treeNodeDataModel->setType($type);
@@ -804,6 +813,8 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @param bool $chachingEnabled
+     *
+     * @return void
      */
     private function addCachingTriggers(\IMapperCacheTriggerRestricted $cacheTriggerManager)
     {

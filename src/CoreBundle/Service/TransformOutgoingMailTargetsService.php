@@ -80,6 +80,8 @@ class TransformOutgoingMailTargetsService implements TransformOutgoingMailTarget
 
     /**
      * @param string $whiteList
+     *
+     * @return void
      */
     private function extractWhiteList($whiteList)
     {

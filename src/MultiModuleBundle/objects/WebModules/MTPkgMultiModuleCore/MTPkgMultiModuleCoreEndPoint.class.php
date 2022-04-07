@@ -393,6 +393,8 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      * Returns the name of the module configured in static module parameters.
      *
      * @return string
+     *
+     * @param string $sFieldName
      */
     protected function GetValueFromStaticParameters($sFieldName)
     {

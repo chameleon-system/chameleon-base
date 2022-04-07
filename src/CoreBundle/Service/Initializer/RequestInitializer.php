@@ -34,6 +34,8 @@ class RequestInitializer
 
     /**
      * @param Request $request
+     *
+     * @return void
      */
     public function initialize(Request $request)
     {
@@ -47,6 +49,9 @@ class RequestInitializer
         $this->transformParameters($request);
     }
 
+    /**
+     * @return void
+     */
     protected function defineVersion()
     {
         require_once PATH_CORE_CONFIG.'/version.inc.php';
@@ -65,12 +70,17 @@ class RequestInitializer
 
     /**
      * @param ChameleonSessionManagerInterface $sessionManager
+     *
+     * @return void
      */
     public function setSessionManager($sessionManager)
     {
         $this->sessionManager = $sessionManager;
     }
 
+    /**
+     * @return void
+     */
     protected function addStaticURLs()
     {
         $aStaticURLs = TGlobal::GetStaticURLPrefix();
@@ -91,6 +101,8 @@ class RequestInitializer
 
     /**
      * @param Request $request
+     *
+     * @return void
      */
     protected function transformParameters(Request $request)
     {

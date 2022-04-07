@@ -38,6 +38,9 @@ class SanityCheckOnAdminLoginListener
         $this->checkList = $checkList;
     }
 
+    /**
+     * @return void
+     */
     public function onLogin(BackendLoginEvent $event)
     {
         $user = $event->getUser();

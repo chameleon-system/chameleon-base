@@ -36,11 +36,19 @@ class TPkgCommentType extends TPkgCommentTypeAutoParent
         return $oInstance;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function GetActiveItem()
     {
         return null;
     }
 
+    /**
+     * @param string $sCommentTypeId
+     * @return string
+     * @throws TPkgCmsException_Log
+     */
     public static function GetCommentTypeTableName($sCommentTypeId)
     {
         $sTableName = '';

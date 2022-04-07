@@ -22,10 +22,23 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
     const URL_PARAM_UNSUBSCRIBE_KEY = 'unsbkey';
     const MSG_MANAGER_NAME = 'aPkgNewsletter';
 
+    /**
+     * @var string
+     */
     protected $sStep = '';
+
+    /**
+     * @var TdbPkgNewsletterUser|null
+     */
     protected $oNewsletterSignup = null;
-    /** @var $oNewsletterSignup TdbPkgNewsletterUser */
+    /**
+     * @var TdbPkgNewsletterModuleSignupConfig|null
+     */
     protected $oModuleConfig = null;
+
+    /**
+     * @var true
+     */
     protected $bAllowHTMLDivWrapping = true;
 
     const INPUT_DATA_NAME = 'aPkgNewsletterOut';
@@ -80,6 +93,8 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
      *
      * @param string      $sPkgNewsletterUserMail
      * @param string|null $sPkgNewsletterGroupId
+     *
+     * @return void
      */
     protected function UnsubscribeUser($sPkgNewsletterUserMail = null, $sPkgNewsletterGroupId = null)
     {
@@ -114,6 +129,10 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
 
         if (!$bError) {
             $bConfirme = false;
+            /**
+             * @psalm-suppress UndefinedPropertyFetch
+             * @FIXME Does `fieldUseDoubleOptOut` exist?
+             */
             if (!$this->oModuleConfig->fieldUseDoubleOptOut || $this->IsUnsubscribeCodeValid($sUnsubscribeCode, $oNewsUser->id, $sPkgNewsletterGroupId)) {
                 $bConfirme = true;
             }
@@ -126,6 +145,13 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
         $oMsgManager->AddMessage(self::INPUT_DATA_NAME.'-confirmoptout', 'NEWSLETTER_UNSUBSCRIBED', array('mail' => $sPkgNewsletterUserMail));
     }
 
+    /**
+     * @param string $sUnsubscribeCode
+     * @param string $sNewsletterUserId
+     * @param string $sNewsletterGroupId
+     *
+     * @return bool
+     */
     protected function IsUnsubscribeCodeValid($sUnsubscribeCode, $sNewsletterUserId, $sNewsletterGroupId)
     {
         $bValid = false;
@@ -262,6 +288,8 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
      *
      * @param string       $sPkgNewsletterUserMail
      * @param unknown_type $sPkgNewsletterGroupId
+     *
+     * @return void
      */
     protected function SignOut()
     {
@@ -370,6 +398,8 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
      * Confirm sign out for given newsletter user.
      *
      * @param TdbPkgNewsletterUser $oNewsletterUser
+     *
+     * @return void
      */
     protected function ConfirmSignOutForUser($oNewsletterUser)
     {

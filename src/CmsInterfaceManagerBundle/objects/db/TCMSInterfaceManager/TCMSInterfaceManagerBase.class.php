@@ -20,7 +20,7 @@ class TCMSInterfaceManagerBase extends TCMSRecord
     /**
      * Contains the parameters of the interface as key=>value pair.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $aParameter;
     /**
@@ -36,6 +36,10 @@ class TCMSInterfaceManagerBase extends TCMSRecord
      */
     protected $aMessages = array();
 
+    /**
+     * @param string $id
+     * @param string $iLanguage
+     */
     public function __construct($id = null, $iLanguage = null)
     {
         parent::__construct('cms_interface_manager', $id, $iLanguage);
@@ -51,6 +55,9 @@ class TCMSInterfaceManagerBase extends TCMSRecord
         return $this->aMessages;
     }
 
+    /**
+     * @return void
+     */
     protected function PostLoadHook()
     {
         parent::PostLoadHook();
@@ -60,6 +67,10 @@ class TCMSInterfaceManagerBase extends TCMSRecord
         }
     }
 
+    /**
+     * @param string $sKey
+     * @return false|mixed
+     */
     protected function GetParameter($sKey)
     {
         if (is_array($this->aParameter) && array_key_exists($sKey, $this->aParameter)) {
@@ -71,6 +82,8 @@ class TCMSInterfaceManagerBase extends TCMSRecord
 
     /**
      * do any initialization work that needs to be done before you want to run the import.
+     *
+     * @return void
      */
     public function Init()
     {

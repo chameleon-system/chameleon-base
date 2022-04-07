@@ -344,6 +344,8 @@ SQL;
 
     /**
      * @param LanguageServiceInterface $languageService
+     *
+     * @return void
      */
     public function setLanguageService(LanguageServiceInterface $languageService)
     {
@@ -352,6 +354,8 @@ SQL;
 
     /**
      * @param PortalDomainServiceInterface $portalDomainService
+     *
+     * @return void
      */
     public function setPortalDomainService(PortalDomainServiceInterface $portalDomainService)
     {
@@ -360,6 +364,8 @@ SQL;
 
     /**
      * @param RequestStack $requestStack
+     *
+     * @return void
      */
     public function setRequestStack(RequestStack $requestStack)
     {
@@ -368,6 +374,8 @@ SQL;
 
     /**
      * @param RoutingUtilInterface $routingUtil
+     *
+     * @return void
      */
     public function setRoutingUtil(RoutingUtilInterface $routingUtil)
     {
@@ -376,6 +384,8 @@ SQL;
 
     /**
      * @param string $controllerId
+     *
+     * @return void
      */
     public function setControllerId($controllerId)
     {
@@ -384,6 +394,8 @@ SQL;
 
     /**
      * @param RequestInfoServiceInterface $requestInfoService
+     *
+     * @return void
      */
     public function setRequestInfoService(RequestInfoServiceInterface $requestInfoService)
     {
@@ -392,6 +404,8 @@ SQL;
 
     /**
      * @param DomainValidatorInterface $domainValidator
+     *
+     * @return void
      */
     public function setDomainValidator(DomainValidatorInterface $domainValidator)
     {

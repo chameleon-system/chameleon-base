@@ -13,10 +13,13 @@ namespace ChameleonSystem\CoreBundle\DatabaseAccessLayer;
 
 class DatabaseAccessLayerFieldTypes extends AbstractDatabaseAccessLayer
 {
+    /**
+     * @var bool
+     */
     private $isLoaded = false;
 
     /**
-     * @param $id
+     * @param string $id
      *
      * @return \TdbCmsFieldType
      */
@@ -27,6 +30,9 @@ class DatabaseAccessLayerFieldTypes extends AbstractDatabaseAccessLayer
         return $this->getFromCache($id);
     }
 
+    /**
+     * @return void
+     */
     private function loadAll()
     {
         if (true === $this->isLoaded) {

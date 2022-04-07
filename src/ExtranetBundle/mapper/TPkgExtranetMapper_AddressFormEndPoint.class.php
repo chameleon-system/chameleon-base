@@ -63,6 +63,8 @@ class TPkgExtranetMapper_AddressFormEndPoint extends AbstractPkgExtranetMapper_A
      * @param TCMSRecordList|null        $oFieldOptionList
      *
      * @internal param string $sMSGConsumer
+     *
+     * @return void
      */
     protected function SetInputFields($aFieldList, $oVisitor, $oAddress, $sFieldType = 'text', $oFieldOptionList = null)
     {

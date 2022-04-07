@@ -69,8 +69,6 @@ class DataMappingService implements DataMappingServiceInterface
 
     /**
      * resets service so it can be used with new source data.
-     *
-     * @return void
      */
     public function reset()
     {
@@ -202,6 +200,8 @@ class DataMappingService implements DataMappingServiceInterface
 
     /**
      * @param IViewMapper $mapper
+     *
+     * @return void
      */
     private function applyMapperRequirementsToVisitor(IViewMapper $mapper)
     {

@@ -13,6 +13,8 @@ class TCMSListManagerChangeLogSet extends TCMSListManagerFullGroupTable
 {
     /**
      * add additional fields.
+     *
+     * @return void
      */
     public function AddFields()
     {

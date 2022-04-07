@@ -234,10 +234,10 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
         return $link;
     }
 
-    /*
+    /**
      * return cache trigger for the object
-     * @return array
-    */
+     * @return array{table: string, id: string}[]
+     */
     public function GetCacheTrigger()
     {
         $aTrigger = $this->GetFromInternalCache('aCacheTrigger');
@@ -276,6 +276,11 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
+     *
+     * @param string $varName
+     * @param array{table: string, id: string}[]|null|string $content
      */
     protected function SetInternalCache($varName, $content)
     {

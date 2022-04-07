@@ -22,7 +22,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class ChameleonSystemCoreExtension extends Extension
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function load(array $config, ContainerBuilder $container)
     {
@@ -198,6 +200,8 @@ class ChameleonSystemCoreExtension extends Extension
     /**
      * @param array            $googleApiConfig
      * @param ContainerBuilder $container
+     *
+     * @return void
      */
     private function addGoogleApiConfig(array $googleApiConfig, ContainerBuilder $container)
     {
@@ -210,6 +214,8 @@ class ChameleonSystemCoreExtension extends Extension
     /**
      * @param array            $moduleExecutionConfig
      * @param ContainerBuilder $container
+     *
+     * @return void
      */
     private function addModuleExecutionConfig(array $moduleExecutionConfig, ContainerBuilder $container)
     {
@@ -219,6 +225,8 @@ class ChameleonSystemCoreExtension extends Extension
 
     /**
      * @param ContainerBuilder $container
+     *
+     * @return void
      */
     private function addResources(ContainerBuilder $container)
     {
@@ -236,6 +244,9 @@ class ChameleonSystemCoreExtension extends Extension
         }
     }
 
+    /**
+     * @return void
+     */
     private function configureSession(ContainerBuilder $container)
     {
         if (false === SECURITY_REGENERATE_SESSION_ON_USER_CHANGE) {

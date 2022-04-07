@@ -19,7 +19,9 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 class ChameleonSystemDatabaseMigrationExtension extends Extension
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function load(array $config, ContainerBuilder $container)
     {

@@ -13,7 +13,14 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class MTPkgViewRendererSnippetGalleryCore extends MTPkgViewRendererAbstractModuleMapper
 {
+    /**
+     * @var string
+     */
     private $sActiveRelativePath = '';
+
+    /**
+     * @var bool
+     */
     private $bHideNavigation = false;
 
     public function Init()
@@ -47,7 +54,7 @@ class MTPkgViewRendererSnippetGalleryCore extends MTPkgViewRendererAbstractModul
      * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
      *
-     * @return
+     * @return void
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {

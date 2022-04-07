@@ -14,7 +14,8 @@ class TDataCountryList extends TDataCountryListAutoParent
     /**
      * {@inheritdoc}
      *
-     * @return void
+     * @psalm-suppress AssignmentToVoid, InvalidReturnStatement
+     * @FIXME `Load` is a void method. Saving the parent return value and returning in this method makes no sense.
      */
     public function Load($sQuery, array $queryParameters = array(), array $queryParameterTypes = array())
     {

@@ -20,6 +20,8 @@ interface FlashMessageServiceInterface
      * @param string $consumer
      * @param string $code
      * @param array  $parameter
+     *
+     * @return void
      */
     public function addMessage($consumer, $code, array $parameter = array());
 
@@ -45,6 +47,8 @@ interface FlashMessageServiceInterface
 
     /**
      * @param string|null $sConsumerName
+     *
+     * @return void
      */
     public function clearMessages($sConsumerName = null);
 
@@ -94,6 +98,8 @@ interface FlashMessageServiceInterface
      * @param string $type
      * @param array  $parameters
      * @param string $domain
+     *
+     * @return void
      */
     public function addBackendToasterMessage($id, $type = 'ERROR', array $parameters = array(), $domain = TranslationConstants::DOMAIN_BACKEND);
 }

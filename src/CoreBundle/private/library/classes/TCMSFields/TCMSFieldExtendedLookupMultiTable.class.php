@@ -161,7 +161,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     /**
      * generates the javascript for the extended list buttons.
      *
-     * @param $oPopupTableConf
+     * @param TCMSRecord $oPopupTableConf
      *
      * @return string
      */
@@ -404,7 +404,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
      * called on each field after the record is saved (NOT on insert, only on save)
      * saves the hidden field fieldName_table_name with the table name of the connected record.
      *
-     * @param int $iRecordId - the id of the record
+     * @param string $iRecordId - the id of the record
      */
     public function PostSaveHook($iRecordId)
     {

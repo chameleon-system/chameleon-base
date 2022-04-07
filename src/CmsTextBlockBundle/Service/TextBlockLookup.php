@@ -61,7 +61,7 @@ class TextBlockLookup implements TextBlockLookupInterface
      * @deprecated since version 7.0.13 use getRenderedTextFromTextBlock instead
      *
      * @param TdbPkgCmsTextBlock $textBlock
-     * @param $textContainerWidth
+     * @param int $textContainerWidth
      *
      * @return string
      */

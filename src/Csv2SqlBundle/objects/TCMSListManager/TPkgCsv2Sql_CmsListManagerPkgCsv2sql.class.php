@@ -13,6 +13,8 @@ class TPkgCsv2Sql_CmsListManagerPkgCsv2sql extends TCMSListManagerFullGroupTable
 {
     /**
      * set public methods here that may be called from outside.
+     *
+     * @return void
      */
     public function DefineInterface()
     {
@@ -22,6 +24,8 @@ class TPkgCsv2Sql_CmsListManagerPkgCsv2sql extends TCMSListManagerFullGroupTable
 
     /**
      * add table-specific buttons to the editor (add them directly to $this->oMenuItems).
+     *
+     * @return void
      */
     protected function GetCustomMenuItems()
     {
@@ -41,6 +45,9 @@ class TPkgCsv2Sql_CmsListManagerPkgCsv2sql extends TCMSListManagerFullGroupTable
         $this->oMenuItems->AddItem($oMenuItem);
     }
 
+    /**
+     * @return string
+     */
     public function ProcessImport()
     {
         /** @var $oView TViewParser */
@@ -68,8 +75,8 @@ class TPkgCsv2Sql_CmsListManagerPkgCsv2sql extends TCMSListManagerFullGroupTable
     /**
      * here you can add checks to validate the data and prevent saving.
      *
-     * @var array     $postData - raw post data (e.g. datetime fields are splitted into 2 post values and in non sql format)
-     * @var TIterator $oFields - TIterator of TCMSField objects
+     * @param array     $postData - raw post data (e.g. datetime fields are splitted into 2 post values and in non sql format)
+     * @param TIterator $oFields - TIterator of TCMSField objects
      *
      * @return bool
      */

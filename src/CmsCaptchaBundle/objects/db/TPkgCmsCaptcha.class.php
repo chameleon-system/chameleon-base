@@ -50,8 +50,10 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
     /**
      * generates the captcha image and outputs it.
      *
-     * @param $sIdentifier
+     * @param string $sIdentifier
      * @param array $aParameter
+     *
+     * @return void
      */
     public function GenerateNewCaptchaImage($sIdentifier, $aParameter = array())
     {
@@ -78,6 +80,9 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
         }
     }
 
+    /**
+     * @return bool
+     */
     protected function useImagickForCaptchaImage()
     {
         $config = TdbCmsConfig::GetInstance();
@@ -85,6 +90,14 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
         return (!DISABLE_IMAGEMAGICK && false !== $config->GetImageMagickVersion()) || defined('HHVM_VERSION');
     }
 
+    /**
+     * @param int $iWidth
+     * @param int $iHeight
+     * @param float $font_size
+     * @param string $code
+     *
+     * @return void
+     */
     protected function generateCaptchaImageGd($iWidth, $iHeight, $font_size, $code)
     {
         $image = imagecreate($iWidth, $iHeight);
@@ -117,6 +130,14 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
         imagedestroy($image);
     }
 
+    /**
+     * @param int $iWidth
+     * @param int $iHeight
+     * @param float $font_size
+     * @param string $code
+     *
+     * @return void
+     */
     protected function generateCaptchaImageImagick($iWidth, $iHeight, $font_size, $code)
     {
         header('Content-Type: image/jpeg');
@@ -166,6 +187,8 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
      *
      * @param string $sIdentifier
      * @param string $sCode
+     *
+     * @return void
      */
     protected static function SaveInSession($sIdentifier, $sCode)
     {
@@ -217,10 +240,11 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
      * @param string $sIdentifier
      * @param int    $iCharacters
      *
-     * return array
+     * @return string
      */
     protected function GenerateCode($sIdentifier, $iCharacters)
     {
+        /** @var array<string, string> $aCodeCache */
         static $aCodeCache = array();
         if (!array_key_exists($sIdentifier, $aCodeCache)) {
             $possible = '23456789bcdfghjkmnpqrstvwxyz';

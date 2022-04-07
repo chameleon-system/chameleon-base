@@ -250,7 +250,7 @@ class TCMSTableEditorManager
      * @param array $postData
      * @param bool  $bDataIsInSQLForm
      *
-     * @return TCMSstdClass|bool
+     * @return TCMSstdClass|false
      */
     public function Save($postData, $bDataIsInSQLForm = false)
     {
@@ -496,9 +496,9 @@ class TCMSTableEditorManager
      * Set new order position and updates order position in all other
      * connected connections behind the new position.
      *
-     * @param $sFieldName
-     * @param $sConnectedId
-     * @param $iPosition
+     * @param string $sFieldName
+     * @param string $sConnectedId
+     * @param int $iPosition
      */
     public function updateMLTSortOrder($sFieldName, $sConnectedId, $iPosition)
     {

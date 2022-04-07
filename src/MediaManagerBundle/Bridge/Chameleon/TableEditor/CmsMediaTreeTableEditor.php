@@ -22,7 +22,7 @@ use TTools;
 class CmsMediaTreeTableEditor extends TCMSTableEditorMediaTree
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function updateCache($treeNodeId)
     {

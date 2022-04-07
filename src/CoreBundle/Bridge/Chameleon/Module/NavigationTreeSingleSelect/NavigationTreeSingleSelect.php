@@ -137,7 +137,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
@@ -404,6 +404,9 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         $this->setCheckStatus($treeNodeDataModel, $node->id);
     }
 
+    /**
+     * @param string $nodeId
+     */
     protected function setCheckStatus(BackendTreeNodeDataModel $treeNodeDataModel, $nodeId): void
     {
         if ($this->activeNodeId === $nodeId) {
@@ -422,6 +425,10 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     {
     }
 
+    /**
+     * @param string $fieldName
+     * @param string $path
+     */
     private function createPageBreadcrumbs(\TdbCmsTree $node, $fieldName, $path = ''): string
     {
         $path .= '<li class="breadcrumb-item">'.$node->fieldName.'</li>';

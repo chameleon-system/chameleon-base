@@ -14,6 +14,9 @@
 /**/
 class TCMSCronJob_pkgTrackViewsUpdateShopArticleViewCounter extends TCMSCronJob
 {
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         // make sure every article has an entry

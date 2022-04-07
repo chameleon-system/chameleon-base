@@ -19,6 +19,9 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
  */
 class DatabaseAccessLayerCmsTree extends AbstractDatabaseAccessLayer
 {
+    /**
+     * @var bool
+     */
     private $isLoaded = false;
     /**
      * @var PortalDomainServiceInterface
@@ -30,6 +33,9 @@ class DatabaseAccessLayerCmsTree extends AbstractDatabaseAccessLayer
      */
     private $languageService;
 
+    /**
+     * @var array<string, \TdbCmsTree|null>
+     */
     private $objectCache = array();
 
     public function __construct(PortalDomainServiceInterface $portalDomainService, LanguageServiceInterface $languageService)
@@ -136,6 +142,9 @@ class DatabaseAccessLayerCmsTree extends AbstractDatabaseAccessLayer
         return $results;
     }
 
+    /**
+     * @return void
+     */
     private function loadAllTreeNodes()
     {
         if (true === $this->isLoaded) {

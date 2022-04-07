@@ -99,6 +99,9 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
         return false;
     }
 
+    /**
+     * @return array
+     */
     private function getExtensionList()
     {
         if (null === $this->aClassExtensionList) {

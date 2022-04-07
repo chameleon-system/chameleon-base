@@ -35,7 +35,7 @@ use ViewRenderer;
 class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function ChangeFieldDefinition($sOldName, $sNewName, &$postData = null)
     {
@@ -79,7 +79,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function PostSaveHook($iRecordId)
     {
@@ -89,6 +89,8 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 
     /**
      * @param string $recordId
+     *
+     * @return void
      */
     private function saveCropId($recordId)
     {
@@ -127,7 +129,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function PostInsertHook($iRecordId)
     {
@@ -136,7 +138,9 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function DeleteFieldDefinition()
     {
@@ -144,6 +148,9 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $this->dropAdditionalField();
     }
 
+    /**
+     * @return void
+     */
     private function dropAdditionalField()
     {
         $additionalFieldName = $this->getFieldNameOfAdditionalField($this->name);
@@ -161,7 +168,9 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function ChangeFieldTypePreHook()
     {
@@ -169,7 +178,9 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function ChangeFieldTypePostHook()
     {
@@ -189,7 +200,9 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function RemoveFieldIndex()
     {
@@ -257,6 +270,8 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
     public function RenderFieldPropertyString()
     {
@@ -281,6 +296,8 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
     public function RenderFieldPostLoadString()
     {

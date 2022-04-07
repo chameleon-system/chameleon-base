@@ -70,6 +70,8 @@ class ServiceLocator
      * @param ContainerInterface $container
      *
      * @internal
+     *
+     * @return void
      */
     public static function setContainer(ContainerInterface $container)
     {

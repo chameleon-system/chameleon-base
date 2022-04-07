@@ -311,7 +311,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     }
 
     /**
-     * @param LanguageServiceInterface $languageService
+     * {@inheritDoc}
      */
     public function initializeFallbackLanguage(LanguageServiceInterface $languageService)
     {

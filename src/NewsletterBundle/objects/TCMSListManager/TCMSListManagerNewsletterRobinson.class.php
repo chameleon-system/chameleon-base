@@ -13,6 +13,8 @@ class TCMSListManagerNewsletterRobinson extends TCMSListManagerFullGroupTable
 {
     /**
      * add table-specific buttons to the editor (add them directly to $this->oMenuItems).
+     *
+     * @return void
      */
     protected function GetCustomMenuItems()
     {
@@ -21,6 +23,9 @@ class TCMSListManagerNewsletterRobinson extends TCMSListManagerFullGroupTable
         $this->oMenuItems->AddItem($oMenuItem);
     }
 
+    /**
+     * @return TCMSTableEditorMenuItem
+     */
     protected function GetImportMenuItem()
     {
         $oMenuItem = new TCMSTableEditorMenuItem();

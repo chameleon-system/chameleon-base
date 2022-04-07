@@ -29,7 +29,7 @@ interface RequestInfoServiceInterface
     /**
      * Compares a given chameleon request type to the currently active request type.
      *
-     * @param $requestType integer This must be an integer that is defined as a constant in
+     * @param int $requestType This must be an integer that is defined as a constant in
      * Returns the chameleon request type. This is always an integer that is defined as
      * a constant in ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface
      *

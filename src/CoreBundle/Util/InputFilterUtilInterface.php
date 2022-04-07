@@ -23,8 +23,8 @@ interface InputFilterUtilInterface
      * Retrieves a value from user input and filters it according to the given input filter.
      * The fetch semantics and the first three arguments are the same as for Symfony\Component\HttpFoundation\Request::get().
      *
-     * @param $key
-     * @param $default
+     * @param string $key
+     * @param mixed $default
      * @param bool   $deep
      * @param string $filter
      *
@@ -40,8 +40,8 @@ interface InputFilterUtilInterface
      * Retrieves a value from user input (GET only) and filters it according to the given input filter.
      * The fetch semantics and the first three arguments are the same as for Symfony\Component\HttpFoundation\Request::query::get().
      *
-     * @param $key
-     * @param $default
+     * @param string $key
+     * @param mixed $default
      * @param bool   $deep
      * @param string $filter
      *
@@ -57,8 +57,8 @@ interface InputFilterUtilInterface
      * Retrieves a value from user input (POST only) and filters it according to the given input filter.
      * The fetch semantics and the first three arguments are the same as for Symfony\Component\HttpFoundation\Request::request::get().
      *
-     * @param $key
-     * @param $default
+     * @param string $key
+     * @param mixed $default
      * @param bool   $deep
      * @param string $filter
      *
@@ -73,11 +73,12 @@ interface InputFilterUtilInterface
     /**
      * Applies a filter to one or more values.
      *
-     * @param string|null $filter
+     * @param string|null $value
      * @param string $filterClass - form: classname;path;type|classname;path;type
+     *
      * @return string|null - null if $filter is null
      *
-     * @psalm-return ($filter is null ? null : string)
+     * @psalm-return ($value is null ? null : string)
      */
     public function filterValue($value, $filterClass);
 

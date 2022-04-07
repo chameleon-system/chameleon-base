@@ -12,7 +12,7 @@
 interface IMapperCacheTrigger extends IMapperCacheTriggerRestricted
 {
     /**
-     * @return array in the form array(array('table'=>tablename,'id'=>id),...)
+     * @return array{table: string, id: string}[] in the form array(array('table'=>tablename,'id'=>id),...)
      */
     public function getTrigger();
 }

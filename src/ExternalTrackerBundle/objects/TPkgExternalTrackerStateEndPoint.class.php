@@ -14,13 +14,23 @@
 /**/
 class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListener
 {
+    /**
+     * @var array<string, mixed>
+     */
     protected $aEventData = array();
+
+    /**
+     * @var array<string, TdbCmsTplPage>
+     */
     protected $aStateData = array();
 
     const EVENT_EXTRANET_LOGIN = 'pkgExtranet__Login';
     const EVENT_EXTRANET_REGISTRATION = 'pkgExtranet__Registration';
     const EVENT_CONTACT_FORM_SUBMIT = 'contact_form__Submit';
 
+    /**
+     * @var bool
+     */
     private $dataProcessed = false;
     /**
      * property is used to store event data in the serialized version of the object (we need to delay wakeup until the session is loaded when the object is loaded via session).
@@ -38,11 +48,22 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
         return array('aEventData');
     }
 
+    /**
+     * @param string $sKey
+     * @param TdbCmsTplPage $oObject
+     *
+     * @return void
+     */
     public function AddStateData($sKey, $oObject)
     {
         $this->aStateData[$sKey] = $oObject;
     }
 
+    /**
+     * @param string $sKey
+     *
+     * @return TdbCmsTplPage|false
+     */
     public function GetStateData($sKey)
     {
         if (array_key_exists($sKey, $this->aStateData)) {
@@ -52,6 +73,9 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
         }
     }
 
+    /**
+     * @return void
+     */
     public function SetActivePage(TdbCmsTplPage $oActivePage)
     {
         $this->AddStateData('__oActivePage', $oActivePage);
@@ -65,11 +89,22 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
         return $this->GetStateData('__oActivePage');
     }
 
+    /**
+     * @return void
+     *
+     * @param string $sEventName
+     * @param mixed $aParameter
+     */
     public function AddEventData($sEventName, $aParameter)
     {
         $this->aEventData[$sEventName] = $aParameter;
     }
 
+    /**
+     * @param string $sEventName
+     *
+     * @return mixed|false
+     */
     public function GetEventData($sEventName)
     {
         if ($this->HasEvent($sEventName)) {
@@ -82,7 +117,7 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
     /**
      * return true if the event was triggered.
      *
-     * @param $sEventName
+     * @param string $sEventName
      *
      * @return bool
      */
@@ -91,6 +126,11 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
         return array_key_exists($sEventName, $this->aEventData);
     }
 
+    /**
+     * @return array
+     *
+     * @psalm-return array<string, mixed>
+     */
     public function GetEventList()
     {
         return $this->aEventData;
@@ -98,6 +138,8 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
 
     /**
      * clear the state data.
+     *
+     * @return void
      */
     public function Clear()
     {
@@ -107,6 +149,8 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
 
     /**
      * @param bool $dataProcessed
+     *
+     * @return void
      */
     public function setDataProcessed($dataProcessed)
     {
@@ -116,6 +160,8 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
     /**
      * method is called on objects recovered from session after the session has been started.
      * you can use this method to perform post session wakeup logic - but do not use this to delay property serialization of an object (see #25251 to see why this is a bad idea).
+     *
+     * @return void
      */
     public function sessionWakeupHook()
     {

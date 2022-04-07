@@ -37,7 +37,7 @@ class TemplateEngineAccessListener
     }
 
     /**
-     * @param GetResponseEvent $event
+     * @return void
      */
     public function onKernelRequest(GetResponseEvent $event)
     {

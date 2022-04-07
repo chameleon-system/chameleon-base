@@ -68,6 +68,8 @@ class RequestStateHashProviderCache implements RequestStateHashProviderInterface
 
     /**
      * @param Event $event
+     *
+     * @return void
      */
     public function onStateDataChanged(Event $event)
     {

@@ -87,6 +87,8 @@ interface LanguageServiceInterface
 
     /**
      * @param string $languageId
+     *
+     * @return void
      */
     public function setActiveLanguage($languageId);
 
@@ -108,6 +110,8 @@ interface LanguageServiceInterface
 
     /**
      * @param TdbCmsLanguage $fallbackLanguage
+     *
+     * @return void
      */
     public function setFallbackLanguage(TdbCmsLanguage $fallbackLanguage);
 }

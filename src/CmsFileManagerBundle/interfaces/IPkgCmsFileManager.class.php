@@ -93,6 +93,8 @@ interface IPkgCmsFileManager
     /**
      * @param string $path
      * @param bool   $recursive
+     *
+     * @return void
      */
     public function deldir($path, $recursive = false);
 

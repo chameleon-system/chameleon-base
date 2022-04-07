@@ -82,7 +82,7 @@ class TUserModelBaseCore extends TModelBase
      * This is necessary, should you use an instance of ViewRenderer in your module's old style view.php
      * Here you have to include the resources of the package in your HTMLHeadIncludes by hand.
      *
-     * @param $sSnippetPath - the path to the snippet package
+     * @param string $sSnippetPath - the path to the snippet package
      *
      * @return array
      */

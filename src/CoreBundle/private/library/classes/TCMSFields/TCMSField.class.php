@@ -433,7 +433,9 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * called on each field after the record is saved (NOT on insert, only on save).
      *
-     * @param int $iRecordId - the id of the record
+     * @param string $iRecordId - the id of the record
+     *
+     * @return void
      */
     public function PostSaveHook($iRecordId)
     {
@@ -443,6 +445,8 @@ class TCMSField implements TCMSFieldVisitableInterface
      * called on each field when a record is inserted.
      *
      * @param string $iRecordId
+     *
+     * @return void
      */
     public function PostInsertHook($iRecordId)
     {
@@ -454,6 +458,8 @@ class TCMSField implements TCMSFieldVisitableInterface
      * @param string     $oldName
      * @param string     $newName
      * @param array|null $postData
+     *
+     * @return void
      */
     public function ChangeFieldDefinition($oldName, $newName, &$postData = null)
     {
@@ -1411,7 +1417,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      * returns the field config value for a key
      * shortcut to "$this->oDefinition->GetFieldtypeConfigKey()".
      *
-     * @param $sKey
+     * @param string $sKey
      *
      * @return string|null
      */

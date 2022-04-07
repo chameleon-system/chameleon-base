@@ -56,6 +56,8 @@ class MediaManagerListRequest
 
     /**
      * @param MediaTreeNodeDataModel|null $mediaTreeNode
+     *
+     * @return void
      */
     public function setMediaTreeNode($mediaTreeNode)
     {
@@ -72,6 +74,8 @@ class MediaManagerListRequest
 
     /**
      * @param bool $subTreeIncluded
+     *
+     * @return void
      */
     public function setSubTreeIncluded($subTreeIncluded)
     {
@@ -88,6 +92,8 @@ class MediaManagerListRequest
 
     /**
      * @param string|null $searchTerm
+     *
+     * @return void
      */
     public function setSearchTerm($searchTerm)
     {
@@ -104,6 +110,8 @@ class MediaManagerListRequest
 
     /**
      * @param int $pageNumber
+     *
+     * @return void
      */
     public function setPageNumber($pageNumber)
     {
@@ -120,6 +128,8 @@ class MediaManagerListRequest
 
     /**
      * @param int $pageSize
+     *
+     * @return void
      */
     public function setPageSize($pageSize)
     {
@@ -143,9 +153,12 @@ class MediaManagerListRequest
      * @FIXME `$this->sortColumn` is annotated as `SortColumnInterface|null` and `MediaItemDataAccess::getOrderBy()` uses it
      *         as such. But `MediaManagerListRequestFactory` fills it with `string|null` from `MediaManagerListState` which
      *         in turn is set to a string directly from the request in `MediaManagerListStateFromRequestService`.
+     *
      * @psalm-suppress InvalidPropertyAssignmentValue
      *
      * @param string|null $sortColumn
+     *
+     * @return void
      */
     public function setSortColumn($sortColumn)
     {

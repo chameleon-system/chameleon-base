@@ -74,6 +74,8 @@ interface MediaTreeDataAccessInterface
      *
      * @param string $id
      *
+     * @return void
+     *
      * @throws DataAccessException
      */
     public function deleteMediaTreeNode($id);
@@ -85,6 +87,8 @@ interface MediaTreeDataAccessInterface
      * @param string $parentId
      * @param int    $position
      * @param string $languageId
+     *
+     * @return void
      *
      * @throws DataAccessException
      */

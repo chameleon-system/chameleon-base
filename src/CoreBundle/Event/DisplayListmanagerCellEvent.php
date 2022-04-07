@@ -93,6 +93,8 @@ class DisplayListmanagerCellEvent extends Event
 
     /**
      * @param array $attributes
+     *
+     * @return void
      */
     public function setAttributes(array $attributes)
     {
@@ -109,6 +111,8 @@ class DisplayListmanagerCellEvent extends Event
 
     /**
      * @param string $onclickEvent
+     *
+     * @return void
      */
     public function setOnclickEvent($onclickEvent)
     {
@@ -125,6 +129,8 @@ class DisplayListmanagerCellEvent extends Event
 
     /**
      * @param array $cssClasses
+     *
+     * @return void
      */
     public function setCssClasses(array $cssClasses)
     {
@@ -141,6 +147,8 @@ class DisplayListmanagerCellEvent extends Event
 
     /**
      * @param string $cellValue
+     *
+     * @return void
      */
     public function setCellValue($cellValue)
     {

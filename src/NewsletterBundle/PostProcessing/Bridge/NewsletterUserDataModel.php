@@ -13,11 +13,34 @@ namespace ChameleonSystem\NewsletterBundle\PostProcessing\Bridge;
 
 class NewsletterUserDataModel
 {
+    /**
+     * @var string
+     */
     private $salutation;
+
+    /**
+     * @var string
+     */
     private $firstName;
+
+    /**
+     * @var string
+     */
     private $lastName;
+
+    /**
+     * @var string
+     */
     private $eMail;
+
+    /**
+     * @var string
+     */
     private $unsubscribeLink;
+
+    /**
+     * @var string
+     */
     private $htmlLink;
 
     /**

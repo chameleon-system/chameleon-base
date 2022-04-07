@@ -106,6 +106,8 @@ class AddCookieConsentIncludesListener
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     *
+     * @return void
      */
     public function onGlobalHtmlHeaderInclude(HtmlIncludeEventInterface $event)
     {
@@ -123,6 +125,8 @@ class AddCookieConsentIncludesListener
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     *
+     * @return void
      */
     public function onGlobalHtmlFooterInclude(HtmlIncludeEventInterface $event)
     {

@@ -65,6 +65,8 @@ abstract class AbstractQuery implements QueryInterface
      * @param MigrationQueryData $migrationQueryData
      *
      * @throws InvalidArgumentException if prerequisites aren't met
+     *
+     * @return void
      */
     protected function assertPrerequisites(MigrationQueryData $migrationQueryData)
     {

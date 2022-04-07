@@ -11,6 +11,9 @@
 
 class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
 {
+    /**
+     * @var int
+     */
     protected $iSubscribersAddedToQueue = 0;
 
     /**
@@ -18,6 +21,8 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
      *
      * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
+     *
+     * @return void
      */
     protected function PostSaveHook(&$oFields, &$oPostTable)
     {
@@ -95,6 +100,9 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
         }
     }
 
+    /**
+     * @return void
+     */
     protected function setNewsletterQueueCount()
     {
         $sQuery = "SELECT COUNT(*) AS count FROM  `pkg_newsletter_queue` WHERE `pkg_newsletter_campaign_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'";
@@ -107,6 +115,8 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
      * add users to the the _tmp_pkg_newsletter_queue table.
      *
      * @param TdbPkgNewsletterGroup $oPkgNewsletterGroup - the user group we are working on
+     *
+     * @return void
      */
     protected function AddUsersToTmpTable(&$oPkgNewsletterGroup)
     {
@@ -194,6 +204,8 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
 
     /**
      * set public methods here that may be called from outside.
+     *
+     * @return void
      */
     public function DefineInterface()
     {
@@ -203,6 +215,8 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
 
     /**
      * add table-specific buttons to the editor (add them directly to $this->oMenuItems).
+     *
+     * @return void
      */
     protected function GetCustomMenuItems()
     {
@@ -228,6 +242,8 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
      *
      * @param string $sCode             - the code to use. if empty, a random unique code will be generated
      * @param int    $iNumberOfVouchers - number of vouchers to create (will fetch this from user input if null given)
+     *
+     * @return string
      */
     public function DeleteCampaignQueue()
     {

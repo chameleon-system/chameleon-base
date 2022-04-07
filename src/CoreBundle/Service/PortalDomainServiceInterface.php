@@ -87,6 +87,8 @@ interface PortalDomainServiceInterface
      * Sets the currently active portal.
      *
      * @param TCMSPortal $portal
+     *
+     * @return void
      */
     public function setActivePortal(TCMSPortal $portal);
 
@@ -94,6 +96,8 @@ interface PortalDomainServiceInterface
      * Sets the currently active domain.
      *
      * @param TCMSPortalDomain $domain
+     *
+     * @return void
      */
     public function setActiveDomain(TCMSPortalDomain $domain);
 }

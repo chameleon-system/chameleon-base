@@ -50,6 +50,8 @@ class ComposerData
 
     /**
      * @param array $data
+     *
+     * @return void
      */
     public function setData($data)
     {

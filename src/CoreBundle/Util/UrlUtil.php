@@ -381,6 +381,8 @@ class UrlUtil
 
     /**
      * @param array $parameters
+     *
+     * @return void
      */
     public function addAuthenticityTokenToArrayIfRequired(array &$parameters)
     {
@@ -421,6 +423,8 @@ class UrlUtil
      * @param string $url
      * @param array  $parameters
      * @param string $paramSeparator
+     *
+     * @return void
      */
     public function addAuthenticityTokenToUrlStringIfRequired(&$url, array $parameters, $paramSeparator = '&amp;')
     {
@@ -438,6 +442,8 @@ class UrlUtil
 
     /**
      * @param array $parameters
+     *
+     * @return void
      */
     public function removeAuthenticityTokenFromArray(array &$parameters)
     {
@@ -479,6 +485,8 @@ class UrlUtil
      * @var $url string
      *
      * @return string
+     *
+     * @param string $url
      */
     public function encodeUrlParts($url)
     {

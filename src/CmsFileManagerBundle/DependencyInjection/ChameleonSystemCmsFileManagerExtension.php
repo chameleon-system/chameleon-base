@@ -19,7 +19,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class ChameleonSystemCmsFileManagerExtension extends Extension
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function load(array $config, ContainerBuilder $container)
     {

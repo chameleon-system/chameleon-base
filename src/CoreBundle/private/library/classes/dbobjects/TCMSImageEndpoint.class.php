@@ -1852,7 +1852,7 @@ class TCMSImageEndpoint
     }
 
     /**
-     * @param $id
+     * @param string $id
      *
      * @return TdbCmsFiletype
      */
@@ -2217,7 +2217,7 @@ class TCMSImageEndpoint
     }
 
     /**
-     * @param $createdThumbnailPath - the full path to the thumbnail-image
+     * @param string $createdThumbnailPath - the full path to the thumbnail-image
      * @param string $thumbnailType - jpg, png, gif
      */
     protected function thumbnailCreatedHook($createdThumbnailPath, $thumbnailType)

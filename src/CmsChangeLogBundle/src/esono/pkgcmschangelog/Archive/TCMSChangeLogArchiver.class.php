@@ -17,6 +17,8 @@ class TCMSChangeLogArchiver
     /**
      * Archives and deletes all changelog data that is older than a specific date. The default value for this is 6 months.
      * If th.
+     *
+     * @return void
      */
     public function archiveAndDelete()
     {
@@ -78,6 +80,8 @@ class TCMSChangeLogArchiver
 
     /**
      * Delete all changelog sets and changelog items that are older than a specific date.
+     *
+     * @return void
      */
     protected function delete()
     {

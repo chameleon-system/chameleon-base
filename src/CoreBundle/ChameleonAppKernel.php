@@ -17,6 +17,8 @@ abstract class ChameleonAppKernel extends Kernel
 {
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function boot()
     {

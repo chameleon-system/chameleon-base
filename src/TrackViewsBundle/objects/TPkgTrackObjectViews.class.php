@@ -47,13 +47,17 @@ class TPkgTrackObjectViews
 
     /**
      * track a view - note: only none-bot-requests will be tracked
-     * @var TCMSRecord|mixed $oObject
+     *
      * @param bool $bCountReloads
      * @param bool $bAllowMultipleViewsPerPage
+     * @param TCMSRecord $oObject
      *
      * @psalm-suppress UndefinedPropertyFetch
+     *
      * @FIXME Static access to non-static property. Should probably be $this->aObjects
-    */
+     *
+     * @return void
+     */
     public function TrackObject($oObject, $bCountReloads = true, $bAllowMultipleViewsPerPage = false)
     {
         if (false == TdbCmsConfig::RequestIsInBotList() && ($bCountReloads || false == self::WasViewedLast($oObject))) {
@@ -73,8 +77,11 @@ class TPkgTrackObjectViews
         }
     }
 
-    /*
+    /**
      * render tracking html
+     *
+     * @param string $sViewName
+     * @param string $sViewType
      * @return string
     */
     public function Render($sViewName = 'standard', $sViewType = 'Core')
@@ -89,11 +96,19 @@ class TPkgTrackObjectViews
     * Set last viewed object in session
     * @param TCMSRecord $oTableObject
     */
+    /**
+     * @return void
+     *
+     * @param TCMSRecord $oTableObject
+     */
     protected static function SetLastViewObjectHistory($oTableObject)
     {
         $_SESSION['TPkgTrackObjectViews'] = array('tbl' => $oTableObject->table, 'id' => $oTableObject->id);
     }
 
+    /**
+     * @return string
+     */
     protected function GetPayloadOutgoing()
     {
         $sPayload = '';
@@ -107,6 +122,11 @@ class TPkgTrackObjectViews
         return $sPayload;
     }
 
+    /**
+     * @param string $sPayloadType
+     *
+     * @return array<string, mixed>
+     */
     protected function GetPayloadBaseData($sPayloadType = 'view')
     {
         $sUserId = '';
@@ -127,6 +147,9 @@ class TPkgTrackObjectViews
         return $aPayload;
     }
 
+    /**
+     * @return array|mixed
+     */
     protected function GetPayloadFromURL()
     {
         $oGlobal = TGlobal::instance();
@@ -148,6 +171,11 @@ class TPkgTrackObjectViews
     * @param TCMSRecord $oTableObject
     * @return boolean
     */
+    /**
+     * @return bool
+     *
+     * @param TCMSRecord $oTableObject
+     */
     protected static function WasViewedLast($oTableObject)
     {
         $bViewHistorySet = (array_key_exists('TPkgTrackObjectViews', $_SESSION) && is_array($_SESSION['TPkgTrackObjectViews']) && array_key_exists('tbl', $_SESSION['TPkgTrackObjectViews']) && array_key_exists('id', $_SESSION['TPkgTrackObjectViews']));
@@ -158,6 +186,8 @@ class TPkgTrackObjectViews
 
     /**
      * write the view to the database.
+     *
+     * @return void
      */
     public function WriteView()
     {
@@ -185,6 +215,10 @@ class TPkgTrackObjectViews
         }
     }
 
+    /**
+     * @param TCMSRecord $oObject
+     * @return string
+     */
     public function GetTrackClickClass($oObject)
     {
         $aPayload = array('table_name' => $oObject->table, 'owner_id' => $oObject->id);

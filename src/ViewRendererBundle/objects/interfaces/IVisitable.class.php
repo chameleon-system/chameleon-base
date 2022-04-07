@@ -30,6 +30,8 @@ interface IVisitable
      * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache triggers that invalidate the view rendered via mapper. If set to false, you should NOT set any trigger.
      * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
      *
+     * @return void
+     *
      * @throws MapperException
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager);

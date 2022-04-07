@@ -14,15 +14,15 @@ namespace esono\pkgCmsCache;
 interface StorageInterface
 {
     /**
-     * @param $key
+     * @param string $key
      *
      * @return string|null
      */
     public function get($key);
 
     /**
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param mixed $value
      * @param int $expireInSeconds
      *
      * @return bool
@@ -30,7 +30,7 @@ interface StorageInterface
     public function set($key, $value, $expireInSeconds = 0);
 
     /**
-     * @param $key
+     * @param string $key
      *
      * @return bool
      */

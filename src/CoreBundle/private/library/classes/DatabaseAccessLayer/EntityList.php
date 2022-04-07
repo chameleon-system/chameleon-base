@@ -410,8 +410,6 @@ class EntityList implements EntityListInterface
     }
 
     /**
-     * @param $pageSize
-     *
      * @return EntityListPagerInterface
      */
     protected function getEntityListPager($pageSize)

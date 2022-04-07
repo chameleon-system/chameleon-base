@@ -31,6 +31,8 @@ class ChameleonRedirectException extends \Exception
 
     /**
      * @param string $url
+     *
+     * @return void
      */
     public function setUrl($url)
     {
@@ -47,6 +49,8 @@ class ChameleonRedirectException extends \Exception
 
     /**
      * @param int $status
+     *
+     * @return void
      */
     public function setStatus($status)
     {

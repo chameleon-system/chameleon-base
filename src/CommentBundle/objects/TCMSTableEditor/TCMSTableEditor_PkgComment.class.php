@@ -14,6 +14,9 @@
 /**/
 class TCMSTableEditor_PkgComment extends TCMSTableEditor
 {
+    /**
+     * {@inheritDoc}
+     */
     protected function PostSaveHook(&$oFields, &$oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);

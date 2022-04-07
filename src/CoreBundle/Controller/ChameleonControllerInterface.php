@@ -47,6 +47,7 @@ interface ChameleonControllerInterface
      * Setter for a cache service to be used by the controller.
      *
      * @param CacheInterface $cache
+     * @return void
      */
     public function setCache(CacheInterface $cache);
 
@@ -54,6 +55,7 @@ interface ChameleonControllerInterface
      * Adds a text line that is to be added to the header of the output page automatically.
      *
      * @param string $line
+     * @return void
      */
     public function AddHTMLHeaderLine($line);
 
@@ -61,6 +63,7 @@ interface ChameleonControllerInterface
      * Adds a text line that is to be added to the footer of the output page automatically.
      *
      * @param string $line
+     * @return void
      */
     public function AddHTMLFooterLine($line);
 
@@ -71,6 +74,7 @@ interface ChameleonControllerInterface
      * controlled by this method.
      *
      * @param bool $enableAutoFlush
+     * @return void
      */
     public function FlushContentToBrowser($enableAutoFlush = false);
 }

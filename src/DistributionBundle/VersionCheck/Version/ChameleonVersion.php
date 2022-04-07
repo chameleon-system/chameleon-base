@@ -13,15 +13,29 @@ namespace ChameleonSystem\DistributionBundle\VersionCheck\Version;
 
 class ChameleonVersion
 {
+    /**
+     * @var string
+     */
     private $prettyVersion;
+
+    /**
+     * @var string
+     */
     private $name;
 
+    /**
+     * @param string $name
+     * @param string $prettyVersion
+     */
     public function __construct($name, $prettyVersion)
     {
         $this->prettyVersion = $prettyVersion;
         $this->name = $name;
     }
 
+    /**
+     * @return bool
+     */
     public function isDev()
     {
         return
@@ -29,16 +43,27 @@ class ChameleonVersion
             'dev-' === substr($this->prettyVersion, 0, strlen('dev-'));
     }
 
+    /**
+     * @return string
+     */
     public function getMajorVersion()
     {
         return $this->getVersionPart(0);
     }
 
+    /**
+     * @return string
+     */
     public function getMinorVersion()
     {
         return $this->getVersionPart(1);
     }
 
+    /**
+     * @param int $part
+     *
+     * @return string
+     */
     private function getVersionPart($part)
     {
         $matches = array();
