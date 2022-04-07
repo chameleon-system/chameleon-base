@@ -24,7 +24,7 @@ abstract class MTPkgViewRendererAbstractModuleMapper extends TUserCustomModelBas
     /**
      * {@inheritdoc}
      */
-    final public function ClearCache(): void
+    final public function ClearCache()
     {
     }
 
