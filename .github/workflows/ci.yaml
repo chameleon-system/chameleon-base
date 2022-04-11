@@ -1,0 +1,123 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - 'master'
+      - '[0-9]+.[0-9]+.x'
+      - '770-github-actions'
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  ci:
+    name: CI ${{ matrix.php-version }}
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        php-version: [ '7.4' ]
+#        php-version: [ '7.1', '7.2', '7.3', '7.4' ]
+    env:
+      # Branch / Tag of chameleon-system/chameleon-system and chameleon-system/chameleon-resources
+      # that will be used to setup this project
+      CHAMELEON_SYSTEM_REF: '7.0.x'
+      CHAMELEON_RESOURCES_REF: '7.0.x'
+
+    services:
+      mysql:
+        image: mariadb:10.2
+        env:
+          MARIADB_ROOT_PASSWORD: 'root'
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+
+    steps:
+
+      # Setup PHP
+      - name: Setup PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer
+
+      # Clone base system
+      - name: 'Checkout base system: chameleon-system/chameleon-system'
+        uses: actions/checkout@v3
+        with:
+          repository: 'chameleon-system/chameleon-system'
+          ref: ${{ env.CHAMELEON_SYSTEM_REF }}
+          path: chameleon-system
+      
+      # Clone resources
+      - name: 'Checkout chameleon-resources: chameleon-system/chameleon-resources'
+        uses: actions/checkout@v3
+        with:
+          repository: 'chameleon-system/chameleon-resources'
+          ref: ${{ env.CHAMELEON_RESOURCES_REF }}
+          path: chameleon-resources
+
+      # Import db
+      - name: 'Import database'
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -u root -proot -e 'CREATE DATABASE IF NOT EXISTS db'
+          cat database/shop-database.sql | mysql -h 127.0.0.1 -P 3306 -u root -proot db
+        working-directory: chameleon-resources
+
+      # Setup parameters.yml for temporary db
+      - name: Update parameters.yml with CI-DB credentials
+        uses: mikefarah/yq@master
+        with:
+          cmd: |
+            # Exclamation point in parameters cannot be parsed by yq.
+            cat chameleon-system/app/config/parameters.yml.dist | sed -e 's/!ThisTokenIsNotSoSecretChangeIt!/""/g' > chameleon-system/app/config/parameters.yml
+            yq -i '
+              .parameters.secret = "__CI_SECRET__" |
+              .parameters.database_host = "127.0.0.1" |
+              .parameters.database_port = "3306" |
+              .parameters.database_name = "db" |
+              .parameters.database_user = "root" |
+              .parameters.database_password = "root"
+            ' chameleon-system/app/config/parameters.yml
+
+      # Composer setup
+      - run: |
+          rm composer.json composer.lock
+          mv composer_dev.json composer.json
+          composer install --no-scripts
+        working-directory: chameleon-system
+
+      # Replace the composer installed version of chameleon-base with the currently tested version
+      - run: rm -Rf chameleon-system/vendor/chameleon-system/chameleon-base
+      - name: Checkout currently tested version of chameleon-base
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
+          path: chameleon-system/vendor/chameleon-system/chameleon-base
+
+      # Chameleon setup
+      - run: |
+          php app/console chameleon_system:autoclasses:generate
+          php app/console chameleon_system:update:run
+        working-directory: chameleon-system
+
+      # Run composer install in chameleon-base repository as well
+      - run: composer install --no-scripts
+        working-directory: chameleon-system/vendor/chameleon-system/chameleon-base
+
+      # Run CI Jobs
+      - run: ./vendor/bin/psalm --output-format=github
+        working-directory: chameleon-system/vendor/chameleon-system/chameleon-base
+
+      - run: |
+          ./vendor/bin/phpunit --log-junit=phpunit.junit.xml
+          cat phpunit.junit.xml
+          pwd
+        working-directory: chameleon-system/vendor/chameleon-system/chameleon-base
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: "chameleon-system/vendor/chameleon-system/chameleon-base/*.junit.xml"
+          check_name: 'PHPUnit Results on PHP ${{ matrix.php-version }}'
