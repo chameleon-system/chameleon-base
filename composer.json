@@ -41,6 +41,7 @@
         "chameleon-system/sanitycheck": "~7.1.0",
         "phpspec/prophecy-phpunit": "^2.0.0",
         "phpunit/phpunit": "^9.5.1",
+        "psalm/plugin-symfony": "^3.1",
         "vimeo/psalm": "^4.22"
     },
     "autoload": {
