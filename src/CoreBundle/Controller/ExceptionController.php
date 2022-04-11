@@ -75,7 +75,9 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
      */
     public function showAction(Request $request, FlattenException $exception, DebugLoggerInterface $logger = null)
     {
-        $currentContent = $this->getAndCleanOutputBuffering($request->headers->get('X-Php-Ob-Level', -1));
+        /** @var int $level */
+        $level = $request->headers->get('X-Php-Ob-Level', -1);
+        $currentContent = $this->getAndCleanOutputBuffering($level);
 
         $code = $exception->getStatusCode();
 

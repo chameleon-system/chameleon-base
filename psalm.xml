@@ -40,6 +40,7 @@
 
     <stubs>
         <file preloadClasses="true" name="psalm-stubs/Container.stub" />
+        <file name="psalm-stubs/TwigDeprecated.stub" />
     </stubs>
 
     <universalObjectCrates>

@@ -31,6 +31,10 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
         $this->original = $original;
     }
 
+    /**
+     * @return void
+     * @psalm-suppress MethodSignatureMismatch - `Twig_Token` is a subtype of `Token`
+     */
     public function compile(Twig_Compiler $compiler)
     {
         $snippet = $this->original->getNode('expr')->hasAttribute('value') ? $snippet = $this->original->getNode('expr')->getAttribute('value') : null;
@@ -92,6 +96,10 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
         return $this->original->getTemplateName();
     }
 
+    /**
+     * @param Source $source
+     * @return void
+     */
     public function setSourceContext(Source $source)
     {
         $this->original->setSourceContext($source);

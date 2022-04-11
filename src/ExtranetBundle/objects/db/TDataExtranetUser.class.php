@@ -1312,7 +1312,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @param string $sAddressId
      *
-     * @return TdbDataExtranetUserAddress|null
+     * @return TdbDataExtranetUserAddress|null|false
      */
     public function SetAddressAsShippingAddress($sAddressId)
     {
@@ -1661,7 +1661,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     /**
      * returns per default an instance of mail profile "registration".
      *
-     * @return TdbDataMailProfile
+     * @return TdbDataMailProfile|null
      */
     protected function GetRegistrationEmailProfile()
     {

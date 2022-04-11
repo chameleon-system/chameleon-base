@@ -615,6 +615,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
             TPkgCmsEvent::GetNewInstance($this, TPkgCmsEvent::CONTEXT_CORE, TPkgCmsEvent::NAME_GET_CUSTOM_HEADER_DATA));
 
         $event = new HtmlIncludeEvent();
+        /** @var HtmlIncludeEvent $event */
         $event = $this->eventDispatcher->dispatch(CoreEvents::GLOBAL_HTML_HEADER_INCLUDE, $event);
 
         if ($bAsArray) {
@@ -675,6 +676,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         $event = new HtmlIncludeEvent();
 
+        /** @var HtmlIncludeEvent $event */
         $event = $this->eventDispatcher->dispatch(CoreEvents::GLOBAL_HTML_FOOTER_INCLUDE, $event);
 
         $aModuleFooterData = $event->getData();

@@ -18,12 +18,13 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query;
 
 /**
- * @psalm-suppress UndefinedInterfaceMethod
+ * @FIXME This class has a lot of incorrect types and other issues.
+ * @psalm-suppress InvalidPropertyAssignmentValue, ConstructorSignatureMismatch, MethodSignatureMismatch
  */
 class ProfilerDatabaseConnection extends Connection
 {
     /**
-     * @var \Doctrine\DBAL\Driver\Connection
+     * @var Connection
      */
     private $connection;
 

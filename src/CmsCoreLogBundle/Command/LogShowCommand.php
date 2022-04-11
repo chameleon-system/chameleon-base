@@ -93,10 +93,12 @@ class LogShowCommand extends Command
         $infoStrings = array();
 
         $channel = $input->getOption('channel');
+        /** @var string $number */
         $number = $input->getOption('number');
         $level = $input->getOption('level');
         $ip = $input->getOption('ip');
         $cmsident = $input->getOption('cmsident');
+        /** @var string $page */
         $page = $input->getOption('page');
         $sorting = $input->getOption('sort');
 

@@ -85,6 +85,7 @@ class ChameleonHttpKernel extends HttpKernel
 
     /**
      * @param string $trustedHeaderClientIp
+     * @return void
      */
     public function setTrustedHeaderClientIp($trustedHeaderClientIp)
     {
@@ -93,6 +94,7 @@ class ChameleonHttpKernel extends HttpKernel
 
     /**
      * @param string $trustedHeaderClientHost
+     * @return void
      */
     public function setTrustedHeaderClientHost($trustedHeaderClientHost)
     {
@@ -101,6 +103,7 @@ class ChameleonHttpKernel extends HttpKernel
 
     /**
      * @param string $trustedHeaderClientPort
+     * @return void
      */
     public function setTrustedHeaderClientPort($trustedHeaderClientPort)
     {
@@ -109,6 +112,7 @@ class ChameleonHttpKernel extends HttpKernel
 
     /**
      * @param string $trustedHeaderClientProtocol
+     * @return void
      */
     public function setTrustedHeaderClientProtocol($trustedHeaderClientProtocol)
     {
