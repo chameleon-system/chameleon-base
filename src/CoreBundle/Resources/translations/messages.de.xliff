@@ -203,7 +203,14 @@
                 <source>chameleon_system_core.template_tool.show_dynamic_box</source>
                 <target>anzeigen</target>
             </trans-unit>
-
+            <trans-unit id="chameleon_system.table_editor_twig_body_parse_error">
+                <source>chameleon_system.table_editor_twig_body_parse_error</source>
+                <target>Fehler beim Parsen des Feldes 'Body' in E-Mail Vorlage.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system.table_editor_twig_body_text_parse_error">
+                <source>chameleon_system.table_editor_twig_body_text_parse_error</source>
+                <target>Fehler beim Parsen des Feldes 'Body Text' in E-Mail Vorlage.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

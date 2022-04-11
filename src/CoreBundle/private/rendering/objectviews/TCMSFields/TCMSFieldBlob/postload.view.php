@@ -10,7 +10,7 @@ if (isset($oDefinition->sqlData['is_translatable']) && '1' == $oDefinition->sqlD
 ?>
     if ($this->sqlData['<?= $sFieldDatabaseName; ?>'] === serialize(false)) {
         $this->sqlData['<?= $sFieldDatabaseName; ?>'] = false;  // special case - false was serialized
-    } else {
+    } elseif(is_string($this->sqlData['<?= $sFieldDatabaseName; ?>'])) {
         $sTmpCleanData = @unserialize($this->sqlData['<?= $sFieldDatabaseName; ?>']);
         if ($sTmpCleanData !== false) {
             $this->sqlData['<?= $sFieldDatabaseName; ?>'] = $sTmpCleanData;

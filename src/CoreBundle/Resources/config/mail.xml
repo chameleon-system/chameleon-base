@@ -3,7 +3,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="chameleon_system_core.mailer" class="TCMSMail" shared="false">
+        <service id="chameleon_system_core.mailer" class="TCMSMail" shared="false" public="true">
             <call method="setTools">
                 <argument type="service" id="chameleon_system_core.tools" />
             </call>
@@ -17,7 +17,7 @@
 
         <service id="chameleon_system_core.phpmailer" class="TCMSMail" shared="false" />
 
-        <service id="chameleon_system_core.mail_target_transformation_service" alias="chameleon_system_core.null_mail_target_transformation_service" />
+        <service id="chameleon_system_core.mail_target_transformation_service" alias="chameleon_system_core.null_mail_target_transformation_service" public="true" />
 
         <service id="chameleon_system_core.transforming_mail_target_transformation_service" class="ChameleonSystem\CoreBundle\Service\TransformOutgoingMailTargetsService" public="false">
             <argument>%chameleon_system_core.mail_target_transformation_service.target_mail%</argument>
@@ -33,7 +33,7 @@
 
         <service id="chameleon_system_core.security.mail.permissive_mail_peer_security" class="ChameleonSystem\CoreBundle\Security\Https\PermissiveHttpsContext" />
 
-        <service id="chameleon_system_core.security.mail.mail_peer_security" alias="chameleon_system_core.security.mail.permissive_mail_peer_security" />
+        <service id="chameleon_system_core.security.mail.mail_peer_security" alias="chameleon_system_core.security.mail.permissive_mail_peer_security" public="true" />
 
     </services>
 

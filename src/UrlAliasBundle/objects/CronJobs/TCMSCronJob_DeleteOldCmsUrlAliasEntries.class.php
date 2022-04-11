@@ -12,7 +12,7 @@
 /**
  * cleanup old url alias entries.
 /**/
-class TCMSCronJob_DeleteOldCmsUrlAliasEntries extends TCMSCronJob
+class TCMSCronJob_DeleteOldCmsUrlAliasEntries extends TdbCmsCronjobs
 {
     /**
      * @return void

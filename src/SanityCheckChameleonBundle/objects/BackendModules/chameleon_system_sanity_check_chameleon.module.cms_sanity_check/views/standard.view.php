@@ -1,7 +1,7 @@
 <?php
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @var TranslatorInterface $translator

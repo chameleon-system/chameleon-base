@@ -42,7 +42,7 @@ class TCMSMasterPagedefSpot extends TCMSRecord
      */
     public function __construct($table = 'cms_master_pagedef_spot', $id = null, $iLanguageId = null)
     {
-        parent::TCMSRecord($table, $id, $iLanguageId);
+        parent::__construct($table, $id, $iLanguageId);
     }
 
     /**

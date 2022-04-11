@@ -21,7 +21,7 @@ if($sDecodedData == '') {
 $sDecodedData = $this->sqlData['<?= $sFieldDatabaseName; ?>'];
 }else{
 if ($sDecodedData === serialize(false)) $sDecodedData = false; // special case - false was serialized
-else {
+elseif (is_string($sDecodedData)) {
 $sTmpCleanData = @unserialize($sDecodedData);
 if ($sTmpCleanData !== false) {
 $sDecodedData = $sTmpCleanData;

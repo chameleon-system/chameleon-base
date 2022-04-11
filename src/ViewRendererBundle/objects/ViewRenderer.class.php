@@ -248,7 +248,7 @@ class ViewRenderer
         if ($this->getShowHTMLHints()) {
             $mappersUsed = $this->dataMappingService->getMapperNameList();
             $event = new ViewRendererEvent($renderedContent, $mappersUsed, $sView);
-            $this->eventDispatcher->dispatch(ViewRendererEvent::EVENT_POST_RENDER, $event);
+            $this->eventDispatcher->dispatch($event, ViewRendererEvent::EVENT_POST_RENDER);
             $renderedContent = $event->getContent();
         }
 

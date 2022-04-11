@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use TCMSPortalDomain;
 
 class ChangeActiveDomainEvent extends Event

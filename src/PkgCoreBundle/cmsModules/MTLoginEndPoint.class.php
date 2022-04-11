@@ -11,7 +11,7 @@
 
 use ChameleonSystem\UpdateCounterMigrationBundle\Exception\InvalidMigrationCounterException;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MTLoginEndPoint extends TCMSModelBase
 {

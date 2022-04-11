@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use TCMSUser;
 
 class BackendLogoutEvent extends Event

@@ -21,22 +21,6 @@ class ChameleonHttpKernel extends HttpKernel
      * @var string
      */
     private $trustedProxies;
-    /**
-     * @var string
-     */
-    private $trustedHeaderClientIp;
-    /**
-     * @var string
-     */
-    private $trustedHeaderClientHost;
-    /**
-     * @var string
-     */
-    private $trustedHeaderClientPort;
-    /**
-     * @var string
-     */
-    private $trustedHeaderClientProtocol;
 
     /**
      * {@inheritdoc}
@@ -53,21 +37,8 @@ class ChameleonHttpKernel extends HttpKernel
                 }
             }
             if (count($aTrustedProxies) > 0) {
-                Request::setTrustedProxies($aTrustedProxies);
+                Request::setTrustedProxies($aTrustedProxies, Request::getTrustedHeaderSet());
             }
-        }
-
-        if ('' !== $this->trustedHeaderClientIp) {
-            Request::setTrustedHeaderName(Request::HEADER_CLIENT_IP, $this->trustedHeaderClientIp);
-        }
-        if ('' !== $this->trustedHeaderClientHost) {
-            Request::setTrustedHeaderName(Request::HEADER_CLIENT_HOST, $this->trustedHeaderClientHost);
-        }
-        if ('' !== $this->trustedHeaderClientPort) {
-            Request::setTrustedHeaderName(Request::HEADER_CLIENT_PORT, $this->trustedHeaderClientPort);
-        }
-        if ('' !== $this->trustedHeaderClientProtocol) {
-            Request::setTrustedHeaderName(Request::HEADER_CLIENT_PROTO, $this->trustedHeaderClientProtocol);
         }
 
         return parent::handle($request, $type, $catch);
@@ -83,39 +54,4 @@ class ChameleonHttpKernel extends HttpKernel
         $this->trustedProxies = $trustedProxies;
     }
 
-    /**
-     * @param string $trustedHeaderClientIp
-     * @return void
-     */
-    public function setTrustedHeaderClientIp($trustedHeaderClientIp)
-    {
-        $this->trustedHeaderClientIp = $trustedHeaderClientIp;
-    }
-
-    /**
-     * @param string $trustedHeaderClientHost
-     * @return void
-     */
-    public function setTrustedHeaderClientHost($trustedHeaderClientHost)
-    {
-        $this->trustedHeaderClientHost = $trustedHeaderClientHost;
-    }
-
-    /**
-     * @param string $trustedHeaderClientPort
-     * @return void
-     */
-    public function setTrustedHeaderClientPort($trustedHeaderClientPort)
-    {
-        $this->trustedHeaderClientPort = $trustedHeaderClientPort;
-    }
-
-    /**
-     * @param string $trustedHeaderClientProtocol
-     * @return void
-     */
-    public function setTrustedHeaderClientProtocol($trustedHeaderClientProtocol)
-    {
-        $this->trustedHeaderClientProtocol = $trustedHeaderClientProtocol;
-    }
 }

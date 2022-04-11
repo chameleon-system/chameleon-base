@@ -10,9 +10,12 @@
  */
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class TPkgCmsSessionHandler_Decorator_EnforceWriteSequenceTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
@@ -29,13 +32,13 @@ class TPkgCmsSessionHandler_Decorator_EnforceWriteSequenceTest extends TestCase
      */
     private $mockStorage = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->oMockStorage = $this->createMock('SessionHandlerInterface', array('read', 'write', 'open', 'close', 'gc', 'destroy'));
     }
 
-    public function TearDown()
+    public function tearDown(): void
     {
         $this->oMockStorage = null;
         $this->mockExistingSessionData = null;

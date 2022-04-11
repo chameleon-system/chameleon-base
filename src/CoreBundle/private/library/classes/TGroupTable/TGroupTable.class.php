@@ -12,13 +12,15 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * class TGroupTable is used to display a flexible table with, and without data groupings.
 /**/
 class TGroupTable
 {
+    use \ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
+
     /**
      * TGroupTableStyle (see class definition to view available styles).
      *
@@ -151,9 +153,18 @@ class TGroupTable
 
     private $languageId = null;
 
-    public function TGroupTable()
+    public function __construct()
     {
         $this->style = new TGroupTableStyle();
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TGroupTable()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**

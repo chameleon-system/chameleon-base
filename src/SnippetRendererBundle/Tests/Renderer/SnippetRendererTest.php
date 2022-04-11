@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 class SnippetRendererTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         if (!defined('TESTSUITE')) {
@@ -26,11 +26,10 @@ class SnippetRendererTest extends TestCase
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         //$twigEnv = $this->getMockBuilder('Twig_Environment')->getMock();
-        $environment = new Twig_Environment(new TwigStringLoader());
-        $snippetRenderer = new TPkgSnippetRenderer($environment, $environment, new \Psr\Log\NullLogger());
+        $snippetRenderer = new TPkgSnippetRenderer(new \Twig\Environment(new \Twig\Loader\FilesystemLoader()), new \Twig\Environment(new TwigStringLoader()), new \Psr\Log\NullLogger());
         $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
         $container->set('chameleon_system_snippet_renderer.snippet_renderer', $snippetRenderer);
         ServiceLocator::setContainer($container);
@@ -64,20 +63,18 @@ class SnippetRendererTest extends TestCase
         $this->assertEquals($aExpected, $aSubstitutes);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testWrongEndingOfCapture()
     {
+        $this->expectException(BadMethodCallException::class);
+
         $renderer = TPkgSnippetRenderer::GetNewInstance('', false);
         $renderer->setCapturedVarStop();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testWrongStartingOfCapture()
     {
+        $this->expectException(BadMethodCallException::class);
+
         $renderer = TPkgSnippetRenderer::GetNewInstance('', false);
         $renderer->setCapturedVarStart('foo');
         try {

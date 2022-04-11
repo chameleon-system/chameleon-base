@@ -22,8 +22,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('chameleon_system_debug');
+        $treeBuilder = new TreeBuilder('chameleon_system_debug');
+        $root = $treeBuilder->getRootNode();
 
         $root
             ->children()
@@ -41,8 +41,8 @@ class Configuration implements ConfigurationInterface
 
     private function getDatabaseProfilerConfig(): NodeDefinition
     {
-        $tree = new TreeBuilder();
-        $subTree = $tree->root('database_profiler');
+        $tree = new TreeBuilder('database_profiler');
+        $subTree = $tree->getRootNode();
         $subTree->addDefaultsIfNotSet();
         $subTree->canBeEnabled();
         $subTree->children()

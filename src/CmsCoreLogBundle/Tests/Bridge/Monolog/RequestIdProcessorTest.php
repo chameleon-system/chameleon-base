@@ -14,10 +14,13 @@ namespace ChameleonSystem\CmsCoreLogBundle\Tests\Bridge\Monolog;
 use ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\RequestIdProcessor;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class RequestIdProcessorTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var RequestInfoServiceInterface|ObjectProphecy
      */
@@ -33,7 +36,7 @@ class RequestIdProcessorTest extends TestCase
      */
     private $actualResult;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

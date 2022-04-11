@@ -12,7 +12,7 @@
 namespace ChameleonSystem\TrackViewsBundle\EventListener;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use TPkgTrackObjectViews;
 
 class TrackViewsListener
@@ -20,7 +20,7 @@ class TrackViewsListener
     /**
      * @return void
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         if (!$event->isMasterRequest()) {
             return;

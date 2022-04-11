@@ -1,3 +1,4 @@
 composer.lock
 vendor/
 /src/CoreBundle/Resources/Theme/node_modules/
+.phpunit.result.cache

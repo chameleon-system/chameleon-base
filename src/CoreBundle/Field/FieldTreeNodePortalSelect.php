@@ -12,7 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Field;
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use TGlobal;
 
 /**
