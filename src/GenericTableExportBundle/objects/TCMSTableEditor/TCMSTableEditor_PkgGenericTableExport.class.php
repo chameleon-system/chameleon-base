@@ -68,7 +68,7 @@ class TCMSTableEditor_PkgGenericTableExport extends TCMSTableEditor
      * @return never
      *
      * @psalm-suppress NoValue, InvalidReturnType - A method that never returns contains a return statement
-     * @FIXME `WriteExportToDownload` calls exit and never returns - saving it's return or even returning at the end of this method value makes no sense.
+     * @FIXME `WriteExportToDownload` calls exit and never returns - saving its return or even returning at the end of this method value makes no sense.
      */
     public function RunExportToDownload()
     {

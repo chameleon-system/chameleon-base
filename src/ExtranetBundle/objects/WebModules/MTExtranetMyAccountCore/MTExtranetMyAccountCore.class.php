@@ -23,7 +23,7 @@ class MTExtranetMyAccountCore extends TUserCustomModelBase
     protected $oModuleConfig = null;
 
     /**
-     * @var true
+     * @var bool
      */
     protected $bAllowHTMLDivWrapping = true;
 

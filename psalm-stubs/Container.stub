@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Container is stubbed away in order to make the retur value of `get` non-nullable
+ * Container is stubbed away in order to make the return value of `get` non-nullable
  * to prevent unactionable errors.
  */
 

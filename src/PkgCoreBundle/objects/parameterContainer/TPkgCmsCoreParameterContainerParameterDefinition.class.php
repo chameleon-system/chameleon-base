@@ -29,7 +29,7 @@ class TPkgCmsCoreParameterContainerParameterDefinition
     /**
      * @param string $propertyName
      * @param bool $required
-     * @param class-string $type
+     * @param class-string|null $type
      */
     public function __construct($propertyName, $required, $type = null)
     {

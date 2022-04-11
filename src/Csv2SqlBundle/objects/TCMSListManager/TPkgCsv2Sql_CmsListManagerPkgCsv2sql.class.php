@@ -75,8 +75,8 @@ class TPkgCsv2Sql_CmsListManagerPkgCsv2sql extends TCMSListManagerFullGroupTable
     /**
      * here you can add checks to validate the data and prevent saving.
      *
-     * @param array     $postData - raw post data (e.g. datetime fields are splitted into 2 post values and in non sql format)
-     * @param TIterator $oFields - TIterator of TCMSField objects
+     * @param array|null $postData - raw post data (e.g. datetime fields are splitted into 2 post values and in non sql format)
+     * @param TIterator<TCMSField> $oFields - TIterator of TCMSField objects
      *
      * @return bool
      */

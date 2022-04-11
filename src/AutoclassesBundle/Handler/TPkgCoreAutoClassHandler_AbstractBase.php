@@ -17,7 +17,6 @@ use IPkgCmsFileManager;
 abstract class TPkgCoreAutoClassHandler_AbstractBase implements IPkgCmsCoreAutoClassHandler
 {
     /**
-     * @FIXME This property is never used?
      * @var mixed
      */
     protected $aClassMapping = null;
