@@ -28,6 +28,11 @@ class CacheCheck extends AbstractCheck
      */
     private $memcacheActive;
 
+    /**
+     * @param int $level
+     * @param bool $allowCache
+     * @param bool $memcacheActive
+     */
     public function __construct($level, $allowCache, $memcacheActive)
     {
         parent::__construct($level);
@@ -43,6 +48,9 @@ class CacheCheck extends AbstractCheck
         return $this->checkCache();
     }
 
+    /**
+     * @return CheckOutcome[]
+     */
     private function checkCache()
     {
         $retValue = array();

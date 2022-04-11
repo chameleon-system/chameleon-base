@@ -44,6 +44,7 @@ class SupportedLanguagesService implements SupportedLanguagesServiceInterface
 
     /**
      * @return string
+     * @psalm-suppress FalsableReturnStatement
      */
     private function getTranslationBaseLanguageId()
     {

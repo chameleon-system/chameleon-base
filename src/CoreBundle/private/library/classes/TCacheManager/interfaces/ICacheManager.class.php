@@ -36,7 +36,7 @@ interface ICacheManager
      *
      * @static
      *
-     * @param $bDisableCaching
+     * @param bool $bDisableCaching
      */
     public static function SetDisableCaching($bDisableCaching);
 
@@ -111,7 +111,7 @@ interface ICacheManager
      *
      * @static
      *
-     * @param $aParameters
+     * @param array $aParameters
      */
     public static function GetKeyStateless($aParameters);
 

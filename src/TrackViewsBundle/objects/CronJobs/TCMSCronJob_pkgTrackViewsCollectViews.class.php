@@ -15,7 +15,14 @@
 /**/
 class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
 {
+    /**
+     * @var string
+     */
     private $targetTable;
+
+    /**
+     * @var string
+     */
     private $timeToLive;
 
     /**
@@ -54,9 +61,14 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
      * 'month' => analog (date('Ymxxxx'))
      * 'year' => analog (date('Yxxxxxx'))
      * 'all' => total count 'xxxxxxxxxx'
+     *
+     * @var array
      */
     protected $aTableDateGroups = array();
 
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         $targetTable = $this->targetTable;
@@ -106,11 +118,14 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
         if (!MySqlLegacySupport::getInstance()->num_rows($res) || 0 == MySqlLegacySupport::getInstance()->num_rows($res)) {
             $aData = array('table_name' => $aHistoryRow['table_name'], 'owner_id' => $aHistoryRow['owner_id'], 'count' => $aHistoryRow['views'], 'time_block' => $aDateGroup[$sDate]);
 
-            /** @var TCMSRecord $sClassName */
+            /**
+             * @var class-string<TCMSRecordWritable> $sClassName
+             */
             $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $targetTable);
 
-            $oViewCount = $sClassName::GetNewInstance();
             /** @var $oViewCount TCMSRecordWritable* */
+            $oViewCount = $sClassName::GetNewInstance();
+
             $oViewCount->LoadFromRow($aData);
             $oViewCount->AllowEditByAll(true);
             $oViewCount->Save();
@@ -135,7 +150,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
      *  get custom date group for table
      *  default is all options (day, week, month, year, all).
      *
-     * @param $sTableName
+     * @param string $sTableName
      *
      * @return array
      */
@@ -150,6 +165,11 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
         return $aDateGroup;
     }
 
+    /**
+     * @param int $dTime
+     *
+     * @return void
+     */
     protected function clearTrackingObjectHistory($dTime)
     {
         $targetTable = $this->targetTable;
@@ -173,6 +193,8 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
      *
      * @param string $sTableName
      * @param float  $dTime
+     *
+     * @return void
      */
     protected function deleteCountedItem($sTableName, $dTime)
     {
@@ -191,7 +213,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
     /**
      * get counted tracking item live time in sec.
      *
-     * @param $sTableName
+     * @param string $sTableName
      *
      * @return string
      */

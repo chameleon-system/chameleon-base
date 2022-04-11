@@ -109,7 +109,7 @@ class CropImageExtension extends Twig_Extension
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     private function getLanguageId()
     {

@@ -12,6 +12,12 @@
 namespace ChameleonSystem\ViewRendererBundle\Twig\Extension;
 
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
+use Symfony\Bundle\TwigBundle\DependencyInjection\TwigExtension;
+use Symfony\Component\Form\Extension\Core\CoreExtension;
+use Twig\Environment;
+use Twig\Error\RuntimeError;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig_Environment;
 use Twig_SimpleFilter;
 
@@ -59,7 +65,7 @@ class ChameleonStandardExtension extends \Twig_Extension
      * chameleonTwigEscapeFilter wraps the original twig escape extension to make sure the authenticity token string
      * won't get escaped by Twig and thus be rendered useless.
      *
-     * @param Twig_Environment $env
+     * @param Environment      $env
      * @param mixed            $string
      * @param string|null      $strategy
      * @param string|null      $charset
@@ -67,7 +73,7 @@ class ChameleonStandardExtension extends \Twig_Extension
      *
      * @return string
      *
-     * @throws \Twig_Error_Runtime
+     * @throws RuntimeError
      */
     public static function chameleonTwigEscapeFilter(Twig_Environment $env, $string, $strategy = 'html', $charset = null, $autoescape = false)
     {
@@ -94,7 +100,7 @@ class ChameleonStandardExtension extends \Twig_Extension
     }
 
     /**
-     * @param Twig_Environment $env
+     * @param Environment      $env
      * @param mixed            $string
      * @param string           $strategy
      * @param string|null      $charset
@@ -102,7 +108,7 @@ class ChameleonStandardExtension extends \Twig_Extension
      *
      * @return string
      *
-     * @throws \Twig_Error_Runtime
+     * @throws RuntimeError
      */
     public static function sanitizeUrl(Twig_Environment $env, $string, $strategy = 'html', $charset = null, $autoescape = false)
     {
@@ -117,7 +123,7 @@ class ChameleonStandardExtension extends \Twig_Extension
      * Forbids javascript: and data: URLs as well as URLs that are malformed enough that parse_url does not recognize
      * them.
      *
-     * @param $string
+     * @param string $string
      *
      * @return bool
      */

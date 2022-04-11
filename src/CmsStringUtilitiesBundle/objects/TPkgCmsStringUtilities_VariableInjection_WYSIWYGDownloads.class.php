@@ -18,12 +18,7 @@ class TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads extends TPkgCmsS
      * used when formating a number: [{variable:number:decimalplaces}]
      * example [{costs:number:2}].
      *
-     * @param string $sString
-     * @param array  $aCustomVariables
-     * @param bool   $bPassVarsThroughOutHTML - set to true, if you want to pass the vars through TGlobal::OutHTML
-     * @param $iWidth bool|int - max image width, default = false, used in pkgCmsTextBlock package
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function replace($sString, $aCustomVariables, $bPassVarsThroughOutHTML = false, $iWidth = false)
     {
@@ -39,6 +34,10 @@ class TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads extends TPkgCmsS
         return $sString;
     }
 
+    /**
+     * @param string $sContent
+     * @return string[]
+     */
     protected function getMatches($sContent)
     {
         $sPattern = '#\[\{\s*?((\w|-){36}|\d+)\s*?,\s*?dl\s*?,[^,\[\{\}\]]*?\s*?(|,\s*?(ico|kb)|,\s*?ico\s*?,\s*?kb|,\s*?kb\s*?,\s*?ico)\s*?\}\]#';
@@ -50,7 +49,7 @@ class TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads extends TPkgCmsS
     /**
      * method called by the regex to replace the variables in the message string.
      *
-     * @param array $sMatch
+     * @param string $sMatch
      *
      * @return string
      */

@@ -22,9 +22,13 @@ interface RequestTypeInterface
 
     /**
      * @return int
+     * @psalm-return self::REQUEST_TYPE_*
      */
     public function getRequestType();
 
+    /**
+     * @return void
+     */
     public function initialize();
 
     /**

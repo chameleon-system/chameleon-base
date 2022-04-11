@@ -1,0 +1,26 @@
+<?php
+/**
+ * Stubs for deprecated Twig classes.
+ * These exist in the twig library but are guarded by an if-clause making them
+ * non-discoverable.
+ */
+
+/** @deprecated since Twig 2.7, use "Twig\Loader\LoaderInterface" instead */
+interface Twig_LoaderInterface extends Twig\Loader\LoaderInterface
+{
+}
+
+/** @deprecated since Twig 2.7, use "Twig\Compiler" instead */
+class Twig_Compiler extends Twig\Compiler
+{
+}
+
+/** @deprecated since Twig 2.7, use "Twig\Node\NodeOutputInterface" instead */
+interface Twig_NodeOutputInterface extends Twig\Node\NodeOutputInterface
+{
+}
+
+/** @deprecated since Twig 2.7, use "Twig\Token" instead */
+class Twig_Token extends Twig\Token
+{
+}

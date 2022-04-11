@@ -24,6 +24,8 @@ class Mapper_PkgNewsletterGroup extends AbstractViewMapper
      * @abstract
      *
      * @param IMapperRequirementsRestricted $oRequirements
+     *
+     * @return void
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
     {
@@ -35,15 +37,15 @@ class Mapper_PkgNewsletterGroup extends AbstractViewMapper
      * If you want to use this mapper add this query to query field in your export itme.
      *
      *
-     SELECT  `pkg_newsletter_user`. * , `pkg_newsletter_confirmation` . `registration_date` AS regDate  ,
-    `pkg_newsletter_confirmation` . `confirmation` AS confirmed  ,
-    `pkg_newsletter_confirmation` . `confirmation_date` AS confDate  ,
-    `pkg_newsletter_confirmation`.`pkg_newsletter_group_id` AS groupId
-    FROM `pkg_newsletter_user`
-    LEFT JOIN `pkg_newsletter_user_pkg_newsletter_confirmation_mlt` ON `pkg_newsletter_user_pkg_newsletter_confirmation_mlt`.`source_id` = `pkg_newsletter_user`.`id`
-    LEFT JOIN `pkg_newsletter_confirmation` ON `pkg_newsletter_confirmation`.`id` = `pkg_newsletter_user_pkg_newsletter_confirmation_mlt`.`target_id`
-    LEFT JOIN `pkg_newsletter_group` AS group_confirm ON `group_confirm`.`id` = `pkg_newsletter_confirmation`.`pkg_newsletter_group_id`
-    WHERE 1 = '1'
+     *     SELECT  `pkg_newsletter_user`. * , `pkg_newsletter_confirmation` . `registration_date` AS regDate  ,
+     *    `pkg_newsletter_confirmation` . `confirmation` AS confirmed  ,
+     *    `pkg_newsletter_confirmation` . `confirmation_date` AS confDate  ,
+     *    `pkg_newsletter_confirmation`.`pkg_newsletter_group_id` AS groupId
+     *    FROM `pkg_newsletter_user`
+     *    LEFT JOIN `pkg_newsletter_user_pkg_newsletter_confirmation_mlt` ON `pkg_newsletter_user_pkg_newsletter_confirmation_mlt`.`source_id` = `pkg_newsletter_user`.`id`
+     *    LEFT JOIN `pkg_newsletter_confirmation` ON `pkg_newsletter_confirmation`.`id` = `pkg_newsletter_user_pkg_newsletter_confirmation_mlt`.`target_id`
+     *    LEFT JOIN `pkg_newsletter_group` AS group_confirm ON `group_confirm`.`id` = `pkg_newsletter_confirmation`.`pkg_newsletter_group_id`
+     *    WHERE 1 = '1'
      *
      *
      * To map values from models to views the mapper has to implement iVisitable.
@@ -63,6 +65,8 @@ class Mapper_PkgNewsletterGroup extends AbstractViewMapper
      * @param \IMapperVisitorRestricted     $oVisitor
      * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
+     *
+     * @return void
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {

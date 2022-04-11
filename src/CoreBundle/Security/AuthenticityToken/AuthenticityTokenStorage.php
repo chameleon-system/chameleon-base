@@ -67,7 +67,11 @@ class AuthenticityTokenStorage implements TokenStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param string $tokenId The token ID
+     * @param string $token   The CSRF token
+     * @return void
      */
     public function setToken($tokenId, $token)
     {

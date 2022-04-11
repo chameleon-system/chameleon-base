@@ -134,7 +134,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(
         IMapperVisitorRestricted $oVisitor,
@@ -447,6 +447,8 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
      * @throws LogicException
      * @throws MapperException
      * @throws TPkgSnippetRenderer_SnippetRenderingException
+     *
+     * @return void
      */
     protected function renderList()
     {
@@ -495,6 +497,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsAjaxResponse($listReturn);
     }
 
+    /**
+     * @return void
+     */
     private function returnGeneralErrorMessageForAjax()
     {
         $return = new JavascriptPluginMessage();
@@ -506,6 +511,11 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsAjaxError($return);
     }
 
+    /**
+     * @param mixed $object - must be JSON encodable.
+     *
+     * @return never
+     */
     private function returnAsAjaxError($object)
     {
         header('HTTP/1.1 500 Internal Server Error');
@@ -551,6 +561,11 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         );
     }
 
+    /**
+     * @param mixed $object - Must be json serializable
+     *
+     * @return never
+     */
     private function returnAsAjaxResponse($object)
     {
         header('HTTP/1.1 200 OK');
@@ -564,6 +579,8 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
      * @throws MapperException
      * @throws TPkgSnippetRenderer_SnippetRenderingException
      * @throws LogicException
+     *
+     * @return void
      */
     protected function renderDetail()
     {
@@ -659,6 +676,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         return array_unique($detailMappers);
     }
 
+    /**
+     * @return void
+     */
     protected function provideMediaTreeNodeInfo()
     {
         $mediaTreeNodeId = $this->inputFilterUtil->getFilteredGetInput(
@@ -689,6 +709,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsAjaxResponse($info);
     }
 
+    /**
+     * @return void
+     */
     protected function insertMediaTreeNode()
     {
         $mediaTreeNodeParentId = $this->inputFilterUtil->getFilteredPostInput('parentId');
@@ -718,6 +741,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsAjaxResponse($info);
     }
 
+    /**
+     * @return void
+     */
     protected function renameMediaTreeNode()
     {
         $mediaTreeNodeId = $this->inputFilterUtil->getFilteredPostInput('id');
@@ -747,6 +773,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsAjaxResponse($info);
     }
 
+    /**
+     * @return void
+     */
     protected function deleteMediaTreeNode()
     {
         $mediaTreeNodeId = $this->inputFilterUtil->getFilteredPostInput('id');
@@ -778,6 +807,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsAjaxResponse($info);
     }
 
+    /**
+     * @return void
+     */
     protected function moveMediaTreeNode()
     {
         $mediaTreeNodeId = $this->inputFilterUtil->getFilteredPostInput('id');
@@ -812,6 +844,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsAjaxResponse($info);
     }
 
+    /**
+     * @return void
+     */
     protected function moveImages()
     {
         $mediaTreeNodeId = $this->inputFilterUtil->getFilteredPostInput('treeId');
@@ -846,6 +881,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsAjaxResponse($return);
     }
 
+    /**
+     * @return void
+     */
     protected function quickEdit()
     {
         $mediaItemId = $this->inputFilterUtil->getFilteredPostInput('mediaItemId');
@@ -903,6 +941,11 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsTextResponse($value);
     }
 
+    /**
+     * @param null|string $string
+     *
+     * @return never
+     */
     private function returnAsTextResponse($string)
     {
         header('HTTP/1.1 200 OK');
@@ -910,6 +953,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         exit();
     }
 
+    /**
+     * @return void
+     */
     protected function confirmDeleteMediaItem()
     {
         $return = new JavascriptPluginRenderedContent();
@@ -930,6 +976,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsAjaxResponse($return);
     }
 
+    /**
+     * @return void
+     */
     protected function deleteMediaItem()
     {
         $return = new JavascriptPluginRenderedContent();
@@ -955,6 +1004,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsAjaxResponse($return);
     }
 
+    /**
+     * @return void
+     */
     protected function autoCompleteSearch()
     {
         $return = new JavascriptPluginRenderedContent();
@@ -969,6 +1021,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsAjaxResponse($return);
     }
 
+    /**
+     * @return void
+     */
     protected function postSelectHook()
     {
         $this->returnAsAjaxResponse(new \stdClass());

@@ -81,6 +81,9 @@ class TPkgCmsNavigation_LanguageSelection extends AbstractViewMapper
         $oVisitor->SetMappedValue('aTree', $aTree);
     }
 
+    /**
+     * @return mixed[]
+     */
     private function getLanguageList()
     {
         $aLanguageList = array();

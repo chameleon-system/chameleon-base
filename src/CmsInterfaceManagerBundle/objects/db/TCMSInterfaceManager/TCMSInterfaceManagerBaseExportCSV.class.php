@@ -60,6 +60,10 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
         return $oDataObjct->sqlData;
     }
 
+    /**
+     * @return string
+     * @throws TPkgCmsException_Log
+     */
     protected function GetExportTableName()
     {
         static $sTable;
@@ -100,6 +104,9 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
      * this method is always called at the end of RunImport (even if the import failed) to do any cleanup work.
      *
      * @param bool $bImportSucceeded - set to true if the import succeeded
+     *
+     * @FIXME Parent return `$bImportSucceeded` (bool). This method should probably do the same?
+     * @return void
      */
     protected function Cleanup($bImportSucceeded)
     {
@@ -112,6 +119,8 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
      * save order row to tmp table.
      *
      * @param array $aRow
+     *
+     * @return void
      */
     protected function SaveRow($aRow)
     {
@@ -170,6 +179,9 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
         return PATH_OUTBOX.'/'.$this->GetExportTableName().'.csv';
     }
 
+    /**
+     * @return string
+     */
     protected function CreateCSV()
     {
         $sFile = $this->GetAbsoluteFilePath();
@@ -192,6 +204,12 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
         return $sFile;
     }
 
+    /**
+     * @param resource $fp
+     * @param mixed[] $aRow
+     *
+     * @return void
+     */
     protected function WriteRow(&$fp, $aRow)
     {
         $sLine = '';

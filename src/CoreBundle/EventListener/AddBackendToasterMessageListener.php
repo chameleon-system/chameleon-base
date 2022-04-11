@@ -36,6 +36,7 @@ class AddBackendToasterMessageListener
 
     /**
      * @param FilterResponseEvent $event
+     * @return void
      */
     public function addMessage(FilterResponseEvent $event)
     {

@@ -79,6 +79,8 @@ class DeleteMediaConnectionsListener
 
     /**
      * @param DeleteMediaEvent $deleteMediaEvent
+     *
+     * @return void
      */
     public function onDeleteMedia(DeleteMediaEvent $deleteMediaEvent)
     {

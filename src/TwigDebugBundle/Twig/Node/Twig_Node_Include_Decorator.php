@@ -31,6 +31,10 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
         $this->original = $original;
     }
 
+    /**
+     * @return void
+     * @psalm-suppress MethodSignatureMismatch - `Twig_Token` is a subtype of `Token`
+     */
     public function compile(Twig_Compiler $compiler)
     {
         $snippet = $this->original->getNode('expr')->hasAttribute('value') ? $snippet = $this->original->getNode('expr')->getAttribute('value') : null;
@@ -43,11 +47,17 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
         }
     }
 
+    /**
+     * @return \Traversable
+     */
     public function getIterator()
     {
         return $this->original->getIterator();
     }
 
+    /**
+     * @return string|null
+     */
     public function getNodeTag()
     {
         return $this->original->getNodeTag();
@@ -58,26 +68,46 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
         return $this->original->count();
     }
 
+    /**
+     * @return int
+     */
     public function getTemplateLine()
     {
         return $this->original->getTemplateLine();
     }
 
+    /**
+     * @psalm-suppress UndefinedMethod
+     * @FIXME `setTemplateName` does not exist on the original class. This method should probably be removed.
+     *
+     * @param string $name
+     * @return void
+     */
     public function setTemplateName($name)
     {
         $this->original->setTemplateName($name);
     }
 
+    /**
+     * @return string|null
+     */
     public function getTemplateName()
     {
         return $this->original->getTemplateName();
     }
 
+    /**
+     * @param Source $source
+     * @return void
+     */
     public function setSourceContext(Source $source)
     {
         $this->original->setSourceContext($source);
     }
 
+    /**
+     * @return \Twig_Source|null
+     */
     public function getSourceContext()
     {
         return $this->original->getSourceContext();

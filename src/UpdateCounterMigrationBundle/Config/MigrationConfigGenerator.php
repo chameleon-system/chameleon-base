@@ -99,6 +99,7 @@ class MigrationConfigGenerator
     /**
      * @param string $updatePath
      * @param string $symlinkName
+     * @param array $bundleNames
      *
      * @return string
      */

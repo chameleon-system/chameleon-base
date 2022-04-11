@@ -137,7 +137,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
@@ -242,9 +242,16 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
 
     protected function updateSelection(): ?string
     {
+        /** @var string|null $tableName */
         $tableName = $this->inputFilterUtil->getFilteredGetInput('table', '');
+
+        /** @var string|null $nodeId */
         $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
+
+        /** @var string|null $currentRecordId */
         $currentRecordId = $this->inputFilterUtil->getFilteredGetInput('currentRecordId', '');
+
+        /** @var string|null $fieldName */
         $fieldName = $this->inputFilterUtil->getFilteredGetInput('fieldName', '');
 
         if ('' === $tableName || '' === $currentRecordId || '' === $fieldName) {
@@ -397,6 +404,9 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         $this->setCheckStatus($treeNodeDataModel, $node->id);
     }
 
+    /**
+     * @param string $nodeId
+     */
     protected function setCheckStatus(BackendTreeNodeDataModel $treeNodeDataModel, $nodeId): void
     {
         if ($this->activeNodeId === $nodeId) {
@@ -415,6 +425,10 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
     {
     }
 
+    /**
+     * @param string $fieldName
+     * @param string $path
+     */
     private function createPageBreadcrumbs(\TdbCmsTree $node, $fieldName, $path = ''): string
     {
         $path .= '<li class="breadcrumb-item">'.$node->fieldName.'</li>';

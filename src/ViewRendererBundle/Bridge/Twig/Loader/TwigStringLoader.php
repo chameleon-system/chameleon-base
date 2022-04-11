@@ -21,6 +21,10 @@ namespace ChameleonSystem\ViewRendererBundle\Bridge\Twig\Loader;
  */
 class TwigStringLoader implements \Twig_LoaderInterface
 {
+    /**
+     * @param string $name
+     * @return string
+     */
     public function getSource($name)
     {
         @trigger_error(sprintf('Calling "getSource" on "%s" is deprecated since 1.27. Use getSourceContext() instead.', get_class($this)), E_USER_DEPRECATED);
@@ -28,21 +32,38 @@ class TwigStringLoader implements \Twig_LoaderInterface
         return $name;
     }
 
+    /**
+     * @param string $name
+     * @return \Twig_Source
+     */
     public function getSourceContext($name)
     {
         return new \Twig_Source($name, $name);
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function exists($name)
     {
         return true;
     }
 
+    /**
+     * @param string $name
+     * @return string
+     */
     public function getCacheKey($name)
     {
         return $name;
     }
 
+    /**
+     * @param string $name
+     * @param int $time
+     * @return bool
+     */
     public function isFresh($name, $time)
     {
         return true;

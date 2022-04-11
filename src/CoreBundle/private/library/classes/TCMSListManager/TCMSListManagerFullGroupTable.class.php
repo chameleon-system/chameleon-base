@@ -750,8 +750,8 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     /**
      * Renders a button to open a record in full editing mode.
      *
-     * @param $id
-     * @param $row
+     * @param string $id
+     * @param array<string, string> $row
      *
      * @return string
      */
@@ -765,8 +765,8 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     /**
      * Renders a button to duplicate records within the list view.
      *
-     * @param $id
-     * @param $row
+     * @param string $id
+     * @param array<string, string> $row
      *
      * @return string
      */

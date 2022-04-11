@@ -20,9 +20,6 @@ class EntityListPager implements EntityListPagerInterface
         $this->pageSize = $pageSize;
     }
 
-    /**
-     * @param $pageNumber
-     */
     public function getQueryForPage($query, $pageNumberStartingAtZero)
     {
         if ($this->pageSize > 0) {
@@ -34,6 +31,10 @@ class EntityListPager implements EntityListPagerInterface
         return $this->removeLimitFromQuery($query);
     }
 
+    /**
+     * @param string $query
+     * @return string
+     */
     private function removeLimitFromQuery($query)
     {
         $normalizeQuery = $this->removeAllLineFeedsAndTabsFromQuery($query);

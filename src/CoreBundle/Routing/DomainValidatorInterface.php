@@ -23,7 +23,7 @@ interface DomainValidatorInterface
      * @param bool                $secure   if true, the $domain is checked against secure domains of $portal, else against the default
      *                                      domain
      *
-     * @return string
+     * @return string|null
      */
     public function getValidDomain($domain, TdbCmsPortal $portal = null, TdbCmsLanguage $language = null, $secure = true);
 }

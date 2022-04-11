@@ -29,6 +29,9 @@ class ClearRoutingCacheListener
         $this->router = $router;
     }
 
+    /**
+     * @return void
+     */
     public function clearRoutingCache(Event $event)
     {
         $this->router->clearCache();

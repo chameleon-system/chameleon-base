@@ -37,6 +37,10 @@ class CMSSanityCheck extends TModelBase
     private $outputResolver;
     /** @var LanguageServiceInterface $languageService */
     private $languageService;
+
+    /**
+     * @var TranslatorInterface
+     */
     private $translator;
 
     /**
@@ -89,6 +93,9 @@ class CMSSanityCheck extends TModelBase
         return $aIncludes;
     }
 
+    /**
+     * @return void
+     */
     private function handleCheckExecution()
     {
         /** @var Request $request */
@@ -116,6 +123,9 @@ class CMSSanityCheck extends TModelBase
         }
     }
 
+    /**
+     * @return void
+     */
     private function gatherTemplateData()
     {
         $checks = $this->checkDataHolder->getAllChecks();

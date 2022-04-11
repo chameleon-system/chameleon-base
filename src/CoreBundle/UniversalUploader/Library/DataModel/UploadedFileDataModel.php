@@ -69,6 +69,8 @@ class UploadedFileDataModel
 
     /**
      * @param string $tmpFilePath
+     *
+     * @return void
      */
     public function setTmpFilePath($tmpFilePath)
     {
@@ -85,6 +87,8 @@ class UploadedFileDataModel
 
     /**
      * @param string $originalClientFileName
+     *
+     * @return void
      */
     public function setOriginalClientFileName($originalClientFileName)
     {
@@ -101,6 +105,8 @@ class UploadedFileDataModel
 
     /**
      * @param int $fileSize
+     *
+     * @return void
      */
     public function setFileSize($fileSize)
     {
@@ -117,6 +123,8 @@ class UploadedFileDataModel
 
     /**
      * @param string $mimeType
+     *
+     * @return void
      */
     public function setMimeType($mimeType)
     {
@@ -135,6 +143,8 @@ class UploadedFileDataModel
      * @param string $errorMessage
      * @param int    $code
      * @param array  $context
+     *
+     * @return void
      */
     public function addErrorMessage($errorMessage, $code = 0, $context = array())
     {
@@ -160,6 +170,8 @@ class UploadedFileDataModel
 
     /**
      * @param string|null $savedRecordId
+     *
+     * @return void
      */
     public function setSavedRecordId($savedRecordId)
     {
@@ -176,6 +188,8 @@ class UploadedFileDataModel
 
     /**
      * @param bool $uploadFinished
+     *
+     * @return void
      */
     public function setUploadFinished($uploadFinished)
     {

@@ -21,7 +21,17 @@ class TPkgExtranetMapper_ChangePassword extends AbstractViewMapper
         $oRequirements->NeedsSourceObject('sToken');
         $oRequirements->NeedsSourceObject('sTitle', null, '');
         $oRequirements->NeedsSourceObject('sText', null, '');
+        /**
+         * @psalm-suppress InvalidArgument
+         * @FIXME Passing `false` as a type is not correct. This should probably be the following:
+         * $oRequirements->NeedsSourceObject('bPasswordChanged', 'boolean',false);
+         */
         $oRequirements->NeedsSourceObject('bPasswordChanged', false);
+        /**
+         * @psalm-suppress InvalidArgument
+         * @FIXME Passing `false` as a type is not correct. This should probably be the following:
+         * $oRequirements->NeedsSourceObject('bPasswordChangeKeyValid', 'boolean', false);
+         */
         $oRequirements->NeedsSourceObject('bPasswordChangeKeyValid', false);
         $oRequirements->NeedsSourceObject('oPasswordChangeUser', null);
     }

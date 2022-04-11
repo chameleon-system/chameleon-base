@@ -307,7 +307,7 @@ class TPkgViewRendererLessCompiler
      * @param string       $css
      * @param TdbCmsPortal $portal
      *
-     * @return bool
+     * @return false|int
      */
     public function writeCssFileForPortal($css, $portal)
     {

@@ -79,7 +79,7 @@ class MTPkgCmsTextBlockCore extends TUserCustomModelBase
      * loads the text block from database based on $this->sTextBlockKey or
      * backend module configuration and current portal.
      *
-     * @return TdbPkgCmsTextBlock|null
+     * @return TdbPkgCmsTextBlock|false
      */
     protected function LoadTextBlock()
     {

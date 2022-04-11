@@ -29,6 +29,8 @@ interface ActivePageServiceInterface
     /**
      * @param string $activePageId
      * @param string $referrerPageId
+     *
+     * @return void
      */
     public function setActivePage($activePageId, $referrerPageId);
 

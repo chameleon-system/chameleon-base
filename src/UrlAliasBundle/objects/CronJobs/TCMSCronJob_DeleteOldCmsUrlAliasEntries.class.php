@@ -14,6 +14,9 @@
 /**/
 class TCMSCronJob_DeleteOldCmsUrlAliasEntries extends TCMSCronJob
 {
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         $iCutoff = time();

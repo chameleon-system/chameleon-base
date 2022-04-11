@@ -14,13 +14,25 @@ use Doctrine\DBAL\Connection;
 
 class TPkgCmsVirtualClassManager
 {
+    /**
+     * @var null|array<string, mixed>
+     */
     private $config = null;
+
+    /**
+     * @var null|string
+     */
     private $entryPoint = null;
     /**
      * @var Connection
      */
     private $databaseConnection;
 
+    /**
+     * @param string $entryPointClass
+     *
+     * @return bool
+     */
     public function load($entryPointClass)
     {
         $this->entryPoint = $entryPointClass;
@@ -29,6 +41,13 @@ class TPkgCmsVirtualClassManager
         return false !== $config && null !== $config;
     }
 
+    /**
+     * @param class-string $sClassName
+     * @param string $sClassSubType
+     * @param string $sClassType
+     * @param bool $bRefresh
+     * @return false|class-string
+     */
     public static function GetEntryPointClassForClass($sClassName, $sClassSubType, $sClassType, $bRefresh = false)
     {
         static $aEntryPoints = null;
@@ -58,6 +77,8 @@ class TPkgCmsVirtualClassManager
 
     /**
      * @param string|null $targetDir
+     *
+     * @return void
      */
     public function UpdateVirtualClasses($targetDir = null)
     {
@@ -104,6 +125,10 @@ class TPkgCmsVirtualClassManager
         }
     }
 
+    /**
+     * @param class-string $sClassName
+     * @return string
+     */
     private function getAutoParentClassFromClass($sClassName)
     {
         $autoParent = $sClassName.'AutoParent';
@@ -118,6 +143,8 @@ class TPkgCmsVirtualClassManager
      * update all virtual classes.
      *
      * @static
+     *
+     * @return void
      */
     public static function UpdateAllVirtualClasses()
     {
@@ -133,11 +160,17 @@ class TPkgCmsVirtualClassManager
         }
     }
 
+    /**
+     * @return void
+     */
     public function recreateAutoclasses()
     {
         $this->getAutoclassesCacheWarmer()->updateAllTables();
     }
 
+    /**
+     * @return false|string
+     */
     protected function GetVirtualClassEntryPointFileName()
     {
         $sTargetFile = false;
@@ -149,6 +182,9 @@ class TPkgCmsVirtualClassManager
         return $sTargetFile;
     }
 
+    /**
+     * @return null|array<string, mixed>
+     */
     protected function getConfig()
     {
         if (null === $this->config || false === $this->config) {
@@ -168,6 +204,10 @@ class TPkgCmsVirtualClassManager
         return $this->config;
     }
 
+    /**
+     * @param string $name
+     * @return mixed|null
+     */
     public function getConfigValue($name)
     {
         $config = $this->getConfig();
@@ -175,6 +215,9 @@ class TPkgCmsVirtualClassManager
         return (isset($config[$name])) ? $config[$name] : null;
     }
 
+    /**
+     * @return array
+     */
     public function getExtensionList()
     {
         $aExtensionList = array();
@@ -213,6 +256,8 @@ class TPkgCmsVirtualClassManager
 
     /**
      * @param \Doctrine\DBAL\Connection $connection
+     *
+     * @return void
      */
     public function setDatabaseConnection(Connection $connection)
     {

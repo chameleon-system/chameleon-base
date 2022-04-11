@@ -52,7 +52,7 @@ class RequestTypeListener implements ContainerAwareInterface
     }
 
     /**
-     * @param GetResponseEvent $event
+     * @return void
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
@@ -83,7 +83,9 @@ class RequestTypeListener implements ContainerAwareInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function setContainer(ContainerInterface $container = null)
     {

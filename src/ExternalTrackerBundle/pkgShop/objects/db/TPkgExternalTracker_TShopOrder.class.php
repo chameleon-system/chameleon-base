@@ -13,6 +13,8 @@ class TPkgExternalTracker_TShopOrder extends TPkgExternalTracker_TShopOrderAutoP
 {
     /**
      * method is called after all data from the basket has been saved to the order tables.
+     *
+     * @return void
      */
     public function CreateOrderInDatabaseCompleteHook()
     {

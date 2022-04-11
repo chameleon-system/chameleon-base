@@ -19,14 +19,14 @@ class TUserModelBaseCore extends TModelBase
     /**
      * holds the instance id of the module (points to a record in the table cms_tpl_module_instance).
      *
-     * @var string
+     * @var string|null
      */
     public $instanceID = null;
 
     /**
      * holds the language shortname of the template (example: de, en, ...).
      *
-     * @var string
+     * @var string|null
      */
     public $templateLanguage = null;
 
@@ -38,6 +38,9 @@ class TUserModelBaseCore extends TModelBase
         return $aSleep;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function &Execute()
     {
         parent::Execute();
@@ -79,7 +82,7 @@ class TUserModelBaseCore extends TModelBase
      * This is necessary, should you use an instance of ViewRenderer in your module's old style view.php
      * Here you have to include the resources of the package in your HTMLHeadIncludes by hand.
      *
-     * @param $sSnippetPath - the path to the snippet package
+     * @param string $sSnippetPath - the path to the snippet package
      *
      * @return array
      */

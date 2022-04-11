@@ -56,6 +56,8 @@ class AutoclassesCacheWarmer
 
     /**
      * @param string $id
+     *
+     * @return void
      */
     public function updateTableById($id)
     {
@@ -67,6 +69,8 @@ class AutoclassesCacheWarmer
 
     /**
      * @param string $tablename
+     *
+     * @return void
      */
     public function updateTableByName($tablename)
     {
@@ -77,6 +81,9 @@ class AutoclassesCacheWarmer
         $this->regenerateClassmap($this->cacheDir);
     }
 
+    /**
+     * @return void
+     */
     public function updateAllTables()
     {
         $targetDir = $this->cacheDir;
@@ -118,6 +125,8 @@ class AutoclassesCacheWarmer
 
     /**
      * @param string $targetDir
+     *
+     * @return void
      */
     private function makeTempDirToAutoclassesDir($targetDir)
     {
@@ -217,6 +226,8 @@ class AutoclassesCacheWarmer
     /**
      * @param resource $file
      * @param array    $classData
+     *
+     * @return void
      */
     private function writeClassmap($file, array $classData)
     {

@@ -102,6 +102,8 @@ class MigrationRecorder
     /**
      * @param resource             $filePointer
      * @param LogChangeDataModel[] $dataModels
+     *
+     * @return void
      */
     public function writeQueries($filePointer, array $dataModels)
     {
@@ -109,7 +111,9 @@ class MigrationRecorder
     }
 
     /**
-     * @param $filePointer
+     * @param resource $filePointer
+     *
+     * @return void
      */
     public function endTransaction($filePointer)
     {

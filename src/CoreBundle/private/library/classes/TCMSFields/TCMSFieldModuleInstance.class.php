@@ -330,7 +330,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     /**
      * called on each field after the record is saved (NOT on insert, only on save).
      *
-     * @param int $iRecordId - the id of the record
+     * @param string $iRecordId - the id of the record
      */
     public function PostSaveHook($iRecordId)
     {

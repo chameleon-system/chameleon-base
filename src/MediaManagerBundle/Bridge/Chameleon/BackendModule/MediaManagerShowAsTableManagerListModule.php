@@ -20,7 +20,7 @@ use TCMSImage;
 class MediaManagerShowAsTableManagerListModule extends MTPkgViewRendererAbstractModuleMapper
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(
         IMapperVisitorRestricted $oVisitor,

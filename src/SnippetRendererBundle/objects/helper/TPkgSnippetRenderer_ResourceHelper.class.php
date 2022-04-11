@@ -11,6 +11,12 @@
 
 class TPkgSnippetRenderer_ResourceHelper
 {
+    /**
+     * @param string $sSource
+     * @param bool $bExcludeJS
+     *
+     * @return array<string, string[]>
+     */
     public function getResourcesFromSource($sSource, $bExcludeJS = false)
     {
         $sSource = trim($sSource);

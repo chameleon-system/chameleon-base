@@ -39,6 +39,8 @@ class SnippetChainModifier
      * @param string[] $toTheseThemes an array of theme IDs for which to add the element. Add to all themes if empty.
      *
      * @throws DataAccessException
+     *
+     * @return void
      */
     public function addToSnippetChain($pathToAdd, $afterThisPath = null, array $toTheseThemes = array())
     {
@@ -101,6 +103,8 @@ class SnippetChainModifier
      * @param string[] $fromTheseThemes an array of theme IDs from which to remove the element. Remove from all themes if empty.
      *
      * @throws DataAccessException
+     *
+     * @return void
      */
     public function removeFromSnippetChain($pathToRemove, array $fromTheseThemes = array())
     {

@@ -58,6 +58,8 @@ class RehashBackendUserPasswordListener
 
     /**
      * @param BackendLoginEvent $backendLoginEvent
+     *
+     * @return void
      */
     public function rehashPassword(BackendLoginEvent $backendLoginEvent)
     {
@@ -100,6 +102,7 @@ class RehashBackendUserPasswordListener
         if (true === $isDummyUser) {
             $plainPassword = $dummyUserData['password'];
         } else {
+            /** @var string|null $plainPassword */
             $plainPassword = $this->inputFilterUtil->getFilteredPostInput('password');
         }
 
@@ -109,6 +112,8 @@ class RehashBackendUserPasswordListener
     /**
      * @param string $userId
      * @param string $hashedPassword
+     *
+     * @return void
      */
     private function saveHashedPassword($userId, $hashedPassword)
     {

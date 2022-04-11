@@ -69,12 +69,12 @@ class CMSFieldPositionRPC extends TCMSModelBase
     /**
      * generates a html string with <li> elements for each field of the table.
      *
-     * @param $sTableSQLName - sql name of the table
-     * @param $sRecordID - the id of the record (position field) in the table
-     * @param $sFieldName - the field name of the record (position field) in the table
-     * @param $sRestrictionField - the field name that should be used as restriction
-     * @param $sRestriction - the value to restrict $sRestrictionField to
-     * @param $bCmsFieldConfTable - true if the current table is cms_field_conf table (generates fixed li elements for each tab - so the fields are grouped)
+     * @param string $sTableSQLName - sql name of the table
+     * @param string $sRecordID - the id of the record (position field) in the table
+     * @param string $sFieldName - the field name of the record (position field) in the table
+     * @param string $sRestrictionField - the field name that should be used as restriction
+     * @param string $sRestriction - the value to restrict $sRestrictionField to
+     * @param bool $bCmsFieldConfTable - true if the current table is cms_field_conf table (generates fixed li elements for each tab - so the fields are grouped)
      *
      * @return string - the html construct of the <li> elements
      */
@@ -118,7 +118,7 @@ class CMSFieldPositionRPC extends TCMSModelBase
     /**
      * this function will only be called if the current table of the position field is the cms_field_conf table.
      *
-     * @param $oPositionRow - the record in the position list
+     * @param TCMSRecord $oPositionRow - the record in the position list
      *
      * @return string - fixed <li> html element with the tab name
      */
@@ -147,10 +147,10 @@ class CMSFieldPositionRPC extends TCMSModelBase
      * constructs a list query for a position field in a normal table (not cms_field_conf table)
      * and respects restrictions set in field config or given via url - passed as parameters to the function.
      *
-     * @param $sTableSQLName - sql name of the table
-     * @param $sFieldName - the field name of the record (position field) in the table
-     * @param $sRestrictionField - the field name that should be used as restriction
-     * @param $sRestriction - the value to restrict $sRestrictionField to
+     * @param string $sTableSQLName - sql name of the table
+     * @param string $sFieldName - the field name of the record (position field) in the table
+     * @param string $sRestrictionField - the field name that should be used as restriction
+     * @param string $sRestriction - the value to restrict $sRestrictionField to
      *
      * @return string - list query the any standard table (not cms_field_conf table) with all restrictions
      */
@@ -185,8 +185,8 @@ class CMSFieldPositionRPC extends TCMSModelBase
      * constructs a specific list query for the cms_field_conf table
      * and respects restrictions set in field config or given via url - passed as parameters to the function.
      *
-     * @param $sRestrictionField - the field name that should be used as restriction
-     * @param $sRestriction - the value to restrict $sRestrictionField to
+     * @param string $sRestrictionField - the field name that should be used as restriction
+     * @param string $sRestriction - the value to restrict $sRestrictionField to
      *
      * @return string
      */

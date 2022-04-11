@@ -14,7 +14,7 @@ class TPkgCmsStringUtilities_PathUtils
     /**
      * it will be checked, if the given path stays below its root (eg. foo/../bar is ok, foo/../../bar is not).
      *
-     * @param $path
+     * @param string $path
      *
      * @return bool - will return true, if it is ok, will return false wither if it's not ok, or if the path is absolute
      */
@@ -51,8 +51,8 @@ class TPkgCmsStringUtilities_PathUtils
      * This is useful for servers, which have a subfolder of httpdocs placed somewhere else and linked. in theses cases, doing
      * a check with realpath will fail horribly.
      *
-     * @param $path string - the path to check
-     * @param $alternativePath string - if you don't want to check against document root, you may provide an alternative path here
+     * @param string $path - the path to check
+     * @param string $alternativePath - if you don't want to check against document root, you may provide an alternative path here
      *
      * @return bool
      */
@@ -115,7 +115,7 @@ class TPkgCmsStringUtilities_PathUtils
     /**
      * checks if a path is relative.
      *
-     * @param $string
+     * @param string $string
      *
      * @return bool
      */

@@ -15,11 +15,17 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EmptyRequest extends Request
 {
+    /**
+     * @return null
+     */
     public function getLanguage()
     {
         return null;
     }
 
+    /**
+     * @return null
+     */
     public function getActivePage()
     {
         return null;

@@ -13,8 +13,15 @@ namespace ChameleonSystem\CoreBundle\DatabaseAccessLayer;
 
 class DatabaseAccessLayerCmsMedia extends AbstractDatabaseAccessLayer
 {
+    /**
+     * @var bool
+     */
     private $isLoaded = false;
 
+    /**
+     * @param string $mediaId
+     * @return \TdbCmsMedia
+     */
     public function loadMediaFromId($mediaId)
     {
         $this->loadAllParameters();
@@ -27,6 +34,9 @@ class DatabaseAccessLayerCmsMedia extends AbstractDatabaseAccessLayer
         return \TdbCmsMedia::GetNewInstance($mediaId);
     }
 
+    /**
+     * @return void
+     */
     private function loadAllParameters()
     {
         if (true === $this->isLoaded) {

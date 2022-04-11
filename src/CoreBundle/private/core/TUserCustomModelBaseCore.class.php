@@ -14,6 +14,8 @@ class TUserCustomModelBaseCore extends TUserModelBase
     /**
      * add your custom methods as array to $this->methodCallAllowed here
      * to allow them to be called from web.
+     *
+     * @return void
      */
     protected function DefineInterface()
     {

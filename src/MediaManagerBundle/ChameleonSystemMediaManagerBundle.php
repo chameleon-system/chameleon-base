@@ -22,7 +22,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 class ChameleonSystemMediaManagerBundle extends Bundle
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function build(ContainerBuilder $container)
     {

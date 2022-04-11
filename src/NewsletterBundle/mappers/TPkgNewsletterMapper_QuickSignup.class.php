@@ -43,7 +43,7 @@ class TPkgNewsletterMapper_QuickSignup extends AbstractViewMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
     {

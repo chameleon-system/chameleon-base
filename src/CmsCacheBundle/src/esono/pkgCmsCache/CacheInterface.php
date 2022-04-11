@@ -15,11 +15,15 @@ interface CacheInterface
 {
     /**
      * allows you to disable caching during runtime.
+     *
+     * @return void
      */
     public function disable();
 
     /**
      * enable caching during runtime.
+     *
+     * @return void
      */
     public function enable();
 
@@ -45,6 +49,8 @@ interface CacheInterface
      * @param mixed  $content           - content to be stored
      * @param array  $trigger           - cache trigger array(array('table'=>'','id'=>''),array('table'=>'','id'=>''),...);
      * @param int    $iMaxLiveInSeconds - max age in seconds before the cache content expires - default = 30 days
+     *
+     * @return void
      */
     public function set($key, $content, $trigger, $iMaxLiveInSeconds = null);
 
@@ -59,6 +65,8 @@ interface CacheInterface
 
     /**
      * Clears the whole cache. Operation is permitted even if caching is disabled.
+     *
+     * @return void
      */
     public function clearAll();
 
@@ -67,6 +75,8 @@ interface CacheInterface
      *
      * @param string     $table
      * @param int|string $id
+     *
+     * @return void
      */
     public function callTrigger($table, $id = null);
 

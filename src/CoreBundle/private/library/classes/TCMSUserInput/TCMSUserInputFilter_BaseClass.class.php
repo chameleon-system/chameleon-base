@@ -14,9 +14,9 @@ abstract class TCMSUserInputFilter_BaseClass
     /**
      * run the filter.
      *
-     * @param string|array $sValue
-     *
-     * @return string|array
+     * @template T of string|array<array-key, string>
+     * @param T $sValue
+     * @return T
      */
     public function Filter($sValue)
     {

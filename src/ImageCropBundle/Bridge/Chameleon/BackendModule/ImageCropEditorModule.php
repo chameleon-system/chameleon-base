@@ -16,7 +16,7 @@ use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use ChameleonSystem\Corebundle\Util\UrlUtil;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ImageCrop\DataModel\CmsMediaDataModel;
 use ChameleonSystem\ImageCrop\DataModel\ImageCropDataModel;
 use ChameleonSystem\ImageCrop\DataModel\ImageCropPresetDataModel;
@@ -143,7 +143,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(
         IMapperVisitorRestricted $oVisitor,
@@ -262,6 +262,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @return string|null
+     * @psalm-suppress InvalidReturnStatement - We know that this is string|null here
      */
     private function getPresetSystemName()
     {
@@ -464,6 +465,9 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         return $includes;
     }
 
+    /**
+     * @return void
+     */
     public function getImageFieldInformation()
     {
         $return = [];
@@ -505,6 +509,8 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @param array $returnValues
+     *
+     * @return never
      */
     private function returnAsAjaxError($returnValues)
     {
@@ -516,6 +522,8 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @param array $returnValues
+     *
+     * @return never
      */
     private function returnAsAjaxResponse($returnValues)
     {
@@ -536,6 +544,9 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         $this->methodCallAllowed[] = 'deleteCrop';
     }
 
+    /**
+     * @return never
+     */
     protected function saveCrop()
     {
         $cmsImage = $this->getCmsImage();
@@ -597,6 +608,9 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         );
     }
 
+    /**
+     * @return void
+     */
     protected function deleteCrop()
     {
         $cropId = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_CROP_ID);

@@ -711,7 +711,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
-     * @param $sEditorHeight
+     * @param string $sEditorHeight
      */
     protected function setEditorHeight($sEditorHeight)
     {
@@ -719,7 +719,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
-     * @param $sEditorWidth
+     * @param string $sEditorWidth
      */
     protected function setEditorWidth($sEditorWidth)
     {

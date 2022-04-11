@@ -13,13 +13,20 @@ namespace ChameleonSystem\CoreBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
+/**
+ * @psalm-suppress InvalidReturnStatement, InvalidReturnType
+ * @FIXME Default value of `$content` is an empty array, when everything outside of this class expects `getContent` to return a string.
+ */
 class ResourceCollectionJavaScriptCollectedEvent extends Event implements ResourceCollectionJavaScriptCollectedEventInterface
 {
     /**
-     * @var string
+     * @var array|string
      */
     private $content = array();
 
+    /**
+     * @param string|null $content
+     */
     public function __construct($content = null)
     {
         if (null !== $content) {

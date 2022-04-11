@@ -86,6 +86,8 @@ class DataAccessCmsTree implements DataAccessCmsTreeInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress FalsableReturnStatement
      */
     public function getInvertedNoFollowRulePageIds($cmsTreeId)
     {

@@ -51,7 +51,7 @@ class AutoclassesDatabaseAdapter implements AutoclassesDatabaseAdapterInterface
     /**
      * @param array $all
      *
-     * @return array
+     * @return string[]
      */
     private function getNamesArray(array $all)
     {

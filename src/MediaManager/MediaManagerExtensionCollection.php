@@ -20,6 +20,9 @@ class MediaManagerExtensionCollection
      */
     private $extensions = array();
 
+    /**
+     * @return void
+     */
     public function addExtension(MediaManagerExtensionInterface $mediaManagerExtension)
     {
         $this->extensions[] = $mediaManagerExtension;

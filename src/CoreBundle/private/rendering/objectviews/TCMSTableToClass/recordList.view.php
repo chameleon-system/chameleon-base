@@ -17,8 +17,15 @@ if (is_array($aTableNotes)) {
 $sTempTableName = '_tmp_'.$sTableDBName;
 ?>
 ****************************************************************************/
+
+/**
+ * @extends TCMSRecordList<<?=$sClassName; ?>>
+ */
 class <?=$sAutoClassName; ?>List extends TCMSRecordList
 {
+    /**
+     * @var bool
+     */
     public $bChangedDataChanged = false;
 
     /**
@@ -90,7 +97,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      * if we are at the end of the record, then the function will return false (like after GoToLast)
      * if we are at the start of the record (like after GoToStart), then it will return the first element
      *
-     * @return <?php echo $sClassName."\n"; ?>
+     * @return false|<?php echo $sClassName."\n"; ?>
      */
     public function &Current()
     {
@@ -131,7 +138,7 @@ while ($oField = $oFields->Next()) {
      * factory returning an element for the list
      *
      * @param array $aData
-     * @return TCMSRecord
+     * @return <?=$sClassName; ?>
      */
     protected function &_NewElement(&$aData)
     {

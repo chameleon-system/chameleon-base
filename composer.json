@@ -40,7 +40,8 @@
     "require-dev": {
         "chameleon-system/code-style-config": "dev-master@dev",
         "chameleon-system/sanitycheck": "~7.0.0",
-        "phpunit/phpunit": "~7.0"
+        "phpunit/phpunit": "~7.0",
+        "vimeo/psalm": "^4.22"
     },
     "autoload": {
         "classmap": [
@@ -166,5 +167,8 @@
         "chameleon-system/pkgviewrenderer": "*",
         "chameleon-system/twig-debug-bundle": "*",
         "chameleon-system/update-counter-migration-bundle": "*"
+    },
+    "scripts": {
+        "analyze": "psalm --output-format=compact"
     }
 }

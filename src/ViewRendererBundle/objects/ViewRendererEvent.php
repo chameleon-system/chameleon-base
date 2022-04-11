@@ -17,16 +17,24 @@ class ViewRendererEvent extends Event
 {
     const EVENT_POST_RENDER = 'chameleon_system.viewrenderer.post_render';
 
+    /**
+     * @var string
+     */
     private $content;
     /**
-     * @var array
+     * @var class-string<\IViewMapper>[]
      */
     private $mappers;
     /**
-     * @var
+     * @var string
      */
     private $viewName;
 
+    /**
+     * @param string $content
+     * @param class-string<\IViewMapper>[] $mappers
+     * @param string $viewName
+     */
     public function __construct($content, array $mappers, $viewName)
     {
         $this->content = $content;
@@ -35,7 +43,7 @@ class ViewRendererEvent extends Event
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getContent()
     {
@@ -43,7 +51,9 @@ class ViewRendererEvent extends Event
     }
 
     /**
-     * @param mixed $content
+     * @param string $content
+     *
+     * @return void
      */
     public function setContent($content)
     {
@@ -51,7 +61,7 @@ class ViewRendererEvent extends Event
     }
 
     /**
-     * @return array
+     * @return class-string<\IViewMapper>[]
      */
     public function getMappers()
     {
@@ -59,7 +69,7 @@ class ViewRendererEvent extends Event
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getViewName()
     {

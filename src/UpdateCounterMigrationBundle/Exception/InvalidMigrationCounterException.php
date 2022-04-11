@@ -16,10 +16,16 @@ use Exception;
 class InvalidMigrationCounterException extends CounterMigrationException
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $invalidCounters;
 
+    /**
+     * @param string $message
+     * @param int $code
+     * @param Exception|null $previous
+     * @param string[] $invalidCounters
+     */
     public function __construct($message = '', $code = 0, Exception $previous = null, array $invalidCounters = array())
     {
         parent::__construct($message, $code, $previous);
@@ -27,7 +33,7 @@ class InvalidMigrationCounterException extends CounterMigrationException
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getInvalidCounters()
     {

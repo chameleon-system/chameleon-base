@@ -26,7 +26,8 @@ interface PortalAndLanguageAwareRouterInterface extends RouterInterface
      *                                           it via RoutingUtilInterface::getHostRequirementPlaceholder()).
      * @param TdbCmsPortal|null   $portal
      * @param TdbCmsLanguage|null $language
-     * @param bool|string         $referenceType
+     * @param int                 $referenceType
+     * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
      *

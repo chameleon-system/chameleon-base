@@ -1498,7 +1498,7 @@ class TTools
      *
      * @static
      *
-     * @param array $aVariables
+     * @param array<string, string>|null $aVariables
      * @param bool  $bEscapeViaOutHTML - set to true, if you want to pass each value through TGlobal::OutHTML
      *
      * @return array|null
@@ -1508,7 +1508,9 @@ class TTools
      */
     public static function AddStaticPageVariables($aVariables, $bEscapeViaOutHTML = false)
     {
+        /** @var array<string, string> $aPageVars */
         static $aPageVars = array();
+
         if (is_array($aVariables)) {
             $responseVariableReplacer = self::getResponseVariableReplacer();
             foreach ($aVariables as $sKey => $value) {
@@ -1586,7 +1588,7 @@ class TTools
      *
      * @static
      *
-     * @param $string
+     * @param string $string
      * @param int    $format
      * @param string $charlist
      *
@@ -1766,7 +1768,7 @@ class TTools
      *
      * @static
      *
-     * @param $aArray
+     * @param array $aArray
      *
      * @return mixed
      */
@@ -1783,8 +1785,8 @@ class TTools
      *
      * @static
      *
-     * @param $a
-     * @param $b
+     * @param array{weight: numeric} $a
+     * @param array{weight: numeric} $b
      *
      * @return int
      */
@@ -1800,7 +1802,7 @@ class TTools
     /**
      * checks string for GUID pattern like "A98C5A1E-A742-4808-96FA-6F409E799937".
      *
-     * @param $sID
+     * @param string $sID
      *
      * @return bool
      */

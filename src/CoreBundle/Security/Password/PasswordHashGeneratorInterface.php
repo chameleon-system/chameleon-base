@@ -24,6 +24,8 @@ interface PasswordHashGeneratorInterface
      * Returns a hashed password.
      *
      * @param string $plainPassword
+     *
+     * @return string
      */
     public function hash($plainPassword);
 

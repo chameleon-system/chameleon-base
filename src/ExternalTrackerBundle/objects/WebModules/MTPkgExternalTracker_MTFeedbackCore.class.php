@@ -13,6 +13,8 @@ class MTPkgExternalTracker_MTFeedbackCore extends MTPkgExternalTracker_MTFeedbac
 {
     /**
      * hook to do things after the email was send successfully (e.g. save data to db).
+     *
+     * @return void
      */
     public function AfterSendEMailSuccess()
     {

@@ -11,11 +11,18 @@
 
 class TCMSCronjob_ClearAtomicLocks extends TCMSCronJob
 {
+
+    /**
+     * @return void
+     */
     public function _ExecuteCron()
     {
         $this->clearTable();
     }
 
+    /**
+     * @return void
+     */
     private function clearTable()
     {
         $sQuery = 'TRUNCATE TABLE `data_atomic_lock`';

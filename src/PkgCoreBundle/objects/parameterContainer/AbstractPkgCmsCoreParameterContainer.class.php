@@ -11,13 +11,20 @@
 
 abstract class AbstractPkgCmsCoreParameterContainer
 {
+    /**
+     * @var TPkgCmsCoreParameterContainerParameterDefinition[]
+     */
     private $aRequirements = array();
+
+    /**
+     * @var bool
+     */
     private $requirementsChecked = false;
 
     /**
      * use $this->addRequirement to add the requirements of the container.
      *
-     * @return
+     * @return void
      */
     abstract protected function defineRequirements();
 
@@ -33,6 +40,10 @@ abstract class AbstractPkgCmsCoreParameterContainer
         return $this;
     }
 
+    /**
+     * @return void
+     * @throws TPkgCmsException_Log
+     */
     final public function checkRequirements()
     {
         $this->defineRequirements();
@@ -52,6 +63,11 @@ abstract class AbstractPkgCmsCoreParameterContainer
         $this->requirementsChecked = true;
     }
 
+    /**
+     * @param string $sPropertyName
+     * @return mixed
+     * @throws TPkgCmsException_Log
+     */
     protected function get($sPropertyName)
     {
         if (false === $this->requirementsChecked) {

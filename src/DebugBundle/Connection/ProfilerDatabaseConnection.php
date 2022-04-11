@@ -17,18 +17,35 @@ use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query;
 
+/**
+ * @FIXME This class has a lot of incorrect types and other issues.
+ * @psalm-suppress InvalidPropertyAssignmentValue, ConstructorSignatureMismatch, MethodSignatureMismatch
+ */
 class ProfilerDatabaseConnection extends Connection
 {
     /**
-     * @var \Doctrine\DBAL\Driver\Connection
+     * @var Connection
      */
     private $connection;
 
+    /**
+     * @var bool
+     */
     private $backtraceEnabled = false;
 
+    /**
+     * @var int
+     */
     private $backtraceLimit = 10;
 
+    /**
+     * @var array{ 0: string, 1: string, 2: array, 3: float }[]
+     */
     private $queries = array();
+
+    /**
+     * @var numeric
+     */
     private $queryTimer = 0;
 
     public function __construct(Connection $connection)
@@ -36,6 +53,11 @@ class ProfilerDatabaseConnection extends Connection
         $this->connection = $connection;
     }
 
+    /**
+     * @param float $time
+     *
+     * @return void
+     */
     public function addToQueryTimer($time)
     {
         $this->queryTimer += $time;
@@ -315,11 +337,19 @@ class ProfilerDatabaseConnection extends Connection
         return $this->connection->lastInsertId($seqName);
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @FIXME Parent method returns `mixed`, we should add a `return` statement here.
+     */
     public function transactional(Closure $func)
     {
         $this->connection->transactional($func);
     }
 
+    /**
+     * @psalm-suppress InvalidReturnStatement
+     * @FIXME This is a `void` method, it should not return
+     */
     public function setNestTransactionsWithSavepoints($nestTransactionsWithSavepoints)
     {
         return $this->connection->setNestTransactionsWithSavepoints(
@@ -332,16 +362,28 @@ class ProfilerDatabaseConnection extends Connection
         return $this->connection->getNestTransactionsWithSavepoints();
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @FIXME Parent method returns `mixed`, we should add a `return` statement here.
+     */
     public function beginTransaction()
     {
         $this->connection->beginTransaction();
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @FIXME Parent method returns `mixed`, we should add a `return` statement here.
+     */
     public function commit()
     {
         $this->connection->commit();
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @FIXME Parent method returns `mixed`, we should add a `return` statement here.
+     */
     public function rollBack()
     {
         $this->connection->rollBack();
@@ -402,9 +444,17 @@ class ProfilerDatabaseConnection extends Connection
         return $this->connection->createQueryBuilder();
     }
 
-    /* This function will return the name string of the function that called $function. To return the
-        caller of your function, either call get_caller(), or get_caller(__FUNCTION__).
+    /*
     */
+    /**
+     * This function will return the name string of the function that called $function. To return the
+     * caller of your function, either call get_caller(), or get_caller(__FUNCTION__).
+     *
+     * @param null|string $function
+     * @param null|array $use_stack
+     *
+     * @return string
+     */
     public function get_caller($function = null, $use_stack = null)
     {
         if (is_array($use_stack)) {
@@ -431,6 +481,9 @@ class ProfilerDatabaseConnection extends Connection
         return 'unknown';
     }
 
+    /**
+     * @return array<string, mixed>[]
+     */
     protected function getBacktraceForQuery()
     {
         $backtrace = array();
@@ -450,7 +503,7 @@ class ProfilerDatabaseConnection extends Connection
     }
 
     /**
-     * @return int
+     * @return numeric
      */
     public function getQueryTimer()
     {
@@ -459,6 +512,8 @@ class ProfilerDatabaseConnection extends Connection
 
     /**
      * @param bool $backtraceEnabled
+     *
+     * @return void
      */
     public function setBacktraceEnabled($backtraceEnabled)
     {
@@ -467,6 +522,8 @@ class ProfilerDatabaseConnection extends Connection
 
     /**
      * @param int $backtraceLimit
+     *
+     * @return void
      */
     public function setBacktraceLimit($backtraceLimit)
     {

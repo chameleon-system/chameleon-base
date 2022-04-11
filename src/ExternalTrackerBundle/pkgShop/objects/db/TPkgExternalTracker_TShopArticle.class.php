@@ -13,6 +13,8 @@ class TPkgExternalTracker_TShopArticle extends TPkgExternalTracker_TShopArticleA
 {
     /**
      * increase the product view counter by one.
+     *
+     * @return void
      */
     public function UpdateProductViewCount()
     {

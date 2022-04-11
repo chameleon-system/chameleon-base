@@ -28,8 +28,8 @@ class TCmsConfigImagemagick extends TCmsConfigImagemagickAutoParent
      *
      * @static
      *
-     * @param  $iWidth
-     * @param  $iHeight
+     * @param int $iWidth
+     * @param int $iHeight
      *
      * @return TdbCmsConfigImagemagick
      */

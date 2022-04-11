@@ -18,6 +18,9 @@ class chameleon
      */
     private static $requestType;
 
+    /**
+     * @return void
+     */
     public function boot()
     {
         if (!array_key_exists('HTTP_HOST', $_SERVER)) {
@@ -65,6 +68,9 @@ class chameleon
         }
     }
 
+    /**
+     * @return void
+     */
     private function InitAutoloader()
     {
         require_once realpath(PATH_PROJECT_BASE.'/app/autoload.php');

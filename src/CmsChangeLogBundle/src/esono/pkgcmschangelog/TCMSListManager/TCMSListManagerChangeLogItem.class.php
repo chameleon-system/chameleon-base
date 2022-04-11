@@ -13,6 +13,8 @@ class TCMSListManagerChangeLogItem extends TCMSListManagerFullGroupTable
 {
     /**
      * add additional fields.
+     *
+     * @return void
      */
     public function AddFields()
     {
@@ -31,11 +33,23 @@ class TCMSListManagerChangeLogItem extends TCMSListManagerFullGroupTable
         $this->tableObj->AddColumn('value_new', 'left', array($this, 'CallbackResolveFieldValue'), $jsParas, 1);
     }
 
+    /**
+     * @param string $cellValue
+     * @param array<string, mixed> $row
+     * @param string $name
+     * @return string
+     */
     public function CallbackResolveFieldName($cellValue, $row, $name)
     {
         return TCMSChangeLogFormatter::formatFieldName($cellValue);
     }
 
+    /**
+     * @param string $cellValue
+     * @param array<string, mixed> $row
+     * @param string $name
+     * @return string
+     */
     public function CallbackResolveFieldValue($cellValue, $row, $name)
     {
         return TCMSChangeLogFormatter::formatFieldValue($row['cms_field_conf'], $cellValue);

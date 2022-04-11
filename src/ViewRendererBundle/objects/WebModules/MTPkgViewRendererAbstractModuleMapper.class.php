@@ -22,7 +22,7 @@ abstract class MTPkgViewRendererAbstractModuleMapper extends TUserCustomModelBas
     }
 
     /**
-     * {@inheritdoc}
+     * @return void
      */
     final public function ClearCache()
     {
@@ -37,7 +37,11 @@ abstract class MTPkgViewRendererAbstractModuleMapper extends TUserCustomModelBas
     }
 
     /**
-     * {@inheritdoc}
+     * @param array  $aCacheTableInfos
+     * @param string $sTableName
+     * @param string $sRecordId
+     *
+     * @return array
      */
     final public function SetCacheTableInfos($aCacheTableInfos = array(), $sTableName = '', $sRecordId = '')
     {

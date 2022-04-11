@@ -74,6 +74,10 @@ class TreeService implements TreeServiceInterface
             }
         }
 
+        /**
+         * @psalm-suppress InvalidArgument
+         * @FIXME returning `null` from a sorting method is not allowed, should probably return `0`.
+         */
         usort($children, function (TdbCmsTree $a, TdbCmsTree $b) {
             if ($a->fieldEntrySort === $b->fieldEntrySort) {
                 return null;

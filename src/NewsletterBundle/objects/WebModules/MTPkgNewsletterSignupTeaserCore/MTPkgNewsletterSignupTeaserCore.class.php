@@ -18,7 +18,7 @@ use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 class MTPkgNewsletterSignupTeaserCore extends TUserCustomModelBase
 {
     /**
-     * @var TdbPkgNewsletterModuleSignupTeaser
+     * @var TdbPkgNewsletterModuleSignupTeaser|null|false
      */
     private $oModuleConfig = null;
 
@@ -42,7 +42,7 @@ class MTPkgNewsletterSignupTeaserCore extends TUserCustomModelBase
     }
 
     /**
-     * @return TdbPkgNewsletterModuleSignupTeaser
+     * @return TdbPkgNewsletterModuleSignupTeaser|false
      */
     protected function GetModuleConfig()
     {
@@ -57,7 +57,7 @@ class MTPkgNewsletterSignupTeaserCore extends TUserCustomModelBase
     }
 
     /**
-     * @return TdbPkgNewsletterModuleSignupConfig
+     * @return TdbPkgNewsletterModuleSignupConfig|null
      */
     protected function GetModuleTargetConfig()
     {

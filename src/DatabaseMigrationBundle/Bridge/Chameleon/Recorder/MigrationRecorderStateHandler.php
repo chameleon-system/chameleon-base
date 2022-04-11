@@ -58,6 +58,8 @@ class MigrationRecorderStateHandler
     /**
      * @throws AccessDeniedException
      * @throws \LogicException
+     *
+     * @return void
      */
     public function toggleDatabaseLogging()
     {
@@ -69,6 +71,8 @@ class MigrationRecorderStateHandler
      *
      * @throws AccessDeniedException
      * @throws \LogicException
+     *
+     * @return void
      */
     private function setDatabaseLoggingActive($isActive)
     {
@@ -100,6 +104,8 @@ class MigrationRecorderStateHandler
      * @param string $buildNumber
      *
      * @throws \LogicException
+     *
+     * @return void
      */
     public function setCurrentBuildNumber($buildNumber)
     {

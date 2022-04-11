@@ -229,7 +229,7 @@ class TCMSFieldOption extends TCMSField
     /**
      * creates the translation key under which the translation of the option may potentially be found.
      *
-     * @param $value
+     * @param string $value
      *
      * @return string
      */

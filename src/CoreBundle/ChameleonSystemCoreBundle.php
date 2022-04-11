@@ -26,7 +26,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 class ChameleonSystemCoreBundle extends Bundle
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function build(ContainerBuilder $container)
     {

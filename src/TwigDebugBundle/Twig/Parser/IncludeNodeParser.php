@@ -17,6 +17,7 @@ class IncludeNodeParser extends \Twig_TokenParser_Include
 {
     /**
      * {@inheritdoc}
+     * @psalm-suppress MethodSignatureMismatch - `Twig_Token` is a subtype of `Token`
      */
     public function parse(\Twig_Token $token)
     {

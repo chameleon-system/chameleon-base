@@ -18,7 +18,7 @@ interface EntityListLengthCalculationStrategyInterface
     public function __construct(Connection $databaseConnection);
 
     /**
-     * @param $normalizedQuery - should be all caps with not \n, \r or \t
+     * @param string $normalizedQuery - should be all caps with not \n, \r or \t
      *
      * @return bool
      */

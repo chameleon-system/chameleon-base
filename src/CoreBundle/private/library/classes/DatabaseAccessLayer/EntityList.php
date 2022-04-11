@@ -15,15 +15,31 @@ use ChameleonSystem\core\DatabaseAccessLayer\LengthCalculationStrategy\EntityLis
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Statement;
 
+/**
+ * @template T
+ * @implements EntityListInterface<T>
+ */
 class EntityList implements EntityListInterface
 {
     /**
      * @var Connection
      */
     private $databaseConnection;
+
+    /**
+     * @var T[]
+     */
     private $entityList = array();
+
+    /**
+     * @var int
+     */
     private $entityIndex = 0;
-    private $query = null;
+
+    /**
+     * @var string
+     */
+    private $query;
 
     /**
      * @var Statement|null
@@ -46,6 +62,10 @@ class EntityList implements EntityListInterface
      * @var EntityListPager
      */
     private $pager;
+
+    /**
+     * @var int|null
+     */
     private $maxNumberOfResults = null;
 
     /**
@@ -58,7 +78,7 @@ class EntityList implements EntityListInterface
     private $queryParameterTypes = null;
 
     /**
-     * @param $query
+     * @param string     $query
      * @param array      $queryParameters     - same as the parameters parameter of the Connection
      * @param array      $queryParameterTypes - same as the parameters types of the Connection
      * @param Connection $databaseConnection
@@ -96,7 +116,7 @@ class EntityList implements EntityListInterface
     }
 
     /**
-     * @return array|false
+     * @return T|false
      */
     public function current()
     {
@@ -114,6 +134,7 @@ class EntityList implements EntityListInterface
 
     /**
      * Move forward to next element.
+     * {@inheritDoc}
      */
     public function next()
     {
@@ -124,6 +145,9 @@ class EntityList implements EntityListInterface
         $this->current(); // make sure the item is fetched and stored
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function previous()
     {
         if ($this->entityIndex < 0) {
@@ -133,7 +157,7 @@ class EntityList implements EntityListInterface
     }
 
     /**
-     * @return int
+     * {@inheritDoc}
      */
     public function key()
     {
@@ -141,7 +165,7 @@ class EntityList implements EntityListInterface
     }
 
     /**
-     * @return bool
+     * {@inheritDoc}
      */
     public function valid()
     {
@@ -150,6 +174,9 @@ class EntityList implements EntityListInterface
         return false !== $item;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function rewind()
     {
         $this->entityIndex = 0;
@@ -157,8 +184,7 @@ class EntityList implements EntityListInterface
 
     /**
      * returns an exact count of the number of records matching the query.
-     *
-     * @return int
+     * {@inheritDoc}
      */
     public function count()
     {
@@ -189,6 +215,10 @@ class EntityList implements EntityListInterface
         return $this->correctCountUsingMaxNumberOfResultsAllowed($this->entityCount);
     }
 
+    /**
+     * @param int $count
+     * @return int
+     */
     private function correctCountUsingMaxNumberOfResultsAllowed($count)
     {
         if (null === $this->maxNumberOfResults) {
@@ -200,6 +230,7 @@ class EntityList implements EntityListInterface
 
     /**
      * estimates the number of records found. If a count is already known, it will return that instead.
+     * {@inheritDoc}
      */
     public function estimateCount()
     {
@@ -218,11 +249,19 @@ class EntityList implements EntityListInterface
         return $this->correctCountUsingMaxNumberOfResultsAllowed($this->entityCountEstimate);
     }
 
+    /**
+     * @param string $query
+     * @return string
+     */
     private function getNormalizeQuery($query)
     {
         return str_replace(array("\n", "\n\r", "\t"), ' ', mb_strtoupper($query));
     }
 
+    /**
+     * @param string $query
+     * @return string
+     */
     private function removeOrderByFromQuery($query)
     {
         $queryModifier = $this->getQueryModifierOrderByService();
@@ -238,6 +277,9 @@ class EntityList implements EntityListInterface
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.query_modifier.order_by');
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setPageSize($pageSize)
     {
         $this->pager = $this->getEntityListPager($pageSize);
@@ -246,6 +288,9 @@ class EntityList implements EntityListInterface
         return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setCurrentPage($currentPage)
     {
         $this->currentPage = $currentPage;
@@ -254,6 +299,9 @@ class EntityList implements EntityListInterface
         return $this;
     }
 
+    /**
+     * @return void
+     */
     private function resetList()
     {
         $this->databaseEntityListStatement = null;
@@ -261,12 +309,19 @@ class EntityList implements EntityListInterface
         $this->entityIndex = 0;
     }
 
+    /**
+     * @return void
+     */
     private function resetListCounts()
     {
         $this->entityCount = null;
         $this->entityCountEstimate = null;
     }
 
+    /**
+     * @param string $query
+     * @return string
+     */
     private function getExecutableQuery($query)
     {
         if (null !== $this->pager) {
@@ -280,6 +335,10 @@ class EntityList implements EntityListInterface
         return $query;
     }
 
+    /**
+     * @param int $position
+     * @return void
+     */
     public function seek($position)
     {
         // backwards seek
@@ -303,6 +362,9 @@ class EntityList implements EntityListInterface
         return $this->entityIndex;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function end()
     {
         if ($this->entityIndex < 0) {
@@ -313,6 +375,9 @@ class EntityList implements EntityListInterface
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setQuery($query)
     {
         $this->query = $query;
@@ -324,6 +389,7 @@ class EntityList implements EntityListInterface
      * limit results to - pass null to remove the restriction.
      *
      * @param int $maxNumberOfResults
+     * @return void
      */
     public function setMaxAllowedResults($maxNumberOfResults)
     {
@@ -332,6 +398,10 @@ class EntityList implements EntityListInterface
         $this->resetListCounts();
     }
 
+    /**
+     * @param string $query
+     * @return string
+     */
     private function addMaxNumberOfResultsRestrictionToQuery($query)
     {
         $queryModifier = new QueryModifierRestrictNumberOfResults($query);
@@ -340,8 +410,6 @@ class EntityList implements EntityListInterface
     }
 
     /**
-     * @param $pageSize
-     *
      * @return EntityListPagerInterface
      */
     protected function getEntityListPager($pageSize)
@@ -349,16 +417,25 @@ class EntityList implements EntityListInterface
         return new EntityListPager($pageSize);
     }
 
+    /**
+     * @return string
+     */
     protected function getQuery()
     {
         return $this->query;
     }
 
+    /**
+     * @return array
+     */
     protected function getQueryParameters()
     {
         return (null === $this->queryParameters) ? array() : $this->queryParameters;
     }
 
+    /**
+     * @return array
+     */
     protected function getQueryParametersTypes()
     {
         return (null === $this->queryParameterTypes) ? array() : $this->queryParameterTypes;

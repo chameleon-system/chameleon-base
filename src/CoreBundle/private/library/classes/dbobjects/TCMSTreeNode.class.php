@@ -56,7 +56,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
     }
 
     /**
-     * @param $includeHidden - also count hidden menuitems
+     * @param bool $includeHidden - also count hidden menuitems
      *
      * @return int
      */
@@ -540,7 +540,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
     /**
      * returns the previous node of the current on the same treelevel or null.
      *
-     * @param $bIncludeHidden - also check hidden nodes
+     * @param bool $bIncludeHidden - also check hidden nodes
      *
      * @return TCMSTreeNode|null
      */
@@ -566,7 +566,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
     /**
      * returns the next node of the current on the same treelevel or null.
      *
-     * @param $bIncludeHidden - also check hidden nodes
+     * @param bool $bIncludeHidden - also check hidden nodes
      *
      * @return TCMSTreeNode
      */

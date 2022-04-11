@@ -36,9 +36,9 @@ interface ResponseVariableReplacerInterface
      * Only public properties of an object will be processed.
      * Independent from defined variables, the method will also inject the authenticity token into the content.
      *
-     * @param object|array|string $content
-     *
-     * @return object|array|string
+     * @template T of \stdClass|array|string
+     * @param T $content
+     * @return T
      *
      * @throws TokenInjectionFailedException
      */
