@@ -20,7 +20,7 @@ use ChameleonSystem\CoreBundle\UniversalUploader\Library\UploaderPostHandlerServ
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
 {

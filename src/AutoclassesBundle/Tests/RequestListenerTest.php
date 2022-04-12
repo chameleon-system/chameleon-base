@@ -14,12 +14,15 @@ namespace ChameleonSystem\AutoclassesBundle\Tests;
 use ChameleonSystem\AutoclassesBundle\Listener\RequestListener;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class RequestListenerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @test
      */

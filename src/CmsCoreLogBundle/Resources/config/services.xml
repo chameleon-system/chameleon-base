@@ -55,7 +55,7 @@
             </call>
         </service>
 
-        <service id="cmsPkgCore.logChannel.standard" class="TPkgCmsCoreLog">
+        <service id="cmsPkgCore.logChannel.standard" class="TPkgCmsCoreLog" public="true">
             <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
             <argument type="service" id="logger"/>
         </service>
@@ -114,7 +114,7 @@
             </call>
         </service>
 
-        <service id="cmsPkgCore.logChannel.cronjobs" class="TPkgCmsCoreLog">
+        <service id="cmsPkgCore.logChannel.cronjobs" class="TPkgCmsCoreLog" public="true">
             <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
             <argument type="service" id="monolog.logger.cronjob"/>
         </service>

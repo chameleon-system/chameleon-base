@@ -24,8 +24,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('chameleon_system_media_manager');
+        $treeBuilder = new TreeBuilder('chameleon_system_media_manager');
+        $root = $treeBuilder->getRootNode();
         // @formatter:off
 
         $root

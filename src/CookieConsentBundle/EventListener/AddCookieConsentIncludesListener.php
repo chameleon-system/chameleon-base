@@ -68,15 +68,15 @@ class AddCookieConsentIncludesListener
     private $systemPageService;
 
     /**
-     * @param string                      $position
-     * @param string                      $theme
-     * @param string                      $bgColor
-     * @param string                      $buttonBgColor
-     * @param string                      $buttonTextColor
-     * @param string                      $privacyPolicySystemPageName
+     * @param string $position
+     * @param string $theme
+     * @param string $bgColor
+     * @param string $buttonBgColor
+     * @param string $buttonTextColor
+     * @param string $privacyPolicySystemPageName
      * @param RequestInfoServiceInterface $requestInfoService
-     * @param \Twig_Environment           $twig
-     * @param SystemPageServiceInterface  $systemPageService
+     * @param Environment $twig
+     * @param SystemPageServiceInterface $systemPageService
      */
     public function __construct(
         $position,
@@ -86,7 +86,7 @@ class AddCookieConsentIncludesListener
         $buttonTextColor,
         $privacyPolicySystemPageName,
         RequestInfoServiceInterface $requestInfoService,
-        \Twig_Environment $twig,
+        Environment $twig,
         SystemPageServiceInterface $systemPageService
     ) {
         $this->position = $position;

@@ -8,6 +8,7 @@ use ChameleonSystem\CoreBundle\RequestState\RequestStateHashProvider;
 use ChameleonSystem\CoreBundle\Util\HashInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class RequestStateHashProviderTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var RequestStateHashProvider
      */
@@ -52,7 +55,7 @@ class RequestStateHashProviderTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockHashArray = $this->prophesize(HashInterface::class);
         $this->mockHashArray->hash32(Argument::any())->willReturn('fake-hash');

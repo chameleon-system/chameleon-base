@@ -15,16 +15,19 @@ use ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface;
 use ChameleonSystem\CoreBundle\EventListener\CaseInsensitivePortalExceptionListener;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class CaseInsensitivePortalExceptionListenerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var CaseInsensitivePortalExceptionListener
      */
@@ -34,7 +37,7 @@ class CaseInsensitivePortalExceptionListenerTest extends TestCase
      */
     private $cmsPortalDomainsDataAccessMock;
     /**
-     * @var GetResponseForExceptionEvent
+     * @var ExceptionEvent
      */
     private $event;
     /**
@@ -42,7 +45,7 @@ class CaseInsensitivePortalExceptionListenerTest extends TestCase
      */
     private $request;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->subject = null;
@@ -147,7 +150,7 @@ class CaseInsensitivePortalExceptionListenerTest extends TestCase
     private function whenOnKernelExceptionIsCalled(\Exception $exception): void
     {
         $kernel = $this->prophesize(KernelInterface::class);
-        $this->event = new GetResponseForExceptionEvent($kernel->reveal(), $this->request->reveal(), 1, $exception);
+        $this->event = new ExceptionEvent($kernel->reveal(), $this->request->reveal(), 1, $exception);
         $this->subject->onKernelException($this->event);
     }
 

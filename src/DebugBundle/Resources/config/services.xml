@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="chameleon_system_debug.debug_test_session_locking_controller" class="ChameleonSystem\DebugBundle\Controller\DebugTestSessionLockingController">
+        <service id="chameleon_system_debug.debug_test_session_locking_controller" class="ChameleonSystem\DebugBundle\Controller\DebugTestSessionLockingController" public="true">
             <argument type="service" id="session" />
             <argument type="service" id="router" />
         </service>

@@ -18,7 +18,7 @@ use ChameleonSystem\MediaManager\MediaItemChainUsageFinder;
 use IMapperCacheTriggerRestricted;
 use IMapperRequirementsRestricted;
 use IMapperVisitorRestricted;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MediaManagerMediaItemUsagesMapper extends AbstractViewMapper
 {

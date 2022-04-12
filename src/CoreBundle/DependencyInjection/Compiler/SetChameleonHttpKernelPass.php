@@ -24,5 +24,6 @@ class SetChameleonHttpKernelPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $container->setAlias('http_kernel', 'chameleon_system_core.http_kernel');
+        $container->getAlias('http_kernel')->setPublic(true);
     }
 }

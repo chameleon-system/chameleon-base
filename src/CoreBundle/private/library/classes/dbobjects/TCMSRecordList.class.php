@@ -11,6 +11,7 @@
 
 use ChameleonSystem\core\DatabaseAccessLayer\EntityList;
 use ChameleonSystem\core\DatabaseAccessLayer\QueryModifierOrderByInterface;
+use ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use Doctrine\DBAL\Connection;
 
@@ -23,6 +24,8 @@ use Doctrine\DBAL\Connection;
  */
 class TCMSRecordList extends TIterator
 {
+    use NamedConstructorSupport;
+
     /**
      * class name used for each record.
      *
@@ -333,15 +336,22 @@ class TCMSRecordList extends TIterator
      * @param string $sTableName
      * @param string $sQuery
      * @param string $sLanguageId
-     *
-     * @return TCMSRecordList
      */
-    public function TCMSRecordList($sTableObject = 'TCMSRecord', $sTableName = null, $sQuery = null, $sLanguageId = null)
+    public function __construct($sTableObject = 'TCMSRecord', $sTableName = null, $sQuery = null, $sLanguageId = null)
     {
         $this->sTableObject = $sTableObject;
         $this->sTableName = $sTableName;
         $this->SetLanguage($sLanguageId);
         $this->sQuery = $sQuery;
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSRecordList()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**

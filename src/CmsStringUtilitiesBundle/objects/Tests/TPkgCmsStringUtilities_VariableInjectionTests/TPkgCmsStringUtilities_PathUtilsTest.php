@@ -13,13 +13,13 @@ use PHPUnit\Framework\TestCase;
 
 class TPkgCmsStringUtilities_PathUtilsTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $_SERVER['DOCUMENT_ROOT'] = '/my/documentroot';
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $_SERVER['DOCUMENT_ROOT'] = null;

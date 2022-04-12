@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
@@ -28,6 +29,8 @@ use Doctrine\DBAL\Driver\Statement;
  */
 class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 {
+    use NamedConstructorSupport;
+
     /**
      * name of the table.
      *
@@ -139,7 +142,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * @param string $id
      * @param string $iLanguageId
      */
-    public function TCMSRecord($table = null, $id = null, $iLanguageId = null)
+    public function __construct($table = null, $id = null, $iLanguageId = null)
     {
         if (null !== $table) {
             $this->table = $table;
@@ -161,6 +164,15 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         if (null !== $this->id) {
             $this->Load($this->id);
         }
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSRecord()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**
@@ -2244,12 +2256,12 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         return array($tdbClassName, $cellFormattingFunctionName);
     }
 
-    public function callBackUuid(string $id)
+    public static function callBackUuid(string $id)
     {
         return '<span title="'.TGlobal::OutHTML($id).'"><i class="fas fa-fingerprint"></i> '.self::getShortUuid($id).'</span>';
     }
 
-    protected function getShortUuid(string $uuid)
+    protected static function getShortUuid(string $uuid)
     {
         if (strlen($uuid) > 8) {
             return substr($uuid, 0, 8);

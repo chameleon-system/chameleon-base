@@ -17,7 +17,7 @@ use IMapperCacheTriggerRestricted;
 use IMapperRequirementsRestricted;
 use IMapperVisitorRestricted;
 use InvalidArgumentException;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MediaManagerPageSizeMapper extends AbstractViewMapper
 {

@@ -477,7 +477,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     private function dispatchJSMinifyEvent($jsContent)
     {
         $event = new ResourceCollectionJavaScriptCollectedEvent($jsContent);
-        $event = $this->eventDispatcher->dispatch(CoreEvents::GLOBAL_RESOURCE_COLLECTION_COLLECTED_JAVASCRIPT, $event);
+        $event = $this->eventDispatcher->dispatch($event, CoreEvents::GLOBAL_RESOURCE_COLLECTION_COLLECTED_JAVASCRIPT);
 
         return $event->getContent();
     }

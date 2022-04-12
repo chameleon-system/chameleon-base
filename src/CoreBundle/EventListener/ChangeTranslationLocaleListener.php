@@ -12,8 +12,12 @@
 namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\Event\LocaleChangedEvent;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @psalm-suppress UndefinedInterfaceMethod
+ * @FIXME This translator uses methods that are exclusive to `Symfony\Component\Translation\TranslatorInterface` (`setLocale`) but uses `Symfony\Contracts\Translation\TranslatorInterface` for `$delegate`
+ */
 class ChangeTranslationLocaleListener
 {
     /**

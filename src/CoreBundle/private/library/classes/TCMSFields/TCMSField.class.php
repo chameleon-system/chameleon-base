@@ -16,7 +16,7 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TCMSField implements TCMSFieldVisitableInterface
 {
