@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version: [ '7.4', '8.0', '8.1' ]
+        php-version: [ '7.4', '8.0' ]
     env:
       # Branch / Tag of chameleon-system/chameleon-system and chameleon-system/chameleon-resources
       # that will be used to setup this project
