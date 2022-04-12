@@ -6,6 +6,7 @@ on:
       - 'master'
       - '[0-9]+.[0-9]+.x'
       - '770-github-actions'
+    tags: [ '*' ]
   pull_request:
     types: [ opened, synchronize, reopened ]
 
@@ -15,8 +16,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version: [ '7.4' ]
-#        php-version: [ '7.1', '7.2', '7.3', '7.4' ]
+        php-version: [ '7.1', '7.2', '7.3', '7.4' ]
     env:
       # Branch / Tag of chameleon-system/chameleon-system and chameleon-system/chameleon-resources
       # that will be used to setup this project
