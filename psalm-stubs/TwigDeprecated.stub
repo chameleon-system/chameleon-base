@@ -24,3 +24,7 @@ interface Twig_NodeOutputInterface extends Twig\Node\NodeOutputInterface
 class Twig_Token extends Twig\Token
 {
 }
+
+class Twig_TokenParser_Include extends Twig\TokenParser\IncludeTokenParser
+{
+}
