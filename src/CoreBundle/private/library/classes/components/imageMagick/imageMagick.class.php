@@ -501,7 +501,7 @@ class imageMagick
                         $aParameter[] = '-background white -flatten';
                     }
                 }
-                $command = $this->sImageMagickDir.'/convert '.$sImParamStrip.' -quality '.escapeshellarg($iQuality).' -geometry '.escapeshellarg($iWidth.'x'.$iHeight).' '.implode(' ', $aParameter).' '.escapeshellarg($this->oSourceFile->sPath).' '.escapeshellarg($this->sTempDir.'/'.$this->sTempFileName);
+                $command = $this->sImageMagickDir.'/convert '.$sImParamStrip.' -quality '.escapeshellarg($iQuality).' -limit memory 160MiB -geometry '.escapeshellarg($iWidth.'x'.$iHeight).' '.implode(' ', $aParameter).' '.escapeshellarg($this->oSourceFile->sPath).' '.escapeshellarg($this->sTempDir.'/'.$this->sTempFileName);
                 exec($command, $returnarray, $returnvalue);
 
                 if ($returnvalue) {
