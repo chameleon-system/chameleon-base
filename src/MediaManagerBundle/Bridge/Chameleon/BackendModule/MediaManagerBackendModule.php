@@ -629,7 +629,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         try {
             $contentHtml = $this->responseVariableReplacer->replaceVariables($contentHtml);
         } catch (TokenInjectionFailedException $e) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Couldn\'t replace variables');
+            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Couldn\'t replace variables', $e);
         }
         $detailReturn->contentHtml = $contentHtml;
         $detailReturn->mediaItemName = $mediaItem->getName();
