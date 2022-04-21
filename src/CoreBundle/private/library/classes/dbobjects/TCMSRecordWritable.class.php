@@ -100,7 +100,7 @@ class TCMSRecordWritable extends TCMSRecord
     /**
      * Save active data... create new record if no id present.
      *
-     * @return string|bool - id on success... else false
+     * @return string|false - id on success... else false
      */
     public function Save()
     {
@@ -218,7 +218,7 @@ class TCMSRecordWritable extends TCMSRecord
      *
      * @param array $aFields
      *
-     * @return string|bool
+     * @return string|false - the id of the saved record or false on error
      */
     public function SaveFieldsFast($aFields)
     {

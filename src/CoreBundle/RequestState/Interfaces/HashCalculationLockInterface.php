@@ -15,5 +15,8 @@ interface HashCalculationLockInterface
      */
     public function lock();
 
+    /**
+     * @return void
+     */
     public function release();
 }

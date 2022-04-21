@@ -203,8 +203,8 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * Renames related tables like mlt tables for source and target connections.
      *
-     * @param  $sOldName
-     * @param  $sNewName
+     * @param string $sOldName
+     * @param string $sNewName
      */
     public function _RenameRelatedTables($sOldName, $sNewName)
     {
@@ -215,8 +215,8 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * Renames related tables like mlt tables for mlt fields in this table.
      *
-     * @param  $sOldTableName
-     * @param  $sNewTableName
+     * @param string $sOldTableName
+     * @param string $sNewTableName
      */
     protected function RenameRelatedTablesSource($sOldTableName, $sNewTableName)
     {

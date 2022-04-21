@@ -13,7 +13,9 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * include page header data like title, and meta tags.
@@ -628,7 +630,14 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
                 $url = $alternativeLanguage->GetTranslatedPageURL();
                 $alternatives[$iso] = $url;
             } catch (Exception $exception) {
-                $this->getLogger()->error(
+                $logLevel = Logger::ERROR;
+                if ($exception instanceof RouteNotFoundException) {
+                    // This is ok: page might be disabled on purpose in that language
+                    $logLevel = Logger::DEBUG;
+                }
+
+                $this->getLogger()->log(
+                    $logLevel,
                     sprintf(
                         'Cannot generate alternative language URLs for page with ID "%s" and name "%s" for language "%s".',
                         $activePage->id,

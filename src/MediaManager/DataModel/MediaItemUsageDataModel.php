@@ -104,6 +104,8 @@ class MediaItemUsageDataModel
 
     /**
      * @param string $targetFieldName
+     *
+     * @return void
      */
     public function setTargetFieldName($targetFieldName)
     {
@@ -120,6 +122,8 @@ class MediaItemUsageDataModel
 
     /**
      * @param string|null $targetTableDescriptiveName
+     *
+     * @return void
      */
     public function setTargetTableDescriptiveName($targetTableDescriptiveName)
     {
@@ -136,6 +140,8 @@ class MediaItemUsageDataModel
 
     /**
      * @param string|null $targetFieldDescriptiveName
+     *
+     * @return void
      */
     public function setTargetFieldDescriptiveName($targetFieldDescriptiveName)
     {
@@ -152,6 +158,8 @@ class MediaItemUsageDataModel
 
     /**
      * @param string|null $targetRecordName
+     *
+     * @return void
      */
     public function setTargetRecordName($targetRecordName)
     {
@@ -168,6 +176,8 @@ class MediaItemUsageDataModel
 
     /**
      * @param string|null $url
+     *
+     * @return void
      */
     public function setUrl($url)
     {
@@ -184,6 +194,8 @@ class MediaItemUsageDataModel
 
     /**
      * @param string|null $cropId
+     *
+     * @return void
      */
     public function setCropId($cropId)
     {

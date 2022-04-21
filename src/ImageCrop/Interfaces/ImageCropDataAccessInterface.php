@@ -37,6 +37,8 @@ interface ImageCropDataAccessInterface
      *
      * @param ImageCropDataModel $imageCrop
      *
+     * @return void
+     *
      * @throws ImageCropDataAccessException
      */
     public function updateImageCrop(ImageCropDataModel $imageCrop);

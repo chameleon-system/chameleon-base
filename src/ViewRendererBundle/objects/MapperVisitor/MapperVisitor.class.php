@@ -61,6 +61,8 @@ class MapperVisitor implements IMapperVisitor
      * do not call this.
      *
      * @param array $aSourceObjects
+     *
+     * @return void
      */
     protected function AddSourceObjects($aSourceObjects)
     {
@@ -215,6 +217,10 @@ class MapperVisitor implements IMapperVisitor
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
+     *
+     * @param null|array<string, string> $transformations
      */
     public function setTransformations($transformations)
     {

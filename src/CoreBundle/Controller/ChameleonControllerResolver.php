@@ -29,7 +29,7 @@ class ChameleonControllerResolver extends ControllerResolver
      */
     private $controllerList;
     /**
-     * @var string
+     * @var ChameleonController
      */
     private $defaultChameleonController;
 
@@ -49,6 +49,8 @@ class ChameleonControllerResolver extends ControllerResolver
 
     /**
      * {@inheritdoc}
+     *
+     * @return callable|false|null
      */
     public function getController(Request $request)
     {

@@ -17,20 +17,23 @@ interface AutoclassesDatabaseAdapterInterface
 {
     /**
      * @param Connection $conn
+     *
+     * @return void
      */
     public function setConnection(Connection $conn);
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getTableClassList();
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getVirtualClassList();
 
     /**
+     * @param string $id
      * @return string|null
      */
     public function getTableNameForId($id);

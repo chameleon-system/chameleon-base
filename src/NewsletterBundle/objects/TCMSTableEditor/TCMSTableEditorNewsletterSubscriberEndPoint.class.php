@@ -12,7 +12,7 @@
 class TCMSTableEditorNewsletterSubscriberEndPoint extends TCMSTableEditor
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Delete($sId = null)
     {

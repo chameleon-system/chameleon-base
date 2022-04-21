@@ -97,7 +97,7 @@ class RequestListenerTest extends TestCase
     private function getResponseEventProphet($type, $chameleonType)
     {
         $prophet = new Prophet();
-        $evt = $prophet->prophesize('Symfony\Component\HttpKernel\Event\GetResponseEvent');
+        $evt = $prophet->prophesize('Symfony\Component\HttpKernel\Event\RequestEvent');
         $evt->getRequestType()->willReturn($type);
 
         return $evt;

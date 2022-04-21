@@ -31,6 +31,8 @@ class AddAntispamIncludesListener
 
     /**
      * @param HtmlIncludeEventInterface $event
+     *
+     * @return void
      */
     public function onGlobalHtmlFooterInclude(HtmlIncludeEventInterface $event)
     {

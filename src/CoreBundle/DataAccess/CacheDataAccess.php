@@ -15,16 +15,22 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use esono\pkgCmsCache\CacheInterface;
 use TCMSRecord;
 
+/**
+ * @template T extends TCMSRecord
+ * @implements DataAccessInterface<T>
+ */
 class CacheDataAccess implements DataAccessInterface
 {
     /**
      * @var CacheInterface
      */
     private $cache;
+
     /**
      * @var LanguageServiceInterface
      */
     private $languageService;
+
     /**
      * @var DataAccessInterface
      */
@@ -33,7 +39,7 @@ class CacheDataAccess implements DataAccessInterface
     /**
      * @param CacheInterface           $cache
      * @param LanguageServiceInterface $languageService
-     * @param DataAccessInterface      $decorated
+     * @param DataAccessInterface<T>    $decorated
      */
     public function __construct(CacheInterface $cache, LanguageServiceInterface $languageService, DataAccessInterface $decorated)
     {
@@ -58,6 +64,7 @@ class CacheDataAccess implements DataAccessInterface
         ));
         /**
          * @var TCMSRecord[] $elements
+         * @psalm-var T[] $elements
          */
         $elements = $this->cache->get($key);
         if (null === $elements) {

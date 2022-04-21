@@ -73,6 +73,8 @@ class TPkgCmsResultCacheManager
      * @param string      $sValue
      * @param string|bool $expireTimestamp
      * @param bool        $bAllowGarbageCollection true = garbage collector delete entry if expired
+     *
+     * @return void
      */
     public function set($sOwner, $sKey, $sValue, $expireTimestamp, $bAllowGarbageCollection = true)
     {
@@ -105,6 +107,8 @@ class TPkgCmsResultCacheManager
 
     /**
      * Delete expired cache entries.
+     *
+     * @return void
      */
     public function garbageCollector()
     {

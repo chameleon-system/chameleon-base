@@ -28,6 +28,9 @@ class TCMSCronJob_ArchiveChangeLog extends \TdbCmsCronjobs
         $this->logger = $logger;
     }
 
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         if ($this->days <= 0) {

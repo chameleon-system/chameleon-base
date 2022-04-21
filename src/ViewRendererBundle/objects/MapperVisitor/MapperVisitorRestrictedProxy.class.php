@@ -25,8 +25,7 @@ class MapperVisitorRestrictedProxy implements IMapperVisitorRestricted
     }
 
     /**
-     * @param string $key
-     * @param mixed  $value
+     * {@inheritDoc}
      */
     public function SetMappedValue($key, $value)
     {
@@ -34,11 +33,7 @@ class MapperVisitorRestrictedProxy implements IMapperVisitorRestricted
     }
 
     /**
-     * @param string $key
-     *
-     * @return mixed
-     *
-     * @throws MapperException
+     * {@inheritDoc}
      */
     public function GetSourceObject($key)
     {

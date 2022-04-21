@@ -56,7 +56,7 @@ class TPkgCmsSessionHandler_Decorator_Locking extends \Symfony\Component\HttpFou
     }
 
     /**
-     * @param $sSessionId
+     * @param mixed $sSessionId
      *
      * @return mixed
      *

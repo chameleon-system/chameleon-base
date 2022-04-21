@@ -24,12 +24,22 @@ interface ExtranetConfigurationInterface
     const PAGE_POST_LOGOUT = 9;
     const PAGE_LOGOUT = 10;
 
+    /**
+     * @return string
+     */
     public function getExtranetHandlerSpotName();
 
+    /**
+     * @param int $page
+     *
+     * @psalm-param self::PAGE_* $page
+     *
+     * @return string|null
+     */
     public function getLink($page);
 
     /**
-     * @return \TdbDataExtranet
+     * @return \TdbDataExtranet|false
      */
     public function getExtranetConfigObject();
 }

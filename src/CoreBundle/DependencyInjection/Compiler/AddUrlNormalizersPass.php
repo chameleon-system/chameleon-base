@@ -17,7 +17,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class AddUrlNormalizersPass implements CompilerPassInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function process(ContainerBuilder $container)
     {

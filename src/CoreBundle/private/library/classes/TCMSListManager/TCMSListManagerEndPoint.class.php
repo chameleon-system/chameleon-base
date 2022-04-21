@@ -27,7 +27,7 @@ class TCMSListManagerEndPoint
     /**
      * table definition object.
      *
-     * @var TCMSTableConf
+     * @var TdbCmsTblConf
      */
     protected $oTableConf;
 

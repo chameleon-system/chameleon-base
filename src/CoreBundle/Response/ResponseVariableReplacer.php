@@ -45,6 +45,10 @@ class ResponseVariableReplacer implements ResponseVariableReplacerInterface
         $this->variables[$key] = $value;
     }
 
+    /**
+     * @return void
+     * @throws TokenInjectionFailedException
+     */
     public function handleResponse(FilterContentEvent $event)
     {
         $event->setContent($this->replaceVariables($event->getContent()));
@@ -52,6 +56,8 @@ class ResponseVariableReplacer implements ResponseVariableReplacerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress InvalidReturnType, InvalidReturnStatement - We know that the return type is correct here.
      */
     public function replaceVariables($content)
     {

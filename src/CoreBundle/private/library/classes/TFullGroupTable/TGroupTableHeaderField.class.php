@@ -30,7 +30,7 @@ class TGroupTableHeaderField extends TGroupTableField
     public $width = false;
 
     /**
-     * @param string      $name
+     * @param string|non-empty-array<string, string>  $name - if it is an array it should be of the form 'name'=>'full_name'
      * @param string      $align
      * @param string|null $format
      * @param int         $colSpan

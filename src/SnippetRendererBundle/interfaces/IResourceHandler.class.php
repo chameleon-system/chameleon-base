@@ -16,7 +16,9 @@ interface IResourceHandler
      *
      * @abstract
      *
-     * @param $sResource
+     * @param string $sResource
+     *
+     * @return void
      */
     public function addCSSResource($sResource);
 
@@ -25,7 +27,9 @@ interface IResourceHandler
      *
      * @abstract
      *
-     * @param $sResource
+     * @param string $sResource
+     *
+     * @return void
      */
     public function addJSResource($sResource);
 
@@ -34,7 +38,7 @@ interface IResourceHandler
      *
      * @abstract
      *
-     * @return $aResult - collected resources as array
+     * @return array $aResult - collected resources as array
      */
     public function handleResources();
 
@@ -43,7 +47,7 @@ interface IResourceHandler
      *
      * @abstract
      *
-     * @param $aPlainResources
+     * @param string $aPlainResources
      *
      * @return string
      */

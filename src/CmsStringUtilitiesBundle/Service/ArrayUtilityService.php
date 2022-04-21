@@ -18,8 +18,8 @@ class ArrayUtilityService implements ArrayUtilityServiceInterface
     /**
      * return true if two arrays are equal.
      *
-     * @param $array1
-     * @param $array2
+     * @param array $array1
+     * @param array $array2
      *
      * @return bool
      */

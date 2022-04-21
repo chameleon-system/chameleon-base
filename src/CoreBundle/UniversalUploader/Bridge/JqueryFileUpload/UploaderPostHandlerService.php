@@ -244,7 +244,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
     }
 
     /**
-     * @param $fieldName
+     * @param string $fieldName
      *
      * @throws UploaderPostDataException
      *

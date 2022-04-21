@@ -39,7 +39,7 @@ class TCMSPage extends TCMSPageAutoParent
     private $breadcrumb = null;
 
     /**
-     * @return TCMSPageBreadcrumb|null
+     * @return TCMSPageBreadcrumb
      */
     public function getBreadcrumb()
     {

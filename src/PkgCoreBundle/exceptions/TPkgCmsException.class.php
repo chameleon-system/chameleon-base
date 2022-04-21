@@ -11,6 +11,9 @@
 
 class TPkgCmsException extends \Exception implements Serializable
 {
+    /**
+     * @var null|string
+     */
     private $contextData = null;
 
     /**
@@ -36,6 +39,9 @@ class TPkgCmsException extends \Exception implements Serializable
         return $sString;
     }
 
+    /**
+     * @return null|string
+     */
     public function getContextData()
     {
         return $this->contextData;

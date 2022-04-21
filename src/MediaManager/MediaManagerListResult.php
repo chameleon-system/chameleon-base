@@ -56,6 +56,8 @@ class MediaManagerListResult
 
     /**
      * @param int $numberOfPages
+     *
+     * @return void
      */
     public function setNumberOfPages($numberOfPages)
     {
@@ -72,6 +74,8 @@ class MediaManagerListResult
 
     /**
      * @param int $numberOfItems
+     *
+     * @return void
      */
     public function setNumberOfItems($numberOfItems)
     {

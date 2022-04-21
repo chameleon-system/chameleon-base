@@ -26,6 +26,9 @@ class Migrator62 implements MigratorInterface
         $this->baseDir = realpath(__DIR__.'/../../../../../../..');
     }
 
+    /**
+     * @return void
+     */
     public function migrate()
     {
         $this->migrate62FileBase();
@@ -33,6 +36,9 @@ class Migrator62 implements MigratorInterface
         $this->finish();
     }
 
+    /**
+     * @return void
+     */
     private function migrate62FileBase()
     {
         $this->addAutoloadFile();
@@ -41,16 +47,25 @@ class Migrator62 implements MigratorInterface
         $this->removeOldFiles();
     }
 
+    /**
+     * @return void
+     */
     private function addAutoloadFile()
     {
         copy(__DIR__.'/autoloadTemplate.php', $this->baseDir.'/app/autoload.php');
     }
 
+    /**
+     * @return void
+     */
     private function adjustGitignore()
     {
         copy(__DIR__.'/gitignoreTemplate.txt', $this->baseDir.'/.gitignore');
     }
 
+    /**
+     * @return void
+     */
     private function migrate62ComposerJson()
     {
         $composerHelper = new ComposerJsonModifier();
@@ -205,6 +220,9 @@ class Migrator62 implements MigratorInterface
         ];
     }
 
+    /**
+     * @return void
+     */
     private function finish()
     {
         echo <<<EOF
@@ -213,6 +231,9 @@ Migration finished. Please check if the changes to the files make sense for this
 EOF;
     }
 
+    /**
+     * @return void
+     */
     private function adjustPublicSymlinks()
     {
         $webDir = $this->baseDir.'/web/';
@@ -284,6 +305,9 @@ EOF;
         chdir($originalWorkingDir);
     }
 
+    /**
+     * @return void
+     */
     private function removeOldFiles()
     {
         $vendorBinDir = $this->baseDir.'/vendor/bin';

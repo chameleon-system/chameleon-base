@@ -11,17 +11,32 @@
 
 /**
  * special record list to handle downloads.
-/**/
+ *
+ * @extends TCMSRecordList<TCMSDownloadFile>
+ */
 class TCMSListDownloadFiles extends TCMSRecordList
 {
     /**
      * name of the source table.
      *
-     * @var string
+     * @var string|null
      */
     protected $_sSourceTableName = null;
+
+    /**
+     * @var string|null
+     */
     protected $_sRecordID = null;
+
+    /**
+     * @var string|null
+     */
     protected $_sourceField = null;
+
+    /**
+     * @TODO This property never seems to get written to.
+     * @var mixed|null
+     */
     protected $allowedFileTypes = null;
 
     public function __construct()
@@ -38,6 +53,12 @@ class TCMSListDownloadFiles extends TCMSRecordList
         $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
+    /**
+     * @param string|null $sourceTable
+     * @param string|null $sourceField
+     * @param string|null $sourceRecordID
+     * @return void
+     */
     public function Init($sourceTable, $sourceField, $sourceRecordID)
     {
         $this->_sSourceTableName = $sourceTable;

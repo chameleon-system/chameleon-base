@@ -11,8 +11,14 @@
 
 class TPkgCmsCaptcha_Math extends TdbPkgCmsCaptcha
 {
+    /**
+     * @param string $sIdentifier
+     * @param int $iCharacters
+     * @return string
+     */
     protected function GenerateCode($sIdentifier, $iCharacters)
     {
+        /** @var array<string, string> $aCodeCache */
         static $aCodeCache = array(); // generate a code for an identifier only once within one session call
         if (!array_key_exists($sIdentifier, $aCodeCache)) {
             $a = rand(1, 20);

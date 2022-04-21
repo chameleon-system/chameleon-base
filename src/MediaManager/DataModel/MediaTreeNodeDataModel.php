@@ -79,6 +79,8 @@ class MediaTreeNodeDataModel
 
     /**
      * @param string|null $iconPath
+     *
+     * @return void
      */
     public function setIconPath($iconPath)
     {

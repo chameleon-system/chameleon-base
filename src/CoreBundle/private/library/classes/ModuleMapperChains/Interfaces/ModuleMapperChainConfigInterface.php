@@ -36,8 +36,8 @@ interface ModuleMapperChainConfigInterface
     public function addMapperToChain($mapperChainName, $newMapper, $positionAfter = null);
 
     /**
-     * @param $mapperChainName
-     * @param $mapperName
+     * @param string $mapperChainName
+     * @param string $mapperName
      *
      * @throws ErrorException
      */
@@ -55,7 +55,7 @@ interface ModuleMapperChainConfigInterface
     public function replaceMapper($oldMapperName, $newMapperName, $mapperChainName = null);
 
     /**
-     * @param $mapperChainName
+     * @param string $mapperChainName
      * @param array $mapperList
      *
      * @throws ErrorException
@@ -63,7 +63,7 @@ interface ModuleMapperChainConfigInterface
     public function addMapperChain($mapperChainName, array $mapperList);
 
     /**
-     * @param $mapperChainName
+     * @param string $mapperChainName
      *
      * @throws ErrorException
      */

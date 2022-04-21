@@ -84,7 +84,7 @@ class TCMSTableEditorMenuItem
     /**
      * expects an already translated string.
      *
-     * @param $sTitle
+     * @param string $sTitle
      */
     public function setTitle($sTitle)
     {
@@ -248,7 +248,7 @@ class TCMSTableEditorMenuItem
      *
      * @see http://getbootstrap.com/css/#buttons
      *
-     * @param $sButtonStyle
+     * @param string $sButtonStyle
      */
     public function setButtonStyle($sButtonStyle)
     {

@@ -51,6 +51,9 @@ class RequestTypeListener implements ContainerAwareInterface
         $this->assetRequestType = $assetRequestType;
     }
 
+    /**
+     * @return void
+     */
     public function onKernelRequest(RequestEvent $event)
     {
         if (false === $event->isMasterRequest()) {
@@ -80,7 +83,9 @@ class RequestTypeListener implements ContainerAwareInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function setContainer(ContainerInterface $container = null)
     {

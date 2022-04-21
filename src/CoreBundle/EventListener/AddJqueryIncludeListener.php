@@ -18,6 +18,8 @@ class AddJqueryIncludeListener
 {
     /**
      * @param HtmlIncludeEventInterface $event
+     *
+     * @return void
      */
     public function onGlobalHtmlHeaderInclude(HtmlIncludeEventInterface $event)
     {

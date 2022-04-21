@@ -11,6 +11,10 @@
 
 namespace ChameleonSystem\core\DatabaseAccessLayer;
 
+/**
+ * @template T
+ * @implements \SeekableIterator<int, T>
+ */
 interface EntityListInterface extends \SeekableIterator, \Countable
 {
     /**
@@ -20,16 +24,23 @@ interface EntityListInterface extends \SeekableIterator, \Countable
 
     /**
      * change internal index to the last element.
+     *
+     * @return void
      */
     public function end();
 
     /**
      * set a new query to use for the result set. changing the query will also change the list state (drop cached results, etc).
+     *
+     * @param string $query
+     * @return void
      */
     public function setQuery($query);
 
     /**
      * position internal pointer the the previous element.
+     *
+     * @return void
      */
     public function previous();
 
@@ -60,6 +71,7 @@ interface EntityListInterface extends \SeekableIterator, \Countable
      * limit results to - pass null to remove the restriction.
      *
      * @param int $maxNumberOfResults
+     * @return void
      */
     public function setMaxAllowedResults($maxNumberOfResults);
 }

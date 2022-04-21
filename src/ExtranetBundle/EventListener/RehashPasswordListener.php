@@ -38,6 +38,8 @@ class RehashPasswordListener
 
     /**
      * @param ExtranetUserEvent $extranetUserEvent
+     *
+     * @return void
      */
     public function rehashPassword(ExtranetUserEvent $extranetUserEvent)
     {

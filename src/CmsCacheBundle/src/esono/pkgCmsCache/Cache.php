@@ -82,6 +82,8 @@ class Cache implements CacheInterface
 
     /**
      * @param StorageInterface $oCacheStorage
+     *
+     * @return void
      */
     public function setStorage(StorageInterface $oCacheStorage)
     {
@@ -146,6 +148,8 @@ class Cache implements CacheInterface
      *
      * @param array  $triggerList
      * @param string $key
+     *
+     * @return void
      */
     private function setTrigger($triggerList, $key)
     {
@@ -280,6 +284,8 @@ class Cache implements CacheInterface
 
     /**
      * @param RequestStack $requestStack
+     *
+     * @return void
      */
     public function setRequestStack(RequestStack $requestStack)
     {
@@ -296,6 +302,8 @@ class Cache implements CacheInterface
 
     /**
      * @param Connection $dbConnection
+     *
+     * @return void
      */
     public function setDbConnection(Connection $dbConnection)
     {

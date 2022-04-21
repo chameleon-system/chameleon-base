@@ -13,6 +13,9 @@ namespace ChameleonSystem\CoreBundle\DatabaseAccessLayer;
 
 class DatabaseAccessLayerCmsMasterPagedefSpotAccess extends AbstractDatabaseAccessLayer
 {
+    /**
+     * @var bool
+     */
     private $isLoaded = false;
 
     /**
@@ -27,6 +30,9 @@ class DatabaseAccessLayerCmsMasterPagedefSpotAccess extends AbstractDatabaseAcce
         return $this->getFromCache($spotId);
     }
 
+    /**
+     * @return void
+     */
     private function loadAll()
     {
         if (true === $this->isLoaded) {

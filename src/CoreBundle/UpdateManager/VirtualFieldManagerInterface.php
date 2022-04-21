@@ -14,6 +14,7 @@ namespace ChameleonSystem\CoreBundle\UpdateManager;
 interface VirtualFieldManagerInterface
 {
     /**
+     * @param string $tableName
      * @return array
      */
     public function getVirtualFieldsForTable($tableName);

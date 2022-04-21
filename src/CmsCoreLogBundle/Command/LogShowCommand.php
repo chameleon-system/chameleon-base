@@ -22,6 +22,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class LogShowCommand extends Command
 {
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this
@@ -90,10 +93,12 @@ class LogShowCommand extends Command
         $infoStrings = array();
 
         $channel = $input->getOption('channel');
+        /** @var string $number */
         $number = $input->getOption('number');
         $level = $input->getOption('level');
         $ip = $input->getOption('ip');
         $cmsident = $input->getOption('cmsident');
+        /** @var string $page */
         $page = $input->getOption('page');
         $sorting = $input->getOption('sort');
 
@@ -248,5 +253,7 @@ class LogShowCommand extends Command
         } else {
             $output->writeln('<error>No log entries found</error>');
         }
+
+        return 0;
     }
 }

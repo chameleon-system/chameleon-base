@@ -30,6 +30,8 @@ class AbstractQueryDataAccess implements AbstractQueryDataAccessInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return null|string
      */
     public function getBaseLanguageIso()
     {

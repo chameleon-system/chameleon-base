@@ -35,6 +35,9 @@ class MessageCheckOutput extends AbstractTranslatingCheckOutput
      */
     private $requestStack;
 
+    /**
+     * @param string $translationDomain
+     */
     public function __construct(RequestStack $requestStack, OutputFormatterInterface $outputFormatter, TranslatorInterface $translator, $translationDomain = 'chameleon_system_sanitycheck')
     {
         parent::__construct($translator, $translationDomain);
@@ -43,7 +46,9 @@ class MessageCheckOutput extends AbstractTranslatingCheckOutput
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function gather(CheckOutcome $outcome)
     {
@@ -59,7 +64,9 @@ class MessageCheckOutput extends AbstractTranslatingCheckOutput
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function commit()
     {
@@ -67,6 +74,8 @@ class MessageCheckOutput extends AbstractTranslatingCheckOutput
 
     /**
      * @param OutputFormatterInterface $outputFormatter
+     *
+     * @return void
      */
     public function setOutputFormatter($outputFormatter)
     {

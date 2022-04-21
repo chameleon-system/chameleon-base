@@ -15,11 +15,15 @@ interface DataMappingServiceResponseInterface
 {
     /**
      * @param array $data
+     *
+     * @return void
      */
     public function setMappedData(array $data);
 
     /**
      * @param array $trigger
+     *
+     * @return void
      */
     public function setCacheTrigger(array $trigger);
 

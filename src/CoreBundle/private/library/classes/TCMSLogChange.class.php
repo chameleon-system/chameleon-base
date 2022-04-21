@@ -1088,7 +1088,7 @@ class TCMSLogChange
     /**
      * @see TCMSLogChange::AddBackEndMessage()
      *
-     * @param $language
+     * @param string|int|null $language
      *
      * @return string|null
      */
@@ -1153,10 +1153,10 @@ class TCMSLogChange
      *
      * @static
      *
-     * @param  $sExtensionTableName - the db table name
-     * @param  $sClassName - the origianl class name
-     * @param  $sListClassName - the original list class name (if set)
-     * @param  $sClassSubType - (deprecated!) the path relative to classes
+     * @param string $sExtensionTableName - the db table name
+     * @param string $sClassName - the origianl class name
+     * @param string $sListClassName - the original list class name (if set)
+     * @param string $sClassSubType - (deprecated!) the path relative to classes
      * @param string $sClassType - (deprecated!) core/customer?
      */
     public static function ChangeExtensionToAutoParentClass($sExtensionTableName, $sClassName, $sListClassName, $sClassSubType = '', $sClassType = 'Core')
@@ -1207,10 +1207,10 @@ class TCMSLogChange
     /**
      * add a new extension to a table. if no $sNameOfClassAfterWhichToPosition is given, the class will be inserted in last position.
      *
-     * @param $sTableName
-     * @param $sClassName
-     * @param $sClassSubType - deprecated! handled by autoloader
-     * @param $sClassType - deprecated! handled by autoloader
+     * @param string $sTableName
+     * @param string $sClassName
+     * @param string $sClassSubType - deprecated! handled by autoloader
+     * @param string $sClassType - deprecated! handled by autoloader
      * @param string $sListClass
      * @param string $sNameOfClassAfterWhichToPosition
      */
@@ -1605,8 +1605,8 @@ class TCMSLogChange
      * use this method to simple add field connections for fields of $sTargetTable given in $aFields for your cms_field_conf_mlt field in $sTable
      * you can specify one record or leave it null to set for all records of $sTable.
      *
-     * @param $sTable - table name where the cms_field_conf_mlt field is stored
-     * @param $sTargetTable - table name of the table from what the fields will be selected also used in fieldtyp config parameter (sShowFieldsFromTable)
+     * @param string $sTable - table name where the cms_field_conf_mlt field is stored
+     * @param string $sTargetTable - table name of the table from what the fields will be selected also used in fieldtyp config parameter (sShowFieldsFromTable)
      * @param array $aFields   - field names for that will be a mlt connection added
      * @param null  $sRecordId - record id if you only want to set the connections for a specific record - if null all records of $sTable will be selected
      */
@@ -1816,9 +1816,9 @@ class TCMSLogChange
      *
      * You should not use this method in new packages, which already know about the change.
      *
-     * @param $shop_id
-     * @param $name_internal
-     * @param $name
+     * @param string $shop_id
+     * @param string $name_internal
+     * @param string $name
      * @param string $cms_tree_id
      *
      * @deprecated since 6.2.0 - no longer used.
@@ -2084,7 +2084,7 @@ class TCMSLogChange
     /**
      * initializes lft and rgt values for all entries in the table.
      *
-     * @param $tableName
+     * @param string $tableName
      * @param string $parentIdFieldName
      * @param string $entrySortField
      */
@@ -2100,8 +2100,8 @@ class TCMSLogChange
      * Set field user group right for a table to show them in mlt field connection.
      * For example in variant sets article fields.
      *
-     * @param $tableName
-     * @param $userGroupSystemName (cms_admin)
+     * @param string $tableName
+     * @param string $userGroupSystemName (cms_admin)
      * @param array $fieldNameList if array is empty grand rights to all table fields
      *
      * @return bool|void
@@ -2243,8 +2243,8 @@ class TCMSLogChange
     /**
      * Creates a MigrationQueryData object, avoiding the PHP 5.3 limitation of not being able to call "fluent constructors".
      *
-     * @param $tableName
-     * @param $language
+     * @param string $tableName
+     * @param string $language
      *
      * @return MigrationQueryData
      */

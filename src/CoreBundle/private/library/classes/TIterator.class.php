@@ -11,14 +11,21 @@
 
 /**
  * manages lists of data, provided methods to move forward and back in the list.
-/**/
+ *
+ * @template T
+ * @implements Iterator<int, T>
+ *
+ * Dynamic properties introduced by __get and __set
+ * @property T[] $_items
+ * @property int $_itemPointer
+ */
 class TIterator implements Iterator
 {
     private $itemPointer = 0;
     /**
      * array of item objects.
      *
-     * @var array
+     * @var T[]
      */
     protected $_items = array();
 
@@ -56,6 +63,7 @@ class TIterator implements Iterator
 
     /**
      * delete the list.
+     * @return void
      */
     public function Destroy()
     {
@@ -69,7 +77,8 @@ class TIterator implements Iterator
     /**
      * Adds an item to the end of the list.
      *
-     * @param mixed $item
+     * @param T $item
+     * @return void
      */
     public function AddItem(&$item)
     {
@@ -79,6 +88,9 @@ class TIterator implements Iterator
     /**
      * adds an item to the beginning of the list. also keeps the element pointer
      * pointing at the current elemement UNLESS that is the first element.
+     *
+     * @param T $item
+     * @return void
      */
     public function AddItemToStart(&$item)
     {
@@ -88,6 +100,10 @@ class TIterator implements Iterator
         }
     }
 
+    /**
+     * @param callable(T, T):int $callback
+     * @return void
+     */
     public function usort($callback)
     {
         usort($this->_items, $callback);
@@ -141,7 +157,7 @@ class TIterator implements Iterator
      * @param string $propertyValue - property value
      * @param bool   $bIgnoreCase   - do a case insenstive compare
      *
-     * @return object|bool
+     * @return T|false
      */
     public function FindItemWithProperty($propertyName, $propertyValue, $bIgnoreCase = false)
     {
@@ -171,7 +187,7 @@ class TIterator implements Iterator
      * adds the item if it is not found in the list.
      * returns true if the item was replaced.
      *
-     * @param object $oNewItem
+     * @param T $oNewItem
      * @param string $matchPropertyName - if the value of this property name is equal the item will be replaced
      *
      * @return bool
@@ -202,7 +218,7 @@ class TIterator implements Iterator
      * @param string $propertyName  - property name (must be public in the items
      * @param string $propertyValue - property value
      *
-     * @return TIterator
+     * @return TIterator<T>
      */
     public function FindItemsWithProperty($propertyName, $propertyValue)
     {
@@ -228,7 +244,7 @@ class TIterator implements Iterator
     /**
      * returns current item without moving the item pointer.
      *
-     * @return object
+     * @return T
      */
     public function &current()
     {
@@ -245,7 +261,7 @@ class TIterator implements Iterator
     /**
      * return true if the item is in the list (uses the IsSameAs method).
      *
-     * @param object $oItem
+     * @param T $oItem
      *
      * @return bool
      */
@@ -267,7 +283,7 @@ class TIterator implements Iterator
     /**
      * returns the current item in the list and advances the list pointer by 1.
      *
-     * @return object
+     * @return T|false
      */
     public function &next()
     {
@@ -282,6 +298,8 @@ class TIterator implements Iterator
 
     /**
      * returns the current item in the list and moves the list pointer back by 1.
+     *
+     * @return T|false
      */
     public function &Previous()
     {
@@ -296,6 +314,8 @@ class TIterator implements Iterator
 
     /**
      * Resets the pointer back to the start of the list.
+     *
+     * @return void
      */
     public function GoToStart()
     {
@@ -305,6 +325,8 @@ class TIterator implements Iterator
 
     /**
      * Returns the number of elements in the list.
+     *
+     * @return int
      */
     public function Length()
     {
@@ -315,6 +337,8 @@ class TIterator implements Iterator
 
     /**
      * returns true if the entry that was just fetched was the last entry.
+     *
+     * @return bool
      */
     public function IsLast()
     {
@@ -323,6 +347,8 @@ class TIterator implements Iterator
 
     /**
      * jumps to the end of the list.
+     *
+     * @return void
      */
     public function GoToEnd()
     {
@@ -330,9 +356,9 @@ class TIterator implements Iterator
     }
 
     /**
-     * returns one random element from the list.
+     * returns one random element from the list or false if the list is empty.
      *
-     * @return object|bool $item
+     * @return T|false $item
      */
     public function &Random()
     {
@@ -347,6 +373,8 @@ class TIterator implements Iterator
 
     /**
      * shuffle list.
+     *
+     * @return void
      */
     public function ShuffleList()
     {
@@ -356,6 +384,8 @@ class TIterator implements Iterator
 
     /**
      * reverses the item list.
+     *
+     * @return void
      */
     public function ReverseItemList()
     {

@@ -21,7 +21,15 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * @var Psr\Log\LoggerInterface
      */
     private $logger = null;
+
+    /**
+     * @var null|string
+     */
     private $requestUID = null;
+
+    /**
+     * @var bool
+     */
     private $logMetaData = true;
 
     public function __construct(Psr\Log\LoggerInterface $oLogger)
@@ -31,7 +39,7 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
     }
 
     /**
-     * @param Psr\Log\LoggerInterface $logger
+     * {@inheritDoc}
      */
     public function setLogger(Psr\Log\LoggerInterface $logger)
     {
@@ -42,9 +50,11 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * System is unusable.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function emergency($message, $sFile, $iLine, array $context = array())
     {
@@ -59,9 +69,11 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * trigger the SMS alerts and wake you up.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function alert($message, $sFile, $iLine, array $context = array())
     {
@@ -75,9 +87,11 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * Example: Application component unavailable, unexpected exception.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function critical($message, $sFile, $iLine, array $context = array())
     {
@@ -90,9 +104,11 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * be logged and monitored.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function error($message, $sFile, $iLine, array $context = array())
     {
@@ -107,9 +123,11 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * that are not necessarily wrong.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function warning($message, $sFile, $iLine, array $context = array())
     {
@@ -121,9 +139,11 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * Normal but significant events.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function notice($message, $sFile, $iLine, array $context = array())
     {
@@ -137,9 +157,11 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * Example: User logs in, SQL logs.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function info($message, $sFile, $iLine, array $context = array())
     {
@@ -151,9 +173,11 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * Detailed debug information.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function debug($message, $sFile, $iLine, array $context = array())
     {
@@ -166,9 +190,11 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      *
      * @param mixed  $level   - defined via Psr\Log\LogLevel
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function log($level, $message, $sFile, $iLine, array $context = array())
     {
@@ -178,6 +204,8 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
 
     /**
      * @param bool $logMetaData
+     *
+     * @return void
      */
     public function setLogMetaData($logMetaData)
     {
@@ -192,6 +220,13 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
         return $this->requestUID;
     }
 
+    /**
+     * @param array $context
+     * @param string $sFile
+     * @param int $iLine
+     *
+     * @return array
+     */
     protected function addMetaData($context, $sFile, $iLine)
     {
         if (false === $this->logMetaData) {

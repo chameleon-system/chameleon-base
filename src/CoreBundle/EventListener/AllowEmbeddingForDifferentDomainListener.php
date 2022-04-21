@@ -30,6 +30,9 @@ class AllowEmbeddingForDifferentDomainListener
         $this->domainsDataAccess = $domainsDataAccess;
     }
 
+    /**
+     * @return void
+     */
     public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();

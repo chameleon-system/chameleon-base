@@ -31,6 +31,9 @@ class StaticViewModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->languageService = $languageService;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
         $targetView = $this->aModuleConfig['targetView'];

@@ -56,7 +56,7 @@ class DatabaseAccessLayerFieldConfig extends AbstractDatabaseAccessLayer
      * @param string $tableName
      * @param string $fieldName
      *
-     * @return TCMSField
+     * @return TCMSField|null
      */
     private function GetField($tableName, $fieldName)
     {
@@ -98,7 +98,7 @@ class DatabaseAccessLayerFieldConfig extends AbstractDatabaseAccessLayer
      * @param string $tableName
      * @param string $fieldName the sql name of the field
      *
-     * @return TdbCmsFieldConf
+     * @return TdbCmsFieldConf|null
      */
     public function GetFieldDefinition($tableName, $fieldName)
     {

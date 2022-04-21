@@ -338,6 +338,8 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
     protected function PostSaveHook(&$oFields, &$oPostTable)
     {
         if ($bReturnVal = parent::PostSaveHook($oFields, $oPostTable)) {
+            $isUpdate = $this->bIsUpdateCall; // the bIsUpdateCall will be falsely set to true in all SaveField methods here
+
             if (array_key_exists('filesize', $oPostTable->sqlData)) {
                 $this->SaveField('filesize', $oPostTable->sqlData['filesize']);
             }
@@ -375,7 +377,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
             }
 
             // if there was a change of the image, we need to clear related cache elements
-            if ($this->bIsUpdateCall) {
+            if (true === $isUpdate) {
                 $this->ClearCacheOfObjectsUsingImage($media->id);
             }
         }
@@ -421,7 +423,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
      * call the delete method without removing ids connected to the image. use this ONLY if you are sure, that there
      * are no other connections.
      *
-     * @param  $fileID
+     * @param string $fileID
      */
     public function DeleteWithoutRemovingOldConnections($fileID)
     {

@@ -30,6 +30,7 @@ class TCMSContentBox extends TAdbCmsContentBoxList
      * sets the users backend language for the menu items.
      *
      * @param string $query
+     * @return void
      */
     public function Load($query = null, array $queryParameters = array(), array $queryParameterTypes = array())
     {

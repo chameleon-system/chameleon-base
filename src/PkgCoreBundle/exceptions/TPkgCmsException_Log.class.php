@@ -20,7 +20,15 @@ use Psr\Log\LoggerInterface;
 class TPkgCmsException_Log extends TPkgCmsException
 {
     const LOG_FILE = 'exceptions.log';
+
+    /**
+     * @var int|null
+     */
     private $logLevel = null;
+
+    /**
+     * @var null|string
+     */
     protected $logFilePath = null;
 
     /**
@@ -42,6 +50,9 @@ class TPkgCmsException_Log extends TPkgCmsException
         $this->writeMessageToLog();
     }
 
+    /**
+     * @return void
+     */
     private function writeMessageToLog()
     {
         $level = $this->getLogLevel();
@@ -81,11 +92,17 @@ class TPkgCmsException_Log extends TPkgCmsException
         return ServiceLocator::get('logger');
     }
 
+    /**
+     * @return int|null
+     */
     public function getLogLevel()
     {
         return $this->logLevel;
     }
 
+    /**
+     * @return null|string
+     */
     public function getLogFilePath()
     {
         return $this->logFilePath;

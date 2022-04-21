@@ -14,6 +14,8 @@ interface IMapperPostRenderVisitor extends IMapperPayload
     /**
      * @param string $key
      * @param mixed  $value
+     *
+     * @return void
      */
     public function SetMappedValue($key, $value);
 }

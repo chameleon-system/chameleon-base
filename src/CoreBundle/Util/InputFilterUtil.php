@@ -78,6 +78,7 @@ class InputFilterUtil implements InputFilterUtilInterface
         if (null === $value) {
             return $value;
         }
+        /** @var string $value */
         if (null === $filterClass || '' === $filterClass || false === $filterClass) {
             return $value;
         }

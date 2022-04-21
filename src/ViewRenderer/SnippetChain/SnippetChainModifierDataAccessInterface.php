@@ -36,6 +36,8 @@ interface SnippetChainModifierDataAccessInterface
      * @param string $themeId
      * @param string $snippetChain
      *
+     * @return void
+     *
      * @throws DataAccessException
      */
     public function updateSnippetChain($themeId, $snippetChain);

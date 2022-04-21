@@ -163,7 +163,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
@@ -349,6 +349,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         }
     }
 
+    /**
+     * @param string $path
+     */
     private function createPageBreadcrumbs(\TdbCmsTree $node, $path = ''): string
     {
         $path .= '<li class="breadcrumb-item">'.$node->fieldName.'</li>';
@@ -451,7 +454,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      */
     protected function deleteNode(): ?string
     {
+        /** @var string|null $tableId */
         $tableId = $this->inputFilterUtil->getFilteredGetInput('tableid', '');
+        /** @var string|null $nodeId */
         $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
 
         if ('' === $tableId || '' === $nodeId) {
@@ -466,9 +471,13 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
     protected function connectPageToNode(): ?string
     {
+        /** @var string|null $treeNodeTableName */
         $treeNodeTableName = $this->inputFilterUtil->getFilteredGetInput('table', '');
+        /** @var string|null $tableId */
         $tableId = $this->tools->GetCMSTableId($treeNodeTableName);
+        /** @var string|null $nodeId */
         $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
+        /** @var string|null $currentPageId */
         $currentPageId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
 
         if ('' === $treeNodeTableName || '' === $nodeId || '' === $currentPageId) {
@@ -498,8 +507,11 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
     protected function disconnectPageFromNode(): ?string
     {
+        /** @var string|null $treeNodeTableName */
         $treeNodeTableName = $this->inputFilterUtil->getFilteredGetInput('table', '');
+        /** @var string|null $nodeId */
         $nodeId = $this->inputFilterUtil->getFilteredGetInput('nodeId', '');
+        /** @var string|null $currentPageId */
         $currentPageId = $this->inputFilterUtil->getFilteredGetInput('currentPageId', '');
 
         if ('' === $treeNodeTableName || '' === $nodeId || '' === $currentPageId) {
@@ -593,7 +605,10 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         return $treeData;
     }
 
-    private function getPortalBasedRootNodeId(): string
+    /**
+     * @return null|string
+     */
+    private function getPortalBasedRootNodeId(): ?string
     {
         if ('' !== $this->currentPageId) {
             // If called from page (further page connections).
@@ -701,6 +716,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         return $name;
     }
 
+    /**
+     * @return void
+     */
     private function setTypeAndAttributes(BackendTreeNodeDataModel $treeNodeDataModel, \TdbCmsTree $node)
     {
         $treeNodeDataModel->setType('');
@@ -765,6 +783,9 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         }
     }
 
+    /**
+     * @return void
+     */
     private function addIconToTreeNode (BackendTreeNodeDataModel $treeNodeDataModel, string $type, string $fontawesomeIcon) {
         if ('' === $treeNodeDataModel->getType()) {
             $treeNodeDataModel->setType($type);
@@ -795,6 +816,8 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @param bool $chachingEnabled
+     *
+     * @return void
      */
     private function addCachingTriggers(\IMapperCacheTriggerRestricted $cacheTriggerManager)
     {

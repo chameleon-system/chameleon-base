@@ -100,6 +100,9 @@ class ActivePageService implements ActivePageServiceInterface
         return $this->activePage;
     }
 
+    /**
+     * @return void
+     */
     private function initialize()
     {
         $this->activePageServiceInitializer->initialize($this);
@@ -149,7 +152,8 @@ class ActivePageService implements ActivePageServiceInterface
      * @param array               $additionalParameters
      * @param array               $excludeParameters
      * @param TdbCmsLanguage|null $language
-     * @param bool|string|int     $referenceType
+     * @param int                 $referenceType
+     * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
      */
@@ -243,6 +247,8 @@ class ActivePageService implements ActivePageServiceInterface
     /**
      * @param array          $parameters
      * @param TdbCmsLanguage $language
+     *
+     * @return void
      */
     private function modifyRouteParameters(array &$parameters, TdbCmsLanguage $language = null)
     {

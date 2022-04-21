@@ -13,20 +13,53 @@ namespace ChameleonSystem\DistributionBundle\VersionCheck\Version;
 
 class MatchLevel
 {
+    /**
+     * @var int
+     */
     public static $MATCH_SAME = 0;
+
+    /**
+     * @var int
+     */
     public static $MATCH_LEVEL_1 = 1;
+
+    /**
+     * @var int
+     */
     public static $MATCH_LEVEL_2 = 2;
 
+    /**
+     * @var int
+     */
     public static $MISSMATCH_TYPE_DEV_STABLE = 0;
+
+    /**
+     * @var int
+     */
     public static $MISSMATCH_TYPE_MINOR_DIFF = 1;
+
+    /**
+     * @var int
+     */
     public static $MISSMATCH_TYPE_MAYOR_DIFF = 2;
 
-    private $matchLevel;
     /**
-     * @var
+     * @var int
+     */
+    private $matchLevel;
+
+    /**
+     * @var array
      */
     private $missmatchlist;
 
+    /**
+     * @param int $matchLevel
+     * @param array $missmatchlist
+     *
+     * @psalm-param self::$MATCH_* $matchLevel
+     * @psalm-param self::$MISSMATCH_TYPE_*[] $missmatchlist
+     */
     public function __construct($matchLevel, array $missmatchlist)
     {
         $this->matchLevel = $matchLevel;

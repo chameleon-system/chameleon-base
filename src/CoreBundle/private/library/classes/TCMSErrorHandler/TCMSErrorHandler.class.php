@@ -81,8 +81,8 @@ class TCMSErrorHandler
     /**
      * transforms the error code into an human readable string (PHP constant name).
      *
-     * @param $iErrorType
-     * @param $aErrorLookup - optional: your own error type lookuplist
+     * @param int $iErrorType
+     * @param array<int, string> $aErrorLookup - optional: your own error type lookuplist
      *
      * @return string
      */

@@ -12,7 +12,7 @@
 class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig extends AbstractViewMapper
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
     {
@@ -21,7 +21,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig extends AbstractView
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {

@@ -16,15 +16,22 @@ interface IPkgCmsCoreLog
 {
     public function __construct(Psr\Log\LoggerInterface $oLogger);
 
+    /**
+     * @param Psr\Log\LoggerInterface $logger
+     *
+     * @return void
+     */
     public function setLogger(Psr\Log\LoggerInterface $logger);
 
     /**
      * System is unusable.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function emergency($message, $sFile, $iLine, array $context = array());
 
@@ -35,9 +42,11 @@ interface IPkgCmsCoreLog
      * trigger the SMS alerts and wake you up.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function alert($message, $sFile, $iLine, array $context = array());
 
@@ -47,9 +56,11 @@ interface IPkgCmsCoreLog
      * Example: Application component unavailable, unexpected exception.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function critical($message, $sFile, $iLine, array $context = array());
 
@@ -58,9 +69,11 @@ interface IPkgCmsCoreLog
      * be logged and monitored.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function error($message, $sFile, $iLine, array $context = array());
 
@@ -71,9 +84,11 @@ interface IPkgCmsCoreLog
      * that are not necessarily wrong.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function warning($message, $sFile, $iLine, array $context = array());
 
@@ -81,9 +96,11 @@ interface IPkgCmsCoreLog
      * Normal but significant events.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function notice($message, $sFile, $iLine, array $context = array());
 
@@ -93,9 +110,11 @@ interface IPkgCmsCoreLog
      * Example: User logs in, SQL logs.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function info($message, $sFile, $iLine, array $context = array());
 
@@ -103,9 +122,11 @@ interface IPkgCmsCoreLog
      * Detailed debug information.
      *
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function debug($message, $sFile, $iLine, array $context = array());
 
@@ -114,9 +135,11 @@ interface IPkgCmsCoreLog
      *
      * @param mixed  $level
      * @param string $message
-     * @param $sFile
-     * @param $iLine
+     * @param string $sFile
+     * @param int $iLine
      * @param array $context
+     *
+     * @return void
      */
     public function log($level, $message, $sFile, $iLine, array $context = array());
 }

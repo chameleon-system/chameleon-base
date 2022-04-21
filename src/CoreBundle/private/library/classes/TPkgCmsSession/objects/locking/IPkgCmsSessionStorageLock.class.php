@@ -20,7 +20,7 @@ interface IPkgCmsSessionStorageLock
     /**
      * returns true if the session is locked by the current request.
      *
-     * @param $sLockIdentifier
+     * @param string $sLockIdentifier
      *
      * @return bool
      */

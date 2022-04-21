@@ -14,6 +14,9 @@
 /**/
 class TPkgCmsEventManager
 {
+    /**
+     * @var array<string, IPkgCmsEventObserver[]>
+     */
     private $aObserver = array();
 
     /**
@@ -34,6 +37,8 @@ class TPkgCmsEventManager
      * @param string               $sEventContext - IPkgCmsEvent::CONTEXT_* or TPkgCmsEvent::CONTEXT_*
      * @param string               $sEventName    - use IPkgCmsEvent::NAME_* or TPkgCmsEvent::NAME_*
      * @param IPkgCmsEventObserver $oObserver
+     *
+     * @return void
      */
     public function RegisterObserver($sEventContext, $sEventName, IPkgCmsEventObserver &$oObserver)
     {
@@ -72,6 +77,12 @@ class TPkgCmsEventManager
         return $this->GetFullEventName($oEvent->GetContext(), $oEvent->GetName());
     }
 
+    /**
+     * @param string $sEventContext
+     * @param string $sEventName
+     *
+     * @return string
+     */
     private function GetFullEventName($sEventContext, $sEventName)
     {
         return $sEventContext.'::'.$sEventName;

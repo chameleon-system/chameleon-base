@@ -20,13 +20,18 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CountUpdateCommand extends Command
 {
+    /**
+     * @param string|null $name
+     */
     public function __construct($name = null)
     {
         parent::__construct('chameleon_system:update:count');
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function configure()
     {

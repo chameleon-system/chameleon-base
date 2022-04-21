@@ -38,7 +38,7 @@ class ExtranetConfiguration implements ExtranetConfigurationInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getExtranetHandlerSpotName()
     {
@@ -46,9 +46,7 @@ class ExtranetConfiguration implements ExtranetConfigurationInterface
     }
 
     /**
-     * @param int $page
-     *
-     * @return string|null
+     * {@inheritDoc}
      */
     public function getLink($page)
     {
@@ -90,7 +88,7 @@ class ExtranetConfiguration implements ExtranetConfigurationInterface
     }
 
     /**
-     * @return TdbDataExtranet
+     * {@inheritDoc}
      */
     public function getExtranetConfigObject()
     {

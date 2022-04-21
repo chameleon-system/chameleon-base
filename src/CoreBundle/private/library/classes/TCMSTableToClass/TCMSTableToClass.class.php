@@ -512,7 +512,7 @@ class TCMSTableToClass
      * @param string $sPrefix
      * @param string $sName
      *
-     * @return string
+     * @return class-string
      */
     public static function GetClassName($sPrefix, $sName)
     {

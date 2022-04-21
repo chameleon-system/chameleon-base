@@ -271,8 +271,8 @@ class TCMSTableEditorEndPoint
     /**
      * here you can add checks to validate the data and prevent saving.
      *
-     * @var array     $postData - raw post data (e.g. datetime fields are splitted into 2 post values and in non sql format)
-     * @var TIterator $oFields - TIterator of TCMSField objects
+     * @param array     $postData - raw post data (e.g. datetime fields are splitted into 2 post values and in non sql format)
+     * @param TIterator $oFields - TIterator of TCMSField objects
      *
      * @return bool
      */
@@ -742,7 +742,7 @@ class TCMSTableEditorEndPoint
      * @param array $postData
      * @param bool  $bDataIsInSQLForm - set to true, if the data in $postData is in sql form
      *
-     * @return TCMSstdClass|bool
+     * @return TCMSstdClass|false
      */
     public function Save(&$postData, $bDataIsInSQLForm = false)
     {
@@ -1006,6 +1006,8 @@ class TCMSTableEditorEndPoint
      *
      * @param TCMSField $oField       mlt field object
      * @param int       $iConnectedID
+     *
+     * @return void
      */
     protected function AddMLTConnectionExecute($oField, $iConnectedID)
     {
@@ -1040,9 +1042,9 @@ class TCMSTableEditorEndPoint
      * Set new order position and updates order position in all other
      * connected connections behind the new position.
      *
-     * @param $sFieldName
-     * @param $sConnectedId
-     * @param $iPosition
+     * @param string $sFieldName
+     * @param string $sConnectedId
+     * @param int $iPosition
      */
     public function updateMLTSortOrder($sFieldName, $sConnectedId, $iPosition)
     {
@@ -1123,7 +1125,7 @@ class TCMSTableEditorEndPoint
     /**
      * here you can modify, clean or filter data before saving.
      *
-     * @var array $postData
+     * @param array $postData
      *
      * @return array
      */
@@ -1169,6 +1171,8 @@ class TCMSTableEditorEndPoint
      *
      *
      * @param TIterator $oFields - the fields inserted
+     *
+     * @return void
      */
     protected function PostInsertHook(&$oFields)
     {
@@ -1257,7 +1261,9 @@ class TCMSTableEditorEndPoint
     /**
      * deletes the record and all language children; updates all references to this record.
      *
-     * @param int $sId
+     * @param string $sId
+     *
+     * @return void
      */
     public function Delete($sId = null)
     {

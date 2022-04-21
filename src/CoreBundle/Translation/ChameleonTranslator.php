@@ -17,10 +17,14 @@ use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @psalm-suppress UndefinedInterfaceMethod, InvalidPropertyAssignmentValue
+ * @FIXME This translator uses methods that are exclusive to `Symfony\Component\Translation\TranslatorInterface` (e.g. `transChoice`) but uses `Symfony\Contracts\Translation\TranslatorInterface` for `$delegate`
+ */
 class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
 {
     /**
-     * @var TranslatorInterface|TranslatorBagInterface
+     * @var TranslatorInterface&TranslatorBagInterface
      */
     private $delegate;
     /**
@@ -29,7 +33,7 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
     private $requestInfoService;
 
     /**
-     * @param TranslatorInterface         $delegate
+     * @param TranslatorInterface&TranslatorBagInterface $delegate
      * @param RequestInfoServiceInterface $requestInfoService
      */
     public function __construct(TranslatorInterface $delegate, RequestInfoServiceInterface $requestInfoService)
@@ -60,7 +64,12 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $id
+     * @param int $number
+     * @param array $parameters
+     * @param string $domain
+     * @param string $locale
+     * @return string
      */
     public function transChoice($id, $number, array $parameters = array(), $domain = null, $locale = null)
     {
@@ -68,7 +77,8 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $locale
+     * @return void
      */
     public function setLocale($locale)
     {

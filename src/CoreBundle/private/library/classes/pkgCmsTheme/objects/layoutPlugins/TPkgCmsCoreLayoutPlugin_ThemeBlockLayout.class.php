@@ -26,10 +26,7 @@ class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugi
     }
 
     /**
-     * generate the layout html.
-     *
-     * @param $contentIdentifier
-     * @param $config
+     * {@inheritDoc}
      */
     public function run($contentIdentifier, $config)
     {

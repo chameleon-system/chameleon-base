@@ -86,6 +86,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param string $responseStatus
+     *
+     * @return void
      */
     public function setResponseStatus($responseStatus)
     {
@@ -102,6 +104,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param string $updateStatus
+     *
+     * @return void
      */
     public function setUpdateStatus($updateStatus)
     {
@@ -118,6 +122,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param string $fileContents
+     *
+     * @return void
      */
     public function setFileContents($fileContents)
     {
@@ -134,6 +140,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param string $message
+     *
+     * @return void
      */
     public function setMessage($message)
     {
@@ -150,6 +158,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param UpdateMessage[] $infoMessages
+     *
+     * @return void
      */
     public function setInfoMessages(array $infoMessages)
     {
@@ -166,6 +176,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param UpdateException[] $exceptions
+     *
+     * @return void
      */
     public function setExceptions(array $exceptions)
     {
@@ -182,6 +194,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param SuccessQuery[] $successQueries
+     *
+     * @return void
      */
     public function setSuccessQueries(array $successQueries)
     {
@@ -198,6 +212,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param ErrorQuery[] $errorQueries
+     *
+     * @return void
      */
     public function setErrorQueries(array $errorQueries)
     {
@@ -214,6 +230,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param string $renderedExceptionsGlobal
+     *
+     * @return void
      */
     public function setRenderedExceptionsGlobal($renderedExceptionsGlobal)
     {
@@ -230,6 +248,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param string $renderedExceptionsUpdate
+     *
+     * @return void
      */
     public function setRenderedExceptionsUpdate($renderedExceptionsUpdate)
     {
@@ -246,6 +266,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param string $renderedErrorQueriesGlobal
+     *
+     * @return void
      */
     public function setRenderedErrorQueriesGlobal($renderedErrorQueriesGlobal)
     {
@@ -262,6 +284,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param string $renderedErrorQueriesUpdate
+     *
+     * @return void
      */
     public function setRenderedErrorQueriesUpdate($renderedErrorQueriesUpdate)
     {
@@ -278,6 +302,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param string $renderedInfoMessagesGlobal
+     *
+     * @return void
      */
     public function setRenderedInfoMessagesGlobal($renderedInfoMessagesGlobal)
     {
@@ -294,6 +320,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param string $renderedInfoMessagesUpdate
+     *
+     * @return void
      */
     public function setRenderedInfoMessagesUpdate($renderedInfoMessagesUpdate)
     {
@@ -310,6 +338,8 @@ class MigrationResult implements JsonSerializable
 
     /**
      * @param string $renderedSuccessQueriesUpdate
+     *
+     * @return void
      */
     public function setRenderedSuccessQueriesUpdate($renderedSuccessQueriesUpdate)
     {

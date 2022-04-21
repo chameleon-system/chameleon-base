@@ -16,24 +16,31 @@ interface NestedSetHelperInterface
     /**
      * call after creating a new node to update all siblings.
      *
-     * @param $nodeId
-     * @param $parentId
+     * @param string $nodeId
+     * @param string $parentId
+     *
+     * @return void
      */
     public function newNode($nodeId, $parentId);
 
     /**
      * @param NodeInterface $node - the after being moved before the lft and rgt fields have been updated
+     *
+     * @return void
      */
     public function updateNode(NodeInterface $node);
 
     /**
      * call before removing a node - will update all siblings.
      *
-     * @param $nodeId
+     * @param string $nodeId
      *
-     * @return mixed
+     * @return void
      */
     public function deleteNode($nodeId);
 
+    /**
+     * @return void
+     */
     public function initializeTree();
 }

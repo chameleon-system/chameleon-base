@@ -12,7 +12,7 @@
 class TPkgCmsFileManager_Utilities
 {
     /**
-     * @param $input_size int - raw input file size in bytes
+     * @param int $input_size - raw input file size in bytes
      *
      * @return int - base64 encoded output file size in bytes
      */
@@ -20,6 +20,8 @@ class TPkgCmsFileManager_Utilities
     {
         $code_size = (($input_size * 4) / 3);
         $padding_size = ($input_size % 3) ? (3 - ($input_size % 3)) : 0;
+
+        /** @var int $total_size */
         $total_size = ceil($code_size + $padding_size);
 
         return $total_size;
@@ -37,9 +39,10 @@ class TPkgCmsFileManager_Utilities
      * $result = debianSaveGlob("/path/to/my/cache", "*.inc.php"); // will do a glob for the pattern "/path/to/my/cache/*.inc.php"
      *
      *
-     * @param $path
-     * @param $patternInPath
-     * @param null $flags
+     * @param string $path
+     * @param string $patternInPath
+     * @param int|null $flags
+     * @psalm-param GLOB_* $flags
      *
      * @return array
      */

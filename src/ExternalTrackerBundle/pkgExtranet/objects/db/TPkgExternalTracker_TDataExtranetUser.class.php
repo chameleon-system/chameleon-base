@@ -11,12 +11,18 @@
 
 class TPkgExternalTracker_TDataExtranetUser extends TPkgExternalTracker_TDataExtranetUserAutoParent
 {
+    /**
+     * @return void
+     */
     protected function PostLoginHook()
     {
         parent::PostLoginHook();
         TdbPkgExternalTrackerList::GetActiveInstance()->AddEvent(TPkgExternalTrackerState::EVENT_EXTRANET_LOGIN, $this);
     }
 
+    /**
+     * @return void
+     */
     protected function PostInsertHook()
     {
         parent::PostInsertHook();
