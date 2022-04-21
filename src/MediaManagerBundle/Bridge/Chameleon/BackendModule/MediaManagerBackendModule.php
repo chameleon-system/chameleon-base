@@ -456,7 +456,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $accessRightsMedia = $this->createMediaAccessRightsModel();
         if (false === $accessRightsMedia->show) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: No show rights');
+            $this->logAndReturnError('MediaManagerBackendModule: No show rights');
         }
 
         $listState = $this->getListState();
@@ -499,7 +499,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->returnAsAjaxResponse($listReturn);
     }
 
-    private function returnGeneralErrorMessageForAjax(?string $logMessage = null, ?\Throwable $exception = null)
+    private function logAndReturnError(?string $logMessage = null, ?\Throwable $exception = null)
     {
         $this->logger->error($logMessage ?? 'A media error occured', ['exception'=>$exception]);
 
@@ -580,10 +580,10 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 $this->languageService->getActiveEditLanguage()->id
             );
             if (null === $mediaItem) {
-                $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Couldn\'t find media item '.$mediaItemId);
+                $this->logAndReturnError('MediaManagerBackendModule: Couldn\'t find media item '.$mediaItemId);
             }
         } catch (DataAccessException $e) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Couldn\'t find media item '.$mediaItemId, $e);
+            $this->logAndReturnError('MediaManagerBackendModule: Couldn\'t find media item '.$mediaItemId, $e);
         }
 
         $viewRenderer = $this->createViewRendererInstance();
@@ -629,7 +629,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         try {
             $contentHtml = $this->responseVariableReplacer->replaceVariables($contentHtml);
         } catch (TokenInjectionFailedException $e) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Couldn\'t replace variables', $e);
+            $this->logAndReturnError('MediaManagerBackendModule: Couldn\'t replace variables', $e);
         }
         $detailReturn->contentHtml = $contentHtml;
         $detailReturn->mediaItemName = $mediaItem->getName();
@@ -664,7 +664,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
             MediaManagerListState::STATE_PARAM_NAME_MEDIA_TREE_NODE_ID
         );
         if (null === $mediaTreeNodeId) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Media tree node id is missing');
+            $this->logAndReturnError('MediaManagerBackendModule: Media tree node id is missing');
         }
 
         try {
@@ -673,10 +673,10 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 $this->languageService->getActiveEditLanguage()->id
             );
         } catch (DataAccessException $e) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Couldn\'t access media tree node '.$mediaTreeNodeId);
+            $this->logAndReturnError('MediaManagerBackendModule: Couldn\'t access media tree node '.$mediaTreeNodeId);
         }
         if (null === $mediaTreeNode) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: media tree node not found '.$mediaTreeNodeId);
+            $this->logAndReturnError('MediaManagerBackendModule: media tree node not found '.$mediaTreeNodeId);
         }
 
         $info = new MediaTreeNodeJsonObject(
@@ -693,7 +693,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $mediaTreeNodeParentId = $this->inputFilterUtil->getFilteredPostInput('parentId');
         $name = $this->inputFilterUtil->getFilteredPostInput('name');
         if (null === $mediaTreeNodeParentId || null === $name) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: name or tree node parent id are missing');
+            $this->logAndReturnError('MediaManagerBackendModule: name or tree node parent id are missing');
         }
 
         $mediaTreeNode = null;
@@ -705,7 +705,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 null === $editLanguage ? null : $editLanguage->id
             );
         } catch (DataAccessException $e) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Couldn\'t insert media tree node parent '.$mediaTreeNodeParentId, $e);
+            $this->logAndReturnError('MediaManagerBackendModule: Couldn\'t insert media tree node parent '.$mediaTreeNodeParentId, $e);
         }
 
         $info = new MediaTreeNodeJsonObject(
@@ -722,7 +722,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $mediaTreeNodeId = $this->inputFilterUtil->getFilteredPostInput('id');
         $name = $this->inputFilterUtil->getFilteredPostInput('name');
         if (null === $mediaTreeNodeId || null === $name) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: name or media tree node id are missing');
+            $this->logAndReturnError('MediaManagerBackendModule: name or media tree node id are missing');
         }
 
         $mediaTreeNode = null;
@@ -730,11 +730,11 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
             $editLanguage = $this->languageService->getActiveEditLanguage();
             $mediaTreeNode = $this->mediaTreeDataAccess->getMediaTreeNode($mediaTreeNodeId, $editLanguage->id);
             if (null === $mediaTreeNode) {
-                $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Media tree node not found '.$mediaTreeNodeId);
+                $this->logAndReturnError('MediaManagerBackendModule: Media tree node not found '.$mediaTreeNodeId);
             }
             $this->mediaTreeDataAccess->renameMediaTreeNode($mediaTreeNode->getId(), $name, $editLanguage->id);
         } catch (DataAccessException $e) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Couldn\'t rename media tree node '.$mediaTreeNodeId, $e);
+            $this->logAndReturnError('MediaManagerBackendModule: Couldn\'t rename media tree node '.$mediaTreeNodeId, $e);
         }
 
         $info = new MediaTreeNodeJsonObject(
@@ -750,7 +750,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $mediaTreeNodeId = $this->inputFilterUtil->getFilteredPostInput('id');
         if (null === $mediaTreeNodeId) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Media tree node id is missing');
+            $this->logAndReturnError('MediaManagerBackendModule: Media tree node id is missing');
         }
         try {
             $mediaTreeNode = $this->mediaTreeDataAccess->getMediaTreeNode(
@@ -758,11 +758,11 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 $this->languageService->getActiveEditLanguage()->id
             );
             if (null === $mediaTreeNode) {
-                $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Media tree node not found '.$mediaTreeNodeId);
+                $this->logAndReturnError('MediaManagerBackendModule: Media tree node not found '.$mediaTreeNodeId);
             }
             $this->mediaTreeDataAccess->deleteMediaTreeNode($mediaTreeNode->getId());
         } catch (DataAccessException $e) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Couldn\'t delete media tree node '.$mediaTreeNodeId, $e);
+            $this->logAndReturnError('MediaManagerBackendModule: Couldn\'t delete media tree node '.$mediaTreeNodeId, $e);
         }
 
         $info = new MediaTreeNodeJsonObject($mediaTreeNodeId, '');
@@ -784,17 +784,17 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $position = (int) $this->inputFilterUtil->getFilteredPostInput('position');
 
         if (null === $mediaTreeNodeId || null === $mediaTreeNodeParentId || null === $position) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: position or media tree node id or media tree node parent id are missing');
+            $this->logAndReturnError('MediaManagerBackendModule: position or media tree node id or media tree node parent id are missing');
         }
 
         try {
             $editLanguage = $this->languageService->getActiveEditLanguage();
             if (null === $editLanguage) {
-                $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: There is no edit language');
+                $this->logAndReturnError('MediaManagerBackendModule: There is no edit language');
             }
             $mediaTreeNode = $this->mediaTreeDataAccess->getMediaTreeNode($mediaTreeNodeId, $editLanguage->id);
             if (null === $mediaTreeNode) {
-                $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Media tree node not found '.$mediaTreeNodeId);
+                $this->logAndReturnError('MediaManagerBackendModule: Media tree node not found '.$mediaTreeNodeId);
             }
             $this->mediaTreeDataAccess->moveMediaTreeNode(
                 $mediaTreeNodeId,
@@ -803,7 +803,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 $editLanguage->id
             );
         } catch (DataAccessException $e) {
-            $this->returnGeneralErrorMessageForAjax('Cannot move media tree node to '.$mediaTreeNodeId.' '.$mediaTreeNodeParentId, $e);
+            $this->logAndReturnError('Cannot move media tree node to '.$mediaTreeNodeId.' '.$mediaTreeNodeParentId, $e);
         }
 
         $info = new MediaTreeNodeJsonObject($mediaTreeNodeId, '');
@@ -816,7 +816,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $mediaTreeNodeId = $this->inputFilterUtil->getFilteredPostInput('treeId');
         $imageIds = $this->inputFilterUtil->getFilteredPostInput('imageIds');
         if (null === $mediaTreeNodeId || false === is_array($imageIds)) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: images ids or media tree node id are missing');
+            $this->logAndReturnError('MediaManagerBackendModule: images ids or media tree node id are missing');
         }
 
         try {
@@ -833,7 +833,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 }
             }
         } catch (DataAccessException $e) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Cannot set media tree node of media item(s)', $e);
+            $this->logAndReturnError('MediaManagerBackendModule: Cannot set media tree node of media item(s)', $e);
         }
 
         $return = new JavascriptPluginMessage();
@@ -851,7 +851,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $value = $this->inputFilterUtil->getFilteredPostInput('value');
         $type = $this->inputFilterUtil->getFilteredPostInput('type');
         if (null === $mediaItemId || null === $value || null === $type) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: type or or value or media item id are missing');
+            $this->logAndReturnError('MediaManagerBackendModule: type or or value or media item id are missing');
         }
 
         try {
@@ -860,7 +860,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 $this->languageService->getActiveEditLanguage()->id
             );
             if (null === $mediaItem) {
-                $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Media item not found '.$mediaItemId);
+                $this->logAndReturnError('MediaManagerBackendModule: Media item not found '.$mediaItemId);
             }
 
             $languageId = $this->languageService->getActiveEditLanguage()->id;
@@ -942,7 +942,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
                 }
             }
         } catch (DataAccessException $e) {
-            $this->returnGeneralErrorMessageForAjax('MediaManagerBackendModule: Couldn\'t delete media item(s)', $e);
+            $this->logAndReturnError('MediaManagerBackendModule: Couldn\'t delete media item(s)', $e);
         }
 
         $this->returnAsAjaxResponse($return);
