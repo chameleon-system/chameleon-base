@@ -83,7 +83,7 @@ class TCMSFieldBoolean extends TCMSFieldOption
     {
         $aData = parent::GetFieldWriterData();
 
-        $aData['sFieldType'] = 'boolean';
+        $aData['sFieldType'] = 'bool';
 
         $aData['sFieldDefaultValue'] = 'false';
         if ('1' == $this->data) {

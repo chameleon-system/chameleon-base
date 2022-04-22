@@ -16,7 +16,7 @@
  * name: with in each context the events are identified by their name.
  *
  * events may hold data specific to the event. this data can be accessed via GetData
-/**/
+ */
 interface IPkgCmsEvent
 {
     const CONTEXT_CORE = 'core';
@@ -48,9 +48,7 @@ interface IPkgCmsEvent
      * returns the context of the event. Context describes what package or subpackage the event belongs to. this helps
      * to isolate events within a package from other events
      *
-     * @return null|string
-     *
-     * @psalm-return IPkgCmsEvent::CONTEXT_*|TPkgCmsEvent::CONTEXT_*|null
+     * @return string|null
      */
     public function GetContext();
 
@@ -58,9 +56,7 @@ interface IPkgCmsEvent
      * @abstract
      * each event has, in addition to the context a name. the combination is used to identify the specific event
      *
-     * @return null|string
-     *
-     * @psalm-return self::NAME_*|TPkgCmsEvent::NAME_*|null
+     * @return string|null
      */
     public function GetName();
 
@@ -77,7 +73,6 @@ interface IPkgCmsEvent
      * sets the context of the event - use IPkgCmsEvent::CONTEXT_* or TPkgCmsEvent::CONTEXT_*
      *
      * @param string $sContext
-     * @psalm-param self::CONTEXT_*|TPkgCmsEvent::CONTEXT_* $sContext
      *
      * @return $this
      */
@@ -88,7 +83,6 @@ interface IPkgCmsEvent
      * sets the name of the event in the context set via SetContext. use IPkgCmsEvent::NAME_* or TPkgCmsEvent::NAME_*
      *
      * @param string $sName
-     * @psalm-param self::NAME_*|TPkgCmsEvent::NAME_* $sName
      *
      * @return $this
      *
@@ -112,9 +106,6 @@ interface IPkgCmsEvent
      * @param string $sContext - use IPkgCmsEvent::CONTEXT_* or TPkgCmsEvent::CONTEXT_*
      * @param string $sName - use IPkgCmsEvent::NAME_* or TPkgCmsEvent::NAME_*
      * @param array $aData - any data you want to pass to the event
-     *
-     * @psalm-param IPkgCmsEvent::NAME_*|TPkgCmsEvent::NAME_* $sName
-     * @psalm-param IPkgCmsEvent::CONTEXT_*|TPkgCmsEvent::CONTEXT_* $sContext
      *
      * @return IPkgCmsEvent
      *                      returns a new instance of an event for the defined context.

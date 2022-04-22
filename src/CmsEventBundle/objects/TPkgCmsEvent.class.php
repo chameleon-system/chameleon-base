@@ -13,18 +13,16 @@ class TPkgCmsEvent implements IPkgCmsEvent
 {
     /**
      * @var null|string
-     * @psalm-var null|IPkgCmsEvent::CONTEXT_*|TPkgCmsEvent::CONTEXT_*
      */
     private $sContext = null;
 
     /**
      * @var null|string
-     * @psalm-var null|IPkgCmsEvent::NAME_*|TPkgCmsEvent::NAME_*
      */
     private $sName = null;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $aData = array();
 
@@ -55,8 +53,6 @@ class TPkgCmsEvent implements IPkgCmsEvent
 
     /**
      * @return null|string
-     *
-     * @psalm-return IPkgCmsEvent::CONTEXT_*|TPkgCmsEvent::CONTEXT_*|null
      */
     public function GetContext()
     {
@@ -65,8 +61,6 @@ class TPkgCmsEvent implements IPkgCmsEvent
 
     /**
      * @return null|string
-     *
-     * @psalm-return IPkgCmsEvent::NAME_*|TPkgCmsEvent::NAME_*|null
      */
     public function GetName()
     {
@@ -83,7 +77,6 @@ class TPkgCmsEvent implements IPkgCmsEvent
 
     /**
      * @param string $sContext
-     * @psalm-param IPkgCmsEvent::CONTEXT_*|TPkgCmsEvent::CONTEXT_* $sContext
      *
      * @return $this
      */
@@ -96,7 +89,6 @@ class TPkgCmsEvent implements IPkgCmsEvent
 
     /**
      * @param string $sName
-     * @psalm-param IPkgCmsEvent::NAME_*|TPkgCmsEvent::NAME_* $sName
      *
      * @return $this
      */
@@ -108,7 +100,7 @@ class TPkgCmsEvent implements IPkgCmsEvent
     }
 
     /**
-     * @param array $aData
+     * @param array<string, mixed> $aData
      *
      * @return $this
      */
@@ -122,16 +114,16 @@ class TPkgCmsEvent implements IPkgCmsEvent
     /**
      * @param string $sContext
      * @param string $sName
-     * @param \ChameleonSystem\CoreBundle\Controller\ChameleonController $oSubject
-     * @param string[] $aData
+     * @param object $oSubject
+     * @param array<string, mixed> $aData
      *
-     * @psalm-param IPkgCmsEvent::NAME_*|TPkgCmsEvent::NAME_* $sName
-     * @psalm-param IPkgCmsEvent::CONTEXT_*|TPkgCmsEvent::CONTEXT_* $sContext
+     * @return static
      */
     public static function &GetNewInstance($oSubject, $sContext, $sName, $aData = array())
     {
         $sCallingClass = get_called_class();
-        /** @var $oInstance TPkgCmsEvent */
+
+        /** @var static $oInstance */
         $oInstance = new $sCallingClass();
         $oInstance->SetSubject($oSubject);
         $oInstance->SetContext($sContext);

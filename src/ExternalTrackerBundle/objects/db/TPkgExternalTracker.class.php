@@ -36,7 +36,7 @@ class TPkgExternalTracker extends TPkgExternalTrackerAutoParent
     /**
      * @param TPkgExternalTrackerState $oState
      *
-     * @return array
+     * @return string[]
      */
     public function GetHTMLHeadIncludes(TPkgExternalTrackerState $oState)
     {

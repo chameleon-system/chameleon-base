@@ -282,7 +282,7 @@ class TModuleLoader
     /**
      * return the footer includes of all modules.
      *
-     * @return array
+     * @return string[]
      */
     public function GetHtmlFooterIncludes()
     {

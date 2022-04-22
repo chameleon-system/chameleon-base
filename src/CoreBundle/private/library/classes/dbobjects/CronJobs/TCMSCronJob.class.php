@@ -26,6 +26,9 @@ class TCMSCronJob extends TCMSRecord
      */
     protected $sMessageOutput = '';
 
+    /**
+     * @param string $id
+     */
     public function TCMSCronJob($id = null)
     {
         parent::TCMSRecord('cms_cronjobs', $id);
