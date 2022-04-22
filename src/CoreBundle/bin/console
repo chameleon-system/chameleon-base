@@ -32,6 +32,14 @@ require_once PATH_PROJECT_BASE.'/app/AppKernel.php';
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 
+/**
+ * #715: Use symfony error handling, when `USE_SYMFONY_CLI_ERROR_HANDLER=1` is set but default to
+ *       old-style error handler.
+ * @deprecated This flag exists to ease the move to symfony error handling.
+ *             It will be removed in the future and symfony error handling will become standard with 7.2
+ */
+$useSymfonyCliErrorHandler = '1' === getenv('USE_SYMFONY_CLI_ERROR_HANDLER');
+
 $input = new ArgvInput();
 $env = $input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'dev');
 $debug = '0' !== getenv('SYMFONY_DEBUG') && !$input->hasParameterOption(array('--no-debug', '')) && 'prod' !== $env;
@@ -39,7 +47,9 @@ $debug = '0' !== getenv('SYMFONY_DEBUG') && !$input->hasParameterOption(array('-
 try {
     $kernel = new AppKernel($env, $debug);
     $application = new Application($kernel);
-    $application->setCatchExceptions(false);
+    if (false === $useSymfonyCliErrorHandler) {
+        $application->setCatchExceptions(false);
+    }
     $application->run($input);
 } catch (Exception $e) {
     echo $e;
