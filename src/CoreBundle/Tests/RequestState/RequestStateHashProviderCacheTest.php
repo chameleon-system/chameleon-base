@@ -6,14 +6,17 @@ use ChameleonSystem\CoreBundle\RequestState\Interfaces\RequestStateHashProviderI
 use ChameleonSystem\CoreBundle\RequestState\RequestStateHashProviderCache;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class RequestStateHashProviderCacheTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var RequestStateHashProviderCache
      */
@@ -40,7 +43,7 @@ class RequestStateHashProviderCacheTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockSubject = $this->prophesize(RequestStateHashProviderInterface::class);
         $this->mockSubject->getHash(Argument::any())->willReturn('some-fake-hash');

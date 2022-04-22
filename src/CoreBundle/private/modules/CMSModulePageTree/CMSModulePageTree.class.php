@@ -571,7 +571,7 @@ class CMSModulePageTree extends TCMSModelBase
 
             $updatedNodes[] = $node;
             $event = new ChangeNavigationTreeNodeEvent($updatedNodes);
-            $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_NAVIGATION_TREE_NODE, $event);
+            $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_NAVIGATION_TREE_NODE);
         }
 
         return $returnVal;

@@ -13,7 +13,7 @@ namespace ChameleonSystem\AutoclassesBundle\Listener;
 
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class RequestListener
@@ -44,7 +44,7 @@ class RequestListener
     /**
      * @return void
      */
-    public function checkAutoclasses(GetResponseEvent $evt)
+    public function checkAutoclasses(RequestEvent $evt)
     {
         if (HttpKernelInterface::MASTER_REQUEST !== $evt->getRequestType()) {
             return;

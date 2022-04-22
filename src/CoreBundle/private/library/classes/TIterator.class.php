@@ -19,7 +19,7 @@
  * @property T[] $_items
  * @property int $_itemPointer
  */
-class TIterator
+class TIterator implements Iterator
 {
     private $itemPointer = 0;
     /**
@@ -407,4 +407,20 @@ class TIterator
     {
         $this->itemPointer = $itemPointer;
     }
+
+    public function key(): int
+    {
+        return $this->getItemPointer();
+    }
+
+    public function valid(): bool
+    {
+        return $this->getItemPointer() < $this->Length();
+    }
+
+    public function rewind(): void
+    {
+        $this->setItemPointer(0);
+    }
+
 }

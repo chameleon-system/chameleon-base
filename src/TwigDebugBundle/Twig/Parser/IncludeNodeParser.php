@@ -12,14 +12,18 @@
 namespace ChameleonSystem\TwigDebugBundle\Twig\Parser;
 
 use ChameleonSystem\TwigDebugBundle\Twig\Node\Twig_Node_Include_Decorator;
+use Twig\Node\IncludeNode;
+use Twig\Node\Node;
+use Twig\Token;
+use Twig\TokenParser\IncludeTokenParser;
 
-class IncludeNodeParser extends \Twig_TokenParser_Include
+class IncludeNodeParser extends IncludeTokenParser
 {
     /**
      * {@inheritdoc}
      * @psalm-suppress MethodSignatureMismatch - `Twig_Token` is a subtype of `Token`
      */
-    public function parse(\Twig_Token $token)
+    public function parse(Token $token): Node
     {
         $node = parent::parse($token);
 

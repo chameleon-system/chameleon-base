@@ -1013,7 +1013,7 @@ class TTools
      *
      * @return string - the cutted plain text
      */
-    public static function StripTextWordSave($length = null, $sText, $sAddToText = '')
+    public static function StripTextWordSave($length, $sText, $sAddToText = '')
     {
         $content = strip_tags(trim($sText));
         $content = html_entity_decode($content, ENT_NOQUOTES, 'UTF-8');

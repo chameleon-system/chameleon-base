@@ -14,12 +14,15 @@ namespace ChameleonSystem\AutoclassesBundle\Tests;
 use ChameleonSystem\AutoclassesBundle\Listener\RequestListener;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class RequestListenerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @test
      */
@@ -94,7 +97,7 @@ class RequestListenerTest extends TestCase
     private function getResponseEventProphet($type, $chameleonType)
     {
         $prophet = new Prophet();
-        $evt = $prophet->prophesize('Symfony\Component\HttpKernel\Event\GetResponseEvent');
+        $evt = $prophet->prophesize('Symfony\Component\HttpKernel\Event\RequestEvent');
         $evt->getRequestType()->willReturn($type);
 
         return $evt;

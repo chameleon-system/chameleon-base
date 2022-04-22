@@ -25,8 +25,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('chameleon_system_core');
+        $treeBuilder = new TreeBuilder('chameleon_system_core');
+        $root = $treeBuilder->getRootNode();
         $root->isRequired();
 
         $root
@@ -58,8 +58,8 @@ class Configuration implements ConfigurationInterface
      */
     private function getCronjobConfig()
     {
-        $tree = new TreeBuilder();
-        $subTree = $tree->root('cronjobs');
+        $tree = new TreeBuilder('cronjobs');
+        $subTree = $tree->getRootNode();
         $subTree->addDefaultsIfNotSet();
         $subTree->children()
             ->arrayNode('ip_whitelist')
@@ -84,8 +84,8 @@ class Configuration implements ConfigurationInterface
      */
     private function getMailTargetTransformationServiceConfig()
     {
-        $tree = new TreeBuilder();
-        $subTree = $tree->root('mail_target_transformation_service');
+        $tree = new TreeBuilder('mail_target_transformation_service');
+        $subTree = $tree->getRootNode();
         $subTree->isRequired();
         $subTree->children()
             ->scalarNode('target_mail')
@@ -109,8 +109,8 @@ class Configuration implements ConfigurationInterface
      */
     private function getMailerConfig()
     {
-        $tree = new TreeBuilder();
-        $subTree = $tree->root('mailer');
+        $tree = new TreeBuilder('mailer');
+        $subTree = $tree->getRootNode();
         $subTree->addDefaultsIfNotSet();
         $subTree->children()
             ->scalarNode('host')
@@ -134,8 +134,8 @@ class Configuration implements ConfigurationInterface
      */
     private function getGoogleMapsApiConfig()
     {
-        $tree = new TreeBuilder();
-        $subTree = $tree->root('google_maps');
+        $tree = new TreeBuilder('google_maps');
+        $subTree = $tree->getRootNode();
         $subTree->addDefaultsIfNotSet();
         $subTree->children()
             ->scalarNode('api_key')
@@ -150,8 +150,8 @@ class Configuration implements ConfigurationInterface
      */
     private function getModuleExecutionConfig()
     {
-        $tree = new TreeBuilder();
-        $subTree = $tree->root('module_execution');
+        $tree = new TreeBuilder('module_execution');
+        $subTree = $tree->getRootNode();
         $subTree->addDefaultsIfNotSet();
         $subTree->children()
             ->enumNode('strategy')
@@ -168,8 +168,8 @@ class Configuration implements ConfigurationInterface
      */
     private function getBackendConfig()
     {
-        $tree = new TreeBuilder();
-        $subTree = $tree->root('backend');
+        $tree = new TreeBuilder('backend');
+        $subTree = $tree->getRootNode();
         $subTree->addDefaultsIfNotSet();
         $subTree->children()
             ->scalarNode('home_pagedef')
@@ -190,8 +190,8 @@ class Configuration implements ConfigurationInterface
      */
     private function getResourceCollectionConfig()
     {
-        $tree = new TreeBuilder();
-        $subTree = $tree->root('resource_collection');
+        $tree = new TreeBuilder('resource_collection');
+        $subTree = $tree->getRootNode();
         $subTree->addDefaultsIfNotSet();
         $outboxUrl = rtrim(URL_OUTBOX, '/');
         // the outboxurl may be an absolute url - we want a relative url instead. Reason:

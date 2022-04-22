@@ -59,5 +59,7 @@ EOF
         $output->writeln('<info>Please make sure that your autoclasses folder is writable by the web server. Otherwise, actions in the backend modifying tables won\'t be able to update the classes.</info>');
         $output->writeln('<info>Preferably use ACLs or configure the system in a way that it uses the same user for command line operations and the web server.</info>');
         $output->writeln('<info>If nothing else helps, either do something like `sudo chown -R www-data app/cache` or, if you intend to switch between command line and web based cache write, do a nasty 777 on the folder.</info>');
+
+        return 0;
     }
 }

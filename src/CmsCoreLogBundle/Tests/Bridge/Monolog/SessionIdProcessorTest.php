@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Chameleon System (https://www.chameleonsystem.com).
  *
@@ -12,8 +11,8 @@
 namespace ChameleonSystem\CmsCoreLogBundle\Tests\Bridge\Monolog;
 
 use ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\SessionIdProcessor;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -21,107 +20,81 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class SessionIdProcessorTest extends TestCase
 {
     /**
-     * @var RequestStack|ObjectProphecy
+     * @var MockObject<RequestStack>
      */
     private $mockRequestStack;
-
-    /**
-     * @var Request|ObjectProphecy|null
-     */
-    private $mockRequest;
-
-    /**
-     * @var SessionInterface|ObjectProphecy|null
-     */
-    private $mockSession;
 
     /**
      * @var SessionIdProcessor
      */
     private $subject;
 
-    /**
-     * @var array
-     */
-    private $actualResult;
-
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
-
-        $this->mockRequestStack = $this->prophesize(RequestStack::class);
-        $this->subject = new SessionIdProcessor($this->mockRequestStack->reveal());
+        $this->mockRequestStack = $this->createMock(RequestStack::class);
+        $this->subject = new SessionIdProcessor($this->mockRequestStack);
     }
+
 
     public function testInvokeAddsTheSessionId(): void
     {
-        $sessionId = 'session-id';
-        $this->givenARequest();
-        $this->givenASession($sessionId);
-
-        $this->whenICallInvoke(['extra' => []]);
-
-        $this->thenTheSessionIdShouldHaveBeenAddedToExtra($sessionId);
+        $this->mockRequestWithSessionId('session-id');
+        $result = $this->subject->__invoke(['extra' => []]);
+        $this->assertSessionIdExistsInExtra($result, 'session-id');
     }
 
     public function testInvokeAddsTheExtraBlockIfMissing(): void
     {
-        $sessionId = 'session-id';
-        $this->givenARequest();
-        $this->givenASession($sessionId);
-
-        $this->whenICallInvoke([]);
-
-        $this->thenTheSessionIdShouldHaveBeenAddedToExtra($sessionId);
+        $this->mockRequestWithSessionId('session-id');
+        $result = $this->subject->__invoke([]);
+        $this->assertSessionIdExistsInExtra($result, 'session-id');
     }
 
     public function testInvokeReturnsTheInputWithoutRequest(): void
     {
         $input = ['extra' => [], 'dummy' => 'test'];
-
-        $this->whenICallInvoke($input);
-
-        $this->thenTheInputShouldHaveBeenReturned($input);
+        $result = $this->subject->__invoke($input);
+        $this->assertEquals($input, $result);
     }
 
     public function testInvokeReturnsTheInputWithoutSession(): void
     {
-        $this->givenARequest();
-
+        $this->mockRequestWithSessionId(null);
         $input = ['extra' => [], 'dummy' => 'test2'];
-
-        $this->whenICallInvoke($input);
-
-        $this->thenTheInputShouldHaveBeenReturned($input);
+        $result = $this->subject->__invoke($input);
+        $this->assertEquals($input, $result);
     }
 
-    private function givenARequest(): void
+    /**
+     * Pass `null` as session id to mock not having a session.
+     */
+    private function mockRequestWithSessionId(?string $sessionId): void
     {
-        $this->mockRequest = $this->prophesize(Request::class);
-        $this->mockRequestStack->getCurrentRequest()->willReturn($this->mockRequest);
+        $request = $this->createMock(Request::class);
+        $this->mockRequestStack->method('getCurrentRequest')->willReturn($request);
+        if (null === $sessionId) {
+            // mock not having a session
+            $request->method('hasSession')->willReturn(false);
+            $request->method('getSession')->willReturn(null);
+
+            return;
+        }
+        // Mock having a session with $sessionId
+        $session = $this->createMock(SessionInterface::class);
+        $session->method('getId')->willReturn($sessionId);
+        $request->method('hasSession')->willReturn(true);
+        $request->method('getSession')->willReturn($session);
     }
 
-    private function givenASession(string $sessionId): void
+    /**
+     * Asserts that the given sessionId has been added as extra.session_id correctly.
+     */
+    private function assertSessionIdExistsInExtra(array $result, string $sessionId): void
     {
-        $this->mockSession = $this->prophesize(SessionInterface::class);
-        $this->mockSession->getId()->willReturn($sessionId);
-        $this->mockRequest->getSession()->willReturn($this->mockSession);
+        $this->assertArrayHasKey('extra', $result);
+        $this->assertArrayHasKey('session_id', $result['extra']);
+        $this->assertContains($sessionId, $result['extra']);
     }
 
-    private function whenICallInvoke(array $input): void
-    {
-        $this->actualResult = $this->subject->__invoke($input);
-    }
-
-    private function thenTheSessionIdShouldHaveBeenAddedToExtra(string $sessionId): void
-    {
-        $this->assertArrayHasKey('extra', $this->actualResult);
-        $this->assertArrayHasKey('session_id', $this->actualResult['extra']);
-        $this->assertContains($sessionId, $this->actualResult['extra']);
-    }
-
-    private function thenTheInputShouldHaveBeenReturned(array $input): void
-    {
-        $this->assertEquals($input, $this->actualResult);
-    }
 }

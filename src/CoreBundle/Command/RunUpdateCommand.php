@@ -51,7 +51,7 @@ class RunUpdateCommand extends Command
     {
         $this
             ->setDefinition(array())
-            ->setDescription('Runs Chameleon updates (EXPERIMENTAL!)')
+            ->setDescription('Runs Chameleon database updates')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command runs Chameleon updates
 EOF

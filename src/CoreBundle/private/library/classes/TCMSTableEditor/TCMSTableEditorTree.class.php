@@ -60,7 +60,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
 
         $insertedNode = new TdbCmsTree($this->sId);
         $event = new ChangeNavigationTreeNodeEvent(array($insertedNode));
-        $this->getEventDispatcher()->dispatch(CoreEvents::ADD_NAVIGATION_TREE_NODE, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::ADD_NAVIGATION_TREE_NODE);
     }
 
     /**
@@ -99,7 +99,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $this->sId);
 
         $event = new ChangeNavigationTreeNodeEvent($updatedNodes);
-        $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_NAVIGATION_TREE_NODE, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_NAVIGATION_TREE_NODE);
     }
 
     /**
@@ -345,7 +345,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         $this->writeSqlLog();
 
         $event = new ChangeNavigationTreeNodeEvent($deletedNodes);
-        $this->getEventDispatcher()->dispatch(CoreEvents::DELETE_NAVIGATION_TREE_NODE, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_NAVIGATION_TREE_NODE);
     }
 
     /**

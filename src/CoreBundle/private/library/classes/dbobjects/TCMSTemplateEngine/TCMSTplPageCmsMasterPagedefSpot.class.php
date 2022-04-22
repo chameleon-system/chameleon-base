@@ -14,10 +14,20 @@
 /**/
 class TCMSTplPageCmsMasterPagedefSpot extends TCMSRecord
 {
-    public function TCMSTplPageCmsMasterPagedefSpot($table = null, $id = null)
+    public function __construct($table = null, $id = null)
     {
-        parent::TCMSRecord('cms_tpl_page_cms_master_pagedef_spot', $id);
+        parent::__construct('cms_tpl_page_cms_master_pagedef_spot', $id);
     }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSTplPageCmsMasterPagedefSpot()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
+    }
+
 
     /**
      * returns if model and view are allowed for spot.

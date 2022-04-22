@@ -20,7 +20,8 @@
         <ignoreFiles>
             <directory name="../../symfony" />
             <directory name="src/**/views/" />
-            <directory name="src/**/Resources/" />
+            <directory name="src/**/Resources/BackendPageDefs" />
+            <directory name="src/**/Resources/views/objectviews" />
             <directory name="src/**/private/" />
             <directory name="src/**/installation" />
             <directory name="src/**/install" />
@@ -47,6 +48,17 @@
         <!-- TCMSstdClass can have dynamic properties -->
         <class name="TCMSstdClass"/>
     </universalObjectCrates>
+
+    <plugins>
+        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
+            <containerXml>../../../var/cache/dev/appAppKernelDevDebugContainer.xml</containerXml>
+        </pluginClass>
+    </plugins>
+
+    <fileExtensions>
+        <extension name=".php" />
+        <extension name=".twig" checker="./vendor/psalm/plugin-symfony/src/Twig/TemplateFileAnalyzer.php"/>
+    </fileExtensions>
 
     <issueHandlers>
 
@@ -98,6 +110,29 @@
                 <referencedFunction name="twig_escape_filter" />
             </errorLevel>
         </UndefinedFunction>
+
+        <!--
+            Injections of the container into classes that existed previously but should not be added
+            to new code.
+        -->
+        <PluginIssue name="ContainerDependency" errorLevel="suppress">
+            <errorLevel type="suppress">
+                <file name="src/CmsRoutingBundle/src/esono/pkgCmsRouting/CmsRouteLoader.php" />
+                <file name="src/CoreBundle/Controller/ChameleonControllerInvokeListener.php" />
+                <file name="src/CoreBundle/Controller/ChameleonControllerResolver.php" />
+                <file name="src/CoreBundle/Controller/ChameleonFrontendController.php" />
+                <file name="src/CoreBundle/DataAccess/CmsPortalDomainsDataAccessCacheDecorator.php" />
+                <file name="src/CoreBundle/EventListener/RequestTypeListener.php" />
+                <file name="src/CoreBundle/Routing/ChameleonBaseRouter.php" />
+                <file name="src/CoreBundle/Service/Initializer/ActivePageServiceInitializer.php" />
+                <file name="src/CoreBundle/Service/Initializer/PortalDomainServiceInitializer.php" />
+                <file name="src/CoreBundle/Session/ChameleonSessionManager.php" />
+                <file name="src/CoreBundle/Util/PageServiceUtil.php" />
+                <file name="src/DatabaseMigrationBundle/Bridge/Chameleon/Recorder/MigrationRecorder.php" />
+                <file name="src/DatabaseMigrationBundle/Bridge/Chameleon/Recorder/QueryWriter.php" />
+                <file name="src/PkgCoreBundle/objects/redirect/cmsCoreRedirect.php" />
+            </errorLevel>
+        </PluginIssue>
 
     </issueHandlers>
 </psalm>

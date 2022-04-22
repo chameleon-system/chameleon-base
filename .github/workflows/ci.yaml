@@ -5,7 +5,7 @@ on:
     branches:
       - 'master'
       - '[0-9]+.[0-9]+.x'
-      - '770-github-actions'
+      - '770-github-actions-7-1-x'
     tags: [ '*' ]
   pull_request:
     types: [ opened, synchronize, reopened ]
@@ -16,12 +16,12 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version: [ '7.1', '7.2', '7.3', '7.4' ]
+        php-version: [ '7.4', '8.0' ]
     env:
       # Branch / Tag of chameleon-system/chameleon-system and chameleon-system/chameleon-resources
       # that will be used to setup this project
-      CHAMELEON_SYSTEM_REF: '7.0.x'
-      CHAMELEON_RESOURCES_REF: '7.0.x'
+      CHAMELEON_SYSTEM_REF: '7.1.x'
+      CHAMELEON_RESOURCES_REF: '7.1.x'
 
     services:
       mysql:
@@ -70,7 +70,7 @@ jobs:
         with:
           cmd: |
             # Exclamation point in parameters cannot be parsed by yq.
-            cat chameleon-system/app/config/parameters.yml.dist | sed -e 's/!ThisTokenIsNotSoSecretChangeIt!/""/g' > chameleon-system/app/config/parameters.yml
+            cp chameleon-system/app/config/parameters.yml.dist chameleon-system/app/config/parameters.yml
             yq -i '
               .parameters.secret = "__CI_SECRET__" |
               .parameters.database_host = "127.0.0.1" |

@@ -11,7 +11,7 @@
 
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
 {

@@ -89,7 +89,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
 
         $changedDomain = new TdbCmsPortalDomains($this->sId);
         $event = new ChangeDomainEvent(array($changedDomain));
-        $this->getEventDispatcher()->dispatch(CoreEvents::ADD_DOMAIN, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::ADD_DOMAIN);
     }
 
     /**
@@ -101,7 +101,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
 
         $changedDomain = new TdbCmsPortalDomains($this->sId);
         $event = new ChangeDomainEvent(array($changedDomain));
-        $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_DOMAIN, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_DOMAIN);
     }
 
     /**
@@ -113,7 +113,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
 
         $changedDomain = new TdbCmsPortalDomains($this->sId);
         $event = new ChangeDomainEvent(array($changedDomain));
-        $this->getEventDispatcher()->dispatch(CoreEvents::DELETE_DOMAIN, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_DOMAIN);
     }
 
     /**

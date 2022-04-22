@@ -14,6 +14,7 @@ namespace ChameleonSystem\CoreBundle\Controller;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
+use ChameleonSystem\CoreBundle\Event\FilterContentEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
@@ -145,7 +146,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     public function __invoke()
     {
         $event = new ChameleonControllerInvokeEvent($this);
-        $this->eventDispatcher->dispatch(ChameleonControllerEvents::INVOKE, $event);
+        $this->eventDispatcher->dispatch($event, ChameleonControllerEvents::INVOKE);
 
         $pagedef = $this->getRequest()->attributes->get('pagedef');
         $this->handleRequest($pagedef);
@@ -550,7 +551,10 @@ abstract class ChameleonController implements ChameleonControllerInterface
                 $bHeaderParsed = true;
             }
         }
-        $sPageContent = $this->responseVariableReplacer->replaceVariables($sPageContent);
+
+        $event = new FilterContentEvent($sPageContent);
+        $this->eventDispatcher->dispatch($event, CoreEvents::FILTER_CONTENT);
+        $sPageContent = $event->getContent();
         $this->sGeneratedPage .= $sPageContent;
 
         return $sPageContent;
@@ -616,7 +620,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         $event = new HtmlIncludeEvent();
         /** @var HtmlIncludeEvent $event */
-        $event = $this->eventDispatcher->dispatch(CoreEvents::GLOBAL_HTML_HEADER_INCLUDE, $event);
+        $event = $this->eventDispatcher->dispatch($event, CoreEvents::GLOBAL_HTML_HEADER_INCLUDE);
 
         if ($bAsArray) {
             return $event->getData();
@@ -677,7 +681,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $event = new HtmlIncludeEvent();
 
         /** @var HtmlIncludeEvent $event */
-        $event = $this->eventDispatcher->dispatch(CoreEvents::GLOBAL_HTML_FOOTER_INCLUDE, $event);
+        $event = $this->eventDispatcher->dispatch($event, CoreEvents::GLOBAL_HTML_FOOTER_INCLUDE);
 
         $aModuleFooterData = $event->getData();
 

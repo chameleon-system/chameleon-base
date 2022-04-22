@@ -10,7 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TMapper_ViewPortSwitch extends AbstractViewMapper
 {

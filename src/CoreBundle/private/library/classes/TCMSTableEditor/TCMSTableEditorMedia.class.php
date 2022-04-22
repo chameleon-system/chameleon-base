@@ -405,7 +405,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
      */
     public function Delete($fileID = null)
     {
-        $this->getEventDispatcher()->dispatch(CoreEvents::BEFORE_DELETE_MEDIA, new DeleteMediaEvent($fileID));
+        $this->getEventDispatcher()->dispatch(new DeleteMediaEvent($fileID), CoreEvents::BEFORE_DELETE_MEDIA);
         $this->deleteExternalMediaFile($fileID);
         parent::Delete($fileID);
     }

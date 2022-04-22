@@ -234,12 +234,22 @@ class TFullGroupTable extends TGroupTable
      */
     protected $tableCSS = 'table table-sm table-striped table-hover TCMSListManagerFullGroupTable';
 
-    public function TFullGroupTable($postData = array())
+    public function __construct($postData = array())
     {
-        parent::TGroupTable();
+        parent::__construct();
         $this->style = new TFullGroupTableStyle();
         $this->_postData = $postData;
     }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TFullGroupTable()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
+    }
+
 
     /**
      * initialises the class, set postdata here.
@@ -602,7 +612,6 @@ class TFullGroupTable extends TGroupTable
                     if (isset($this->orderList) && is_array($this->orderList) && array_key_exists($cellObj->name, $this->orderList)) {
                         // find orderCount
                         $orderCount = 1;
-                        $found = false;
                         reset($this->orderList);
 
                         $tmpOrderList = $this->orderList;
@@ -612,11 +621,11 @@ class TFullGroupTable extends TGroupTable
                             unset($tmpOrderList[$this->groupByCell->name]);
                         }
 
-                        while ((list($field, $dir) = each($tmpOrderList)) && !$found) {
+                        foreach ($tmpOrderList as $field => $dir) {
                             if (0 != strcmp($cellObj->name, $field)) {
                                 ++$orderCount;
                             } else {
-                                $found = true;
+                                break;
                             }
                         }
 

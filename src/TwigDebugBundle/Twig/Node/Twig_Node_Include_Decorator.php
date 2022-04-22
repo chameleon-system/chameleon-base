@@ -11,31 +11,33 @@
 
 namespace ChameleonSystem\TwigDebugBundle\Twig\Node;
 
+use Twig\Compiler;
+use Twig\Node\IncludeNode;
+use Twig\Node\Node;
+use Twig\Node\NodeOutputInterface;
 use Twig\Source;
-use Twig_Compiler;
 use Twig_Node_Include;
 use Twig_NodeOutputInterface;
 
-class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputInterface
+class Twig_Node_Include_Decorator extends Node implements NodeOutputInterface
 {
     /**
-     * @var Twig_Node_Include
+     * @var IncludeNode
      */
     private $original;
 
     /**
-     * @param Twig_Node_Include $original
+     * @param IncludeNode $original
      */
-    public function __construct(Twig_Node_Include $original)
+    public function __construct(IncludeNode $original)
     {
         $this->original = $original;
     }
 
     /**
      * @return void
-     * @psalm-suppress MethodSignatureMismatch - `Twig_Token` is a subtype of `Token`
      */
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $snippet = $this->original->getNode('expr')->hasAttribute('value') ? $snippet = $this->original->getNode('expr')->getAttribute('value') : null;
         if ($snippet) {
@@ -47,20 +49,14 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
         }
     }
 
-    /**
-     * @return \Traversable
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return $this->original->getIterator();
     }
 
-    /**
-     * @return string|null
-     */
-    public function getNodeTag()
+    public function getNodeTag(): string
     {
-        return $this->original->getNodeTag();
+        return (string) $this->original->getNodeTag();
     }
 
     public function count()
@@ -68,10 +64,7 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
         return $this->original->count();
     }
 
-    /**
-     * @return int
-     */
-    public function getTemplateLine()
+    public function getTemplateLine(): int
     {
         return $this->original->getTemplateLine();
     }
@@ -88,27 +81,17 @@ class Twig_Node_Include_Decorator extends \Twig_Node implements Twig_NodeOutputI
         $this->original->setTemplateName($name);
     }
 
-    /**
-     * @return string|null
-     */
-    public function getTemplateName()
+    public function getTemplateName(): string
     {
-        return $this->original->getTemplateName();
+        return (string) $this->original->getTemplateName();
     }
 
-    /**
-     * @param Source $source
-     * @return void
-     */
-    public function setSourceContext(Source $source)
+    public function setSourceContext(Source $source): void
     {
         $this->original->setSourceContext($source);
     }
 
-    /**
-     * @return \Twig_Source|null
-     */
-    public function getSourceContext()
+    public function getSourceContext(): ?Source
     {
         return $this->original->getSourceContext();
     }

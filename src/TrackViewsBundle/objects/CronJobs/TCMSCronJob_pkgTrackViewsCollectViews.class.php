@@ -13,7 +13,7 @@
  * Collect all views from history and add them to view count.
  *
 /**/
-class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
+class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
 {
     /**
      * @var string
@@ -31,7 +31,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TCMSCronJob
      */
     public function __construct($targetTable, $timeToLive)
     {
-        parent::TCMSCronJob();
+        parent::__construct();
         $this->targetTable = $targetTable;
         $this->timeToLive = $timeToLive;
     }
