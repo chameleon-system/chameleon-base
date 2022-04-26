@@ -16,13 +16,26 @@ use IPkgCmsFileManager;
 
 abstract class TPkgCoreAutoClassHandler_AbstractBase implements IPkgCmsCoreAutoClassHandler
 {
+    /**
+     * @var mixed
+     */
     protected $aClassMapping = null;
+
+    /**
+     * @var null|array
+     */
     protected $aClassExtensionList = null;
+
+    /**
+     * @var null|class-string[]
+     */
     protected $aClassNameList = null;
+
     /**
      * @var IPkgCmsFileManager
      */
     protected $filemanager;
+
     /**
      * @var Connection
      */
@@ -34,6 +47,9 @@ abstract class TPkgCoreAutoClassHandler_AbstractBase implements IPkgCmsCoreAutoC
         $this->filemanager = $filemanager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function resetInternalCache()
     {
         $this->aClassMapping = null;

@@ -3,130 +3,115 @@
 namespace ChameleonSystem\CoreBundle\Tests\CronJob;
 
 use ChameleonSystem\CoreBundle\CronJob\CronJobFactory;
+use ChameleonSystem\CoreBundle\CronJob\subject;
 use ChameleonSystem\CoreBundle\RequestState\Interfaces\RequestStateHashProviderInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Tests\CronJob\fixtures\CronJobThatExtendsTCMSCronJob;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
-use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CronJobFactoryTest extends TestCase
 {
-    use ProphecyTrait;
-
     /**
-     * @var ContainerInterface|ObjectProphecy
+     * @var MockObject<ContainerInterface>
      */
     private $containerMock;
+
     /**
      * @var CronJobFactory
      */
-    private $cronJobFactory;
-    /**
-     * @var \TCMSCronJob
-     */
-    private $actualResult;
+    private $subject;
 
-    protected function tearDown(): void
+    public function setUp(): void
     {
-        parent::tearDown();
-        $this->containerMock = null;
-        $this->cronJobFactory = null;
-        $this->actualResult = null;
+        parent::setUp();
+        $this->containerMock = $this->createMock(ContainerInterface::class);
+        ServiceLocator::setContainer($this->containerMock);
+        $this->addMockServices([
+            'existing_service' => fn() => new CronJobThatExtendsTCMSCronJob(),
+            'chameleon_system_core.request_state_hash_provider' => $this->createMock(
+                RequestStateHashProviderInterface::class
+            ),
+            'unknown_identifier' => null,
+            'ChameleonSystem\CoreBundle\Tests\CronJob\fixtures\CronJobThatExtendsTCMSCronJob' => null,
+            'ChameleonSystem\CoreBundle\Tests\CronJob\fixtures\CronJobThatDoesNotExtendTCMSCronJob' => null,
+            // Commented out because it is not known to the container.
+            //'service_that_is_unknown_to_the_service_container' => null,
+        ]);
+        $this->subject = new CronJobFactory($this->containerMock);
     }
 
     public function testConstructCronJobFromService()
     {
-        $this->givenACronJobFactory();
-        $this->whenConstructCronJobIsCalledForAnExistingCronJob();
-        $this->thenTheExpectedCronJobShouldBeReturned();
-    }
-
-    private function givenACronJobFactory()
-    {
-        $this->containerMock = $this->prophesize(ContainerInterface::class);
-        $this->containerMock->has('existing_service')->willReturn(true);
-        $this->containerMock->has('unknown_identifier')->willReturn(false);
-        $this->containerMock->has('service_that_is_unknown_to_the_service_container')->willReturn(false);
-        $this->containerMock->has('ChameleonSystem\CoreBundle\Tests\CronJob\fixtures\CronJobThatExtendsTCMSCronJob')->willReturn(false);
-        $this->containerMock->has('ChameleonSystem\CoreBundle\Tests\CronJob\fixtures\CronJobThatDoesNotExtendTCMSCronJob')->willReturn(false);
-        $this->containerMock->get('existing_service')->willReturn(new CronJobThatExtendsTCMSCronJob());
-        $this->containerMock->get('chameleon_system_core.request_state_hash_provider')->willReturn($this->prophesize(RequestStateHashProviderInterface::class));
-        ServiceLocator::setContainer($this->containerMock->reveal());
-
-        $this->cronJobFactory = new CronJobFactory($this->containerMock->reveal());
-    }
-
-    private function whenConstructCronJobIsCalledForAnExistingCronJob()
-    {
-        $this->actualResult = $this->cronJobFactory->constructCronJob('existing_service', [
-            'foo' => 'bar',
-            'baz' => 'quuz',
-        ]);
-    }
-
-    private function thenTheExpectedCronJobShouldBeReturned()
-    {
-        $expected = new CronJobThatExtendsTCMSCronJob();
-        $expected->sqlData = [
+        $data = [
             'foo' => 'bar',
             'baz' => 'quuz',
         ];
-        $this->assertEquals($expected, $this->actualResult);
+        $result = $this->subject->constructCronJob('existing_service', $data);
+        $this->assertIsValidCronjobObject($result, $data);
     }
 
     public function testConstructCronJobFromClassName()
     {
-        $this->givenACronJobFactory();
-        $this->whenConstructCronJobIsCalledForAnExistingClassName();
-        $this->thenTheExpectedCronJobShouldBeReturned();
-    }
-
-    private function whenConstructCronJobIsCalledForAnExistingClassName()
-    {
-        $this->actualResult = $this->cronJobFactory->constructCronJob(CronJobThatExtendsTCMSCronJob::class, [
+        $data = [
             'foo' => 'bar',
             'baz' => 'quuz',
-        ]);
+        ];
+        $result = $this->subject->constructCronJob(CronJobThatExtendsTCMSCronJob::class, $data);
+        $this->assertIsValidCronjobObject($result, $data);
     }
 
     public function testConstructNonExistingCronJob()
     {
         $this->expectException(\InvalidArgumentException::class);
-
-        $this->givenACronJobFactory();
-        $this->whenConstructCronJobIsCalledForANonExistingCronJob();
-    }
-
-    private function whenConstructCronJobIsCalledForANonExistingCronJob()
-    {
-        $this->cronJobFactory->constructCronJob('unknown_identifier', []);
+        $this->subject->constructCronJob('unknown_identifier', []);
     }
 
     public function testConstructCronJobWithWrongType()
     {
         $this->expectException(\InvalidArgumentException::class);
-
-        $this->givenACronJobFactory();
-        $this->whenConstructCronJobIsCalledForAServiceThatDoesNotExtendTCMSCronJob();
-    }
-
-    private function whenConstructCronJobIsCalledForAServiceThatDoesNotExtendTCMSCronJob()
-    {
-        $this->cronJobFactory->constructCronJob(fixtures\CronJobThatDoesNotExtendTCMSCronJob::class, []);
+        $this->subject->constructCronJob(fixtures\CronJobThatDoesNotExtendTCMSCronJob::class, []);
     }
 
     public function testConstructCronJobUnknownToTheServiceContainer()
     {
         $this->expectException(\InvalidArgumentException::class);
-
-        $this->givenACronJobFactory();
-        $this->whenConstructCronJobIsCalledForARegisteredCronJobUnknownToTheServiceContainer();
+        $this->subject->constructCronJob('service_that_is_unknown_to_the_service_container', []);
     }
 
-    private function whenConstructCronJobIsCalledForARegisteredCronJobUnknownToTheServiceContainer()
+    /**
+     * @param array $services - assoc array of service name to service object.
+     *          Use `null` as service object to mock not having that service.
+     *          Use a closure to generate services that cannot be created at declare time
+     * @return void
+     */
+    private function addMockServices(array $services): void
     {
-        $this->cronJobFactory->constructCronJob('service_that_is_unknown_to_the_service_container', []);
+        $this->containerMock->method('has')->willReturnCallback(function (string $serviceName) use ($services) {
+                return null !== ($services[$serviceName] ?? null);
+            });
+        $this->containerMock->method('get')->willReturnCallback(function (string $serviceName) use ($services) {
+                $service = $services[$serviceName] ?? null;
+                if (null === $service) {
+                    return null;
+                }
+                if (\is_callable($service)) {
+                    return $service();
+                }
+
+                return $service;
+            });
     }
+
+    private function assertIsValidCronjobObject($value, array $expectedData): void
+    {
+        $this->assertInstanceOf(CronJobThatExtendsTCMSCronJob::class, $value);
+        $this->assertEquals(count($expectedData), count($value->sqlData));
+        foreach ($expectedData as $key => $expectedValue) {
+            $this->assertArrayHasKey($key, $value->sqlData);
+            $this->assertEquals($expectedValue, $value->sqlData[$key]);
+        }
+    }
+
 }

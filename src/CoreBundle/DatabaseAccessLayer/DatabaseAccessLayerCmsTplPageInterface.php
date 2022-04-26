@@ -32,6 +32,8 @@ interface DatabaseAccessLayerCmsTplPageInterface
      * @param bool   $bPreventFilter - default false
      *
      * @deprecated since 6.1.0 - use chameleon_system_core.page_service::getByTreeId() instead
+     *
+     * @return mixed
      */
     public function loadForTreeId($treeId, $bPreventFilter = false);
 }

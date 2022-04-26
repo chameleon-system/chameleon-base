@@ -23,6 +23,8 @@ class ChameleonSystemCookieConsentExtension extends Extension
      * @param ContainerBuilder $container
      *
      * @throws \Exception
+     *
+     * @return void
      */
     public function load(array $configs, ContainerBuilder $container)
     {

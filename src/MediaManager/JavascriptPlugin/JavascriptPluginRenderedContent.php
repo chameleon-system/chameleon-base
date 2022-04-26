@@ -16,11 +16,23 @@ namespace ChameleonSystem\MediaManager\JavascriptPlugin;
  */
 class JavascriptPluginRenderedContent
 {
+    /**
+     * @var bool
+     */
     public $hasError = false;
 
+    /**
+     * @var string
+     */
     public $errorMessage = '';
 
+    /**
+     * @var string
+     */
     public $contentHtml;
 
+    /**
+     * @var string
+     */
     public $mediaItemName;
 }

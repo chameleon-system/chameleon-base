@@ -34,6 +34,9 @@ class AddBackendToasterMessageListener
         $this->type = $type;
     }
 
+    /**
+     * @return void
+     */
     public function addMessage(ResponseEvent $event)
     {
         if (!$event->isMasterRequest()) {

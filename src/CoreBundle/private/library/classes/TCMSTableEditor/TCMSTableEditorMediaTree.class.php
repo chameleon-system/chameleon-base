@@ -158,6 +158,8 @@ class TCMSTableEditorMediaTree extends TCMSTableEditorTreeShared
      *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
+     *
+     * @return void
      */
     protected function updateCache($id)
     {

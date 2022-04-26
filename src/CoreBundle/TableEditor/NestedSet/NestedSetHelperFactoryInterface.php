@@ -14,7 +14,7 @@ namespace ChameleonSystem\CoreBundle\TableEditor\NestedSet;
 interface NestedSetHelperFactoryInterface
 {
     /**
-     * @param $tableName
+     * @param string $tableName
      * @param string $parentIdField
      * @param string $nodeSortField
      *

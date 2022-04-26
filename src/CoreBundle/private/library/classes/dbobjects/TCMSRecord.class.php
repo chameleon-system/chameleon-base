@@ -22,6 +22,10 @@ use Doctrine\DBAL\Driver\Statement;
 
 /**
  * holds one record of a table.
+ *
+ * This method is implemented in every inheriting Tdb class.
+ * See also: CoreBundle/private/rendering/objectviews/TCMSTableToClass/record.view.php
+ * @method static static GetNewInstance()
  */
 class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 {
@@ -37,7 +41,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      * assoc array holding the sql data row.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public $sqlData = array();
 
@@ -131,6 +135,13 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         }
     }
 
+    /**
+     * create instance of table object.
+     *
+     * @param string $table
+     * @param string $id
+     * @param string $iLanguageId
+     */
     public function __construct($table = null, $id = null, $iLanguageId = null)
     {
         if (null !== $table) {
@@ -1342,7 +1353,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * @param string|null    $sMLTFieldName name of the mlt field
      * @param TCMSField|null $oField        Field object form the mlt field. If not set function will load ist for given field name
      *
-     * @return array
+     * @return string[]
      */
     protected function GetMLTIDListCleared($sTableName, $sMLTFieldName = null, $oField = null)
     {
@@ -1385,7 +1396,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * @param string    $sFieldName - name of the mlt field. If field not exists in objects table the function interprets given table as source table
      * @param TCMSField $oField     - target field object to check file type
      *
-     * @return array - all target_ids of the mlt table that connected the the record
+     * @return string[] - all target_ids of the mlt table that connected the the record
      */
     public function GetMLTIdList($table, $sFieldName = null, $oField = null)
     {
@@ -1707,7 +1718,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @param string $varName - cache key
      *
-     * @return object
+     * @return mixed|null
      */
     protected function &GetFromInternalCache($varName)
     {
@@ -1893,7 +1904,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      * return array with required fields.
      *
-     * @return array
+     * @return string[]
      */
     public function GetRequiredFields()
     {

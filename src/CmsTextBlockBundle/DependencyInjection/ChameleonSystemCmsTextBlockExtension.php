@@ -18,6 +18,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class ChameleonSystemCmsTextBlockExtension extends Extension
 {
+    /**
+     * @return void
+     */
     public function load(array $config, ContainerBuilder $container)
     {
         $loader = new XMLFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));

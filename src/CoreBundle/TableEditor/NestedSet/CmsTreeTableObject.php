@@ -13,11 +13,17 @@ namespace ChameleonSystem\CoreBundle\TableEditor\NestedSet;
 
 class CmsTreeTableObject extends \ChameleonSystemCoreBundleTableEditorNestedSetCmsTreeTableObjectAutoParent implements NodeInterface
 {
+    /**
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getParentId()
     {
         if ('' === $this->fieldParentId) {
@@ -27,11 +33,17 @@ class CmsTreeTableObject extends \ChameleonSystemCoreBundleTableEditorNestedSetC
         return $this->fieldParentId;
     }
 
+    /**
+     * @return string
+     */
     public function getLeft()
     {
         return $this->fieldLft;
     }
 
+    /**
+     * @return string
+     */
     public function getRight()
     {
         return $this->fieldRgt;

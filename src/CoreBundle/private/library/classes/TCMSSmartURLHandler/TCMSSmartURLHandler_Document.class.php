@@ -142,7 +142,7 @@ class TCMSSmartURLHandler_Document extends TCMSSmartURLHandler
     /**
      * Checks if given download path is part of active path.
      *
-     * @param $sOutboxPath
+     * @param string $sOutboxPath
      *
      * @return bool
      */
@@ -161,7 +161,7 @@ class TCMSSmartURLHandler_Document extends TCMSSmartURLHandler
     /**
      * Strips http and /.
      *
-     * @param $sPath
+     * @param string $sPath
      *
      * @return string
      */
@@ -180,7 +180,7 @@ class TCMSSmartURLHandler_Document extends TCMSSmartURLHandler
     /**
      * Gets document id from url path.
      *
-     * @param $sDownloadOutboxPath
+     * @param string $sDownloadOutboxPath
      *
      * @return bool
      */
@@ -198,7 +198,7 @@ class TCMSSmartURLHandler_Document extends TCMSSmartURLHandler
     /**
      * gets document seo name from url path.
      *
-     * @param $sDownloadOutboxPath
+     * @param string $sDownloadOutboxPath
      *
      * @return bool
      */
@@ -216,7 +216,7 @@ class TCMSSmartURLHandler_Document extends TCMSSmartURLHandler
     /**
      * get document token from url path.
      *
-     * @param $sDownloadOutboxPath
+     * @param string $sDownloadOutboxPath
      *
      * @return bool
      */
@@ -235,7 +235,7 @@ class TCMSSmartURLHandler_Document extends TCMSSmartURLHandler
      * Get the download data from active path url.
      * Includes token, id, seo name and tree id. Depends on download type.
      *
-     * @param $sDownloadOutboxPath
+     * @param string $sDownloadOutboxPath
      *
      * @return array
      */
@@ -255,7 +255,7 @@ class TCMSSmartURLHandler_Document extends TCMSSmartURLHandler
     /**
      * Returns the download type specific to given url path.
      *
-     * @param $sDownloadPath
+     * @param string $sDownloadPath
      *
      * @return string
      */

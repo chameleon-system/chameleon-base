@@ -8,7 +8,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class CollectRequestStateElementProvidersPass implements CompilerPassInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function process(ContainerBuilder $container)
     {

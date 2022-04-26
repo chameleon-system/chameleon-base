@@ -121,9 +121,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
     }
 
     /**
-     * called on each field when a record is inserted.
-     *
-     * @param string $iRecordId
+     * {@inheritDoc}
      */
     public function PostInsertHook($iRecordId)
     {

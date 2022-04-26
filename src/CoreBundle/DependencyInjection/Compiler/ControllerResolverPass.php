@@ -17,6 +17,9 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ControllerResolverPass implements CompilerPassInterface
 {
+    /**
+     * @return void
+     */
     public function process(ContainerBuilder $container)
     {
         $definition = $container->getDefinition('controller_resolver');

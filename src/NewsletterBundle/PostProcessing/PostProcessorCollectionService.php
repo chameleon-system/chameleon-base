@@ -20,6 +20,9 @@ class PostProcessorCollectionService implements PostProcessorInterface
      */
     private $processors = array();
 
+    /**
+     * @return void
+     */
     public function addPostProcessor(PostProcessorInterface $postProcessor)
     {
         $this->processors[] = $postProcessor;

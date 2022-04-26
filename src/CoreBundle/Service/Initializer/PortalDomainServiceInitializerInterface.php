@@ -20,6 +20,8 @@ interface PortalDomainServiceInitializerInterface
 {
     /**
      * @param PortalDomainServiceInterface $portalDomainService
+     *
+     * @return void
      */
     public function initialize(PortalDomainServiceInterface $portalDomainService);
 }

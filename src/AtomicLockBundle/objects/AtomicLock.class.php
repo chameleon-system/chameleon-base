@@ -34,17 +34,27 @@ use Doctrine\DBAL\DBALException;
  */
 class AtomicLock
 {
+    /**
+     * @var string
+     */
     private static $LOCK_TABLE = 'data_atomic_lock';
+
+    /**
+     * @var string
+     */
     private static $LOCK_FIELD = 'lockkey';
 
+    /**
+     * @var null|string
+     */
     private $key = null;
 
     /**
      * Helps in getting a unique key for a given object.
      *
-     * @param $oObject
+     * @param mixed $oObject
      *
-     * @return string : the key you can use for acquireLock()
+     * @return string key you can use for acquireLock()
      */
     public function getKeyForObject($oObject)
     {
@@ -54,9 +64,9 @@ class AtomicLock
     /**
      * Acquire a lock for the given key.
      *
-     * @param $key
+     * @param string $key
      *
-     * @return AtomicLock|null : AtomicLock, if the lock has been created successfully. Null, if there is already an active lock for this key
+     * @return null|static if the lock has been created successfully. Null, if there is already an active lock for this key
      */
     public function acquireLock($key)
     {
@@ -80,7 +90,7 @@ class AtomicLock
     /**
      * Releases the lock.
      *
-     * @return bool : true, if the release was successful
+     * @return bool if the release was successful
      */
     public function release()
     {

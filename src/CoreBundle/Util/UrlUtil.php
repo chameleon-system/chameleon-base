@@ -75,7 +75,12 @@ class UrlUtil
     public function getArrayAsUrl(array $data, $prefix = '', $paramSeparator = '&amp;')
     {
         $this->removeAuthenticityTokenFromArray($data);
+        /**
+         * @psalm-suppress NullArgument
+         * @FIXME Passing `null` as prefix works but triggers a warning in PHP8.1. It behaves the same as passing an empty string.
+         */
         $url = $prefix.http_build_query($data, null, $paramSeparator);
+
         /*
          * Add authenticity token without URL encoding
          */
@@ -376,6 +381,8 @@ class UrlUtil
 
     /**
      * @param array $parameters
+     *
+     * @return void
      */
     public function addAuthenticityTokenToArrayIfRequired(array &$parameters)
     {
@@ -416,6 +423,8 @@ class UrlUtil
      * @param string $url
      * @param array  $parameters
      * @param string $paramSeparator
+     *
+     * @return void
      */
     public function addAuthenticityTokenToUrlStringIfRequired(&$url, array $parameters, $paramSeparator = '&amp;')
     {
@@ -433,6 +442,8 @@ class UrlUtil
 
     /**
      * @param array $parameters
+     *
+     * @return void
      */
     public function removeAuthenticityTokenFromArray(array &$parameters)
     {
@@ -474,6 +485,8 @@ class UrlUtil
      * @var $url string
      *
      * @return string
+     *
+     * @param string $url
      */
     public function encodeUrlParts($url)
     {

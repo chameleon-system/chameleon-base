@@ -97,6 +97,8 @@ class ImageCropDataModel
 
     /**
      * @param string $id
+     *
+     * @return void
      */
     public function setId($id)
     {
@@ -113,6 +115,8 @@ class ImageCropDataModel
 
     /**
      * @param CmsMediaDataModel $cmsMedia
+     *
+     * @return void
      */
     public function setCmsMedia(CmsMediaDataModel $cmsMedia)
     {
@@ -129,6 +133,8 @@ class ImageCropDataModel
 
     /**
      * @param ImageCropPresetDataModel|null $imageCropPreset
+     *
+     * @return void
      */
     public function setImageCropPreset(ImageCropPresetDataModel $imageCropPreset)
     {
@@ -145,6 +151,8 @@ class ImageCropDataModel
 
     /**
      * @param int $posX
+     *
+     * @return void
      */
     public function setPosX($posX)
     {
@@ -161,6 +169,8 @@ class ImageCropDataModel
 
     /**
      * @param int $posY
+     *
+     * @return void
      */
     public function setPosY($posY)
     {
@@ -177,6 +187,8 @@ class ImageCropDataModel
 
     /**
      * @param int $width
+     *
+     * @return void
      */
     public function setWidth($width)
     {
@@ -193,6 +205,8 @@ class ImageCropDataModel
 
     /**
      * @param int $height
+     *
+     * @return void
      */
     public function setHeight($height)
     {
@@ -209,6 +223,8 @@ class ImageCropDataModel
 
     /**
      * @param string|null $name
+     *
+     * @return void
      */
     public function setName($name)
     {
@@ -225,6 +241,8 @@ class ImageCropDataModel
 
     /**
      * @param int|null $targetHeight
+     *
+     * @return void
      */
     public function setTargetHeight($targetHeight)
     {
@@ -241,6 +259,8 @@ class ImageCropDataModel
 
     /**
      * @param int|null $targetWidth
+     *
+     * @return void
      */
     public function setTargetWidth($targetWidth)
     {

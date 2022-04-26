@@ -14,6 +14,8 @@ class TShopOrderStepPkgExternalTracker extends TShopOrderStepPkgExternalTrackerA
     /**
      * method is called from the init method of the calling module. here you can check
      * if the step may be viewed, and redirect to another step if the user does not have permission.
+     *
+     * @return void
      */
     public function Init()
     {

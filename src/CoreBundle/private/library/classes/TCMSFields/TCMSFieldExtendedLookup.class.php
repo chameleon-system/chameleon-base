@@ -132,7 +132,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
     /**
      * generates the javascript for the extended list buttons.
      *
-     * @param $oPopupTableConf
+     * @param TCMSRecord $oPopupTableConf
      *
      * @return string
      */

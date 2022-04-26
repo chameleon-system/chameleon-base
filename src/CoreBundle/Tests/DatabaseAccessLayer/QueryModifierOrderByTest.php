@@ -33,7 +33,7 @@ class QueryModifierOrderByTest extends TestCase
      * @test
      * @dataProvider dataProviderRemoveOrderBy
      *
-     * @param $query
+     * @param string $query
      * @param $expectedResult
      */
     public function it_removes_order_by($query, $expectedResult)

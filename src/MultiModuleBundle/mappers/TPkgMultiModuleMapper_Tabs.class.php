@@ -22,6 +22,8 @@ class TPkgMultiModuleMapper_Tabs extends AbstractViewMapper
      * $oRequirements->NeedsMappedValue("baz");
      *
      * @param IMapperRequirementsRestricted $oRequirements
+     *
+     * @return void
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
     {
@@ -49,7 +51,7 @@ class TPkgMultiModuleMapper_Tabs extends AbstractViewMapper
      * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
      *
-     * @return
+     * @return void
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {

@@ -13,6 +13,9 @@ namespace ChameleonSystem\CoreBundle\Util\UrlNormalization;
 
 class UrlNormalizerSlavic implements UrlNormalizerInterface
 {
+    /**
+     * @var array<string, string>
+     */
     private static $slavicCharNormalization = array(
         'Ż' => 'Z',
         'ż' => 'z',

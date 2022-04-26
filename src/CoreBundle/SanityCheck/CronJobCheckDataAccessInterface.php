@@ -18,5 +18,8 @@ interface CronJobCheckDataAccessInterface
      */
     public function getTimestampOfLastCronJobCall();
 
+    /**
+     * @return void
+     */
     public function refreshTimestampOfLastCronJobCall();
 }

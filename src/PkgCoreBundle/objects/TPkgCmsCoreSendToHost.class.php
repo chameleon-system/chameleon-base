@@ -22,13 +22,45 @@ class TPkgCmsCoreSendToHost
     const METHOD_GET = 'GET';
     const METHOD_HEAD = 'HEAD';
     const METHOD_POST = 'POST';
+
+    /**
+     * @var array<string, mixed>
+     */
     private $aConfig = array();
+
+    /**
+     * @var string|null
+     */
     private $lastRequest = null;
+
+    /**
+     * @var string|null
+     */
     private $lastResponseHeader = null;
+
+    /**
+     * @var array<string, string|non-empty-list<string>>
+     */
     private $lastResponseHeaderVariables = null;
+
+    /**
+     * @var int|null
+     */
     private $lastResponseCode = null;
+
+    /**
+     * @var string|null
+     */
     private $lastResponseCodeRaw = null;
+
+    /**
+     * @var string|null
+     */
     private $lastResponseBody = null;
+
+    /**
+     * @var bool
+     */
     private $logRequest = false;
 
     /**
@@ -75,6 +107,11 @@ class TPkgCmsCoreSendToHost
         return $this;
     }
 
+    /**
+     * @param string $sHeader
+     *
+     * @return void
+     */
     private function parseResponseHeader($sHeader)
     {
         $sHeader = trim($sHeader);
@@ -115,15 +152,22 @@ class TPkgCmsCoreSendToHost
     /**
      * return a header variable.
      *
-     * @param $sVarName
+     * @param string $sVarName
      *
-     * @return string|null
+     * @return string|non-empty-list<string>|null
      */
     public function getLastResponseHeaderVariable($sVarName)
     {
         if (null === $this->lastResponseHeaderVariables) {
             $this->lastResponseHeaderVariables = array();
+
+            /**
+             * @psalm-suppress UndefinedClass
+             * @var resource $rHeader
+             * @see https://github.com/chameleon-system/chameleon-system/issues/772
+             */
             $rHeader = TPkgCmsStringUtilities::getStringStream($this->getLastResponseHeader());
+
             $this->lastResponseCodeRaw = fgets($rHeader);
 
             $aTmp = explode("\n", $this->getLastResponseHeader());
@@ -150,8 +194,10 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param $key
-     * @param $val
+     * @param string $key
+     * @param mixed $val
+     *
+     * @return void
      */
     private function setConfigVar($key, $val)
     {
@@ -159,9 +205,9 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param $bUseSSL
+     * @param bool $bUseSSL
      *
-     * @return $this
+     * @return static
      */
     public function setUseSSL($bUseSSL)
     {
@@ -179,9 +225,9 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param $sHost
+     * @param string $sHost
      *
-     * @return $this
+     * @return static
      */
     public function setHost($sHost)
     {
@@ -191,9 +237,9 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param $sPath
+     * @param string $sPath
      *
-     * @return $this
+     * @return static
      */
     public function setPath($sPath)
     {
@@ -203,9 +249,9 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param $sUser
+     * @param string $sUser
      *
-     * @return $this
+     * @return static
      */
     public function setUser($sUser)
     {
@@ -215,9 +261,9 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param $sPassword
+     * @param string $sPassword
      *
-     * @return $this
+     * @return static
      */
     public function setPassword($sPassword)
     {
@@ -227,9 +273,9 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param $aPayload
+     * @param array $aPayload
      *
-     * @return $this
+     * @return static
      */
     public function setPayload($aPayload)
     {
@@ -367,8 +413,9 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param $key
-     * @param null $default
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
      */
     private function getConfigVar($key, $default = null)
     {
@@ -419,7 +466,8 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param $sMethod (must be one of TPkgCmsCoreSendToHost::METHOD_*)
+     * @param string $sMethod (must be one of TPkgCmsCoreSendToHost::METHOD_*)
+     * @psalm-param self::METHOD_* $sMethod
      *
      * @return $this
      */
@@ -446,7 +494,7 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param $bAgent
+     * @param bool $bAgent
      *
      * @return $this
      */
@@ -466,7 +514,7 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param $sContentType
+     * @param string $sContentType
      *
      * @return $this
      */
@@ -478,7 +526,7 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param $iTimeout
+     * @param int $iTimeout
      *
      * @return $this
      */
@@ -516,11 +564,17 @@ class TPkgCmsCoreSendToHost
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getLastResponseCode()
     {
         return $this->lastResponseCode;
     }
 
+    /**
+     * @return null|string
+     */
     public function getLastResponseCodeRaw()
     {
         return $this->lastResponseCodeRaw;

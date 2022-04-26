@@ -25,7 +25,9 @@ class TableEditorExtranetUser extends TCMSTableEditor
     private const LOGIN_TOKEN_LIFETIME_SECONDS = 20;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function DefineInterface()
     {
@@ -35,7 +37,9 @@ class TableEditorExtranetUser extends TCMSTableEditor
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function GetCustomMenuItems()
     {
@@ -94,7 +98,7 @@ class TableEditorExtranetUser extends TCMSTableEditor
      *
      * @see LoginByTokenController::loginAction()
      *
-     * @return never-returns - Ends request by redirecting
+     * @return void
      */
     public function LoginAsExtranetUser(): void
     {
@@ -108,6 +112,10 @@ class TableEditorExtranetUser extends TCMSTableEditor
         }
 
         $portal = $this->getPortalForExtranetUserId($userId);
+        if (false === $portal) {
+            return;
+        }
+
         $this->redirectUserToTokenLoginOnPortal($userId, $portal);
     }
 
@@ -120,7 +128,11 @@ class TableEditorExtranetUser extends TCMSTableEditor
             && true === $cmsUser->oAccessManager->PermitFunction($permission);
     }
 
-    private function getPortalForExtranetUserId(string $userId): TdbCmsPortal
+    /**
+     * @param string $userId
+     * @return false|TdbCmsPortal
+     */
+    private function getPortalForExtranetUserId(string $userId)
     {
         $extranetUser = TdbDataExtranetUser::GetNewInstance();
 

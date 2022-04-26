@@ -17,6 +17,10 @@ class TCMSListManagerMediaManager extends TCMSListManagerMediaSelector
 {
     /**
      * {@inheritdoc}
+     *
+     * @return void
+     *
+     * @param \TCMSImage $oImage
      */
     public function Init(&$oImage)
     {

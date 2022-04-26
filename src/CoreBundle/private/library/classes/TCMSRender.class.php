@@ -11,7 +11,7 @@
 
 /**
  * provides some standard render functions for cms containers and buttons.
-/**/
+ */
 class TCMSRender
 {
     /**
@@ -53,7 +53,7 @@ class TCMSRender
      * @param string $onMouseOver
      * @param string $id
      * @param string $onclick
-     * @param null   $sTarget     was cleared if link is javascript button
+     * @param string|null $sTarget     was cleared if link is javascript button
      *
      * @return string
      */

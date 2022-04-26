@@ -11,6 +11,9 @@
 
 class MapperCacheTrigger implements IMapperCacheTrigger
 {
+    /**
+     * @var array<string, array{table: string, id: string}>
+     */
     private $aTrigger = array();
 
     /**

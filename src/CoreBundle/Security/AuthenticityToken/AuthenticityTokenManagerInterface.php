@@ -31,6 +31,8 @@ interface AuthenticityTokenManagerInterface
 
     /**
      * Generates and stores a new authenticity token.
+     *
+     * @return void
      */
     public function refreshToken();
 
@@ -60,6 +62,8 @@ interface AuthenticityTokenManagerInterface
      *
      * @param int $format
      *
+     * @psalm-param self::TOKEN_* $format
+     *
      * @return array|string
      *
      * @throws InvalidTokenFormatException
@@ -70,6 +74,8 @@ interface AuthenticityTokenManagerInterface
      * Returns the token ID and authenticity token in one of different formats (one of the constants in this interface).
      *
      * @param int $format
+     *
+     * @psalm-param self::TOKEN_* $format
      *
      * @return array|string
      *

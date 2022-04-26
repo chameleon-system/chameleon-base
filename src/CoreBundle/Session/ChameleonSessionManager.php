@@ -84,6 +84,9 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         $this->inputFilterUtil = $inputFilterUtil;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function boot()
     {
         $sessionHandler = null;
@@ -153,7 +156,7 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
     }
 
     /**
-     * @return Request
+     * @return Request|null
      */
     protected function getRequest()
     {

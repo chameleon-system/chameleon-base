@@ -19,6 +19,8 @@ interface CounterMigrationDataAccessInterface
      * @param string $from
      * @param string $to
      *
+     * @return void
+     *
      * @throws CounterMigrationException
      */
     public function copyCounter($from, $to);
@@ -26,6 +28,8 @@ interface CounterMigrationDataAccessInterface
     /**
      * @param array  $updates
      * @param string $counter
+     *
+     * @return void
      *
      * @throws CounterMigrationException
      */
@@ -47,6 +51,8 @@ interface CounterMigrationDataAccessInterface
 
     /**
      * @param int $version
+     *
+     * @return void
      */
     public function saveMigrationCounterVersion($version);
 
@@ -57,17 +63,23 @@ interface CounterMigrationDataAccessInterface
 
     /**
      * @param array $counterData
+     *
+     * @return void
      */
     public function createCountersVersionTwo(array $counterData);
 
     /**
      * @param string   $systemNamePattern
      * @param string[] $excludePatterns
+     *
+     * @return void
      */
     public function deleteCountersVersionOne($systemNamePattern, array $excludePatterns = array());
 
     /**
      * Creates base tables for migration counter data.
+     *
+     * @return void
      */
     public function createMigrationTablesVersionTwo();
 }

@@ -39,6 +39,8 @@ interface MigrationDataAccessInterface
      * @param string $counterId
      * @param int    $buildNumber
      *
+     * @return void
+     *
      * @throws InvalidArgumentException if the bundle name could not be found
      */
     public function markMigrationFileAsProcessed($counterId, $buildNumber);
@@ -48,6 +50,8 @@ interface MigrationDataAccessInterface
      * Call getMigrationCounterIdsByBundle() to retrieve the new ID.
      *
      * @param string $bundleName
+     *
+     * @return void
      */
     public function createMigrationCounter($bundleName);
 
@@ -55,6 +59,8 @@ interface MigrationDataAccessInterface
      * Deletes the update counter with the given ID from the underlying data storage.
      *
      * @param string $counterId
+     *
+     * @return void
      */
     public function deleteMigrationCounter($counterId);
 }

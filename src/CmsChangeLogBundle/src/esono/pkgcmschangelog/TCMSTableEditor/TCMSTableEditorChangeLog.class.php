@@ -27,7 +27,9 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     protected $aForbiddenTables = array('pkg_cms_changelog_set', 'pkg_cms_changelog_item');
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function GetCustomMenuItems()
     {
@@ -68,6 +70,8 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      *
      * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
+     *
+     * @return void
      */
     protected function PostSaveHook(&$oFields, &$oPostTable)
     {
@@ -177,6 +181,8 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     /**
      * @param string $sChangeSetId
      * @param array  $aDiff
+     *
+     * @return void
      */
     protected function createChangeItems($sChangeSetId, $aDiff)
     {
@@ -199,7 +205,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     protected function getNameColumnValue()
     {
@@ -220,7 +226,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function PostInsertHook(&$oFields)
     {
@@ -241,7 +247,9 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function DeleteExecute()
     {
@@ -255,6 +263,8 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
 
     /**
      * @throws TPkgCmsException
+     *
+     * @return void
      */
     protected function failOnForbiddenTables()
     {
@@ -282,7 +292,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function AddMLTConnectionExecute($oField, $iConnectedID)
     {
@@ -302,6 +312,8 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      *
      * @param TCMSField $oField       mlt field object
      * @param int       $iConnectedID the connected record id that will be removed
+     *
+     * @return void
      */
     protected function RemoveMLTConnectionExecute($oField, $iConnectedID)
     {

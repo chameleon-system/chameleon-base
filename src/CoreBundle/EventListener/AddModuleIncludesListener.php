@@ -41,6 +41,9 @@ class AddModuleIncludesListener
         $this->userModuleLoader = $userModuleLoader;
     }
 
+    /**
+     * @return void
+     */
     public function onGlobalHtmlHeaderInclude(HtmlIncludeEventInterface $event)
     {
         if ($this->requestInfoService->isBackendMode()) {
@@ -50,6 +53,9 @@ class AddModuleIncludesListener
         }
     }
 
+    /**
+     * @return void
+     */
     public function onGlobalHtmlFooterInclude(HtmlIncludeEventInterface $event)
     {
         if ($this->requestInfoService->isBackendMode()) {

@@ -27,6 +27,8 @@ class ChameleonSystemTwigDebugExtension extends Extension
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
      *
      * @api
+     *
+     * @return void
      */
     public function load(array $config, ContainerBuilder $container)
     {

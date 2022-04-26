@@ -354,7 +354,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      * Returns the name of the table this field is connected with from given sql field data.
      * Get connected table name from field config (connectedTableName) or from field name.
      *
-     * @param  $aNewFieldData
+     * @param array $aNewFieldData
      *
      * @return string|null
      */
@@ -423,7 +423,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      * Returns config parameter for given field data and config parameter.
      *
      * @param array $aFieldSQLData sql data array of field config
-     * @param  $sParameterKey
+     * @param string $sParameterKey
      *
      * @return string
      */

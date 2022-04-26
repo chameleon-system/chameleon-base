@@ -16,6 +16,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
 class ChameleonSystemCmsTextFieldExtension extends ConfigurableExtension
 {
+    /**
+     * @return void
+     */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {
         $container->setParameter(

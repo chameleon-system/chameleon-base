@@ -301,7 +301,7 @@ class TFullGroupTable extends TGroupTable
     /**
      * add a header cell.
      *
-     * @param string   $name           - database name of the column name may be a string, or an array. if it is an array
+     * @param string|non-empty-array<string, string>   $name - database name of the column name may be a string, or an array. if it is an array
      *                                 it should be of the form 'name'=>'full_name'
      * @param string   $align          - horizontal alignment to use in the cell
      * @param resource $format         - a callback function to use for the column (the function will get 2 parameters,

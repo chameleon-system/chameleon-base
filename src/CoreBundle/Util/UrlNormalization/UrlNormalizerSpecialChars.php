@@ -13,6 +13,9 @@ namespace ChameleonSystem\CoreBundle\Util\UrlNormalization;
 
 class UrlNormalizerSpecialChars implements UrlNormalizerInterface
 {
+    /**
+     * @var array<string, string>
+     */
     private static $specialCharNormalization = array(
         '®' => '',
         '™' => '',
@@ -117,6 +120,8 @@ class UrlNormalizerSpecialChars implements UrlNormalizerInterface
      * The third index in the search array is a special character. It looks like a space but it is a special space
      * (from mac). This special character has the effect that the following text won't wrap until the next normal
      * space or other character (that allows wrapping) appears.
+     *
+     * @var string[]
      */
     private static $specialCharToSpacerNormalization = array(
         '/',

@@ -12,14 +12,16 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgCmsCache\CacheInterface;
 
+/**
+ * @property TdbPkgCmsTextBlock $oTable
+ */
 class TCMSPkgCmsTextBlockTableEditor extends TCMSTableEditor
 {
     /**
      * Gets called after save if all posted data was valid.
      * Clear cache for linked portals and text fields containing the placeholder from the text block item.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
-     * @param TCMSRecord $oPostTable holds the record object of all posted data
+     * {@inheritDoc}
      */
     protected function PrepareDataForSave($postData)
     {
@@ -32,7 +34,9 @@ class TCMSPkgCmsTextBlockTableEditor extends TCMSTableEditor
     /**
      * Clear cache for linked portals.
      *
-     * @param  $postData
+     * @param array $postData
+     *
+     * @return void
      */
     protected function ClearPortalCache($postData)
     {
@@ -53,7 +57,9 @@ class TCMSPkgCmsTextBlockTableEditor extends TCMSTableEditor
     /**
      * Clear cache for text fields containing the placeholder from the text block item.
      *
-     * @param  $postData
+     * @param array $postData
+     *
+     * @return void
      */
     protected function ClearWysiwygTextFieldCache($postData)
     {

@@ -23,7 +23,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * Get newsletter user for given email and active portal.
      *
-     * @param $sEmail
+     * @param string $sEmail
      *
      * @return TdbPkgNewsletterUser|null
      */
@@ -50,11 +50,12 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      *
      * @param bool $bRefresh
      *
-     * @return TdbPkgNewsletterUser
+     * @return TdbPkgNewsletterUser|null
      */
     public static function &GetInstanceForActiveUser($bRefresh = false)
     {
         static $oInst = false;
+
         if (false === $oInst || $bRefresh) {
             $oInst = null;
             $user = self::getExtranetUserProvider()->getActiveUser();
@@ -126,10 +127,13 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * return instance based on the id in the url
      * TdbPkgNewsletterUser.
+     *
+     * @return TdbPkgNewsletterUser|null
      */
     public static function &GetInstanceFromURLId()
     {
         static $oInstance = false;
+
         if (false === $oInstance) {
             $oGlobal = TGlobal::instance();
             $sId = $oGlobal->GetUserData(TdbPkgNewsletterUser::URL_USER_ID_PARAMETER);
@@ -149,6 +153,8 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * the newsletter use will be confirmed.
      *
      * @param TdbPkgNewsletterConfirmation $oNewsletterConfirmation
+     *
+     * @return void
      */
     public function ConfirmSignup($oNewsletterConfirmation = null)
     {
@@ -230,7 +236,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * return link to un-subscribe page.
      *
-     * @param $sPkgNewsletterGroupId
+     * @param string[]|string $sPkgNewsletterGroupId
      *
      * @return string
      */
@@ -266,10 +272,10 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * Get link parameter for unsubscribe link.
      *
      * @param string $sPkgNewsletterGroupId
-     * @param bool   $sUnsubscribeCode      if given, add opt-out-key to link (use with new newsletter module).O
+     * @param string|false   $sUnsubscribeCode      if given, add opt-out-key to link (use with new newsletter module).O
      *                                      Otherwise generate link for old newsletter module.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function GetUnsubscribeLinkParameter($sPkgNewsletterGroupId, $sUnsubscribeCode = false)
     {
@@ -388,6 +394,8 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * load data from row, but protected items that the user should not set via get/post.
      *
      * @param array $aData
+     *
+     * @return void
      */
     public function LoadFromRowProtected($aData)
     {
@@ -413,6 +421,9 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         return $aWhiteList;
     }
 
+    /**
+     * @return void
+     */
     public function PostInsertHook()
     {
         parent::PostInsertHook();
@@ -450,6 +461,11 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         }
     }
 
+    /**
+     * @param TdbPkgNewsletterModuleSignupConfig|null $oNewsletterConfig
+     *
+     * @return void
+     */
     public function SendDoubleOptInEMail($oNewsletterConfig = null)
     {
         $oMail = TdbDataMailProfile::GetProfile('newsletter-double-opt-in');
@@ -489,6 +505,8 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * after updating a confirmation save new opt-in code to newsletter user.
      *
      * @param TdbPkgNewsletterModuleSignupConfig $oNewsletterConfig
+     *
+     * @return void
      */
     public function PostConfirmationUpdateHook($oNewsletterConfig)
     {
@@ -508,7 +526,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      *
      * @param TdbPkgNewsletterModuleSignupConfig $oNewsletterConfig
      *
-     * @return bool $rReturnValue
+     * @return string|false - id on success... else false
      */
     public function Save($oNewsletterConfig = null)
     {
@@ -569,6 +587,8 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * Was called after sign up newsletter user only.
      * This will be used if no newsletter groups are existing.
+     *
+     * @return void
      */
     public function PostSignUpNewsletterUserOnly()
     {
@@ -578,6 +598,8 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * update confirmation with new registration date.
      *
      * @param TdbPkgNewsletterConfirmation $oNewsletterConfirmation
+     *
+     * @return void
      */
     protected function UpdateConfirmation($oNewsletterConfirmation)
     {
@@ -617,6 +639,8 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * Was called after creating confirmation.
      *
      * @param TdbPkgNewsletterConfirmation $oNewsletterConfirmation
+     *
+     * @return void
      */
     protected function PostCreateConfirmationHook($oNewsletterConfirmation)
     {
@@ -673,6 +697,8 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * Was called after confirming newsletter confirmation.
      *
      * @param bool|string $sNewsletterGroupId
+     *
+     * @return void
      */
     protected function PostConfirmNewsletterUserHook($sNewsletterGroupId = false)
     {
@@ -681,8 +707,10 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * add given newsletter groups to newsletter user.
      *
-     * @param $aNewNewsletterConfirmationIdList
      * @param bool $bNoDelete
+     * @param string[] $aNewsletterGroupIdList
+     *
+     * @return void
      */
     public function AddNewsletterGroupConnection($aNewsletterGroupIdList, $bNoDelete = false)
     {
@@ -694,8 +722,10 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * add given newsletter confirmations to newsletter user.
      *
-     * @param $aNewNewsletterConfirmationIdList
      * @param bool $bNoDelete
+     * @param string[] $aNewNewsletterConfirmationIdList
+     *
+     * @return void
      */
     public function AddNewsletterConfirmationConnection($aNewNewsletterConfirmationIdList, $bNoDelete = false)
     {
@@ -772,6 +802,8 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
 
     /**
      * send double opt out mail to newsletter user with a link for each signed in newsletter.
+     *
+     * @return bool
      */
     protected function SendDoubleOptOutMail()
     {
@@ -909,7 +941,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * @param array $aNewsletterGroupSignOutList if is only a string then the signout came from old singout module so confirmed is set to true
      * @param bool  $bConfirmSignOut             sign out was confirmed -> delete all confirmations with newslettergroups in $aNewsletterGroupSignOutList
      *
-     * @return TdbPkgNewsletterUser
+     * @return bool
      */
     public function SignOut($aNewsletterGroupSignOutList = array(), $bConfirmSignOut = false)
     {
@@ -942,6 +974,8 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * Was called after unsubscribing newsletter user.
      *
      * @param bool|string $sNewsletterGroupId
+     *
+     * @return void
      */
     protected function PostUnSubscribeNewsletterUser($sNewsletterGroupId = false)
     {
@@ -952,7 +986,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      *
      * @param array $aNewsletterGroupSignOutList if is only a string then the signout came from old singout module so confirmed is set to true
      *
-     * @return TdbPkgNewsletterUser
+     * @return void
      */
     public function SendSignOutConfirmation($aNewsletterGroupSignOutList = array())
     {
@@ -1025,7 +1059,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * Return true if newsletter user is a member of the given group.
      *
-     * @param $sPkgNewsletterGroupId
+     * @param string $sPkgNewsletterGroupId
      *
      * @return bool
      */

@@ -13,6 +13,9 @@ namespace ChameleonSystem\CoreBundle\Util\UrlNormalization;
 
 class UrlNormalizerRomanian implements UrlNormalizerInterface
 {
+    /**
+     * @var array<string, string>
+     */
     private static $romanianCharNormalization = array(
         'Ă' => 'A',
         'ă' => 'a',

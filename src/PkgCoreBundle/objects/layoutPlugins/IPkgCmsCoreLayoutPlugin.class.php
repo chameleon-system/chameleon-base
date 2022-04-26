@@ -19,8 +19,10 @@ interface IPkgCmsCoreLayoutPlugin
     /**
      * generate the layout html.
      *
-     * @param $contentIdentifier
-     * @param $config
+     * @param string $contentIdentifier
+     * @param array<string, mixed> $config
+     *
+     * @return void
      */
     public function run($contentIdentifier, $config);
 }

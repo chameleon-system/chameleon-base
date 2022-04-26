@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @psalm-suppress UndefinedClass - AutoParent does not seem to exist at scan-time.
+ */
 class MTPkgExternalTracker_MTPkgArticle extends MTPkgExternalTracker_MTPkgArticleAutoParent
 {
     public function Init()

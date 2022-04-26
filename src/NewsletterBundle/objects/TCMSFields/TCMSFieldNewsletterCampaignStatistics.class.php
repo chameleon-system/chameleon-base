@@ -50,6 +50,9 @@ class TCMSFieldNewsletterCampaignStatistics extends TCMSFieldText
         return $html;
     }
 
+    /**
+     * @return int
+     */
     protected function getAlreadySentCount()
     {
         $sQuery = "SELECT COUNT(*) AS count

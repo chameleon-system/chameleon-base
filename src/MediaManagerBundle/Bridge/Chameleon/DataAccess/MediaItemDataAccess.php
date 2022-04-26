@@ -25,6 +25,7 @@ use ChameleonSystem\MediaManager\SortColumnCollection;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
 use TCMSstdClass;
 use TCMSTableEditorManager;
 use TdbCmsMedia;
@@ -251,6 +252,8 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
      * @param array                   $queryRestrictions
      * @param array                   $params
      * @param array                   $paramTypes
+     *
+     * @return void
      */
     private function addMediaTreeNodeRestrictions(
         MediaManagerListRequest $mediaManagerListRequest,
@@ -278,6 +281,8 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
      * @param array                   $queryRestrictions
      * @param array                   $params
      * @param array                   $paramTypes
+     *
+     * @return void
      */
     private function addSearchRestrictions(
         MediaManagerListRequest $mediaManagerListRequest,
@@ -437,13 +442,13 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     }
 
     /**
-     * @param Statement|PDOStatement  $stm
+     * @param Statement|\PDOStatement $stm
      * @param MediaManagerListRequest $mediaManagerListRequest
      * @param string                  $query
      * @param array                   $params
      * @param array                   $paramTypes
      *
-     * @return Statement
+     * @return Statement|DriverResultStatement|\PDOStatement
      *
      * @throws DBALException
      */

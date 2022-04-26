@@ -39,6 +39,8 @@ class JavaScriptMinifyEventListener
 
     /**
      * @param ResourceCollectionJavaScriptCollectedEventInterface $event
+     *
+     * @return void
      */
     public function onMinifyRequest(ResourceCollectionJavaScriptCollectedEventInterface $event)
     {

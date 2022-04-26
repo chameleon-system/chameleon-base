@@ -22,6 +22,11 @@ class MltFieldUtil
     * @param string $mltTableName
     * @return string
     */
+    /**
+     * @param string $mltTableName
+     *
+     * @return string
+     */
     public function cutMultiMltFieldNumber($mltTableName)
     {
         if (1 === preg_match('#^(.*?)\d+$#', $mltTableName, $matches)) {
@@ -48,7 +53,7 @@ class MltFieldUtil
     }
 
     /**
-     * @param $mltTableName
+     * @param string $mltTableName
      *
      * @return string
      */

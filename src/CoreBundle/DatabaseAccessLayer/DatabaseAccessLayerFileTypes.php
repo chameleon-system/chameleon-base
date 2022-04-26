@@ -19,7 +19,7 @@ class DatabaseAccessLayerFileTypes extends AbstractDatabaseAccessLayer
     private $cache;
 
     /**
-     * @param $id
+     * @param string $id
      *
      * @return \TdbCmsFiletype
      */

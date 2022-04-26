@@ -32,6 +32,9 @@ class ModuleIconMigrator
         $this->iconMapping = IconMapping::ICON_MAPPING;
     }
 
+    /**
+     * @return void
+     */
     public function migrateModuleIcon(string $module, array $additionalIconMapping = [])
     {
         $query = 'SELECT * FROM `cms_tpl_module` WHERE `classname` = :module';
@@ -46,6 +49,9 @@ class ModuleIconMigrator
         $this->migrateModuleIconByRecord($row, $additionalIconMapping);
     }
 
+    /**
+     * @return void
+     */
     public function migrateUnhandledModules(array $additionalIconMapping = [])
     {
         $moduleRecordList = $this->databaseConnection->fetchAll("SELECT * FROM `cms_tpl_module` WHERE `icon_font_css_class` = '' AND `icon_list` != ''");
@@ -55,6 +61,9 @@ class ModuleIconMigrator
         }
     }
 
+    /**
+     * @return void
+     */
     private function migrateModuleIconByRecord(array $moduleRecord, array $additionalIconMapping = [])
     {
         $iconFontClass = $this->getFontIconStyleByImage($moduleRecord['icon_list'], $additionalIconMapping);

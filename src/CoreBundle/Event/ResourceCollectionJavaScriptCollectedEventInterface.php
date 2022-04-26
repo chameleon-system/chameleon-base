@@ -15,6 +15,8 @@ interface ResourceCollectionJavaScriptCollectedEventInterface
 {
     /**
      * @param string $content
+     *
+     * @return void
      */
     public function setContent($content);
 

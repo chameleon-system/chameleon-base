@@ -29,8 +29,8 @@ class TCMSUserInput
     /**
      * return the filtered value.
      *
-     * @param $sValue
-     * @param $sFilterClass - form: classname;path;type|classname;path;type
+     * @param string $sValue
+     * @param string $sFilterClass - form: classname;path;type|classname;path;type
      *
      * @return string
      *

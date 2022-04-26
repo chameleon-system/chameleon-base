@@ -11,6 +11,9 @@
 
 class TCMSListManagerShowChanges extends TCMSListManagerShowChangesAutoParent
 {
+    /**
+     * @return void
+     */
     protected function GetCustomMenuItems()
     {
         parent::GetCustomMenuItems();

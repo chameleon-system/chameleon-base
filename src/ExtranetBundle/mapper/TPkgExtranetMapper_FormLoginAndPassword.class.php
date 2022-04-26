@@ -46,8 +46,6 @@ class TPkgExtranetMapper_FormLoginAndPassword extends AbstractPkgExtranetMapper_
      * @param \IMapperVisitorRestricted     $oVisitor
      * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     *
-     * @return
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
@@ -81,6 +79,8 @@ class TPkgExtranetMapper_FormLoginAndPassword extends AbstractPkgExtranetMapper_
      * @param TCMSRecordList           $oFieldOptionList
      *
      * @internal param string $sMSGConsumer
+     *
+     * @return void
      */
     protected function SetInputFields($aFieldList, $oVisitor, $oUser, $sFieldType = 'text', $oFieldOptionList = null)
     {

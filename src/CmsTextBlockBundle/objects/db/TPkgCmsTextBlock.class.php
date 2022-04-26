@@ -20,6 +20,10 @@ class TPkgCmsTextBlock extends TPkgCmsTextBlockAutoParent
      * You can set width of text block by adding "iWidth" to $aCallTimeVars.(default width 600).
      *
      * @return string
+     *
+     * @param string $sViewName
+     * @param string $sSubtype
+     * @param int[] $aCallTimeVars
      */
     public function Render($sViewName, $sSubtype = 'Customer', $aCallTimeVars = array())
     {

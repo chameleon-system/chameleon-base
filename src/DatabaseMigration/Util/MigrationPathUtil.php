@@ -29,6 +29,8 @@ class MigrationPathUtil implements MigrationPathUtilInterface
 
     /**
      * @param string $pathInBundle
+     *
+     * @return void
      */
     public function addPathToUpdatesInBundle($pathInBundle)
     {

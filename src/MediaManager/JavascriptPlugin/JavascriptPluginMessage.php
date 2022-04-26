@@ -16,5 +16,8 @@ namespace ChameleonSystem\MediaManager\JavascriptPlugin;
  */
 class JavascriptPluginMessage
 {
+    /**
+     * @var string
+     */
     public $message = '';
 }

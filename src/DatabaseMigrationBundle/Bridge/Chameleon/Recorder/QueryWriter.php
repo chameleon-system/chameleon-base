@@ -41,6 +41,8 @@ class QueryWriter
     /**
      * @param resource             $filePointer
      * @param LogChangeDataModel[] $dataModels
+     *
+     * @return void
      */
     public function writeQueries($filePointer, array $dataModels)
     {
@@ -52,6 +54,8 @@ class QueryWriter
     /**
      * @param resource           $filePointer
      * @param LogChangeDataModel $dataModel
+     *
+     * @return void
      */
     public function writeQuery($filePointer, LogChangeDataModel $dataModel)
     {
@@ -72,6 +76,8 @@ class QueryWriter
     /**
      * @param resource           $filePointer
      * @param MigrationQueryData $migrationQueryData
+     *
+     * @return void
      */
     public function writeInsertQuery($filePointer, MigrationQueryData $migrationQueryData)
     {
@@ -81,6 +87,8 @@ class QueryWriter
     /**
      * @param resource           $filePointer
      * @param MigrationQueryData $migrationQueryData
+     *
+     * @return void
      */
     public function writeUpdateQuery($filePointer, MigrationQueryData $migrationQueryData)
     {
@@ -90,16 +98,21 @@ class QueryWriter
     /**
      * @param resource           $filePointer
      * @param MigrationQueryData $migrationQueryData
+     *
+     * @return void
      */
     public function writeDeleteQuery($filePointer, MigrationQueryData $migrationQueryData)
     {
         $this->writeQueryToFile($filePointer, $migrationQueryData, LogChangeDataModel::TYPE_DELETE);
     }
 
+
     /**
-     * @param $filePointer
+     * @param resource $filePointer
      * @param MigrationQueryData $migrationQueryData
-     * @param string             $operationType
+     * @param string $operationType
+     *
+     * @return void
      */
     private function writeQueryToFile($filePointer, MigrationQueryData $migrationQueryData, $operationType)
     {
@@ -206,6 +219,8 @@ class QueryWriter
      *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
+     *
+     * @return void
      */
     public function writeLiteralQueryToFile($filePointer, $query)
     {

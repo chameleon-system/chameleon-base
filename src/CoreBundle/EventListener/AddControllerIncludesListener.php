@@ -44,6 +44,8 @@ class AddControllerIncludesListener
 
     /**
      * @param HtmlIncludeEventInterface $event
+     *
+     * @return void
      */
     public function onGlobalHtmlHeaderInclude(HtmlIncludeEventInterface $event)
     {
@@ -56,6 +58,8 @@ class AddControllerIncludesListener
 
     /**
      * @param HtmlIncludeEventInterface $event
+     *
+     * @return void
      */
     public function onGlobalHtmlFooterInclude(HtmlIncludeEventInterface $event)
     {

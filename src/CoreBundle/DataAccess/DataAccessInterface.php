@@ -20,6 +20,8 @@ use TCMSRecord;
  * 2. There is a cache mechanism for the fetched data, to avoid reading rather large datasets from the backend.
  * 3. There are higher-level services that operate on the fetched data. The returned values should be quite raw, so more
  *    sophisticated usage requires additional work.
+ *
+ * @template T extends \TCMSRecord
  */
 interface DataAccessInterface
 {
@@ -28,7 +30,7 @@ interface DataAccessInterface
      *
      * @param string|null $languageId if null, the currently active language is used
      *
-     * @return TCMSRecord[]
+     * @return T[]
      */
     public function loadAll($languageId = null);
 

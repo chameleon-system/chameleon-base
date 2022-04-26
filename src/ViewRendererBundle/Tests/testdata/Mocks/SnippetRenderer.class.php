@@ -35,7 +35,7 @@ class SnippetRenderer implements IPkgSnippetRenderer
      *
      * @static
      *
-     * @param $sSource - the snippet source (or path to a file containing it)
+     * @param string $sSource - the snippet source (or path to a file containing it)
      * @param int $iSourceType - set to one of self::SOURCE_TYPE_*
      *
      * @return TPkgSnippetRenderer
@@ -49,7 +49,7 @@ class SnippetRenderer implements IPkgSnippetRenderer
      * Set the snippet source.
      * It is possible to override the initially given source this way afterwards.
      *
-     * @param $sSource - the snippet source
+     * @param string $sSource - the snippet source
      */
     public function setSource($sSource)
     {
@@ -60,7 +60,7 @@ class SnippetRenderer implements IPkgSnippetRenderer
      * Set the path to the snippet code.
      * It is possible to override the initially given source this way afterwards.
      *
-     * @param $sPath - the path to the snippet code
+     * @param string $sPath - the path to the snippet code
      */
     public function setFilename($sPath)
     {
@@ -82,7 +82,7 @@ class SnippetRenderer implements IPkgSnippetRenderer
      * The method will throw a <code>badMethodCallException</code> if it is called while another
      * similar call is already active,
      *
-     * @param $sName - the variable/block name
+     * @param string $sName - the variable/block name
      *
      * @throws BadMethodCallException
      */

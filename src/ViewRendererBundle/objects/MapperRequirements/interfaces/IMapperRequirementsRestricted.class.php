@@ -17,7 +17,10 @@ interface IMapperRequirementsRestricted
      *
      * @param string $key
      * @param string $sType
-     * @param mixed  $sDefault
+     * @param mixed $sDefault
+     * @param bool $bOptional
+     *
+     * @return void
      */
     public function NeedsSourceObject($key, $sType = null, $sDefault = null, $bOptional = false);
 }

@@ -46,6 +46,8 @@ class ChameleonHttpKernel extends HttpKernel
 
     /**
      * @param string $trustedProxies comma-separated list of proxies to trust
+     *
+     * @return void
      */
     public function setTrustedProxies($trustedProxies)
     {

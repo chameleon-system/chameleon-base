@@ -55,7 +55,7 @@ class MediaManagerMediaItemCropsMapper extends AbstractViewMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(
         IMapperVisitorRestricted $oVisitor,

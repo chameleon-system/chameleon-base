@@ -19,6 +19,9 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
  */
 class DatabaseAccessLayerCmsTree extends AbstractDatabaseAccessLayer
 {
+    /**
+     * @var bool
+     */
     private $isLoaded = false;
     /**
      * @var PortalDomainServiceInterface
@@ -30,6 +33,9 @@ class DatabaseAccessLayerCmsTree extends AbstractDatabaseAccessLayer
      */
     private $languageService;
 
+    /**
+     * @var array<string, \TdbCmsTree|null>
+     */
     private $objectCache = array();
 
     public function __construct(PortalDomainServiceInterface $portalDomainService, LanguageServiceInterface $languageService)
@@ -42,7 +48,7 @@ class DatabaseAccessLayerCmsTree extends AbstractDatabaseAccessLayer
      * @param string $id
      * @param string $languageId
      *
-     * @return \TdbCmsTree
+     * @return \TdbCmsTree|null
      */
     public function loadFromId($id, $languageId = null)
     {
@@ -55,7 +61,7 @@ class DatabaseAccessLayerCmsTree extends AbstractDatabaseAccessLayer
      * @param string $id
      * @param string $languageId
      *
-     * @return \TdbCmsTree
+     * @return \TdbCmsTree|null
      */
     private function getFromObjectCache($id, $languageId = null)
     {
@@ -90,6 +96,10 @@ class DatabaseAccessLayerCmsTree extends AbstractDatabaseAccessLayer
         /** @var \TdbCmsTree[] $matches */
         $matches = $this->findDbObjectFromFieldInCache('parent_id', $id, $languageId);
 
+        /**
+         * @psalm-suppress InvalidArgument
+         * @FIXME returning `null` from a sorting method is not allowed, should probably return `0`.
+         */
         usort($matches, function (\TdbCmsTree $a, \TdbCmsTree $b) {
             if ($a->fieldEntrySort === $b->fieldEntrySort) {
                 return null;
@@ -132,6 +142,9 @@ class DatabaseAccessLayerCmsTree extends AbstractDatabaseAccessLayer
         return $results;
     }
 
+    /**
+     * @return void
+     */
     private function loadAllTreeNodes()
     {
         if (true === $this->isLoaded) {

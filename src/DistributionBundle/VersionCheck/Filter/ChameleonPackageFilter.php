@@ -13,6 +13,9 @@ namespace ChameleonSystem\DistributionBundle\VersionCheck\Filter;
 
 class ChameleonPackageFilter implements PackageNameFilterInterface
 {
+    /**
+     * @{inheritDoc}
+     */
     public function filter($name)
     {
         $prefix = 'chameleon-system/';

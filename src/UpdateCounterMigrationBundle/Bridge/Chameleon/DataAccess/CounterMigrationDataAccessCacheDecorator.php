@@ -66,6 +66,8 @@ class CounterMigrationDataAccessCacheDecorator implements CounterMigrationDataAc
 
     /**
      * @param string $counter
+     *
+     * @return void
      */
     private function refreshConfigCacheForCreatedCounter($counter)
     {

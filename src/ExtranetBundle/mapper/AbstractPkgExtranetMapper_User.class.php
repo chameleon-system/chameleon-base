@@ -22,6 +22,8 @@ abstract class AbstractPkgExtranetMapper_User extends AbstractViewMapper
      * $oRequirements->NeedsMappedValue("baz");
      *
      * @param IMapperRequirementsRestricted $oRequirements
+     *
+     * @return void
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
     {

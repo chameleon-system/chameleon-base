@@ -14,10 +14,14 @@ namespace ChameleonSystem\CoreBundle\DataAccess;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use TCMSRecord;
 
+/**
+ * @template T extends TCMSRecord
+ * @implements DataAccessInterface<T>
+ */
 class RequestCacheDataAccess implements DataAccessInterface
 {
     /**
-     * @var TCMSRecord[][] $elements
+     * @var array<string, T[]> $elements
      */
     private $cache = array();
     /**
@@ -31,7 +35,7 @@ class RequestCacheDataAccess implements DataAccessInterface
 
     /**
      * @param LanguageServiceInterface $languageService
-     * @param DataAccessInterface      $decorated
+     * @param DataAccessInterface<T>      $decorated
      */
     public function __construct(LanguageServiceInterface $languageService, DataAccessInterface $decorated)
     {

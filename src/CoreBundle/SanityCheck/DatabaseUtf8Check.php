@@ -23,6 +23,10 @@ class DatabaseUtf8Check extends AbstractCheck
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
+    /**
+     * @param int $level
+     * @param Connection $connection
+     */
     public function __construct($level, Connection $connection)
     {
         parent::__construct($level);
@@ -43,6 +47,9 @@ class DatabaseUtf8Check extends AbstractCheck
         return $retValue;
     }
 
+    /**
+     * @return CheckOutcome[]
+     */
     private function checkUtf8()
     {
         $retValue = array();

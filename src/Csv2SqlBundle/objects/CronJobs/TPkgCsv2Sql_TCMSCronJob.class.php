@@ -17,6 +17,9 @@ use Psr\Log\LoggerInterface;
 /**/
 class TPkgCsv2Sql_TCMSCronJob extends TdbCmsCronjobs
 {
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         // run all csv2sql jobs

@@ -13,10 +13,13 @@ namespace ChameleonSystem\CoreBundle\DatabaseAccessLayer;
 
 class DatabaseAccessLayerCmsTPlModule extends AbstractDatabaseAccessLayer
 {
+    /**
+     * @var bool
+     */
     private $isLoaded = false;
 
     /**
-     * @param $classOrId
+     * @param string $classOrId
      *
      * @return \TdbCmsTplModule|null
      */
@@ -34,7 +37,7 @@ class DatabaseAccessLayerCmsTPlModule extends AbstractDatabaseAccessLayer
     }
 
     /**
-     * @param $id
+     * @param string $id
      *
      * @return \TdbCmsTplModule|null
      */
@@ -45,6 +48,11 @@ class DatabaseAccessLayerCmsTPlModule extends AbstractDatabaseAccessLayer
         return $this->getFromCache($id);
     }
 
+    /**
+     * @param string $field
+     * @param string $value
+     * @return mixed|null
+     */
     public function loadFromField($field, $value)
     {
         $this->loadAllModules();
@@ -56,6 +64,9 @@ class DatabaseAccessLayerCmsTPlModule extends AbstractDatabaseAccessLayer
         return $matches[0];
     }
 
+    /**
+     * @return void
+     */
     private function loadAllModules()
     {
         if (true === $this->isLoaded) {

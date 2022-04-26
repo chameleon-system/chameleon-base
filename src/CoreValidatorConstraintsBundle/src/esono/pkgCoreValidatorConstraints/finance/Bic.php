@@ -18,8 +18,14 @@ namespace esono\pkgCoreValidatorConstraints\finance;
  */
 class Bic extends \Symfony\Component\Validator\Constraint
 {
+    /**
+     * @var string
+     */
     public $message = '%value% is not a valid BIC.';
 
+    /**
+     * @return string
+     */
     public function getRawMessage()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('VALIDATOR_CONSTRAINT_FINANCE_BIC');

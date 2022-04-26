@@ -78,6 +78,8 @@ class ChameleonBackendRouter extends ChameleonBaseRouter implements RequestMatch
 
     /**
      * @param array $match
+     *
+     * @return void
      */
     private function addLocaleToMatch(array &$match)
     {

@@ -20,7 +20,7 @@ class CmsPortalDomainsDataAccessRequestLevelCacheDecorator implements CmsPortalD
      */
     private $subject;
     /**
-     * @var TdbCmsPortalDomains[]
+     * @var array<string, TdbCmsPortalDomains|null>
      */
     private $cache = [];
 

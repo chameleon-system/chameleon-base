@@ -22,6 +22,8 @@ class JsMinifyPass implements CompilerPassInterface
      * Gets all tagged javascript minify integrations and set the one configured in configuration.
      *
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function process(ContainerBuilder $container)
     {

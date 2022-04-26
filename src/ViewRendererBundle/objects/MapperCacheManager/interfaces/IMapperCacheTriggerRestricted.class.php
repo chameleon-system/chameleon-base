@@ -14,6 +14,8 @@ interface IMapperCacheTriggerRestricted
     /**
      * @param string            $sTable
      * @param string|array|null $sId
+     *
+     * @return void
      */
     public function addTrigger($sTable, $sId = null);
 }

@@ -18,6 +18,8 @@ class Migrator
 {
     /**
      * @param string $version
+     *
+     * @return void
      */
     public function migrate($version)
     {

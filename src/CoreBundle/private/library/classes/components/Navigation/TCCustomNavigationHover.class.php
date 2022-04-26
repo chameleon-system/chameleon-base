@@ -205,13 +205,8 @@ class TCCustomNavigationHover extends TCCustomNavigation
     }
 
     /**
+     * {@inheritDoc}
      * hide the children IF we are viewing the page through the CMS.
-     *
-     * @param TCMSTreeNode $oNode - parent node
-     * @param $row - row within current submenu
-     * @param $level - level within navi of the parent node
-     *
-     * @return bool
      */
     public function _ShowChildren(&$oNode, $row = null, $level = null)
     {

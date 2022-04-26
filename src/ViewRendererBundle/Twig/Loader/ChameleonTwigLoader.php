@@ -21,6 +21,9 @@ class ChameleonTwigLoader extends FilesystemLoader
      */
     private $snippetDirectory;
 
+    /**
+     * @var bool
+     */
     private $initialized = false;
 
     public function __construct(TPkgViewRendererSnippetDirectoryInterface $snippetDirectory)
@@ -28,6 +31,9 @@ class ChameleonTwigLoader extends FilesystemLoader
         $this->snippetDirectory = $snippetDirectory;
     }
 
+    /**
+     * @return void
+     */
     private function init()
     {
         if ($this->initialized) {
@@ -37,6 +43,11 @@ class ChameleonTwigLoader extends FilesystemLoader
         $this->initialized = true;
     }
 
+    /**
+     * @param string $name
+     * @param bool $throwException
+     * @return string|null|false
+     */
     protected function findTemplate($name, $throwException = true)
     {
         $this->init();

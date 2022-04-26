@@ -13,6 +13,8 @@ class TCMSListManagerChangeLogSet extends TCMSListManagerFullGroupTable
 {
     /**
      * add additional fields.
+     *
+     * @return void
      */
     public function AddFields()
     {
@@ -41,21 +43,45 @@ class TCMSListManagerChangeLogSet extends TCMSListManagerFullGroupTable
         $this->tableObj->AddColumn('change_type', 'left', array($this, 'CallbackFormatChangeType'), $jsParas, 1);
     }
 
+    /**
+     * @param string $cellValue
+     * @param array<string, mixed> $row
+     * @param string $name
+     * @return string
+     */
     public function CallbackResolveTableName($cellValue, $row, $name)
     {
         return TCMSChangeLogFormatter::formatTableName($cellValue);
     }
 
+    /**
+     * @param string $cellValue
+     * @param array<string, mixed> $row
+     * @param string $name
+     * @return string
+     */
     public function CallbackFormatDate($cellValue, $row, $name)
     {
         return TCMSChangeLogFormatter::formatDateTime($cellValue);
     }
 
+    /**
+     * @param string $cellValue
+     * @param array<string, mixed> $row
+     * @param string $name
+     * @return string
+     */
     public function CallbackFormatUser($cellValue, $row, $name)
     {
         return TCMSChangeLogFormatter::formatUser($cellValue);
     }
 
+    /**
+     * @param string $cellValue
+     * @param array<string, mixed> $row
+     * @param string $name
+     * @return string|null
+     */
     public function CallbackFormatChangeType($cellValue, $row, $name)
     {
         return TCMSChangeLogFormatter::formatChangeType($cellValue);

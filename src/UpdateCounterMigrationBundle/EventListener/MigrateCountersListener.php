@@ -38,6 +38,8 @@ class MigrateCountersListener
 
     /**
      * @throws CounterMigrationException
+     *
+     * @return void
      */
     public function onBeforeUpdateCollection()
     {

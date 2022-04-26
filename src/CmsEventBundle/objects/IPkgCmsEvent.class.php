@@ -38,6 +38,8 @@ interface IPkgCmsEvent
      * @abstract
      *
      * @param object $oSubject -the object that created the event
+     *
+     * @return mixed
      */
     public function SetSubject($oSubject);
 
@@ -45,42 +47,61 @@ interface IPkgCmsEvent
      * @abstract
      * returns the context of the event. Context describes what package or subpackage the event belongs to. this helps
      * to isolate events within a package from other events
+     *
+     * @return null|string
+     *
+     * @psalm-return IPkgCmsEvent::CONTEXT_*|TPkgCmsEvent::CONTEXT_*|null
      */
     public function GetContext();
 
     /**
      * @abstract
      * each event has, in addition to the context a name. the combination is used to identify the specific event
+     *
+     * @return null|string
+     *
+     * @psalm-return self::NAME_*|TPkgCmsEvent::NAME_*|null
      */
     public function GetName();
 
     /**
      * @abstract
      * returns data associated with the event
+     *
+     * @return array
      */
     public function GetData();
 
     /**
      * @abstract
-     *
-     * @param $sContext
      * sets the context of the event - use IPkgCmsEvent::CONTEXT_* or TPkgCmsEvent::CONTEXT_*
+     *
+     * @param string $sContext
+     * @psalm-param self::CONTEXT_*|TPkgCmsEvent::CONTEXT_* $sContext
+     *
+     * @return $this
      */
     public function SetContext($sContext);
 
     /**
      * @abstract
-     *
-     * @param $sName
      * sets the name of the event in the context set via SetContext. use IPkgCmsEvent::NAME_* or TPkgCmsEvent::NAME_*
+     *
+     * @param string $sName
+     * @psalm-param self::NAME_*|TPkgCmsEvent::NAME_* $sName
+     *
+     * @return $this
+     *
      */
     public function SetName($sName);
 
     /**
      * @abstract
-     *
-     * @param $aData
      * set additional data for the event
+     *
+     * @param array $aData
+     *
+     * @return $this
      */
     public function SetData($aData);
 
@@ -88,9 +109,12 @@ interface IPkgCmsEvent
      * @static
      *
      * @param object $oSubject - the object that created the event
-     * @param $sContext - use IPkgCmsEvent::CONTEXT_* or TPkgCmsEvent::CONTEXT_*
-     * @param $sName - use IPkgCmsEvent::NAME_* or TPkgCmsEvent::NAME_*
+     * @param string $sContext - use IPkgCmsEvent::CONTEXT_* or TPkgCmsEvent::CONTEXT_*
+     * @param string $sName - use IPkgCmsEvent::NAME_* or TPkgCmsEvent::NAME_*
      * @param array $aData - any data you want to pass to the event
+     *
+     * @psalm-param IPkgCmsEvent::NAME_*|TPkgCmsEvent::NAME_* $sName
+     * @psalm-param IPkgCmsEvent::CONTEXT_*|TPkgCmsEvent::CONTEXT_* $sContext
      *
      * @return IPkgCmsEvent
      *                      returns a new instance of an event for the defined context.

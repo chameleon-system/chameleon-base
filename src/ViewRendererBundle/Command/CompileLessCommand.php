@@ -12,6 +12,7 @@
 namespace ChameleonSystem\ViewRendererBundle\Command;
 
 use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
+use ChameleonSystem\ViewRendererBundle\Service\ThemeService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,15 +28,22 @@ class CompileLessCommand extends Command
      * @var TPkgViewRendererLessCompiler
      */
     private $lessCompiler;
+    /**
+     * @var ThemeService
+     */
+    private $themeService;
 
-    public function __construct($lessCompiler)
+    public function __construct(TPkgViewRendererLessCompiler $lessCompiler, ThemeService $themeService)
     {
         parent::__construct('chameleon_system:less:compile');
         $this->lessCompiler = $lessCompiler;
+        $this->themeService = $themeService;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function configure()
     {
@@ -64,7 +72,10 @@ EOF
         $portalList = TdbCmsPortalList::GetList();
         $minifyCss = true === $input->getOption('minify-css');
         while ($portal = $portalList->Next()) {
+            $this->themeService->setOverrideTheme($portal->GetFieldPkgCmsTheme());
             $css = $this->lessCompiler->getGeneratedCssForPortal($portal, $minifyCss);
+            $this->themeService->setOverrideTheme(null);
+
             $cacheWriteSuccess = $this->lessCompiler->writeCssFileForPortal($css, $portal);
 
             if ($cacheWriteSuccess) {
@@ -74,5 +85,7 @@ EOF
             }
         }
         $output->writeln('<info>Done.</info>');
+
+        return 0;
     }
 }

@@ -13,6 +13,9 @@ namespace ChameleonSystem\CoreBundle\Util\UrlNormalization;
 
 class UrlNormalizerGerman implements UrlNormalizerInterface
 {
+    /**
+     * @var array<string, string>
+     */
     private static $germanCharNormalization = array(
         'ä' => 'ae',
         'ö' => 'oe',

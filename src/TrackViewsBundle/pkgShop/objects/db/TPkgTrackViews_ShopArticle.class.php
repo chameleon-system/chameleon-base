@@ -13,6 +13,8 @@ class TPkgTrackViews_ShopArticle extends TPkgTrackViews_ShopArticleAutoParent
 {
     /**
      * increase the product view counter by one.
+     *
+     * @return void
      */
     public function UpdateProductViewCount()
     {

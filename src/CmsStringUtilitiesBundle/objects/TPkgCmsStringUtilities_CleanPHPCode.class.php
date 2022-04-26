@@ -11,6 +11,10 @@
 
 class TPkgCmsStringUtilities_CleanPHPCode
 {
+    /**
+     * @param string $code
+     * @return string
+     */
     public function stripComments($code)
     {
         $newStr = '';

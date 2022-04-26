@@ -19,7 +19,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 class ChameleonSystemMediaManagerExtension extends ConfigurableExtension
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {
