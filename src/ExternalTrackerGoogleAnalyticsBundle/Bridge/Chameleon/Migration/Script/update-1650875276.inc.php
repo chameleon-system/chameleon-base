@@ -20,6 +20,6 @@ TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('pkg_external_tracker', 'de')
   ->setFields([ 'name' => 'Google Universal Analytics (analytics.js, alt)' ])
-  ->setWhereEquals([ 'id' => '7ba2f2ab-6426-6e13-443e-7bde372406cd' ]);
+  ->setWhereEquals([ 'class' => 'ChameleonSystem\ExternalTrackerGoogleAnalyticsBundle\Bridge\Chameleon\ExternalTracker\ExternalTrackerGoogleUniversalAnalytics' ]);
 TCMSLogChange::update(__LINE__, $data);
 
