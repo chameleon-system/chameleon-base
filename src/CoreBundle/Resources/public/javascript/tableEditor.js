@@ -738,6 +738,8 @@ function updateIframeSize(sFieldName, iHeight) {
 }
 
 CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
+    // current version obtained from https://github.com/tempusdominus/bootstrap-4/tree/5.39.0/build/js
+
     $('.datetimepicker-input').each(function () {
         var id = $(this).attr('id');
 
@@ -747,7 +749,7 @@ CHAMELEON.CORE.MTTableEditor.initDateTimePickers  = function () {
 
             var moment = e.date;
 
-            if (moment === undefined) {
+            if (moment === undefined || moment === false) {
                 $field.val('');
 
                 return;
