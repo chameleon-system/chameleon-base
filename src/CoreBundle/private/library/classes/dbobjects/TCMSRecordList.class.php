@@ -242,7 +242,8 @@ class TCMSRecordList extends TIterator
     /**
      * change the order by of the list.
      *
-     * @param array $aOrderInfo - must be of the form `table`.`field` => ASC/DESC or fieldalias=>ASC/DESC - fields MUST be quoted!
+     * @param array<string, string> $aOrderInfo - must be of the form `table`.`field` => ASC/DESC or fieldalias=>ASC/DESC - fields MUST be quoted!
+     * @psalm-param array<string, 'ASC'|'DESC'>
      */
     public function ChangeOrderBy($aOrderInfo)
     {
@@ -263,6 +264,8 @@ class TCMSRecordList extends TIterator
      * add a custom filter condition to the the beginning of the WHERE statement in the query.
      *
      * @param string $sFilterString
+     *
+     * @return void
      */
     public function AddFilterString($sFilterString = '')
     {
@@ -893,7 +896,7 @@ class TCMSRecordList extends TIterator
      * all results, not just your current page.
      *
      * @param string $sFieldName
-     * @param array  $aCallbackMethodToEvaluate - allows you to pass a callback array(object, method) to return the true value for the field
+     * @param callable(string, string, array<string, string>): void  $aCallbackMethodToEvaluate - allows you to pass a callback array(object, method) to return the true value for the field
      *                                          the callback is passed the field name, the value and an array of all the row
      *
      * @return array

@@ -1842,7 +1842,8 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      * returns true if the passed item is the same as this item.
      *
-     * @param TCMSRecord $oItem
+     * @template T of TCMSRecord
+     * @param T $oItem
      *
      * @return bool
      */

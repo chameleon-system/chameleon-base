@@ -66,7 +66,7 @@ class UrlUtil
     /**
      * converts an array (even multidimensional) to URL parameters.
      *
-     * @param array  $data
+     * @param array<string, mixed> $data
      * @param string $prefix
      * @param string $paramSeparator
      *

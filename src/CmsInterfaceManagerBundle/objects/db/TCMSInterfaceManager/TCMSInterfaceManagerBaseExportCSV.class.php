@@ -13,7 +13,9 @@
  * you can use extensions of this class to implement csv exports
  * OVERWRITE THE METHODS GetDataList, GetFieldMapping and GetExportRowFromDataObject (last one only if you need to)
  * you should not need to overwrite anything else.
-/**/
+ *
+ * @template TItem extends TCMSRecord
+ */
 class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
 {
     const TMP_TBL_PREFIX = '_tmpexport';
@@ -28,7 +30,8 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
     /**
      * OVERWRITE THIS TO FETCH THE DATA. MUST RETURN A TCMSRecordList.
      *
-     * @return TCMSRecordList
+     * @return TCMSRecordList<TItem>
+     * @psalm-suppress InvalidReturnType, InvalidReturnStatement
      */
     protected function GetDataList()
     {
@@ -51,7 +54,7 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
     /**
      * OVERWRITE THIS IF YOU NEED TO ADD ANY OTHER DATA TO THE ROW OBJECT.
      *
-     * @param TCMSRecord $oDataObjct
+     * @param TItem $oDataObjct
      *
      * @return array
      */

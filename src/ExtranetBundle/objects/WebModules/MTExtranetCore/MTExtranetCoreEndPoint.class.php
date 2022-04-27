@@ -1141,6 +1141,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      * @param string $sInputArrayName
      * @param string $fieldBlacklistType Defines which field blacklist to use - one of MTExtranetCoreEndPoint::FIELD_BLACKLIST_TYPE_*
      *
+     * @psalm-param self::FIELD_BLACKLIST_TYPE_* $fieldBlacklistType
+     *
      * @return array
      */
     protected function GetFilteredUserData($sInputArrayName, $fieldBlacklistType = self::FIELD_BLACKLIST_TYPE_USER)
@@ -1188,6 +1190,8 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      * List of fields that should never be set via post data.
      *
      * @param string $blacklistType Defines which field blacklist to use - one of MTExtranetCoreEndPoint::FIELD_BLACKLIST_TYPE_*
+     *
+     * @psalm-param self::FIELD_BLACKLIST_TYPE_* $blacklistType
      *
      * @return array
      *

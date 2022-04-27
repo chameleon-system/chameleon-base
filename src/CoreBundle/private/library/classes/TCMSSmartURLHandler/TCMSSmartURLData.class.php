@@ -16,7 +16,25 @@ use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 
 /**
  * @deprecated use \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest() instead
-/**/
+ *
+ * Lots of magic properties through `__get` in this class:
+ * @property string $sRelativeURL
+ * @property string $sOriginalURL
+ * @property TdbCmsPortalDomains|null $oActiveDomain
+ * @property string $sDomainName
+ * @property string $sOriginalDomainName
+ * @property bool $bIsSSLCall
+ * @property string $sRelativeURLPortalIdentifier
+ * @property string $sRelativeFullURL
+ * @property array $aParameters
+ * @property int $iPortalId
+ * @property bool $bPagedefFound
+ * @property bool $bDomainNotFound
+ * @property bool $bPortalNotFound
+ * @property string $sLanguageId
+ * @property string $sLanguageIdentifier
+ * @property bool $bDomainBasedLanguage
+ */
 class TCMSSmartURLData
 {
     /**

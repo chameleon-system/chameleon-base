@@ -1281,6 +1281,8 @@ class TCMSTableEditorEndPoint
     /**
      * is called only from Delete method and calls all delete relevant methods
      * executes the final SQL Delete Query.
+     *
+     * @return void
      */
     protected function DeleteExecute()
     {
@@ -2146,11 +2148,17 @@ class TCMSTableEditorEndPoint
         return $oRecordData;
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlHeadIncludes()
     {
         return array();
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlFooterIncludes()
     {
         return array();
