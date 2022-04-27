@@ -249,7 +249,7 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param string $sUser
+     * @param string|null $sUser
      *
      * @return static
      */
@@ -261,7 +261,7 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @param string $sPassword
+     * @param string|null $sPassword
      *
      * @return static
      */

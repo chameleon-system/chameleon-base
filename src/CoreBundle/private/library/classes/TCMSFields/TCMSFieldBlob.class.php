@@ -68,4 +68,12 @@ class TCMSFieldBlob extends TCMSFieldText
 
         return '<pre style="white-space:pre">'.$html.'</pre>';
     }
+
+    protected function GetFieldWriterData()
+    {
+        $data = parent::GetFieldWriterData();
+        $data['sFieldType'] = 'mixed';
+
+        return $data;
+    }
 }

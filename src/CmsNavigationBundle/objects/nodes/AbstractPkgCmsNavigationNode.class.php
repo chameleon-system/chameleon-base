@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @template T
+ */
 abstract class AbstractPkgCmsNavigationNode
 {
     /**
@@ -56,7 +59,7 @@ abstract class AbstractPkgCmsNavigationNode
      */
     public $sCssClass = '';
     /**
-     * @var array|null
+     * @var AbstractPkgCmsNavigationNode[]|null
      */
     protected $aChildren = null;
     /**
@@ -68,7 +71,7 @@ abstract class AbstractPkgCmsNavigationNode
      */
     protected $bIsExpanded = null;
     /**
-     * @var TdbCmsTree|null
+     * @var T|null
      */
     private $oNodeCopy = null;
     /**
@@ -84,7 +87,7 @@ abstract class AbstractPkgCmsNavigationNode
     abstract public function load($sId);
 
     /**
-     * @param TdbCmsTree $oNode
+     * @param T $oNode
      *
      * @return bool
      */
@@ -143,7 +146,7 @@ abstract class AbstractPkgCmsNavigationNode
     }
 
     /**
-     * @return TdbCmsTree|null
+     * @return T|null
      */
     protected function getNodeCopy()
     {
@@ -151,7 +154,7 @@ abstract class AbstractPkgCmsNavigationNode
     }
 
     /**
-     * @param TdbCmsTree $oNodeCopy
+     * @param T $oNodeCopy
      *
      * @return void
      */

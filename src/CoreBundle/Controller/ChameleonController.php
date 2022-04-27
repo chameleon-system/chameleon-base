@@ -865,7 +865,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getHtmlFooterIncludes()
     {

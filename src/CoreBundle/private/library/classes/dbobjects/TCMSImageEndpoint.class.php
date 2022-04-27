@@ -1119,7 +1119,7 @@ class TCMSImageEndpoint
      * @param int   $maxWidth
      * @param int   $maxHeight       - defaults to 2000 so maxWidth value is enough info for resizing
      * @param bool  $usePreviewImage - if set to true then the thumbnail will be generated using the image under cms_media_id
-     * @param array $aEffects:       submit a list of effects to apply to the thumbnail. See method GetThumbnailPointer for available effects
+     * @param string[] $aEffects       submit a list of effects to apply to the thumbnail. {@see GetThumbnailPointer} for available effects
      *
      * @return TCMSImage
      */

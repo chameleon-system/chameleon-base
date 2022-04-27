@@ -51,10 +51,9 @@ class TCMSSpellcheck
      * suggest a correction. return false if there are now corrections.
      *
      * @param string $sString
-     * @param string $sCorrectionSelectCallback - callback to improve suggestion (must take a word as input). you can also use: array($this,'somemethod')
+     * @param callable(string[]): string|null $sCorrectionSelectCallback - callback to improve suggestion (must take a word as input). you can also use: array($this,'somemethod')
      *
-     * @return array - format:
-     *               'string'=>'','corrections'=>array('word'=>'new word')
+     * @return array{ string: string, corrections: array<string, string> } - format: [ 'string' => '', 'corrections' => [ 'word' => 'new word' ] ]
      */
     public function SuggestCorrection($sString, $sCorrectionSelectCallback = null)
     {
@@ -74,7 +73,7 @@ class TCMSSpellcheck
 
     /**
      * @param array  $aWords
-     * @param string $sCorrectionSelectCallback - callback to improve suggestion (must take a word as input). you can also use: array($this,'somemethod')
+     * @param callable(string[]): string $sCorrectionSelectCallback - callback to improve suggestion (must take a word as input). you can also use: array($this,'somemethod')
      *
      * @return array
      */
