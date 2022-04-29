@@ -929,6 +929,7 @@
 
         <service id="chameleon_system_core.service.guid_creation" class="ChameleonSystem\CoreBundle\Service\GuidCreationService" public="true">
             <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.tools"/>
         </service>
     </services>
 </container>

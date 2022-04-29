@@ -19,10 +19,12 @@ use Doctrine\DBAL\Exception;
 class GuidCreationService implements GuidCreationServiceInterface
 {
     private Connection $connection;
+    private \TTools $tools;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, \TTools $tools)
     {
         $this->connection = $connection;
+        $this->tools = $tools;
     }
 
     /**
@@ -34,7 +36,7 @@ class GuidCreationService implements GuidCreationServiceInterface
         $tries = 10;
 
         do {
-            $id = \TTools::GetUUID();
+            $id = $this->tools::GetUUID();
             try {
                 $count = $this->connection->fetchOne("SELECT count(*) FROM $quotedTableName WHERE `id` = :id", ['id' => $id]);
                 if (false !== $count) {
