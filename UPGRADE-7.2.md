@@ -31,7 +31,17 @@ https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 In `composer.json`, adjust version constraints for all Chameleon dependencies from `~7.1.0` to `~7.2.0` and run
 `composer update`.
 
+Remove the file `app/autoload.php`. It is no longer used by the system (see below).
+
 # Removed Features
+
+## Annotation support
+
+The functionality "annotation support" was removed. This file was calling a
+deprecated function `AnnotationRegistry::registerLoader()`. If needed annotations can still be configured and used
+directly in a project.
+However with php 8 you should use attributes instead.
+
 # Newly Deprecated Code Entities
 # Removed Code Entities
 

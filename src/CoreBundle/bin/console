@@ -12,12 +12,7 @@ define('REQUEST_PROTOCOL', 'console');
 
 define('PATH_WEB', $_SERVER['DOCUMENT_ROOT']);
 require_once __DIR__.'/../Resources/config/const.inc.php';
-
-if (file_exists(PATH_PROJECT_BASE.'/app/autoload.php')) {
-    include_once PATH_PROJECT_BASE.'/app/autoload.php';
-} else {
-    include_once __DIR__.'/../../../../../autoload.php';
-}
+include_once __DIR__.'/../../../../../autoload.php';
 
 require_once PATH_PROJECT_CONFIG.'/config.inc.php';
 require_once PATH_CORE_CONFIG.'/config.inc.php';
