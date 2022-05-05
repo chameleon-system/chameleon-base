@@ -32,6 +32,14 @@ In `composer.json`, adjust version constraints for all Chameleon dependencies fr
 `composer update`.
 
 # Removed Features
+
+## Annotation support
+
+The functionality "annotation support" and especially the file `app/autoload.php` was removed. This file was calling a
+deprecated function `AnnotationRegistry::registerLoader()`. If needed annotations can still be configured and used
+directly in a project.
+However with php 8 you should use attributes instead.
+
 # Newly Deprecated Code Entities
 # Removed Code Entities
 
