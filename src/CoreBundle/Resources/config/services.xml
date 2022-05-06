@@ -126,6 +126,7 @@
             <argument type="service" id="chameleon_system_core.global" />
             <argument />  <!-- Module execution strategy will be set by ChameleonSystemCoreExtension -->
             <argument type="service" id="chameleon_system_core.request_info_service"/>
+            <argument type="service" id="logger"/>
         </service>
         <service id="chameleon_system_core.usermoduleloader" class="TUserModuleLoader" parent="chameleon_system_core.moduleloader" public="true" />
 

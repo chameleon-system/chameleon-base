@@ -71,6 +71,7 @@ class TModuleLoader
      * @var RequestInfoServiceInterface
      */
     private $requestInfoService;
+    private LoggerInterface $logger;
 
     public function __construct(
         RequestStack $requestStack,
@@ -79,7 +80,8 @@ class TModuleLoader
         CacheInterface $cache,
         TGlobalBase $global,
         ModuleExecutionStrategyInterface $moduleExecutionStrategy,
-        RequestInfoServiceInterface $requestInfoService
+        RequestInfoServiceInterface $requestInfoService,
+        LoggerInterface $logger
     ) {
         $this->requestStack = $requestStack;
         $this->moduleResolver = $moduleResolver;
@@ -88,6 +90,7 @@ class TModuleLoader
         $this->global = $global;
         $this->moduleExecutionStrategy = $moduleExecutionStrategy;
         $this->requestInfoService = $requestInfoService;
+        $this->logger = $logger;
     }
 
     /**
@@ -346,17 +349,17 @@ class TModuleLoader
             $response = $this->moduleExecutionStrategy->execute($request, $module, $spotName, $this->isLegacyModule($module));
             $sContent = $response->getContent();
         } catch (ModuleException $e) {
+            $this->logModuleException($e, $spotName);
+
             if (_DEVELOPMENT_MODE) {
                 throw $e;
             }
-
-            $this->logModuleException($e, $spotName);
         } catch (\Exception $e) {
+            $this->logModuleException($e, $spotName);
+
             if (_DEVELOPMENT_MODE) {
                 throw new ModuleExecutionFailedException('Error in module execution: '.$e->getMessage(), 0, $e);
             }
-
-            $this->logModuleException($e, $spotName);
         }
 
         if (false === empty($sContent)) {
@@ -394,24 +397,7 @@ class TModuleLoader
      */
     private function logModuleException(\Exception $e, $spotName)
     {
-        $subject = 'Error-Notification '.$_SERVER['HTTP_HOST'].': '.$e->getMessage().' '.md5($e->getFile().$e->getLine().$_SERVER['REQUEST_URI']);
-        $date = date('Y-m-d H:i:s');
-        $backtrace = TTools::GetFormattedDebug($e->getTrace());
-
-        $body = 'Request-URI: '.$_SERVER['REQUEST_URI']."\n";
-        $body .= $date."\n";
-        $body .= 'Code: '.$e->getCode()."\n";
-        $body .= 'Message: '.$e->getMessage()."\n";
-        $body .= 'Spot: '.$spotName."\n";
-        $body .= 'Backtrace: '.$backtrace."\n";
-
-        $logMessage = "@@\n".$subject."\n".$body.'END@@';
-
-        /**
-         * @var $logger LoggerInterface
-         */
-        $logger = ServiceLocator::get('logger');
-        $logger->error($logMessage);
+        $this->logger->critical(sprintf('There was an exception for the module in spot %s: %s', $spotName, $e->getMessage()), ['exception' => $e]);
     }
 
     /**
