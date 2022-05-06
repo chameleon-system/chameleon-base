@@ -324,7 +324,7 @@ class TModuleLoader
     public function GetModule($spotName, $bReturnString = false, $sCustomWrapping = null, $bAllowAutoWrap = true)
     {
         if (!isset($this->modules[$spotName])) {
-            $sContent = "<!-- ERROR: unable to find module [{$spotName}] -->";
+            $sContent = _DEVELOPMENT_MODE ? "<!-- ERROR: unable to find module [{$spotName}] -->" : '';
             if (true === $bReturnString) {
                 return $sContent;
             }
