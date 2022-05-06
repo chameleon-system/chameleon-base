@@ -713,6 +713,7 @@
 
         <service id="chameleon_system_core.mapper_loader" class="ChameleonSystem\CoreBundle\MapperLoader\MapperLoader" public="true">
             <argument /> <!-- Will be set by AddMappersPass. -->
+            <argument type="service" id="logger"/>
         </service>
 
         <service id="chameleon_system_core.field.provider.class_from_table_field" class="ChameleonSystem\CoreBundle\Field\Provider\ClassFromTableFieldProvider" public="true">
