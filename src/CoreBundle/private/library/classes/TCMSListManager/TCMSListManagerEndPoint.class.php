@@ -488,7 +488,8 @@ class TCMSListManagerEndPoint
                         $aParameter = array_merge($aParameter, $aAdditionalParams);
                     }
 
-                    $oMenuItem->sOnClick = "top.document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter)."'";
+                    $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter); // TODO support "top" target?
+                    //$oMenuItem->sOnClick = "top.document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter)."'";
                     $this->oMenuItems->AddItem($oMenuItem);
                 }
 

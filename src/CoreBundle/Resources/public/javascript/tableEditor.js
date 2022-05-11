@@ -944,7 +944,7 @@ CHAMELEON.CORE.MTTableEditor.initSwitchToEntryButtons = function () {
             return;
         }
 
-        // NOTE a change listener of the selectElement (= "the other way around") does not work as that is masked by select2 pseudo element (TODO remove select2)
+        // NOTE a change listener on the selectElement (= "the other way around") does not work as that is masked by select2 pseudo element (TODO remove select2)
 
         linkButton.addEventListener("click", function(e) {
             if ("" === selectElement.value) {
