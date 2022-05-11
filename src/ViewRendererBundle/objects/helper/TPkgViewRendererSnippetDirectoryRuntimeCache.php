@@ -66,7 +66,7 @@ class TPkgViewRendererSnippetDirectoryRuntimeCache implements TPkgViewRendererSn
 
     public function getBasePaths($oPortal = null, $sBaseDirectory = null)
     {
-        static $basePaths = array();
+        static $basePaths = [];
         if (null === $oPortal) {
             $oPortal = $this->portalDomainService->getActivePortal();
         }
