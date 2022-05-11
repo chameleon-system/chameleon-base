@@ -98,6 +98,7 @@ jobs:
 
       # Chameleon setup
       - run: |
+          composer dumpautoload
           php app/console chameleon_system:autoclasses:generate
           php app/console chameleon_system:update:run
         working-directory: chameleon-system
