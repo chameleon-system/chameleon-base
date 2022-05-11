@@ -182,18 +182,11 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
      */
     public function getSnippetBaseDirectory()
     {
-        static $sDir = null;
-        if (null !== $sDir) {
-            return $sDir;
-        }
-
         if (true === $this->requestInfoService->isBackendMode()) {
-            $sDir = CMS_SNIPPET_PATH.'-cms';
-        } else {
-            $sDir = CMS_SNIPPET_PATH;
+            return CMS_SNIPPET_PATH.'-cms';
         }
 
-        return $sDir;
+        return CMS_SNIPPET_PATH;
     }
 
     /**
@@ -380,14 +373,8 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
             $sBaseDirectory = $this->getSnippetBaseDirectory();
         }
 
-        static $aBasePaths = array();
         if (null === $oPortal) {
             $oPortal = $this->portalDomainService->getActivePortal();
-        }
-        $sPortalCacheId = null === $oPortal ? '-1' : $oPortal->id;
-        $sPortalCacheId .= $sBaseDirectory;
-        if (isset($aBasePaths[$sPortalCacheId])) {
-            return $aBasePaths[$sPortalCacheId];
         }
 
         $snippetChain = [];
@@ -398,28 +385,28 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
 
         // TODO quite unfortunate here that there is no "this is backend" (only the fact that is has no portal and thus no snippet chain paths)
 
+        $aBasePaths = [];
         if (false !== CHAMELEON_PATH_THEMES && count($snippetChain) > 0) {
-            $aBasePaths[$sPortalCacheId] = array();
             foreach ($snippetChain as $element) {
                 $element = TCMSUserInput::FilterValue($element, 'TCMSUserInput_Raw;TCMSUserInput/filter;Core');
                 $path = $this->getVerifiedPath($element, $sBaseDirectory);
                 if (null !== $path) {
-                    $aBasePaths[$sPortalCacheId][] = $path;
+                    $aBasePaths[] = $path;
                 }
             }
         } else {
             // NOTE this is now a very old fallback; normally everything should have a theme and a snippet chain > 0
 
-            $aBasePaths[$sPortalCacheId] = array(realpath(PATH_CORE_VIEWS.'/'.$sBaseDirectory));
+            $aBasePaths = array(realpath(PATH_CORE_VIEWS.'/'.$sBaseDirectory));
             $aCandidates = array(_CMS_CUSTOMER_CORE, _CMS_CUSTOM_CORE);
             foreach ($aCandidates as $sCandidate) {
                 if (false !== $sCandidate && true === is_dir($sCandidate.'/'.$sBaseDirectory)) {
-                    $aBasePaths[$sPortalCacheId][] = realpath($sCandidate.'/'.$sBaseDirectory);
+                    $aBasePaths[] = realpath($sCandidate.'/'.$sBaseDirectory);
                 }
             }
         }
 
-        return $aBasePaths[$sPortalCacheId];
+        return $aBasePaths;
     }
 
     /**
