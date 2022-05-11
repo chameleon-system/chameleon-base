@@ -74,7 +74,6 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             );
 
             $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParam);
-            //$oMenuItem->sOnClick = "document.location.href='{$sURL}';";
             $this->oMenuItems->AddItem($oMenuItem);
         }
         if (true === $this->isCopyPermissionsAllowed()) {

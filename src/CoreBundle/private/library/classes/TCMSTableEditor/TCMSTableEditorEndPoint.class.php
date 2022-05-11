@@ -524,7 +524,6 @@ class TCMSTableEditorEndPoint
                         }
 
                         $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter);
-                        //$oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter)."'";
                         $this->oMenuItems->AddItem($oMenuItem);
                     }
                     // now add custom items

@@ -149,7 +149,6 @@ class TCMSTableEditorPage extends TCMSTableEditor
         $oMenuItem->sItemKey = 'pagesettings';
         $oMenuItem->sIcon = 'far fa-edit';
         $oMenuItem->href = PATH_CMS_CONTROLLER.'?pagedef=tableeditor&tableid=70&id='.TGlobal::OutHTML($this->oTable->id);
-        //$oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=tableeditor&tableid=70&id='.TGlobal::OutHTML($this->oTable->id)."';";
         $this->oMenuItems->AddItem($oMenuItem);
 
         $bPageDefExists = (!empty($this->oTable->sqlData['cms_master_pagedef_id']));
@@ -160,7 +159,6 @@ class TCMSTableEditorPage extends TCMSTableEditor
             $oMenuItem->sItemKey = 'templateengine';
             $oMenuItem->sIcon = 'fa fa-pen-square';
             $oMenuItem->href = PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=edit_content&id='.TGlobal::OutHTML($this->oTable->id);
-            //$oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=edit_content&id='.TGlobal::OutHTML($this->oTable->id)."';";
             $oMenuItem->setButtonStyle('btn btn-sm w-100 btn-primary');
             $this->oMenuItems->AddItem($oMenuItem);
 
@@ -169,7 +167,6 @@ class TCMSTableEditorPage extends TCMSTableEditor
             $oMenuItem->sItemKey = 'pagepreview';
             $oMenuItem->sIcon = 'far fa-eye';
             $oMenuItem->href = PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=preview_content&id='.TGlobal::OutHTML($this->oTable->id);
-            //$oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=preview_content&id='.TGlobal::OutHTML($this->oTable->id)."';";
             $this->oMenuItems->AddItem($oMenuItem);
         }
 
@@ -194,7 +191,6 @@ class TCMSTableEditorPage extends TCMSTableEditor
         $oMenuItem->sItemKey = 'pagesettings';
         $oMenuItem->sIcon = 'fa fa-pen-square';
         $oMenuItem->href = PATH_CMS_CONTROLLER.'?pagedef=tableeditor&tableid=70&id='.TGlobal::OutHTML($this->oTable->id);
-        //$oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=tableeditor&tableid=70&id='.TGlobal::OutHTML($this->oTable->id)."';";
         $oMenuItem->setButtonStyle('btn btn-sm w-100 btn-primary');
         $this->oMenuItems->AddItem($oMenuItem);
 
@@ -206,7 +202,6 @@ class TCMSTableEditorPage extends TCMSTableEditor
             $oMenuItem->sItemKey = 'templateengine';
             $oMenuItem->sIcon = 'far fa-edit';
             $oMenuItem->href = PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=edit_content&id='.TGlobal::OutHTML($this->oTable->id);
-            //$oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=edit_content&id='.TGlobal::OutHTML($this->oTable->id)."';";
             $this->oMenuItems->AddItem($oMenuItem);
 
             $oMenuItem = new TCMSTableEditorMenuItem();
@@ -214,7 +209,6 @@ class TCMSTableEditorPage extends TCMSTableEditor
             $oMenuItem->sItemKey = 'pagepreview';
             $oMenuItem->sIcon = 'far fa-eye';
             $oMenuItem->href = PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=preview_content&id='.TGlobal::OutHTML($this->oTable->id);
-            //$oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=preview_content&id='.TGlobal::OutHTML($this->oTable->id)."';";
             $this->oMenuItems->AddItem($oMenuItem);
         }
     }

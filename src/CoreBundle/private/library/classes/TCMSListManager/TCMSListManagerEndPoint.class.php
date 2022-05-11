@@ -489,7 +489,6 @@ class TCMSListManagerEndPoint
                     }
 
                     $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter); // TODO support "top" target?
-                    //$oMenuItem->sOnClick = "top.document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter)."'";
                     $this->oMenuItems->AddItem($oMenuItem);
                 }
 
