@@ -123,23 +123,6 @@ class TPkgCmsCoreSendToHost
     {
         if (null === $this->lastResponseHeaderVariables) {
             $this->lastResponseHeaderVariables = array();
-            $rHeader = TPkgCmsStringUtilities::getStringStream($this->getLastResponseHeader());
-            $this->lastResponseCodeRaw = fgets($rHeader);
-
-            $aTmp = explode("\n", $this->getLastResponseHeader());
-            foreach ($aTmp as $sHeaderLine) {
-                $iSplit = strpos($sHeaderLine, ':');
-                $sHeaderVarName = trim(substr($sHeaderLine, 0, $iSplit));
-                $sHeaderVarValue = trim(substr($sHeaderLine, $iSplit));
-                if (isset($this->lastResponseHeaderVariables[$sHeaderVarName])) {
-                    if (!is_array($this->lastResponseHeaderVariables[$sHeaderVarName])) {
-                        $this->lastResponseHeaderVariables[$sHeaderVarName] = array($this->lastResponseHeaderVariables[$sHeaderVarName]);
-                    }
-                    $this->lastResponseHeaderVariables[$sHeaderVarName][] = $sHeaderVarValue;
-                } else {
-                    $this->lastResponseHeaderVariables[$sHeaderVarName] = $sHeaderVarValue;
-                }
-            }
         }
 
         if (isset($sVarName, $this->lastResponseHeaderVariables)) {
