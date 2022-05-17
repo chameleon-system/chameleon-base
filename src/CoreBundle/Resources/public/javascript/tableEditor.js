@@ -937,6 +937,30 @@ CHAMELEON.CORE.MTTableEditor.idButtonCopyToClipboard = function () {
     });
 };
 
+CHAMELEON.CORE.MTTableEditor.initSwitchToEntryButtons = function () {
+    document.querySelectorAll("[data-link-for-select]").forEach(function(linkButton) {
+        const selectElement = document.querySelector('select[name="' + linkButton.dataset.linkForSelect + '"]');
+        if (null === selectElement) {
+            return;
+        }
+
+        // NOTE a change listener on the selectElement (= "the other way around") does not work as that is masked by select2 pseudo element (TODO remove select2)
+
+        linkButton.addEventListener("click", function(e) {
+            if ("" === selectElement.value) {
+                e.preventDefault();
+
+                return;
+            }
+
+            const href = new URL(linkButton.getAttribute("href"), document.location.origin);
+            href.searchParams.set('id', selectElement.value);
+
+            linkButton.setAttribute("href", href.toString());
+        });
+    });
+};
+
 $(function () {
     const $tabsWrapper = $("#tabs-wrapper");
     if ($tabsWrapper.length > 0) {
@@ -950,5 +974,6 @@ $(function () {
     CHAMELEON.CORE.MTTableEditor.initHelpTexts();
     CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe();
     CHAMELEON.CORE.MTTableEditor.idButtonCopyToClipboard();
+    CHAMELEON.CORE.MTTableEditor.initSwitchToEntryButtons();
     CHAMELEON.CORE.handleFormAndLinkTargetsInModals();
 });

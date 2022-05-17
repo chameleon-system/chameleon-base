@@ -72,9 +72,8 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
                 'module_fnc' => array('contentmodule' => 'SwitchToUser'),
                 '_noModuleFunction' => 'true',
             );
-            $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParam);
 
-            $oMenuItem->sOnClick = "document.location.href='{$sURL}';";
+            $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParam);
             $this->oMenuItems->AddItem($oMenuItem);
         }
         if (true === $this->isCopyPermissionsAllowed()) {
