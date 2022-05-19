@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
 class TGoogleMapEndPoint
 {
     /**
@@ -218,25 +221,52 @@ class TGoogleMapEndPoint
      *
      * @param string $sPlace
      *
-     * @return array|bool - contains latitude and longitude coordinate
+     * @return array{latitude: float, longitude: float}|false - contains latitude and longitude coordinate
      */
     public function locatePlace($sPlace = '')
     {
-        $aCoordinates = false;
-        $sURL = 'http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($sPlace);
+        $url = sprintf('https://nominatim.openstreetmap.org/search?%s', http_build_query([
+            'format' => 'geojson',
+            'limit' => 1,
+            // Note: `country` sets a 'preference' for results, not a hard limit
+            'country' => 'de',
+            'q' => $sPlace,
+        ]));
 
-        $sResponse = file_get_contents($sURL);
-        if (empty($sResponse)) {
+        $response = $this->getHttpClient()->request('GET', $url, [
+            'headers' => [
+                'User-Agent' => 'Chameleon System / https://chameleon-system.com',
+            ]
+        ]);
+
+        if (200 !== $response->getStatusCode()) {
             return false;
         }
 
-        $oGoogleMapsGeoData = json_decode($sResponse);
+        /**
+         * @see https://geojson.org/
+         * @psalm-var array{
+         *      type: "FeatureCollection",
+         *      features: list<array{
+         *          type: "Feature",
+         *          geometry: array{
+         *              type: "Point"
+         *              coordinates: [ float, float ]
+         *          },
+         *          properties: array<string, mixed>
+         *      }>
+         * } $json
+         */
+        $json = json_decode($response->getContent(), true);
 
-        if (isset($oGoogleMapsGeoData->results[0]->geometry->location->lat)) {
-            $aCoordinates = array('latitude' => $oGoogleMapsGeoData->results[0]->geometry->location->lat, 'longitude' => $oGoogleMapsGeoData->results[0]->geometry->location->lng);
+        $longitude = $json['features'][0]['geometry']['coordinates'][0] ?? null;
+        $latitude = $json['features'][0]['geometry']['coordinates'][1] ?? null;
+
+        if (!is_float($longitude) || !is_float($latitude)) {
+            return false;
         }
 
-        return $aCoordinates;
+        return [ 'latitude' => $latitude, 'longitude' => $longitude ];
     }
 
     /**
@@ -972,4 +1002,10 @@ class TGoogleMapEndPoint
             $this->aInfoWindowOptions = $aOptions;
         }
     }
+
+    private function getHttpClient(): HttpClientInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.http_client');
+    }
+
 }

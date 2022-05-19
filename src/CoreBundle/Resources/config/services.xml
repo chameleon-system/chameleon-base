@@ -937,5 +937,10 @@
             <argument type="service" id="database_connection"/>
             <argument type="service" id="logger"/>
         </service>
+
+        <service id="chameleon_system_core.http_client" class="Symfony\Contracts\HttpClient\HttpClientInterface" public="true">
+            <factory class="Symfony\Component\HttpClient\HttpClient" method="create" />
+        </service>
+
     </services>
 </container>
