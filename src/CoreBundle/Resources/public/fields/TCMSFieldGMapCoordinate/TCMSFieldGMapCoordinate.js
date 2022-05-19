@@ -1,3 +1,35 @@
+/**
+ * @see https://geojson.org/
+ * @typedef {object} GeoJsonPoint
+ * @property {"Point"} type
+ * @property {float[]} coordinates - Always 2 items: [ lng, lat ]
+ */
+
+/**
+ * @see https://geojson.org/
+ * @typedef {object} GeoJsonFeature
+ * @property {"Feature"} type
+ * @property {float[]} bbox - Always 4 items: [ lng, lat, lng, lat ]
+ * @property {GeoJsonPoint} geometry
+ * @property {object} properties
+ * @property {string} properties.category
+ * @property {string} properties.display_name
+ * @property {float} properties.importance
+ * @property {int} properties.osm_id
+ * @property {string} properties.osm_type
+ * @property {int} properties.place_id
+ * @property {int} properties.place_rank
+ * @property {string} properties.type
+ */
+
+/**
+ * @see https://geojson.org/
+ * @typedef {object} GeoJsonFeatureCollection
+ * @property {"FeatureCollection"} type
+ * @property {GeoJsonFeature[]} features
+ * @property {string} [licence]
+ */
+
 if (typeof CHAMELEON === "undefined" || !CHAMELEON) {
     var CHAMELEON = {};
 }
@@ -123,32 +155,75 @@ CHAMELEON.CORE.TCMSFieldGMapCoordinate =
     },
 
     /**
-     * @param {decimal} latitude
-     * @param {decimal} longitude
+     * @param {string|null} latitude
+     * @param {string|null} longitude
      */
     viewCoordinate: function (latitude, longitude) {
-        $("#coordinates").html(CHAMELEON.CORE.TCMSFieldGMapCoordinate.coordinateTitle + ': ' + latitude + ' | ' + longitude);
+        if (latitude && longitude) {
+            $("#coordinates").html(CHAMELEON.CORE.TCMSFieldGMapCoordinate.coordinateTitle + ': ' + latitude + ' | ' + longitude);
+        } else {
+            $("#coordinates").html('');
+        }
     },
 
     /**
      * @param {string} address
      */
     searchPlace: function (address) {
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({'address': address}, function (results, status) {
-
-            if (status == google.maps.GeocoderStatus.OK) {
-                var point = results[0].geometry.location;
-                CHAMELEON.CORE.TCMSFieldGMapCoordinate.coordinateMarker.setPosition(point);
-                CHAMELEON.CORE.TCMSFieldGMapCoordinate.latitude = point.lat();
-                CHAMELEON.CORE.TCMSFieldGMapCoordinate.longitude = point.lng();
-                CHAMELEON.CORE.TCMSFieldGMapCoordinate.viewCoordinate(point.lat().toFixed(5), point.lng().toFixed(5));
-
-                var mapObject = window[CHAMELEON.CORE.TCMSFieldGMapCoordinate.mapId];
-                mapObject.setCenter(results[0].geometry.location);
-            } else {
-                alert("Geocode was not successful for the following reason: " + status);
+        CHAMELEON.CORE.TCMSFieldGMapCoordinate.geocode(address).then(coordinates => {
+            if (!coordinates) {
+                CHAMELEON.CORE.TCMSFieldGMapCoordinate.viewCoordinate(null, null);
+                return;
             }
+
+            var point = new google.maps.LatLng(coordinates.lat, coordinates.lng);
+            CHAMELEON.CORE.TCMSFieldGMapCoordinate.coordinateMarker.setPosition(point);
+            CHAMELEON.CORE.TCMSFieldGMapCoordinate.latitude = point.lat();
+            CHAMELEON.CORE.TCMSFieldGMapCoordinate.longitude = point.lng();
+            CHAMELEON.CORE.TCMSFieldGMapCoordinate.viewCoordinate(
+                point.lat().toFixed(5),
+                point.lng().toFixed(5),
+            );
+            var mapObject = window[CHAMELEON.CORE.TCMSFieldGMapCoordinate.mapId];
+            mapObject.setCenter(point);
+        }).catch(reason => {
+            alert("Geocode was not successful for the following reason: " + reason);
         });
-    }
+    },
+
+    /**
+     * @param {string} query
+     * @return {Promise<{ lat: float, lng: float }|null, string>}
+     */
+    geocode: function(query) {
+        /**
+         * @see https://nominatim.org/release-docs/develop/api/Search/
+         * Using geojson output instead of default JSON in order to be compatible with more tools
+         * (e.g. selfhosted photon geocoder) by using a standardized data format.
+         */
+        var url = new URL('https://nominatim.openstreetmap.org/search');
+        url.searchParams.set('format', 'geojson');
+        url.searchParams.set('limit', '1');
+        // Note: `country` sets a 'preference' for results, not a hard limit
+        url.searchParams.set('country', 'de');
+        url.searchParams.set('q', query);
+
+        return fetch(url, { method: 'GET' })
+            .then(response => {
+                if (response.status !== 200) {
+                    throw response.statusText;
+                }
+                return response.json();
+            })
+            .then(response => {
+                /** @type {GeoJsonFeatureCollection} response */
+                if (response.features.length > 0) {
+                    var lng = response.features[0].geometry.coordinates[0];
+                    var lat = response.features[0].geometry.coordinates[1];
+                    return { lat: lat, lng: lng }
+                }
+
+                return null;
+            });
+    },
 };
