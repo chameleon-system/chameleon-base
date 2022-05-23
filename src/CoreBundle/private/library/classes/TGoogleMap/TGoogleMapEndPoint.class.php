@@ -9,8 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Geocoding\GeocoderInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class TGoogleMapEndPoint
 {
@@ -225,48 +225,15 @@ class TGoogleMapEndPoint
      */
     public function locatePlace($sPlace = '')
     {
-        $url = sprintf('https://nominatim.openstreetmap.org/search?%s', http_build_query([
-            'format' => 'geojson',
-            'limit' => 1,
-            // Note: `country` sets a 'preference' for results, not a hard limit
-            'country' => 'de',
-            'q' => $sPlace,
-        ]));
-
-        $response = $this->getHttpClient()->request('GET', $url, [
-            'headers' => [
-                'User-Agent' => 'Chameleon System / https://chameleon-system.com',
-            ]
-        ]);
-
-        if (200 !== $response->getStatusCode()) {
+        $results = $this->getGeocoder()->geocode($sPlace);
+        if (0 === count($results)) {
             return false;
         }
 
-        /**
-         * @see https://geojson.org/
-         * @psalm-var array{
-         *      type: "FeatureCollection",
-         *      features: list<array{
-         *          type: "Feature",
-         *          geometry: array{
-         *              type: "Point"
-         *              coordinates: [ float, float ]
-         *          },
-         *          properties: array<string, mixed>
-         *      }>
-         * } $json
-         */
-        $json = json_decode($response->getContent(), true);
-
-        $longitude = $json['features'][0]['geometry']['coordinates'][0] ?? null;
-        $latitude = $json['features'][0]['geometry']['coordinates'][1] ?? null;
-
-        if (!is_float($longitude) || !is_float($latitude)) {
-            return false;
-        }
-
-        return [ 'latitude' => $latitude, 'longitude' => $longitude ];
+        return [
+            'latitude' => $results[0]->getLatitude(),
+            'longitude' => $results[0]->getLongitude(),
+        ];
     }
 
     /**
@@ -1003,9 +970,9 @@ class TGoogleMapEndPoint
         }
     }
 
-    private function getHttpClient(): HttpClientInterface
+    private function getGeocoder(): GeocoderInterface
     {
-        return ServiceLocator::get('chameleon_system_core.http_client');
+        return ServiceLocator::get('chameleon_system_core.geocoding.geocoder');
     }
 
 }

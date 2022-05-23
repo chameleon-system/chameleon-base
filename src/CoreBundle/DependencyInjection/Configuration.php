@@ -48,6 +48,7 @@ class Configuration implements ConfigurationInterface
                 ->append($this->getBackendConfig())
                 ->append($this->getModuleExecutionConfig())
                 ->append($this->getResourceCollectionConfig())
+                ->append($this->getGeoJsonGeocoderConfig())
         ;
 
         return $treeBuilder;
@@ -140,6 +141,38 @@ class Configuration implements ConfigurationInterface
         $subTree->children()
             ->scalarNode('api_key')
                 ->defaultNull()
+            ->end();
+
+        return $subTree;
+    }
+
+    /**
+     * @return ArrayNodeDefinition|NodeDefinition
+     */
+    private function getGeoJsonGeocoderConfig()
+    {
+        $tree = new TreeBuilder();
+        $subTree = $tree->root('geocoder');
+        $subTree->addDefaultsIfNotSet();
+        $subTree->children()
+            ->scalarNode('geo_json_endpoint')
+                ->defaultValue('https://nominatim.openstreetmap.org/search?format=geojson&country=de&q={query}')
+                ->info('URL of a GeoJson geocoding endpoint. The {query} placeholder will be replaced by the string to search. Must respond to GET requests and must return a GeoJson FeatureCollection. Fetches data from nominatim by default but can be configurred to use a self hosted geocoder such as photon')
+            ->end()
+            ->arrayNode('attribution')
+                ->info('Attribution information for the geocoding data. Set `show: false` if no attribution needs to be displayed')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->booleanNode('show')
+                        ->defaultTrue()
+                    ->end()
+                    ->scalarNode('name')
+                        ->defaultValue('nominatim')
+                    ->end()
+                    ->scalarNode('url')
+                        ->defaultValue('https://nominatim.org/')
+                    ->end()
+                ->end()
             ->end();
 
         return $subTree;

@@ -32,14 +32,16 @@ if (array_key_exists('googleMapHtml', $data) && !empty($data['googleMapHtml'])) 
 }
 ?>
 
-<small>
-    <i>
-        <?= $translator->trans('chameleon_system_core.google_map.geocoding_via', [
-            '%name%' => 'nominatim',
-            '%url%' => 'https://nominatim.org',
-        ]) ?>
-    </i>
-</small>
+<?php if (\ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_core.geocoding.attribution.show')): ?>
+    <small>
+        <i>
+            <?= $translator->trans('chameleon_system_core.google_map.geocoding_via', [
+                '%name%' => \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_core.geocoding.attribution.name'),
+                '%url%' => \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_core.geocoding.attribution.url'),
+            ]) ?>
+        </i>
+    </small>
+<?php endif; ?>
 
 <script type="text/javascript">
     $(document).ready(function() {
