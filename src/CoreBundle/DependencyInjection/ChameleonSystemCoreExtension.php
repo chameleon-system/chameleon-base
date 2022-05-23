@@ -55,6 +55,7 @@ class ChameleonSystemCoreExtension extends Extension
         $this->addCacheConfig($container);
         $this->addMailerConfig($config['mailer'], $container);
         $this->addGoogleApiConfig($config['google_maps'], $container);
+        $this->addGeocoderConfig($config['geocoder'], $container);
         $this->addModuleExecutionConfig($config['module_execution'], $container);
         $this->configureSession($container);
         $this->addBackendConfig($config['backend'], $container);
@@ -209,6 +210,16 @@ class ChameleonSystemCoreExtension extends Extension
         $args = $definition->getArguments();
         $args[0] = $googleApiConfig['api_key'];
         $definition->setArguments($args);
+    }
+
+    private function addGeocoderConfig(array $geocoderConfig, ContainerBuilder $container): void
+    {
+        $definition = $container->getDefinition('chameleon_system_core.geocoding.geocoder');
+        $definition->setArgument(0, $geocoderConfig['geo_json_endpoint']);
+
+        $container->setParameter('chameleon_system_core.geocoding.attribution.show', $geocoderConfig['attribution']['show']);
+        $container->setParameter('chameleon_system_core.geocoding.attribution.name', 'test' . $geocoderConfig['attribution']['name']);
+        $container->setParameter('chameleon_system_core.geocoding.attribution.url', 'test' . $geocoderConfig['attribution']['url']);
     }
 
     /**
