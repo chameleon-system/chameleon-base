@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\RecordChangeEvent;
+use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
+use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -1628,29 +1630,22 @@ class TCMSTableEditorEndPoint
         if (false === $bIsUpdateCall) {
             $databaseChanged = false;
 
-            // need to create an id.. try to insert until we have a free id. We will try at most 3 times
+            try {
+                $id = $this->getGuidCreationService()->findUnusedId($tableName);
 
-            $iMaxTry = 3;
-            do {
-                $uid = TTools::GetUUID();
-                $sInsertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($uid)."'";
-                $dataForChangeRecorder['id'] = $uid;
-                MySqlLegacySupport::getInstance()->query($sInsertQuery);
+                $insertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($id)."'";
+
+                MySqlLegacySupport::getInstance()->query($insertQuery);
                 $error = MySqlLegacySupport::getInstance()->error();
-                if (!empty($error)) {
-                    $errNr = MySqlLegacySupport::getInstance()->errno();
-                    if (1062 != $errNr) {
-                        $iMaxTry = 0;
-                    } else {
-                        $error = '';
-                    }
-                } else {
-                    $query = $sInsertQuery;
+                if (empty($error)) {
+                    $query = $insertQuery;
                     $databaseChanged = true;
-                    $this->sId = $uid;
+                    $this->sId = $id;
+                    $dataForChangeRecorder['id'] = $id;
                 }
-                --$iMaxTry;
-            } while ($iMaxTry > 0 && false === $databaseChanged);
+            } catch (GuidCreationFailedException $exception) {
+                $error = $exception->getMessage();
+            }
         } else {
             if (MySqlLegacySupport::getInstance()->query($query)) {
                 $databaseChanged = true;
@@ -2582,5 +2577,10 @@ class TCMSTableEditorEndPoint
     private function getMigrationRecorderStateHandler(): MigrationRecorderStateHandler
     {
         return ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');
+    }
+
+    private function getGuidCreationService(): GuidCreationServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.guid_creation');
     }
 }
