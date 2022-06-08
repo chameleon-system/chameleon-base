@@ -11,6 +11,9 @@
 
 use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
 
+/**
+ * @extends AbstractPkgCmsNavigationNode<TdbCmsTree>
+ */
 class TPkgCmsNavigationNode extends AbstractPkgCmsNavigationNode
 {
     /**
@@ -69,6 +72,8 @@ class TPkgCmsNavigationNode extends AbstractPkgCmsNavigationNode
 
     /**
      * @param TdbCmsTree $oNode
+     *
+     * @return void
      */
     private function setFromCmsTreeNode(TdbCmsTree $oNode)
     {

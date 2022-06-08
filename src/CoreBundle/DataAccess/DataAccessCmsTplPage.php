@@ -14,6 +14,9 @@ namespace ChameleonSystem\CoreBundle\DataAccess;
 use Doctrine\DBAL\Connection;
 use TdbCmsTplPage;
 
+/**
+ * @implements DataAccessInterface<TdbCmsTplPage>
+ */
 class DataAccessCmsTplPage implements DataAccessInterface
 {
     /**
@@ -30,9 +33,7 @@ class DataAccessCmsTplPage implements DataAccessInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return TdbCmsTplPage[]
+     * {@inheritDoc}
      */
     public function loadAll($languageId = null)
     {

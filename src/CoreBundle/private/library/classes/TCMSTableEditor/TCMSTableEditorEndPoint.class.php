@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\RecordChangeEvent;
+use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
+use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -271,8 +273,8 @@ class TCMSTableEditorEndPoint
     /**
      * here you can add checks to validate the data and prevent saving.
      *
-     * @var array     $postData - raw post data (e.g. datetime fields are splitted into 2 post values and in non sql format)
-     * @var TIterator $oFields - TIterator of TCMSField objects
+     * @param array     $postData - raw post data (e.g. datetime fields are splitted into 2 post values and in non sql format)
+     * @param TIterator $oFields - TIterator of TCMSField objects
      *
      * @return bool
      */
@@ -523,7 +525,7 @@ class TCMSTableEditorEndPoint
                             $aParameter = array_merge($aParameter, $aAdditionalParams);
                         }
 
-                        $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter)."'";
+                        $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter);
                         $this->oMenuItems->AddItem($oMenuItem);
                     }
                     // now add custom items
@@ -742,7 +744,7 @@ class TCMSTableEditorEndPoint
      * @param array $postData
      * @param bool  $bDataIsInSQLForm - set to true, if the data in $postData is in sql form
      *
-     * @return TCMSstdClass|bool
+     * @return TCMSstdClass|false
      */
     public function Save(&$postData, $bDataIsInSQLForm = false)
     {
@@ -1006,6 +1008,8 @@ class TCMSTableEditorEndPoint
      *
      * @param TCMSField $oField       mlt field object
      * @param int       $iConnectedID
+     *
+     * @return void
      */
     protected function AddMLTConnectionExecute($oField, $iConnectedID)
     {
@@ -1040,9 +1044,9 @@ class TCMSTableEditorEndPoint
      * Set new order position and updates order position in all other
      * connected connections behind the new position.
      *
-     * @param $sFieldName
-     * @param $sConnectedId
-     * @param $iPosition
+     * @param string $sFieldName
+     * @param string $sConnectedId
+     * @param int $iPosition
      */
     public function updateMLTSortOrder($sFieldName, $sConnectedId, $iPosition)
     {
@@ -1123,7 +1127,7 @@ class TCMSTableEditorEndPoint
     /**
      * here you can modify, clean or filter data before saving.
      *
-     * @var array $postData
+     * @param array $postData
      *
      * @return array
      */
@@ -1169,6 +1173,8 @@ class TCMSTableEditorEndPoint
      *
      *
      * @param TIterator $oFields - the fields inserted
+     *
+     * @return void
      */
     protected function PostInsertHook(&$oFields)
     {
@@ -1257,7 +1263,9 @@ class TCMSTableEditorEndPoint
     /**
      * deletes the record and all language children; updates all references to this record.
      *
-     * @param int $sId
+     * @param string $sId
+     *
+     * @return void
      */
     public function Delete($sId = null)
     {
@@ -1275,6 +1283,8 @@ class TCMSTableEditorEndPoint
     /**
      * is called only from Delete method and calls all delete relevant methods
      * executes the final SQL Delete Query.
+     *
+     * @return void
      */
     protected function DeleteExecute()
     {
@@ -1620,29 +1630,22 @@ class TCMSTableEditorEndPoint
         if (false === $bIsUpdateCall) {
             $databaseChanged = false;
 
-            // need to create an id.. try to insert until we have a free id. We will try at most 3 times
+            try {
+                $id = $this->getGuidCreationService()->findUnusedId($tableName);
 
-            $iMaxTry = 3;
-            do {
-                $uid = TTools::GetUUID();
-                $sInsertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($uid)."'";
-                $dataForChangeRecorder['id'] = $uid;
-                MySqlLegacySupport::getInstance()->query($sInsertQuery);
+                $insertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($id)."'";
+
+                MySqlLegacySupport::getInstance()->query($insertQuery);
                 $error = MySqlLegacySupport::getInstance()->error();
-                if (!empty($error)) {
-                    $errNr = MySqlLegacySupport::getInstance()->errno();
-                    if (1062 != $errNr) {
-                        $iMaxTry = 0;
-                    } else {
-                        $error = '';
-                    }
-                } else {
-                    $query = $sInsertQuery;
+                if (empty($error)) {
+                    $query = $insertQuery;
                     $databaseChanged = true;
-                    $this->sId = $uid;
+                    $this->sId = $id;
+                    $dataForChangeRecorder['id'] = $id;
                 }
-                --$iMaxTry;
-            } while ($iMaxTry > 0 && false === $databaseChanged);
+            } catch (GuidCreationFailedException $exception) {
+                $error = $exception->getMessage();
+            }
         } else {
             if (MySqlLegacySupport::getInstance()->query($query)) {
                 $databaseChanged = true;
@@ -2140,11 +2143,17 @@ class TCMSTableEditorEndPoint
         return $oRecordData;
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlHeadIncludes()
     {
         return array();
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlFooterIncludes()
     {
         return array();
@@ -2568,5 +2577,10 @@ class TCMSTableEditorEndPoint
     private function getMigrationRecorderStateHandler(): MigrationRecorderStateHandler
     {
         return ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');
+    }
+
+    private function getGuidCreationService(): GuidCreationServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.guid_creation');
     }
 }

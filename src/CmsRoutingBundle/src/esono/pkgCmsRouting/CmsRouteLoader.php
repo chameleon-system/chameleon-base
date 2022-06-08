@@ -132,6 +132,8 @@ class CmsRouteLoader extends Loader
      * @param TdbCmsLanguage|null $language
      *
      * @throws LogicException
+     *
+     * @return void
      */
     private function importRoutes(RouteCollection $collection, array $routeConfig, $portal = null, $language = null)
     {
@@ -251,6 +253,8 @@ class CmsRouteLoader extends Loader
     /**
      * @param Route  $route
      * @param string $prefix
+     *
+     * @return void
      */
     private function handlePortalAndLanguagePrefix(Route $route, $prefix)
     {
@@ -269,6 +273,8 @@ class CmsRouteLoader extends Loader
     /**
      * @param Route  $route
      * @param string $prefix
+     *
+     * @return void
      */
     private function addPrefix(Route $route, $prefix)
     {
@@ -277,6 +283,10 @@ class CmsRouteLoader extends Loader
 
     /**
      * @param Route $route
+     * @param string $urlPrefix
+     * @param bool $hasTrailingSlash
+     *
+     * @return void
      */
     private function handleTrailingSlash(Route $route, $urlPrefix, $hasTrailingSlash)
     {
@@ -296,6 +306,8 @@ class CmsRouteLoader extends Loader
      * @param TdbCmsLanguage $language
      *
      * @throws LogicException if no primary domain is set
+     *
+     * @return void
      */
     private function handleDomainRequirements(
         Route $route,
@@ -317,6 +329,8 @@ class CmsRouteLoader extends Loader
     /**
      * @param Route          $route
      * @param TdbCmsLanguage $language
+     *
+     * @return void
      */
     private function handleLocale(Route $route, TdbCmsLanguage $language)
     {
@@ -325,6 +339,8 @@ class CmsRouteLoader extends Loader
 
     /**
      * @param Route $route
+     *
+     * @return void
      */
     private function handleSecurityAndFinalRoutePath(Route $route)
     {

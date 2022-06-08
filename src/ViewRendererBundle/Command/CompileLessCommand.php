@@ -41,7 +41,9 @@ class CompileLessCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function configure()
     {
@@ -83,5 +85,7 @@ EOF
             }
         }
         $output->writeln('<info>Done.</info>');
+
+        return 0;
     }
 }

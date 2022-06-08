@@ -10,6 +10,9 @@ use TGlobal;
 use TPkgExternalTrackerState;
 use TShopBasketArticle;
 
+/**
+ * @deprecated Google Universal Analytics will be removed in July 2023. Use {@see ExternalTrackerGoogleAnalyticsGa4} instead.
+ */
 class ExternalTrackerGoogleUniversalAnalytics extends TdbPkgExternalTracker
 {
     /**

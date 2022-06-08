@@ -15,7 +15,7 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 class MTPkgCmsNavigationEndPoint extends MTPkgViewRendererAbstractModuleMapper
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
@@ -62,6 +62,9 @@ class MTPkgCmsNavigationEndPoint extends MTPkgViewRendererAbstractModuleMapper
         return $parameter;
     }
 
+    /**
+     * @return string[]
+     */
     private function getActiveUserExtranetGroups()
     {
         $activeUser = $this->getActiveUser();
@@ -80,6 +83,9 @@ class MTPkgCmsNavigationEndPoint extends MTPkgViewRendererAbstractModuleMapper
         return TdbDataExtranetUser::GetInstance();
     }
 
+    /**
+     * @return bool
+     */
     private function activeUserIsLoggedIn()
     {
         $activeUser = $this->getActiveUser();

@@ -12,20 +12,40 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @psalm-suppress UndefinedDocblockClass
+ * @psalm-suppress UndefinedClass
+ * @see https://github.com/chameleon-system/chameleon-system/issues/773
+ */
 class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
 {
+    /**
+     * @var string
+     */
     protected $sTimeStampFormat = 'Ymd_His';
 
+    /**
+     * @var bool
+     */
     protected $bDebugMode = false;
 
     /**
      * @deprecated since 6.3.0 - not used anymore
+     * @var string
      */
     protected $sLogFileName = 'csv2sql_import.log';
 
+    /**
+     * @var array{
+     *     start: int|null,
+     *     end: int|null,
+     *     bHasErrors: bool,
+     * }
+     */
     protected $aImportStats = array('start' => null, 'end' => null, 'bHasErrors' => false);
 
     /**
+     * @psalm-suppress UndefinedDocblockClass - https://github.com/chameleon-system/chameleon-system/issues/773
      * @var TPkgCmsBulkSql_LoadDataInfile
      */
     protected $oBulkInsert = null;
@@ -53,9 +73,9 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     /**
      * Log error message to logfile.
      *
-     * @param $sMsg
-     * @param null $sFileName
-     * @param null $sFileLine
+     * @param string $sFileName
+     * @param string $sFileLine
+     * @param string $sMsg
      *
      * @return bool
      */
@@ -296,6 +316,8 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      * @param IPkgCmsBulkSql|null $oBulkInsertManager alternative bulk insert manager if not passed TPkgCmsBulkSql_LoadDataInfile will be used
      *
      * @return array|bool - array of error strings or false on error
+     *
+     * @psalm-suppress UndefinedClass - https://github.com/chameleon-system/chameleon-system/issues/773
      */
     public function Import($sLogName = null, IPkgCmsBulkSql $oBulkInsertManager = null)
     {
@@ -359,7 +381,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         }
 
         if (!$bDone) {
-            $this->LogError('No files found!');
+            $logger->notice('No files found!');
         }
 
         $aResultArray = self::ArrayConcat($aResultArray, $aRes);
@@ -374,10 +396,10 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      *
      * @static
      *
-     * @param  $aFirst array
-     * @param  $aSecond array
+     * @param array $aFirst
+     * @param array $aSecond
      *
-     * @return array|mixed
+     * @return array
      */
     public static function ArrayConcat($aFirst, $aSecond)
     {
@@ -398,7 +420,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     }
 
     /**
-     * @param  $sSource
+     * @param string $sSource
      *
      * @return array|int|mixed
      */
@@ -443,9 +465,9 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     }
 
     /**
-     * @param  $sFileName
+     * @param string $sFileName
      *
-     * @return array
+     * @return string[]
      */
     protected function _ImportFile($sFileName)
     {
@@ -574,14 +596,15 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         }
 
         if (false === $bDone) {
-            $this->LogError('Invalid file or directory: '.$sSource);
+            $logger = $this->getLogger();
+            $logger->notice('Invalid file or directory: '.$sSource);
         }
 
         return $aResultArray;
     }
 
     /**
-     * @param  $sSource
+     * @param string $sSource
      *
      * @return array
      */
@@ -605,9 +628,9 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     }
 
     /**
-     * @param  $SourceFile
+     * @param string $SourceFile
      *
-     * @return array
+     * @return string[]
      */
     protected function _ValidateFile($SourceFile)
     {
@@ -658,7 +681,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      *
      * @param string $sFilename
      *
-     * @return bool
+     * @return bool|null
      */
     protected function _CheckUTF8BOMExists($sFilename = '')
     {
@@ -702,7 +725,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      *
      * @param string $csvfile
      *
-     * @return bool
+     * @return void
      */
     public function removeUTF8BOM($csvfile = '')
     {
@@ -717,7 +740,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     }
 
     /**
-     * @param $SourceFile
+     * @param string $SourceFile
      *
      * @return bool|string
      */
@@ -727,7 +750,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     }
 
     /**
-     * @param $SourceFile
+     * @param string $SourceFile
      *
      * @return bool|string
      */
@@ -737,7 +760,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     }
 
     /**
-     * @param $SourceFile
+     * @param string $SourceFile
      *
      * @return bool|string
      */
@@ -749,8 +772,8 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     /**
      * Move file to new directory.
      *
-     * @param $SourceFile
      * @param string $sDestinationType
+     * @param string $SourceFile
      *
      * @return bool|string
      */
@@ -816,6 +839,10 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         return $sRet;
     }
 
+    /**
+     * @param string $sSource
+     * @return string
+     */
     protected function ConvertFromGermanDecimal($sSource)
     {
         $sSource = str_replace('.', '', $sSource);
@@ -824,6 +851,10 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         return $sSource;
     }
 
+    /**
+     * @param string $sSource
+     * @return string
+     */
     protected function ConvertFromGermanDate($sSource)
     {
         static $oLocal = null;

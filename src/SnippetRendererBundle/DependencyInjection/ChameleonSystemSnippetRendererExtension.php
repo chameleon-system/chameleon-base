@@ -18,6 +18,9 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 class ChameleonSystemSnippetRendererExtension extends Extension
 {
+    /**
+     * @return void
+     */
     public function load(array $config, ContainerBuilder $container)
     {
         $loader = new XMLFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));

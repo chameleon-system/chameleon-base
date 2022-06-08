@@ -16,6 +16,9 @@ class RefreshAuthenticityTokenListener
         $this->authenticityTokenManager = $authenticityTokenManager;
     }
 
+    /**
+     * @return void
+     */
     public function refreshAuthenticityToken()
     {
         $this->authenticityTokenManager->refreshToken();

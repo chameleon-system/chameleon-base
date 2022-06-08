@@ -21,7 +21,7 @@ class TPkgCmsSessionHandler_Decorator_EnforceWriteSequence extends \Symfony\Comp
     private $writeSequenceCounter = 0;
 
     /**
-     * @param $sSessionId
+     * @param string $sSessionId
      *
      * @return mixed
      *

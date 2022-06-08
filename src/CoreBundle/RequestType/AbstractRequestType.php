@@ -13,6 +13,9 @@ namespace ChameleonSystem\CoreBundle\RequestType;
 
 abstract class AbstractRequestType implements RequestTypeInterface
 {
+    /**
+     * @return void
+     */
     protected function sendDefaultHeaders()
     {
         if (true === headers_sent()) {

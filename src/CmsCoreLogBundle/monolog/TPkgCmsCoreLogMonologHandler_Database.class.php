@@ -105,6 +105,9 @@ class TPkgCmsCoreLogMonologHandler_Database extends AbstractProcessingHandler
         return $str;
     }
 
+    /**
+     * @param object $object
+     */
     private function getClass($object): string
     {
         $class = \get_class($object);

@@ -11,7 +11,9 @@
 
 /**
  * class loads all table confs that contain fields which may hold the image.
-/**/
+ *
+ * @extends TCMSRecordList<TCMSTableConf>
+ */
 class TListImageTables extends TCMSRecordList
 {
     public function __construct()

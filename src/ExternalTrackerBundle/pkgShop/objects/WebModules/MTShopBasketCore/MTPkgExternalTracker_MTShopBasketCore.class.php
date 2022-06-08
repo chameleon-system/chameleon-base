@@ -16,6 +16,8 @@ class MTPkgExternalTracker_MTShopBasketCore extends MTPkgExternalTracker_MTShopB
      *
      * @param TShopBasketArticle $oArticle
      * @param bool               $bItemWasUpdated
+     *
+     * @return void
      */
     protected function PostUpdateItemInBasketEvent($oArticle, $bItemWasUpdated)
     {
@@ -27,6 +29,10 @@ class MTPkgExternalTracker_MTShopBasketCore extends MTPkgExternalTracker_MTShopB
         }
     }
 
+    /**
+     * @param TShopBasketArticle $oArticle
+     * @return void
+     */
     protected function PostRemoveItemInBasketHook($oArticle)
     {
         parent::PostRemoveItemInBasketHook($oArticle);

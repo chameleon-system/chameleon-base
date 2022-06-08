@@ -152,6 +152,9 @@ class LanguageService implements LanguageServiceInterface
         return $this->activeLanguage;
     }
 
+    /**
+     * @return void
+     */
     private function initialize()
     {
         if ($this->isInitializing) {
@@ -162,6 +165,9 @@ class LanguageService implements LanguageServiceInterface
         $this->isInitializing = false;
     }
 
+    /**
+     * @return void
+     */
     private function initializeFallbackLanguage()
     {
         if ($this->isInitializing) {

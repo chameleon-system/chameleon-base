@@ -19,7 +19,9 @@ use Symfony\Component\DependencyInjection\Reference;
 class AddCronJobsPass implements CompilerPassInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function process(ContainerBuilder $container)
     {

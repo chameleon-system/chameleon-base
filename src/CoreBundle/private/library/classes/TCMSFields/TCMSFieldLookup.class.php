@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 /**
  * ReloadOnChange=true.
@@ -86,7 +87,7 @@ class TCMSFieldLookup extends TCMSField
         $viewRenderer->AddSourceObject('foreignTableName', $foreignTableName);
         $oGlobal = TGlobal::instance();
         if ($oGlobal->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
-            $viewRenderer->AddSourceObject('buttonLink', $this->GoToRecordJS());
+            $viewRenderer->AddSourceObject('buttonLink', $this->getSelectedEntryLink($this->data));
         }
         $viewRenderer->AddSourceObject('connectedRecordId', $this->data);
     }
@@ -154,14 +155,49 @@ class TCMSFieldLookup extends TCMSField
 
     public function GetReadOnly()
     {
+        $html = $this->_GetHiddenField();
+        $html .= '<div class="row">';
+
         $this->GetOptions();
         if (array_key_exists($this->data, $this->options)) {
-            return $this->_GetHiddenField().'<div class="form-content-simple">'.$this->options[$this->data].'</div>';
-        } else {
-            return $this->_GetHiddenField();
+            $html .= '<div class="form-content-simple col-12 col-lg-8">'.$this->options[$this->data].'</div>';
         }
+
+        if (false === empty($this->data)) {
+            $html .= '<div class="col-12 pt-2 col-lg-4 pt-lg-0">';
+            $html .= TCMSRender::DrawButton(
+                TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'),
+                $this->getSelectedEntryLink($this->data),
+                'far fa-edit'
+            );
+            $html .= '</div>';
+        }
+
+        $html .= '</div>';
+
+        return $html;
     }
 
+    protected function getSelectedEntryLink(string $value): string
+    {
+        $foreignTableName = $this->GetConnectedTableName();
+        $tableConf = \TdbCmsTblConf::GetNewInstance();
+        if (false === $tableConf->LoadFromField('name', $foreignTableName)) {
+            return '';
+        }
+
+        $linkParams = array(
+            'pagedef' => 'tableeditor',
+            'tableid' => $tableConf->id,
+            'id' => urlencode($value),
+        );
+
+        return PATH_CMS_CONTROLLER . $this->getUrlUtil()->getArrayAsUrl($linkParams, '?', '&');
+    }
+
+    /**
+     * @deprecated not used anymore - replaced by normal links (also see getSelectedEntryLink() here)
+     */
     public function GoToRecordJS()
     {
         $tblName = $this->GetConnectedTableName();
@@ -571,5 +607,10 @@ class TCMSFieldLookup extends TCMSField
     private function getViewRenderer(): ViewRenderer
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+    }
+
+    private function getUrlUtil(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

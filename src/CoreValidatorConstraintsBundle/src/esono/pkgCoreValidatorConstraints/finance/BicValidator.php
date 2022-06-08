@@ -22,6 +22,8 @@ class BicValidator extends \Symfony\Component\Validator\ConstraintValidator
      * @see http://www.iban.de/bic.html
      *
      * @api
+     *
+     * @return void
      */
     public function validate($value, \Symfony\Component\Validator\Constraint $constraint)
     {

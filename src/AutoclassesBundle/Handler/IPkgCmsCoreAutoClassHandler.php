@@ -18,6 +18,8 @@ interface IPkgCmsCoreAutoClassHandler
      *
      * @param string $sClassName
      * @param string $targetDir
+     *
+     * @return void
      */
     public function create($sClassName, $targetDir);
 
@@ -49,6 +51,8 @@ interface IPkgCmsCoreAutoClassHandler
     /**
      * resets the internal cache (e.g. for the glue mapping)
      * Call this when recreating classes.
+     *
+     * @return void
      */
     public function resetInternalCache();
 }

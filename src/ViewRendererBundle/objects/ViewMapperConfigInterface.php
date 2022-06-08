@@ -90,6 +90,8 @@ interface ViewMapperConfigInterface
     /**
      * @param string $config
      * @param string $newSnippet
+     *
+     * @return void
      */
     public function changeSnippet($config, $newSnippet);
 
@@ -97,6 +99,8 @@ interface ViewMapperConfigInterface
      * @param string       $config
      * @param string       $snippetName
      * @param array|string $mapperChain - array of mapper names or control strings (ie. this my be myMapperClass or myMapperClass{arrayMapName}[key1->key2][key2->key4] for every mapper
+     *
+     * @return void
      */
     public function addConfig($config, $snippetName, $mapperChain);
 }

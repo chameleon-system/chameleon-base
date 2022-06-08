@@ -20,10 +20,16 @@ class VirtualFieldManager implements VirtualFieldManagerInterface
      */
     private $databaseConnection;
 
+    /**
+     * Uses tablename as key and fieldnames as values.
+     * @var array<string, string[]>
+     */
     private $virtualFields;
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
     public function setDatabaseConnection(Connection $connection)
     {
@@ -31,7 +37,7 @@ class VirtualFieldManager implements VirtualFieldManagerInterface
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getVirtualFieldsForTable($tableName)
     {
@@ -40,6 +46,11 @@ class VirtualFieldManager implements VirtualFieldManagerInterface
         return isset($virtualFields[$tableName]) ? $virtualFields[$tableName] : array();
     }
 
+    /**
+     * @return (mixed|string)[][]
+     *
+     * @psalm-return array<array<mixed|string>>
+     */
     private function getVirtualFields()
     {
         if (null !== $this->virtualFields) {

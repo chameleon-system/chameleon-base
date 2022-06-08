@@ -40,7 +40,9 @@
         "chameleon-system/code-style-config": "dev-master@dev",
         "chameleon-system/sanitycheck": "~7.1.0",
         "phpspec/prophecy-phpunit": "^2.0.0",
-        "phpunit/phpunit": "^9.5.1"
+        "phpunit/phpunit": "^9.5.1",
+        "psalm/plugin-symfony": "^3.1",
+        "vimeo/psalm": "^4.22"
     },
     "autoload": {
         "classmap": [
@@ -166,5 +168,8 @@
         "chameleon-system/pkgviewrenderer": "*",
         "chameleon-system/twig-debug-bundle": "*",
         "chameleon-system/update-counter-migration-bundle": "*"
+    },
+    "scripts": {
+        "analyze": "psalm --output-format=compact"
     }
 }

@@ -63,6 +63,8 @@ class TPkgExtranetMapper_UserForm extends AbstractPkgExtranetMapper_User
      * @param TCMSRecordList             $oFieldOptionList
      *
      * @internal param string $sMSGConsumer
+     *
+     * @return void
      */
     protected function SetInputFields($aFieldList, $oVisitor, $oAddress, $sFieldType = 'text', $oFieldOptionList = null)
     {

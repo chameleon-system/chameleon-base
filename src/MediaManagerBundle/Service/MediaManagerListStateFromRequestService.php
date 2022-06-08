@@ -178,6 +178,8 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
     private function isPickImageMode()
     {
@@ -186,6 +188,8 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
 
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
     private function getPickImageCallback()
     {
@@ -197,6 +201,8 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
     private function isPickImageWithCrop()
     {

@@ -24,6 +24,8 @@ class SortColumnCollection
      * Add a sort column, there can be only one per system name.
      *
      * @param SortColumnInterface $sortColumn
+     *
+     * @return void
      */
     public function addColumn(SortColumnInterface $sortColumn)
     {

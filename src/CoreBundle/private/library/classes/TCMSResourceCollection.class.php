@@ -485,7 +485,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     /**
      * returns absolute URL of current CSS file (strips filename).
      *
-     * @param  $sFile   full file URL
+     * @param string $sFile   full file URL
      *
      * @return string path of a file
      */

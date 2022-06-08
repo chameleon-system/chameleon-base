@@ -196,7 +196,7 @@ class TCMSURLHistory
     /**
      * removes all history entries with higher index than the given one.
      *
-     * @param $id
+     * @param int $id
      */
     public function Clear($id)
     {

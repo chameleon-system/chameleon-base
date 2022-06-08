@@ -11,6 +11,9 @@
 
 class TPkExternalTracker_TShopSearchLog extends TPkExternalTracker_TShopSearchLogAutoParent
 {
+    /**
+     * @return void
+     */
     protected function PostInsertHook()
     {
         parent::PostInsertHook();

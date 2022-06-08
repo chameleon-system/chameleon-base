@@ -66,6 +66,8 @@ class MigrationDataModel
     /**
      * @param int    $buildNumber
      * @param string $path
+     *
+     * @return void
      */
     public function addFile($buildNumber, $path)
     {
@@ -84,6 +86,8 @@ class MigrationDataModel
     /**
      * @param int    $buildNumber
      * @param string $path
+     *
+     * @return void
      */
     private function addDuplicate($buildNumber, $path)
     {

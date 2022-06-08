@@ -19,6 +19,8 @@ interface HtmlIncludeEventInterface
      *   - if it does not, the md5 sum of the content will be used.
      *
      * @param array $data
+     *
+     * @return void
      */
     public function addData(array $data);
 

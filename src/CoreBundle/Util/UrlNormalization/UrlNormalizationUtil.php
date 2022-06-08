@@ -20,6 +20,8 @@ class UrlNormalizationUtil
 
     /**
      * @param UrlNormalizerInterface $urlNormalizer
+     *
+     * @return void
      */
     public function addNormalizer(UrlNormalizerInterface $urlNormalizer)
     {

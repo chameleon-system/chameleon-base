@@ -56,6 +56,8 @@ class FileSystemMigrationDataModelFactory implements FileSystemMigrationDataMode
      * @param array  $models
      * @param string $bundleName
      * @param string $updateDirectory
+     *
+     * @return void
      */
     private function addModelsForDirectory(array &$models, $bundleName, $updateDirectory)
     {

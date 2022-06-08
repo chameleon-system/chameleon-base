@@ -21,6 +21,8 @@ class NewsletterPostProcessorCompiler implements CompilerPassInterface
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
      * @api
+     *
+     * @return void
      */
     public function process(\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {

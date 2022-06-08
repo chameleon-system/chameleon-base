@@ -23,6 +23,10 @@ class StripVirtualFieldsFromQuery
         $this->virtualFieldManager = $virtualFieldManager;
     }
 
+    /**
+     * @param string $query
+     * @return string
+     */
     public function stripNonExistingFields($query)
     {
         $tableNamePattern = '/^(INSERT INTO|UPDATE) `(\\w+)`/iu';

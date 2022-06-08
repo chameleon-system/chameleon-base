@@ -35,6 +35,9 @@ class ChameleonFrontendController extends ChameleonController
      */
     private $configToLessMapper;
 
+    /**
+     * @param \IViewPathManager $viewPathManager
+     */
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
@@ -71,7 +74,8 @@ class ChameleonFrontendController extends ChameleonController
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $pagedef
+     * @return \TCMSPageDefinitionFile|\TCMSPagedef|\TdbCmsMasterPagedef|false
      */
     public function &GetPagedefObject($pagedef)
     {
@@ -130,6 +134,9 @@ class ChameleonFrontendController extends ChameleonController
 
     /**
      * {@inheritdoc}
+     *
+     * @param string $layoutTemplate - name of the layout template
+     * @return null|string
      */
     protected function LoadLayoutTemplate($layoutTemplate)
     {

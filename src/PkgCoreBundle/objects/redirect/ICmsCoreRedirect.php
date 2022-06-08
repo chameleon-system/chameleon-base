@@ -17,6 +17,8 @@ interface ICmsCoreRedirect
      * @param string $url
      * @param int    $status
      * @param bool   $allowOnlyInternalUrls
+     *
+     * @return never-returns
      */
     public function redirect($url, $status = 302, $allowOnlyInternalUrls = false);
 
@@ -34,7 +36,7 @@ interface ICmsCoreRedirect
      *
      * @param array|string|null $queryStringParameters
      *
-     * @return mixed
+     * @return never-returns
      */
     public function redirectToActivePage($queryStringParameters = null);
 }

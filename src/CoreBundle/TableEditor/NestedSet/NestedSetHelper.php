@@ -19,14 +19,32 @@ class NestedSetHelper implements NestedSetHelperInterface
      * @var Connection
      */
     private $connection;
+
+    /**
+     * @var string
+     */
     private $tableName;
+
+    /**
+     * @var string
+     */
     private $parentIdField;
+
+    /**
+     * @var string
+     */
     private $nodeSortField;
     /**
      * @var NodeFactoryInterface
      */
     private $nodeFactory;
 
+    /**
+     * @param NodeFactoryInterface $nodeFactory
+     * @param string $tableName
+     * @param string $parentIdField
+     * @param string $nodeSortField
+     */
     public function __construct(NodeFactoryInterface $nodeFactory, $tableName, $parentIdField = 'parent_id', $nodeSortField = 'position')
     {
         $this->tableName = $tableName;
@@ -37,6 +55,8 @@ class NestedSetHelper implements NestedSetHelperInterface
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
     public function setDatabaseConnection(Connection $connection)
     {
@@ -121,6 +141,12 @@ class NestedSetHelper implements NestedSetHelperInterface
         $this->removeSubtreeSpace($node->getRight(), $subtreeWidth);
     }
 
+    /**
+     * @param int $subtreeWidth
+     * @param int $subtreePosition
+     *
+     * @return void
+     */
     private function createSpaceForSubtree($subtreePosition, $subtreeWidth)
     {
         $query = "update `{$this->tableName}` SET lft = lft + :subtreeWidth WHERE lft >= :newPosition";
@@ -140,7 +166,6 @@ class NestedSetHelper implements NestedSetHelperInterface
     }
 
     /**
-     * call before removing a node - will update all siblings
      * {@inheritdoc}
      */
     public function deleteNode($nodeId)
@@ -150,6 +175,11 @@ class NestedSetHelper implements NestedSetHelperInterface
         $this->removeSubtreeSpace($node->getRight(), $subtreeWidth);
     }
 
+    /**
+     * @param string $subtreeRightValue
+     * @param int $subtreeWidth
+     * @return void
+     */
     private function removeSubtreeSpace($subtreeRightValue, $subtreeWidth)
     {
         $query = "UPDATE `{$this->tableName}` SET lft = lft - :subtreeWidth WHERE lft > :oldRgt";
@@ -168,6 +198,9 @@ class NestedSetHelper implements NestedSetHelperInterface
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function initializeTree()
     {
         $left = 0;
@@ -178,6 +211,10 @@ class NestedSetHelper implements NestedSetHelperInterface
         }
     }
 
+    /**
+     * @param int $left
+     * @return int
+     */
     private function initializeNode(NodeInterface $node, $left)
     {
         $this->updateNodeLeftValue($node->getId(), $left);
@@ -193,7 +230,7 @@ class NestedSetHelper implements NestedSetHelperInterface
     }
 
     /**
-     * @param $nodeId
+     * @param string $nodeId
      *
      * @return NodeInterface
      */
@@ -227,6 +264,13 @@ class NestedSetHelper implements NestedSetHelperInterface
         return $childrenObject;
     }
 
+    /**
+     * @param string $nodeId
+     * @param int $newLeft
+     * @param int $newRight
+     *
+     * @return void
+     */
     private function updateNodeLeftAndRightValues($nodeId, $newLeft, $newRight)
     {
         $query = "UPDATE {$this->tableName} SET rgt = :newRight, lft = :newLeft WHERE id = :nodeId";
@@ -239,6 +283,12 @@ class NestedSetHelper implements NestedSetHelperInterface
         );
     }
 
+    /**
+     * @param string $nodeId
+     * @param int $newLeft
+     *
+     * @return void
+     */
     private function updateNodeLeftValue($nodeId, $newLeft)
     {
         $query = "UPDATE {$this->tableName} SET lft = :newLeft WHERE id = :nodeId";
@@ -250,6 +300,12 @@ class NestedSetHelper implements NestedSetHelperInterface
         );
     }
 
+    /**
+     * @param string $nodeId
+     * @param int $newRight
+     *
+     * @return void
+     */
     private function updateNodeRightValue($nodeId, $newRight)
     {
         $query = "UPDATE {$this->tableName} SET rgt = :newRight WHERE id = :nodeId";
@@ -269,7 +325,7 @@ class NestedSetHelper implements NestedSetHelperInterface
      *
      * @param NodeInterface $node
      *
-     * @return int
+     * @return numeric
      */
     private function calculateNodePosition(NodeInterface $node)
     {

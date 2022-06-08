@@ -32,11 +32,18 @@ class DebugTestSessionLockingController
         $this->router = $router;
     }
 
+    /**
+     * @return Response
+     */
     public function indexAction()
     {
         return new Response('foo');
     }
 
+    /**
+     * @param string $value
+     * @return RedirectResponse
+     */
     public function setAction($value = 'no value set')
     {
         $this->session->set('testvalue', $value);
@@ -44,6 +51,9 @@ class DebugTestSessionLockingController
         return new RedirectResponse($this->router->generate('_debug_get'));
     }
 
+    /**
+     * @return Response
+     */
     public function getAction()
     {
         $content = $this->session->get('testvalue');
@@ -51,6 +61,10 @@ class DebugTestSessionLockingController
         return new Response($content);
     }
 
+    /**
+     * @param int $duration
+     * @return RedirectResponse
+     */
     public function lockAction($duration)
     {
         $this->session->restartSessionWithWriteLock();

@@ -24,7 +24,7 @@ interface TreeNodeServiceInterface
      * @param string      $treeNodeId
      * @param string|null $languageId if null, the active language is used
      *
-     * @return TdbCmsTreeNode
+     * @return TdbCmsTreeNode|null
      */
     public function getById($treeNodeId, $languageId = null);
 
@@ -34,7 +34,7 @@ interface TreeNodeServiceInterface
      * @param string      $treeId
      * @param string|null $languageId if null, the active language is used
      *
-     * @return TdbCmsTreeNode
+     * @return TdbCmsTreeNode|null
      */
     public function getByTreeId($treeId, $languageId = null);
 }

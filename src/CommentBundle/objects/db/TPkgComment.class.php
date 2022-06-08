@@ -28,6 +28,9 @@ class TPkgComment extends TPkgCommentAutoParent
 
     const VIEW_PATH = 'pkgComment/views/db/TPkgComment';
 
+    /**
+     * @var string[]
+     */
     protected $aActionModes = array('edit', 'recomment');
 
     /**
@@ -35,7 +38,7 @@ class TPkgComment extends TPkgCommentAutoParent
      *
      * @static TdbPkgComment
      *
-     * @return TdbPkgComment
+     * @return TdbPkgComment|null
      */
     public static function &GetInstance()
     {
@@ -57,7 +60,7 @@ class TPkgComment extends TPkgCommentAutoParent
      * @param string $sId
      * @param bool   $bReload
      *
-     * @return TdbPkgComment
+     * @return TdbPkgComment|null
      */
     public static function GetInstanceFromId($sId, $bReload = false)
     {
@@ -339,6 +342,10 @@ class TPkgComment extends TPkgCommentAutoParent
         return $oView->RenderObjectPackageView($sViewName, self::VIEW_PATH, 'Customer');
     }
 
+    /**
+     * @param string $sViewName
+     * @return string[][]
+     */
     protected function GetCacheTrigger($sViewName)
     {
         $aClearCacheParameter = array();
@@ -358,8 +365,9 @@ class TPkgComment extends TPkgCommentAutoParent
     /**
      * Get additional variable to show in view.
      *
-     * @param  TViewParser
-     * @param  string
+     * @param TViewParser $oView
+     * @param string $sViewName
+     * @param array $aCallTimeVars
      *
      * @return TViewParser
      */
@@ -388,11 +396,12 @@ class TPkgComment extends TPkgCommentAutoParent
     /**
      * return object being commented on.
      *
-     * @return TCMSRecord
+     * @return TCMSRecord|false|null
      */
     public function GetCommentedObject()
     {
         $oCommentedObject = $this->GetFromInternalCache('oCommentedObject');
+
         if (is_null($oCommentedObject)) {
             $query = "SELECT `cms_tbl_conf`.`name`
                     FROM `cms_tbl_conf`

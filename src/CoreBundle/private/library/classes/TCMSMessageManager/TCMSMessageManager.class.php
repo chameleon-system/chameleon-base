@@ -409,8 +409,8 @@ class TCMSMessageManager
     /**
      * get all css classes for consumer messages, separated by spaces or optional divider.
      *
-     * @param $sConsumerName
-     * @param $sDivider
+     * @param string $sConsumerName
+     * @param string $sDivider
      *
      * @return string
      */

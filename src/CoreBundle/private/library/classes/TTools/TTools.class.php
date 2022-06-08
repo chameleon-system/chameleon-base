@@ -1420,9 +1420,8 @@ class TTools
     /**
      * removes whitespaces from all values of the array.
      *
-     * @param array $aData
-     *
-     * @return array
+     * @param array<array-key, string> $aData
+     * @return array<array-key, string>
      */
     public static function TrimArrayValues($aData)
     {
@@ -1498,7 +1497,7 @@ class TTools
      *
      * @static
      *
-     * @param array $aVariables
+     * @param array<string, string>|null $aVariables
      * @param bool  $bEscapeViaOutHTML - set to true, if you want to pass each value through TGlobal::OutHTML
      *
      * @return array|null
@@ -1508,7 +1507,9 @@ class TTools
      */
     public static function AddStaticPageVariables($aVariables, $bEscapeViaOutHTML = false)
     {
+        /** @var array<string, string> $aPageVars */
         static $aPageVars = array();
+
         if (is_array($aVariables)) {
             $responseVariableReplacer = self::getResponseVariableReplacer();
             foreach ($aVariables as $sKey => $value) {
@@ -1528,7 +1529,7 @@ class TTools
      * checks if a record exists in table.
      *
      * @param string $sTableName
-     * @param array  $aFieldsArray - array('fieldname'=>'fieldvalue')
+     * @param array<string, string>  $aFieldsArray - array('fieldname'=>'fieldvalue')
      *
      * @return bool
      */
@@ -1586,11 +1587,13 @@ class TTools
      *
      * @static
      *
-     * @param $string
-     * @param int    $format
+     * @param string $string
+     * @param int    $format - 0: Returns the number of words, 1: Returns the words themselves, 2: Returns an array of words indexed by their position in the original string
      * @param string $charlist
+     * @psalm-param 0|1|2 $format
      *
      * @return array|int
+     * @psalm-return ($format is 0 ? int : ($format is 1 ? string[] : ($format is 2 ? array<int, string> : 0)))
      */
     public static function str_word_count_utf8($string, $format = 0, $charlist = '')
     {
@@ -1622,7 +1625,7 @@ class TTools
      * @param string|null $sCountry   iso code (2 characters) e.g. de
      * @param string|null $sCountryId
      *
-     * @return bool|int
+     * @return false|int
      */
     public static function IsVatIdValid($sVatId, $sCountry = null, $sCountryId = null)
     {
@@ -1761,14 +1764,13 @@ class TTools
 
     /**
      * Takes an array in the form array(array('weight'=>weight,'value'=>$value),array('weight'=>weight,'value'=>$anotherValue), ...) and
-     * returns an array in the form array(weight => $value) with a randomly selected
-     * value respecting weights from the input array.
+     * returns the value of a randomly selected value respecting weights from the input array.
      *
      * @static
      *
-     * @param $aArray
-     *
-     * @return mixed
+     * @template T
+     * @param array{weight: numeric, value: T}[] $aArray
+     * @return T
      */
     public static function GetWeightedRandomArrayValue($aArray)
     {
@@ -1783,8 +1785,8 @@ class TTools
      *
      * @static
      *
-     * @param $a
-     * @param $b
+     * @param array{weight: numeric} $a
+     * @param array{weight: numeric} $b
      *
      * @return int
      */
@@ -1800,7 +1802,7 @@ class TTools
     /**
      * checks string for GUID pattern like "A98C5A1E-A742-4808-96FA-6F409E799937".
      *
-     * @param $sID
+     * @param string $sID
      *
      * @return bool
      */

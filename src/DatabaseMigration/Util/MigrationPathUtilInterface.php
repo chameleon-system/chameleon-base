@@ -33,7 +33,7 @@ interface MigrationPathUtilInterface
     /**
      * @param string $updateFile - filename
      *
-     * @return string
+     * @return int
      *
      * @throws \InvalidArgumentException
      */

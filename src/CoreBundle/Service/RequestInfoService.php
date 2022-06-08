@@ -31,6 +31,9 @@ class RequestInfoService implements RequestInfoServiceInterface
      */
     private $portalDomainService;
 
+    /**
+     * @var null|string
+     */
     private $pathInfoWithoutPortalAndLanguagePrefix;
     /**
      * @var UrlPrefixGeneratorInterface
@@ -92,6 +95,8 @@ class RequestInfoService implements RequestInfoServiceInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param int $requestType
      */
     public function isChameleonRequestType($requestType)
     {

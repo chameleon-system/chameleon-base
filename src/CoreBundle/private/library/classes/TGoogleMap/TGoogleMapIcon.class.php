@@ -72,8 +72,8 @@ class TGoogleMapIcon
     /**
      * fallback for direct write access to $id.
      *
-     * @param $property
-     * @param $value
+     * @param string $property
+     * @param mixed $value
      *
      * @return $this
      */
@@ -87,7 +87,7 @@ class TGoogleMapIcon
     /**
      * fallback for direct read access to $id.
      *
-     * @param $property
+     * @param string $property
      *
      * @return string
      */

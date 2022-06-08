@@ -31,6 +31,9 @@ class RequestListener
      */
     private $requestInfoService;
 
+    /**
+     * @param string $autoclassesDir
+     */
     public function __construct($autoclassesDir, AutoclassesCacheWarmer $cacheWarmer, RequestInfoServiceInterface $requestInfoService)
     {
         $this->autoclassesDir = $autoclassesDir;
@@ -38,6 +41,9 @@ class RequestListener
         $this->requestInfoService = $requestInfoService;
     }
 
+    /**
+     * @return void
+     */
     public function checkAutoclasses(RequestEvent $evt)
     {
         if (HttpKernelInterface::MASTER_REQUEST !== $evt->getRequestType()) {

@@ -9,9 +9,18 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class MTPkgViewRendererSnippetGalleryCore extends MTPkgViewRendererAbstractModuleMapper
 {
+    /**
+     * @var string
+     */
     private $sActiveRelativePath = '';
+
+    /**
+     * @var bool
+     */
     private $bHideNavigation = false;
 
     public function Init()
@@ -45,16 +54,21 @@ class MTPkgViewRendererSnippetGalleryCore extends MTPkgViewRendererAbstractModul
      * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
      *
-     * @return
+     * @return void
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        $oSnippetDirectory = new TPkgViewRendererSnippetDirectory();
+        $oSnippetDirectory = $this->getSnippetDirectory();
 
         $aDirTree = $oSnippetDirectory->getDirTree(true);
         $oVisitor->SetMappedValue('aTree', $aDirTree);
         $oVisitor->SetMappedValue('bHideNavigation', $this->bHideNavigation);
         $oVisitor->SetMappedValue('sActiveRelativePath', $this->sActiveRelativePath);
         $oVisitor->SetMappedValue('aSnippetList', $oSnippetDirectory->getSnippetList($aDirTree, $this->sActiveRelativePath));
+    }
+
+    private function getSnippetDirectory(): TPkgViewRendererSnippetDirectoryInterface
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
     }
 }

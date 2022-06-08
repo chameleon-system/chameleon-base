@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Translation\TranslatorInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * todays date (editable).
 /**/
@@ -33,7 +36,14 @@ class TCMSFieldDateToday extends TCMSFieldDate
         $html = parent::GetHTML();
 
         if ($this->currentDateIsEmpty) {
-            $html .= '<span class="alert alert-info">'.TGlobal::Translate('chameleon_system_core.field_date_time.not_set').'</span>';
+            $html = sprintf(
+                '
+                    <div class="alert alert-info">%s</div>
+                    %s
+                ',
+                $this->getTranslator()->trans('chameleon_system_core.field_date_time.not_set'),
+                $html
+            );
         }
 
         return $html;
@@ -48,5 +58,10 @@ class TCMSFieldDateToday extends TCMSFieldDate
         }
 
         return $htmldate;
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
     }
 }

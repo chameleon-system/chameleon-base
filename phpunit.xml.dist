@@ -8,6 +8,11 @@
          convertErrorsToExceptions="false"
          convertNoticesToExceptions="false"
 >
+
+    <php>
+        <const name="CHAMELEON_CACHING_ENABLE_RUNTIME_PER_DEFAULT" value="FALSE" />
+    </php>
+
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>src</directory>

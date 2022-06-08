@@ -100,6 +100,9 @@ class cmsCoreRedirect implements ICmsCoreRedirect
         $this->redirect($this->getActivePageService()->getLinkToActivePageRelative($parameters, $excludeParameters));
     }
 
+    /**
+     * @return void
+     */
     public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getThrowable();
@@ -113,7 +116,7 @@ class cmsCoreRedirect implements ICmsCoreRedirect
     }
 
     /**
-     * @return Request
+     * @return Request|null
      */
     protected function getRequest()
     {

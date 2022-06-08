@@ -28,6 +28,8 @@ class TPkgCmsCoreLayoutPluginManager
      * @param string $pluginClassName
      * @param string $contentIdentifier
      * @param array  $config
+     *
+     * @return void
      */
     public function includePlugin($pluginClassName, $contentIdentifier, $config = array())
     {

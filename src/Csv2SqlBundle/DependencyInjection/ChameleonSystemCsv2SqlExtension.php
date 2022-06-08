@@ -20,7 +20,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class ChameleonSystemCsv2SqlExtension extends Extension implements PrependExtensionInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -29,7 +31,9 @@ class ChameleonSystemCsv2SqlExtension extends Extension implements PrependExtens
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function prepend(ContainerBuilder $container)
     {

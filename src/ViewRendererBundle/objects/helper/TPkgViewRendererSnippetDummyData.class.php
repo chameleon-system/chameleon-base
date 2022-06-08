@@ -11,11 +11,16 @@
 
 class TPkgViewRendererSnippetDummyData
 {
+    /**
+     * @var array<string, string|array>
+     */
     private $aData = array();
 
     /**
      * @param string       $sKey
      * @param string|array $sVal
+     *
+     * @return void
      */
     public function addDummyData($sKey, $sVal)
     {
@@ -23,7 +28,9 @@ class TPkgViewRendererSnippetDummyData
     }
 
     /**
-     * @param $aDummyData
+     * @param array<string, string|array> $aDummyData
+     *
+     * @return void
      */
     public function addDummyDataArray($aDummyData)
     {
@@ -42,10 +49,12 @@ class TPkgViewRendererSnippetDummyData
 
     /**
      * @param TdbCmsPortal $oPortal
-     * @param $sPathRelativeToSnippetsFolder
      * @param bool $bSuppressWarnings
+     * @param string $sPathRelativeToSnippetsFolder
      *
      * @throws ErrorException
+     *
+     * @return void
      */
     public function addDummyDataFromFile($sPathRelativeToSnippetsFolder, $bSuppressWarnings = false, TdbCmsPortal $oPortal = null)
     {
@@ -140,6 +149,8 @@ class TPkgViewRendererSnippetDummyData
      * @param string $sAliasName
      * @param string $sPathRelativeToSnippetsFolder
      * @param bool   $bSuppressWarnings
+     *
+     * @return void
      */
     public function addDummyDataFromFileAs($sAliasName, $sPathRelativeToSnippetsFolder, $bSuppressWarnings = false)
     {
@@ -161,6 +172,8 @@ class TPkgViewRendererSnippetDummyData
 
     /**
      * @param string $sKey
+     *
+     * @return void
      */
     public function removeData($sKey)
     {

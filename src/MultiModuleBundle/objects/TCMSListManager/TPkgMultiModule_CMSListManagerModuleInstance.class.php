@@ -11,6 +11,9 @@
 
 class TPkgMultiModule_CMSListManagerModuleInstance extends TPkgMultiModule_CMSListManagerModuleInstanceAutoParent
 {
+    /**
+     * @return void
+     */
     public function AddFields()
     {
         parent::AddFields();

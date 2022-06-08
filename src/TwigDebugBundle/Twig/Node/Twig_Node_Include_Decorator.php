@@ -34,6 +34,9 @@ class Twig_Node_Include_Decorator extends Node implements NodeOutputInterface
         $this->original = $original;
     }
 
+    /**
+     * @return void
+     */
     public function compile(Compiler $compiler)
     {
         $snippet = $this->original->getNode('expr')->hasAttribute('value') ? $snippet = $this->original->getNode('expr')->getAttribute('value') : null;
@@ -53,7 +56,7 @@ class Twig_Node_Include_Decorator extends Node implements NodeOutputInterface
 
     public function getNodeTag(): string
     {
-        return $this->original->getNodeTag();
+        return (string) $this->original->getNodeTag();
     }
 
     public function count()
@@ -66,6 +69,13 @@ class Twig_Node_Include_Decorator extends Node implements NodeOutputInterface
         return $this->original->getTemplateLine();
     }
 
+    /**
+     * @psalm-suppress UndefinedMethod
+     * @FIXME `setTemplateName` does not exist on the original class. This method should probably be removed.
+     *
+     * @param string $name
+     * @return void
+     */
     public function setTemplateName($name)
     {
         $this->original->setTemplateName($name);
@@ -73,7 +83,7 @@ class Twig_Node_Include_Decorator extends Node implements NodeOutputInterface
 
     public function getTemplateName(): string
     {
-        return $this->original->getTemplateName();
+        return (string) $this->original->getTemplateName();
     }
 
     public function setSourceContext(Source $source): void
@@ -81,7 +91,7 @@ class Twig_Node_Include_Decorator extends Node implements NodeOutputInterface
         $this->original->setSourceContext($source);
     }
 
-    public function getSourceContext(): Source
+    public function getSourceContext(): ?Source
     {
         return $this->original->getSourceContext();
     }

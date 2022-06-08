@@ -12,6 +12,8 @@
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
 use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesRequestCacheDataAccess;
 use ChameleonSystem\AutoclassesBundle\Handler\TPkgCoreAutoClassHandler_TPkgCmsClassManager;
+use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
+use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\UpdateManager\StripVirtualFieldsFromQuery;
@@ -302,7 +304,7 @@ class TCMSLogChange
     public static function _RunQuery($query, $line, $bInsertId = true)
     {
         /** @var $stripNonExistingFields StripVirtualFieldsFromQuery */
-        $stripNonExistingFields = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.update_manager_strip_virtual_fields_from_query');
+        $stripNonExistingFields = ServiceLocator::get('chameleon_system_core.update_manager_strip_virtual_fields_from_query');
         $query = $stripNonExistingFields->stripNonExistingFields($query);
 
         $sOriginalQuery = $query;
@@ -365,7 +367,7 @@ class TCMSLogChange
      */
     public static function RunQuery($line, $sql, array $parameter = array(), array $types = null)
     {
-        $db = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $db = ServiceLocator::get('database_connection');
 
         $logger = self::getLogger();
         try {
@@ -1088,7 +1090,7 @@ class TCMSLogChange
     /**
      * @see TCMSLogChange::AddBackEndMessage()
      *
-     * @param $language
+     * @param string|int|null $language
      *
      * @return string|null
      */
@@ -1131,21 +1133,11 @@ class TCMSLogChange
      */
     public static function createUnusedRecordId($tableName)
     {
-        $databaseConnection = self::getDatabaseConnection();
-        $quotedTableName = $databaseConnection->quoteIdentifier($tableName);
-        $tries = 11;
-        do {
-            $id = TTools::GetUUID();
-            $count = $databaseConnection->fetchColumn("SELECT count(*) FROM $quotedTableName WHERE `id` = :id", array(
-                'id' => $id,
-            ));
-            --$tries;
-        } while (intval($count) > 0 && $tries > 0);
-        if (0 === $tries) {
-            throw new UnexpectedValueException('TCMSLogChange::createUnusedRecordId was unable to create an unused ID after 10 attempts.');
+        try {
+            return self::getGuidCreationService()->findUnusedId($tableName);
+        } catch (GuidCreationFailedException $exception) {
+            throw new UnexpectedValueException($exception->getMessage(), $exception->getCode(), $exception);
         }
-
-        return $id;
     }
 
     /**
@@ -1153,10 +1145,10 @@ class TCMSLogChange
      *
      * @static
      *
-     * @param  $sExtensionTableName - the db table name
-     * @param  $sClassName - the origianl class name
-     * @param  $sListClassName - the original list class name (if set)
-     * @param  $sClassSubType - (deprecated!) the path relative to classes
+     * @param string $sExtensionTableName - the db table name
+     * @param string $sClassName - the origianl class name
+     * @param string $sListClassName - the original list class name (if set)
+     * @param string $sClassSubType - (deprecated!) the path relative to classes
      * @param string $sClassType - (deprecated!) core/customer?
      */
     public static function ChangeExtensionToAutoParentClass($sExtensionTableName, $sClassName, $sListClassName, $sClassSubType = '', $sClassType = 'Core')
@@ -1207,10 +1199,10 @@ class TCMSLogChange
     /**
      * add a new extension to a table. if no $sNameOfClassAfterWhichToPosition is given, the class will be inserted in last position.
      *
-     * @param $sTableName
-     * @param $sClassName
-     * @param $sClassSubType - deprecated! handled by autoloader
-     * @param $sClassType - deprecated! handled by autoloader
+     * @param string $sTableName
+     * @param string $sClassName
+     * @param string $sClassSubType - deprecated! handled by autoloader
+     * @param string $sClassType - deprecated! handled by autoloader
      * @param string $sListClass
      * @param string $sNameOfClassAfterWhichToPosition
      */
@@ -1280,7 +1272,7 @@ class TCMSLogChange
     {
         // check position of field where we want to set the new field behind
         /** @var $databaseConnection \Doctrine\DBAL\Connection */
-        $databaseConnection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $databaseConnection = ServiceLocator::get('database_connection');
         $query = 'SELECT `position` FROM `cms_tbl_extension` WHERE `name` = :preExtensionName';
         $posData = $databaseConnection->fetchArray($query, array('preExtensionName' => $sPreExtensionName));
         if (false === $posData) {
@@ -1361,7 +1353,7 @@ class TCMSLogChange
 
     public static function UpdateVirtualNonDbClasses()
     {
-        $filemanager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.filemanager');
+        $filemanager = ServiceLocator::get('chameleon_system_core.filemanager');
         $oAutoTableWriter = new TPkgCoreAutoClassHandler_TPkgCmsClassManager(self::getDatabaseConnection(), $filemanager);
         $oList = TdbPkgCmsClassManagerList::GetList();
         while ($oItem = $oList->Next()) {
@@ -1605,8 +1597,8 @@ class TCMSLogChange
      * use this method to simple add field connections for fields of $sTargetTable given in $aFields for your cms_field_conf_mlt field in $sTable
      * you can specify one record or leave it null to set for all records of $sTable.
      *
-     * @param $sTable - table name where the cms_field_conf_mlt field is stored
-     * @param $sTargetTable - table name of the table from what the fields will be selected also used in fieldtyp config parameter (sShowFieldsFromTable)
+     * @param string $sTable - table name where the cms_field_conf_mlt field is stored
+     * @param string $sTargetTable - table name of the table from what the fields will be selected also used in fieldtyp config parameter (sShowFieldsFromTable)
      * @param array $aFields   - field names for that will be a mlt connection added
      * @param null  $sRecordId - record id if you only want to set the connections for a specific record - if null all records of $sTable will be selected
      */
@@ -1790,7 +1782,7 @@ class TCMSLogChange
 
     public static function getLogger(): LoggerInterface
     {
-        return  \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.cms_update');
+        return  ServiceLocator::get('monolog.logger.cms_update');
     }
 
     /**
@@ -1816,9 +1808,9 @@ class TCMSLogChange
      *
      * You should not use this method in new packages, which already know about the change.
      *
-     * @param $shop_id
-     * @param $name_internal
-     * @param $name
+     * @param string $shop_id
+     * @param string $name_internal
+     * @param string $name
      * @param string $cms_tree_id
      *
      * @deprecated since 6.2.0 - no longer used.
@@ -2078,20 +2070,20 @@ class TCMSLogChange
      */
     public static function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
     /**
      * initializes lft and rgt values for all entries in the table.
      *
-     * @param $tableName
+     * @param string $tableName
      * @param string $parentIdFieldName
      * @param string $entrySortField
      */
     public static function initializeNestedSet($tableName, $parentIdFieldName = 'parent_id', $entrySortField = 'position')
     {
         /** @var $helperServiceFactory \ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperFactoryInterface */
-        $helperServiceFactory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.table_editor_nested_set_helper_factory');
+        $helperServiceFactory = ServiceLocator::get('chameleon_system_core.table_editor_nested_set_helper_factory');
         $helperService = $helperServiceFactory->createNestedSetHelper($tableName, $parentIdFieldName, $entrySortField);
         $helperService->initializeTree();
     }
@@ -2100,8 +2092,8 @@ class TCMSLogChange
      * Set field user group right for a table to show them in mlt field connection.
      * For example in variant sets article fields.
      *
-     * @param $tableName
-     * @param $userGroupSystemName (cms_admin)
+     * @param string $tableName
+     * @param string $userGroupSystemName (cms_admin)
      * @param array $fieldNameList if array is empty grand rights to all table fields
      *
      * @return bool|void
@@ -2146,7 +2138,7 @@ class TCMSLogChange
      */
     private static function getAutoclassesDataAccessRequestCache()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses_request_cache');
+        return ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses_request_cache');
     }
 
     /**
@@ -2154,7 +2146,7 @@ class TCMSLogChange
      */
     private static function getAutoclassesCacheWarmer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
+        return ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
     }
 
     /**
@@ -2229,7 +2221,7 @@ class TCMSLogChange
     private static function executeUpdateOperation($line, $serviceId, MigrationQueryData $migrationQueryData)
     {
         /** @var QueryInterface $operation */
-        $operation = \ChameleonSystem\CoreBundle\ServiceLocator::get($serviceId);
+        $operation = ServiceLocator::get($serviceId);
         try {
             list($query, $queryParams) = $operation->execute($migrationQueryData);
             self::outputSuccess($line, $query, $queryParams);
@@ -2243,8 +2235,8 @@ class TCMSLogChange
     /**
      * Creates a MigrationQueryData object, avoiding the PHP 5.3 limitation of not being able to call "fluent constructors".
      *
-     * @param $tableName
-     * @param $language
+     * @param string $tableName
+     * @param string $language
      *
      * @return MigrationQueryData
      */
@@ -2371,7 +2363,7 @@ class TCMSLogChange
      */
     private static function getFieldTranslationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 
     /**
@@ -2379,7 +2371,7 @@ class TCMSLogChange
      */
     private static function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     /**
@@ -2387,7 +2379,7 @@ class TCMSLogChange
      */
     private static function getMigrationRecorder()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder');
+        return ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder');
     }
 
     /**
@@ -2395,7 +2387,7 @@ class TCMSLogChange
      */
     private static function getKernel()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('kernel');
+        return ServiceLocator::get('kernel');
     }
 
     /**
@@ -2403,7 +2395,7 @@ class TCMSLogChange
      */
     private static function getMigrationCounterManager()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.counter.migration_counter_manager');
+        return ServiceLocator::get('chameleon_system_core.counter.migration_counter_manager');
     }
 
     /**
@@ -2420,5 +2412,10 @@ class TCMSLogChange
     private static function getSnippetChainModifier()
     {
         return ServiceLocator::get('chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier');
+    }
+
+    private static function getGuidCreationService(): GuidCreationServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.guid_creation');
     }
 }

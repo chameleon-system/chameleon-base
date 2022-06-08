@@ -33,7 +33,9 @@ class CreateInitialBackendUserCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function configure()
     {
@@ -58,5 +60,7 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->initialBackendUserCreator->create($input, $output, $this->getHelper('question'));
+
+        return 0;
     }
 }

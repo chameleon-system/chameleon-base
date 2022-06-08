@@ -32,7 +32,7 @@ class BackendTreeNodeDataModel implements JsonSerializable
     /**
      * @var int
      */
-    private $cmsIdent = '';
+    private $cmsIdent;
 
     /**
      * @var BackendTreeNodeDataModel[]

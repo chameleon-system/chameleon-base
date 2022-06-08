@@ -155,7 +155,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * @return Request
+     * @return Request|null
      */
     protected function getRequest()
     {
@@ -164,6 +164,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * @param TGlobal $global
+     *
+     * @return void
      */
     public function setGlobal($global)
     {
@@ -172,6 +174,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * @param bool $bBlockAutoFlushToBrowser
+     *
+     * @return void
      */
     public function SetBlockAutoFlushToBrowser($bBlockAutoFlushToBrowser)
     {
@@ -186,6 +190,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
         return $this->bBlockAutoFlushToBrowser;
     }
 
+    /**
+     * @return void
+     */
     protected function sendDefaultHeaders()
     {
         if (true === headers_sent()) {
@@ -295,9 +302,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
     /**
      * return the page definition object. by default, this is file based, but may be page based (template engine).
      *
-     * @var string $pagedef
+     * @param string $pagedef
      *
-     * @return TCMSPageDefinitionFile|bool
+     * @return TCMSPageDefinitionFile|false
      *
      * @deprecated since 6.2.10 - use chameleon_system_core.data_access_cms_master_pagedef_file or chameleon_system_core.data_access_cms_master_pagedef_database instead
      */
@@ -337,6 +344,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * call the init function on all modules.
+     *
+     * @return void
      */
     protected function InitializeModules()
     {
@@ -346,6 +355,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
             $this->global->SetExecutingModulePointer($this->moduleLoader->modules[$spotName]);
             $this->moduleLoader->modules[$spotName]->Init();
             $tmp = null;
+
+            /** @psalm-suppress NullArgument */
             $this->global->SetExecutingModulePointer($tmp);
         }
         reset($this->moduleLoader->modules);
@@ -360,6 +371,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * execution is the same as the order in module_fnc array.
      *
      * @param TModuleLoader $modulesObject
+     *
+     * @return void
      */
     protected function ExecuteModuleMethod(&$modulesObject)
     {
@@ -383,6 +396,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
                     $this->global->SetExecutingModulePointer($module);
                     $module->_CallMethod($method);
                     $tmp = null;
+
+                    /** @psalm-suppress NullArgument */
                     $this->global->SetExecutingModulePointer($tmp);
                 }
             } else {
@@ -554,6 +569,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     protected function injectHeaderIncludes($sPageContent)
     {
+        /** @var array{js: string[], other: string[]} $aCustomHeaderData */
         static $aCustomHeaderData = null;
 
         if (
@@ -594,7 +610,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @param bool $bAsArray
      *
-     * @return string
+     * @return string|string[]
+     * @psalm-return ($bAsArray is true ? string[] : string)
      */
     protected function _GetCustomHeaderData($bAsArray = false)
     {
@@ -602,6 +619,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
             TPkgCmsEvent::GetNewInstance($this, TPkgCmsEvent::CONTEXT_CORE, TPkgCmsEvent::NAME_GET_CUSTOM_HEADER_DATA));
 
         $event = new HtmlIncludeEvent();
+        /** @var HtmlIncludeEvent $event */
         $event = $this->eventDispatcher->dispatch($event, CoreEvents::GLOBAL_HTML_HEADER_INCLUDE);
 
         if ($bAsArray) {
@@ -612,9 +630,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * @param array $aResourceArray
+     * @param string[] $aResourceArray
      *
-     * @return array
+     * @return array{js: string[], other: string[]}
      */
     protected function splitHeaderDataIntoJSandOther($aResourceArray)
     {
@@ -662,6 +680,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         $event = new HtmlIncludeEvent();
 
+        /** @var HtmlIncludeEvent $event */
         $event = $this->eventDispatcher->dispatch($event, CoreEvents::GLOBAL_HTML_FOOTER_INCLUDE);
 
         $aModuleFooterData = $event->getData();
@@ -682,9 +701,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
     /**
      * extra hook that replaces messages and custom vars in the string passed.
      *
-     * @param object|array|string $sPageContent
+     * @param \stdClass|array|string $sPageContent
      *
-     * @return string
+     * @return \stdClass|array|string
      *
      * @deprecated since 6.3.0 - use ResponseVariableReplacerInterface::replaceVariables() instead.
      *
@@ -781,6 +800,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @param array $aParameters - assoc array of the get parameters
      *
      * @deprecated use \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect')->redirectToActivePage($aParameters) instead
+     *
+     * @return never
      */
     public function HeaderRedirect($aParameters)
     {
@@ -794,6 +815,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @param bool   $bAllowOnlyRelativeURLs - strips scheme from URL and adds current HOST - default false
      *
      * @deprecated use \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect') instead
+     *
+     * @return never
      */
     public function HeaderURLRedirect($url = '', $bAllowOnlyRelativeURLs = false)
     {
@@ -810,6 +833,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * @param ActivePageServiceInterface $activePageService
+     *
+     * @return void
      */
     public function setActivePageService(ActivePageServiceInterface $activePageService)
     {
@@ -819,6 +844,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
     /**
      * use method to check access of current user to the page. use it to redirect to an access denied page if the user does
      * not have the correct permissions.
+     *
+     * @return void
      */
     protected function accessCheckHook()
     {
@@ -826,6 +853,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * @param string $pagedef
+     *
+     * @return void
      */
     protected function handleRequest($pagedef)
     {
@@ -840,7 +869,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getHtmlFooterIncludes()
     {
@@ -849,6 +878,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * @param AuthenticityTokenManagerInterface $authenticityTokenManager
+     *
+     * @return void
      */
     public function setAuthenticityTokenManager($authenticityTokenManager)
     {
@@ -857,6 +888,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * @param RequestInfoServiceInterface $requestInfoService
+     *
+     * @return void
      */
     public function setRequestInfoService($requestInfoService)
     {
@@ -867,6 +900,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @param ICmsCoreRedirect $redirect
      *
      * @deprecated since 6.1.9 - no longer used in this class.
+     *
+     * @return void
      */
     public function setRedirect($redirect)
     {
@@ -883,6 +918,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * @param InputFilterUtilInterface $inputFilterUtil
+     *
+     * @return void
      */
     public function setInputFilterUtil(InputFilterUtilInterface $inputFilterUtil)
     {

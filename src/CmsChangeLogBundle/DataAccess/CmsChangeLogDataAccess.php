@@ -37,7 +37,7 @@ class CmsChangeLogDataAccess implements CmsChangeLogDataAccessInterface
                 ['minimumDate' => $minimumDate->format('Y-m-d')]
             );
 
-            return $result->rowCount();
+            return (int) $result->rowCount();
         } catch (Exception $exception) {
             throw new CmsChangeLogDataAccessFailedException('Deletion of changelog entries failed: '.$exception->getMessage(), 0, $exception);
         }

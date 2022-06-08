@@ -23,8 +23,14 @@ class DatabaseDataCollector extends DataCollector
      */
     private $databaseConnection;
 
+    /**
+     * @var bool
+     */
     private $backtraceEnabled = false;
 
+    /**
+     * @var bool|int
+     */
     private $backtraceLimit = 10;
 
     public function __construct(ProfilerDatabaseConnection $databaseConnection)
@@ -32,6 +38,9 @@ class DatabaseDataCollector extends DataCollector
         $this->databaseConnection = $databaseConnection;
     }
 
+    /**
+     * @return void
+     */
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
         $queries = $this->databaseConnection->getQueries();
@@ -47,46 +56,75 @@ class DatabaseDataCollector extends DataCollector
         );
     }
 
+    /**
+     * @return void
+     */
     public function reset()
     {
         $this->data = [];
     }
 
+    /**
+     * @return bool
+     */
     public function getBacktraceEnabled()
     {
         return $this->data['backtraceEnabled'];
     }
 
+    /**
+     * @return int
+     */
     public function getBacktraceLimit()
     {
         return $this->data['backtraceLimit'];
     }
 
+    /**
+     * @return mixed
+     */
     public function getQueriesByOccurrence()
     {
         return $this->data['queriesByOccurrence'];
     }
 
+    /**
+     * @return int
+     */
     public function getQueryCount()
     {
         return $this->data['queryCount'];
     }
 
+    /**
+     * @return numeric
+     */
     public function getQueryTime()
     {
         return 1000 * $this->data['queryTime'];
     }
 
+    /**
+     * @return string
+     */
     public function getQueriedTables()
     {
         return $this->data['queriedTables'];
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'chameleon.database';
     }
 
+    /**
+     * @param array $queries
+     *
+     * @return array<string, mixed>[]
+     */
     protected function getQueriesListedByNumberOfOccurrence($queries)
     {
         $queriesByOccurrence = array();
@@ -115,6 +153,11 @@ class DatabaseDataCollector extends DataCollector
         return $queriesByOccurrence;
     }
 
+    /**
+     * @param array{count: int} $a
+     * @param array{count: int} $b
+     * @return int
+     */
     protected function sortQueriesByNumberOfOccurrence($a, $b)
     {
         if ($a['count'] == $b['count']) {
@@ -124,6 +167,10 @@ class DatabaseDataCollector extends DataCollector
         return ($a['count'] < $b['count']) ? 1 : -1;
     }
 
+    /**
+     * @return array<string, mixed[]>
+     * @param string[][] $queries
+     */
     protected function getQueriesGroupedByHash($queries)
     {
         $queriesByHash = array();
@@ -135,6 +182,11 @@ class DatabaseDataCollector extends DataCollector
         return $queriesByHash;
     }
 
+    /**
+     * @param array $queries
+     *
+     * @return array<string, int>
+     */
     protected function buildQueriedTables($queries)
     {
         $tables = array();
@@ -158,6 +210,8 @@ class DatabaseDataCollector extends DataCollector
 
     /**
      * @param bool $backtraceEnabled
+     *
+     * @return void
      */
     public function setBacktraceEnabled($backtraceEnabled)
     {
@@ -166,6 +220,8 @@ class DatabaseDataCollector extends DataCollector
 
     /**
      * @param bool $backtraceLimit
+     *
+     * @return void
      */
     public function setBacktraceLimit($backtraceLimit)
     {

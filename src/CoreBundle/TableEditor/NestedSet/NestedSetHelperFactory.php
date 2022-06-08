@@ -31,6 +31,8 @@ class NestedSetHelperFactory implements NestedSetHelperFactoryInterface
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
     public function setDatabaseConnection(Connection $connection)
     {
@@ -38,7 +40,7 @@ class NestedSetHelperFactory implements NestedSetHelperFactoryInterface
     }
 
     /**
-     * @param $tableName
+     * @param string $tableName
      * @param string $parentIdField
      * @param string $nodeSortField
      *

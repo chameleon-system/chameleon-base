@@ -43,6 +43,8 @@ class HtmlHelper
 
     /**
      * @param array|string|object $html
+     *
+     * @return void
      */
     private function computeHtml($html)
     {
@@ -74,6 +76,8 @@ class HtmlHelper
 
     /**
      * @param string|null $html
+     *
+     * @return void
      */
     public function render($html = null)
     {

@@ -27,7 +27,7 @@ class TCMSListManagerEndPoint
     /**
      * table definition object.
      *
-     * @var TCMSTableConf
+     * @var TdbCmsTblConf
      */
     protected $oTableConf;
 
@@ -488,7 +488,7 @@ class TCMSListManagerEndPoint
                         $aParameter = array_merge($aParameter, $aAdditionalParams);
                     }
 
-                    $oMenuItem->sOnClick = "top.document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter)."'";
+                    $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter); // TODO support "top" target?
                     $this->oMenuItems->AddItem($oMenuItem);
                 }
 

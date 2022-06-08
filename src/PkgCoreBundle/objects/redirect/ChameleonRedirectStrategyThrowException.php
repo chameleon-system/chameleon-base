@@ -11,6 +11,12 @@
 
 class ChameleonRedirectStrategyThrowException implements ChameleonRedirectStrategyInterface
 {
+    /**
+     * @param string $url
+     * @param int $status
+     * @return never-returns
+     * @throws ChameleonRedirectException
+     */
     public function redirect($url, $status)
     {
         $redirectException = new ChameleonRedirectException();

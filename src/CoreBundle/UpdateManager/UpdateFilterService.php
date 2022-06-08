@@ -13,6 +13,9 @@ namespace ChameleonSystem\CoreBundle\UpdateManager;
 
 class UpdateFilterService implements UpdateFilterServiceInterface
 {
+    /**
+     * @var array<string, string[]>
+     */
     private $excludeFolders = array(
         'module' => array('dbbuilds'),
     );

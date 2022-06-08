@@ -50,7 +50,7 @@ interface MediaTreeDataAccessInterface
      * @param string $name
      * @param string $languageId
      *
-     * @return MediaTreeNodeDataModel
+     * @return MediaTreeNodeDataModel|null
      *
      * @throws DataAccessException
      */
@@ -63,7 +63,7 @@ interface MediaTreeDataAccessInterface
      * @param string $name
      * @param string $languageId
      *
-     * @return MediaTreeNodeDataModel
+     * @return MediaTreeNodeDataModel|null
      *
      * @throws DataAccessException
      */
@@ -73,6 +73,8 @@ interface MediaTreeDataAccessInterface
      * Delete a media tree node.
      *
      * @param string $id
+     *
+     * @return void
      *
      * @throws DataAccessException
      */
@@ -85,6 +87,8 @@ interface MediaTreeDataAccessInterface
      * @param string $parentId
      * @param int    $position
      * @param string $languageId
+     *
+     * @return void
      *
      * @throws DataAccessException
      */

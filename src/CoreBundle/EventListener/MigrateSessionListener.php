@@ -29,6 +29,9 @@ class MigrateSessionListener
         $this->requestStack = $requestStack;
     }
 
+    /**
+     * @return void
+     */
     public function migrateSession()
     {
         $session = $this->requestStack->getMasterRequest()->getSession();

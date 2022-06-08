@@ -26,6 +26,9 @@ class ChameleonControllerInvokeListener implements EventSubscriberInterface
         $this->container = $container;
     }
 
+    /**
+     * @return void
+     */
     public function onInvoke(ChameleonControllerInvokeEvent $event)
     {
         $this->container->set('chameleon_system_core.chameleon_controller', $event->getController());

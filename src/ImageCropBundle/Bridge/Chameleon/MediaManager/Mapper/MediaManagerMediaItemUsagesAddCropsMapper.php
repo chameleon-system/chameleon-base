@@ -21,7 +21,7 @@ use IMapperVisitorRestricted;
 class MediaManagerMediaItemUsagesAddCropsMapper extends AbstractViewMapper
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
     {
@@ -30,7 +30,7 @@ class MediaManagerMediaItemUsagesAddCropsMapper extends AbstractViewMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(
         IMapperVisitorRestricted $oVisitor,

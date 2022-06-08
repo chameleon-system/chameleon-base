@@ -25,8 +25,9 @@
 
     <div class="col-12 pt-2 col-lg-4 pt-lg-0">
         {% if buttonLink is defined %}
-            <button type="button" class="btn btn-sm btn-secondary" onclick="{{ buttonLink|e('html_attr') }}"><i
-                        class="fas fa-edit"></i> {{ 'chameleon_system_core.field_lookup.switch_to'|trans }}</button>
+            <a class="btn btn-sm btn-secondary" data-link-for-select="{{ fieldName|e('html_attr') }}" role="button" href="{{ buttonLink | e('html_attr') }}">
+                <i class="fas fa-edit"></i> {{ 'chameleon_system_core.field_lookup.switch_to'|trans }}
+            </a>
         {% endif %}
     </div>
 </div>

@@ -102,4 +102,11 @@ class TCMSFieldNumber extends TCMSFieldVarchar
 
         return $iFieldMaxLength;
     }
+
+    protected function GetFieldWriterData() {
+        $data = parent::GetFieldWriterData();
+        $data['sFieldType'] = 'int';
+
+        return $data;
+    }
 }

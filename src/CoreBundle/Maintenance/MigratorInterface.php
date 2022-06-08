@@ -20,6 +20,8 @@ interface MigratorInterface
 {
     /**
      * Perform any migration steps.
+     *
+     * @return void
      */
     public function migrate();
 }

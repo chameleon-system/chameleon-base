@@ -194,7 +194,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     }
 
     /**
-     * @param $oUser
+     * @param TCMSUser $oUser
      *
      * @throws ErrorException
      * @throws TPkgCmsException_Log

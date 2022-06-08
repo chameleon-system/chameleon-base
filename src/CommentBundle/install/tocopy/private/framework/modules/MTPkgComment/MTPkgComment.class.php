@@ -18,7 +18,7 @@ class MTPkgComment extends MTPkgCommentCore
      * use this method to modify data of a comment before saving it, e.g. when
      * you have custom fields for you comment you need to fill.
      *
-     * @param  $aData
+     * @param array $aData
      *
      * @return array
      */

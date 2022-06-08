@@ -41,6 +41,8 @@ class ChangeChameleonObjectsLocaleListener
 
     /**
      * @param LocaleChangedEvent $event
+     *
+     * @return void
      */
     public function onLocaleChangedEvent(LocaleChangedEvent $event)
     {

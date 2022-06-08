@@ -30,6 +30,9 @@ class BackendAccessCheck
      */
     private $requestStack;
 
+    /**
+     * @var array<string, string[]>
+     */
     private $ipRestrictedPageDefs = array();
 
     /**
@@ -48,13 +51,18 @@ class BackendAccessCheck
      * Unrestrict a pagedef to a list of client ips. If the array of ips is empty, the pagedef will be unrestricted for all requests.
      *
      * @param string $pagedef
-     * @param array  $ips
+     * @param string[] $ips
+     *
+     * @return void
      */
     public function unrestrictPagedef($pagedef, array $ips)
     {
         $this->ipRestrictedPageDefs[$pagedef] = $ips;
     }
 
+    /**
+     * @return void
+     */
     public function assertAccess()
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -71,6 +79,9 @@ class BackendAccessCheck
         $this->checkLogin();
     }
 
+    /**
+     * @return void
+     */
     protected function checkLogin()
     {
         if (null === $this->global->oUser || !$this->global->oUser->ValidSessionKey()) {
@@ -81,6 +92,8 @@ class BackendAccessCheck
 
     /**
      * if we are on a ajax call return status and redirect url. So ajax can do a redirect to login page if user was logged out.
+     *
+     * @return void
      */
     protected function checkLoginOnAjax()
     {
