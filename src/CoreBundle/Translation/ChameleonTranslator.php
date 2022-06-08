@@ -14,14 +14,14 @@ namespace ChameleonSystem\CoreBundle\Translation;
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
-use Symfony\Contracts\Translation\LocaleAwareInterface;
+use Symfony\Component\Translation\TranslatorInterface as LegacyTranslatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @psalm-suppress UndefinedInterfaceMethod, InvalidPropertyAssignmentValue
  * @FIXME This translator uses methods that are exclusive to `Symfony\Component\Translation\TranslatorInterface` (e.g. `transChoice`) but uses `Symfony\Contracts\Translation\TranslatorInterface` for `$delegate`
  */
-class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
+class ChameleonTranslator implements LegacyTranslatorInterface, TranslatorInterface, TranslatorBagInterface
 {
     /**
      * @var TranslatorInterface&TranslatorBagInterface
