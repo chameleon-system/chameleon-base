@@ -24,7 +24,7 @@ class FlashMessageSilentService implements FlashMessageServiceInterface
 
     private FlashMessageServiceInterface $subject;
 
-    private $isSilentModeActive = false;
+    private bool $isSilentModeActive = false;
 
     /**
      * @param RequestStack $requestStack
@@ -108,7 +108,7 @@ class FlashMessageSilentService implements FlashMessageServiceInterface
     public function consumerMessageCount($sConsumerName, bool $includeGlobal = true)
     {
         if (true === $this->isSilentModeActive) {
-            return false;
+            return 0;
         }
 
         return $this->subject->ConsumerMessageCount($sConsumerName, $includeGlobal);
