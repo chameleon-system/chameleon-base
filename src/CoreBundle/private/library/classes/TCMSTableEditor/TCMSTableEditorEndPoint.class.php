@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 class TCMSTableEditorEndPoint
 {
     /**
+     * @deprecated since the use for this blacklist handling was removed when the revision logic was removed. Will be remove in 7.2
      * session variable name for black listed records and tables which should not be deleted
      * this is needed to prevent recursive deletes with DeleteRecordReferences.
      */
