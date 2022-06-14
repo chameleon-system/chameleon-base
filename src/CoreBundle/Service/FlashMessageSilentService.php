@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Silent service can be used when no session is available and no messages need to be printed.
- * Flash messages are not generated in sleep mode.
+ * Flash messages are not generated in silent mode.
  */
 class FlashMessageSilentService implements FlashMessageServiceInterface
 {
