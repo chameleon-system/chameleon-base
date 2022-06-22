@@ -46,7 +46,11 @@ class ChameleonTranslator implements LegacyTranslatorInterface, TranslatorInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $id
+     * @param array $parameters
+     * @param string|null $domain
+     * @param string|null $locale
+     * @return string
      */
     public function trans($id, array $parameters = array(), $domain = null, $locale = null)
     {
