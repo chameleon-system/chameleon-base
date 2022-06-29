@@ -15,11 +15,12 @@ use ChameleonSystem\CoreBundle\CoreEvents;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class ChameleonSystemCoreExtension extends Extension
+class ChameleonSystemCoreExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritDoc}
@@ -264,6 +265,19 @@ class ChameleonSystemCoreExtension extends Extension
         $definition->addTag('kernel.event_listener', [
             'event' => CoreEvents::BACKEND_LOGOUT_SUCCESS,
             'method' => 'migrateSession',
+        ]);
+    }
+
+    public function prepend(ContainerBuilder $container)
+    {
+        // Fix for BC break in PDO. See https://www.php.net/manual/en/migration81.incompatible.php#migration81.incompatible.pdo.mysql
+        // Proposed solution: https://github.com/doctrine/dbal/issues/5228
+        $container->prependExtensionConfig('doctrine', [
+            'dbal' => [
+                'options' => [
+                    \PDO::ATTR_STRINGIFY_FETCHES => true,
+                ]
+            ]
         ]);
     }
 }
