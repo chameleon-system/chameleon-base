@@ -268,6 +268,9 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function prepend(ContainerBuilder $container)
     {
         // Fix for BC break in PDO. See https://www.php.net/manual/en/migration81.incompatible.php#migration81.incompatible.pdo.mysql
