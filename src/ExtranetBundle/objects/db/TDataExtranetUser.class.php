@@ -936,6 +936,20 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         return array('table', 'oBillingAddress', 'oShippingAddress', 'aSessionData', 'sqlData', 'pageAccessCache');
     }
 
+    // isRequestForResource will try to identify the request based on its path.
+    // This method is quite specific and only used when deciding if it should check the active portal of the user
+    // on session validation. See https://github.com/chameleon-system/chameleon-system/issues/787 for details.
+    private function isRequestForResource(): bool {
+        $pathInfo = $this->getCurrentRequest()->getPathInfo();
+
+        $isResourceRequest =
+            str_starts_with($pathInfo, '/_wdt') ||
+            str_ends_with($pathInfo, '.css') ||
+            str_ends_with($pathInfo, '.jpg');
+
+        return $isResourceRequest;
+    }
+
     /**
      * validates the user session data.
      *
@@ -960,7 +974,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             if ($aUserData) {
                 $iCurrentTime = time();
                 $dataValid = (($iCurrentTime - $aUserData['login_timestamp']) < $oExtranetConfig->fieldSessionlife);
-                if ($dataValid && CHAMELEON_EXTRANET_USER_IS_PORTAL_DEPENDANT && !TGlobal::IsCMSMode()) {
+                if ($dataValid && CHAMELEON_EXTRANET_USER_IS_PORTAL_DEPENDANT && !TGlobal::IsCMSMode() && !$this->isRequestForResource()) {
                     $dataValid = $this->checkForActivePortal($aUserData);
                 }
                 if ($dataValid) {
