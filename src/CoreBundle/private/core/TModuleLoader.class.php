@@ -353,7 +353,7 @@ class TModuleLoader
             $this->logModuleException($e, $spotName);
         } catch (\Exception $e) {
             if (_DEVELOPMENT_MODE) {
-                throw new ModuleExecutionFailedException('Error in module execution: '.$e->getMessage(), 0, $e);
+                throw new ModuleExecutionFailedException('Error in module execution: '.$e->getMessage().' in file: '.$e->getFile().' on line: '.$e->getLine(), 0, $e);
             }
 
             $this->logModuleException($e, $spotName);
