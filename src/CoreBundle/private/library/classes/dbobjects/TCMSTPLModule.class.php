@@ -211,9 +211,9 @@ class TCMSTPLModule extends TCMSRecord
             return $viewMapperConfig;
         }
 
-        try {
+        if (false !== $this->sqlData && \array_key_exists('view_mapper_config', $this->sqlData)) {
             $viewMapperConfig = $this->sqlData['view_mapper_config'];
-        } catch (\Exception $e) {
+        } else {
             throw new \Exception(sprintf('module with ID: %s not found',$this->id));
         }
         $viewMapperConfig = new ViewMapperConfig($viewMapperConfig);
