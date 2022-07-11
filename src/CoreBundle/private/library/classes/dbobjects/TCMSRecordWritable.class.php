@@ -830,7 +830,7 @@ class TCMSRecordWritable extends TCMSRecord
      *
      * @return bool
      */
-    public function UploadCMSDocumentFromURL($sFileURL = '', $sFileName, $sFieldName, $iDocumentCategoryId, $bIsPrivate = true, $sDescription = null, $sDocumentID = null)
+    public function UploadCMSDocumentFromURL($sFileURL, $sFileName, $sFieldName, $iDocumentCategoryId, $bIsPrivate = true, $sDescription = null, $sDocumentID = null)
     {
         $bUploadOK = false;
         if (!empty($sFileURL) && $this->AllowEdit() && !is_null($this->id) && TTools::isOnline($sFileURL)) {
