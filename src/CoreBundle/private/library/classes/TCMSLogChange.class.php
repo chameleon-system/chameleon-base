@@ -657,7 +657,7 @@ class TCMSLogChange
      * @param bool       $bResetRoles  - indicates if all other roles will be kicked and the new role has the exclusive right
      * @param array|bool $aPermissions - array of the role fieldnr. 0,1,2,3,4,5,6, default = false
      */
-    public static function SetTableRolePermissions($sRoleName = 'cms_admin', $sTableName, $bResetRoles = false, $aPermissions = false)
+    public static function SetTableRolePermissions($sRoleName, $sTableName, $bResetRoles = false, $aPermissions = false)
     {
         $databaseConnection = self::getDatabaseConnection();
         $roleID = self::GetUserRoleIdByKey($sRoleName);

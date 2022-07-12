@@ -74,7 +74,7 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
      *
      * @return array
      */
-    private function getTreeLookup($portalHomeNodeId, TdbCmsTree $node, $pathToNode = '', $jumpToChildren = false, TdbCmsPortal $portal, TdbCmsLanguage $language)
+    private function getTreeLookup($portalHomeNodeId, TdbCmsTree $node, $pathToNode, $jumpToChildren, TdbCmsPortal $portal, TdbCmsLanguage $language)
     {
         $lookup = array();
         if ('' !== $node->fieldLink) {
