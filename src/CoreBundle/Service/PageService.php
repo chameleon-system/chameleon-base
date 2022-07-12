@@ -128,7 +128,7 @@ class PageService implements PageServiceInterface
      *
      * @throws RouteNotFoundException
      */
-    private function getLinkToPageObject(TdbCmsTplPage $page, array $parameters = array(), TdbCmsLanguage $language = null, $forceSecure = false, $referenceType)
+    private function getLinkToPageObject(TdbCmsTplPage $page, array $parameters = array(), TdbCmsLanguage $language = null, $forceSecure = false, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $portal = $page->GetPortal();
         if ($page->GetMainTreeId() === $portal->fieldHomeNodeId) {
