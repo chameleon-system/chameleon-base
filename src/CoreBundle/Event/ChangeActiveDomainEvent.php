@@ -41,7 +41,7 @@ class ChangeActiveDomainEvent extends Event
         return $this->oldActiveDomain;
     }
 
-    public function __construct(TCMSPortalDomain $oldActiveDomain = null, TCMSPortalDomain $newActiveDomain)
+    public function __construct(?TCMSPortalDomain $oldActiveDomain, TCMSPortalDomain $newActiveDomain)
     {
         $this->oldActiveDomain = $oldActiveDomain;
         $this->newActiveDomain = $newActiveDomain;

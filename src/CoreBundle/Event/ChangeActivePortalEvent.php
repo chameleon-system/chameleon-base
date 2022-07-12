@@ -41,7 +41,7 @@ class ChangeActivePortalEvent extends Event
         return $this->oldActivePortal;
     }
 
-    public function __construct(TCMSPortal $oldActivePortal = null, TCMSPortal $newActivePortal)
+    public function __construct(?TCMSPortal $oldActivePortal, TCMSPortal $newActivePortal)
     {
         $this->oldActivePortal = $oldActivePortal;
         $this->newActivePortal = $newActivePortal;
