@@ -1,6 +1,5 @@
 <?php
 
-
 use PHPUnit\Framework\TestCase;
 
 class TIteratorTest extends TestCase
@@ -150,9 +149,25 @@ class TIteratorTest extends TestCase
                     $this->assertEquals('baz', $item);
                     break;
                 default:
-                    throw new \Exception('Invalid index ' . index);
+                    throw new \Exception('Invalid index ' . $index);
             }
         }
+    }
+
+    public function testCanBeIteratedMultipleTimes(): void
+    {
+        // Tests if the `reset` method correctly resets the item pointer
+        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+
+        $items = [ ];
+        foreach ($iterator as $item) {
+            $items[] = $item;
+        }
+        foreach ($iterator as $item) {
+            $items[] = $item;
+        }
+
+        $this->assertEquals([ 'foo', 'bar', 'baz', 'foo', 'bar', 'baz' ], $items);
     }
 
     public function testResetsItemPointerBeforeIterating(): void
