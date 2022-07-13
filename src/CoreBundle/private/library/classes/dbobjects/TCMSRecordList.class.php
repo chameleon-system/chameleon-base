@@ -711,6 +711,21 @@ class TCMSRecordList extends TIterator
         return $this->getItem($itemKey, $data);
     }
 
+    public function key(): int
+    {
+        return $this->getEntityList()->key();
+    }
+
+    public function valid(): bool
+    {
+        return $this->getEntityList()->valid();
+    }
+
+    public function rewind(): void
+    {
+        $this->getEntityList()->rewind();
+    }
+
     /**
      * returns the previous record from the list, moving the pointer back one.
      *
