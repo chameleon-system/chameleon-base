@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 class TCMSTableEditorEndPoint
 {
     /**
+     * @deprecated since the use for this blacklist handling was removed when the revision logic was removed. Will be remove in 7.2
      * session variable name for black listed records and tables which should not be deleted
      * this is needed to prevent recursive deletes with DeleteRecordReferences.
      */
@@ -2318,6 +2319,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since the use for this blacklist handling was removed when the revision logic was removed. Will be remove in 7.2
      * adds a table + record id to the delete blacklist.
      *
      * @param bool|string $sTableId
@@ -2325,21 +2327,10 @@ class TCMSTableEditorEndPoint
      */
     protected function SetDeleteBlackList($sTableId = false, $sRecordId = false)
     {
-        if (!array_key_exists(self::DELETE_BLACKLIST_SESSION_VAR, $_SESSION)) {
-            $_SESSION[self::DELETE_BLACKLIST_SESSION_VAR] = array();
-        }
-        if (empty($sTableId)) {
-            $sTableId = $this->sTableId;
-        }
-        if (empty($sRecordId)) {
-            $sRecordId = $this->sId;
-        }
-        $sKey = md5($sTableId.$sRecordId);
-        $_SESSION[self::DELETE_BLACKLIST_SESSION_VAR][$sKey]['sTableId'] = $sTableId;
-        $_SESSION[self::DELETE_BLACKLIST_SESSION_VAR][$sKey]['sRecordId'] = $sRecordId;
     }
 
     /**
+     * @deprecated since the use for this blacklist handling was removed when the revision logic was removed. Will be remove in 7.2
      * checks if recordID of tableID is in delete blacklist.
      *
      * @param bool|string $sTableId
@@ -2349,21 +2340,7 @@ class TCMSTableEditorEndPoint
      */
     public function IsInDeleteBlackList($sTableId = false, $sRecordId = false)
     {
-        $bIsInDeleteBlackList = false;
-        if (array_key_exists(self::DELETE_BLACKLIST_SESSION_VAR, $_SESSION)) {
-            if (empty($sTableId)) {
-                $sTableId = $this->sTableId;
-            }
-            if (empty($sRecordId)) {
-                $sRecordId = $this->sId;
-            }
-            $sKey = md5($sTableId.$sRecordId);
-            if (array_key_exists($sKey, $_SESSION[self::DELETE_BLACKLIST_SESSION_VAR])) {
-                $bIsInDeleteBlackList = true;
-            }
-        }
-
-        return $bIsInDeleteBlackList;
+        return false;
     }
 
     /**
