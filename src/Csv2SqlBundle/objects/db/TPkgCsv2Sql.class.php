@@ -381,7 +381,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         }
 
         if (!$bDone) {
-            $this->LogError('No files found!');
+            $logger->notice('No files found!');
         }
 
         $aResultArray = self::ArrayConcat($aResultArray, $aRes);
@@ -596,7 +596,8 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         }
 
         if (false === $bDone) {
-            $this->LogError('Invalid file or directory: '.$sSource);
+            $logger = $this->getLogger();
+            $logger->notice('Invalid file or directory: '.$sSource);
         }
 
         return $aResultArray;

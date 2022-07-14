@@ -107,8 +107,8 @@ class TCMSImageImageCrop extends ChameleonSystemImageCropBundleBridgeChameleonTC
         $targetHeight,
         $cropWidth,
         $cropHeight,
-        $x = 0,
-        $y = 0,
+        $x,
+        $y,
         $thumbPath,
         $originalExtension
     ) {

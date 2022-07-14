@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 class TCMSTableEditorEndPoint
 {
     /**
+     * @deprecated since the use for this blacklist handling was removed when the revision logic was removed. Will be remove in 7.2
      * session variable name for black listed records and tables which should not be deleted
      * this is needed to prevent recursive deletes with DeleteRecordReferences.
      */
@@ -525,7 +526,7 @@ class TCMSTableEditorEndPoint
                             $aParameter = array_merge($aParameter, $aAdditionalParams);
                         }
 
-                        $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter)."'";
+                        $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter);
                         $this->oMenuItems->AddItem($oMenuItem);
                     }
                     // now add custom items
@@ -1283,6 +1284,8 @@ class TCMSTableEditorEndPoint
     /**
      * is called only from Delete method and calls all delete relevant methods
      * executes the final SQL Delete Query.
+     *
+     * @return void
      */
     protected function DeleteExecute()
     {
@@ -2141,11 +2144,17 @@ class TCMSTableEditorEndPoint
         return $oRecordData;
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlHeadIncludes()
     {
         return array();
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlFooterIncludes()
     {
         return array();
@@ -2310,6 +2319,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since the use for this blacklist handling was removed when the revision logic was removed. Will be remove in 7.2
      * adds a table + record id to the delete blacklist.
      *
      * @param bool|string $sTableId
@@ -2317,21 +2327,10 @@ class TCMSTableEditorEndPoint
      */
     protected function SetDeleteBlackList($sTableId = false, $sRecordId = false)
     {
-        if (!array_key_exists(self::DELETE_BLACKLIST_SESSION_VAR, $_SESSION)) {
-            $_SESSION[self::DELETE_BLACKLIST_SESSION_VAR] = array();
-        }
-        if (empty($sTableId)) {
-            $sTableId = $this->sTableId;
-        }
-        if (empty($sRecordId)) {
-            $sRecordId = $this->sId;
-        }
-        $sKey = md5($sTableId.$sRecordId);
-        $_SESSION[self::DELETE_BLACKLIST_SESSION_VAR][$sKey]['sTableId'] = $sTableId;
-        $_SESSION[self::DELETE_BLACKLIST_SESSION_VAR][$sKey]['sRecordId'] = $sRecordId;
     }
 
     /**
+     * @deprecated since the use for this blacklist handling was removed when the revision logic was removed. Will be remove in 7.2
      * checks if recordID of tableID is in delete blacklist.
      *
      * @param bool|string $sTableId
@@ -2341,21 +2340,7 @@ class TCMSTableEditorEndPoint
      */
     public function IsInDeleteBlackList($sTableId = false, $sRecordId = false)
     {
-        $bIsInDeleteBlackList = false;
-        if (array_key_exists(self::DELETE_BLACKLIST_SESSION_VAR, $_SESSION)) {
-            if (empty($sTableId)) {
-                $sTableId = $this->sTableId;
-            }
-            if (empty($sRecordId)) {
-                $sRecordId = $this->sId;
-            }
-            $sKey = md5($sTableId.$sRecordId);
-            if (array_key_exists($sKey, $_SESSION[self::DELETE_BLACKLIST_SESSION_VAR])) {
-                $bIsInDeleteBlackList = true;
-            }
-        }
-
-        return $bIsInDeleteBlackList;
+        return false;
     }
 
     /**

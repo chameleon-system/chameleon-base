@@ -259,7 +259,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         }
 
         $tableEditor = $this->tools->GetTableEditorManager($tableName, $currentRecordId);
-        $tableEditor->SaveField($fieldName, $nodeId);
+        $tableEditor->SaveField($fieldName, $nodeId, true);
 
         return $nodeId;
     }

@@ -35,6 +35,7 @@ class CmsTreeTableObject extends \ChameleonSystemCoreBundleTableEditorNestedSetC
 
     /**
      * @return string
+     * @psalm-suppress InvalidReturnStatement, InvalidReturnType - Technically returning an `int` here
      */
     public function getLeft()
     {
@@ -43,6 +44,7 @@ class CmsTreeTableObject extends \ChameleonSystemCoreBundleTableEditorNestedSetC
 
     /**
      * @return string
+     * @psalm-suppress InvalidReturnStatement, InvalidReturnType - Technically returning an `int` here
      */
     public function getRight()
     {

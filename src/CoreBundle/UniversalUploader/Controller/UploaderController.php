@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\UniversalUploader\Bridge\Chameleon\UploaderConfig
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploadedFileDataModel;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\UploaderPostHandlerServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use TdbCmsConfig;
 
 class UploaderController
@@ -48,6 +49,10 @@ class UploaderController
      */
     public function __invoke()
     {
+        if (false === $this->isBackendUserAuthenticated()) {
+            throw new UnauthorizedHttpException('User must be logged in in backend');
+        }
+
         $configuration = $this->getUploaderConfiguration();
 
         $uploadedFiles = $this->postHandler->post($configuration);
@@ -63,6 +68,17 @@ class UploaderController
         }
 
         return $this->postHandler->getResponse($uploadedFiles);
+    }
+
+    private function isBackendUserAuthenticated(): bool
+    {
+        $user = \TdbCmsUser::GetActiveUser();
+
+        if (null === $user || false === $user->bLoggedIn) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

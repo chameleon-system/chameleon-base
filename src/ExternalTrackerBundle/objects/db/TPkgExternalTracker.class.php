@@ -36,7 +36,7 @@ class TPkgExternalTracker extends TPkgExternalTrackerAutoParent
     /**
      * @param TPkgExternalTrackerState $oState
      *
-     * @return array
+     * @return string[]
      */
     public function GetHTMLHeadIncludes(TPkgExternalTrackerState $oState)
     {
@@ -46,7 +46,7 @@ class TPkgExternalTracker extends TPkgExternalTrackerAutoParent
     /**
      * @param TPkgExternalTrackerState $oState
      *
-     * @return array
+     * @return string[]
      */
     public function GetPostBodyOpeningCode(TPkgExternalTrackerState $oState)
     {
@@ -56,7 +56,7 @@ class TPkgExternalTracker extends TPkgExternalTrackerAutoParent
     /**
      * @param TPkgExternalTrackerState $oState
      *
-     * @return array
+     * @return string[]
      */
     public function GetPreBodyClosingCode(TPkgExternalTrackerState $oState)
     {
