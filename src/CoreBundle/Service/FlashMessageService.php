@@ -38,7 +38,7 @@ class FlashMessageService implements FlashMessageServiceInterface
     private function getSession()
     {
         $currentRequest = $this->requestStack->getCurrentRequest();
-        if (false === $currentRequest->hasSession()) {
+        if (null === $currentRequest || false === $currentRequest->hasSession()) {
             return null;
         }
 
@@ -55,14 +55,17 @@ class FlashMessageService implements FlashMessageServiceInterface
      */
     private function getHandler()
     {
-        if (null === $this->getSession()) {
+        $session = $this->getSession();
+
+        if (null === $session) {
             return null;
         }
-        if (false === $this->getSession()->has(self::SESSION_KEY_NAME)) {
-            $this->getSession()->set(self::SESSION_KEY_NAME, new \TCMSMessageManager());
+
+        if (false === $session->has(self::SESSION_KEY_NAME)) {
+            $session->set(self::SESSION_KEY_NAME, new \TCMSMessageManager());
         }
 
-        return $this->getSession()->get(self::SESSION_KEY_NAME, null);
+        return $session->get(self::SESSION_KEY_NAME, null);
     }
 
     /**
@@ -70,7 +73,12 @@ class FlashMessageService implements FlashMessageServiceInterface
      */
     public function addMessage($consumer, $code, array $parameter = array())
     {
-        $this->getHandler()->AddMessage($consumer, $code, $parameter);
+        $handler = $this->getHandler();
+        if (null === $handler) {
+            return;
+        }
+
+        $handler->AddMessage($consumer, $code, $parameter);
     }
 
     /**
@@ -78,7 +86,12 @@ class FlashMessageService implements FlashMessageServiceInterface
      */
     public function consumeMessages($consumer, $remove = true, bool $includeGlobal = true)
     {
-        return $this->getHandler()->ConsumeMessages($consumer, $remove, $includeGlobal);
+        $handler = $this->getHandler();
+        if (null === $handler) {
+            return new \TIterator();
+        }
+
+        return $handler->ConsumeMessages($consumer, $remove, $includeGlobal);
     }
 
     /**
@@ -91,7 +104,12 @@ class FlashMessageService implements FlashMessageServiceInterface
         array $aCallTimeVars = array(),
         $bRemove = true
     ) {
-        return $this->getHandler()->RenderMessages($sConsumerName, $sViewName, $sViewType, $aCallTimeVars, $bRemove);
+        $handler = $this->getHandler();
+        if (null === $handler) {
+            return '';
+        }
+
+        return $handler->RenderMessages($sConsumerName, $sViewName, $sViewType, $aCallTimeVars, $bRemove);
     }
 
     /**
@@ -99,7 +117,12 @@ class FlashMessageService implements FlashMessageServiceInterface
      */
     public function clearMessages($sConsumerName = null)
     {
-        $this->getHandler()->ClearMessages($sConsumerName);
+        $handler = $this->getHandler();
+        if (null === $handler) {
+            return;
+        }
+
+        $handler->ClearMessages($sConsumerName);
     }
 
     /**
@@ -107,7 +130,12 @@ class FlashMessageService implements FlashMessageServiceInterface
      */
     public function consumerHasMessages($sConsumerName, bool $includeGlobal = true)
     {
-        return $this->getHandler()->ConsumerHasMessages($sConsumerName, $includeGlobal);
+        $handler = $this->getHandler();
+        if (null === $handler) {
+            return false;
+        }
+
+        return $handler->ConsumerHasMessages($sConsumerName, $includeGlobal);
     }
 
     /**
@@ -115,7 +143,12 @@ class FlashMessageService implements FlashMessageServiceInterface
      */
     public function consumerMessageCount($sConsumerName, bool $includeGlobal = true)
     {
-        return $this->getHandler()->ConsumerMessageCount($sConsumerName, $includeGlobal);
+        $handler = $this->getHandler();
+        if (null === $handler) {
+            return 0;
+        }
+
+        return $handler->ConsumerMessageCount($sConsumerName, $includeGlobal);
     }
 
     /**
@@ -123,7 +156,12 @@ class FlashMessageService implements FlashMessageServiceInterface
      */
     public function totalMessageCount()
     {
-        return $this->getHandler()->TotalMessageCount();
+        $handler = $this->getHandler();
+        if (null === $handler) {
+            return 0;
+        }
+
+        return $handler->TotalMessageCount();
     }
 
     /**
@@ -131,7 +169,12 @@ class FlashMessageService implements FlashMessageServiceInterface
      */
     public function injectMessageIntoString($sText)
     {
-        return $this->getHandler()->InjectMessageIntoString($sText);
+        $handler = $this->getHandler();
+        if (null === $handler) {
+            return $sText;
+        }
+
+        return $handler->InjectMessageIntoString($sText);
     }
 
     /**
@@ -139,7 +182,12 @@ class FlashMessageService implements FlashMessageServiceInterface
      */
     public function getConsumerListWithMessages()
     {
-        return $this->getHandler()->GetConsumerListWithMessages();
+        $handler = $this->getHandler();
+        if (null === $handler) {
+            return [];
+        }
+
+        return $handler->GetConsumerListWithMessages();
     }
 
     /**
@@ -147,7 +195,12 @@ class FlashMessageService implements FlashMessageServiceInterface
      */
     public function getClassesForConsumer($sConsumerName, $sDivider = ' ')
     {
-        return $this->getHandler()->GetClassesForConsumer($sConsumerName, $sDivider);
+        $handler = $this->getHandler();
+        if (null === $handler) {
+            return '';
+        }
+
+        return $handler->GetClassesForConsumer($sConsumerName, $sDivider);
     }
 
     /**
@@ -155,6 +208,11 @@ class FlashMessageService implements FlashMessageServiceInterface
      */
     public function addBackendToasterMessage($id, $type = 'ERROR', array $parameters = array(), $domain = TranslationConstants::DOMAIN_BACKEND)
     {
-        $this->getHandler()->addBackendToasterMessage($id, $type, $parameters, $domain);
+        $handler = $this->getHandler();
+        if (null === $handler) {
+            return;
+        }
+
+        $handler->addBackendToasterMessage($id, $type, $parameters, $domain);
     }
 }
