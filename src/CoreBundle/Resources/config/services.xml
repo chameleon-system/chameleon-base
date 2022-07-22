@@ -406,13 +406,6 @@
             <argument type="service" id="request_stack" />
         </service>
 
-        <service id="chameleon_system_core.flash_messages_silent"
-                 class="ChameleonSystem\CoreBundle\Service\FlashMessageSilentService"
-                 public="true"
-                decorates="chameleon_system_core.flash_messages">
-            <argument type="service" id="chameleon_system_core.flash_messages_silent.inner" />
-        </service>
-
         <service id="chameleon_system_core.command.update.run" class="ChameleonSystem\CoreBundle\Command\RunUpdateCommand">
             <argument type="service" id="chameleon_system_cms_cache.cache" />
             <argument type="service" id="chameleon_system_autoclasses.cache_warmer" />
