@@ -697,6 +697,9 @@ class TModelBase
             $sViewName = $this->aModuleConfig['view'];
             $viewMapperConfig = $oModule->getViewMapperConfig();
             $mappers = $viewMapperConfig->getMappersForConfig($sViewName);
+            if (null === $mappers) {
+                throw new MapperException(sprintf('No mappers found/config not found for %s for view %s', $this->aModuleConfig['model'], $sViewName));
+            }
             foreach ($mappers as $sMapperName) {
                 $oRenderer->addMapperFromIdentifier(
                     $sMapperName,
