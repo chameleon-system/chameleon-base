@@ -183,6 +183,9 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         return $this->isSessionStarting;
     }
 
+    /**
+     * @return string
+     */
     private function getCookieNameSuffix()
     {
         if (!CHAMELEON_EXTRANET_USER_IS_PORTAL_DEPENDANT) {
