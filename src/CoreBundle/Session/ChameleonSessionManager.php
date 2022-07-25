@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Session;
 
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 use PDO;
@@ -63,17 +64,19 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
      * @var bool
      */
     private $isSessionStarting = false;
+    private PortalDomainServiceInterface $portalDomainService;
 
     /**
-     * @param RequestStack             $requestStack
-     * @param Connection               $databaseConnection
-     * @param PDO                      $sessionPdo
-     * @param ContainerInterface       $container
-     * @param int                      $metaDataTimeout
-     * @param array                    $sessionOptions
-     * @param InputFilterUtilInterface $inputFilterUtil
+     * @param RequestStack                  $requestStack
+     * @param Connection                    $databaseConnection
+     * @param PDO                           $sessionPdo
+     * @param ContainerInterface            $container
+     * @param int                           $metaDataTimeout
+     * @param array                         $sessionOptions
+     * @param InputFilterUtilInterface      $inputFilterUtil
+     * @param PortalDomainServiceInterface  $portalDomainService
      */
-    public function __construct(RequestStack $requestStack, Connection $databaseConnection, PDO $sessionPdo, ContainerInterface $container, $metaDataTimeout, array $sessionOptions, InputFilterUtilInterface $inputFilterUtil)
+    public function __construct(RequestStack $requestStack, Connection $databaseConnection, PDO $sessionPdo, ContainerInterface $container, $metaDataTimeout, array $sessionOptions, InputFilterUtilInterface $inputFilterUtil, PortalDomainServiceInterface $portalDomainService)
     {
         $this->requestStack = $requestStack;
         $this->databaseConnection = $databaseConnection;
@@ -82,6 +85,7 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         $this->metaDataTimeout = $metaDataTimeout;
         $this->sessionOptions = $sessionOptions;
         $this->inputFilterUtil = $inputFilterUtil;
+        $this->portalDomainService = $portalDomainService;
     }
 
     /**
@@ -142,6 +146,9 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
 
         $session = new \TPKgCmsSession($sessionStorage);
 
+        $cookieName = "PHPSESSID" . $this->getCookieNameSuffix();
+        $session->setName($cookieName);
+
         if (false === DISABLE_SESSION_LOCKING) {
             $session->setSessionLockingEnabled(true);
         }
@@ -174,5 +181,19 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
     public function isSessionStarting()
     {
         return $this->isSessionStarting;
+    }
+
+    private function getCookieNameSuffix()
+    {
+        if (!CHAMELEON_EXTRANET_USER_IS_PORTAL_DEPENDANT) {
+            return '';
+        }
+
+        $portal = $this->portalDomainService->getActivePortal();
+        if (null === $portal) {
+            return '';
+        }
+
+        return $portal->sqlData['cmsident'] ?? '';
     }
 }
