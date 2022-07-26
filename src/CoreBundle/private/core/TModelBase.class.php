@@ -700,10 +700,7 @@ class TModelBase
             if (null === $sViewPathReference) {
                 throw new MapperException(sprintf('No config found for %s for view %s', $this->aModuleConfig['model'], $sViewName));
             }
-            $mappers = $viewMapperConfig->getMappersForConfig($sViewName);
-            if (null === $mappers) {
-                $mappers = []; // the actual error is checked above with the view path reference
-            }
+            $mappers = $viewMapperConfig->getMappersForConfig($sViewName) ?? [];
             foreach ($mappers as $sMapperName) {
                 $oRenderer->addMapperFromIdentifier(
                     $sMapperName,
