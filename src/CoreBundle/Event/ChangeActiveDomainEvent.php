@@ -17,16 +17,16 @@ use TCMSPortalDomain;
 class ChangeActiveDomainEvent extends Event
 {
     /**
-     * @var TCMSPortalDomain
+     * @var TCMSPortalDomain|null
      */
     private $oldActiveDomain;
     /**
-     * @var TCMSPortalDomain
+     * @var TCMSPortalDomain|null
      */
     private $newActiveDomain;
 
     /**
-     * @return TCMSPortalDomain
+     * @return TCMSPortalDomain|null
      */
     public function getNewActiveDomain()
     {
@@ -34,14 +34,14 @@ class ChangeActiveDomainEvent extends Event
     }
 
     /**
-     * @return TCMSPortalDomain
+     * @return TCMSPortalDomain|null
      */
     public function getOldActiveDomain()
     {
         return $this->oldActiveDomain;
     }
 
-    public function __construct(?TCMSPortalDomain $oldActiveDomain, TCMSPortalDomain $newActiveDomain)
+    public function __construct(?TCMSPortalDomain $oldActiveDomain = null, ?TCMSPortalDomain $newActiveDomain = null)
     {
         $this->oldActiveDomain = $oldActiveDomain;
         $this->newActiveDomain = $newActiveDomain;
