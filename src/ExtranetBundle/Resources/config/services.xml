@@ -32,12 +32,6 @@
             <argument type="service" id="request_stack" />
         </service>
 
-        <service id="chameleon_system_extranet.extranet_user_static_provider"
-                 class="ChameleonSystem\ExtranetBundle\Service\ExtranetUserStaticProvider" public="true"
-                 decorates="chameleon_system_extranet.extranet_user_provider">
-            <argument type="service" id="chameleon_system_extranet.extranet_user_static_provider.inner"/>
-        </service>
-
         <service id="chameleon_system_extranet.extranet_config" class="ChameleonSystem\ExtranetBundle\Service\ExtranetConfiguration" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
         </service>

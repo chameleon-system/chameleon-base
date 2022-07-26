@@ -26,6 +26,8 @@ interface ExtranetUserProviderInterface
      * available.
      *
      * @return TdbDataExtranetUser|null
+     *
+     * @deprecated null is now never returned (always an empty user then) and that option will be removed from the interface in future versions
      */
     public function getActiveUser();
 
