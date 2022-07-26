@@ -57,7 +57,7 @@ class SQLParenthesesParser
      * parses the query string and returns multidimensional array
      * of all query parts split by brackets.
      *
-     * @param $sString
+     * @param string $sString
      *
      * @return array
      */
@@ -112,7 +112,7 @@ class SQLParenthesesParser
     /**
      * returns array of all query string parts not in brackets.
      *
-     * @param $sString
+     * @param string $sString
      *
      * @return array
      */

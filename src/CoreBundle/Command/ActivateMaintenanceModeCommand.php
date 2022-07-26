@@ -32,7 +32,9 @@ class ActivateMaintenanceModeCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function configure()
     {

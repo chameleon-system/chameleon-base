@@ -18,6 +18,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class ChameleonSystemDebugExtension extends Extension
 {
+    /**
+     * @return void
+     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $config = $this->processConfiguration(new Configuration(), $configs);

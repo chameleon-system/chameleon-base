@@ -136,6 +136,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
 
     /**
      * reset the pageAccessCache - needs to be called anytime the users access level changes (login/logout).
+     *
+     * @return void
      */
     protected function resetPageAccessCache()
     {
@@ -147,6 +149,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @param string                    $sObserverName
      * @param IDataExtranetUserObserver $oObserver
+     *
+     * @return void
      */
     public function ObserverRegister($sObserverName, &$oObserver)
     {
@@ -157,6 +161,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * remove an observer from the list.
      *
      * @param string $sObserverName
+     *
+     * @return void
      */
     public function ObserverUnregister($sObserverName)
     {
@@ -186,6 +192,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * be ovewritten and the user will NOT be marked as confirmed - even if $oExtranetConf->fieldUserMustConfirmRegistration = false.
      *
      * {@inheritdoc}
+     *
+     * @param bool $bForceUserConfirm
      */
     public function Save($bForceUserConfirm = false)
     {
@@ -454,6 +462,9 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         $this->sqlData['session_key'] = $dbKey;
         $this->sqlData['login_timestamp'] = $aKeyData['logintime'];
         $this->fieldSessionKey = $this->sqlData['session_key'];
+        /**
+         * @psalm-suppress InvalidPropertyAssignmentValue - Tdb type annotation is incorrect
+         */
         $this->fieldLoginTimestamp = $this->sqlData['login_timestamp'];
 
         return $this->ValidateSessionData();
@@ -531,6 +542,9 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         return $bIsValid;
     }
 
+    /**
+     * @return void
+     */
     protected function PostLoginHook()
     {
         $this->resetPageAccessCache();
@@ -558,6 +572,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
 
     /**
      * creates a new login history record with current timestamp and user ip for the logged in user.
+     *
+     * @return void
      */
     protected function CreateLoginHistoryEntry()
     {
@@ -617,6 +633,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
 
     /**
      * logs the user out.
+     *
+     * @return void
      */
     public function Logout()
     {
@@ -684,6 +702,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * $aProtectedVariables and moves them to the new session.
      *
      * @param array $aProtectedVariables
+     *
+     * @return void
      */
     protected function CleanUpSession($aProtectedVariables = array())
     {
@@ -721,6 +741,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     /**
      * @param string $sTicket
      * @param array  $aParameter
+     *
+     * @return void
      */
     public function UseTicket($sTicket, $aParameter = array())
     {
@@ -785,14 +807,17 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @param bool $bForceReload
      *
-     * @return array
+     * @return string[]
      */
     public function GetUserGroupIds($bForceReload = false)
     {
+        /** @var string[]|null $aActiveGroups */
         $aActiveGroups = $this->GetFromInternalCache('_user_group_ids');
+
         if (null === $aActiveGroups || $bForceReload) {
             $aActiveGroups = $this->GetMLTIdList('data_extranet_group');
             sort($aActiveGroups);
+
             $this->SetInternalCache('_user_group_ids', $aActiveGroups);
         }
 
@@ -951,6 +976,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     /**
      * @param string $sSessionKey
      * @param array  $aUserData
+     *
+     * @return void
      */
     private function updateLoginTimeStamp($sSessionKey, $aUserData)
     {
@@ -1011,6 +1038,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * @param string $sSessionKey
      *
      * @return array
+     * @psalm-suppress FalsableReturnStatement
      */
     private function getUserDataFromSessionKey($sSessionKey)
     {
@@ -1158,7 +1186,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * @param bool $bReset        - set to true if you want to reload the info
      * @param bool $bGetFromInput - set to true if you want to fetch the data from the GET/POST
      *
-     * @return TdbDataExtranetUserAddress
+     * @return TdbDataExtranetUserAddress|null|false
      */
     public function GetShippingAddress($bReset = false, $bGetFromInput = false)
     {
@@ -1217,7 +1245,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @param bool $bReset
      *
-     * @return TdbDataExtranetUserAddress|null
+     * @return TdbDataExtranetUserAddress|null|false
      */
     public function GetBillingAddress($bReset = false)
     {
@@ -1261,7 +1289,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @param string $sAddressId
      *
-     * @return TdbDataExtranetUserAddress|null
+     * @return TdbDataExtranetUserAddress|null|false
      */
     public function SetAddressAsBillingAddress($sAddressId)
     {
@@ -1284,7 +1312,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @param string $sAddressId
      *
-     * @return TdbDataExtranetUserAddress|null
+     * @return TdbDataExtranetUserAddress|null|false
      */
     public function SetAddressAsShippingAddress($sAddressId)
     {
@@ -1308,6 +1336,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * @param array $aRow
      * @param bool  $bClearUndefinedFields - set to false if you want to keep data in the object not passed by aRow (or
      *                                     data that is in the object and marked as protected()
+     *
+     * @return void
      */
     public function LoadFromRowProtected($aRow, $bClearUndefinedFields = true)
     {
@@ -1477,6 +1507,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * set the users registration data to the data held in $oAddresse.
      *
      * @param TdbDataExtranetUserAddress $oAddress
+     *
+     * @return void
      */
     public function SetUserBaseDataUsingAddress(TdbDataExtranetUserAddress &$oAddress)
     {
@@ -1509,7 +1541,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @param bool $bUseExistingAddress - set to false if you want to create an address even if an address exists in the address list
      *
-     * @return TdbDataExtranetUserAddress|null
+     * @return TdbDataExtranetUserAddress|false|null
      */
     public function &CreateAddressBasedOnRegistrationData($bUseExistingAddress = true)
     {
@@ -1565,6 +1597,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * send a registration notification mail to the user.
      *
      * @param string $sMailProfileToSend - allows you to overwrite the standard mail profile
+     *
+     * @return void
      */
     public function SendRegistrationNotification($sMailProfileToSend = null)
     {
@@ -1627,7 +1661,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     /**
      * returns per default an instance of mail profile "registration".
      *
-     * @return TdbDataMailProfile
+     * @return TdbDataMailProfile|null
      */
     protected function GetRegistrationEmailProfile()
     {
@@ -1855,6 +1889,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
 
     /**
      * we use the post insert hook to set the default customer groups.
+     *
+     * @return void
      */
     protected function PostInsertHook()
     {
@@ -1970,6 +2006,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * logic moved to PostEmailChange()
      *
      * @param string $sOldEmail
+     *
+     * @return void
      */
     public function HandleEmailChangeOnUpdateUser($sOldEmail)
     {
@@ -1997,6 +2035,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @param string $sNewEmail
      * @param string $sOldEmail
+     *
+     * @return void
      */
     protected function PostEmailChange($sNewEmail, $sOldEmail)
     {
@@ -2054,7 +2094,9 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     }
 
     /**
-     * @return TdbDataExtranetUserProfile|bool
+     * @return TdbDataExtranetUserProfile|false
+     *
+     * @psalm-suppress UndefinedDocblockClass - Tdb is used dynamically here: If it exists then it is used, otherwise `false` is returned.
      */
     public function &GetFieldDataExtranetUserProfile()
     {
@@ -2088,6 +2130,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     /**
      * method should be called after a new user is registered. NOTE: the method must be
      * called by the controlling class!
+     *
+     * @return void
      */
     protected function PostRegistrationHook()
     {
@@ -2245,6 +2289,11 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             throw new PasswordGenerationFailedException($e->getMessage(), $e->getCode(), $e);
         }
         $this->AllowEditByAll(true);
+
+        /**
+         * `$bSuccess` is actually an id or false. But through the if-block it'll always be a boolean.
+         * @var bool $bSuccess
+         */
         $bSuccess = $this->SaveFieldsFast(array('password_change_key' => $this->getPasswordHashGenerator()->hash($sForgotPasswordKey), 'password_change_time_stamp' => date('Y-m-d H:i:s')));
         $this->AllowEditByAll(false);
         if ($bSuccess) {
@@ -2333,6 +2382,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * ATTENTION: This should only be used for simulation and does not work if user or address have an id.
      *
      * @param TdbDataExtranetUserAddress $oShippingAddress
+     *
+     * @return void
      */
     public function setFakedShippingAddressForUser($oShippingAddress)
     {
@@ -2342,7 +2393,9 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function sessionWakeupHook()
     {

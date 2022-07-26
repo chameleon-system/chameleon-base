@@ -121,7 +121,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {

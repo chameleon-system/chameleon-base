@@ -15,12 +15,21 @@ use ChameleonSystem\ViewRendererBundle\objects\ViewRendererEvent;
 
 class ViewRendererPostRenderListener
 {
+    /**
+     * @return void
+     */
     public function handlePostRender(ViewRendererEvent $evt)
     {
         $content = $this->addHTMLHintsToResponse($evt->getMappers(), $evt->getViewName(), $evt->getContent());
         $evt->setContent($content);
     }
 
+    /**
+     * @return string
+     *
+     * @param string $viewName
+     * @param string $content
+     */
     private function addHTMLHintsToResponse(array $mappersUsed, $viewName, $content)
     {
         return "\n\n<!-- START SNIPPET\n - snippet: {$viewName}\n - mappers: ".implode(', ', $mappersUsed)."\n-->\n\n"

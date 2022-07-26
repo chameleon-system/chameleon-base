@@ -39,6 +39,8 @@ class PagePath
 
     /**
      * @param string $path
+     *
+     * @return void
      */
     public function addPath($path)
     {

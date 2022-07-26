@@ -22,6 +22,8 @@ class TCMSTextFieldEndPoint
     /**
      * if the size difference between the thumbnail and the original image is smaller than 5 pixel
      * the extra link for the original image will not be rendered.
+     *
+     * @var int
      */
     protected $iThumbnailSizeThreshold = 5;
 
@@ -78,16 +80,24 @@ class TCMSTextFieldEndPoint
      */
     protected $aEnclosedMediaIDs = array();
 
-    /*
+    /**
      * if set to true, the replace functions will force full urls
+     *
+     * @var bool
      */
     protected $bForceFullURLs = false;
 
     /*
      * used to pass variables to the callback methods called by the regex processes
      */
+    /**
+     * @var array
+     */
     protected $aProcessStack = array();
 
+    /**
+     * @param string $content
+     */
     public function __construct($content = null)
     {
         $this->content = $content;
@@ -113,6 +123,8 @@ class TCMSTextFieldEndPoint
      *
      * @param int $width  - default 780
      * @param int $height - default 600
+     *
+     * @return void
      */
     public function SetMaxImageZoomDimensions($width = 780, $height = 600)
     {
@@ -230,6 +242,13 @@ class TCMSTextFieldEndPoint
         return $content;
     }
 
+    /**
+     * @param string $sContent
+     * @param array|null $aCustomVariables
+     * @param int $thumbnailWidth
+     *
+     * @return string
+     */
     protected function ReplaceCustomVariablesInString($sContent, $aCustomVariables, $thumbnailWidth)
     {
         if (is_array($aCustomVariables)) {
@@ -318,7 +337,7 @@ class TCMSTextFieldEndPoint
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string
      */
@@ -372,7 +391,9 @@ class TCMSTextFieldEndPoint
     /**
      * add cms class to set css for links that surround an <img /> tag.
      *
-     * @return
+     * @return null|string
+     *
+     * @param string $content
      */
     protected function _AddCMSClassToLinkedImages($content)
     {
@@ -440,7 +461,7 @@ class TCMSTextFieldEndPoint
     /**
      * Clears an thickbox a tag if its in a tag. then the outer at has higher priority.
      *
-     * @param  $aMatch
+     * @param array $aMatch
      *
      * @return string
      */
@@ -1074,6 +1095,8 @@ class TCMSTextFieldEndPoint
      * the extra link for the original image will not be rendered.
      *
      * @param int $iSize
+     *
+     * @return void
      */
     protected function SetThumbnailSizeThreshold($iSize)
     {

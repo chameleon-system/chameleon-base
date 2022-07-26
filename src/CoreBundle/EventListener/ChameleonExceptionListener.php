@@ -29,7 +29,10 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 class ChameleonExceptionListener extends ExceptionListener
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param string $message
+     * @return void
      */
     protected function logException(Exception $exception, $message)
     {
@@ -38,8 +41,9 @@ class ChameleonExceptionListener extends ExceptionListener
 
             return;
         }
+
         /**
-         * @var HttpExceptionInterface $exception
+         * @var HttpExceptionInterface&Exception $exception
          */
         if (Response::HTTP_NOT_FOUND !== $exception->getStatusCode()) {
             parent::logException($exception, $message);

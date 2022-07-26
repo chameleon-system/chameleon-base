@@ -11,13 +11,28 @@
 
 class TPkgCmsEvent implements IPkgCmsEvent
 {
+    /**
+     * @var null|string
+     */
     private $sContext = null;
+
+    /**
+     * @var null|string
+     */
     private $sName = null;
+
+    /**
+     * @var array<string, mixed>
+     */
     private $aData = array();
+
+    /**
+     * @var null|object
+     */
     private $oSubject = null;
 
     /**
-     * @return object
+     * @return null|object
      */
     public function GetSubject()
     {
@@ -36,23 +51,32 @@ class TPkgCmsEvent implements IPkgCmsEvent
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function GetContext()
     {
         return $this->sContext;
     }
 
+    /**
+     * @return null|string
+     */
     public function GetName()
     {
         return $this->sName;
     }
 
+    /**
+     * @return array
+     */
     public function GetData()
     {
         return $this->aData;
     }
 
     /**
-     * @param $sContext
+     * @param string $sContext
      *
      * @return $this
      */
@@ -64,7 +88,7 @@ class TPkgCmsEvent implements IPkgCmsEvent
     }
 
     /**
-     * @param $sName
+     * @param string $sName
      *
      * @return $this
      */
@@ -76,7 +100,7 @@ class TPkgCmsEvent implements IPkgCmsEvent
     }
 
     /**
-     * @param $aData
+     * @param array<string, mixed> $aData
      *
      * @return $this
      */
@@ -87,10 +111,19 @@ class TPkgCmsEvent implements IPkgCmsEvent
         return $this;
     }
 
+    /**
+     * @param string $sContext
+     * @param string $sName
+     * @param object $oSubject
+     * @param array<string, mixed> $aData
+     *
+     * @return static
+     */
     public static function &GetNewInstance($oSubject, $sContext, $sName, $aData = array())
     {
         $sCallingClass = get_called_class();
-        /** @var $oInstance TPkgCmsEvent */
+
+        /** @var static $oInstance */
         $oInstance = new $sCallingClass();
         $oInstance->SetSubject($oSubject);
         $oInstance->SetContext($sContext);

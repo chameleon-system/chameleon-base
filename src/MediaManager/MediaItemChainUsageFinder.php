@@ -23,6 +23,9 @@ class MediaItemChainUsageFinder
      */
     private $finders = array();
 
+    /**
+     * @return void
+     */
     public function addFinder(MediaItemUsageFinderInterface $mediaItemUsageFinder)
     {
         $this->finders[] = $mediaItemUsageFinder;

@@ -43,13 +43,15 @@ class RunUpdateCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function configure()
     {
         $this
             ->setDefinition(array())
-            ->setDescription('Runs Chameleon updates (EXPERIMENTAL!)')
+            ->setDescription('Runs Chameleon database updates')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command runs Chameleon updates
 EOF
@@ -79,9 +81,15 @@ EOF
                     $helper->render($result->getMessage());
                 }
                 if (count($result->getExceptions()) > 0) {
+                    /**
+                     * @psalm-suppress InvalidArgument - Passing an array to HtmlHelper::render() is valid but not annotated.
+                     */
                     $helper->render($result->getExceptions());
                 }
                 if (count($result->getInfoMessages()) > 0) {
+                    /**
+                     * @psalm-suppress InvalidArgument - Passing an array to HtmlHelper::render() is valid but not annotated.
+                     */
                     $helper->render($result->getInfoMessages());
                 }
                 $output->writeln('');
@@ -100,5 +108,7 @@ EOF
         $output->writeln('Starting cache clearing.');
         $this->cache->clearAll();
         $output->writeln('Finished cache clearing.');
+
+        return 0;
     }
 }

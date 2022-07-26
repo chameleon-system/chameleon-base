@@ -57,6 +57,9 @@ class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
         $this->requestStack = $requestStack;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
         parent::Accept($visitor, $cachingEnabled, $cacheTriggerManager);

@@ -14,8 +14,8 @@ namespace ChameleonSystem\CoreBundle\UpdateManager;
 interface UpdateFilterServiceInterface
 {
     /**
-     * @param $type
-     * @param $folderName - path relative to the update type root folder (for a package that would have the form /packagename/packagename-updates)
+     * @param string $type
+     * @param string $folderName - path relative to the update type root folder (for a package that would have the form /packagename/packagename-updates)
      *
      * @return bool
      */

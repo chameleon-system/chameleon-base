@@ -42,11 +42,13 @@ class TPkgCmsCaptcha_TextFieldJavascriptHidden extends TdbPkgCmsCaptcha
      * @param string $sIdentifier
      * @param int    $iCharacters will be ignored by this type of captcha
      *
-     * @return mixed
+     * @return string
      */
     protected function GenerateCode($sIdentifier, $iCharacters)
     {
+        /** @var array<string, string> $aCodeCache */
         static $aCodeCache = array(); // generate a code for an identifier only once within one session call
+
         if (!array_key_exists($sIdentifier, $aCodeCache)) {
             $sCode = TTools::GenerateNicePassword();
             $aCodeCache[$sIdentifier] = $sCode;

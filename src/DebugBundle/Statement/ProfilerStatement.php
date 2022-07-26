@@ -20,16 +20,24 @@ class ProfilerStatement extends PDOStatement
     /** @var PDOStatement $statement */
     private $statement;
     /**
-     * @var \ChameleonSystem\DebugBundle\Connection\ProfilerDatabaseConnection
+     * @var ProfilerDatabaseConnection
      */
     private $databaseConnection;
 
+    /**
+     * @param PDOStatement $statement
+     * @param ProfilerDatabaseConnection $databaseConnection
+     */
     public function __construct($statement, ProfilerDatabaseConnection $databaseConnection)
     {
         $this->statement = $statement;
         $this->databaseConnection = $databaseConnection;
     }
 
+    /**
+     * @param array|null $input_parameters
+     * @return bool
+     */
     public function execute($input_parameters = null)
     {
         $startTime = microtime(true);
@@ -39,6 +47,12 @@ class ProfilerStatement extends PDOStatement
         return $result;
     }
 
+    /**
+     * @param int $fetch_style
+     * @param int $cursor_orientation
+     * @param int $cursor_offset
+     * @return mixed
+     */
     public function fetch($fetch_style = null, $cursor_orientation = PDO::FETCH_ORI_NEXT, $cursor_offset = 0)
     {
         $startTime = microtime(true);
@@ -48,6 +62,14 @@ class ProfilerStatement extends PDOStatement
         return $result;
     }
 
+    /**
+     * @param int|string $parameter
+     * @param mixed $variable
+     * @param int $data_type
+     * @param int $length
+     * @param mixed $driver_options
+     * @return bool
+     */
     public function bindParam(
         $parameter,
         &$variable,
@@ -68,6 +90,14 @@ class ProfilerStatement extends PDOStatement
         return $result;
     }
 
+    /**
+     * @param string|int $column
+     * @param mixed $param
+     * @param int $type
+     * @param int $maxlen
+     * @param mixed $driverdata
+     * @return bool
+     */
     public function bindColumn($column, &$param, $type = null, $maxlen = null, $driverdata = null)
     {
         $startTime = microtime(true);
@@ -77,6 +107,12 @@ class ProfilerStatement extends PDOStatement
         return $result;
     }
 
+    /**
+     * @param int|string $parameter
+     * @param mixed $value
+     * @param int $data_type
+     * @return bool
+     */
     public function bindValue($parameter, $value, $data_type = PDO::PARAM_STR)
     {
         $startTime = microtime(true);
@@ -95,6 +131,10 @@ class ProfilerStatement extends PDOStatement
         return $result;
     }
 
+    /**
+     * @param int $column_number
+     * @return null|scalar
+     */
     public function fetchColumn($column_number = 0)
     {
         $startTime = microtime(true);
@@ -104,15 +144,27 @@ class ProfilerStatement extends PDOStatement
         return $result;
     }
 
-    public function fetchAll($fetch_style = null, $fetch_argument = null, $ctor_args = null)
+    /**
+     * @psalm-suppress MethodSignatureMismatch - This method extends {@see PDOStatementImplementations} which differs depending on
+     *     the PHP version: PDOStatementImplementations::fetchAll has different signatures in 7.4 to 8.0. For this reason there is
+     *     no definitive declaration to be compatible with both. Since we are only passing down the arguments, passing all of them
+     *     down is a compromise in this case.
+     * @FIXME Use correct method signature once PHP7.4 support is being dropped.
+     */
+    public function fetchAll(...$args)
     {
         $startTime = microtime(true);
-        $result = $this->statement->fetchAll($fetch_style, $fetch_argument, $ctor_args);
+        $result = $this->statement->fetchAll(...$args);
         $this->databaseConnection->addToQueryTimer(microtime(true) - $startTime);
 
         return $result;
     }
 
+    /**
+     * @param string|null $class_name
+     * @param array|null $ctor_args
+     * @return object|false
+     */
     public function fetchObject($class_name = null, $ctor_args = null)
     {
         $startTime = microtime(true);
@@ -140,6 +192,11 @@ class ProfilerStatement extends PDOStatement
         return $result;
     }
 
+    /**
+     * @param int $attribute
+     * @param mixed $value
+     * @return bool
+     */
     public function setAttribute($attribute, $value)
     {
         $startTime = microtime(true);
@@ -149,6 +206,10 @@ class ProfilerStatement extends PDOStatement
         return $result;
     }
 
+    /**
+     * @param int $attribute
+     * @return mixed
+     */
     public function getAttribute($attribute)
     {
         $startTime = microtime(true);
@@ -167,6 +228,10 @@ class ProfilerStatement extends PDOStatement
         return $result;
     }
 
+    /**
+     * @param int $column
+     * @return array|false
+     */
     public function getColumnMeta($column)
     {
         $startTime = microtime(true);
@@ -194,6 +259,10 @@ class ProfilerStatement extends PDOStatement
         return $result;
     }
 
+    /**
+     * @psalm-suppress AssignmentToVoid - Psalm thinks that `debugDumpParams` is a void function
+     * @psalm-suppress InvalidReturnStatement - Psalm thinks that `debugDumpParams` is a void function
+     */
     public function debugDumpParams()
     {
         $startTime = microtime(true);

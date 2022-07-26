@@ -11,18 +11,55 @@
 
 abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
 {
+    /**
+     * @var array<string, string>
+     */
     private $aSubstitutes = array();
+
+    /**
+     * @var bool
+     */
     private $bCapturing = false;
+
+    /**
+     * @var null|string
+     */
     private $sCapturingVar = null;
+
     /**
      * @var IResourceHandler
      */
     private $oResourceHandler;
+
+    /**
+     * @var string|null
+     */
     private $sSource = null;
+
+    /**
+     * @var string|null
+     */
     private $sFile = null;
+
+    /**
+     * @var TModelBase|null
+     */
     private $oSourceModule = null;
+
+    /**
+     * @var int
+     */
     private $sourceType = IPkgSnippetRenderer::SOURCE_TYPE_STRING;
 
+    /**
+     * @param string|TModelBase $sSource
+     * @param int $iSourceType
+     *
+     * @psalm-param IPkgSnippetRenderer::SOURCE_TYPE_* $sourceType
+     * @psalm-param ($iSourceType is IPkgSnippetRenderer::SOURCE_TYPE_CMSMODULE ? TModelBase : string) $sSource
+     *
+     * @return void
+     */
     public function InitializeSource($sSource, $iSourceType = IPkgSnippetRenderer::SOURCE_TYPE_STRING)
     {
         $this->sourceType = $iSourceType;
@@ -52,13 +89,18 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
      * Set the snippet source.
      * It is possible to override the initially given source this way afterwards.
      *
-     * @param $sSource - the snippet source
+     * @param string $sSource - the snippet source
+     *
+     * @return void
      */
     public function setSource($sSource)
     {
         $this->sSource = $sSource;
     }
 
+    /**
+     * @return string|null
+     */
     protected function getSource()
     {
         return $this->sSource;
@@ -68,23 +110,37 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
      * Set the path to the snippet code.
      * It is possible to override the initially given source this way afterwards.
      *
-     * @param $sPath - the path to the snippet code
+     * @param string $sPath- the path to the snippet code
+     * @param TModelBase|string $sPath
+     *
+     * @return void
      */
     public function setFilename($sPath)
     {
         $this->sFile = $sPath;
     }
 
+    /**
+     * @return string|null
+     */
     protected function getFilename()
     {
         return $this->sFile;
     }
 
+    /**
+     * @return void
+     *
+     * @param TModelBase $oModuleInstance
+     */
     public function setSourceModule($oModuleInstance)
     {
         $this->oSourceModule = $oModuleInstance;
     }
 
+    /**
+     * @return TModelBase|null
+     */
     public function getSourceModule()
     {
         return $this->oSourceModule;
@@ -105,9 +161,11 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
      * The method will throw a <code>badMethodCallException</code> if it is called while another
      * similar call is already active,
      *
-     * @param $sName - the variable/block name
+     * @param string $sName - the variable/block name
      *
      * @throws BadMethodCallException
+     *
+     * @return void
      */
     public function setCapturedVarStart($sName)
     {
@@ -125,6 +183,8 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
      * The method will throw a <code>badMethodCallException</code> if it is called while no capturing session is active.
      *
      * @throws BadMethodCallException
+     *
+     * @return void
      */
     public function setCapturedVarStop()
     {
@@ -133,6 +193,9 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
         }
         $sResult = ob_get_clean();
         $this->bCapturing = false;
+        /**
+         * @psalm-suppress InvalidPropertyAssignmentValue
+         */
         $this->aSubstitutes[$this->sCapturingVar] = $sResult;
         $this->sCapturingVar = null;
     }
@@ -140,14 +203,21 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
     /**
      * Set a variable/block to be substituted in the snippet.
      *
-     * @param $sName - variable/block name
-     * @param $sValue - the string to use in place of the variable/block
+     * @param string $sValue - the string to use in place of the variable/block
+     * @param string $sName - variable/block name
+     *
+     * @return void
      */
     public function setVar($sName, $sValue)
     {
         $this->aSubstitutes[$sName] = $sValue;
     }
 
+    /**
+     * @return string[]
+     *
+     * @psalm-return array<string, string>
+     */
     protected function getVars()
     {
         return $this->aSubstitutes;
@@ -155,6 +225,8 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
 
     /**
      * @param IResourceHandler $oResourceHandler
+     *
+     * @return void
      */
     public function setResourceHandler(IResourceHandler $oResourceHandler)
     {
@@ -163,6 +235,8 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
 
     /**
      * clears the objects state.
+     *
+     * @return void
      */
     public function clear()
     {

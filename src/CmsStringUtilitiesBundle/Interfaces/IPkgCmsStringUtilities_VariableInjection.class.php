@@ -14,8 +14,10 @@ interface IPkgCmsStringUtilities_VariableInjection
     /**
      * @abstract
      *
-     * @param string $sText
-     * @param array  $aVariables
+     * @param string $sString
+     * @param array $aCustomVariables
+     * @param false $bPassVarsThroughOutHTML
+     * @param bool|int $iWidth - max image width, default = false, used in pkgCmsTextBlock package
      *
      * @return string
      */

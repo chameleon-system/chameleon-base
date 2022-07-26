@@ -36,7 +36,7 @@ class TPkgExternalTracker extends TPkgExternalTrackerAutoParent
     /**
      * @param TPkgExternalTrackerState $oState
      *
-     * @return array
+     * @return string[]
      */
     public function GetHTMLHeadIncludes(TPkgExternalTrackerState $oState)
     {
@@ -46,7 +46,7 @@ class TPkgExternalTracker extends TPkgExternalTrackerAutoParent
     /**
      * @param TPkgExternalTrackerState $oState
      *
-     * @return array
+     * @return string[]
      */
     public function GetPostBodyOpeningCode(TPkgExternalTrackerState $oState)
     {
@@ -56,7 +56,7 @@ class TPkgExternalTracker extends TPkgExternalTrackerAutoParent
     /**
      * @param TPkgExternalTrackerState $oState
      *
-     * @return array
+     * @return string[]
      */
     public function GetPreBodyClosingCode(TPkgExternalTrackerState $oState)
     {
@@ -74,6 +74,8 @@ class TPkgExternalTracker extends TPkgExternalTrackerAutoParent
     /**
      * this method is called after successful record loading
      * set demo-code if tracker is in demo mode.
+     *
+     * @return void
      */
     protected function PostLoadHook()
     {

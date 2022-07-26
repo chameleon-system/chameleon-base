@@ -16,6 +16,9 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 
 class CategoryTriggerCmsObserverListener
 {
+    /**
+     * @return void
+     */
     public function onArticleListResultGenerated(ArticleListFilterExecutedEvent $event)
     {
         if (false === $this->isCategoryEvent($event)) {
@@ -32,6 +35,9 @@ class CategoryTriggerCmsObserverListener
         );
     }
 
+    /**
+     * @return bool
+     */
     private function isCategoryEvent(ArticleListFilterExecutedEvent $event)
     {
         $categoryFilterClasses = array('TShopModuleArticlelistFilterAllArticlesOfActiveCategoryTree',
@@ -46,16 +52,26 @@ class CategoryTriggerCmsObserverListener
         return false;
     }
 
+    /**
+     * @return \TdbShopArticle[]
+     */
     private function getResultItems(ArticleListFilterExecutedEvent $event)
     {
         return $event->getResultData()->asArray();
     }
 
+    /**
+     * @param ArticleListFilterExecutedEvent $event
+     * @return int
+     */
     private function getNumberOfResults(ArticleListFilterExecutedEvent $event)
     {
         return $event->getResultData()->getTotalNumberOfResults();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getSearchParameters(ArticleListFilterExecutedEvent $event)
     {
         $stateQuery = $event->getState()->getState(StateInterface::QUERY, array());

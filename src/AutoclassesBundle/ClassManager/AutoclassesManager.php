@@ -92,6 +92,8 @@ class AutoclassesManager implements AutoclassesManagerInterface
 
     /**
      * @param string $className
+     *
+     * @return void
      */
     private function pushToCallStack($className)
     {

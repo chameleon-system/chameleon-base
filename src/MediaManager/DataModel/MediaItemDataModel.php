@@ -104,6 +104,8 @@ class MediaItemDataModel
 
     /**
      * @param string|null $name
+     *
+     * @return void
      */
     public function setName($name)
     {
@@ -120,6 +122,8 @@ class MediaItemDataModel
 
     /**
      * @param string[] $tags
+     *
+     * @return void
      */
     public function setTags($tags)
     {
@@ -136,6 +140,8 @@ class MediaItemDataModel
 
     /**
      * @param string|null $type
+     *
+     * @return void
      */
     public function setType($type)
     {
@@ -152,6 +158,8 @@ class MediaItemDataModel
 
     /**
      * @param int|null $width
+     *
+     * @return void
      */
     public function setWidth($width)
     {
@@ -168,6 +176,8 @@ class MediaItemDataModel
 
     /**
      * @param int|null $height
+     *
+     * @return void
      */
     public function setHeight($height)
     {
@@ -184,6 +194,8 @@ class MediaItemDataModel
 
     /**
      * @param string|null $altTag
+     *
+     * @return void
      */
     public function setAltTag($altTag)
     {
@@ -200,6 +212,8 @@ class MediaItemDataModel
 
     /**
      * @param \DateTime|null $dateChanged
+     *
+     * @return void
      */
     public function setDateChanged($dateChanged)
     {
@@ -216,6 +230,8 @@ class MediaItemDataModel
 
     /**
      * @param string $systemName
+     *
+     * @return void
      */
     public function setSystemName($systemName)
     {

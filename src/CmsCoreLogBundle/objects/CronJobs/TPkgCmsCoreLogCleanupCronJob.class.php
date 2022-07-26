@@ -27,6 +27,9 @@ if (!defined('PKG_CMS_CORE_LOG_DEFAULT_MAX_AGE_IN_SECONDS_LEVEL_BELOW_WARNING'))
  */
 class TPkgCmsCoreLogCleanupCronJob extends TdbCmsCronjobs
 {
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         parent::_ExecuteCron();
@@ -40,6 +43,13 @@ class TPkgCmsCoreLogCleanupCronJob extends TdbCmsCronjobs
         $this->cleanOtherChannels($aChannelList, PKG_CMS_CORE_LOG_DEFAULT_MAX_AGE_IN_SECONDS, PKG_CMS_CORE_LOG_DEFAULT_MAX_AGE_IN_SECONDS_LEVEL_BELOW_WARNING);
     }
 
+    /**
+     * @param string $channelName
+     * @param string $iMaxAgeInSeconds
+     * @param int $iMaxAgeInSecondsForLevelBelowNotice
+     *
+     * @return void
+     */
     private function cleanChannel($channelName, $iMaxAgeInSeconds, $iMaxAgeInSecondsForLevelBelowNotice)
     {
         $iMaxAgeInSeconds = intval($iMaxAgeInSeconds);
@@ -59,6 +69,13 @@ class TPkgCmsCoreLogCleanupCronJob extends TdbCmsCronjobs
         MySqlLegacySupport::getInstance()->query($query);
     }
 
+    /**
+     * @param string[] $aExcludeList
+     * @param int $iMaxAgeInSeconds
+     * @param int $iMaxAgeInSecondsForLevelBelowNotice
+     *
+     * @return void
+     */
     private function cleanOtherChannels($aExcludeList, $iMaxAgeInSeconds, $iMaxAgeInSecondsForLevelBelowNotice)
     {
         $iMaxAgeInSeconds = intval($iMaxAgeInSeconds);

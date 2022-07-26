@@ -22,6 +22,9 @@ class MediaItemUsageChainDeleteService
      */
     private $mediaItemDeleteServices = array();
 
+    /**
+     * @return void
+     */
     public function addUsageDeleteService(MediaItemUsageDeleteServiceInterface $mediaItemDeleteService)
     {
         $this->mediaItemDeleteServices[] = $mediaItemDeleteService;
@@ -31,6 +34,8 @@ class MediaItemUsageChainDeleteService
      * @param MediaItemUsageDataModel[] $usages
      *
      * @throws UsageDeleteException
+     *
+     * @return void
      */
     public function deleteUsages(array $usages)
     {
@@ -43,6 +48,8 @@ class MediaItemUsageChainDeleteService
      * @param MediaItemUsageDataModel $usage
      *
      * @throws UsageDeleteException
+     *
+     * @return void
      */
     public function deleteUsage(MediaItemUsageDataModel $usage)
     {

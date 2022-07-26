@@ -12,7 +12,7 @@
 class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends AbstractViewMapper
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
     {
@@ -24,7 +24,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends Abstrac
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
@@ -41,6 +41,8 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends Abstrac
 
     /**
      * @param IMapperVisitorRestricted $oVisitor
+     *
+     * @return void
      */
     protected function mapFormFields(IMapperVisitorRestricted &$oVisitor)
     {
@@ -62,7 +64,10 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends Abstrac
     }
 
     /**
+     * @param TdbPkgNewsletterGroupList $oSignedInNewsletterList
      * @param IMapperVisitorRestricted $oVisitor
+     *
+     * @return void
      */
     protected function mapAvailableGroupList($oSignedInNewsletterList, IMapperVisitorRestricted &$oVisitor)
     {

@@ -10,7 +10,9 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 class ChameleonSystemCmsCoreLogExtension extends Extension
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function load(array $configs, ContainerBuilder $container)
     {

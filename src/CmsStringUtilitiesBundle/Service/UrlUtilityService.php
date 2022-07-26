@@ -15,6 +15,9 @@ use ChameleonSystem\CmsStringUtilitiesBundle\Interfaces\UrlUtilityServiceInterfa
 
 class UrlUtilityService implements UrlUtilityServiceInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function addParameterToUrl($url, array $parameter)
     {
         $urlParts = parse_url($url);
@@ -27,6 +30,9 @@ class UrlUtilityService implements UrlUtilityServiceInterface
         return $this->httpBuildUr($urlParts);
     }
 
+    /**
+     * @return string
+     */
     private function httpBuildUr(array $urlParts)
     {
         $scheme = isset($urlParts['scheme']) ? $urlParts['scheme'].'://' : '';

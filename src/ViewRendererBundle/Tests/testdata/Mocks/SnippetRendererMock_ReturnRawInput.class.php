@@ -35,7 +35,7 @@ class SnippetRendererMock_ReturnRawInput extends PkgAbstractSnippetRenderer
      *
      * @static
      *
-     * @param $sSource - the snippet source (or path to a file containing it)
+     * @param string $sSource - the snippet source (or path to a file containing it)
      * @param int $iSourceType - set to one of self::SOURCE_TYPE_*
      *
      * @return TPkgSnippetRenderer

@@ -11,10 +11,25 @@
 
 class TPkgViewRendererSnippetGalleryItem
 {
+    /**
+     * @var string|null
+     */
     public $sType = null;
+    /**
+     * @var string|null
+     */
     public $sRelativePath = null;
+    /**
+     * @var string|null
+     */
     public $sSnippetName = null;
+    /**
+     * @var string|null
+     */
     public $sFullDummyDataPath = null;
+    /**
+     * @var string|null
+     */
     public $sDummyDataFileName = null;
     /**
      * @var TPkgViewRendererSnippetDummyData|null

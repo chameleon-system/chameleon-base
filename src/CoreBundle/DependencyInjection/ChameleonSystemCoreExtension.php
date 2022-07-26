@@ -15,14 +15,17 @@ use ChameleonSystem\CoreBundle\CoreEvents;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class ChameleonSystemCoreExtension extends Extension
+class ChameleonSystemCoreExtension extends Extension implements PrependExtensionInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function load(array $config, ContainerBuilder $container)
     {
@@ -198,6 +201,8 @@ class ChameleonSystemCoreExtension extends Extension
     /**
      * @param array            $googleApiConfig
      * @param ContainerBuilder $container
+     *
+     * @return void
      */
     private function addGoogleApiConfig(array $googleApiConfig, ContainerBuilder $container)
     {
@@ -210,6 +215,8 @@ class ChameleonSystemCoreExtension extends Extension
     /**
      * @param array            $moduleExecutionConfig
      * @param ContainerBuilder $container
+     *
+     * @return void
      */
     private function addModuleExecutionConfig(array $moduleExecutionConfig, ContainerBuilder $container)
     {
@@ -219,6 +226,8 @@ class ChameleonSystemCoreExtension extends Extension
 
     /**
      * @param ContainerBuilder $container
+     *
+     * @return void
      */
     private function addResources(ContainerBuilder $container)
     {
@@ -236,6 +245,9 @@ class ChameleonSystemCoreExtension extends Extension
         }
     }
 
+    /**
+     * @return void
+     */
     private function configureSession(ContainerBuilder $container)
     {
         if (false === SECURITY_REGENERATE_SESSION_ON_USER_CHANGE) {
@@ -253,6 +265,22 @@ class ChameleonSystemCoreExtension extends Extension
         $definition->addTag('kernel.event_listener', [
             'event' => CoreEvents::BACKEND_LOGOUT_SUCCESS,
             'method' => 'migrateSession',
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        // Fix for BC break in PDO. See https://www.php.net/manual/en/migration81.incompatible.php#migration81.incompatible.pdo.mysql
+        // Proposed solution: https://github.com/doctrine/dbal/issues/5228
+        $container->prependExtensionConfig('doctrine', [
+            'dbal' => [
+                'options' => [
+                    \PDO::ATTR_STRINGIFY_FETCHES => true,
+                ]
+            ]
         ]);
     }
 }

@@ -121,13 +121,14 @@ class PageService implements PageServiceInterface
      * @param array               $parameters
      * @param TdbCmsLanguage|null $language
      * @param bool                $forceSecure
-     * @param string|bool         $referenceType
+     * @param int                 $referenceType
+     * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
      *
      * @throws RouteNotFoundException
      */
-    private function getLinkToPageObject(TdbCmsTplPage $page, array $parameters = array(), TdbCmsLanguage $language = null, $forceSecure = false, $referenceType)
+    private function getLinkToPageObject(TdbCmsTplPage $page, array $parameters = array(), TdbCmsLanguage $language = null, $forceSecure = false, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $portal = $page->GetPortal();
         if ($page->GetMainTreeId() === $portal->fieldHomeNodeId) {
@@ -211,7 +212,8 @@ class PageService implements PageServiceInterface
      * @param TdbCmsPortal|null   $portal
      * @param TdbCmsLanguage|null $language
      * @param bool                $forceSecure
-     * @param string|bool         $referenceType
+     * @param int                 $referenceType
+     * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
      *

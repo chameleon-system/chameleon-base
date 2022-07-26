@@ -15,7 +15,7 @@ class TPkgCmsStringUtilities_HTML
      * this is a simple implementation of htmlentities, but with one additional option: you can provide a blacklist of characters, that won't be converted.
      * This is sometimes useful, for example when you want to exclude umlauts from the convertion.
      *
-     * @param $string
+     * @param string $string
      * @param array $blacklist
      *
      * @return string

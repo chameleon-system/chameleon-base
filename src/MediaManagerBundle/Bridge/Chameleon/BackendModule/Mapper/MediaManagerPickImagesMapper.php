@@ -20,7 +20,7 @@ use IMapperVisitorRestricted;
 class MediaManagerPickImagesMapper extends AbstractViewMapper
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
     {
@@ -28,7 +28,7 @@ class MediaManagerPickImagesMapper extends AbstractViewMapper
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function Accept(
         IMapperVisitorRestricted $oVisitor,

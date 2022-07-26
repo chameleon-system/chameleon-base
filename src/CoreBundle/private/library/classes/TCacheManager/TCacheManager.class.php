@@ -68,7 +68,7 @@ class TCacheManager implements ICacheManager
      *
      * @static
      *
-     * @param $bDisableCaching
+     * @param bool $bDisableCaching
      */
     public static function SetDisableCaching($bDisableCaching)
     {
@@ -207,7 +207,7 @@ class TCacheManager implements ICacheManager
      *
      * @static
      *
-     * @param $aParameters
+     * @param array $aParameters
      */
     public static function GetKeyStateless($aParameters)
     {

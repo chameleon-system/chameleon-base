@@ -389,9 +389,9 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
     /**
      * Returns cache trigger for the object.
      *
-     * @param $sTableName
+     * @param string $sTableName
      *
-     * @return array
+     * @return array{table: string, id: string}
      */
     public function GetCacheTrigger($sTableName)
     {

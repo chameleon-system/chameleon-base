@@ -93,9 +93,7 @@ $oFields->GoToStart();
   }
 ?>
     /**
-     *
-     *
-     * @return boolean
+     * @return string
      */
      protected function GetMltTableName($sFieldName,$sTableName,$bActiveRecordIsTarget=FALSE)
     {

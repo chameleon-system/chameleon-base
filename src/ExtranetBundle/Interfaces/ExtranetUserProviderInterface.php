@@ -33,6 +33,8 @@ interface ExtranetUserProviderInterface
      * Resets the active extranet user.
      *
      * After calling this method, calls to self::getActiveUser() will return an uninitialized TdbExtranetUser instance.
+     *
+     * @return void
      */
     public function reset();
 }

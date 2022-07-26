@@ -11,6 +11,12 @@
 
 class TPkgCmsCoreLogRecord extends TPkgCmsCoreLogRecordAutoParent
 {
+    /**
+     * @param int $iLevel
+     * @param mixed $aRow
+     * @param string $sField
+     * @return string|int
+     */
     public static function cmsListCallbackLevel($iLevel, $aRow, $sField = '')
     {
         $aMapping = array(

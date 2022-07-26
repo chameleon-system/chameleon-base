@@ -15,13 +15,8 @@
 class TCCustomNavigationOpenActive extends TCCustomNavigation
 {
     /**
+     * {@inheritDoc}
      * show only the children that are part of the current path...
-     *
-     * @param TCMSTreeNode $oNode - parent node
-     * @param $row - row within current submenu
-     * @param $level - level within navi of the parent node
-     *
-     * @return bool
      */
     protected function _ShowChildren(&$oNode, $row = null, $level = null)
     {

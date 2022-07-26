@@ -82,9 +82,9 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
      * @param TCMSImage $oImage
      * @param int       $position
      * @param bool      $bReadOnly - set to true to disable the action buttons
-     * @param $sFieldName
-     * @param $sTableId
-     * @param $sRecordId
+     * @param string $sFieldName
+     * @param string $sTableId
+     * @param string $sRecordId
      *
      * @return string
      */
@@ -129,7 +129,7 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
      * renders the button that opens the image chooser popup.
      *
      * @param int $position
-     * @param $sRecordId
+     * @param string $sRecordId
      *
      * @return string
      */

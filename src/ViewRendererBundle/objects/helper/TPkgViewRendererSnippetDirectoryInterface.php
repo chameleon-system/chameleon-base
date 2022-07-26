@@ -29,7 +29,7 @@ interface TPkgViewRendererSnippetDirectoryInterface
 
     /**
      * @param array|TPkgViewRendererSnippetGalleryItem $aDirTree
-     * @param $sActiveRelativePath
+     * @param string $sActiveRelativePath
      *
      * @return string[]
      */

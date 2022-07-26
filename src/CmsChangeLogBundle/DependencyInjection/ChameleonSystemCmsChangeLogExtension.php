@@ -10,7 +10,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 class ChameleonSystemCmsChangeLogExtension extends ConfigurableExtension
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {

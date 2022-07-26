@@ -18,6 +18,9 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
  */
 class DatabaseAccessLayerCmsTplPage extends AbstractDatabaseAccessLayer implements DatabaseAccessLayerCmsTplPageInterface
 {
+    /**
+     * @var bool
+     */
     private $isLoaded = false;
     /**
      * @var PortalDomainServiceInterface
@@ -62,6 +65,9 @@ class DatabaseAccessLayerCmsTplPage extends AbstractDatabaseAccessLayer implemen
         return false;
     }
 
+    /**
+     * @return void
+     */
     private function loadAllPages()
     {
         if (true === $this->isLoaded) {

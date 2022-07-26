@@ -542,8 +542,8 @@ class TCMSConfig extends TCMSRecord
      * check if $sUserIpAddress is expected ip
      * or if the expected ip is a CIDR then we call the function for CIDR check.
      *
-     * @param $sExpectedIp
-     * @param $sUserIpAddress
+     * @param string $sExpectedIp
+     * @param string $sUserIpAddress
      *
      * @return bool
      */

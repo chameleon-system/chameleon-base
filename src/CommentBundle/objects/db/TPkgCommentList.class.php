@@ -17,9 +17,6 @@ class TPkgCommentList extends TPkgCommentListAutoParent
     /**
      * return number of comments for an item.
      *
-     * @param string $sItemId
-     * @param string $sTypeId
-     *
      * @return int $count
      */
     public function GetNrOfComments()

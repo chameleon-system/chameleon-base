@@ -31,7 +31,9 @@ class SqlStrictModeCheck extends AbstractCheck
     private $mode;
 
     /**
-     * @param $mode
+     * @param int $level
+     * @param string $mode
+     * @psalm-param self::STRICT_* $mode
      */
     public function __construct($level, Connection $connection, $mode)
     {

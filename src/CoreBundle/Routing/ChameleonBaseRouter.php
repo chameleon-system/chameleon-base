@@ -34,10 +34,14 @@ abstract class ChameleonBaseRouter extends Router
 
     /**
      * {@inheritdoc}
+     * @param mixed $resource
      */
     public function __construct(ContainerInterface $container, $resource, array $options = array(), RequestContext $context = null)
     {
         parent::__construct($container, $resource, $options, $context);
+        /**
+         * @psalm-suppress InvalidPropertyAssignmentValue - We know that this is a string in this instance.
+         */
         $this->environment = $container->getParameter('kernel.environment');
 
         $options['matcher_cache_class'] = $this->getMatcherCacheClassName();
@@ -59,10 +63,12 @@ abstract class ChameleonBaseRouter extends Router
     abstract protected function getGeneratorCacheClassName();
 
     /**
-     * @param $newURL
+     * @param string $newURL
      * @param bool $permanently
      *
      * @deprecated use chameleon_system_core.redirect::redirect() instead
+     *
+     * @return never
      */
     public function redirect($newURL, $permanently = false)
     {
@@ -86,6 +92,9 @@ abstract class ChameleonBaseRouter extends Router
      */
     abstract protected function getRouterConfig();
 
+    /**
+     * @return void
+     */
     public function clearCache()
     {
         $currentDir = $this->getOption('cache_dir');
@@ -117,6 +126,8 @@ abstract class ChameleonBaseRouter extends Router
 
     /**
      * @param \ICmsCoreRedirect $redirect
+     *
+     * @return void
      */
     public function setRedirect(\ICmsCoreRedirect $redirect)
     {
@@ -125,6 +136,8 @@ abstract class ChameleonBaseRouter extends Router
 
     /**
      * @param UrlUtil $urlUtil
+     *
+     * @return void
      */
     public function setUrlUtil($urlUtil)
     {

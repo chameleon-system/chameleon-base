@@ -133,6 +133,7 @@ class TPkgViewRendererSnippetResourceCollectorEndPoint
 
     /**
      * @param array $aSnippetTree
+     * @param bool $bExcludeJS
      *
      * @return array
      */

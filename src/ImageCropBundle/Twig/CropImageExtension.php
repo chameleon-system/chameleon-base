@@ -116,7 +116,7 @@ class CropImageExtension extends AbstractExtension
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     private function getLanguageId()
     {

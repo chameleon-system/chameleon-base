@@ -30,6 +30,8 @@ class TPkgCsv2SqlManager
      * note: code was moved from TPkgCsv2Sql_CmsListManagerPkgCsv2sql::ProcessImport so we can call it via cron-job as well.
      *
      * @static
+     *
+     * @return array<string, string|array>
      */
     public static function ProcessAll()
     {
@@ -75,6 +77,8 @@ class TPkgCsv2SqlManager
      * set Log-File-name
      * for each handler, call Import()
      * if Log-File is not empty at end of Import, send E-Mail PKG-CSV-2-SQL-ERRORS-LOGGED and the Log-File as attachment
+     *
+     * @return array
      */
     public static function ImportAll()
     {
@@ -133,6 +137,8 @@ class TPkgCsv2SqlManager
      * Merge all logs to big one.
      *
      * @deprecated since 6.3.0 - not supported anymore
+     *
+     * @return void
      */
     protected static function MergeLogs()
     {
@@ -141,7 +147,9 @@ class TPkgCsv2SqlManager
     /**
      * Send import log (on error!).
      *
-     * @param $aErrors
+     * @param mixed[] $aErrors
+     *
+     * @return void
      */
     public static function SendErrorNotification($aErrors)
     {

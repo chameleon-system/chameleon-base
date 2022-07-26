@@ -102,6 +102,9 @@ class PortalDomainService implements PortalDomainServiceInterface
         return $this->domain;
     }
 
+    /**
+     * @return void
+     */
     private function initialize()
     {
         if ($this->isInitializing) {

@@ -50,6 +50,8 @@ class ChameleonBackendController extends ChameleonController
      *                        Notice that only the name should be passed. The location of
      *                        the definition file is defined in the config.inc.php file loaded
      *                        in TGlobal (PATH_PAGE_DEFINITIONS)
+     *
+     * @return void
      */
     public function HandleRequest($pagedef)
     {
@@ -66,6 +68,8 @@ class ChameleonBackendController extends ChameleonController
 
     /**
      * @param BackendAccessCheck $backendAccessCheck
+     *
+     * @return void
      */
     public function setBackendAccessCheck($backendAccessCheck)
     {

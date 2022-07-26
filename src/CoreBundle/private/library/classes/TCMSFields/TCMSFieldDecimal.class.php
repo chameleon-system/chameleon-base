@@ -105,7 +105,6 @@ class TCMSFieldDecimal extends TCMSField
     public function RenderFieldPostLoadString()
     {
         $oViewParser = new TViewParser();
-        /** @var $oViewParser TViewParser */
         $oViewParser->bShowTemplatePathAsHTMLHint = false;
         $aData = $this->GetFieldWriterData();
         $aData['numberOfDecimals'] = $this->_GetNumberOfDecimals();
@@ -119,7 +118,6 @@ class TCMSFieldDecimal extends TCMSField
         $sNormalfield = parent::RenderFieldPropertyString();
 
         $oViewParser = new TViewParser();
-        /** @var $oViewParser TViewParser */
         $oViewParser->bShowTemplatePathAsHTMLHint = false;
         $aData = $this->GetFieldWriterData();
         $aData['sFieldName'] = $aData['sFieldName'].'Formated';

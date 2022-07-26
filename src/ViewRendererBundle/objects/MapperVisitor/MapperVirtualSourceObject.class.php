@@ -11,25 +11,47 @@
 
 class MapperVirtualSourceObject
 {
+    /**
+     * @param string $name
+     * @param mixed[] $arguments
+     * @return $this
+     */
     public function __call($name, $arguments)
     {
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @param mixed[] $arguments
+     * @return MapperVirtualSourceObject
+     */
     public static function __callStatic($name, $arguments)
     {
         return new self();
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
     public function __set($name, $value)
     {
     }
 
+    /**
+     * @param string $name
+     * @return $this
+     */
     public function __get($name)
     {
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return '[null]';

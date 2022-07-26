@@ -104,6 +104,8 @@ abstract class AbstractImageFieldsUsageFinder implements MediaItemUsageFinderInt
      * ).
      *
      * @throws DBALException
+     *
+     * @return array
      */
     protected function getFields()
     {

@@ -27,22 +27,27 @@ class DataMappingService implements DataMappingServiceInterface
      * @var IViewMapper[]
      */
     private $mappers = array();
+
     /**
-     * @var array
+     * @var list<array<string, string>|null>
      */
     private $transformations = array();
+
     /**
-     * @var array
+     * @var list<string|null>
      */
     private $mapToArray = array();
+
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $sourceObjects = array();
+
     /**
      * @var MapperVisitor
      */
     private $mapperVisitor = null;
+
     /**
      * @var IMapperCacheTrigger
      */
@@ -130,11 +135,17 @@ class DataMappingService implements DataMappingServiceInterface
         return $this->createMapperResponse();
     }
 
+    /**
+     * @return void
+     */
     private function createCacheTriggerCollector()
     {
         $this->cacheTriggerCollector = $this->helperFactory->createCacheTriggerCollector();
     }
 
+    /**
+     * @return void
+     */
     private function createMapperVisitorWithSourceData()
     {
         $this->mapperVisitor = $this->helperFactory->createMapperVisitor($this->sourceObjects);
@@ -144,6 +155,7 @@ class DataMappingService implements DataMappingServiceInterface
     }
 
     /**
+     * @return void
      * @throws MapperException
      */
     private function executeMapperChain()
@@ -159,8 +171,10 @@ class DataMappingService implements DataMappingServiceInterface
 
     /**
      * @param IViewMapper $mapper
-     * @param array|null  $aMapperTransformations
-     * @param array|null  $aMapperMapToArrayTransformations
+     * @param array<string, string>|null  $aMapperTransformations
+     * @param string|null  $aMapperMapToArrayTransformations
+     *
+     * @return void
      *
      * @throws MapperException
      */
@@ -186,6 +200,8 @@ class DataMappingService implements DataMappingServiceInterface
 
     /**
      * @param IViewMapper $mapper
+     *
+     * @return void
      */
     private function applyMapperRequirementsToVisitor(IViewMapper $mapper)
     {
@@ -197,7 +213,7 @@ class DataMappingService implements DataMappingServiceInterface
     /**
      * @param int $mapperIndex
      *
-     * @return array
+     * @return array<string, string>|null
      */
     private function getMapperTransformations($mapperIndex)
     {
@@ -207,7 +223,7 @@ class DataMappingService implements DataMappingServiceInterface
     /**
      * @param int $mapperIndex
      *
-     * @return array
+     * @return string|null
      */
     private function getMapperMapToArrayTransformations($mapperIndex)
     {
@@ -233,7 +249,7 @@ class DataMappingService implements DataMappingServiceInterface
     }
 
     /**
-     * @return array
+     * @return class-string<IViewMapper>[]
      */
     public function getMapperNameList()
     {
@@ -247,7 +263,7 @@ class DataMappingService implements DataMappingServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getSourceData()
     {

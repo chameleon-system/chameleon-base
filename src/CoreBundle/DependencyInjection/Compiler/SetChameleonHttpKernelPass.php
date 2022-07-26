@@ -17,7 +17,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class SetChameleonHttpKernelPass implements CompilerPassInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     public function process(ContainerBuilder $container)
     {

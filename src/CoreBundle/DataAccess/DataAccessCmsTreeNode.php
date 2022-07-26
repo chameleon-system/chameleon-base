@@ -15,6 +15,9 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use Doctrine\DBAL\Connection;
 use TdbCmsTreeNode;
 
+/**
+ * @implements DataAccessInterface<TdbCmsTreeNode>
+ */
 class DataAccessCmsTreeNode implements DataAccessInterface
 {
     /**
@@ -38,8 +41,6 @@ class DataAccessCmsTreeNode implements DataAccessInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return TdbCmsTreeNode[]
      */
     public function loadAll($languageId = null)
     {

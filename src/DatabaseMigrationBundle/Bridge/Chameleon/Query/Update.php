@@ -16,7 +16,7 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 class Update extends AbstractQuery
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function assertPrerequisites(MigrationQueryData $migrationQueryData)
     {

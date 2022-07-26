@@ -53,6 +53,8 @@ class CheckPortalDomainListener
      * @throws PortalNotFoundException
      * @throws InvalidPortalDomainException
      * @throws LogicException
+     *
+     * @return void
      */
     public function onKernelRequest(RequestEvent $event)
     {
@@ -85,6 +87,8 @@ class CheckPortalDomainListener
      *
      * @throws PortalNotFoundException
      * @throws InvalidPortalDomainException
+     *
+     * @return void
      */
     private function redirectToPrimaryDomainIfRequired(RequestEvent $event, TdbCmsPortalDomains $activeDomain, $hostFromRequest)
     {

@@ -157,7 +157,12 @@ function CmsAjaxCallback_OpenLink(sResponse, statusText) {
 }
 function DisplayAjaxMessage(data, statusText) {
     CloseModalIFrameDialog();
-    toasterMessage(data, 'MESSAGE');
+
+    if (data.messageType) {
+        toasterMessage(data.message, data.messageType);
+    } else {
+        toasterMessage(data, 'MESSAGE');
+    }
 }
 
 function DisplayAjaxTextarea(data, statusText) {

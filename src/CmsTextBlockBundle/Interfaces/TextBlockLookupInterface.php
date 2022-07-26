@@ -19,7 +19,7 @@ interface TextBlockLookupInterface
      * @deprecated since version 7.0.13 use getRenderedText instead
      *
      * @param string $systemName
-     * @param $textContainerWidth
+     * @param int $textContainerWidth
      *
      * @return string
      */
@@ -45,7 +45,7 @@ interface TextBlockLookupInterface
      * @deprecated since version 7.0.13 use getRenderedTextFromTextBlock instead
      *
      * @param TdbPkgCmsTextBlock $textBlock
-     * @param $textContainerWidth
+     * @param int $textContainerWidth
      *
      * @return string
      */

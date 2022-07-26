@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<!--
+    Note about this configuration file:
+    This configuration is meant to be used while chameleon-base is installed in a fully
+    functional chameleon system since it requires autoclasses to do static analysis.
+-->
+
+<psalm
+    errorLevel="5"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    cacheDirectory="/tmp"
+    autoloader="../../autoload.php"
+>
+
+    <projectFiles>
+        <directory name="./src" />
+        <ignoreFiles>
+            <directory name="../../symfony" />
+            <directory name="src/**/views/" />
+            <directory name="src/**/Resources/BackendPageDefs" />
+            <directory name="src/**/Resources/views/objectviews" />
+            <directory name="src/**/private/" />
+            <directory name="src/**/installation" />
+            <directory name="src/**/install" />
+            <directory name="src/**/Tests" />
+            <directory name="src/**/objects/**/**/views" />
+            <directory name="src/**/objects/Tests" />
+            <directory name="src/**/Bridge/Chameleon/Migration" />
+            <file name="src/CoreBundle/Maintenance/Migrator62/autoloadTemplate.php" />
+        </ignoreFiles>
+    </projectFiles>
+
+    <extraFiles>
+        <directory name="../../../app/cache/autoclasses" />
+        <file name="../../../app/config/config.inc.php" />
+        <file name="src/CoreBundle/Resources/config/defaults.inc.php" />
+    </extraFiles>
+
+    <stubs>
+        <file preloadClasses="true" name="psalm-stubs/Container.stub" />
+        <file preloadClasses="true" name="psalm-stubs/TwigDeprecated.stub" />
+    </stubs>
+
+    <universalObjectCrates>
+        <!-- TCMSstdClass can have dynamic properties -->
+        <class name="TCMSstdClass"/>
+    </universalObjectCrates>
+
+    <plugins>
+        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
+            <containerXml>../../../var/cache/dev/appAppKernelDevDebugContainer.xml</containerXml>
+        </pluginClass>
+    </plugins>
+
+    <fileExtensions>
+        <extension name=".php" />
+        <extension name=".twig" checker="./vendor/psalm/plugin-symfony/src/Twig/TemplateFileAnalyzer.php"/>
+    </fileExtensions>
+
+    <issueHandlers>
+
+        <!-- Ignore undefined constants for now: psalm is not picking up the declarations in `*.inc.php` files? -->
+        <UndefinedConstant errorLevel="suppress" />
+
+        <!-- We switch param names from hungarian notation to regular quite often -->
+        <ParamNameMismatch errorLevel="suppress" />
+
+        <!-- Redundant type casts can help add more meaning to the code -->
+        <RedundantCastGivenDocblockType errorLevel="suppress" />
+
+        <UnusedPsalmSuppress errorLevel="error" />
+        <MissingReturnType errorLevel="error" />
+        <MissingParamType errorLevel="error" />
+        <MissingPropertyType errorLevel="error" />
+
+        <!-- TODO Not supress? -->
+        <MoreSpecificImplementedParamType errorLevel="suppress" />
+
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress">
+                <!-- Symfony references enum that only exists in later PHP versions -->
+                <referencedClass name="UnitEnum" />
+
+                <!-- Composer classes do not exist on the filesystem -->
+                <referencedClass name="Composer\Package\Package" />
+
+            </errorLevel>
+        </UndefinedDocblockClass>
+
+        <!-- Some Tdbs don't exist in demo shop -->
+        <UndefinedClass>
+            <errorLevel type="suppress">
+                <referencedClass name="TdbPkgComActivityFeedObject" />
+                <referencedClass name="TdbShopPrimaryNaviList" />
+                <referencedClass name="TdbShopArticlePreorder" />
+                <referencedClass name="TdbPkgNewsletterUnsubscribeCodeList" />
+
+
+                <!-- Composer classes do not exist on the filesystem -->
+                <referencedClass name="Composer\Script\Event" />
+            </errorLevel>
+        </UndefinedClass>
+
+        <!-- Function exists, but is defined in a way that is not analyzable -->
+        <UndefinedFunction>
+            <errorLevel type="suppress">
+                <referencedFunction name="twig_escape_filter" />
+            </errorLevel>
+        </UndefinedFunction>
+
+        <!--
+            Injections of the container into classes that existed previously but should not be added
+            to new code.
+        -->
+        <PluginIssue name="ContainerDependency" errorLevel="suppress">
+            <errorLevel type="suppress">
+                <file name="src/CmsRoutingBundle/src/esono/pkgCmsRouting/CmsRouteLoader.php" />
+                <file name="src/CoreBundle/Controller/ChameleonControllerInvokeListener.php" />
+                <file name="src/CoreBundle/Controller/ChameleonControllerResolver.php" />
+                <file name="src/CoreBundle/Controller/ChameleonFrontendController.php" />
+                <file name="src/CoreBundle/DataAccess/CmsPortalDomainsDataAccessCacheDecorator.php" />
+                <file name="src/CoreBundle/EventListener/RequestTypeListener.php" />
+                <file name="src/CoreBundle/Routing/ChameleonBaseRouter.php" />
+                <file name="src/CoreBundle/Service/Initializer/ActivePageServiceInitializer.php" />
+                <file name="src/CoreBundle/Service/Initializer/PortalDomainServiceInitializer.php" />
+                <file name="src/CoreBundle/Session/ChameleonSessionManager.php" />
+                <file name="src/CoreBundle/Util/PageServiceUtil.php" />
+                <file name="src/DatabaseMigrationBundle/Bridge/Chameleon/Recorder/MigrationRecorder.php" />
+                <file name="src/DatabaseMigrationBundle/Bridge/Chameleon/Recorder/QueryWriter.php" />
+                <file name="src/PkgCoreBundle/objects/redirect/cmsCoreRedirect.php" />
+            </errorLevel>
+        </PluginIssue>
+
+    </issueHandlers>
+</psalm>

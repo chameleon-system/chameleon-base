@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Chameleon System (https://www.chameleonsystem.com).
  *
@@ -13,11 +12,23 @@ namespace ChameleonSystem\CoreBundle\TableEditor\NestedSet;
 
 interface NodeInterface
 {
+    /**
+     * @return string
+     */
     public function getId();
 
+    /**
+     * @return null|string
+     */
     public function getParentId();
 
+    /**
+     * @return string
+     */
     public function getLeft();
 
+    /**
+     * @return string
+     */
     public function getRight();
 }

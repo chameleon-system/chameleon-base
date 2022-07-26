@@ -163,7 +163,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
      *
      * @return bool
      */
-    private function isChunkFile(array $contentRange = null, $tmpFilePath)
+    private function isChunkFile(?array $contentRange, $tmpFilePath)
     {
         if (null === $contentRange) {
             return false;
@@ -244,7 +244,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
     }
 
     /**
-     * @param $fieldName
+     * @param string $fieldName
      *
      * @throws UploaderPostDataException
      *

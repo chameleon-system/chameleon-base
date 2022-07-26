@@ -57,6 +57,13 @@ class TCMSTableEditorMenuItem
     public $sOnClick = null;
 
     /**
+     * The menu item should be a simple link with this value.
+     *
+     * @var null|string
+     */
+    public $href = null;
+
+    /**
      * one or more additional CSS style classes
      * (if you want to set the bootstrap button style, please set this via setButtonType().
      *
@@ -84,7 +91,7 @@ class TCMSTableEditorMenuItem
     /**
      * expects an already translated string.
      *
-     * @param $sTitle
+     * @param string $sTitle
      */
     public function setTitle($sTitle)
     {
@@ -180,17 +187,7 @@ class TCMSTableEditorMenuItem
     protected function renderSingleItem()
     {
         $oViewRenderer = new ViewRenderer();
-        $oViewRenderer->AddSourceObject('sTitle', $this->getTitle());
-        $oViewRenderer->AddSourceObject('sItemKey', $this->sItemKey);
-        $oViewRenderer->AddSourceObject('sCSSClass', $this->sCSSClass);
-        $oViewRenderer->AddSourceObject('sOnClick', $this->sOnClick);
-        $oViewRenderer->AddSourceObject('sButtonStyle', $this->getButtonStyle());
-
-        if ($this->isIconUrl($this->sIcon)) {
-            $oViewRenderer->AddSourceObject('sIconURL', $this->sIcon);
-        } else {
-            $oViewRenderer->AddSourceObject('sIcon', $this->sIcon);
-        }
+        $oViewRenderer->AddSourceObjectsFromArray($this->getViewVariables($this));
 
         return $oViewRenderer->Render('MTTableEditor/singleMenuButton.html.twig', null, false);
     }
@@ -203,16 +200,7 @@ class TCMSTableEditorMenuItem
     protected function renderItemWithSubMenu()
     {
         $oViewRenderer = new ViewRenderer();
-        $oViewRenderer->AddSourceObject('sTitle', $this->getTitle());
-        $oViewRenderer->AddSourceObject('sItemKey', $this->sItemKey);
-        $oViewRenderer->AddSourceObject('sCSSClass', $this->sCSSClass);
-        $oViewRenderer->AddSourceObject('sOnClick', $this->sOnClick);
-        if ($this->isIconUrl($this->sIcon)) {
-            $oViewRenderer->AddSourceObject('sIconURL', $this->sIcon);
-        } else {
-            $oViewRenderer->AddSourceObject('sIcon', $this->sIcon);
-        }
-        $oViewRenderer->AddSourceObject('sButtonStyle', $this->getButtonStyle());
+        $oViewRenderer->AddSourceObjectsFromArray($this->getViewVariables($this));
 
         $aSubItems = array();
 
@@ -220,21 +208,32 @@ class TCMSTableEditorMenuItem
          * @var $oSubItem TCMSTableEditorMenuItem
          */
         foreach ($this->aSubMenuItems as $oSubItem) {
-            $aSubItemData = array();
-            $aSubItemData['sTitle'] = $oSubItem->getTitle();
-            $aSubItemData['sItemKey'] = $oSubItem->sItemKey;
-            $aSubItemData['sCSSClass'] = $oSubItem->sCSSClass;
-            $aSubItemData['sOnClick'] = $oSubItem->sOnClick;
-            if ($this->isIconUrl($oSubItem->sIcon)) {
-                $aSubItemData['sIconURL'] = $oSubItem->sIcon;
-            } else {
-                $aSubItemData['sIcon'] = $oSubItem->sIcon;
-            }
-            $aSubItems[] = $aSubItemData;
+            $aSubItems[] = $this->getViewVariables($oSubItem);
         }
+        
         $oViewRenderer->AddSourceObject('aSubItems', $aSubItems);
 
         return $oViewRenderer->Render('MTTableEditor/menuButtonWithDropdown.html.twig', null, false);
+    }
+    
+    private function getViewVariables(TCMSTableEditorMenuItem $item): array
+    {
+        $viewVariables = [];
+        
+        $viewVariables['sTitle'] = $item->getTitle();
+        $viewVariables['sItemKey'] = $item->sItemKey;
+        $viewVariables['sCSSClass'] = $item->sCSSClass;
+        $viewVariables['href'] = $item->href;
+        $viewVariables['sOnClick'] = $item->sOnClick;
+        $viewVariables['sButtonStyle'] = $item->getButtonStyle();
+
+        if ($this->isIconUrl($item->sIcon)) {
+            $viewVariables['sIconURL'] = $item->sIcon;
+        } else {
+            $viewVariables['sIcon'] = $item->sIcon;
+        }
+
+        return $viewVariables;
     }
 
     private function isIconUrl($icon): bool
@@ -248,7 +247,7 @@ class TCMSTableEditorMenuItem
      *
      * @see http://getbootstrap.com/css/#buttons
      *
-     * @param $sButtonStyle
+     * @param string $sButtonStyle
      */
     public function setButtonStyle($sButtonStyle)
     {

@@ -36,6 +36,9 @@ class TemplateEngineAccessListener
         $this->requestInfoService = $requestInfoService;
     }
 
+    /**
+     * @return void
+     */
     public function onKernelRequest(RequestEvent $event)
     {
         if (!$event->isMasterRequest()) {

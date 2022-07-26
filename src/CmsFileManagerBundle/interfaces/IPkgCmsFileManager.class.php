@@ -17,7 +17,7 @@ interface IPkgCmsFileManager
      * @param int|null $chmod
      * @param bool     $remoteOnly @deprecated since 6.2.0 - cluster file handling is no longer available.
      *
-     * @return bool
+     * @return bool|null
      */
     public function put($sSource, $sTarget, $chmod = null, $remoteOnly = false);
 
@@ -25,7 +25,7 @@ interface IPkgCmsFileManager
      * @param string $source
      * @param string $target
      *
-     * @return bool
+     * @return bool|null
      */
     public function move($source, $target);
 
@@ -93,6 +93,8 @@ interface IPkgCmsFileManager
     /**
      * @param string $path
      * @param bool   $recursive
+     *
+     * @return void
      */
     public function deldir($path, $recursive = false);
 

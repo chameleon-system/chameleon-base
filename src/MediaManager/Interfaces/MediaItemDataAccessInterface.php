@@ -68,6 +68,8 @@ interface MediaItemDataAccessInterface
      *
      * @param string $id
      *
+     * @return void
+     *
      * @throws DataAccessException
      */
     public function deleteMediaItem($id);
@@ -91,6 +93,8 @@ interface MediaItemDataAccessInterface
      * @param string $mediaTreeNodeId
      * @param string $languageId
      *
+     * @return void
+     *
      * @throws DataAccessException
      */
     public function setMediaTreeNodeOfMediaItem($mediaItemId, $mediaTreeNodeId, $languageId);
@@ -101,6 +105,8 @@ interface MediaItemDataAccessInterface
      * @param string $mediaItemId
      * @param string $description
      * @param string $languageId
+     *
+     * @return void
      *
      * @throws DataAccessException
      */
@@ -113,6 +119,8 @@ interface MediaItemDataAccessInterface
      * @param array  $tagList
      * @param string $languageId
      *
+     * @return void
+     *
      * @throws DataAccessException
      */
     public function updateTags($mediaItemId, $tagList, $languageId);
@@ -123,6 +131,8 @@ interface MediaItemDataAccessInterface
      * @param string $mediaItemId
      * @param string $systemName
      * @param string $languageId
+     *
+     * @return void
      *
      * @throws DataAccessException
      */

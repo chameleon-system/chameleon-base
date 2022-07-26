@@ -13,9 +13,20 @@ namespace esono\pkgCmsRouting\exceptions;
 
 class RedirectRequiredException extends \Exception
 {
+    /**
+     * @var string
+     */
     private $url = null;
+
+    /**
+     * @var bool
+     */
     private $permanent = false;
 
+    /**
+     * @param string $url
+     * @param bool $permanent
+     */
     public function __construct($url, $permanent = false)
     {
         $this->url = $url;
@@ -23,6 +34,9 @@ class RedirectRequiredException extends \Exception
         parent::__construct('redirect required');
     }
 
+    /**
+     * @return string
+     */
     public function getUrl()
     {
         return $this->url;

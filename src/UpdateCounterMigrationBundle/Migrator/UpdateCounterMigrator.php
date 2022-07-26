@@ -45,6 +45,8 @@ class UpdateCounterMigrator
 
     /**
      * @throws CounterMigrationException
+     *
+     * @return void
      */
     public function migrate()
     {
@@ -65,6 +67,8 @@ class UpdateCounterMigrator
      * @param string               $newCounter                - database counter systemname
      *
      * @throws CounterMigrationException
+     *
+     * @return void
      */
     private function fillOldCounterWithNewData(array $fileSystemMigrationModels, $oldCounter, $newCounter)
     {

@@ -44,6 +44,8 @@ class TDataExtranetUserAddressList extends TDataExtranetUserAddressListAutoParen
      * set the user id for the current list. should only be called by GetUserAddressList.
      *
      * @param int $iUserId
+     *
+     * @return void
      */
     public function SetUserIdForList($iUserId)
     {

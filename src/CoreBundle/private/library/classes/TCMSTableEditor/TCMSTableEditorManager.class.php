@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -250,7 +252,7 @@ class TCMSTableEditorManager
      * @param array $postData
      * @param bool  $bDataIsInSQLForm
      *
-     * @return TCMSstdClass|bool
+     * @return TCMSstdClass|false
      */
     public function Save($postData, $bDataIsInSQLForm = false)
     {
@@ -329,8 +331,7 @@ class TCMSTableEditorManager
                 $this->sId = $id;
                 $this->oTableEditor->Init($this->sTableId, $this->sId); // reinit for new id
             }
-
-            $oMessageManager = TCMSMessageManager::GetInstance();
+            $flashMessageService = $this->getFlashMessageService();
             $sConsumerName = self::MESSAGE_MANAGER_CONSUMER;
 
             if (TTools::RecordExists($this->oTableEditor->oTableConf->sqlData['name'], 'id', $this->sId)) {
@@ -338,14 +339,14 @@ class TCMSTableEditorManager
 
                 $this->oTableEditor->Delete($this->sId);
                 $this->sId = $this->oTableEditor->sId;
-                $oMessageManager->AddMessage(
+                $flashMessageService->AddMessage(
                     $sConsumerName,
                     'TABLEEDITOR_DELETE_RECORD_SUCCESS',
                     array('id' => $this->sId, 'name' => $sRecordName)
                 );
                 $bReturnVal = true;
             } else {
-                $oMessageManager->AddMessage(
+                $flashMessageService->AddMessage(
                     $sConsumerName,
                     'TABLEEDITOR_DELETE_RECORD_DOES_NOT_EXIST',
                     array('id' => $this->sId, 'name' => 'Unknown')
@@ -496,9 +497,9 @@ class TCMSTableEditorManager
      * Set new order position and updates order position in all other
      * connected connections behind the new position.
      *
-     * @param $sFieldName
-     * @param $sConnectedId
-     * @param $iPosition
+     * @param string $sFieldName
+     * @param string $sConnectedId
+     * @param int $iPosition
      */
     public function updateMLTSortOrder($sFieldName, $sConnectedId, $iPosition)
     {
@@ -608,5 +609,10 @@ class TCMSTableEditorManager
         }
 
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+    }
+
+    private function getFlashMessageService(): FlashMessageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 }

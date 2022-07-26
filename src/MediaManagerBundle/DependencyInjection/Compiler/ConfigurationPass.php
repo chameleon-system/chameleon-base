@@ -27,6 +27,8 @@ class ConfigurationPass implements CompilerPassInterface
      * @throws ServiceNotFoundException
      * @throws InvalidArgumentException
      * @throws LogicException
+     *
+     * @return void
      */
     public function process(ContainerBuilder $container)
     {

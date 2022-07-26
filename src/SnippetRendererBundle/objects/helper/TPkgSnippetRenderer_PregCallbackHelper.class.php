@@ -15,8 +15,15 @@
 /**/
 class TPkgSnippetRenderer_PregCallbackHelper
 {
+    /**
+     * @var null|string
+     */
     public $aResult = null;
 
+    /**
+     * @param array $aMatches
+     * @return string
+     */
     public function PregReplaceCallback($aMatches)
     {
         $this->aResult[] = $aMatches[1];

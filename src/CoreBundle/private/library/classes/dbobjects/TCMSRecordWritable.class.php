@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
+use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
@@ -100,7 +102,7 @@ class TCMSRecordWritable extends TCMSRecord
     /**
      * Save active data... create new record if no id present.
      *
-     * @return string|bool - id on success... else false
+     * @return string|false - id on success... else false
      */
     public function Save()
     {
@@ -156,31 +158,20 @@ class TCMSRecordWritable extends TCMSRecord
 
             $smysqlerror = '';
             if ($bIsNew) {
-                // need to create an id.. try to insert untill we have a free id. We will try at most 3 times
-                $iMaxTry = 3;
-                $bWasInserted = false;
-                do {
-                    $uid = TTools::GetUUID();
-                    $sInsertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($uid)."'";
-                    MySqlLegacySupport::getInstance()->query($sInsertQuery);
+                try {
+                    $id = $this->getGuidCreationService()->findUnusedId($this->table);
+
+                    $insertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($id)."'";
+
+                    MySqlLegacySupport::getInstance()->query($insertQuery);
                     $smysqlerror = MySqlLegacySupport::getInstance()->error();
-                    if (!empty($smysqlerror)) {
-                        $errNr = MySqlLegacySupport::getInstance()->errno();
-                        if (1062 != $errNr && 23000 != $errNr) {
-                            TTools::WriteLogEntry('unable to save record - error:  ['.$smysqlerror.'] using query ['.$sInsertQuery.'] - object ['.$this->id.']: '.print_r($this->sqlData, true), 1, __FILE__, __LINE__);
-                            $iMaxTry = 0;
-                        } else {
-                            $smysqlerror = '';
-                        }
-                    } else {
-                        if (!array_key_exists('cmsident', $this->sqlData) || empty($this->sqlData['cmsident'])) {
-                            $this->sqlData['cmsident'] = MySqlLegacySupport::getInstance()->insert_id();
-                        }
-                        $bWasInserted = true;
-                        $this->id = $uid;
+                    if (empty($smysqlerror)) {
+                        $query = $insertQuery;
+                        $this->id = $id;
                     }
-                    --$iMaxTry;
-                } while ($iMaxTry > 0 && !$bWasInserted);
+                } catch (GuidCreationFailedException $exception) {
+                    $smysqlerror = $exception->getMessage();
+                }
             } else {
                 MySqlLegacySupport::getInstance()->query($query);
                 $smysqlerror = MySqlLegacySupport::getInstance()->error();
@@ -218,7 +209,7 @@ class TCMSRecordWritable extends TCMSRecord
      *
      * @param array $aFields
      *
-     * @return string|bool
+     * @return string|false - the id of the saved record or false on error
      */
     public function SaveFieldsFast($aFields)
     {
@@ -265,28 +256,20 @@ class TCMSRecordWritable extends TCMSRecord
 
             $smysqlerror = '';
             if ($bIsNew) {
-                // need to create an id.. try to insert until we have a free id. We will try at most 3 times
-                $iMaxTry = 3;
-                $bWasInserted = false;
-                do {
-                    $uid = TTools::GetUUID();
-                    $sInsertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($uid)."'";
-                    MySqlLegacySupport::getInstance()->query($sInsertQuery);
+                try {
+                    $id = $this->getGuidCreationService()->findUnusedId($this->table);
+
+                    $insertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($id)."'";
+
+                    MySqlLegacySupport::getInstance()->query($insertQuery);
                     $smysqlerror = MySqlLegacySupport::getInstance()->error();
-                    if (!empty($smysqlerror)) {
-                        $errNr = MySqlLegacySupport::getInstance()->errno();
-                        if (1062 != $errNr) {
-                            TTools::WriteLogEntry('unable to save record - error:  ['.$smysqlerror.'] using query ['.$sInsertQuery.'] - object ['.$this->id.']: '.print_r($this->sqlData, true), 1, __FILE__, __LINE__);
-                            $iMaxTry = 0;
-                        } else {
-                            $smysqlerror = '';
-                        }
-                    } else {
-                        $bWasInserted = true;
-                        $this->id = $uid;
+                    if (empty($smysqlerror)) {
+                        $query = $insertQuery;
+                        $this->id = $id;
                     }
-                    --$iMaxTry;
-                } while ($iMaxTry > 0 && !$bWasInserted);
+                } catch (GuidCreationFailedException $exception) {
+                    $smysqlerror = $exception->getMessage();
+                }
             } else {
                 MySqlLegacySupport::getInstance()->query($query);
                 $smysqlerror = MySqlLegacySupport::getInstance()->error();
@@ -847,7 +830,7 @@ class TCMSRecordWritable extends TCMSRecord
      *
      * @return bool
      */
-    public function UploadCMSDocumentFromURL($sFileURL = '', $sFileName, $sFieldName, $iDocumentCategoryId, $bIsPrivate = true, $sDescription = null, $sDocumentID = null)
+    public function UploadCMSDocumentFromURL($sFileURL, $sFileName, $sFieldName, $iDocumentCategoryId, $bIsPrivate = true, $sDescription = null, $sDocumentID = null)
     {
         $bUploadOK = false;
         if (!empty($sFileURL) && $this->AllowEdit() && !is_null($this->id) && TTools::isOnline($sFileURL)) {
@@ -971,5 +954,10 @@ class TCMSRecordWritable extends TCMSRecord
     private function getCache(): CacheInterface
     {
         return ServiceLocator::get('chameleon_system_core.cache');
+    }
+
+    private function getGuidCreationService(): GuidCreationServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.guid_creation');
     }
 }
