@@ -70,6 +70,9 @@ class ExtranetUserProvider implements ExtranetUserProviderInterface
         if (null === $request) {
             return null;
         }
+        if (false === $request->hasSession()) {
+            return null;
+        }
         if (false === $request->getSession()->isStarted()) {
             return null;
         }
