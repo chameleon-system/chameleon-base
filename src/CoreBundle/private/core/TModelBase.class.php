@@ -696,9 +696,13 @@ class TModelBase
             $oRenderer->AddSourceObject('sModuleSpotName', $this->sModuleSpotName);
             $sViewName = $this->aModuleConfig['view'];
             $viewMapperConfig = $oModule->getViewMapperConfig();
+            $sViewPathReference = $viewMapperConfig->getSnippetForConfig($sViewName);
+            if (null === $sViewPathReference) {
+                throw new MapperException(sprintf('No config found for %s for view %s', $this->aModuleConfig['model'], $sViewName));
+            }
             $mappers = $viewMapperConfig->getMappersForConfig($sViewName);
             if (null === $mappers) {
-                throw new MapperException(sprintf('No mappers found/config not found for %s for view %s', $this->aModuleConfig['model'], $sViewName));
+                $mappers = []; // the actual error is checked above with the view path reference
             }
             foreach ($mappers as $sMapperName) {
                 $oRenderer->addMapperFromIdentifier(
@@ -708,7 +712,6 @@ class TModelBase
                 );
             }
 
-            $sViewPathReference = $viewMapperConfig->getSnippetForConfig($sViewName);
 
             $mapperChains = $oModule->getMapperChains();
             foreach ($mapperChains as $mapperChainName => $mapperChainClasses) {
