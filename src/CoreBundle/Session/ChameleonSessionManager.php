@@ -67,14 +67,7 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
     private PortalDomainServiceInterface $portalDomainService;
 
     /**
-     * @param RequestStack                  $requestStack
-     * @param Connection                    $databaseConnection
-     * @param PDO                           $sessionPdo
-     * @param ContainerInterface            $container
-     * @param int                           $metaDataTimeout
-     * @param array                         $sessionOptions
-     * @param InputFilterUtilInterface      $inputFilterUtil
-     * @param PortalDomainServiceInterface  $portalDomainService
+     * @param array<string, mixed> $sessionOptions
      */
     public function __construct(RequestStack $requestStack, Connection $databaseConnection, PDO $sessionPdo, ContainerInterface $container, $metaDataTimeout, array $sessionOptions, InputFilterUtilInterface $inputFilterUtil, PortalDomainServiceInterface $portalDomainService)
     {
