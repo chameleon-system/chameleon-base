@@ -32,6 +32,7 @@ use TPkgCmsSessionHandler_Decorator_Locking;
 
 class ChameleonSessionManager implements ChameleonSessionManagerInterface
 {
+    private const SESSION_BASE_NAME = 'PHPSESSID';
     /**
      * @var RequestStack
      */
@@ -139,7 +140,7 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
 
         $session = new \TPKgCmsSession($sessionStorage);
 
-        $cookieName = "PHPSESSID" . $this->getCookieNameSuffix();
+        $cookieName = self::SESSION_BASE_NAME . $this->getCookieNameSuffix();
         $session->setName($cookieName);
 
         if (false === DISABLE_SESSION_LOCKING) {
