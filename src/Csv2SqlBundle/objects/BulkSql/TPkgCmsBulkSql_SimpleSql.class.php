@@ -26,7 +26,7 @@ class TPkgCmsBulkSql_SimpleSql implements IPkgCmsBulkSql
     /**
      * list of fields in target table.
      *
-     * @var array
+     * @var string[]
      */
     private $aFields = array();
 
@@ -34,7 +34,7 @@ class TPkgCmsBulkSql_SimpleSql implements IPkgCmsBulkSql
      * returns true if the init was ok - else false.
      *
      * @param string $sTable the target table name
-     * @param $aFields array list of fields in target table
+     * @param string[] $aFields list of fields in target table
      *
      * @return bool
      */

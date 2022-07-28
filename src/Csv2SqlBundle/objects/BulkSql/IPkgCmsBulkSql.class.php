@@ -11,9 +11,21 @@
 
 interface IPkgCmsBulkSql
 {
+    /**
+     * @param string $sTable
+     * @param string[] $aFields
+     * @return bool
+     */
     public function Initialize($sTable, $aFields);
 
+    /**
+     * @param array<string, string> $aData
+     * @return bool
+     */
     public function AddRow($aData);
 
+    /**
+     * @return bool
+     */
     public function CommitData();
 }

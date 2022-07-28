@@ -15,6 +15,9 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
      * @var string
      */
     private $sTableName = null;
+    /**
+     * @var string[]
+     */
     private $aFields = array();
     /**
      * @var string
@@ -77,7 +80,7 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
      * returns true if the init was ok - else false.
      *
      * @param string $sTable
-     * @param $aFields
+     * @param string[] $aFields
      *
      * @return bool
      */
