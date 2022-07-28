@@ -54,7 +54,10 @@ class RequestInfoService implements RequestInfoServiceInterface
      * @var bool
      */
     private $isCmsTemplateEngineEditModeCache;
-
+    /**
+     * @var bool
+     */
+    private $isPreviewModeCache;
     /**
      * @param RequestStack                 $requestStack
      * @param PortalDomainServiceInterface $portalDomainService
@@ -127,6 +130,27 @@ class RequestInfoService implements RequestInfoServiceInterface
         $this->isCmsTemplateEngineEditModeCache = false === \TGlobal::IsCMSMode() && 'true' === $request->get('__modulechooser');
 
         return $this->isCmsTemplateEngineEditModeCache;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isPreviewMode()
+    {
+        if (null !== $this->isPreviewModeCache) {
+            return $this->isPreviewModeCache;
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return false;
+        }
+
+        // todo: `__rpeviewmode` should be the only way to enable this. Refactor all places where the preview attribute is set as `preview` instead of `__previewmode'
+        $this->isPreviewModeCache = false === \TGlobal::IsCMSMode() &&
+            ('true' === $request->get('__previewmode') || 'true' === $request->get('preview'));
+
+        return $this->isPreviewModeCache;
     }
 
     /**
