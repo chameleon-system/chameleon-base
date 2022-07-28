@@ -153,7 +153,7 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
      *
      * @param string $sQuery
      *
-     * @return mixed (0 on success)
+     * @return int|false - 0 denotes succes; everything else an error
      */
     protected function CommitDataViaShell($sQuery)
     {
