@@ -99,7 +99,6 @@
             <argument type="service" id="service_container" />
             <argument>%session.metadata.update_threshold%</argument>
             <argument>%session.storage.options%</argument>
-            <argument type="service" id="chameleon_system_core.util.input_filter" />
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="logger" />

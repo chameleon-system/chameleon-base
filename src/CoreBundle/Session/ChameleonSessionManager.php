@@ -60,10 +60,6 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
      */
     private $sessionOptions;
     /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-    /**
      * @var bool
      */
     private $isSessionStarting = false;
@@ -75,7 +71,7 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
      * @param int $metaDataTimeout
      * @param array<string, mixed> $sessionOptions
      */
-    public function __construct(RequestStack $requestStack, Connection $databaseConnection, PDO $sessionPdo, ContainerInterface $container, $metaDataTimeout, array $sessionOptions, InputFilterUtilInterface $inputFilterUtil, PortalDomainServiceInterface $portalDomainService, RequestInfoServiceInterface $requestInfoService, LoggerInterface $logger)
+    public function __construct(RequestStack $requestStack, Connection $databaseConnection, PDO $sessionPdo, ContainerInterface $container, $metaDataTimeout, array $sessionOptions, PortalDomainServiceInterface $portalDomainService, RequestInfoServiceInterface $requestInfoService, LoggerInterface $logger)
     {
         $this->requestStack = $requestStack;
         $this->databaseConnection = $databaseConnection;
@@ -83,7 +79,6 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         $this->container = $container;
         $this->metaDataTimeout = $metaDataTimeout;
         $this->sessionOptions = $sessionOptions;
-        $this->inputFilterUtil = $inputFilterUtil;
         $this->portalDomainService = $portalDomainService;
         $this->requestInfoService = $requestInfoService;
         $this->logger = $logger;
