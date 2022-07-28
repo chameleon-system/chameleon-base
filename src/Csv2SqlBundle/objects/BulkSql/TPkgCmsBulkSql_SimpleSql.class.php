@@ -33,7 +33,7 @@ class TPkgCmsBulkSql_SimpleSql implements IPkgCmsBulkSql
     /**
      * returns true if the init was ok - else false.
      *
-     * @param $sTable string the target table name
+     * @param string $sTable the target table name
      * @param $aFields array list of fields in target table
      *
      * @return bool

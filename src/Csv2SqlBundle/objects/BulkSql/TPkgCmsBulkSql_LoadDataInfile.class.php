@@ -11,9 +11,18 @@
 
 class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
 {
+    /**
+     * @var string
+     */
     private $sTableName = null;
     private $aFields = array();
+    /**
+     * @var string
+     */
     private $sFileName = null;
+    /**
+     * @var resource|false
+     */
     private $rFile = null;
 
     /**
@@ -67,7 +76,7 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
     /**
      * returns true if the init was ok - else false.
      *
-     * @param $sTable
+     * @param string $sTable
      * @param $aFields
      *
      * @return bool
@@ -89,7 +98,7 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
     /**
      * return true if the data was writ ten to the target file.
      *
-     * @param $aData
+     * @param array<string, string> $aData
      *
      * @return bool
      */
@@ -169,6 +178,10 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
         return $iRetVal;
     }
 
+    /**
+     * @param array<string, string> $aData
+     * @return array<string, string>
+     */
     protected function EscapeData($aData)
     {
         foreach (array_keys($aData) as $sKey) {
