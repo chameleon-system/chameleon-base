@@ -142,7 +142,7 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
             trigger_error('MySQL error: "'.$sError.'" in query '.$query.' - switching to backup import via shell call', E_USER_WARNING);
             $this->CommitDataViaShell($query);
 
-            return true;
+            return false;
         }
     }
 
