@@ -51,11 +51,11 @@ class RequestInfoService implements RequestInfoServiceInterface
      */
     private $chameleonRequestType;
     /**
-     * @var bool
+     * @var bool|null
      */
     private $isCmsTemplateEngineEditModeCache;
     /**
-     * @var bool
+     * @var bool|null
      */
     private $isPreviewModeCache;
     /**
