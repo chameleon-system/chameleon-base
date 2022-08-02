@@ -146,7 +146,7 @@ class RequestInfoService implements RequestInfoServiceInterface
             return false;
         }
 
-        // todo: `__rpeviewmode` should be the only way to enable this. Refactor all places where the preview attribute is set as `preview` instead of `__previewmode'
+        // todo: `__previewmode` should be the only way to enable this. Refactor all places where the preview attribute is set as `preview` instead of `__previewmode'
         $this->isPreviewModeCache = false === \TGlobal::IsCMSMode() &&
             ('true' === $request->get('__previewmode') || 'true' === $request->get('preview'));
 
