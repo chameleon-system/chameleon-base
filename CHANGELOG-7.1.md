@@ -16,4 +16,4 @@ This changes public methods - especially `GetMLTTableName`.
 
 In v7.1.4 `\ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface` has an additional method:
 `isPreviewMode();`
-Implementations should return true if the current request is a frontend request and the current page is a preview page.
+Implementations should return true if the current request is a frontend request and the preview mode is active.
