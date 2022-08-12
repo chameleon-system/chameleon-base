@@ -26,13 +26,19 @@ class TCMSPortal extends TCMSRecord
      * you should use the factory GetPagePortal to create the portal (if the page is known).
      *
      * @param int $id - portal id
-     *
-     * @return TCMSPortal
      */
-    public function TCMSPortal($id = null)
+    public function __construct($id = null)
     {
-        $table = 'cms_portal';
-        parent::TCMSRecord($table, $id);
+        parent::__construct('cms_portal', $id);
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSPortal()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**

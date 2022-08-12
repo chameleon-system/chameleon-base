@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\BackendLoginEvent;
 use ChameleonSystem\CoreBundle\Event\BackendLogoutEvent;
@@ -44,12 +45,21 @@ class TCMSUser extends TCMSRecord
      */
     private static $oActiveUser = null;
 
-    public function TCMSUser($id = null)
+    public function __construct($id = null)
     {
-        parent::TCMSRecord('cms_user', $id);
+        parent::__construct('cms_user', $id);
         if (!is_null($id)) {
             $this->Load($id);
         }
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSUser()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**
@@ -171,9 +181,9 @@ class TCMSUser extends TCMSRecord
         $eventDispatcher = self::getEventDispatcher();
         $event = new BackendLoginEvent($this);
         if ($this->bLoggedIn) {
-            $eventDispatcher->dispatch(CoreEvents::BACKEND_LOGIN_SUCCESS, $event);
+            $eventDispatcher->dispatch($event, CoreEvents::BACKEND_LOGIN_SUCCESS);
         } else {
-            $eventDispatcher->dispatch(CoreEvents::BACKEND_LOGIN_FAILURE, $event);
+            $eventDispatcher->dispatch($event, CoreEvents::BACKEND_LOGIN_FAILURE);
         }
 
         return $this->bLoggedIn;
@@ -229,13 +239,15 @@ class TCMSUser extends TCMSRecord
         unset($_SESSION['_listObjCache']);
         $request = self::getRequest();
         if (null !== $request) {
-            $session = $request->getSession();
-            if (null === $session) {
-                $session->clear();
+            if (true === $request->hasSession()) {
+                $session = $request->getSession();
+                if (null === $session) {
+                    $session->clear();
+                }
             }
         }
 
-        self::getEventDispatcher()->dispatch(CoreEvents::BACKEND_LOGOUT_SUCCESS, new BackendLogoutEvent($user));
+        self::getEventDispatcher()->dispatch(new BackendLogoutEvent($user), CoreEvents::BACKEND_LOGOUT_SUCCESS);
     }
 
     /**

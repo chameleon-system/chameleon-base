@@ -37,16 +37,18 @@ class ExtranetUserProvider implements ExtranetUserProviderInterface
      */
     public function getActiveUser()
     {
-        if (false === $this->hasSession() || false === $this->sessionIsStarted()) {
-            return null;
+        $session = $this->getStartedSession();
+
+        if (null === $session) {
+            return \TdbDataExtranetUser::GetNewInstance();
         }
 
-        $user = $this->getSession()->get(self::SESSION_KEY_NAME);
+        $user = $session->get(self::SESSION_KEY_NAME);
         if (null === $user) {
             $this->reset();
         }
 
-        return $this->getSession()->get(self::SESSION_KEY_NAME);
+        return $session->get(self::SESSION_KEY_NAME);
     }
 
     /**
@@ -54,36 +56,27 @@ class ExtranetUserProvider implements ExtranetUserProviderInterface
      */
     public function reset()
     {
-        $this->getSession()->set(self::SESSION_KEY_NAME, \TdbDataExtranetUser::GetNewInstance());
-    }
-
-    /**
-     * @return SessionInterface|null
-     */
-    private function getSession()
-    {
-        return $this->requestStack->getCurrentRequest()->getSession();
-    }
-
-    /**
-     * @return bool
-     */
-    private function hasSession()
-    {
-        $hasSession = false;
-        $request = $this->requestStack->getCurrentRequest();
-        if (null !== $request) {
-            $hasSession = $request->hasSession();
+        $session = $this->getStartedSession();
+        if (null === $session) {
+            return;
         }
 
-        return $hasSession;
+        $session->set(self::SESSION_KEY_NAME, \TdbDataExtranetUser::GetNewInstance());
     }
 
-    /**
-     * @return bool
-     */
-    private function sessionIsStarted()
+    private function getStartedSession(): ?SessionInterface
     {
-        return $this->getSession()->isStarted();
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return null;
+        }
+        if (false === $request->hasSession()) {
+            return null;
+        }
+        if (false === $request->getSession()->isStarted()) {
+            return null;
+        }
+
+        return $request->getSession();
     }
 }

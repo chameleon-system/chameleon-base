@@ -11,7 +11,7 @@
 
 use ChameleonSystem\CoreBundle\Exception\ModuleException;
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * holds a record from the "cms_tpl_module_instance" table.
@@ -39,10 +39,18 @@ class TCMSTPLModuleInstance extends TCMSRecord
      */
     protected $sSpotName = null;
 
-    public function TCMSTPLModuleInstance($id = null)
+    public function __construct($id = null)
     {
-        $table = 'cms_tpl_module_instance';
-        parent::TCMSRecord($table, $id);
+        parent::__construct('cms_tpl_module_instance', $id);
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSTPLModuleInstance()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**

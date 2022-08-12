@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\RecordChangeEvent;
+use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
+use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -28,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 class TCMSTableEditorEndPoint
 {
     /**
+     * @deprecated since the use for this blacklist handling was removed when the revision logic was removed. Will be remove in 7.2
      * session variable name for black listed records and tables which should not be deleted
      * this is needed to prevent recursive deletes with DeleteRecordReferences.
      */
@@ -523,7 +526,7 @@ class TCMSTableEditorEndPoint
                             $aParameter = array_merge($aParameter, $aAdditionalParams);
                         }
 
-                        $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter)."'";
+                        $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter);
                         $this->oMenuItems->AddItem($oMenuItem);
                     }
                     // now add custom items
@@ -816,7 +819,7 @@ class TCMSTableEditorEndPoint
         }
 
         $event = new RecordChangeEvent($this->oTableConf->sqlData['name'], $this->sId);
-        $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_RECORD, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_RECORD);
     }
 
     /**
@@ -1214,7 +1217,7 @@ class TCMSTableEditorEndPoint
         TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $sCacheTriggerID);
 
         $event = new RecordChangeEvent($this->oTableConf->sqlData['name'], $this->sId);
-        $this->getEventDispatcher()->dispatch(CoreEvents::INSERT_RECORD, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::INSERT_RECORD);
     }
 
     /**
@@ -1308,7 +1311,7 @@ class TCMSTableEditorEndPoint
         TCMSLogChange::WriteTransaction($aQuery);
 
         $event = new RecordChangeEvent($this->oTableConf->sqlData['name'], $sDeleteId);
-        $this->getEventDispatcher()->dispatch(CoreEvents::DELETE_RECORD, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_RECORD);
 
         $this->sId = null;
     }
@@ -1628,29 +1631,22 @@ class TCMSTableEditorEndPoint
         if (false === $bIsUpdateCall) {
             $databaseChanged = false;
 
-            // need to create an id.. try to insert until we have a free id. We will try at most 3 times
+            try {
+                $id = $this->getGuidCreationService()->findUnusedId($tableName);
 
-            $iMaxTry = 3;
-            do {
-                $uid = TTools::GetUUID();
-                $sInsertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($uid)."'";
-                $dataForChangeRecorder['id'] = $uid;
-                MySqlLegacySupport::getInstance()->query($sInsertQuery);
+                $insertQuery = $query.", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($id)."'";
+
+                MySqlLegacySupport::getInstance()->query($insertQuery);
                 $error = MySqlLegacySupport::getInstance()->error();
-                if (!empty($error)) {
-                    $errNr = MySqlLegacySupport::getInstance()->errno();
-                    if (1062 != $errNr) {
-                        $iMaxTry = 0;
-                    } else {
-                        $error = '';
-                    }
-                } else {
-                    $query = $sInsertQuery;
+                if (empty($error)) {
+                    $query = $insertQuery;
                     $databaseChanged = true;
-                    $this->sId = $uid;
+                    $this->sId = $id;
+                    $dataForChangeRecorder['id'] = $id;
                 }
-                --$iMaxTry;
-            } while ($iMaxTry > 0 && false === $databaseChanged);
+            } catch (GuidCreationFailedException $exception) {
+                $error = $exception->getMessage();
+            }
         } else {
             if (MySqlLegacySupport::getInstance()->query($query)) {
                 $databaseChanged = true;
@@ -2323,6 +2319,7 @@ class TCMSTableEditorEndPoint
     }
 
     /**
+     * @deprecated since the use for this blacklist handling was removed when the revision logic was removed. Will be remove in 7.2
      * adds a table + record id to the delete blacklist.
      *
      * @param bool|string $sTableId
@@ -2330,21 +2327,10 @@ class TCMSTableEditorEndPoint
      */
     protected function SetDeleteBlackList($sTableId = false, $sRecordId = false)
     {
-        if (!array_key_exists(self::DELETE_BLACKLIST_SESSION_VAR, $_SESSION)) {
-            $_SESSION[self::DELETE_BLACKLIST_SESSION_VAR] = array();
-        }
-        if (empty($sTableId)) {
-            $sTableId = $this->sTableId;
-        }
-        if (empty($sRecordId)) {
-            $sRecordId = $this->sId;
-        }
-        $sKey = md5($sTableId.$sRecordId);
-        $_SESSION[self::DELETE_BLACKLIST_SESSION_VAR][$sKey]['sTableId'] = $sTableId;
-        $_SESSION[self::DELETE_BLACKLIST_SESSION_VAR][$sKey]['sRecordId'] = $sRecordId;
     }
 
     /**
+     * @deprecated since the use for this blacklist handling was removed when the revision logic was removed. Will be remove in 7.2
      * checks if recordID of tableID is in delete blacklist.
      *
      * @param bool|string $sTableId
@@ -2354,21 +2340,7 @@ class TCMSTableEditorEndPoint
      */
     public function IsInDeleteBlackList($sTableId = false, $sRecordId = false)
     {
-        $bIsInDeleteBlackList = false;
-        if (array_key_exists(self::DELETE_BLACKLIST_SESSION_VAR, $_SESSION)) {
-            if (empty($sTableId)) {
-                $sTableId = $this->sTableId;
-            }
-            if (empty($sRecordId)) {
-                $sRecordId = $this->sId;
-            }
-            $sKey = md5($sTableId.$sRecordId);
-            if (array_key_exists($sKey, $_SESSION[self::DELETE_BLACKLIST_SESSION_VAR])) {
-                $bIsInDeleteBlackList = true;
-            }
-        }
-
-        return $bIsInDeleteBlackList;
+        return false;
     }
 
     /**
@@ -2582,5 +2554,10 @@ class TCMSTableEditorEndPoint
     private function getMigrationRecorderStateHandler(): MigrationRecorderStateHandler
     {
         return ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');
+    }
+
+    private function getGuidCreationService(): GuidCreationServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.guid_creation');
     }
 }

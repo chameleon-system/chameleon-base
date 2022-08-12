@@ -8,6 +8,6 @@ class CronJobThatExtendsTCMSCronJob extends TCMSCronJob
 {
     public function __construct()
     {
-        // Do not call parent constructor in order to avoid ServiceLocator calls.
+        // Does not call parent constructor
     }
 }

@@ -184,7 +184,7 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
          */
         $newTreeConnection = $this->oTable;
         $event = new ChangeNavigationTreeConnectionEvent($newTreeConnection);
-        $this->getEventDispatcher()->dispatch(CoreEvents::ADD_NAVIGATION_TREE_CONNECTION, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::ADD_NAVIGATION_TREE_CONNECTION);
     }
 
     /**
@@ -249,7 +249,7 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
          */
         $changedTreeConnection = $this->oTable;
         $event = new ChangeNavigationTreeConnectionEvent($changedTreeConnection);
-        $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_NAVIGATION_TREE_CONNECTION, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_NAVIGATION_TREE_CONNECTION);
     }
 
     /**
@@ -308,6 +308,6 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
         parent::Delete($sId);
 
         $event = new ChangeNavigationTreeConnectionEvent($deletedTreeConnection);
-        $this->getEventDispatcher()->dispatch(CoreEvents::DELETE_NAVIGATION_TREE_CONNECTION, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_NAVIGATION_TREE_CONNECTION);
     }
 }

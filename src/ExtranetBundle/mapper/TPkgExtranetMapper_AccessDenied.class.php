@@ -10,7 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TPkgExtranetMapper_AccessDenied extends AbstractViewMapper
 {

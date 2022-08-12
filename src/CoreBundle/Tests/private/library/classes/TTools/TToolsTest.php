@@ -15,9 +15,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class TToolsTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var bool
      */

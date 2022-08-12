@@ -33,7 +33,7 @@ class TCMSLocal extends TCMSRecord
 
     public function __construct($id = null, $iLanguage = null)
     {
-        parent::TCMSRecord('cms_locals', $id, $iLanguage);
+        parent::__construct('cms_locals', $id, $iLanguage);
     }
 
     protected function PostLoadHook()

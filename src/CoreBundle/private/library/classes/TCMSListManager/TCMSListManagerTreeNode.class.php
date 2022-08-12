@@ -84,7 +84,7 @@ class TCMSListManagerTreeNode extends TCMSListManagerFullGroupTable
                     $aParameter = array_merge($aParameter, $aAdditionalParams);
                 }
 
-                $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter)."'";
+                $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter);
                 $this->oMenuItems->AddItem($oMenuItem);
             }
         }

@@ -59,28 +59,16 @@
             <argument type="service" id="chameleon_system_view_renderer.snippet_directory" />
         </service>
 
-        <service id="chameleon_system_core.http_kernel" class="ChameleonSystem\CoreBundle\ChameleonHttpKernel">
+        <service id="chameleon_system_core.http_kernel" class="ChameleonSystem\CoreBundle\ChameleonHttpKernel" public="true">
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="controller_resolver" />
             <argument type="service" id="request_stack" />
             <call method="setTrustedProxies">
                 <argument>%chameleon_system_core.request.trusted_proxies%</argument>
             </call>
-            <call method="setTrustedHeaderClientIp">
-                <argument>%chameleon_system_core.request.trusted_header_client_ip%</argument>
-            </call>
-            <call method="setTrustedHeaderClientHost">
-                <argument>%chameleon_system_core.request.trusted_header_client_host%</argument>
-            </call>
-            <call method="setTrustedHeaderClientPort">
-                <argument>%chameleon_system_core.request.trusted_header_client_port%</argument>
-            </call>
-            <call method="setTrustedHeaderClientProtocol">
-                <argument>%chameleon_system_core.request.trusted_header_client_protocol%</argument>
-            </call>
         </service>
 
-        <service id="chameleon_system_core.controller_resolver" class="ChameleonSystem\CoreBundle\Controller\ChameleonControllerResolver">
+        <service id="chameleon_system_core.controller_resolver" class="ChameleonSystem\CoreBundle\Controller\ChameleonControllerResolver" public="true">
             <argument type="service" id="service_container" />
             <argument type="service" id="default.controller_resolver" />
             <argument type="collection">
@@ -111,7 +99,9 @@
             <argument type="service" id="service_container" />
             <argument>%session.metadata.update_threshold%</argument>
             <argument>%session.storage.options%</argument>
-            <argument type="service" id="chameleon_system_core.util.input_filter" />
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.request_info_service" />
+            <argument type="service" id="logger" />
         </service>
 
         <service id="session" synthetic="true" public="true"/>
@@ -191,7 +181,7 @@
             </call>
         </service>
 
-        <service id="chameleon_system_core.image_not_found_controller" class="ChameleonSystem\CoreBundle\Controller\ImageNotFoundController">
+        <service id="chameleon_system_core.image_not_found_controller" class="ChameleonSystem\CoreBundle\Controller\ImageNotFoundController" public="true">
         </service>
 
         <service id="chameleon_system_core.controller_invoke_listener" class="%chameleon_system_core.controller_invoke_listener.class%">
@@ -428,7 +418,7 @@
             <tag name="console.command" />
         </service>
 
-        <service id="chameleon_system_core.tpl_page_controller" class="%chameleon_system_core.tpl_page_controller.class%">
+        <service id="chameleon_system_core.tpl_page_controller" class="%chameleon_system_core.tpl_page_controller.class%" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.language_service" />
             <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
@@ -517,7 +507,7 @@
         <service id="chameleon_system_core.updatemanager.update_filter_service" class="ChameleonSystem\CoreBundle\UpdateManager\UpdateFilterService" public="true">
         </service>
 
-        <service id="chameleon_system_core.controller_proxy_disabled_autoflushing" class="ChameleonSystem\CoreBundle\Controller\ChameleonNoAutoFlushController">
+        <service id="chameleon_system_core.controller_proxy_disabled_autoflushing" class="ChameleonSystem\CoreBundle\Controller\ChameleonNoAutoFlushController" public="true">
             <argument type="service" id="chameleon_system_core.frontend_controller" />
         </service>
 
@@ -609,7 +599,7 @@
         <service id="chameleon_system_core.i18n.active_user_permission" class="ChameleonSystem\CoreBundle\i18n\ActiveCmsUserPermission">
 
         </service>
-        <service id="chameleon_system_core.i18n.export_translation_db_controller" class="ChameleonSystem\CoreBundle\i18n\Controller\JsTranslationController">
+        <service id="chameleon_system_core.i18n.export_translation_db_controller" class="ChameleonSystem\CoreBundle\i18n\Controller\JsTranslationController" public="true">
             <argument type="service" id="chameleon_system_core.i18n.export_service" />
             <argument type="service" id="chameleon_system_core.i18n.active_user_permission" />
         </service>
@@ -690,7 +680,7 @@
             <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
         </service>
 
-        <service id="chameleon_system_core.translator" class="ChameleonSystem\CoreBundle\Translation\ChameleonTranslator" decorates="translator" decoration-priority="-255">
+        <service id="chameleon_system_core.translator" class="ChameleonSystem\CoreBundle\Translation\ChameleonTranslator" decorates="translator" decoration-priority="-255" public="true">
             <argument type="service" id="chameleon_system_core.translator.inner" />
             <argument type="service" id="chameleon_system_core.request_info_service" />
         </service>
@@ -724,7 +714,7 @@
         </service>
 
         <service id="chameleon_system_core.mapper_loader" class="ChameleonSystem\CoreBundle\MapperLoader\MapperLoader" public="true">
-            <argument type="service" id="service_container" />
+            <argument /> <!-- Will be set by AddMappersPass. -->
         </service>
 
         <service id="chameleon_system_core.field.provider.class_from_table_field" class="ChameleonSystem\CoreBundle\Field\Provider\ClassFromTableFieldProvider" public="true">
@@ -808,7 +798,7 @@
             <tag name="console.command"/>
         </service>
 
-        <service id="chameleon_system_core.maintenance_mode_service" class="ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeService">
+        <service id="chameleon_system_core.maintenance_mode_service" class="ChameleonSystem\CoreBundle\Maintenance\MaintenanceMode\MaintenanceModeService" public="true">
             <argument type="service" id="database_connection"/>
             <argument type="service" id="chameleon_system_cms_cache.cache"/>
         </service>
@@ -841,6 +831,7 @@
         <service id="chameleon_system_core.response.response_variable_replacer" class="ChameleonSystem\CoreBundle\Response\ResponseVariableReplacer" public="true">
             <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager"/>
             <argument type="service" id="chameleon_system_core.flash_messages"/>
+            <tag name="kernel.event_listener" event="chameleon_system_core.filter_content" method="handleResponse" priority="253"/>
         </service>
 
         <service id="cmsPkgCore.tableEditorListFieldState" class="TTableEditorListFieldState" public="true" />
@@ -879,15 +870,15 @@
             <tag name="chameleon_system.module" />
         </service>
 
-        <service id="chameleon_system_core.service.backend_breadcrumb" class="ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService">
+        <service id="chameleon_system_core.service.backend_breadcrumb" class="ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService" public="true">
             <argument type="service" id="request_stack"/>
         </service>
 
-        <service id="chameleon_system_core.service.main_menu_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator">
+        <service id="chameleon_system_core.service.main_menu_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator" public="true">
             <argument id="database_connection" type="service"/>
             <argument id="chameleon_system_core.util.field_translation" type="service"/>
         </service>
-        <service id="chameleon_system_core.service.module_icon_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\ModuleIconMigrator">
+        <service id="chameleon_system_core.service.module_icon_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\ModuleIconMigrator" public="true">
             <argument id="database_connection" type="service"/>
         </service>
 
@@ -930,12 +921,17 @@
             <argument id="request_stack" type="service"/>
         </service>
 
-        <service id="chameleon_system_core.service.css_minifier" class="ChameleonSystem\CoreBundle\Service\CssMinifierService">
+        <service id="chameleon_system_core.service.css_minifier" class="ChameleonSystem\CoreBundle\Service\CssMinifierService" public="true">
         </service>
 
         <service id="chameleon_system_core.service.cms_config_data_access" class="ChameleonSystem\CoreBundle\Service\CmsConfigDataAccess">
             <argument type="service" id="database_connection"/>
             <argument type="service" id="logger"/>
+        </service>
+
+        <service id="chameleon_system_core.service.guid_creation" class="ChameleonSystem\CoreBundle\Service\GuidCreationService" public="true">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.tools"/>
         </service>
     </services>
 </container>

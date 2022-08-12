@@ -12,8 +12,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('chameleon_system_view_renderer');
+        $treeBuilder = new TreeBuilder('chameleon_system_view_renderer');
+        $root = $treeBuilder->getRootNode();
         $root->addDefaultsIfNotSet();
 
         $root

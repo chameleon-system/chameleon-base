@@ -13,7 +13,7 @@
  * deletes orphaned module contents that are leftovers of already deleted module instances.
  *
 /**/
-class TCMSCronJob_CleanupModuleContents extends TCMSCronJob
+class TCMSCronJob_CleanupModuleContents extends TdbCmsCronjobs
 {
     protected function _ExecuteCron()
     {

@@ -968,11 +968,7 @@ class TGlobalBase
             }
         }
         $sErrorMessage = false;
-        // first make sure the path contains null byte or other
-        $sTmpPath = filter_var($sPath, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES | FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
-
-        $sTmpPath = realpath($sTmpPath);
-        // the file should now be safe..
+        $sTmpPath = realpath($sPath);
         if (empty($sTmpPath)) {
             $sErrorMessage = 'File not found ['.$sPath.']';
         } else {

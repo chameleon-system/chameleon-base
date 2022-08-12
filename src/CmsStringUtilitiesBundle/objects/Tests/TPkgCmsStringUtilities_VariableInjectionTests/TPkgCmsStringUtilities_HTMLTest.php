@@ -16,13 +16,13 @@ class TPkgCmsStringUtilities_HTMLTest extends TestCase
     /** @var TPkgCmsStringUtilities_HTML */
     protected $util = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->util = new TPkgCmsStringUtilities_HTML();
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->util = null;
         parent::tearDown();

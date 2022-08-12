@@ -23,7 +23,7 @@ class TCMSTableEditorShopOrderStep extends TCMSTableEditor
 
         $changedStep = new TdbShopOrderStep($this->sId);
         $event = new ChangeShopOrderStepEvent(array($changedStep));
-        $this->getEventDispatcher()->dispatch(CoreEvents::ADD_SHOP_ORDER_STEP, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::ADD_SHOP_ORDER_STEP);
     }
 
     /**
@@ -35,7 +35,7 @@ class TCMSTableEditorShopOrderStep extends TCMSTableEditor
 
         $changedStep = new TdbShopOrderStep($this->sId);
         $event = new ChangeShopOrderStepEvent(array($changedStep));
-        $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_SHOP_ORDER_STEP, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_SHOP_ORDER_STEP);
     }
 
     /**
@@ -47,6 +47,6 @@ class TCMSTableEditorShopOrderStep extends TCMSTableEditor
 
         $changedStep = new TdbShopOrderStep($this->sId);
         $event = new ChangeShopOrderStepEvent(array($changedStep));
-        $this->getEventDispatcher()->dispatch(CoreEvents::DELETE_SHOP_ORDER_STEP, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_SHOP_ORDER_STEP);
     }
 }

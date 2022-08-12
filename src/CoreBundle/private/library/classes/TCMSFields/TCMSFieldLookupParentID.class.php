@@ -11,7 +11,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * through the config parameter "bShowLinkToParentRecord=true" you can activate a link
@@ -68,7 +68,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
             if ('' !== $itemName) {
                 $html .= '<div class="mr-2">'.$itemName.'</div>';
             }
-            $html .= '<div class="switchToRecordBox">'.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), "javascript:document.location.href='".$this->GetEditLinkForParentRecord()."';", 'fas fa-location-arrow').'</div>';
+            $html .= '<div class="switchToRecordBox">'.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), $this->GetEditLinkForParentRecord(), 'fas fa-location-arrow').'</div>';
             $html .= '</div>';
 
             return $html;

@@ -14,9 +14,18 @@
 /**/
 class TCMSModule extends TCMSRecord
 {
-    public function TCMSModule($table = null, $id = null)
+    public function __construct($table = null, $id = null)
     {
-        parent::TCMSRecord('cms_module', $id);
+        parent::__construct('cms_module', $id);
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSModule()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**

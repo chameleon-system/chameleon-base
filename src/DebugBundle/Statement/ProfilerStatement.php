@@ -145,15 +145,16 @@ class ProfilerStatement extends PDOStatement
     }
 
     /**
-     * @param int|null $fetch_style
-     * @param mixed $fetch_argument
-     * @param mixed $ctor_args
-     * @return mixed[]
+     * @psalm-suppress MethodSignatureMismatch - This method extends {@see PDOStatementImplementations} which differs depending on
+     *     the PHP version: PDOStatementImplementations::fetchAll has different signatures in 7.4 to 8.0. For this reason there is
+     *     no definitive declaration to be compatible with both. Since we are only passing down the arguments, passing all of them
+     *     down is a compromise in this case.
+     * @FIXME Use correct method signature once PHP7.4 support is being dropped.
      */
-    public function fetchAll($fetch_style = null, $fetch_argument = null, $ctor_args = null)
+    public function fetchAll(...$args)
     {
         $startTime = microtime(true);
-        $result = $this->statement->fetchAll($fetch_style, $fetch_argument, $ctor_args);
+        $result = $this->statement->fetchAll(...$args);
         $this->databaseConnection->addToQueryTimer(microtime(true) - $startTime);
 
         return $result;

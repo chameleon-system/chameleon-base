@@ -324,7 +324,7 @@ class TModuleLoader
     public function GetModule($spotName, $bReturnString = false, $sCustomWrapping = null, $bAllowAutoWrap = true)
     {
         if (!isset($this->modules[$spotName])) {
-            $sContent = "<!-- ERROR: unable to find module [{$spotName}] -->";
+            $sContent = _DEVELOPMENT_MODE ? "<!-- ERROR: unable to find module [{$spotName}] -->" : '';
             if (true === $bReturnString) {
                 return $sContent;
             }
@@ -353,7 +353,7 @@ class TModuleLoader
             $this->logModuleException($e, $spotName);
         } catch (\Exception $e) {
             if (_DEVELOPMENT_MODE) {
-                throw new ModuleExecutionFailedException('Error in module execution: '.$e->getMessage(), 0, $e);
+                throw new ModuleExecutionFailedException(sprintf('Error in module execution: %s in file: %s on line: %d',$e->getMessage(), $e->getFile(), $e->getLine()), 0, $e);
             }
 
             $this->logModuleException($e, $spotName);

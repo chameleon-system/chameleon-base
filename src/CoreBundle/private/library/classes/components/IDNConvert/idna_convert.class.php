@@ -55,6 +55,8 @@
 if (!class_exists('idna_convert', false)) {
     class idna_convert
     {
+        use \ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
+
         /**
          * Holds all relevant mapping tables, loaded from a seperate file on construct
          * See RFC3454 for details.
@@ -92,7 +94,7 @@ if (!class_exists('idna_convert', false)) {
         public $_strict_mode = false; // Behave strict or not
 
         // The constructor
-        public function idna_convert($options = false)
+        public function __construct($options = false)
         {
             $this->slast = $this->_sbase + $this->_lcount * $this->_vcount * $this->_tcount;
             if (function_exists('file_get_contents')) {
@@ -106,6 +108,15 @@ if (!class_exists('idna_convert', false)) {
             }
 
             return true;
+        }
+
+        /**
+         * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+         * @see self::__construct
+         */
+        public function idna_convert()
+        {
+            $this->callConstructorAndLogDeprecation(func_get_args());
         }
 
         /**

@@ -21,7 +21,7 @@ use Twig\TwigFilter;
 use Twig_Environment;
 use Twig_SimpleFilter;
 
-class ChameleonStandardExtension extends \Twig_Extension
+class ChameleonStandardExtension extends AbstractExtension
 {
     /**
      * Returns the name of the extension.
@@ -39,21 +39,21 @@ class ChameleonStandardExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'cmsthumb' => new \Twig_SimpleFilter('cmsthumb', 'TPkgSnippetRendererFilter::getThumbnail'),
-            'staticurl' => new \Twig_SimpleFilter('staticurl', 'TGlobal::getStaticUrl'),
+            'cmsthumb' => new TwigFilter('cmsthumb', 'TPkgSnippetRendererFilter::getThumbnail'),
+            'staticurl' => new TwigFilter('staticurl', 'TGlobal::getStaticUrl'),
 
             // escaping
-            'escape' => new Twig_SimpleFilter(
+            'escape' => new TwigFilter(
                 'escape',
                 '\ChameleonSystem\ViewRendererBundle\Twig\Extension\ChameleonStandardExtension::chameleonTwigEscapeFilter',
                 array('needs_environment' => true, 'is_safe_callback' => 'twig_escape_filter_is_safe')
             ),
-            'e' => new Twig_SimpleFilter(
+            'e' => new TwigFilter(
                 'e',
                 '\ChameleonSystem\ViewRendererBundle\Twig\Extension\ChameleonStandardExtension::chameleonTwigEscapeFilter',
                 array('needs_environment' => true, 'is_safe_callback' => 'twig_escape_filter_is_safe')
             ),
-            'sanitizeurl' => new Twig_SimpleFilter(
+            'sanitizeurl' => new TwigFilter(
                 'sanitizeurl',
                 '\ChameleonSystem\ViewRendererBundle\Twig\Extension\ChameleonStandardExtension::sanitizeUrl',
                 array('needs_environment' => true, 'is_safe_callback' => 'twig_escape_filter_is_safe')
@@ -75,7 +75,7 @@ class ChameleonStandardExtension extends \Twig_Extension
      *
      * @throws RuntimeError
      */
-    public static function chameleonTwigEscapeFilter(Twig_Environment $env, $string, $strategy = 'html', $charset = null, $autoescape = false)
+    public static function chameleonTwigEscapeFilter(Environment $env, $string, $strategy = 'html', $charset = null, $autoescape = false)
     {
         if (!is_string($string)) {
             return twig_escape_filter($env, $string, $strategy, $charset, $autoescape);
@@ -110,7 +110,7 @@ class ChameleonStandardExtension extends \Twig_Extension
      *
      * @throws RuntimeError
      */
-    public static function sanitizeUrl(Twig_Environment $env, $string, $strategy = 'html', $charset = null, $autoescape = false)
+    public static function sanitizeUrl(Environment $env, $string, $strategy = 'html', $charset = null, $autoescape = false)
     {
         if (false === self::isAllowedUrl($string)) {
             return '#';

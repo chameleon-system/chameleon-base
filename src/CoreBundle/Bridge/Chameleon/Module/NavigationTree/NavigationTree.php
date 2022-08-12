@@ -25,7 +25,7 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Doctrine\DBAL\Connection;
 use MTPkgViewRendererAbstractModuleMapper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use TGlobal;
 use TTools;
 
@@ -442,7 +442,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
         $updatedNodes[] = $node;
         $event = new ChangeNavigationTreeNodeEvent($updatedNodes);
-        $this->eventDispatcher->dispatch(CoreEvents::UPDATE_NAVIGATION_TREE_NODE, $event);
+        $this->eventDispatcher->dispatch($event, CoreEvents::UPDATE_NAVIGATION_TREE_NODE);
 
         return true;
     }

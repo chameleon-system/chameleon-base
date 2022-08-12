@@ -20,7 +20,7 @@ use ChameleonSystem\CoreBundle\UniversalUploader\Library\UploaderPostHandlerServ
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
 {
@@ -163,7 +163,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
      *
      * @return bool
      */
-    private function isChunkFile(array $contentRange = null, $tmpFilePath)
+    private function isChunkFile(?array $contentRange, $tmpFilePath)
     {
         if (null === $contentRange) {
             return false;

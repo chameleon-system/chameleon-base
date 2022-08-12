@@ -11,9 +11,12 @@
 
 namespace ChameleonSystem\CoreBundle\Session;
 
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 use PDO;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -31,6 +34,7 @@ use TPkgCmsSessionHandler_Decorator_Locking;
 
 class ChameleonSessionManager implements ChameleonSessionManagerInterface
 {
+    private const SESSION_BASE_NAME = 'PHPSESSID';
     /**
      * @var RequestStack
      */
@@ -56,24 +60,18 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
      */
     private $sessionOptions;
     /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-    /**
      * @var bool
      */
     private $isSessionStarting = false;
+    private PortalDomainServiceInterface $portalDomainService;
+    private RequestInfoServiceInterface $requestInfoService;
+    private LoggerInterface $logger;
 
     /**
-     * @param RequestStack             $requestStack
-     * @param Connection               $databaseConnection
-     * @param PDO                      $sessionPdo
-     * @param ContainerInterface       $container
-     * @param int                      $metaDataTimeout
-     * @param array                    $sessionOptions
-     * @param InputFilterUtilInterface $inputFilterUtil
+     * @param int $metaDataTimeout
+     * @param array<string, mixed> $sessionOptions
      */
-    public function __construct(RequestStack $requestStack, Connection $databaseConnection, PDO $sessionPdo, ContainerInterface $container, $metaDataTimeout, array $sessionOptions, InputFilterUtilInterface $inputFilterUtil)
+    public function __construct(RequestStack $requestStack, Connection $databaseConnection, PDO $sessionPdo, ContainerInterface $container, $metaDataTimeout, array $sessionOptions, PortalDomainServiceInterface $portalDomainService, RequestInfoServiceInterface $requestInfoService, LoggerInterface $logger)
     {
         $this->requestStack = $requestStack;
         $this->databaseConnection = $databaseConnection;
@@ -81,7 +79,9 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         $this->container = $container;
         $this->metaDataTimeout = $metaDataTimeout;
         $this->sessionOptions = $sessionOptions;
-        $this->inputFilterUtil = $inputFilterUtil;
+        $this->portalDomainService = $portalDomainService;
+        $this->requestInfoService = $requestInfoService;
+        $this->logger = $logger;
     }
 
     /**
@@ -128,10 +128,6 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         // add decorator to enforce write order (old data may not overwrite new data)
         $sessionHandler = new TPkgCmsSessionHandler_Decorator_EnforceWriteSequence($sessionStorage->getSaveHandler());
 
-        if ($this->metaDataTimeout > 0) {
-            $sessionHandler = new WriteCheckSessionHandler($sessionHandler);
-        }
-
         // add session locking support if enabled
         if (false === DISABLE_SESSION_LOCKING) {
             $oLockManager = new \TPkgCmsSessionStorageLock_ViaDatabase();
@@ -145,6 +141,9 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         $sessionStorage->setSaveHandler($sessionHandler);
 
         $session = new \TPKgCmsSession($sessionStorage);
+
+        $cookieName = $this->getCookieName();
+        $session->setName($cookieName);
 
         if (false === DISABLE_SESSION_LOCKING) {
             $session->setSessionLockingEnabled(true);
@@ -178,5 +177,36 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
     public function isSessionStarting()
     {
         return $this->isSessionStarting;
+    }
+
+    /**
+     * @return string
+     */
+    private function getCookieName()
+    {
+        if ($this->requestInfoService->isBackendMode()) {
+            return self::SESSION_BASE_NAME . 'CMS';
+        }
+
+        if ($this->requestInfoService->isCmsTemplateEngineEditMode()) {
+            $this->logger->notice('Using backend session because we are in template engine edit mode');
+            return self::SESSION_BASE_NAME . 'CMS';
+        }
+
+        if ($this->requestInfoService->isPreviewMode()) {
+            $this->logger->notice('Using backend session because we are in preview mode');
+            return self::SESSION_BASE_NAME . 'CMS';
+        }
+
+        if (!CHAMELEON_EXTRANET_USER_IS_PORTAL_DEPENDANT) {
+            return self::SESSION_BASE_NAME;
+        }
+
+        $portal = $this->portalDomainService->getActivePortal();
+        if (null === $portal) {
+            return self::SESSION_BASE_NAME;
+        }
+
+        return self::SESSION_BASE_NAME . $portal->sqlData['cmsident'] ?? '';
     }
 }

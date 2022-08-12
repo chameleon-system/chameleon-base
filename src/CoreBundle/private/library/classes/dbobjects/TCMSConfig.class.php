@@ -30,14 +30,18 @@ class TCMSConfig extends TCMSRecord
 
     private $aConfigValues = null;
 
+    public function __construct()
+    {
+        parent::__construct('cms_config');
+    }
+
     /**
-     * constructor. do not call directly.
-     *
-     * @return TCMSConfig
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
      */
     public function TCMSConfig()
     {
-        parent::TCMSRecord('cms_config');
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**

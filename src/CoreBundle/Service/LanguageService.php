@@ -230,7 +230,7 @@ class LanguageService implements LanguageServiceInterface
 
         if (null === $originalLanguage || $originalLanguage->id !== $this->getActiveLanguageId()) {
             $localeChanged = new LocaleChangedEvent($newLanguage->fieldIso6391, (null !== $originalLanguage) ? $originalLanguage->fieldIso6391 : null);
-            $this->eventDispatcher->dispatch(CoreEvents::LOCALE_CHANGED, $localeChanged);
+            $this->eventDispatcher->dispatch($localeChanged, CoreEvents::LOCALE_CHANGED);
         }
     }
 

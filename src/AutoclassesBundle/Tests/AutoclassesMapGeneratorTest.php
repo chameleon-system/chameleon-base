@@ -24,7 +24,7 @@ class AutoclassesMapGeneratorTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mapGenerator = new AutoclassesMapGenerator();
@@ -33,7 +33,7 @@ class AutoclassesMapGeneratorTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->mapGenerator = null;

@@ -10,14 +10,20 @@
  */
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
-use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
+use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use ChameleonSystem\ExtranetBundle\LoginByToken\LoginTokenServiceInterface;
+use ChameleonSystem\ExtranetBundle\LoginByToken\LoginByTokenController;
+use ChameleonSystem\ExtranetBundle\LoginByToken\RouteGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TableEditorExtranetUser extends TCMSTableEditor
 {
+    private const LOGIN_TOKEN_LIFETIME_SECONDS = 20;
+
     /**
      * {@inheritDoc}
      *
@@ -39,29 +45,49 @@ class TableEditorExtranetUser extends TCMSTableEditor
     {
         parent::GetCustomMenuItems();
 
-        $cmsUser = TCMSUser::GetActiveUser();
-        if (!$cmsUser || !$cmsUser->oAccessManager || !$cmsUser->oAccessManager->PermitFunction('allow-login-as-extranet-user')) {
-            return;
+        $menuItem = $this->loginAsExtranetUserButton();
+        if (null !== $menuItem) {
+            $this->oMenuItems->AddItem($menuItem);
         }
+    }
+
+    private function loginAsExtranetUserButton(): ?TCMSTableEditorMenuItem
+    {
+        if (false === $this->isBackendUserLoggedInWithPermission('allow-login-as-extranet-user')) {
+            return null;
+        }
+
         $menuItem = new TCMSTableEditorMenuItem();
         $menuItem->sItemKey = 'ExtranetUserLogin';
-        $menuItem->setTitle($this->getTranslator()->trans('chameleon_system_extranet.action.login_as_extranet_user', array(), TranslationConstants::DOMAIN_BACKEND));
+        $menuItem->setTitle($this->getTranslator()->trans(
+            'chameleon_system_extranet.action.login_as_extranet_user',
+            [],
+            TranslationConstants::DOMAIN_BACKEND
+        ));
         $menuItem->sIcon = 'fas fa-user-check';
 
         $executingModulePointer = $this->getGlobal()->GetExecutingModulePointer();
+        if (null === $executingModulePointer) {
+            return null;
+        }
+
         $pagedef = $this->getInputFilterUtil()->getFilteredInput('pagedef');
-        $urlData = array(
-            'module_fnc' => array($executingModulePointer->sModuleSpotName => 'LoginAsExtranetUser'),
+        $urlData = [
+            'module_fnc' => [$executingModulePointer->sModuleSpotName => 'LoginAsExtranetUser'],
             '_noModuleFunction' => 'true',
             'pagedef' => $pagedef,
             'id' => $this->sId,
             'tableid' => $this->oTableConf->id,
-        );
-        $url = PATH_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($urlData, '?', '&');
-        $js = "var tmp = window.open('{$url}');";
-        $menuItem->sOnClick = $js;
+        ];
 
-        $this->oMenuItems->AddItem($menuItem);
+        if (false === $this->loginTokenService()->isReadyToEncodeTokens()) {
+            $menuItem->sCSSClass = 'disabled';
+        } else {
+            $url = PATH_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($urlData, '?', '&');
+            $menuItem->sOnClick = sprintf("window.open('%s'); return false;", $url);
+        }
+
+        return $menuItem;
     }
 
     /**
@@ -74,30 +100,69 @@ class TableEditorExtranetUser extends TCMSTableEditor
      *
      * @return void
      */
-    public function LoginAsExtranetUser()
+    public function LoginAsExtranetUser(): void
     {
-        $cmsUser = TCMSUser::GetActiveUser();
-        if (!$cmsUser || !$cmsUser->oAccessManager || !$cmsUser->oAccessManager->PermitFunction('allow-login-as-extranet-user')) {
+        if (false === $this->isBackendUserLoggedInWithPermission('allow-login-as-extranet-user')) {
             return;
         }
-        $inputFilterUtil = $this->getInputFilterUtil();
-        $userId = $inputFilterUtil->getFilteredGetInput('id');
+
+        $userId = $this->getInputFilterUtil()->getFilteredGetInput('id');
         if (null === $userId) {
             return;
         }
-        $extranetUserProvider = $this->getExtranetUserProvider();
-        $extranetUserProvider->reset();
-        $extranetUser = $extranetUserProvider->getActiveUser();
-        $extranetUser->Load($userId);
-        if (empty($extranetUser->fieldCmsPortalId)) {
+
+        $portal = $this->getPortalForExtranetUserId($userId);
+        if (false === $portal) {
+            return;
+        }
+
+        $this->redirectUserToTokenLoginOnPortal($userId, $portal);
+    }
+
+    private function isBackendUserLoggedInWithPermission(string $permission): bool
+    {
+        $cmsUser = TCMSUser::GetActiveUser();
+
+        return null !== $cmsUser
+            && null !== $cmsUser->oAccessManager
+            && true === $cmsUser->oAccessManager->PermitFunction($permission);
+    }
+
+    /**
+     * @param string $userId
+     * @return false|TdbCmsPortal
+     */
+    private function getPortalForExtranetUserId(string $userId)
+    {
+        $extranetUser = TdbDataExtranetUser::GetNewInstance();
+
+        if (false === $extranetUser->Load($userId) || empty($extranetUser->fieldCmsPortalId)) {
             $portalList = TdbCmsPortalList::GetList();
             $portalList->GoToStart();
-            $portal = $portalList->Current();
-        } else {
-            $portal = TdbCmsPortal::GetNewInstance($extranetUser->fieldCmsPortalId);
+
+            return $portalList->Current();
         }
-        $extranetUser->DirectLoginWithoutPassword($extranetUser->GetName(), $portal->id);
-        $url = $this->getPageService()->getLinkToPortalHomePageRelative(array(), $portal);
+
+        return TdbCmsPortal::GetNewInstance($extranetUser->fieldCmsPortalId);
+    }
+
+    /**
+     * @return never-returns - Ends request by redirecting
+     */
+    private function redirectUserToTokenLoginOnPortal(string $userId, TdbCmsPortal $portal): void
+    {
+        $token = $this->loginTokenService()->createTokenForUser(
+            $userId,
+            self::LOGIN_TOKEN_LIFETIME_SECONDS
+        );
+        $url = $this->router()->generateWithPrefixes(
+            'chameleon_system_extranet.login_by_token',
+            [ 'token' => $token ],
+            $portal,
+            null,
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
         $this->getRedirect()->redirect($url);
     }
 
@@ -149,11 +214,13 @@ class TableEditorExtranetUser extends TCMSTableEditor
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 
-    /**
-     * @return PageServiceInterface
-     */
-    private function getPageService()
+    private function loginTokenService(): LoginTokenServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.login_by_token.service.login_token');
+    }
+
+    private function router(): PortalAndLanguageAwareRouterInterface
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.router.chameleon_frontend');
     }
 }

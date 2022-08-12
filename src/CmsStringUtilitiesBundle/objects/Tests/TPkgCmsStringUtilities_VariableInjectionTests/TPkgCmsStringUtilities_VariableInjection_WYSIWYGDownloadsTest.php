@@ -21,14 +21,14 @@ class TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloadsTest extends Test
     /** @var ReflectionMethod */
     protected $getMatches = null;
 
-    public function SetUp()
+    public function setUp(): void
     {
         $this->oPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads = new TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads();
         $this->getMatches = new ReflectionMethod('TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads', 'getMatches');
         $this->getMatches->setAccessible(true);
     }
 
-    public function TearDown()
+    public function TearDown(): void
     {
         $this->oPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads = null;
     }
