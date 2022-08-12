@@ -55,8 +55,7 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
      * @param string|TModelBase $sSource
      * @param int $iSourceType
      *
-     * @psalm-param IPkgSnippetRenderer::SOURCE_TYPE_* $sourceType
-     * @psalm-param ($iSourceType is IPkgSnippetRenderer::SOURCE_TYPE_CMSMODULE ? TModelBase : string) $sSource
+     * @psalm-param IPkgSnippetRenderer::SOURCE_TYPE_* $iSourceType
      *
      * @return void
      */
@@ -66,12 +65,15 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
 
         switch ($iSourceType) {
             case IPkgSnippetRenderer::SOURCE_TYPE_STRING:
-                $this->setSource($sSource);
+                /** @var string $sSource */
+            $this->setSource($sSource);
                 break;
             case IPkgSnippetRenderer::SOURCE_TYPE_FILE:
+                /** @var string $sSource */
                 $this->setFilename($sSource);
                 break;
             case IPkgSnippetRenderer::SOURCE_TYPE_CMSMODULE:
+                /** @var TModelBase $sSource */
                 $this->setSourceModule($sSource);
                 break;
             default:
@@ -110,8 +112,7 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
      * Set the path to the snippet code.
      * It is possible to override the initially given source this way afterwards.
      *
-     * @param string $sPath- the path to the snippet code
-     * @param TModelBase|string $sPath
+     * @param string $sPath - the path to the snippet code
      *
      * @return void
      */

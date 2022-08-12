@@ -273,7 +273,7 @@ class TCMSTableEditorManager
      * save only one field of a record.
      *
      * @param string $sFieldName
-     * @param string $sFieldContent
+     * @param scalar $sFieldContent
      * @param bool   $bTriggerPostSaveHook
      *
      * @return bool
@@ -469,7 +469,7 @@ class TCMSTableEditorManager
      * removes one connection from mlt.
      *
      * @param string $sFieldName   mlt fieldname (connected table name)
-     * @param int    $iConnectedID the connected record id that will be removed
+     * @param string $iConnectedID the connected record id that will be removed
      */
     public function RemoveMLTConnection($sFieldName, $iConnectedID)
     {

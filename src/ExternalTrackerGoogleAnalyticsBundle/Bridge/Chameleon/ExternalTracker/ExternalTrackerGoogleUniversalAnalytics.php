@@ -164,9 +164,11 @@ class ExternalTrackerGoogleUniversalAnalytics extends TdbPkgExternalTracker
         $event = null;
         if (is_a($state, 'TPkgExternalTrackerState_PkgShop')) {
             // basket event
+
+            /** @var TShopBasketArticle|false $addToBasketEvent */
             $addToBasketEvent = $state->GetEventData(TPkgExternalTrackerState::EVENT_PKG_SHOP_ADD_TO_BASKET);
+
             if (false !== $addToBasketEvent) {
-                /** @var $addToBasketEvent TShopBasketArticle */
                 $event = sprintf("ga('send', 'event', 'products', 'AddToBasket', '%s','%s');",
                     TGlobal::OutJS($addToBasketEvent->fieldArticlenumber),
                     TGlobal::OutJS($addToBasketEvent->dAmount));
@@ -184,18 +186,17 @@ class ExternalTrackerGoogleUniversalAnalytics extends TdbPkgExternalTracker
     protected function getOrderCompleteEvent(TPkgExternalTrackerState $state)
     {
         $html = '';
+        /** @var TdbShopOrder|false $orderEvent */
         $orderEvent = $state->GetEventData(TPkgExternalTrackerState::EVENT_PKG_SHOP_CREATE_ORDER);
+
         if (false !== $orderEvent) {
-            /** @var $orderEvent TdbShopOrder */
             $htmlLines = array();
             $htmlLines[] = "ga('require', 'ecommerce');";
 
             $htmlLines[] = $this->getOrderCompleteEventOrderDetails($orderEvent);
             $orderItems = $orderEvent->GetFieldShopOrderItemList();
-            /** @var $orderItems TdbShopOrderItemList */
             $orderItems->GoToStart();
             while ($orderItem = $orderItems->Next()) {
-                /** @var $orderItem TdbShopOrderItem */
                 $htmlLines[] = $this->getOrderCompleteEventOrderItemDetails($orderEvent, $orderItem);
             }
             $htmlLines[] = "ga('ecommerce:send');";

@@ -56,7 +56,7 @@ class MigrationPathUtil implements MigrationPathUtilInterface
             $finder->path($pathInBundle);
         }
         foreach ($finder as $file) {
-            /** @var $file SplFileInfo */
+            /** @var SplFileInfo $file */
             $collectedUpdateFolders[] = $file->getPath().DIRECTORY_SEPARATOR.$file->getFilename();
         }
 
@@ -75,7 +75,7 @@ class MigrationPathUtil implements MigrationPathUtilInterface
         $finder = new Finder();
         $finder->name(self::UPDATE_FILENAME_PATTERN_WITH_GROUPED_BUILDNUMBER)->in($updateFolder)->depth(0);
         foreach ($finder as $file) {
-            /** @var $file SplFileInfo */
+            /** @var SplFileInfo $file */
             $updateFiles[] = $file->getPath().DIRECTORY_SEPARATOR.$file->getFilename();
         }
 

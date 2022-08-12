@@ -21,7 +21,6 @@ class TPkgSnippetRendererLegacy extends PkgAbstractSnippetRenderer
      * @param int                   $iSourceType
      * @param IResourceHandler|null $oResourceHandler
      *
-     * @psalm-param ($iSourceType is IPkgSnippetRenderer::SOURCE_TYPE_CMSMODULE ? TModelBase : string) $sSource
      * @psalm-param IPkgSnippetRenderer::SOURCE_TYPE_* $iSourceType
      *
      * @return \TPkgSnippetRenderer|\TPkgSnippetRendererLegacy

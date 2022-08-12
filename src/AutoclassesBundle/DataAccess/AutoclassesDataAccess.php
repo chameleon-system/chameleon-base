@@ -69,6 +69,8 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
             if (false === isset($data[$tableConfId])) {
                 $data[$tableConfId] = new TIterator();
             }
+
+            /** @psalm-var class-string<TCMSField> $className */
             $className = trim($row['fieldclass']);
 
             $fieldType = $row['cms_field_type_id'];
@@ -84,7 +86,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
                 $className = trim($fieldDef->sqlData['fieldclass']);
             }
 
-            /** @var $field TCMSField */
+            /** @var TCMSField $field */
             $field = new $className();
             $field->setDatabaseConnection($this->connection);
             $field->data = $row['field_default_value'];

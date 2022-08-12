@@ -69,7 +69,7 @@ class TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads extends TPkgCmsS
                 'ico' => (false !== array_search('ico', $aParts)) ? (true) : (false),
                 'kb' => (false !== array_search('kb', $aParts)) ? (true) : (false),
             );
-            /** @var $oItem TCMSDownloadFile */
+
             $oItem = new TCMSDownloadFile();
             if ($oItem->Load($aParsedResult['id'])) {
                 $sReturn = $this->getLink($oItem, false, false, !$aParsedResult['kb'], false, !$aParsedResult['ico'], $aParsedResult['name']);

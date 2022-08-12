@@ -57,9 +57,13 @@ class TPkgMultiModuleMapper_Tabs extends AbstractViewMapper
     {
         $aTabHeaderList = array();
         $oVisitor->SetMappedValue('sContent', $oVisitor->GetSourceObject('sContent'));
+
+        /** @var array<string, TdbPkgMultiModuleSetItem>  $aSetItems */
         $aSetItems = $oVisitor->GetSourceObject('aSetItems');
+
+        /** @var bool $bShowNoActive */
         $bShowNoActive = $oVisitor->GetSourceObject('bNoActive');
-        /** @var $oSetItem TdbPkgMultiModuleSetItem */
+
         $bActive = true;
         if ($bShowNoActive) {
             $bActive = false;

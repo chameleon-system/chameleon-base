@@ -227,7 +227,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
         $fileName = trim(basename(stripslashes($fileName)), ".\x00..\x20");
         // use a timestamp for empty file names:
         if ('' === $fileName) {
-            $fileName = str_replace('.', '-', microtime(true));
+            $fileName = str_replace('.', '-', (string) microtime(true));
         }
 
         return $fileName;

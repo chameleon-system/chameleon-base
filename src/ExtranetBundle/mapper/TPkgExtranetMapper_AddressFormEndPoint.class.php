@@ -77,7 +77,7 @@ class TPkgExtranetMapper_AddressFormEndPoint extends AbstractPkgExtranetMapper_A
                     $aField['sError'] = $this->GetMessageForField($sRealFieldName, $oVisitor->GetSourceObject('sCustomMSGConsumer'));
                     $aField['aValueList'] = array();
                     if (!is_null($oFieldOptionList)) {
-                        /** @var $oFieldOption TCMSRecord */
+                        /** @var TCMSRecord $oFieldOption */
                         while ($oFieldOption = $oFieldOptionList->Next()) {
                             $aFieldOption = array();
                             $aFieldOption['sName'] = $oFieldOption->GetName();

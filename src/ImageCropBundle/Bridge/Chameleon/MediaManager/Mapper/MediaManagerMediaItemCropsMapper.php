@@ -63,8 +63,8 @@ class MediaManagerMediaItemCropsMapper extends AbstractViewMapper
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /**
-         * @var $mediaItem MediaItemDataModel
-         * @var $language  TdbCmsLanguage
+         * @var MediaItemDataModel $mediaItem
+         * @var TdbCmsLanguage $language
          */
         $mediaItem = $oVisitor->GetSourceObject('mediaItem');
         $language = $oVisitor->GetSourceObject('language');

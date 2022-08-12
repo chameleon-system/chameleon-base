@@ -62,7 +62,7 @@ class MTPkgCmsSubNavigationEndPoint extends MTPkgViewRendererAbstractModuleMappe
     }
 
     /**
-     * @return TdbDataExtranetUser
+     * @return TdbDataExtranetUser|null
      */
     private function getActiveUser()
     {

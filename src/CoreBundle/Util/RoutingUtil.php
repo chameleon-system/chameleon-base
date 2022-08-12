@@ -147,6 +147,8 @@ class RoutingUtil implements RoutingUtilInterface
          * @var PagePath[] $routes
          */
         $routes = array();
+
+        /** @var string $homePagedef */
         $homePagedef = $this->treeService->getById($portal->fieldHomeNodeId)->GetLinkedPage();
         $routes[$homePagedef] = new PagePath($homePagedef, '/');
 
@@ -212,6 +214,7 @@ class RoutingUtil implements RoutingUtilInterface
      * @param TdbCmsTree[] $pathElements
      * @return string|null The depth of a navigation root node, or null if $pathElements does not contain a navigation
      *                     root node.
+     * @psalm-return numeric-string
      */
     private function getNavigationRootDepth(TdbCmsPortal $portal, array $pathElements): ?string
     {

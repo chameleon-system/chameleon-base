@@ -70,7 +70,7 @@ class Mapper_PkgNewsletterGroup extends AbstractViewMapper
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
-        /** @var $oExportData TdbPkgNewsletterUser */
+        /** @var TdbPkgNewsletterUser $oExportData */
         $oExportData = $oVisitor->GetSourceObject('exportdata');
         if (null === $oExportData) {
             return;

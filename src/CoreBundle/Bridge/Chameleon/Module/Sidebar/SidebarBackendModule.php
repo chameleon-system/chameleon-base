@@ -208,10 +208,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             }
         }
 
-        if (0 === $items) {
-            return null;
-        }
-
         return new MenuCategory(
             self::POPULAR_CATEGORY_ID,
             $this->translator->trans('chameleon_system_core.sidebar.popular_entries'),

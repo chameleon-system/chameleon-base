@@ -317,7 +317,7 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
             }
         } else {
             $oNewsletterUser = $this->LoadNewsletterSignup();
-            /** @var $oNewsletterUser TdbPkgNewsletterUser */
+            /** @var TdbPkgNewsletterUser $oNewsletterUser */
             $oNewsLetterSignedInList = $oNewsletterUser->GetFieldPkgNewsletterGroupList();
             if (array_key_exists('newsletter', $aSignOutData) && count($aSignOutData['newsletter']) > 0 || $oNewsLetterSignedInList->Length() < 1) {
                 if (!array_key_exists('newsletter', $aSignOutData) || count($aSignOutData['newsletter']) < 1) {

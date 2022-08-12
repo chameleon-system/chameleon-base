@@ -255,7 +255,6 @@ class MTPkgCommentCore extends TUserCustomModelBase
     protected function ValidateCommentData($aData)
     {
         $oModConf = $this->GetConfig();
-        /** @var $oModConf TdbPkgCommentModuleConfig */
         $oUser = TdbDataExtranetUser::GetInstance();
         $oMessageManager = TCMSMessageManager::GetInstance();
         $bValid = true;
@@ -409,7 +408,6 @@ class MTPkgCommentCore extends TUserCustomModelBase
     protected function ValidateReportData($aData)
     {
         $oModConf = $this->GetConfig();
-        /** @var $oModConf TdbPkgCommentModuleConfig */
         $oUser = TdbDataExtranetUser::GetInstance();
         $oMessageManager = TCMSMessageManager::GetInstance();
         $bValid = true;
@@ -616,7 +614,6 @@ class MTPkgCommentCore extends TUserCustomModelBase
         if ($oComments->Length() > 0) {
             $oActiveItem = $this->GetActiveComment();
             $oFeed = new TCMSRssHandler();
-            /* @var $oFeed TCMSRssHandler* */
             $oFeed->AddItemMappingArray(['comment' => 'summary', 'created_timestamp' => 'updated']);
             $oFeed->SetFeedTitle($oActiveItem->GetName());
             $i = $oComments->Length();

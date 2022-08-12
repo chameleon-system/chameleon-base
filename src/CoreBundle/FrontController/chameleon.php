@@ -156,7 +156,8 @@ class chameleon
     }
 
     /**
-     * @param string $requestType
+     * @param int $requestType
+     * @psalm-param RequestTypeInterface::REQUEST_TYPE_* $requestType
      *
      * @return bool
      */

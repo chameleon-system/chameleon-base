@@ -375,7 +375,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         if (!is_null($selectedAddressId) && $oUser->IsLoggedIn() && !is_null($oUser->id)) {
             // make sure the user has that address
             $oAdr = TdbDataExtranetUserAddress::GetNewInstance();
-            /** @var $oAdr TdbDataExtranetUserAddress */
+            /** @var TdbDataExtranetUserAddress $oAdr */
             if ($oAdr->LoadFromFields(['data_extranet_user_id' => $oUser->id, 'id' => $selectedAddressId])) {
                 if ($oAdr->id === $oUser->GetBillingAddress()->id) {
                 } else {
@@ -439,7 +439,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         if (!is_null($selectedAddressId) && $oUser->IsLoggedIn() && !is_null($oUser->id)) {
             // make sure the user has that address
             $oAdr = TdbDataExtranetUserAddress::GetNewInstance();
-            /** @var $oAdr TdbDataExtranetUserAddress */
+            /** @var TdbDataExtranetUserAddress $oAdr */
             if ($oAdr->LoadFromFields(['data_extranet_user_id' => $oUser->id, 'id' => $selectedAddressId])) {
                 if ($oAdr->id != $oUser->GetBillingAddress()->id) {
                     $bDataValid = true;
@@ -559,7 +559,6 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             if ('new' == $selectedAddressId) {
                 // create a new address, and set it
                 $oAdr = TdbDataExtranetUserAddress::GetNewInstance();
-                /** @var $oAdr TdbDataExtranetUserAddress */
                 $oLocal = TCMSLocal::GetActive();
                 $aData = ['name' => 'neue Addresse (angelegt am '.$oLocal->FormatDate(date('Y-m-d')).')'];
                 $oAdr->LoadFromRowProtected($aData);
@@ -601,7 +600,6 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             $oUser = $this->getExtranetUserProvider()->getActiveUser();
 
             $oTmpAdr = TdbDataExtranetUserAddress::GetNewInstance();
-            /* @var $oTmpAdr TdbDataExtranetUserAddress */
             $oTmpAdr->LoadFromRowProtected($aBillingAddress);
             if ($oTmpAdr->ValidateData(TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING)) {
                 $oUser->UpdateBillingAddress($aBillingAddress);
@@ -632,7 +630,6 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             $oUser = $this->getExtranetUserProvider()->getActiveUser();
 
             $oTmpAdr = TdbDataExtranetUserAddress::GetNewInstance();
-            /* @var $oTmpAdr TdbDataExtranetUserAddress */
             $oTmpAdr->LoadFromRowProtected($aAddress);
             if ($oTmpAdr->ValidateData(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING)) {
                 $bUpdateOk = $oUser->UpdateShippingAddress($aAddress);

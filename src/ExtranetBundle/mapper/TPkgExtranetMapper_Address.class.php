@@ -25,7 +25,7 @@ class TPkgExtranetMapper_Address extends AbstractPkgExtranetMapper_Address
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         parent::Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
-        /** @var $oAddress TdbDataExtranetUserAddress */
+        /** @var TdbDataExtranetUserAddress$oAddress */
         $oAddress = $oVisitor->GetSourceObject('oAddressObject');
         if ($oAddress && !empty($oAddress->id) && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($oAddress->table, $oAddress->id);

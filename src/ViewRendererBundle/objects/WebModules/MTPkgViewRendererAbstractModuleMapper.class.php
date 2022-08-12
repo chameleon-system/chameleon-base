@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsTPlModule;
+
 abstract class MTPkgViewRendererAbstractModuleMapper extends TUserCustomModelBase implements IViewMapper
 {
     /**
@@ -51,8 +53,8 @@ abstract class MTPkgViewRendererAbstractModuleMapper extends TUserCustomModelBas
     {
         $aHeadIncludes = parent::GetHtmlHeadIncludes();
         $sViewName = $this->aModuleConfig['view'];
-        /** @var $dbAccessLayer ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsTPlModule* */
-        $dbAccessLayer = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_cms_tpl_module');
+        /** @var DatabaseAccessLayerCmsTPlModule $dbAccessLayer */
+        $dbAccessLayer = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_cms_tpl_module');
         if (!isset($this->aModuleConfig['model'])) {
             throw new ErrorException(
                 'unable to run GetHtmlHeadIncludes for '.get_class(

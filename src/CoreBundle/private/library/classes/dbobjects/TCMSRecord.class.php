@@ -27,7 +27,7 @@ use esono\pkgCmsCache\CacheInterface;
  * This method is implemented in every inheriting Tdb class.
  * See also: CoreBundle/private/rendering/objectviews/TCMSTableToClass/record.view.php
  *
- * @method static static GetNewInstance()
+ * @method static static GetNewInstance(string|array|null $sData = null, string|null $language = null)
  */
 class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 {
@@ -334,7 +334,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * Load the database record from the table using $sValue as a filter on the field $sField.
      *
      * @param string $field
-     * @param string $value
+     * @param scalar $value
      *
      * @return bool
      */
@@ -1196,7 +1196,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-     * /**
      * returns true if the record is connected using an MLT
      * returns false if not connected or no MLT exists.
      *
@@ -1278,7 +1277,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * record is connected to via mlt from some other table).
      *
      * @param string $sMLTField - mlt field in this table
-     * @param int $iTargetID - target id to check
+     * @param string $iTargetID - target id to check
      * @param string $sTargetTableName - name of the target table needed to generate the mlt table name. if not set function have to load the mlt field object to generate the mlt table name(lower performance).
      *
      * @return bool

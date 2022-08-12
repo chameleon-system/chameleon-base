@@ -145,8 +145,10 @@ class AuthenticityTokenManager implements AuthenticityTokenManagerInterface
 
     /**
      * @throws InvalidTokenFormatException
+     *
+     * @psalm-param AuthenticityTokenManagerInterface::TOKEN_FORMAT_* $format
      */
-    private function getAuthenticityTokenAsParameter(string $format, string $tokenValue): array|string
+    private function getAuthenticityTokenAsParameter(int $format, string $tokenValue): array|string
     {
         $tokenId = AuthenticityTokenManagerInterface::TOKEN_ID;
         switch ($format) {

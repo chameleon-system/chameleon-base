@@ -26,7 +26,7 @@ class TPkgViewRendererModuleLegacyMapper extends TPkgViewRendererAbstractModuleM
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
-        /** @var $oModuleInstance TModelBase */
+        /** @var TModelBase $oModuleInstance */
         $oModuleInstance = $oVisitor->GetSourceObject('oModuleInstance');
         $aData = $oModuleInstance->Execute();
         foreach (array_keys($aData) as $sKey) {

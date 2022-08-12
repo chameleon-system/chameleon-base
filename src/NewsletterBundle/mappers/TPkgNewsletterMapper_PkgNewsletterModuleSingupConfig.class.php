@@ -25,7 +25,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig extends AbstractViewM
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
-        /** @var $oNewsletterModuleSignUpConfig TdbPkgNewsletterModuleSignupConfig */
+        /** @var TdbPkgNewsletterModuleSignupConfig $oNewsletterModuleSignUpConfig */
         $oNewsletterModuleSignUpConfig = $oVisitor->GetSourceObject('oObject');
         if ($oNewsletterModuleSignUpConfig && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($oNewsletterModuleSignUpConfig->table, $oNewsletterModuleSignUpConfig->id);

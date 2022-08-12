@@ -25,7 +25,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig extends AbstractView
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
-        /** @var $oNewsletterModuleSignOutConfig TdbPkgNewsletterModuleSignoutConfig */
+        /** @var TdbPkgNewsletterModuleSignoutConfig $oNewsletterModuleSignOutConfig */
         $oNewsletterModuleSignOutConfig = $oVisitor->GetSourceObject('oObject');
         if ($oNewsletterModuleSignOutConfig && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($oNewsletterModuleSignOutConfig->table, $oNewsletterModuleSignOutConfig->id);

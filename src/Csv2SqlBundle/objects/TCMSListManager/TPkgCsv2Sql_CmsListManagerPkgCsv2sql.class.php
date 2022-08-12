@@ -50,7 +50,6 @@ class TPkgCsv2Sql_CmsListManagerPkgCsv2sql extends TCMSListManagerFullGroupTable
      */
     public function ProcessImport()
     {
-        /** @var $oView TViewParser */
         $oView = new TViewParser();
         $aData = TPkgCsv2SqlManager::ProcessAll();
         $oView->AddVarArray($aData);

@@ -24,9 +24,6 @@ interface PageServiceUtilInterface
     /**
      * Returns the URL path for the given page.
      *
-     * @param TdbCmsTplPage       $page
-     * @param TdbCmsLanguage|null $language
-     *
      * @return string
      *
      * @throws RouteNotFoundException

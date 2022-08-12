@@ -82,7 +82,7 @@ class SaveToMediaLibraryService implements SaveToMediaLibraryServiceInterface
         if (null !== $recordId) {
             $postData['id'] = $recordId;
             if (null !== $tableEditor->oTable && isset($tableEditor->oTable->sqlData['path']) && '' !== $tableEditor->oTable->sqlData['path']) {
-                $postData['refresh_token'] = dechex(crc32(time()));
+                $postData['refresh_token'] = dechex(crc32((string) time()));
             }
         }
 
@@ -104,7 +104,7 @@ class SaveToMediaLibraryService implements SaveToMediaLibraryServiceInterface
                 'maxWidth' => $parameters->getMaxUploadWidth(),
                 'maxHeight' => $parameters->getMaxUploadHeight(),
             );
-            $uploadedFile->addErrorMessage($e->getMessage(), $e->getCode(), $context);
+            $uploadedFile->addErrorMessage($e->getMessage(), (int) $e->getCode(), $context);
         }
 
         //notice: if your image does not show up in media manager, chances are, its cmsident is below 1000... historically, these are not shown

@@ -74,7 +74,7 @@ class TPkgViewRendererSnippetDummyData
         } else {
             $aDummyData = array();
             if ($oDummyData instanceof self) {
-                /** @var $oDummyData TPkgViewRendererSnippetDummyData */
+                /** @var TPkgViewRendererSnippetDummyData $oDummyData */
                 $aDummyData = $oDummyData->getDummyData();
             } else {
                 $aDummyData = $oDummyData;
