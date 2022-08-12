@@ -30,7 +30,7 @@ class TPkgExtranetMapper_AddressSelector extends AbstractPkgExtranetMapper_Addre
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
         parent::Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
-        /** @var $oAddress TdbDataExtranetUserAddress */
+        /** @var TdbDataExtranetUserAddress $oAddress */
         $oAddress = $oVisitor->GetSourceObject('oAddressObject');
         $bAddressTypeIsBilling = $oVisitor->GetSourceObject('bAddressTypeIsBilling');
 
@@ -74,7 +74,9 @@ class TPkgExtranetMapper_AddressSelector extends AbstractPkgExtranetMapper_Addre
         $oVisitor->SetMappedValue('sSpotName', $oVisitor->GetSourceObject('sSpotName'));
         $oVisitor->SetMappedValue('sAddressId', $oAddress->id);
 
-        $oActivePage = $oVisitor->GetSourceObject('oActivePage'); /** @var $oActivePage TCMSActivePage* */
+        /** @var TCMSActivePage $oActivePage* */
+        $oActivePage = $oVisitor->GetSourceObject('oActivePage');
+
         $oVisitor->SetMappedValue('sFormUrl', $oActivePage->GetRealURLPlain());
     }
 

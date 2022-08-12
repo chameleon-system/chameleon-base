@@ -71,7 +71,7 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
     {
         static $sTable;
         if (!$sTable) {
-            $sTable = MySqlLegacySupport::getInstance()->real_escape_string(self::TMP_TBL_PREFIX.md5(uniqid(rand(), true)));
+            $sTable = MySqlLegacySupport::getInstance()->real_escape_string(self::TMP_TBL_PREFIX.md5(uniqid((string) rand(), true)));
         }
 
         return $sTable;
@@ -108,14 +108,15 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
      *
      * @param bool $bImportSucceeded - set to true if the import succeeded
      *
-     * @FIXME Parent return `$bImportSucceeded` (bool). This method should probably do the same?
-     * @return void
+     * @return bool
      */
     protected function Cleanup($bImportSucceeded)
     {
         parent::Cleanup($bImportSucceeded);
         $query = 'DROP TABLE `'.$this->GetExportTableName().'`';
         MySqlLegacySupport::getInstance()->query($query);
+
+        return true;
     }
 
     /**

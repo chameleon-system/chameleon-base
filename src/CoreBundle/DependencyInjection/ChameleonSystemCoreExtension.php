@@ -116,9 +116,9 @@ class ChameleonSystemCoreExtension extends Extension
         if (-1 === $failOnErrorLevel) {
             $debug = $container->getParameter('kernel.debug');
             if (true === $debug) {
-                $failOnErrorLevel = E_ALL & !E_DEPRECATED & !E_USER_DEPRECATED;
+                $failOnErrorLevel = E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED;
             } else {
-                $failOnErrorLevel = E_ALL & !E_NOTICE & !E_USER_NOTICE & !E_DEPRECATED & !E_USER_DEPRECATED;
+                $failOnErrorLevel = E_ALL & ~E_NOTICE & ~E_USER_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED;
             }
         }
         $container->setParameter('chameleon_system_core.cronjobs.fail_on_error_level', $failOnErrorLevel);

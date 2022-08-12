@@ -26,10 +26,10 @@ class TCMSCronJob_CleanupExtranetLoginHistory extends TCMSCronJob
             $sQuery = 'SELECT COUNT(*) AS count, `data_extranet_user_login_history`.`data_extranet_user_id`
                         FROM `data_extranet_user_login_history`
                         GROUP BY `data_extranet_user_id`
-                        HAVING COUNT(*) > '.MySqlLegacySupport::getInstance()->real_escape_string(intval(CHAMELEON_EXTRANET_LOGIN_HISTORY_LIMIT));
+                        HAVING COUNT(*) > '.MySqlLegacySupport::getInstance()->real_escape_string((string) CHAMELEON_EXTRANET_LOGIN_HISTORY_LIMIT);
             $rRes = MySqlLegacySupport::getInstance()->query($sQuery);
             while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($rRes)) {
-                $sSubQuery = "SELECT datecreated FROM (SELECT `datecreated` FROM `data_extranet_user_login_history`  WHERE `data_extranet_user_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($aRow['data_extranet_user_id'])."' ORDER BY `datecreated` DESC LIMIT ".MySqlLegacySupport::getInstance()->real_escape_string(intval(CHAMELEON_EXTRANET_LOGIN_HISTORY_LIMIT)).',1)';
+                $sSubQuery = "SELECT datecreated FROM (SELECT `datecreated` FROM `data_extranet_user_login_history`  WHERE `data_extranet_user_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($aRow['data_extranet_user_id'])."' ORDER BY `datecreated` DESC LIMIT ".MySqlLegacySupport::getInstance()->real_escape_string((string) CHAMELEON_EXTRANET_LOGIN_HISTORY_LIMIT).',1)';
                 $sDeleteQuery = "DELETE FROM `data_extranet_user_login_history` WHERE `data_extranet_user_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($aRow['data_extranet_user_id'])."' AND `datecreated` <= (".$sSubQuery.' x)';
                 MySqlLegacySupport::getInstance()->query($sDeleteQuery);
             }

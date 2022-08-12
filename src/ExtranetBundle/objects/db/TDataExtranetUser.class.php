@@ -204,7 +204,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             }
         }
         if (is_null($this->id) || empty($this->id)) {
-            $this->sqlData['tmpconfirmkey'] = md5(uniqid(rand(), true));
+            $this->sqlData['tmpconfirmkey'] = md5(uniqid((string) rand(), true));
             $oExtranetConf = &TdbDataExtranet::GetInstance();
             if ($oExtranetConf->fieldUserMustConfirmRegistration || $bForceUserConfirm) {
                 $this->sqlData['confirmed'] = '0';
@@ -278,13 +278,13 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @param bool $bReset - set to true to reset object
      *
-     * @return TdbDataExtranetUser
+     * @return TdbDataExtranetUser|null
      *
      * @deprecated - use service chameleon_system_extranet.extranet_user_provider instead
      */
     public static function GetInstance($bReset = false)
     {
-        /** @var $extranetUserProvider ExtranetUserProviderInterface */
+        /** @var ExtranetUserProviderInterface $extranetUserProvider */
         $extranetUserProvider = ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
         if ($bReset) {
             $extranetUserProvider->reset();
@@ -454,7 +454,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         $dbKey = $this->GenerateKey($aKeyData);
         $query = "UPDATE `data_extranet_user`
                    SET `session_key` = '".MySqlLegacySupport::getInstance()->real_escape_string($dbKey)."',
-                       `login_timestamp` = '".MySqlLegacySupport::getInstance()->real_escape_string($aKeyData['logintime'])."'
+                       `login_timestamp` = '".MySqlLegacySupport::getInstance()->real_escape_string((string) $aKeyData['logintime'])."'
                  WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sUserId)."'";
         MySqlLegacySupport::getInstance()->query($query);
         $this->isLoggedIn = false;
@@ -724,7 +724,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     public function CreateTransactionTicket($aParameter = array())
     {
-        $sSalt = md5(uniqid(rand(), true));
+        $sSalt = md5(uniqid((string) rand(), true));
         $_SESSION[self::TICKETVARNAME] = $sSalt;
 
         return $this->CalculateTicketValue($sSalt, $aParameter);
@@ -1135,7 +1135,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     public function ShipToAddressOtherThanBillingAddress()
     {
         $bNewAdrSet = false;
-        if (null !== $this->id & $this->IsLoggedIn()) {
+        if (null !== $this->id && $this->IsLoggedIn()) {
             $oAdrList = $this->GetUserAddresses();
             $oBillingAdr = $this->GetBillingAddress();
             if ($oAdrList->Length() > 1) {
@@ -1160,7 +1160,6 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             // set shipping addres to a new empty address
             $aAdrData = array('name' => 'Neue Adresse');
             $this->oShippingAddress = TdbDataExtranetUserAddress::GetNewInstance();
-            /** @var $oNewAdr TdbDataExtranetUserAddress */
             $this->oShippingAddress->LoadFromRowProtected($aAdrData);
             $this->sqlData['default_shipping_address_id'] = null;
             $this->fieldDefaultShippingAddressId = null;
@@ -1205,7 +1204,6 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             $this->oShippingAddress = null;
             if (!empty($this->fieldDefaultShippingAddressId)) {
                 $this->oShippingAddress = TdbDataExtranetUserAddress::GetNewInstance();
-                /** @var $oShippingAddress TdbDataExtranetUserAddress */
                 if (!$this->oShippingAddress->Load($this->fieldDefaultShippingAddressId)) {
                     $this->oShippingAddress = null;
                 }
@@ -1231,7 +1229,6 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             if (null === $this->oShippingAddress) {
                 // need to create an empty address
                 $this->oShippingAddress = TdbDataExtranetUserAddress::GetNewInstance();
-                /** @var $oShippingAddress TdbDataExtranetUserAddress */
             }
         }
 
@@ -2045,7 +2042,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             $this->sqlData['confirmed'] = '0';
             $this->sqlData['confirmedon'] = '0000-00-00 00:00:00';
             $this->sqlData['reg_email_send'] = '1';
-            $this->sqlData['tmpconfirmkey'] = md5(uniqid(rand(), true));
+            $this->sqlData['tmpconfirmkey'] = md5(uniqid((string) rand(), true));
             $this->SendRegistrationNotification();
         }
     }
@@ -2106,7 +2103,6 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         $oProfile = &$this->GetFromInternalCache('oProfile');
         if (is_null($oProfile)) {
             $oProfile = TdbDataExtranetUserProfile::GetNewInstance();
-            /** @var $oProfile TdbDataExtranetUserProfile */
             if (!$oProfile->LoadFromField('data_extranet_user_id', $this->id)) {
                 $oProfile = false;
             }
@@ -2286,7 +2282,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         try {
             $sForgotPasswordKey = \bin2hex(random_bytes(20));
         } catch (\Exception $e) {
-            throw new PasswordGenerationFailedException($e->getMessage(), $e->getCode(), $e);
+            throw new PasswordGenerationFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
         $this->AllowEditByAll(true);
 

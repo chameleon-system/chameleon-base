@@ -397,7 +397,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
                 $oModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
                 $oModuleInstance->Load($sModuleInstanceId);
                 if (method_exists($oModuleInstance, 'GetFieldCmsTplPageList')) {
-                    /** @var $oPageList TdbCmsTplPageList */
+                    /** @var TdbCmsTplPageList $oPageList */
                     $oPageList = $oModuleInstance->GetFieldCmsTplPageList();
                     $bFound = false;
                     while ($oPage = &$oPageList->Next()) {
@@ -415,7 +415,6 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
                         }
                     }
                 } elseif (method_exists($oModuleInstance, 'GetFieldCmsTplPageCmsMasterPagedefSpotList')) {
-                    /** @var $oPageDefSpotList TdbCmsTplPageCmsMasterPagedefSpotList */
                     $oPageDefSpotList = $oModuleInstance->GetFieldCmsTplPageCmsMasterPagedefSpotList();
                     $bFound = false;
                     while ($oPageDefSpot = &$oPageDefSpotList->Next()) {
@@ -453,7 +452,6 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
         $bSignUpConfirmed = false;
         if ($this->global->UserDataExists('optincode')) {
             $oSignUp = TdbPkgNewsletterUser::GetNewInstance();
-            /** @var $oSignUp TdbPkgNewsletterUser */
             if ($oSignUp->LoadFromField('optincode', $this->global->GetUserData('optincode'))) {
                 $this->data['oNewsletterSignup'] = $oSignUp;
                 // do not opt in if we have an opt in

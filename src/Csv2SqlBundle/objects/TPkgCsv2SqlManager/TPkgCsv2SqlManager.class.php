@@ -86,7 +86,6 @@ class TPkgCsv2SqlManager
 
         $aErrors = array();
         // get list of import handler
-        /** @var $oCsv2SqlList TdbPkgCsv2sqlList */
         $oCsv2SqlList = TdbPkgCsv2sqlList::GetList();
         $oCsv2SqlList->GoToStart();
         while ($oListItem = $oCsv2SqlList->Next()) {
@@ -121,7 +120,6 @@ class TPkgCsv2SqlManager
         $aErrors = array();
 
         //get list of import handler
-        /** @var $oCsv2SqlList TdbPkgCsv2sqlList */
         $oCsv2SqlList = TdbPkgCsv2sqlList::GetList();
         $oCsv2SqlList->GoToStart();
         while ($oListItem = $oCsv2SqlList->Next()) {

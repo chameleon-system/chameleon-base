@@ -57,7 +57,7 @@ EOF
             $updateCount += \count($updates);
         }
 
-        $output->writeln($updateCount);
+        $output->writeln((string) $updateCount);
 
         return 0;
     }

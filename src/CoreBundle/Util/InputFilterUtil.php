@@ -41,7 +41,7 @@ class InputFilterUtil implements InputFilterUtilInterface
             return $default;
         }
 
-        return $this->filterValue($request->get($key, $default, $deep), $filter);
+        return $this->filterValue($request->get($key, $default), $filter);
     }
 
     /**
@@ -54,7 +54,7 @@ class InputFilterUtil implements InputFilterUtilInterface
             return $default;
         }
 
-        return $this->filterValue($request->query->get($key, $default, $deep), $filter);
+        return $this->filterValue($request->query->get($key, $default), $filter);
     }
 
     /**
@@ -67,7 +67,7 @@ class InputFilterUtil implements InputFilterUtilInterface
             return $default;
         }
 
-        return $this->filterValue($request->request->get($key, $default, $deep), $filter);
+        return $this->filterValue($request->request->get($key, $default), $filter);
     }
 
     /**

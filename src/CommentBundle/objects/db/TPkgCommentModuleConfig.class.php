@@ -71,12 +71,16 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
      */
     public function &GetFieldPkgCommentType()
     {
+        /** @var TdbPkgCommentType|null $oItem */
         $oItem = $this->GetFromInternalCache('oLookuppkg_comment_type_id');
+
         if (is_null($oItem)) {
             $oItem = TdbPkgCommentType::GetNewInstance();
-            /** @var $oItem TdbPkgCommentType */
             $oItem->SetLanguage($this->iLanguageId);
+
+            /** @var TdbPkgCommentType $oItem */
             $oItem = $oItem->GetInstance($this->fieldPkgCommentTypeId);
+
             if (!array_key_exists('id', $oItem->sqlData) && !empty($oItem->sqlData['id'])) {
                 $oItem = null;
             }

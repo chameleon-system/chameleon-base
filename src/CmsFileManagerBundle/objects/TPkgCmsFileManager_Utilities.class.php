@@ -42,7 +42,6 @@ class TPkgCmsFileManager_Utilities
      * @param string $path
      * @param string $patternInPath
      * @param int|null $flags
-     * @psalm-param GLOB_* $flags
      *
      * @return array
      */

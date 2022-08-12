@@ -25,9 +25,6 @@ class ImageCropMediaFieldImageBoxMapper extends AbstractViewMapper
      */
     private $mediaManagerUrlGenerator;
 
-    /**
-     * @param MediaManagerUrlGeneratorInterface|null $mediaManagerUrlGenerator
-     */
     public function __construct(MediaManagerUrlGeneratorInterface $mediaManagerUrlGenerator)
     {
         $this->mediaManagerUrlGenerator = $mediaManagerUrlGenerator;

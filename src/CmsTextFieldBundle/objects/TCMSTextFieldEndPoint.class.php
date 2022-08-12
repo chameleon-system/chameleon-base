@@ -721,7 +721,6 @@ class TCMSTextFieldEndPoint
         $sItemId = $aMatch[2];
         $sLinkName = $aMatch[7];
         $oItem = new TCMSDownloadFile();
-        /** @var $oItem TCMSDownloadFile */
         if ($oItem->Load($sItemId)) {
             if ($sLinkName != $oItem->GetName()) {
                 $sResult = $oItem->getDownloadHtmlTag(false, false, false, false, $sLinkName);
@@ -831,6 +830,8 @@ class TCMSTextFieldEndPoint
      * @param array $aMatch
      *
      * @return string
+     *
+     * @psalm-suppress InvalidScalarArgument - Some array type juggling is happening in this method
      */
     protected function _callback_cmstextfield_imageparser($aMatch)
     {
@@ -855,7 +856,7 @@ class TCMSTextFieldEndPoint
         if ('/' !== substr($tags['src'], 0, 1)) {
             $tags['src'] = '/'.$tags['src'];
         }
-        /** @var $oImage TCMSImage */
+
         $oImage = new TCMSImage();
         $sCMSMediaID = $aMatch[2];
         $this->aEnclosedMediaIDs[] = $sCMSMediaID;
@@ -1061,10 +1062,10 @@ class TCMSTextFieldEndPoint
         $globalZoomMaxHeight = CMS_MAX_IMAGE_ZOOM_HEIGHT;
 
         if (!empty($globalZoomMaxWidth) || !empty($globalZoomMaxHeight)) {
-            if ($this->iMaxZoomImageWidth > $globalZoomMaxWidth || $this->iMaxZoomImageWidth = 0) {
+            if ($this->iMaxZoomImageWidth > $globalZoomMaxWidth || 0 === $this->iMaxZoomImageWidth) {
                 $maxWidth = $globalZoomMaxWidth;
             }
-            if ($this->iMaxZoomImageHeight > $globalZoomMaxHeight || $this->iMaxZoomImageHeight = 0) {
+            if ($this->iMaxZoomImageHeight > $globalZoomMaxHeight || 0 === $this->iMaxZoomImageHeight) {
                 $maxHeight = $globalZoomMaxHeight;
             }
         }

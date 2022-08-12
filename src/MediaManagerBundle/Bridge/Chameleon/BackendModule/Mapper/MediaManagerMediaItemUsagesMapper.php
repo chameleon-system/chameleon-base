@@ -59,7 +59,7 @@ class MediaManagerMediaItemUsagesMapper extends AbstractViewMapper
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
         /**
-         * @var $mediaItem MediaItemDataModel
+         * @var MediaItemDataModel $mediaItem
          */
         $mediaItem = $oVisitor->GetSourceObject('mediaItem');
         try {

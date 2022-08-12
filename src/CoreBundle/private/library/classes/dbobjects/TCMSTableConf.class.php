@@ -16,7 +16,7 @@
 class TCMSTableConf extends TCMSRecord
 {
     /**
-     * @param int|null $id
+     * @param string|null $id
      */
     public function TCMSTableConf($id = null)
     {

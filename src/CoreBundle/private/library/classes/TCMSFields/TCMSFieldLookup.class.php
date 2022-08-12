@@ -416,12 +416,12 @@ class TCMSFieldLookup extends TCMSField
             $sInputName => array(
                 'description' => 'ID for the record in: '.($aTableConf['translation'] ?? ' [not found]'),
                 'default' => '',
-                'sType' => 'int',
+                'sType' => 'string',
             ),
             'iLanguageId' => array(
                 'description' => 'set language id for list - if null, the default language will be used instead',
                 'default' => 'null',
-                'sType' => 'int',
+                'sType' => 'string|null',
             ),
         );
         $aMethodData['aParameters'] = $aParameters;

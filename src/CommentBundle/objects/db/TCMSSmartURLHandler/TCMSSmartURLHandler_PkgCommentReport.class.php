@@ -25,7 +25,6 @@ class TCMSSmartURLHandler_PkgCommentReport extends TCMSSmartURLHandler
         $aParts = explode('/', $sPath);
         $aParts = $this->CleanPath($aParts);
         $oPortal = TdbCmsPortal::GetNewInstance();
-        /** @var $oPortal TdbCmsPortal */
         $oPortal->Load($oURLData->iPortalId);
 
         try {
@@ -50,7 +49,6 @@ class TCMSSmartURLHandler_PkgCommentReport extends TCMSSmartURLHandler
         }
         if ($bIsCorrect) {
             $oPortal = TdbCmsPortal::GetNewInstance();
-            /** @var $oPortal TdbCmsPortal */
             $oPortal->Load($oURLData->iPortalId);
             $iNodeId = $oPortal->GetSystemPageNodeId('announcecomment');
             $iPageId = static::GetNodePage($iNodeId);

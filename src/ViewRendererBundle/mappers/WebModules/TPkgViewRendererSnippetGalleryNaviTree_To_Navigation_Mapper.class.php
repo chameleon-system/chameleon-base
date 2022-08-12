@@ -25,7 +25,7 @@ class TPkgViewRendererSnippetGalleryNaviTree_To_Navigation_Mapper extends Abstra
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        /** @var $aTree array */
+        /** @var array $aTree */
         $aTree = $oVisitor->GetSourceObject('aTree');
 
         $oVisitor->SetMappedValue('aTree', $this->MapTree($aTree, '', $oVisitor->GetSourceObject('sActiveRelativePath')));

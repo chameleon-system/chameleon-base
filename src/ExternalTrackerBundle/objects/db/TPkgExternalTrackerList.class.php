@@ -223,7 +223,7 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
      * return an instance for the query passed.
      *
      * @param string $sQuery                                 - custom query instead of default query
-     * @param int    $iLanguageId                            - the language id for record overloading
+     * @param string $iLanguageId                            - the language id for record overloading
      * @param bool   $bAllowCaching                          - set this to true if you want to cache the recordlist object
      * @param bool   $bForceWorkflow                         - set this to true to force adding the workflow query part even in cms backend mode
      * @param bool   $bUseGlobalFilterInsteadOfPreviewFilter - set this to true if you want to overload all workflow data instead of only the records that are marked for preview

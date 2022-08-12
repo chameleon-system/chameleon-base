@@ -56,9 +56,6 @@ class MatchLevel
     /**
      * @param int $matchLevel
      * @param array $missmatchlist
-     *
-     * @psalm-param self::$MATCH_* $matchLevel
-     * @psalm-param self::$MISSMATCH_TYPE_*[] $missmatchlist
      */
     public function __construct($matchLevel, array $missmatchlist)
     {

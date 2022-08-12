@@ -75,9 +75,7 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
      */
     protected function GetPostData()
     {
-        /** @var $oGlobal TGlobal */
         $oGlobal = TGlobal::instance();
-        /** @var $oUser TdbDataExtranetUser */
         $oUser = TdbDataExtranetUser::GetInstance();
         $aPostData = array();
 
@@ -204,7 +202,6 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
         $bHasPostalcode = (array_key_exists('postalcode', $this->sqlData) && !empty($this->sqlData['postalcode']));
         if ($bHasCountry && $bHasPostalcode) {
             $oCountry = TdbDataCountry::GetNewInstance();
-            /** @var $oCountry TdbDataCountry */
             if ($oCountry->Load($this->sqlData['data_country_id'])) {
                 if (!$oCountry->IsValidPostalcode($this->sqlData['postalcode'])) {
                     if ('' != $sFormDataName) {

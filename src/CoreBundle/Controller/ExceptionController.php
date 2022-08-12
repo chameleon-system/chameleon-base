@@ -72,6 +72,7 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
      * @param DebugLoggerInterface|null $logger
      *
      * @return Response
+     * @psalm-suppress InvalidScalarArgument
      */
     public function showAction(Request $request, FlattenException $exception, DebugLoggerInterface $logger = null)
     {

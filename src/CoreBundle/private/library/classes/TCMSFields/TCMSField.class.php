@@ -83,7 +83,7 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * the definition class of the field.
      *
-     * @var TdbCmsFieldConf
+     * @var TdbCmsFieldConf|TCMSTableToField_TCMSTableFieldConf
      */
     public $oDefinition;
 

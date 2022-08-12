@@ -71,7 +71,7 @@ class TPkgCmsResultCacheManager
      * @param string      $sOwner
      * @param string      $sKey
      * @param string      $sValue
-     * @param string|bool $expireTimestamp
+     * @param int         $expireTimestamp
      * @param bool        $bAllowGarbageCollection true = garbage collector delete entry if expired
      *
      * @return void

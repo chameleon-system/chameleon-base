@@ -49,7 +49,7 @@ class ImageCropEditorUrlMapper extends AbstractViewMapper
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
         /**
-         * @var $mediaItem MediaItemDataModel
+         * @var MediaItemDataModel $mediaItem
          */
         $mediaItem = $oVisitor->GetSourceObject('mediaItem');
         $oVisitor->SetMappedValue('createCropUrl', $this->getCropEditorUrl($mediaItem->getId()));

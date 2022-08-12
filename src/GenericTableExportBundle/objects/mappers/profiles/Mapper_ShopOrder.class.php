@@ -55,7 +55,7 @@ class Mapper_ShopOrder extends AbstractViewMapper
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        /** @var $oExportData TdbShopOrder */
+        /** @var TdbShopOrder $oExportData */
         $oExportData = $oVisitor->GetSourceObject('exportdata');
         if (null === $oExportData) {
             return;

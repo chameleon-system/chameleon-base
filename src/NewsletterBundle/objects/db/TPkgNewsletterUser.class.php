@@ -60,7 +60,6 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
             $oInst = null;
             $user = self::getExtranetUserProvider()->getActiveUser();
             if (null !== $user && $user->IsLoggedIn()) {
-                /** @var $oInst TdbPkgNewsletterUser */
                 $oInst = TdbPkgNewsletterUser::GetNewInstance();
                 $oPortal = self::getPortalDomainServiceStatic()->getActivePortal();
                 $bNewsletterUserLoaded = false;
@@ -137,7 +136,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         if (false === $oInstance) {
             $oGlobal = TGlobal::instance();
             $sId = $oGlobal->GetUserData(TdbPkgNewsletterUser::URL_USER_ID_PARAMETER);
-            /** @var $oInstance TdbPkgNewsletterUser */
+            /** @var TdbPkgNewsletterUser $oInstance */
             $oInstance = TdbPkgNewsletterUser::GetNewInstance();
             if (!$oInstance->Load($sId)) {
                 $oInstance = null;
@@ -433,7 +432,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         if (!array_key_exists('optin', $this->sqlData) || '1' != $this->sqlData['optin']) {
             $aData = $this->sqlData;
             $aData['signup_date'] = date('Y-m-d H:i:s');
-            $aData['optincode'] = md5(uniqid(rand(), true));
+            $aData['optincode'] = md5(uniqid((string) rand(), true));
             if (is_null($oNewsletterConfig)) {
                 $aData['optin'] = '0';
                 $this->LoadFromRow($aData);
@@ -511,7 +510,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     public function PostConfirmationUpdateHook($oNewsletterConfig)
     {
         $oUser = TdbDataExtranetUser::GetInstance();
-        $this->sqlData['optincode'] = md5(uniqid(rand(), true));
+        $this->sqlData['optincode'] = md5(uniqid((string) rand(), true));
         $this->AllowEditByAll(true);
         $this->Save();
         $this->AllowEditByAll(true);
@@ -905,7 +904,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         $sOptOutCode = $oConfirmation->fieldOptoutKey;
         if (0 == strlen($sOptOutCode)) {
             $oConfirmation->AllowEditByAll(true);
-            $sOptOutCode = md5(uniqid(rand(), true));
+            $sOptOutCode = md5(uniqid((string) rand(), true));
             $oConfirmation->sqlData['optout_key'] = $sOptOutCode;
             $oConfirmation->Save();
             $oConfirmation->AllowEditByAll(false);
@@ -926,7 +925,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         $sOptOutCode = $this->fieldOptoutcode;
         if (0 == strlen($sOptOutCode)) {
             $this->AllowEditByAll(true);
-            $sOptOutCode = md5(uniqid(rand(), true));
+            $sOptOutCode = md5(uniqid((string) rand(), true));
             $this->sqlData['optoutcode'] = $sOptOutCode;
             $this->Save();
             $this->AllowEditByAll(false);
@@ -1037,6 +1036,9 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
 
     /**
      * return TdbPkgNewsletterUser if the email has already been registered otherwise null.
+     *
+     * @psalm-suppress TypeDoesNotContainNull
+     * @FIXME This method currently ALWAYS returns `TdbPkgNewsletterUser`, irrespective of the registration state as `TdbPkgNewsletterUser::GetNewInstance` will also always return an instance.
      *
      * @return TdbPkgNewsletterUser|null
      */

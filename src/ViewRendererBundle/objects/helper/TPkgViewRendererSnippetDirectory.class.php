@@ -232,7 +232,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
 
     /**
      * @param array       $aTree
-     * @param bool|string $sType
+     * @param string      $sType
      * @param string|null $sRootPath
      *
      * @return array
@@ -270,7 +270,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
 
     /**
      * @param array       $aTree
-     * @param bool|string $sType
+     * @param string      $sType
      * @param string      $sRootPath
      * @param bool        $bWithDummyData - include the dummy data files
      *

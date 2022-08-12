@@ -73,15 +73,16 @@ class MediaManagerConfirmDeleteMapper extends AbstractViewMapper
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
-        /**
-         * @var $listState    MediaManagerListState
-         * @var $mediaItemIds string[]
-         * @var $language     TdbCmsLanguage
-         */
+        /** @var MediaManagerListState $listState */
         $listState = $oVisitor->GetSourceObject('listState');
-        $enableUsageSearch = $listState->isDeleteWithUsageSearch();
+
+        /** @var string[] $mediaItemIds */
         $mediaItemIds = $oVisitor->GetSourceObject('mediaItemIds');
+
+        /** @var TdbCmsLanguage $language */
         $language = $oVisitor->GetSourceObject('language');
+
+        $enableUsageSearch = $listState->isDeleteWithUsageSearch();
 
         try {
             $mediaItems = $this->mediaItemDataAccess->getMediaItems($mediaItemIds, $language->id);

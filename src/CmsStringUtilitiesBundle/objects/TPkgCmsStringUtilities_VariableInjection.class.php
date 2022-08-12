@@ -112,6 +112,7 @@ class TPkgCmsStringUtilities_VariableInjection implements IPkgCmsStringUtilities
                     }
                     $return = '';
                     if (is_numeric($this->aInternalDataCache[$var])) {
+                        /** @var int $modifier */
                         $return = TCMSLocal::GetActive()->FormatNumber($this->aInternalDataCache[$var], $modifier);
                     }
                     break;

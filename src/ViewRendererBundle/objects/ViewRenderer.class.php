@@ -157,7 +157,7 @@ class ViewRenderer
      *
      * @return void
      */
-    public function addMapperFromIdentifier($identifier, array $transformations = null, array $mapToArray = null)
+    public function addMapperFromIdentifier($identifier, array $transformations = null, $mapToArray = null)
     {
         $this->AddMapper($this->mapperLoader->getMapper($identifier), $transformations, $mapToArray);
     }

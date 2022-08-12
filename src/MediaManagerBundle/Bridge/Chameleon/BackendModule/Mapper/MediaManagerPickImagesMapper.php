@@ -36,7 +36,7 @@ class MediaManagerPickImagesMapper extends AbstractViewMapper
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
         /**
-         * @var $listState MediaManagerListState
+         * @var MediaManagerListState $listState
          */
         $listState = $oVisitor->GetSourceObject('listState');
         if ($listState->isPickImageMode()) {

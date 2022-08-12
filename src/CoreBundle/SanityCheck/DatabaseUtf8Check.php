@@ -34,7 +34,7 @@ class DatabaseUtf8Check extends AbstractCheck
     }
 
     /**
-     * @return array(CheckOutcome)
+     * @return CheckOutcome[]
      */
     public function performCheck()
     {

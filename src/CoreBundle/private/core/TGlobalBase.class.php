@@ -400,7 +400,7 @@ class TGlobalBase
     /**
      * escapes a string for javascript usage.
      *
-     * @param string $nonEscapedString
+     * @param scalar $nonEscapedString
      *
      * @return string
      */

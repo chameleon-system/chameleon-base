@@ -188,7 +188,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
             $messages = $this->flashMessageService->consumeMessages(TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER);
             if (null !== $messages) {
                 while ($message = $messages->Next()) {
-                    /** @var $message TdbCmsMessageManagerBackendMessage */
+                    /** @var TdbCmsMessageManagerBackendMessage $message */
                     $messageTexts[] = $message->fieldMessage;
                 }
             }
@@ -204,7 +204,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         }
 
         while ($message = $messages->Next()) {
-            /** @var $message TdbCmsMessageManagerBackendMessage */
+            /** @var TdbCmsMessageManagerBackendMessage $message */
             if ('TABLEEDITOR_DELETE_RECORD_SUCCESS' !== $message->fieldName) {
                 throw new DataAccessException(
                     sprintf(
@@ -292,10 +292,10 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         array &$paramTypes
     ) {
         $searchTerm = $mediaManagerListRequest->getSearchTerm();
-        $searchTerm = trim($searchTerm);
         if (null === $searchTerm || '' === $searchTerm) {
             return;
         }
+        $searchTerm = trim($searchTerm);
 
         $language = $this->languageService->getLanguage($languageId);
         $parts = [];
@@ -420,10 +420,10 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
                 $params,
                 $paramTypes
             );
-            $numberOfRecords = $stm->rowCount();
+            $numberOfRecords = (int) $stm->rowCount();
 
             $stm = $this->transformStatementForPaging($stm, $mediaManagerListRequest, $query, $params, $paramTypes);
-            $numberOfPages = ceil($numberOfRecords / $mediaManagerListRequest->getPageSize());
+            $numberOfPages = (int) ceil($numberOfRecords / $mediaManagerListRequest->getPageSize());
 
             $mediaItems = array();
             $rows = $stm->fetchAll(\PDO::FETCH_ASSOC);

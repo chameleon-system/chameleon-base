@@ -236,7 +236,7 @@ class TCMSPortal extends TCMSRecord
      *
      * @param string $sNaviName
      *
-     * @return bool|string
+     * @return false|string
      */
     public function GetNavigationTreeId($sNaviName)
     {

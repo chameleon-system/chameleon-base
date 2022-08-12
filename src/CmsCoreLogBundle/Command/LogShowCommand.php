@@ -92,14 +92,19 @@ class LogShowCommand extends Command
     {
         $infoStrings = array();
 
+        /** @var string $channel */
         $channel = $input->getOption('channel');
-        /** @var string $number */
+        /** @var numeric-string $number */
         $number = $input->getOption('number');
+        /** @var string $level */
         $level = $input->getOption('level');
+        /** @var string $ip */
         $ip = $input->getOption('ip');
+        /** @var string $cmsident */
         $cmsident = $input->getOption('cmsident');
-        /** @var string $page */
+        /** @var numeric-string $page */
         $page = $input->getOption('page');
+        /** @var string $sorting */
         $sorting = $input->getOption('sort');
 
         if (!array_key_exists($sorting, array('desc', 'asc'))) {
@@ -144,7 +149,7 @@ class LogShowCommand extends Command
             $sqlCount = $sql;
             $rowCount = \MySqlLegacySupport::getInstance()->num_rows(\MySqlLegacySupport::getInstance()->query($sqlCount));
 
-            $sql .= ' LIMIT '.\MySqlLegacySupport::getInstance()->real_escape_string($limitOffset).','.\MySqlLegacySupport::getInstance()->real_escape_string($limitNumber);
+            $sql .= ' LIMIT '.\MySqlLegacySupport::getInstance()->real_escape_string((string) $limitOffset).','.\MySqlLegacySupport::getInstance()->real_escape_string($limitNumber);
             //$infoStrings[] = '<comment>limit: '.$number.'</comment>';
             $limitEnd = $limitOffset + $limitNumber;
             $infoStrings[] = '<comment>showing entries '.$limitOffset.'-'.$limitEnd.' of '.$rowCount.' entries</comment>';

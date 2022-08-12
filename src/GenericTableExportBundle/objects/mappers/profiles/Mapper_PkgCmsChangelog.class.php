@@ -36,7 +36,7 @@ class Mapper_PkgCmsChangelog extends AbstractViewMapper
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        /** @var $oExportData TdbPkgNewsletterUser */
+        /** @var TdbPkgNewsletterUser $oExportData */
         $oExportData = $oVisitor->GetSourceObject('exportdata');
         if (null === $oExportData) {
             return;

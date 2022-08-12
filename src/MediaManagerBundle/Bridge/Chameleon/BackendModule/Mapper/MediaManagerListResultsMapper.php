@@ -63,12 +63,12 @@ class MediaManagerListResultsMapper extends AbstractViewMapper
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
-        /**
-         * @var $listState MediaManagerListState
-         * @var $language  TdbCmsLanguage
-         */
+        /** @var MediaManagerListState $listState */
         $listState = $oVisitor->GetSourceObject('listState');
+
+        /** @var TdbCmsLanguage $language */
         $language = $oVisitor->GetSourceObject('language');
+
         try {
             $listRequest = $this->mediaManagerListRequestService->createListRequestFromListState(
                 $listState,

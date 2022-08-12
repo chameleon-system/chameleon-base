@@ -73,7 +73,7 @@ class Mapper_ShopExtranetUser extends AbstractViewMapper
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
-        /** @var $oExportData TdbDataExtranetUser */
+        /** @var TdbDataExtranetUser $oExportData */
         $oExportData = $oVisitor->GetSourceObject('exportdata');
         $aBilling = array();
         $aShipping = array();

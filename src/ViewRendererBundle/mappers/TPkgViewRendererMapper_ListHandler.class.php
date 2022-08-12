@@ -20,16 +20,9 @@ class TPkgViewRendererMapper_ListHandler extends AbstractViewMapper
      */
     private $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
-        if (null === $container) {
-            $this->container = \ChameleonSystem\CoreBundle\ServiceLocator::get('service_container');
-        } else {
-            $this->container = $container;
-        }
+        $this->container = $container;
     }
 
     /**
@@ -55,7 +48,7 @@ class TPkgViewRendererMapper_ListHandler extends AbstractViewMapper
             unset($aListHandlerInput[self::SOURCE_DATA_NAME]);
         }
         foreach ($aListHandlerData as $oListHandlerData) {
-            /** @var $oSourceList TCMSRecordList */
+            /** @var TCMSRecordList $oSourceList */
             $oSourceList = $aListHandlerInput[$oListHandlerData->getSourceVariableName()];
             $aTargetData = array();
             $oSourceList->GoToStart();

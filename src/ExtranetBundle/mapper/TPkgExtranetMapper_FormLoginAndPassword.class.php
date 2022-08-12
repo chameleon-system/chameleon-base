@@ -49,7 +49,7 @@ class TPkgExtranetMapper_FormLoginAndPassword extends AbstractPkgExtranetMapper_
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        /** @var $oUser TdbDataExtranetUser */
+        /** @var TdbDataExtranetUser $oUser */
         $oUser = $oVisitor->GetSourceObject('oUser');
         $aFieldList = $this->GetFieldList();
         $this->SetInputFields($aFieldList, $oVisitor, $oUser);

@@ -51,12 +51,12 @@ class MediaManagerSearchAutoCompleteMapper extends AbstractViewMapper
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
-        /**
-         * @var $searchTerm string
-         * @var $language   TdbCmsLanguage
-         */
+        /** @var string $searchTerm */
         $searchTerm = $oVisitor->GetSourceObject('searchTerm');
+
+        /** @var TdbCmsLanguage $language */
         $language = $oVisitor->GetSourceObject('language');
+
         try {
             $rows = $this->mediaItemDataAccess->getTermsToAutoSuggestForSearchTerm($searchTerm, $language->id);
         } catch (DataAccessException $e) {

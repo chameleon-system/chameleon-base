@@ -814,11 +814,13 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $mediaTreeNodeId = $this->inputFilterUtil->getFilteredPostInput('id');
         $mediaTreeNodeParentId = $this->inputFilterUtil->getFilteredPostInput('parentId');
-        $position = (int) $this->inputFilterUtil->getFilteredPostInput('position');
+        $position = $this->inputFilterUtil->getFilteredPostInput('position');
 
         if (null === $mediaTreeNodeId || null === $mediaTreeNodeParentId || null === $position) {
             $this->returnGeneralErrorMessageForAjax();
         }
+
+        $position = (int) $position;
 
         try {
             $editLanguage = $this->languageService->getActiveEditLanguage();
@@ -849,8 +851,12 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
      */
     protected function moveImages()
     {
+        /** @var string|null $mediaTreeNodeId */
         $mediaTreeNodeId = $this->inputFilterUtil->getFilteredPostInput('treeId');
+
+        /** @var string[]|null $imageIds */
         $imageIds = $this->inputFilterUtil->getFilteredPostInput('imageIds');
+
         if (null === $mediaTreeNodeId || false === is_array($imageIds)) {
             $this->returnGeneralErrorMessageForAjax();
         }
@@ -859,7 +865,6 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
             $editLanguageId = $this->languageService->getActiveEditLanguage()->id;
             $mediaTreeNode = $this->mediaTreeDataAccess->getMediaTreeNode($mediaTreeNodeId, $editLanguageId);
             if (null !== $mediaTreeNode) {
-                /** @var $imageIds array* */
                 foreach ($imageIds as $mediaItemId) {
                     $this->mediaItemDataAccess->setMediaTreeNodeOfMediaItem(
                         $mediaItemId,
@@ -984,8 +989,10 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $return = new JavascriptPluginRenderedContent();
         $return->hasError = false;
         try {
+
+            /** @var string[]|null $mediaItemIds */
             $mediaItemIds = $this->inputFilterUtil->getFilteredPostInput('id');
-            /** @var $mediaItemIds array* */
+
             if (true === is_array($mediaItemIds)) {
                 foreach ($mediaItemIds as $mediaItemId) {
                     $this->mediaItemDataAccess->deleteMediaItem($mediaItemId);

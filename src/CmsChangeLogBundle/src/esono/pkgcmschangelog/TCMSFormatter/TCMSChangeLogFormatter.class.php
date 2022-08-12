@@ -24,7 +24,6 @@ class TCMSChangeLogFormatter
         if (!$sTableId) {
             return '';
         }
-        /* @var $oTableConf TCMSTableConf */
         $oTableConf = new TCMSTableConf($sTableId);
 
         return $oTableConf->sqlData['translation'];
@@ -105,10 +104,7 @@ class TCMSChangeLogFormatter
             return '';
         }
         $oTableConf = new TCMSTableConf($oFieldConf->fieldCmsTblConfId);
-        if (!$oTableConf) {
-            return '';
-        }
-        /* @var $oField TCMSField */
+
         $oField = $oTableConf->GetField($oFieldConf->fieldName, $oFieldConf);
         if (!$oField) {
             return '';

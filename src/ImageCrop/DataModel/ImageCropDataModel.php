@@ -132,8 +132,6 @@ class ImageCropDataModel
     }
 
     /**
-     * @param ImageCropPresetDataModel|null $imageCropPreset
-     *
      * @return void
      */
     public function setImageCropPreset(ImageCropPresetDataModel $imageCropPreset)

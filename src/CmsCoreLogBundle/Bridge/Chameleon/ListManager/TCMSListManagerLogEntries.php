@@ -28,7 +28,6 @@ class TCMSListManagerLogEntries extends TCMSListManagerFullGroupTable
 
     /**
      * @var array<string, int>
-     * @psalm-type array<string, Logger::*>
      */
     private static $levels = [
         'DEBUG' => Logger::DEBUG,

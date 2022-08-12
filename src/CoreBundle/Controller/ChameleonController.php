@@ -303,13 +303,12 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @param string $pagedef
      *
-     * @return TCMSPageDefinitionFile|false
+     * @return \TCMSPageDefinitionFile|\TCMSPagedef|\TdbCmsMasterPagedef|false
      *
      * @deprecated since 6.2.10 - use chameleon_system_core.data_access_cms_master_pagedef_file or chameleon_system_core.data_access_cms_master_pagedef_database instead
      */
     public function &GetPagedefObject($pagedef)
     {
-        /** @var $oPageDefinitionFile TCMSPageDefinitionFile */
         $oPageDefinitionFile = new TCMSPageDefinitionFile();
         $fullPageDefPath = $this->PageDefinitionFile($pagedef);
         $pagePath = substr($fullPageDefPath, 0, -strlen($pagedef.'.pagedef.php'));
@@ -450,7 +449,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @param string $layoutTemplate - name of the layout template
      *
-     * @return string
+     * @return string|null
      */
     protected function LoadLayoutTemplate($layoutTemplate)
     {

@@ -32,6 +32,6 @@ class CronJobDataAccess implements CronJobCheckDataAccessInterface
     public function refreshTimestampOfLastCronJobCall()
     {
         $cmsConfig = \TCMSConfig::GetInstance();
-        $cmsConfig->SetConfigParameter(self::CRONJOB_TIMESTAMP_PARAMETER, time(), true);
+        $cmsConfig->SetConfigParameter(self::CRONJOB_TIMESTAMP_PARAMETER, (string) time(), true);
     }
 }

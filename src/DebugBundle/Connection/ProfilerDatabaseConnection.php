@@ -19,7 +19,7 @@ use Doctrine\DBAL\Query;
 
 /**
  * @FIXME This class has a lot of incorrect types and other issues.
- * @psalm-suppress InvalidPropertyAssignmentValue, ConstructorSignatureMismatch, MethodSignatureMismatch
+ * @psalm-suppress InvalidPropertyAssignmentValue, ConstructorSignatureMismatch, MethodSignatureMismatch, InternalMethod
  */
 class ProfilerDatabaseConnection extends Connection
 {

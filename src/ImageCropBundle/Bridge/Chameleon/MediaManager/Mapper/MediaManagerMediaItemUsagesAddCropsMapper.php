@@ -37,11 +37,10 @@ class MediaManagerMediaItemUsagesAddCropsMapper extends AbstractViewMapper
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
-        /**
-         * @var $crops  ImageCropDataModel[]
-         * @var $usages MediaItemUsageDataModel[]
-         */
+        /** @var ImageCropDataModel[] $crops */
         $crops = $oVisitor->GetSourceObject('crops');
+
+        /** @var MediaItemUsageDataModel[] $allUsages */
         $allUsages = $oVisitor->GetSourceObject('usages');
 
         $cropIds = array();

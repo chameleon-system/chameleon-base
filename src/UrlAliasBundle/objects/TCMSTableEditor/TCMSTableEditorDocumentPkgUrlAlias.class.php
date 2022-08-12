@@ -50,7 +50,7 @@ class TCMSTableEditorDocumentPkgUrlAlias extends TCMSTableEditorDocumentPkgUrlAl
             if ($oURLAliasList->Length() > 0) {
                 // update existing redirect (in a perfect world this should only be one record)
                 while ($oURLAlias = $oURLAliasList->Next()) {
-                    /** @var $oTableEditorURLAlias TCMSTableEditorManager */
+                    /** @var TCMSTableEditorManager $oTableEditorURLAlias */
                     $oTableEditorURLAlias = TTools::GetTableEditorManager('cms_url_alias', $oURLAlias->id);
                     $oTableEditorURLAlias->AllowEditByAll(true);
                     $oTableEditorURLAlias->AllowDeleteByAll(true);
@@ -67,7 +67,7 @@ class TCMSTableEditorDocumentPkgUrlAlias extends TCMSTableEditorDocumentPkgUrlAl
                 }
             } else {
                 // insert new redirect URL
-                /** @var $oTableEditorURLAlias TCMSTableEditorManager */
+                /** @var TCMSTableEditorManager $oTableEditorURLAlias */
                 $oTableEditorURLAlias = TTools::GetTableEditorManager('cms_url_alias');
                 $oTableEditorURLAlias->AllowEditByAll(true);
 

@@ -159,11 +159,6 @@ class ProfilerStatement extends PDOStatement
         return $result;
     }
 
-    /**
-     * @param string|null $class_name
-     * @param array|null $ctor_args
-     * @return object|false
-     */
     public function fetchObject($class_name = null, $ctor_args = null)
     {
         $startTime = microtime(true);

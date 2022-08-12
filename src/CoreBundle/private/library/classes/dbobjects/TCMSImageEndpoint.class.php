@@ -190,7 +190,7 @@ class TCMSImageEndpoint
     /**
      * Load the image data from the database.
      *
-     * @param int $id
+     * @param string|int $id
      *
      * @return bool
      */
@@ -1246,7 +1246,7 @@ class TCMSImageEndpoint
      *
      * @param TCMSImage $oThumb
      *
-     * @return bool|string
+     * @return int|false
      */
     protected function GetTransformJPGQuality($oThumb)
     {

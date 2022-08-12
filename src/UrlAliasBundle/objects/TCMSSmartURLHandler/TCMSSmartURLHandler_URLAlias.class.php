@@ -23,7 +23,7 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
     public function GetPageDef()
     {
         // Redirect URL-Aliases:
-        /** @var $oURLData TCMSSmartURLData */
+        /** @var TCMSSmartURLData $oURLData */
         $oURLData = &TCMSSmartURLData::GetActive();
         $aUrlList = $this->getUrlAliasListAsSortedArray();
         foreach ($aUrlList as $oURLAlias) {
@@ -144,7 +144,7 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
         $conditions[] = sprintf("(`exact_match` = '0' AND `source_url` LIKE %s)", $dbConnection->quote('/'.$relativeSourceUrl.'%'));
         $conditions[] = sprintf("(`exact_match` = '0' AND `source_url` LIKE %s)", $dbConnection->quote($absoluteSourceUrl.'%'));
 
-        /** @var $oPortal TdbCmsPortal */
+        /** @var TdbCmsPortal $oPortal */
         $oPortal = $this->getPortalDomainService()->getActivePortal();
         $conditionString = implode(' OR ', $conditions);
         $sQuery = "SELECT *

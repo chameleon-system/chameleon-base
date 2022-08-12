@@ -21,7 +21,7 @@ use TCMSConfig;
 class ImageMagickCheck extends AbstractCheck
 {
     /**
-     * @return array(CheckOutcome)
+     * @return CheckOutcome[]
      */
     public function performCheck()
     {

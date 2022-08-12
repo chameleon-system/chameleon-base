@@ -48,9 +48,9 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig_Form extends Abstract
      */
     protected function mapFormFields(IMapperVisitorRestricted &$oVisitor)
     {
-        /** @var $oNewsletterUser TdbPkgNewsletterUser */
+        /** @var TdbPkgNewsletterUser $oNewsletterUser */
         $oNewsletterUser = $oVisitor->GetSourceObject('oNewsletterUser');
-        /** @var $oUser TdbDataExtranetUser */
+        /** @var TdbDataExtranetUser $oUser */
         $oUser = $oVisitor->GetSourceObject('oUser');
 
         $oMessageManager = TCMSMessageManager::GetInstance();
@@ -106,9 +106,9 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig_Form extends Abstract
      */
     protected function mapAvailableGroupList(IMapperVisitorRestricted &$oVisitor)
     {
-        /** @var $oNewsletterModuleSignUpConfig TdbPkgNewsletterModuleSignupConfig */
+        /** @var TdbPkgNewsletterModuleSignupConfig $oNewsletterModuleSignUpConfig */
         $oNewsletterModuleSignUpConfig = $oVisitor->GetSourceObject('oObject');
-        /** @var $oNewsletterUser TdbPkgNewsletterUser */
+        /** @var TdbPkgNewsletterUser $oNewsletterUser */
         $oNewsletterUser = $oVisitor->GetSourceObject('oNewsletterUser');
 
         $aGroupList = array();

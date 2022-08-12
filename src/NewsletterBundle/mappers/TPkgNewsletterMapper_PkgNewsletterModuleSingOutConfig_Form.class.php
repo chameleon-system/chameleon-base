@@ -46,9 +46,9 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends Abstrac
      */
     protected function mapFormFields(IMapperVisitorRestricted &$oVisitor)
     {
-        /** @var $oNewsletterUser TdbPkgNewsletterUser */
+        /** @var TdbPkgNewsletterUser $oNewsletterUser */
         $oNewsletterUser = $oVisitor->GetSourceObject('oNewsletterUser');
-        /** @var $oUser TdbDataExtranetUser */
+        /** @var TdbDataExtranetUser $oUser */
         $oUser = $oVisitor->GetSourceObject('oUser');
         $oMessageManager = TCMSMessageManager::GetInstance();
         $aFieldEmail = array(
@@ -71,7 +71,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends Abstrac
      */
     protected function mapAvailableGroupList($oSignedInNewsletterList, IMapperVisitorRestricted &$oVisitor)
     {
-        /** @var $oNewsletterUser TdbPkgNewsletterUser */
+        /** @var TdbPkgNewsletterUser $oNewsletterUser */
         $oNewsletterUser = $oVisitor->GetSourceObject('oNewsletterUser');
         $aGroupList = array();
         while ($oGroup = &$oSignedInNewsletterList->Next()) {

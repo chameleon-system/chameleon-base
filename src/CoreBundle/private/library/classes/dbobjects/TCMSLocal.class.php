@@ -143,7 +143,7 @@ class TCMSLocal extends TCMSRecord
     /**
      * return formated number.
      *
-     * @param float $dNumber
+     * @param numeric $dNumber
      * @param int   $dDecimals
      *
      * @return string

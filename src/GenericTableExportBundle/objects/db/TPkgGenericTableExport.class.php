@@ -184,7 +184,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
                 }
 
                 if ($sTableName && $oData = call_user_func(array($sTableName.'List', 'GetList'), $sRestriction)) {
-                    /** @var $oData TCMSRecordList */
+                    /** @var TCMSRecordList $oData */
                     $sOutput = $this->RenderList($oData);
                 }
             } else {
@@ -204,7 +204,6 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
      */
     protected function RenderHeader($sHeaderViewPath)
     {
-        /** @var $oViewRenderer ViewRenderer */
         $oViewRenderer = new ViewRenderer();
         $oViewRenderer->setShowHTMLHints(false);
         $sOutput = $oViewRenderer->Render($sHeaderViewPath);
@@ -222,7 +221,6 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
      */
     protected function Render($oExportData, $sViewPath)
     {
-        /** @var $oViewRenderer ViewRenderer */
         $oViewRenderer = new ViewRenderer();
         $oViewRenderer->setShowHTMLHints(false);
         $oViewRenderer->AddSourceObject('exportdata', $oExportData);

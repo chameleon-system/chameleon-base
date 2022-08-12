@@ -25,7 +25,6 @@ class TCMSTableEditorNewsletterSubscriberEndPoint extends TCMSTableEditor
                 $iTableID = TTools::GetCMSTableId('pkg_newsletter_queue');
 
                 $oTableEditor = new TCMSTableEditorManager();
-                /** @var $oTableEditor TCMSTableEditorManager */
                 $oTableEditor->Init($iTableID, $oPkgNewsletterQueue->id);
                 $oTableEditor->AllowDeleteByAll(true);
                 $oTableEditor->Delete($oPkgNewsletterQueue->id);

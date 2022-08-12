@@ -58,6 +58,8 @@ class ClassFromTableFieldProvider implements ClassFromTableFieldProviderInterfac
     public function getDictionaryFromTableField($fieldIdentifier)
     {
         $fieldIdentifier = str_replace('`', '', $fieldIdentifier);
+
+        /** @var string[]|false $tableConfIdSplit */
         $tableConfIdSplit = explode('.', $fieldIdentifier);
 
         if (false === $tableConfIdSplit || 2 !== count($tableConfIdSplit)) {
