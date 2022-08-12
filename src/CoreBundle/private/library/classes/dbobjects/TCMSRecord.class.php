@@ -1735,6 +1735,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @param string $varName - key name
      * @param mixed  $content
+     * @return void
      */
     protected function SetInternalCache($varName, $content)
     {

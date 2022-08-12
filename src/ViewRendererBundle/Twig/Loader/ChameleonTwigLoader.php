@@ -46,7 +46,7 @@ class ChameleonTwigLoader extends FilesystemLoader
     /**
      * @param string $name
      * @param bool $throwException
-     * @return string|null|false
+     * @return string|null
      */
     protected function findTemplate($name, $throwException = true)
     {

@@ -17,6 +17,9 @@ use Twig\Node\Node;
 use Twig\Token;
 use Twig\TokenParser\IncludeTokenParser;
 
+/**
+ * @psalm-suppress InternalClass, InternalMethod
+ */
 class IncludeNodeParser extends IncludeTokenParser
 {
     /**

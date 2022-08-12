@@ -131,7 +131,7 @@
             Injections of the container into classes that existed previously but should not be added
             to new code.
         -->
-        <PluginIssue name="ContainerDependency" errorLevel="suppress">
+        <PluginIssue name="ContainerDependency" errorLevel="error">
             <errorLevel type="suppress">
                 <file name="src/CmsRoutingBundle/src/esono/pkgCmsRouting/CmsRouteLoader.php" />
                 <file name="src/CoreBundle/Controller/ChameleonControllerInvokeListener.php" />
@@ -147,6 +147,7 @@
                 <file name="src/DatabaseMigrationBundle/Bridge/Chameleon/Recorder/MigrationRecorder.php" />
                 <file name="src/DatabaseMigrationBundle/Bridge/Chameleon/Recorder/QueryWriter.php" />
                 <file name="src/PkgCoreBundle/objects/redirect/cmsCoreRedirect.php" />
+                <file name="src/ViewRendererBundle/mappers/TPkgViewRendererMapper_ListHandler.class.php" />
             </errorLevel>
         </PluginIssue>
 

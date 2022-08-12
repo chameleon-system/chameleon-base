@@ -93,7 +93,7 @@ interface IPkgCmsEvent
      * @abstract
      * set additional data for the event
      *
-     * @param array $aData
+     * @param array<string, mixed> $aData
      *
      * @return $this
      */
@@ -105,7 +105,7 @@ interface IPkgCmsEvent
      * @param object $oSubject - the object that created the event
      * @param string $sContext - use IPkgCmsEvent::CONTEXT_* or TPkgCmsEvent::CONTEXT_*
      * @param string $sName - use IPkgCmsEvent::NAME_* or TPkgCmsEvent::NAME_*
-     * @param array $aData - any data you want to pass to the event
+     * @param array<string, mixed> $aData - any data you want to pass to the event
      *
      * @return IPkgCmsEvent
      *                      returns a new instance of an event for the defined context.

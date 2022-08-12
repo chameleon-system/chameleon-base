@@ -28,7 +28,7 @@ class TPkgViewRendererSnippetDummyData
     }
 
     /**
-     * @param array<string, string|array> $aDummyData
+     * @param array<string, mixed> $aDummyData
      *
      * @return void
      */
