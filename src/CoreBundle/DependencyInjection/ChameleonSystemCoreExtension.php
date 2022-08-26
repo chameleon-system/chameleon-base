@@ -222,8 +222,8 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
         $definition->setArgument(0, $geocoderConfig['geo_json_endpoint']);
 
         $container->setParameter('chameleon_system_core.geocoding.attribution.show', $geocoderConfig['attribution']['show']);
-        $container->setParameter('chameleon_system_core.geocoding.attribution.name', 'test' . $geocoderConfig['attribution']['name']);
-        $container->setParameter('chameleon_system_core.geocoding.attribution.url', 'test' . $geocoderConfig['attribution']['url']);
+        $container->setParameter('chameleon_system_core.geocoding.attribution.name', $geocoderConfig['attribution']['name']);
+        $container->setParameter('chameleon_system_core.geocoding.attribution.url', $geocoderConfig['attribution']['url']);
     }
 
     /**
