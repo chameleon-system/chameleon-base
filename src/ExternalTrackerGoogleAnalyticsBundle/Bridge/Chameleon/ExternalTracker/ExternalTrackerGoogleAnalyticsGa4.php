@@ -62,7 +62,7 @@ class ExternalTrackerGoogleAnalyticsGa4 extends TdbPkgExternalTracker
           
           %3$s
         </script>
-        ', $quotedIdentifier, json_encode($config), implode("\n", $events));
+        ', $quotedIdentifier, json_encode($config, JSON_FORCE_OBJECT), implode("\n", $events));
 
         return $lines;
     }
@@ -115,7 +115,7 @@ class ExternalTrackerGoogleAnalyticsGa4 extends TdbPkgExternalTracker
         $data = [
             'value' => (float) $event->fieldPrice,
             'currency' => $this->getActiveCurrencyCode(),
-            'items' => [
+            'items' => [[
                 'item_id' => $event->fieldArticlenumber,
                 'item_name' => $event->fieldName,
                 'item_brand' => null !== $manufacturer ? $manufacturer->fieldName : null,
@@ -123,7 +123,7 @@ class ExternalTrackerGoogleAnalyticsGa4 extends TdbPkgExternalTracker
                 'price' => (float) $event->fieldPrice,
                 'currency' => $this->getActiveCurrencyCode(),
                 'quantity' => (float) $event->fieldQuantityInUnits,
-            ]
+            ]]
         ];
 
         return sprintf('gtag("event", "%s", %s);', $gaEvent, json_encode($data));
