@@ -36,42 +36,42 @@ class EntityListMock implements EntityListInterface
         return count($this->items);
     }
 
-    public function getCurrentPosition()
+    public function getCurrentPosition(): int
     {
         return $this->pointer;
     }
 
-    public function end()
+    public function end(): void
     {
         $this->pointer = count($this->items) - 1;
     }
 
-    public function setQuery($query)
+    public function setQuery(string $query): void
     {
         // Does nothing
     }
 
-    public function previous()
+    public function previous(): void
     {
         $this->pointer--;
     }
 
-    public function estimateCount()
+    public function estimateCount(): int
     {
         return count($this->items);
     }
 
-    public function setPageSize($pageSize)
+    public function setPageSize(int $pageSize): self
     {
         // Does nothing
     }
 
-    public function setCurrentPage($currentPage)
+    public function setCurrentPage(int $currentPage): self
     {
         // Does nothing
     }
 
-    public function setMaxAllowedResults($maxNumberOfResults)
+    public function setMaxAllowedResults(int $maxNumberOfResults):void
     {
         // Does nothing
     }

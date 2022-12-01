@@ -18,5 +18,5 @@ interface EntityListPagerInterface
      * @param int $pageNumberStartingAtZero
      * @return string
      */
-    public function getQueryForPage($query, $pageNumberStartingAtZero);
+    public function getQueryForPage(string $query, int $pageNumberStartingAtZero): string;
 }
