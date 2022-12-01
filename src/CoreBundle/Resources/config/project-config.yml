@@ -74,6 +74,7 @@ twig:
   debug:            "%kernel.debug%"
   charset:          "%kernel.charset%"
   strict_variables:          false
+  exception_controller: null
 #  auto_reload:               ~
 #  optimizations:             ~
 
