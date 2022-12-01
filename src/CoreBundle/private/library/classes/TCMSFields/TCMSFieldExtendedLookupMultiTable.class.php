@@ -226,7 +226,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     {
         $aTables = $this->GetAllowedTables();
         $aMethodData = $this->GetFieldMethodBaseDataArray();
-        $aMethodData['sMethodName'] = '&'.$this->GetFieldMethodName();
+        $aMethodData['sMethodName'] = $this->GetFieldMethodName();
         $aMethodData['sReturnType'] = 'null|';
         $sTypes = '';
         $sTables = '';
@@ -314,7 +314,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 
         $sMethodName = 'GetListFor'.TCMSTableToClass::ConvertToClassString($this->name);
 
-        $aMethodData['sMethodName'] = '&'.$sMethodName;
+        $aMethodData['sMethodName'] = $sMethodName;
         $aMethodData['sReturnType'] = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->sTableName).'List';
 
         $aMethodData['sClassName'] = $aMethodData['sReturnType'];

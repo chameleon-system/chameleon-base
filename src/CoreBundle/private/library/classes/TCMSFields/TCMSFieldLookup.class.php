@@ -410,7 +410,7 @@ class TCMSFieldLookup extends TCMSField
     public function RenderFieldMethodsString()
     {
         $aMethodData = $this->GetFieldMethodBaseDataArray();
-        $aMethodData['sMethodName'] = '&'.$this->GetFieldMethodName();
+        $aMethodData['sMethodName'] = $this->GetFieldMethodName();
         $class = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->GetConnectedTableName());
 
         $sCode = '';
@@ -464,7 +464,7 @@ class TCMSFieldLookup extends TCMSField
 
         $sMethodName = 'GetListFor'.TCMSTableToClass::ConvertToClassString($this->name);
 
-        $aMethodData['sMethodName'] = '&'.$sMethodName;
+        $aMethodData['sMethodName'] = $sMethodName;
         $aMethodData['sReturnType'] = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->sTableName).'List';
 
         $aMethodData['sClassName'] = $aMethodData['sReturnType'];

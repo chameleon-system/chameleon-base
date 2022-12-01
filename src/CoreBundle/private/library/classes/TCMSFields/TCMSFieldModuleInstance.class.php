@@ -361,7 +361,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     public function RenderFieldMethodsString()
     {
         $aMethodData = $this->GetFieldMethodBaseDataArray();
-        $aMethodData['sMethodName'] = '&'.$this->GetFieldMethodName();
+        $aMethodData['sMethodName'] = $this->GetFieldMethodName();
         $aMethodData['sReturnType'] = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->GetConnectedTableName());
 
         $sCode = '';

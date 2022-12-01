@@ -193,7 +193,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
 
         if (!empty($sOwningField)) {
             $aMethodData = $this->GetFieldMethodBaseDataArray();
-            $aMethodData['sMethodName'] = '&'.$this->GetFieldMethodName();
+            $aMethodData['sMethodName'] = $this->GetFieldMethodName();
             $aMethodData['sReturnType'] = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->GetPropertyTableName()).'List';
 
             $aMethodData['sCallMethodName'] = 'GetListFor'.TCMSTableToClass::GetClassName('', $sOwningField);

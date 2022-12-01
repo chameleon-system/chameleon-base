@@ -124,7 +124,7 @@ class TCMSFieldGMapCoordinate extends TCMSField
     public function RenderFieldMethodsString()
     {
         $aMethodData = $this->GetFieldMethodBaseDataArray();
-        $aMethodData['sMethodName'] = '&'.$this->GetFieldMethodName('GoogleMap');
+        $aMethodData['sMethodName'] = $this->GetFieldMethodName('GoogleMap');
         $aMethodData['sReturnType'] = 'TGoogleMap';
         $aMethodData['sClassName'] = 'TGoogleMap';
         $aMethodData['sClassSubType'] = 'TGoogleMap';
