@@ -140,7 +140,7 @@ class TModuleLoader
         $this->modules = [];
         foreach ($moduleList as $name => $config) {
             // @TODO: check if the class is a descendant of TModelBase
-            $this->modules[$name] = &$this->_SetModuleConfigData($name, $config, $templateLanguage);
+            $this->modules[$name] = $this->_SetModuleConfigData($name, $config, $templateLanguage);
         }
     }
 
@@ -153,7 +153,7 @@ class TModuleLoader
      *
      * @return TModelBase
      */
-    protected function &_SetModuleConfigData($name, $config, $templateLanguage = null)
+    protected function _SetModuleConfigData($name, $config, $templateLanguage = null)
     {
         $moduleType = 'Core';
         if (array_key_exists('moduleType', $config)) {
@@ -167,7 +167,7 @@ class TModuleLoader
         $sMappedPath = $modulePath;
         $bModuleIsExtended = false;
         if (TGlobal::IsCMSMode()) {
-            $oCMSConfig = &TdbCmsConfig::GetInstance();
+            $oCMSConfig = TdbCmsConfig::GetInstance();
             $sMappedClassName = $oCMSConfig->GetRealModuleClassName($sModuleClassName);
             if (false !== $sMappedClassName) {
                 $bModuleIsExtended = true;
@@ -334,7 +334,7 @@ class TModuleLoader
         }
 
         $module = $this->modules[$spotName];
-        $oOldModulePoiner = &$this->global->GetExecutingModulePointer();
+        $oOldModulePoiner = $this->global->GetExecutingModulePointer();
         $this->global->SetExecutingModulePointer($module);
 
         $request = $this->requestStack->getCurrentRequest();
@@ -494,7 +494,7 @@ class TModuleLoader
      *
      * @return TModelBase|bool
      */
-    public function &GetPointerToModule($sModuleSpotName)
+    public function GetPointerToModule($sModuleSpotName)
     {
         if (array_key_exists($sModuleSpotName, $this->modules)) {
             return $this->modules[$sModuleSpotName];
@@ -515,7 +515,7 @@ class TModuleLoader
         $pointerArray = array();
         foreach ($this->modules as $moduleKey => $module) {
             if (is_subclass_of($this->modules[$moduleKey], $type) || 0 == strcasecmp(get_class($this->modules[$moduleKey]), $type)) {
-                $pointerArray[] = &$this->modules[$moduleKey];
+                $pointerArray[] = $this->modules[$moduleKey];
             }
         }
 

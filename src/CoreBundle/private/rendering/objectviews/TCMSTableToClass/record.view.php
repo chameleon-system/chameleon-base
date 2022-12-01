@@ -299,7 +299,7 @@ $oFields->GoToStart();
 <?php
         if ('TAdbCmsLocals' != $sAutoClassName) {
             ?>
-        $oLocal =& TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         <?php
         }
 

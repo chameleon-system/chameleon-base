@@ -92,7 +92,7 @@ class TCMSFieldDefinition extends TCMSRecord
      *
      * @return TCMSField|null
      */
-    public function &GetFieldObject()
+    public function GetFieldObject()
     {
         $field = null;
         // check if the field defines a class that overwrites the field type class
@@ -600,7 +600,7 @@ class TCMSFieldDefinition extends TCMSRecord
 
         $language = null;
         if (null === $sLanguageID) {
-            $oUser = &TCMSUser::GetActiveUser();
+            $oUser = TCMSUser::GetActiveUser();
             if (null !== $oUser) {
                 $language = $oUser->GetCurrentEditLanguageObject();
             }

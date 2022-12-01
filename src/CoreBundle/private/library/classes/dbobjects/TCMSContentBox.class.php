@@ -36,7 +36,7 @@ class TCMSContentBox extends TAdbCmsContentBoxList
     {
         $language = null;
         /** @var $oUser TdbCmsUser */
-        $oUser = &TdbCmsUser::GetActiveUser();
+        $oUser = TdbCmsUser::GetActiveUser();
         if ($oUser) {
             $language = $oUser->GetFieldCmsLanguage();
             $this->SetLanguage($language->id);

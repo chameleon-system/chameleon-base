@@ -107,7 +107,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      *
      * @return TdbPkgNewsletterCampaign|null
      */
-    public static function &GetInstanceFromURLId()
+    public static function GetInstanceFromURLId()
     {
         static $oInstance = false;
         if (false === $oInstance) {
@@ -139,7 +139,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
         $oNewsletterUserList = $this->GetNewsletterUser();
         $oNewsletterGroupList = $this->GetFieldPkgNewsletterGroupList();
         $sGeneratedNewsletter = false;
-        while ($oNewsletterUser = &$oNewsletterUserList->Next()) /*@var $oNewsletterUser TdbPkgNewsletterUser*/ {
+        while ($oNewsletterUser = $oNewsletterUserList->Next()) /*@var $oNewsletterUser TdbPkgNewsletterUser*/ {
             $oNewsletterGroup = $this->GetNewsletterGroupForNewsletterUserBestFit($oNewsletterUser, $oNewsletterGroupList);
             $bFoundGroup = false;
             $aNewsletterGroups = array();
@@ -193,7 +193,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      *
      * @return TdbPkgNewsletterGroup|false
      */
-    protected function GetNewsletterGroupForNewsletterUserBestFit(TdbPkgNewsletterUser $oNewsletterUser, TdbPkgNewsletterGroupList &$oNewsletterGroupList)
+    protected function GetNewsletterGroupForNewsletterUserBestFit(TdbPkgNewsletterUser $oNewsletterUser, TdbPkgNewsletterGroupList $oNewsletterGroupList)
     {
         $oNewsletterGroup = null;
         $oExtranetUser = $oNewsletterUser->GetFieldDataExtranetUser();
@@ -259,7 +259,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      *
      * @return bool
      */
-    protected function SendMail(&$oNewsletterGroup, &$oNewsletterUser, $sGeneratedNewsletter, $aNewsletterGroups = null, $bAddAllUnsubscribeLinks = false)
+    protected function SendMail($oNewsletterGroup, $oNewsletterUser, $sGeneratedNewsletter, $aNewsletterGroups = null, $bAddAllUnsubscribeLinks = false)
     {
         $bSend = false;
         if (!empty($sGeneratedNewsletter)) {

@@ -14,7 +14,7 @@ $iShowCommentsOnStart = $oModconf->fieldNumberOfCommentsPerPage;
         <div class="commentlist">
             <?php
             $oCommentList->GoToStart();
-    while ($oComment = &$oCommentList->Next()) { /*@var $oComment TdbPkgComment*/
+    while ($oComment = $oCommentList->Next()) { /*@var $oComment TdbPkgComment*/
         if ($iCount >= $iShowCommentsOnStart) {
             echo '<div class="jshide">';
         }

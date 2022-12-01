@@ -33,7 +33,7 @@ class TPkgCmsNavigation_LoginMapper extends AbstractViewMapper
 
         $user = $this->getExtranetUserProvider()->getActiveUser();
 
-        $oExtranet = &TdbDataExtranet::GetInstance();
+        $oExtranet = TdbDataExtranet::GetInstance();
         if ($oExtranet && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($oExtranet->table, $oExtranet->id);
         }

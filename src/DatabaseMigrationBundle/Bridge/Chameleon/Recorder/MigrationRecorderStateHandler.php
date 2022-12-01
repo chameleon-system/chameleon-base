@@ -28,7 +28,7 @@ class MigrationRecorderStateHandler
      */
     public function isDatabaseLoggingAllowed()
     {
-        $currentUser = &TCMSUser::GetActiveUser();
+        $currentUser = TCMSUser::GetActiveUser();
         if (null === $currentUser) {
             return false;
         }

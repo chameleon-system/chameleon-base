@@ -638,7 +638,7 @@ class TCMSRecordList extends TIterator
      *
      * @return T
      */
-    public function &Random()
+    public function Random()
     {
         $currentItemPointer = $this->getEntityList()->getCurrentPosition();
         $itemIndex = ($this->iNumberOfRecordsToShow > 0) ? $this->iNumberOfRecordsToShow : $this->Length();
@@ -681,7 +681,7 @@ class TCMSRecordList extends TIterator
      *
      * @return T|false
      */
-    public function &current()
+    public function current()
     {
         $data = $this->getEntityList()->current();
         if (false === $data) {
@@ -697,7 +697,7 @@ class TCMSRecordList extends TIterator
      *
      * @return T|false
      */
-    public function &next()
+    public function next()
     {
         $data = $this->getEntityList()->current();
         if (false === $data) {
@@ -731,7 +731,7 @@ class TCMSRecordList extends TIterator
      *
      * @return T|false
      */
-    public function &Previous()
+    public function Previous()
     {
         $this->getEntityList()->previous();
         $data = $this->getEntityList()->current();
@@ -769,7 +769,7 @@ class TCMSRecordList extends TIterator
      *
      * @return T
      */
-    protected function &_NewElement(&$aData)
+    protected function _NewElement($aData)
     {
         $oElement = false;
         // try to fetch the element from _items first
@@ -933,7 +933,7 @@ class TCMSRecordList extends TIterator
         $oCallbackObject = null;
         $sCallbackMethod = '';
         if (!is_null($aCallbackMethodToEvaluate)) {
-            $oCallbackObject = &$aCallbackMethodToEvaluate[0];
+            $oCallbackObject = $aCallbackMethodToEvaluate[0];
             $sCallbackMethod = $aCallbackMethodToEvaluate[1];
         }
 
@@ -1040,7 +1040,7 @@ class TCMSRecordList extends TIterator
      *
      * @return string
      */
-    public function GetListManagerFilterQueryCustomJoins(&$oListManager)
+    public function GetListManagerFilterQueryCustomJoins($oListManager)
     {
         return '';
     }
@@ -1054,7 +1054,7 @@ class TCMSRecordList extends TIterator
      *
      * @return string
      */
-    public function GetListManagerPortalRestriction(&$oListManager, $sQuery)
+    public function GetListManagerPortalRestriction($oListManager, $sQuery)
     {
         return $sQuery;
     }
@@ -1067,7 +1067,7 @@ class TCMSRecordList extends TIterator
      *
      * @return string
      */
-    public function GetListManagerCustomGroupBy(&$oListManager)
+    public function GetListManagerCustomGroupBy($oListManager)
     {
         return '';
     }
@@ -1115,7 +1115,7 @@ class TCMSRecordList extends TIterator
         return $sQuery;
     }
 
-    private function &getItem($itemKey, $data)
+    private function getItem($itemKey, $data)
     {
         if (isset($this->_items[$itemKey])) {
             return $this->_items[$itemKey];

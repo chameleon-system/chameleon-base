@@ -124,7 +124,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
      *
      * @return string
      */
-    protected function _GetOpenWindowJS(&$oPopupTableConf)
+    protected function _GetOpenWindowJS($oPopupTableConf)
     {
         $js = parent::_GetOpenWindowJS($oPopupTableConf);
 
@@ -346,7 +346,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
      * @param string     $sNewName
      * @param array|null $postData
      */
-    public function ChangeFieldDefinition($sOldName, $sNewName, &$postData = null)
+    public function ChangeFieldDefinition($sOldName, $sNewName, $postData = null)
     {
         parent::ChangeFieldDefinition($sOldName, $sNewName, $postData);
 

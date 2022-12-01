@@ -30,10 +30,10 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
     /**
      * @param TCMSImage $oImage - the default image for the current selected position
      */
-    public function Init(&$oImage)
+    public function Init($oImage)
     {
         $this->oGlobal = TGlobal::instance();
-        $this->oDefaultImage = &$oImage;
+        $this->oDefaultImage = $oImage;
 
         $tableConf = TdbCmsTblConf::GetNewInstance();
         $tableConf->LoadFromField('name', 'cms_media');

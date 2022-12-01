@@ -6,5 +6,5 @@
             $sFilter = "`<?=$sTableDatabaseName; ?>`.`<?=$aFieldData['sFieldDatabaseName']; ?>`= ".\ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection')->quote($<?=$iLookupFieldName; ?>)."
                             AND `<?=$sTableDatabaseName; ?>`.`<?=$aFieldData['sFieldDatabaseName']; ?>_table_name`= ".\ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection')->quote($oRecord->sqlData['<?=$aFieldData['sFieldDatabaseName']; ?>_table_name']);
             $query = <?=$sReturnType; ?>::GetDefaultQuery($iLanguageId, $sFilter);
-            $oList =& <?=$sReturnType; ?>::GetList($query);
+            $oList = <?=$sReturnType; ?>::GetList($query);
             return $oList;

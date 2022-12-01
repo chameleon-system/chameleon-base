@@ -173,7 +173,7 @@ class TCMSPage extends TCMSPageAutoParent
      *
      * @return TCMSPageBreadcrumb
      */
-    public function &GetNavigationPath($aStopNodes, $mainTreeNode = null)
+    public function GetNavigationPath($aStopNodes, $mainTreeNode = null)
     {
         if (is_null($mainTreeNode)) {
             $mainTreeNode = $this->GetMainTreeId();
@@ -213,7 +213,7 @@ class TCMSPage extends TCMSPageAutoParent
             // need to reverse the list
             $oTreeNodes->ReverseItemList();
 
-            $this->_aDataCache['oTreePath'][$mainTreeNode] = &$oTreeNodes;
+            $this->_aDataCache['oTreePath'][$mainTreeNode] = $oTreeNodes;
         }
 
         return $this->_aDataCache['oTreePath'][$mainTreeNode];
@@ -226,7 +226,7 @@ class TCMSPage extends TCMSPageAutoParent
      *
      * @return TIterator
      */
-    public function &GetAllNavigationPaths($aStopNodes)
+    public function GetAllNavigationPaths($aStopNodes)
     {
         if (!array_key_exists('oBreadCrumbs', $this->_aDataCache)) {
             $this->_aDataCache['oBreadCrumbs'] = new TIterator();
@@ -235,13 +235,13 @@ class TCMSPage extends TCMSPageAutoParent
                 return $this->_aDataCache['oBreadCrumbs'];
             }
             $allTreeIds = $this->GetPageTreeNodes();
-            $oBreadcrumb = &$this->GetNavigationPath($aStopNodes, $mainTreeId);
+            $oBreadcrumb = $this->GetNavigationPath($aStopNodes, $mainTreeId);
             $oBreadcrumb->bIsPrimary = true;
             $this->_aDataCache['oBreadCrumbs']->AddItem($oBreadcrumb);
             // now add all secondary nodes
             foreach ($allTreeIds as $treeID) {
                 if ($treeID != $mainTreeId) {
-                    $oBreadcrumb = &$this->GetNavigationPath($aStopNodes, $treeID);
+                    $oBreadcrumb = $this->GetNavigationPath($aStopNodes, $treeID);
                     $this->_aDataCache['oBreadCrumbs']->AddItem($oBreadcrumb);
                 }
             }
@@ -295,7 +295,7 @@ class TCMSPage extends TCMSPageAutoParent
      *
      * @return TdbCmsTreeList
      */
-    public function &GetTreeNodesObjects($bShowOnlyActiveNodes = true)
+    public function GetTreeNodesObjects($bShowOnlyActiveNodes = true)
     {
         $sCurrentDateTime = date('Y-m-d H:i:s');
         $query = "SELECT DISTINCT `cms_tree`.*

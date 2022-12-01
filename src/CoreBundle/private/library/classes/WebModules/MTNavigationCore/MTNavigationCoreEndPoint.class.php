@@ -39,7 +39,7 @@ class MTNavigationCoreEndPoint extends TUserModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $activePortal = $this->getPortalDomainService()->getActivePortal();

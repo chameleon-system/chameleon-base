@@ -37,7 +37,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     /**
      * {@inheritDoc}
      */
-    public function ChangeFieldDefinition($sOldName, $sNewName, &$postData = null)
+    public function ChangeFieldDefinition($sOldName, $sNewName, $postData = null)
     {
         $originalDefinitionData = $this->oDefinition->sqlData;
         parent::ChangeFieldDefinition($sOldName, $sNewName, $postData);

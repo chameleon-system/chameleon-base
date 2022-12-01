@@ -70,9 +70,9 @@ class TMDataArticle extends TCMSRecord
      *
      * @return TCMSRecordList
      */
-    public function &GetRelatedArticles()
+    public function GetRelatedArticles()
     {
-        $oRelatedArticles = &$this->GetMLT('data_article_mlt', 'TMDataArticle', '`data_article`.`teaser_priority`,`data_article`.`name`', 'dbobjects/WebModules', 'Core');
+        $oRelatedArticles = $this->GetMLT('data_article_mlt', 'TMDataArticle', '`data_article`.`teaser_priority`,`data_article`.`name`', 'dbobjects/WebModules', 'Core');
 
         return $oRelatedArticles;
     }

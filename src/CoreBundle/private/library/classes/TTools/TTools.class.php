@@ -163,7 +163,7 @@ class TTools
      *
      * @return string
      */
-    public static function ArrayToString(&$aArray)
+    public static function ArrayToString($aArray)
     {
         $sString = 'array(';
         $position = 0;
@@ -212,7 +212,7 @@ class TTools
      */
     public static function CallModule($sModule, $sView, $aParameters = array(), $sSpotName = 'tmpmodule')
     {
-        $oModuleLoader = &self::GetModuleLoaderObject($sModule, $sView, $aParameters, $sSpotName);
+        $oModuleLoader = self::GetModuleLoaderObject($sModule, $sView, $aParameters, $sSpotName);
         $oModuleLoader->InitModules($sSpotName);
 
         return $oModuleLoader->GetModule($sSpotName, true);
@@ -228,7 +228,7 @@ class TTools
      *
      * @return TModuleLoader
      */
-    public static function &GetModuleLoaderObject($sModule, $sView, $aParameters = array(), $sSpotName = 'tmpmodule')
+    public static function GetModuleLoaderObject($sModule, $sView, $aParameters = array(), $sSpotName = 'tmpmodule')
     {
         $oModuleLoader = self::getSubModuleLoader();
         $aModuleParameters = array('model' => $sModule, 'view' => $sView);
@@ -251,8 +251,8 @@ class TTools
      */
     public static function GetModuleObject($sModule, $sView, $aParameters = array(), $sSpotName = 'tmpmodule')
     {
-        $oModuleLoader = &self::GetModuleLoaderObject($sModule, $sView, $aParameters, $sSpotName);
-        $oModule = &$oModuleLoader->GetPointerToModule($sSpotName);
+        $oModuleLoader = self::GetModuleLoaderObject($sModule, $sView, $aParameters, $sSpotName);
+        $oModule = $oModuleLoader->GetPointerToModule($sSpotName);
 
         return $oModule;
     }
@@ -906,7 +906,7 @@ class TTools
     {
         $oGlobal = TGlobal::instance();
 
-        $oModulePointer = &$oGlobal->GetExecutingModulePointer();
+        $oModulePointer = $oGlobal->GetExecutingModulePointer();
         $sSpotName = $oModulePointer->sModuleSpotName;
 
         $aParamList = $aOtherParameters;
@@ -1233,7 +1233,7 @@ class TTools
         if (null === $oTableConf) {
             return $aField;
         }
-        $oCmsConfig = &TdbCmsConfig::GetInstance();
+        $oCmsConfig = TdbCmsConfig::GetInstance();
         $sActiveLanguage = TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID();
         if (($sActiveLanguage != $oCmsConfig->sqlData['translation_base_language_id'])) {
             $sActiveLanguagePrefix = TGlobal::GetLanguagePrefix($sActiveLanguage);
@@ -1634,9 +1634,9 @@ class TTools
             if (null !== $oUser) {
                 $oBillingAddress = $oUser->GetBillingAddress();
                 if (null !== $oBillingAddress) {
-                    $oCountry = &$oBillingAddress->GetFieldDataCountry();
+                    $oCountry = $oBillingAddress->GetFieldDataCountry();
                     if (null !== $oCountry) {
-                        $oTCountry = &$oCountry->GetFieldTCountry();
+                        $oTCountry = $oCountry->GetFieldTCountry();
                         if (null !== $oTCountry) {
                             $sCountry = $oTCountry->fieldIsoCode2;
                         }
@@ -1645,7 +1645,7 @@ class TTools
             }
         } elseif (null !== $sCountryId) {
             $oCountry = TdbDataCountry::GetNewInstance($sCountryId);
-            $oTCountry = &$oCountry->GetFieldTCountry();
+            $oTCountry = $oCountry->GetFieldTCountry();
             if (null !== $oTCountry) {
                 $sCountry = $oTCountry->fieldIsoCode2;
             }

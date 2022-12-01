@@ -51,7 +51,7 @@ class MTHeader extends TCMSModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
@@ -237,7 +237,7 @@ class MTHeader extends TCMSModelBase
     protected function GetPortalList()
     {
         $oCmsPortalList = null;
-        $oCMSUser = &TCMSUser::GetActiveUser();
+        $oCMSUser = TCMSUser::GetActiveUser();
         if (class_exists('TdbCmsPortalList')) {
             $aUserPortalID = $oCMSUser->GetMLTIdList('cms_portal', 'cms_portal_mlt');
             if (count($aUserPortalID) > 0) {
@@ -261,7 +261,7 @@ class MTHeader extends TCMSModelBase
      */
     protected function GetLogo()
     {
-        $oConfig = &TdbCmsConfig::GetInstance();
+        $oConfig = TdbCmsConfig::GetInstance();
 
         return $oConfig->GetThemeURL().'/images/chameleon_logo_header.png';
     }
@@ -291,7 +291,7 @@ class MTHeader extends TCMSModelBase
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $oUser = &TCMSUser::GetActiveUser();
+        $oUser = TCMSUser::GetActiveUser();
         if ($oUser && $oUser->oAccessManager && $oUser->oAccessManager->PermitFunction('flush_cms_cache')) {
             $this->methodCallAllowed[] = 'ClearCache';
         }
@@ -537,7 +537,7 @@ class MTHeader extends TCMSModelBase
         $html = '';
         $editLanguages = array();
         $currentLanguage = '';
-        $currentUser = &TCMSUser::GetActiveUser();
+        $currentUser = TCMSUser::GetActiveUser();
         if (null !== $currentUser) {
             $currentLanguage = $currentUser->GetCurrentEditLanguage();
 
@@ -599,7 +599,7 @@ class MTHeader extends TCMSModelBase
     {
         if ($this->global->UserDataExists('activePortalID')) {
             $portalID = $this->global->GetUserData('activePortalID');
-            $oActiveUser = &TCMSUser::GetActiveUser();
+            $oActiveUser = TCMSUser::GetActiveUser();
 
             $oActiveUser->SetActiveEditPortalID($portalID);
         } else {

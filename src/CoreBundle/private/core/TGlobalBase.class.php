@@ -130,9 +130,9 @@ class TGlobalBase
      *
      * @param TModelBase $oExecutingModuleObject
      */
-    public function SetExecutingModulePointer(&$oExecutingModuleObject)
+    public function SetExecutingModulePointer($oExecutingModuleObject)
     {
-        $this->oExecutingModuleObject = &$oExecutingModuleObject;
+        $this->oExecutingModuleObject = $oExecutingModuleObject;
     }
 
     /**
@@ -140,7 +140,7 @@ class TGlobalBase
      *
      * @return TModelBase
      */
-    public function &GetExecutingModulePointer()
+    public function GetExecutingModulePointer()
     {
         return $this->oExecutingModuleObject;
     }
@@ -520,7 +520,7 @@ class TGlobalBase
      *
      * @param array $arrayObj
      */
-    protected function _StripSlashesArray(&$arrayObj)
+    protected function _StripSlashesArray($arrayObj)
     {
         // strips slashes from multidimensional array
         if (is_array($arrayObj)) {
@@ -816,7 +816,7 @@ class TGlobalBase
      *
      * @return TCMSPortalList
      */
-    public function &GetPortals()
+    public function GetPortals()
     {
         if (!array_key_exists('oPortals', $this->_dataCache)) {
             $this->_dataCache['oPortals'] = new TCMSPortalList();
@@ -837,7 +837,7 @@ class TGlobalBase
     {
         static $sBaseLanguageId = null;
         if (null === $sBaseLanguageId) {
-            $oCmsConfig = &TdbCmsConfig::GetInstance();
+            $oCmsConfig = TdbCmsConfig::GetInstance();
             $sBaseLanguageId = $oCmsConfig->fieldTranslationBaseLanguageId;
         }
         $languageService = self::getLanguageService();

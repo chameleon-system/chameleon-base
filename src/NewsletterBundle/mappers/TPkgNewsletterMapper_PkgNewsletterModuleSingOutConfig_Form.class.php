@@ -44,7 +44,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends Abstrac
      *
      * @return void
      */
-    protected function mapFormFields(IMapperVisitorRestricted &$oVisitor)
+    protected function mapFormFields(IMapperVisitorRestricted $oVisitor)
     {
         /** @var $oNewsletterUser TdbPkgNewsletterUser */
         $oNewsletterUser = $oVisitor->GetSourceObject('oNewsletterUser');
@@ -69,12 +69,12 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends Abstrac
      *
      * @return void
      */
-    protected function mapAvailableGroupList($oSignedInNewsletterList, IMapperVisitorRestricted &$oVisitor)
+    protected function mapAvailableGroupList($oSignedInNewsletterList, IMapperVisitorRestricted $oVisitor)
     {
         /** @var $oNewsletterUser TdbPkgNewsletterUser */
         $oNewsletterUser = $oVisitor->GetSourceObject('oNewsletterUser');
         $aGroupList = array();
-        while ($oGroup = &$oSignedInNewsletterList->Next()) {
+        while ($oGroup = $oSignedInNewsletterList->Next()) {
             $aUserGroups = (null !== $oNewsletterUser) ? ($oSignedInNewsletterList->GetIdList()) : (array());
             $aGroupList[] = array(
                 'id' => $oGroup->id,

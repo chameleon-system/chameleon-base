@@ -124,9 +124,9 @@ class THTMLTableColumn
      *
      * @return THTMLTableColumn
      */
-    public static function &GetInstance($sColumnAlias, $sColumnDBName, $sTitle, $sType = self::FIELD_TYPE_TEXT, $sCallback = null)
+    public static function GetInstance($sColumnAlias, $sColumnDBName, $sTitle, $sType = self::FIELD_TYPE_TEXT, $sCallback = null)
     {
-        $oInstance = &self::GetClassForType($sType);
+        $oInstance = self::GetClassForType($sType);
         /** @var $oInstance THTMLTableColumn */
         if (is_null($oInstance)) {
             trigger_error('Error: Type ['.$sType.'] has no class in THTMLTable/THTMLTableColumn::GetInstance()', E_USER_ERROR);
@@ -166,7 +166,7 @@ class THTMLTableColumn
      *
      * @return string
      */
-    public function GetFieldValue(&$oTableRow)
+    public function GetFieldValue($oTableRow)
     {
         $sValue = '';
         if (array_key_exists($this->sColumnAlias, $oTableRow->sqlData)) {
@@ -197,7 +197,7 @@ class THTMLTableColumn
      *
      * @return string
      */
-    protected function FormatValue($sValue, &$oTableRow)
+    protected function FormatValue($sValue, $oTableRow)
     {
         return TGlobal::OutHTML($sValue);
     }
@@ -219,7 +219,7 @@ class THTMLTableColumn
      *
      * @return THTMLTableColumn
      */
-    protected static function &GetClassForType($sType)
+    protected static function GetClassForType($sType)
     {
         $oInstance = null;
         $sClassName = null;

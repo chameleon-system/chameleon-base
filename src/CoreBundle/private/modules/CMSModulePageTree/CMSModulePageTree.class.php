@@ -85,7 +85,7 @@ class CMSModulePageTree extends TCMSModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
@@ -161,7 +161,7 @@ class CMSModulePageTree extends TCMSModelBase
         $oCMSTreeNode->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
         $oCMSTreeNode->Load($nodeID);
 
-        $this->oRootNode = &$oCMSTreeNode;
+        $this->oRootNode = $oCMSTreeNode;
         $this->data['rootNodeName'] = $oCMSTreeNode->sqlData['name'];
     }
 
@@ -450,7 +450,7 @@ class CMSModulePageTree extends TCMSModelBase
         if (null !== $internalCache) {
             $aPortalExcludeList = $internalCache;
         } else {
-            $oUser = &TCMSUser::GetActiveUser();
+            $oUser = TCMSUser::GetActiveUser();
             $sPortalList = $oUser->oAccessManager->user->portals->PortalList();
             $query = 'SELECT * FROM `cms_portal`';
             if (false !== $sPortalList) {
@@ -525,7 +525,7 @@ class CMSModulePageTree extends TCMSModelBase
                 if (0 == $iPosition) { // set every other node pos+1
                     $query = "SELECT * FROM $quotedTreeTable WHERE `parent_id` = $quotedParentNodeId";
                     $oCmsTreeList = TdbCmsTreeList::GetList($query);
-                    while ($oCmsTreeNode = &$oCmsTreeList->Next()) {
+                    while ($oCmsTreeNode = $oCmsTreeList->Next()) {
                         $oTableEditor->Init($iTableID, $oCmsTreeNode->id);
                         $newSortOrder = $oTableEditor->oTableEditor->oTable->sqlData[$sEntrySortField] + 1;
                         $oTableEditor->SaveField('entry_sort', $newSortOrder);
@@ -539,10 +539,10 @@ class CMSModulePageTree extends TCMSModelBase
                     $quotedNodeId = $databaseConnection->quote($iNodeID);
                     $quotedEntrySortField = $databaseConnection->quoteIdentifier($sEntrySortField);
                     $query = "SELECT * FROM $quotedTreeTable WHERE `parent_id` = $quotedParentNodeId AND `id` != $quotedNodeId ORDER BY $quotedEntrySortField  ASC";
-                    $oCmsTreeList = &TdbCmsTreeList::GetList($query, TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+                    $oCmsTreeList = TdbCmsTreeList::GetList($query, TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
 
                     $count = 0;
-                    while ($oCmsTree = &$oCmsTreeList->Next()) {
+                    while ($oCmsTree = $oCmsTreeList->Next()) {
                         if ($iPosition == $count) { // skip new position of moved node
                             ++$count;
                         }
@@ -646,7 +646,7 @@ class CMSModulePageTree extends TCMSModelBase
             $parameters = array();
         }
 
-        $oCMSUser = &TCMSUser::GetActiveUser();
+        $oCMSUser = TCMSUser::GetActiveUser();
         $parameters['ouserid'] = $oCMSUser->id;
         $parameters['noassign'] = $this->global->GetUserData('noassign');
         $parameters['id'] = $this->global->GetUserData('id');
@@ -666,7 +666,7 @@ class CMSModulePageTree extends TCMSModelBase
             $aTableTriggerList = array();
         }
 
-        $oCMSUser = &TCMSUser::GetActiveUser();
+        $oCMSUser = TCMSUser::GetActiveUser();
 
         $aTableTriggerList[] = array('table' => 'cms_user', 'id' => $oCMSUser->id);
         $aTableTriggerList[] = array('table' => 'cms_user_cms_language_mlt', 'id' => '');

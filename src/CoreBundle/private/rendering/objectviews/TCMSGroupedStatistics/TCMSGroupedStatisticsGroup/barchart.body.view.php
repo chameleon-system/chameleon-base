@@ -1,5 +1,5 @@
 <?php
-$oLocal = &TCMSLocal::GetActive();
+$oLocal = TCMSLocal::GetActive();
 $iBarHeight = 200; //in pixel
 $iTotalBarWidth = 20; //in pixel
 $iSubBarWidth = 10; //in pixel

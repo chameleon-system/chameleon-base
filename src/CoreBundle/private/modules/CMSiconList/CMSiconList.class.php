@@ -14,7 +14,7 @@ class CMSiconList extends TCMSModelBase
     public $iconName = null;
     public $fieldName = null;
 
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
         $fieldName = $this->global->GetUserData('fieldName');

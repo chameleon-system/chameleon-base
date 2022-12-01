@@ -1,6 +1,6 @@
 <?php
 
-function addDefaultPageTitle(array &$moduleList): void
+function addDefaultPageTitle(array $moduleList): void
 {
     $moduleList['pagetitle'] = [
         'model' => 'MTHeader',
@@ -8,7 +8,7 @@ function addDefaultPageTitle(array &$moduleList): void
     ];
 }
 
-function addDefaultHeader(array &$moduleList): void
+function addDefaultHeader(array $moduleList): void
 {
     $moduleList['headerimage'] = [
         'model' => 'MTHeader',
@@ -16,7 +16,7 @@ function addDefaultHeader(array &$moduleList): void
     ];
 }
 
-function addDefaultBreadcrumb(array &$moduleList): void
+function addDefaultBreadcrumb(array $moduleList): void
 {
     $moduleList['breadcrumb'] = [
         'model' => 'MTHeader',
@@ -24,7 +24,7 @@ function addDefaultBreadcrumb(array &$moduleList): void
     ];
 }
 
-function addDefaultSidebar(array &$moduleList): void
+function addDefaultSidebar(array $moduleList): void
 {
     $moduleList['sidebar'] = [
         'model' => 'chameleon_system_core.module.sidebar.sidebar_backend_module',

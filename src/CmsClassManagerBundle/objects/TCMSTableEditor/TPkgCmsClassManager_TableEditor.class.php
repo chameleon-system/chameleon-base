@@ -23,7 +23,7 @@ class TPkgCmsClassManager_TableEditor extends TCMSTableEditor
      *
      * @return void
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
         $classManager = new TPkgCmsVirtualClassManager();

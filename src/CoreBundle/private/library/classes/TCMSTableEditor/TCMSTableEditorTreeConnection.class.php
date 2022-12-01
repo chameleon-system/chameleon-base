@@ -150,7 +150,7 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         parent::PostInsertHook($oFields);
 
@@ -212,13 +212,13 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function _OverwriteDefaults(&$oFields)
+    protected function _OverwriteDefaults($oFields)
     {
         parent::_OverwriteDefaults($oFields);
         $oGlobal = TGlobal::instance();
 
         $oFields->GoToStart();
-        while ($oField = &$oFields->Next()) {
+        while ($oField = $oFields->Next()) {
             /** @var $oField TCMSField */
             if ('parent_id' == $oField->name) {
                 $oField->data = $oGlobal->GetUserData('parent_id');
@@ -230,7 +230,7 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 

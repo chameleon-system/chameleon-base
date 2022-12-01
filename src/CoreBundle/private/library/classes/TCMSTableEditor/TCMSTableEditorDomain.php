@@ -21,7 +21,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function _OverwriteDefaults(&$oFields)
+    protected function _OverwriteDefaults($oFields)
     {
         parent::_OverwriteDefaults($oFields);
 
@@ -83,7 +83,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         parent::PostInsertHook($oFields);
 
@@ -95,7 +95,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 

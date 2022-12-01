@@ -68,7 +68,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
     /**
      * {@inheritdoc}
      */
-    protected function DataIsValid(&$postData, $oFields = null)
+    protected function DataIsValid($postData, $oFields = null)
     {
         $isValid = parent::DataIsValid($postData, $oFields);
 
@@ -152,7 +152,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
@@ -575,7 +575,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
      *
      * @return TIterator
      */
-    public function &GetMenuItems()
+    public function GetMenuItems()
     {
         parent::GetMenuItems();
 

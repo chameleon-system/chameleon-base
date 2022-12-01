@@ -20,7 +20,7 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->CheckRights();
@@ -33,7 +33,7 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
      */
     protected function CheckRights()
     {
-        $oCMSUser = &TCMSUser::GetActiveUser();
+        $oCMSUser = TCMSUser::GetActiveUser();
         $aPortals = $oCMSUser->GetMLTIdList('cms_portal', 'cms_portal_mlt');
 
         $databaseConnection = $this->getDatabaseConnection();

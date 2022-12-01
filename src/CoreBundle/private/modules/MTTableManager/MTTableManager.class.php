@@ -69,13 +69,13 @@ class MTTableManager extends TCMSModelBase
         $this->AddURLHistory();
 
         if (false === $this->oTableList->CheckTableRights()) {
-            $oCMSUser = &TCMSUser::GetActiveUser();
+            $oCMSUser = TCMSUser::GetActiveUser();
             $oCMSUser->Logout();
             $this->getRedirectService()->redirect(PATH_CMS_CONTROLLER);
         }
     }
 
-    public function &Execute()
+    public function Execute()
     {
         $inputFilterUtil = $this->getInputFilterUtil();
 
@@ -135,7 +135,7 @@ class MTTableManager extends TCMSModelBase
 
         $this->data['listClass'] = $listClass;
 
-        $this->oTableList = &$this->oTableConf->GetListObject($listClass);
+        $this->oTableList = $this->oTableConf->GetListObject($listClass);
         if ('TCMSListManagerMLT' === $listClass) {
             $this->data['bShowCustomSort'] = $this->oTableList->IsCustomSort();
         } else {
@@ -486,7 +486,7 @@ class MTTableManager extends TCMSModelBase
             $listClass = $this->aModuleConfig['listClass'];
         }
 
-        $oTableList = &$this->oTableConf->GetListObject($listClass);
+        $oTableList = $this->oTableConf->GetListObject($listClass);
 
         $query = $oTableList->FilterQuery();
         $parentTableAlias = $oTableList->GetTableAlias($query);

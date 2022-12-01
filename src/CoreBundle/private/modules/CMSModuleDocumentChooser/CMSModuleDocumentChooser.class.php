@@ -11,7 +11,7 @@
 
 class CMSModuleDocumentChooser extends TModelBase
 {
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
 

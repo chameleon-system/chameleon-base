@@ -56,7 +56,7 @@ class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugi
                             break;
                         }
                     }
-                    $modules = &$this->moduleLoader;
+                    $modules = $this->moduleLoader;
                     require TGlobal::ProtectedPath($sLayoutPath);
                 }
             }
@@ -95,7 +95,7 @@ class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugi
                     }
 
                     ob_start();
-                    $modules = &$this;
+                    $modules = $this;
                     require TGlobal::ProtectedPath($sLayoutPath);
                     $sThemeBlock = ob_get_contents();
                     ob_end_clean();

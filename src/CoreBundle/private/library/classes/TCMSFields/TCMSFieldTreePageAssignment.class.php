@@ -159,7 +159,7 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
     protected function createPageForNode($treeNodeId, $masterPagedefId)
     {
         $global = TGlobal::instance();
-        $connectedPageTableConfig = &$this->oAssignedPage->GetTableConf();
+        $connectedPageTableConfig = $this->oAssignedPage->GetTableConf();
         $treeNodeRecord = TdbCmsTree::GetNewInstance();
         $treeNodeRecord->Load($treeNodeId);
         $nodePortal = $treeNodeRecord->GetNodePortal();

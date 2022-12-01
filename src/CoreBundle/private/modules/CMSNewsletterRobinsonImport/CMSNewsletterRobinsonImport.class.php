@@ -16,7 +16,7 @@ class CMSNewsletterRobinsonImport extends TCMSModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->GetPortals();
@@ -34,7 +34,7 @@ class CMSNewsletterRobinsonImport extends TCMSModelBase
      */
     protected function GetPortals()
     {
-        $oCMSUser = &TCMSUser::GetActiveUser();
+        $oCMSUser = TCMSUser::GetActiveUser();
         $oPortals = $oCMSUser->GetMLT('cms_portal_mlt');
         $this->data['oPortals'] = $oPortals;
     }

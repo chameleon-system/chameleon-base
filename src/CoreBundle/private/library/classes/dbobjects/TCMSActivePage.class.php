@@ -89,10 +89,10 @@ class TCMSActivePage extends TdbCmsTplPage
      *
      * @return TCMSTreeNode
      */
-    public function &GetTreeNode()
+    public function GetTreeNode()
     {
         $sCacheName = 'treeNode';
-        $oTreeNode = &$this->GetFromInternalCache($sCacheName);
+        $oTreeNode = $this->GetFromInternalCache($sCacheName);
         if (null !== $oTreeNode) {
             return $oTreeNode;
         }

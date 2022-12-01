@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**/
 class CMSDeliverFile extends TCMSModelBase
 {
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 

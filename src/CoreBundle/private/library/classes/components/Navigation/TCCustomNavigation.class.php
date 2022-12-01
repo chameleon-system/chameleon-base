@@ -185,7 +185,7 @@ class TCCustomNavigation
         $menu = '';
         $count = 0;
         $totalSiblings = $this->oRootNode->CountChildren();
-        $oChildren = &$this->oRootNode->GetChildren();
+        $oChildren = $this->oRootNode->GetChildren();
         $oChildren->GoToStart();
         if (!$this->bPlaceEachRootNodeInASeparateBlock) {
             $menu .= '<ul>';
@@ -266,7 +266,7 @@ class TCCustomNavigation
      *
      * @return string
      */
-    protected function WrapSubmenuString($sSubmenuBlock, &$oParentNode, $activeNodeLevel, $level)
+    protected function WrapSubmenuString($sSubmenuBlock, $oParentNode, $activeNodeLevel, $level)
     {
         return $sSubmenuBlock;
     }
@@ -291,7 +291,7 @@ class TCCustomNavigation
      *
      * @return string
      */
-    protected function _Render(&$oSubnodes, &$oParentNode, $level = 0)
+    protected function _Render($oSubnodes, $oParentNode, $level = 0)
     {
         $menu = '';
         if ($this->_ShowChildren($oParentNode, 0, $level)) {
@@ -381,7 +381,7 @@ class TCCustomNavigation
      *
      * @return bool
      */
-    protected function _ShowChildren(&$oNode, $row = null, $level = null)
+    protected function _ShowChildren($oNode, $row = null, $level = null)
     {
         return $oNode->IsActive();
     }
@@ -395,7 +395,7 @@ class TCCustomNavigation
      *
      * @return bool
      */
-    protected function _ShowNode(&$oNode, $level = null, $row = null)
+    protected function _ShowNode($oNode, $level = null, $row = null)
     {
         $showNode = $oNode->IsActive();
         if (true === $showNode) {
@@ -415,7 +415,7 @@ class TCCustomNavigation
      *
      * @return string
      */
-    protected function _WriteSubmenuStyle(&$oNode, $siblingCount, $totalSiblings)
+    protected function _WriteSubmenuStyle($oNode, $siblingCount, $totalSiblings)
     {
         $nodeCssClasses = array();
         if ($oNode->IsInBreadcrumb()) {
@@ -451,7 +451,7 @@ class TCCustomNavigation
      *
      * @return string
      */
-    protected function _WriteRootNodeListClass(&$oNode, $bHasChildren = false, $row = 0, $totalSiblings = 0)
+    protected function _WriteRootNodeListClass($oNode, $bHasChildren = false, $row = 0, $totalSiblings = 0)
     {
         $nodeCssClasses = array();
         $nodeCssClasses[] = 'liNavi'.str_replace(array('-', '_'), '', $oNode->sqlData['urlname']);
@@ -503,7 +503,7 @@ class TCCustomNavigation
      *
      * @return string
      */
-    protected function _GetNodeStyle(&$oNode, $level, $row, $bHasChildren = false, $totalSiblings = 0)
+    protected function _GetNodeStyle($oNode, $level, $row, $bHasChildren = false, $totalSiblings = 0)
     {
         $nodeCssClasses = array();
         $nodeCssClasses[] = 'liNavi'.str_replace(array('-', '_'), '', $oNode->sqlData['urlname']);
@@ -550,7 +550,7 @@ class TCCustomNavigation
      *
      * @return string
      */
-    protected function _RenderRootNode(&$oNode)
+    protected function _RenderRootNode($oNode)
     {
         $link = $this->_GetNodeName($oNode);
         $linkStyle = $this->AddLinkStyle($oNode);
@@ -573,7 +573,7 @@ class TCCustomNavigation
      *
      * @return string
      */
-    protected function _GetNodeName(&$oNode)
+    protected function _GetNodeName($oNode)
     {
         $sLinkText = TGlobal::OutHTML($oNode->GetName());
         if (!empty($this->sEncloseLinkTextHTML)) {
@@ -592,7 +592,7 @@ class TCCustomNavigation
      *
      * @return string
      */
-    protected function _RenderNode(&$oNode, &$oParentNode)
+    protected function _RenderNode($oNode, $oParentNode)
     {
         $link = $this->_GetNodeName($oNode);
         $linkStyle = $this->AddLinkStyle($oNode);
@@ -617,7 +617,7 @@ class TCCustomNavigation
      *
      * @return string
      */
-    protected function AddLinkStyle(&$oNode)
+    protected function AddLinkStyle($oNode)
     {
         $nodeCssClasses = array();
         $nodeCssClasses[] = 'aNavi'.str_replace(array('-', '_'), '', $oNode->sqlData['urlname']);
@@ -655,7 +655,7 @@ class TCCustomNavigation
      *
      * @return string
      */
-    protected function _GetSubmenuBlockCSS(&$oParentNode, $level)
+    protected function _GetSubmenuBlockCSS($oParentNode, $level)
     {
         return '';
     }

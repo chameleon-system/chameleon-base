@@ -35,7 +35,7 @@ class CMSFieldMLTList extends TCMSModelBase
         }
 
         if (!is_null($listClass)) {
-            $oTableList = &$this->oTableConf->GetListObject($listClass);
+            $oTableList = $this->oTableConf->GetListObject($listClass);
             $this->data['sTable'] = $oTableList->GetList();
         } else {
             $sTableName = $this->global->GetUserData('name');
@@ -43,7 +43,7 @@ class CMSFieldMLTList extends TCMSModelBase
             if ($oTable->Load($this->global->GetUserData('id'))) {
                 $sTableName = $oTable->fieldName;
             }
-            $this->oTableList = &TCMSTableConf::GetMLTListObject($sTableName);
+            $this->oTableList = TCMSTableConf::GetMLTListObject($sTableName);
             $this->oTableList->sRestriction = $this->global->GetUserData('sRestriction');
             $this->oTableList->sRestrictionField = $this->global->GetUserData('sRestrictionField');
             $this->oTableList->Init($this->oTableConf);
@@ -54,7 +54,7 @@ class CMSFieldMLTList extends TCMSModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
 

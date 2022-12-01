@@ -21,9 +21,9 @@ class MapperRequirementsRestrictedProxy implements IMapperRequirementsRestricted
      *
      * @param IMapperRequirements $oRequirements
      */
-    public function __construct(IMapperRequirements &$oRequirements)
+    public function __construct(IMapperRequirements $oRequirements)
     {
-        $this->oRequirements = &$oRequirements;
+        $this->oRequirements = $oRequirements;
     }
 
     /**

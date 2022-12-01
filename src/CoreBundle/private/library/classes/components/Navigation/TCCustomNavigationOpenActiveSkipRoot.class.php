@@ -24,7 +24,7 @@ class TCCustomNavigationOpenActiveSkipRoot extends TCCustomNavigationOpenActive
         // never render the rootnode...
         $menu = '';
         $count = 0;
-        $oChildren = &$this->oRootNode->GetChildren();
+        $oChildren = $this->oRootNode->GetChildren();
         $oChildren->GoToStart();
         // for each child, get is children, then run render...
         while ($oRootNode = $oChildren->Next()) {

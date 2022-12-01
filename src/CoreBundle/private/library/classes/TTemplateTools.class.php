@@ -89,7 +89,7 @@ class TTemplateTools
      *
      * @return string
      */
-    public static function DrawDBSelectField($sName, &$oList, $sValue, $iWidth = 200, $sSelectParameters = '', $sInitialValue = 'Bitte wählen')
+    public static function DrawDBSelectField($sName, $oList, $sValue, $iWidth = 200, $sSelectParameters = '', $sInitialValue = 'Bitte wählen')
     {
         $sXHTML = '<select class="userinput" name="'.$sName.'" style="width: '.$iWidth.'px;">'."\n";
 

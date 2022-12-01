@@ -69,7 +69,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
      */
     public function GetRealFileName()
     {
-        $oFileType = &$this->GetFileType();
+        $oFileType = $this->GetFileType();
 
         return $this->id.'.'.$oFileType->sqlData['file_extension'];
     }
@@ -84,7 +84,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
     public function GetTargetFileName($bForceNewSeoName = false)
     {
         if ('' == $this->sqlData['seo_name'] || $bForceNewSeoName) {
-            $oFileType = &$this->GetFileType();
+            $oFileType = $this->GetFileType();
             $sFileName = $this->sqlData['filename'];
             if (defined('CHAMELEON_ENABLE_ID_SUFFIX_IN_DOWNLOAD_FILENAMES') && CHAMELEON_ENABLE_ID_SUFFIX_IN_DOWNLOAD_FILENAMES) {
                 $sFileName .= '_'.$this->sqlData['cmsident'];
@@ -129,7 +129,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
      */
     public function RemovePublicSymLink()
     {
-        $oImageType = &$this->GetFileType();
+        $oImageType = $this->GetFileType();
         if ($oImageType) {
             $symLink = PATH_OUTBOX.'/public/'.$this->sqlData['cms_document_tree_id'].'/'.$this->GetTargetFileName();
             if (file_exists($symLink)) {
@@ -143,7 +143,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
      *
      * @return TdbCmsFiletype
      */
-    public function &GetFileType()
+    public function GetFileType()
     {
         if (!array_key_exists('oFileType', $this->_cacheParameter)) {
             $this->_cacheParameter['oFileType'] = null;

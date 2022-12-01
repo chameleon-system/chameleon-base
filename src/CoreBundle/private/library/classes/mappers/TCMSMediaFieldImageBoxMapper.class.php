@@ -88,7 +88,7 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
      *
      * @return string
      */
-    protected function GetImageBox(&$oImage, $position, $bReadOnly, $sFieldName, $sTableId, $sRecordId)
+    protected function GetImageBox($oImage, $position, $bReadOnly, $sFieldName, $sTableId, $sRecordId)
     {
         $bImageIsSet = false;
         $aImageData = array();

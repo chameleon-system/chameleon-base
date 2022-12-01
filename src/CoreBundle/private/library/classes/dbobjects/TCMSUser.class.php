@@ -69,7 +69,7 @@ class TCMSUser extends TCMSRecord
      *
      * @return TdbCmsUser|null
      */
-    public static function &GetActiveUser()
+    public static function GetActiveUser()
     {
         if (is_null(self::$oActiveUser)) {
             if (isset($_SESSION) && array_key_exists(self::GetSessionVarName('_user'), $_SESSION) && !empty($_SESSION[self::GetSessionVarName('_user')])) {
@@ -103,8 +103,8 @@ class TCMSUser extends TCMSRecord
     public function GetUserPortalRootNodes()
     {
         $aId = array();
-        $oPortals = &$this->GetMLT('cms_portal_mlt', 'TCMSPortal');
-        while ($oPortal = &$oPortals->Next()) {
+        $oPortals = $this->GetMLT('cms_portal_mlt', 'TCMSPortal');
+        while ($oPortal = $oPortals->Next()) {
             if (TCMSTreeNode::TREE_ROOT_ID != $oPortal->sqlData['main_node_tree']) {
                 $aId[] = $oPortal->sqlData['main_node_tree'];
             }
@@ -400,7 +400,7 @@ class TCMSUser extends TCMSRecord
     /*
     * @return TdbCmsLanguage
     */
-    public function &GetCurrentEditLanguageObject()
+    public function GetCurrentEditLanguageObject()
     {
         $language = self::getLanguageService()->getLanguageFromIsoCode($this->GetCurrentEditLanguage());
 

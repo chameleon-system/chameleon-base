@@ -19,7 +19,7 @@ class CMSModuleImageManager extends TCMSModelBase
     protected $rootTreeID = 1;
     protected $imageTableConfId = null;
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $mode = $this->global->GetUserData('_mode');
@@ -209,7 +209,7 @@ class CMSModuleImageManager extends TCMSModelBase
      * @param string       $path
      * @param int          $level
      */
-    public function RenderTree(&$oNode, $activeID, $fieldName, $path = '', $level = 0)
+    public function RenderTree($oNode, $activeID, $fieldName, $path = '', $level = 0)
     {
         $sNodeName = $oNode->GetName();
         if (!empty($sNodeName)) {
@@ -237,7 +237,7 @@ class CMSModuleImageManager extends TCMSModelBase
 
             $this->data['treeHTML'] .= '</a>';
 
-            $oChildren = &$oNode->GetChildren(true);
+            $oChildren = $oNode->GetChildren(true);
             $iChildrenCount = $oChildren->Length();
             if ($iChildrenCount > 0) {
                 $this->data['treeHTML'] .= "\n".$spacer."  <ul>\n";

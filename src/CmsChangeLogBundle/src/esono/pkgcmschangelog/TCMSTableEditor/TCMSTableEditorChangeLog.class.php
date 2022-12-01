@@ -54,7 +54,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     /**
      * {@inheritdoc}
      */
-    public function Save(&$postData, $bDataIsInSQLForm = false)
+    public function Save($postData, $bDataIsInSQLForm = false)
     {
         if ($this->oTableConf->fieldChangelogActive) {
             $this->failOnForbiddenTables();
@@ -73,7 +73,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      *
      * @return void
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
@@ -95,7 +95,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      *
      * @return array
      */
-    protected function computeDifferences(&$newFields, &$oPostTable)
+    protected function computeDifferences($newFields, $oPostTable)
     {
         $result = [];
 
@@ -228,7 +228,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     /**
      * {@inheritDoc}
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         parent::PostInsertHook($oFields);
 

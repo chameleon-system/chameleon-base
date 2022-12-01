@@ -23,7 +23,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**/
 class CMSRunCrons extends TModelBase
 {
-    public function &Execute()
+    public function Execute()
     {
         $dataAccess = new CronJobDataAccess();
         $dataAccess->refreshTimestampOfLastCronJobCall();

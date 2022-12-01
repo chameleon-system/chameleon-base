@@ -30,7 +30,7 @@ class TCMSFieldTablefieldname extends TCMSFieldOption
             /** @var $oTableConf TCMSTableConf */
             $oTableConf->Load($tmp['id']);
 
-            $oFields = &$oTableConf->GetFieldDefinitions();
+            $oFields = $oTableConf->GetFieldDefinitions();
             while ($oField = $oFields->Next()) {
                 $fieldTitleDecoded = $oField->sqlData['translation'];
 

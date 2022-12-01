@@ -32,7 +32,7 @@ class ChameleonSystemDebugExtension extends Extension
         $this->configureDatabaseProfiler($container, $config['database_profiler'], $loader);
     }
 
-    private function handleLegacyConfig(array &$config): void
+    private function handleLegacyConfig(array $config): void
     {
         if (isset($config['backtrace_enabled'])) {
             $config['database_profiler']['backtrace_enabled'] = $config['backtrace_enabled'];

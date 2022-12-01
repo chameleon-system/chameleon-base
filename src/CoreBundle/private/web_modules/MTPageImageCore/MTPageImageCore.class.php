@@ -29,7 +29,7 @@ class MTPageImageCore extends TUserModelBase
      */
     protected $bPickRandomImage = true;
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['oImage'] = $this->GetPageImage();
@@ -42,7 +42,7 @@ class MTPageImageCore extends TUserModelBase
      *
      * @return TCMSImage
      */
-    public function &GetPageImage()
+    public function GetPageImage()
     {
         $imageID = $this->GetImageFromPageTable();
         if (is_null($imageID)) {

@@ -26,7 +26,7 @@ class TCMSSpellcheck
      *
      * @return TCMSSpellcheck
      */
-    public static function &GetInstance()
+    public static function GetInstance()
     {
         static $oInstance;
         if (!isset($oInstance)) {

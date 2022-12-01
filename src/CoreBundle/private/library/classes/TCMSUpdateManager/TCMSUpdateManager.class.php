@@ -58,7 +58,7 @@ class TCMSUpdateManager
      *
      * @return TCMSUpdateManager
      */
-    public static function &GetInstance()
+    public static function GetInstance()
     {
         static $oUpdateManager;
         if (!$oUpdateManager) {

@@ -257,9 +257,9 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
      */
     private function addMediaTreeNodeRestrictions(
         MediaManagerListRequest $mediaManagerListRequest,
-        array &$queryRestrictions,
-        array &$params,
-        array &$paramTypes
+        array $queryRestrictions,
+        array $params,
+        array $paramTypes
     ) {
         $mediaTreeNode = $mediaManagerListRequest->getMediaTreeNode();
         if (null === $mediaTreeNode) {
@@ -287,9 +287,9 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     private function addSearchRestrictions(
         MediaManagerListRequest $mediaManagerListRequest,
         $languageId,
-        array &$queryRestrictions,
-        array &$params,
-        array &$paramTypes
+        array $queryRestrictions,
+        array $params,
+        array $paramTypes
     ) {
         $searchTerm = $mediaManagerListRequest->getSearchTerm();
         $searchTerm = trim($searchTerm);

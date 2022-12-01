@@ -37,7 +37,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
         }
     }
 
-    protected function DataIsValid(&$postData, $oFields = null)
+    protected function DataIsValid($postData, $oFields = null)
     {
         $isValid = parent::DataIsValid($postData, $oFields);
 
@@ -63,7 +63,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
                 }
             }
 
-            $oConfig = &TdbCmsConfig::GetInstance();
+            $oConfig = TdbCmsConfig::GetInstance();
             $imageUploadMaxSize = $oConfig->sqlData['max_image_upload_size'] * 1024;
 
             if ($isValid) {
@@ -335,7 +335,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         if ($bReturnVal = parent::PostSaveHook($oFields, $oPostTable)) {
             $isUpdate = $this->bIsUpdateCall; // the bIsUpdateCall will be falsely set to true in all SaveField methods here

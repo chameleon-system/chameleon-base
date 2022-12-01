@@ -24,7 +24,7 @@ class CMSModulePageTreeRPC extends TCMSModelBase
     public $onTitleClickCallBackFnc = null;
     public $actualPageID = null;
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
@@ -99,7 +99,7 @@ class CMSModulePageTreeRPC extends TCMSModelBase
      */
     public function getChildrenPortalCondition()
     {
-        $oUser = &TCMSUser::GetActiveUser();
+        $oUser = TCMSUser::GetActiveUser();
         $sPortalList = $oUser->oAccessManager->user->portals->PortalList();
         $query = 'SELECT * FROM `cms_portal`';
         if (false !== $sPortalList) {
@@ -126,7 +126,7 @@ class CMSModulePageTreeRPC extends TCMSModelBase
      *
      * @param TCMSTreeNode $oTreeNode
      */
-    public function _nodeProperties(&$oTreeNode)
+    public function _nodeProperties($oTreeNode)
     {
         $child = array();
 

@@ -18,7 +18,7 @@
         <a name="FAQ"></a>
 
         <div class="itemlist">
-            <?php while ($oItem = &$oItemList->Next()) {
+            <?php while ($oItem = $oItemList->Next()) {
     /** @var $oItem TdbModuleFaq */ ?>
             <div class="faqItem">
                 <div class="faqQuestion">

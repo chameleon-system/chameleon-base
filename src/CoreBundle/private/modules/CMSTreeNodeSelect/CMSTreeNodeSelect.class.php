@@ -43,7 +43,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
      */
     protected $aRestrictedNodes = array();
 
-    public function &Execute()
+    public function Execute()
     {
         $this->GetPortalTreeRootNode();
 
@@ -83,7 +83,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
      * @param string $path
      * @param int    $level
      */
-    protected function RenderTree(&$oNode, $activeID, $fieldName, $path = '', $level = 0)
+    protected function RenderTree($oNode, $activeID, $fieldName, $path = '', $level = 0)
     {
         $sNodeName = $oNode->fieldName;
         if (!empty($sNodeName)) {
@@ -107,7 +107,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
 
             $this->data['treeHTML'] .= '</a>';
 
-            $oChildren = &$oNode->GetChildren(true);
+            $oChildren = $oNode->GetChildren(true);
             $iChildrenCount = $oChildren->Length();
             if ($iChildrenCount > 0) {
                 $this->data['treeHTML'] .= "\n".$spacer."<ul>\n";

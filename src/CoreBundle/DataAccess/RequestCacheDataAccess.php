@@ -57,11 +57,11 @@ class RequestCacheDataAccess implements DataAccessInterface
         if (!isset($this->cache[$languageId])) {
             $this->cache[$languageId] = $this->decorated->loadAll($languageId);
         }
-        $elements = &$this->cache[$languageId]; // reference assignment ok
+        $elements = $this->cache[$languageId]; // reference assignment ok
         if (!empty($elements)) {
             reset($elements);
             if ('no-language' !== $languageId && $languageId !== current($elements)->GetLanguage()) {
-                foreach ($elements as &$element) {
+                foreach ($elements as $element) {
                     $element->SetLanguage($languageId);
                     $element->LoadFromRow($element->sqlData);
                 }

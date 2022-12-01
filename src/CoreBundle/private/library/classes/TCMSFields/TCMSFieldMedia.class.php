@@ -311,7 +311,7 @@ class TCMSFieldMedia extends TCMSField
             }
         } else {
             if (!empty($this->oTableRow->id)) {
-                $this->oTableConf = &$this->oTableRow->GetTableConf();
+                $this->oTableConf = $this->oTableRow->GetTableConf();
                 if (array_key_exists($this->name, $this->oTableRow->sqlData)) {
                     /* @var $oImages TIterator */
                     $oImages = $this->oTableRow->GetImages($this->name, true);
@@ -385,7 +385,7 @@ class TCMSFieldMedia extends TCMSField
                                     $oMsgManager->AddMessage($sConsumerName, 'ERROR-INVALID-IMAGE-DIMENSIONS', array('allowedWidth' => 1000, 'allowedHeight' => 1000));
                                 }
 
-                                $oConfig = &TdbCmsConfig::GetInstance();
+                                $oConfig = TdbCmsConfig::GetInstance();
                                 $imageUploadMaxSize = $oConfig->sqlData['max_image_upload_size'] * 1024;
                                 if ($_FILES[$this->name.'image']['size'][$key] > $imageUploadMaxSize) {
                                     $bIsValid = false;
@@ -472,7 +472,7 @@ class TCMSFieldMedia extends TCMSField
      *
      * @return string
      */
-    protected function GetMySQLLengthSet($oFieldType, &$aPostData = null)
+    protected function GetMySQLLengthSet($oFieldType, $aPostData = null)
     {
         $oGlobal = TGlobal::instance();
 

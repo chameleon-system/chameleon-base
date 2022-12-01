@@ -21,7 +21,7 @@ class TPkgMultiModuleSetItem extends TPkgMultiModuleSetItemAutoParent
     public function GetAjaxURLForContainingModule($bGetAsJSFunction = false)
     {
         $oGlobal = TGlobal::instance();
-        $oExecutingModule = &$oGlobal->GetExecutingModulePointer();
+        $oExecutingModule = $oGlobal->GetExecutingModulePointer();
         $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ExecuteAjaxCall', '_fnc' => 'RenderModuleAjax', 'sShowModuleInstanceId' => $this->fieldCmsTplModuleInstanceId);
         $sLink = '?'.TTools::GetArrayAsURL($aAdditionalParameters);
         if ($bGetAsJSFunction) {

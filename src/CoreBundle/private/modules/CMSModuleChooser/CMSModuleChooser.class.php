@@ -81,11 +81,11 @@ class CMSModuleChooser extends TCMSModelBase
         $this->LoadModuleInstanceData();
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
-        $oActiveUser = &TCMSUser::GetActiveUser();
+        $oActiveUser = TCMSUser::GetActiveUser();
         $this->oAccessManager = $oActiveUser->oAccessManager;
         $this->data['oAccessManager'] = $this->oAccessManager;
 
@@ -378,7 +378,7 @@ class CMSModuleChooser extends TCMSModelBase
         static $oModuleList = null;
 
         if (is_null($oModuleList)) {
-            $oUser = &TCMSUser::GetActiveUser();
+            $oUser = TCMSUser::GetActiveUser();
             $oModuleList = new TCMSRecordList();
             $oModuleList->sTableObject = 'TCMSTPLModule';
             $oModuleList->sTableName = 'cms_tpl_module';
@@ -538,7 +538,7 @@ class CMSModuleChooser extends TCMSModelBase
         if ($oUsedModule->Load($moduleID)) {
             $oModuleUsedTableList = $oUsedModule->GetFieldCmsTblConfList();
             if ($oModuleUsedTableList->Length() > 0) {
-                while ($oModuleUsedTable = &$oModuleUsedTableList->Next()) {
+                while ($oModuleUsedTable = $oModuleUsedTableList->Next()) {
                     $oRecordListToCopy = $this->GetRecordsToCopy($oModuleUsedTable->fieldName, $sOldModlueInstanceId);
                     $bCopySuccess = $this->CopyRecords($oRecordListToCopy, $sNewModuleInstanceId);
                 }
@@ -569,7 +569,7 @@ class CMSModuleChooser extends TCMSModelBase
             $sQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` WHERE `cms_tpl_module_instance_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sOldModuleInstanceId)."'";
             /** @var $oRecordToCopyList TCMSRecordList */
             $oRecordToCopyList = $oTableList->GetList($sQuery);
-            while ($oRecordToCopy = &$oRecordToCopyList->Next()) {
+            while ($oRecordToCopy = $oRecordToCopyList->Next()) {
                 $oRecordListToCopy->AddItem($oRecordToCopy);
             }
         }
@@ -674,7 +674,7 @@ class CMSModuleChooser extends TCMSModelBase
         if (null !== $this->instanceID) {
             // check for page spot record
 
-            $oSpot = &$this->GetCmsTplPageCmsMasterPagedefSpot();
+            $oSpot = $this->GetCmsTplPageCmsMasterPagedefSpot();
             if (null !== $oSpot) {
                 /** @var $oTableEditor TCMSTableEditorManager */
                 $oTableEditor = new TCMSTableEditorManager();
@@ -809,7 +809,7 @@ class CMSModuleChooser extends TCMSModelBase
      *
      * @return TdbCmsTplPageCmsMasterPagedefSpot
      */
-    protected function &GetCmsTplPageCmsMasterPagedefSpot()
+    protected function GetCmsTplPageCmsMasterPagedefSpot()
     {
         $sPageId = $this->global->GetUserData('pagedef');
         if (is_null($this->oCmsTplPageCmsMasterPagedefSpot)) {

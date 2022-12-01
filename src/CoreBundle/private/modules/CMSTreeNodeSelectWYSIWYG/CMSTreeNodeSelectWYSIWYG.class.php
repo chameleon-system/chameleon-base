@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CMSTreeNodeSelectWYSIWYG extends CMSTreeNodeSelect
 {
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['CKEditorFuncNum'] = $this->getRequest()->query->getInt('CKEditorFuncNum');

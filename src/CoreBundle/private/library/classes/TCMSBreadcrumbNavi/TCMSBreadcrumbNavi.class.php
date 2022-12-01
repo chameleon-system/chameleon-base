@@ -103,8 +103,8 @@ class TCMSBreadcrumbNavi
 
         while (!$done && ($node = MySqlLegacySupport::getInstance()->fetch_assoc($nodes))) {
             $done = (in_array($node['id'], $stopNodeArray));
-            $nodeObj = &$this->CreateNode($node);
-            $this->nodes[] = &$nodeObj;
+            $nodeObj = $this->CreateNode($node);
+            $this->nodes[] = $nodeObj;
             $nodes = TCmsTree::GetNewInstance($node['parent_id']);
         }
         $this->nodes = array_reverse($this->nodes);
@@ -113,7 +113,7 @@ class TCMSBreadcrumbNavi
     /* ------------------------------------------------------------------------
      * returns a node given an assoc array for input
     /* ----------------------------------------------------------------------*/
-    public function &CreateNode($node)
+    public function CreateNode($node)
     {
         $nodeClass = $this->nodeClass;
         $nodeObj = new $nodeClass();

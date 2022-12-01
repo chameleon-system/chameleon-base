@@ -28,7 +28,7 @@ class TGlobal extends TGlobalBase
     {
         if (self::MODE_FRONTEND === self::$mode) {
             if ('oUser' === $sParameterName) {
-                $this->oUser = &TCMSUser::GetActiveUser();
+                $this->oUser = TCMSUser::GetActiveUser();
                 if (!$this->oUser && 'true' == !$this->GetUserData('__modulechooser')) {
                     // no user set yet... so autologin the webuser...
                     $this->oUser = new TCMSUser();

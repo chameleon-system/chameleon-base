@@ -55,7 +55,7 @@ class MTPageImagesCore extends TUserModelBase
         }
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         if (is_null($this->oPage)) {
@@ -67,7 +67,7 @@ class MTPageImagesCore extends TUserModelBase
         $oImageList = $this->GetPageImages();
 
         if (is_null($oImageList) || $oImageList->Length() < 1) {
-            $oImageList = &$this->GetDivisionImages();
+            $oImageList = $this->GetDivisionImages();
         }
 
         if (is_null($oImageList) || $oImageList->Length() < 1) {
@@ -83,7 +83,7 @@ class MTPageImagesCore extends TUserModelBase
     {
         $oImageList = null;
         if ($this->oPage && array_key_exists('data_page_images', $this->oPage->sqlData)) {
-            $oImageList = &$this->oPage->GetProperties('data_page_images');
+            $oImageList = $this->oPage->GetProperties('data_page_images');
         }
 
         return $oImageList;
@@ -94,9 +94,9 @@ class MTPageImagesCore extends TUserModelBase
         $oImageList = null;
         if ($this->oDivision) {
             if (array_key_exists('data_bereich_images', $this->oDivision->sqlData)) {
-                $oImageList = &$this->oDivision->GetProperties('data_bereich_images');
+                $oImageList = $this->oDivision->GetProperties('data_bereich_images');
             } elseif (array_key_exists('data_division_images', $this->oDivision->sqlData)) {
-                $oImageList = &$this->oDivision->GetProperties('data_division_images');
+                $oImageList = $this->oDivision->GetProperties('data_division_images');
             }
         }
 

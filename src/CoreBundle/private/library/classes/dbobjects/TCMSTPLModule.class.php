@@ -75,7 +75,7 @@ class TCMSTPLModule extends TCMSRecord
      *
      * @return TIterator
      */
-    public function &GetViewsLegacy()
+    public function GetViewsLegacy()
     {
         if (null !== $this->_oViews) {
             return $this->_oViews;
