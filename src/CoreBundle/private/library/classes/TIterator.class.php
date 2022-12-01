@@ -246,7 +246,7 @@ class TIterator implements Iterator
      *
      * @return T
      */
-    public function current()
+    public function current(): mixed
     {
         if (-1 == $this->getItemPointer() && count($this->_items) > 0) {
             $this->setItemPointer(0);
@@ -285,7 +285,7 @@ class TIterator implements Iterator
      *
      * @return T|false
      */
-    public function next()
+    public function next(): mixed
     {
         $item = false;
         if ($this->getItemPointer() < $this->Length()) {

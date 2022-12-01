@@ -681,7 +681,7 @@ class TCMSRecordList extends TIterator
      *
      * @return T|false
      */
-    public function current()
+    public function current(): mixed
     {
         $data = $this->getEntityList()->current();
         if (false === $data) {
@@ -697,7 +697,7 @@ class TCMSRecordList extends TIterator
      *
      * @return T|false
      */
-    public function next()
+    public function next(): mixed
     {
         $data = $this->getEntityList()->current();
         if (false === $data) {
