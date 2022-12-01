@@ -66,15 +66,13 @@ framework:
     cookie_httponly: true
     cookie_lifetime: 7200
     gc_maxlifetime: 7200
-  templating:
-    engines: ['twig']
   translator: { fallback: en }
+  error_controller: chameleon_system_core.controller.exception:showAction
 
 twig:
   debug:            "%kernel.debug%"
   charset:          "%kernel.charset%"
   strict_variables:          false
-  exception_controller: chameleon_system_core.controller.exception:showAction
 #  auto_reload:               ~
 #  optimizations:             ~
 

@@ -308,7 +308,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @deprecated since 6.2.10 - use chameleon_system_core.data_access_cms_master_pagedef_file or chameleon_system_core.data_access_cms_master_pagedef_database instead
      */
-    public function &GetPagedefObject($pagedef)
+    public function GetPagedefObject($pagedef)
     {
         /** @var $oPageDefinitionFile TCMSPageDefinitionFile */
         $oPageDefinitionFile = new TCMSPageDefinitionFile();
@@ -374,7 +374,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @return void
      */
-    protected function ExecuteModuleMethod(&$modulesObject)
+    protected function ExecuteModuleMethod($modulesObject)
     {
         $moduleFunctions = $this->getRequestedModuleFunctions();
 
@@ -475,7 +475,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @return string
      */
-    public function PreOutputCallbackFunction(&$sPageContent)
+    public function PreOutputCallbackFunction($sPageContent)
     {
         static $bHeaderParsed = false;
         TPkgCmsEventManager::GetInstance()->NotifyObservers(
