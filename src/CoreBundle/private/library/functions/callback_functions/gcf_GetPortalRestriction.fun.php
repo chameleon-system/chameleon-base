@@ -16,7 +16,7 @@
  * @param TCMSTableConf $oTableConf
  * @param TCMSRecord    $oTableRestriction
  */
-function gcf_GetPortalRestriction(&$oTableConf, &$oTableRestriction)
+function gcf_GetPortalRestriction($oTableConf, $oTableRestriction)
 {
     $sRestriction = '';
     $oGlobal = TGlobal::instance();

@@ -41,11 +41,11 @@ class TPkgExtranetMapper_UserForm extends AbstractPkgExtranetMapper_User
         $this->SetInputFields($aFieldList, $oVisitor, $oUser);
 
         $aRadioFieldList = array('aFieldSalutation' => 'data_extranet_salutation_id');
-        $oSalutationList = &TdbDataExtranetSalutationList::GetList();
+        $oSalutationList = TdbDataExtranetSalutationList::GetList();
         $this->SetInputFields($aRadioFieldList, $oVisitor, $oUser, 'radio', $oSalutationList);
 
         $aSelectFieldList = array('aFieldCountry' => 'data_country_id');
-        $oCountryList = &TdbDataCountryList::GetList();
+        $oCountryList = TdbDataCountryList::GetList();
         $this->SetInputFields($aSelectFieldList, $oVisitor, $oUser, 'select', $oCountryList);
 
         $sFieldNamesPrefix = $oVisitor->GetSourceObject('sFieldNamesPrefix');

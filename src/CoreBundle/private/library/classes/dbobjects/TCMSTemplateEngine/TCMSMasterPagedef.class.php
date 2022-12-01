@@ -110,7 +110,7 @@ class TCMSMasterPagedef extends TCMSMasterPagedefAutoParent
         }
 
         $aSpots = array();
-        $oSpots = &$this->GetProperties('cms_master_pagedef_spot', 'TCMSMasterPagedefSpot');
+        $oSpots = $this->GetProperties('cms_master_pagedef_spot', 'TCMSMasterPagedefSpot');
         /**
          * @var TCMSMasterPagedefSpot $oSpot
          */
@@ -214,7 +214,7 @@ class TCMSMasterPagedef extends TCMSMasterPagedefAutoParent
      *
      * @return TCMSMasterPagedefSpot
      */
-    public function &GetSpot($sSpotName)
+    public function GetSpot($sSpotName)
     {
         $this->GetSpots();
         $oSpot = null;

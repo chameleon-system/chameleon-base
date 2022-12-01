@@ -27,7 +27,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      *
      * @return TdbPkgNewsletterUser|null
      */
-    public static function &GetInstanceForMail($sEmail)
+    public static function GetInstanceForMail($sEmail)
     {
         $oInst = null;
         $oPortal = self::getPortalDomainServiceStatic()->getActivePortal();
@@ -52,7 +52,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      *
      * @return TdbPkgNewsletterUser|null
      */
-    public static function &GetInstanceForActiveUser($bRefresh = false)
+    public static function GetInstanceForActiveUser($bRefresh = false)
     {
         static $oInst = false;
 
@@ -115,7 +115,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     public function CompareNewsletterLists($oAvailableNewsletterList)
     {
         $aAvailableForUserList = array();
-        while ($oAvailableNewsletter = &$oAvailableNewsletterList->Next()) {
+        while ($oAvailableNewsletter = $oAvailableNewsletterList->Next()) {
             if (!$this->HasConnection('pkg_newsletter_group_mlt', $oAvailableNewsletter->id)) {
                 $aAvailableForUserList[$oAvailableNewsletter->id] = $oAvailableNewsletter;
             }
@@ -130,7 +130,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      *
      * @return TdbPkgNewsletterUser|null
      */
-    public static function &GetInstanceFromURLId()
+    public static function GetInstanceFromURLId()
     {
         static $oInstance = false;
 
@@ -221,7 +221,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         $oModuleInstance->Load($sModuleInstanceId);
         $oMasterPageList = $oModuleInstance->GetFieldCmsTplPageCmsMasterPagedefSpotList();
         $sReturnURL = '';
-        while ($oMasterPage = &$oMasterPageList->Next()) {
+        while ($oMasterPage = $oMasterPageList->Next()) {
             $oPage = TdbCmsTplPage::GetNewInstance();
             $oPage->Load($oMasterPage->fieldCmsTplPageId);
             if ($oPage->fieldCmsPortalId == $oPortal->id) {
@@ -470,7 +470,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     {
         $oMail = TdbDataMailProfile::GetProfile('newsletter-double-opt-in');
         $aData = $this->sqlData;
-        $oSal = &$this->GetFieldDataExtranetSalutation();
+        $oSal = $this->GetFieldDataExtranetSalutation();
         if (is_null($oSal)) {
             $data_extranet_salutation_name = '';
         } else {
@@ -782,7 +782,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     {
         $aNewNewsletterConfirmationIdList = array();
         $oSignedInConfirmationList = $this->GetFieldPkgNewsletterConfirmationList();
-        while ($oSignedInConfirmation = &$oSignedInConfirmationList->Next()) {
+        while ($oSignedInConfirmation = $oSignedInConfirmationList->Next()) {
             if (!in_array($oSignedInConfirmation->fieldPkgNewsletterGroupId, $aNewsletterGroupSignOutList)) {
                 $aNewNewsletterConfirmationIdList[] = $oSignedInConfirmation->id;
             } else {
@@ -809,7 +809,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     {
         $oMail = TdbDataMailProfile::GetProfile('newsletter-double-opt-out');
         $aData = $this->sqlData;
-        $oSal = &$this->GetFieldDataExtranetSalutation();
+        $oSal = $this->GetFieldDataExtranetSalutation();
         if (is_null($oSal)) {
             $data_extranet_salutation_name = '';
         } else {
@@ -870,7 +870,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         } elseif ($oConfirmationList->Length() < 1) {
             $aLink[TGlobal::Translate('chameleon_system_newsletter.action.unsubscribe')] = $this->getActivePageService()->getLinkToActivePageAbsolute($aParameter).'  ';
         }
-        while ($oConfirmation = &$oConfirmationList->Next()) {
+        while ($oConfirmation = $oConfirmationList->Next()) {
             $oNewsletterGroup = TdbPkgNewsletterGroup::GetNewInstance();
             $oNewsletterGroup->Load($oConfirmation->fieldPkgNewsletterGroupId);
             $aLink[$oNewsletterGroup->fieldName] = $this->GetOptOutConfirmationLinkForConfirmation($oConfirmation).' ';
@@ -993,7 +993,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         $oMail = TdbDataMailProfile::GetProfile('newsletter-sign-out-confirmation');
         $aData = $this->sqlData;
 
-        $oSal = &$this->GetFieldDataExtranetSalutation();
+        $oSal = $this->GetFieldDataExtranetSalutation();
         if (is_null($oSal)) {
             $data_extranet_salutation_name = '';
         } else {

@@ -33,7 +33,7 @@ class MTPkgCmsTextBlockCore extends TUserCustomModelBase
      */
     protected $oPkgCmsTextBlock = null;
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['oPkgCmsTextBlock'] = $this->LoadTextBlock();

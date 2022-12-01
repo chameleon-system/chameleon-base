@@ -149,7 +149,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
      *
      * @return string
      */
-    protected function _GetOpenWindowJS(&$oPopupTableConf)
+    protected function _GetOpenWindowJS($oPopupTableConf)
     {
         $aParams = array('pagedef' => 'extendedLookupList', 'id' => $oPopupTableConf->id, 'fieldName' => $this->name, 'sourceTblConfId' => $this->oDefinition->fieldCmsTblConfId);
         $restriction = $this->getTargetListRestriction();

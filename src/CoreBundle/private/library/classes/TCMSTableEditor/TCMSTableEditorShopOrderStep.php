@@ -17,7 +17,7 @@ class TCMSTableEditorShopOrderStep extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         parent::PostInsertHook($oFields);
 
@@ -29,7 +29,7 @@ class TCMSTableEditorShopOrderStep extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 

@@ -43,8 +43,8 @@ class TCMSPortalList extends TCMSRecordList
             $tmpPointer = $this->getItemPointer();
             $this->GoToStart();
             $this->_aNodeIds = array();
-            while ($oItem = &$this->Next()) {
-                $oTreeNode = &$oItem->GetTreeNode();
+            while ($oItem = $this->Next()) {
+                $oTreeNode = $oItem->GetTreeNode();
                 if (!is_null($oTreeNode)) {
                     $this->_aNodeIds[] = $oTreeNode->id;
                 }

@@ -35,7 +35,7 @@ class TPkgTrackObjectViews
      *
      * @return TPkgTrackObjectViews
      **/
-    public static function &GetInstance()
+    public static function GetInstance()
     {
         static $oInstance = null;
         if (is_null($oInstance)) {

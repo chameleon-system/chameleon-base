@@ -1,6 +1,6 @@
 <?php
 
-$oExtranetConfig = &TdbDataExtranet::GetInstance();
+$oExtranetConfig = TdbDataExtranet::GetInstance();
 $oViewRender = new ViewRenderer();
 $oViewRender->AddMapper(new TCMSWizardStepMapper_UserProfileEmail());
 $oViewRender->AddSourceObject('sSpotName', $oExtranetConfig->fieldExtranetSpotName);

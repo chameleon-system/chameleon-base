@@ -64,7 +64,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
             // check if the user has a newsletter... if he does, transfer to correct step
             $oUserNewsletter = null;
             if (false == $this->bAllowSigningUpEMailsNotBelongingToUser) {
-                $oUserNewsletter = &TdbPkgNewsletterUser::GetInstanceForActiveUser();
+                $oUserNewsletter = TdbPkgNewsletterUser::GetInstanceForActiveUser();
             }
             if (!is_null($oUserNewsletter)) {
                 $oNewsletterConfig = $this->GetConfig();
@@ -111,7 +111,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
     /**
      * @return array<string, mixed>
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['oNewsletterConfig'] = $this->GetConfig();
@@ -161,13 +161,13 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
      *
      * @return TdbPkgNewsletterUser
      */
-    protected function &LoadNewsletterSignup()
+    protected function LoadNewsletterSignup()
     {
         if (is_null($this->oNewsletterSignup)) {
             $oUser = TdbDataExtranetUser::GetInstance();
             $this->oNewsletterSignup = TdbPkgNewsletterUser::GetNewInstance();
             if (false == $this->bAllowSigningUpEMailsNotBelongingToUser) {
-                $oNewsletter = &TdbPkgNewsletterUser::GetInstanceForActiveUser();
+                $oNewsletter = TdbPkgNewsletterUser::GetInstanceForActiveUser();
                 if (!is_null($oNewsletter)) {
                     $this->oNewsletterSignup = $oNewsletter;
                 }
@@ -400,7 +400,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
                     /** @var $oPageList TdbCmsTplPageList */
                     $oPageList = $oModuleInstance->GetFieldCmsTplPageList();
                     $bFound = false;
-                    while ($oPage = &$oPageList->Next()) {
+                    while ($oPage = $oPageList->Next()) {
                         if ($oPage->fieldCmsPortalId == $oPortal->id && !$bFound) {
                             $aReturnArray['URL'] = $this->getPageService()->getLinkToPageObjectAbsolute($oPage);
                             $query = "SELECT `cms_master_pagedef_spot`.`name` FROM `cms_tpl_page_cms_master_pagedef_spot`
@@ -418,7 +418,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
                     /** @var $oPageDefSpotList TdbCmsTplPageCmsMasterPagedefSpotList */
                     $oPageDefSpotList = $oModuleInstance->GetFieldCmsTplPageCmsMasterPagedefSpotList();
                     $bFound = false;
-                    while ($oPageDefSpot = &$oPageDefSpotList->Next()) {
+                    while ($oPageDefSpot = $oPageDefSpotList->Next()) {
                         $oPage = TdbCmsTplPage::GetNewInstance();
                         $oPage->Load($oPageDefSpot->fieldCmsTplPageId);
                         if ($oPage->fieldCmsPortalId == $oPortal->id && !$bFound) {

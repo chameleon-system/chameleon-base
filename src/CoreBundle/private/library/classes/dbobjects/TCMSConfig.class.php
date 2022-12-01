@@ -87,7 +87,7 @@ class TCMSConfig extends TCMSRecord
         $bLogDeletes = ('1' == $this->sqlData['log_deletes']);
         if ($bLogDeletes && '0' == $this->sqlData['log_www_user_delete_calls']) {
             /** @var $oCMSUser TdbCmsUser */
-            $oCMSUser = &TdbCmsUser::GetActiveUser();
+            $oCMSUser = TdbCmsUser::GetActiveUser();
             $bLogDeletes = ('www' != $oCMSUser->sqlData['login']);
         }
 
@@ -162,7 +162,7 @@ class TCMSConfig extends TCMSRecord
      *
      * @return TdbCmsConfig
      */
-    public static function &GetInstance($bReload = false)
+    public static function GetInstance($bReload = false)
     {
         static $instance = null;
         if ('TCMSConfig' === get_called_class()) {
@@ -227,9 +227,9 @@ class TCMSConfig extends TCMSRecord
      *
      * @return TCMSPortal
      */
-    public function &GetPrimaryPortal()
+    public function GetPrimaryPortal()
     {
-        $oPortal = &$this->GetFromInternalCache('_primaryPortal');
+        $oPortal = $this->GetFromInternalCache('_primaryPortal');
         if (is_null($oPortal)) {
             $oPortal = new TCMSPortal();
             $oPortal->Load($this->sqlData['cms_portal_id']);
@@ -349,7 +349,7 @@ class TCMSConfig extends TCMSRecord
      */
     public function GetImageMagickVersion()
     {
-        $sImageMagickVersion = &$this->GetFromInternalCache('_imageMagickVersion');
+        $sImageMagickVersion = $this->GetFromInternalCache('_imageMagickVersion');
         if (is_null($sImageMagickVersion)) {
             $sImageMagickVersion = false;
             $oImageMagick = new imageMagick();
@@ -519,7 +519,7 @@ class TCMSConfig extends TCMSRecord
         if ($oIpWhiteList->Length() > 0) {
             $bUserIsWhiteListed = false;
             //first check the white list configured in the backend (cms settings)
-            while ($oIP = &$oIpWhiteList->Next() && false === $bUserIsWhiteListed) {
+            while ($oIP = $oIpWhiteList->Next() && false === $bUserIsWhiteListed) {
                 $bUserIsWhiteListed = $this->CheckIP($oIP->fieldIp, $sUserIpAddress);
             }
 

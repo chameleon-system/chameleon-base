@@ -17,7 +17,7 @@ class TCMSSmartURLHandler_PkgCommentReport extends TCMSSmartURLHandler
     public function GetPageDef()
     {
         $iPageId = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
         $sPath = $oURLData->sRelativeURL;
         if ('/' == substr($sPath, 0, 1)) {
             $sPath = substr($sPath, 1);

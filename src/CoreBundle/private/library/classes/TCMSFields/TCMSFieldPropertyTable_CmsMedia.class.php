@@ -371,7 +371,7 @@ JAVASCRIPTCODE;
                                         );
                                     }
 
-                                    $oConfig = &TdbCmsConfig::GetInstance();
+                                    $oConfig = TdbCmsConfig::GetInstance();
                                     $imageUploadMaxSize = $oConfig->sqlData['max_image_upload_size'] * 1024;
                                     if ($_FILES[$this->name.'image']['size'][$key] > $imageUploadMaxSize) {
                                         $bIsValid = false;

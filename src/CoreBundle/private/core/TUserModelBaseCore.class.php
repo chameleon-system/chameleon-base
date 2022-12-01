@@ -41,7 +41,7 @@ class TUserModelBaseCore extends TModelBase
     /**
      * @return array<string, mixed>
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['instanceID'] = $this->instanceID;

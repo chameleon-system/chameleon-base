@@ -72,7 +72,7 @@ class ProfilerStatement extends PDOStatement
      */
     public function bindParam(
         $parameter,
-        &$variable,
+        $variable,
         $data_type = PDO::PARAM_STR,
         $length = null,
         $driver_options = null
@@ -98,7 +98,7 @@ class ProfilerStatement extends PDOStatement
      * @param mixed $driverdata
      * @return bool
      */
-    public function bindColumn($column, &$param, $type = null, $maxlen = null, $driverdata = null)
+    public function bindColumn($column, $param, $type = null, $maxlen = null, $driverdata = null)
     {
         $startTime = microtime(true);
         $result = $this->statement->bindColumn($column, $param, $type, $maxlen, $driverdata);

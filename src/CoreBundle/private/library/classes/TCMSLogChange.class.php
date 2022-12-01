@@ -844,7 +844,7 @@ class TCMSLogChange
     {
         $bReturnVal = false;
         if (!empty($sIso6391Code)) {
-            $oConfig = &TdbCmsConfig::GetInstance();
+            $oConfig = TdbCmsConfig::GetInstance();
 
             $oLangList = $oConfig->GetFieldCmsLanguageList();
             if ($oLangList->Length()) {
@@ -1506,7 +1506,7 @@ class TCMSLogChange
         if (-1 == $iBuildNumber) {
             $iBuildNumber = null;
         }
-        $oUpdateManager = &TCMSUpdateManager::GetInstance();
+        $oUpdateManager = TCMSUpdateManager::GetInstance();
 
         // test if folder exists in vendor packages
         if (false === strpos('/', $sFolderName) && '-updates' === substr($sFolderName, -strlen('-updates'))) {
@@ -1540,7 +1540,7 @@ class TCMSLogChange
      */
     public static function requireBundleUpdates($bundleName, $highestBuildNumber)
     {
-        $oUpdateManager = &TCMSUpdateManager::GetInstance();
+        $oUpdateManager = TCMSUpdateManager::GetInstance();
         echo $oUpdateManager->runUpdates($bundleName, $highestBuildNumber);
     }
 

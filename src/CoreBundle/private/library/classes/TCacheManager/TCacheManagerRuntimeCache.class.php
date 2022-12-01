@@ -28,7 +28,7 @@ class TCacheManagerRuntimeCache
      *
      * @return TCacheManagerRuntimeCache
      */
-    public static function &GetInstance()
+    public static function GetInstance()
     {
         static $oInstance = null;
         if (null === $oInstance) {

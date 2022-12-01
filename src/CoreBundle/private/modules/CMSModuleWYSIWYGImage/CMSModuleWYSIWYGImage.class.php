@@ -31,7 +31,7 @@ class CMSModuleWYSIWYGImage extends TCMSModelBase
         $this->directoryID = $this->global->GetUserData('directoryID');
     }
 
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
 

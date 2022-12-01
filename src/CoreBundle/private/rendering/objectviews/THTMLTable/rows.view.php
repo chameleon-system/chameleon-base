@@ -15,7 +15,7 @@ $bShowActionCheckbox = (count($aActions) > 0);
 $oRecordList->GoToStart();
 $iRowCount = 1;
 $sRowStyle = '';
-while ($oRow = &$oRecordList->Next()) {
+while ($oRow = $oRecordList->Next()) {
     if (0 == ($iRowCount % 2)) {
         $sRowStyle = 'even';
     } else {
@@ -28,7 +28,7 @@ while ($oRow = &$oRecordList->Next()) {
     </th><?php
     }
     $oColumns->GoToStart();
-    while ($oColumn = &$oColumns->Next()) {
+    while ($oColumn = $oColumns->Next()) {
         /** @var $oColumn THTMLTableColumn */
         echo '<td class="'.TGlobal::OutHTML($oColumn->sColumnAlias).' '.$oColumn->GetColumnFormatCSSClass().'">'.$oColumn->GetFieldValue($oRow).'</td>';
     }

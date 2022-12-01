@@ -14,13 +14,13 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class MTPkgTrackObjectViewsCore extends TUserCustomModelBase
 {
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $isEnabled = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_track_views.enabled');
         if ($isEnabled) {
             if (false === $this->getRequestInfoService()->isCmsTemplateEngineEditMode()) {
-                $oTracker = &TPkgTrackObjectViews::GetInstance();
+                $oTracker = TPkgTrackObjectViews::GetInstance();
                 $this->data['sTrackHTML'] = $oTracker->Render();
             } else {
                 $this->data['sTrackHTML'] = '<!-- tracking pixel - disabled in cms backend -->';

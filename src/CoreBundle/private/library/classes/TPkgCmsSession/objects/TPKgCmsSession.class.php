@@ -63,7 +63,7 @@ class TPKgCmsSession extends \Symfony\Component\HttpFoundation\Session\Session
             return;
         }
         // reopen session to make sure we are working the newest data. NOTICE: this will discard the current session data!
-        $storageCopy = &$this->storage;
+        $storageCopy = $this->storage;
 
         /** @var TPkgCmsSession_NativeSessionStorage $storageCopy */
         if (true === $storageCopy->closeWithoutWriting()) {

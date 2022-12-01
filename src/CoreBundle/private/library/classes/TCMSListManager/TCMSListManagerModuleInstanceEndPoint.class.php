@@ -23,7 +23,7 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
     /**
      * {@inheritdoc}
      */
-    public function Init(&$oTableConf)
+    public function Init($oTableConf)
     {
         $tableConf = TdbCmsTblConf::GetNewInstance();
         $tableConf->LoadFromField('name', 'cms_tpl_module_instance');

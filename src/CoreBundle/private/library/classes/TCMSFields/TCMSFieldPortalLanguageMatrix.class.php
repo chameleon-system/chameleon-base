@@ -333,7 +333,7 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField
      * @param string     $sNewName
      * @param array|null $postData
      */
-    public function ChangeFieldDefinition($sOldName, $sNewName, &$postData = null)
+    public function ChangeFieldDefinition($sOldName, $sNewName, $postData = null)
     {
     }
 
@@ -390,7 +390,7 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField
      *
      * @return string
      */
-    public function _GetSQLDefinition(&$fieldDefinition = null)
+    public function _GetSQLDefinition($fieldDefinition = null)
     {
         return '';
     }

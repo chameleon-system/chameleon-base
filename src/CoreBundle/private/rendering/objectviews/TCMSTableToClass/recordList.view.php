@@ -60,7 +60,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      * @param boolean $bUseGlobalFilterInsteadOfPreviewFilter - (deprecated) set this to true if you want to overload all workflow data instead of only the records that are marked for preview
      * @return <?=$sClassName; ?>List
      */
-    static public function &GetList($sQuery=null,$iLanguageId=null, $bAllowCaching = false, $bForceWorkflow = false, $bUseGlobalFilterInsteadOfPreviewFilter = false)
+    static public function GetList($sQuery=null,$iLanguageId=null, $bAllowCaching = false, $bForceWorkflow = false, $bUseGlobalFilterInsteadOfPreviewFilter = false)
     {
         if (null === $iLanguageId) {
             $iLanguageId = self::getMyLanguageService()->getActiveLanguageId();
@@ -99,7 +99,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      *
      * @return false|<?php echo $sClassName."\n"; ?>
      */
-    public function &Current()
+    public function Current()
     {
         return parent::Current();
     }
@@ -110,7 +110,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      *
      * @return false|<?php echo $sClassName."\n"; ?>
      */
-    public function &Next()
+    public function Next()
     {
         return parent::Next();
     }
@@ -120,7 +120,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      *
      * @return false|<?php echo $sClassName."\n"; ?>
      */
-    public function &Previous()
+    public function Previous()
     {
         return parent::Previous();
     }
@@ -140,7 +140,7 @@ while ($oField = $oFields->Next()) {
      * @param array $aData
      * @return <?=$sClassName; ?>
      */
-    protected function &_NewElement(&$aData)
+    protected function _NewElement($aData)
     {
         $this->bChangedDataChanged = true;
         $oObj = <?=$sClassName; ?>::GetNewInstance($aData,$this->iLanguageId);

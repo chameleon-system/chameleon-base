@@ -42,7 +42,7 @@ class TCMSFile
      *
      * @return TCMSFile
      */
-    public static function &GetInstance($sPath)
+    public static function GetInstance($sPath)
     {
         $oItem = new self();
         /** @var $oItem TCMSFile */
@@ -76,7 +76,7 @@ class TCMSFile
     public function GetURL()
     {
         $sURL = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
         $sBase = $_SERVER['DOCUMENT_ROOT'];
         if (substr($this->sPath, 0, strlen($sBase)) == $sBase) {
             $sURL = REQUEST_PROTOCOL.'/'.$oURLData->sDomainName.'/'.substr($this->sPath, strlen($sBase));

@@ -25,13 +25,13 @@ class TCMSFieldLookupRoles extends TCMSFieldLookupMultiselectCheckboxes
     protected function getMltRecordData($listGroupFieldColumn)
     {
         $data = parent::getMltRecordData($listGroupFieldColumn);
-        $activeUser = &TCMSUser::GetActiveUser();
+        $activeUser = TCMSUser::GetActiveUser();
         if ($activeUser->oAccessManager->user->IsAdmin()) {
             return $data;
         }
 
         $rolesOfActiveUser = $activeUser->GetFieldCmsRoleIdList();
-        foreach ($data as &$record) {
+        foreach ($data as $record) {
             if (false === $record['editable']) {
                 continue;
             }

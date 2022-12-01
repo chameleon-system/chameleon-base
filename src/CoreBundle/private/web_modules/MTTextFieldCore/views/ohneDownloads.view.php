@@ -1,7 +1,7 @@
 <?php
-$oSingleDynPage = &$data['oTableRow'];
+$oSingleDynPage = $data['oTableRow'];
 /** @var $oSingleDynPage TCMSRecord */
-$oDownloadList = &$oSingleDynPage->GetDownloads('data_pool');
+$oDownloadList = $oSingleDynPage->GetDownloads('data_pool');
 ?>
 <?php if ($oSingleDynPage->sqlData['name']) {
     ?>

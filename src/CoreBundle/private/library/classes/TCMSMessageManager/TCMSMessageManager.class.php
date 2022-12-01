@@ -375,7 +375,7 @@ class TCMSMessageManager
         }
         $matchString = '/\[\{CMSMSG-(.*?)(:(.*?))?(:(Core|Custom-Core|Customer))?\}\]/si';
 
-        return preg_replace_callback($matchString, array(&$this, 'InjectMessageIntoStringReplaceCallback'), $sText);
+        return preg_replace_callback($matchString, array($this, 'InjectMessageIntoStringReplaceCallback'), $sText);
     }
 
     /**

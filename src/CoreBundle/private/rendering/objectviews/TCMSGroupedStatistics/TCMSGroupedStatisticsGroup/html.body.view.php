@@ -1,5 +1,5 @@
 <?php
-$oLocal = &TCMSLocal::GetActive();
+$oLocal = TCMSLocal::GetActive();
 ?>
 <tr>
     <th rowspan="<?=$oGroup->GetRowCount(); ?>"><?=$sGroupTitle; ?></th>

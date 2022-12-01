@@ -194,10 +194,10 @@ class TModelBase
      *
      * @return array<string, mixed>
      */
-    public function &Execute()
+    public function Execute()
     {
         $this->data['sModuleSpotName'] = $this->sModuleSpotName;
-        $this->data['_oModules'] = &$this->getController()->moduleLoader;
+        $this->data['_oModules'] = $this->getController()->moduleLoader;
         $pagedef = $this->global->GetUserData('pagedef');
         $this->data['pagedef'] = $pagedef;
         $this->data['_pagedefType'] = 'Core';
@@ -253,7 +253,7 @@ class TModelBase
                 return;
             }
             // call the _fnc method in the current module
-            $functionResult = &$this->_CallMethod($methodName);
+            $functionResult = $this->_CallMethod($methodName);
 
             $sOutputMode = 'Ajax';
             $aPermittedOutputModes = array('Ajax', 'Plain');
@@ -311,7 +311,7 @@ class TModelBase
      * @param string $content
      * @param bool   $bPreventPreOutputInjection - disable the pre output variable injection (messages, vars, authenticity token...)
      */
-    protected function _OutputForAjaxPlain(&$content, $bPreventPreOutputInjection = false)
+    protected function _OutputForAjaxPlain($content, $bPreventPreOutputInjection = false)
     {
         if (!$bPreventPreOutputInjection) {
             try {
@@ -338,7 +338,7 @@ class TModelBase
      *
      * @param object|array|string $content
      */
-    protected function _OutputForAjax(&$content)
+    protected function _OutputForAjax($content)
     {
         try {
             $content = $this->getResponseVariableReplacer()->replaceVariables($content);
@@ -392,7 +392,7 @@ class TModelBase
      *
      * @return mixed
      */
-    public function &_CallMethod($sMethodName, $aMethodParameter = array())
+    public function _CallMethod($sMethodName, $aMethodParameter = array())
     {
         if (true === $this->isMethodCallAllowed($sMethodName)) {
             $functionResult = call_user_func_array(array($this, $sMethodName), $aMethodParameter);
@@ -629,7 +629,7 @@ class TModelBase
      *
      * @param TUserModuleLoader
      */
-    public function InjectVirtualModuleSpots(&$oModuleLoader)
+    public function InjectVirtualModuleSpots($oModuleLoader)
     {
     }
 
@@ -677,7 +677,7 @@ class TModelBase
             $oLegacySnippetRenderer = TPkgSnippetRendererLegacy::GetNewInstance($this, IPkgSnippetRenderer::SOURCE_TYPE_CMSMODULE);
             $oRenderer->AddMapper(new TPkgViewRendererModuleLegacyMapper());
             $oRenderer->AddSourceObject('oModuleInstance', $this);
-            $sViewPathReference = &$this->viewTemplate;
+            $sViewPathReference = $this->viewTemplate;
         } else {
             $oModule = $this->getModuleObject($this->aModuleConfig['model'], 'classname');
             if (null === $oModule) {

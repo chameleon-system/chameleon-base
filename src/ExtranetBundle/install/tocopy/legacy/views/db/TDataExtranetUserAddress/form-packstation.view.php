@@ -36,7 +36,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
     <th><?=TGlobal::OutHTML(TGlobal::Translate('Anrede')); ?><span class="required">*</span></th>
     <td>
         <?php
-        $oSalutationList = &TdbDataExtranetSalutationList::GetList();
+        $oSalutationList = TdbDataExtranetSalutationList::GetList();
         $sSelectedId = $oUserAddress->fieldDataExtranetSalutationId;
         while ($oSalutation = $oSalutationList->Next()) {
             $sSelected = '';
@@ -186,7 +186,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
     <th><?=TGlobal::OutHTML(TGlobal::Translate('Land')); ?><span class="required">*</span></th>
     <td>
         <?php
-        $oCountries = &TdbDataCountryList::GetList();
+        $oCountries = TdbDataCountryList::GetList();
         $oShop = TdbShop::GetInstance();
         $iCountryId = $oUserAddress->fieldDataCountryId;
         if (is_null($iCountryId) || $iCountryId < 1) {

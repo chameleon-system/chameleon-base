@@ -230,7 +230,7 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
      *
      * @return TdbPkgExternalTrackerList
      */
-    public static function &GetList($sQuery = null, $iLanguageId = null, $bAllowCaching = true, $bForceWorkflow = false, $bUseGlobalFilterInsteadOfPreviewFilter = false)
+    public static function GetList($sQuery = null, $iLanguageId = null, $bAllowCaching = true, $bForceWorkflow = false, $bUseGlobalFilterInsteadOfPreviewFilter = false)
     {
         $oList = parent::GetList($sQuery, $iLanguageId, $bAllowCaching, $bForceWorkflow, $bUseGlobalFilterInsteadOfPreviewFilter);
         if (!is_null($sQuery) && $oList) {

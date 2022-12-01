@@ -23,7 +23,7 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
      *
      * @param TIterator $oFields - the fields inserted
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         // get the parent_id from oFields
         $parentId = 0;
@@ -54,7 +54,7 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
      * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
         // update cache
@@ -68,7 +68,7 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
      *
      * @return TIterator
      */
-    public function &GetMenuItems()
+    public function GetMenuItems()
     {
         if (is_null($this->oMenuItems)) {
             $this->oMenuItems = new TIterator();
@@ -131,13 +131,13 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
      *
      * @param TIterator $oFields
      */
-    public function _OverwriteDefaults(&$oFields)
+    public function _OverwriteDefaults($oFields)
     {
         parent::_OverwriteDefaults($oFields);
         $oGlobal = TGlobal::instance();
 
         $oFields->GoToStart();
-        while ($oField = &$oFields->Next()) {
+        while ($oField = $oFields->Next()) {
             /** @var $oField TCMSField */
             if ('parent_id' == $oField->name) {
                 $oField->data = $oGlobal->GetUserData('parent_id');

@@ -57,7 +57,7 @@ class CMSTableExport extends TCMSModelBase
         }
     }
 
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
 
@@ -109,7 +109,7 @@ class CMSTableExport extends TCMSModelBase
             $listClass = null;
         }
 
-        $this->oTableList = &$this->oTableConf->GetListObject($listClass)->tableObj;
+        $this->oTableList = $this->oTableConf->GetListObject($listClass)->tableObj;
 
         $sListCacheKey = $this->global->GetUserData('listCacheKey');
 

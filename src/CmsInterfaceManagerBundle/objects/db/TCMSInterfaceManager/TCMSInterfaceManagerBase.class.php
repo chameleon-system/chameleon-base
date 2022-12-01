@@ -61,7 +61,7 @@ class TCMSInterfaceManagerBase extends TCMSRecord
     protected function PostLoadHook()
     {
         parent::PostLoadHook();
-        $oParameterList = &$this->GetProperties('cms_interface_manager_parameter', 'TdbCmsInterfaceManagerParameter');
+        $oParameterList = $this->GetProperties('cms_interface_manager_parameter', 'TdbCmsInterfaceManagerParameter');
         while ($oParameter = $oParameterList->Next()) {
             $this->aParameter[$oParameter->GetName()] = $oParameter->sqlData['value'];
         }

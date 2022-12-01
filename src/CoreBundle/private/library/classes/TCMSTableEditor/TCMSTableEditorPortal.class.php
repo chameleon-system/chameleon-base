@@ -167,11 +167,11 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      *
      * @param TIterator $oFields - the fields inserted
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         parent::PostInsertHook($oFields);
 
-        $oUser = &TCMSUser::GetActiveUser();
+        $oUser = TCMSUser::GetActiveUser();
         $this->linkPortalToUser($oUser);
 
         TCacheManager::PerformeTableChange('cms_user', $oUser->id);
@@ -185,7 +185,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         $this->SetSessionCopiedPortalId();
         parent::OnAfterCopy();
 
-        $oUser = &TCMSUser::GetActiveUser();
+        $oUser = TCMSUser::GetActiveUser();
         $this->linkPortalToUser($oUser);
 
         $this->CopyNaviTree();
@@ -280,7 +280,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
                ";
         $oSourceNavigations->Load($query);
 
-        while ($oSourceNavi = &$oSourceNavigations->Next()) {
+        while ($oSourceNavi = $oSourceNavigations->Next()) {
             // copy root node and subtrees
             // and create navi using new tree node
             // create subnavi
@@ -448,7 +448,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         /** @var $oCmsDivision TdbCmsDivision */
         $oCmsDivision = TdbCmsDivision::GetNewInstance();
         if ($oCmsDivision->LoadFromField('cms_tree_id_tree', $aSourceNode['id'])) {
-            $oDivisionTableConf = &$oCmsDivision->GetTableConf();
+            $oDivisionTableConf = $oCmsDivision->GetTableConf();
 
             /** @var $oTableManager TCMSTableEditorManager */
             $oTableManager = new TCMSTableEditorManager();
@@ -522,7 +522,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    public function Save(&$postData, $bDataIsInSQLForm = false)
+    public function Save($postData, $bDataIsInSQLForm = false)
     {
         $defaultLanguageBeforeChange = $this->oTable->fieldCmsLanguageId;
         $languagesBeforeChange = $this->oTable->GetMLTIdList('cms_language');

@@ -83,7 +83,7 @@ class CMSDocumentLocalImport extends TCMSModelBase
      * this function should fill the data array and return a pointer to it
      * (pointer because it may contain objects).
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 

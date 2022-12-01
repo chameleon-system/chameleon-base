@@ -47,7 +47,7 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    public function Save(&$postData, $bDataIsInSQLForm = false)
+    public function Save($postData, $bDataIsInSQLForm = false)
     {
         $this->aOldData = $this->oTable->sqlData;
         $this->sOldTblName = $this->aOldData['name'];
@@ -131,7 +131,7 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
@@ -361,11 +361,11 @@ class TCMSTableWriter extends TCMSTableEditor
      *
      * @param TIterator $oFields
      */
-    public function _OverwriteDefaults(&$oFields)
+    public function _OverwriteDefaults($oFields)
     {
         if (!is_null($this->_sqlTableName)) {
             $oFields->GoToStart();
-            while ($oField = &$oFields->Next()) {
+            while ($oField = $oFields->Next()) {
                 /** @var $oField TCMSField */
                 if ('name' == $oField->name) {
                     $oField->data = $this->_sqlTableName;

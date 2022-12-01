@@ -18,7 +18,7 @@ class MTPkgExternalTracker_MTPkgArticle extends MTPkgExternalTracker_MTPkgArticl
     {
         parent::Init();
         // Add view count
-        $oActiveArticle = &TdbPkgArticle::GetActiveInstance();
+        $oActiveArticle = TdbPkgArticle::GetActiveInstance();
         // extenral tracker
         if (is_object($oActiveArticle)) {
             TdbPkgExternalTrackerList::GetActiveInstance()->AddStateData('oPkgArticle', $oActiveArticle);

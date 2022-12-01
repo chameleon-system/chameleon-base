@@ -44,23 +44,13 @@ abstract class ChameleonBaseRouter extends Router
          */
         $this->environment = $container->getParameter('kernel.environment');
 
-        $options['matcher_cache_class'] = $this->getMatcherCacheClassName();
-        $options['generator_cache_class'] = $this->getGeneratorCacheClassName();
         $options['resource_type'] = 'chameleon';
-        $options['cache_dir'] = $container->getParameter('kernel.cache_dir');
+        $options['cache_dir'] = $this->generateCacheDir($container->getParameter('kernel.cache_dir'));
 
         $this->setOptions($options);
     }
 
-    /**
-     * @return string
-     */
-    abstract protected function getMatcherCacheClassName();
-
-    /**
-     * @return string
-     */
-    abstract protected function getGeneratorCacheClassName();
+    abstract protected function generateCacheDir(string $baseCacheDir): string;
 
     /**
      * @param string $newURL

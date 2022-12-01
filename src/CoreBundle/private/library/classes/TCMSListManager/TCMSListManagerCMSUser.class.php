@@ -24,7 +24,7 @@ class TCMSListManagerCMSUser extends TCMSListManagerFullGroupTable
     public function GetUserRestriction()
     {
         $query = parent::GetUserRestriction();
-        $oUser = &TCMSUser::GetActiveUser();
+        $oUser = TCMSUser::GetActiveUser();
 
         $restrictionQuery = '';
         if (!$oUser->oAccessManager->user->IsAdmin()) {

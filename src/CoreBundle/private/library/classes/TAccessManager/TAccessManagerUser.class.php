@@ -62,7 +62,7 @@ class TAccessManagerUser
      *
      * @param TCMSUser $oCmsUser - note this may TCMSUser or TdbCmsUser, so only use TCMSUser methods/properties
      */
-    public function InitFromObject(&$oCmsUser = null)
+    public function InitFromObject($oCmsUser = null)
     {
         if (!is_null($oCmsUser)) {
             $this->id = $oCmsUser->id;

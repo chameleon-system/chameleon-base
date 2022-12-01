@@ -100,7 +100,7 @@ class TCMSRecordListTest extends TestCase
 
             // Does not create a new Tdb for the data returned from the iterator
             // but returns the data 1:1
-            protected function &_NewElement(&$aData) {
+            protected function _NewElement($aData) {
                 return $aData;
             }
         };

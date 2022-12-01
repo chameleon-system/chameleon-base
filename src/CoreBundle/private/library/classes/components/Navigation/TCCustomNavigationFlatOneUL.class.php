@@ -25,7 +25,7 @@ class TCCustomNavigationFlatOneUL extends TCCustomNavigation
         $menu = '';
         $count = 0;
         $totalSiblings = $this->oRootNode->CountChildren();
-        $oChildren = &$this->oRootNode->GetChildren();
+        $oChildren = $this->oRootNode->GetChildren();
         $oChildren->GoToStart();
         $menu .= '<ul>'.$this->linefeed;
         while ($oNode = $oChildren->Next()) {
@@ -63,7 +63,7 @@ class TCCustomNavigationFlatOneUL extends TCCustomNavigation
      *
      * @return string
      */
-    public function _Render(&$oSubnodes, &$oParentNode, $level = 0)
+    public function _Render($oSubnodes, $oParentNode, $level = 0)
     {
         $menu = '';
         if ($this->_ShowChildren($oParentNode, 0, $level)) {

@@ -264,7 +264,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $urlUtil = $this->getUrlUtil();
         $translator = $this->getTranslator();
 
-        $tableConf = &$this->oTableRow->GetTableConf();
+        $tableConf = $this->oTableRow->GetTableConf();
         $this->_GetFieldWidth();
         $url = PATH_CMS_CONTROLLER.'?'.$urlUtil->getArrayAsUrl(array(
             'id' => $this->recordId,
@@ -461,7 +461,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      *
      * @return void
      */
-    public function ChangeFieldDefinition($oldName, $newName, &$postData = null)
+    public function ChangeFieldDefinition($oldName, $newName, $postData = null)
     {
         if (true === $this->oDefinition->isVirtualField()) {
             return;
@@ -746,7 +746,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      *
      * @return string
      */
-    public function _GetSQLDefinition(&$fieldDefinition = null)
+    public function _GetSQLDefinition($fieldDefinition = null)
     {
         $connection = $this->getDatabaseConnection();
         $inputFilterUtil = $this->getInputFilterUtil();
@@ -805,7 +805,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      *
      * @return string
      */
-    protected function GetMySQLLengthSet($oFieldType, &$aPostData = null)
+    protected function GetMySQLLengthSet($oFieldType, $aPostData = null)
     {
         $lengthSet = '';
         if (!empty($oFieldType->sqlData['length_set'])) {
@@ -1134,7 +1134,7 @@ class TCMSField implements TCMSFieldVisitableInterface
     {
         $inputFilterUtil = $this->getInputFilterUtil();
         $urlUtil = $this->getUrlUtil();
-        $oTableConf = &$this->oTableRow->GetTableConf();
+        $oTableConf = $this->oTableRow->GetTableConf();
 
         if (!is_array($aParams)) {
             $aParams = array();

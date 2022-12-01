@@ -20,7 +20,7 @@ class TCMSTableEditorNewsletterSubscriberEndPoint extends TCMSTableEditor
             // delete user from queue before final delete
 
             $query = "SELECT * FROM `pkg_newsletter_queue` WHERE `pkg_newsletter_user` = '".MySqlLegacySupport::getInstance()->real_escape_string($sId)."'";
-            $oPkgNewsletterQueueList = &TdbPkgNewsletterQueueList::GetList($query);
+            $oPkgNewsletterQueueList = TdbPkgNewsletterQueueList::GetList($query);
             while ($oPkgNewsletterQueue = $oPkgNewsletterQueueList->Next()) {
                 $iTableID = TTools::GetCMSTableId('pkg_newsletter_queue');
 

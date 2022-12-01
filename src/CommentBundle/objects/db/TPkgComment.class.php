@@ -40,7 +40,7 @@ class TPkgComment extends TPkgCommentAutoParent
      *
      * @return TdbPkgComment|null
      */
-    public static function &GetInstance()
+    public static function GetInstance()
     {
         static $oComment = null;
         if (is_null($oComment)) {
@@ -371,7 +371,7 @@ class TPkgComment extends TPkgCommentAutoParent
      *
      * @return TViewParser
      */
-    protected function GetAdditionalViewVariables($oView, $sViewName, &$aCallTimeVars)
+    protected function GetAdditionalViewVariables($oView, $sViewName, $aCallTimeVars)
     {
         if ('report' != $sViewName) {
             $oChildCommentList = $this->GetChildComments();

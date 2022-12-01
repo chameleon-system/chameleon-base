@@ -25,7 +25,7 @@ class TCCustomNavigationSkipRoot extends TCCustomNavigation
         $menu = '';
         $count = 0;
         $totalSiblings = $this->oRootNode->CountChildren();
-        $oChildren = &$this->oRootNode->GetChildren();
+        $oChildren = $this->oRootNode->GetChildren();
         $oChildren->GoToStart();
         // for each child, get is children, then run render...
         if (!$this->bPlaceEachRootNodeInASeparateBlock) {

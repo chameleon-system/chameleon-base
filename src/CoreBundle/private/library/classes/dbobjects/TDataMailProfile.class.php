@@ -96,7 +96,7 @@ class TDataMailProfile extends TDataMailProfileAutoParent
      * @param string $key
      * @param string $value
      */
-    public function AddData($key, &$value)
+    public function AddData($key, $value)
     {
         $this->aMailData[$key] = $value;
     }
@@ -106,7 +106,7 @@ class TDataMailProfile extends TDataMailProfileAutoParent
      *
      * @param array $aData
      */
-    public function AddDataArray(&$aData)
+    public function AddDataArray($aData)
     {
         $this->aMailData = array_merge($this->aMailData, $aData);
     }
@@ -304,7 +304,7 @@ class TDataMailProfile extends TDataMailProfileAutoParent
      */
     public function Send($sModuleInWhichTheViewsAreToBeFound, $aAttachFiles = null)
     {
-        $oMail = &$this->GetMailObject($aAttachFiles);
+        $oMail = $this->GetMailObject($aAttachFiles);
         $oMail->SetTemplates($sModuleInWhichTheViewsAreToBeFound, $this->sqlData['template'], $this->sqlData['template_text']);
 
         return $oMail->Send($this->aMailData);
@@ -337,7 +337,7 @@ class TDataMailProfile extends TDataMailProfileAutoParent
      */
     public function SendUsingPackageObjectView($sSubType = '', $sType = 'Core', $aAttachFiles = null)
     {
-        $oMail = &$this->GetMailObject($aAttachFiles);
+        $oMail = $this->GetMailObject($aAttachFiles);
         $oMail->SetPackageObjectTemplate($sSubType, $sType, $this->sqlData['template'], $this->sqlData['template_text']);
 
         return $oMail->Send($this->aMailData);
@@ -350,7 +350,7 @@ class TDataMailProfile extends TDataMailProfileAutoParent
      *
      * @return TCMSMail
      */
-    protected function &GetMailObject(array $aAttachFiles = null)
+    protected function GetMailObject(array $aAttachFiles = null)
     {
         $mailer = $this->getMailer();
         $this->aMailData['subject'] = $this->GetSubject();

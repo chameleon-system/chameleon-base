@@ -74,14 +74,14 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
         $this->data['sTitle'] = $this->_GetTitle();
         $this->data['sURL'] = $this->_GetActivePageURL();
         $this->data['sHost'] = $this->_GetHost();
-        $this->data['oPortalLogo'] = &$this->_GetPortalLogo();
+        $this->data['oPortalLogo'] = $this->_GetPortalLogo();
         $this->data['aMetaData'] = $this->_GetMetaData();
         $this->data['sCustomHeaderData'] = $this->_GetCustomHeaderData();
         $this->data['sHomeURL'] = $this->GetHomeURL();
@@ -280,8 +280,8 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      */
     protected function GetHomeURL()
     {
-        $oPortalHomeNode = &$this->_GetPortalHomeNode();
-        $this->data['oPortalHomeNode'] = &$oPortalHomeNode;
+        $oPortalHomeNode = $this->_GetPortalHomeNode();
+        $this->data['oPortalHomeNode'] = $oPortalHomeNode;
         /** @deprecated - use $data['sHomeURL'] instead of data['oPortalHomeNode']->GetLink(); */
         $url = '/';
         $activePortal = $this->getPortalDomainService()->getActivePortal();
@@ -297,7 +297,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      *
      * @return TdbCmsTree
      */
-    protected function &_GetPortalHomeNode()
+    protected function _GetPortalHomeNode()
     {
         $activePortal = $this->getPortalDomainService()->getActivePortal();
         $oPortalHomeNode = null;
@@ -313,7 +313,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      *
      * @return TCMSImage - returns null if no image is set
      */
-    protected function &_GetPortalLogo()
+    protected function _GetPortalLogo()
     {
         $activePortal = $this->getPortalDomainService()->getActivePortal();
         $oPortalLogo = null;

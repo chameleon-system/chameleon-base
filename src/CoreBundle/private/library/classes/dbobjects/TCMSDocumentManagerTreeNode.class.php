@@ -36,7 +36,7 @@ class TCMSDocumentManagerTreeNode extends TCMSTreeNode
     /**
      * {@inheritdoc}
      */
-    public function &GetChildren($includeHidden = false, $languageId = null)
+    public function GetChildren($includeHidden = false, $languageId = null)
     {
         if (null !== $this->oChildren) {
             return $this->oChildren;

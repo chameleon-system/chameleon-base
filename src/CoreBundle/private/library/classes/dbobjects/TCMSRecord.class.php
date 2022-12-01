@@ -823,7 +823,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @return TdbCmsTblConf
      */
-    public function &GetTableConf()
+    public function GetTableConf()
     {
         if (is_null($this->_oTableConf)) {
             $this->_oTableConf = TdbCmsTblConf::GetNewInstance(null, $this->iLanguageId);
@@ -877,7 +877,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         if ($includeDummyImages) {
             $sCacheName .= '_withDummyImages';
         }
-        $oImages = &$this->GetFromInternalCache($sCacheName);
+        $oImages = $this->GetFromInternalCache($sCacheName);
         if (is_null($oImages)) {
             $idlist = explode(',', $this->sqlData[$fieldName]);
             $oImages = new TIterator();
@@ -975,7 +975,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @return TdbCmsDocumentList
      */
-    public function &GetDownloads($sDownloadField = 'data_pool', $allowedFileTypes = null, $bOrderByPosition = false)
+    public function GetDownloads($sDownloadField = 'data_pool', $allowedFileTypes = null, $bOrderByPosition = false)
     {
         $mltTable = $this->table.'_'.$sDownloadField.'_cms_document_mlt';
 
@@ -1034,11 +1034,11 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @return TCMSRecordList
      */
-    public function &GetMLT($sFieldName, $sClassName = 'TCMSRecord', $sOrderBy = '', $sClassSubType = 'dbobjects', $sClassType = 'Core', $sListAutoClassName = null, $bForceLoad = false, $sTargetTableName = '')
+    public function GetMLT($sFieldName, $sClassName = 'TCMSRecord', $sOrderBy = '', $sClassSubType = 'dbobjects', $sClassType = 'Core', $sListAutoClassName = null, $bForceLoad = false, $sTargetTableName = '')
     {
         $sCacheName = 'mltField'.$sFieldName.'_'.$sClassName.'_'.$sOrderBy.'_'.$sClassSubType.'_'.$sClassType.'_'.$sTargetTableName;
         if (false === $bForceLoad) {
-            $oMLTFields = &$this->GetFromInternalCache($sCacheName);
+            $oMLTFields = $this->GetFromInternalCache($sCacheName);
         } else {
             $oMLTFields = null;
         }
@@ -1188,7 +1188,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     public function GetMLTSourceRecords($sSourceTableName, $sSourceFieldName, $sOrderBy = '', $sClassName = 'TCMSRecord', $sClassSubType = 'dbobjects', $sClassType = 'Core')
     {
         $sCacheName = 'mltField'.$sSourceFieldName.'_'.$sClassName.'_'.$sOrderBy.'_'.$sClassSubType.'_'.$sClassType;
-        $oMLTFields = &$this->GetFromInternalCache($sCacheName);
+        $oMLTFields = $this->GetFromInternalCache($sCacheName);
         $oMLTFields = null;
         if (is_null($oMLTFields)) {
             $fTable = $this->table;
@@ -1238,7 +1238,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $quotedSourceId = $databaseConnection->quote($iSourceID);
 
         $sCacheName = 'isConnected'.$sSourceTableName.'_'.$iSourceID.'_'.$sMLTSourceFieldName.'_'.$this->table;
-        $isConnected = &$this->GetFromInternalCache($sCacheName);
+        $isConnected = $this->GetFromInternalCache($sCacheName);
         if (is_null($isConnected)) {
             $aMLTTableNameList = $this->GetConnectedMLTTableNameList($sSourceTableName, $sMLTSourceFieldName, $sMLTTable);
             if (count($aMLTTableNameList) > 0) {
@@ -1415,7 +1415,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @todo find usages of GetLookUp and change calls where $sClassName = array(...). afterwards change trigger_error MSG in LINE 1647
      */
-    public function &GetLookup($sFieldName, $sClassName = null)
+    public function GetLookup($sFieldName, $sClassName = null)
     {
         if (is_null($sClassName)) {
             $sClassName = 'TCMSRecord';
@@ -1453,7 +1453,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         }
 
         $sCacheName = 'lookupField_'.$sFieldName.'_'.$sClassName;
-        $oLookupRecord = &$this->GetFromInternalCache($sCacheName);
+        $oLookupRecord = $this->GetFromInternalCache($sCacheName);
 
         if (is_null($oLookupRecord) && !empty($this->sqlData[$sFieldName])) {
             $foreignTable = substr($sFieldName, 0, -3);
@@ -1493,7 +1493,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @deprecated - Tdb objects have a method for every property field - use that
      */
-    public function &GetProperties($sFieldName, $sClassName = null, $sOrderBy = '`cmsident`', $aFilterConditions = null, $sParentFieldNameInTargetTable = null)
+    public function GetProperties($sFieldName, $sClassName = null, $sOrderBy = '`cmsident`', $aFilterConditions = null, $sParentFieldNameInTargetTable = null)
     {
         $oPropertyList = null;
         if (false === $this->sqlData) {
@@ -1542,7 +1542,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $sCacheName .= '_'.$aFilterConditions;
         }
 
-        $oPropertyList = &$this->GetFromInternalCache($sCacheName);
+        $oPropertyList = $this->GetFromInternalCache($sCacheName);
         if (is_null($oPropertyList)) {
             $linkField = $this->table.'_id';
             if (!is_null($sParentFieldNameInTargetTable)) {
@@ -1597,7 +1597,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     {
         $aIdList = array();
         $sCacheName = 'propertyField_'.$sFieldName.'__idlist';
-        $oPropertyList = &$this->GetFromInternalCache($sCacheName);
+        $oPropertyList = $this->GetFromInternalCache($sCacheName);
         if (is_null($oPropertyList)) {
             /** @var $oTableConf TdbCmsTblConf */
             $oTableConfig = $this->GetTableConf();
@@ -1636,10 +1636,10 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @return TCMSTreeNode
      */
-    public function &GetTreeNode()
+    public function GetTreeNode()
     {
         $sCacheName = 'treeNode';
-        $oTreeNode = &$this->GetFromInternalCache($sCacheName);
+        $oTreeNode = $this->GetFromInternalCache($sCacheName);
         if (is_null($oTreeNode)) {
             $query = 'SELECT `cms_tree`.*
                     FROM `cms_tree`
@@ -1720,11 +1720,11 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @return mixed|null
      */
-    protected function &GetFromInternalCache($varName)
+    protected function GetFromInternalCache($varName)
     {
         $resultPointer = null;
         if ((is_array($this->aResultCache) && isset($this->aResultCache[$varName]))) {
-            $resultPointer = &$this->aResultCache[$varName];
+            $resultPointer = $this->aResultCache[$varName];
         }
 
         return $resultPointer;
@@ -1750,8 +1750,8 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function ExportRowData($excludeFields = array())
     {
-        $oTableConf = &$this->GetTableConf();
-        $oFields = &$oTableConf->GetFields($this);
+        $oTableConf = $this->GetTableConf();
+        $oFields = $oTableConf->GetFields($this);
 
         $databaseConnection = $this->getDatabaseConnection();
         $quotedTableName = $databaseConnection->quoteIdentifier($this->table);
@@ -1791,7 +1791,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $sql .= 'SET @recordId'.$this->table."='{$sNewId}';\n";
 
         // now add mlt data
-        $oFieldDefinitions = &$oTableConf->GetFieldDefinitions(array('CMSFIELD_MULTITABLELIST', 'CMSFIELD_MULTITABLELIST_CHECKBOXES'));
+        $oFieldDefinitions = $oTableConf->GetFieldDefinitions(array('CMSFIELD_MULTITABLELIST', 'CMSFIELD_MULTITABLELIST_CHECKBOXES'));
         while ($oFieldDef = $oFieldDefinitions->Next()) {
             /** @var $oFieldDef TCMSFieldDefinition */
             $tableName = $this->table.'_'.$oFieldDef->sqlData['name'];
@@ -1803,7 +1803,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             }
         }
         // now insert property records
-        $oFieldDefinitions = &$oTableConf->GetFieldDefinitions(array('CMSFIELD_PROPERTY'));
+        $oFieldDefinitions = $oTableConf->GetFieldDefinitions(array('CMSFIELD_PROPERTY'));
         $quotedSqlDataTableName = $databaseConnection->quoteIdentifier($oTableConf->sqlData['name'].'_id');
         while ($oFieldDef = $oFieldDefinitions->Next()) {
             /** @var $oFieldDef TCMSFieldDefinition */
@@ -1847,7 +1847,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @return bool
      */
-    public function IsSameAs(&$oItem)
+    public function IsSameAs($oItem)
     {
         $bIsSame = false;
         if (!is_null($oItem)) {
@@ -1910,10 +1910,10 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     public function GetRequiredFields()
     {
         $requiredFields = array();
-        $tableConf = &$this->GetTableConf();
-        $fields = &$tableConf->GetFieldDefinitions();
+        $tableConf = $this->GetTableConf();
+        $fields = $tableConf->GetFieldDefinitions();
         $fields->GoToStart();
-        while ($field = &$fields->Next()) {
+        while ($field = $fields->Next()) {
             /** @var $field TCMSFieldDefinition */
             if ('1' == $field->sqlData['isrequired']) {
                 $requiredFields[] = $field->sqlData['name'];

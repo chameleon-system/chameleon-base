@@ -80,7 +80,7 @@ class TPkgCsv2Sql_CmsListManagerPkgCsv2sql extends TCMSListManagerFullGroupTable
      *
      * @return bool
      */
-    protected function DataIsValid(&$postData, $oFields = null)
+    protected function DataIsValid($postData, $oFields = null)
     {
         return true;
     }

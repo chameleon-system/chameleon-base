@@ -53,7 +53,7 @@ class CMSDocumentManager extends TCMSModelBase
         $this->oTreeWidget = $this->LoadTreeWidget();
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 

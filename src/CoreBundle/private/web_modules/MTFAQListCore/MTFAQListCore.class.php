@@ -13,7 +13,7 @@ class MTFAQListCore extends TUserCustomModelBase
 {
     protected $bAllowHTMLDivWrapping = true;
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
@@ -34,7 +34,7 @@ class MTFAQListCore extends TUserCustomModelBase
      *
      * @param TdbModuleFaqList $oList
      */
-    protected function ChangeOrderByForList(&$oList)
+    protected function ChangeOrderByForList($oList)
     {
         $oList->ChangeOrderBy(array('qdescription' => 'ASC'));
     }

@@ -111,5 +111,5 @@ interface IPkgCmsEvent
      *                      returns a new instance of an event for the defined context.
      *                      the returned instance will be of the type used to call the method. So calling a subclass will return an instance of this subclass
      */
-    public static function &GetNewInstance($oSubject, $sContext, $sName, $aData = array());
+    public static function GetNewInstance($oSubject, $sContext, $sName, $aData = array());
 }

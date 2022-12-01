@@ -103,7 +103,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      *
      * @return bool
      */
-    protected function CreateTable(&$aErrorList)
+    protected function CreateTable($aErrorList)
     {
         $logger = $this->getLogger();
 

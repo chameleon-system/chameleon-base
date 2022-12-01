@@ -73,7 +73,7 @@ class TCMSBreadcrumbNaviItem
     /* ------------------------------------------------------------------------
      * overwrite this function to changes the way the node is rendered.
     /* ----------------------------------------------------------------------*/
-    public function Render($depth, &$division)
+    public function Render($depth, $division)
     {
         return '<div style="padding-left:'.(5 * $depth)."px;background-color:{$division['color_primary_hexcolor']}\">".htmlspecialchars($this->name)."</div>\n";
     }

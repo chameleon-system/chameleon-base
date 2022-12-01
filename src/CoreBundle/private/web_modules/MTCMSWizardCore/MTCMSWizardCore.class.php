@@ -44,13 +44,13 @@ class MTCMSWizardCore extends TUserCustomModelBase
             if (!$sSpotName || ($sSpotName && $sSpotName == $this->sModuleSpotName)) {
                 $sStepName = $this->global->GetUserData(self::URL_PARAM_STEP_SYSTEM_NAME);
             }
-            $this->oActiveOrderStep = &TdbCmsWizardStep::GetStep($sStepName, $this->instanceID);
+            $this->oActiveOrderStep = TdbCmsWizardStep::GetStep($sStepName, $this->instanceID);
             if (is_null($this->oActiveOrderStep)) {
                 // order step not found... go back to the caling step, but write a message
                 $oMsgManager = TCMSMessageManager::GetInstance();
                 $oMsgManager->AddMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'SYSTEM-ERROR-SHOP-ORDER-STEP-NOT-DEFINED', array('target' => $sStepName, 'calling' => TdbCmsWizardStep::GetCallingStepName()));
                 $sStepName = TdbCmsWizardStep::GetCallingStepName();
-                $this->oActiveOrderStep = &TdbCmsWizardStep::GetStep($sStepName, $this->instanceID);
+                $this->oActiveOrderStep = TdbCmsWizardStep::GetStep($sStepName, $this->instanceID);
             }
             if (!is_null($this->oActiveOrderStep)) {
                 $oOldList = TdbCmsWizardStepList::GetAllBeforeThisStep($this->oActiveOrderStep);
@@ -61,11 +61,11 @@ class MTCMSWizardCore extends TUserCustomModelBase
         }
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->LoadActiveStep();
-        $this->data['oActiveOrderStep'] = &$this->oActiveOrderStep;
+        $this->data['oActiveOrderStep'] = $this->oActiveOrderStep;
         $this->data['oStepNavi'] = TdbCmsWizardStepList::GetListNavigationForInstance($this->oActiveOrderStep);
         $this->data['sBasketRequestURL'] = self::GetCallingURL();
 
@@ -74,7 +74,7 @@ class MTCMSWizardCore extends TUserCustomModelBase
         if (!$oWizardConf->LoadFromField('cms_tpl_module_instance_id', $this->instanceID)) {
             $oWizardConf = null;
         }
-        $this->data['oWizardConf'] = &$oWizardConf;
+        $this->data['oWizardConf'] = $oWizardConf;
 
         return $this->data;
     }

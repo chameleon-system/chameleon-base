@@ -30,7 +30,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
      *
      * @param TIterator $oFields - the fields inserted
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         parent::PostInsertHook($oFields);
         // get the parent_id from oFields
@@ -66,7 +66,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         $fieldTranslationUtil = $this->getFieldTranslationUtil();
         $translatedUrlnameFieldName = $fieldTranslationUtil->getTranslatedFieldName($this->oTableConf->fieldName, 'urlname');
@@ -75,7 +75,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         $updatedNodes[] = new TdbCmsTree($this->sId);
         $oFields->GoToStart();
         $urlname = '';
-        while ($oField = &$oFields->Next()) {
+        while ($oField = $oFields->Next()) {
             /** @var $oField TCMSField */
             if ('name' === $oField->name) {
                 $urlname = $this->getUrlNormalizationUtil()->normalizeUrl($oField->data);
@@ -231,7 +231,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
      *
      * @return TIterator
      */
-    public function &GetMenuItems()
+    public function GetMenuItems()
     {
         if (is_null($this->oMenuItems)) {
             $this->oMenuItems = new TIterator();
@@ -295,13 +295,13 @@ class TCMSTableEditorTree extends TCMSTableEditor
      *
      * @param TIterator $oFields
      */
-    public function _OverwriteDefaults(&$oFields)
+    public function _OverwriteDefaults($oFields)
     {
         parent::_OverwriteDefaults($oFields);
         $oGlobal = TGlobal::instance();
 
         $oFields->GoToStart();
-        while ($oField = &$oFields->Next()) {
+        while ($oField = $oFields->Next()) {
             /** @var $oField TCMSField */
             if ('parent_id' == $oField->name) {
                 $oField->data = $oGlobal->GetUserData('parent_id');
@@ -324,7 +324,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         $oNode = new TdbCmsTree();
         $oNode->Load($sId);
         $deletedNodes[] = $oNode;
-        $oPages = &$oNode->GetAllLinkedPages();
+        $oPages = $oNode->GetAllLinkedPages();
         parent::Delete($sId);
         // and delete all children as well
         $query = "SELECT * FROM `cms_tree` WHERE `parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sId)."'";

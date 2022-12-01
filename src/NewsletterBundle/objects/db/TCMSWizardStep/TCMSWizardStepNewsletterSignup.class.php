@@ -25,11 +25,11 @@ class TCMSWizardStepNewsletterSignup extends TdbCmsWizardStep
      *
      * @return TdbPkgNewsletterUser
      */
-    protected function &LoadNewsletterSignup()
+    protected function LoadNewsletterSignup()
     {
         if (is_null($this->oNewsletterSignup)) {
             $this->oNewsletterSignup = TdbPkgNewsletterUser::GetNewInstance();
-            $oNewslettter = &TdbPkgNewsletterUser::GetInstanceForActiveUser();
+            $oNewslettter = TdbPkgNewsletterUser::GetInstanceForActiveUser();
             if (!is_null($oNewslettter)) {
                 $this->oNewsletterSignup = $oNewslettter;
             }
@@ -110,7 +110,7 @@ class TCMSWizardStepNewsletterSignup extends TdbCmsWizardStep
      *
      * @return array
      */
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
         $aViewVariables = array();
         if (is_null($this->oNewsletterSignup)) {

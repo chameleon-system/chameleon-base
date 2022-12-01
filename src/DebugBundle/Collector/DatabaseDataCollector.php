@@ -148,7 +148,7 @@ class DatabaseDataCollector extends DataCollector
             );
         }
 
-        usort($queriesByOccurrence, array(&$this, 'sortQueriesByNumberOfOccurrence'));
+        usort($queriesByOccurrence, array($this, 'sortQueriesByNumberOfOccurrence'));
 
         return $queriesByOccurrence;
     }

@@ -42,7 +42,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     /**
      * {@inheritdoc}
      */
-    public function Init(&$oTableConf)
+    public function Init($oTableConf)
     {
         parent::Init($oTableConf);
 
@@ -227,7 +227,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
                     $sListClass = 'TCMSListManager';
 
-                    $oListClass = &$this->oTableConf->GetLookup('cms_tbl_list_class_id');
+                    $oListClass = $this->oTableConf->GetLookup('cms_tbl_list_class_id');
                     if (isset($oListClass) && !is_null($oListClass) && is_object($oListClass)) {
                         $sListClass = $oListClass->sqlData['classname'];
                     }

@@ -136,7 +136,7 @@ class AuthenticityTokenManager implements AuthenticityTokenManagerInterface
         // The last block can never contain a form, so we can ignore it.
         $lastIndex = $partCount - 2;
         for ($i = 0; $i <= $lastIndex; ++$i) {
-            $part = &$parts[$i];
+            $part = $parts[$i];
             $pattern = '/(<(input|button)[^>]+module_fnc[^>]+>)/ui';
             if (1 === \preg_match($pattern, $part)) {
                 $part .= $tokenInputField;
