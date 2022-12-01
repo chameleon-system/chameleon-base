@@ -60,7 +60,7 @@ framework:
   csrf_protection: ~
   validation:      { enable_annotations: true }
   router:
-    resource: "%kernel.root_dir%/config/routing.yml"
+    resource: "%kernel.project_dir%/app/config/routing.yml"
     strict_requirements: ~
   session:
     metadata_update_threshold: 120

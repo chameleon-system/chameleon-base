@@ -46,26 +46,26 @@
         <service id="chameleon_system_core.check_cms_dir_writable"  parent="chameleon_system_sanity_check.check.file_permission">
             <argument>%chameleon_system_sanity_check.level.error%</argument>
             <argument type="collection">
-                <argument>cmsdata</argument>
-                <argument>cache</argument>
-                <argument>cache/autoclasses</argument>
+                <argument>app/cmsdata</argument>
+                <argument>var/cache</argument>
+                <argument>var/cache/autoclasses</argument>
                 <argument>logs</argument>
-                <argument>../web/chameleon/mediapool</argument>
-                <argument>../web/chameleon/outbox/static/css</argument>
-                <argument>../web/chameleon/outbox/static/js</argument>
-                <argument>../web/chameleon/outbox/static/less</argument>
+                <argument>web/chameleon/mediapool</argument>
+                <argument>web/chameleon/outbox/static/css</argument>
+                <argument>web/chameleon/outbox/static/js</argument>
+                <argument>web/chameleon/outbox/static/less</argument>
             </argument>
             <argument type="collection">
                 <argument>READ</argument>
                 <argument>WRITE</argument>
             </argument>
-            <argument>%kernel.root_dir%</argument>
+            <argument>%kernel.project_dir%</argument>
             <tag name="chameleon_system.sanity_check.check" translation_key="label.directorieswritable" />
         </service>
 
         <service id="chameleon_system_core.check_disk_space"  parent="chameleon_system_sanity_check.check.disk_space">
             <argument>%chameleon_system_sanity_check.level.error%</argument>
-            <argument>%kernel.root_dir%</argument>
+            <argument>%kernel.project_dir%</argument>
             <argument type="collection">
                 <argument key="%chameleon_system_sanity_check.level.warning%">1GiB</argument>
                 <argument key="%chameleon_system_sanity_check.level.error%">100MiB</argument>
