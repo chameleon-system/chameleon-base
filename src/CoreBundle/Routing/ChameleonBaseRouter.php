@@ -87,13 +87,19 @@ abstract class ChameleonBaseRouter extends Router
      */
     public function clearCache()
     {
-        $currentDir = $this->getOption('cache_dir');
-        $matcherName = $currentDir.DIRECTORY_SEPARATOR.$this->getMatcherCacheClassName().'.php';
-        @unlink($matcherName);
-        @unlink($matcherName.'.meta');
-        $generatorName = $currentDir.DIRECTORY_SEPARATOR.$this->getGeneratorCacheClassName().'.php';
-        @unlink($generatorName);
-        @unlink($generatorName.'.meta');
+        $currentDir = $this->generateCacheDir($this->getOption('cache_dir'));
+        if (false === is_dir($currentDir)) {
+            return;
+        }
+        $d = dir($currentDir);
+        while (false !== ($entry = $d->read())) {
+            $fullName = sprintf('%s%s%s',$currentDir, DIRECTORY_SEPARATOR, $entry);
+            if ($entry === '.' || $entry === '..' || is_dir($fullName)) {
+                continue;
+            }
+            unlink($fullName);
+        }
+        $d->close();
     }
 
     /**
