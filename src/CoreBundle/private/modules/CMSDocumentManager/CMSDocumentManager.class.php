@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * shows the CMS Document Manager component.
@@ -530,7 +531,7 @@ class CMSDocumentManager extends TCMSModelBase
     }
 
     /**
-     * @return \Symfony\Component\Translation\TranslatorInterface
+     * @return TranslatorInterface
      */
     private function getTranslator()
     {

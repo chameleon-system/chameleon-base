@@ -14,14 +14,13 @@ namespace ChameleonSystem\CoreBundle\Translation;
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
-use Symfony\Component\Translation\TranslatorInterface as LegacyTranslatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @psalm-suppress UndefinedInterfaceMethod, InvalidPropertyAssignmentValue
  * @FIXME This translator uses methods that are exclusive to `Symfony\Component\Translation\TranslatorInterface` (e.g. `transChoice`) but uses `Symfony\Contracts\Translation\TranslatorInterface` for `$delegate`
  */
-class ChameleonTranslator implements LegacyTranslatorInterface, TranslatorInterface, TranslatorBagInterface
+class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
 {
     /**
      * @var TranslatorInterface&TranslatorBagInterface
@@ -65,28 +64,6 @@ class ChameleonTranslator implements LegacyTranslatorInterface, TranslatorInterf
         }
 
         return $this->delegate->trans($id, $parameters, $domain, $locale);
-    }
-
-    /**
-     * @param string $id
-     * @param int $number
-     * @param array $parameters
-     * @param string $domain
-     * @param string $locale
-     * @return string
-     */
-    public function transChoice($id, $number, array $parameters = array(), $domain = null, $locale = null)
-    {
-        return $this->delegate->transChoice($id, $number, $parameters, $domain, $locale);
-    }
-
-    /**
-     * @param string $locale
-     * @return void
-     */
-    public function setLocale($locale)
-    {
-        $this->delegate->setLocale($locale);
     }
 
     /**
