@@ -75,7 +75,7 @@ class DatabaseAccessLayerCmsTPlModule extends AbstractDatabaseAccessLayer
         $this->isLoaded = true;
 
         $query = 'select * from `cms_tpl_module`';
-        $modules = $this->getDatabaseConnection()->fetchAll($query);
+        $modules = $this->getDatabaseConnection()->fetchAllAssociative($query);
         foreach ($modules as $module) {
             $className = $module['classname'];
             $id = $module['id'];

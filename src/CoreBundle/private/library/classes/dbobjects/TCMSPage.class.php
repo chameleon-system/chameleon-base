@@ -281,7 +281,7 @@ class TCMSPage extends TCMSPageAutoParent
                 $query .= " AND (`cms_tree`.`hidden` = '0')";
             }
 
-            $treeIdRows = $this->getDatabaseConnection()->fetchAll($query, $parameters);
+            $treeIdRows = $this->getDatabaseConnection()->fetchAllAssociative($query, $parameters);
             $this->_aDataCache['pageTreeNodes'] = array_map(function (array $idRow) {return $idRow['id']; }, $treeIdRows);
         }
 

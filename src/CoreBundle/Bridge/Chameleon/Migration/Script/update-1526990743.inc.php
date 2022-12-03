@@ -27,7 +27,7 @@ $query = "(SELECT chameleon_tables.`name`
           AND mysql_tables.`TABLE_SCHEMA` = $valueQuotedDatabaseName)
           ";
 
-$tablesToConvert = $databaseConnection->fetchAll($query);
+$tablesToConvert = $databaseConnection->fetchAllAssociative($query);
 foreach ($tablesToConvert as $row) {
     $quotedTableName = $databaseConnection->quoteIdentifier($row['name']);
     TCMSLogChange::RunQuery(__LINE__, "ALTER TABLE $quotedTableName ENGINE = InnoDB");

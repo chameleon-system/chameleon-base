@@ -148,10 +148,6 @@ class ExceptionController extends ErrorController
         }
 
         if (null === $nodeId) {
-            if ($this->debug) {
-                return;
-            }
-
             if (is_object($portal)) {
                 $nodeId = $portal->GetSystemPageNodeId('error-'.$code);
             } else {

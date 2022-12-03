@@ -195,7 +195,7 @@ class EntityList implements EntityListInterface
         }
 
         $query = 'EXPLAIN '.$this->query;
-        $estimateRow = $this->getDatabaseConnection()->fetchAssoc($query);
+        $estimateRow = $this->getDatabaseConnection()->fetchAssociative($query);
         $this->entityCountEstimate = (int) $estimateRow['rows'];
 
         return $this->correctCountUsingMaxNumberOfResultsAllowed($this->entityCountEstimate);

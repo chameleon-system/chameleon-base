@@ -186,13 +186,14 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
         ";
 
         $statement = $this->databaseConnection->prepare($query);
-        $statement->execute(array(
+        $result = $statement->executeQuery(array(
             'portalId' => $portal->id,
             'date' => date('Y-m-d H:i:s'),
         ));
 
         $pageAssignmentList = array();
-        while ($row = $statement->fetch()) {
+        foreach($result->iterateAssociative() as $row) {
+//        while ($row = $result->fetch()) {
             $pageId = $row['page_id'];
             $treeId = $row['tree_id'];
 

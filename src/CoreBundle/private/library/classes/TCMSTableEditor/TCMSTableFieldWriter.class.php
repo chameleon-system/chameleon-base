@@ -252,7 +252,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
 
         $query = 'SELECT * FROM `cms_field_type` WHERE `id` = :typeId';
 
-        $fieldTypeData = $databaseConnection->fetchAssoc($query, ['typeId' => $typeId]);
+        $fieldTypeData = $databaseConnection->fetchAssociative($query, ['typeId' => $typeId]);
 
         if (false === $fieldTypeData) {
             return null;

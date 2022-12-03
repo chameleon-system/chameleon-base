@@ -1996,7 +1996,7 @@ class TCMSTableEditorEndPoint
                LEFT JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id` 
                    WHERE `cms_field_conf`.`cms_field_type_id` = :fieldTypeId';
 
-        return $databaseConnection->fetchAll($fieldConfigQuery, ['fieldTypeId' => $fieldTypeId]);
+        return $databaseConnection->fetchAllAssociative($fieldConfigQuery, ['fieldTypeId' => $fieldTypeId]);
     }
 
     protected function hasMultiTableRecordReferences(string $tableName, string $fieldName, string $deletedTableName, string $deletedRecordId = ''): bool

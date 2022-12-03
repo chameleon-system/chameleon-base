@@ -168,7 +168,7 @@ class DatabaseAccessLayerCmsTree extends AbstractDatabaseAccessLayer
             $sQuery = 'SELECT * FROM `cms_tree` ORDER BY `lft`';
         }
 
-        $treeNodes = $this->getDatabaseConnection()->fetchAll($sQuery, $params);
+        $treeNodes = $this->getDatabaseConnection()->fetchAllAssociative($sQuery, $params);
         foreach ($treeNodes as $treeNode) {
             $treeId = $treeNode['id'];
             $this->setCache($treeId, $treeNode);

@@ -41,7 +41,7 @@ class DataAccessCmsPortalSystemPage implements DataAccessInterface
                      FROM `cms_portal_system_page`
                      ORDER BY `cms_portal_system_page`.`cmsident`';
 
-        $systemPages = $this->databaseConnection->fetchAll($query);
+        $systemPages = $this->databaseConnection->fetchAllAssociative($query);
         $systemPageList = array();
         foreach ($systemPages as $systemPage) {
             $pageId = $systemPage['id'];

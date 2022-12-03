@@ -48,7 +48,7 @@ class AbstractQueryDataAccess implements AbstractQueryDataAccessInterface
           ON `cms_field_conf`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
           WHERE `cms_tbl_conf`.`name` = :tableName
           AND `cms_field_conf`.`is_translatable` = '1'";
-        $result = $this->databaseConnection->fetchAll($query, array(
+        $result = $this->databaseConnection->fetchAllAssociative($query, array(
             'tableName' => $tableName,
         ));
 

@@ -104,8 +104,8 @@ class MainMenuMigrator
      */
     public function migrateUnhandledTableMenuItems(array $additionalMainCategoryMapping = []): void
     {
-        $contentBoxRows = $this->databaseConnection->fetchAll('SELECT * FROM `cms_content_box`');
-        $categoryRows = $this->databaseConnection->fetchAll('SELECT * FROM `cms_menu_category`');
+        $contentBoxRows = $this->databaseConnection->fetchAllAssociative('SELECT * FROM `cms_content_box`');
+        $categoryRows = $this->databaseConnection->fetchAllAssociative('SELECT * FROM `cms_menu_category`');
         $categories = [];
         foreach ($categoryRows as $categoryRow) {
             $categories[$categoryRow['system_name']] = $categoryRow['id'];
@@ -132,7 +132,7 @@ class MainMenuMigrator
      */
     public function migrateUnhandledContentBoxes(): void
     {
-        $contentBoxRows = $this->databaseConnection->fetchAll('SELECT * FROM `cms_content_box`');
+        $contentBoxRows = $this->databaseConnection->fetchAllAssociative('SELECT * FROM `cms_content_box`');
         $mainCategoryMapping = $this->getMainCategoryMapping();
 
         foreach ($contentBoxRows as $contentBoxRow) {
@@ -158,7 +158,7 @@ class MainMenuMigrator
     public function migrateContentBox(string $oldContentBoxSystemName): void
     {
         $query = 'SELECT * FROM `cms_content_box` WHERE `system_name` = :systemName';
-        $row = $this->databaseConnection->fetchAssoc($query, array('systemName' => $oldContentBoxSystemName));
+        $row = $this->databaseConnection->fetchAssociative($query, array('systemName' => $oldContentBoxSystemName));
         if (false === $row) {
             \TCMSLogChange::addInfoMessage(\sprintf('No content box found for system name "%s"', $oldContentBoxSystemName), \TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR);
 

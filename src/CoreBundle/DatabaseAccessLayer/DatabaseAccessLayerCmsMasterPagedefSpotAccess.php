@@ -41,7 +41,7 @@ class DatabaseAccessLayerCmsMasterPagedefSpotAccess extends AbstractDatabaseAcce
         $this->isLoaded = true;
 
         $query = 'SELECT * FROM `cms_master_pagedef_spot_access`';
-        $accessList = $this->getDatabaseConnection()->fetchAll($query);
+        $accessList = $this->getDatabaseConnection()->fetchAllAssociative($query);
         $data = array();
         foreach ($accessList as $access) {
             $cmsMasterPagedefSpotId = $access['cms_master_pagedef_spot_id'];

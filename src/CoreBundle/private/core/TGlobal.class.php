@@ -119,7 +119,7 @@ class TGlobal extends TGlobalBase
                 $tmp = explode(',', $this->oUser->sqlData['languages']);
                 foreach ($tmp as $lang) {
                     $query = 'SELECT * FROM `cms_language` WHERE `iso_6391` = :languageCode';
-                    if ($langrow = $databaseConnection->fetchAssoc($query, array('languageCode' => trim($lang)))) {
+                    if ($langrow = $databaseConnection->fetchAssociative($query, array('languageCode' => trim($lang)))) {
                         $this->aLangaugeIds[] = $langrow['id'];
                     }
                 }

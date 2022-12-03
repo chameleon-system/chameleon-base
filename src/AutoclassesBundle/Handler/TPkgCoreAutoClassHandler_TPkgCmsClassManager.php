@@ -33,7 +33,7 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
                    INNER JOIN `pkg_cms_class_manager_extension` ON `pkg_cms_class_manager`.`id` = `pkg_cms_class_manager_extension`.`pkg_cms_class_manager_id`
                         WHERE `pkg_cms_class_manager_extension`.`class` = :cleanClassName
                       ';
-                if ($aClassManager = $this->getDatabaseConnection()->fetchAssoc($sQuery, array('cleanClassName' => $sClean))) {
+                if ($aClassManager = $this->getDatabaseConnection()->fetchAssociative($sQuery, array('cleanClassName' => $sClean))) {
                     $oClassManager->load($aClassManager['name_of_entry_point']);
                 } else {
                     $oClassManager = null;
@@ -64,7 +64,7 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
     {
         $sClassName = false;
         $query = 'SELECT `name_of_entry_point` FROM `pkg_cms_class_manager` WHERE `id` = :key';
-        if ($aClass = $this->getDatabaseConnection()->fetchAssoc($query, array('key' => $sKey))) {
+        if ($aClass = $this->getDatabaseConnection()->fetchAssociative($query, array('key' => $sKey))) {
             /** @psalm-suppress InvalidArrayOffset */
             $sClassName = $aClass[0];
         }

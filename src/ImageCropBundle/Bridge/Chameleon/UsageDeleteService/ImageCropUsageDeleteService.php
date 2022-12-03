@@ -90,7 +90,7 @@ class ImageCropUsageDeleteService implements MediaItemUsageDeleteServiceInterfac
                 $this->databaseConnection->quoteIdentifier($usage->getTargetTableName())
             );
             try {
-                $row = $this->databaseConnection->fetchAssoc(
+                $row = $this->databaseConnection->fetchAssociative(
                     $query,
                     array('id' => $usage->getTargetRecordId())
                 );

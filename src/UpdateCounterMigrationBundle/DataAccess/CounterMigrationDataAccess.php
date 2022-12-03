@@ -44,14 +44,14 @@ class CounterMigrationDataAccess implements CounterMigrationDataAccessInterface
     public function copyCounter($from, $to)
     {
         $query = 'SELECT `value`, `cms_config_id` FROM `cms_config_parameter` WHERE `systemname` = :systemname';
-        $sourceData = $this->connection->fetchAssoc($query, array(
+        $sourceData = $this->connection->fetchAssociative($query, array(
             'systemname' => $from,
         ));
 
         if (empty($sourceData)) {
             throw new CounterMigrationException("Expected existing counter '$from', but did not find it.");
         }
-        $targetData = $this->connection->fetchAssoc($query, array(
+        $targetData = $this->connection->fetchAssociative($query, array(
             'systemname' => $to,
         ));
         if (empty($targetData)) {
@@ -92,7 +92,7 @@ class CounterMigrationDataAccess implements CounterMigrationDataAccessInterface
     public function addUpdatesToCounter(array $updates, $counter)
     {
         $query = 'SELECT `value` FROM `cms_config_parameter` WHERE `systemname` = :systemname';
-        $sourcedata = $this->connection->fetchAssoc($query, array('systemname' => $counter));
+        $sourcedata = $this->connection->fetchAssociative($query, array('systemname' => $counter));
 
         if (empty($sourcedata)) {
             throw new CounterMigrationException("Expected existing counter '$counter', but did not find it.");
@@ -120,7 +120,7 @@ class CounterMigrationDataAccess implements CounterMigrationDataAccessInterface
     {
         $query = 'SELECT * FROM `cms_migration_counter` WHERE `name` = :name';
         try {
-            $sourcedata = $this->connection->fetchAssoc($query, array('name' => $counterName));
+            $sourcedata = $this->connection->fetchAssociative($query, array('name' => $counterName));
 
             return !(empty($sourcedata));
         } catch (DBALException $e) {
@@ -182,7 +182,7 @@ class CounterMigrationDataAccess implements CounterMigrationDataAccessInterface
                      AND `value` LIKE '%buildNumbers%' 
                 ORDER BY `systemname`";
 
-        return $this->connection->fetchAll($query);
+        return $this->connection->fetchAllAssociative($query);
     }
 
     /**

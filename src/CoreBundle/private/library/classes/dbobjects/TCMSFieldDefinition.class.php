@@ -151,7 +151,7 @@ class TCMSFieldDefinition extends TCMSRecord
     {
         $query = "SELECT `constname` FROM `cms_field_type` WHERE `contains_images` = '1'";
         $databaseconnection = self::getDbConnection();
-        $result = $databaseconnection->fetchAll($query);
+        $result = $databaseconnection->fetchAllAssociative($query);
         $imageFieldTypes = array();
         foreach ($result as $row) {
             $imageFieldTypes[] = $row['constname'];
