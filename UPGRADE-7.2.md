@@ -24,7 +24,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - Signature of `Iterator` has changed. Make sure `current()` and `next()` match the signature
 - pass by reference and return by reference has been removed almost everywhere - search for `function &`, `&$` and `=&`.
 - `\ChameleonSystem\DebugBundle\ChameleonSystemDebugBundle` removed. The logging of database connections can no longer be done the way done in the bundle
-- doctrine update.
+- doctrine update [maybe]s.
   - replace `->fetchAll(` with `->fetchAllAssociative(`
   - replace `->fetchArray` with `->fetchNumeric(`
   - replace `->fetchAssoc` with `->fetchAssociative(`
