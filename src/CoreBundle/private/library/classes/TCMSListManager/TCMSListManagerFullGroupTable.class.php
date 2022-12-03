@@ -350,7 +350,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 ORDER BY `position`
                ';
 
-        return $connection->fetchAll($query, array(
+        return $connection->fetchAllAssociative($query, array(
             'id' => $tableConfigurationId,
         ));
     }
@@ -372,7 +372,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 ORDER BY `position`
                ';
         try {
-            return $connection->fetchAll($query, array(
+            return $connection->fetchAllAssociative($query, array(
                 'id' => $tableConfigurationId,
                 'field' => $field,
             ));

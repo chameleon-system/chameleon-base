@@ -41,7 +41,7 @@ class DataAccessCmsTplPage implements DataAccessInterface
                      FROM `cms_tpl_page`
                      ORDER BY `cms_tpl_page`.`cmsident`';
 
-        $pages = $this->databaseConnection->fetchAll($query);
+        $pages = $this->databaseConnection->fetchAllAssociative($query);
         $pageList = array();
         foreach ($pages as $page) {
             $pageId = $page['id'];

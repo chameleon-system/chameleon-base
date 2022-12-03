@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Expr\Comparison;
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
 
-$rolesRaw = $databaseConnection->fetchAll("SELECT `id` FROM `cms_role` WHERE `name` IN ('cms_revision_author', 'workflow_publisher', 'workflow_user')");
+$rolesRaw = $databaseConnection->fetchAllAssociative("SELECT `id` FROM `cms_role` WHERE `name` IN ('cms_revision_author', 'workflow_publisher', 'workflow_user')");
 $roles = [];
 foreach ($rolesRaw as $roleRow) {
     $roles[] = $roleRow['id'];

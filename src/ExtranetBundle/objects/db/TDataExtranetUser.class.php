@@ -426,7 +426,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             $query .= ' AND `cms_portal_id` = :portalId';
             $parameters['portalId'] = $portal->id;
         }
-        if ($aUser = $this->getDatabaseConnection()->fetchAssoc($query, $parameters)) {
+        if ($aUser = $this->getDatabaseConnection()->fetchAssociative($query, $parameters)) {
             $oUser = TdbDataExtranetUser::GetNewInstance();
             $oUser->LoadFromRow($aUser);
             if ($this->LoginUserDataValid($oUser->sqlData)) {
@@ -1052,7 +1052,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             $parameters['sessionKey'] = $sSessionKey;
         }
 
-        return $this->getDatabaseConnection()->fetchAssoc($query, $parameters);
+        return $this->getDatabaseConnection()->fetchAssociative($query, $parameters);
     }
 
     /**

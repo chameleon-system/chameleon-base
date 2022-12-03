@@ -50,7 +50,7 @@ class NestedSetHelperTestNodeMock implements NodeInterface
     public function loadFromId($id)
     {
         $query = 'select * from tree where id = :id';
-        $this->data = $this->databaseConnection->fetchAssoc($query, array('id' => $id));
+        $this->data = $this->databaseConnection->fetchAssociative($query, array('id' => $id));
     }
 
     /**

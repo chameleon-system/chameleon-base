@@ -360,7 +360,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
           ORDER BY cms_tree.lft DESC
              LIMIT 1
         ';
-        $portal = $this->getDatabaseConnection()->fetchAssoc($query, array('lft' => $this->sqlData['lft'], 'rgt' => $this->sqlData['rgt']));
+        $portal = $this->getDatabaseConnection()->fetchAssociative($query, array('lft' => $this->sqlData['lft'], 'rgt' => $this->sqlData['rgt']));
         if (false === $portal) {
             return null;
         }

@@ -39,7 +39,7 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
                   ORDER BY `cms_language_id` DESC LIMIT 0,1
                  ";
 
-        $rows = $this->connection->fetchAll($query, [
+        $rows = $this->connection->fetchAllAssociative($query, [
             'portalId' => $portalId,
             'languageId' => $languageId,
         ]);
@@ -95,7 +95,7 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
                 GROUP BY `cms_portal_domains`.`cms_portal_id`
                ';
 
-        $result = $this->connection->fetchAll($query, [
+        $result = $this->connection->fetchAllAssociative($query, [
             $domainName,
             $domainName,
         ]);
@@ -124,7 +124,7 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
         $query .= ' ORDER BY `identifier` DESC
                        LIMIT 0,1';
 
-        $portalCandidate = $this->connection->fetchAssoc($query, [
+        $portalCandidate = $this->connection->fetchAssociative($query, [
              $idRestrictionList,
              $identifierRestriction,
          ], [
@@ -153,7 +153,7 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
                 GROUP BY `cms_portal_domains`.`cms_portal_id`
                ';
 
-        return $this->connection->fetchAll($query, [
+        return $this->connection->fetchAllAssociative($query, [
             $domainName,
             $domainName,
         ]);

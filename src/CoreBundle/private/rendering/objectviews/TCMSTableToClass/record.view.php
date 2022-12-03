@@ -414,7 +414,7 @@ $oFields->GoToStart();
               }
               ?>
 
-                    if ($nameRecord = $databaseConnection->fetchAssoc($listQuery)) {
+                    if ($nameRecord = $databaseConnection->fetchAssociative($listQuery)) {
                         if (array_key_exists($sNameColumn, $nameRecord)) {
                             $this->sqlData[$sNameColumn] = $nameRecord[$sNameColumn];
                         }

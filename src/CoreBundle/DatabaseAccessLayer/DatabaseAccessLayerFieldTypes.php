@@ -42,7 +42,7 @@ class DatabaseAccessLayerFieldTypes extends AbstractDatabaseAccessLayer
 
         $query = 'select * from `cms_field_type`';
 
-        $fieldTypes = $this->getDatabaseConnection()->fetchAll($query);
+        $fieldTypes = $this->getDatabaseConnection()->fetchAllAssociative($query);
         foreach ($fieldTypes as $fieldType) {
             $treeObject = \TdbCmsFieldType::GetNewInstance($fieldType);
             $this->setCache($fieldType['id'], $treeObject);

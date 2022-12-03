@@ -33,7 +33,7 @@ class AutoclassesDatabaseAdapter implements AutoclassesDatabaseAdapterInterface
      */
     public function getTableClassList()
     {
-        $all = $this->conn->fetchAll('SELECT `name` from `cms_tbl_conf`');
+        $all = $this->conn->fetchAllAssociative('SELECT `name` from `cms_tbl_conf`');
 
         return $this->getNamesArray($all);
     }
@@ -43,7 +43,7 @@ class AutoclassesDatabaseAdapter implements AutoclassesDatabaseAdapterInterface
      */
     public function getVirtualClassList()
     {
-        $all = $this->conn->fetchAll('SELECT `name_of_entry_point` as \'name\' FROM `pkg_cms_class_manager`');
+        $all = $this->conn->fetchAllAssociative('SELECT `name_of_entry_point` as \'name\' FROM `pkg_cms_class_manager`');
 
         return $this->getNamesArray($all);
     }
@@ -68,7 +68,7 @@ class AutoclassesDatabaseAdapter implements AutoclassesDatabaseAdapterInterface
      */
     public function getTableNameForId($id)
     {
-        $result = $this->conn->fetchAll('SELECT `name` from `cms_tbl_conf` WHERE id=:id', array('id' => $id));
+        $result = $this->conn->fetchAllAssociative('SELECT `name` from `cms_tbl_conf` WHERE id=:id', array('id' => $id));
         if (0 === count($result)) {
             return null;
         }

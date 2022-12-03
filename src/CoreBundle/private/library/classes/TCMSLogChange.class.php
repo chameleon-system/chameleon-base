@@ -491,7 +491,7 @@ class TCMSLogChange
         $databaseConnection = self::getDatabaseConnection();
 
         $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
-        $sourceMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $mainMenuCategorySystemName));
+        $sourceMenu = $databaseConnection->fetchAssociative($query, array('systemName' => $mainMenuCategorySystemName));
 
         if (false === $sourceMenu) {
             $message = sprintf('Could not place main menu category: %s, because this category is missing.', $mainMenuCategorySystemName);
@@ -504,7 +504,7 @@ class TCMSLogChange
 
         if (null !== $afterThisMainMenuCategory) {
             $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
-            $targetMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $afterThisMainMenuCategory));
+            $targetMenu = $databaseConnection->fetchAssociative($query, array('systemName' => $afterThisMainMenuCategory));
 
             if (false === $targetMenu) {
                 $message = sprintf('Could not place main menu category: %s, behind %s because the target category is missing.', $mainMenuCategorySystemName, $afterThisMainMenuCategory);
@@ -830,7 +830,7 @@ class TCMSLogChange
     {
         $query = 'SELECT `id` FROM `cms_field_conf` WHERE `cms_tbl_field_tab` = :tabId';
 
-        return self::getDatabaseConnection()->fetchArray($query, array('tabId' => $tabId));
+        return self::getDatabaseConnection()->fetchNumeric($query, array('tabId' => $tabId));
     }
 
     /**
@@ -981,7 +981,7 @@ class TCMSLogChange
             $existsCheckArray['portalId'] = $sPortalID;
         }
 
-        $existingDatasets = $connection->fetchAll($existsCheckQuery, $existsCheckArray);
+        $existingDatasets = $connection->fetchAllAssociative($existsCheckQuery, $existsCheckArray);
 
         $languageCode = self::getLanguageCodeFromArgument($language);
         $data = static::createMigrationQueryData('cms_message_manager_message', $languageCode);
@@ -1062,7 +1062,7 @@ class TCMSLogChange
         $languageCode = self::getLanguageCodeFromArgument($language);
         $databaseConnection = self::getDatabaseConnection();
         $checkQuery = 'SELECT `id`, `description` FROM `cms_message_manager_backend_message` WHERE `name` = :messageName';
-        $result = $databaseConnection->fetchAll($checkQuery, array(
+        $result = $databaseConnection->fetchAllAssociative($checkQuery, array(
             'messageName' => $identifierName,
         ));
         $data = self::createMigrationQueryData('cms_message_manager_backend_message', $languageCode);
@@ -1274,7 +1274,7 @@ class TCMSLogChange
         /** @var $databaseConnection \Doctrine\DBAL\Connection */
         $databaseConnection = ServiceLocator::get('database_connection');
         $query = 'SELECT `position` FROM `cms_tbl_extension` WHERE `name` = :preExtensionName';
-        $posData = $databaseConnection->fetchArray($query, array('preExtensionName' => $sPreExtensionName));
+        $posData = $databaseConnection->fetchNumeric($query, array('preExtensionName' => $sPreExtensionName));
         if (false === $posData) {
             self::addInfoMessage("unable to position extension {$sExtensionName} after {$sPreExtensionName} because {$sPreExtensionName} can not be found", self::INFO_MESSAGE_LEVEL_ERROR);
 
@@ -1413,7 +1413,7 @@ class TCMSLogChange
     public static function deleteVirtualEntryPoint($virtualEntryPoint)
     {
         $query = 'select id from pkg_cms_class_manager where name_of_entry_point = :nameOfEntryPoint';
-        $entryPoint = self::getDatabaseConnection()->fetchAssoc($query, array('nameOfEntryPoint' => $virtualEntryPoint));
+        $entryPoint = self::getDatabaseConnection()->fetchAssociative($query, array('nameOfEntryPoint' => $virtualEntryPoint));
         if (false === $entryPoint) {
             throw new ErrorException("unable to delete {$virtualEntryPoint} - not found", 0, E_USER_ERROR, __FILE__, __LINE__);
         }
@@ -2311,7 +2311,7 @@ class TCMSLogChange
     {
         $query = 'SELECT `id` FROM `cms_portal`';
         $databaseConnection = self::getDatabaseConnection();
-        $result = $databaseConnection->fetchAll($query);
+        $result = $databaseConnection->fetchAllAssociative($query);
         $portalIdList = array();
         foreach ($result as $row) {
             $portalIdList[] = $row['id'];
@@ -2333,7 +2333,7 @@ class TCMSLogChange
           ON lang.`id` = mlt.`target_id`
           WHERE mlt.`source_id` = ?';
         $databaseConnection = self::getDatabaseConnection();
-        $result = $databaseConnection->fetchAll($query, array($portalId));
+        $result = $databaseConnection->fetchAllAssociative($query, array($portalId));
         $languageList = array();
         foreach ($result as $row) {
             $languageList[] = $row['iso_6391'];

@@ -33,7 +33,7 @@ class SqlCountWithSubqueryStrategy implements EntityListLengthCalculationStrateg
     public function calculateLength($query, array $queryParameters = array(), array $queryParameterTypes = array())
     {
         $sCountQuery = "SELECT COUNT(*) AS matches FROM ({$query}) AS _A_";
-        $matchRow = $this->databaseConnection->fetchArray($sCountQuery, $queryParameters, $queryParameterTypes);
+        $matchRow = $this->databaseConnection->fetchNumeric($sCountQuery, $queryParameters, $queryParameterTypes);
 
         return (int) $matchRow[0];
     }

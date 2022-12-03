@@ -63,7 +63,7 @@ FROM cms_field_conf
 INNER JOIN cms_tbl_conf on cms_field_conf.cms_tbl_conf_id = cms_tbl_conf.id
 INNER JOIN cms_field_type on cms_field_conf.cms_field_type_id = cms_field_type.id
 WHERE cms_field_type.mysql_type = ''";
-        $all = $this->databaseConnection->fetchAll($query);
+        $all = $this->databaseConnection->fetchAllAssociative($query);
         foreach ($all as $data) {
             $tablename = $data['tablename'];
             if (!isset($this->virtualFields[$tablename])) {

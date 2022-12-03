@@ -56,7 +56,7 @@ class DatabaseUtf8Check extends AbstractCheck
 
         /* Character Set */
         $query = "SHOW VARIABLES LIKE 'character\_set\_%'";
-        $result = $this->connection->fetchAll($query);
+        $result = $this->connection->fetchAllAssociative($query);
 
         foreach ($result as $row) {
             $type = $row['Variable_name'];
@@ -72,7 +72,7 @@ class DatabaseUtf8Check extends AbstractCheck
 
         /* Collation */
         $query = "SHOW VARIABLES LIKE 'collation\_%'";
-        $result = $this->connection->fetchAll($query);
+        $result = $this->connection->fetchAllAssociative($query);
         foreach ($result as $row) {
             $type = $row['Variable_name'];
             $value = $row['Value'];
