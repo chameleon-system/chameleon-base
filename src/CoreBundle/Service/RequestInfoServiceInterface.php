@@ -38,11 +38,20 @@ interface RequestInfoServiceInterface
     public function isChameleonRequestType($requestType);
 
     /**
-     * Returns true if the current request is a backend request AND the current page is the template engine.
+     * Returns true if the user is accessing a frontend page in template mode.
+     * This is used when editing spots in the backend.
      *
      * @return bool
      */
     public function isCmsTemplateEngineEditMode();
+
+    /**
+     * Returns true if the user is accessing a frontend page in preview mode.
+     * This is used when a page is previewed from the backend.
+     *
+     * @return bool
+     */
+    public function isPreviewMode();
 
     /**
      * @return bool

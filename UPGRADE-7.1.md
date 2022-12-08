@@ -112,6 +112,7 @@ class ...Cronjob extends TdbCmsCronjobs {
 # Removed Features
 # Deprecated Code Entities
 
+* ExtranetUserProviderInterface::getActiveUser: null as a return value is deprecated
 * TCMSChangeLogArchiver
 
 # Removed Code Entities
