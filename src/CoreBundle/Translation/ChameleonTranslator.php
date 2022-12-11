@@ -16,10 +16,6 @@ use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @psalm-suppress UndefinedInterfaceMethod, InvalidPropertyAssignmentValue
- * @FIXME This translator uses methods that are exclusive to `Symfony\Component\Translation\TranslatorInterface` (e.g. `transChoice`) but uses `Symfony\Contracts\Translation\TranslatorInterface` for `$delegate`
- */
 class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
 {
     /**
