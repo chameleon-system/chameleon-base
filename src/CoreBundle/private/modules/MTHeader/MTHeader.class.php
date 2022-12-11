@@ -66,9 +66,6 @@ class MTHeader extends TCMSModelBase
 
             /** @var FlashBagInterface $flashBag */
             $flashBag = $this->getCurrentRequest()->getSession()->getFlashBag();
-            if ($flashBag->has(MessageCheckOutput::CONSUMER_NAME)) {
-                $this->data['check_messages'] = $flashBag->get(MessageCheckOutput::CONSUMER_NAME);
-            }
 
             $this->data['sLogoURL'] = $this->GetLogo();
             $this->data['sQuickLinksHTML'] = '';
