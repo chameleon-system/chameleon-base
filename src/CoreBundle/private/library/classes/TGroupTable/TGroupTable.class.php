@@ -348,7 +348,7 @@ class TGroupTable
      *
      * @return bool
      */
-    protected function _DisplayGroup($groupContent, $group, $groupRow, $recordCount)
+    protected function _DisplayGroup(&$groupContent, $group, $groupRow, &$recordCount)
     {
         $groupContent = '';
         $iRecordsFoundInSubGroup = $this->GetNumberOfResultsForSubGroupQuery($group);
