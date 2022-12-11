@@ -28,7 +28,9 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
   - replace `->fetchAll(` with `->fetchAllAssociative(`
   - replace `->fetchArray` with `->fetchNumeric(`
   - replace `->fetchAssoc` with `->fetchAssociative(`
-
+-  `framework.session.cookie_samesite: lax` added to `src/CoreBundle/Resources/config/project-config.yaml`
+- translation files moved to `translations/` (from `src/Resources/translations/` or `src/Resources/<BundleName>/translations/`) in
+  the project or a bundle. Inside bundles `Resources/translations/` ist still supported but no longer recommended.
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 
