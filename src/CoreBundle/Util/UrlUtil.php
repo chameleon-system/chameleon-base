@@ -380,7 +380,7 @@ class UrlUtil
      *
      * @return void
      */
-    public function addAuthenticityTokenToArrayIfRequired(array $parameters)
+    public function addAuthenticityTokenToArrayIfRequired(array &$parameters)
     {
         $this->removeAuthenticityTokenFromArray($parameters);
         if ($this->isAuthenticityTokenRequired($parameters)) {
@@ -422,7 +422,7 @@ class UrlUtil
      *
      * @return void
      */
-    public function addAuthenticityTokenToUrlStringIfRequired($url, array $parameters, $paramSeparator = '&amp;')
+    public function addAuthenticityTokenToUrlStringIfRequired(&$url, array $parameters, $paramSeparator = '&amp;')
     {
         $this->removeAuthenticityTokenFromArray($parameters);
         if (!$this->isAuthenticityTokenRequired($parameters)) {
@@ -441,7 +441,7 @@ class UrlUtil
      *
      * @return void
      */
-    public function removeAuthenticityTokenFromArray(array $parameters)
+    public function removeAuthenticityTokenFromArray(array &$parameters)
     {
         unset($parameters[AuthenticityTokenManagerInterface::TOKEN_ID]);
     }
