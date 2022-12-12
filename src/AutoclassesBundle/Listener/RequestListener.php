@@ -46,7 +46,7 @@ class RequestListener
      */
     public function checkAutoclasses(RequestEvent $evt)
     {
-        if (HttpKernelInterface::MASTER_REQUEST !== $evt->getRequestType()) {
+        if (HttpKernelInterface::MAIN_REQUEST !== $evt->getRequestType()) {
             return;
         }
 

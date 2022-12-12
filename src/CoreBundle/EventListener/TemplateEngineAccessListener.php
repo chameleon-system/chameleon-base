@@ -41,7 +41,7 @@ class TemplateEngineAccessListener
      */
     public function onKernelRequest(RequestEvent $event)
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
         if (!$this->requestInfoService->isCmsTemplateEngineEditMode()) {

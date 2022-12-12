@@ -31,6 +31,10 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 -  `framework.session.cookie_samesite: lax` added to `src/CoreBundle/Resources/config/project-config.yaml`
 - translation files moved to `translations/` (from `src/Resources/translations/` or `src/Resources/<BundleName>/translations/`) in
   the project or a bundle. Inside bundles `Resources/translations/` ist still supported but no longer recommended.
+- `kernel.root_dir` (was the `app` folder) has been removed. Use `%kernel.project_dir%` instead (is the project root folder). So `%kernel.root_dir%` becomes `%kernel.project_dir%/app/`
+- replace `RequestStack::getMasterRequest()` with `RequestStack::getMainRequest()`
+- replace `KernelEvent::isMasterRequest()` with `KernelEvent::isMainRequest()`
+- replace `HttpKernelInterface::MASTER_REQUEST` with `HttpKernelInterface::MAIN_REQUEST`
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 

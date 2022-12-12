@@ -39,7 +39,7 @@ class AddBackendToasterMessageListener
      */
     public function addMessage(ResponseEvent $event)
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
         $response = $event->getResponse();
