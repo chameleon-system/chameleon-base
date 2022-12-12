@@ -51,7 +51,7 @@ class AuthenticityTokenStorage implements TokenStorageInterface
      */
     private function getSession()
     {
-        $request = $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getMainRequest();
         if (null === $request) {
             return null;
         }

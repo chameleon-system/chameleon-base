@@ -56,7 +56,7 @@ class RequestTypeListener implements ContainerAwareInterface
      */
     public function onKernelRequest(RequestEvent $event)
     {
-        if (false === $event->isMasterRequest()) {
+        if (false === $event->isMainRequest()) {
             return;
         }
         $request = $event->getRequest();
