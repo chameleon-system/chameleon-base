@@ -81,7 +81,7 @@ class EntityListMock implements EntityListInterface
         $this->pointer = $offset;
     }
 
-    public function current()
+    public function current(): mixed
     {
         return $this->items[$this->pointer];
     }
