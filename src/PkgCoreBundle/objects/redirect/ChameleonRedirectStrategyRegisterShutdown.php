@@ -43,6 +43,9 @@ class ChameleonRedirectStrategyRegisterShutdown implements ChameleonRedirectStra
                 register_shutdown_function(
                     function ($url, $status, Request $request) {
                         /** @var TPKgCmsSession $session */
+                        if (false === $request->hasSession()) {
+                            return;
+                        }
                         $session = $request->getSession();
                         $session->save();
                         header('Location: '.$url, true, $status);

@@ -208,7 +208,7 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     {
         /** @var Request $request */
         $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
-        if (null === $request || false === $request->getSession()->isStarted()) {
+        if (null === $request || false === $request->hasSession() || false === $request->getSession()->isStarted()) {
             return null;
         }
 

@@ -64,9 +64,6 @@ class MTHeader extends TCMSModelBase
             }
             $this->CheckNavigationRights();
 
-            /** @var FlashBagInterface $flashBag */
-            $flashBag = $this->getCurrentRequest()->getSession()->getFlashBag();
-
             $this->data['sLogoURL'] = $this->GetLogo();
             $this->data['sQuickLinksHTML'] = '';
 

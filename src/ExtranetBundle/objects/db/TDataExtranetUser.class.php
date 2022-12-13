@@ -987,7 +987,11 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         // we are using the last used data from the meta data in the session so that the setting, that avoids writing unchanged session data during a given threshold works
         // If we update the login_timestamp at every request, we will change the session data every request as well and the threshold will never be reached, resulting in a session write
         // at every request.
-        $session = $this->getCurrentRequest()->getSession();
+        $request = $this->getCurrentRequest();
+        $session = null !== $request && $request->hasSession() ? $request->getSession(): null;
+        if (null === $session) {
+            return ;
+        }
         $lastUsed = $session->getMetadataBag()->getLastUsed();
 
         if ((int) $aUserData['login_timestamp'] !== (int) $lastUsed) {
