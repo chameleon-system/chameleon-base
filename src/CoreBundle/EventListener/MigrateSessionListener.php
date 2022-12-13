@@ -34,10 +34,11 @@ class MigrateSessionListener
      */
     public function migrateSession()
     {
-        $session = $this->requestStack->getMainRequest()?->getSession();
-        if (null === $session) {
-            return;
+        $mainRequest = $this->requestStack->getMainRequest();
+        if (null === $mainRequest || false === $mainRequest->hasSession()) {
+            return null;
         }
+        $session = $mainRequest?->getSession();
 
         $session->migrate(true);
     }

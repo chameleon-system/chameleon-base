@@ -241,9 +241,7 @@ class TCMSUser extends TCMSRecord
         if (null !== $request) {
             if (true === $request->hasSession()) {
                 $session = $request->getSession();
-                if (null === $session) {
-                    $session->clear();
-                }
+                $session->clear();
             }
         }
 

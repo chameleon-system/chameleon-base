@@ -116,6 +116,9 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         if (null === $request) {
             return null;
         }
+        if (false === $request->hasSession()) {
+            return null;
+        }
 
         return $request->getSession();
     }
