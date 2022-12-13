@@ -12,7 +12,7 @@
 /**
  * extend any interfaces (import and export) you build for the cms from this class.
  * to get an instance of the right interface, use the static factory GetInterfaceManagerObject in the database object of the table
- * Example: $oInterface =& TdbCmsInterfaceManager::GetInterfaceManagerObject(1);
+ * Example: $oInterface & TdbCmsInterfaceManager::GetInterfaceManagerObject(1);
  * this would return the interface object defined by record id 1 in the table.
  */
 class TCMSInterfaceManagerBase extends TCMSRecord

@@ -35,6 +35,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - replace `RequestStack::getMasterRequest()` with `RequestStack::getMainRequest()`
 - replace `KernelEvent::isMasterRequest()` with `KernelEvent::isMainRequest()`
 - replace `HttpKernelInterface::MASTER_REQUEST` with `HttpKernelInterface::MAIN_REQUEST`
+- `@TwigBundle/Resources/config/routing/errors.xml` no longer exists - so remove it from your `routing*.yaml`
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 

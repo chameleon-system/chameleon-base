@@ -14,7 +14,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 /**
  * a table used to display a resultset
  * example:
- * $oMedia =& TdbCmsMediaList::GetList();
+ * $oMedia = TdbCmsMediaList::GetList();
  * $oHTMLList = new THTMLTable();.
  *
  * $oColumn = THTMLTableColumn::GetInstance('id','`cms_media`.`id`','ID',THTMLTableColumn::FIELD_TYPE_NUMBER);

@@ -828,7 +828,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      *
      * @return void
      */
-    protected function PrepareSubmittedData($aData)
+    protected function PrepareSubmittedData(&$aData)
     {
     }
 
