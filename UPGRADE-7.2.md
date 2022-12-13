@@ -17,9 +17,14 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - Event dispatcher (`EventDispatcherInterface`): The argument order is swapped. (search for ->dispatch( )
 - Session: Instead of `getSession()` `hasSession()` should be used for a null check. (search for ->getSession( with a following null check)
 - Some event classes have been renamed. 
-  Especially `FilterResponseEvent` (use `ResponseEvent`), `GetResponseEvent` (use `RequestEvent`) and `GetRequestEvent`.
+  specifically: 
+  - `FilterResponseEvent` (use `ResponseEvent`)
+  - `GetResponseEvent` (use `RequestEvent`)
+  - `GetResponseForExceptionEvent` (use `ExceptionEvent`)
+  - `PostResponseEvent` (use `TerminateEvent`)
+  - `GetRequestEvent`
 - Also note that the event class should match the event type (i.e. RequestEvent for "kernel.request").
-- Change the event base class to \Symfony\Contracts\EventDispatcher\Event.
+- Change the event base class `Symfony\Component\EventDispatcher\Event` to `\Symfony\Contracts\EventDispatcher\Event`.
 - The namespace of the `Symfony\Component\Translation\TranslatorInterface` changed to Symfony\Contracts\Translation\TranslatorInterface.
 - Take care that all yaml string values have quotes. For example in any config.yml.
 - Signature of `Iterator` has changed. Make sure `current()` and `next()` match the signature
