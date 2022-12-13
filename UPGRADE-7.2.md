@@ -16,7 +16,8 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - Configuration classes: TreeBuilder must be constructed with an argument. (search for new TreeBuilder())
 - Event dispatcher (`EventDispatcherInterface`): The argument order is swapped. (search for ->dispatch( )
 - Session: Instead of `getSession()` `hasSession()` should be used for a null check. (search for ->getSession( with a following null check)
-- Some event classes have been renamed. Especially FilterResponseEvent, GetResponseEvent and GetRequestEvent.
+- Some event classes have been renamed. 
+  Especially `FilterResponseEvent` (use `ResponseEvent`), `GetResponseEvent` (use `RequestEvent`) and `GetRequestEvent`.
 - Also note that the event class should match the event type (i.e. RequestEvent for "kernel.request").
 - Change the event base class to \Symfony\Contracts\EventDispatcher\Event.
 - The namespace of the `Symfony\Component\Translation\TranslatorInterface` changed to Symfony\Contracts\Translation\TranslatorInterface.
