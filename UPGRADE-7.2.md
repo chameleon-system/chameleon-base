@@ -29,6 +29,8 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - Take care that all yaml string values have quotes. For example in any config.yml.
 - Signature of `Iterator` has changed. Make sure `current()` and `next()` match the signature
 - pass by reference and return by reference has been removed almost everywhere - search for `function &`, `&$` and `=&`.
+- search for `=[ ]*\&[\\]{0,1}\w`
+- esarch for `protected function _NewElement\(\$aData\)[ ]*[^\:]{0,1}`
 - `\ChameleonSystem\DebugBundle\ChameleonSystemDebugBundle` removed. The logging of database connections can no longer be done the way done in the bundle
 - doctrine update [maybe]s.
   - replace `->fetchAll(` with `->fetchAllAssociative(`
@@ -42,6 +44,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - replace `KernelEvent::isMasterRequest()` with `KernelEvent::isMainRequest()`
 - replace `HttpKernelInterface::MASTER_REQUEST` with `HttpKernelInterface::MAIN_REQUEST`
 - `@TwigBundle/Resources/config/routing/errors.xml` no longer exists - so remove it from your `routing*.yaml`
+- `GetNewInstance` now type hints. Search for overwritten methods that do not have a return type hint (regex search `function GetNewInstance\((.*)\).*[^:]`)
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 

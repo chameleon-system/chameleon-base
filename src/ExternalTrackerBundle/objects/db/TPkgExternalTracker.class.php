@@ -18,7 +18,7 @@ class TPkgExternalTracker extends TPkgExternalTrackerAutoParent
      * @param string       $sLanguage - init with the language passed
      *
      * @return TdbPkgExternalTracker     */
-    public static function GetNewInstance($sData = null, $sLanguage = null)
+    public static function GetNewInstance($sData = null, $sLanguage = null): TdbPkgExternalTracker
     {
         $oObject = parent::GetNewInstance($sData, $sLanguage);
         if ($oObject && $oObject->sqlData && is_array($oObject->sqlData)) {

@@ -25,7 +25,7 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
      *
      * @return TdbCmsWizardStep
      */
-    protected function _NewElement($aData)
+    protected function _NewElement($aData): TdbCmsWizardStep
     {
         return TdbCmsWizardStep::GetStep($aData['systemname'], $aData['cms_tpl_module_instance_id']);
     }

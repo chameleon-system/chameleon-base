@@ -65,7 +65,7 @@ class TCMSPage extends TCMSPageAutoParent
         return $this->breadcrumb;
     }
 
-    public static function GetNewInstance($sData = null, $sLanguage = null)
+    public static function GetNewInstance($sData = null, $sLanguage = null): TdbCmsTplPage
     {
         $page = null;
         $id = null;
