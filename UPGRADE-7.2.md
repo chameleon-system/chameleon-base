@@ -19,7 +19,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - Some event classes have been renamed. Especially FilterResponseEvent, GetResponseEvent and GetRequestEvent.
 - Also note that the event class should match the event type (i.e. RequestEvent for "kernel.request").
 - Change the event base class to \Symfony\Contracts\EventDispatcher\Event.
-- The namespace of the TranslatorInterface changed to Symfony\Contracts\Translation\TranslatorInterface.
+- The namespace of the `Symfony\Component\Translation\TranslatorInterface` changed to Symfony\Contracts\Translation\TranslatorInterface.
 - Take care that all yaml string values have quotes. For example in any config.yml.
 - Signature of `Iterator` has changed. Make sure `current()` and `next()` match the signature
 - pass by reference and return by reference has been removed almost everywhere - search for `function &`, `&$` and `=&`.
