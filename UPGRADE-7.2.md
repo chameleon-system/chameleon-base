@@ -30,7 +30,10 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - Signature of `Iterator` has changed. Make sure `current()` and `next()` match the signature
 - pass by reference and return by reference has been removed almost everywhere - search for `function &`, `&$` and `=&`.
 - search for `=[ ]*\&[\\]{0,1}\w`
-- esarch for `protected function _NewElement\(\$aData\)[ ]*[^\:]{0,1}`
+- search for `protected function _NewElement\(\$aData\)[ ]*[^\:]{0,1}` (must return the specific Tdb item)
+- search for `public static function GetList\(.*\)` (must return the specific list type)
+- search for `public static function GetDefaultQuery\(.*\)` (must return `string`)
+- search for `public function Previous()` (must return `false|Tdb....`)
 - `\ChameleonSystem\DebugBundle\ChameleonSystemDebugBundle` removed. The logging of database connections can no longer be done the way done in the bundle
 - doctrine update [maybe]s.
   - replace `->fetchAll(` with `->fetchAllAssociative(`
