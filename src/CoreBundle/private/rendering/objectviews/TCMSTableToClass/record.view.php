@@ -220,7 +220,7 @@ $oFields->GoToStart();
      * @param string $sLanguage - init with the language passed
      * @return <?=$sClassName; ?>
      */
-    static public function GetNewInstance($sData = null, $sLanguage = null)
+    static public function GetNewInstance($sData = null, $sLanguage = null): <?=$sClassName; ?>
     {
         $oObject = new <?=$sClassName; ?>();
         if (!is_null($sLanguage)) {
