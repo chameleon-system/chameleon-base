@@ -230,7 +230,7 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
      *
      * @return TdbPkgExternalTrackerList
      */
-    public static function GetList($sQuery = null, $iLanguageId = null, $bAllowCaching = true, $bForceWorkflow = false, $bUseGlobalFilterInsteadOfPreviewFilter = false)
+    public static function GetList($sQuery = null, $iLanguageId = null, $bAllowCaching = true, $bForceWorkflow = false, $bUseGlobalFilterInsteadOfPreviewFilter = false): TdbPkgExternalTrackerList
     {
         $oList = parent::GetList($sQuery, $iLanguageId, $bAllowCaching, $bForceWorkflow, $bUseGlobalFilterInsteadOfPreviewFilter);
         if (!is_null($sQuery) && $oList) {
@@ -293,7 +293,7 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
      *
      * @return string
      */
-    public static function GetDefaultQuery($iLanguageId, $sFilterString = '1=1')
+    public static function GetDefaultQuery($iLanguageId, $sFilterString = '1=1'): string
     {
         $sActiveSnippet = TdbPkgExternalTrackerList::GetActiveItemSQLSnippet();
         if (!empty($sActiveSnippet)) {
