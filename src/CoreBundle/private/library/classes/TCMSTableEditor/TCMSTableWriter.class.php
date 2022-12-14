@@ -383,7 +383,7 @@ class TCMSTableWriter extends TCMSTableEditor
      */
     public function Delete($sId = null)
     {
-        $oClassWriter = new TCMSTableToClass($this->getFileManager(), $this->getAutoclassesDir());
+        $oClassWriter = new TCMSTableToClass($this->getFileManager(), $this->getAutoclassesDir(), $this->getAutoclassDataAccess(), $this->getDatabaseConnection());
         $oClassWriter->Load($this->sId);
         $oClassWriter->Delete();
 
@@ -543,5 +543,13 @@ class TCMSTableWriter extends TCMSTableEditor
     private function getAutoclassesDir()
     {
         return ServiceLocator::getParameter('chameleon_system_autoclasses.cache_warmer.autoclasses_dir');
+    }
+    private function getDatabaseConnection(): \Doctrine\DBAL\Connection
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+    }
+    private function getAutoclassDataAccess(): \ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
     }
 }

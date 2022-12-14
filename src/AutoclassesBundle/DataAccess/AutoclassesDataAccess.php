@@ -72,7 +72,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
 
             $fieldType = $row['cms_field_type_id'];
             if (false === isset($fieldTypes[$fieldType])) {
-                $fieldDef = new TCMSTableToField_TCMSFieldType();
+                $fieldDef = new TCMSTableToField_TCMSFieldType($this->connection);
                 $fieldDef->Load($fieldType);
                 $fieldTypes[$fieldType] = $fieldDef;
             } else {
@@ -89,7 +89,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
             $field->data = $row['field_default_value'];
             $field->sTableName = $row['tablename'];
             $field->name = $row['name'];
-            $field->oDefinition = new TCMSTableToField_TCMSTableFieldConf($fieldDef);
+            $field->oDefinition = new TCMSTableToField_TCMSTableFieldConf($this->connection,$fieldDef);
             $field->oDefinition->LoadFromRow($row);
             $data[$tableConfId]->AddItem($field);
         }

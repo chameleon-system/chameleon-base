@@ -340,7 +340,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         $this->_oField->oDefinition = $this->oTable;
         $this->_oField->CreateFieldDefinition();
 
-        $oClassWriter = new TCMSTableToClass($this->getFileManager(), $this->getAutoclassesDir());
+        $oClassWriter = new TCMSTableToClass($this->getFileManager(), $this->getAutoclassesDir(), $this->getAutoclassDataAccess(), $this->getDatabaseConnection());
         $oClassWriter->Load($this->oTable->sqlData['cms_tbl_conf_id']);
         $oClassWriter->Update();
     }
@@ -423,6 +423,15 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     private function getAutoclassesCacheWarmer()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
+    }
+
+    private function getDatabaseConnection(): \Doctrine\DBAL\Connection
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+    }
+    private function getAutoclassDataAccess(): \ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
     }
 
     /**

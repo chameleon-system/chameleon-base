@@ -27,7 +27,6 @@ class TPkgCmsVirtualClassManager
      * @var Connection
      */
     private $databaseConnection;
-
     /**
      * @param string $entryPointClass
      *
@@ -121,7 +120,7 @@ class TPkgCmsVirtualClassManager
             file_put_contents($file, $classContent);
         }
         if ($addedClasses) {
-            $this->getAutoclassesCacheWarmer()->regenerateClassmap();
+            //$this->cacheWarmer->regenerateClassmap();
         }
     }
 
@@ -139,33 +138,9 @@ class TPkgCmsVirtualClassManager
         return $autoParent;
     }
 
-    /**
-     * update all virtual classes.
-     *
-     * @static
-     *
-     * @return void
-     */
-    public static function UpdateAllVirtualClasses()
+    public function __construct(Connection $databaseConnection)
     {
-        $databaseConnection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
-
-        $query = 'SELECT name_of_entry_point FROM pkg_cms_class_manager ORDER BY cmsident';
-        $tRes = $databaseConnection->query($query);
-        while ($entryPoint = $tRes->fetch(\PDO::FETCH_ASSOC)) {
-            $virtualClassManager = new self();
-            $virtualClassManager->setDatabaseConnection($databaseConnection);
-            $virtualClassManager->load($entryPoint[0]);
-            $virtualClassManager->UpdateVirtualClasses();
-        }
-    }
-
-    /**
-     * @return void
-     */
-    public function recreateAutoclasses()
-    {
-        $this->getAutoclassesCacheWarmer()->updateAllTables();
+        $this->databaseConnection = $databaseConnection;
     }
 
     /**
@@ -194,7 +169,7 @@ class TPkgCmsVirtualClassManager
                      ';
 
             try {
-                $rRes = $this->getDatabaseConnection()->executeQuery($query, array('nameOfEntryPoint' => $this->entryPoint));
+                $rRes = $this->databaseConnection->executeQuery($query, array('nameOfEntryPoint' => $this->entryPoint));
                 $this->config = $rRes->fetch(\PDO::FETCH_ASSOC);
             } catch (\Doctrine\DBAL\DBALException $e) {
                 $this->config = null;
@@ -226,7 +201,7 @@ class TPkgCmsVirtualClassManager
                    WHERE pkg_cms_class_manager_id = :classManagerId
                 ORDER BY `pkg_cms_class_manager_extension`.`position` ASC
                    ';
-        $tRes = $this->getDatabaseConnection()->executeQuery($query, array('classManagerId' => $this->getConfigValue('id')));
+        $tRes = $this->databaseConnection->executeQuery($query, array('classManagerId' => $this->getConfigValue('id')));
         while ($extension = $tRes->fetch(\PDO::FETCH_ASSOC)) {
             $aExtensionList[] = $extension;
         }
@@ -262,25 +237,5 @@ class TPkgCmsVirtualClassManager
     public function setDatabaseConnection(Connection $connection)
     {
         $this->databaseConnection = $connection;
-    }
-
-    /**
-     * @return Connection
-     */
-    protected function getDatabaseConnection()
-    {
-        if (null !== $this->databaseConnection) {
-            return $this->databaseConnection;
-        }
-
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
-    }
-
-    /**
-     * @return AutoclassesCacheWarmer
-     */
-    private function getAutoclassesCacheWarmer()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
     }
 }
