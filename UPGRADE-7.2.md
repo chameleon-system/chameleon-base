@@ -50,6 +50,8 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `GetNewInstance` now type hints. Search for overwritten methods that do not have a return type hint (regex search `function GetNewInstance\((.*)\).*[^:]`)
 - `\ChameleonSystem\core\DatabaseAccessLayer\EntityListInterface` changed - so if you are using it, make sure to update your methods
 - `\ChameleonSystem\core\DatabaseAccessLayer\EntityListPagerInterface` changed - update implementations
+- removed `\TPkgCmsVirtualClassManager::UpdateAllVirtualClasses`
+- Add `var/` and remove `app/cache/*` and `!app/cache/.gitkeep` from your .gitignore. Delte the `app/cache` folder.
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 

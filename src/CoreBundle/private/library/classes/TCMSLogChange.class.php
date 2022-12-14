@@ -1354,10 +1354,13 @@ class TCMSLogChange
     public static function UpdateVirtualNonDbClasses()
     {
         $filemanager = ServiceLocator::get('chameleon_system_core.filemanager');
-        $oAutoTableWriter = new TPkgCoreAutoClassHandler_TPkgCmsClassManager(self::getDatabaseConnection(), $filemanager);
+        $virtualClassManager = ServiceLocator::get('chameleon_system_cms_class_manager.manager');
+        $classCacheWarmer = ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
+        $oAutoTableWriter = new TPkgCoreAutoClassHandler_TPkgCmsClassManager(self::getDatabaseConnection(), $filemanager, $virtualClassManager);
         $oList = TdbPkgCmsClassManagerList::GetList();
         while ($oItem = $oList->Next()) {
             $oAutoTableWriter->create($oItem->fieldNameOfEntryPoint, null);
+            $classCacheWarmer->regenerateClassmap();
         }
     }
 
@@ -1375,7 +1378,7 @@ class TCMSLogChange
      */
     public static function CreateVirtualNonDbEntryPoint($iLine, $sEntryPoint, $sExitClass = '', $sExitClassSubType = '', $sExitClassType = 'Core')
     {
-        $oManager = new TPkgCmsVirtualClassManager();
+        $oManager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_class_manager.manager');
         if (false == $oManager->load($sEntryPoint)) {
             $query = "INSERT INTO `pkg_cms_class_manager`
                           SET `name_of_entry_point` = '".MySqlLegacySupport::getInstance()->real_escape_string($sEntryPoint)."',
@@ -1470,7 +1473,7 @@ class TCMSLogChange
      */
     public static function deleteVirtualNonDbExtension($iLine, $sEntryPoint, $sClassName)
     {
-        $oManager = new TPkgCmsVirtualClassManager();
+        $oManager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_class_manager.manager');
         if (false === $oManager->load($sEntryPoint)) {
             throw new ErrorException("unable to find virtual class entry point {$sEntryPoint} (called from the running update in line {$iLine})", 0, E_USER_ERROR, __FILE__, __LINE__);
         }

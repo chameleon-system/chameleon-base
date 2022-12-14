@@ -14,8 +14,10 @@ namespace ChameleonSystem\AutoclassesBundle\CacheWarmer;
 use ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface;
 use ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface;
 use IPkgCmsFileManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
-class AutoclassesCacheWarmer
+class AutoclassesCacheWarmer implements CacheWarmerInterface
 {
     /**
      * @var AutoclassesDatabaseAdapterInterface
@@ -45,13 +47,33 @@ class AutoclassesCacheWarmer
      * @param IPkgCmsFileManager                  $filemanager
      * @param string                              $cacheDir
      */
-    public function __construct(AutoclassesManagerInterface $autoClassManager, AutoclassesDatabaseAdapterInterface $databaseAdapter, AutoclassesMapGeneratorInterface $autoclassesMapGenerator, IPkgCmsFileManager $filemanager, $cacheDir)
+    public function __construct(
+        AutoclassesManagerInterface $autoClassManager,
+        AutoclassesDatabaseAdapterInterface $databaseAdapter,
+        AutoclassesMapGeneratorInterface $autoclassesMapGenerator,
+        IPkgCmsFileManager $filemanager,
+        $cacheDir,
+        ContainerInterface $container
+    )
     {
         $this->autoClassManager = $autoClassManager;
         $this->databaseAdapter = $databaseAdapter;
         $this->autoclassesMapGenerator = $autoclassesMapGenerator;
         $this->fileManager = $filemanager;
         $this->cacheDir = $cacheDir;
+        \ChameleonSystem\CoreBundle\ServiceLocator::setContainer($container);
+    }
+
+    public function warmUp($cacheDirectory)
+    {
+        $this->updateAllTables();
+
+        return [];
+    }
+
+    public function isOptional()
+    {
+        return false;
     }
 
     /**
