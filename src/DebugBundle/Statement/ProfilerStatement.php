@@ -12,12 +12,13 @@
 namespace ChameleonSystem\DebugBundle\Statement;
 
 use ChameleonSystem\DebugBundle\Connection\ProfilerDatabaseConnection;
-use Doctrine\DBAL\Driver\PDOStatement;
+use Doctrine\DBAL\Statement;
+use Doctrine\DBAL\Driver\Statement as DriverStatement;
 use PDO;
 
-class ProfilerStatement extends PDOStatement
+class ProfilerStatement extends Statement
 {
-    /** @var PDOStatement $statement */
+    /** @var DriverStatement $statement */
     private $statement;
     /**
      * @var ProfilerDatabaseConnection
@@ -25,7 +26,7 @@ class ProfilerStatement extends PDOStatement
     private $databaseConnection;
 
     /**
-     * @param PDOStatement $statement
+     * @param DriverStatement $statement
      * @param ProfilerDatabaseConnection $databaseConnection
      */
     public function __construct($statement, ProfilerDatabaseConnection $databaseConnection)
@@ -144,17 +145,10 @@ class ProfilerStatement extends PDOStatement
         return $result;
     }
 
-    /**
-     * @psalm-suppress MethodSignatureMismatch - This method extends {@see PDOStatementImplementations} which differs depending on
-     *     the PHP version: PDOStatementImplementations::fetchAll has different signatures in 7.4 to 8.0. For this reason there is
-     *     no definitive declaration to be compatible with both. Since we are only passing down the arguments, passing all of them
-     *     down is a compromise in this case.
-     * @FIXME Use correct method signature once PHP7.4 support is being dropped.
-     */
-    public function fetchAll(...$args)
+    public function fetchAll($fetchMode = null, $fetchArgument = null, $ctorArgs = null)
     {
         $startTime = microtime(true);
-        $result = $this->statement->fetchAll(...$args);
+        $result = $this->statement->fetchAll($fetchMode, $fetchArgument, $ctorArgs);
         $this->databaseConnection->addToQueryTimer(microtime(true) - $startTime);
 
         return $result;
