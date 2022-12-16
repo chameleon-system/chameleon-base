@@ -61,7 +61,7 @@ class UpdateException implements JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return array(
             'class' => get_class($this->exception),

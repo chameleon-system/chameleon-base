@@ -425,10 +425,6 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
     }
 
-    private function getDatabaseConnection(): \Doctrine\DBAL\Connection
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
-    }
     private function getAutoclassDataAccess(): \ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
