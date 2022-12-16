@@ -16,7 +16,7 @@
 class TPkgSnippetRenderer_PregCallbackHelper
 {
     /**
-     * @var null|string
+     * @var null|string|array
      */
     public $aResult = null;
 
@@ -26,6 +26,9 @@ class TPkgSnippetRenderer_PregCallbackHelper
      */
     public function PregReplaceCallback($aMatches)
     {
+        if (!is_array($this->aResult)) {
+            $this->aResult = [];
+        }
         $this->aResult[] = $aMatches[1];
 
         return '';

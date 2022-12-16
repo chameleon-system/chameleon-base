@@ -271,7 +271,7 @@ class BackendTreeNodeDataModel implements JsonSerializable
     /**
      * {@inheritDoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $jsTreeItem = [
             'id' => $this->id,

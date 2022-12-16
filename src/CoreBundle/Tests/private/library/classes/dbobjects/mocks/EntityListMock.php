@@ -16,22 +16,22 @@ class EntityListMock implements EntityListInterface
         $this->items = $items;
     }
 
-    public function next()
+    public function next(): void
     {
         $this->pointer++;
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return $this->pointer < count($this->items);
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->pointer = 0;
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->items);
     }
@@ -76,7 +76,7 @@ class EntityListMock implements EntityListInterface
         // Does nothing
     }
 
-    public function seek(int $offset)
+    public function seek(int $offset): void
     {
         $this->pointer = $offset;
     }
@@ -86,7 +86,7 @@ class EntityListMock implements EntityListInterface
         return $this->items[$this->pointer];
     }
 
-    public function key()
+    public function key(): int
     {
         return $this->pointer;
     }
