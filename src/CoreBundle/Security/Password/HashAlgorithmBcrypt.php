@@ -11,6 +11,9 @@
 
 namespace ChameleonSystem\CoreBundle\Security\Password;
 
+/**
+ * @deprecated 7.2 - symfony security layer used
+ */
 class HashAlgorithmBcrypt implements HashAlgorithmInterface
 {
     /**
