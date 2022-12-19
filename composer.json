@@ -157,11 +157,15 @@
             "src/ViewRendererBundle/objects"
         ],
         "psr-4": {
+
             "ChameleonSystem\\": "src",
+            "ChameleonSystem\\CmsBackendBundle\\": "src/CmsBackendBundle/src",
+            "ChameleonSystem\\SecurityBundle\\": "src/SecurityBundle/src",
             "esono\\pkgCmsCache\\": "src/CmsCacheBundle/src/esono/pkgCmsCache",
             "esono\\pkgCmsCounter\\": "src/CmsCounterBundle/src/esono/pkgCmsCounter",
             "esono\\pkgCmsRouting\\": "src/CmsRoutingBundle/src/esono/pkgCmsRouting",
             "esono\\pkgCoreValidatorConstraints\\": "src/CoreValidatorConstraintsBundle/src/esono/pkgCoreValidatorConstraints"
+
         },
         "exclude-from-classmap": [
             "/tests/",

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to Symfony!</title>
+</head>
+<body>
+{% block body %}
+<h1>{{ page_title }}</h1>
+
+{% if user.isLoggedIn %}
+    Hello {{ user.name }}!
+{% endif %}
+
+{% endblock %}
+</body>
+</html>
