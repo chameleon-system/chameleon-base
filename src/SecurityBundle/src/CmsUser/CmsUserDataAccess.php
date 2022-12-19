@@ -48,8 +48,8 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             ['userId' => $userRow['id']]
         );
         $roles = array_map(static fn($row) => sprintf('ROLE_%s', mb_strtoupper($row['name'])), $roleRows);
-        if (false === in_array('ROLE_USER', $roles)) {
-            $roles[] = 'ROLE_USER';
+        if (false === in_array('ROLE_CMS_USER', $roles)) {
+            $roles[] = 'ROLE_CMS_USER';
         }
 
         return new CmsUserModel(
