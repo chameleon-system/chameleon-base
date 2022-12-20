@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
@@ -600,8 +601,16 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
         return $activePage->fieldPrimaryTreeIdHidden === $activePortal->fieldPageNotFoundNode;
     }
 
-    private function getLanguageAlternatives(): array
+    protected function getLanguageAlternatives(): array
     {
+        $requestInfoService = $this->getRequestInfoService();
+        if (true === $requestInfoService->isBackendMode()
+            || true === $requestInfoService->isPreviewMode()
+            || true === $requestInfoService->isCmsTemplateEngineEditMode()
+        ) {
+            return [];
+        }
+
         $activePortal = $this->getPortalDomainService()->getActivePortal();
         if (null === $activePortal) {
             return [];
@@ -670,5 +679,10 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
     private function getLogger(): LoggerInterface
     {
         return ServiceLocator::get('logger');
+    }
+
+    private function getRequestInfoService(): RequestInfoServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.request_info_service');
     }
 }
