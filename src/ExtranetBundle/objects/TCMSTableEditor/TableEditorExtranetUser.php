@@ -11,9 +11,11 @@
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ChameleonSystem\ExtranetBundle\LoginByToken\LoginTokenServiceInterface;
 use ChameleonSystem\ExtranetBundle\LoginByToken\LoginByTokenController;
@@ -53,7 +55,10 @@ class TableEditorExtranetUser extends TCMSTableEditor
 
     private function loginAsExtranetUserButton(): ?TCMSTableEditorMenuItem
     {
-        if (false === $this->isBackendUserLoggedInWithPermission('allow-login-as-extranet-user')) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if (false === $securityHelper->isGranted('CMS_RIGHT_ALLOW-LOGIN-AS-EXTRANET-USER')) {
             return null;
         }
 
@@ -102,7 +107,10 @@ class TableEditorExtranetUser extends TCMSTableEditor
      */
     public function LoginAsExtranetUser(): void
     {
-        if (false === $this->isBackendUserLoggedInWithPermission('allow-login-as-extranet-user')) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if (false === $securityHelper->isGranted('CMS_RIGHT_ALLOW-LOGIN-AS-EXTRANET-USER')) {
             return;
         }
 
@@ -117,15 +125,6 @@ class TableEditorExtranetUser extends TCMSTableEditor
         }
 
         $this->redirectUserToTokenLoginOnPortal($userId, $portal);
-    }
-
-    private function isBackendUserLoggedInWithPermission(string $permission): bool
-    {
-        $cmsUser = TCMSUser::GetActiveUser();
-
-        return null !== $cmsUser
-            && null !== $cmsUser->oAccessManager
-            && true === $cmsUser->oAccessManager->PermitFunction($permission);
     }
 
     /**

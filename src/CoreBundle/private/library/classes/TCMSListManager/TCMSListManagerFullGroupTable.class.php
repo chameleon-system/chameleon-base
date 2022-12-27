@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Field\Provider\ClassFromTableFieldProviderInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 
 require_once PATH_LIBRARY.'/classes/TCMSListManager/tcms_functionblock_callback.fun.php';
@@ -174,20 +176,23 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      */
     protected function GetCacheParameters()
     {
-        $oCmsUser = TdbCmsUser::GetActiveUser();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+
         $request = $this->getRequest();
 
         $aCacheParameters = array('class' => get_class($this),
             'table' => $this->oTableConf->sqlData['name'],
-            'userid' => $oCmsUser->id,
+            'userid' => $securityHelper->getUser()?->getId(),
             'sRestriction' => $this->sRestriction,
             'sRestrictionField' => $this->sRestrictionField,
             'field' => $request->get('field'),
             'pagedef' => $request->get('pagedef'),
+            'sCurrentEditLanguageIsoCode' => $backendSession->getCurrentEditLanguageIso6391(),
         );
-        if ($oCmsUser) {
-            $aCacheParameters['sCurrentEditLanguageId'] = $oCmsUser->GetCurrentEditLanguageID();
-        }
 
         return $aCacheParameters;
     }
@@ -267,11 +272,13 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     public function CreateTableObj()
     {
         $oGlobal = TGlobal::instance();
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 
         $postData = $oGlobal->GetUserData();
         $this->tableObj = new TFullGroupTable();
         $this->tableObj->Init($postData);
-        $this->tableObj->setLanguageId(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        $this->tableObj->setLanguageId($backendSession->getCurrentEditLanguageId());
         $this->tableObj->sTableName = $this->oTableConf->sqlData['name'];
         $this->tableObj->orderList = array();
         $this->tableObj->formActionType = 'GET';
@@ -631,8 +638,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         //remove anything that is translated and not in current edit language #25819
         if (isset($this->tableObj->orderList) && is_array($this->tableObj->orderList) && count($this->tableObj->orderList) > 0) {
-            $cmsUser = TdbCmsUser::GetActiveUser();
-            $editLanguage = $cmsUser->GetCurrentEditLanguage();
+            /** @var BackendSessionInterface $backendSession */
+            $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+            $editLanguage = $backendSession->getCurrentEditLanguageIso6391();
             foreach ($this->tableObj->orderList as $fullFieldName => $sortDirection) {
                 $fieldNameParts = explode('.', $fullFieldName);
                 $cleanFieldNamePart = trim(array_pop($fieldNameParts), '`');

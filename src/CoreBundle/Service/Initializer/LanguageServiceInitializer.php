@@ -17,7 +17,9 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
@@ -106,10 +108,10 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     {
         $languageId = null;
         if ($this->getRequestInfoService()->isChameleonRequestType(RequestTypeInterface::REQUEST_TYPE_BACKEND)) {
-            $oCmsUser = \TCMSUser::GetActiveUser();
-            if ($oCmsUser && is_array($oCmsUser->sqlData) && isset($oCmsUser->sqlData['cms_language_id'])) {
-                $languageId = $oCmsUser->sqlData['cms_language_id'];
-            }
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+            $languageId = $securityHelper->getUser()?->getCmsLanguageId();
         } else {
             try {
                 $languageId = $this->getLanguageFromRequestData($this->requestStack->getCurrentRequest());

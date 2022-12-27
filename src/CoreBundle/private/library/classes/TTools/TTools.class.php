@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Exception\ModuleException;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
@@ -1234,7 +1235,10 @@ class TTools
             return $aField;
         }
         $oCmsConfig = TdbCmsConfig::GetInstance();
-        $sActiveLanguage = TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID();
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $sActiveLanguage = $backendSession->getCurrentEditLanguageId();
         if (($sActiveLanguage != $oCmsConfig->sqlData['translation_base_language_id'])) {
             $sActiveLanguagePrefix = TGlobal::GetLanguagePrefix($sActiveLanguage);
             $aTranslatableFields = $oCmsConfig->GetListOfTranslatableFields();

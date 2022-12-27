@@ -9,9 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 
 /**
  * presents a 1:n table (ie n records for the current table)
@@ -288,21 +291,10 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
 
     protected function hasViewRightToPropertyTable()
     {
-        $hasViewRight = false;
-        $sPropertyTable = $this->GetPropertyTableName();
-        $oUser = TCMSUser::GetActiveUser();
-        if ($oUser && $oUser->oAccessManager) {
-            if ($oUser->oAccessManager->HasShowAllPermission($sPropertyTable)
-                || $oUser->oAccessManager->HasShowAllReadOnlyPermission($sPropertyTable)
-                || $oUser->oAccessManager->HasEditPermission($sPropertyTable)
-                || $oUser->oAccessManager->HasNewPermission($sPropertyTable)) {
-                $hasViewRight = true;
-            }
-        } else {
-            $hasViewRight = true;
-        }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        return $hasViewRight;
+        return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->GetPropertyTableName());
     }
 
     /**

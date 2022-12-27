@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
@@ -245,7 +246,9 @@ class CMSTemplateEngine extends TCMSModelBase
         $this->data['oPage'] = $this->oPage;
         if ($this->bPageDefinitionAssigned) {
             $this->data['sActivePageDef'] = $this->oPage->iMasterPageDefId;
-            $languageId = TCMSUser::GetActiveUser()->GetCurrentEditLanguageID();
+            /** @var BackendSessionInterface $backendSession */
+            $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+            $languageId = $backendSession->getCurrentEditLanguageId();
             $this->data['sActualMasterLayout'] = URL_WEB_CONTROLLER.'?pagedef='.$this->sPageId.'&__masterPageDef=true&__modulechooser=true&id='.$this->oPage->iMasterPageDefId.'&previewLanguageId='.$languageId;
         } else {
             $this->data['sActivePageDef'] = '';

@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+
 /**
  * holds a list of menus for the CMS (category boxes). the category boxes are split into
  * three columns (left, middle, and right). Use the property $sLocation to load
@@ -35,11 +38,12 @@ class TCMSContentBox extends TAdbCmsContentBoxList
     public function Load($query = null, array $queryParameters = array(), array $queryParameterTypes = array())
     {
         $language = null;
-        /** @var $oUser TdbCmsUser */
-        $oUser = TdbCmsUser::GetActiveUser();
-        if ($oUser) {
-            $language = $oUser->GetFieldCmsLanguage();
-            $this->SetLanguage($language->id);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $user = $securityHelper->getUser();
+        if ($user) {
+            $this->SetLanguage($user->getCmsLanguageId());
         }
         if (is_null($query)) {
             $query = $this->_GetQuery($language);

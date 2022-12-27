@@ -11,9 +11,11 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelect;
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
 use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -168,11 +170,19 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         }
 
         $this->restrictedNodes = $this->getPortalNavigationStartNodes();
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+        $activeLanguageIsoCode = $backendSession->getCurrentEditLanguageIso6391();
+
+        $activeLanguageId = null !== $activeLanguageIsoCode ? ServiceLocator::get('database_connection')->fetchFirstColumn("select `id` from `cms_language` where `iso_6391` = :isoCode", ['isoCode' => $activeLanguageIsoCode]) : false;
+
 
         $rootTreeId = $this->getPortalTreeRootNodeId();
         if ('' !== $rootTreeId) {
             $rootNode = new \TdbCmsTree();
-            $rootNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+            if (false !== $activeLanguageId) {
+                $rootNode->SetLanguage($activeLanguageId);
+            }
             $rootNode->Load($rootTreeId);
             $visitor->SetMappedValue('pageBreadcrumbsHTML', $this->createPageBreadcrumbs($rootNode, $fieldName));
         }
@@ -231,8 +241,16 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         if ('' === $rootTreeId) {
             return [];
         }
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+        $activeLanguageIsoCode = $backendSession->getCurrentEditLanguageIso6391();
+
+        $activeLanguageId = null !== $activeLanguageIsoCode ? $this->dbConnection->fetchFirstColumn("select `id` from `cms_language` where `iso_6391` = :isoCode", ['isoCode' => $activeLanguageIsoCode]) : false;
+
         $rootNode = new \TdbCmsTree();
-        $rootNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        if (false !== $activeLanguageId) {
+            $rootNode->SetLanguage($activeLanguageId);
+        }
         $rootNode->Load($rootTreeId);
 
         $treeData[] = $this->createTreeDataModel($rootNode, 0);

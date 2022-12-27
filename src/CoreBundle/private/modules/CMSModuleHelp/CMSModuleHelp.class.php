@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -50,7 +51,8 @@ class CMSModuleHelp extends TCMSModelBase
 
     private function getRenderedHelpTable(): string
     {
-        $oCMSUser = TCMSUser::GetActiveUser();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         $aTableBlackList = array();
 
         $translator = $this->getTranslator();
@@ -68,11 +70,8 @@ class CMSModuleHelp extends TCMSModelBase
         /** @var $oTable TdbCmsTblConf */
         while ($oTable = $oTableList->Next()) {
             if (!in_array($oTable->fieldName, $aTableBlackList)) {
-                $tableInUserGroup = $oCMSUser->oAccessManager->user->IsInGroups($oTable->fieldCmsUsergroupId);
-                $bRightAllowEdit = $oCMSUser->oAccessManager->HasEditPermission($oTable->fieldName);
-                $bRightShowAllReadOnly = $oCMSUser->oAccessManager->HasShowAllReadOnlyPermission($oTable->fieldName);
 
-                if ($tableInUserGroup && ($bRightAllowEdit || $bRightShowAllReadOnly)) {
+                if ($securityHelper->isGranted(\ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $oTable->fieldName)) {
                     $sTableHTML .= '<tr class="table-primary">
                                         <td colspan="2">
                                         <div class="d-flex align-items-baseline">

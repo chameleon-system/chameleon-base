@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Service\CssMinifierServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -99,7 +100,10 @@ class TCMSResourceCollection implements ResourceCollectorInterface
             // do not enable in backend mode
             return false;
         }
-        $bIsTemplateEngine = 'true' === $bIsModuleChooser && TCMSUser::CMSUserDefined();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $bIsTemplateEngine = 'true' === $bIsModuleChooser && $securityHelper->isGranted('ROLE_CMS_USER');
         if (true === $bIsTemplateEngine) {
             return false;
         }

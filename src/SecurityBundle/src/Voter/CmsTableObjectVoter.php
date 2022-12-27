@@ -1,0 +1,93 @@
+<?php
+
+namespace ChameleonSystem\SecurityBundle\Voter;
+
+use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfInterface;
+use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use Doctrine\DBAL\Connection;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+class CmsTableObjectVoter extends CmsTableNameVoter
+{
+
+    public function __construct(
+        readonly private DataAccessCmsTblConfInterface $accessCmsTblConf,
+        readonly private Connection $connection
+    ) {
+        parent::__construct($this->accessCmsTblConf);
+    }
+
+    protected function supports(string $attribute, $subject)
+    {
+        if (false === ($subject instanceof \TCMSRecord)) {
+            return false;
+        }
+
+        if (null === $subject->table) {
+            return false;
+        }
+
+        return parent::supports($attribute, $subject->table);
+    }
+
+    /**
+     * @param string $attribute
+     * @param \TCMSRecord $subject
+     * @param TokenInterface $token
+     * @return bool|void
+     */
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
+    {
+        /** @var CmsUserModel|UserInterface $user */
+        $user = $token->getUser();
+        if (false === ($user instanceof CmsUserModel)) {
+            return false;
+        }
+
+        $tableName = $subject->table;
+        if (null === $tableName) {
+            return false;
+        }
+
+        $hasUserIndependentAccess = parent::voteOnAttribute($attribute, $tableName, $token);
+        if (true === $hasUserIndependentAccess) {
+            return true;
+        }
+
+        $isRowBasedRequest = in_array(
+            $attribute,
+            [
+                CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS,
+                CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT,
+                CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE,
+            ],
+            true
+        );
+
+        if (false === $isRowBasedRequest) {
+            return false;
+        }
+
+        $itemHasId = null !== $subject->id;
+
+        if (false === $itemHasId) {
+            return false;
+        }
+
+        $recordOwnerId = $this->getRecordOwner($subject->table, $subject->id);
+
+        return $recordOwnerId === $user->getId();
+    }
+
+    private function getRecordOwner(string $table, string $id): ?string
+    {
+        $query = sprintf("SELECT * FROM %s WHERE `id` = :id", $this->connection->quoteIdentifier($table));
+        $row = $this->connection->fetchAssociative($query, ['id' => $id]);
+        if (false === $row) {
+            return null;
+        }
+
+        return $row['cms_user_id'] ?? null;
+    }
+}

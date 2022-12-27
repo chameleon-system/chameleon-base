@@ -13,14 +13,11 @@ namespace ChameleonSystem\CoreBundle\Security;
 
 use ICmsCoreRedirect;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Security;
 use TGlobal;
 
 class BackendAccessCheck
 {
-    /**
-     * @var \TGlobal
-     */
-    private $global;
     /**
      * @var \ICmsCoreRedirect
      */
@@ -36,13 +33,11 @@ class BackendAccessCheck
     private $ipRestrictedPageDefs = array();
 
     /**
-     * @param TGlobal          $global
      * @param ICmsCoreRedirect $redirect
      * @param RequestStack     $requestStack
      */
-    public function __construct(TGlobal $global, ICmsCoreRedirect $redirect, RequestStack $requestStack)
+    public function __construct(ICmsCoreRedirect $redirect, RequestStack $requestStack, readonly private Security $security)
     {
-        $this->global = $global;
         $this->redirect = $redirect;
         $this->requestStack = $requestStack;
     }
@@ -66,6 +61,9 @@ class BackendAccessCheck
     public function assertAccess()
     {
         $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return ;
+        }
 
         if (!$request->attributes->has('pagedef')) {
             return;
@@ -84,10 +82,11 @@ class BackendAccessCheck
      */
     protected function checkLogin()
     {
-        if (null === $this->global->oUser || !$this->global->oUser->ValidSessionKey()) {
-            $this->checkLoginOnAjax();
-            $this->redirect->redirectToActivePage(array('pagedef' => 'login', 'module_fnc[contentmodule]' => 'Logout'));
+        if (true === $this->security->isGranted('ROLE_CMS_USER')) {
+            return;
         }
+        $this->checkLoginOnAjax();
+        $this->redirect->redirectToActivePage(array('pagedef' => 'login', 'module_fnc[contentmodule]' => 'Logout'));
     }
 
     /**
@@ -97,13 +96,14 @@ class BackendAccessCheck
      */
     protected function checkLoginOnAjax()
     {
-        $aModuleFNC = $this->global->GetUserData('module_fnc');
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return;
+        }
+        $aModuleFNC = $request->get('module_fnc');
         if (is_array($aModuleFNC) && array_key_exists('contentmodule', $aModuleFNC) && 'ExecuteAjaxCall' === $aModuleFNC['contentmodule']) {
             $aParameters = array('pagedef' => 'login', 'module_fnc[contentmodule]' => 'Logout');
-            $sLocation = PATH_CMS_CONTROLLER.'?';
-            foreach ($aParameters as $name => $value) {
-                $sLocation .= urlencode($name).'='.urlencode($value).'&';
-            }
+            $sLocation = PATH_CMS_CONTROLLER.'?' . http_build_query($aParameters);
             $aJson = array('logedoutajax', $sLocation);
             echo json_encode($aJson);
             exit();
