@@ -57,7 +57,9 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TPkgCustomSearchResultItemList::AddCacheParameters` removed
 - `\TPkgCustomSearchResultItemList::AddClearCacheTriggers` removed
 - `\TPkgImageHotspotItem::AddClearCacheTriggers` removed
-- 
+- `\TCMSFieldWYSIWYG::getModifiedToolbarByUser` - dropped user parameter.
+- `\TCMSTableEditorPortal::linkPortalToUser` now takes the user id instead of the user
+- `\TPkgShopPaymentTransactionContextEndPoint::getCmsUser` was removed
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 

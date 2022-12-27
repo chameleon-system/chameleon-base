@@ -8,6 +8,31 @@
         <defaults autowire="true" autoconfigure="true"  />
         <prototype namespace="ChameleonSystem\SecurityBundle\" resource="../src/*" exclude="../src/{Model,DependencyInjection}"/>
 
+        <service id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" public="true" />
+
+        <service id="ChameleonSystem\SecurityBundle\Voter\CmsRightVoter">
+            <tag name="security.voter"/>
+        </service>
+        <service id="ChameleonSystem\SecurityBundle\Voter\CmsGroupVoter">
+            <tag name="security.voter"/>
+        </service>
+        <service id="ChameleonSystem\SecurityBundle\Voter\CmsRoleVoter">
+            <tag name="security.voter"/>
+        </service>
+
+
+        <service id="ChameleonSystem\SecurityBundle\Voter\CmsTableNameVoter">
+            <tag name="security.voter"/>
+            <argument type="service" id="chameleon_system_core.data_access_cms_tbl_conf" />
+
+        </service>
+        <service id="ChameleonSystem\SecurityBundle\Voter\CmsTableObjectVoter">
+            <argument type="service" id="chameleon_system_core.data_access_cms_tbl_conf" />
+            <tag name="security.voter"/>
+        </service>
+
+
+
     </services>
 
 </container>

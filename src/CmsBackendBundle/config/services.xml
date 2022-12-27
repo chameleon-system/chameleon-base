@@ -8,6 +8,11 @@
         <defaults autowire="true" autoconfigure="true"  />
         <prototype namespace="ChameleonSystem\CmsBackendBundle\" resource="../src/*" exclude="../src/{DependencyInjection}"/>
 
+        <service class="ChameleonSystem\CmsBackendBundle\BackendSession\BackendSession"
+                 id="chameleon_system_cms_backend.backend_session" public="true">
+            <argument type="service" key="$languageService" id="chameleon_system_core.language_service" />
+        </service>
+
     </services>
 
 </container>

@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -53,12 +55,13 @@ class TCMSListManagerDocumentManager extends TCMSListManagerFullGroupTable
         parent::AddFields();
 
         $sLanguageIdent = '';
-        $oCmsUser = TCMSUser::GetActiveUser();
-        $oEditLang = $oCmsUser->GetCurrentEditLanguageObject();
-        $oCmsConfig = TCMSConfig::GetInstance();
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $oCmsConfig = TdbCmsConfig::GetInstance();
         $oDefaultLang = $oCmsConfig->GetFieldTranslationBaseLanguage();
-        if ($oDefaultLang && $oDefaultLang->fieldIso6391 != $oEditLang->fieldIso6391) {
-            $sLanguageIdent = $oEditLang->fieldIso6391;
+        if ($oDefaultLang && $oDefaultLang->fieldIso6391 != $backendSession->getCurrentEditLanguageIso6391()) {
+            $sLanguageIdent = $backendSession->getCurrentEditLanguageIso6391();
         }
 
         $sNameSQL = $this->oTableConf->GetNameColumn();

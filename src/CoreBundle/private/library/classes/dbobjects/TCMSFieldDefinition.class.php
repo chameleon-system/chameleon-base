@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 
@@ -600,9 +602,13 @@ class TCMSFieldDefinition extends TCMSRecord
 
         $language = null;
         if (null === $sLanguageID) {
-            $oUser = TCMSUser::GetActiveUser();
-            if (null !== $oUser) {
-                $language = $oUser->GetCurrentEditLanguageObject();
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            $user = $securityHelper->getUser();
+
+
+            if (null !== $user) {
+                $language = self::getLanguageService()->getLanguageFromIsoCode($user->getCurrentEditLanguageIsoCode());
             }
         } else {
             $language = self::getLanguageService()->getLanguage($sLanguageID);

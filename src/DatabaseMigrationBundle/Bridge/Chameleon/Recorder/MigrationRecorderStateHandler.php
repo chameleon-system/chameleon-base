@@ -6,6 +6,7 @@ use ChameleonSystem\DatabaseMigration\Constant\MigrationRecorderConstants;
 use ChameleonSystem\DatabaseMigration\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Security;
 use TCMSUser;
 
 class MigrationRecorderStateHandler
@@ -18,7 +19,7 @@ class MigrationRecorderStateHandler
     /**
      * @param RequestStack $requestStack
      */
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, readonly private Security $security)
     {
         $this->requestStack = $requestStack;
     }
@@ -28,18 +29,7 @@ class MigrationRecorderStateHandler
      */
     public function isDatabaseLoggingAllowed()
     {
-        $currentUser = TCMSUser::GetActiveUser();
-        if (null === $currentUser) {
-            return false;
-        }
-        if (null === $currentUser->oAccessManager) {
-            return false;
-        }
-        if (false === $currentUser->oAccessManager->PermitFunction('dbchangelog-manager')) {
-            return false;
-        }
-
-        return true;
+        return $this->security->isGranted('CMS_RIGHT_DBCHANGELOG-MANAGER');
     }
 
     /**

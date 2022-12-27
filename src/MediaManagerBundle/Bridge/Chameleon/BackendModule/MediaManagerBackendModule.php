@@ -35,6 +35,8 @@ use ChameleonSystem\MediaManager\JavascriptPlugin\JavascriptPluginRenderedConten
 use ChameleonSystem\MediaManager\JavascriptPlugin\MediaTreeNodeJsonObject;
 use ChameleonSystem\MediaManager\MediaManagerExtensionCollection;
 use ChameleonSystem\MediaManager\MediaManagerListState;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use IMapperCacheTriggerRestricted;
 use IMapperVisitorRestricted;
 use LogicException;
@@ -192,18 +194,13 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     private function createAccessRightsModel($tableName)
     {
         $accessRightsModel = new AccessRightsModel();
-        $backendUser = TdbCmsUser::GetActiveUser();
-        if (null === $backendUser) {
-            return $accessRightsModel;
-        }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $accessManager = $backendUser->oAccessManager;
-        $accessRightsModel->new = $accessManager->HasNewPermission($tableName);
-        $accessRightsModel->edit = $accessManager->HasEditPermission($tableName);
-        $accessRightsModel->delete = $accessManager->HasDeletePermission($tableName);
-        $accessRightsModel->show = $accessManager->HasShowAllPermission(
-                $tableName
-            ) || $accessManager->HasShowAllReadOnlyPermission($tableName);
+        $accessRightsModel->new = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $tableName);
+        $accessRightsModel->edit = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $tableName);
+        $accessRightsModel->delete = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $tableName);
+        $accessRightsModel->show = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $tableName);
 
         return $accessRightsModel;
     }

@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 /**
  * {@inheritdoc}
@@ -26,10 +28,13 @@ class TCMSFieldDate extends TCMSField
      */
     public function GetHTML()
     {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
         $viewRenderer = $this->getViewRenderer();
         $viewRenderer->AddSourceObject('fieldName', $this->name);
         $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
-        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('language', $securityHelper->getUser()?->getCurrentEditLanguageIsoCode());
         $viewRenderer->AddSourceObject('datetimepickerFormat', 'L');
         $viewRenderer->AddSourceObject('datetimepickerSideBySide', 'false');
 
@@ -229,7 +234,7 @@ class TCMSFieldDate extends TCMSField
      */
     private function getFlashMessageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
     /**
@@ -237,6 +242,6 @@ class TCMSFieldDate extends TCMSField
      */
     private function getViewRenderer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }

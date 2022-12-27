@@ -9,9 +9,13 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 
 /**
  * MLT field
@@ -138,24 +142,18 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
 
     protected function isRecordCreationAllowed(string $foreignTableName): bool
     {
-        $activeUser = TCMSUser::GetActiveUser();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if (null === $activeUser) {
-            return false;
-        }
-
-        return true === $activeUser->oAccessManager->HasNewPermission($foreignTableName);
+        return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $foreignTableName);
     }
 
     protected function isRecordChangingAllowed(string $foreignTableName): bool
     {
-        $activeUser = TCMSUser::GetActiveUser();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if (null === $activeUser) {
-            return false;
-        }
-
-        return true === $activeUser->oAccessManager->HasEditPermission($foreignTableName);
+        return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $foreignTableName);
     }
 
     /**
@@ -212,20 +210,31 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
     public function FetchMLTRecords()
     {
         // because the method could be called from frontend, we need to check if we are in cms mode... else use method from parent
-        $oUser = TCMSUser::GetActiveUser();
-        if (TGlobal::IsCMSMode() && !is_null($oUser)) {
-            $foreignTableName = $this->GetForeignTableName();
-            $sFilterQuery = $this->GetMLTFilterQuery();
-
-            /** @var $oMLTRecords TCMSRecordList */
-            $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List';
-            $oMLTRecords = call_user_func(array($sClassName, 'GetList'), $sFilterQuery, null, false);
-            $oMLTRecords->SetLanguage($oUser->GetCurrentEditLanguageID());
-
-            return $oMLTRecords;
-        } else {
+        if (false === TGlobal::IsCMSMode()) {
             return parent::FetchMLTRecords();
         }
+
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
+            return parent::FetchMLTRecords();
+        }
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $foreignTableName = $this->GetForeignTableName();
+        $sFilterQuery = $this->GetMLTFilterQuery();
+
+        /** @var $oMLTRecords TCMSRecordList */
+        $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List';
+        $oMLTRecords = call_user_func(array($sClassName, 'GetList'), $sFilterQuery, null, false);
+        $editLanguageId = $backendSession->getCurrentEditLanguageId();
+        if (null !== $editLanguageId) {
+            $oMLTRecords->SetLanguage($editLanguageId);
+        }
+
+        return $oMLTRecords;
     }
 
     /**
@@ -235,27 +244,35 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
      */
     protected function GetMLTFilterQuery()
     {
-        $oUser = TCMSUser::GetActiveUser();
-        if (TGlobal::IsCMSMode() && !is_null($oUser)) {
-            $foreignTableName = $this->GetForeignTableName();
 
-            /** @var $oTableConf TCMSTableConf */
-            $oTableConf = new TCMSTableConf();
-            $oTableConf->LoadFromField('name', $foreignTableName);
+        // because the method could be called from frontend, we need to check if we are in cms mode... else use method from parent
+        if (false === TGlobal::IsCMSMode()) {
+            return parent::GetMLTFilterQuery();
+        }
 
-            /** @var $oTableList TCMSListManagerFullGroupTable */
-            $oTableList = $oTableConf->GetListObject();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-            $oTableList->sRestriction = null; // do not include the restriction - it is part of the parent table, not the mlt!
+        if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
+            return parent::GetMLTFilterQuery();
+        }
 
-            $sFilterQuery = $oTableList->FilterQuery().$this->GetMLTRecordRestrictions();
+        $foreignTableName = $this->GetForeignTableName();
 
-            $sFilterQueryOrderInfo = $oTableList->GetSortInfoAsString();
-            if (!empty($sFilterQueryOrderInfo)) {
-                $sFilterQuery .= ' ORDER BY '.$sFilterQueryOrderInfo;
-            }
-        } else {
-            $sFilterQuery = parent::GetMLTFilterQuery();
+        /** @var $oTableConf TCMSTableConf */
+        $oTableConf = new TCMSTableConf();
+        $oTableConf->LoadFromField('name', $foreignTableName);
+
+        /** @var $oTableList TCMSListManagerFullGroupTable */
+        $oTableList = $oTableConf->GetListObject();
+
+        $oTableList->sRestriction = null; // do not include the restriction - it is part of the parent table, not the mlt!
+
+        $sFilterQuery = $oTableList->FilterQuery().$this->GetMLTRecordRestrictions();
+
+        $sFilterQueryOrderInfo = $oTableList->GetSortInfoAsString();
+        if (!empty($sFilterQueryOrderInfo)) {
+            $sFilterQuery .= ' ORDER BY '.$sFilterQueryOrderInfo;
         }
 
         return $sFilterQuery;

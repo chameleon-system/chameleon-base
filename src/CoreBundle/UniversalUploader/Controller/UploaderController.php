@@ -17,6 +17,7 @@ use ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploadedFileD
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\UploaderPostHandlerServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Security\Core\Security;
 use TdbCmsConfig;
 
 class UploaderController
@@ -35,7 +36,11 @@ class UploaderController
      * @param UploaderPostHandlerServiceInterface $postHandlerService
      * @param SaveToMediaLibraryServiceInterface  $saveToMediaLibraryService
      */
-    public function __construct(UploaderPostHandlerServiceInterface $postHandlerService, SaveToMediaLibraryServiceInterface $saveToMediaLibraryService)
+    public function __construct(
+        UploaderPostHandlerServiceInterface $postHandlerService,
+        SaveToMediaLibraryServiceInterface $saveToMediaLibraryService,
+        readonly private Security $security
+    )
     {
         $this->postHandler = $postHandlerService;
         $this->saveToMediaLibraryService = $saveToMediaLibraryService;
@@ -72,13 +77,7 @@ class UploaderController
 
     private function isBackendUserAuthenticated(): bool
     {
-        $user = \TdbCmsUser::GetActiveUser();
-
-        if (null === $user || false === $user->bLoggedIn) {
-            return false;
-        }
-
-        return true;
+        return $this->security->isGranted('ROLE_CMS_USER');
     }
 
     /**

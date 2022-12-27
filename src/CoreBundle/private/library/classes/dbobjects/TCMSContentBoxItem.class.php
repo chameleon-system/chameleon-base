@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+
 /**
  * holds one Menu (category) for the CMS, including icon, title, and menu items.
  *
@@ -42,9 +46,10 @@ class TCMSContentBoxItem extends TAdbCmsContentBox
     public function loadMenuItems()
     {
         if (!is_null($this->id)) {
-            $activeUser = TCMSUser::GetActiveUser();
-            if (null === $activeUser) {
-                return;
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
+                return ;
             }
             $aMenuItemsTemp = array();
 
@@ -55,18 +60,15 @@ class TCMSContentBoxItem extends TAdbCmsContentBox
                    WHERE `cms_content_box_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."' ORDER BY `translation`";
             $oTableList = TdbCmsTblConfList::GetList($query, $this->iLanguageId);
             while ($oTableObj = $oTableList->Next()) {
-                $tableInUserGroup = $activeUser->oAccessManager->user->IsInGroups($oTableObj->fieldCmsUsergroupId);
-                $bRightAllowEdit = $activeUser->oAccessManager->HasEditPermission($oTableObj->fieldName);
-                $bRightShowAllReadOnly = $activeUser->oAccessManager->HasShowAllReadOnlyPermission($oTableObj->fieldName);
-
-                if ($tableInUserGroup && ($bRightAllowEdit || $bRightShowAllReadOnly)) {
-                    $oTableItem = new TCMSMenuItem_Table();
-                    $oTableItem->SetData($oTableObj->sqlData);
-                    if (array_key_exists($oTableObj->sqlData['translation'], $aMenuItemsTemp)) {
-                        $oTableObj->sqlData['translation'] = $oTableObj->sqlData['translation'].'1';
-                    }
-                    $aMenuItemsTemp[$oTableObj->sqlData['translation']] = $oTableItem;
+                if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $oTableObj->id)) {
+                    continue;
                 }
+                $oTableItem = new TCMSMenuItem_Table();
+                $oTableItem->SetData($oTableObj->sqlData);
+                if (array_key_exists($oTableObj->sqlData['translation'], $aMenuItemsTemp)) {
+                    $oTableObj->sqlData['translation'] = $oTableObj->sqlData['translation'].'1';
+                }
+                $aMenuItemsTemp[$oTableObj->sqlData['translation']] = $oTableItem;
             }
 
             // fetch modules
@@ -78,16 +80,16 @@ class TCMSContentBoxItem extends TAdbCmsContentBox
 
             $oCMSModuleList = TdbCmsModuleList::GetList($query, $this->iLanguageId);
             while ($oCMSModule = $oCMSModuleList->Next()) {
-                $tableInUserGroup = $activeUser->oAccessManager->user->IsInGroups($oCMSModule->fieldCmsUsergroupId);
-                if ($tableInUserGroup) {
-                    $oMenuItem = new TCMSMenuItem_Module();
-                    $oMenuItem->SetData($oCMSModule->sqlData);
-
-                    if (array_key_exists($oCMSModule->sqlData['name'], $aMenuItemsTemp)) {
-                        $oCMSModule->sqlData['name'] = $oCMSModule->sqlData['name'].'1';
-                    }
-                    $aMenuItemsTemp[$oCMSModule->sqlData['name']] = $oMenuItem;
+                if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::ACCESS, $oCMSModule)) {
+                    continue;
                 }
+                $oMenuItem = new TCMSMenuItem_Module();
+                $oMenuItem->SetData($oCMSModule->sqlData);
+
+                if (array_key_exists($oCMSModule->sqlData['name'], $aMenuItemsTemp)) {
+                    $oCMSModule->sqlData['name'] = $oCMSModule->sqlData['name'].'1';
+                }
+                $aMenuItemsTemp[$oCMSModule->sqlData['name']] = $oMenuItem;
             }
 
             ksort($aMenuItemsTemp);

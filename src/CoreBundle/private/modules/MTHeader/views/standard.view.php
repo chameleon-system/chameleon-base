@@ -2,6 +2,7 @@
 
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -16,8 +17,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @var TranslatorInterface $translator
  */
 $translator = ServiceLocator::get('translator');
+/** @var SecurityHelperAccess $securityHelper */
+$securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+$user = $securityHelper->getUser();
 
-if (false === isset($data['oUser'])) {
+if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
     echo '<span class="navbar-brand"><img src="'.TGlobal::OutHTML($sLogoURL).'" alt="" /></span>';
 
     return;
@@ -171,8 +175,8 @@ if (false === isset($data['oUser'])) {
                     echo $viewRenderer->Render('MTUpdateRecorder/flyout.html.twig');
 
             $userButtonStyle = '';
-            $oUser = TCMSUser::GetActiveUser();
-            $bIsAdminUser = ($oUser && $oUser->oAccessManager && $oUser->oAccessManager->user && $oUser->oAccessManager->user->IsAdmin());
+
+            $bIsAdminUser = ($securityHelper->isGranted('ROLE_CMS_ADMIN'));
             if (!_DEVELOPMENT_MODE && $bIsAdminUser) {
                 $userButtonStyle = 'text-danger';
             } ?>
@@ -188,11 +192,11 @@ if (false === isset($data['oUser'])) {
                         >
                             <i class="fas fa-user"></i>
                             <span class="d-md-down-none">
-                                <?=$oUser->fieldLogin; ?>
+                                <?=$securityHelper->getUser()?->getUserIdentifier() ?>
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="<?= PATH_CMS_CONTROLLER; ?>?pagedef=tableeditor&tableid=<?= $data['iTableIDCMSUser']; ?>&id=<?= $data['oUser']->id; ?>&<?= urlencode('module_fnc[contentmodule]'); ?>">
+                            <a class="dropdown-item" href="<?= PATH_CMS_CONTROLLER; ?>?pagedef=tableeditor&tableid=<?= $data['iTableIDCMSUser']; ?>&id=<?= $user?->getId(); ?>&<?= urlencode('module_fnc[contentmodule]'); ?>">
                                 <i class="fas fa-user"></i>
                                 <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.action_open_profile')); ?>
                             </a>
