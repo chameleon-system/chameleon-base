@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -265,14 +266,22 @@ class TCMSListManagerEndPoint
     public function GetPortalRestriction()
     {
         $query = '';
-        $oUser = TCMSUser::GetActiveUser();
-
-        if (null === $oUser || $oUser->oAccessManager->user->portals->hasNoPortals) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
             return false;
-        } // exit if the field does not exist
+        }
+
+
+        $portals = $securityHelper->getUser()?->getPortals();
+        if (null === $portals) {
+            $portals = [];
+        }
+        $portalRestrictions = implode(', ',array_map(fn($id) => $this->getDatabaseConnection()->quoteIdentifier($id), array_keys($portals)));
+
 
         // we add the portal restriction ONLY if the user does not have the cms_admin role (admins may see all portals)
-        if (false === $oUser->oAccessManager->user->IsAdmin()) {
+        if (false === $securityHelper->isGranted('ROLE_CMS_ADMIN')) {
             $databaseConnection = $this->getDatabaseConnection();
             $sTableName = $this->oTableConf->sqlData['name'];
             $quotedTableName = $databaseConnection->quoteIdentifier($sTableName);
@@ -282,15 +291,14 @@ class TCMSListManagerEndPoint
             $portalLinkExists = ($portalMLTFieldExists || $portalIDFieldExists);
             if ($portalLinkExists) {
                 $restriction = '';
-                $portalRestriction = $oUser->oAccessManager->user->portals->PortalList();
                 $mltTable = $this->oTableConf->sqlData['name'].'_cms_portal_mlt';
                 $quotedMltTable = $databaseConnection->quoteIdentifier($mltTable);
-                if (false !== $portalRestriction) { // the user is in portals...
+                if ('' !== $portalRestrictions) { // the user is in portals...
                     if ($portalMLTFieldExists) {
                         // mlt connection (record may be in many portals)
 
                         $mltSubSelect = $this->getSubselectForMlt($quotedTableName, $quotedMltTable);
-                        $mltSubSelect .= " OR $quotedMltTable.`target_id` IN ($portalRestriction)";
+                        $mltSubSelect .= " OR $quotedMltTable.`target_id` IN ($portalRestrictions)";
 
                         $restriction .= " $quotedTableName.`id` IN ($mltSubSelect)";
                     }
@@ -298,7 +306,7 @@ class TCMSListManagerEndPoint
                         if (!empty($restriction)) {
                             $restriction .= ' AND ';
                         }
-                        $restriction .= " ($quotedTableName.`cms_portal_id` IN ($portalRestriction) OR $quotedTableName.`cms_portal_id` = '' OR $quotedTableName.`cms_portal_id` = '0')";
+                        $restriction .= " ($quotedTableName.`cms_portal_id` IN ($portalRestrictions) OR $quotedTableName.`cms_portal_id` = '' OR $quotedTableName.`cms_portal_id` = '0')";
                     }
                 } else {
                     if ($portalMLTFieldExists) {
@@ -316,13 +324,12 @@ class TCMSListManagerEndPoint
                     }
                 }
                 $query .= " $restriction";
-            } elseif ('`cms_portal`.`name`' == $this->oTableConf->sqlData['list_group_field'] || 'cms_portal' == $this->oTableConf->sqlData['name']) {
+            } elseif ('`cms_portal`.`name`' === $this->oTableConf->sqlData['list_group_field'] || 'cms_portal' === $this->oTableConf->sqlData['name']) {
                 // if the portal is the group field, or we are the portal table then we will need to restrict by portal as well...
-                $portalRestriction = $oUser->oAccessManager->user->portals->PortalList();
-                if (false === $portalRestriction) {
+                if ('' === $portalRestrictions) {
                     $query = ' 1=2';
                 } else {
-                    $query = " (`cms_portal`.`id` IN ($portalRestriction))";
+                    $query = " (`cms_portal`.`id` IN ($portalRestrictions))";
                 }
             }
         }

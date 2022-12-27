@@ -17,7 +17,9 @@ use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -108,7 +110,12 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
 
         $sName = $request->getHost();
         $sRelativePath = $request->getPathInfo();
-        $isUserSignedInToBackend = \TCMSUser::CMSUserDefined();
+        $isUserSignedInToBackend = false;
+        if ($request->hasSession()) {
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            $isUserSignedInToBackend = $securityHelper->isGranted('ROLE_CMS_USER');
+        }
 
         $frontController = PATH_CUSTOMER_FRAMEWORK_CONTROLLER;
         if ('/' !== substr($frontController, 0, 1)) {

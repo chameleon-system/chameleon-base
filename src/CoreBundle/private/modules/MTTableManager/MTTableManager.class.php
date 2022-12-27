@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use Doctrine\DBAL\Connection;
@@ -69,6 +70,7 @@ class MTTableManager extends TCMSModelBase
         $this->AddURLHistory();
 
         if (false === $this->oTableList->CheckTableRights()) {
+            // todo
             $oCMSUser = TCMSUser::GetActiveUser();
             $oCMSUser->Logout();
             $this->getRedirectService()->redirect(PATH_CMS_CONTROLLER);
@@ -496,7 +498,10 @@ class MTTableManager extends TCMSModelBase
         $fieldIsTranslatable = call_user_func(array($autoClassName, 'CMSFieldIsTranslated'), $nameColumn);
 
         if ($fieldIsTranslatable) {
-            $currentEditLanguageId = TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID();
+            /** @var BackendSessionInterface $backendSession */
+            $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+            $currentEditLanguageId = $backendSession->getCurrentEditLanguageId();
             $languageSuffix = TGlobal::GetLanguagePrefix($currentEditLanguageId);
             if ('' !== $languageSuffix) {
                 $nameColumn .= '__'.$languageSuffix;

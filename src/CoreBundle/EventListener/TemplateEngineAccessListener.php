@@ -14,6 +14,7 @@ namespace ChameleonSystem\CoreBundle\EventListener;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Security;
 use TCMSUser;
 
 /**
@@ -31,7 +32,7 @@ class TemplateEngineAccessListener
     /**
      * @param RequestInfoServiceInterface $requestInfoService
      */
-    public function __construct(RequestInfoServiceInterface $requestInfoService)
+    public function __construct(RequestInfoServiceInterface $requestInfoService, readonly private Security $security)
     {
         $this->requestInfoService = $requestInfoService;
     }
@@ -47,7 +48,10 @@ class TemplateEngineAccessListener
         if (!$this->requestInfoService->isCmsTemplateEngineEditMode()) {
             return;
         }
-        if (!TCMSUser::CMSUserDefined()) {
+
+
+
+        if (false === $this->security->isGranted('ROLE_CMS_USER')) {
             throw new AccessDeniedException('Template engine requested without permission.');
         }
     }

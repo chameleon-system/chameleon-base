@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 class TCMSFieldDateTimeNow extends TCMSFieldDateTime
 {
@@ -20,10 +21,13 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
 
     public function GetHTML()
     {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
         $viewRenderer = $this->getViewRenderer();
         $viewRenderer->AddSourceObject('fieldName', $this->name);
         $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
-        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('language', $securityHelper->getUser()?->getCurrentEditLanguageIsoCode());
         $viewRenderer->AddSourceObject('datetimepickerFormat', 'L LTS');
         $viewRenderer->AddSourceObject('datetimepickerSideBySide', 'true');
         $viewRenderer->AddSourceObject('datetimepickerWithIcon', false);

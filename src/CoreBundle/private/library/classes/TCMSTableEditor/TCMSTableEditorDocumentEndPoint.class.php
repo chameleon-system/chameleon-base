@@ -9,7 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 
 class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
 {
@@ -41,21 +44,19 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
         if (false === TGlobal::IsCMSMode()) {
             return false;
         }
-        $oCMSUser = TCMSUser::GetActiveUser();
-        if (true === is_null($oCMSUser)) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
             return false;
         }
+
         /**
          * user can download document if:
          * - he is the owner
          * - OR
          * - he has one of the other permissions.
          */
-        if (true === $this->IsOwner($this->oTable->sqlData) ||
-            true === $oCMSUser->oAccessManager->HasEditPermission($this->oTableConf->fieldName) ||
-            true === $oCMSUser->oAccessManager->HasShowAllPermission($this->oTableConf->fieldName) ||
-            true === $oCMSUser->oAccessManager->HasShowAllReadOnlyPermission($this->oTableConf->fieldName)
-        ) {
+        if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTable)) {
             $bAsDownload = ('1' == $this->getInputFilterUtil()->getFilteredInput('asDownload')) ? true : false;
             $this->oTable->downloadDocument($bAsDownload);
 

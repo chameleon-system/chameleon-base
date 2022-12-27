@@ -9,7 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 /**
  * manages the extranet user list.
@@ -40,8 +42,10 @@ class TCMSListManagerExtranetUser extends TCMSListManagerFullGroupTable
 
         $sURL = PATH_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl($aParameter);
 
-        $oUser = TCMSUser::GetActiveUser();
-        if ($oUser && $oUser->oAccessManager && $oUser->oAccessManager->PermitFunction('allow-login-as-extranet-user')) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if (true === $securityHelper->isGranted('CMS_RIGHT_ALLOW-LOGIN-AS-EXTRANET-USER')) {
             $sReturnValue .= "<a href=\"{$sURL}\" target=\"_blank\"><i class=\"fas fa-user-check\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".TGlobal::Translate('chameleon_system_extranet.action.login_as_extranet_user')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\"></i></a>";
         }
 

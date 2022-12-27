@@ -275,6 +275,7 @@
 
         <service id="chameleon_system_core.listener.template_engine_access" class="ChameleonSystem\CoreBundle\EventListener\TemplateEngineAccessListener">
             <argument type="service" id="chameleon_system_core.request_info_service" />
+            <argument type="service" id="security.helper" />
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="250" />
         </service>
 
@@ -294,9 +295,9 @@
         <service id="chameleon_system_core.request_type" synthetic="true" />
 
         <service id="chameleon_system_core.security.backend_access_check" class="ChameleonSystem\CoreBundle\Security\BackendAccessCheck">
-            <argument type="service" id="chameleon_system_core.global" />
             <argument type="service" id="chameleon_system_core.redirect" />
             <argument type="service" id="request_stack" />
+            <argument type="service" id="security.helper" />
             <call method="unrestrictPagedef">
                 <argument>login</argument>
                 <argument type="collection"></argument>

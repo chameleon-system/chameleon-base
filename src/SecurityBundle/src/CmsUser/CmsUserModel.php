@@ -16,10 +16,50 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
         readonly private string $email,
         readonly private string $cmsLanguageId,
         readonly private array $availableLanguagesIsoCodes,
-        readonly private string $currentEditLanguageIsoCode,
+        readonly private ?string $currentEditLanguageIsoCode,
+        readonly private array $availableEditLanguages,
         readonly private ?string $password = null,
-        readonly private array $roles = []
+        readonly private array $roles = [],
+        readonly private array $rights = [],
+        readonly private array $groups = [],
+        readonly private array $portals = []
     ) {
+    }
+
+    /**
+     * returns users portals. key is id, value is CMS_PORTAL_<external_identifier>
+     * @return array<string, string>
+     */
+    public function getPortals(): array
+    {
+        return $this->portals;
+    }
+
+
+    /**
+     * List of the users groups - key is the group id, value the CMS_GROUP_<internal_name>
+     * @return array<string,string>
+     */
+    public function getGroups(): array
+    {
+        return $this->groups;
+    }
+
+    /**
+     * List of users right - key is the permission id, the value IS CMS_RIGHT_<name>
+     * @return array<string,string>
+     */
+    public function getRights(): array
+    {
+        return $this->rights;
+    }
+
+    /**
+     * @return array<string, string> - assoc array with key being langauge id and value being language iso code
+     */
+    public function getAvailableEditLanguages(): array
+    {
+        return $this->availableEditLanguages;
     }
 
 
@@ -32,7 +72,8 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return array
+     *
+     * @return array<string, string> key is the id, name is ROLE_<name>
      */
     public function getRoles(): array
     {
@@ -120,9 +161,9 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return string
+     * @return ?string
      */
-    public function getCurrentEditLanguageIsoCode(): string
+    public function getCurrentEditLanguageIsoCode(): ?string
     {
         return $this->currentEditLanguageIsoCode;
     }

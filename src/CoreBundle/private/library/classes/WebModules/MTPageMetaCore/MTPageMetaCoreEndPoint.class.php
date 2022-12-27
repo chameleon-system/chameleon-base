@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -408,7 +409,10 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             $sCustomHeaderData = $activePortal->sqlData['custom_metadata'];
 
             // add pageID to content if user is logged in
-            if (true === TCMSUser::CMSUserDefined()) {
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+            if (true === $securityHelper->isGranted('ROLE_CMS_USER')) {
                 $activePage = $this->getActivePageService()->getActivePage();
                 $sCustomHeaderData .= "\n<!-- CMS page ID: ".TGlobal::OutHTML($activePage->id).'; IDENT: '.TGlobal::OutHTML($activePage->sqlData['cmsident'])."-->\n";
             }
@@ -502,7 +506,10 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
     {
         $cacheParameters = parent::_GetCacheParameters();
 
-        if (true === TCMSUser::CMSUserDefined()) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if (true === $securityHelper->isGranted('ROLE_CMS_USER')) {
             $cacheParameters['debugOutputActive'] = true;
         }
 

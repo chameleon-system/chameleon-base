@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 require_once PATH_LIBRARY.'/functions/ConvertDate.fun.php';
 
@@ -22,10 +23,13 @@ class TCMSFieldDateTime extends TCMSField
 
     public function GetHTML()
     {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
         $viewRenderer = $this->getViewRenderer();
         $viewRenderer->AddSourceObject('fieldName', $this->name);
         $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
-        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('language', $securityHelper->getUser()?->getCurrentEditLanguageIsoCode());
         $viewRenderer->AddSourceObject('datetimepickerFormat', 'L LTS');
         $viewRenderer->AddSourceObject('datetimepickerSideBySide', 'true');
         $viewRenderer->AddSourceObject('datetimepickerWithIcon', false);

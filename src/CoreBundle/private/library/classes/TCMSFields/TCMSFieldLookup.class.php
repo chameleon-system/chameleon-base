@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 /**
  * ReloadOnChange=true.
@@ -68,6 +69,9 @@ class TCMSFieldLookup extends TCMSField
 
     private function addFieldRenderVariables(ViewRenderer $viewRenderer): void
     {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
         $sClass = '';
         $sOnChangeAttr = '';
         if ($this->GetReloadOnChangeParam()) {
@@ -77,7 +81,7 @@ class TCMSFieldLookup extends TCMSField
 
         $viewRenderer->AddSourceObject('fieldName', $this->name);
         $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
-        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('language', $securityHelper->getUser()?->getCurrentEditLanguageIsoCode());
         $viewRenderer->AddSourceObject('sClass', $sClass);
         $viewRenderer->AddSourceObject('onchangeAttr', $sOnChangeAttr);
         $viewRenderer->AddSourceObject('options', $this->options);

@@ -9,13 +9,17 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ChangeActiveLanguagesForPortalEvent;
 use ChameleonSystem\CoreBundle\Event\ChangeUseSlashInSeoUrlsEvent;
 use ChameleonSystem\CoreBundle\Event\LocaleChangedEvent;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TCMSTableEditorPortal extends TCMSTableEditor
@@ -171,10 +175,14 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     {
         parent::PostInsertHook($oFields);
 
-        $oUser = TCMSUser::GetActiveUser();
-        $this->linkPortalToUser($oUser);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        TCacheManager::PerformeTableChange('cms_user', $oUser->id);
+        $this->linkPortalToUser($securityHelper->getUser()?->getId());
+        /** @var CacheInterface $cache */
+        $cache = ServiceLocator::get('chameleon_system_cms_cache.cache');
+
+        $cache->callTrigger('cms_user', $securityHelper->getUser()?->getId());
     }
 
     /**
@@ -185,32 +193,42 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         $this->SetSessionCopiedPortalId();
         parent::OnAfterCopy();
 
-        $oUser = TCMSUser::GetActiveUser();
-        $this->linkPortalToUser($oUser);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $this->linkPortalToUser($securityHelper->getUser()?->getId());
 
         $this->CopyNaviTree();
         $this->UnsetSessionCopiedPortalId();
-        TCacheManager::PerformeTableChange('cms_user', $oUser->id);
+        /** @var CacheInterface $cache */
+        $cache = ServiceLocator::get('chameleon_system_cms_cache.cache');
+
+        $cache->callTrigger('cms_user', $securityHelper->getUser()?->getId());
+
     }
 
     /**
-     * @param TCMSUser $oUser
      *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
      */
-    protected function linkPortalToUser(TCMSUser $oUser)
+    protected function linkPortalToUser(?string $userId)
     {
+        if (null === $userId) {
+            return;
+        }
         $query = "INSERT INTO `cms_user_cms_portal_mlt`
-                        SET `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oUser->id)."',
-                            `target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'";
-        MySqlLegacySupport::getInstance()->query($query);
+                        SET `source_id` = :userId,
+                            `target_id` = :portalId";
+        $this->getDatabaseConnection()->executeQuery($query, ['userId' => $userId, 'portalId' => $this->sId]);
 
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
-        $migrationQueryData = new MigrationQueryData('cms_user_cms_portal_mlt', $editLanguage->fieldIso6391);
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $migrationQueryData = new MigrationQueryData('cms_user_cms_portal_mlt', $backendSession->getCurrentEditLanguageIso6391());
         $migrationQueryData
             ->setFields(array(
-                'source_id' => $oUser->id,
+                'source_id' => $userId,
                 'target_id' => $this->sId,
             ))
         ;

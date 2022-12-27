@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use esono\pkgCmsCache\CacheInterface;
 
 class TCMSConfig extends TCMSRecord
@@ -86,9 +87,11 @@ class TCMSConfig extends TCMSRecord
     {
         $bLogDeletes = ('1' == $this->sqlData['log_deletes']);
         if ($bLogDeletes && '0' == $this->sqlData['log_www_user_delete_calls']) {
-            /** @var $oCMSUser TdbCmsUser */
-            $oCMSUser = TdbCmsUser::GetActiveUser();
-            $bLogDeletes = ('www' != $oCMSUser->sqlData['login']);
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+            $user = $securityHelper->getUser();
+            $bLogDeletes = ('www' !== $user->getUserIdentifier());
         }
 
         return $bLogDeletes;

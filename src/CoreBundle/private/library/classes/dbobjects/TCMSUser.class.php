@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\Event\BackendLogoutEvent;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -68,18 +69,30 @@ class TCMSUser extends TCMSRecord
      * you don`t get a WWW-user object!
      *
      * @return TdbCmsUser|null
+     * @deprecated 7.2 - use symfony security service
      */
     public static function GetActiveUser()
     {
-        if (is_null(self::$oActiveUser)) {
-            if (isset($_SESSION) && array_key_exists(self::GetSessionVarName('_user'), $_SESSION) && !empty($_SESSION[self::GetSessionVarName('_user')])) {
-                self::$oActiveUser = TdbCmsUser::GetNewInstance();
-                self::$oActiveUser->Load($_SESSION[self::GetSessionVarName('_user')]);
-                self::$oActiveUser->bLoggedIn = ($_SESSION[self::GetSessionVarName('_user')] == self::$oActiveUser->id);
-            }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $user = $securityHelper->getUser();
+        if (null === $user || false === $securityHelper->isGranted('ROLE_CMS_USER') || false ===($user instanceof \ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel)) {
+            self::$oActiveUser = null;
+            return null;
         }
 
+        if (null !== self::$oActiveUser && self::$oActiveUser->id === $user->getId()) {
+            return self::$oActiveUser;
+        }
+
+        /** @var \ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel $user */
+        self::$oActiveUser = TdbCmsUser::GetNewInstance();
+        self::$oActiveUser->Load($user->getId());
+
+        self::$oActiveUser->bLoggedIn = true;
+
         return self::$oActiveUser;
+
     }
 
     public static function GetSessionVarName($sName)
@@ -115,14 +128,15 @@ class TCMSUser extends TCMSRecord
 
     /**
      * checks for valid cms user session.
-     *
+     * @deprecated use SecurityHelperAccess::class
      * @return bool
      */
     public static function CMSUserDefined()
     {
-        $sUserVar = '_usercms';
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        return isset($_SESSION) && array_key_exists($sUserVar, $_SESSION) && !empty($_SESSION[$sUserVar]);
+        return $securityHelper->isGranted('ROLE_CMS_USER');
     }
 
     /**
@@ -227,6 +241,7 @@ class TCMSUser extends TCMSRecord
      */
     public static function Logout()
     {
+        // todo
         $user = static::GetActiveUser();
         $sessionKeys = array_keys($_SESSION);
         foreach ($sessionKeys as $key) {
@@ -301,41 +316,16 @@ class TCMSUser extends TCMSRecord
      * returns the current edit language in iso6391 format e.g. de,en,fr etc.
      *
      * @return string
+     * @deprecated use service \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSession
      */
     public function GetCurrentEditLanguage($bReset = false)
     {
+        /** @var \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface $sessionService */
+        $sessionService = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
         if (true === $bReset) {
-            $_SESSION['cmsbackend-currenteditlanguage'] = null;
+            $sessionService->resetCurrentEditLanguage();
         }
-
-        if (isset($_SESSION['cmsbackend-currenteditlanguage']) && !empty($_SESSION['cmsbackend-currenteditlanguage'])) {
-            return $_SESSION['cmsbackend-currenteditlanguage'];
-        }
-
-        $sCurrentEditLanguageIso6391Code = null;
-
-        if (isset($this->sqlData['cms_current_edit_language']) && !empty($this->sqlData['cms_current_edit_language'])) {
-            $sCurrentEditLanguageIso6391Code = $this->sqlData['cms_current_edit_language'];
-        }
-
-        // no language set? select the first from the languages available to the user
-        if (is_null($sCurrentEditLanguageIso6391Code) && isset($this->sqlData['cms_language_mlt'])) {
-            $oEditLanguages = $this->GetMLT('cms_language_mlt');
-            if ($oEditLanguages->Length() > 0) {
-                $oEditLanguages->GoToStart();
-                $oLanguage = $oEditLanguages->Current();
-                $sCurrentEditLanguageIso6391Code = $oLanguage->sqlData['iso_6391'];
-            }
-        }
-
-        if (is_null($sCurrentEditLanguageIso6391Code)) {
-            $config = TdbCmsConfig::GetInstance();
-            $sCurrentEditLanguageIso6391Code = $config->GetFieldTranslationBaseLanguage()->fieldIso6391;
-        }
-
-        $_SESSION['cmsbackend-currenteditlanguage'] = $sCurrentEditLanguageIso6391Code;
-
-        return $sCurrentEditLanguageIso6391Code;
+        return $sessionService->getCurrentEditLanguageIso6391();
     }
 
     /**
@@ -412,26 +402,18 @@ class TCMSUser extends TCMSRecord
      *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
+     * @deprecated 7.2 use \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSession
      */
     public function SetCurrentEditLanguage($language = null)
     {
+        /** @var \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface $sessionService */
+        $sessionService = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
         if (null === $language) {
-            $config = TdbCmsConfig::GetInstance();
-            $language = $config->GetFieldTranslationBaseLanguage()->fieldIso6391;
+            $sessionService->resetCurrentEditLanguage();
+            return;
         }
-        $databaseConnection = $this->getDatabaseConnection();
-        $updateQuery = 'UPDATE `cms_user` SET `cms_current_edit_language` = :language WHERE `id` = :userId';
-        $databaseConnection->executeQuery($updateQuery, array(
-            'language' => $language,
-            'userId' => $this->sqlData['id'],
-        ));
-        $this->sqlData['cms_current_edit_language'] = $language;
 
-        // reset language object cache
-        $this->SetInternalCache('oCurrentEditLanguage', null);
-
-        $_SESSION['cmsbackend-currenteditlanguage'] = $language;
-        $this->GetCurrentEditLanguage(true);
+        $sessionService->setCurrentEditLanguageIso6391($language);
     }
 
     /**

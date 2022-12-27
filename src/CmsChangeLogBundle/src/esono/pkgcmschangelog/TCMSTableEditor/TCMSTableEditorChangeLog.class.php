@@ -159,15 +159,20 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      */
     protected function createChangeSet($sAction)
     {
+
         $oChangeSet = TdbPkgCmsChangelogSet::GetNewInstance();
         $oTableEditor = TTools::GetTableEditorManager($oChangeSet->table);
         $oTableEditor->AllowEditByAll(true);
         $oTableEditor->Insert();
 
+        /** @var \ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess $securityHelper */
+        $securityHelper = \ChameleonSystem\CoreBundle\ServiceLocator::get(\ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess::class);
+
+
         $aData = array();
         $aData['id'] = $oTableEditor->sId;
         $aData['modify_date'] = date('Y-m-d H:i:s');
-        $aData['cms_user'] = TCMSUser::GetActiveUser()->id;
+        $aData['cms_user'] = $securityHelper->getUser()?->getId();
         $aData['cms_tbl_conf'] = $this->sTableId;
         $aData['modified_id'] = $this->oTable->id;
         $aData['modified_name'] = $this->getNameColumnValue();
