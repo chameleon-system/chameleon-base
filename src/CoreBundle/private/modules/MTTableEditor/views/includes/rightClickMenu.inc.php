@@ -7,7 +7,7 @@
                 foreach ($data['breadcrumb'] as $histid => $item) {
                     ?>
                     <li><a href="#"
-                           onclick="document.location.href='<?=TGlobalBase::OutHTML($item['url']); ?>">
+                           onclick="document.location.href='<?=TGlobalBase::OutHTML($item['url'])?>'">
                             <?=$item['name']; ?></a></li>
                     <?php
                 }
