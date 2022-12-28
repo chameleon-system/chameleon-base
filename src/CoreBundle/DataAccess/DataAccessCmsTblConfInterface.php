@@ -2,6 +2,7 @@
 
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
+use ChameleonSystem\CoreBundle\DataModel\TableConfigurationDataModel;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 
 interface DataAccessCmsTblConfInterface
@@ -18,9 +19,11 @@ interface DataAccessCmsTblConfInterface
     ];
     /**
      * returns array with table ids as key, and name as value
-     * @return array<string,string>
+     * @return array<string,TableConfigurationDataModel>
      */
-    public function getTableNames(): array;
+    public function getTableConfigurations(): array;
+
+    public function isTableName(string $tableName): bool;
 
     /**
      * returns the roles assigned to the action
@@ -29,4 +32,6 @@ interface DataAccessCmsTblConfInterface
      * @return array<string>
      */
     public function getPermittedRoles(string $action, string $tableName): array;
+
+    public function getGroupIdForTable(string $tableName): ?string;
 }

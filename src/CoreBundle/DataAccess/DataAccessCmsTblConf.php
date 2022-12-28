@@ -2,6 +2,7 @@
 
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
+use ChameleonSystem\CoreBundle\DataModel\TableConfigurationDataModel;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 
@@ -11,18 +12,33 @@ class DataAccessCmsTblConf implements DataAccessCmsTblConfInterface
     {
     }
 
-    public function getTableNames(): array
+    public function getTableConfigurations(): array
     {
-        $query = "SELECT `id`, `name` FROM `cms_tbl_conf`";
+        $query = "SELECT `id`, `name`, `cms_usergroup_id` FROM `cms_tbl_conf`";
         $tableRows = $this->connection->fetchAllAssociative($query);
 
         return array_reduce($tableRows, static function (array $carry, array $row) {
-            $carry[$row['id']] = $row['name'];
+            $carry[$row['id']] = new TableConfigurationDataModel($row['id'], $row['name'], $row['cms_usergroup_id']);
 
             return $carry;
         }, []);
 
     }
+
+    public function isTableName(string $tableName): bool
+    {
+        $tableExists = $this->connection->fetchOne(
+            'SELECT EXISTS(SELECT 1 FROM `cms_tbl_conf` WHERE `name` = :tableName)',
+            ['tableName' => $tableName]
+        );
+
+        if (false === $tableExists) {
+            return false;
+        }
+
+        return 1 === (int)$tableExists;
+    }
+
 
     public function getPermittedRoles(string $action, string $tableName): array
     {
@@ -46,6 +62,20 @@ class DataAccessCmsTblConf implements DataAccessCmsTblConfInterface
                 ['tableName' => $tableName]
             )
         );
+    }
+
+    public function getGroupIdForTable(string $tableName): ?string
+    {
+        $groupId = $this->connection->fetchOne(
+            'SELECT `cms_usergroup_id` FROM `cms_tbl_conf` WHERE `name` = :tableName',
+            ['tableName' => $tableName]
+        );
+
+        if (false === $groupId) {
+            return null;
+        }
+
+        return $groupId;
     }
 
 

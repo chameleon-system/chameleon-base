@@ -2,33 +2,90 @@
 
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
+use ChameleonSystem\CoreBundle\DataModel\TableConfigurationDataModel;
 use esono\pkgCmsCache\CacheInterface;
 
 class DataAccessCmsTblConfCacheDecorator implements DataAccessCmsTblConfInterface
 {
-    public function __construct(readonly private DataAccessCmsTblConfInterface $subject, readonly private CacheInterface $cache)
-    {
+    private ?array $tableConfigurations = null;
+    private ?array $tableNameToIdMap = null;
+
+    public function __construct(
+        readonly private DataAccessCmsTblConfInterface $subject,
+        readonly private CacheInterface $cache
+    ) {
     }
 
-    public function getTableNames(): array
+    public function getTableConfigurations(): array
     {
+        if (null !== $this->tableConfigurations) {
+            return $this->tableConfigurations;
+        }
         $keyParam = ['class' => __CLASS__, 'fnc' => 'tableNames'];
         $key = $this->cache->getKey($keyParam, false);
 
-        $tables = $this->cache->get($key);
-        if (null !== $tables) {
-            return $tables;
+        $this->tableConfigurations = $this->cache->get($key);
+        if (null !== $this->tableConfigurations) {
+            return $this->tableConfigurations;
         }
 
-        $tables = $this->subject->getTableNames();
-        $this->cache->set($key, $tables, [['table' =>'cms_tbl_conf', 'id' => null]]);
+        $this->tableConfigurations = $this->subject->getTableConfigurations();
+        $this->cache->set($key, $this->tableConfigurations, [['table' => 'cms_tbl_conf', 'id' => null]]);
 
-        return $tables;
+        return $this->tableConfigurations;
     }
+
+    public function isTableName(string $tableName): bool
+    {
+        $tableNameToIdMap = $this->getTableNameToIdMap();
+
+        return array_key_exists($tableName, $tableNameToIdMap);
+    }
+
+    private function getTableNameToIdMap(): array
+    {
+        if (null !== $this->tableNameToIdMap) {
+            return $this->tableNameToIdMap;
+        }
+
+        $tables = $this->getTableConfigurations();
+        $this->tableNameToIdMap = [];
+        foreach (array_keys($tables) as $tableId) {
+            $this->tableNameToIdMap[$tables[$tableId]->getName()] = $tableId;
+        }
+
+        return $this->tableNameToIdMap;
+    }
+    private function getTableConf(string $tableName): ?TableConfigurationDataModel
+    {
+        $mapping = $this->getTableNameToIdMap();
+        if (false === array_key_exists($tableName, $mapping)) {
+            return null;
+        }
+
+        return $this->tableConfigurations[$mapping[$tableName]] ?? null;
+    }
+
+    public function getGroupIdForTable(string $tableName): ?string
+    {
+        $tableConf = $this->getTableConf($tableName);
+
+        if (null === $tableConf) {
+            return null;
+        }
+
+        return $tableConf->getCmsUsergroupId();
+    }
+
 
     public function getPermittedRoles(string $action, string $tableName): array
     {
-        $keyParam = ['class' => __CLASS__, 'fnc' => 'getPermittedRoles', 'action' => $action, 'tableName' => $tableName];
+        $keyParam = [
+            'class' => __CLASS__,
+            'fnc' => 'getPermittedRoles',
+            'action' => $action,
+            'tableName' => $tableName,
+        ];
         $key = $this->cache->getKey($keyParam, false);
 
         $permittedRoleIds = $this->cache->get($key);
@@ -37,7 +94,7 @@ class DataAccessCmsTblConfCacheDecorator implements DataAccessCmsTblConfInterfac
         }
 
         $permittedRoleIds = $this->subject->getPermittedRoles($action, $tableName);
-        $this->cache->set($key, $permittedRoleIds, [['table' =>'cms_tbl_conf', 'id' => null]]);
+        $this->cache->set($key, $permittedRoleIds, [['table' => 'cms_tbl_conf', 'id' => null]]);
 
         return $permittedRoleIds;
     }
