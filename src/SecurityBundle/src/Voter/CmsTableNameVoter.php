@@ -25,9 +25,7 @@ class CmsTableNameVoter extends Voter
             return false;
         }
 
-        $tables = $this->accessCmsTblConf->getTableNames();
-
-        return (in_array($subject, $tables, true));
+        return $this->accessCmsTblConf->isTableName($subject);
     }
 
     /**
@@ -41,6 +39,16 @@ class CmsTableNameVoter extends Voter
         /** @var CmsUserModel|UserInterface $user */
         $user = $token->getUser();
         if (false === ($user instanceof CmsUserModel)) {
+            return false;
+        }
+
+        $targetTableGroupId = $this->accessCmsTblConf->getGroupIdForTable($subject);
+
+        if (null === $targetTableGroupId) {
+            return false;
+        }
+        $groups = $user->getGroups();
+        if (false === array_key_exists($targetTableGroupId, $groups)) {
             return false;
         }
 
