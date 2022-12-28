@@ -12,9 +12,12 @@
 namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\FirewallMapInterface;
 use TCMSUser;
 
 /**
@@ -24,18 +27,11 @@ use TCMSUser;
  */
 class TemplateEngineAccessListener
 {
-    /**
-     * @var RequestInfoServiceInterface
-     */
-    private $requestInfoService;
-
-    /**
-     * @param RequestInfoServiceInterface $requestInfoService
-     */
-    public function __construct(RequestInfoServiceInterface $requestInfoService, readonly private Security $security)
-    {
-        $this->requestInfoService = $requestInfoService;
-    }
+    public function __construct(
+        readonly private RequestInfoServiceInterface $requestInfoService,
+        readonly private SecurityHelperAccess $security
+    )
+    {}
 
     /**
      * @return void
@@ -48,8 +44,12 @@ class TemplateEngineAccessListener
         if (!$this->requestInfoService->isCmsTemplateEngineEditMode()) {
             return;
         }
+        $firewallName = $this->security->getFirewallConfig($event->getRequest())?->getName();
 
-
+        if ('backend' !== $firewallName) {
+            // ignore frontend requests (such as access to the less files)
+            return ;
+        }
 
         if (false === $this->security->isGranted('ROLE_CMS_USER')) {
             throw new AccessDeniedException('Template engine requested without permission.');

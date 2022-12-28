@@ -104,7 +104,7 @@ class ChameleonFrontendRouter extends ChameleonBaseRouter implements PortalAndLa
         if (null === $pagedef) {
             return false;
         }
-        if (PATH_CUSTOMER_FRAMEWORK_CONTROLLER !== $request->getPathInfo()) {
+        if (PATH_CMS_CONTROLLER_FRONTEND !== $request->getPathInfo()) {
             return false;
         }
         if (false === $this->requestInfoService->isCmsTemplateEngineEditMode() && 'true' !== $this->requestStack->getCurrentRequest()->query->get('__previewmode')) {

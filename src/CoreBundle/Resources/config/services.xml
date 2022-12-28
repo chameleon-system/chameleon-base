@@ -275,8 +275,8 @@
 
         <service id="chameleon_system_core.listener.template_engine_access" class="ChameleonSystem\CoreBundle\EventListener\TemplateEngineAccessListener">
             <argument type="service" id="chameleon_system_core.request_info_service" />
-            <argument type="service" id="security.helper" />
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="250" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="-250" />
         </service>
 
         <service id="chameleon_system_core.listener.redirect_to_primary_domain" class="ChameleonSystem\CoreBundle\EventListener\CheckPortalDomainListener">

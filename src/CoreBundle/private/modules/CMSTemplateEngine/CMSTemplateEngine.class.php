@@ -249,7 +249,7 @@ class CMSTemplateEngine extends TCMSModelBase
             /** @var BackendSessionInterface $backendSession */
             $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
             $languageId = $backendSession->getCurrentEditLanguageId();
-            $this->data['sActualMasterLayout'] = URL_WEB_CONTROLLER.'?pagedef='.$this->sPageId.'&__masterPageDef=true&__modulechooser=true&id='.$this->oPage->iMasterPageDefId.'&previewLanguageId='.$languageId;
+            $this->data['sActualMasterLayout'] = PATH_CMS_CONTROLLER_FRONTEND.'?pagedef='.$this->sPageId.'&__masterPageDef=true&__modulechooser=true&id='.$this->oPage->iMasterPageDefId.'&previewLanguageId='.$languageId;
         } else {
             $this->data['sActivePageDef'] = '';
         }
