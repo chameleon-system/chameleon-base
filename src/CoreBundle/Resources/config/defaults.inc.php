@@ -19,11 +19,16 @@ if (!defined('URL_WEB_CONTROLLER')) {
     define('URL_WEB_CONTROLLER', REQUEST_PROTOCOL.'://'.$_SERVER['HTTP_HOST'].PATH_CUSTOMER_FRAMEWORK_CONTROLLER);
 }
 
+
 /**
  * URL backend front controller.
  */
 if (!defined('PATH_CMS_CONTROLLER')) {
     define('PATH_CMS_CONTROLLER', '/cms');
+}
+
+if (!defined('PATH_CMS_CONTROLLER_FRONTEND')) {
+    define('PATH_CMS_CONTROLLER_FRONTEND', PATH_CMS_CONTROLLER.'/frontend');
 }
 
 /**

@@ -117,6 +117,12 @@ class chameleon
             return true;
         }
 
+        $requestPath = parse_url($requestUri, PHP_URL_PATH);
+
+        if ('/cms/frontend' === $requestPath) {
+            return false;
+        }
+
         return 1 === preg_match('#^/cms($|/|[?])#', $requestUri);
     }
 

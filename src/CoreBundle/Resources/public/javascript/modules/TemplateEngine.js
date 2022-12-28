@@ -37,7 +37,7 @@
   }
 
   function EditTable(tableID,moduleInstanceID, sessionid) {
-    window.open("cms?pagedef=tablemanager&sRestrictionField=cms_tpl_module_instance_id&sRestriction="+moduleInstanceID+"&id="+tableID,"_top","");
+    window.open("/cms?pagedef=tablemanager&sRestrictionField=cms_tpl_module_instance_id&sRestriction="+moduleInstanceID+"&id="+tableID,"_top","");
   }
 
   function Rename(sModuleSpotName, instanceName) {

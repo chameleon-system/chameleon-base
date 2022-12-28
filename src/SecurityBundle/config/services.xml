@@ -8,7 +8,10 @@
         <defaults autowire="true" autoconfigure="true"  />
         <prototype namespace="ChameleonSystem\SecurityBundle\" resource="../src/*" exclude="../src/{Model,DependencyInjection}"/>
 
-        <service id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" public="true" />
+        <service id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" public="true">
+            <argument type="service" key="$firewallMap" id="security.firewall.map" />
+
+        </service>
 
         <service id="ChameleonSystem\SecurityBundle\Voter\CmsRightVoter">
             <tag name="security.voter"/>
