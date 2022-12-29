@@ -1,20 +1,39 @@
 {% extends '@ChameleonSystemCmsBackend/cms/base.html.twig' %}
 
 {% block body %}
-    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-4 lg-offset-4 mt-5">
+                <div class="card bg-light">
+                    <div class="card-header">
+                        <h4>Login</h4>
+                    </div>
+                    <div class="card-body">
+                        {% if error %}
+                            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+                        <form name="cmsform"  action="{{ path('cms_login') }}" method="post">
+                            <fieldset>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
+                                    <input class="form-control" placeholder="{{ 'chameleon_system_core.cms_module_login.form_user_name' | trans | e('html_attr') }}" type="text" id="username" name="_username" value="{{ last_username | e('html_attr') }}" />
+                                </div>
+                            </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-unlock-alt"></i></span></div>
+                                        <input class="form-control" placeholder="{{ 'chameleon_system_core.cms_module_login.form_password' | trans | e('html_attr') }}" type="password" id="password" name="_password" />
+                                    </div>
+                                </div>
+                                <input class="btn btn-lg btn-success btn-block" type="submit" value="{{ 'chameleon_system_core.cms_module_login.action_login' | trans | e('html_attr') }}">
 
-    <form action="{{ path('cms_login') }}" method="post">
-        <label for="username">Email:</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}">
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="_password">
-
-        {# If you want to control the URL the user is redirected to on success
-        <input type="hidden" name="_target_path" value="/account"> #}
-
-        <button type="submit">login</button>
-    </form>
 {% endblock %}
