@@ -583,14 +583,13 @@ class MTHeader extends TCMSModelBase
      */
     public function ChangeEditLanguage()
     {
-        $editLanguageId = $this->getInputFilterUtil()->getFilteredGetInput('editLanguageID');
-        if (null === $editLanguageId) {
+        $editLanguageIso = $this->getInputFilterUtil()->getFilteredGetInput('editLanguageIsoCode');
+        if (null === $editLanguageIso) {
             return;
         }
         /** @var BackendSessionInterface $backendSession */
         $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
-        $language = TdbCmsLanguage::GetNewInstance($editLanguageId);
-        $backendSession->setCurrentEditLanguageIso6391($language->fieldIso6391);
+        $backendSession->setCurrentEditLanguageIso6391($editLanguageIso);
 
         // we need to redirect to the current page to ensure the change from taking hold
         // now call page again... but without module_fnc
