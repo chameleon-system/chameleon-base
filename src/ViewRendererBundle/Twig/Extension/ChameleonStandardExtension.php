@@ -18,6 +18,7 @@ use Twig\Environment;
 use Twig\Error\RuntimeError;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 use Twig_Environment;
 use Twig_SimpleFilter;
 
@@ -33,6 +34,18 @@ class ChameleonStandardExtension extends AbstractExtension
         return 'chameleon_system_standard_extension';
     }
 
+    public function getFunctions()
+    {
+        return array(
+            new TwigFunction(
+                'cmsGetPathTheme', static fn () => \TGlobal::GetPathTheme(), array(
+                    'is_safe' => array('html'),
+                )
+            ),
+        );
+    }
+
+
     /**
      * {@inheritdoc}
      */
@@ -41,6 +54,7 @@ class ChameleonStandardExtension extends AbstractExtension
         return array(
             'cmsthumb' => new TwigFilter('cmsthumb', 'TPkgSnippetRendererFilter::getThumbnail'),
             'staticurl' => new TwigFilter('staticurl', 'TGlobal::getStaticUrl'),
+            'cms_static_url_web_lib' => new TwigFilter('cms_static_url_web_lib', 'TGlobal::GetStaticURLToWebLib'),
 
             // escaping
             'escape' => new TwigFilter(
