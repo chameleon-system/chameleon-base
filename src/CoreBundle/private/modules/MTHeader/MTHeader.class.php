@@ -550,9 +550,9 @@ class MTHeader extends TCMSModelBase
             $oAvailableLanguages = $oCmsConfig->GetFieldCmsLanguageList();
 
             $aAvailableLanguageIds = $oAvailableLanguages->GetIdList();
-            $editLanguageIds = $securityHelper->getUser()?->getAvailableEditLanguages();
-            if (null !== $editLanguageIds && count($editLanguageIds) > 0) {
-                $languageIdListString = implode(', ', array_map(fn(string $languageId) => $this->getDatabaseConnection()->quote($this-$this->getDatabaseConnection()->quote($languageId)), array_keys($editLanguageIds)));
+            $availableEditLanguages = $securityHelper->getUser()?->getAvailableEditLanguages();
+            if (null !== $availableEditLanguages && count($availableEditLanguages) > 0) {
+                $languageIdListString = implode(', ', array_map(fn(string $languageId) => $this->getDatabaseConnection()->quote($languageId), array_values($availableEditLanguages)));
             } else {
                 $languageIdListString = "'-1'";
             }
