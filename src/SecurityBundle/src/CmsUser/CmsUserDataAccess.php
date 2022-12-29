@@ -2,6 +2,7 @@
 
 namespace ChameleonSystem\SecurityBundle\CmsUser;
 
+use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -21,7 +22,9 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
         }
 
-        // todo - refresh only if the user changed.
+        if (false === $this->userHasBeenModified($user)) {
+            return $user;
+        }
 
         return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
@@ -114,6 +117,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             }, []);
 
         return new CmsUserModel(
+            \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $userRow['date_modified']),
             $userRow['id'],
             $userRow['login'],
             $userRow['firstname'],
@@ -138,6 +142,17 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
     public function loadUserByUsername(string $username)
     {
         return $this->loadUserByIdentifier($username);
+    }
+
+    private function userHasBeenModified(CmsUserModel $user): bool
+    {
+        $query = "SELECT `date_modified` FROM `cms_user` WHERE `id` = :userId";
+        $dateModified = $this->connection->fetchOne($query, ['userId' => $user->getId()]);
+        if (false === $dateModified) {
+            return true;
+        }
+
+        return ($user->getDateModified()->format('Y-m-d H:i:s') < $dateModified);
     }
 
 

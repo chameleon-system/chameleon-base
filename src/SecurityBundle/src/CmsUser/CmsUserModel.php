@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public function __construct(
+        readonly private \DateTimeImmutable $dateModified,
         readonly private string $id,
         readonly private string $userIdentifier,
         readonly private string $firstname,
@@ -24,6 +25,14 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
         readonly private array $groups = [],
         readonly private array $portals = []
     ) {
+    }
+
+    /**
+     * @return \DateTimeImmutable
+     */
+    public function getDateModified(): \DateTimeImmutable
+    {
+        return $this->dateModified;
     }
 
     /**
