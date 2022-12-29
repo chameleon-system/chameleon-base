@@ -13,6 +13,10 @@
 
         </service>
 
+        <service id="ChameleonSystem\SecurityBundle\Voter\UserHasRightVoter">
+            <tag name="security.voter"/>
+        </service>
+
         <service id="ChameleonSystem\SecurityBundle\Voter\CmsRightVoter">
             <tag name="security.voter"/>
         </service>
