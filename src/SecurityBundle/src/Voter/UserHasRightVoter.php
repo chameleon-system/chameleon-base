@@ -13,7 +13,7 @@ class UserHasRightVoter extends Voter
 
     protected function supports(string $attribute, $subject)
     {
-        return str_starts_with('CMS_RIGHT_', $attribute);
+        return str_starts_with($attribute, 'CMS_RIGHT_');
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)

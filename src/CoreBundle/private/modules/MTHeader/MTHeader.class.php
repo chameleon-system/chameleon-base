@@ -299,7 +299,7 @@ class MTHeader extends TCMSModelBase
         $this->methodCallAllowed[] = 'ChangeActiveEditPortal';
         $this->methodCallAllowed[] = 'GetCurrentTransactionInfo';
         $this->methodCallAllowed[] = 'addTabToUrlHistory';
-        if ($securityHelper->isGranted('CNS_RIGHT_DBCHANGELOG-MANAGER')) {
+        if ($securityHelper->isGranted('CMS_RIGHT_DBCHANGELOG-MANAGER')) {
             $this->methodCallAllowed[] = 'SwitchLoggingState';
             $this->methodCallAllowed[] = 'UpdateUnixTimeStamp';
         }
