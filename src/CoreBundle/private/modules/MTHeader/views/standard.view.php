@@ -85,11 +85,11 @@ if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
                     <div class="dropdown-menu dropdown-menu-left">
                         <?php
                             $authenticityTokenId = AuthenticityTokenManagerInterface::TOKEN_ID;
-                $aParam = TGlobal::instance()->GetUserData(null, array('module_fnc', '_fnc', 'editLanguageID', $authenticityTokenId));
+                $aParam = TGlobal::instance()->GetUserData(null, array('module_fnc', '_fnc', 'editLanguageIsoCode', $authenticityTokenId));
                 foreach ($editLanguages as $languageIso => $languageName) {
                     if (strtolower($activeEditLanguageIso) != strtolower($languageIso)) {
                         $aParam['module_fnc'] = array($data['sModuleSpotName'] => 'ChangeEditLanguage');
-                        $aParam['editLanguageID'] = $languageIso;
+                        $aParam['editLanguageIsoCode'] = $languageIso;
                         $sLanguageURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParam);
                         $urlToLanguageFlag = TGlobal::GetPathTheme().'/images/icons/language-flags/'.strtolower($languageIso).'.png';
                         echo '<a href="'.$sLanguageURL.'" class="dropdown-item"><span class="cmsNavIcon" style="background-image: url('.$urlToLanguageFlag.')"></span>'.$languageName.'</a>';
