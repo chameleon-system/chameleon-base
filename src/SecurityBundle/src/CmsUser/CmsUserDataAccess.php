@@ -106,7 +106,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         $query = "SELECT `cms_language`.*
                     FROM `cms_language`
               INNER JOIN `cms_user_cms_language_mlt` ON `cms_user_cms_language_mlt`.`target_id` = `cms_language`.`id`
-                   WHERE `cms_user_cms_language_mlt`.`target_id` = :userId
+                   WHERE `cms_user_cms_language_mlt`.`source_id` = :userId
                     ";
         $languagesRows = $this->connection->fetchAllAssociative($query, ['userId' => $userRow['id']]);
 
