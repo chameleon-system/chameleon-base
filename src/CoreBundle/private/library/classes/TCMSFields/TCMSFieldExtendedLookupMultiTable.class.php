@@ -9,8 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\Common\Collections\Expr\Comparison;
 
 /**
@@ -97,8 +100,9 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
                 if (count($aTableDisplayNames) > 0 && array_key_exists($sTableName, $aTableDisplayNames)) {
                     $sTableDisplayName = $aTableDisplayNames[$sTableName];
                 }
-                $oGlobal = TGlobal::instance();
-                if (!$oCmsTblConf->fieldOnlyOneRecordTbl && ($oGlobal->oUser->oAccessManager->HasShowAllPermission($sTableName) || $oGlobal->oUser->oAccessManager->HasShowAllReadOnlyPermission($sTableName))) {
+                /** @var SecurityHelperAccess $securityHelper */
+                $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+                if (!$oCmsTblConf->fieldOnlyOneRecordTbl && ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $sTableName))) {
                     $sHTML .= TCMSRender::DrawButton($sTableDisplayName, 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf).';', 'fas fa-th-list');
                     $sHTML .= '<input type="hidden" name="'.TGlobal::OutHTML('aTableNames['.$oCmsTblConf->id).']" id="'.TGlobal::OutHTML('aTableNames['.$oCmsTblConf->id).']" value="'.TGlobal::OutHTML($oCmsTblConf->fieldTranslation).'" />'."\n";
                 }

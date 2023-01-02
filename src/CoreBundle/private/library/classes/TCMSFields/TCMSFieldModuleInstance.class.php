@@ -42,8 +42,6 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
 
         $aData['oField'] = $this;
 
-        $oActiveUser = TCMSUser::GetActiveUser();
-        $aData['oAccessManager'] = $oActiveUser->oAccessManager;
         $sRestrictToModule = $this->oDefinition->GetFieldtypeConfigKey('moduleclass');
         $sQuery = null;
         $databaseConnection = $this->getDatabaseConnection();

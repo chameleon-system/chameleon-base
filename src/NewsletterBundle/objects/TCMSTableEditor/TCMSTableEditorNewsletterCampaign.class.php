@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+
 class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
 {
     /**
@@ -282,9 +286,11 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
         $oTargetTableConf = TdbCmsTblConf::GetNewInstance();
         /** @var $oTargetTableConf TdbCmsTblConf */
         if ($oTargetTableConf->Loadfromfield('name', 'pkg_newsletter_campaign')) {
-            $oGlobal = TGlobal::instance();
-            $bUserIsInCodeTableGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($oTargetTableConf->fieldCmsUsergroupId);
-            $bHasNewPermissionOnTargetTable = ($oGlobal->oUser->oAccessManager->HasNewPermission('pkg_newsletter_campaign'));
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+            $bUserIsInCodeTableGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $oTargetTableConf->fieldName);
+            $bHasNewPermissionOnTargetTable = ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, 'pkg_newsletter_campaign'));
             $bAllowDeletingCampaignQueue = ($bUserIsInCodeTableGroup && $bHasNewPermissionOnTargetTable);
         }
 

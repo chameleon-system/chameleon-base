@@ -8,6 +8,10 @@
         <defaults autowire="true" autoconfigure="true"  />
         <prototype namespace="ChameleonSystem\SecurityBundle\" resource="../src/*" exclude="../src/{Model,DependencyInjection}"/>
 
+        <service id="ChameleonSystem\SecurityBundle\EventListener\RedirectOnPendingUpdatesEventListener">
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LoginSuccessEvent" method="onLoginSuccess" />
+        </service>
+
         <service id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" public="true">
             <argument type="service" key="$firewallMap" id="security.firewall.map" />
 
@@ -34,7 +38,6 @@
 
         </service>
         <service id="ChameleonSystem\SecurityBundle\Voter\CmsTableObjectVoter">
-            <argument type="service" id="chameleon_system_core.data_access_cms_tbl_conf" />
             <tag name="security.voter"/>
         </service>
 

@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -108,9 +109,9 @@ class TCMSListManagerEndPoint
     public function CheckTableRights()
     {
         $tableRights = false;
-
-        $oGlobal = TGlobal::instance();
-        $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
         if ($tableInUserGroup) {
             $tableRights = true;
         }
@@ -362,10 +363,21 @@ class TCMSListManagerEndPoint
     public function GetUserRestriction()
     {
         $query = '';
-        $oGlobal = TGlobal::instance();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $userId = $securityHelper->getUser()?->getId();
+        $userGroupIds = $securityHelper->getUser()?->getGroups();
+        if (null === $userGroupIds) {
+            $userGroupIds = [];
+        }
+        if (0 === count($userGroupIds)) {
+            $groupList = false;
+        } else {
+            $groupList = implode(', ',array_map(fn($id) => $this->getDatabaseConnection()->quoteIdentifier($id), array_keys($userGroupIds)));
+        }
 
         $restrictionQuery = '';
-        if (!$oGlobal->oUser->oAccessManager->HasShowAllPermission($this->oTableConf->sqlData['name']) && !$oGlobal->oUser->oAccessManager->HasShowAllReadOnlyPermission($this->oTableConf->sqlData['name'])) {
+        if (!$securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->sqlData['name'])) {
             // user does not have the right to view or edit records he did not create. does the table
             // contain a user field (cms_user_id)
             // a user that does not have permission to see all records may still view a record if it
@@ -374,7 +386,7 @@ class TCMSListManagerEndPoint
             $userField = MySqlLegacySupport::getInstance()->query($tmpQuery);
 
             if (MySqlLegacySupport::getInstance()->num_rows($userField) > 0) {
-                $restrictionQuery = $this->CreateRestriction('cms_user_id', "= '".$oGlobal->oUser->oAccessManager->user->id."'");
+                $restrictionQuery = $this->CreateRestriction('cms_user_id', "= '".$userId."'");
             }
 
             // check for user groups
@@ -382,7 +394,6 @@ class TCMSListManagerEndPoint
             //$tmpQuery = "SHOW FIELDS FROM `{$this->oTableConf->sqlData['name']}` LIKE 'cms_usergroup_mlt'";
             $userField = MySqlLegacySupport::getInstance()->query($tmpQuery);
             if (MySqlLegacySupport::getInstance()->num_rows($userField) > 0) {
-                $groupList = $oGlobal->oUser->oAccessManager->user->groups->GroupList();
                 if (false !== $groupList) {
                     if (!empty($restrictionQuery)) {
                         $restrictionQuery .= ' OR ';
@@ -459,11 +470,12 @@ class TCMSListManagerEndPoint
         if (is_null($this->oMenuItems)) {
             $this->oMenuItems = new TIterator();
             // std menuitems...
-            $oGlobal = TGlobal::instance();
 
-            $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
-            if ($tableInUserGroup) {
-                if ($oGlobal->oUser->oAccessManager->HasNewPermission($this->oTableConf->sqlData['name'])) {
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            $allowTableAccess = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
+            if ($allowTableAccess) {
+                if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->oTableConf->fieldName)) {
                     // new
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.new');
@@ -474,7 +486,7 @@ class TCMSListManagerEndPoint
                 }
 
                 // if we have edit access to the table editor, then we also show a link to it
-                if ($oGlobal->oUser->oAccessManager->HasEditPermission('cms_tbl_conf')) {
+                if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, 'cms_tbl_conf')) {
                     $oTableEditorConf = new TCMSTableConf();
                     /** @var $oTableEditorConf TCMSTableConf */
                     $oTableEditorConf->LoadFromField('name', 'cms_tbl_conf');

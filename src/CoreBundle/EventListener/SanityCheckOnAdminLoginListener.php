@@ -45,9 +45,7 @@ class SanityCheckOnAdminLoginListener
     {
         $user = $event->getUser();
 
-        $accessManagerUser = new \TAccessManagerUser();
-        $accessManagerUser->InitFromObject($user);
-        if ($accessManagerUser->IsAdmin()) {
+        if ($user->IsAdmin()) {
             $checkOutcomeList = $this->checkHandler->checkSome($this->checkList);
             foreach ($checkOutcomeList as $checkOutcome) {
                 if ($checkOutcome->getLevel() > CheckOutcome::OK) {

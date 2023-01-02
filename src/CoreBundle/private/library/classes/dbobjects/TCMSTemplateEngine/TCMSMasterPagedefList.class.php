@@ -9,14 +9,25 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+
 class TCMSMasterPagedefList extends TAdbCmsMasterPagedefList
 {
     protected function GetBaseQuery()
     {
         if (is_null($this->sQuery)) {
-            $oGlobal = TGlobal::instance();
-
-            $portalRestriction = $oGlobal->oUser->oAccessManager->user->portals->PortalList();
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            $portals = $securityHelper->getUser()?->getPortals();
+            if (null === $portals) {
+                $portals = [];
+            }
+            $portalRestriction = implode(
+                ', ',
+                array_map(fn(string $portalId) => $this->getDatabaseConnection()->quote($portalId),
+                    array_keys($portals))
+            );
 
             $this->sQuery = 'SELECT DISTINCT `cms_master_pagedef`.*
                            FROM `cms_master_pagedef`

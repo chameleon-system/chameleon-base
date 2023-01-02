@@ -272,8 +272,9 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         if ('1' == $this->oDefinition->sqlData['restrict_to_groups']) {
             // check if the user is in one of the connected groups
 
-            $fieldGroups = $this->oDefinition->GetPermissionGroups();
-            if (!$oGlobal->oUser->oAccessManager->user->IsInGroups($fieldGroups)) {
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            if (!$securityHelper->isGranted(CmsPermissionAttributeConstants::ACCESS, $this->oDefinition)) {
                 $modifier = 'hidden';
             } else {
                 if (!$this->hasViewRightToPropertyTable()) {

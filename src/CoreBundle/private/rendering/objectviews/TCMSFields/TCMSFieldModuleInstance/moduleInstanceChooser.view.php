@@ -3,6 +3,10 @@
  * @var $oField      TCMSFieldModuleInstance
  * @var $oModuleList TdbCmsTplModuleList
  */
+
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+
 $menuPrefix = $oField->name;
 ?>
 <h2>
@@ -170,7 +174,10 @@ if (!is_null($oField->oModuleInstance)) {
             </li>
             <?php
         }
-        if ($oAccessManager->PermitFunction('cms_template_module_edit')) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if ($securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT')) {
             ?>
             <?php
             if (\count($viewMappings) > 1) {
@@ -201,7 +208,7 @@ if (!is_null($oField->oModuleInstance)) {
     }
     ?>
     <?php
-    if ($oAccessManager->PermitFunction('cms_template_module_edit')) {
+    if ($securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT')) {
         ?>
       <li><a href="#" class="hasChildren" onclick="openMenuLevel(this);return false;"><i class="fas fa-plus"></i> <?=TGlobal::Translate('chameleon_system_core.template_engine.action_create_module_instance'); ?></a>
         <ul>

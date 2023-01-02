@@ -1,5 +1,7 @@
 <?php
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 $menuPrefix = TGlobal::OutHTML($data['sModuleSpotName']);
 $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
@@ -136,7 +138,10 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
             <?php
         }
 
-        if ($data['oAccessManager']->PermitFunction('cms_template_module_edit')) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if ($securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT')) {
             if ($oViews->Length() > 1 && $data['functionRights']['bInstanceChangeViewAllowed']) {
                 ?>
                 <li><a href="javascript:void(0);" class="hasChildren" onclick="openMenuLevel(this);return false;"><span
@@ -196,7 +201,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
     ?>
     <?php
-    if ($data['oAccessManager']->PermitFunction('cms_template_module_edit')) {
+    if ($securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT')) {
         if ($data['functionRights']['bInstanceNewInstanceAllowed']) {
             ?>
       <li><a href="javascript:void(0);" class="hasChildren" onclick="openMenuLevel(this);return false;">
@@ -250,7 +255,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
             <?php
         }
     }
-    if ($data['oAccessManager']->HasEditPermission('cms_master_pagedef_spot')) {
+    if ($securityHelper->isGranted('CMS_RIGHT_CMS_MASTER_PAGEDEF_SPOT')) {
         /** @ $oGlobal TGlobal*/
         $oGlobal = TGlobal::instance();
         $sPageId = $oGlobal->GetUserData('pagedef');
