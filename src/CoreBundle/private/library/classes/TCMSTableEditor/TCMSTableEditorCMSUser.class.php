@@ -1,6 +1,7 @@
 <?php
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -67,15 +68,12 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             $oMenuItem->sItemKey = 'changeuser';
             $oMenuItem->sIcon = 'fas fa-user-check';
 
-            $aParam = array(
-                'pagedef' => $this->getInputFilterUtil()->getFilteredInput('pagedef'),
-                'tableid' => $this->oTableConf->id,
-                'id' => $this->sId,
-                'module_fnc' => array('contentmodule' => 'SwitchToUser'),
-                '_noModuleFunction' => 'true',
-            );
-
-            $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParam);
+            $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl(
+                    [
+                        '_switch_user' => $this->oTable->sqlData['login'],
+                    ]
+                    , '', '&'
+                );
             $this->oMenuItems->AddItem($oMenuItem);
         }
         if (true === $this->isCopyPermissionsAllowed()) {
@@ -105,7 +103,10 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             $this->oMenuItems->RemoveItem('sItemKey', 'delete');
         }
     }
-
+    private function getUrlUtil(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
+    }
     /**
      * @return bool
      */
@@ -196,6 +197,11 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
      */
     public function AllowEdit($postData = null)
     {
+        // owner can always edit
+        if ($this->IsOwner($postData)) {
+            return true;
+        }
+
         $bAllowEdit = parent::AllowEdit($postData);
         $bIsCMSMode = TGlobal::IsCMSMode();
         if ($bAllowEdit) {

@@ -278,7 +278,7 @@ class TCMSListManagerEndPoint
         if (null === $portals) {
             $portals = [];
         }
-        $portalRestrictions = implode(', ',array_map(fn($id) => $this->getDatabaseConnection()->quoteIdentifier($id), array_keys($portals)));
+        $portalRestrictions = implode(', ',array_map(fn($id) => $this->getDatabaseConnection()->quote($id), array_keys($portals)));
 
 
         // we add the portal restriction ONLY if the user does not have the cms_admin role (admins may see all portals)
@@ -373,7 +373,7 @@ class TCMSListManagerEndPoint
         if (0 === count($userGroupIds)) {
             $groupList = false;
         } else {
-            $groupList = implode(', ',array_map(fn($id) => $this->getDatabaseConnection()->quoteIdentifier($id), array_keys($userGroupIds)));
+            $groupList = implode(', ',array_map(fn($id) => $this->getDatabaseConnection()->quote($id), array_keys($userGroupIds)));
         }
 
         $restrictionQuery = '';

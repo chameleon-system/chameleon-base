@@ -200,7 +200,7 @@ if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
                                 <i class="fas fa-user"></i>
                                 <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.action_open_profile')); ?>
                             </a>
-                            <a class="dropdown-item" href="<?= PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(array('pagedef' => 'login', 'module_fnc' => array('contentmodule' => 'Logout'))); ?>">
+                            <a class="dropdown-item" href="<?=$data['logoutUrl']?>">
                                 <i class="fas fa-sign-out-alt"></i>
                                 <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.action_logout')); ?>
                             </a>
