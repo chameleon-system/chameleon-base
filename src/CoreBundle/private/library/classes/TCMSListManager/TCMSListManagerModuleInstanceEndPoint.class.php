@@ -107,7 +107,7 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
         }
         $sGroupList = implode(
             ', ',
-            array_map(fn($id) => $this->getDatabaseConnection()->quoteIdentifier($id),
+            array_map(fn($id) => $this->getDatabaseConnection()->quote($id),
                 array_keys(
                     $userGroups
                 ))
@@ -125,7 +125,7 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
         }
         $sPortalList = implode(
             ', ',
-            array_map(fn($id) => $this->getDatabaseConnection()->quoteIdentifier($id),
+            array_map(fn($id) => $this->getDatabaseConnection()->quote($id),
                 array_keys(
                     $portals
                 ))

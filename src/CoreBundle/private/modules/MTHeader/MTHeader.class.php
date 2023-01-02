@@ -55,6 +55,10 @@ class MTHeader extends TCMSModelBase
     {
         parent::Execute();
 
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+
         $this->data['table_id_cms_tpl_page'] = TTools::GetCMSTableId('cms_tpl_page');
         if (stristr($this->viewTemplate, 'title.view.php')) {
             $this->data['sBackendTitle'] = $this->GetBackendTitle();
@@ -70,7 +74,7 @@ class MTHeader extends TCMSModelBase
             $this->data['clearCacheURL'] = '';
             $this->data['bHeaderIsHidden'] = false;
 
-            if (TGlobal::CMSUserDefined()) {
+            if ($securityHelper->isGranted('ROLE_CMS_USER')) {
                 $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
                 $this->data['breadcrumb'] = $breadcrumb->GetBreadcrumb(true);
 
@@ -85,14 +89,25 @@ class MTHeader extends TCMSModelBase
 
             $this->data['aCustomMenuItems'] = $this->GetCustomNavigationItems();
 
-            /** @var SecurityHelperAccess $securityHelper */
-            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
             if (true === $securityHelper->isGranted('ROLE_CMS_USER')) {
                 $this->GetPortalQuickLinks();
             }
 
             $this->RemoveLock();
         }
+
+        if ($securityHelper->isGranted('IS_IMPERSONATOR')) {
+            $this->data['logoutUrl'] = PATH_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl([
+                    '_switch_user' => '_exit',
+                ], '', '&');
+        } else {
+            $this->data['logoutUrl'] = PATH_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl([
+                    'pagedef' => 'login',
+                    'module_fnc' => ['contentmodule' => 'Logout'],
+                ], '', '&');
+        }
+
+
 
         return $this->data;
     }
