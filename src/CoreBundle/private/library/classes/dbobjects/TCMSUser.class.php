@@ -9,10 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
-use ChameleonSystem\CoreBundle\CoreEvents;
-use ChameleonSystem\CoreBundle\Event\BackendLoginEvent;
-use ChameleonSystem\CoreBundle\Event\BackendLogoutEvent;
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -137,19 +134,6 @@ class TCMSUser extends TCMSRecord
     }
 
     /**
-     * checks for valid cms user session.
-     * @deprecated use SecurityHelperAccess::class
-     * @return bool
-     */
-    public static function CMSUserDefined()
-    {
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-
-        return $securityHelper->isGranted('ROLE_CMS_USER');
-    }
-
-    /**
      * load the user from id.
      *
      * @param int $id
@@ -181,53 +165,6 @@ class TCMSUser extends TCMSRecord
     }
 
     /**
-     * login current user as active user.
-     *
-     * if login simulation is on ($bSimulateLogin) then the user login will not be written to the session
-     * the login only exists for during runtime of the script that initiates the user activation
-     *
-     * @param bool $bSimulateLogin
-     */
-    public function SetAsActiveUser($bSimulateLogin = false)
-    {
-        $this->bLoggedIn = true;
-        // add hash of user values
-        if ($bSimulateLogin) {
-            self::$oActiveUser = $this;
-        } else {
-            $_SESSION[self::GetSessionVarName('_USERSESSIONKEY')] = $this->GetUserSessionKey();
-            $_SESSION[self::GetSessionVarName('_user')] = $this->id;
-        }
-    }
-
-    /**
-     * logout the user and kill session cookie.
-     */
-    public static function Logout()
-    {
-        // todo
-        $user = static::GetActiveUser();
-        $sessionKeys = array_keys($_SESSION);
-        foreach ($sessionKeys as $key) {
-            if ('_usercms' == $key && !empty($_SESSION['_usercms'])) {
-                self::ReleaseOpenLocks($_SESSION['_usercms']);
-            }
-            unset($_SESSION[$key]);
-        }
-
-        unset($_SESSION['_listObjCache']);
-        $request = self::getRequest();
-        if (null !== $request) {
-            if (true === $request->hasSession()) {
-                $session = $request->getSession();
-                $session->clear();
-            }
-        }
-
-        self::getEventDispatcher()->dispatch(new BackendLogoutEvent($user), CoreEvents::BACKEND_LOGOUT_SUCCESS);
-    }
-
-    /**
      * release all open locks.
      *
      * @param string $cmsUserId
@@ -242,41 +179,6 @@ class TCMSUser extends TCMSRecord
     }
 
     /**
-     * checks for valid session key.
-     *
-     * @return bool
-     */
-    public function ValidSessionKey()
-    {
-        $sActiveKey = $this->GetUserSessionKey();
-        $sSessionKey = '';
-        if (array_key_exists(self::GetSessionVarName('_USERSESSIONKEY'), $_SESSION)) {
-            $sSessionKey = $_SESSION[self::GetSessionVarName('_USERSESSIONKEY')];
-        }
-
-        return 0 == strcmp($sActiveKey, $sSessionKey);
-    }
-
-    /**
-     * generates a user session key (md5).
-     *
-     * @return string
-     */
-    public function GetUserSessionKey()
-    {
-        $aKeyData = '';
-        // add browser and ip
-        // $aKeyData .= $_SERVER['HTTP_USER_AGENT'];   // we have problems with auto-logouts when uploading files via flash, because of different user-agents
-        //$aKeyData .= $_SERVER['REMOTE_ADDR']; // cannot use this because users with proxyserver will otherwise be kicked out
-        $aKeyData .= $this->id;
-        $aKeyData .= 'saltx';
-
-        $userSessionKey = md5($aKeyData);
-
-        return $userSessionKey;
-    }
-
-    /**
      * returns the current edit language in iso6391 format e.g. de,en,fr etc.
      *
      * @return string
@@ -284,7 +186,7 @@ class TCMSUser extends TCMSRecord
      */
     public function GetCurrentEditLanguage($bReset = false)
     {
-        /** @var \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface $sessionService */
+        /** @var BackendSessionInterface $sessionService */
         $sessionService = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
         if (true === $bReset) {
             $sessionService->resetCurrentEditLanguage();
@@ -370,7 +272,7 @@ class TCMSUser extends TCMSRecord
      */
     public function SetCurrentEditLanguage($language = null)
     {
-        /** @var \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface $sessionService */
+        /** @var BackendSessionInterface $sessionService */
         $sessionService = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
         if (null === $language) {
             $sessionService->resetCurrentEditLanguage();

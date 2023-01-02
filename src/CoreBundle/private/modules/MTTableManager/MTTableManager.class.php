@@ -18,6 +18,7 @@ use Doctrine\DBAL\Connection;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * list a table
@@ -72,10 +73,10 @@ class MTTableManager extends TCMSModelBase
         $this->AddURLHistory();
 
         if (false === $this->oTableList->CheckTableRights()) {
-            // todo
-            $oCMSUser = TCMSUser::GetActiveUser();
-            $oCMSUser->Logout();
-            $this->getRedirectService()->redirect(PATH_CMS_CONTROLLER);
+            /** @var RouterInterface $router */
+            $router = ServiceLocator::get('router');
+            $logout = $router->generate('app_logout');
+            $this->getRedirectService()->redirect($logout);
         }
     }
 

@@ -79,7 +79,13 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TAccessManagerPermissions` removed.
 - `\TAccessManagerPortals` removed.
 - `\TAccessManagerRoles` removed.
-- 
+- `\MTLoginEndPoint::Logout` removed (logout works by redirecting to the logout url)
+- `\TCMSUser::Logout` removed
+- `\TCMSUser::SetAsActiveUser` removed - switch user by using Symfony impersonate.
+- `\TCMSTableEditorCMSUser::SwitchToUser` removed - switch user by using Symfony impersonate.
+- `\TCMSUser::CMSUserDefined` removed - is `isGranted('ROLE_CMS_USER')`
+- `\TCMSUser::ValidSessionKey` removed
+- `\TCMSUser::GetUserSessionKey` removed
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 
