@@ -12,6 +12,8 @@
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -87,7 +89,10 @@ class MTTableManager extends TCMSModelBase
         $this->data['listCacheKey'] = $this->oTableList->GetListCacheKey();
 
         $this->data['id'] = $inputFilterUtil->getFilteredInput('id');
-        $this->data['permission_new'] = $this->global->oUser->oAccessManager->HasNewPermission($this->oTableConf->sqlData['name']) && $this->oTableList->ShowNewEntryButton();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $this->data['permission_new'] = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->oTableConf->sqlData['name']) && $this->oTableList->ShowNewEntryButton();
 
         // load menu
         $this->data['oMenuItems'] = $this->oTableList->GetMenuItems();

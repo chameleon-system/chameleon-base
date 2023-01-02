@@ -1,4 +1,8 @@
 <?php
+
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+
 $oCMSUser = $data['oCMSUser']; /** @var $oCMSUser TCMSUser */
 ?>
 <form id="cmsformdel" name="cmsformdel" method="post" action="<?=PATH_CMS_CONTROLLER; ?>" accept-charset="UTF-8">
@@ -44,7 +48,11 @@ $oCMSUser = $data['oCMSUser']; /** @var $oCMSUser TCMSUser */
                                                                        value="<?=TGlobal::OutHTML($data['sRestrictionField']); ?>"/><?php
     } ?>
 </form>
-<?php if ($oCMSUser->oAccessManager->HasNewPermission($data['sTableName'])) {
+<?php
+/** @var SecurityHelperAccess $securityHelper */
+$securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $data['sTableName'])) {
         ?>
 <div style="position: relative; top: 2px;">
     <table border="0" cellpadding="0" cellspacing="0" width="100%">

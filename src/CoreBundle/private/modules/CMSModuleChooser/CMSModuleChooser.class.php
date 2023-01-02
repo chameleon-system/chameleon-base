@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -70,11 +71,6 @@ class CMSModuleChooser extends TCMSModelBase
     protected $bPageIsLockedByUser = false;
 
     /**
-     * @var TAccessManager
-     */
-    protected $oAccessManager = null;
-
-    /**
      * called before the execute method, and before any external functions gets called, but
      * after the constructor.
      */
@@ -88,10 +84,6 @@ class CMSModuleChooser extends TCMSModelBase
         parent::Execute();
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-
-        $oActiveUser = TCMSUser::GetActiveUser();
-        $this->oAccessManager = $oActiveUser->oAccessManager;
-        $this->data['oAccessManager'] = $this->oAccessManager;
 
         $this->data['oModuleInstance'] = $this->oModuleInstance;
         $this->data['oModuleInstanceColorState'] = '000000';
@@ -135,8 +127,10 @@ class CMSModuleChooser extends TCMSModelBase
      */
     protected function CheckFunctionRights()
     {
-        $bHasModuleInstanceEditRight = $this->oAccessManager->HasEditPermission('cms_tpl_module_instance');
-        // $bHasSpotEditRight = $this->oAccessManager->HasEditPermission('cms_tpl_page_cms_master_pagedef_spot');
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $bHasModuleInstanceEditRight = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, 'cms_tpl_module_instance');
         $bHasSpotEditRight = true; // we ignore the table rights on cms_tpl_page_cms_master_pagedef_spot at this moment
 
         //NewInstance

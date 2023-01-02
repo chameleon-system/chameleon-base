@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+
 /**
  * cms user.
 /**/
@@ -18,14 +21,15 @@ class TCMSFieldCMSUser extends TCMSFieldExtendedLookup
     {
         $this->allowEmptySelection = false;
         if (empty($this->data)) {
-            $oGlobal = TGlobal::instance();
-            $this->data = $oGlobal->oUser->id;
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            $this->data = $securityHelper->getUser()?->getId();
         }
 
         /** @var $oUser TdbCmsUser */
         $oUser = TdbCmsUser::GetNewInstance();
         if ($oUser->Load($this->data)) {
-            if ($oUser->oAccessManager->user->IsAdmin()) {
+            if ($oUser->IsAdmin()) {
                 $html = parent::GetHTML();
             } else {
                 $html = $this->GetReadOnly();
@@ -52,8 +56,9 @@ class TCMSFieldCMSUser extends TCMSFieldExtendedLookup
     public function GetReadOnly()
     {
         if (empty($this->data)) {
-            $oGlobal = TGlobal::instance();
-            $this->data = $oGlobal->oUser->id;
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            $this->data = $securityHelper->getUser()?->getId();
         }
 
         /** @var $oUser TdbCmsUser */

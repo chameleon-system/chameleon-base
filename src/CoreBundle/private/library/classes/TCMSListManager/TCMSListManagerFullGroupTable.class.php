@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\Field\Provider\ClassFromTableFieldProviderInterfa
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 
 require_once PATH_LIBRARY.'/classes/TCMSListManager/tcms_functionblock_callback.fun.php';
@@ -216,16 +217,21 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     protected function GetCustomMenuItems()
     {
         parent::GetCustomMenuItems();
-        $oGlobal = TGlobal::instance();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
+        $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
         if ($tableInUserGroup) {
+            $portalIds = $securityHelper->getUser()?->getPortals();
+            if (null === $portalIds) {
+                $portalIds = array();
+            }
+            $portalRestriction = implode(', ', array_map(fn ($id) => $this->getDatabaseConnection()->quote($id), array_keys($portalIds)));
             /* Check for Export Profiles */
-            $portalRestriction = $oGlobal->oUser->oAccessManager->user->portals->PortalList();
             if (!empty($portalRestriction)) {
-                $query = "SELECT * FROM `cms_export_profiles` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->oTableConf->sqlData['id'])."' AND `cms_portal_id` IN ({$portalRestriction})";
-                $result = MySqlLegacySupport::getInstance()->query($query);
-                if (MySqlLegacySupport::getInstance()->num_rows($result) > 0) {
+                $query = "SELECT EXISTS (SELECT 1 FROM `cms_export_profiles` WHERE `cms_tbl_conf_id` = :tableId AND `cms_portal_id` IN ({$portalRestriction}))";
+                $hasExportProfile = $this->getDatabaseConnection()->fetchOne($query, ['tableId' => $this->oTableConf->sqlData['id']]);
+                if (1 === (int)$hasExportProfile) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.export');
                     $oMenuItem->sIcon = 'far fa-save';
@@ -253,7 +259,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 }
             }
 
-            if ($oGlobal->oUser->oAccessManager->HasDeletePermission($this->oTableConf->sqlData['name'])) {
+            if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableConf->sqlData['name'])) {
                 $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
                 $oMenuItem = new TCMSTableEditorMenuItem();
                 $oMenuItem->sItemKey = 'deleteall';
@@ -735,21 +741,19 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     {
         $items = array();
 
-        /**
-         * @var $accessManager TAccessManager
-         */
-        $accessManager = TGlobal::instance()->oUser->oAccessManager;
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         $fieldName = $this->oTableConf->sqlData['name'];
 
-        if ($accessManager->HasEditPermission($fieldName)) {
+        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $fieldName)) {
             $items['edit'] = $this->CallBackFunctionBlockEditButton($id, $row);
         }
 
-        if ($accessManager->HasNewPermission($fieldName)) {
+        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW,$fieldName)) {
             $items['copy'] = $this->CallBackFunctionBlockCopyButton($id, $row);
         }
 
-        if ($accessManager->HasDeletePermission($fieldName)) {
+        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE,$fieldName)) {
             $items['delete'] = $this->CallBackFunctionBlockDeleteButton($id, $row);
         }
 
@@ -895,8 +899,9 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     public function CallBackDrawListItemSelectbox($id, $row, $sFieldName)
     {
         $html = '';
-        $oGlobal = TGlobal::instance();
-        if ($oGlobal->oUser->oAccessManager->HasDeletePermission($this->oTableConf->sqlData['name'])) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableConf->sqlData['name'])) {
             $html = '<input type="checkbox" name="aInputIdList[]" value="'.TGlobal::OutHTML($id).'" />';
         }
 

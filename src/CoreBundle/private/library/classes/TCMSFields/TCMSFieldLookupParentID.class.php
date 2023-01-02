@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -60,9 +62,10 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
         $itemName = $item->GetName();
 
         $foreignTableName = $this->GetConnectedTableName();
-        $global = TGlobal::instance();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if ('true' === $showLinkToParentRecord && '' !== $this->data && true === $global->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
+        if ('true' === $showLinkToParentRecord && '' !== $this->data && true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $foreignTableName)) {
             $html .= '<div class="d-flex align-items-center">';
 
             if ('' !== $itemName) {

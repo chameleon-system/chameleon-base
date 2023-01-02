@@ -6,16 +6,16 @@ use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfInterface;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class CmsTableObjectVoter extends CmsTableNameVoter
+class CmsTableObjectVoter extends Voter
 {
 
     public function __construct(
-        readonly private DataAccessCmsTblConfInterface $accessCmsTblConf,
-        readonly private Connection $connection
+        readonly private Connection $connection,
+        readonly private CmsTableNameVoter $cmsTableNameVoter
     ) {
-        parent::__construct($this->accessCmsTblConf);
     }
 
     protected function supports(string $attribute, $subject)
@@ -28,12 +28,12 @@ class CmsTableObjectVoter extends CmsTableNameVoter
             return false;
         }
 
-        return parent::supports($attribute, $subject->table);
+        return $this->cmsTableNameVoter->supports($attribute, $subject->table);
     }
 
     /**
      * @param string $attribute
-     * @param \TCMSRecord $subject
+     * @param \TCMSRecord|string $subject
      * @param TokenInterface $token
      * @return bool|void
      */
@@ -50,7 +50,7 @@ class CmsTableObjectVoter extends CmsTableNameVoter
             return false;
         }
 
-        $hasUserIndependentAccess = parent::voteOnAttribute($attribute, $tableName, $token);
+        $hasUserIndependentAccess = $this->cmsTableNameVoter->voteOnAttribute($attribute, $tableName, $token);
         if (true === $hasUserIndependentAccess) {
             return true;
         }

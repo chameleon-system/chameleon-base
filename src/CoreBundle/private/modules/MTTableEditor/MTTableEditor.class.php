@@ -13,6 +13,8 @@ use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -464,17 +466,19 @@ class MTTableEditor extends TCMSModelBase
     protected function GetPermissionSettings()
     {
         $permissions = array('new' => false, 'edit' => false, 'delete' => false, 'showlist' => false);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $permissions['edit'] = $this->global->oUser->oAccessManager->HasEditPermission($this->oTableManager->oTableConf->sqlData['name']);
-        $tableInUserGroup = $this->global->oUser->oAccessManager->user->IsInGroups($this->oTableManager->oTableConf->sqlData['cms_usergroup_id']);
+        $permissions['edit'] = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableManager->oTableConf->sqlData['name']);
+        $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableManager->oTableConf->sqlData['name']);
         if ($tableInUserGroup) {
             $permissions['showlist'] = true;
             if ($this->IsOnlyOneRecordTableRequest()) {
                 $permissions['new'] = false;
                 $permissions['delete'] = false;
             } else {
-                $permissions['new'] = $this->global->oUser->oAccessManager->HasNewPermission($this->oTableManager->oTableConf->sqlData['name']);
-                $permissions['delete'] = $this->global->oUser->oAccessManager->HasDeletePermission($this->oTableManager->oTableConf->sqlData['name']);
+                $permissions['new'] = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->oTableManager->oTableConf->sqlData['name']);
+                $permissions['delete'] = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableManager->oTableConf->sqlData['name']);
             }
         }
         $this->data['aPermission'] = $permissions;

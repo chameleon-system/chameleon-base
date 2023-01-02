@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * the user manager class for the cms.
+ *
 /**/
 class TCMSUser extends TCMSRecord
 {
@@ -29,15 +30,9 @@ class TCMSUser extends TCMSRecord
      * set to true if the user logged in.
      *
      * @var bool
+     * @deprecated since 7.2.0 - no longer used
      */
     public $bLoggedIn = false;
-
-    /**
-     * access manager object.
-     *
-     * @var TAccessManager
-     */
-    public $oAccessManager = null;
 
     /**
      * holds the user object singleton.
@@ -52,6 +47,21 @@ class TCMSUser extends TCMSRecord
         if (!is_null($id)) {
             $this->Load($id);
         }
+    }
+
+    public function isAdmin(): bool
+    {
+        $groups = $this->GetMLT('cms_role_mlt');
+        if (null === $groups) {
+            return false;
+        }
+        while($group = $groups->next()) {
+            if ($group->fieldName === 'cms_admin') {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -152,55 +162,10 @@ class TCMSUser extends TCMSRecord
         if (!empty($id)) {
             if (parent::Load($id)) {
                 $bIsLoaded = true;
-                $this->_LoadAccessManager();
             }
         }
 
         return $bIsLoaded;
-    }
-
-    /**
-     * login the user using the users username and password.
-     *
-     * @param string $sUsername
-     * @param string $sPassword
-     *
-     * @return bool
-     */
-    public function Login($sUsername, $sPassword)
-    {
-        $query = "SELECT * FROM `cms_user` WHERE `login` = '".MySqlLegacySupport::getInstance()->real_escape_string($sUsername)."' LIMIT 0,1";
-        if ($userRow = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-            $allowCMSLogin = false;
-            if (!array_key_exists('allow_cms_login', $userRow) || '1' == $userRow['allow_cms_login']) {
-                $allowCMSLogin = true;
-            }
-
-            if (false === TGlobal::IsCMSMode() || $allowCMSLogin) {
-                if ('' !== $userRow['crypted_pw'] && $this->getPasswordHashGenerator()->verify($sPassword, $userRow['crypted_pw'])) {
-                    $this->LoadFromRow($userRow);
-                    $this->SetAsActiveUser();
-                }
-            }
-        }
-        if ($this->bLoggedIn && TGlobal::IsCMSMode()) {
-            $_SESSION[self::GetSessionVarName('_user')] = $this->id;
-            $this->getAuthenticityTokenManager()->refreshToken();
-        }
-
-        // release old locks
-        $query = 'DELETE FROM `cms_lock` WHERE TIMESTAMPDIFF(MINUTE,`time_stamp`,CURRENT_TIMESTAMP()) >= '.RECORD_LOCK_TIMEOUT.'';
-        MySqlLegacySupport::getInstance()->query($query);
-
-        $eventDispatcher = self::getEventDispatcher();
-        $event = new BackendLoginEvent($this);
-        if ($this->bLoggedIn) {
-            $eventDispatcher->dispatch($event, CoreEvents::BACKEND_LOGIN_SUCCESS);
-        } else {
-            $eventDispatcher->dispatch($event, CoreEvents::BACKEND_LOGIN_FAILURE);
-        }
-
-        return $this->bLoggedIn;
     }
 
     /**
@@ -225,7 +190,6 @@ class TCMSUser extends TCMSRecord
      */
     public function SetAsActiveUser($bSimulateLogin = false)
     {
-        $this->_LoadAccessManager();
         $this->bLoggedIn = true;
         // add hash of user values
         if ($bSimulateLogin) {
@@ -414,17 +378,6 @@ class TCMSUser extends TCMSRecord
         }
 
         $sessionService->setCurrentEditLanguageIso6391($language);
-    }
-
-    /**
-     * Loads the access manager for the user (controls access to tables and modules).
-     */
-    public function _LoadAccessManager()
-    {
-        if (!is_null($this->id)) {
-            $this->oAccessManager = new TAccessManager();
-            $this->oAccessManager->InitFromObject($this);
-        }
     }
 
     /**

@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+
 /**
  * manages the webpage list (links to the template engine interface).
 /**/
@@ -37,25 +41,12 @@ class TCMSListManagerWebpages extends TCMSListManagerFullGroupTable
     {
         parent::GetCustomMenuItems();
 
-        $userIsInWebsiteEditGroup = false;
-        $userHasWebsiteEditRight = false;
-        $userHasNaviEditRight = false;
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $userHasWebsiteEditRight = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->fieldName);
+        $userHasNaviEditRight = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, 'cms_tree');
 
-        $oGlobal = TGlobal::instance();
-        if (TGlobal::CMSUserDefined()) {
-            $query = "SELECT `id` FROM `cms_usergroup` WHERE `internal_identifier` = 'website_editor'";
-            $result = MySqlLegacySupport::getInstance()->query($query);
-
-            if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
-                $userGroupRow = MySqlLegacySupport::getInstance()->fetch_assoc($result);
-                // check if user is in group "website_editor"
-                $userIsInWebsiteEditGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($userGroupRow['id']);
-                $userHasWebsiteEditRight = $oGlobal->oUser->oAccessManager->HasEditPermission('cms_tpl_page');
-                $userHasNaviEditRight = $oGlobal->oUser->oAccessManager->HasEditPermission('cms_tree');
-            }
-        }
-
-        if ($userIsInWebsiteEditGroup && $userHasWebsiteEditRight && $userHasNaviEditRight) {
+        if ($userHasWebsiteEditRight && $userHasNaviEditRight) {
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.pages_regenerate_page_path');
             $oMenuItem->sIcon = 'fas fa-sync';
@@ -77,9 +68,9 @@ class TCMSListManagerWebpages extends TCMSListManagerFullGroupTable
         // drop copy item
         unset($aItems['copy']);
 
-        $oGlobal = TGlobal::instance();
-
-        if ($oGlobal->oUser->oAccessManager->PermitFunction('cms_page_property')) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if ($securityHelper->isGranted('CMS_RIGHT_CMS_PAGE_PROPERTY')) {
             $aItems['pageConfig'] = '<a title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.page_settings')).'" href="javascript:document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();"><i class="fas fa-cog"></i></a>';
         }
 

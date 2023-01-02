@@ -247,9 +247,8 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             if (null !== $this->sId && !empty($this->sId)) {
                 $oTargetUser = TdbCmsUser::GetNewInstance();
                 $oTargetUser->Load($this->sId);
-                $oTargetUser->_LoadAccessManager();
                 // If the target user is an admin, and the current user is not, then we do not grant edit permission.
-                if ($oTargetUser->oAccessManager->user->IsAdmin()) {
+                if ($oTargetUser->IsAdmin()) {
                     return false;
                 }
 
