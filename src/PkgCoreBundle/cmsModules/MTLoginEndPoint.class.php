@@ -62,26 +62,6 @@ class MTLoginEndPoint extends TCMSModelBase
         return $validBrowser;
     }
 
-    protected function DefineInterface()
-    {
-        $externalFunctions = array('Logout');
-        $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
-    }
-
-
-    /**
-     * @param bool $noRedirect
-     * @return void
-     */
-    public function Logout($noRedirect = false)
-    {
-        TCMSUser::Logout();
-
-        if (!$noRedirect) {
-            $this->getRedirect()->redirect(PATH_CMS_CONTROLLER.'?pagedef=login');
-        }
-    }
-
     /**
      * @return void
      */

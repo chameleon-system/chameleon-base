@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * edit a table record
@@ -198,10 +199,10 @@ class MTTableEditor extends TCMSModelBase
             $bUserHasEditRight = $this->oTableManager->oTableEditor->AllowEdit();
 
             if (!$bIsReadOnlyRequest && ((!$bUserHasEditRight && !$bIsInsert && !$this->bIsReadOnlyMode) || ($this->bIsReadOnlyMode && !$bUserHasReadOnlyRight))) {
-                // todo
-                $oCMSUser = TCMSUser::GetActiveUser();
-                $oCMSUser->Logout();
-                $this->controller->HeaderURLRedirect(PATH_CMS_CONTROLLER);
+                /** @var RouterInterface $router */
+                $router = ServiceLocator::get('router');
+                $logout = $router->generate('app_logout');
+                $this->controller->HeaderURLRedirect($logout);                $this->controller->HeaderURLRedirect($logout);
             }
 
             $this->data['oTabs'] = $this->GetTabsForTable();

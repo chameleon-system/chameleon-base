@@ -26,7 +26,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('CopyUserRights', 'ActivateUser', 'SwitchToUser');
+        $externalFunctions = array('CopyUserRights', 'ActivateUser');
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -314,32 +314,6 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             \count(array_intersect($allowedPortals, $portalsOfTargetUser)) > 0;
     }
 
-    /**
-     * switch from current user to another user.
-     */
-    public function SwitchToUser()
-    {
-        if (false === $this->isSwitchToUserAllowed()) {
-            return;
-        }
-        $oUser = new TCMSUser();
-        if (false === $oUser->Load($this->sId)) {
-            return;
-        }
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-
-        $userId = $securityHelper->getUser()?->getId();
-        if (null !== $userId) {
-            TCMSUser::ReleaseOpenLocks($userId);
-        }
-        // todo: impersonate user
-        $oUser->SetAsActiveUser();
-        $this->getRedirect()->redirectToActivePage(array(
-            '_rmhist' => 'true',
-            '_histid' => '0',
-        ));
-    }
 
     /**
      * copies the user group and role from one user to the current user.
