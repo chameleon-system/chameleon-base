@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -146,8 +149,9 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
             return;
         }
 
-        $oGlobal = TGlobal::instance();
-        if (false === $oGlobal->oUser->oAccessManager->HasNewPermission('cms_tpl_page')) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, 'cms_tpl_page')) {
             return;
         }
 
@@ -160,7 +164,6 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
      */
     protected function createPageForNode($treeNodeId, $masterPagedefId)
     {
-        $global = TGlobal::instance();
         $connectedPageTableConfig = $this->oAssignedPage->GetTableConf();
         $treeNodeRecord = TdbCmsTree::GetNewInstance();
         $treeNodeRecord->Load($treeNodeId);
@@ -169,6 +172,8 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
         if (null !== $nodePortal) {
             $nodePortalId = $nodePortal->id;
         }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         $tableManager = new TCMSTableEditorManager();
         $tableManager->Init($connectedPageTableConfig->id, null);
         $tableManager->Insert();
@@ -177,7 +182,7 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
             'name' => $this->oTableRow->sqlData['name'],
             'cms_portal_id' => $nodePortalId,
             'primary_tree_id_hidden' => $treeNodeId,
-            'cms_user_id' => $global->oUser->id,
+            'cms_user_id' => $securityHelper->getUser()?->getId(),
         );
 
         $additionalDefaultData = $this->getDefaultPageData();

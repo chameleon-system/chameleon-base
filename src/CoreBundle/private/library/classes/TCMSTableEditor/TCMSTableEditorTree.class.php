@@ -15,6 +15,8 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 
 class TCMSTableEditorTree extends TCMSTableEditor
 {
@@ -236,12 +238,13 @@ class TCMSTableEditorTree extends TCMSTableEditor
         if (is_null($this->oMenuItems)) {
             $this->oMenuItems = new TIterator();
             // std menuitems...
-            $oGlobal = TGlobal::instance();
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-            $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
+            $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
             if ($tableInUserGroup) {
                 // edit
-                if ($oGlobal->oUser->oAccessManager->HasEditPermission($this->oTableConf->sqlData['name'])) {
+                if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save');
                     $oMenuItem->sIcon = 'far fa-save';

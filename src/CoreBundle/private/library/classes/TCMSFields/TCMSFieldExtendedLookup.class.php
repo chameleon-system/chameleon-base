@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -60,8 +62,9 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
             $target = 'top';
         }
 
-        $oGlobal = TGlobal::instance();
-        if ($this->bShowSwitchToRecord && $oGlobal->oUser->oAccessManager->HasNewPermission($tableName)) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if ($this->bShowSwitchToRecord && $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $tableName)) {
             $sHTML .= TCMSRender::DrawButton(
                 TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'),
                 $this->getSelectedEntryLink($this->data),

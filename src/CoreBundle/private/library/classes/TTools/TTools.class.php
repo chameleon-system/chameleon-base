@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\Corebundle\Util\UrlUtil;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -1177,13 +1178,18 @@ class TTools
      */
     public static function IsRecordLocked($sTableID, $sRecordID)
     {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $userId = $securityHelper->getUser()?->getId();
+        if (null === $userId) {
+            $userId = '';
+        }
         $lockActive = false;
-        $oGlobal = TGlobal::instance();
 
         $query = "SELECT * FROM `cms_lock`
       WHERE `recordid` = '".MySqlLegacySupport::getInstance()->real_escape_string($sRecordID)."'
       AND `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTableID)."'
-      AND `cms_user_id` != '".MySqlLegacySupport::getInstance()->real_escape_string($oGlobal->oUser->id)."'
+      AND `cms_user_id` != '".MySqlLegacySupport::getInstance()->real_escape_string($userId)."'
       AND TIMESTAMPDIFF(MINUTE,`time_stamp`,CURRENT_TIMESTAMP()) <= ".RECORD_LOCK_TIMEOUT.'
       ';
 

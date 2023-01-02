@@ -22,6 +22,7 @@ use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -339,36 +340,14 @@ class TCMSTableEditorEndPoint
         if ($this->bAllowEditByAll) {
             return true;
         }
-        if ($this->IsOwner($postData)) {
-            return true;
-        }
-        $bAllowEdit = false;
 
-        if (is_null($this->oTable)) {
-            if (is_array($postData) && !array_key_exists('cms_user_id', $postData)) {
-                $bAllowEdit = true;
-            }
-        } else {
-            $user = $this->getGlobal()->oUser;
-            if (null === $user) {
-                $bAllowEdit = false;
-            } else {
-                if ((!is_null($this->oTable) && is_array($this->oTable->sqlData)) && !array_key_exists('cms_user_id', $this->oTable->sqlData)) {
-                    $bHasAllowEditView = true;
-                } else {
-                    $bHasAllowEditView = $user->oAccessManager->HasShowAllPermission($this->oTableConf->sqlData['name']);
-                }
-
-                $tableInUserGroup = $user->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
-                $bUserHasTableEditPermissions = $user->oAccessManager->HasEditPermission($this->oTableConf->sqlData['name']);
-
-                if ($tableInUserGroup && $bUserHasTableEditPermissions && $bHasAllowEditView) {
-                    $bAllowEdit = true;
-                }
-            }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (null !== $this->oTable) {
+            return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTable);
         }
 
-        return $bAllowEdit;
+        return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name']);
     }
 
     /**
@@ -387,35 +366,13 @@ class TCMSTableEditorEndPoint
             return true;
         }
 
-        $oGlobal = TGlobal::instance();
-
-        $tableInUserGroup = false;
-        if (!is_null($oGlobal->oUser)) {
-            $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
-        }
-        $bAllowView = false;
-        if ($this->IsOwner($postData)) {
-            $bAllowView = true;
-        } else {
-            $bHasAllowAllView = false;
-            if (is_null($this->oTable)) {
-                if (is_array($postData) && !array_key_exists('cms_user_id', $postData)) {
-                    $bAllowView = true;
-                }
-            } else {
-                if ((!is_null($this->oTable) && is_array($this->oTable->sqlData)) && !array_key_exists('cms_user_id', $this->oTable->sqlData)) {
-                    $bHasAllowAllView = true;
-                } else {
-                    $bHasAllowAllView = $oGlobal->oUser->oAccessManager->HasShowAllReadOnlyPermission($this->oTableConf->sqlData['name']);
-                }
-
-                if ($tableInUserGroup && $bHasAllowAllView) {
-                    $bAllowView = true;
-                }
-            }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (null !== $this->oTable) {
+            return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
         }
 
-        return $bAllowView;
+        return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTable);
     }
 
     /**
@@ -435,13 +392,13 @@ class TCMSTableEditorEndPoint
             return $this->oMenuItems;
         }
 
-        $oGlobal = TGlobal::instance();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if (!$this->IsRecordInReadOnlyMode()) {
+        if (false === $this->IsRecordInReadOnlyMode() && true === $this->AllowReadOnly()) {
             if (is_null($this->oMenuItems)) {
                 $this->oMenuItems = new TIterator();
                 // std menuitems...
-                $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
 
                 if ($this->AllowEdit()) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
@@ -465,9 +422,8 @@ class TCMSTableEditorEndPoint
                     $this->oMenuItems->AddItem($oMenuItem);
                 }
 
-                if ($tableInUserGroup) {
                     if (1 != $this->oTableConf->sqlData['only_one_record_tbl'] && true !== $this->editOnly) {
-                        if ($oGlobal->oUser->oAccessManager->HasNewPermission($this->oTableConf->sqlData['name'])) {
+                        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->oTableConf->sqlData['name'])) {
                             // copy
                             $oMenuItem = new TCMSTableEditorMenuItem();
                             $oMenuItem->sItemKey = 'copy';
@@ -486,7 +442,12 @@ class TCMSTableEditorEndPoint
                         }
 
                         // delete
-                        if ($oGlobal->oUser->oAccessManager->HasDeletePermission($this->oTableConf->sqlData['name'])) {
+                        if (null !== $this->oTable) {
+                            $allowDelete = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTable);
+                        } else {
+                            $allowDelete = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableConf->sqlData['name']);
+                        }
+                        if ($allowDelete) {
                             $oMenuItem = new TCMSTableEditorMenuItem();
                             $oMenuItem->sItemKey = 'delete';
                             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.delete');
@@ -495,7 +456,6 @@ class TCMSTableEditorEndPoint
                             $oMenuItem->setButtonStyle('btn-danger');
                             $this->oMenuItems->AddItem($oMenuItem);
                         }
-                    }
 
                     // preview button
                     if (1 == $this->oTableConf->sqlData['show_previewbutton']) {
@@ -510,7 +470,7 @@ class TCMSTableEditorEndPoint
                     }
 
                     // if we have edit access to the table editor, then we also show a link to it
-                    if ($oGlobal->oUser->oAccessManager->HasEditPermission('cms_tbl_conf')) {
+                    if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, 'cms_tbl_conf')) {
                         /** @var $oTableEditorConf TCMSTableConf */
                         $oTableEditorConf = new TCMSTableConf();
                         $oTableEditorConf->LoadFromField('name', 'cms_tbl_conf');
@@ -597,8 +557,10 @@ class TCMSTableEditorEndPoint
             TdbCmsConfig::GetInstance()->GetFieldBasedTranslationLanguageArray()
         );
 
-        $oGlobal = TGlobal::instance();
-        $currentLanguageISO = $oGlobal->oUser->GetCurrentEditLanguage();
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $currentLanguageISO = $backendSession->getCurrentEditLanguageIso6391();
 
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'copy_translation';
@@ -1189,6 +1151,9 @@ class TCMSTableEditorEndPoint
         $oFields->GoToStart();
         $oCMSUserFieldType = TdbCmsFieldType::GetNewInstance();
         $bIsDone = false;
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $userId = $securityHelper->getUser()?->getId();
 
         $sModuleInstanceID = '';
         while (!$bIsDone && ($oField = $oFields->Next())) {
@@ -1198,8 +1163,7 @@ class TCMSTableEditorEndPoint
                 $bIsDone = true;
                 if ($oCMSUserFieldType->LoadFromField('constname', 'CMSFIELD_PROPERTY_PARENT_ID')) {
                     if ($oField->oDefinition->sqlData['cms_field_type_id'] != $oCMSUserFieldType->id) {
-                        $oGlobal = TGlobal::instance();
-                        $this->SaveField($oField->oDefinition->sqlData['name'], $oGlobal->oUser->id);
+                        $this->SaveField($oField->oDefinition->sqlData['name'], $userId);
                     }
                 }
             } elseif ('cms_tpl_module_instance_id' == $oField->oDefinition->sqlData['name']) {
@@ -1446,6 +1410,9 @@ class TCMSTableEditorEndPoint
         $this->LoadDataFromDatabase();
         $oFields = $this->oTableConf->GetFields($this->oTable);
         $sModuleInstanceID = '';
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $userId = $securityHelper->getUser()?->getId();
         /** @var $oField TCMSField */
         while ($oField = $oFields->Next()) {
             $oField->PreGetSQLHook();
@@ -1460,8 +1427,7 @@ class TCMSTableEditorEndPoint
                 $oCMSUserFieldType = TdbCmsFieldType::GetNewInstance();
                 if ($oCMSUserFieldType->LoadFromField('constname', 'CMSFIELD_PROPERTY_PARENT_ID')) {
                     if ($oField->oDefinition->sqlData['cms_field_type_id'] != $oCMSUserFieldType->id) {
-                        $oGlobal = TGlobal::instance();
-                        $this->SaveField($oField->oDefinition->sqlData['name'], $oGlobal->oUser->id);
+                        $this->SaveField($oField->oDefinition->sqlData['name'], $userId);
                     }
                 }
             } elseif ('cms_tpl_module_instance_id' == $oField->oDefinition->sqlData['name']) {

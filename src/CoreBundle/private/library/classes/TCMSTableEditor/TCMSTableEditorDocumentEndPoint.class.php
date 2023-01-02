@@ -582,12 +582,13 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
 
         $this->oMenuItems->RemoveItem('sItemKey', 'save');
 
-        $oGlobal = TGlobal::instance();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
+        $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->sqlData['cms_usergroup_id']);
         if ($tableInUserGroup) {
             // edit
-            if ($oGlobal->oUser->oAccessManager->HasEditPermission($this->oTableConf->sqlData['name'])) {
+            if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
                 $oMenuItem = new TCMSTableEditorMenuItem();
                 $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save_and_return');
                 $oMenuItem->sIcon = 'far fa-save';

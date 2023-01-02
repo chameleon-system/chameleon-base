@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+
 /**
  * manages the webpage list (links to the template engine interface).
 /**/
@@ -22,14 +25,20 @@ class TCMSListManagerPagedefinitions extends TCMSListManagerFullGroupTable
      */
     public function GetPortalRestriction()
     {
-        $oGlobal = TGlobal::instance();
-        if ($oGlobal->oUser->oAccessManager->user->portals->hasNoPortals) {
-            return false;
-        } // exit if the field does not exist
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $portals = $securityHelper->getUser()?->getPortals();
+        if (null === $portals) {
+            $portals = array();
+        }
+        $portalRestriction = implode(
+            ', ',
+            array_map(static fn(string $portalId) => $portalId,
+                array_keys($portals))
+        );
 
         $sQuery = '';
-        $portalRestriction = $oGlobal->oUser->oAccessManager->user->portals->PortalList();
-        if (!$oGlobal->oUser->oAccessManager->user->roles->IsInRole('cms_admin')) {
+        if (!$securityHelper->isGranted('ROLE_CMS_ADMIN')) {
             $sQuery = " (`cms_portal`.`id` IN ({$portalRestriction}) OR `cms_master_pagedef`.`restrict_to_portals`='0')";
         }
 

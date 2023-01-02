@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+
 class CMSInterface extends TCMSModelBase
 {
     public function Execute()
@@ -25,10 +28,16 @@ class CMSInterface extends TCMSModelBase
         }
 
         parent::Execute();
-        $aGroupListUser = $oGlobal->oUser->oAccessManager->user->groups->GetGroupListAsArray();
-        $aGroupListUser = TTools::MysqlRealEscapeArray($aGroupListUser);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $groups = $securityHelper->getUser()?->getGroups();
+        $aGroupListUser = TTools::MysqlRealEscapeArray($groups);
         $sGroupSQL = '';
         foreach ($aGroupListUser as $sGroupId => $sGroupSystemName) {
+            if ('-' === $sGroupId) {
+                continue;
+            }
             if ('' != $sGroupSQL) {
                 $sGroupSQL .= ',';
             }

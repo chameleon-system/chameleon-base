@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+
 class TCMSTableEditorTreeShared extends TCMSTableEditor
 {
     /**
@@ -73,12 +77,13 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
         if (is_null($this->oMenuItems)) {
             $this->oMenuItems = new TIterator();
             // std menuitems...
-            $oGlobal = TGlobal::instance();
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-            $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
+            $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
             if ($tableInUserGroup) {
                 // edit
-                if ($oGlobal->oUser->oAccessManager->HasEditPermission($this->oTableConf->sqlData['name'])) {
+                if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save');
                     $oMenuItem->sItemKey = 'save';

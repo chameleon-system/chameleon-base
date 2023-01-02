@@ -57,8 +57,6 @@ class TGlobalBase
      */
     public $_dataCache = array();
 
-    public $aLangaugeIds = null;
-
     /**
      * holds the current executing module object.
      *
@@ -330,13 +328,8 @@ class TGlobalBase
 
     public function GetLanguageIdList()
     {
-        if (is_null($this->aLangaugeIds)) {
-            $this->aLangaugeIds = array();
-            $oCMSConfig = TdbCmsConfig::GetInstance();
-            $this->aLangaugeIds[] = $oCMSConfig->fieldTranslationBaseLanguageId;
-        }
-
-        return $this->aLangaugeIds;
+        $oCMSConfig = TdbCmsConfig::GetInstance();
+        return [$oCMSConfig->fieldTranslationBaseLanguageId];
     }
 
     /**

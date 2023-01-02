@@ -60,6 +60,29 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TCMSFieldWYSIWYG::getModifiedToolbarByUser` - dropped user parameter.
 - `\TCMSTableEditorPortal::linkPortalToUser` now takes the user id instead of the user
 - `\TPkgShopPaymentTransactionContextEndPoint::getCmsUser` was removed
+- `\TGlobalBase::$aLangaugeIds` removed
+- `\TGlobal::GetLanguageIdList` deprecated
+- `\TCMSUser::GetSessionVarName` removed
+- `\MTLoginEndPoint::Login` removed
+- `\TCMSUser::Login` removed
+- `\MTLoginEndPoint::postLoginRedirect` removed
+- `\MTLoginEndPoint::IsUserAlreadyLoggedIn` removed
+- `\ChameleonSystem\CoreBundle\CoreEvents::BACKEND_LOGIN_SUCCESS` removed
+- `\ChameleonSystem\CoreBundle\CoreEvents::BACKEND_LOGIN_FAILURE` removed
+- `\ChameleonSystem\CoreBundle\CoreEvents::BACKEND_LOGOUT_SUCCESS` removed
+- `\TGlobal->oUser` access via magic `__get` removed.
+- `\CMSModuleChooser::$oAccessManager` removed.
+- `\TCMSUser::$oAccessManager` removed.
+- `\TCMSUser::_LoadAccessManager` removed.
+- `\TAccessManager` removed.
+- `\TAccessManagerUser` removed.
+- `\TAccessManagerEditLanguages` removed.
+- `\TAccessManagerExtraFunctions` removed.
+- `\TAccessManagerGroups` removed.
+- `\TAccessManagerPermissions` removed.
+- `\TAccessManagerPortals` removed.
+- `\TAccessManagerRoles` removed.
+- 
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 
