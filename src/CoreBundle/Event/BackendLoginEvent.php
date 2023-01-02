@@ -14,6 +14,9 @@ namespace ChameleonSystem\CoreBundle\Event;
 use Symfony\Contracts\EventDispatcher\Event;
 use TCMSUser;
 
+/**
+ * @deprecated 7.2 no longer used - use the standard symfony login event
+ */
 class BackendLoginEvent extends Event
 {
     /**
