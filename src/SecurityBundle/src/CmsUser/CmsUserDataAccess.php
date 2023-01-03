@@ -41,7 +41,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
 
         if (false === $userRow) {
             throw new UserNotFoundException(
-                sprintf('No cms user "%s" found - or user is not allowed to log into cms.', $userRow)
+                sprintf('No cms user "%s" found - or user is not allowed to log into cms.', $identifier)
             );
         }
 

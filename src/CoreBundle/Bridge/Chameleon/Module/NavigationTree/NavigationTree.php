@@ -190,7 +190,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $backendSession = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_backend.backend_session');
         $activeLanguageIsoCode = $backendSession->getCurrentEditLanguageIso6391();
 
-        $activeLanguageId = null !== $activeLanguageIsoCode ? $this->dbConnection->fetchFirstColumn("select `id` from `cms_language` where `iso_6391` = :isoCode", ['isoCode' => $activeLanguageIsoCode]) : false;
+        $activeLanguageId = null !== $activeLanguageIsoCode ? $this->dbConnection->fetchOne("select `id` from `cms_language` where `iso_6391` = :isoCode", ['isoCode' => $activeLanguageIsoCode]) : false;
 
         if ('' !== $currentPageId) {
             $rootNode = new \TdbCmsTree();

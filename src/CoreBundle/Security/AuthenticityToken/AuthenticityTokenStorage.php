@@ -36,7 +36,7 @@ class AuthenticityTokenStorage implements TokenStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function getToken(string $tokenId)
+    public function getToken(string $tokenId): string
     {
         $session = $this->getSession();
         if (null === $session || false === $session->has($this->namespace.'/'.$tokenId)) {
@@ -73,7 +73,7 @@ class AuthenticityTokenStorage implements TokenStorageInterface
      * @param string $token   The CSRF token
      * @return void
      */
-    public function setToken($tokenId, $token)
+    public function setToken(string $tokenId, string $token)
     {
         $session = $this->getSession();
         if (null === $session) {

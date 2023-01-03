@@ -40,7 +40,7 @@ class SecurityHelperAccess
         return $this->security->getUser();
     }
 
-    public function isGranted($attributes, $subject = null): bool
+    public function isGranted(mixed $attributes, mixed $subject = null): bool
     {
         if (null === $this->security->getUser()) {
             return false;
