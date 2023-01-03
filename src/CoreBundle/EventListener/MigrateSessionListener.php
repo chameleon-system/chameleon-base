@@ -36,7 +36,7 @@ class MigrateSessionListener
     {
         $mainRequest = $this->requestStack->getMainRequest();
         if (null === $mainRequest || false === $mainRequest->hasSession()) {
-            return null;
+            return;
         }
         $session = $mainRequest->getSession();
 

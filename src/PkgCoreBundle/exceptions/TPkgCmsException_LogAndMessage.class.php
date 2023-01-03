@@ -47,7 +47,7 @@ class TPkgCmsException_LogAndMessage extends TPkgCmsException_Log
         parent::__construct($message, $aContextData, $iLogLevel, $sLogFilePath);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $sString = parent::__toString();
 
