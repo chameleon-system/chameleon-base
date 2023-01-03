@@ -108,7 +108,7 @@ class TPkgCmsException_Log extends TPkgCmsException
         return $this->logFilePath;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $sString = parent::__toString();
 
