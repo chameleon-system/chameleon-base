@@ -54,6 +54,8 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - Add `var/` and remove `app/cache/*` and `!app/cache/.gitkeep` from your .gitignore. Delte the `app/cache` folder.
 - Twig File-Loader requires templates to be in the Form `@BundleName/path/to/file/relative/to/Resources/views/.html.twig` where `@BundleName` is the name without `Bundle`.
   This is used in debug data collectors - so search for `<tag name="data_collector"`. Example `<tag name="data_collector" template="@ChameleonSystemElastic/Profiler/layout.html.twig" id="chameleon_system_elastic.search" priority="20"/>`
+- `\TPkgCustomSearchResultItemList::AddCacheParameters` removed
+- `\TPkgCustomSearchResultItemList::AddClearCacheTriggers` removed
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 
