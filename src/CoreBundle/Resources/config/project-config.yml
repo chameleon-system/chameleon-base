@@ -1,3 +1,6 @@
+imports:
+  - { resource: "@ChameleonSystemSecurityBundle/config/security.yaml" }
+
 parameters:
   chameleon_system_core.cache.cache_less_files: true # if disabled less information will still be cached but partly regenerated on file changes; if enabled the generated css will be written as file
   chameleon_system_core.cache.allow: true
