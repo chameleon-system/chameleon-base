@@ -17,7 +17,7 @@ class TPkgShopServiceType_Giftcard extends TdbPkgShopServiceType
      *
      * @param array $aUserInput
      */
-    public function FilterUserInput($aUserInput)
+    public function FilterUserInput(array $aUserInput): array
     {
         $aPermittedData = array('cardtext');
         $aKeys = array_keys($aUserInput);
@@ -26,5 +26,6 @@ class TPkgShopServiceType_Giftcard extends TdbPkgShopServiceType
                 unset($aUserInput[$sKey]);
             }
         }
+        return $aUserInput;
     }
 }
