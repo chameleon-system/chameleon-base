@@ -67,7 +67,7 @@ class ExceptionController extends ErrorController
 
     public function showAction(Request $request, \Throwable $exception): Response
     {
-        $code = null;
+        $code = 500;
         if (method_exists($exception, 'getStatusCode')) {
             $code = $exception->getStatusCode();
         }
