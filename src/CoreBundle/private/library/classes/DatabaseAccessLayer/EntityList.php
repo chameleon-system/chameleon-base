@@ -118,7 +118,7 @@ class EntityList implements EntityListInterface
         --$this->entityIndex;
     }
 
-    public function key(): mixed
+    public function key(): int
     {
         return $this->entityIndex;
     }
@@ -378,6 +378,11 @@ class EntityList implements EntityListInterface
 
     public function getNumberOfResultsOnPage(): int
     {
-        return $this->getDatabaseEntityListStatement()?->rowCount();
+        $statement = $this->getDatabaseEntityListStatement();
+        if (null === $statement) {
+            return 0;
+        }
+
+        return $statement->rowCount();
     }
 }
