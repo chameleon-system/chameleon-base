@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
 use Doctrine\DBAL\Connection;
 
 class TPkgCmsVirtualClassManager
@@ -118,9 +117,6 @@ class TPkgCmsVirtualClassManager
                 $addedClasses = true;
             }
             file_put_contents($file, $classContent);
-        }
-        if ($addedClasses) {
-            //$this->cacheWarmer->regenerateClassmap();
         }
     }
 

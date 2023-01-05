@@ -45,12 +45,12 @@ abstract class ChameleonBaseRouter extends Router
         $this->environment = $container->getParameter('kernel.environment');
 
         $options['resource_type'] = 'chameleon';
-        $options['cache_dir'] = $this->generateCacheDir($container->getParameter('kernel.cache_dir'));
+        $options['cache_dir'] = $this->generateCacheDirPath($container->getParameter('kernel.cache_dir'));
 
         $this->setOptions($options);
     }
 
-    abstract protected function generateCacheDir(string $baseCacheDir): string;
+    abstract protected function generateCacheDirPath(string $baseCacheDir): string;
 
     /**
      * @param string $newURL
@@ -87,7 +87,7 @@ abstract class ChameleonBaseRouter extends Router
      */
     public function clearCache()
     {
-        $currentDir = $this->generateCacheDir($this->getOption('cache_dir'));
+        $currentDir = $this->generateCacheDirPath($this->getOption('cache_dir'));
         if (false === is_dir($currentDir)) {
             return;
         }
