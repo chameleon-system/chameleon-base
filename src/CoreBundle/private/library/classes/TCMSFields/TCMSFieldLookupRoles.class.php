@@ -31,11 +31,11 @@ class TCMSFieldLookupRoles extends TCMSFieldLookupMultiselectCheckboxes
         }
 
         $rolesOfActiveUser = $activeUser->GetFieldCmsRoleIdList();
-        foreach ($data as $record) {
+        foreach ($data as $key => $record) {
             if (false === $record['editable']) {
                 continue;
             }
-            $record['editable'] = in_array($record['id'], $rolesOfActiveUser, true);
+            $data[$key]['editable'] = in_array($record['id'], $rolesOfActiveUser, true);
         }
 
         return $data;
