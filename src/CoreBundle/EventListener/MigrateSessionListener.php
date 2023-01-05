@@ -38,7 +38,7 @@ class MigrateSessionListener
         if (null === $mainRequest || false === $mainRequest->hasSession()) {
             return null;
         }
-        $session = $mainRequest?->getSession();
+        $session = $mainRequest->getSession();
 
         $session->migrate(true);
     }

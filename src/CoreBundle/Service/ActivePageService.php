@@ -250,7 +250,7 @@ class ActivePageService implements ActivePageServiceInterface
      *
      * @return void
      */
-    private function modifyRouteParameters(array $parameters, TdbCmsLanguage $language = null)
+    private function modifyRouteParameters(array &$parameters, TdbCmsLanguage $language = null)
     {
         /*
          * _locale is set automatically to the new value and would be appended to the resulting link
