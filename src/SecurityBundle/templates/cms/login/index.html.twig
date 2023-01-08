@@ -28,6 +28,8 @@
                                 </div>
                                 <input class="btn btn-lg btn-success btn-block" type="submit" value="{{ 'chameleon_system_core.cms_module_login.action_login' | trans | e('html_attr') }}">
 
+                                {% if googleLoginUrl %}<a href="{{ googleLoginUrl }}" class="btn btn-md btn-info btn-block">Login mit Google</a>{% endif %}
+
                             </fieldset>
                         </form>
                     </div>

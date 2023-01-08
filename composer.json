@@ -85,7 +85,9 @@
         "symfony/validator": "^5.4",
         "symfony/web-link": "^5.4",
         "symfony/workflow": "^5.4",
-        "symfony/yaml": "^5.4"
+        "symfony/yaml": "^5.4",
+        "knpuniversity/oauth2-client-bundle": "^2.11",
+        "league/oauth2-google": "^4.0"
     },
     "require-dev": {
         "symfony/stopwatch": "^5.4",

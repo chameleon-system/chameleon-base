@@ -16,7 +16,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
     {
     }
 
-    public function refreshUser(UserInterface $user): UserInterface
+    public function refreshUser(UserInterface $user): CmsUserModel|UserInterface
     {
         if (!$user instanceof CmsUserModel) {
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
@@ -34,7 +34,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return CmsUserModel::class === $class || is_subclass_of($class, CmsUserModel::class);
     }
 
-    public function loadUserByIdentifier(string $identifier): UserInterface
+    public function loadUserByIdentifier(string $identifier): CmsUserModel|UserInterface
     {
         $query = "SELECT * FROM `cms_user` WHERE `login` = :username AND `allow_cms_login` = '1' LIMIT 0,1";
         $userRow = $this->connection->fetchAssociative($query, ['username' => $identifier]);
@@ -45,6 +45,56 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             );
         }
 
+        return $this->createUserFromRow($userRow);
+    }
+
+    public function loadUserByUsername(string $username)
+    {
+        return $this->loadUserByIdentifier($username);
+    }
+
+    private function userHasBeenModified(CmsUserModel $user): bool
+    {
+        $query = "SELECT `date_modified` FROM `cms_user` WHERE `id` = :userId";
+        $dateModified = $this->connection->fetchOne($query, ['userId' => $user->getId()]);
+        if (false === $dateModified) {
+            return true;
+        }
+
+        return ($user->getDateModified()->format('Y-m-d H:i:s') < $dateModified);
+    }
+
+    public function loadUserByGoogleToken(string $googleId): ?CmsUserModel
+    {
+        $query = "SELECT * FROM `cms_user` WHERE `token_google` = :googleId AND `allow_cms_login` = '1' LIMIT 0,1";
+        $userRow = $this->connection->fetchAssociative($query, ['googleId' => $googleId]);
+
+        if (false === $userRow) {
+            return null;
+        }
+
+        return $this->createUserFromRow($userRow);
+    }
+
+    public function loadUserByEMail(string $email):?CmsUserModel
+    {
+        $query = "SELECT * FROM `cms_user` WHERE `email` = :email AND `allow_cms_login` = '1' LIMIT 0,1";
+        $userRow = $this->connection->fetchAssociative($query, ['email' => $email]);
+
+        if (false === $userRow) {
+            return null;
+        }
+
+        return $this->createUserFromRow($userRow);
+    }
+
+    /**
+     * @param array $userRow
+     * @return CmsUserModel
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function createUserFromRow(array $userRow): CmsUserModel
+    {
         $roleRows = $this->connection->fetchAllAssociative(
             "SELECT `cms_role`.* 
                      FROM `cms_role`
@@ -53,7 +103,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             ['userId' => $userRow['id']]
         );
         $roles = array_reduce($roleRows, static function (array $carry, array $row) {
-            $carry[$row['id']] =  sprintf('ROLE_%s', mb_strtoupper($row['name']));
+            $carry[$row['id']] = sprintf('ROLE_%s', mb_strtoupper($row['name']));
 
             return $carry;
         }, []);
@@ -70,7 +120,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         );
 
         $userRights = array_reduce($userRightRows, static function (array $carry, array $row) {
-            $carry[$row['id']] = sprintf('CMS_RIGHT_%s',mb_strtoupper($row['name']));
+            $carry[$row['id']] = sprintf('CMS_RIGHT_%s', mb_strtoupper($row['name']));
 
             return $carry;
         }, []);
@@ -114,7 +164,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             $carry[$row['iso_6391']] = $row['id'];
 
             return $carry;
-            }, []);
+        }, []);
 
         return new CmsUserModel(
             \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $userRow['date_modified']),
@@ -139,20 +189,99 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         );
     }
 
-    public function loadUserByUsername(string $username)
+    public function createUser(CmsUserModel $user): CmsUserModel|UserInterface
     {
-        return $this->loadUserByIdentifier($username);
-    }
+        $this->connection->insert('cms_user', [
+            'id' => $user->getId(),
+            'login' => $user->getUserIdentifier(),
+            'firstname' => $user->getFirstName(),
+            'name' => $user->getLastName(),
+            'company' => $user->getCompany(),
+            'email' => $user->getEmail(),
+            'cms_language_id' => $user->getCmsLanguageId(),
+            'crypted_pw' => '-',
+            'date_modified' => $user->getDateModified()->format('Y-m-d H:i:s'),
+            'cms_current_edit_language' => $user->getCurrentEditLanguageIsoCode(),
+            'languages' => implode(', ',$user->getAvailableLanguagesIsoCodes()),
+        ]);
 
-    private function userHasBeenModified(CmsUserModel $user): bool
-    {
-        $query = "SELECT `date_modified` FROM `cms_user` WHERE `id` = :userId";
-        $dateModified = $this->connection->fetchOne($query, ['userId' => $user->getId()]);
-        if (false === $dateModified) {
-            return true;
+        foreach ($user->getAvailableEditLanguages() as $id => $code) {
+            $this->connection->insert('cms_user_cms_language_mlt', [
+                'source_id' => $user->getId(),
+                'target_id' => $id,
+            ]);
+        }
+        foreach ($user->getGroups() as $id => $code) {
+            $this->connection->insert('cms_user_cms_usergroup_mlt', [
+                'source_id' => $user->getId(),
+                'target_id' => $id,
+            ]);
         }
 
-        return ($user->getDateModified()->format('Y-m-d H:i:s') < $dateModified);
+        foreach ($user->getRoles() as $id => $code) {
+            $this->connection->insert('cms_user_cms_role_mlt', [
+                'source_id' => $user->getId(),
+                'target_id' => $id,
+            ]);
+        }
+
+        foreach ($user->getPortals() as $id => $code) {
+            $this->connection->insert('cms_user_cms_portal_mlt', [
+                'source_id' => $user->getId(),
+                'target_id' => $id,
+            ]);
+        }
+
+        return $this->loadUserByIdentifier($user->getUserIdentifier());
+    }
+
+    public function updateUser(CmsUserModel $user): CmsUserModel|UserInterface
+    {
+        $this->connection->update('cms_user', [
+
+            'login' => $user->getUserIdentifier(),
+            'firstname' => $user->getFirstName(),
+            'name' => $user->getLastName(),
+            'company' => $user->getCompany(),
+            'email' => $user->getEmail(),
+            'cms_language_id' => $user->getCmsLanguageId(),
+            'date_modified' => $user->getDateModified()->format('Y-m-d H:i:s'),
+            'cms_current_edit_language' => $user->getCurrentEditLanguageIsoCode(),
+            'languages' => implode(', ',$user->getAvailableLanguagesIsoCodes()),
+        ], ['id' => $user->getId(),]);
+
+        $this->connection->delete('cms_user_cms_language_mlt', ['source_id' => $user->getId()]);
+        foreach ($user->getAvailableEditLanguages() as $id => $code) {
+            $this->connection->insert('cms_user_cms_language_mlt', [
+                'source_id' => $user->getId(),
+                'target_id' => $id,
+            ]);
+        }
+        $this->connection->delete('cms_user_cms_usergroup_mlt', ['source_id' => $user->getId()]);
+        foreach ($user->getGroups() as $id => $code) {
+            $this->connection->insert('cms_user_cms_usergroup_mlt', [
+                'source_id' => $user->getId(),
+                'target_id' => $id,
+            ]);
+        }
+
+        $this->connection->delete('cms_user_cms_role_mlt', ['source_id' => $user->getId()]);
+        foreach ($user->getRoles() as $id => $code) {
+            $this->connection->insert('cms_user_cms_role_mlt', [
+                'source_id' => $user->getId(),
+                'target_id' => $id,
+            ]);
+        }
+
+        $this->connection->delete('cms_user_cms_portal_mlt', ['source_id' => $user->getId()]);
+        foreach ($user->getPortals() as $id => $code) {
+            $this->connection->insert('cms_user_cms_portal_mlt', [
+                'source_id' => $user->getId(),
+                'target_id' => $id,
+            ]);
+        }
+
+        return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
 
 
