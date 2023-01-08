@@ -64,9 +64,9 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return ($user->getDateModified()->format('Y-m-d H:i:s') < $dateModified);
     }
 
-    public function loadUserByGoogleToken(string $googleId): ?CmsUserModel
+    public function loadUserByGoogleId(string $googleId): ?CmsUserModel
     {
-        $query = "SELECT * FROM `cms_user` WHERE `token_google` = :googleId AND `allow_cms_login` = '1' LIMIT 0,1";
+        $query = "SELECT * FROM `cms_user` WHERE `google_id` = :googleId AND `allow_cms_login` = '1' LIMIT 0,1";
         $userRow = $this->connection->fetchAssociative($query, ['googleId' => $googleId]);
 
         if (false === $userRow) {
@@ -193,6 +193,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
     {
         $this->connection->insert('cms_user', [
             'id' => $user->getId(),
+            'google_id' => $user->getGoogleId() ?? '',
             'login' => $user->getUserIdentifier(),
             'firstname' => $user->getFirstName(),
             'name' => $user->getLastName(),
@@ -240,6 +241,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         $this->connection->update('cms_user', [
 
             'login' => $user->getUserIdentifier(),
+            'google_id' => $user->getGoogleId() ?? '',
             'firstname' => $user->getFirstName(),
             'name' => $user->getLastName(),
             'company' => $user->getCompany(),

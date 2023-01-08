@@ -69,7 +69,7 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
 
     private function getCmsUser(GoogleUser $googleUser): ?CmsUserModel
     {
-        $existingUser = $this->cmsUserDataAccess->loadUserByGoogleToken($googleUser->getId());
+        $existingUser = $this->cmsUserDataAccess->loadUserByGoogleId($googleUser->getId());
         if (null !== $existingUser) {
             return $existingUser;
         }
