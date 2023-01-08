@@ -28,6 +28,7 @@ use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -101,10 +102,9 @@ class MTHeader extends TCMSModelBase
                     '_switch_user' => '_exit',
                 ], '', '&');
         } else {
-            $this->data['logoutUrl'] = PATH_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl([
-                    'pagedef' => 'login',
-                    'module_fnc' => ['contentmodule' => 'Logout'],
-                ], '', '&');
+            /** @var RouterInterface $router */
+            $router = ServiceLocator::get('router');
+            $this->data['logoutUrl'] = $router->generate('app_logout');
         }
 
 
