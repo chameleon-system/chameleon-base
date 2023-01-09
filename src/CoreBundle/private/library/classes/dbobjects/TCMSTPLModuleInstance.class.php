@@ -99,7 +99,7 @@ class TCMSTPLModuleInstance extends TCMSRecord
      *
      * @return TCMSTPLModule
      */
-    protected function &GetModule()
+    protected function GetModule()
     {
         if (is_null($this->oModule)) {
             $this->oModule = new TCMSTPLModule();
@@ -109,12 +109,12 @@ class TCMSTPLModuleInstance extends TCMSRecord
         return $this->oModule;
     }
 
-    protected function &GetModuleLoader($sView, $aParameters)
+    protected function GetModuleLoader($sView, $aParameters)
     {
         if (is_null($this->oModuleLoader)) {
             $aParameters['instanceID'] = $this->id;
             $this->GetModule();
-            $this->oModuleLoader = &TTools::GetModuleLoaderObject($this->oModule->sqlData['classname'], $sView, $aParameters, $this->sSpotName);
+            $this->oModuleLoader = TTools::GetModuleLoaderObject($this->oModule->sqlData['classname'], $sView, $aParameters, $this->sSpotName);
         }
 
         return $this->oModuleLoader;

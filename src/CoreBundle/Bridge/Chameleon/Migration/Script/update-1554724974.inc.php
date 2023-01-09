@@ -19,7 +19,7 @@ TCMSLogChange::update(__LINE__, $data);
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
 
-$rightsRaw = $databaseConnection->fetchAll("SELECT `id` FROM `cms_right` WHERE `name` IN ('cms_revision_management', 'cms_revision_on_workflow_publish', 'workflow_active', 'workflow_publish_own_changes')");
+$rightsRaw = $databaseConnection->fetchAllAssociative("SELECT `id` FROM `cms_right` WHERE `name` IN ('cms_revision_management', 'cms_revision_on_workflow_publish', 'workflow_active', 'workflow_publish_own_changes')");
 $rights = [];
 foreach ($rightsRaw as $rightRow) {
     $rights[] = $rightRow['id'];

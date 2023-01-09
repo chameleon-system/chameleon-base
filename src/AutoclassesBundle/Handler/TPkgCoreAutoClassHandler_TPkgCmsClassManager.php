@@ -11,46 +11,64 @@
 
 namespace ChameleonSystem\AutoclassesBundle\Handler;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use IPkgCmsFileManager;
 use TPkgCmsVirtualClassManager;
 
 class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHandler_AbstractBase
 {
+    private TPkgCmsVirtualClassManager $virtualClassManager;
+
+    public function __construct(Connection $databaseConnection, IPkgCmsFileManager $filemanager, \TPkgCmsVirtualClassManager $virtualClassManager)
+    {
+        parent::__construct($databaseConnection, $filemanager);
+        $this->virtualClassManager = $virtualClassManager;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function create($sClassName, $targetDir)
     {
-        $oClassManager = new TPkgCmsVirtualClassManager();
-        $oClassManager->setDatabaseConnection($this->getDatabaseConnection());
+        $virtualClassManager = clone $this->virtualClassManager;
 
-        if (false === $oClassManager->load($sClassName)) {
-            // my be a class extension auto parent glue
-            if ('AutoParent' == substr($sClassName, -10)) {
-                $sClean = substr($sClassName, 0, -10);
-                $sQuery = 'SELECT `pkg_cms_class_manager`.*
-                         FROM `pkg_cms_class_manager`
-                   INNER JOIN `pkg_cms_class_manager_extension` ON `pkg_cms_class_manager`.`id` = `pkg_cms_class_manager_extension`.`pkg_cms_class_manager_id`
-                        WHERE `pkg_cms_class_manager_extension`.`class` = :cleanClassName
-                      ';
-                if ($aClassManager = $this->getDatabaseConnection()->fetchAssoc($sQuery, array('cleanClassName' => $sClean))) {
-                    $oClassManager->load($aClassManager['name_of_entry_point']);
-                } else {
-                    $oClassManager = null;
-                }
-            } else {
-                $oClassManager = null;
-            }
+        if (true === $virtualClassManager->load($sClassName)) {
+            $virtualClassManager->UpdateVirtualClasses($targetDir);
+            return;
         }
 
-        if (null === $oClassManager) {
+        if ('AutoParent' !== substr($sClassName, -10)) {
             trigger_error(
                 "invalid class name {$sClassName} for TPkgCoreAutoClassHandler_TPkgCmsClassManager",
                 E_USER_ERROR
             );
         }
 
-        $oClassManager->UpdateVirtualClasses($targetDir);
+        // my be a class extension auto parent glue
+        $sClean = substr($sClassName, 0, -10);
+        $sQuery = 'SELECT `pkg_cms_class_manager`.*
+                 FROM `pkg_cms_class_manager`
+           INNER JOIN `pkg_cms_class_manager_extension` ON `pkg_cms_class_manager`.`id` = `pkg_cms_class_manager_extension`.`pkg_cms_class_manager_id`
+                WHERE `pkg_cms_class_manager_extension`.`class` = :cleanClassName
+              ';
+        $aClassManager = $this->getDatabaseConnection()->fetchAssociative($sQuery, array('cleanClassName' => $sClean));
+        if (false === $aClassManager) {
+            trigger_error(
+                "invalid class name {$sClassName} for TPkgCoreAutoClassHandler_TPkgCmsClassManager",
+                E_USER_ERROR
+            );
+        }
+
+        if (false === $virtualClassManager->load($aClassManager['name_of_entry_point'])) {
+            trigger_error(
+                "invalid class name {$sClassName} for TPkgCoreAutoClassHandler_TPkgCmsClassManager",
+                E_USER_ERROR
+            );
+        }
+
+
+        $virtualClassManager->UpdateVirtualClasses($targetDir);
     }
 
     /**
@@ -64,7 +82,7 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
     {
         $sClassName = false;
         $query = 'SELECT `name_of_entry_point` FROM `pkg_cms_class_manager` WHERE `id` = :key';
-        if ($aClass = $this->getDatabaseConnection()->fetchAssoc($query, array('key' => $sKey))) {
+        if ($aClass = $this->getDatabaseConnection()->fetchAssociative($query, array('key' => $sKey))) {
             /** @psalm-suppress InvalidArrayOffset */
             $sClassName = $aClass[0];
         }

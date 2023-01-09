@@ -196,7 +196,7 @@ class MTTableEditor extends TCMSModelBase
             $bUserHasEditRight = $this->oTableManager->oTableEditor->AllowEdit();
 
             if (!$bIsReadOnlyRequest && ((!$bUserHasEditRight && !$bIsInsert && !$this->bIsReadOnlyMode) || ($this->bIsReadOnlyMode && !$bUserHasReadOnlyRight))) {
-                $oCMSUser = &TCMSUser::GetActiveUser();
+                $oCMSUser = TCMSUser::GetActiveUser();
                 $oCMSUser->Logout();
                 $this->controller->HeaderURLRedirect(PATH_CMS_CONTROLLER);
             }
@@ -276,7 +276,7 @@ class MTTableEditor extends TCMSModelBase
         }
     }
 
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
         if ('error' !== $this->aModuleConfig['view']) {
@@ -321,7 +321,7 @@ class MTTableEditor extends TCMSModelBase
             if ($this->isEditFieldMode()) {
                 $editFieldName = $this->global->GetUserData('_fieldName');
                 $this->oTableManager->oTableEditor->setActiveEditField($editFieldName);
-                $this->data['oField'] = &$this->oTableManager->oTableConf->GetField($editFieldName, $oTable);
+                $this->data['oField'] = $this->oTableManager->oTableConf->GetField($editFieldName, $oTable);
                 $this->data['_fieldName'] = $editFieldName;
             } else {
                 $aPostData = $this->global->GetUserData(null);
@@ -341,7 +341,7 @@ class MTTableEditor extends TCMSModelBase
                     $oPostTable->sqlData = array_merge($oPostTable->sqlData, $aPostData);
 
                     $oFields = $this->oTableManager->oTableEditor->oTableConf->GetFields($oPostTable);
-                    while ($oField = &$oFields->Next()) {
+                    while ($oField = $oFields->Next()) {
                         $convertedData = $oField->ConvertPostDataToSQL();
                         if (false === $convertedData || null === $convertedData) {
                             $convertedData = '';
@@ -526,13 +526,13 @@ class MTTableEditor extends TCMSModelBase
         // get the head includes for all the fields...
         if ($this->global->UserDataExists('_fnc') && 'editfield' === $this->global->GetUserData('_fnc')) {
             $editFieldName = $this->global->GetUserData('_fieldName');
-            $oField = &$this->oTableManager->oTableConf->GetField($editFieldName, $this->oTableManager->oTableEditor->oTable);
+            $oField = $this->oTableManager->oTableConf->GetField($editFieldName, $this->oTableManager->oTableEditor->oTable);
             if (null !== $oField) {
                 $aFieldIncludes = $oField->GetCMSHtmlHeadIncludes();
                 $aIncludes = array_merge($aIncludes, $aFieldIncludes);
             }
         } else {
-            $oFields = &$this->oTableManager->oTableConf->GetFields($this->oTableManager->oTableEditor->oTable);
+            $oFields = $this->oTableManager->oTableConf->GetFields($this->oTableManager->oTableEditor->oTable);
             while ($oField = $oFields->Next()) {
                 /* @var $oField TCMSField */
                 $aFieldIncludes = $oField->GetCMSHtmlHeadIncludes();
@@ -554,13 +554,13 @@ class MTTableEditor extends TCMSModelBase
 
         if ($this->global->UserDataExists('_fnc') && 'editfield' === $this->global->GetUserData('_fnc')) {
             $editFieldName = $this->global->GetUserData('_fieldName');
-            $oField = &$this->oTableManager->oTableConf->GetField($editFieldName, $this->oTableManager->oTableEditor->oTable);
+            $oField = $this->oTableManager->oTableConf->GetField($editFieldName, $this->oTableManager->oTableEditor->oTable);
             if (null !== $oField) {
                 $aFieldIncludes = $oField->GetCMSHtmlFooterIncludes();
                 $aIncludes = array_merge($aIncludes, $aFieldIncludes);
             }
         } else {
-            $oFields = &$this->oTableManager->oTableConf->GetFields($this->oTableManager->oTableEditor->oTable);
+            $oFields = $this->oTableManager->oTableConf->GetFields($this->oTableManager->oTableEditor->oTable);
             while ($oField = $oFields->Next()) {
                 /* @var $oField TCMSField */
                 $aFieldIncludes = $oField->GetCMSHtmlFooterIncludes();
@@ -583,7 +583,7 @@ class MTTableEditor extends TCMSModelBase
         $returnData = false;
         if (!empty($sFieldName) && $this->global->UserDataExists('_fnc')) {
             $sMethodName = $this->global->GetUserData('_fnc');
-            $oField = &$this->oTableManager->oTableConf->GetField($sFieldName, $this->oTableManager->oTableEditor->oTable);
+            $oField = $this->oTableManager->oTableConf->GetField($sFieldName, $this->oTableManager->oTableEditor->oTable);
             if (null !== $oField) {
                 if ($oField->isMethodCallAllowed($sMethodName)) {
                     // execute the method in field object
@@ -603,7 +603,7 @@ class MTTableEditor extends TCMSModelBase
      *
      * @return mixed
      */
-    public function &_CallMethod($sFunctionName, $aMethodParameter = array())
+    public function _CallMethod($sFunctionName, $aMethodParameter = array())
     {
         $tmp = null;
         $isNotAModuleFunction = $this->global->GetUserData('_noModuleFunction');
@@ -677,7 +677,7 @@ class MTTableEditor extends TCMSModelBase
     public function AjaxGetFieldEditBox()
     {
         $editFieldName = $this->global->GetUserData('_fieldName');
-        $oField = &$this->oTableManager->oTableConf->GetField($editFieldName, $this->oTableManager->oTableEditor->oTable);
+        $oField = $this->oTableManager->oTableConf->GetField($editFieldName, $this->oTableManager->oTableEditor->oTable);
         $result = array('field' => $editFieldName, 'content' => $oField->GetContent());
 
         return $result;

@@ -69,7 +69,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      */
     protected $aModuleObjects = array();
 
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
 
@@ -102,7 +102,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      *
      * @return mixed
      */
-    public function &_CallMethod($sMethodName, $aMethodParameter = array())
+    public function _CallMethod($sMethodName, $aMethodParameter = array())
     {
         $sFunctionResult = null;
         $this->LoadInstances();
@@ -332,7 +332,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      * @param TUserModuleLoader $oModuleLoader
      * @return void
      */
-    public function InjectVirtualModuleSpots(&$oModuleLoader)
+    public function InjectVirtualModuleSpots($oModuleLoader)
     {
         if (!$this->IsStatic() || ($this->IsStatic() && false === $this->getRequestInfoService()->isCmsTemplateEngineEditMode())) {
             $this->LoadInstances();

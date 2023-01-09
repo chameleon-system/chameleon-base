@@ -25,7 +25,7 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
      *
      * @return TdbCmsWizardStep
      */
-    protected function &_NewElement(&$aData)
+    protected function _NewElement($aData): TdbCmsWizardStep
     {
         return TdbCmsWizardStep::GetStep($aData['systemname'], $aData['cms_tpl_module_instance_id']);
     }
@@ -38,9 +38,9 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
      *
      * @return TdbCmsWizardStepList
      */
-    public static function &GetCmsWizardStepListForCmsTplModuleInstance($iCmsTplModuleInstanceId, $iLanguageId = null)
+    public static function GetCmsWizardStepListForCmsTplModuleInstance($iCmsTplModuleInstanceId, $iLanguageId = null)
     {
-        $oList = &TAdbCmsWizardStepList::GetListForCmsTplModuleInstanceId($iCmsTplModuleInstanceId, $iLanguageId);
+        $oList = TAdbCmsWizardStepList::GetListForCmsTplModuleInstanceId($iCmsTplModuleInstanceId, $iLanguageId);
         $oList->iModuleInstanceId = $iCmsTplModuleInstanceId;
 
         return $oList;
@@ -53,16 +53,16 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
      *
      * @return TdbCmsWizardStep
      */
-    public static function &GetNextStep(&$oStep)
+    public static function GetNextStep($oStep)
     {
         $oNextStep = null;
         $query = "SELECT * FROM `cms_wizard_step`
                 WHERE `position` > '".MySqlLegacySupport::getInstance()->real_escape_string($oStep->fieldPosition)."'
                   AND `cms_tpl_module_instance_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oStep->fieldCmsTplModuleInstanceId)."'
              ORDER BY `position`";
-        $oSteps = &TdbCmsWizardStepList::GetList($query);
+        $oSteps = TdbCmsWizardStepList::GetList($query);
         if ($oSteps->Length() > 0) {
-            $oNextStep = &$oSteps->Current();
+            $oNextStep = $oSteps->Current();
         }
 
         return $oNextStep;
@@ -75,7 +75,7 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
      *
      * @return TdbCmsWizardStep
      */
-    public static function &GetPreviousStep(&$oStep)
+    public static function GetPreviousStep($oStep)
     {
         $oPreviousStep = null;
         $query = "SELECT *
@@ -83,9 +83,9 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
                 WHERE `position` < '".MySqlLegacySupport::getInstance()->real_escape_string($oStep->fieldPosition)."'
                   AND `cms_tpl_module_instance_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oStep->fieldCmsTplModuleInstanceId)."'
              ORDER BY `position` DESC";
-        $oSteps = &TdbCmsWizardStepList::GetList($query);
+        $oSteps = TdbCmsWizardStepList::GetList($query);
         if ($oSteps->Length() > 0) {
-            $oPreviousStep = &$oSteps->Current();
+            $oPreviousStep = $oSteps->Current();
         }
 
         return $oPreviousStep;
@@ -98,7 +98,7 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
      *
      * @return TdbCmsWizardStepList
      */
-    public static function GetAllBeforeThisStep(&$oStep)
+    public static function GetAllBeforeThisStep($oStep)
     {
         $query = "SELECT *
                  FROM `cms_wizard_step`
@@ -123,7 +123,7 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
         $oList->GoToStart();
         $iStepCount = 0;
         $bActiveFound = false;
-        while ($oItem = &$oList->Next()) {
+        while ($oItem = $oList->Next()) {
             ++$iStepCount;
             $oItem->iCurrentPositionInList = $iStepCount;
             if ($oItem->id == $oActiveStep->id) {
@@ -164,7 +164,7 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
         $oView->AddVar('sSpotName', $sSpotName);
         $oView->AddVar('aCallTimeVars', $aCallTimeVars);
 
-        $aOtherParameters = &$this->GetAdditionalViewVariables($sViewName, $sViewType);
+        $aOtherParameters = $this->GetAdditionalViewVariables($sViewName, $sViewType);
         $oView->AddVarArray($aOtherParameters);
 
         if ($oWizardConf->fieldListIsPackage) {
@@ -185,7 +185,7 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
      *
      * @return array
      */
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
         $aViewVariables = array();
 

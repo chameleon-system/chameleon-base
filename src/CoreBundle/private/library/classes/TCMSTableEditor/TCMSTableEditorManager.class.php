@@ -161,7 +161,7 @@ class TCMSTableEditorManager
         /** @var $oCmsTblConf TdbCmsTblConf */
         $this->oTableConf = TdbCmsTblConf::GetNewInstance();
         if (null === $sLanguageID) {
-            $oUser = &TdbCmsUser::GetActiveUser();
+            $oUser = TdbCmsUser::GetActiveUser();
             if ($oUser && is_array($oUser->sqlData) && array_key_exists('cms_language_id', $oUser->sqlData)) {
                 $this->oTableConf->SetLanguage($oUser->GetCurrentEditLanguageID());
             }
@@ -180,7 +180,7 @@ class TCMSTableEditorManager
         }
         unset($oRecord);
 
-        $this->oTableEditor = &$this->TableEditorFactory();
+        $this->oTableEditor = $this->TableEditorFactory();
         $this->oTableEditor->AllowEditByAll($this->bAllowEditByAll);
         $this->oTableEditor->AllowEditByWebUser($this->bAllowEditByWebUser);
         $this->oTableEditor->sRestriction = $this->sRestriction;
@@ -230,7 +230,7 @@ class TCMSTableEditorManager
      * Load the table editor class that is configured in cms_tbl_conf.
      * @return TCMSTableEditor
      */
-    public function &TableEditorFactory()
+    public function TableEditorFactory()
     {
         // check if table editor is extended
         if (!empty($this->oTableConf->sqlData['table_editor_class'])) {
@@ -427,7 +427,7 @@ class TCMSTableEditorManager
         if (true === $this->bAllowEditByAll) {
             return true;
         }
-        $user = &TCMSUser::GetActiveUser();
+        $user = TCMSUser::GetActiveUser();
 
         return (null !== $user) && $user->oAccessManager->HasNewPermission($this->oTableConf->sqlData['name']);
     }
@@ -440,7 +440,7 @@ class TCMSTableEditorManager
         if (true === $this->bAllowEditByAll) {
             return true;
         }
-        $user = &TCMSUser::GetActiveUser();
+        $user = TCMSUser::GetActiveUser();
 
         return (null !== $user) && $user->oAccessManager->HasNewLanguagePermission($this->oTableConf->sqlData['name']);
     }
@@ -453,7 +453,7 @@ class TCMSTableEditorManager
         if (true === $this->bAllowDeleteByAll) {
             return true;
         }
-        $user = &TCMSUser::GetActiveUser();
+        $user = TCMSUser::GetActiveUser();
 
         return (null !== $user) && $user->oAccessManager->HasDeletePermission($this->oTableConf->sqlData['name']);
     }

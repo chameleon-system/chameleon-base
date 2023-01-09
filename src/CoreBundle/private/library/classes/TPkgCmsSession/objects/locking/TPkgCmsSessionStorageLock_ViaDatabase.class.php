@@ -50,7 +50,7 @@ class TPkgCmsSessionStorageLock_ViaDatabase implements IPkgCmsSessionStorageLock
         $bIsLocked = false;
         $bMyLock = false;
         $query = 'SELECT IS_USED_LOCK('.$this->getDatabaseConnection()->quote($sLockIdentifier).')';
-        if ($aData = $this->getDatabaseConnection()->fetchArray($query)) {
+        if ($aData = $this->getDatabaseConnection()->fetchNumeric($query)) {
             if (isset($aData[0]) && null !== $aData[0]) {
                 $sLockConnectionIdentifier = $aData[0];
                 $bIsLocked = true;
@@ -59,7 +59,7 @@ class TPkgCmsSessionStorageLock_ViaDatabase implements IPkgCmsSessionStorageLock
 
         if ($bIsLocked) {
             $query = 'SELECT CONNECTION_ID()';
-            if ($aData = $this->getDatabaseConnection()->fetchArray($query)) {
+            if ($aData = $this->getDatabaseConnection()->fetchNumeric($query)) {
                 if (isset($aData[0])) {
                     $bMyLock = ($aData[0] == $sLockConnectionIdentifier);
                 }
@@ -78,7 +78,7 @@ class TPkgCmsSessionStorageLock_ViaDatabase implements IPkgCmsSessionStorageLock
         $bIsLocked = false;
         $bMyLock = false;
         $query = 'SELECT IS_USED_LOCK('.$this->getDatabaseConnection()->quote($sLockIdentifier).')';
-        if ($aData = $this->getDatabaseConnection()->fetchArray($query)) {
+        if ($aData = $this->getDatabaseConnection()->fetchNumeric($query)) {
             if (isset($aData[0]) && null !== $aData[0]) {
                 $sLockConnectionIdentifier = $aData[0];
                 $bIsLocked = true;
@@ -87,7 +87,7 @@ class TPkgCmsSessionStorageLock_ViaDatabase implements IPkgCmsSessionStorageLock
 
         if ($bIsLocked) {
             $query = 'SELECT CONNECTION_ID()';
-            if ($aData = $this->getDatabaseConnection()->fetchArray($query)) {
+            if ($aData = $this->getDatabaseConnection()->fetchNumeric($query)) {
                 if (isset($aData[0])) {
                     $bMyLock = ($aData[0] == $sLockConnectionIdentifier);
                 }

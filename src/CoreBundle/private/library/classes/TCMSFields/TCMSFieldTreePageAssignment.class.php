@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 /**
  * special field class for the tree. it shows the primary page attached to
  * the tree node. if no page is assigned, it will show a select box with master pagedefs instead
@@ -159,7 +161,7 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
     protected function createPageForNode($treeNodeId, $masterPagedefId)
     {
         $global = TGlobal::instance();
-        $connectedPageTableConfig = &$this->oAssignedPage->GetTableConf();
+        $connectedPageTableConfig = $this->oAssignedPage->GetTableConf();
         $treeNodeRecord = TdbCmsTree::GetNewInstance();
         $treeNodeRecord->Load($treeNodeId);
         $nodePortal = $treeNodeRecord->GetNodePortal();
@@ -205,7 +207,7 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
     }
 
     /**
-     * @return \Symfony\Component\Translation\TranslatorInterface
+     * @return TranslatorInterface
      */
     private function getTranslator()
     {

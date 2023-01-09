@@ -215,7 +215,7 @@ class CMSTemplateEngine extends TCMSModelBase
         $breadcrumb->AddItem($params, $breadcrumbTitle);
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
@@ -319,9 +319,9 @@ class CMSTemplateEngine extends TCMSModelBase
      */
     protected function GetNavigationBreadCrumbs()
     {
-        $oPortals = &$this->global->GetPortals();
+        $oPortals = $this->global->GetPortals();
         $stopNodes = $oPortals->GetTreeNodes();
-        $oBreadcrumbs = &$this->oPage->GetAllNavigationPaths($stopNodes);
+        $oBreadcrumbs = $this->oPage->GetAllNavigationPaths($stopNodes);
 
         $total = $oBreadcrumbs->Length();
 
@@ -432,7 +432,7 @@ class CMSTemplateEngine extends TCMSModelBase
             }
         }
 
-        $oListTable = &$oModuleListTableConf->GetListObject($listClass);
+        $oListTable = $oModuleListTableConf->GetListObject($listClass);
         if (array_key_exists($this->data['spotname'], $this->aModuleList)) {
             if (array_key_exists('permittedModules', $this->aModuleList[$this->data['spotname']])) {
                 $oListTable->aPermittedModules = $this->aModuleList[$this->data['spotname']]['permittedModules'];

@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="vendor_dir">%kernel.root_dir%/../vendors</parameter>
+        <parameter key="vendor_dir">%kernel.project_dir%/vendor</parameter>
         <parameter key="chameleon_system_core.pdo.mysql_attr_init_command" type="constant">\PDO::MYSQL_ATTR_INIT_COMMAND</parameter> <!-- deprecated since 6.3.0 - no longer used -->
         <parameter key="chameleon_system_core.pdo.mysql_attr_compression_name" type="constant">\PDO::MYSQL_ATTR_COMPRESS</parameter> <!-- deprecated since 6.3.0 - see below -->
         <parameter key="chameleon_system_core.pdo.enable_mysql_compression">false</parameter> <!-- deprecated since 6.3.0 - use the configuration key "doctrine: dbal: options: 1006: 1" instead -->
@@ -512,8 +512,9 @@
         </service>
 
         <service id="chameleon_system_core.controller.exception" class="ChameleonSystem\CoreBundle\Controller\ExceptionController" public="true">
-            <argument type="service" id="twig" />
-            <argument>%kernel.debug%</argument>
+            <argument type="service" id="chameleon_system_core.http_kernel"/>
+            <argument>error_controller</argument>
+            <argument type="service" id="twig.error_renderer.html"/>
             <call method="setMainController">
                 <argument type="service" id="chameleon_system_core.controller_proxy_disabled_autoflushing" />
             </call>
@@ -580,11 +581,6 @@
 
         <service id="chameleon_system_core.secure_page_header_listener" class="ChameleonSystem\CoreBundle\EventListener\NoCacheForSecurePageListener">
             <tag name="kernel.event_listener" event="chameleon_system_core.change_active_page" method="onChangeActivePage" priority="270"/>
-        </service>
-
-        <service id="chameleon_system_core.change_translation_locale_listener" class="ChameleonSystem\CoreBundle\EventListener\ChangeTranslationLocaleListener">
-            <tag name="kernel.event_listener" event="chameleon_system_core.locale_changed" method="onLocaleChangedEvent" />
-            <argument type="service" id="translator" />
         </service>
 
         <service id="chameleon_system_core.change_chameleon_objects_locale_listener" class="ChameleonSystem\CoreBundle\EventListener\ChangeChameleonObjectsLocaleListener">

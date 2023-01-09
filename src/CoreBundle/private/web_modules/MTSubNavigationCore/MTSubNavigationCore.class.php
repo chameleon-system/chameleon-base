@@ -24,7 +24,7 @@ class MTSubNavigationCore extends MTNavigationCore
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         if (!is_null($this->getPortalDomainService()->getActivePortal())) {

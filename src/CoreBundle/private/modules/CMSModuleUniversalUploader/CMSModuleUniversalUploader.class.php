@@ -31,7 +31,7 @@ class CMSModuleUniversalUploader extends TCMSModelBase
      *
      * @return array
      */
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
         $this->data['uploaderFormAction'] = $this->getUploaderFormAction();

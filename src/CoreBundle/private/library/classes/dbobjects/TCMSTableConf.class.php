@@ -44,7 +44,7 @@ class TCMSTableConf extends TCMSRecord
      *
      * @todo find usages and refactor calls
      */
-    public function &GetListObject($listClassName = null, $listClassLocation = 'Core', $sListClassPath = 'TCMSListManager')
+    public function GetListObject($listClassName = null, $listClassLocation = 'Core', $sListClassPath = 'TCMSListManager')
     {
         /** @var $oGlobal TGlobal */
         $oGlobal = TGlobal::instance();
@@ -92,7 +92,7 @@ class TCMSTableConf extends TCMSRecord
      *
      * @return TCMSListManager
      */
-    public static function &GetMLTListObject($sTableName)
+    public static function GetMLTListObject($sTableName)
     {
         // get the table conf - just in case the there is an mlt list
         $oTableConf = TdbCmsTblConf::GetNewInstance();
@@ -159,13 +159,13 @@ class TCMSTableConf extends TCMSRecord
      *
      * @return TIterator
      */
-    public function &GetFields(&$oTableRow, $loadDefaults = false, $bDoNotUseAutoObjects = false)
+    public function GetFields($oTableRow, $loadDefaults = false, $bDoNotUseAutoObjects = false)
     {
-        $oFieldDefinition = &$this->GetFieldDefinitions(array(), $bDoNotUseAutoObjects);
+        $oFieldDefinition = $this->GetFieldDefinitions(array(), $bDoNotUseAutoObjects);
         $oFields = new TIterator();
         while ($oFieldDef = $oFieldDefinition->next()) {
             /** @var $oFieldDef TdbCmsFieldConf|TCMSFieldDefinition */
-            $oField = &$oFieldDef->GetFieldObject();
+            $oField = $oFieldDef->GetFieldObject();
 
             if (null === $oField) {
                 continue;
@@ -257,7 +257,7 @@ class TCMSTableConf extends TCMSRecord
      *
      * @return TCMSField
      */
-    public function &GetField($sFieldName, &$oTableRow, $loadDefaults = false)
+    public function GetField($sFieldName, $oTableRow, $loadDefaults = false)
     {
         $oField = null;
         /** @var $oFieldDef TCMSFieldDefinition */
@@ -296,13 +296,13 @@ class TCMSTableConf extends TCMSRecord
      *
      * @return TCMSRecordList|TdbCmsFieldConfList
      */
-    public function &GetFieldDefinitions($aFieldTypes = array(), $bDoNotUseAutoObjects = false)
+    public function GetFieldDefinitions($aFieldTypes = array(), $bDoNotUseAutoObjects = false)
     {
         $cacheName = '_oFieldDefinition'.serialize($aFieldTypes);
         if ($bDoNotUseAutoObjects) {
             $cacheName .= 'noAutoObjects';
         }
-        $oFieldDefinitions = &$this->GetFromInternalCache($cacheName);
+        $oFieldDefinitions = $this->GetFromInternalCache($cacheName);
         if (is_null($oFieldDefinitions)) {
             $databaseConnection = $this->getDatabaseConnection();
             $quotedId = $databaseConnection->quote($this->id);
@@ -327,7 +327,7 @@ class TCMSTableConf extends TCMSRecord
                 $oFieldDefinitions->sTableObject = 'TCMSFieldDefinition';
                 $oFieldDefinitions->Load($query);
             } else {
-                $oFieldDefinitions = &TdbCmsFieldConfList::GetList($query);
+                $oFieldDefinitions = TdbCmsFieldConfList::GetList($query);
             }
             $oFieldDefinitions->SetLanguage($this->getLanguageForDefinition());
 
@@ -472,7 +472,7 @@ class TCMSTableConf extends TCMSRecord
                   );\n";
             // add fields...
 
-            $oFields = &$this->GetFields($this, true);
+            $oFields = $this->GetFields($this, true);
             while ($oField = $oFields->Next()) {
                 /** @var $oField TCMSField */
                 $sql .= $oField->CreateFieldDefinition(true, $oField);
@@ -485,7 +485,7 @@ class TCMSTableConf extends TCMSRecord
 
             // get property tables
             // now insert property records
-            $oFieldDefinitions = &$this->GetFieldDefinitions(array('CMSFIELD_PROPERTY'));
+            $oFieldDefinitions = $this->GetFieldDefinitions(array('CMSFIELD_PROPERTY'));
             while ($oFieldDef = $oFieldDefinitions->Next()) {
                 /** @var $oFieldDef TCMSFieldDefinition */
                 $tableName = $oFieldDef->sqlData['field_default_value'];

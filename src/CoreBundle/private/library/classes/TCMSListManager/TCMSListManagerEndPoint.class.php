@@ -58,9 +58,9 @@ class TCMSListManagerEndPoint
      *
      * @param TdbCmsTblConf $oTableConf
      */
-    public function Init(&$oTableConf)
+    public function Init($oTableConf)
     {
-        $this->oTableConf = &$oTableConf;
+        $this->oTableConf = $oTableConf;
     }
 
     /**
@@ -182,7 +182,7 @@ class TCMSListManagerEndPoint
             }
 
             // now add custom restrictions if present
-            $oCustomRestrictions = &$this->oTableConf->GetProperties('cms_tbl_conf_restrictions', 'TCMSTableConfRestriction');
+            $oCustomRestrictions = $this->oTableConf->GetProperties('cms_tbl_conf_restrictions', 'TCMSTableConfRestriction');
             while ($oCustomRestriction = $oCustomRestrictions->Next()) {
                 /** @var $oCustomRestriction TCMSTableConfRestriction */
                 $sCustomRestriction = $oCustomRestriction->GetRestriction($this->oTableConf);
@@ -265,7 +265,7 @@ class TCMSListManagerEndPoint
     public function GetPortalRestriction()
     {
         $query = '';
-        $oUser = &TCMSUser::GetActiveUser();
+        $oUser = TCMSUser::GetActiveUser();
 
         if (null === $oUser || $oUser->oAccessManager->user->portals->hasNoPortals) {
             return false;
@@ -447,7 +447,7 @@ class TCMSListManagerEndPoint
      *
      * @return TIterator
      */
-    public function &GetMenuItems()
+    public function GetMenuItems()
     {
         if (is_null($this->oMenuItems)) {
             $this->oMenuItems = new TIterator();

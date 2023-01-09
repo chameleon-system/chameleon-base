@@ -16,7 +16,7 @@ echo '<tr class="filter">';
 if (count($aActions) > 0) {
     echo '<th class="actionColumn">&nbsp;</th>';
 }
-while ($oColumn = &$oColumns->Next()) {
+while ($oColumn = $oColumns->Next()) {
     /** @var $oColumn THTMLTableColumn */
     echo '<th class="'.TGlobal::OutHTML($oColumn->sColumnAlias).' '.$oColumn->GetColumnFormatCSSClass().'">';
 

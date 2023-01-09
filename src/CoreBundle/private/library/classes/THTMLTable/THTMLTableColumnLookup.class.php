@@ -21,7 +21,7 @@ class THTMLTableColumnLookup extends THTMLTableColumn
      *
      * @return string
      */
-    protected function FormatValue($sValue, &$oTableRow)
+    protected function FormatValue($sValue, $oTableRow)
     {
         $oLookup = $oTableRow->GetLookup($this->sColumnAlias);
 

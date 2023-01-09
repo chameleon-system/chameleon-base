@@ -9,15 +9,19 @@
  * file that was distributed with this source code.
  */
 
+use Doctrine\DBAL\Connection;
+
 class TCMSTableToClass_MockRecord
 {
     public $sqlData = null;
     public $table = '';
     public $id = null;
+    private Connection $connection;
 
-    public function __construct($sTable)
+    public function __construct(Connection $connection, $sTable)
     {
         $this->table = $sTable;
+        $this->connection = $connection;
     }
 
     public function LoadFromRow($aRow)
@@ -29,8 +33,8 @@ class TCMSTableToClass_MockRecord
     public function Load($sId)
     {
         $bFound = false;
-        $query = "select * from {$this->table} where id = '".MySqlLegacySupport::getInstance()->real_escape_string($sId)."'";
-        if ($this->sqlData = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+        $query = "select * from {$this->table} where id = :id";
+        if ($this->sqlData = $this->connection->fetchAssociative($query, ['id' => $sId])) {
             $this->postLoadHook();
             $bFound = true;
         }

@@ -108,7 +108,7 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
         $oView = new TViewParser();
 
         // add view variables
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
+        $oExtranetConfig = TdbDataExtranet::GetInstance();
         $oView->AddVar('oUserAddress', $this);
         $oView->AddVar('oExtranetConfig', $oExtranetConfig);
         $oView->AddVar('aCallTimeVars', $aCallTimeVars);

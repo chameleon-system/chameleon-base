@@ -10,7 +10,7 @@ $sKey = str_rot13($sKey);
 if (false === is_object($this->sqlData['<?= $sFieldDatabaseName; ?>']) && false === is_array($this->sqlData['<?= $sFieldDatabaseName; ?>'])) {
 $sQry = "SELECT DECODE(".$this->getDatabaseConnection()->quote($this->sqlData['<?= $sFieldDatabaseName; ?>']).",".$this->getDatabaseConnection()->quote($sKey).") AS encoded_value ";
 
-$aDecodedData = $this->getDatabaseConnection()->fetchAssoc($sQry);
+$aDecodedData = $this->getDatabaseConnection()->fetchAssociative($sQry);
 $sDecodedData = $aDecodedData['encoded_value'];
 } else {
 $sDecodedData = $this->sqlData['<?= $sFieldDatabaseName; ?>'];

@@ -76,7 +76,7 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
                     $this->sStep = 'SignOut';
                 }
             } elseif ($oUser->IsLoggedIn()) {
-                $oUserNewsletter = &TdbPkgNewsletterUser::GetInstanceForActiveUser();
+                $oUserNewsletter = TdbPkgNewsletterUser::GetInstanceForActiveUser();
                 if (is_null($oUserNewsletter)) {
                     $this->sStep = 'NoSignedIn';
                 } else {
@@ -170,7 +170,7 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
         return $bValid;
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $oUser = TdbDataExtranetUser::GetInstance();
@@ -259,11 +259,11 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
      *
      * @return TdbPkgNewsletterUser
      */
-    protected function &LoadNewsletterSignup($bRefresh = false)
+    protected function LoadNewsletterSignup($bRefresh = false)
     {
         if (is_null($this->oNewsletterSignup)) {
             $this->oNewsletterSignup = TdbPkgNewsletterUser::GetNewInstance();
-            $oNewsletter = &TdbPkgNewsletterUser::GetInstanceForActiveUser($bRefresh);
+            $oNewsletter = TdbPkgNewsletterUser::GetInstanceForActiveUser($bRefresh);
             if (!is_null($oNewsletter)) {
                 $this->oNewsletterSignup = $oNewsletter;
             } else {
@@ -405,7 +405,7 @@ class MTPkgNewsletterSignoutCore extends TUserCustomModelBase
     {
         $oSignedNewsletterList = $oNewsletterUser->GetSignedInNewsletterList();
         $aNewsletterList = array();
-        while ($oSignedNewsletter = &$oSignedNewsletterList->Next()) {
+        while ($oSignedNewsletter = $oSignedNewsletterList->Next()) {
             $aNewsletterList[] = $oSignedNewsletter->id;
         }
         $oNewsletterUser->SignOut($aNewsletterList, true);

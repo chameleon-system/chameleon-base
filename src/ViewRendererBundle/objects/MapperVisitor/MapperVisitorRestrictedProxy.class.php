@@ -19,9 +19,9 @@ class MapperVisitorRestrictedProxy implements IMapperVisitorRestricted
      *
      * @param IMapperVisitor $oComponent
      */
-    public function __construct(IMapperVisitor &$oComponent)
+    public function __construct(IMapperVisitor $oComponent)
     {
-        $this->oComponent = &$oComponent;
+        $this->oComponent = $oComponent;
     }
 
     /**

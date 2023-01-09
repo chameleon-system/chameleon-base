@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use Doctrine\DBAL\Connection;
+
 class TCMSTableToField_TCMSTableFieldConf extends TCMSTableToClass_MockRecord
 {
     private $oFieldType = null;
@@ -17,10 +19,10 @@ class TCMSTableToField_TCMSTableFieldConf extends TCMSTableToClass_MockRecord
      */
     private $oCacheExtraConfigFieldObject = null;
 
-    public function __construct(TCMSTableToField_TCMSFieldType $oFieldType)
+    public function __construct(Connection $connection, TCMSTableToField_TCMSFieldType $oFieldType)
     {
         $this->oFieldType = $oFieldType;
-        parent::__construct('cms_field_conf');
+        parent::__construct($connection, 'cms_field_conf');
     }
 
     public function GetFieldType()

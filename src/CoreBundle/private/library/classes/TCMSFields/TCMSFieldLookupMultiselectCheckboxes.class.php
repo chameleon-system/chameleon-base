@@ -172,7 +172,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         $mltTableName = $this->GetMLTTableName();
         $mltRecords = $this->FetchMLTRecords();
 
-        while ($mltRecord = &$mltRecords->Next()) {
+        while ($mltRecord = $mltRecords->Next()) {
             $data[] = array(
                 'id' => $mltRecord->id,
                 'group' => '' === $listGroupFieldColumn ? '' : $mltRecord->sqlData[$listGroupFieldColumn],
@@ -212,7 +212,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
     public function FetchMLTRecords()
     {
         // because the method could be called from frontend, we need to check if we are in cms mode... else use method from parent
-        $oUser = &TCMSUser::GetActiveUser();
+        $oUser = TCMSUser::GetActiveUser();
         if (TGlobal::IsCMSMode() && !is_null($oUser)) {
             $foreignTableName = $this->GetForeignTableName();
             $sFilterQuery = $this->GetMLTFilterQuery();
@@ -235,7 +235,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
      */
     protected function GetMLTFilterQuery()
     {
-        $oUser = &TCMSUser::GetActiveUser();
+        $oUser = TCMSUser::GetActiveUser();
         if (TGlobal::IsCMSMode() && !is_null($oUser)) {
             $foreignTableName = $this->GetForeignTableName();
 
@@ -244,7 +244,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             $oTableConf->LoadFromField('name', $foreignTableName);
 
             /** @var $oTableList TCMSListManagerFullGroupTable */
-            $oTableList = &$oTableConf->GetListObject();
+            $oTableList = $oTableConf->GetListObject();
 
             $oTableList->sRestriction = null; // do not include the restriction - it is part of the parent table, not the mlt!
 

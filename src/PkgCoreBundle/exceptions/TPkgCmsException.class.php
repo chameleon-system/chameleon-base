@@ -29,7 +29,7 @@ class TPkgCmsException extends \Exception implements Serializable
         $this->contextData = print_r($aContextData, true);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $sString = parent::__toString();
 

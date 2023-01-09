@@ -71,7 +71,7 @@ class CMSSanityCheck extends TModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 

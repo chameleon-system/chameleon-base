@@ -16,15 +16,14 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetConfigurationInterface;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
-use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
+use Symfony\Component\HttpKernel\Controller\ErrorController;
 
 /**
  * {@inheritdoc}
  */
-class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\ExceptionController
+class ExceptionController extends ErrorController
 {
     /**
      * @var ChameleonControllerInterface
@@ -66,27 +65,21 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
         $this->mainController = $mainController;
     }
 
-    /**
-     * @param Request                   $request
-     * @param FlattenException          $exception
-     * @param DebugLoggerInterface|null $logger
-     *
-     * @return Response
-     */
-    public function showAction(Request $request, FlattenException $exception, DebugLoggerInterface $logger = null)
+    public function showAction(Request $request, \Throwable $exception): Response
     {
-        /** @var int $level */
-        $level = $request->headers->get('X-Php-Ob-Level', -1);
-        $currentContent = $this->getAndCleanOutputBuffering($level);
-
-        $code = $exception->getStatusCode();
-
-        $request->attributes->set('currentContent', $currentContent);
+        $code = null;
+        if (method_exists($exception, 'getStatusCode')) {
+            $code = $exception->getStatusCode();
+        }
+        if (null === $code) {
+            $code = 500;
+        }
 
         $exceptionPageDef = $this->getExceptionPageDef($code);
         if (null === $exceptionPageDef) {
-            return parent::showAction($request, $exception, $logger);
+            return $this->__invoke($exception);
         }
+
         $request->attributes->set('pagedef', $exceptionPageDef);
 
         // Do not execute (original) module_fnc for error pages
@@ -114,23 +107,6 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
     public function setExtranetUserProvider(ExtranetUserProviderInterface $extranetUserProvider)
     {
         $this->extranetUserProvider = $extranetUserProvider;
-    }
-
-    /**
-     * @param Request $request
-     * @param string  $format
-     * @param int     $code
-     * @param bool    $debug
-     *
-     * @return string
-     */
-    protected function findTemplate(Request $request, $format, $code, $debug)
-    {
-        if ($debug) {
-            return 'exception-debug.html.twig';
-        }
-
-        return 'exception.html.twig';
     }
 
     /**
@@ -175,10 +151,6 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
         }
 
         if (null === $nodeId) {
-            if ($this->debug) {
-                return;
-            }
-
             if (is_object($portal)) {
                 $nodeId = $portal->GetSystemPageNodeId('error-'.$code);
             } else {

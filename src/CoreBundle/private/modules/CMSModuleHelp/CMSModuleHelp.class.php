@@ -29,7 +29,7 @@ class CMSModuleHelp extends TCMSModelBase
     protected $oTableConf = null;
     protected $oTableList = null;
 
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
 

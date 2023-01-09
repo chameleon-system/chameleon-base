@@ -25,7 +25,7 @@ class TCCustomNavigationFlat extends TCCustomNavigation
         $menu = '';
         $count = 0;
         $totalSiblings = $this->oRootNode->CountChildren();
-        $oChildren = &$this->oRootNode->GetChildren();
+        $oChildren = $this->oRootNode->GetChildren();
         $oChildren->GoToStart();
         while ($oNode = $oChildren->Next()) {
             /** @var $oNode TCMSTreeNode */
@@ -63,7 +63,7 @@ class TCCustomNavigationFlat extends TCCustomNavigation
      *
      * @return string
      */
-    public function _Render(&$oSubnodes, &$oParentNode, $level = 0)
+    public function _Render($oSubnodes, $oParentNode, $level = 0)
     {
         $menu = '';
         if ($this->_ShowChildren($oParentNode, 0, $level)) {

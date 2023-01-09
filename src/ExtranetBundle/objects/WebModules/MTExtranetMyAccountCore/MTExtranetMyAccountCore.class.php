@@ -35,22 +35,22 @@ class MTExtranetMyAccountCore extends TUserCustomModelBase
         $this->oModuleConfig->LoadFromField('cms_tpl_module_instance_id', $this->instanceID);
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $user = $this->getExtranetUserProvider()->getActiveUser();
-        $this->data['oUser'] = &$user;
-        $this->data['oModuleConfig'] = &$this->oModuleConfig;
+        $this->data['oUser'] = $user;
+        $this->data['oModuleConfig'] = $this->oModuleConfig;
 
         $aCustomVars = $user->sqlData;
         $aCustomVars['salutation'] = '';
         $aCustomVars['country'] = '';
-        $oSalutation = &$user->GetFieldDataExtranetSalutation();
+        $oSalutation = $user->GetFieldDataExtranetSalutation();
         if (!is_null($oSalutation)) {
             $aCustomVars['salutation'] = $oSalutation->GetName();
         }
 
-        $oCountry = &$user->GetFieldDataCountry();
+        $oCountry = $user->GetFieldDataCountry();
         if (!is_null($oCountry)) {
             $aCustomVars['country'] = $oCountry->GetName();
         }

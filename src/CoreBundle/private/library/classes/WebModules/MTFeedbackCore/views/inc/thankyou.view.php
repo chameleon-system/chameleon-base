@@ -1,5 +1,5 @@
 <?php
-$oTableRow = &$data['oTableRow']; /** @var $oTableRow TCMSRecord */
+$oTableRow = $data['oTableRow']; /** @var $oTableRow TCMSRecord */
 ?>
 <div class="ModuleFeedback">
     <?php if (!empty($oTableRow->sqlData['name'])) {

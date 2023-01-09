@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MTLoginEndPoint extends TCMSModelBase
 {
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
 

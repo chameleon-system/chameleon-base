@@ -14,7 +14,7 @@
                 <th><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.variants.action_new_variant_value')); ?></th>
             </tr>
             <?php
-            $oVariantTypes = &$oVariantSet->GetFieldShopVariantTypeList();
+            $oVariantTypes = $oVariantSet->GetFieldShopVariantTypeList();
             while ($oType = $oVariantTypes->Next()) {
                 /** @var $oType TdbShopVariantType */
                 $oValueList = $oType->GetFieldShopVariantTypeValueList(); ?>

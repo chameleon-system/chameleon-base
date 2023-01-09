@@ -113,7 +113,7 @@ abstract class AbstractDatabaseAccessLayer
      *
      * @return void
      */
-    private function normalize(&$cacheLookupData)
+    private function normalize($cacheLookupData)
     {
         foreach ($cacheLookupData as $key => $value) {
             if (is_array($cacheLookupData[$key])) {

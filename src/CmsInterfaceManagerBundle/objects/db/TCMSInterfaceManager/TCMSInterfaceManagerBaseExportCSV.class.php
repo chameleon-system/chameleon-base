@@ -58,7 +58,7 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
      *
      * @return array
      */
-    protected function GetExportRowFromDataObject(&$oDataObjct)
+    protected function GetExportRowFromDataObject($oDataObjct)
     {
         return $oDataObjct->sqlData;
     }
@@ -213,7 +213,7 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
      *
      * @return void
      */
-    protected function WriteRow(&$fp, $aRow)
+    protected function WriteRow($fp, $aRow)
     {
         $sLine = '';
         foreach ($aRow as $sValue) {

@@ -51,7 +51,7 @@ class TCMSRecordListTest extends TestCase
         self::$queryModifier->method('getQueryWithoutOrderBy')->willReturnArgument(0);
 
         self::$entityList = new class ($this->connection, 'SELECT * FROM foo') extends EntityList {
-            protected function getQueryModifierOrderByService() {
+            protected function getQueryModifierOrderByService(): QueryModifierOrderByInterface {
                 return TCMSRecordListTest::$queryModifier;
             }
         };
@@ -100,7 +100,7 @@ class TCMSRecordListTest extends TestCase
 
             // Does not create a new Tdb for the data returned from the iterator
             // but returns the data 1:1
-            protected function &_NewElement(&$aData) {
+            protected function _NewElement($aData) {
                 return $aData;
             }
         };

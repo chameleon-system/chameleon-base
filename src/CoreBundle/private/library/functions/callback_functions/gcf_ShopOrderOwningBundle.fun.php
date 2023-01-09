@@ -15,7 +15,7 @@ function gcf_ShopOrderOwningBundle($iShopOrderItemId, $row, $fieldName)
     $oOrdeItem = TdbShopOrderItem::GetNewInstance();
     /** @var $oOrdeItem TdbShopOrderItem */
     $oOrdeItem->Load($iShopOrderItemId);
-    $oOwner = &$oOrdeItem->GetOwningBundleOrderItem();
+    $oOwner = $oOrdeItem->GetOwningBundleOrderItem();
     if ($oOwner) {
         $sOwner = TGlobal::OutHTML($oOwner->fieldName);
     }

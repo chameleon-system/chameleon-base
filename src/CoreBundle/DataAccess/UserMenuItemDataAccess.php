@@ -49,7 +49,7 @@ class UserMenuItemDataAccess implements UserMenuItemDataAccessInterface
                 ORDER BY `cms_user_cms_menu_item_mlt`.`entry_sort` DESC';
 
         try {
-            $rows = $this->connection->fetchAll($query, ['userId' => $userId]);
+            $rows = $this->connection->fetchAllAssociative($query, ['userId' => $userId]);
         } catch (DBALException $exception) {
             $this->logger->error('Cannot get menu items for user', ['exception' => $exception]);
 

@@ -14,7 +14,7 @@ class TCMSSmartURLHandler_PkgCmsCaptcha extends TCMSSmartURLHandler
     public function GetPageDef()
     {
         $iPageId = false;
-        $oSmartURL = &TCMSSmartURLData::GetActive();
+        $oSmartURL = TCMSSmartURLData::GetActive();
 
         if (strpos($oSmartURL->sRelativeURL, TdbPkgCmsCaptcha::URL_IDENTIFIER)) {
             $aParts = explode('/', $oSmartURL->sRelativeURL);

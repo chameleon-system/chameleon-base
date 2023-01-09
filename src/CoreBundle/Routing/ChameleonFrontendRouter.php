@@ -113,21 +113,8 @@ class ChameleonFrontendRouter extends ChameleonBaseRouter implements PortalAndLa
 
         return true;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getMatcherCacheClassName()
-    {
-        return 'chameleonFrontend'.ucfirst($this->environment).'UrlMatcher';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getGeneratorCacheClassName()
-    {
-        return 'chameleonFrontend'.ucfirst($this->environment).'UrlGenerator';
+    protected function generateCacheDirPath(string $baseCacheDir): string {
+        return sprintf('%s/frontend', $baseCacheDir);
     }
 
     /**

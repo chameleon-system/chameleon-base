@@ -38,7 +38,7 @@ class TCCustomNavigationHover extends TCCustomNavigation
         $menu = '';
         $count = 0;
         $totalSiblings = $this->oRootNode->CountChildren();
-        $oChildren = &$this->oRootNode->GetChildren();
+        $oChildren = $this->oRootNode->GetChildren();
         $oChildren->GoToStart();
         if (!$this->bPlaceEachRootNodeInASeparateBlock) {
             $menu .= '<ul>';
@@ -111,7 +111,7 @@ class TCCustomNavigationHover extends TCCustomNavigation
      *
      * @return string
      */
-    public function _Render(&$oSubnodes, &$oParentNode, $level = 0)
+    public function _Render($oSubnodes, $oParentNode, $level = 0)
     {
         $menu = '';
         if ($this->_ShowChildren($oParentNode, 0, $level)) {
@@ -174,7 +174,7 @@ class TCCustomNavigationHover extends TCCustomNavigation
     public function Load($rootNodeId, $iCurrentPage)
     {
         /** @var $oPagePortal TdbCmsPortal */
-        $oPagePortal = &TdbCmsPortal::GetPagePortal($iCurrentPage);
+        $oPagePortal = TdbCmsPortal::GetPagePortal($iCurrentPage);
         $this->aDivisionNodeIdList = array();
         if ($oPagePortal) {
             $oDivisions = $oPagePortal->GetFieldCmsPortalDivisionsList();
@@ -188,9 +188,9 @@ class TCCustomNavigationHover extends TCCustomNavigation
     /**
      * {@inheritdoc}
      */
-    protected function _GetNodeStyle(&$oNode, $level, $row, $bHasChildren = false, $totalSiblings = 0)
+    protected function _GetNodeStyle($oNode, $level, $row, $bHasChildren = false, $totalSiblings = 0)
     {
-        $this->oCurrentDivision = &TdbCmsDivision::GetTreeNodeDivision($oNode->id);
+        $this->oCurrentDivision = TdbCmsDivision::GetTreeNodeDivision($oNode->id);
         $nodeClass = parent::_GetNodeStyle($oNode, $level, $row, $bHasChildren, $totalSiblings);
         if ('Links' == $this->oCurrentDivision->sqlData['menu_direction']) {
             if (!empty($nodeClass)) {
@@ -208,7 +208,7 @@ class TCCustomNavigationHover extends TCCustomNavigation
      * {@inheritDoc}
      * hide the children IF we are viewing the page through the CMS.
      */
-    public function _ShowChildren(&$oNode, $row = null, $level = null)
+    public function _ShowChildren($oNode, $row = null, $level = null)
     {
         if (TGlobal::IsCMSMode()) {
             return false;

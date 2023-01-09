@@ -71,7 +71,7 @@ class TPkgCmsTextBlock extends TPkgCmsTextBlockAutoParent
                AND `pkg_cms_text_block`.`systemname` = :systemName
              LIMIT 0,1
                  ';
-        $aRow = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection')->fetchAssoc(
+        $aRow = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection')->fetchAssociative(
             $query,
             array('portalId' => $sPortalId, 'systemName' => $sSystemName)
         );

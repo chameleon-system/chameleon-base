@@ -220,7 +220,7 @@ $oFields->GoToStart();
      * @param string $sLanguage - init with the language passed
      * @return <?=$sClassName; ?>
      */
-    static public function GetNewInstance($sData = null, $sLanguage = null)
+    static public function GetNewInstance($sData = null, $sLanguage = null): <?=$sClassName; ?>
     {
         $oObject = new <?=$sClassName; ?>();
         if (!is_null($sLanguage)) {
@@ -299,7 +299,7 @@ $oFields->GoToStart();
 <?php
         if ('TAdbCmsLocals' != $sAutoClassName) {
             ?>
-        $oLocal =& TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         <?php
         }
 
@@ -414,7 +414,7 @@ $oFields->GoToStart();
               }
               ?>
 
-                    if ($nameRecord = $databaseConnection->fetchAssoc($listQuery)) {
+                    if ($nameRecord = $databaseConnection->fetchAssociative($listQuery)) {
                         if (array_key_exists($sNameColumn, $nameRecord)) {
                             $this->sqlData[$sNameColumn] = $nameRecord[$sNameColumn];
                         }

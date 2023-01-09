@@ -59,7 +59,10 @@ class TCMSMessageManager
     public static function GetInstance($bReload = false)
     {
         $request = ServiceLocator::get('request_stack')->getCurrentRequest();
-        if ((null === $request) || (false === $request->getSession()->isStarted())) {
+        if (null === $request || false === $request->hasSession()) {
+            return null;
+        }
+        if (false === $request->getSession()->isStarted()) {
             return null;
         }
         if ($bReload) {
@@ -375,7 +378,7 @@ class TCMSMessageManager
         }
         $matchString = '/\[\{CMSMSG-(.*?)(:(.*?))?(:(Core|Custom-Core|Customer))?\}\]/si';
 
-        return preg_replace_callback($matchString, array(&$this, 'InjectMessageIntoStringReplaceCallback'), $sText);
+        return preg_replace_callback($matchString, array($this, 'InjectMessageIntoStringReplaceCallback'), $sText);
     }
 
     /**

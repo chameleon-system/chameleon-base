@@ -17,7 +17,7 @@ class TCMSTableEditor_PkgComment extends TCMSTableEditor
     /**
      * {@inheritDoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
         if (property_exists($oPostTable, 'sqlData') && is_array($oPostTable->sqlData)) {

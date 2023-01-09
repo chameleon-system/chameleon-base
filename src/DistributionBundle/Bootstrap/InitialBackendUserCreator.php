@@ -199,7 +199,7 @@ class InitialBackendUserCreator
 
     private function addUserRoles(string $userId): void
     {
-        $userRoleList = $this->databaseConnection->fetchAll('SELECT `id` FROM `cms_role`');
+        $userRoleList = $this->databaseConnection->fetchAllAssociative('SELECT `id` FROM `cms_role`');
 
         $query = 'INSERT INTO `cms_user_cms_role_mlt` (`source_id`, `target_id`, `entry_sort`) VALUES (?, ?, ?)';
         $statement = $this->databaseConnection->prepare($query);
@@ -216,7 +216,7 @@ class InitialBackendUserCreator
 
     private function addUserGroups(string $userId): void
     {
-        $userGroupList = $this->databaseConnection->fetchAll('SELECT `id` FROM `cms_usergroup`');
+        $userGroupList = $this->databaseConnection->fetchAllAssociative('SELECT `id` FROM `cms_usergroup`');
 
         $query = 'INSERT INTO `cms_user_cms_usergroup_mlt` (`source_id`, `target_id`, `entry_sort`) VALUES (?, ?, ?)';
         $statement = $this->databaseConnection->prepare($query);

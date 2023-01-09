@@ -1,8 +1,8 @@
 <?php
-$oTableRow = &$data['oTableRow'];
+$oTableRow = $data['oTableRow'];
 /** @var $oTableRow TCMSRecord */
 $aInput = $data['aInput'];
-$oError = &$data['oError']; /** @var $oError MTFeedbackErrors */
+$oError = $data['oError']; /** @var $oError MTFeedbackErrors */
 ?>
 <div class="ModuleFeedback">
     <?php if (!empty($oTableRow->sqlData['name'])) {

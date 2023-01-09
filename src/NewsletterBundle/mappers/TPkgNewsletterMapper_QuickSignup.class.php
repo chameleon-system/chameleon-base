@@ -87,7 +87,7 @@ class TPkgNewsletterMapper_QuickSignup extends AbstractViewMapper
     {
         $aValueList = array();
         $oSalutationList = TdbDataExtranetSalutationList::GetList();
-        while ($oSalutation = &$oSalutationList->Next()) {
+        while ($oSalutation = $oSalutationList->Next()) {
             $aValueList[] = array(
                 'sValue' => $oSalutation->id,
                 'sName' => $oSalutation->GetName(),

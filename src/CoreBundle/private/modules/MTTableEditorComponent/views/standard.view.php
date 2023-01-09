@@ -1,5 +1,5 @@
 <?php
-$oCMSUser = &$data['oCMSUser']; /** @var $oCMSUser TCMSUser */
+$oCMSUser = $data['oCMSUser']; /** @var $oCMSUser TCMSUser */
 ?>
 <div>
     <?php

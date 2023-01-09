@@ -168,7 +168,7 @@ class ViewRenderer
      *
      * @return ViewRenderer
      */
-    public function &AddSourceObject($key, $value)
+    public function AddSourceObject($key, $value)
     {
         $this->dataMappingService->addSourceObject($key, $value);
 

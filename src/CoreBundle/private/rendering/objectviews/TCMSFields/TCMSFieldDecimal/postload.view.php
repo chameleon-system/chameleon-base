@@ -1,6 +1,6 @@
 <?php require dirname(__FILE__).'/../TCMSField/postload.view.php'; ?>
 if ($oLocal === null && class_exists('TCMSLocal')) {
-$oLocal =& TCMSLocal::GetActive();
+$oLocal = TCMSLocal::GetActive();
 }
 if (isset($this->sqlData['<?= $sFieldDatabaseName; ?>'])) {
 $this-><?= $sFieldName; ?> = $this->sqlData['<?= $sFieldDatabaseName; ?>'];

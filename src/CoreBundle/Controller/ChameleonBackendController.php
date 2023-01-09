@@ -55,9 +55,9 @@ class ChameleonBackendController extends ChameleonController
      */
     public function HandleRequest($pagedef)
     {
-        $oCMSConfig = &\TdbCmsConfig::GetInstance();
+        $oCMSConfig = \TdbCmsConfig::GetInstance();
         if (!$oCMSConfig) { // sometimes config comes corrupted from cache then reload config from db
-            $oCMSConfig = &\TdbCmsConfig::GetInstance(true);
+            $oCMSConfig = \TdbCmsConfig::GetInstance(true);
         }
         if ($oCMSConfig && $oCMSConfig->CurrentIpIsWhiteListed()) {
             $this->accessCheckHook();

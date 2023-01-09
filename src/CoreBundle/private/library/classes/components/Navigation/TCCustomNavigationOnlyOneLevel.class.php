@@ -18,7 +18,7 @@ class TCCustomNavigationOnlyOneLevel extends TCCustomNavigation
      * {@inheritDoc}
      * show only the children that are part of the current path...
      */
-    protected function _ShowChildren(&$oNode, $row = null, $level = null)
+    protected function _ShowChildren($oNode, $row = null, $level = null)
     {
         return false;
     }

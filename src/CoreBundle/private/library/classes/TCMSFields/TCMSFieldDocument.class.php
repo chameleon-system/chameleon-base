@@ -15,7 +15,7 @@ class TCMSFieldDocument extends TCMSFieldLookup
 {
     public function GetHTML()
     {
-        $this->oTableConf = &$this->oTableRow->GetTableConf();
+        $this->oTableConf = $this->oTableRow->GetTableConf();
 
         $currentFile = TGlobal::Translate('chameleon_system_core.field_document.nothing_selected');
         if (!empty($this->data)) {

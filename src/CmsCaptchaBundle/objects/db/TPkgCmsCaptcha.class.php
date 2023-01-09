@@ -21,7 +21,7 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
      *
      * @return TdbPkgCmsCaptcha
      */
-    public static function GetNewInstance($sData = null, $sLanguage = null)
+    public static function GetNewInstance($sData = null, $sLanguage = null): TdbPkgCmsCaptcha
     {
         $oObject = parent::GetNewInstance($sData, $sLanguage);
         if ($oObject && !empty($oObject->id) && !empty($oObject->fieldClass)) {

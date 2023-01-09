@@ -92,7 +92,7 @@ class TCMSFieldDefinition extends TCMSRecord
      *
      * @return TCMSField|null
      */
-    public function &GetFieldObject()
+    public function GetFieldObject()
     {
         $field = null;
         // check if the field defines a class that overwrites the field type class
@@ -151,7 +151,7 @@ class TCMSFieldDefinition extends TCMSRecord
     {
         $query = "SELECT `constname` FROM `cms_field_type` WHERE `contains_images` = '1'";
         $databaseconnection = self::getDbConnection();
-        $result = $databaseconnection->fetchAll($query);
+        $result = $databaseconnection->fetchAllAssociative($query);
         $imageFieldTypes = array();
         foreach ($result as $row) {
             $imageFieldTypes[] = $row['constname'];
@@ -600,7 +600,7 @@ class TCMSFieldDefinition extends TCMSRecord
 
         $language = null;
         if (null === $sLanguageID) {
-            $oUser = &TCMSUser::GetActiveUser();
+            $oUser = TCMSUser::GetActiveUser();
             if (null !== $oUser) {
                 $language = $oUser->GetCurrentEditLanguageObject();
             }

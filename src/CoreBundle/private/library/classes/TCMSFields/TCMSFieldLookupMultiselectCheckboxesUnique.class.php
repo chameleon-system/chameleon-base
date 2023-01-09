@@ -21,7 +21,7 @@ class TCMSFieldLookupMultiselectCheckboxesUnique extends TCMSFieldLookupMultisel
         /** @var $oTableConf TCMSTableConf */
         $oTableConfig->LoadFromField('name', $foreignTableName);
 
-        $oTableList = &$oTableConfig->GetListObject();
+        $oTableList = $oTableConfig->GetListObject();
 
         $oTableList->sRestriction = null; // do not include the restriction - it is part of the parent table, not the mlt!
 
@@ -31,7 +31,7 @@ class TCMSFieldLookupMultiselectCheckboxesUnique extends TCMSFieldLookupMultisel
         if (!empty($sFilterQueryOrderInfo)) {
             $sFilterQuery .= ' ORDER BY '.$sFilterQueryOrderInfo;
         }
-        $oUser = &TCMSUser::GetActiveUser();
+        $oUser = TCMSUser::GetActiveUser();
         /** @var $oMLTRecords TCMSRecordList */
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List';
         $oMLTRecords = call_user_func(array($sClassName, 'GetList'), $sFilterQuery, null, false);

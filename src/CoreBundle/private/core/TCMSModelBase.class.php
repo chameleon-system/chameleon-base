@@ -64,10 +64,10 @@ class TCMSModelBase extends TModelBase
                 if (method_exists($this, 'ExecuteAjaxCallInField')) {
                     $functionResult = $this->ExecuteAjaxCallInField($fieldName);
                 } else {
-                    $functionResult = &$this->_CallMethod($methodName);
+                    $functionResult = $this->_CallMethod($methodName);
                 }
             } else {
-                $functionResult = &$this->_CallMethod($methodName);
+                $functionResult = $this->_CallMethod($methodName);
             }
             $this->OutPutAjaxCallResult($functionResult);
         }
@@ -99,11 +99,11 @@ class TCMSModelBase extends TModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['oCMSUser'] = TCMSUser::GetActiveUser();
-        $oConfig = &TdbCmsConfig::GetInstance();
+        $oConfig = TdbCmsConfig::GetInstance();
         $this->data['sThemePath'] = $oConfig->GetThemeURL();
 
         return $this->data;

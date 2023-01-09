@@ -17,20 +17,8 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 
 class ChameleonBackendRouter extends ChameleonBaseRouter implements RequestMatcherInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function getMatcherCacheClassName()
-    {
-        return 'chameleonBackend'.ucfirst($this->environment).'UrlMatcher';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getGeneratorCacheClassName()
-    {
-        return 'chameleonBackend'.ucfirst($this->environment).'UrlGenerator';
+    protected function generateCacheDirPath(string $baseCacheDir): string {
+        return sprintf('%s/backend', $baseCacheDir);
     }
 
     /**
@@ -81,7 +69,7 @@ class ChameleonBackendRouter extends ChameleonBaseRouter implements RequestMatch
      *
      * @return void
      */
-    private function addLocaleToMatch(array &$match)
+    private function addLocaleToMatch(array $match)
     {
         if (isset($match['_locale'])) {
             return;

@@ -109,7 +109,7 @@ class TCMSPortal extends TCMSRecord
      *
      * @return TdbCmsTree
      */
-    public function &GetPortalHomeNode()
+    public function GetPortalHomeNode()
     {
         if (false === isset($this->_aCache['_portalHomeNode'])) {
             $this->_aCache['_portalHomeNode'] = self::getTreeService()->getById($this->sqlData['home_node_id']);
@@ -125,7 +125,7 @@ class TCMSPortal extends TCMSRecord
      *
      * @return TCMSPortal or array of TCMSPortal
      */
-    public static function &GetDomainPortal($sDomainName)
+    public static function GetDomainPortal($sDomainName)
     {
         static $aPortalList;
         if (!$aPortalList || !isset($aPortalList[$sDomainName])) {
@@ -184,7 +184,7 @@ class TCMSPortal extends TCMSRecord
      *
      * @return TCMSImage
      */
-    public function &GetLogo()
+    public function GetLogo()
     {
         if (!array_key_exists('_portalLogo', $this->_aCache)) {
             $this->_aCache['_portalLogo'] = new TCMSImage();
@@ -199,10 +199,10 @@ class TCMSPortal extends TCMSRecord
      *
      * @return TdbCmsDivision
      */
-    public function &GetPrimaryDivision()
+    public function GetPrimaryDivision()
     {
         if (!array_key_exists('_primaryDivision', $this->_aCache)) {
-            $this->_aCache['_primaryDivision'] = &TdbCmsDivision::GetTreeNodeDivision($this->sqlData['home_node_id']);
+            $this->_aCache['_primaryDivision'] = TdbCmsDivision::GetTreeNodeDivision($this->sqlData['home_node_id']);
         }
 
         return $this->_aCache['_primaryDivision'];
@@ -215,7 +215,7 @@ class TCMSPortal extends TCMSRecord
      *
      * @return TdbCmsPortal
      */
-    public static function &GetPagePortal($pageId)
+    public static function GetPagePortal($pageId)
     {
         $portal = self::getPageService()->getById($pageId)->GetPortal();
 
@@ -556,7 +556,7 @@ class TCMSPortal extends TCMSRecord
                 $aTmpList = array();
                 $oPages = $this->GetProperties('cms_portal_system_page', 'TdbCmsPortalSystemPage');
                 $treeService = self::getTreeService();
-                while ($oSystemPage = &$oPages->Next()) {
+                while ($oSystemPage = $oPages->Next()) {
                     /** @var $oSystemPage TdbCmsPortalSystemPage */
                     $oNode = $treeService->getById($oSystemPage->fieldCmsTreeId);
                     if (null !== $oNode) {

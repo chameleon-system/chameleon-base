@@ -47,7 +47,7 @@ class SnippetChainModifierDataAccess implements SnippetChainModifierDataAccessIn
         }
 
         try {
-            $rawData = $this->databaseConnection->fetchAll($query, $parameters, $parameterTypes);
+            $rawData = $this->databaseConnection->fetchAllAssociative($query, $parameters, $parameterTypes);
         } catch (DBALException $e) {
             throw new DataAccessException('Error while accessing database: '.$e->getMessage(), 0, $e);
         }

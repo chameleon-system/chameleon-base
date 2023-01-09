@@ -46,7 +46,7 @@ class TCMSDivision extends TCMSDivisionAutoParent
      *
      * @return TdbCmsDivision|null
      */
-    public static function GetPageDivision(&$oPage)
+    public static function GetPageDivision($oPage)
     {
         $aKey = array(
             'class' => __CLASS__,
@@ -60,12 +60,12 @@ class TCMSDivision extends TCMSDivisionAutoParent
         if (null === $oPageDivision) {
             $aStopNodes = TdbCmsDivision::GetStopNodes();
             /** @var $oNaviPath TCMSPageBreadcrumb */
-            $oNaviPath = &$oPage->GetNavigationPath($aStopNodes);
+            $oNaviPath = $oPage->GetNavigationPath($aStopNodes);
             $oPageDivision = false;
             $oNaviPath->GoToStart();
             if ($oNaviPath->Length() > 0) {
                 /** @var $oDivisionNode TCMSTreeNode */
-                $oDivisionNode = &$oNaviPath->Next();
+                $oDivisionNode = $oNaviPath->Next();
                 // either the first node in the breadcrumb is the division node, or its parent is the division node...
                 $sDivisionNodeId = '';
                 if (in_array($oDivisionNode->id, $aStopNodes)) {
@@ -95,7 +95,7 @@ class TCMSDivision extends TCMSDivisionAutoParent
      *
      * @return TCMSTreeNode
      */
-    public function &GetDivisionNode()
+    public function GetDivisionNode()
     {
         $oNode = new TCMSTreeNode();
         $oNode->Load($this->sqlData['cms_tree_id_tree']);
@@ -111,7 +111,7 @@ class TCMSDivision extends TCMSDivisionAutoParent
      *
      * @return TdbCmsDivision
      */
-    public static function &GetTreeNodeDivision($iTreeNode)
+    public static function GetTreeNodeDivision($iTreeNode)
     {
         static $aDivisionLookup = array();
         static $aNodeLookup = array();

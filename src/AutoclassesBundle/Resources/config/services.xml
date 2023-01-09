@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="chameleon_system_autoclasses.cache_warmer.class">ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer</parameter>
-        <parameter key="chameleon_system_autoclasses.cache_warmer.autoclasses_dir">%kernel.root_dir%/cache/autoclasses/</parameter>
+        <parameter key="chameleon_system_autoclasses.cache_warmer.autoclasses_dir">%kernel.project_dir%/var/autoclasses/</parameter>
         <parameter key="chameleon_system_autoclasses.request_listener.class">ChameleonSystem\AutoclassesBundle\Listener\RequestListener</parameter>
     </parameters>
 
@@ -15,6 +15,8 @@
         <service id="chameleon_system_autoclasses.auto_class_manager" class="ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManager" public="false">
             <argument type="service" id="database_connection" />
             <argument type="service" id="chameleon_system_core.filemanager" />
+            <argument type="service" id="chameleon_system_cms_class_manager.manager"/>
+            <argument type="service" id="chameleon_system_autoclasses.data_access.autoclasses"/>
         </service>
 
         <service id="chameleon_system_autoclasses.autoclasses_db_adapter" class="ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapter" public="false">
@@ -27,11 +29,13 @@
         </service>
 
         <service id="chameleon_system_autoclasses.cache_warmer" class="%chameleon_system_autoclasses.cache_warmer.class%" public="true">
+            <tag name="kernel.cache_warmer" priority="-10"/>
             <argument type="service" id="chameleon_system_autoclasses.auto_class_manager" />
             <argument type="service" id="chameleon_system_autoclasses.autoclasses_db_adapter" />
             <argument type="service" id="chameleon_system_autoclasses.autoclasses_map_generator" />
             <argument type="service" id="chameleon_system_core.filemanager" />
             <argument>%chameleon_system_autoclasses.cache_warmer.autoclasses_dir%</argument>
+            <argument type="service" id="service_container" />
         </service>
 
         <service id="chameleon_system_autoclasses.data_access.autoclasses" class="ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccess" public="true">

@@ -124,7 +124,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['aInput'] = $this->GetFilteredUserData('aInput');
@@ -241,7 +241,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                 if (!is_null($sSuccessURL)) {
                     $this->RedirectToURL($sSuccessURL, true);
                 } else {
-                    $oExtranetConf = &TdbDataExtranet::GetInstance();
+                    $oExtranetConf = TdbDataExtranet::GetInstance();
                     $this->RedirectToURL($oExtranetConf->GetLinkRegisterSuccessPage(), true);
                 }
             }
@@ -310,7 +310,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                 if (!is_null($sSuccessURL)) {
                     $this->RedirectToURL($sSuccessURL, true);
                 } else {
-                    $oExtranet = &TdbDataExtranet::GetInstance();
+                    $oExtranet = TdbDataExtranet::GetInstance();
                     $this->RedirectToURL($oExtranet->GetLinkRegisterSuccessPage(), true);
                 }
             } else {
@@ -489,7 +489,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             if ('new' == $selectedAddressId) {
                 // create a new address, and set it
                 $oAdr = TdbDataExtranetUserAddress::GetNewInstance();
-                $oLocal = &TCMSLocal::GetActive();
+                $oLocal = TCMSLocal::GetActive();
                 $aData = array('name' => 'neue Addresse (angelegt am '.$oLocal->FormatDate(date('Y-m-d')).')');
                 $oAdr->LoadFromRowProtected($aData);
                 $oAdr->Save();
@@ -552,7 +552,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                 // create a new address, and set it
                 $oAdr = TdbDataExtranetUserAddress::GetNewInstance();
                 /** @var $oAdr TdbDataExtranetUserAddress */
-                $oLocal = &TCMSLocal::GetActive();
+                $oLocal = TCMSLocal::GetActive();
                 $aData = array('name' => 'neue Addresse (angelegt am '.$oLocal->FormatDate(date('Y-m-d')).')');
                 $oAdr->LoadFromRowProtected($aData);
                 $oAdr->Save();
@@ -729,7 +729,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                     if (!is_null($sSuccessURL)) {
                         $this->RedirectToURL($sSuccessURL, true);
                     } else {
-                        $oExtranet = &TdbDataExtranet::GetInstance();
+                        $oExtranet = TdbDataExtranet::GetInstance();
                         $this->RedirectToURL($oExtranet->GetLinkRegisterSuccessPage(), true);
                     }
                 }
@@ -863,7 +863,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      */
     protected function SendDoubleOptInEMail($sRequestUserKey = false, $bIsExternalCall = true)
     {
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
+        $oExtranetConfig = TdbDataExtranet::GetInstance();
         if (false === $sRequestUserKey) {
             $sRequestUserKey = $this->getInputFilterUtil()->getFilteredInput('sUserKey');
         }
@@ -909,7 +909,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
             $this->data['bLoginError'] = true;
             $this->bLoginAttemptedFailed = true;
-            $oExtranetConfig = &TdbDataExtranet::GetInstance();
+            $oExtranetConfig = TdbDataExtranet::GetInstance();
             $aParams = array('forgotPwdLinkStart' => '<a href="'.$oExtranetConfig->GetLinkForgotPasswordPage().'">', 'forgotPwdLinkEnd' => '</a>');
             $oMessage = TCMSMessageManager::GetInstance();
             $loginName = $inputFilterUtil->getFilteredPostInput(ExtranetUserConstants::LOGIN_FORM_FIELD_LOGIN_NAME);
@@ -959,7 +959,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         $this->getExtranetUserProvider()->getActiveUser()->Logout();
         // now redirect to current page
         if (is_null($sRedirectToURL)) {
-            $oConf = &TdbDataExtranet::GetInstance();
+            $oConf = TdbDataExtranet::GetInstance();
             $sLink = $oConf->GetLinkLogoutPage();
             if ($sLink) {
                 $sRedirectToURL = $sLink;

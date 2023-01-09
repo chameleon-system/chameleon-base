@@ -177,7 +177,7 @@ class TViewParser
             if (file_exists($sTemplatePath) && is_file($sTemplatePath)) {
                 unset($orgPath);
                 if (!array_key_exists('data', $this->aTemplateData)) {
-                    $data = &$this->aTemplateData;
+                    $data = $this->aTemplateData;
                 }
                 extract($this->aTemplateData, EXTR_REFS || EXTR_SKIP);
                 ob_start();

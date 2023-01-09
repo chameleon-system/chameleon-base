@@ -48,7 +48,7 @@ class MTCMSExportModuleCore extends TUserCustomModelBase
         $this->oListModule = new TCMSTPLModuleInstance();
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->oListModule->Load($this->iInstId);

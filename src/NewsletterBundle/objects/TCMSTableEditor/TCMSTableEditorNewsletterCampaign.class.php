@@ -24,10 +24,10 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
      *
      * @return void
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
-        $oNewsletterGroupList = &$oPostTable->GetMLT('pkg_newsletter_group_mlt');
+        $oNewsletterGroupList = $oPostTable->GetMLT('pkg_newsletter_group_mlt');
         if ($oNewsletterGroupList->Length() > 0 && '1' == $oPostTable->sqlData['active']) {
             // to allow fast insert, we work with a tmp table
             $query = 'CREATE TEMPORARY TABLE `_tmp_pkg_newsletter_queue` (
@@ -118,7 +118,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
      *
      * @return void
      */
-    protected function AddUsersToTmpTable(&$oPkgNewsletterGroup)
+    protected function AddUsersToTmpTable($oPkgNewsletterGroup)
     {
         // if we have include_all_newsletter_users set, we can skip all other settings and just add everyone
         if ($oPkgNewsletterGroup->fieldIncludeAllNewsletterUsers) {
@@ -227,7 +227,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
             $oMenuItem->sIcon = 'fas fa-user-slash';
 
             $oGlobal = TGlobal::instance();
-            $oExecutingModulePointer = &$oGlobal->GetExecutingModulePointer();
+            $oExecutingModulePointer = $oGlobal->GetExecutingModulePointer();
 
             $aURLData = array('module_fnc' => array($oExecutingModulePointer->sModuleSpotName => 'ExecuteAjaxCall'), '_fnc' => 'DeleteCampaignQueue', '_noModuleFunction' => 'true', 'pagedef' => $oGlobal->GetUserData('pagedef'), 'id' => $this->sId, 'tableid' => $this->oTableConf->id);
             $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aURLData);

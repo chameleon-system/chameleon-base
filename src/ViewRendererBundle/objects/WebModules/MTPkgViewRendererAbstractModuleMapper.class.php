@@ -31,7 +31,7 @@ abstract class MTPkgViewRendererAbstractModuleMapper extends TUserCustomModelBas
     /**
      * {@inheritdoc}
      */
-    final public function &Execute()
+    final public function Execute()
     {
         return parent::Execute();
     }

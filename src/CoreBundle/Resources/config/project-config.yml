@@ -59,22 +59,23 @@ chameleon_system_core:
 framework:
   csrf_protection: ~
   router:
-    resource: "%kernel.root_dir%/config/routing.yml"
+    resource: "%kernel.project_dir%/app/config/routing.yml"
     strict_requirements: ~
   session:
+    # symfony 5.0 - increased security against CSRF attacks
+    cookie_samesite: lax
     metadata_update_threshold: 120
     cookie_httponly: true
     cookie_lifetime: 7200
     gc_maxlifetime: 7200
-  templating:
-    engines: ['twig']
   translator: { fallback: en }
+  error_controller: chameleon_system_core.controller.exception:showAction
 
 twig:
   debug:            "%kernel.debug%"
   charset:          "%kernel.charset%"
   strict_variables:          false
-  exception_controller: chameleon_system_core.controller.exception:showAction
+  exception_controller: null
 #  auto_reload:               ~
 #  optimizations:             ~
 

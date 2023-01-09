@@ -119,7 +119,7 @@ class TPkgCmsEvent implements IPkgCmsEvent
      *
      * @return static
      */
-    public static function &GetNewInstance($oSubject, $sContext, $sName, $aData = array())
+    public static function GetNewInstance($oSubject, $sContext, $sName, $aData = array())
     {
         $sCallingClass = get_called_class();
 

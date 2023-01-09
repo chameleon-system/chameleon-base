@@ -118,7 +118,7 @@ class TCMSFieldExtendedLookupMedia extends TCMSFieldExtendedLookup
      */
     protected function getOriginalLanguageImageId()
     {
-        $row = $this->getDatabaseConnection()->fetchAssoc(
+        $row = $this->getDatabaseConnection()->fetchAssociative(
             'SELECT * FROM '.$this->getDatabaseConnection()->quoteIdentifier(
                 $this->oTableRow->table
             ).' WHERE `id` = :id',

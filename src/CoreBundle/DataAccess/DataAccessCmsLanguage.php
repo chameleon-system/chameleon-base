@@ -71,7 +71,7 @@ class DataAccessCmsLanguage implements DataAccessCmsLanguageInterface
     public function getLanguageFromIsoCode($isoCode, $targetLanguageId)
     {
         $query = 'SELECT * FROM `cms_language` WHERE `iso_6391` = :isoCode';
-        $row = $this->databaseConnection->fetchAssoc($query, array(
+        $row = $this->databaseConnection->fetchAssociative($query, array(
             'isoCode' => $isoCode,
         ));
         if (false === $row) {

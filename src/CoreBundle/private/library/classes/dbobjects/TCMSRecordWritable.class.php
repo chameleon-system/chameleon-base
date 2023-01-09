@@ -124,8 +124,8 @@ class TCMSRecordWritable extends TCMSRecord
             $this->PreSaveHook($bIsNew);
 
             reset($this->sqlData);
-            $oTableConf = &$this->GetTableConf();
-            $oFields = &$oTableConf->GetFields($this, true, true);
+            $oTableConf = $this->GetTableConf();
+            $oFields = $oTableConf->GetFields($this, true, true);
             $this->sqlData['lastmodified'] = date('Y-m-d H:i:s');
 
             $aQueryFieldStrings = array();
@@ -331,7 +331,7 @@ class TCMSRecordWritable extends TCMSRecord
         $aOldData = $this->sqlData;
         if ($this->AllowDelete()) {
             $this->PreDeleteHook();
-            $oTableConf = &$this->GetTableConf();
+            $oTableConf = $this->GetTableConf();
             /** @var $oEditor TCMSTableEditorManager */
             $oEditor = new TCMSTableEditorManager();
             $oEditor->Init($oTableConf->id, null);
@@ -410,11 +410,11 @@ class TCMSRecordWritable extends TCMSRecord
     public function ConvertToSQLFormat($aData = null)
     {
         if (is_null($aData)) {
-            $aData = &$this->sqlData;
+            $aData = $this->sqlData;
         }
         // convert to sql
-        $oTableConf = &$this->GetTableConf();
-        $oFields = &$oTableConf->GetFieldDefinitions();
+        $oTableConf = $this->GetTableConf();
+        $oFields = $oTableConf->GetFieldDefinitions();
         /** @var $oField TCMSFieldDefinition */
         while ($oField = $oFields->Next()) {
             if (true === $oField->isVirtualField()) {
@@ -436,10 +436,10 @@ class TCMSRecordWritable extends TCMSRecord
      *
      * @return string
      */
-    protected function ConvertFieldToSQL(&$oField, $sVal)
+    protected function ConvertFieldToSQL($oField, $sVal)
     {
         $oFieldType = $oField->GetFieldType();
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
 
         switch ($oFieldType->sqlData['mysql_type']) {
             case 'DATE':
@@ -497,7 +497,7 @@ class TCMSRecordWritable extends TCMSRecord
      *
      * @return TdbDataExtranetUser
      */
-    public function &GetOwner()
+    public function GetOwner()
     {
         if (is_null($this->oOwner)) {
             if (array_key_exists('data_extranet_user_id', $this->sqlData)) {
@@ -783,7 +783,7 @@ class TCMSRecordWritable extends TCMSRecord
                     $bUploadOK = true;
 
                     // check field type. if this is not a download type, we assume it to be a lookup type and update the field value directly
-                    $oTableConf = &$this->GetTableConf();
+                    $oTableConf = $this->GetTableConf();
                     $oFieldConf = $oTableConf->GetFieldDefinition($sFieldName);
                     $oFieldType = $oFieldConf->GetFieldType();
                     if ('CMSFIELD_DOCUMENTS' == $oFieldType->sqlData['constname']) {
@@ -896,7 +896,7 @@ class TCMSRecordWritable extends TCMSRecord
         }
 
         // if the records has parent fields, we need to trigger a cache clear on all the owning records
-        $oTableConf = &$this->GetTableConf();
+        $oTableConf = $this->GetTableConf();
         $oParentFields = $oTableConf->GetFieldDefinitions(array('CMSFIELD_PROPERTY_PARENT_ID'));
         while ($oParentField = $oParentFields->Next()) {
             $oParentFieldObject = $oTableConf->GetField($oParentField->sqlData['name'], $this);

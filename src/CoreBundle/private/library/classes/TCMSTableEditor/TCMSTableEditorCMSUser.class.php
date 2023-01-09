@@ -109,7 +109,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
      */
     private function isSwitchToUserAllowed()
     {
-        $activeUser = &TCMSUser::GetActiveUser();
+        $activeUser = TCMSUser::GetActiveUser();
 
         return 'www' !== $this->oTable->sqlData['login']
             && $this->sId !== $activeUser->id
@@ -123,7 +123,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
      */
     private function isCopyPermissionsAllowed()
     {
-        $activeUser = &TCMSUser::GetActiveUser();
+        $activeUser = TCMSUser::GetActiveUser();
 
         return $activeUser->id !== $this->sId
             && true === $activeUser->oAccessManager->user->IsAdmin()
@@ -135,7 +135,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
      */
     private function isActivateUserAllowed()
     {
-        $activeUser = &TCMSUser::GetActiveUser();
+        $activeUser = TCMSUser::GetActiveUser();
 
         return 'www' !== $this->oTable->sqlData['login']
             && $activeUser->id !== $this->sId
@@ -222,7 +222,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             return true;
         }
 
-        $activeUser = &TCMSUser::GetActiveUser();
+        $activeUser = TCMSUser::GetActiveUser();
         if (false === $activeUser->oAccessManager->HasEditPermission($this->oTableConf->sqlData['name'])) {
             return false;
         }
@@ -265,7 +265,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             return false;
         }
 
-        $activeUser = &TCMSUser::GetActiveUser();
+        $activeUser = TCMSUser::GetActiveUser();
         if (false === $activeUser->oAccessManager->HasDeletePermission($this->oTableConf->sqlData['name'])) {
             return false;
         }
@@ -433,7 +433,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
           <input type=\"hidden\" name=\"_noModuleFunction\" value=\"true\" />\n";
 
         $query = "SELECT * FROM `cms_user` WHERE `id` != '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."' ORDER BY `name`, `firstname`";
-        $cmsUserList = &TdbCmsUserList::GetList($query);
+        $cmsUserList = TdbCmsUserList::GetList($query);
         $count = 0;
         $cmsUserList->SetPagingInfo(0, 50); // limit to at most 50 users
 
@@ -457,7 +457,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
                 if ($userGroups->Length() > 0) {
                     $listContent .= '<div class="font-weight-bold mt-3">'.$this->translator->trans('chameleon_system_core.table_editor_cms_user.user_group')."</div>\n";
                     $listContent .= '<div class="row mt-2">';
-                    while ($userGroup = &$userGroups->Next()) {
+                    while ($userGroup = $userGroups->Next()) {
                         $listContent .= '
                             <div class="col-12 col-lg-4 col-xl-3 my-1">
                                 <div class="border-bottom border-right pl-2 py-1">
@@ -473,7 +473,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
                     $listContent .= '<div class="font-weight-bold mt-3">'.$this->translator->trans('chameleon_system_core.table_editor_cms_user.user_rolls').'</div>';
                     
                     $listContent .= '<div class="row mt-2">';
-                    while ($role = &$roles->Next()) {
+                    while ($role = $roles->Next()) {
                         $listContent .= '
                             <div class="col-12 col-lg-4 col-xl-3 my-1">
                                 <div class="border-bottom border-right pl-2 py-1">
@@ -489,7 +489,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
                     $listContent .= '<div class="font-weight-bold font mt-3">'.$this->translator->trans('chameleon_system_core.table_editor_cms_user.portal').'</div>';
 
                     $listContent .= '<div class="row mt-2">';
-                    while ($portal = &$portals->Next()) {
+                    while ($portal = $portals->Next()) {
                         $listContent .= '
                             <div class="col-12 col-lg-4 col-xl-3 my-1">
                                 <div class="border-bottom border-right pl-2 py-1">
@@ -572,7 +572,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PrepareFieldsForSave(&$oFields)
+    protected function PrepareFieldsForSave($oFields)
     {
         parent::PrepareFieldsForSave($oFields);
 
@@ -609,7 +609,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         }
 
         // Get the new lists of roles to add/remove, restricted to the allowed roles.
-        $activeUser = &TCMSUser::GetActiveUser();
+        $activeUser = TCMSUser::GetActiveUser();
         $rolesOfActiveUser = $activeUser->GetFieldCmsRoleIdList();
         $rolesToAdd = array_intersect($rolesToAdd, $rolesOfActiveUser);
         $rolesToRemove = array_intersect($rolesToRemove, $rolesOfActiveUser);
@@ -638,7 +638,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
      * @param \TIterator  $oFields
      * @param \TCMSRecord $oPostTable
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 

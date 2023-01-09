@@ -13,14 +13,14 @@ namespace ChameleonSystem\core\DatabaseAccessLayer;
 
 class EntityListPager implements EntityListPagerInterface
 {
-    private $pageSize;
+    private int $pageSize;
 
-    public function __construct($pageSize)
+    public function __construct(int $pageSize)
     {
         $this->pageSize = $pageSize;
     }
 
-    public function getQueryForPage($query, $pageNumberStartingAtZero)
+    public function getQueryForPage(string $query, int $pageNumberStartingAtZero): string
     {
         if ($this->pageSize > 0) {
             $startRecord = $pageNumberStartingAtZero * $this->pageSize;
@@ -35,7 +35,7 @@ class EntityListPager implements EntityListPagerInterface
      * @param string $query
      * @return string
      */
-    private function removeLimitFromQuery($query)
+    private function removeLimitFromQuery(string $query): string
     {
         $normalizeQuery = $this->removeAllLineFeedsAndTabsFromQuery($query);
         $iLimitPos = strripos($normalizeQuery, ' LIMIT ');
@@ -46,7 +46,7 @@ class EntityListPager implements EntityListPagerInterface
         return substr($query, 0, $iLimitPos);
     }
 
-    private function removeAllLineFeedsAndTabsFromQuery($query)
+    private function removeAllLineFeedsAndTabsFromQuery(string $query): string
     {
         return str_replace(array("\n", "\r", "\t"), ' ', $query);
     }

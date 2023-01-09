@@ -10,7 +10,7 @@ $query = "SELECT `cms_field_conf`.`name` AS fieldName, `cms_tbl_conf`.`name` AS 
             INNER JOIN `cms_tbl_conf` ON `cms_field_conf`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id` 
           WHERE `cms_field_conf`.`is_translatable` = '1' AND `cms_field_type`.`constname` = 'CMSFIELD_EXTENDEDTABLELIST_MEDIA_CROP'";
 
-$translatableFields = TCMSLogChange::getDatabaseConnection()->fetchAll($query);
+$translatableFields = TCMSLogChange::getDatabaseConnection()->fetchAllAssociative($query);
 if (count($translatableFields) > 0) {
     $fieldsString = implode(
         ', ',

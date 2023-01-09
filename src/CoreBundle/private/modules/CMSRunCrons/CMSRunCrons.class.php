@@ -23,7 +23,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**/
 class CMSRunCrons extends TModelBase
 {
-    public function &Execute()
+    public function Execute()
     {
         $dataAccess = new CronJobDataAccess();
         $dataAccess->refreshTimestampOfLastCronJobCall();
@@ -78,7 +78,7 @@ class CMSRunCrons extends TModelBase
                      AND `active` = '1'
                 ORDER BY `execute_every_n_minutes`
                  ";
-            $cronJobRows = $this->getDatabaseConnection()->fetchAll($sQuery, ['now' => $now]);
+            $cronJobRows = $this->getDatabaseConnection()->fetchAllAssociative($sQuery, ['now' => $now]);
             foreach ($cronJobRows as $cronJobRow) {
                 $cronJobObject = TdbCmsCronjobs::GetNewInstance();
                 // cronjobs may run for a long time - in the meantime other jobs could have been executed by another thread. So load

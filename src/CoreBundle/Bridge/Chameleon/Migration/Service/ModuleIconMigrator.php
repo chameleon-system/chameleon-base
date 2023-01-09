@@ -38,7 +38,7 @@ class ModuleIconMigrator
     public function migrateModuleIcon(string $module, array $additionalIconMapping = [])
     {
         $query = 'SELECT * FROM `cms_tpl_module` WHERE `classname` = :module';
-        $row = $this->databaseConnection->fetchAssoc($query, array('module' => $module));
+        $row = $this->databaseConnection->fetchAssociative($query, array('module' => $module));
 
         if (false === $row) {
             \TCMSLogChange::addInfoMessage(\sprintf('Template Module "%s" could not be found.', $module), \TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR);
@@ -54,7 +54,7 @@ class ModuleIconMigrator
      */
     public function migrateUnhandledModules(array $additionalIconMapping = [])
     {
-        $moduleRecordList = $this->databaseConnection->fetchAll("SELECT * FROM `cms_tpl_module` WHERE `icon_font_css_class` = '' AND `icon_list` != ''");
+        $moduleRecordList = $this->databaseConnection->fetchAllAssociative("SELECT * FROM `cms_tpl_module` WHERE `icon_font_css_class` = '' AND `icon_list` != ''");
 
         foreach ($moduleRecordList as $moduleRecord) {
             $this->migrateModuleIconByRecord($moduleRecord, $additionalIconMapping);

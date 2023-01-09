@@ -28,7 +28,7 @@ class MTMenuManager extends TCMSModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
         $this->RenderMenues();
@@ -87,7 +87,7 @@ class MTMenuManager extends TCMSModelBase
             $aParameters = array();
         }
         /** @var $oCMSUser TdbCmsUser */
-        $oCMSUser = &TCMSUser::GetActiveUser();
+        $oCMSUser = TCMSUser::GetActiveUser();
         $oTdbCMSUser = TdbCmsUser::GetNewInstance();
         $oTdbCMSUser->Load($oCMSUser->id);
 
@@ -108,7 +108,7 @@ class MTMenuManager extends TCMSModelBase
         $aClearTriggers = parent::_GetCacheTableInfos();
         $aClearTriggers[] = array('table' => 'cms_tbl_conf', 'id' => '');
         $aClearTriggers[] = array('table' => 'cms_content_box', 'id' => '');
-        $oCMSUser = &TCMSUser::GetActiveUser();
+        $oCMSUser = TCMSUser::GetActiveUser();
         $aClearTriggers[] = array('table' => 'cms_user', 'id' => $oCMSUser->id);
         $aClearTriggers[] = array('table' => 'cms_widget_task', 'id' => '');
 

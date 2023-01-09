@@ -36,7 +36,7 @@ class TCMSMediaManagerTreeNode extends TCMSTreeNode
     /**
      * {@inheritdoc}
      */
-    public function &GetChildren($includeHidden = false, $languageId = null)
+    public function GetChildren($includeHidden = false, $languageId = null)
     {
         if (is_null($this->oChildren)) {
             $query = "SELECT `cms_media_tree`.*

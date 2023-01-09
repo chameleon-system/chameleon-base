@@ -22,7 +22,7 @@ use Symfony\Component\Config\Resource\FileResource;
  */
 class FileExistsResource extends FileResource
 {
-    public function isFresh($timestamp)
+    public function isFresh(int $timestamp): bool
     {
         return file_exists($this->getResource());
     }

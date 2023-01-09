@@ -69,7 +69,7 @@ class TPkgExtranetMapper_AddressSelector extends AbstractPkgExtranetMapper_Addre
             $oVisitor->SetMappedValue('bAllowDelete', $bAllowDelete);
             $oVisitor->SetMappedValue('sFieldNamesPrefix', TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
         }
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
+        $oExtranetConfig = TdbDataExtranet::GetInstance();
         $oVisitor->SetMappedValue('sExtranetSpot', $oExtranetConfig->fieldExtranetSpotName);
         $oVisitor->SetMappedValue('sSpotName', $oVisitor->GetSourceObject('sSpotName'));
         $oVisitor->SetMappedValue('sAddressId', $oAddress->id);

@@ -207,7 +207,7 @@ class TCMSTableEditorEndPoint
         /** @var $oCmsTblConf TdbCmsTblConf */
         $oCmsTblConf = TdbCmsTblConf::GetNewInstance();
         if (is_null($sLanguageID)) {
-            $oCmsUser = &TdbCmsUser::GetActiveUser();
+            $oCmsUser = TdbCmsUser::GetActiveUser();
             if ($oCmsUser && is_array($oCmsUser->sqlData) && array_key_exists('cms_language_id', $oCmsUser->sqlData)) {
                 $oCmsTblConf->SetLanguage($oCmsUser->GetCurrentEditLanguageID());
             }
@@ -279,7 +279,7 @@ class TCMSTableEditorEndPoint
      *
      * @return bool
      */
-    protected function DataIsValid(&$postData, $oFields = null)
+    protected function DataIsValid($postData, $oFields = null)
     {
         $bDataValid = true;
         if (!is_null($oFields)) {
@@ -423,7 +423,7 @@ class TCMSTableEditorEndPoint
      *
      * @return TIterator
      */
-    public function &GetMenuItems()
+    public function GetMenuItems()
     {
         if (null !== $this->getActiveEditField()) {
             $this->oMenuItems = $this->getMenuButtonsForFieldEditor();
@@ -447,10 +447,10 @@ class TCMSTableEditorEndPoint
 
                     $sOnSaveViaAjaxHookMethods = '';
                     /** @var $oFields TIterator */
-                    $oFields = &$this->oTableConf->GetFields($this->oTable);
+                    $oFields = $this->oTableConf->GetFields($this->oTable);
                     $oFields->GoToStart();
                     /** @var $oField TCMSField */
-                    while ($oField = &$oFields->Next()) {
+                    while ($oField = $oFields->Next()) {
                         $sFieldDisplayType = $oField->GetDisplayType();
                         if ('none' == $sFieldDisplayType) {
                             $sOnSaveViaAjaxHookMethods .= $oField->getOnSaveViaAjaxHookMethod();
@@ -747,7 +747,7 @@ class TCMSTableEditorEndPoint
      *
      * @return TCMSstdClass|false
      */
-    public function Save(&$postData, $bDataIsInSQLForm = false)
+    public function Save($postData, $bDataIsInSQLForm = false)
     {
         $returnVal = false;
 
@@ -764,7 +764,7 @@ class TCMSTableEditorEndPoint
             $oPostTable->DisablePostLoadHook(true);
             $oPostTable->LoadFromRow($postData);
 
-            $oFields = &$this->oTableConf->GetFields($oPostTable);
+            $oFields = $this->oTableConf->GetFields($oPostTable);
 
             $this->PrepareFieldsForSave($oFields);
             if ($bDataIsInSQLForm || $this->DataIsValid($postData, $oFields)) {
@@ -802,7 +802,7 @@ class TCMSTableEditorEndPoint
      * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         $oFields->GoToStart();
         /** @var $oField TCMSField */
@@ -842,7 +842,7 @@ class TCMSTableEditorEndPoint
         $oPostTable->DisablePostLoadHook(true);
         $oPostTable->LoadFromRow($postData);
 
-        $oField = &$this->oTableConf->GetField($sFieldName, $oPostTable);
+        $oField = $this->oTableConf->GetField($sFieldName, $oPostTable);
 
         if (false === $oField->DataIsValid()) {
             return $this->GetObjectShortInfo($postData);
@@ -971,7 +971,7 @@ class TCMSTableEditorEndPoint
     public function AddMLTConnection($sFieldName, $iConnectedID)
     {
         /** @var TCMSMLTField $oField */
-        $oField = &$this->oTableConf->GetField($sFieldName, $this->oTable);
+        $oField = $this->oTableConf->GetField($sFieldName, $this->oTable);
         $oFieldType = $oField->oDefinition->GetFieldType();
         if ('_mlt' == substr($oField->name, -4)) {
             $sTargetTable = $oField->GetConnectedTableName();
@@ -1052,7 +1052,7 @@ class TCMSTableEditorEndPoint
     public function updateMLTSortOrder($sFieldName, $sConnectedId, $iPosition)
     {
         /** @var TCMSMLTField $oField */
-        $oField = &$this->oTableConf->GetField($sFieldName, $this->oTable);
+        $oField = $this->oTableConf->GetField($sFieldName, $this->oTable);
         $sMltTableName = $oField->GetMLTTableName();
 
         $databaseConnection = $this->getDatabaseConnection();
@@ -1145,7 +1145,7 @@ class TCMSTableEditorEndPoint
     public function Insert()
     {
         $oPostTable = $this->GetNewTableObjectForEditor();
-        $oFields = &$this->oTableConf->GetFields($oPostTable, true); // for the insert we always load the defaults
+        $oFields = $this->oTableConf->GetFields($oPostTable, true); // for the insert we always load the defaults
         // we need to initialize all fields with the default values from the database.
         // this is needed since some of the values will need to be overwritten for some tables
         // we need to overwrite the default of the restriction field, if a restriction was given
@@ -1177,7 +1177,7 @@ class TCMSTableEditorEndPoint
      *
      * @return void
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         $oFields->GoToStart();
         $oCMSUserFieldType = TdbCmsFieldType::GetNewInstance();
@@ -1225,7 +1225,7 @@ class TCMSTableEditorEndPoint
      *
      * @param TIterator $oFields
      */
-    protected function _OverwriteDefaults(&$oFields)
+    protected function _OverwriteDefaults($oFields)
     {
     }
 
@@ -1236,7 +1236,7 @@ class TCMSTableEditorEndPoint
      *
      * @param TIterator $oFields
      */
-    protected function PrepareFieldsForSave(&$oFields)
+    protected function PrepareFieldsForSave($oFields)
     {
     }
 
@@ -1245,14 +1245,14 @@ class TCMSTableEditorEndPoint
      *
      * @param TIterator $oFields
      */
-    protected function _AddRestriction(&$oFields)
+    protected function _AddRestriction($oFields)
     {
         if (!is_null($this->sRestriction) && !is_null($this->sRestrictionField) && '_id' == substr($this->sRestrictionField, -3)) {
             $restriction = $this->sRestriction;
 
             $oFields->GoToStart();
             /** @var $oField TCMSField */
-            while ($oField = &$oFields->Next()) {
+            while ($oField = $oFields->Next()) {
                 if ($oField->name == $this->sRestrictionField) {
                     $oField->data = $restriction;
                 }
@@ -1324,7 +1324,7 @@ class TCMSTableEditorEndPoint
      *
      * @return TCMSTableEditor
      */
-    public function &CopyClass($id)
+    public function CopyClass($id)
     {
         $oClass = clone $this;
         $oClass->Init($this->sTableId, $id);
@@ -1351,7 +1351,7 @@ class TCMSTableEditorEndPoint
         $oPostTable->LoadFromRow($postData);
         $oPostTable->id = null;
         $oPostTable->sqlData['id'] = null;
-        $oFields = &$this->oTableConf->GetFields($oPostTable);
+        $oFields = $this->oTableConf->GetFields($oPostTable);
         if ($this->_WriteDataToDatabase($oFields, $oPostTable, $bNoConversion, true)) {
             $this->OnAfterCopy();
         }
@@ -1377,7 +1377,7 @@ class TCMSTableEditorEndPoint
         $this->oTable->id = null;
         $this->oTable->sqlData['id'] = null;
         $this->OnBeforeCopy();
-        $oFields = &$this->oTableConf->GetFields($this->oTable);
+        $oFields = $this->oTableConf->GetFields($this->oTable);
 
         $oFields->GoToStart();
         while ($oField = $oFields->Next()) {
@@ -1437,7 +1437,7 @@ class TCMSTableEditorEndPoint
     {
         // hotfix: call GetSQL to trigger additional scripts even on copy
         $this->LoadDataFromDatabase();
-        $oFields = &$this->oTableConf->GetFields($this->oTable);
+        $oFields = $this->oTableConf->GetFields($this->oTable);
         $sModuleInstanceID = '';
         /** @var $oField TCMSField */
         while ($oField = $oFields->Next()) {
@@ -1497,7 +1497,7 @@ class TCMSTableEditorEndPoint
      *
      * @return bool
      */
-    protected function _WriteDataToDatabase(&$oFields, &$oData, $bDataFromDatabase = false, $isCopy = false, $bForceInsert = false, $bCopyAllLanguages = false)
+    protected function _WriteDataToDatabase($oFields, $oData, $bDataFromDatabase = false, $isCopy = false, $bForceInsert = false, $bCopyAllLanguages = false)
     {
         $aMLTFields = array();
         $aPropertyFields = array();
@@ -1838,7 +1838,7 @@ class TCMSTableEditorEndPoint
      *
      * @param TCMSFieldDefinition $oPropertyField
      */
-    protected function DeleteRecordReferencesProperties(&$oPropertyField)
+    protected function DeleteRecordReferencesProperties($oPropertyField)
     {
         $oPropertyFieldObject = $this->oTableConf->GetField($oPropertyField->sqlData['name'], $this->oTable, true);
         /** @var $oPropertyFieldObject TCMSFieldPropertyTable */
@@ -1996,7 +1996,7 @@ class TCMSTableEditorEndPoint
                LEFT JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id` 
                    WHERE `cms_field_conf`.`cms_field_type_id` = :fieldTypeId';
 
-        return $databaseConnection->fetchAll($fieldConfigQuery, ['fieldTypeId' => $fieldTypeId]);
+        return $databaseConnection->fetchAllAssociative($fieldConfigQuery, ['fieldTypeId' => $fieldTypeId]);
     }
 
     protected function hasMultiTableRecordReferences(string $tableName, string $fieldName, string $deletedTableName, string $deletedRecordId = ''): bool
@@ -2081,14 +2081,14 @@ class TCMSTableEditorEndPoint
     public function DeleteRecordReferencesFromSource()
     {
         // we need to delete any entries in related property tables...
-        $oPropertyFields = &$this->oTableConf->GetFieldDefinitions(array('CMSFIELD_PROPERTY'));
+        $oPropertyFields = $this->oTableConf->GetFieldDefinitions(array('CMSFIELD_PROPERTY'));
         /* @var $oPropertyField TCMSFieldPropertyTable */
         while ($oPropertyField = $oPropertyFields->Next()) {
             $this->DeleteRecordReferencesProperties($oPropertyField);
         }
 
         // now delete all mlt connections
-        $oFields = &$this->oTableConf->GetFields($this->oTable);
+        $oFields = $this->oTableConf->GetFields($this->oTable);
         /** @var $oFields TIterator */
         while ($oField = $oFields->Next()) {
             if ($oField->isMLTField) {
@@ -2178,7 +2178,7 @@ class TCMSTableEditorEndPoint
      *
      * @param TIterator $oFields
      */
-    public function ProcessFieldsBeforeDisplay(&$oFields)
+    public function ProcessFieldsBeforeDisplay($oFields)
     {
     }
 

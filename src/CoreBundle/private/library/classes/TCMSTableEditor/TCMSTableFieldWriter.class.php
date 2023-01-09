@@ -81,7 +81,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         $this->_oField->name = $this->_sqlFieldName;
         $this->_oField->recordId = $this->sId;
         $this->_oField->sTableName = $this->_oParentRecord->sqlData['name'];
-        $this->_oField->oDefinition = &$this->oTable;
+        $this->_oField->oDefinition = $this->oTable;
         $this->_oField->CreateFieldDefinition(false, $this->_oField);
 
         return $oRecordData;
@@ -112,7 +112,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         $this->_oField->name = $this->_sqlFieldName;
         $this->_oField->recordId = $this->sId;
         $this->_oField->sTableName = $this->_oParentRecord->sqlData['name'];
-        $this->_oField->oDefinition = &$this->oTable;
+        $this->_oField->oDefinition = $this->oTable;
 
         return $oRecordData;
     }
@@ -130,7 +130,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    public function Save(&$postData, $bDataIsInSQLForm = false)
+    public function Save($postData, $bDataIsInSQLForm = false)
     {
         if (false === $this->DataIsValid($postData, null)) {
             return false;
@@ -146,7 +146,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
@@ -252,7 +252,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
 
         $query = 'SELECT * FROM `cms_field_type` WHERE `id` = :typeId';
 
-        $fieldTypeData = $databaseConnection->fetchAssoc($query, ['typeId' => $typeId]);
+        $fieldTypeData = $databaseConnection->fetchAssociative($query, ['typeId' => $typeId]);
 
         if (false === $fieldTypeData) {
             return null;
@@ -264,11 +264,11 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function _OverwriteDefaults(&$oFields)
+    protected function _OverwriteDefaults($oFields)
     {
         if (!is_null($this->_sqlFieldName)) {
             $oFields->GoToStart();
-            while ($oField = &$oFields->Next()) {
+            while ($oField = $oFields->Next()) {
                 /** @var $oField TCMSField */
                 if ('name' == $oField->name) {
                     $oField->data = $this->_sqlFieldName;
@@ -280,7 +280,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         // there must always be a field type defined. if it is not (like after a create field request)
         // then we will set it to varchar
         $oFields->GoToStart();
-        while ($oField = &$oFields->Next()) {
+        while ($oField = $oFields->Next()) {
             /** @var $oField TCMSField */
             if ('cms_field_type_id' == $oField->name) {
                 if (is_null($oField->data) || empty($oField->data)) {
@@ -320,7 +320,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
             $this->_oField->name = $this->oTable->sqlData['name'];
             $this->_oField->sTableName = $sTableName;
             $this->_oField->recordId = $this->sId;
-            $this->_oField->oDefinition = &$this->oTable;
+            $this->_oField->oDefinition = $this->oTable;
         }
     }
 
@@ -337,10 +337,10 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         $this->_oField->name = $this->_sqlFieldName;
         $this->_oField->recordId = $this->sId;
         $this->_oField->sTableName = $this->_oParentRecord->sqlData['name'];
-        $this->_oField->oDefinition = &$this->oTable;
+        $this->_oField->oDefinition = $this->oTable;
         $this->_oField->CreateFieldDefinition();
 
-        $oClassWriter = new TCMSTableToClass($this->getFileManager(), $this->getAutoclassesDir());
+        $oClassWriter = new TCMSTableToClass($this->getFileManager(), $this->getAutoclassesDir(), $this->getAutoclassDataAccess(), $this->getDatabaseConnection());
         $oClassWriter->Load($this->oTable->sqlData['cms_tbl_conf_id']);
         $oClassWriter->Update();
     }
@@ -378,7 +378,7 @@ class TCMSTableFieldWriter extends TCMSTableEditor
      *
      * @return bool
      */
-    protected function DataIsValid(&$postData, $oFields = null)
+    protected function DataIsValid($postData, $oFields = null)
     {
         $bDataValid = parent::DataIsValid($postData, $oFields);
 
@@ -423,6 +423,11 @@ class TCMSTableFieldWriter extends TCMSTableEditor
     private function getAutoclassesCacheWarmer()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
+    }
+
+    private function getAutoclassDataAccess(): \ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
     }
 
     /**

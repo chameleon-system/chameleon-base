@@ -42,7 +42,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
 
         $aData['oField'] = $this;
 
-        $oActiveUser = &TCMSUser::GetActiveUser();
+        $oActiveUser = TCMSUser::GetActiveUser();
         $aData['oAccessManager'] = $oActiveUser->oAccessManager;
         $sRestrictToModule = $this->oDefinition->GetFieldtypeConfigKey('moduleclass');
         $sQuery = null;
@@ -61,7 +61,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
                   WHERE `cms_tpl_module`.`classname` = $quotedRestrictToModule
                ORDER BY `cms_tpl_module`.$quotedNameField ASC";
         }
-        $oModuleList = &TdbCmsTplModuleList::GetList($sQuery);
+        $oModuleList = TdbCmsTplModuleList::GetList($sQuery);
 
         $aData['oModuleList'] = $oModuleList;
         $aData['sAjaxURL'] = $this->GenerateAjaxURL();
@@ -105,7 +105,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         return $html;
     }
 
-    protected function _GetOpenWindowJS(&$oPopupTableConf)
+    protected function _GetOpenWindowJS($oPopupTableConf)
     {
         $sRestrictToModule = $this->oDefinition->GetFieldtypeConfigKey('moduleclass');
         $url = PATH_CMS_CONTROLLER.'?pagedef=extendedLookupListInstances&amp;id='.urlencode($oPopupTableConf->id).'&amp;fieldName='.urlencode($this->name);
@@ -173,7 +173,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
      * @param string $sNewName
      * @param array  $postData
      */
-    public function ChangeFieldDefinition($sOldName, $sNewName, &$postData = null)
+    public function ChangeFieldDefinition($sOldName, $sNewName, $postData = null)
     {
         parent::ChangeFieldDefinition($sOldName, $sNewName, $postData);
 
@@ -253,7 +253,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     public function RenameInstance()
     {
         $oTdbCmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
-        $oTableConf = &$oTdbCmsTplModuleInstance->GetTableConf();
+        $oTableConf = $oTdbCmsTplModuleInstance->GetTableConf();
 
         $oTableEditor = new TCMSTableEditorModuleInstance();
         $oTableEditor->Init($oTableConf->id, $this->data);
@@ -268,7 +268,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         if ($oGlobal->UserDataExists('moduleID') && $oGlobal->UserDataExists('sView') && $oGlobal->UserDataExists('sName')) {
             $oTdbCmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
             /** @var $oTdbCmsTplModuleInstance TdbCmsTplModuleInstance */
-            $oTableConf = &$oTdbCmsTplModuleInstance->GetTableConf();
+            $oTableConf = $oTdbCmsTplModuleInstance->GetTableConf();
 
             $oTableEditor = new TCMSTableEditorModuleInstance();
             /** @var $oTableEditor TCMSTableEditorModuleInstance */
@@ -313,7 +313,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
             } else {
                 $oTdbCmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
                 /** @var $oTdbCmsTplModuleInstance TdbCmsTplModuleInstance */
-                $oTableConf = &$oTdbCmsTplModuleInstance->GetTableConf();
+                $oTableConf = $oTdbCmsTplModuleInstance->GetTableConf();
 
                 $oTableEditor = new TCMSTableEditorModuleInstance();
                 /** @var $oTableEditor TCMSTableEditorModuleInstance */
@@ -361,7 +361,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     public function RenderFieldMethodsString()
     {
         $aMethodData = $this->GetFieldMethodBaseDataArray();
-        $aMethodData['sMethodName'] = '&'.$this->GetFieldMethodName();
+        $aMethodData['sMethodName'] = $this->GetFieldMethodName();
         $aMethodData['sReturnType'] = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->GetConnectedTableName());
 
         $sCode = '';

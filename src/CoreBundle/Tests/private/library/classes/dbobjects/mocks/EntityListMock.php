@@ -16,77 +16,77 @@ class EntityListMock implements EntityListInterface
         $this->items = $items;
     }
 
-    public function next()
+    public function next(): void
     {
         $this->pointer++;
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return $this->pointer < count($this->items);
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->pointer = 0;
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->items);
     }
 
-    public function getCurrentPosition()
+    public function getCurrentPosition(): int
     {
         return $this->pointer;
     }
 
-    public function end()
+    public function end(): void
     {
         $this->pointer = count($this->items) - 1;
     }
 
-    public function setQuery($query)
+    public function setQuery(string $query): void
     {
         // Does nothing
     }
 
-    public function previous()
+    public function previous(): void
     {
         $this->pointer--;
     }
 
-    public function estimateCount()
+    public function estimateCount(): int
     {
         return count($this->items);
     }
 
-    public function setPageSize($pageSize)
+    public function setPageSize(int $pageSize): self
     {
         // Does nothing
     }
 
-    public function setCurrentPage($currentPage)
+    public function setCurrentPage(int $currentPage): self
     {
         // Does nothing
     }
 
-    public function setMaxAllowedResults($maxNumberOfResults)
+    public function setMaxAllowedResults(int $maxNumberOfResults):void
     {
         // Does nothing
     }
 
-    public function seek(int $offset)
+    public function seek(int $offset): void
     {
         $this->pointer = $offset;
     }
 
-    public function current()
+    public function current(): mixed
     {
         return $this->items[$this->pointer];
     }
 
-    public function key()
+    public function key(): int
     {
         return $this->pointer;
     }

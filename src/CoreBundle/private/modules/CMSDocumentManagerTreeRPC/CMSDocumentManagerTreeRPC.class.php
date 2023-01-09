@@ -52,7 +52,7 @@ class CMSDocumentManagerTreeRPC extends CMSModulePageTreeRPC
     /**
      * callback function to create the node properties.
      */
-    public function _nodeProperties(&$oTreeNode)
+    public function _nodeProperties($oTreeNode)
     {
         $child = array();
 

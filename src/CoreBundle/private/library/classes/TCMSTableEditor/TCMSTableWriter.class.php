@@ -47,7 +47,7 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    public function Save(&$postData, $bDataIsInSQLForm = false)
+    public function Save($postData, $bDataIsInSQLForm = false)
     {
         $this->aOldData = $this->oTable->sqlData;
         $this->sOldTblName = $this->aOldData['name'];
@@ -131,7 +131,7 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
@@ -361,11 +361,11 @@ class TCMSTableWriter extends TCMSTableEditor
      *
      * @param TIterator $oFields
      */
-    public function _OverwriteDefaults(&$oFields)
+    public function _OverwriteDefaults($oFields)
     {
         if (!is_null($this->_sqlTableName)) {
             $oFields->GoToStart();
-            while ($oField = &$oFields->Next()) {
+            while ($oField = $oFields->Next()) {
                 /** @var $oField TCMSField */
                 if ('name' == $oField->name) {
                     $oField->data = $this->_sqlTableName;
@@ -383,7 +383,7 @@ class TCMSTableWriter extends TCMSTableEditor
      */
     public function Delete($sId = null)
     {
-        $oClassWriter = new TCMSTableToClass($this->getFileManager(), $this->getAutoclassesDir());
+        $oClassWriter = new TCMSTableToClass($this->getFileManager(), $this->getAutoclassesDir(), $this->getAutoclassDataAccess(), $this->getDatabaseConnection());
         $oClassWriter->Load($this->sId);
         $oClassWriter->Delete();
 
@@ -543,5 +543,9 @@ class TCMSTableWriter extends TCMSTableEditor
     private function getAutoclassesDir()
     {
         return ServiceLocator::getParameter('chameleon_system_autoclasses.cache_warmer.autoclasses_dir');
+    }
+    private function getAutoclassDataAccess(): \ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
     }
 }

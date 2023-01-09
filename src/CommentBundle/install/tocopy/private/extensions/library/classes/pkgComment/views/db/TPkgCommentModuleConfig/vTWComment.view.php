@@ -7,7 +7,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
     ?>
         <?php
         $oCommentList->GoToStart();
-    while ($oComment = &$oCommentList->Next()) { /*@var $oComment TdbPkgComment*/
+    while ($oComment = $oCommentList->Next()) { /*@var $oComment TdbPkgComment*/
         echo $oComment->Render('vTWComment');
     } ?>
         <?php

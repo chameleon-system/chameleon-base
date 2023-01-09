@@ -48,7 +48,7 @@ class TCMSFieldPosition extends TCMSField
     protected function GetTableConf()
     {
         if (is_null($this->oTableConf)) {
-            $this->oTableConf = &$this->oTableRow->GetTableConf();
+            $this->oTableConf = $this->oTableRow->GetTableConf();
         }
     }
 

@@ -29,7 +29,7 @@ class TCMSTableConfRestriction extends TCMSRecord
         $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
-    public function GetRestriction(&$oTableConf)
+    public function GetRestriction($oTableConf)
     {
         $sRestriction = '';
         $sFunctionName = $this->sqlData['function'];

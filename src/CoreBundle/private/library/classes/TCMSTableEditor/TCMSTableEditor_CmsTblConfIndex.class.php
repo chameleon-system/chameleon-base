@@ -55,7 +55,7 @@ class TCMSTableEditor_CmsTblConfIndex extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    public function Save(&$postData, $bDataIsInSQLForm = false)
+    public function Save($postData, $bDataIsInSQLForm = false)
     {
         $returnVal = false;
         if ($this->DataIsValid($postData, null)) {

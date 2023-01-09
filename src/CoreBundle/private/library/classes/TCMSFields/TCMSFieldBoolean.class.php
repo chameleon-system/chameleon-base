@@ -135,7 +135,7 @@ class TCMSFieldBoolean extends TCMSFieldOption
     /**
      * {@inheritdoc}
      */
-    public function _GetSQLDefinition(&$fieldDefinition = null)
+    public function _GetSQLDefinition($fieldDefinition = null)
     {
         // never allow an empty default value for boolean fields
         if (isset($fieldDefinition['field_default_value']) && '' === $fieldDefinition['field_default_value']) {

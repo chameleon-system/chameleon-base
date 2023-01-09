@@ -152,9 +152,9 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @return void
      */
-    public function ObserverRegister($sObserverName, &$oObserver)
+    public function ObserverRegister($sObserverName, $oObserver)
     {
-        $this->aObservers[$sObserverName] = &$oObserver;
+        $this->aObservers[$sObserverName] = $oObserver;
     }
 
     /**
@@ -205,7 +205,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         }
         if (is_null($this->id) || empty($this->id)) {
             $this->sqlData['tmpconfirmkey'] = md5(uniqid(rand(), true));
-            $oExtranetConf = &TdbDataExtranet::GetInstance();
+            $oExtranetConf = TdbDataExtranet::GetInstance();
             if ($oExtranetConf->fieldUserMustConfirmRegistration || $bForceUserConfirm) {
                 $this->sqlData['confirmed'] = '0';
                 $this->sqlData['confirmedon'] = '0';
@@ -333,7 +333,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     public function IsLoggedInAndConfirmed()
     {
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
+        $oExtranetConfig = TdbDataExtranet::GetInstance();
         if ($oExtranetConfig->fieldLoginAllowedNotConfirmedUser) {
             if ($this->IsConfirmedUser()) {
                 return $this->IsLoggedIn();
@@ -373,7 +373,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         $oUser = $this->GetValidatedLoginUser($sLoginName);
         if (null !== $oUser) {
             if ($this->IsLoginCryptedPasswordCorrect($oUser->fieldPassword, $sPlainPassword)) {
-                $oExtranetConfig = &TdbDataExtranet::GetInstance();
+                $oExtranetConfig = TdbDataExtranet::GetInstance();
                 if ((!$oUser->IsConfirmedUser() && $oExtranetConfig->fieldLoginAllowedNotConfirmedUser) || $oUser->IsConfirmedUser()) {
                     $this->LoadFromRow($oUser->sqlData);
                     $sIsloggedIn = $this->SaveUserLogindata($sLoginName, $oUser->id);
@@ -426,7 +426,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             $query .= ' AND `cms_portal_id` = :portalId';
             $parameters['portalId'] = $portal->id;
         }
-        if ($aUser = $this->getDatabaseConnection()->fetchAssoc($query, $parameters)) {
+        if ($aUser = $this->getDatabaseConnection()->fetchAssociative($query, $parameters)) {
             $oUser = TdbDataExtranetUser::GetNewInstance();
             $oUser->LoadFromRow($aUser);
             if ($this->LoginUserDataValid($oUser->sqlData)) {
@@ -529,7 +529,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     protected function LoginUserDataValid($aUserData)
     {
         $bIsValid = true;
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
+        $oExtranetConfig = TdbDataExtranet::GetInstance();
         if (!$oExtranetConfig->fieldLoginAllowedNotConfirmedUser) {
             if (!is_array($aUserData) || count($aUserData) < 1) {
                 $aUserData = $this->sqlData;
@@ -947,7 +947,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             return $this->bSessionValidateResultCache;
         }
 
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
+        $oExtranetConfig = TdbDataExtranet::GetInstance();
         $dataValid = false;
         if (false === $oExtranetConfig) {
             return false;
@@ -987,7 +987,11 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         // we are using the last used data from the meta data in the session so that the setting, that avoids writing unchanged session data during a given threshold works
         // If we update the login_timestamp at every request, we will change the session data every request as well and the threshold will never be reached, resulting in a session write
         // at every request.
-        $session = $this->getCurrentRequest()->getSession();
+        $request = $this->getCurrentRequest();
+        $session = null !== $request && $request->hasSession() ? $request->getSession(): null;
+        if (null === $session) {
+            return ;
+        }
         $lastUsed = $session->getMetadataBag()->getLastUsed();
 
         if ((int) $aUserData['login_timestamp'] !== (int) $lastUsed) {
@@ -1052,7 +1056,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             $parameters['sessionKey'] = $sSessionKey;
         }
 
-        return $this->getDatabaseConnection()->fetchAssoc($query, $parameters);
+        return $this->getDatabaseConnection()->fetchAssociative($query, $parameters);
     }
 
     /**
@@ -1086,7 +1090,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @return TdbDataCountry|null
      */
-    public function &GetCountry()
+    public function GetCountry()
     {
         $oCountry = null;
         if (!empty($this->fieldDataCountryId)) {
@@ -1215,7 +1219,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
 
                 // still nothing? create an address entry based on the current user data
                 if (null === $this->oShippingAddress) {
-                    $this->oShippingAddress = &$this->CreateAddressBasedOnRegistrationData();
+                    $this->oShippingAddress = $this->CreateAddressBasedOnRegistrationData();
                 }
 
                 // update user to point to the new address
@@ -1264,7 +1268,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
 
             // still nothing? create an address entry based on the current user data
             if (null === $this->oBillingAddress) {
-                $this->oBillingAddress = &$this->CreateAddressBasedOnRegistrationData(false);
+                $this->oBillingAddress = $this->CreateAddressBasedOnRegistrationData(false);
 
                 if (null !== $this->oBillingAddress && null !== $this->oBillingAddress->id) {
                     $this->sqlData['default_billing_address_id'] = $this->oBillingAddress->id;
@@ -1390,7 +1394,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @return TdbDataExtranetUserAddressList
      */
-    public function &GetUserAddresses()
+    public function GetUserAddresses()
     {
         return TdbDataExtranetUserAddressList::GetUserAddressList($this->id);
     }
@@ -1510,7 +1514,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @return void
      */
-    public function SetUserBaseDataUsingAddress(TdbDataExtranetUserAddress &$oAddress)
+    public function SetUserBaseDataUsingAddress(TdbDataExtranetUserAddress $oAddress)
     {
         $aData = array(
             'data_extranet_salutation_id' => $oAddress->fieldDataExtranetSalutationId,
@@ -1543,11 +1547,11 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @return TdbDataExtranetUserAddress|false|null
      */
-    public function &CreateAddressBasedOnRegistrationData($bUseExistingAddress = true)
+    public function CreateAddressBasedOnRegistrationData($bUseExistingAddress = true)
     {
         $oAddress = null;
         // we do this only if this user has no addresses
-        $oAddressList = &TdbDataExtranetUserAddressList::GetUserAddressList($this->id);
+        $oAddressList = TdbDataExtranetUserAddressList::GetUserAddressList($this->id);
         if ($oAddressList->Length() < 1 || !$bUseExistingAddress) {
             $oAddress = $this->getAddressFromRegistrationData();
 
@@ -1558,7 +1562,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
                 $oAddress->AllowEditByAll(false);
             }
         } else {
-            $oAddress = &$oAddressList->Current();
+            $oAddress = $oAddressList->Current();
         }
 
         return $oAddress;
@@ -1602,7 +1606,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     public function SendRegistrationNotification($sMailProfileToSend = null)
     {
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
+        $oExtranetConfig = TdbDataExtranet::GetInstance();
         $oMail = null;
         if (null === $sMailProfileToSend) {
             $oMail = $this->GetRegistrationEmailProfile();
@@ -1622,7 +1626,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
                 $salName = $oSal->GetName();
             }
             $oMail->AddData('data_extranet_salutation_name', $salName);
-            $oCountry = &$this->GetFieldDataCountry();
+            $oCountry = $this->GetFieldDataCountry();
             $countryName = '';
             if (null !== $oCountry) {
                 $countryName = $oCountry->GetName();
@@ -1666,7 +1670,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     protected function GetRegistrationEmailProfile()
     {
         $oMail = null;
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
+        $oExtranetConfig = TdbDataExtranet::GetInstance();
         if ($oExtranetConfig->fieldUserMustConfirmRegistration) {
             $oMail = TdbDataMailProfile::GetProfile('registration-with-confirmation');
         } else {
@@ -1689,7 +1693,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     {
         $oView = new TViewParser();
 
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
+        $oExtranetConfig = TdbDataExtranet::GetInstance();
         $oView->AddVar('oUser', $this);
         $oView->AddVar('oExtranetConfig', $oExtranetConfig);
         $oView->AddVar('aCallTimeVars', $aCallTimeVars);
@@ -1789,7 +1793,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             }
         }
         $oUser = TdbDataExtranetUser::GetNewInstance($aData);
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
+        $oExtranetConfig = TdbDataExtranet::GetInstance();
         if (!array_key_exists('name', $aData) || empty($aData['name'])) {
             $bIsValid = false;
             $oMessages->AddMessage($sFormDataName.'-name', 'ERROR-USER-LOGIN-NAME-REQUIRED');
@@ -1876,11 +1880,11 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @return TdbPkgNewsletterUserList
      */
-    public function &GetNewsletterList()
+    public function GetNewsletterList()
     {
-        $oNewsletterList = &$this->GetFromInternalCache('GetNewsletterList');
+        $oNewsletterList = $this->GetFromInternalCache('GetNewsletterList');
         if (null === $oNewsletterList) {
-            $oNewsletterList = &TdbPkgNewsletterUserList::GetListForDataExtranetUserId($this->id);
+            $oNewsletterList = TdbPkgNewsletterUserList::GetListForDataExtranetUserId($this->id);
             $this->SetInternalCache('GetNewsletterList', $oNewsletterList);
         }
 
@@ -1895,7 +1899,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     protected function PostInsertHook()
     {
         parent::PostInsertHook();
-        $oExtranet = &TdbDataExtranet::GetInstance();
+        $oExtranet = TdbDataExtranet::GetInstance();
         $aDefaultUser = $oExtranet->GetMLTIdList('data_extranet_group', 'data_extranet_group_mlt');
         if (count($aDefaultUser) > 0) {
             $this->UpdateMLT('data_extranet_group_mlt', $aDefaultUser);
@@ -2014,7 +2018,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         $sNewEmail = $this->GetUserEMail();
         if (!empty($sNewEmail) && $sNewEmail != $sOldEmail) {
             if ($this->IsAllowUserChangeEmail()) {
-                $oExtranetConfig = &TdbDataExtranet::GetInstance();
+                $oExtranetConfig = TdbDataExtranet::GetInstance();
                 $oMessageManager = $this->getFlashMessageService();
                 $sMessageField = 'email';
                 if (empty($this->fieldEmail)) {
@@ -2077,7 +2081,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
     public function IsPasswordChangeKeyValid()
     {
         $bIsPasswordChangeKeyValid = true;
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
+        $oExtranetConfig = TdbDataExtranet::GetInstance();
         if ($oExtranetConfig->fieldPasswordChangeKeyTimeValidity > 0) {
             if (!empty($this->fieldPasswordChangeKey)) {
                 $sPasswordChangeTimeStamp = strtotime($this->fieldPasswordChangeTimeStamp);
@@ -2098,12 +2102,12 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      *
      * @psalm-suppress UndefinedDocblockClass - Tdb is used dynamically here: If it exists then it is used, otherwise `false` is returned.
      */
-    public function &GetFieldDataExtranetUserProfile()
+    public function GetFieldDataExtranetUserProfile()
     {
         if (false === class_exists('TdbDataExtranetUserProfile')) {
             return false;
         }
-        $oProfile = &$this->GetFromInternalCache('oProfile');
+        $oProfile = $this->GetFromInternalCache('oProfile');
         if (is_null($oProfile)) {
             $oProfile = TdbDataExtranetUserProfile::GetNewInstance();
             /** @var $oProfile TdbDataExtranetUserProfile */

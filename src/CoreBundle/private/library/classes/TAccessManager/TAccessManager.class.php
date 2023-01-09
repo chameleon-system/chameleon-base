@@ -67,7 +67,7 @@ class TAccessManager
      *
      * @param TCMSUser $oTdbCMsUser
      */
-    public function InitFromObject(&$oTdbCMsUser = null)
+    public function InitFromObject($oTdbCMsUser = null)
     {
         $this->user->InitFromObject($oTdbCMsUser);
         $this->functions->InitFromDatabase($this->user);

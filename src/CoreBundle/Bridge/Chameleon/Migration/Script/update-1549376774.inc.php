@@ -253,7 +253,7 @@ TCMSLogChange::update(__LINE__, $data);
 
 $query = 'SELECT `target_id` FROM `cms_tbl_conf_cms_role1_mlt` WHERE `source_id` = ?';
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
-$rows = $databaseConnection->fetchAll($query, [
+$rows = $databaseConnection->fetchAllAssociative($query, [
         TCMSLogChange::GetTableId('cms_tpl_page'),
 ]);
 foreach ($rows as $row) {

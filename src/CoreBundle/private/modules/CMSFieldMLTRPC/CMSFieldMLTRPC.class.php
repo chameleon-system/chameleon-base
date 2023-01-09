@@ -34,7 +34,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
         $this->sourceTable = $this->global->GetUserData('sourceTable');
     }
 
-    public function &Execute()
+    public function Execute()
     {
         $rpcAction = $this->global->GetUserData('action');
 
@@ -249,7 +249,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
         $sFieldListString = '';
         $bFindShowField = false;
         if (!is_null($oListFieldsList) && $oListFieldsList->Length() > 0) {
-            while ($oListField = &$oListFieldsList->Next()) {
+            while ($oListField = $oListFieldsList->Next()) {
                 if ($oListField->fieldShowInSort) {
                     if (!empty($oListField->fieldTitle)) {
                         $sFieldListString .= '<th scope="col" id="'.$oListField->fieldDbAlias.'" class="">'.$oListField->fieldTitle.'</th>';
@@ -282,7 +282,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
         $sFieldListString = '';
         $bFindShowField = false;
         if (!is_null($oListFieldsList) && $oListFieldsList->Length() > 0) {
-            while ($oListField = &$oListFieldsList->Next()) {
+            while ($oListField = $oListFieldsList->Next()) {
                 if ($oListField->fieldShowInSort) {
                     if (empty($oListField->fieldCallbackFnc)) {
                         $sFieldListString .= '<td class="w-100 '.$oListField->fieldDbAlias.'">'.$oRecord->sqlData[$oListField->fieldDbAlias].'</td>';

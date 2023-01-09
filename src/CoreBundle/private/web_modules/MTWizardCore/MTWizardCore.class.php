@@ -153,7 +153,7 @@ class MTWizardCore extends TUserCustomModelBase
         }
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         if (!is_null($this->oWizardStep)) {

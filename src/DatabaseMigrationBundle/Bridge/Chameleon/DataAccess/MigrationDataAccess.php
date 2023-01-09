@@ -41,7 +41,7 @@ class MigrationDataAccess implements MigrationDataAccessInterface
                   ON c.`id` = f.`cms_migration_counter_id`
                   ORDER BY c.`name`, f.`build_number`';
 
-        return $this->connection->fetchAll($query);
+        return $this->connection->fetchAllAssociative($query);
     }
 
     /**
@@ -61,7 +61,7 @@ class MigrationDataAccess implements MigrationDataAccessInterface
      */
     public function getMigrationCounterIdsByBundle()
     {
-        $data = $this->connection->fetchAll('SELECT `id`, `name` FROM `cms_migration_counter`');
+        $data = $this->connection->fetchAllAssociative('SELECT `id`, `name` FROM `cms_migration_counter`');
         $result = [];
         foreach ($data as $row) {
             $result[$row['name']] = $row['id'];

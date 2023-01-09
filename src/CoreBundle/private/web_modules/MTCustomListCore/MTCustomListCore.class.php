@@ -80,17 +80,17 @@ class MTCustomListCore extends TUserCustomModelBase
         $this->LoadListConfig();
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
         $this->LoadModuleConfigTable();
 
-        $this->data['oItemListConfig'] = &$this->oModuleConfig;
+        $this->data['oItemListConfig'] = $this->oModuleConfig;
         $this->data['oItem'] = $this->oActiveItem;
 
         if (is_null($this->oActiveItem)) { // no item -> show list
-            $this->oItemList = &$this->GetList();
+            $this->oItemList = $this->GetList();
             $this->GetListNavigation();
             $this->data['oItemList'] = $this->oItemList;
         }
@@ -153,7 +153,7 @@ class MTCustomListCore extends TUserCustomModelBase
         return get_class($this);
     }
 
-    protected function &GetList()
+    protected function GetList()
     {
         $oListRecords = new TCMSRecordList(); /*var $oListRecords TCMSRecordList*/
 
@@ -208,7 +208,7 @@ class MTCustomListCore extends TUserCustomModelBase
         $sCategoryTableName = null;
         $sCategoryNameField = null;
         if (!is_null($this->oListConfig->sCategoryFieldName)) {
-            $oCategoryField = &$this->oListTableConfig->GetFieldDefinition($this->oListConfig->sCategoryFieldName);
+            $oCategoryField = $this->oListTableConfig->GetFieldDefinition($this->oListConfig->sCategoryFieldName);
 
             // mlt, lookup, or normal?
             $oCategoryFieldType = $oCategoryField->GetFieldType();

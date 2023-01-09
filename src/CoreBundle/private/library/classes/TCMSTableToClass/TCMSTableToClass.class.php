@@ -37,6 +37,8 @@ class TCMSTableToClass
      * @var string
      */
     private $cachedir;
+    private AutoclassesDataAccessInterface $autoClassesDataAccess;
+    private Connection $databaseConnection;
 
     /**
      * @param string $tableConfId
@@ -165,7 +167,7 @@ class TCMSTableToClass
      */
     private function getTableExtensionData($targetTableConfId)
     {
-        $data = $this->getAutoclassesDataAccess()->getTableExtensionData();
+        $data = $this->autoClassesDataAccess->getTableExtensionData();
         if (isset($data[$targetTableConfId])) {
             return $data[$targetTableConfId];
         } else {
@@ -289,7 +291,7 @@ class TCMSTableToClass
      */
     private function getFields($sTableId)
     {
-        $data = $this->getAutoclassesDataAccess()->getFieldData();
+        $data = $this->autoClassesDataAccess->getFieldData();
 
         if (isset($data[$sTableId])) {
             return $data[$sTableId];
@@ -337,7 +339,7 @@ class TCMSTableToClass
             'sParentClassSubType' => $this->aTableConf['dbobject_extend_subtype'],
             'sParentClassType' => $this->aTableConf['dbobject_extend_type'],
             'aTableConf' => $this->aTableConf,
-            'databaseConnection' => $this->getDatabaseConnection(),
+            'databaseConnection' => $this->databaseConnection,
         );
 
         $aData['isTableWithActiveWorkflow'] = false;
@@ -438,8 +440,7 @@ class TCMSTableToClass
     {
         $data = array();
 
-        $dataAccess = $this->getAutoclassesDataAccess();
-        $data['cmsConfig'] = $dataAccess->getConfig();
+        $data['cmsConfig'] = $this->autoClassesDataAccess->getConfig();
 
         return $data;
     }
@@ -451,7 +452,7 @@ class TCMSTableToClass
      */
     private function getTableOrderBy($targetTableConfId)
     {
-        $data = $this->getAutoclassesDataAccess()->getTableOrderByData();
+        $data = $this->autoClassesDataAccess->getTableOrderByData();
 
         if (isset($data[$targetTableConfId])) {
             return $data[$targetTableConfId];
@@ -585,7 +586,7 @@ class TCMSTableToClass
      */
     private function loadRecord($tableConfId)
     {
-        $data = $this->getAutoclassesDataAccess()->getTableConfigData();
+        $data = $this->autoClassesDataAccess->getTableConfigData();
 
         if (true === isset($data[$tableConfId])) {
             return $data[$tableConfId];
@@ -598,22 +599,11 @@ class TCMSTableToClass
      * @param IPkgCmsFileManager $filemanager
      * @param string             $cachedir
      */
-    public function __construct(IPkgCmsFileManager $filemanager, $cachedir)
+    public function __construct(IPkgCmsFileManager $filemanager, $cachedir, AutoclassesDataAccessInterface $autoClassesDataAccess, Connection $databaseConnection)
     {
         $this->filemanager = $filemanager;
         $this->cachedir = $cachedir;
-    }
-
-    private function getDatabaseConnection(): Connection
-    {
-        return ServiceLocator::get('database_connection');
-    }
-
-    /**
-     * @return AutoclassesDataAccessInterface
-     */
-    private function getAutoclassesDataAccess()
-    {
-        return ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
+        $this->autoClassesDataAccess = $autoClassesDataAccess;
+        $this->databaseConnection = $databaseConnection;
     }
 }

@@ -65,7 +65,7 @@ class TCMSTableEditorPage extends TCMSTableEditor
      * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         $this->UpdatePageNaviBreadCrumb();
         parent::PostSaveHook($oFields, $oPostTable);

@@ -22,7 +22,7 @@ class TCMSListManagerMediaManager extends TCMSListManagerMediaSelector
      *
      * @param \TCMSImage $oImage
      */
-    public function Init(&$oImage)
+    public function Init($oImage)
     {
         parent::Init($oImage);
         $this->bListCacheEnabled = false;

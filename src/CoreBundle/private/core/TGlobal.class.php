@@ -28,7 +28,7 @@ class TGlobal extends TGlobalBase
     {
         if (self::MODE_FRONTEND === self::$mode) {
             if ('oUser' === $sParameterName) {
-                $this->oUser = &TCMSUser::GetActiveUser();
+                $this->oUser = TCMSUser::GetActiveUser();
                 if (!$this->oUser && 'true' == !$this->GetUserData('__modulechooser')) {
                     // no user set yet... so autologin the webuser...
                     $this->oUser = new TCMSUser();
@@ -119,7 +119,7 @@ class TGlobal extends TGlobalBase
                 $tmp = explode(',', $this->oUser->sqlData['languages']);
                 foreach ($tmp as $lang) {
                     $query = 'SELECT * FROM `cms_language` WHERE `iso_6391` = :languageCode';
-                    if ($langrow = $databaseConnection->fetchAssoc($query, array('languageCode' => trim($lang)))) {
+                    if ($langrow = $databaseConnection->fetchAssociative($query, array('languageCode' => trim($lang)))) {
                         $this->aLangaugeIds[] = $langrow['id'];
                     }
                 }

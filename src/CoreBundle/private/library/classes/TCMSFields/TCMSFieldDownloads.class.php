@@ -23,7 +23,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
 
     public function GetHTML()
     {
-        $this->oTableConf = &$this->oTableRow->GetTableConf();
+        $this->oTableConf = $this->oTableRow->GetTableConf();
 
         $html = '<input type="hidden" id="'.TGlobalBase::OutHTML($this->name).'" name="'.TGlobalBase::OutHTML($this->name).'" value="'.TGlobalBase::OutHTML($this->data).'" />
       <div>';
@@ -56,7 +56,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
 
         $html .= '<div id="documentManager_'.$this->name."_anchor\">
       <div class=\"pt-2\">\n";
-        while ($oDownload = &$oDownloads->Next()) {
+        while ($oDownload = $oDownloads->Next()) {
             /** @var $oDownload TCMSDownloadFile */
             $tdWidth = 50;
             if (true === $bReadOnly) {
@@ -337,7 +337,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
     public function PkgCmsFormPostSaveHook($sId, $oForm)
     {
         if (!$this->oTableConf) {
-            $this->oTableConf = &$this->oTableRow->GetTableConf();
+            $this->oTableConf = $this->oTableRow->GetTableConf();
         }
         if (is_array($this->data) && array_key_exists('x', $this->data)) {
             unset($this->data['x']);

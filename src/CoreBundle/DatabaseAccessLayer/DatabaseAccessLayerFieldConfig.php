@@ -108,7 +108,7 @@ class DatabaseAccessLayerFieldConfig extends AbstractDatabaseAccessLayer
                  WHERE `cms_field_conf`.`name`= :fieldName
                    AND `cms_tbl_conf`.`name` = :tableName';
         $oFieldDefinition = null;
-        $row = $this->getDatabaseConnection()->fetchAssoc($query, array('fieldName' => $fieldName, 'tableName' => $tableName));
+        $row = $this->getDatabaseConnection()->fetchAssociative($query, array('fieldName' => $fieldName, 'tableName' => $tableName));
 
         if (false !== $row) {
             $oFieldDefinition = TdbCmsFieldConf::GetNewInstance($row);

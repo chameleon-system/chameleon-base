@@ -208,7 +208,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     protected function getToolbar()
     {
         $aToolbar = $this->getCkeditorConfigProvider()->getToolbar();
-        $oUser = &TCMSUser::GetActiveUser();
+        $oUser = TCMSUser::GetActiveUser();
         $aToolbar = $this->getModifiedToolbarByUser($oUser, $aToolbar);
         $aToolbar = $this->getModifiedToolbarByConstant($aToolbar);
         $aToolbar = $this->getModifiedToolbarByFieldConfig($aToolbar);

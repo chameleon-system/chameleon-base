@@ -46,7 +46,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig_Form extends Abstract
      *
      * @return void
      */
-    protected function mapFormFields(IMapperVisitorRestricted &$oVisitor)
+    protected function mapFormFields(IMapperVisitorRestricted $oVisitor)
     {
         /** @var $oNewsletterUser TdbPkgNewsletterUser */
         $oNewsletterUser = $oVisitor->GetSourceObject('oNewsletterUser');
@@ -58,8 +58,8 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig_Form extends Abstract
         $aFieldSalutation = array();
         $aFieldSalutation['sValue'] = ('' != $oNewsletterUser->fieldDataExtranetSalutationId) ? ($oNewsletterUser->fieldDataExtranetSalutationId) : ($oUser->fieldDataExtranetSalutationId);
         $aValueList = array();
-        $oSalutationList = &TdbDataExtranetSalutationList::GetList();
-        while ($oSalutation = &$oSalutationList->Next()) {
+        $oSalutationList = TdbDataExtranetSalutationList::GetList();
+        while ($oSalutation = $oSalutationList->Next()) {
             $aValueList[] = array(
                 'sValue' => $oSalutation->id,
                 'sName' => $oSalutation->GetName(),
@@ -104,7 +104,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig_Form extends Abstract
      *
      * @return void
      */
-    protected function mapAvailableGroupList(IMapperVisitorRestricted &$oVisitor)
+    protected function mapAvailableGroupList(IMapperVisitorRestricted $oVisitor)
     {
         /** @var $oNewsletterModuleSignUpConfig TdbPkgNewsletterModuleSignupConfig */
         $oNewsletterModuleSignUpConfig = $oVisitor->GetSourceObject('oObject');
@@ -113,7 +113,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig_Form extends Abstract
 
         $aGroupList = array();
         $oGroupsAvailableForSignUp = $oNewsletterModuleSignUpConfig->GetFieldPkgNewsletterGroupList();
-        while ($oGroup = &$oGroupsAvailableForSignUp->Next()) {
+        while ($oGroup = $oGroupsAvailableForSignUp->Next()) {
             $aUserGroups = (null !== $oNewsletterUser) ? ($oNewsletterUser->GetSignedInNewsletterList()->GetIdList()) : (array());
             $aGroupList[] = array(
                 'id' => $oGroup->id,

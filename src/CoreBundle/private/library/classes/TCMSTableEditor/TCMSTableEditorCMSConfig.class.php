@@ -48,7 +48,7 @@ class TCMSTableEditorCMSConfig extends TCMSTableEditor
     public function UpdateTranslationFields()
     {
         // get language list
-        $oConfig = &TdbCmsConfig::GetInstance(true);
+        $oConfig = TdbCmsConfig::GetInstance(true);
         /** @var $oConfig TdbCmsConfig */
         if (!empty($oConfig->sqlData['translation_base_language_id'])) {
             // ok, we have a list of "other" languages (in addition to the base language)
@@ -67,7 +67,7 @@ class TCMSTableEditorCMSConfig extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 

@@ -317,7 +317,7 @@ EOREGEX;
     /* This function breaks up the SQL statement into logical sections.
             Some sections are then further handled by specialized functions.
          */
-    private function process_sql(&$tokens, $start_at = 0, $stop_at = false)
+    private function process_sql($tokens, $start_at = 0, $stop_at = false)
     {
         $prev_category = '';
         $token_category = '';
@@ -697,7 +697,7 @@ EOREGEX;
 
             Finally, at the end, the epxression list is returned.
          */
-    private function process_select(&$tokens)
+    private function process_select($tokens)
     {
         $expression = '';
         $expr = array();
@@ -815,7 +815,7 @@ EOREGEX;
         return array('expr_type' => $type, 'alias' => $alias, 'base_expr' => $base_expr, 'sub_tree' => $processed);
     }
 
-    private function process_from(&$tokens)
+    private function process_from($tokens)
     {
         $expression = '';
         $expr = array();
@@ -1013,7 +1013,7 @@ EOREGEX;
         return $expr;
     }
 
-    private function process_group(&$tokens, &$select)
+    private function process_group($tokens, $select)
     {
         $out = array();
         $expression = '';

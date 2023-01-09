@@ -25,7 +25,7 @@ class MTMerklisteCore extends TUserModelBase
         // load items...
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['oItems'] = $this->LoadItems();
@@ -33,7 +33,7 @@ class MTMerklisteCore extends TUserModelBase
         return $this->data;
     }
 
-    protected function &LoadItems()
+    protected function LoadItems()
     {
         $oItems = false;
         if (count($this->aMerklistenItems) > 0) {
