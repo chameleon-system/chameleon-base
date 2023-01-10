@@ -17,7 +17,7 @@ class TPkgCmsSessionHandler_Decorator_EnforceWriteSequenceTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $oMockStorage = null;
     private $mockExistingSessionData;
@@ -128,6 +128,7 @@ class TPkgCmsSessionHandler_Decorator_EnforceWriteSequenceTest extends TestCase
         $this->mockStorage->write(\Prophecy\Argument::any(), \Prophecy\Argument::any())->will(function ($args, $mockStorage) {
             /** @var \SessionHandlerInterface|\Prophecy\Prophecy\ObjectProphecy $mockStorage */
             $mockStorage->read($args[0])->willReturn($args[1]);
+            return true;
         }
         );
         $this->writeSequenceEnforcer = new TPkgCmsSessionHandler_Decorator_EnforceWriteSequence($this->mockStorage->reveal());
