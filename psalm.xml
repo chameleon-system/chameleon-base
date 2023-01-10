@@ -34,7 +34,7 @@
     </projectFiles>
 
     <extraFiles>
-        <directory name="../../../app/cache/autoclasses" />
+        <directory name="../../../var/autoclasses" />
         <file name="../../../app/config/config.inc.php" />
         <file name="src/CoreBundle/Resources/config/defaults.inc.php" />
     </extraFiles>
