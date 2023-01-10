@@ -19,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
 {
     /**
-     * @var TranslatorInterface
+     * @var TranslatorInterface&TranslatorBagInterface
      */
     private $delegate;
     /**
@@ -28,7 +28,7 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
     private $requestInfoService;
 
     /**
-     * @param TranslatorInterface $delegate
+     * @param TranslatorInterface&TranslatorBagInterface $delegate
      * @param RequestInfoServiceInterface $requestInfoService
      */
     public function __construct(TranslatorInterface $delegate, RequestInfoServiceInterface $requestInfoService)
