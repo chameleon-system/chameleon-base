@@ -31,9 +31,9 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
      * @param TranslatorInterface&TranslatorBagInterface $delegate
      * @param RequestInfoServiceInterface $requestInfoService
      */
-    public function __construct(TranslatorInterface $delegate, RequestInfoServiceInterface $requestInfoService)
+    public function __construct(TranslatorBagInterface $delegate, RequestInfoServiceInterface $requestInfoService)
     {
-        if (!$delegate instanceof TranslatorBagInterface) {
+        if (!$delegate instanceof TranslatorInterface) {
             throw new \LogicException('The translator must implement both TranslatorInterface and TranslatorBagInterface');
         }
         $this->delegate = $delegate;
