@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - 'master'
-      - '[0-9]+.[0-9]+.x'
-      - '770-github-actions-7-1-x'
-    tags: [ '*' ]
   pull_request:
     types: [ opened, synchronize, reopened ]
 
@@ -16,12 +13,12 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version: [ '7.4', '8.0' ]
+        php-version: [ '8.0', '8.1' ]
     env:
       # Branch / Tag of chameleon-system/chameleon-system and chameleon-system/chameleon-resources
       # that will be used to setup this project
-      CHAMELEON_SYSTEM_REF: '7.1.x'
-      CHAMELEON_RESOURCES_REF: '7.1.x'
+      CHAMELEON_SYSTEM_REF: 'master'
+      CHAMELEON_RESOURCES_REF: 'master'
 
     services:
       mysql:
