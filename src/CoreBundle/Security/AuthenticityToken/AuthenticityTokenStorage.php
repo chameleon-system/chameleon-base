@@ -36,7 +36,7 @@ class AuthenticityTokenStorage implements TokenStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function getToken($tokenId)
+    public function getToken(string $tokenId)
     {
         $session = $this->getSession();
         if (null === $session || false === $session->has($this->namespace.'/'.$tokenId)) {
@@ -85,7 +85,7 @@ class AuthenticityTokenStorage implements TokenStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function removeToken($tokenId)
+    public function removeToken(string $tokenId)
     {
         $session = $this->getSession();
         if (null === $session) {
@@ -98,7 +98,7 @@ class AuthenticityTokenStorage implements TokenStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function hasToken($tokenId)
+    public function hasToken(string $tokenId)
     {
         $session = $this->getSession();
         if (null === $session) {

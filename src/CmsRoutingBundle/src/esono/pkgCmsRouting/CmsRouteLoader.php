@@ -360,7 +360,7 @@ class CmsRouteLoader extends Loader
     /**
      * {@inheritdoc}
      */
-    public function supports($resource, $type = null)
+    public function supports($resource, string $type = null)
     {
         return 'chameleon' === $type;
     }

@@ -45,7 +45,7 @@ abstract class ChameleonBaseRouter extends Router
         $this->environment = $container->getParameter('kernel.environment');
 
         $options['resource_type'] = 'chameleon';
-        $options['cache_dir'] = $this->generateCacheDirPath($container->getParameter('kernel.cache_dir'));
+        $options['cache_dir'] = $this->generateCacheDirPath((string) $container->getParameter('kernel.cache_dir'));
 
         $this->setOptions($options);
     }
@@ -105,7 +105,7 @@ abstract class ChameleonBaseRouter extends Router
     /**
      * {@inheritdoc}
      */
-    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    public function generate(string $name, array $parameters = array(), int $referenceType = self::ABSOLUTE_PATH)
     {
         /*
          * Remove an existing authenticity token (might be set to a concrete value instead of the placeholder)
