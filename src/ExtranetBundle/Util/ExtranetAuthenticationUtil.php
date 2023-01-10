@@ -33,7 +33,7 @@ class ExtranetAuthenticationUtil implements ExtranetAuthenticationUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastLoginName()
+    public function getLastLoginName(): string
     {
         $request = $this->getCurrentRequest();
 
@@ -41,7 +41,7 @@ class ExtranetAuthenticationUtil implements ExtranetAuthenticationUtilInterface
             return '';
         }
 
-        return $request->request->get(ExtranetUserConstants::LOGIN_FORM_FIELD_LOGIN_NAME, '');
+        return (string) $request->request->get(ExtranetUserConstants::LOGIN_FORM_FIELD_LOGIN_NAME, '');
     }
 
     /**

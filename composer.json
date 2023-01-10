@@ -85,7 +85,8 @@
         "symfony/validator": "^5.4",
         "symfony/web-link": "^5.4",
         "symfony/workflow": "^5.4",
-        "symfony/yaml": "^5.4"
+        "symfony/yaml": "^5.4",
+        "ext-gd": "*"
     },
     "require-dev": {
         "symfony/stopwatch": "^5.4",
