@@ -19,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
 {
     /**
-     * @var TranslatorInterface&TranslatorBagInterface
+     * @var TranslatorInterface
      */
     private $delegate;
     /**
@@ -28,10 +28,10 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
     private $requestInfoService;
 
     /**
-     * @param TranslatorInterface&TranslatorBagInterface $delegate
+     * @param TranslatorInterface $delegate
      * @param RequestInfoServiceInterface $requestInfoService
      */
-    public function __construct(TranslatorInterface&TranslatorBagInterface $delegate, RequestInfoServiceInterface $requestInfoService)
+    public function __construct(TranslatorInterface $delegate, RequestInfoServiceInterface $requestInfoService)
     {
         if (!$delegate instanceof TranslatorBagInterface) {
             throw new \LogicException('The translator must implement both TranslatorInterface and TranslatorBagInterface');
