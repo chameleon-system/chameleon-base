@@ -32,11 +32,7 @@ class DataAccessCmsTblConf implements DataAccessCmsTblConfInterface
             ['tableName' => $tableName]
         );
 
-        if (false === $tableExists) {
-            return false;
-        }
-
-        return 1 === (int)$tableExists;
+        return (bool)$tableExists;
     }
 
 
