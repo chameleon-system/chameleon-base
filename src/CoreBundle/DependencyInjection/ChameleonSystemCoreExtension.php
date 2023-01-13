@@ -19,6 +19,8 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
+use Symfony\Component\Security\Http\Event\LogoutEvent;
 
 class ChameleonSystemCoreExtension extends Extension implements PrependExtensionInterface
 {
@@ -258,11 +260,11 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
 
         $definition = $container->getDefinition('chameleon_system_core.event_listener.migrate_session_listener');
         $definition->addTag('kernel.event_listener', [
-            'event' => CoreEvents::BACKEND_LOGIN_SUCCESS,
+            'event' => LoginSuccessEvent::class,
             'method' => 'migrateSession',
         ]);
         $definition->addTag('kernel.event_listener', [
-            'event' => CoreEvents::BACKEND_LOGOUT_SUCCESS,
+            'event' => LogoutEvent::class,
             'method' => 'migrateSession',
         ]);
     }
