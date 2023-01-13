@@ -10,8 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -29,7 +29,7 @@ class TCMSListManagerCMSUser extends TCMSListManagerFullGroupTable
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if ($securityHelper->isGranted(UserRoles::CMS_ADMIN)) {
+        if ($securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN)) {
             return $query;
         }
 

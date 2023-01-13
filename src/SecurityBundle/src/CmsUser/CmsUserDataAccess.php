@@ -2,7 +2,7 @@
 
 namespace ChameleonSystem\SecurityBundle\CmsUser;
 
-use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -57,7 +57,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
 
             return $carry;
         }, []);
-        $roles['-'] = UserRoles::CMS_USER;
+        $roles['-'] = CmsUserRoleConstants::CMS_USER;
 
 
         $userRightRows = $this->connection->fetchAllAssociative(

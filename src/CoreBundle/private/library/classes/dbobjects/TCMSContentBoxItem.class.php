@@ -10,9 +10,9 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 
 /**
  * holds one Menu (category) for the CMS, including icon, title, and menu items.
@@ -49,7 +49,7 @@ class TCMSContentBoxItem extends TAdbCmsContentBox
         if (!is_null($this->id)) {
             /** @var SecurityHelperAccess $securityHelper */
             $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-            if (false === $securityHelper->isGranted(UserRoles::CMS_USER)) {
+            if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
                 return ;
             }
             $aMenuItemsTemp = array();

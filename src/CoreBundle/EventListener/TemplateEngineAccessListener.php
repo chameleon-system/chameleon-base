@@ -12,14 +12,10 @@
 namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
-use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Http\FirewallMapInterface;
-use TCMSUser;
 
 /**
  * TemplateEngineAccessListener checks if the current user has access to the template engine, which is the case if the
@@ -52,7 +48,7 @@ class TemplateEngineAccessListener
             return ;
         }
 
-        if (false === $this->security->isGranted(UserRoles::CMS_USER)) {
+        if (false === $this->security->isGranted(CmsUserRoleConstants::CMS_USER)) {
             throw new AccessDeniedException('Template engine requested without permission.');
         }
     }

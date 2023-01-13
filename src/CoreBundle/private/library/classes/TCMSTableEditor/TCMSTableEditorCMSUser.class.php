@@ -1,12 +1,12 @@
 <?php
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
 /*
  * This file is part of the Chameleon System (https://www.chameleonsystem.com).
@@ -133,7 +133,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
         return $securityHelper->getUser()?->getId() !== $this->sId
-            && true === $securityHelper->isGranted(UserRoles::CMS_ADMIN)
+            && true === $securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN)
         ;
     }
 
@@ -249,7 +249,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             return false;
         }
 
-        if (false === $securityHelper->isGranted(UserRoles::CMS_ADMIN)) {
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN)) {
             // Continue only if we have an ID. If we do not, this is a new record, so the check is not needed.
             if (null !== $this->sId && !empty($this->sId)) {
                 $oTargetUser = TdbCmsUser::GetNewInstance();
@@ -292,7 +292,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             return false;
         }
 
-        if (true === $securityHelper->isGranted(UserRoles::CMS_ADMIN)) {
+        if (true === $securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN)) {
             return true;
         }
 
@@ -645,7 +645,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        return $securityHelper->isGranted(UserRoles::CMS_ADMIN);
+        return $securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN);
     }
 
     /**

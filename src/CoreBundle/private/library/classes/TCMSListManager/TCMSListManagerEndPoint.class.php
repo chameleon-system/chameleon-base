@@ -12,9 +12,9 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -270,7 +270,7 @@ class TCMSListManagerEndPoint
         $query = '';
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-        if (false === $securityHelper->isGranted(UserRoles::CMS_USER)) {
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return false;
         }
 
@@ -283,7 +283,7 @@ class TCMSListManagerEndPoint
 
 
         // we add the portal restriction ONLY if the user does not have the cms_admin role (admins may see all portals)
-        if (false === $securityHelper->isGranted(UserRoles::CMS_ADMIN)) {
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN)) {
             $databaseConnection = $this->getDatabaseConnection();
             $sTableName = $this->oTableConf->sqlData['name'];
             $quotedTableName = $databaseConnection->quoteIdentifier($sTableName);

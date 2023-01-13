@@ -11,11 +11,10 @@
 
 namespace ChameleonSystem\CoreBundle\Security;
 
-use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use ICmsCoreRedirect;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
-use TGlobal;
 
 class BackendAccessCheck
 {
@@ -83,7 +82,7 @@ class BackendAccessCheck
      */
     protected function checkLogin()
     {
-        if (true === $this->security->isGranted(UserRoles::CMS_USER)) {
+        if (true === $this->security->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return;
         }
         $this->checkLoginOnAjax();

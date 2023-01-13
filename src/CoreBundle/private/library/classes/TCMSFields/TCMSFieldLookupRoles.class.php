@@ -10,9 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
-use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 
 /**
  * a lookup field with special cases to prevent non admins to select roles they are not allowed to.
@@ -32,7 +31,7 @@ class TCMSFieldLookupRoles extends TCMSFieldLookupMultiselectCheckboxes
         $data = parent::getMltRecordData($listGroupFieldColumn);
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-        if ($securityHelper->isGranted(UserRoles::CMS_ADMIN)) {
+        if ($securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN)) {
             return $data;
         }
 

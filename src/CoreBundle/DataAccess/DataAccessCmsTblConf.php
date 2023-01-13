@@ -51,12 +51,14 @@ class DataAccessCmsTblConf implements DataAccessCmsTblConfInterface
                      WHERE `cms_tbl_conf`.`name` = :tableName',
             $this->connection->quoteIdentifier($permissionTable)
         );
+        $permittedRoleRows = $this->connection->fetchAllAssociative(
+            $query,
+            ['tableName' => $tableName]
+        );
+
         return array_map(
             static fn(array $row) => $row['target_id'],
-            $this->connection->fetchAllAssociative(
-                $query,
-                ['tableName' => $tableName]
-            )
+            $permittedRoleRows
         );
     }
 

@@ -10,8 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 
 /**
  * manages the webpage list (links to the template engine interface).
@@ -39,7 +39,7 @@ class TCMSListManagerPagedefinitions extends TCMSListManagerFullGroupTable
         );
 
         $sQuery = '';
-        if (!$securityHelper->isGranted(UserRoles::CMS_ADMIN)) {
+        if (!$securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN)) {
             $sQuery = " (`cms_portal`.`id` IN ({$portalRestriction}) OR `cms_master_pagedef`.`restrict_to_portals`='0')";
         }
 

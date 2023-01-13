@@ -1,11 +1,11 @@
 <?php
 
-namespace ChameleonSystem\SecurityBundle\CmsUser;
+namespace ChameleonSystem\SecurityBundle\Voter;
 
 /**
  * Defines user roles that have special meaning in the system.
  */
-class UserRoles
+class CmsUserRoleConstants
 {
     /**
      * Every backend user is assigned this role - independent of the roles assigned via database.

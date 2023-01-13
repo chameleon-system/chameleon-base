@@ -16,8 +16,8 @@ use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -175,7 +175,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     {
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-        if (false === $securityHelper->isGranted(UserRoles::CMS_USER)) {
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return [];
         }
 
@@ -234,7 +234,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     {
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-        if (false === $securityHelper->isGranted(UserRoles::CMS_USER)) {
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return null;
         }
 
@@ -332,7 +332,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-        if (false === $securityHelper->isGranted(UserRoles::CMS_USER)) {
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return ;
         }
 
