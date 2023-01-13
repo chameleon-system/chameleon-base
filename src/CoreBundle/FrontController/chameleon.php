@@ -119,7 +119,7 @@ class chameleon
 
         $requestPath = parse_url($requestUri, PHP_URL_PATH);
 
-        if ('/cms/frontend' === $requestPath) {
+        if (PATH_CMS_CONTROLLER_FRONTEND === $requestPath) {
             return false;
         }
 
