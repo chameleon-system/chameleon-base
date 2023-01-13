@@ -108,6 +108,7 @@ class TCMSModelBase extends TModelBase
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
         $user = $securityHelper->getUser();
+        $userObject = null;
         if (null !== $user) {
             $userObject = TdbCmsUser::GetNewInstance();
             $userObject->Load($user->getId());

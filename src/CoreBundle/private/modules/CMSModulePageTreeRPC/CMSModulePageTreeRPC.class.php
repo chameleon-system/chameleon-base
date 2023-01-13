@@ -118,7 +118,7 @@ class CMSModulePageTreeRPC extends TCMSModelBase
 
         $sPortalCondition = '';
         if (count($aPortalExcludeList) > 0) {
-            $sPortalCondition .= " AND T.`id` NOT IN ('".implode(', ', $aPortalExcludeList)."')";
+            $sPortalCondition .= " AND T.`id` NOT IN (".implode(', ', $aPortalExcludeList).")";
         }
 
         return $sPortalCondition;

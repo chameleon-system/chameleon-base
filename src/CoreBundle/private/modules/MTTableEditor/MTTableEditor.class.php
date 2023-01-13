@@ -202,7 +202,7 @@ class MTTableEditor extends TCMSModelBase
                 /** @var RouterInterface $router */
                 $router = ServiceLocator::get('router');
                 $logout = $router->generate('app_logout');
-                $this->controller->HeaderURLRedirect($logout);                $this->controller->HeaderURLRedirect($logout);
+                $this->controller->HeaderURLRedirect($logout);
             }
 
             $this->data['oTabs'] = $this->GetTabsForTable();

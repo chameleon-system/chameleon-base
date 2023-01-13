@@ -646,7 +646,13 @@ class TCMSTableEditorEndPoint
 
         $editLanguageID = $backendSession->getCurrentEditLanguageId();
 
-        return $this->getCurrentRequest()?->getScheme().'://'.$domainName.'/'.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'?pagedef='.$this->sId.'&esdisablelinks=true&__previewmode=true&previewLanguageId='.$editLanguageID;
+
+        $scheme = $this->getCurrentRequest()?->getScheme();
+        if (null === $scheme) {
+            $scheme = 'https';
+        }
+
+        return $scheme.'://'.$domainName.'/'.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'?pagedef='.$this->sId.'&esdisablelinks=true&__previewmode=true&previewLanguageId='.$editLanguageID;
     }
 
     /**
