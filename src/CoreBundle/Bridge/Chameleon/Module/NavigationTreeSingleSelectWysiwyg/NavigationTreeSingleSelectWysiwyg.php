@@ -41,7 +41,7 @@ class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
         TTools $tools,
         TGlobal $global,
         FieldTranslationUtil $fieldTranslationUtil,
-        LanguageServiceInterface $languageService,
+        LanguageServiceInterface $backendSession,
         RequestStack $requestStack
     ) {
         parent::__construct(
@@ -52,7 +52,7 @@ class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
             $tools,
             $global,
             $fieldTranslationUtil,
-            $languageService
+            $backendSession
         );
         $this->requestStack = $requestStack;
     }

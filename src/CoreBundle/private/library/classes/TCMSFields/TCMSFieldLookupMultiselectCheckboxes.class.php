@@ -230,9 +230,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List';
         $oMLTRecords = call_user_func(array($sClassName, 'GetList'), $sFilterQuery, null, false);
         $editLanguageId = $backendSession->getCurrentEditLanguageId();
-        if (null !== $editLanguageId) {
-            $oMLTRecords->SetLanguage($editLanguageId);
-        }
+        $oMLTRecords->SetLanguage($editLanguageId);
 
         return $oMLTRecords;
     }

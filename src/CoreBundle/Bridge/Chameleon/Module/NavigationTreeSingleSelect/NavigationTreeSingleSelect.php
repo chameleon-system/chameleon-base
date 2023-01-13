@@ -108,7 +108,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         TTools $tools,
         TGlobal $global,
         FieldTranslationUtil $fieldTranslationUtil,
-        LanguageServiceInterface $languageService
+        BackendSessionInterface $backendSession
     ) {
         $this->inputFilterUtil = $inputFilterUtil;
         $this->urlUtil = $urlUtil;
@@ -117,7 +117,7 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         $this->tools = $tools;
         $this->global = $global;
         $this->fieldTranslationUtil = $fieldTranslationUtil;
-        $this->editLanguage = $languageService->getActiveEditLanguage();
+        $this->editLanguage = \TdbCmsLanguage::GetNewInstance($backendSession->getCurrentEditLanguageId());
     }
 
     /**

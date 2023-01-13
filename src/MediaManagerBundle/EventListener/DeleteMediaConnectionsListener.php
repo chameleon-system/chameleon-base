@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\MediaManagerBundle\EventListener;
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Event\DeleteMediaEvent;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\MediaManager\Exception\DataAccessException;
@@ -67,7 +68,8 @@ class DeleteMediaConnectionsListener
         MediaItemDataAccessInterface $mediaItemDataAccess,
         MediaItemUsageChainDeleteService $mediaItemUsageChainDeleteService,
         LanguageServiceInterface $languageService,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        readonly private BackendSessionInterface $backendSession
     ) {
         $this->deleteReferences = $deleteReferences;
         $this->mediaItemChainUsageFinder = $mediaItemChainUsageFinder;
@@ -89,7 +91,7 @@ class DeleteMediaConnectionsListener
                 $usages = $this->mediaItemChainUsageFinder->findUsages(
                     $this->mediaItemDataAccess->getMediaItem(
                         $deleteMediaEvent->getDeletedMediaId(),
-                        $this->languageService->getActiveEditLanguage()->id
+                        $this->backendSession->getCurrentEditLanguageId()
                     )
                 );
                 $this->mediaItemUsageChainDeleteService->deleteUsages($usages);

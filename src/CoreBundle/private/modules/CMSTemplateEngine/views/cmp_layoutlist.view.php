@@ -1,5 +1,6 @@
 <?php
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -8,16 +9,9 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
  * @var UrlUtil $urlUtil
  */
 $urlUtil = ServiceLocator::get('chameleon_system_core.util.url');
-/**
- * @var LanguageServiceInterface $languageService
- */
-$languageService = ServiceLocator::get('chameleon_system_core.language_service');
-$editLanguage = $languageService->getActiveEditLanguage();
-if (null === $editLanguage) {
-    $previewLanguageId = $languageService->getCmsBaseLanguageId();
-} else {
-    $previewLanguageId = $editLanguage->id;
-}
+/** @var BackendSessionInterface $backendSession */
+$backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+$previewLanguageId = $backendSession->getCurrentEditLanguageId();
 
 ?>
 <form name="setpagedef" method="post" action="<?=PATH_CMS_CONTROLLER; ?>" target="_top" accept-charset="UTF-8">

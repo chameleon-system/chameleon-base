@@ -21,15 +21,16 @@ class BackendSession implements BackendSessionInterface
     ) {
     }
 
-    public function getCurrentEditLanguageId(): ?string
+    public function getCurrentEditLanguageId(): string
     {
+
         $iso = $this->getCurrentEditLanguageIso6391();
         if (null === $iso) {
-            return null;
+            return $this->languageService->getCmsBaseLanguageId();
         }
         $language = $this->languageService->getLanguageFromIsoCode($iso);
         if (null === $language) {
-            return null;
+            return $this->languageService->getCmsBaseLanguageId();
         }
 
         return $language->id;

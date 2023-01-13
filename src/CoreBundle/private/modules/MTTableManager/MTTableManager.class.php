@@ -465,7 +465,7 @@ class MTTableManager extends TCMSModelBase
 
         $returnVal = [];
 
-        $editLanguageId = $this->getLanguageService()->getActiveEditLanguage()->id;
+        $editLanguageId = $this->getBackendSession()->getCurrentEditLanguageId();
         $recordList->SetLanguage($editLanguageId);
         /** @var $record TCMSRecord */
         while ($record = $recordList->Next()) {
@@ -705,5 +705,9 @@ class MTTableManager extends TCMSModelBase
     private function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+    protected function getBackendSession(): BackendSessionInterface
+    {
+        return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
     }
 }

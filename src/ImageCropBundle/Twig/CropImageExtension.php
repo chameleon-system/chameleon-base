@@ -11,20 +11,14 @@
 
 namespace ChameleonSystem\ImageCropBundle\Twig;
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\ImageCrop\Interfaces\CropImageServiceInterface;
 use ChameleonSystem\ImageCrop\Interfaces\ImageCropPresetDataAccessInterface;
-use Symfony\Bundle\TwigBundle\DependencyInjection\TwigExtension;
 use TCMSImage;
 use Twig\Extension\AbstractExtension;
-use Twig\Extension\CoreExtension;
-use Twig\Extension\ExtensionInterface;
-use Twig\NodeVisitor\NodeVisitorInterface;
-use Twig\TokenParser\TokenParserInterface;
 use Twig\TwigFilter;
-use Twig\TwigFunction;
-use Twig\TwigTest;
 
 class CropImageExtension extends AbstractExtension
 {
@@ -58,7 +52,8 @@ class CropImageExtension extends AbstractExtension
         ImageCropPresetDataAccessInterface $imageCropPresetDataAccess,
         CropImageServiceInterface $cropImageService,
         LanguageServiceInterface $languageService,
-        RequestInfoServiceInterface $requestInfoService
+        RequestInfoServiceInterface $requestInfoService,
+        readonly private BackendSessionInterface $backendSession
     ) {
         $this->imageCropPresetDataAccess = $imageCropPresetDataAccess;
         $this->cropImageService = $cropImageService;
@@ -121,7 +116,7 @@ class CropImageExtension extends AbstractExtension
     private function getLanguageId()
     {
         if ($this->requestInfoService->isBackendMode()) {
-            return $this->languageService->getActiveEditLanguage()->id;
+            return $this->backendSession->getCurrentEditLanguageId();
         }
 
         return $this->languageService->getActiveLanguageId();

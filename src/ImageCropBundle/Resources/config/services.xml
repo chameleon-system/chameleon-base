@@ -32,6 +32,7 @@
             <argument type="service" id="chameleon_system_image_crop.crop_image_service"/>
             <argument type="service" id="chameleon_system_core.language_service"/>
             <argument type="service" id="chameleon_system_core.request_info_service"/>
+            <argument type="service" id="chameleon_system_cms_backend.backend_session"/>
             <tag name="twig.extension"/>
         </service>
 
@@ -63,6 +64,7 @@
             <argument type="service" id="chameleon_system_core.translator"/>
             <argument type="service" id="chameleon_system_core.language_service"/>
             <argument type="service" id="chameleon_system_core.flash_messages"/>
+            <argument type="service" id="chameleon_system_cms_backend.backend_session"/>
             <tag name="chameleon_system.module"/>
         </service>
 

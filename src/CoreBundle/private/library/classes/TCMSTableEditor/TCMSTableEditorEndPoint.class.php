@@ -921,7 +921,7 @@ class TCMSTableEditorEndPoint
             $conditionFields['target_id'] = $iConnectedID;
         }
         if (MySqlLegacySupport::getInstance()->query($deleteQuery)) {
-            $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+            $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
             $migrationQueryData = new MigrationQueryData($mltTableName, $editLanguage->fieldIso6391);
             $migrationQueryData
                 ->setWhereEquals($conditionFields)
@@ -995,7 +995,7 @@ class TCMSTableEditorEndPoint
             $iSortNumber = $this->GetMLTSortNumber($mltTableName);
             $insertQuery = "INSERT INTO $quotedMltTableName SET `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."', `target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iConnectedID)."', `entry_sort` = '".MySqlLegacySupport::getInstance()->real_escape_string($iSortNumber)."'";
             if (MySqlLegacySupport::getInstance()->query($insertQuery)) {
-                $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+                $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
                 $migrationQueryData = new MigrationQueryData($mltTableName, $editLanguage->fieldIso6391);
                 $migrationQueryData
                     ->setFields(array(
@@ -1272,7 +1272,7 @@ class TCMSTableEditorEndPoint
                       WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sDeleteId)."'";
         MySqlLegacySupport::getInstance()->query($query);
 
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+        $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
         $migrationQueryData = new MigrationQueryData($this->oTableConf->sqlData['name'], $editLanguage->fieldIso6391);
         $migrationQueryData
             ->setWhereEquals(array(
@@ -1904,7 +1904,7 @@ class TCMSTableEditorEndPoint
         }
 
         $databaseConnection = $this->getDatabaseConnection();
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+        $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
 
         $fieldConfigResult = $this->getFieldsOfType($fieldTypeId);
 
@@ -2491,6 +2491,10 @@ class TCMSTableEditorEndPoint
         return ServiceLocator::get('database_connection');
     }
 
+    protected function getBackendSession(): BackendSessionInterface
+    {
+        return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+    }
     /**
      * @return LanguageServiceInterface
      */

@@ -587,13 +587,7 @@ class CMSTemplateEngine extends TCMSModelBase
                 $sDialogContent .= '<input type="hidden" name="bLoadCopy" value="1"/>';
             }
 
-            $languageService = $this->getLanguageService();
-            $editLanguage = $languageService->getActiveEditLanguage();
-            if (null === $editLanguage) {
-                $previewLanguageId = $languageService->getCmsBaseLanguageId();
-            } else {
-                $previewLanguageId = $editLanguage->id;
-            }
+            $previewLanguageId = $this->getBackendSession()->getCurrentEditLanguageId();
             $sDialogContent .= '<input type="hidden" name="previewLanguageId" value="'.TGlobal::OutHTML($previewLanguageId).'"/>  '."\n".'';
 
             /** @var $oCmsTplModuleInstance TdbCmsTplModuleInstance */
@@ -671,6 +665,11 @@ class CMSTemplateEngine extends TCMSModelBase
     private function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    private function getBackendSession(): BackendSessionInterface
+    {
+        return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
     }
 
     private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
