@@ -57,7 +57,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
 
             return $carry;
         }, []);
-        $roles['-'] = 'ROLE_CMS_USER';
+        $roles['-'] = UserRoles::CMS_USER;
 
 
         $userRightRows = $this->connection->fetchAllAssociative(

@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar;
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 
@@ -40,7 +41,7 @@ class ModuleMenuItemProvider implements MenuItemProviderInterface
     {
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-        if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
+        if (false === $securityHelper->isGranted(UserRoles::CMS_USER)) {
             return false;
         }
 

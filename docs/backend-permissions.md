@@ -31,7 +31,7 @@ the table name to `isGranted()`.
 Relevant permissions can be found in `CmsPermissionAttributeConstants`.
 
 If you need access to the symfony security component in a place where injection is not possible, you can access it using the 
-`SecurityHelperAccess` via the DependencyFinder service.
+`SecurityHelperAccess` via the `ServiceLocator` service.
 ```php
 /** @var SecurityHelperAccess $securityHelper */
 $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);

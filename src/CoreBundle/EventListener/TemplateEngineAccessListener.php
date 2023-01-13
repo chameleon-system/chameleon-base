@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -51,7 +52,7 @@ class TemplateEngineAccessListener
             return ;
         }
 
-        if (false === $this->security->isGranted('ROLE_CMS_USER')) {
+        if (false === $this->security->isGranted(UserRoles::CMS_USER)) {
             throw new AccessDeniedException('Template engine requested without permission.');
         }
     }

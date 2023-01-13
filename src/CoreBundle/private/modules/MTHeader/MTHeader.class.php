@@ -21,6 +21,7 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\DatabaseMigration\Exception\AccessDeniedException;
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
+use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
 use Doctrine\DBAL\Connection;
@@ -75,7 +76,7 @@ class MTHeader extends TCMSModelBase
             $this->data['clearCacheURL'] = '';
             $this->data['bHeaderIsHidden'] = false;
 
-            if ($securityHelper->isGranted('ROLE_CMS_USER')) {
+            if ($securityHelper->isGranted(UserRoles::CMS_USER)) {
                 $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
                 $this->data['breadcrumb'] = $breadcrumb->GetBreadcrumb(true);
 
@@ -90,7 +91,7 @@ class MTHeader extends TCMSModelBase
 
             $this->data['aCustomMenuItems'] = $this->GetCustomNavigationItems();
 
-            if (true === $securityHelper->isGranted('ROLE_CMS_USER')) {
+            if (true === $securityHelper->isGranted(UserRoles::CMS_USER)) {
                 $this->GetPortalQuickLinks();
             }
 
@@ -555,7 +556,7 @@ class MTHeader extends TCMSModelBase
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if ($securityHelper->isGranted('ROLE_CMS_USER')) {
+        if ($securityHelper->isGranted(UserRoles::CMS_USER)) {
             /** @var BackendSessionInterface $backendSession */
             $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 

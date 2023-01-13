@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\CronJob\CronjobEnablingServiceInterface;
 use ChameleonSystem\CoreBundle\CronJob\CronJobFactoryInterface;
 use ChameleonSystem\CoreBundle\SanityCheck\CronJobDataAccess;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
@@ -34,7 +35,7 @@ class CMSRunCrons extends TModelBase
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if ($this->global->UserDataExists('cronjobid') && $securityHelper->isGranted('ROLE_CMS_USER')) {
+        if ($this->global->UserDataExists('cronjobid') && $securityHelper->isGranted(UserRoles::CMS_USER)) {
             $translator = $this->getTranslator();
 
             if (false === $this->isCronjobExecutionEnabled()) {
@@ -147,7 +148,7 @@ class CMSRunCrons extends TModelBase
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if ($securityHelper->isGranted('ROLE_CMS_USER')) {
+        if ($securityHelper->isGranted(UserRoles::CMS_USER)) {
             $this->data['sMessageOutput'] = $oCronjob->GetMessageOutput();
         }
     }

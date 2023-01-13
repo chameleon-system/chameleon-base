@@ -21,6 +21,7 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
+use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
@@ -2166,7 +2167,7 @@ class TCMSTableEditorEndPoint
 
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-        if ($securityHelper->isGranted('ROLE_CMS_USER')) {
+        if ($securityHelper->isGranted(UserRoles::CMS_USER)) {
             return false;
         }
 

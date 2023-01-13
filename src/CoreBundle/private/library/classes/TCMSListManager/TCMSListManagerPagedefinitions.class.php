@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 /**
@@ -38,7 +39,7 @@ class TCMSListManagerPagedefinitions extends TCMSListManagerFullGroupTable
         );
 
         $sQuery = '';
-        if (!$securityHelper->isGranted('ROLE_CMS_ADMIN')) {
+        if (!$securityHelper->isGranted(UserRoles::CMS_ADMIN)) {
             $sQuery = " (`cms_portal`.`id` IN ({$portalRestriction}) OR `cms_master_pagedef`.`restrict_to_portals`='0')";
         }
 

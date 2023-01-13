@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -132,7 +133,7 @@ class TCMSModelBase extends TModelBase
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
+        if (false === $securityHelper->isGranted(UserRoles::CMS_USER)) {
             return $includes;
         }
         $request = $this->getCurrentRequest();

@@ -2,6 +2,7 @@
 
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -21,7 +22,7 @@ $translator = ServiceLocator::get('translator');
 $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 $user = $securityHelper->getUser();
 
-if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
+if (false === $securityHelper->isGranted(UserRoles::CMS_USER)) {
     echo '<span class="navbar-brand"><img src="'.TGlobal::OutHTML($sLogoURL).'" alt="" /></span>';
 
     return;
@@ -176,7 +177,7 @@ if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
 
             $userButtonStyle = '';
 
-            $bIsAdminUser = ($securityHelper->isGranted('ROLE_CMS_ADMIN'));
+            $bIsAdminUser = ($securityHelper->isGranted(UserRoles::CMS_ADMIN));
             if (!_DEVELOPMENT_MODE && $bIsAdminUser) {
                 $userButtonStyle = 'text-danger';
             } ?>

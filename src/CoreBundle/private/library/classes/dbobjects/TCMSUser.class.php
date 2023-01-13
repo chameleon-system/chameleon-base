@@ -13,6 +13,8 @@ use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\CmsUser\UserRoles;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -83,7 +85,7 @@ class TCMSUser extends TCMSRecord
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         $user = $securityHelper->getUser();
-        if (null === $user || false === $securityHelper->isGranted('ROLE_CMS_USER') || false ===($user instanceof \ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel)) {
+        if (null === $user || false === $securityHelper->isGranted(UserRoles::CMS_USER) || false ===($user instanceof CmsUserModel)) {
             self::$oActiveUser = null;
             return null;
         }
@@ -92,7 +94,7 @@ class TCMSUser extends TCMSRecord
             return self::$oActiveUser;
         }
 
-        /** @var \ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel $user */
+        /** @var CmsUserModel $user */
         self::$oActiveUser = TdbCmsUser::GetNewInstance();
         self::$oActiveUser->Load($user->getId());
 

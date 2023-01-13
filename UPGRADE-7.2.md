@@ -86,7 +86,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TCMSUser::Logout` removed
 - `\TCMSUser::SetAsActiveUser` removed - switch user by using Symfony impersonate.
 - `\TCMSTableEditorCMSUser::SwitchToUser` removed - switch user by using Symfony impersonate.
-- `\TCMSUser::CMSUserDefined` removed - is `isGranted('ROLE_CMS_USER')`
+- `\TCMSUser::CMSUserDefined` removed - is `isGranted(\ChameleonSystem\SecurityBundle\CmsUser\UserRoles::CMS_USER)`
 - `\TCMSUser::ValidSessionKey` removed
 - `\TCMSUser::GetUserSessionKey` removed
 This list might not be complete. Also take a look at the official Symfony migration documentation:
