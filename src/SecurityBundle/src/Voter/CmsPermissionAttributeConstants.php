@@ -12,6 +12,8 @@ final class CmsPermissionAttributeConstants
         self::TABLE_EDITOR_EDIT_ALL,
         self::TABLE_EDITOR_DELETE,
         self::TABLE_EDITOR_NEW_LANGUAGE,
+        self::TABLE_EDITOR_WORKFLOW_PUBLISH,
+        self::TABLE_EDITOR_VERSIONING,
     ];
 
     public const ACCESS = 'cms::access';
@@ -23,4 +25,6 @@ final class CmsPermissionAttributeConstants
     public const TABLE_EDITOR_EDIT_ALL = 'cms::tbl_edit_edit-all';
     public const TABLE_EDITOR_DELETE = 'cms::tbl_edit_delete';
     public const TABLE_EDITOR_NEW_LANGUAGE = 'cms::tbl_edit_new-language';
+    public const TABLE_EDITOR_WORKFLOW_PUBLISH = 'cms::tbl_edit_workflow-publish';
+    public const TABLE_EDITOR_VERSIONING = 'cms::tbl_edit_versioning';
 }

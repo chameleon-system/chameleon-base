@@ -14,8 +14,8 @@ interface DataAccessCmsTblConfInterface
         CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT_ALL => 'cms_role3_mlt',
         CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS_ALL => 'cms_role6_mlt',
         CmsPermissionAttributeConstants::TABLE_EDITOR_NEW_LANGUAGE => 'cms_role4_mlt',
-        //CmsPermissionAttributeConstants::WORKFLOW_PUBLISH => 'cms_role5_mlt',
-        //CmsPermissionAttributeConstants::VERSIONING => 'cms_role7_mlt',
+        CmsPermissionAttributeConstants::TABLE_EDITOR_WORKFLOW_PUBLISH => 'cms_role5_mlt',
+        CmsPermissionAttributeConstants::TABLE_EDITOR_VERSIONING => 'cms_role7_mlt',
     ];
     /**
      * returns array with table ids as key, and name as value
