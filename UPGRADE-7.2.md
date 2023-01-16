@@ -93,6 +93,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TCMSUser::GetUserSessionKey` removed
 - `\ChameleonSystem\CoreBundle\Service\LanguageServiceInterface::getActiveEditLanguage` removed
 - `\TPkgImageHotspotItem::AddClearCacheTriggers` removed
+- `\TShopVariantDisplayHandler::AddClearCacheTriggers` removed
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 

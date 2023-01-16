@@ -28,5 +28,5 @@ interface ICMSSeoPatternItem
      *
      * @see TCMSRenderSeoPattern
      */
-    public function GetSeoPattern($sPatternIn);
+    public function GetSeoPattern(&$sPatternIn);
 }
