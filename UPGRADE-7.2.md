@@ -33,7 +33,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - search for `protected function _NewElement\(\$aData\)[ ]*[^\:]{0,1}` (must return the specific Tdb item)
 - search for `public static function GetList\(.*\)` (must return the specific list type)
 - search for `public static function GetDefaultQuery\(.*\)` (must return `string`)
-- search for `public function Previous()` (must return `false|Tdb....`)
+- search for `public function Previous()` (must return `bool|Tdb....`)
 - `\ChameleonSystem\DebugBundle\ChameleonSystemDebugBundle` removed. The logging of database connections can no longer be done the way done in the bundle
 - doctrine update [maybe]s.
   - replace `->fetchAll(` with `->fetchAllAssociative(`
@@ -90,6 +90,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TCMSUser::ValidSessionKey` removed
 - `\TCMSUser::GetUserSessionKey` removed
 - `\ChameleonSystem\CoreBundle\Service\LanguageServiceInterface::getActiveEditLanguage` removed
+- `\TPkgImageHotspotItem::AddClearCacheTriggers` removed
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 
