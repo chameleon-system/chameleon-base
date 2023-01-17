@@ -1,4 +1,4 @@
-UPGRADE FROM 7.1 to 7.2
+UPGRADE FROM 7.1 to 8.0
 =======================
 
 # Essentials
