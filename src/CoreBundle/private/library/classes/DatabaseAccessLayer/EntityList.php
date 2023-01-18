@@ -40,8 +40,8 @@ class EntityList implements EntityListInterface
 
     private ?int $maxNumberOfResults = null;
 
-    private ?array $queryParameters = null;
-    private ?array $queryParameterTypes = null;
+    private array $queryParameters;
+    private array $queryParameterTypes = [];
 
     /**
      * @param string     $query
@@ -49,7 +49,7 @@ class EntityList implements EntityListInterface
      * @param array      $queryParameterTypes - same as the parameters types of the Connection
      * @param Connection $databaseConnection
      */
-    public function __construct(Connection $databaseConnection, string $query, array $queryParameters = null, array $queryParameterTypes = null)
+    public function __construct(Connection $databaseConnection, string $query, array $queryParameters = [], array $queryParameterTypes = [])
     {
         $this->query = $query;
         $this->databaseConnection = $databaseConnection;
@@ -368,12 +368,12 @@ class EntityList implements EntityListInterface
 
     protected function getQueryParameters(): array
     {
-        return (null === $this->queryParameters) ? array() : $this->queryParameters;
+        return $this->queryParameters;
     }
 
     protected function getQueryParametersTypes(): array
     {
-        return (null === $this->queryParameterTypes) ? array() : $this->queryParameterTypes;
+        return $this->queryParameterTypes;
     }
 
     public function getNumberOfResultsOnPage(): int
