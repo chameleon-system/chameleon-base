@@ -92,23 +92,6 @@ class ProfilerStatement extends Statement
     }
 
     /**
-     * @param string|int $column
-     * @param mixed $param
-     * @param int $type
-     * @param int $maxlen
-     * @param mixed $driverdata
-     * @return bool
-     */
-    public function bindColumn($column, &$param, $type = null, $maxlen = null, $driverdata = null)
-    {
-        $startTime = microtime(true);
-        $result = $this->statement->bindColumn($column, $param, $type, $maxlen, $driverdata);
-        $this->databaseConnection->addToQueryTimer(microtime(true) - $startTime);
-
-        return $result;
-    }
-
-    /**
      * @param int|string $parameter
      * @param mixed $value
      * @param int $data_type
@@ -149,20 +132,6 @@ class ProfilerStatement extends Statement
     {
         $startTime = microtime(true);
         $result = $this->statement->fetchAll($fetchMode, $fetchArgument, $ctorArgs);
-        $this->databaseConnection->addToQueryTimer(microtime(true) - $startTime);
-
-        return $result;
-    }
-
-    /**
-     * @param string|null $class_name
-     * @param array|null $ctor_args
-     * @return object|false
-     */
-    public function fetchObject($class_name = null, $ctor_args = null)
-    {
-        $startTime = microtime(true);
-        $result = $this->statement->fetchObject($class_name, $ctor_args);
         $this->databaseConnection->addToQueryTimer(microtime(true) - $startTime);
 
         return $result;
@@ -222,45 +191,10 @@ class ProfilerStatement extends Statement
         return $result;
     }
 
-    /**
-     * @param int $column
-     * @return array|false
-     */
-    public function getColumnMeta($column)
-    {
-        $startTime = microtime(true);
-        $result = $this->statement->getColumnMeta($column);
-        $this->databaseConnection->addToQueryTimer(microtime(true) - $startTime);
-
-        return $result;
-    }
-
-    public function nextRowset()
-    {
-        $startTime = microtime(true);
-        $result = $this->statement->nextRowset();
-        $this->databaseConnection->addToQueryTimer(microtime(true) - $startTime);
-
-        return $result;
-    }
-
     public function closeCursor()
     {
         $startTime = microtime(true);
         $result = $this->statement->closeCursor();
-        $this->databaseConnection->addToQueryTimer(microtime(true) - $startTime);
-
-        return $result;
-    }
-
-    /**
-     * @psalm-suppress AssignmentToVoid - Psalm thinks that `debugDumpParams` is a void function
-     * @psalm-suppress InvalidReturnStatement - Psalm thinks that `debugDumpParams` is a void function
-     */
-    public function debugDumpParams()
-    {
-        $startTime = microtime(true);
-        $result = $this->statement->debugDumpParams();
         $this->databaseConnection->addToQueryTimer(microtime(true) - $startTime);
 
         return $result;
