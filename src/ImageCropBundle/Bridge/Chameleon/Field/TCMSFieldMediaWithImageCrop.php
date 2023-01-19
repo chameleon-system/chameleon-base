@@ -26,6 +26,7 @@ use TCMSLogChange;
 use TCMSTableToClass;
 use TdbCmsImageCrop;
 use TdbCmsImageCropPreset;
+use TdbCmsLanguage;
 use TGlobal;
 use TViewParser;
 use ViewRenderer;
