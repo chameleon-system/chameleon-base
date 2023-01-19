@@ -18,10 +18,6 @@ final class CoreEvents
 
     const GLOBAL_RESOURCE_COLLECTION_COLLECTED_JAVASCRIPT = 'chameleon_system_core.resource_collection_collected.javascript';
 
-    const BACKEND_LOGIN_SUCCESS = 'chameleon_system_core.login_success';
-    const BACKEND_LOGIN_FAILURE = 'chameleon_system_core.login_failure';
-    const BACKEND_LOGOUT_SUCCESS = 'chameleon_system_core.logout_success';
-
     const LOCALE_CHANGED = 'chameleon_system_core.locale_changed';
 
     const CHANGE_ACTIVE_PAGE = 'chameleon_system_core.change_active_page';

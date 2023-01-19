@@ -90,7 +90,7 @@ class TCMSFileList extends TIterator
      *
      * @return TCMSFile
      */
-    public function current(): TCMSFile|false
+    public function current(): TCMSFile|bool
     {
         return parent::Current();
     }
@@ -100,7 +100,7 @@ class TCMSFileList extends TIterator
      *
      * @return TCMSFile|false
      */
-    public function next():TCMSFile|false
+    public function next():TCMSFile|bool
     {
         return parent::Next();
     }

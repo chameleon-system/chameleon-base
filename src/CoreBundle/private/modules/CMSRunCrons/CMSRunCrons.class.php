@@ -13,6 +13,8 @@ use ChameleonSystem\CoreBundle\CronJob\CronjobEnablingServiceInterface;
 use ChameleonSystem\CoreBundle\CronJob\CronJobFactoryInterface;
 use ChameleonSystem\CoreBundle\SanityCheck\CronJobDataAccess;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -30,8 +32,10 @@ class CMSRunCrons extends TModelBase
         set_time_limit(CMS_MAX_EXECUTION_TIME_IN_SECONDS_FOR_CRONJOBS);
         $this->data = parent::Execute();
         $this->data['sMessageOutput'] = '';
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if ($this->global->UserDataExists('cronjobid') && TCMSUser::CMSUserDefined()) {
+        if ($this->global->UserDataExists('cronjobid') && $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             $translator = $this->getTranslator();
 
             if (false === $this->isCronjobExecutionEnabled()) {
@@ -141,7 +145,10 @@ class CMSRunCrons extends TModelBase
     {
         $oCronjob = $this->cronJobClassFactory($oTdbCmsCronJob);
         $oCronjob->RunScript($bForceExecution);
-        if (TCMSUser::CMSUserDefined()) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if ($securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             $this->data['sMessageOutput'] = $oCronjob->GetMessageOutput();
         }
     }

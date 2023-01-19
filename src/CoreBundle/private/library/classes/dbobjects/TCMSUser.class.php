@@ -9,18 +9,19 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
-use ChameleonSystem\CoreBundle\CoreEvents;
-use ChameleonSystem\CoreBundle\Event\BackendLoginEvent;
-use ChameleonSystem\CoreBundle\Event\BackendLogoutEvent;
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * the user manager class for the cms.
+ *
 /**/
 class TCMSUser extends TCMSRecord
 {
@@ -28,15 +29,9 @@ class TCMSUser extends TCMSRecord
      * set to true if the user logged in.
      *
      * @var bool
+     * @deprecated since 7.2.0 - no longer used
      */
     public $bLoggedIn = false;
-
-    /**
-     * access manager object.
-     *
-     * @var TAccessManager
-     */
-    public $oAccessManager = null;
 
     /**
      * holds the user object singleton.
@@ -51,6 +46,21 @@ class TCMSUser extends TCMSRecord
         if (!is_null($id)) {
             $this->Load($id);
         }
+    }
+
+    public function isAdmin(): bool
+    {
+        $groups = $this->GetMLT('cms_role_mlt');
+        if (null === $groups) {
+            return false;
+        }
+        while($group = $groups->next()) {
+            if ($group->fieldName === 'cms_admin') {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -68,18 +78,30 @@ class TCMSUser extends TCMSRecord
      * you don`t get a WWW-user object!
      *
      * @return TdbCmsUser|null
+     * @deprecated 7.2 - use symfony security service
      */
     public static function GetActiveUser()
     {
-        if (is_null(self::$oActiveUser)) {
-            if (isset($_SESSION) && array_key_exists(self::GetSessionVarName('_user'), $_SESSION) && !empty($_SESSION[self::GetSessionVarName('_user')])) {
-                self::$oActiveUser = TdbCmsUser::GetNewInstance();
-                self::$oActiveUser->Load($_SESSION[self::GetSessionVarName('_user')]);
-                self::$oActiveUser->bLoggedIn = ($_SESSION[self::GetSessionVarName('_user')] == self::$oActiveUser->id);
-            }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $user = $securityHelper->getUser();
+        if (null === $user || false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER) || false ===($user instanceof CmsUserModel)) {
+            self::$oActiveUser = null;
+            return null;
         }
 
+        if (null !== self::$oActiveUser && self::$oActiveUser->id === $user->getId()) {
+            return self::$oActiveUser;
+        }
+
+        /** @var CmsUserModel $user */
+        self::$oActiveUser = TdbCmsUser::GetNewInstance();
+        self::$oActiveUser->Load($user->getId());
+
+        self::$oActiveUser->bLoggedIn = true;
+
         return self::$oActiveUser;
+
     }
 
     public static function GetSessionVarName($sName)
@@ -114,18 +136,6 @@ class TCMSUser extends TCMSRecord
     }
 
     /**
-     * checks for valid cms user session.
-     *
-     * @return bool
-     */
-    public static function CMSUserDefined()
-    {
-        $sUserVar = '_usercms';
-
-        return isset($_SESSION) && array_key_exists($sUserVar, $_SESSION) && !empty($_SESSION[$sUserVar]);
-    }
-
-    /**
      * load the user from id.
      *
      * @param int $id
@@ -138,55 +148,10 @@ class TCMSUser extends TCMSRecord
         if (!empty($id)) {
             if (parent::Load($id)) {
                 $bIsLoaded = true;
-                $this->_LoadAccessManager();
             }
         }
 
         return $bIsLoaded;
-    }
-
-    /**
-     * login the user using the users username and password.
-     *
-     * @param string $sUsername
-     * @param string $sPassword
-     *
-     * @return bool
-     */
-    public function Login($sUsername, $sPassword)
-    {
-        $query = "SELECT * FROM `cms_user` WHERE `login` = '".MySqlLegacySupport::getInstance()->real_escape_string($sUsername)."' LIMIT 0,1";
-        if ($userRow = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-            $allowCMSLogin = false;
-            if (!array_key_exists('allow_cms_login', $userRow) || '1' == $userRow['allow_cms_login']) {
-                $allowCMSLogin = true;
-            }
-
-            if (false === TGlobal::IsCMSMode() || $allowCMSLogin) {
-                if ('' !== $userRow['crypted_pw'] && $this->getPasswordHashGenerator()->verify($sPassword, $userRow['crypted_pw'])) {
-                    $this->LoadFromRow($userRow);
-                    $this->SetAsActiveUser();
-                }
-            }
-        }
-        if ($this->bLoggedIn && TGlobal::IsCMSMode()) {
-            $_SESSION[self::GetSessionVarName('_user')] = $this->id;
-            $this->getAuthenticityTokenManager()->refreshToken();
-        }
-
-        // release old locks
-        $query = 'DELETE FROM `cms_lock` WHERE TIMESTAMPDIFF(MINUTE,`time_stamp`,CURRENT_TIMESTAMP()) >= '.RECORD_LOCK_TIMEOUT.'';
-        MySqlLegacySupport::getInstance()->query($query);
-
-        $eventDispatcher = self::getEventDispatcher();
-        $event = new BackendLoginEvent($this);
-        if ($this->bLoggedIn) {
-            $eventDispatcher->dispatch($event, CoreEvents::BACKEND_LOGIN_SUCCESS);
-        } else {
-            $eventDispatcher->dispatch($event, CoreEvents::BACKEND_LOGIN_FAILURE);
-        }
-
-        return $this->bLoggedIn;
     }
 
     /**
@@ -199,53 +164,6 @@ class TCMSUser extends TCMSRecord
     public function PasswordIsValid($sSourcePwd)
     {
         return $this->getPasswordHashGenerator()->verify($sSourcePwd, $this->sqlData['crypted_pw']);
-    }
-
-    /**
-     * login current user as active user.
-     *
-     * if login simulation is on ($bSimulateLogin) then the user login will not be written to the session
-     * the login only exists for during runtime of the script that initiates the user activation
-     *
-     * @param bool $bSimulateLogin
-     */
-    public function SetAsActiveUser($bSimulateLogin = false)
-    {
-        $this->_LoadAccessManager();
-        $this->bLoggedIn = true;
-        // add hash of user values
-        if ($bSimulateLogin) {
-            self::$oActiveUser = $this;
-        } else {
-            $_SESSION[self::GetSessionVarName('_USERSESSIONKEY')] = $this->GetUserSessionKey();
-            $_SESSION[self::GetSessionVarName('_user')] = $this->id;
-        }
-    }
-
-    /**
-     * logout the user and kill session cookie.
-     */
-    public static function Logout()
-    {
-        $user = static::GetActiveUser();
-        $sessionKeys = array_keys($_SESSION);
-        foreach ($sessionKeys as $key) {
-            if ('_usercms' == $key && !empty($_SESSION['_usercms'])) {
-                self::ReleaseOpenLocks($_SESSION['_usercms']);
-            }
-            unset($_SESSION[$key]);
-        }
-
-        unset($_SESSION['_listObjCache']);
-        $request = self::getRequest();
-        if (null !== $request) {
-            if (true === $request->hasSession()) {
-                $session = $request->getSession();
-                $session->clear();
-            }
-        }
-
-        self::getEventDispatcher()->dispatch(new BackendLogoutEvent($user), CoreEvents::BACKEND_LOGOUT_SUCCESS);
     }
 
     /**
@@ -263,79 +181,19 @@ class TCMSUser extends TCMSRecord
     }
 
     /**
-     * checks for valid session key.
-     *
-     * @return bool
-     */
-    public function ValidSessionKey()
-    {
-        $sActiveKey = $this->GetUserSessionKey();
-        $sSessionKey = '';
-        if (array_key_exists(self::GetSessionVarName('_USERSESSIONKEY'), $_SESSION)) {
-            $sSessionKey = $_SESSION[self::GetSessionVarName('_USERSESSIONKEY')];
-        }
-
-        return 0 == strcmp($sActiveKey, $sSessionKey);
-    }
-
-    /**
-     * generates a user session key (md5).
-     *
-     * @return string
-     */
-    public function GetUserSessionKey()
-    {
-        $aKeyData = '';
-        // add browser and ip
-        // $aKeyData .= $_SERVER['HTTP_USER_AGENT'];   // we have problems with auto-logouts when uploading files via flash, because of different user-agents
-        //$aKeyData .= $_SERVER['REMOTE_ADDR']; // cannot use this because users with proxyserver will otherwise be kicked out
-        $aKeyData .= $this->id;
-        $aKeyData .= 'saltx';
-
-        $userSessionKey = md5($aKeyData);
-
-        return $userSessionKey;
-    }
-
-    /**
      * returns the current edit language in iso6391 format e.g. de,en,fr etc.
      *
      * @return string
+     * @deprecated use service \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSession
      */
     public function GetCurrentEditLanguage($bReset = false)
     {
+        /** @var BackendSessionInterface $sessionService */
+        $sessionService = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
         if (true === $bReset) {
-            $_SESSION['cmsbackend-currenteditlanguage'] = null;
+            $sessionService->resetCurrentEditLanguage();
         }
-
-        if (isset($_SESSION['cmsbackend-currenteditlanguage']) && !empty($_SESSION['cmsbackend-currenteditlanguage'])) {
-            return $_SESSION['cmsbackend-currenteditlanguage'];
-        }
-
-        $sCurrentEditLanguageIso6391Code = null;
-
-        if (isset($this->sqlData['cms_current_edit_language']) && !empty($this->sqlData['cms_current_edit_language'])) {
-            $sCurrentEditLanguageIso6391Code = $this->sqlData['cms_current_edit_language'];
-        }
-
-        // no language set? select the first from the languages available to the user
-        if (is_null($sCurrentEditLanguageIso6391Code) && isset($this->sqlData['cms_language_mlt'])) {
-            $oEditLanguages = $this->GetMLT('cms_language_mlt');
-            if ($oEditLanguages->Length() > 0) {
-                $oEditLanguages->GoToStart();
-                $oLanguage = $oEditLanguages->Current();
-                $sCurrentEditLanguageIso6391Code = $oLanguage->sqlData['iso_6391'];
-            }
-        }
-
-        if (is_null($sCurrentEditLanguageIso6391Code)) {
-            $config = TdbCmsConfig::GetInstance();
-            $sCurrentEditLanguageIso6391Code = $config->GetFieldTranslationBaseLanguage()->fieldIso6391;
-        }
-
-        $_SESSION['cmsbackend-currenteditlanguage'] = $sCurrentEditLanguageIso6391Code;
-
-        return $sCurrentEditLanguageIso6391Code;
+        return $sessionService->getCurrentEditLanguageIso6391();
     }
 
     /**
@@ -412,37 +270,18 @@ class TCMSUser extends TCMSRecord
      *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
+     * @deprecated 7.2 use \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSession
      */
     public function SetCurrentEditLanguage($language = null)
     {
+        /** @var BackendSessionInterface $sessionService */
+        $sessionService = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
         if (null === $language) {
-            $config = TdbCmsConfig::GetInstance();
-            $language = $config->GetFieldTranslationBaseLanguage()->fieldIso6391;
+            $sessionService->resetCurrentEditLanguage();
+            return;
         }
-        $databaseConnection = $this->getDatabaseConnection();
-        $updateQuery = 'UPDATE `cms_user` SET `cms_current_edit_language` = :language WHERE `id` = :userId';
-        $databaseConnection->executeQuery($updateQuery, array(
-            'language' => $language,
-            'userId' => $this->sqlData['id'],
-        ));
-        $this->sqlData['cms_current_edit_language'] = $language;
 
-        // reset language object cache
-        $this->SetInternalCache('oCurrentEditLanguage', null);
-
-        $_SESSION['cmsbackend-currenteditlanguage'] = $language;
-        $this->GetCurrentEditLanguage(true);
-    }
-
-    /**
-     * Loads the access manager for the user (controls access to tables and modules).
-     */
-    public function _LoadAccessManager()
-    {
-        if (!is_null($this->id)) {
-            $this->oAccessManager = new TAccessManager();
-            $this->oAccessManager->InitFromObject($this);
-        }
+        $sessionService->setCurrentEditLanguageIso6391($language);
     }
 
     /**

@@ -1,8 +1,12 @@
 <?php
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /*
  * This file is part of the Chameleon System (https://www.chameleonsystem.com).
@@ -23,7 +27,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('CopyUserRights', 'ActivateUser', 'SwitchToUser');
+        $externalFunctions = array('CopyUserRights', 'ActivateUser');
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -65,15 +69,12 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             $oMenuItem->sItemKey = 'changeuser';
             $oMenuItem->sIcon = 'fas fa-user-check';
 
-            $aParam = array(
-                'pagedef' => $this->getInputFilterUtil()->getFilteredInput('pagedef'),
-                'tableid' => $this->oTableConf->id,
-                'id' => $this->sId,
-                'module_fnc' => array('contentmodule' => 'SwitchToUser'),
-                '_noModuleFunction' => 'true',
-            );
-
-            $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParam);
+            $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl(
+                    [
+                        '_switch_user' => $this->oTable->sqlData['login'],
+                    ]
+                    , '', '&'
+                );
             $this->oMenuItems->AddItem($oMenuItem);
         }
         if (true === $this->isCopyPermissionsAllowed()) {
@@ -103,18 +104,23 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             $this->oMenuItems->RemoveItem('sItemKey', 'delete');
         }
     }
-
+    private function getUrlUtil(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
+    }
     /**
      * @return bool
      */
     private function isSwitchToUserAllowed()
     {
-        $activeUser = TCMSUser::GetActiveUser();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $userId = $securityHelper->getUser()?->getId();
 
         return 'www' !== $this->oTable->sqlData['login']
-            && $this->sId !== $activeUser->id
+            && $this->sId !== $userId
             && $this->CurrentUserHasEditPermissionToThisUser()
-            && $activeUser->oAccessManager->PermitFunction('cms_auto_switch_to_any_user')
+            && $securityHelper->isGranted('CMS_RIGHT_CMS_AUTO_SWITCH_TO_ANY_USER')
         ;
     }
 
@@ -123,10 +129,11 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
      */
     private function isCopyPermissionsAllowed()
     {
-        $activeUser = TCMSUser::GetActiveUser();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        return $activeUser->id !== $this->sId
-            && true === $activeUser->oAccessManager->user->IsAdmin()
+        return $securityHelper->getUser()?->getId() !== $this->sId
+            && true === $securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN)
         ;
     }
 
@@ -135,10 +142,11 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
      */
     private function isActivateUserAllowed()
     {
-        $activeUser = TCMSUser::GetActiveUser();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
         return 'www' !== $this->oTable->sqlData['login']
-            && $activeUser->id !== $this->sId
+            && $securityHelper->getUser()?->getId() !== $this->sId
             && $this->CurrentUserHasEditPermissionToThisUser()
         ;
     }
@@ -190,6 +198,11 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
      */
     public function AllowEdit($postData = null)
     {
+        // owner can always edit
+        if ($this->IsOwner($postData)) {
+            return true;
+        }
+
         $bAllowEdit = parent::AllowEdit($postData);
         $bIsCMSMode = TGlobal::IsCMSMode();
         if ($bAllowEdit) {
@@ -221,25 +234,33 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         if (true === $this->IsOwner()) {
             return true;
         }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $activeUser = TCMSUser::GetActiveUser();
-        if (false === $activeUser->oAccessManager->HasEditPermission($this->oTableConf->sqlData['name'])) {
+        if (false === $securityHelper->isGranted(
+                CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT,
+                $this->oTableConf
+            )) {
+            return false;
+        }
+        $user = $securityHelper->getUser();
+
+        if (null === $user) {
             return false;
         }
 
-        if (false === $activeUser->oAccessManager->user->IsAdmin()) {
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN)) {
             // Continue only if we have an ID. If we do not, this is a new record, so the check is not needed.
             if (null !== $this->sId && !empty($this->sId)) {
                 $oTargetUser = TdbCmsUser::GetNewInstance();
                 $oTargetUser->Load($this->sId);
-                $oTargetUser->_LoadAccessManager();
                 // If the target user is an admin, and the current user is not, then we do not grant edit permission.
-                if ($oTargetUser->oAccessManager->user->IsAdmin()) {
+                if ($oTargetUser->IsAdmin()) {
                     return false;
                 }
 
                 // Also, the user may only edit users that have at least one portal in common.
-                $allowedPortals = $activeUser->GetFieldCmsPortalIdList();
+                $allowedPortals = array_keys($user->getPortals());
                 $portalsOfTargetUser = $oTargetUser->GetFieldCmsPortalIdList();
                 if (count($portalsOfTargetUser) > 0
                     && 0 === count(array_intersect($allowedPortals, $portalsOfTargetUser))) {
@@ -264,48 +285,36 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         if (true === $this->IsOwner()) {
             return false;
         }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $activeUser = TCMSUser::GetActiveUser();
-        if (false === $activeUser->oAccessManager->HasDeletePermission($this->oTableConf->sqlData['name'])) {
+        if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableConf->fieldName)) {
             return false;
         }
-        if (true === $activeUser->oAccessManager->user->IsAdmin()) {
+
+        if (true === $securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN)) {
             return true;
         }
 
-        $oTargetUser = TdbCmsUser::GetNewInstance($this->sId);
-        $oTargetUser->_LoadAccessManager();
-        if ($oTargetUser->oAccessManager->user->IsAdmin()) {
+        if ($this->sId === $securityHelper->getUser()?->getId()) {
+            // you cannot delete yourself.
             return false;
         }
 
+        $oTargetUser = TdbCmsUser::GetNewInstance($this->sId);
+
         // Also, the user may only delete users that have at least one portal in common.
-        $allowedPortals = $activeUser->GetFieldCmsPortalIdList();
+        $userPortals = $securityHelper->getUser()?->getPortals();
+        if (null === $userPortals) {
+            $userPortals = [];
+        }
+        $allowedPortals = array_keys($userPortals);
         $portalsOfTargetUser = $oTargetUser->GetFieldCmsPortalIdList();
 
         return 0 === \count($portalsOfTargetUser) ||
             \count(array_intersect($allowedPortals, $portalsOfTargetUser)) > 0;
     }
 
-    /**
-     * switch from current user to another user.
-     */
-    public function SwitchToUser()
-    {
-        if (false === $this->isSwitchToUserAllowed()) {
-            return;
-        }
-        $oUser = new TCMSUser();
-        if (false === $oUser->Load($this->sId)) {
-            return;
-        }
-        TCMSUser::ReleaseOpenLocks(TCMSUser::GetActiveUser()->id);
-        $oUser->SetAsActiveUser();
-        $this->getRedirect()->redirectToActivePage(array(
-            '_rmhist' => 'true',
-            '_histid' => '0',
-        ));
-    }
 
     /**
      * copies the user group and role from one user to the current user.
@@ -538,15 +547,17 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             return true;
         }
         $bIsOwner = false;
-        $oCMSUser = TCMSUser::GetActiveUser();
-        if (!is_null($oCMSUser) && !is_null($this->oTable) && is_array($this->oTable->sqlData)) {
-            $bIsOwner = ($this->oTable->id == $oCMSUser->id);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if (!is_null($this->oTable) && is_array($this->oTable->sqlData)) {
+            $bIsOwner = ($this->oTable->id === $securityHelper->getUser()?->getId());
         } elseif (is_array($aPostData)) {
             $recId = null;
             if (array_key_exists('id', $aPostData)) {
                 $recId = $aPostData['id'];
             }
-            $bIsOwner = ($recId == $oCMSUser->id);
+            $bIsOwner = ($recId === $securityHelper->getUser()?->getId());
         }
 
         return $bIsOwner;
@@ -609,8 +620,11 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         }
 
         // Get the new lists of roles to add/remove, restricted to the allowed roles.
-        $activeUser = TCMSUser::GetActiveUser();
-        $rolesOfActiveUser = $activeUser->GetFieldCmsRoleIdList();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $roles = $securityHelper->getUser()?->getRoles();
+
+        $rolesOfActiveUser = array_keys($roles);
         $rolesToAdd = array_intersect($rolesToAdd, $rolesOfActiveUser);
         $rolesToRemove = array_intersect($rolesToRemove, $rolesOfActiveUser);
 
@@ -628,7 +642,10 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
      */
     private function isCurrentUserAdmin()
     {
-        return TCMSUser::GetActiveUser()->oAccessManager->user->IsAdmin();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        return $securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN);
     }
 
     /**

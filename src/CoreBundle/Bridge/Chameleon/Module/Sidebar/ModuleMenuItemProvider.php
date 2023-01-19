@@ -11,6 +11,11 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar;
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+
 class ModuleMenuItemProvider implements MenuItemProviderInterface
 {
     /**
@@ -34,12 +39,13 @@ class ModuleMenuItemProvider implements MenuItemProviderInterface
 
     private function isModuleAccessAllowed(\TdbCmsModule $cmsModule): bool
     {
-        $activeUser = \TCMSUser::GetActiveUser();
-        if (null === $activeUser) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return false;
         }
 
-        return true === $activeUser->oAccessManager->user->IsInGroups($cmsModule->fieldCmsUsergroupId);
+        return $securityHelper->isGranted(CmsPermissionAttributeConstants::ACCESS, $cmsModule);
     }
 
     private function getModuleTargetUrl(\TdbCmsModule $cmsModule): string

@@ -9,9 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Field\Provider\ClassFromTableFieldProviderInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 
 require_once PATH_LIBRARY.'/classes/TCMSListManager/tcms_functionblock_callback.fun.php';
@@ -174,20 +177,23 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      */
     protected function GetCacheParameters()
     {
-        $oCmsUser = TdbCmsUser::GetActiveUser();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+
         $request = $this->getRequest();
 
         $aCacheParameters = array('class' => get_class($this),
             'table' => $this->oTableConf->sqlData['name'],
-            'userid' => $oCmsUser->id,
+            'userid' => $securityHelper->getUser()?->getId(),
             'sRestriction' => $this->sRestriction,
             'sRestrictionField' => $this->sRestrictionField,
             'field' => $request->get('field'),
             'pagedef' => $request->get('pagedef'),
+            'sCurrentEditLanguageIsoCode' => $backendSession->getCurrentEditLanguageIso6391(),
         );
-        if ($oCmsUser) {
-            $aCacheParameters['sCurrentEditLanguageId'] = $oCmsUser->GetCurrentEditLanguageID();
-        }
 
         return $aCacheParameters;
     }
@@ -211,16 +217,21 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     protected function GetCustomMenuItems()
     {
         parent::GetCustomMenuItems();
-        $oGlobal = TGlobal::instance();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
+        $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
         if ($tableInUserGroup) {
+            $portalIds = $securityHelper->getUser()?->getPortals();
+            if (null === $portalIds) {
+                $portalIds = array();
+            }
+            $portalRestriction = implode(', ', array_map(fn ($id) => $this->getDatabaseConnection()->quote($id), array_keys($portalIds)));
             /* Check for Export Profiles */
-            $portalRestriction = $oGlobal->oUser->oAccessManager->user->portals->PortalList();
             if (!empty($portalRestriction)) {
-                $query = "SELECT * FROM `cms_export_profiles` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->oTableConf->sqlData['id'])."' AND `cms_portal_id` IN ({$portalRestriction})";
-                $result = MySqlLegacySupport::getInstance()->query($query);
-                if (MySqlLegacySupport::getInstance()->num_rows($result) > 0) {
+                $query = "SELECT EXISTS (SELECT 1 FROM `cms_export_profiles` WHERE `cms_tbl_conf_id` = :tableId AND `cms_portal_id` IN ({$portalRestriction}))";
+                $hasExportProfile = $this->getDatabaseConnection()->fetchOne($query, ['tableId' => $this->oTableConf->sqlData['id']]);
+                if (1 === (int)$hasExportProfile) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.export');
                     $oMenuItem->sIcon = 'far fa-save';
@@ -248,7 +259,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 }
             }
 
-            if ($oGlobal->oUser->oAccessManager->HasDeletePermission($this->oTableConf->sqlData['name'])) {
+            if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableConf->sqlData['name'])) {
                 $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
                 $oMenuItem = new TCMSTableEditorMenuItem();
                 $oMenuItem->sItemKey = 'deleteall';
@@ -267,11 +278,13 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     public function CreateTableObj()
     {
         $oGlobal = TGlobal::instance();
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 
         $postData = $oGlobal->GetUserData();
         $this->tableObj = new TFullGroupTable();
         $this->tableObj->Init($postData);
-        $this->tableObj->setLanguageId(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        $this->tableObj->setLanguageId($backendSession->getCurrentEditLanguageId());
         $this->tableObj->sTableName = $this->oTableConf->sqlData['name'];
         $this->tableObj->orderList = array();
         $this->tableObj->formActionType = 'GET';
@@ -631,8 +644,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         //remove anything that is translated and not in current edit language #25819
         if (isset($this->tableObj->orderList) && is_array($this->tableObj->orderList) && count($this->tableObj->orderList) > 0) {
-            $cmsUser = TdbCmsUser::GetActiveUser();
-            $editLanguage = $cmsUser->GetCurrentEditLanguage();
+            /** @var BackendSessionInterface $backendSession */
+            $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+            $editLanguage = $backendSession->getCurrentEditLanguageIso6391();
             foreach ($this->tableObj->orderList as $fullFieldName => $sortDirection) {
                 $fieldNameParts = explode('.', $fullFieldName);
                 $cleanFieldNamePart = trim(array_pop($fieldNameParts), '`');
@@ -726,21 +741,19 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     {
         $items = array();
 
-        /**
-         * @var $accessManager TAccessManager
-         */
-        $accessManager = TGlobal::instance()->oUser->oAccessManager;
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         $fieldName = $this->oTableConf->sqlData['name'];
 
-        if ($accessManager->HasEditPermission($fieldName)) {
+        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $fieldName)) {
             $items['edit'] = $this->CallBackFunctionBlockEditButton($id, $row);
         }
 
-        if ($accessManager->HasNewPermission($fieldName)) {
+        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW,$fieldName)) {
             $items['copy'] = $this->CallBackFunctionBlockCopyButton($id, $row);
         }
 
-        if ($accessManager->HasDeletePermission($fieldName)) {
+        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE,$fieldName)) {
             $items['delete'] = $this->CallBackFunctionBlockDeleteButton($id, $row);
         }
 
@@ -886,8 +899,9 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     public function CallBackDrawListItemSelectbox($id, $row, $sFieldName)
     {
         $html = '';
-        $oGlobal = TGlobal::instance();
-        if ($oGlobal->oUser->oAccessManager->HasDeletePermission($this->oTableConf->sqlData['name'])) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableConf->sqlData['name'])) {
             $html = '<input type="checkbox" name="aInputIdList[]" value="'.TGlobal::OutHTML($id).'" />';
         }
 

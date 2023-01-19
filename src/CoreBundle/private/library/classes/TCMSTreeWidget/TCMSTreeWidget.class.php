@@ -9,6 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+
 class TCMSTreeWidget
 {
     /**
@@ -131,12 +136,13 @@ class TCMSTreeWidget
      */
     protected function LoadTreeUserRights()
     {
-        /** @var $oUser TdbCmsUser */
-        $oUser = TdbCmsUser::GetActiveUser();
-        $this->bHasNewPermission = $oUser->oAccessManager->HasNewPermission($this->sTreeTableName);
-        $this->bHasEditPermission = $oUser->oAccessManager->HasEditPermission($this->sTreeTableName);
-        $this->bHasDeletePermission = $oUser->oAccessManager->HasDeletePermission($this->sTreeTableName);
-        $this->bHasUploadPermission = $oUser->oAccessManager->functions->HasRight('cms_image_pool_upload');
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $this->bHasNewPermission = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->sTreeTableName);
+        $this->bHasEditPermission = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->sTreeTableName);
+        $this->bHasDeletePermission = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->sTreeTableName);
+        $this->bHasUploadPermission = $securityHelper->isGranted('RIGHT_CMS_IMAGE_POOL_UPLOAD');
     }
 
     /**
@@ -200,8 +206,10 @@ class TCMSTreeWidget
                 if ($sNodeID == $this->sRootNodeID) {
                     $iMaxLevel = $this->iOpenNodesLevel;
                 }
-                $cmsUser = TCMSUser::GetActiveUser();
-                $editLanguageId = $cmsUser->GetCurrentEditLanguageID();
+                /** @var BackendSessionInterface $backendSession */
+                $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+                $editLanguageId = $backendSession->getCurrentEditLanguageId();
                 $aReturnVal = $this->RenderJSONNodes($oTreeNode, $iMaxLevel, 0, $editLanguageId);
             }
         }

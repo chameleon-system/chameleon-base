@@ -105,7 +105,7 @@ abstract class ChameleonBaseRouter extends Router
     /**
      * {@inheritdoc}
      */
-    public function generate(string $name, array $parameters = array(), int $referenceType = self::ABSOLUTE_PATH)
+    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
         /*
          * Remove an existing authenticity token (might be set to a concrete value instead of the placeholder)

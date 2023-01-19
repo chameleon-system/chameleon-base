@@ -9,12 +9,14 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ChangeNavigationTreeNodeEvent;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperFactoryInterface;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -158,7 +160,10 @@ class CMSModulePageTree extends TCMSModelBase
     protected function GetRootNodeName($nodeID)
     {
         $oCMSTreeNode = TdbCmsTree::GetNewInstance(); /** @var $oCMSTreeNode TCMSTreeNode */
-        $oCMSTreeNode->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $oCMSTreeNode->SetLanguage($backendSession->getCurrentEditLanguageId());
         $oCMSTreeNode->Load($nodeID);
 
         $this->oRootNode = $oCMSTreeNode;
@@ -202,7 +207,10 @@ class CMSModulePageTree extends TCMSModelBase
                       {$sPortalCondition}
                       ORDER BY $quotedSortField";
 
-            $oTreeNodes = TdbCmsTreeList::GetList($query, TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+            /** @var BackendSessionInterface $backendSession */
+            $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+            $oTreeNodes = TdbCmsTreeList::GetList($query, $backendSession->getCurrentEditLanguageId());
 
             if ($oTreeNodes->Length() > 0) {
                 // render next tree level
@@ -275,11 +283,12 @@ class CMSModulePageTree extends TCMSModelBase
 
         $sIconHTML = '';
 
-        $oCmsUser = TCMSUser::GetActiveUser();
-        $oEditLanguage = $oCmsUser->GetCurrentEditLanguageObject();
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
         $parentNodeHidden = false;
 
-        $oParentTreeNode->SetLanguage($oEditLanguage->id);
+        $oParentTreeNode->SetLanguage($backendSession->getCurrentEditLanguageId());
         if (true == $oParentTreeNode->fieldHidden) {
             $sIconHTML .= $this->getNodeIndicatorIcon('/images/tree/hidden.png', 'iconHidden');
             $parentNodeHidden = true;
@@ -293,8 +302,8 @@ class CMSModulePageTree extends TCMSModelBase
         if (CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE) {
             $oCmsConfig = TCMSConfig::GetInstance();
             $oDefaultLang = $oCmsConfig->GetFieldTranslationBaseLanguage();
-            if ($oDefaultLang && $oDefaultLang->id != $oEditLanguage->id) {
-                if (empty($oParentTreeNode->sqlData['name__'.$oEditLanguage->fieldIso6391])) {
+            if ($oDefaultLang && $oDefaultLang->id != $backendSession->getCurrentEditLanguageId()) {
+                if (empty($oParentTreeNode->sqlData['name__'.$backendSession->getCurrentEditLanguageIso6391()])) {
                     $sIsTranslatedIdent = '<img src="'.TGlobal::GetStaticURL('chameleon/blackbox/images/tree/folder_edit.png').'" width="12" align="absmiddle" border="0" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_page_tree.not_translated')).'" />';
                 }
             }
@@ -379,7 +388,9 @@ class CMSModulePageTree extends TCMSModelBase
                   {$sPortalCondition}
                   ORDER BY $quotedSortField";
 
-        $oTreeNodes = TdbCmsTreeList::GetList($query, TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+        $oTreeNodes = TdbCmsTreeList::GetList($query, $backendSession->getCurrentEditLanguageId());
         ++$level;
 
         if ($oTreeNodes->Length() > 0) {
@@ -425,7 +436,10 @@ class CMSModulePageTree extends TCMSModelBase
      */
     protected function GetPortalNavigationStartNodes()
     {
-        $oPortalList = TdbCmsPortalList::GetList(null, TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $oPortalList = TdbCmsPortalList::GetList(null, $backendSession->getCurrentEditLanguageId());
 
         $aRestrictedNodes = array();
         while ($oPortal = $oPortalList->Next()) {
@@ -450,11 +464,18 @@ class CMSModulePageTree extends TCMSModelBase
         if (null !== $internalCache) {
             $aPortalExcludeList = $internalCache;
         } else {
-            $oUser = TCMSUser::GetActiveUser();
-            $sPortalList = $oUser->oAccessManager->user->portals->PortalList();
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            $portalIds = $securityHelper->getUser()?->getPortals();
+
+            $portalIdSql = '';
+            if (null !== $portalIds && count($portalIds) > 0) {
+                $portalIdSql = implode(', ', array_map(fn(string $portalId) => $this->getDatabaseConnection()->quote($portalId), array_keys($portalIds)));
+            }
+
             $query = 'SELECT * FROM `cms_portal`';
-            if (false !== $sPortalList) {
-                $query .= ' WHERE `id` NOT IN ('.$sPortalList.')';
+            if ('' !== $portalIdSql) {
+                $query .= ' WHERE `id` NOT IN ('.$portalIdSql.')';
             }
             $aPortalExcludeList = array();
             $portalRes = MySqlLegacySupport::getInstance()->query($query);
@@ -490,7 +511,10 @@ class CMSModulePageTree extends TCMSModelBase
     {
         $sEntrySortField = 'entry_sort';
         if (TdbCmsTree::CMSFieldIsTranslated('entry_sort')) {
-            $sLanguagePrefix = TGlobal::GetLanguagePrefix($user = TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+            /** @var BackendSessionInterface $backendSession */
+            $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+            $sLanguagePrefix = TGlobal::GetLanguagePrefix($backendSession->getCurrentEditLanguageId());
             if ('' !== $sLanguagePrefix) {
                 $sEntrySortField .= '__'.$sLanguagePrefix;
             }
@@ -539,7 +563,10 @@ class CMSModulePageTree extends TCMSModelBase
                     $quotedNodeId = $databaseConnection->quote($iNodeID);
                     $quotedEntrySortField = $databaseConnection->quoteIdentifier($sEntrySortField);
                     $query = "SELECT * FROM $quotedTreeTable WHERE `parent_id` = $quotedParentNodeId AND `id` != $quotedNodeId ORDER BY $quotedEntrySortField  ASC";
-                    $oCmsTreeList = TdbCmsTreeList::GetList($query, TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+                    /** @var BackendSessionInterface $backendSession */
+                    $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+                    $oCmsTreeList = TdbCmsTreeList::GetList($query, $backendSession->getCurrentEditLanguageId());
 
                     $count = 0;
                     while ($oCmsTree = $oCmsTreeList->Next()) {
@@ -605,7 +632,10 @@ class CMSModulePageTree extends TCMSModelBase
     protected function UpdateSubtreePathCache($iNodeId)
     {
         $oNode = TdbCmsTree::GetNewInstance();
-        $oNode->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $oNode->SetLanguage($backendSession->getCurrentEditLanguageId());
         $oNode->Load($iNodeId);
         $oNode->TriggerUpdateOfPathCache();
     }
@@ -645,9 +675,10 @@ class CMSModulePageTree extends TCMSModelBase
         if (!is_array($parameters)) {
             $parameters = array();
         }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $oCMSUser = TCMSUser::GetActiveUser();
-        $parameters['ouserid'] = $oCMSUser->id;
+        $parameters['ouserid'] = $securityHelper->getUser()?->getId();
         $parameters['noassign'] = $this->global->GetUserData('noassign');
         $parameters['id'] = $this->global->GetUserData('id');
         $parameters['rootID'] = $this->global->GetUserData('rootID');
@@ -666,9 +697,10 @@ class CMSModulePageTree extends TCMSModelBase
             $aTableTriggerList = array();
         }
 
-        $oCMSUser = TCMSUser::GetActiveUser();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $aTableTriggerList[] = array('table' => 'cms_user', 'id' => $oCMSUser->id);
+        $aTableTriggerList[] = array('table' => 'cms_user', 'id' => $securityHelper->getUser()?->getId());
         $aTableTriggerList[] = array('table' => 'cms_user_cms_language_mlt', 'id' => '');
         $aTableTriggerList[] = array('table' => 'cms_user_cms_portal_mlt', 'id' => '');
         $aTableTriggerList[] = array('table' => 'cms_user_cms_role_mlt', 'id' => '');

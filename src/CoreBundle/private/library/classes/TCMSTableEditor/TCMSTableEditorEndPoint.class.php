@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\RecordChangeEvent;
 use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
@@ -20,6 +21,9 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -207,10 +211,9 @@ class TCMSTableEditorEndPoint
         /** @var $oCmsTblConf TdbCmsTblConf */
         $oCmsTblConf = TdbCmsTblConf::GetNewInstance();
         if (is_null($sLanguageID)) {
-            $oCmsUser = TdbCmsUser::GetActiveUser();
-            if ($oCmsUser && is_array($oCmsUser->sqlData) && array_key_exists('cms_language_id', $oCmsUser->sqlData)) {
-                $oCmsTblConf->SetLanguage($oCmsUser->GetCurrentEditLanguageID());
-            }
+            /** @var BackendSessionInterface $backendSession */
+            $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+            $oCmsTblConf->SetLanguage($backendSession->getCurrentEditLanguageId());
         } else {
             $oCmsTblConf->SetLanguage($sLanguageID);
         }
@@ -309,15 +312,18 @@ class TCMSTableEditorEndPoint
             return true;
         }
         $bIsOwner = false;
-        $oCMSUser = TCMSUser::GetActiveUser();
-        if (!is_null($oCMSUser) && !is_null($this->oTable) && is_array($this->oTable->sqlData)) {
-            $bIsOwner = (array_key_exists('cms_user_id', $this->oTable->sqlData) && $this->oTable->sqlData['cms_user_id'] == $oCMSUser->id);
-        } elseif (is_array($aPostData) && $oCMSUser) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $userId = $securityHelper->getUser()?->getId();
+
+        if (null !== $userId && !is_null($this->oTable) && is_array($this->oTable->sqlData)) {
+            $bIsOwner = (array_key_exists('cms_user_id', $this->oTable->sqlData) && $this->oTable->sqlData['cms_user_id'] == $userId);
+        } elseif (is_array($aPostData) && null !== $userId) {
             $recUserId = null;
             if (array_key_exists('cms_user_id', $aPostData)) {
                 $recUserId = $aPostData['cms_user_id'];
             }
-            $bIsOwner = ($recUserId == $oCMSUser->id);
+            $bIsOwner = ($recUserId === $userId);
         }
 
         return $bIsOwner;
@@ -335,36 +341,14 @@ class TCMSTableEditorEndPoint
         if ($this->bAllowEditByAll) {
             return true;
         }
-        if ($this->IsOwner($postData)) {
-            return true;
-        }
-        $bAllowEdit = false;
 
-        if (is_null($this->oTable)) {
-            if (is_array($postData) && !array_key_exists('cms_user_id', $postData)) {
-                $bAllowEdit = true;
-            }
-        } else {
-            $user = $this->getGlobal()->oUser;
-            if (null === $user) {
-                $bAllowEdit = false;
-            } else {
-                if ((!is_null($this->oTable) && is_array($this->oTable->sqlData)) && !array_key_exists('cms_user_id', $this->oTable->sqlData)) {
-                    $bHasAllowEditView = true;
-                } else {
-                    $bHasAllowEditView = $user->oAccessManager->HasShowAllPermission($this->oTableConf->sqlData['name']);
-                }
-
-                $tableInUserGroup = $user->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
-                $bUserHasTableEditPermissions = $user->oAccessManager->HasEditPermission($this->oTableConf->sqlData['name']);
-
-                if ($tableInUserGroup && $bUserHasTableEditPermissions && $bHasAllowEditView) {
-                    $bAllowEdit = true;
-                }
-            }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (null !== $this->oTable) {
+            return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTable);
         }
 
-        return $bAllowEdit;
+        return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name']);
     }
 
     /**
@@ -383,35 +367,13 @@ class TCMSTableEditorEndPoint
             return true;
         }
 
-        $oGlobal = TGlobal::instance();
-
-        $tableInUserGroup = false;
-        if (!is_null($oGlobal->oUser)) {
-            $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
-        }
-        $bAllowView = false;
-        if ($this->IsOwner($postData)) {
-            $bAllowView = true;
-        } else {
-            $bHasAllowAllView = false;
-            if (is_null($this->oTable)) {
-                if (is_array($postData) && !array_key_exists('cms_user_id', $postData)) {
-                    $bAllowView = true;
-                }
-            } else {
-                if ((!is_null($this->oTable) && is_array($this->oTable->sqlData)) && !array_key_exists('cms_user_id', $this->oTable->sqlData)) {
-                    $bHasAllowAllView = true;
-                } else {
-                    $bHasAllowAllView = $oGlobal->oUser->oAccessManager->HasShowAllReadOnlyPermission($this->oTableConf->sqlData['name']);
-                }
-
-                if ($tableInUserGroup && $bHasAllowAllView) {
-                    $bAllowView = true;
-                }
-            }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (null !== $this->oTable) {
+            return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
         }
 
-        return $bAllowView;
+        return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTable);
     }
 
     /**
@@ -431,13 +393,13 @@ class TCMSTableEditorEndPoint
             return $this->oMenuItems;
         }
 
-        $oGlobal = TGlobal::instance();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if (!$this->IsRecordInReadOnlyMode()) {
+        if (false === $this->IsRecordInReadOnlyMode() && true === $this->AllowReadOnly()) {
             if (is_null($this->oMenuItems)) {
                 $this->oMenuItems = new TIterator();
                 // std menuitems...
-                $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
 
                 if ($this->AllowEdit()) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
@@ -461,9 +423,8 @@ class TCMSTableEditorEndPoint
                     $this->oMenuItems->AddItem($oMenuItem);
                 }
 
-                if ($tableInUserGroup) {
                     if (1 != $this->oTableConf->sqlData['only_one_record_tbl'] && true !== $this->editOnly) {
-                        if ($oGlobal->oUser->oAccessManager->HasNewPermission($this->oTableConf->sqlData['name'])) {
+                        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->oTableConf->sqlData['name'])) {
                             // copy
                             $oMenuItem = new TCMSTableEditorMenuItem();
                             $oMenuItem->sItemKey = 'copy';
@@ -482,7 +443,12 @@ class TCMSTableEditorEndPoint
                         }
 
                         // delete
-                        if ($oGlobal->oUser->oAccessManager->HasDeletePermission($this->oTableConf->sqlData['name'])) {
+                        if (null !== $this->oTable) {
+                            $allowDelete = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTable);
+                        } else {
+                            $allowDelete = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableConf->sqlData['name']);
+                        }
+                        if ($allowDelete) {
                             $oMenuItem = new TCMSTableEditorMenuItem();
                             $oMenuItem->sItemKey = 'delete';
                             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.delete');
@@ -491,7 +457,6 @@ class TCMSTableEditorEndPoint
                             $oMenuItem->setButtonStyle('btn-danger');
                             $this->oMenuItems->AddItem($oMenuItem);
                         }
-                    }
 
                     // preview button
                     if (1 == $this->oTableConf->sqlData['show_previewbutton']) {
@@ -506,7 +471,7 @@ class TCMSTableEditorEndPoint
                     }
 
                     // if we have edit access to the table editor, then we also show a link to it
-                    if ($oGlobal->oUser->oAccessManager->HasEditPermission('cms_tbl_conf')) {
+                    if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, 'cms_tbl_conf')) {
                         /** @var $oTableEditorConf TCMSTableConf */
                         $oTableEditorConf = new TCMSTableConf();
                         $oTableEditorConf->LoadFromField('name', 'cms_tbl_conf');
@@ -593,8 +558,10 @@ class TCMSTableEditorEndPoint
             TdbCmsConfig::GetInstance()->GetFieldBasedTranslationLanguageArray()
         );
 
-        $oGlobal = TGlobal::instance();
-        $currentLanguageISO = $oGlobal->oUser->GetCurrentEditLanguage();
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $currentLanguageISO = $backendSession->getCurrentEditLanguageIso6391();
 
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'copy_translation';
@@ -674,9 +641,18 @@ class TCMSTableEditorEndPoint
 
         $portalId = $page->GetPortal()->id;
         $domainName = $this->getPortalDomainService()->getPrimaryDomain($portalId)->GetActiveDomainName();
-        $editLanguageID = TCMSUser::GetActiveUser()->GetCurrentEditLanguageID();
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 
-        return $this->getCurrentRequest()->getScheme().'://'.$domainName.'/'.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'?pagedef='.$this->sId.'&esdisablelinks=true&__previewmode=true&previewLanguageId='.$editLanguageID;
+        $editLanguageID = $backendSession->getCurrentEditLanguageId();
+
+
+        $scheme = $this->getCurrentRequest()?->getScheme();
+        if (null === $scheme) {
+            $scheme = 'https';
+        }
+
+        return $scheme.'://'.$domainName.'/'.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'?pagedef='.$this->sId.'&esdisablelinks=true&__previewmode=true&previewLanguageId='.$editLanguageID;
     }
 
     /**
@@ -951,7 +927,7 @@ class TCMSTableEditorEndPoint
             $conditionFields['target_id'] = $iConnectedID;
         }
         if (MySqlLegacySupport::getInstance()->query($deleteQuery)) {
-            $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+            $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
             $migrationQueryData = new MigrationQueryData($mltTableName, $editLanguage->fieldIso6391);
             $migrationQueryData
                 ->setWhereEquals($conditionFields)
@@ -1025,7 +1001,7 @@ class TCMSTableEditorEndPoint
             $iSortNumber = $this->GetMLTSortNumber($mltTableName);
             $insertQuery = "INSERT INTO $quotedMltTableName SET `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."', `target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iConnectedID)."', `entry_sort` = '".MySqlLegacySupport::getInstance()->real_escape_string($iSortNumber)."'";
             if (MySqlLegacySupport::getInstance()->query($insertQuery)) {
-                $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+                $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
                 $migrationQueryData = new MigrationQueryData($mltTableName, $editLanguage->fieldIso6391);
                 $migrationQueryData
                     ->setFields(array(
@@ -1182,6 +1158,9 @@ class TCMSTableEditorEndPoint
         $oFields->GoToStart();
         $oCMSUserFieldType = TdbCmsFieldType::GetNewInstance();
         $bIsDone = false;
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $userId = $securityHelper->getUser()?->getId();
 
         $sModuleInstanceID = '';
         while (!$bIsDone && ($oField = $oFields->Next())) {
@@ -1191,8 +1170,7 @@ class TCMSTableEditorEndPoint
                 $bIsDone = true;
                 if ($oCMSUserFieldType->LoadFromField('constname', 'CMSFIELD_PROPERTY_PARENT_ID')) {
                     if ($oField->oDefinition->sqlData['cms_field_type_id'] != $oCMSUserFieldType->id) {
-                        $oGlobal = TGlobal::instance();
-                        $this->SaveField($oField->oDefinition->sqlData['name'], $oGlobal->oUser->id);
+                        $this->SaveField($oField->oDefinition->sqlData['name'], $userId);
                     }
                 }
             } elseif ('cms_tpl_module_instance_id' == $oField->oDefinition->sqlData['name']) {
@@ -1300,7 +1278,7 @@ class TCMSTableEditorEndPoint
                       WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sDeleteId)."'";
         MySqlLegacySupport::getInstance()->query($query);
 
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+        $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
         $migrationQueryData = new MigrationQueryData($this->oTableConf->sqlData['name'], $editLanguage->fieldIso6391);
         $migrationQueryData
             ->setWhereEquals(array(
@@ -1439,6 +1417,9 @@ class TCMSTableEditorEndPoint
         $this->LoadDataFromDatabase();
         $oFields = $this->oTableConf->GetFields($this->oTable);
         $sModuleInstanceID = '';
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $userId = $securityHelper->getUser()?->getId();
         /** @var $oField TCMSField */
         while ($oField = $oFields->Next()) {
             $oField->PreGetSQLHook();
@@ -1453,8 +1434,7 @@ class TCMSTableEditorEndPoint
                 $oCMSUserFieldType = TdbCmsFieldType::GetNewInstance();
                 if ($oCMSUserFieldType->LoadFromField('constname', 'CMSFIELD_PROPERTY_PARENT_ID')) {
                     if ($oField->oDefinition->sqlData['cms_field_type_id'] != $oCMSUserFieldType->id) {
-                        $oGlobal = TGlobal::instance();
-                        $this->SaveField($oField->oDefinition->sqlData['name'], $oGlobal->oUser->id);
+                        $this->SaveField($oField->oDefinition->sqlData['name'], $userId);
                     }
                 }
             } elseif ('cms_tpl_module_instance_id' == $oField->oDefinition->sqlData['name']) {
@@ -1930,7 +1910,7 @@ class TCMSTableEditorEndPoint
         }
 
         $databaseConnection = $this->getDatabaseConnection();
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+        $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
 
         $fieldConfigResult = $this->getFieldsOfType($fieldTypeId);
 
@@ -2190,24 +2170,30 @@ class TCMSTableEditorEndPoint
     public function RefreshLock()
     {
         $oReturnData = false;
-        $oUser = TdbCmsUser::GetActiveUser();
 
-        if (is_object($oUser) && $oUser->bLoggedIn && TGlobal::IsCMSMode() && array_key_exists('locking_active', $this->oTableConf->sqlData) && '1' == $this->oTableConf->sqlData['locking_active'] && CHAMELEON_ENABLE_RECORD_LOCK) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if ($securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
+            return false;
+        }
+
+        $user = $securityHelper->getUser();
+
+        if (null !== $user  && TGlobal::IsCMSMode() && array_key_exists('locking_active', $this->oTableConf->sqlData) && '1' == $this->oTableConf->sqlData['locking_active'] && CHAMELEON_ENABLE_RECORD_LOCK) {
             // prevent locking of cms_lock table
             $iTableID = TTools::GetCMSTableId('cms_lock');
-            if ($this->sTableId != $iTableID) {
+            if ($this->sTableId !== $iTableID) {
                 $oGlobal = TGlobal::instance();
                 $aData = array();
                 $aData['time_stamp'] = time();
-                $aData['cms_user_id'] = $oGlobal->oUser->id;
+                $aData['cms_user_id'] = $user->getId();
 
                 $oTableEditor = new TCMSTableEditorManager();
                 /** @var $oTableEditor TCMSTableEditorManager */
                 // check if lock exists
-                $query = "SELECT * FROM `cms_lock` WHERE `recordid` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."' AND `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sTableId)."'";
-                $result = MySqlLegacySupport::getInstance()->query($query);
-                if (MySqlLegacySupport::getInstance()->num_rows($result) > 0) {
-                    $row = MySqlLegacySupport::getInstance()->fetch_assoc($result);
+                $query = "SELECT * FROM `cms_lock` WHERE `recordid` = :recordId AND `cms_tbl_conf_id` = :tableId";
+                $row = $this->getDatabaseConnection()->fetchAssociative($query, ['recordId' => $this->sId, 'tableId' => $this->sTableId]);
+                if (false !== $row) {
                     $aData['id'] = $row['id'];
                     $oTableEditor->Init($iTableID, $row['id']);
                 } else {
@@ -2231,10 +2217,12 @@ class TCMSTableEditorEndPoint
     public function RemoveLock()
     {
         if (array_key_exists('locking_active', $this->oTableConf->sqlData) && '1' == $this->oTableConf->sqlData['locking_active']) {
-            $oUser = TdbCmsUser::GetActiveUser();
-            if (is_object($oUser)) {
-                $query = "DELETE FROM `cms_lock` WHERE `recordid` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."' AND `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sTableId)."' AND `cms_user_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oUser->id)."'";
-                MySqlLegacySupport::getInstance()->query($query);
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            $userId = $securityHelper->getUser()?->getId();
+            if (null !== $userId) {
+                $query = "DELETE FROM `cms_lock` WHERE `recordid` = :recordId AND `cms_tbl_conf_id` = :tableId AND `cms_user_id` = :userId";
+                $this->getDatabaseConnection()->executeQuery($query, ['recordId' => $this->sId, 'tableId' => $this->sTableId, 'userId' => $userId]);
             }
         }
     }
@@ -2509,6 +2497,10 @@ class TCMSTableEditorEndPoint
         return ServiceLocator::get('database_connection');
     }
 
+    protected function getBackendSession(): BackendSessionInterface
+    {
+        return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+    }
     /**
      * @return LanguageServiceInterface
      */

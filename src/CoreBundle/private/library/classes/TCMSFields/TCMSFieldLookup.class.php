@@ -12,6 +12,8 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 
 /**
  * ReloadOnChange=true.
@@ -68,6 +70,9 @@ class TCMSFieldLookup extends TCMSField
 
     private function addFieldRenderVariables(ViewRenderer $viewRenderer): void
     {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
         $sClass = '';
         $sOnChangeAttr = '';
         if ($this->GetReloadOnChangeParam()) {
@@ -77,7 +82,7 @@ class TCMSFieldLookup extends TCMSField
 
         $viewRenderer->AddSourceObject('fieldName', $this->name);
         $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
-        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('language', $securityHelper->getUser()?->getCurrentEditLanguageIsoCode());
         $viewRenderer->AddSourceObject('sClass', $sClass);
         $viewRenderer->AddSourceObject('onchangeAttr', $sOnChangeAttr);
         $viewRenderer->AddSourceObject('options', $this->options);
@@ -85,8 +90,10 @@ class TCMSFieldLookup extends TCMSField
 
         $foreignTableName = $this->GetConnectedTableName();
         $viewRenderer->AddSourceObject('foreignTableName', $foreignTableName);
-        $oGlobal = TGlobal::instance();
-        if ($oGlobal->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
+
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $foreignTableName)) {
             $viewRenderer->AddSourceObject('buttonLink', $this->getSelectedEntryLink($this->data));
         }
         $viewRenderer->AddSourceObject('connectedRecordId', $this->data);
@@ -264,19 +271,20 @@ class TCMSFieldLookup extends TCMSField
         if (!empty($sRestriction)) {
             $query .= ' AND '.$sRestriction;
         }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $portals = $securityHelper->getUser()?->getPortals();
+        $sPortalList = implode(', ', array_map(fn (string $portalId) => $this->getDatabaseConnection()->quote($portalId), array_keys($portals)));
 
         if ('cms_portal' == $tblName) {
-            $oGlobal = TGlobal::instance();
-            $sPortalList = $oGlobal->oUser->oAccessManager->user->portals->PortalList();
+
             if (!empty($sPortalList)) {
                 $query .= ' AND `cms_portal`.`id` IN ('.$sPortalList.')';
             }
         } elseif (TTools::FieldExists($tblName, 'cms_portal_id')) {
             // if the table holds a portal id, then restrict the list
-            $oGlobal = TGlobal::instance();
-            $sPortalList = $oGlobal->oUser->oAccessManager->user->portals->PortalList();
             if (!empty($sPortalList)) {
-                $query .= ' AND `'.MySqlLegacySupport::getInstance()->real_escape_string($tblName)."`.`cms_portal_id` IN ('', ".$sPortalList.')';
+                $query .= ' AND '.$this->getDatabaseConnection()->quoteIdentifier($tblName).".`cms_portal_id` IN ('', ".$sPortalList.')';
             } else {
                 $query .= ' AND `'.MySqlLegacySupport::getInstance()->real_escape_string($tblName)."`.`cms_portal_id` = ''";
             }

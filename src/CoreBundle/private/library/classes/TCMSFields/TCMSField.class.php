@@ -15,6 +15,8 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -208,13 +210,9 @@ class TCMSField implements TCMSFieldVisitableInterface
         $modifier = $this->oDefinition->sqlData['modifier'];
         if ('hidden' !== $modifier && '1' == $this->oDefinition->sqlData['restrict_to_groups']) {
             // check if the user is in one of the connected groups
-            $global = $this->getGlobal();
-            $fieldGroups = $this->oDefinition->GetPermissionGroups();
-            if ($global->oUser
-                && $global->oUser->oAccessManager
-                && $global->oUser->oAccessManager->user
-                && !$global->oUser->oAccessManager->user->IsInGroups($fieldGroups)
-            ) {
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::ACCESS, $this->oDefinition)) {
                 $modifier = 'readonly';
             }
         }

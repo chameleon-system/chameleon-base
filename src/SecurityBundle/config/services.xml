@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults autowire="true" autoconfigure="true"  />
+        <prototype namespace="ChameleonSystem\SecurityBundle\" resource="../src/*" exclude="../src/{Model,DependencyInjection}"/>
+
+        <service id="ChameleonSystem\SecurityBundle\EventListener\RedirectOnPendingUpdatesEventListener">
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LoginSuccessEvent" method="onLoginSuccess" />
+        </service>
+
+        <service id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" public="true">
+            <argument type="service" key="$firewallMap" id="security.firewall.map" />
+
+        </service>
+
+        <service id="ChameleonSystem\SecurityBundle\Voter\UserHasRightVoter">
+            <tag name="security.voter"/>
+        </service>
+
+        <service id="ChameleonSystem\SecurityBundle\Voter\CmsRightVoter">
+            <tag name="security.voter"/>
+        </service>
+        <service id="ChameleonSystem\SecurityBundle\Voter\CmsGroupVoter">
+            <tag name="security.voter"/>
+        </service>
+        <service id="ChameleonSystem\SecurityBundle\Voter\CmsRoleVoter">
+            <tag name="security.voter"/>
+        </service>
+
+
+        <service id="ChameleonSystem\SecurityBundle\Voter\CmsTableNameVoter">
+            <tag name="security.voter"/>
+            <argument type="service" id="chameleon_system_core.data_access_cms_tbl_conf" />
+
+        </service>
+        <service id="ChameleonSystem\SecurityBundle\Voter\CmsTableObjectVoter">
+            <tag name="security.voter"/>
+        </service>
+
+
+
+    </services>
+
+</container>
+

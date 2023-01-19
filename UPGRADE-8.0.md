@@ -1,4 +1,4 @@
-UPGRADE FROM 7.1 to 7.2
+UPGRADE FROM 7.1 to 8.0
 =======================
 
 # Essentials
@@ -33,7 +33,9 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - search for `protected function _NewElement\(\$aData\)[ ]*[^\:]{0,1}` (must return the specific Tdb item)
 - search for `public static function GetList\(.*\)` (must return the specific list type)
 - search for `public static function GetDefaultQuery\(.*\)` (must return `string`)
-- search for `public function Previous()` (must return `false|Tdb....`)
+- search for `public function Previous()` (must return `bool|Tdb....`)
+- search for `public function Current()` (must return `bool|Tdb....`)
+- search for `public functiocn Next()` (must return `bool|Tdb....`)
 - `\ChameleonSystem\DebugBundle\ChameleonSystemDebugBundle` removed. The logging of database connections can no longer be done the way done in the bundle
 - doctrine update [maybe]s.
   - replace `->fetchAll(` with `->fetchAllAssociative(`
@@ -56,6 +58,42 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
   This is used in debug data collectors - so search for `<tag name="data_collector"`. Example `<tag name="data_collector" template="@ChameleonSystemElastic/Profiler/layout.html.twig" id="chameleon_system_elastic.search" priority="20"/>`
 - `\TPkgCustomSearchResultItemList::AddCacheParameters` removed
 - `\TPkgCustomSearchResultItemList::AddClearCacheTriggers` removed
+- `\TPkgImageHotspotItem::AddClearCacheTriggers` removed
+- `\TCMSFieldWYSIWYG::getModifiedToolbarByUser` - dropped user parameter.
+- `\TCMSTableEditorPortal::linkPortalToUser` now takes the user id instead of the user
+- `\TPkgShopPaymentTransactionContextEndPoint::getCmsUser` was removed
+- `\TGlobalBase::$aLangaugeIds` removed
+- `\TGlobal::GetLanguageIdList` deprecated
+- `\TCMSUser::GetSessionVarName` removed
+- `\MTLoginEndPoint::Login` removed
+- `\TCMSUser::Login` removed
+- `\MTLoginEndPoint::postLoginRedirect` removed
+- `\MTLoginEndPoint::IsUserAlreadyLoggedIn` removed
+- `\ChameleonSystem\CoreBundle\CoreEvents::BACKEND_LOGIN_SUCCESS` removed
+- `\ChameleonSystem\CoreBundle\CoreEvents::BACKEND_LOGIN_FAILURE` removed
+- `\ChameleonSystem\CoreBundle\CoreEvents::BACKEND_LOGOUT_SUCCESS` removed
+- `\TGlobal->oUser` access via magic `__get` removed.
+- `\CMSModuleChooser::$oAccessManager` removed.
+- `\TCMSUser::$oAccessManager` removed.
+- `\TCMSUser::_LoadAccessManager` removed.
+- `\TAccessManager` removed.
+- `\TAccessManagerUser` removed.
+- `\TAccessManagerEditLanguages` removed.
+- `\TAccessManagerExtraFunctions` removed.
+- `\TAccessManagerGroups` removed.
+- `\TAccessManagerPermissions` removed.
+- `\TAccessManagerPortals` removed.
+- `\TAccessManagerRoles` removed.
+- `\MTLoginEndPoint::Logout` removed (logout works by redirecting to the logout url)
+- `\TCMSUser::Logout` removed
+- `\TCMSUser::SetAsActiveUser` removed - switch user by using Symfony impersonate.
+- `\TCMSTableEditorCMSUser::SwitchToUser` removed - switch user by using Symfony impersonate.
+- `\TCMSUser::CMSUserDefined` removed - is `isGranted(\ChameleonSystem\SecurityBundle\CmsUser\UserRoles::CMS_USER)`
+- `\TCMSUser::ValidSessionKey` removed
+- `\TCMSUser::GetUserSessionKey` removed
+- `\ChameleonSystem\CoreBundle\Service\LanguageServiceInterface::getActiveEditLanguage` removed
+- `\TPkgImageHotspotItem::AddClearCacheTriggers` removed
+- `\TShopVariantDisplayHandler::AddClearCacheTriggers` removed
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 

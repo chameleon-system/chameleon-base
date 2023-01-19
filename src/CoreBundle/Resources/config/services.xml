@@ -16,6 +16,12 @@
     <services>
         <service class="ChameleonSystem\CoreBundle\Service\SystemTimeProvider" id="chameleon_system_core.system_time_provider" public="true"/>
 
+        <service id="ChameleonSystem\CoreBundle\EventListener\ReleaseOldLocksOnLoginListener">
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LoginSuccessEvent" method="onLoginSuccess" />
+            <argument type="service" id="database_connection" />
+        </service>
+
+
         <service id="chameleon_system_core.pdo" class="PDO" public="false">
             <factory service="database_connection" method="getWrappedConnection" />
             <deprecated>The %service_id% service is deprecated since Chameleon 6.3.0. Use database_connection::getWrappedConnection() instead instead.</deprecated>
@@ -275,7 +281,8 @@
 
         <service id="chameleon_system_core.listener.template_engine_access" class="ChameleonSystem\CoreBundle\EventListener\TemplateEngineAccessListener">
             <argument type="service" id="chameleon_system_core.request_info_service" />
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="250" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="-250" />
         </service>
 
         <service id="chameleon_system_core.listener.redirect_to_primary_domain" class="ChameleonSystem\CoreBundle\EventListener\CheckPortalDomainListener">
@@ -294,9 +301,9 @@
         <service id="chameleon_system_core.request_type" synthetic="true" />
 
         <service id="chameleon_system_core.security.backend_access_check" class="ChameleonSystem\CoreBundle\Security\BackendAccessCheck">
-            <argument type="service" id="chameleon_system_core.global" />
             <argument type="service" id="chameleon_system_core.redirect" />
             <argument type="service" id="request_stack" />
+            <argument type="service" id="security.helper" />
             <call method="unrestrictPagedef">
                 <argument>login</argument>
                 <argument type="collection"></argument>
@@ -563,6 +570,7 @@
         <service id="chameleon_system_core.util.field_translation" class="ChameleonSystem\CoreBundle\Util\FieldTranslationUtil" public="true">
             <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="chameleon_system_core.language_service" />
+            <argument type="service" id="chameleon_system_cms_backend.backend_session" />
         </service>
 
         <service id="chameleon_system_core.util.page_service_util" class="ChameleonSystem\CoreBundle\Util\PageServiceUtil">
@@ -897,7 +905,7 @@
             <argument id="chameleon_system_core.tools" type="service"/>
             <argument id="chameleon_system_core.global" type="service"/>
             <argument type="service" id="chameleon_system_core.util.field_translation"/>
-            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_cms_backend.backend_session"/>
         </service>
 
         <service id="chameleon_system_core.module.navigation_tree_single_select" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelect\NavigationTreeSingleSelect" shared="false">

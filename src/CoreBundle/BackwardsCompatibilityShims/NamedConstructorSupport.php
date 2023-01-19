@@ -28,7 +28,7 @@ trait NamedConstructorSupport
      * in order to provide backwards compatibility with extending classes in
      * projects that may call the named constructor instead of `parent::__construct`;
      */
-    protected function callConstructorAndLogDeprecation(array $arguments)
+    protected function callConstructorAndLogDeprecation(array $arguments): void
     {
         ServiceLocator::get('logger')->withName('deprecation')->warning(
             'Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.',

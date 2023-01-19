@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\SanityCheck\MessageCheckOutput;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
@@ -20,12 +21,14 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\DatabaseMigration\Exception\AccessDeniedException;
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -40,8 +43,6 @@ class MTHeader extends TCMSModelBase
     {
         $this->CheckTemplateEngineStatus();
 
-        $this->data['oUser'] = TCMSUser::GetActiveUser();
-
         $migrationRecorderStateHandler = $this->getMigrationRecorderStateHandler();
         if (null === $migrationRecorderStateHandler->getCurrentBuildNumber()) {
             $migrationRecorderStateHandler->setCurrentBuildNumber((string) time());
@@ -54,6 +55,10 @@ class MTHeader extends TCMSModelBase
     public function Execute()
     {
         parent::Execute();
+
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
 
         $this->data['table_id_cms_tpl_page'] = TTools::GetCMSTableId('cms_tpl_page');
         if (stristr($this->viewTemplate, 'title.view.php')) {
@@ -70,7 +75,7 @@ class MTHeader extends TCMSModelBase
             $this->data['clearCacheURL'] = '';
             $this->data['bHeaderIsHidden'] = false;
 
-            if (TGlobal::CMSUserDefined()) {
+            if ($securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
                 $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
                 $this->data['breadcrumb'] = $breadcrumb->GetBreadcrumb(true);
 
@@ -85,12 +90,24 @@ class MTHeader extends TCMSModelBase
 
             $this->data['aCustomMenuItems'] = $this->GetCustomNavigationItems();
 
-            if (TGlobal::CMSUserDefined()) {
+            if (true === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
                 $this->GetPortalQuickLinks();
             }
 
             $this->RemoveLock();
         }
+
+        if ($securityHelper->isGranted('IS_IMPERSONATOR')) {
+            $this->data['logoutUrl'] = PATH_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl([
+                    '_switch_user' => '_exit',
+                ], '', '&');
+        } else {
+            /** @var RouterInterface $router */
+            $router = ServiceLocator::get('router');
+            $this->data['logoutUrl'] = $router->generate('app_logout');
+        }
+
+
 
         return $this->data;
     }
@@ -231,9 +248,13 @@ class MTHeader extends TCMSModelBase
     protected function GetPortalList()
     {
         $oCmsPortalList = null;
-        $oCMSUser = TCMSUser::GetActiveUser();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $user = $securityHelper->getUser();
+        $portalList = $user?->getPortals();
+
         if (class_exists('TdbCmsPortalList')) {
-            $aUserPortalID = $oCMSUser->GetMLTIdList('cms_portal', 'cms_portal_mlt');
+            $aUserPortalID = null !== $portalList ? array_keys($portalList) : [];
             if (count($aUserPortalID) > 0) {
                 $databaseConnection = $this->getDatabaseConnection();
                 $idListString = implode(',', array_map(array($databaseConnection, 'quote'), $aUserPortalID));
@@ -274,26 +295,26 @@ class MTHeader extends TCMSModelBase
      */
     protected function CheckNavigationRights()
     {
-        $activeUser = TCMSUser::GetActiveUser();
-        if (null === $activeUser) {
-            return;
-        }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $this->data['showCacheButton'] = $activeUser->oAccessManager->PermitFunction('flush_cms_cache');
+        $this->data['showCacheButton'] = $securityHelper->isGranted('CMS_RIGHT_FLUSH_CMS_CACHE');
     }
 
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $oUser = TCMSUser::GetActiveUser();
-        if ($oUser && $oUser->oAccessManager && $oUser->oAccessManager->PermitFunction('flush_cms_cache')) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if ($securityHelper->isGranted('CMS_RIGHT_FLUSH_CMS_CACHE')) {
             $this->methodCallAllowed[] = 'ClearCache';
         }
         $this->methodCallAllowed[] = 'ChangeEditLanguage';
         $this->methodCallAllowed[] = 'ChangeActiveEditPortal';
         $this->methodCallAllowed[] = 'GetCurrentTransactionInfo';
         $this->methodCallAllowed[] = 'addTabToUrlHistory';
-        if ($oUser && $oUser->oAccessManager && $oUser->oAccessManager->PermitFunction('dbchangelog-manager')) {
+        if ($securityHelper->isGranted('CMS_RIGHT_DBCHANGELOG-MANAGER')) {
             $this->methodCallAllowed[] = 'SwitchLoggingState';
             $this->methodCallAllowed[] = 'UpdateUnixTimeStamp';
         }
@@ -531,15 +552,27 @@ class MTHeader extends TCMSModelBase
         $html = '';
         $editLanguages = array();
         $currentLanguage = '';
-        $currentUser = TCMSUser::GetActiveUser();
-        if (null !== $currentUser) {
-            $currentLanguage = $currentUser->GetCurrentEditLanguage();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if ($securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
+            /** @var BackendSessionInterface $backendSession */
+            $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+            $currentLanguage = $backendSession->getCurrentEditLanguageIso6391();
 
             $oCmsConfig = TdbCmsConfig::GetInstance();
             $oAvailableLanguages = $oCmsConfig->GetFieldCmsLanguageList();
 
             $aAvailableLanguageIds = $oAvailableLanguages->GetIdList();
-            $oEditLanguages = $currentUser->GetMLT('cms_language_mlt');
+            $availableEditLanguages = $securityHelper->getUser()?->getAvailableEditLanguages();
+            if (null !== $availableEditLanguages && count($availableEditLanguages) > 0) {
+                $languageIdListString = implode(', ', array_map(fn(string $languageId) => $this->getDatabaseConnection()->quote($languageId), array_values($availableEditLanguages)));
+            } else {
+                $languageIdListString = "'-1'";
+            }
+
+            $oEditLanguages = TdbCmsLanguageList::GetList(sprintf('SELECT * FROM cms_language WHERE `id` IN (%s) ORDER BY `name`', $languageIdListString));
             while ($oEditLanguage = $oEditLanguages->Next()) {
                 if (false === in_array($oEditLanguage->id, $aAvailableLanguageIds) && $oEditLanguage->id != $oCmsConfig->fieldTranslationBaseLanguageId) {
                     continue;
@@ -565,13 +598,14 @@ class MTHeader extends TCMSModelBase
      */
     public function ChangeEditLanguage()
     {
-        $editLanguageId = $this->getInputFilterUtil()->getFilteredGetInput('editLanguageID');
-        if (null === $editLanguageId) {
+        $editLanguageIso = $this->getInputFilterUtil()->getFilteredGetInput('editLanguageIsoCode');
+        if (null === $editLanguageIso) {
             return;
         }
-        $language = strtolower($editLanguageId);
-        $user = TCMSUser::GetActiveUser();
-        $user->SetCurrentEditLanguage($language);
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+        $backendSession->setCurrentEditLanguageIso6391($editLanguageIso);
+
         // we need to redirect to the current page to ensure the change from taking hold
         // now call page again... but without module_fnc
         $authenticityTokenId = AuthenticityTokenManagerInterface::TOKEN_ID;
@@ -649,10 +683,10 @@ class MTHeader extends TCMSModelBase
     public function _GetCacheParameters()
     {
         $parameters = parent::_GetCacheParameters();
-        $currentUser = TCMSUser::GetActiveUser();
-        if (null !== $currentUser) {
-            $parameters['currentEditLanguage'] = $currentUser->GetCurrentEditLanguage();
-        }
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $parameters['currentEditLanguage'] = $backendSession->getCurrentEditLanguageIso6391();
 
         return $parameters;
     }

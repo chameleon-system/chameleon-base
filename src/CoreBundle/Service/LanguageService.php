@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Service;
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsLanguageInterface;
 use ChameleonSystem\CoreBundle\Event\LocaleChangedEvent;
@@ -245,21 +246,6 @@ class LanguageService implements LanguageServiceInterface
         }
 
         return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getActiveEditLanguage()
-    {
-        $oUser = TCMSUser::GetActiveUser();
-        if (null === $oUser) {
-            $currentEditLanguage = $this->getCmsBaseLanguage();
-        } else {
-            $currentEditLanguage = $oUser->GetCurrentEditLanguageObject();
-        }
-
-        return $currentEditLanguage;
     }
 
     /**

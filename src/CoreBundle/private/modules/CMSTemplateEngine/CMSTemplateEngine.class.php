@@ -9,12 +9,15 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -245,8 +248,10 @@ class CMSTemplateEngine extends TCMSModelBase
         $this->data['oPage'] = $this->oPage;
         if ($this->bPageDefinitionAssigned) {
             $this->data['sActivePageDef'] = $this->oPage->iMasterPageDefId;
-            $languageId = TCMSUser::GetActiveUser()->GetCurrentEditLanguageID();
-            $this->data['sActualMasterLayout'] = URL_WEB_CONTROLLER.'?pagedef='.$this->sPageId.'&__masterPageDef=true&__modulechooser=true&id='.$this->oPage->iMasterPageDefId.'&previewLanguageId='.$languageId;
+            /** @var BackendSessionInterface $backendSession */
+            $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+            $languageId = $backendSession->getCurrentEditLanguageId();
+            $this->data['sActualMasterLayout'] = PATH_CMS_CONTROLLER_FRONTEND.'?pagedef='.$this->sPageId.'&__masterPageDef=true&__modulechooser=true&id='.$this->oPage->iMasterPageDefId.'&previewLanguageId='.$languageId;
         } else {
             $this->data['sActivePageDef'] = '';
         }
@@ -298,17 +303,20 @@ class CMSTemplateEngine extends TCMSModelBase
     {
         $permissions = array('new' => false, 'edit' => false, 'delete' => false, 'showlist' => false);
 
-        $permissions['edit'] = $this->global->oUser->oAccessManager->HasEditPermission($this->oTableManager->oTableConf->sqlData['name']);
-        $tableInUserGroup = $this->global->oUser->oAccessManager->user->IsInGroups($this->oTableManager->oTableConf->sqlData['cms_usergroup_id']);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $permissions['edit'] = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableManager->oTableConf->sqlData['name']);
+        $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableManager->oTableConf->sqlData['name']);
         if ($tableInUserGroup) {
             $permissions['showlist'] = true;
             if (1 == $this->oTableManager->oTableConf->sqlData['only_one_record_tbl']) {
                 $permissions['new'] = false;
                 $permissions['delete'] = false;
             } else {
-                $permissions['new'] = $this->global->oUser->oAccessManager->HasNewPermission($this->oTableManager->oTableConf->sqlData['name']);
+                $permissions['new'] = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->oTableManager->oTableConf->sqlData['name']);
 
-                $permissions['delete'] = $this->global->oUser->oAccessManager->HasDeletePermission($this->oTableManager->oTableConf->sqlData['name']);
+                $permissions['delete'] = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableManager->oTableConf->sqlData['name']);
             }
         }
         $this->data['aPermission'] = $permissions;
@@ -579,13 +587,7 @@ class CMSTemplateEngine extends TCMSModelBase
                 $sDialogContent .= '<input type="hidden" name="bLoadCopy" value="1"/>';
             }
 
-            $languageService = $this->getLanguageService();
-            $editLanguage = $languageService->getActiveEditLanguage();
-            if (null === $editLanguage) {
-                $previewLanguageId = $languageService->getCmsBaseLanguageId();
-            } else {
-                $previewLanguageId = $editLanguage->id;
-            }
+            $previewLanguageId = $this->getBackendSession()->getCurrentEditLanguageId();
             $sDialogContent .= '<input type="hidden" name="previewLanguageId" value="'.TGlobal::OutHTML($previewLanguageId).'"/>  '."\n".'';
 
             /** @var $oCmsTplModuleInstance TdbCmsTplModuleInstance */
@@ -663,6 +665,11 @@ class CMSTemplateEngine extends TCMSModelBase
     private function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    private function getBackendSession(): BackendSessionInterface
+    {
+        return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
     }
 
     private function getBreadcrumbService(): BackendBreadcrumbServiceInterface

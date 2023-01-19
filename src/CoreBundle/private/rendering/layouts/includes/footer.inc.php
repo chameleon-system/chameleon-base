@@ -1,10 +1,7 @@
 <footer class="app-footer">
     <div>
         <span><?php
-            $oUser = TCMSUser::GetActiveUser();
-            if ($oUser) {
-                echo  'Chameleon V. '.CMS_VERSION_MAJOR.'.'.CMS_VERSION_MINOR.' (IP: '.$_SERVER['SERVER_ADDR'].')';
-            }
+            echo  'Chameleon V. '.CMS_VERSION_MAJOR.'.'.CMS_VERSION_MINOR.' (IP: '.$_SERVER['SERVER_ADDR'].')';
             ?></span>
     </div>
     <div class="ml-auto">

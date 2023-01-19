@@ -11,6 +11,9 @@
 
 namespace ChameleonSystem\CoreBundle\Service;
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
@@ -30,8 +33,10 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
 
     public function getBreadcrumb(): ?\TCMSURLHistory
     {
-        $backendUser = \TCMSUser::GetActiveUser();
-        if (null === $backendUser || false === $backendUser->bLoggedIn) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return null;
         }
 

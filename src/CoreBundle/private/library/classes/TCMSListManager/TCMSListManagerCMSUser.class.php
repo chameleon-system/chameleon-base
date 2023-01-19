@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -24,31 +26,34 @@ class TCMSListManagerCMSUser extends TCMSListManagerFullGroupTable
     public function GetUserRestriction()
     {
         $query = parent::GetUserRestriction();
-        $oUser = TCMSUser::GetActiveUser();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $restrictionQuery = '';
-        if (!$oUser->oAccessManager->user->IsAdmin()) {
-            // if the user is not an admin, then he may not view admin users and the public www user
+        if ($securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN)) {
+            return $query;
+        }
 
-            $tmpquery = "SELECT DISTINCT `cms_user_cms_role_mlt`.source_id
-                       FROM `cms_user_cms_role_mlt`
-                 INNER JOIN  `cms_role` ON `cms_user_cms_role_mlt`.`target_id` = `cms_role`.`id`
-                      WHERE `cms_role`.`name` = 'cms_admin' OR `cms_role`.`name` = 'www'";
-            $adminRes = MySqlLegacySupport::getInstance()->query($tmpquery);
-            $aAdminIds = array();
-            while ($aAdmin = MySqlLegacySupport::getInstance()->fetch_assoc($adminRes)) {
-                $aAdminIds[] = $aAdmin['source_id'];
-            }
 
-            if (count($aAdminIds) > 0) {
-                // get admin users and exclude them..
-                $databaseConnection = $this->getDatabaseConnection();
-                $adminIdString = implode(',', array_map(array($databaseConnection, 'quote'), $aAdminIds));
-                $restrictionQuery = $this->CreateRestriction('id', "NOT IN ($adminIdString)");
-            }
-            if (!empty($restrictionQuery)) {
-                $query .= " {$restrictionQuery}";
-            }
+        // if the user is not an admin, then he may not view admin users and the public www user
+
+        $tmpquery = "SELECT DISTINCT `cms_user_cms_role_mlt`.source_id
+                   FROM `cms_user_cms_role_mlt`
+             INNER JOIN  `cms_role` ON `cms_user_cms_role_mlt`.`target_id` = `cms_role`.`id`
+                  WHERE `cms_role`.`name` = 'cms_admin' OR `cms_role`.`name` = 'www'";
+        $adminRows = $this->getDatabaseConnection()->fetchAllAssociative($tmpquery);
+        $aAdminIds = array();
+        foreach ($adminRows as $admin) {
+            $aAdminIds[] = $admin['source_id'];
+        }
+
+        if (count($aAdminIds) > 0) {
+            // get admin users and exclude them..
+            $databaseConnection = $this->getDatabaseConnection();
+            $adminIdString = implode(',', array_map(array($databaseConnection, 'quote'), $aAdminIds));
+            $restrictionQuery = $this->CreateRestriction('id', "NOT IN ($adminIdString)");
+        }
+        if (!empty($restrictionQuery)) {
+            $query .= " {$restrictionQuery}";
         }
 
         return $query;

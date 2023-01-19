@@ -14,6 +14,8 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -55,8 +57,6 @@ class TGlobalBase
      * @var array
      */
     public $_dataCache = array();
-
-    public $aLangaugeIds = null;
 
     /**
      * holds the current executing module object.
@@ -329,23 +329,21 @@ class TGlobalBase
 
     public function GetLanguageIdList()
     {
-        if (is_null($this->aLangaugeIds)) {
-            $this->aLangaugeIds = array();
-            $oCMSConfig = TdbCmsConfig::GetInstance();
-            $this->aLangaugeIds[] = $oCMSConfig->fieldTranslationBaseLanguageId;
-        }
-
-        return $this->aLangaugeIds;
+        $oCMSConfig = TdbCmsConfig::GetInstance();
+        return [$oCMSConfig->fieldTranslationBaseLanguageId];
     }
 
     /**
      * checks if active CMS user session is available.
+     * @deprecated use SecurityHelperAccess::class
      *
      * @return bool
      */
     public static function CMSUserDefined()
     {
-        return TCMSUser::CMSUserDefined();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        return $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER);
     }
 
     /**

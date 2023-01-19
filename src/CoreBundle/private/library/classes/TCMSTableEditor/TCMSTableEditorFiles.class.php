@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+
 class TCMSTableEditorFiles extends TCMSTableEditor
 {
     /**
@@ -289,12 +292,9 @@ class TCMSTableEditorFiles extends TCMSTableEditor
             }
 
             $postData['time_stamp'] = date('y-m-d H:i:s', time());
-            $oGlobal = TGlobal::instance();
-            /** @var $oGlobal TGlobal */
-            $userID = '';
-            if (!is_null($oGlobal->oUser)) {
-                $userID = $oGlobal->oUser->sqlData['id'];
-            }
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            $userID = $securityHelper->getUser()?->getId();
             $postData['cms_user_id'] = $userID;
         }
 

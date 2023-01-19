@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
@@ -259,10 +260,10 @@ class TCMSTableEditorPage extends TCMSTableEditor
         }
 
         $domain = $portal->GetPrimaryDomain();
-        $cmsUser = TCMSUser::GetActiveUser();
-        $editLanguage = $cmsUser->GetCurrentEditLanguageObject();
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 
-        return 'https://'.$domain.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'?pagedef='.$this->sId.'&esdisablelinks=true&__previewmode=true&previewLanguageId='.$editLanguage->id;
+        return 'https://'.$domain.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'?pagedef='.urlencode($this->sId).'&esdisablelinks=true&__previewmode=true&previewLanguageId='.urlencode($backendSession->getCurrentEditLanguageId());
     }
 
     /**

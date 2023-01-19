@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+
 /**
  * function displays the function icons (delete, copy, etc) for table lists
  * returns HTML.
@@ -22,13 +26,15 @@
  */
 function tcms_functionblock_callback($id, $row)
 {
-    $oGlobal = TGlobal::instance();
-    $cms_user_new_record_right = $oGlobal->oUser->oAccessManager->HasNewPermission($_SESSION['_tmpCurrentTableName']);
+    /** @var SecurityHelperAccess $securityHelper */
+    $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+    $cms_user_new_record_right = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $_SESSION['_tmpCurrentTableName']);
     $sDeleteButton = tcms_functionblock_deletebutton($id, $row);
     $showButtons = (!empty($sDeleteButton) || $cms_user_new_record_right || (isset($row['confirmed']) && !empty($row['confirmed'])));
     $returnValue = '<div class="tablelistfunctions">';
     if ($showButtons) {
-        if ('cms_tpl_page' == $_SESSION['_tmpCurrentTableName'] && $oGlobal->oUser->oAccessManager->PermitFunction('cms_page_property')) {
+        if ('cms_tpl_page' == $_SESSION['_tmpCurrentTableName'] && $securityHelper->isGranted('CMS_RIGHT_CMS_PAGE_PROPERTY')) {
             $returnValue .= '<img src="'.URL_CMS."/images/icons/application_edit.png\" onclick=\"document.cmsform._id.value='".$row['id']."';document.cmsform._mode.value='display';document.cmsform.submit();\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".TGlobal::Translate('chameleon_system_core.list.page_settings')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
         }
         $returnValue .= $sDeleteButton;
@@ -238,9 +244,10 @@ function tcms_HumanRedableFileSize_callback($fileSize, $row)
 function tcms_webpagefunctionblock_callback($id, $row)
 {
     $returnValue = '<div class="tablelistfunctions">';
-    $oGlobal = TGlobal::instance();
     $returnValue .= tcms_functionblock_deletebutton($id, $row);
-    if ($oGlobal->oUser->oAccessManager->PermitFunction('cms_page_property')) {
+    /** @var SecurityHelperAccess $securityHelper */
+    $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+    if ($securityHelper->isGranted('CMS_RIGHT_CMS_PAGE_PROPERTY')) {
         $returnValue .= '<img src="'.URL_CMS."/images/icons/application_edit.png\" onclick=\"EditRecordInList('".TGlobal::OutHTML($row['id'])."');\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".TGlobal::Translate('chameleon_system_core.list.page_settings')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
     }
 
@@ -262,9 +269,10 @@ function tcms_webpagefunctionblock_callback($id, $row)
  */
 function tcms_functionblock_deletebutton($id, $row)
 {
-    $oGlobal = TGlobal::instance();
     $returnValue = '';
-    $cms_user_delete_right = $oGlobal->oUser->oAccessManager->HasDeletePermission($_SESSION['_tmpCurrentTableName']);
+    /** @var SecurityHelperAccess $securityHelper */
+    $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+    $cms_user_delete_right = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $_SESSION['_tmpCurrentTableName']);
     if (true == $cms_user_delete_right) {
         $returnValue .= '<img src="'.URL_CMS."/images/icons/cross.png\" onclick=\"DeleteRecord('{$row['id']}');\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".TGlobal::Translate('chameleon_system_core.action.delete')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
     }
@@ -283,9 +291,10 @@ function tcms_functionblock_deletebutton($id, $row)
  */
 function tcms_MLTfunctionblock_deletebutton($id, $row)
 {
-    $oGlobal = TGlobal::instance();
     $returnValue = '';
-    $cms_user_delete_right = $oGlobal->oUser->oAccessManager->HasDeletePermission($_SESSION['_tmpCurrentTableName']);
+    /** @var SecurityHelperAccess $securityHelper */
+    $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+    $cms_user_delete_right = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $_SESSION['_tmpCurrentTableName']);
     if (true == $cms_user_delete_right) {
         $returnValue .= '<img src="'.URL_CMS."/images/icons/cross.png\" onclick=\"if (confirm('".TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.action.confirm_delete'))."')) {document.cmsformdel.elements['module_fnc[contentmodule]'].value='Delete';document.cmsformdel.id.value='{$row['id']}';document.cmsformdel.submit();}\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".TGlobal::Translate('chameleon_system_core.action.delete')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
     }
@@ -307,8 +316,9 @@ function tcms_MLTfunctionblock_deletebutton($id, $row)
 function tcms_drawlistitemselectbox($id, $row, $sFieldName)
 {
     $html = '';
-    $oGlobal = TGlobal::instance();
-    if ($oGlobal->oUser->oAccessManager->HasDeletePermission($_SESSION['_tmpCurrentTableName'])) {
+    /** @var SecurityHelperAccess $securityHelper */
+    $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+    if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $_SESSION['_tmpCurrentTableName'])) {
         $html = '<input type="checkbox" name="aInputIdList[]" value="'.TGlobal::OutHTML($id).'" />';
     }
 

@@ -4,6 +4,15 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConf" id="chameleon_system_core.data_access_cms_tbl_conf">
+            <argument type="service" id="database_connection" />
+        </service>
+        <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfCacheDecorator"
+                 id="chameleon_system_core.data_access_cms_tbl_conf_cache_decorator"
+                 decorates="chameleon_system_core.data_access_cms_tbl_conf">
+            <argument type="service" id="chameleon_system_core.data_access_cms_tbl_conf_cache_decorator.inner"/>
+            <argument type="service" id="chameleon_system_cms_cache.cache" />
+        </service>
 
         <!-- cms_portal_domains -->
 

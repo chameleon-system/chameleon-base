@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 /**
  * exports table data as TAB, CSV or RTF.
@@ -66,8 +67,15 @@ class CMSTableExport extends TCMSModelBase
         $this->data['listClass'] = $this->global->GetUserData('listClass');
         $this->data['listCacheKey'] = $this->global->GetUserData('listCacheKey');
 
-        $aPortals = $this->global->oUser->GetMLTIdList('cms_portal_mlt');
-        $aPortals = TTools::MysqlRealEscapeArray($aPortals);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $aPortals = $securityHelper->getUser()?->getPortals();
+        if (null === $aPortals) {
+            $aPortals = array();
+        }
+
+        $aPortals = TTools::MysqlRealEscapeArray(array_keys($aPortals));
         $portals = "'".implode("','", $aPortals)."'";
 
         $profileOptions = '';
