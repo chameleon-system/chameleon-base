@@ -101,6 +101,7 @@ jobs:
           composer dumpautoload
           php app/console chameleon_system:autoclasses:generate
           php app/console chameleon_system:update:run
+          php app/console chameleon_system:autoclasses:generate
         working-directory: chameleon-system
 
       # Run composer install in chameleon-base repository as well
