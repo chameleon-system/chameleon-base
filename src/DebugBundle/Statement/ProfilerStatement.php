@@ -155,33 +155,6 @@ class ProfilerStatement extends Statement
         return $result;
     }
 
-    /**
-     * @param int $attribute
-     * @param mixed $value
-     * @return bool
-     */
-    public function setAttribute($attribute, $value)
-    {
-        $startTime = microtime(true);
-        $result = $this->statement->setAttribute($attribute, $value);
-        $this->databaseConnection->addToQueryTimer(microtime(true) - $startTime);
-
-        return $result;
-    }
-
-    /**
-     * @param int $attribute
-     * @return mixed
-     */
-    public function getAttribute($attribute)
-    {
-        $startTime = microtime(true);
-        $result = $this->statement->getAttribute($attribute);
-        $this->databaseConnection->addToQueryTimer(microtime(true) - $startTime);
-
-        return $result;
-    }
-
     public function columnCount()
     {
         $startTime = microtime(true);
