@@ -25,10 +25,10 @@ jobs:
         image: mariadb:10.2
         env:
           MARIADB_ROOT_PASSWORD: 'root'
-          MARIADB_SQL_MODE: 'NO_ENGINE_SUBSTITUTION,NO_AUTO_CREATE_USER'
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+        command: --sql_mode="NO_ENGINE_SUBSTITUTION,NO_AUTO_CREATE_USER"
 
     steps:
 
