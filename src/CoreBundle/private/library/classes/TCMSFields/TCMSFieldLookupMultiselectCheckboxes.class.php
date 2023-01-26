@@ -10,12 +10,12 @@
  */
 
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
-use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 
 /**
  * MLT field
@@ -217,7 +217,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return parent::FetchMLTRecords();
         }
         /** @var BackendSessionInterface $backendSession */
@@ -230,9 +230,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List';
         $oMLTRecords = call_user_func(array($sClassName, 'GetList'), $sFilterQuery, null, false);
         $editLanguageId = $backendSession->getCurrentEditLanguageId();
-        if (null !== $editLanguageId) {
-            $oMLTRecords->SetLanguage($editLanguageId);
-        }
+        $oMLTRecords->SetLanguage($editLanguageId);
 
         return $oMLTRecords;
     }
@@ -253,7 +251,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return parent::GetMLTFilterQuery();
         }
 

@@ -11,10 +11,10 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelectWysiwyg;
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelect\NavigationTreeSingleSelect;
 use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
 use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
-use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -41,7 +41,7 @@ class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
         TTools $tools,
         TGlobal $global,
         FieldTranslationUtil $fieldTranslationUtil,
-        LanguageServiceInterface $languageService,
+        BackendSessionInterface $backendSession,
         RequestStack $requestStack
     ) {
         parent::__construct(
@@ -52,7 +52,7 @@ class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
             $tools,
             $global,
             $fieldTranslationUtil,
-            $languageService
+            $backendSession
         );
         $this->requestStack = $requestStack;
     }

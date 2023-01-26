@@ -144,7 +144,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         TTools $tools,
         TGlobal $global,
         FieldTranslationUtil $fieldTranslationUtil,
-        LanguageServiceInterface $languageService
+        BackendSessionInterface $backendSession
     ) {
         parent::__construct();
 
@@ -160,7 +160,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $this->global = $global;
         $this->fieldTranslationUtil = $fieldTranslationUtil;
 
-        $this->editLanguage = $languageService->getActiveEditLanguage();
+        $this->editLanguage = \TdbCmsLanguage::GetNewInstance($backendSession->getCurrentEditLanguageId());
     }
 
     /**

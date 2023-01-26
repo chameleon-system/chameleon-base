@@ -2,7 +2,6 @@
 
 namespace ChameleonSystem\SecurityBundle\Controller;
 
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

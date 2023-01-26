@@ -14,6 +14,7 @@ namespace ChameleonSystem\CoreBundle\i18n;
 use ChameleonSystem\CoreBundle\i18n\Interfaces\ActiveCmsUserPermissionInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 
 class ActiveCmsUserPermission implements ActiveCmsUserPermissionInterface
 {
@@ -24,6 +25,6 @@ class ActiveCmsUserPermission implements ActiveCmsUserPermissionInterface
     {
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-        return  $securityHelper->isGranted('ROLE_CMS_USER');
+        return  $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER);
     }
 }

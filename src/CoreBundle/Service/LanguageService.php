@@ -251,22 +251,6 @@ class LanguageService implements LanguageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getActiveEditLanguage()
-    {
-        // todo: the language service is used in the backensession - so we cannot use the backend session here.
-        $oUser = TCMSUser::GetActiveUser();
-        if (null === $oUser) {
-            $currentEditLanguage = $this->getCmsBaseLanguage();
-        } else {
-            $currentEditLanguage = $oUser->GetCurrentEditLanguageObject();
-        }
-
-        return $currentEditLanguage;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function setFallbackLanguage(TdbCmsLanguage $fallbackLanguage)
     {
         $this->fallbackLanguage = $fallbackLanguage;

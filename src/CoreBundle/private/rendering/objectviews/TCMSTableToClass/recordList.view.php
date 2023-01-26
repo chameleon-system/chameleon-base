@@ -99,7 +99,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      *
      * @return false|<?php echo $sClassName."\n"; ?>
      */
-    public function Current(): false|<?php echo $sClassName."\n"; ?>
+    public function Current(): bool|<?php echo $sClassName."\n"; ?>
     {
         return parent::Current();
     }
@@ -110,7 +110,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      *
      * @return false|<?php echo $sClassName."\n"; ?>
      */
-    public function Next(): false|<?php echo $sClassName."\n"; ?>
+    public function Next(): bool|<?php echo $sClassName."\n"; ?>
     {
         return parent::Next();
     }
@@ -120,7 +120,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      *
      * @return false|<?php echo $sClassName."\n"; ?>
      */
-    public function Previous(): false|<?php echo $sClassName."\n"; ?>
+    public function Previous(): bool|<?php echo $sClassName."\n"; ?>
     {
         return parent::Previous();
     }

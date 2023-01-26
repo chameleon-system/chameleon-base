@@ -73,7 +73,7 @@ class chameleon
      */
     private function InitAutoloader()
     {
-        require_once realpath(PATH_PROJECT_BASE.'/app/autoload.php');
+        require_once realpath(PATH_PROJECT_BASE.'/vendor/autoload.php');
     }
 
     /**

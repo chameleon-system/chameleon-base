@@ -11,8 +11,6 @@
             <argument key="$guidService" type="service" id="chameleon_system_core.service.guid_creation" />
         </service>
 
-
-
         <service id="ChameleonSystem\SecurityBundle\Controller\GoogleLoginController">
             <argument type="service" id="knpu.oauth2.registry" />
         </service>

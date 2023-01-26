@@ -922,7 +922,7 @@ class TCMSImageEndpoint
      *                             - reflect => array(bImageline=>true) // second parameter tells the effect if it should render a tiny black line between image and reflection or not
      *                             - round => array(iCornerRadius=>20, sBackgroundColor=>FFFFFF) // second parameter is the radius in pixel, third parameter is background-color in hex
      *
-     * @return resource
+     * @return false|GdImage|resource
      */
     public function GetThumbnailPointer($oThumb, $aEffects = array())
     {

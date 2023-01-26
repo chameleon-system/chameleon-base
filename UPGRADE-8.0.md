@@ -1,4 +1,4 @@
-UPGRADE FROM 7.1 to 7.2
+UPGRADE FROM 7.1 to 8.0
 =======================
 
 # Essentials
@@ -33,7 +33,9 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - search for `protected function _NewElement\(\$aData\)[ ]*[^\:]{0,1}` (must return the specific Tdb item)
 - search for `public static function GetList\(.*\)` (must return the specific list type)
 - search for `public static function GetDefaultQuery\(.*\)` (must return `string`)
-- search for `public function Previous()` (must return `false|Tdb....`)
+- search for `public function Previous()` (must return `bool|Tdb....`)
+- search for `public function Current()` (must return `bool|Tdb....`)
+- search for `public functiocn Next()` (must return `bool|Tdb....`)
 - `\ChameleonSystem\DebugBundle\ChameleonSystemDebugBundle` removed. The logging of database connections can no longer be done the way done in the bundle
 - doctrine update [maybe]s.
   - replace `->fetchAll(` with `->fetchAllAssociative(`
@@ -54,6 +56,9 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - Add `var/` and remove `app/cache/*` and `!app/cache/.gitkeep` from your .gitignore. Delte the `app/cache` folder.
 - Twig File-Loader requires templates to be in the Form `@BundleName/path/to/file/relative/to/Resources/views/.html.twig` where `@BundleName` is the name without `Bundle`.
   This is used in debug data collectors - so search for `<tag name="data_collector"`. Example `<tag name="data_collector" template="@ChameleonSystemElastic/Profiler/layout.html.twig" id="chameleon_system_elastic.search" priority="20"/>`
+- `\TPkgCustomSearchResultItemList::AddCacheParameters` removed
+- `\TPkgCustomSearchResultItemList::AddClearCacheTriggers` removed
+- `\TPkgImageHotspotItem::AddClearCacheTriggers` removed
 - `\TCMSFieldWYSIWYG::getModifiedToolbarByUser` - dropped user parameter.
 - `\TCMSTableEditorPortal::linkPortalToUser` now takes the user id instead of the user
 - `\TPkgShopPaymentTransactionContextEndPoint::getCmsUser` was removed
@@ -83,9 +88,12 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TCMSUser::Logout` removed
 - `\TCMSUser::SetAsActiveUser` removed - switch user by using Symfony impersonate.
 - `\TCMSTableEditorCMSUser::SwitchToUser` removed - switch user by using Symfony impersonate.
-- `\TCMSUser::CMSUserDefined` removed - is `isGranted('ROLE_CMS_USER')`
+- `\TCMSUser::CMSUserDefined` removed - is `isGranted(\ChameleonSystem\SecurityBundle\CmsUser\UserRoles::CMS_USER)`
 - `\TCMSUser::ValidSessionKey` removed
 - `\TCMSUser::GetUserSessionKey` removed
+- `\ChameleonSystem\CoreBundle\Service\LanguageServiceInterface::getActiveEditLanguage` removed
+- `\TPkgImageHotspotItem::AddClearCacheTriggers` removed
+- `\TShopVariantDisplayHandler::AddClearCacheTriggers` removed
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 
@@ -95,7 +103,17 @@ https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 In `composer.json`, adjust version constraints for all Chameleon dependencies from `~7.1.0` to `~7.2.0` and run
 `composer update`.
 
+Remove the file `app/autoload.php`. It is no longer used by the system (see below).
+
 # Removed Features
+
+## Annotation support
+
+The functionality "annotation support" was removed. This file was calling a
+deprecated function `AnnotationRegistry::registerLoader()`. If needed annotations can still be configured and used
+directly in a project.
+However with php 8 you should use attributes instead.
+
 # Newly Deprecated Code Entities
 # Removed Code Entities
 

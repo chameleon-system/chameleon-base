@@ -101,14 +101,6 @@ interface LanguageServiceInterface
     public function getActiveLocale();
 
     /**
-     * Returns the currently active edit language, or the base language if no backend user is available,
-     * or null if neither backend user nor base language is available.
-     *
-     * @return TdbCmsLanguage|null
-     */
-    public function getActiveEditLanguage();
-
-    /**
      * @param TdbCmsLanguage $fallbackLanguage
      *
      * @return void

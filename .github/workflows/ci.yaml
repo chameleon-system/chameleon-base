@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - 'master'
-      - '[0-9]+.[0-9]+.x'
-      - '770-github-actions-7-1-x'
-    tags: [ '*' ]
   pull_request:
     types: [ opened, synchronize, reopened ]
 
@@ -16,12 +13,12 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version: [ '7.4', '8.0' ]
+        php-version: [ '8.1' ]
     env:
       # Branch / Tag of chameleon-system/chameleon-system and chameleon-system/chameleon-resources
       # that will be used to setup this project
-      CHAMELEON_SYSTEM_REF: '7.1.x'
-      CHAMELEON_RESOURCES_REF: '7.1.x'
+      CHAMELEON_SYSTEM_REF: 'master'
+      CHAMELEON_RESOURCES_REF: 'master'
 
     services:
       mysql:
@@ -33,6 +30,9 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
     steps:
+      - name: 'Set sql_mode in mariadb'
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -u root -proot -e "SET GLOBAL sql_mode = 'NO_ENGINE_SUBSTITUTION,NO_AUTO_CREATE_USER';"
 
       # Setup PHP
       - name: Setup PHP ${{ matrix.php-version }}
@@ -101,6 +101,7 @@ jobs:
           composer dumpautoload
           php app/console chameleon_system:autoclasses:generate
           php app/console chameleon_system:update:run
+          php app/console chameleon_system:autoclasses:generate
         working-directory: chameleon-system
 
       # Run composer install in chameleon-base repository as well

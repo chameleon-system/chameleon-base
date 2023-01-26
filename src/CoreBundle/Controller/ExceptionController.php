@@ -71,6 +71,9 @@ class ExceptionController extends ErrorController
         if (method_exists($exception, 'getStatusCode')) {
             $code = $exception->getStatusCode();
         }
+        if (null === $code) {
+            $code = 500;
+        }
 
         $exceptionPageDef = $this->getExceptionPageDef($code);
         if (null === $exceptionPageDef) {

@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 
 class ChameleonBackendRouter extends ChameleonBaseRouter implements RequestMatcherInterface
 {
-    protected function generateCacheDir(string $baseCacheDir): string {
+    protected function generateCacheDirPath(string $baseCacheDir): string {
         return sprintf('%s/backend', $baseCacheDir);
     }
 

@@ -23,6 +23,7 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder\MigrationRecorderStateHandler;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -645,7 +646,13 @@ class TCMSTableEditorEndPoint
 
         $editLanguageID = $backendSession->getCurrentEditLanguageId();
 
-        return $this->getCurrentRequest()?->getScheme().'://'.$domainName.'/'.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'?pagedef='.$this->sId.'&esdisablelinks=true&__previewmode=true&previewLanguageId='.$editLanguageID;
+
+        $scheme = $this->getCurrentRequest()?->getScheme();
+        if (null === $scheme) {
+            $scheme = 'https';
+        }
+
+        return $scheme.'://'.$domainName.'/'.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'?pagedef='.$this->sId.'&esdisablelinks=true&__previewmode=true&previewLanguageId='.$editLanguageID;
     }
 
     /**
@@ -920,7 +927,7 @@ class TCMSTableEditorEndPoint
             $conditionFields['target_id'] = $iConnectedID;
         }
         if (MySqlLegacySupport::getInstance()->query($deleteQuery)) {
-            $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+            $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
             $migrationQueryData = new MigrationQueryData($mltTableName, $editLanguage->fieldIso6391);
             $migrationQueryData
                 ->setWhereEquals($conditionFields)
@@ -994,7 +1001,7 @@ class TCMSTableEditorEndPoint
             $iSortNumber = $this->GetMLTSortNumber($mltTableName);
             $insertQuery = "INSERT INTO $quotedMltTableName SET `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."', `target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iConnectedID)."', `entry_sort` = '".MySqlLegacySupport::getInstance()->real_escape_string($iSortNumber)."'";
             if (MySqlLegacySupport::getInstance()->query($insertQuery)) {
-                $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+                $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
                 $migrationQueryData = new MigrationQueryData($mltTableName, $editLanguage->fieldIso6391);
                 $migrationQueryData
                     ->setFields(array(
@@ -1271,7 +1278,7 @@ class TCMSTableEditorEndPoint
                       WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sDeleteId)."'";
         MySqlLegacySupport::getInstance()->query($query);
 
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+        $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
         $migrationQueryData = new MigrationQueryData($this->oTableConf->sqlData['name'], $editLanguage->fieldIso6391);
         $migrationQueryData
             ->setWhereEquals(array(
@@ -1903,7 +1910,7 @@ class TCMSTableEditorEndPoint
         }
 
         $databaseConnection = $this->getDatabaseConnection();
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+        $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
 
         $fieldConfigResult = $this->getFieldsOfType($fieldTypeId);
 
@@ -2166,7 +2173,7 @@ class TCMSTableEditorEndPoint
 
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-        if ($securityHelper->isGranted('ROLE_CMS_USER')) {
+        if ($securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return false;
         }
 
@@ -2490,6 +2497,10 @@ class TCMSTableEditorEndPoint
         return ServiceLocator::get('database_connection');
     }
 
+    protected function getBackendSession(): BackendSessionInterface
+    {
+        return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+    }
     /**
      * @return LanguageServiceInterface
      */

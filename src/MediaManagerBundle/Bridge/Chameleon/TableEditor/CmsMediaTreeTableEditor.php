@@ -26,7 +26,7 @@ class CmsMediaTreeTableEditor extends TCMSTableEditorMediaTree
      */
     protected function updateCache($treeNodeId)
     {
-        $languageId = $this->getLanguageService()->getActiveEditLanguage()->id;
+        $languageId = $this->getBackendSession()->getCurrentEditLanguageId();
         $mediaTreeNode = $this->getMediaTreeNodeDataAccess()->getMediaTreeNode($treeNodeId, $languageId);
         if (null !== $mediaTreeNode) {
             /**

@@ -51,7 +51,7 @@ class DataAccessCmsTblConfCacheDecorator implements DataAccessCmsTblConfInterfac
         $tables = $this->getTableConfigurations();
         $this->tableNameToIdMap = [];
         foreach (array_keys($tables) as $tableId) {
-            $this->tableNameToIdMap[$tables[$tableId]->getName()] = $tableId;
+            $this->tableNameToIdMap[$tables[$tableId]->name] = $tableId;
         }
 
         return $this->tableNameToIdMap;
@@ -74,7 +74,7 @@ class DataAccessCmsTblConfCacheDecorator implements DataAccessCmsTblConfInterfac
             return null;
         }
 
-        return $tableConf->getCmsUsergroupId();
+        return $tableConf->cmsUsergroupId;
     }
 
 

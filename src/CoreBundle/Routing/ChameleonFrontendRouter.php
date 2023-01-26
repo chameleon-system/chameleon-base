@@ -113,7 +113,7 @@ class ChameleonFrontendRouter extends ChameleonBaseRouter implements PortalAndLa
 
         return true;
     }
-    protected function generateCacheDir(string $baseCacheDir): string {
+    protected function generateCacheDirPath(string $baseCacheDir): string {
         return sprintf('%s/frontend', $baseCacheDir);
     }
 

@@ -375,9 +375,6 @@ class TCMSTableEditorManager
         if ($bAllowDelete) {
             $bAllowDelete = $this->hasDeletePermission();
         }
-        if ($bAllowDelete && isset($this->oTableEditor)) {
-            $bAllowDelete = !$this->oTableEditor->IsInDeleteBlackList();
-        }
 
         return $bAllowDelete;
     }

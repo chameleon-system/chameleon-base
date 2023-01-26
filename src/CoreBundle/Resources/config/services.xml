@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="vendor_dir">%kernel.project_dir%/vendors</parameter>
+        <parameter key="vendor_dir">%kernel.project_dir%/vendor</parameter>
         <parameter key="chameleon_system_core.pdo.mysql_attr_init_command" type="constant">\PDO::MYSQL_ATTR_INIT_COMMAND</parameter> <!-- deprecated since 6.3.0 - no longer used -->
         <parameter key="chameleon_system_core.pdo.mysql_attr_compression_name" type="constant">\PDO::MYSQL_ATTR_COMPRESS</parameter> <!-- deprecated since 6.3.0 - see below -->
         <parameter key="chameleon_system_core.pdo.enable_mysql_compression">false</parameter> <!-- deprecated since 6.3.0 - use the configuration key "doctrine: dbal: options: 1006: 1" instead -->
@@ -570,6 +570,7 @@
         <service id="chameleon_system_core.util.field_translation" class="ChameleonSystem\CoreBundle\Util\FieldTranslationUtil" public="true">
             <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="chameleon_system_core.language_service" />
+            <argument type="service" id="chameleon_system_cms_backend.backend_session" />
         </service>
 
         <service id="chameleon_system_core.util.page_service_util" class="ChameleonSystem\CoreBundle\Util\PageServiceUtil">
@@ -904,7 +905,7 @@
             <argument id="chameleon_system_core.tools" type="service"/>
             <argument id="chameleon_system_core.global" type="service"/>
             <argument type="service" id="chameleon_system_core.util.field_translation"/>
-            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_cms_backend.backend_session"/>
         </service>
 
         <service id="chameleon_system_core.module.navigation_tree_single_select" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelect\NavigationTreeSingleSelect" shared="false">
@@ -916,7 +917,7 @@
             <argument id="chameleon_system_core.tools" type="service"/>
             <argument id="chameleon_system_core.global" type="service"/>
             <argument type="service" id="chameleon_system_core.util.field_translation"/>
-            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_cms_backend.backend_session"/>
         </service>
 
         <service id="chameleon_system_core.module.navigation_tree_single_select_wysiwyg" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelectWysiwyg\NavigationTreeSingleSelectWysiwyg" parent="chameleon_system_core.module.navigation_tree_single_select" shared="false">

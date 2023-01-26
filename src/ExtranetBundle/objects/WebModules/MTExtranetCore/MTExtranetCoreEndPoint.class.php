@@ -837,7 +837,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      *
      * @return void
      */
-    protected function PrepareSubmittedDataForUserAddress($aData)
+    protected function PrepareSubmittedDataForUserAddress(&$aData)
     {
     }
 

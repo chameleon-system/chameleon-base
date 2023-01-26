@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -107,6 +108,7 @@ class TCMSModelBase extends TModelBase
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
         $user = $securityHelper->getUser();
+        $userObject = null;
         if (null !== $user) {
             $userObject = TdbCmsUser::GetNewInstance();
             $userObject->Load($user->getId());
@@ -132,7 +134,7 @@ class TCMSModelBase extends TModelBase
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return $includes;
         }
         $request = $this->getCurrentRequest();

@@ -216,8 +216,8 @@ class TCMSPagedefEndPoint extends TCMSPage
                     'model' => $model,
                 );
 
-                // check if pagedef spot exists and update it
-                if (null === $this->aOldDynamicModules) {
+                // check if pagedef spot exists in source template configuration and update it
+                if (null === $this->aOldDynamicModules || false === isset($this->aOldDynamicModules[$sSpotName])) {
                     $sSpotID = $spot->id;
                 } else {
                     $sSpotID = $this->aOldDynamicModules[$sSpotName]->id;

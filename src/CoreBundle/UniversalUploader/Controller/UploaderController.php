@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\UniversalUploader\Bridge\Chameleon\SaveToMediaLib
 use ChameleonSystem\CoreBundle\UniversalUploader\Bridge\Chameleon\UploaderConfiguration;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploadedFileDataModel;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\UploaderPostHandlerServiceInterface;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Core\Security;
@@ -77,7 +78,7 @@ class UploaderController
 
     private function isBackendUserAuthenticated(): bool
     {
-        return $this->security->isGranted('ROLE_CMS_USER');
+        return $this->security->isGranted(CmsUserRoleConstants::CMS_USER);
     }
 
     /**

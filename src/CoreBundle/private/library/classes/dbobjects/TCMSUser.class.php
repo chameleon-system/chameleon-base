@@ -13,13 +13,14 @@ use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * the user manager class for the cms.
- *
 /**/
 class TCMSUser extends TCMSRecord
 {
@@ -27,7 +28,7 @@ class TCMSUser extends TCMSRecord
      * set to true if the user logged in.
      *
      * @var bool
-     * @deprecated since 7.2.0 - no longer used
+     * @deprecated since 8.0.0 - no longer used
      */
     public $bLoggedIn = false;
 
@@ -76,14 +77,14 @@ class TCMSUser extends TCMSRecord
      * you don`t get a WWW-user object!
      *
      * @return TdbCmsUser|null
-     * @deprecated 7.2 - use symfony security service
+     * @deprecated 8.0 - use symfony security service
      */
     public static function GetActiveUser()
     {
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         $user = $securityHelper->getUser();
-        if (null === $user || false === $securityHelper->isGranted('ROLE_CMS_USER') || false ===($user instanceof \ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel)) {
+        if (null === $user || false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER) || false ===($user instanceof CmsUserModel)) {
             self::$oActiveUser = null;
             return null;
         }
@@ -92,7 +93,7 @@ class TCMSUser extends TCMSRecord
             return self::$oActiveUser;
         }
 
-        /** @var \ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel $user */
+        /** @var CmsUserModel $user */
         self::$oActiveUser = TdbCmsUser::GetNewInstance();
         self::$oActiveUser->Load($user->getId());
 
@@ -182,7 +183,7 @@ class TCMSUser extends TCMSRecord
      * returns the current edit language in iso6391 format e.g. de,en,fr etc.
      *
      * @return string
-     * @deprecated use service \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSession
+     * @deprecated since 8.0 use service \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSession
      */
     public function GetCurrentEditLanguage($bReset = false)
     {
@@ -268,7 +269,7 @@ class TCMSUser extends TCMSRecord
      *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
-     * @deprecated 7.2 use \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSession
+     * @deprecated 8.0 use \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSession
      */
     public function SetCurrentEditLanguage($language = null)
     {

@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -412,7 +413,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             /** @var SecurityHelperAccess $securityHelper */
             $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-            if (true === $securityHelper->isGranted('ROLE_CMS_USER')) {
+            if (true === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
                 $activePage = $this->getActivePageService()->getActivePage();
                 $sCustomHeaderData .= "\n<!-- CMS page ID: ".TGlobal::OutHTML($activePage->id).'; IDENT: '.TGlobal::OutHTML($activePage->sqlData['cmsident'])."-->\n";
             }
@@ -509,7 +510,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if (true === $securityHelper->isGranted('ROLE_CMS_USER')) {
+        if (true === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             $cacheParameters['debugOutputActive'] = true;
         }
 

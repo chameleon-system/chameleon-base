@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 
 class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
 {
@@ -46,7 +47,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
         }
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-        if (false === $securityHelper->isGranted('ROLE_CMS_USER')) {
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return false;
         }
 
