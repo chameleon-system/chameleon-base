@@ -1,0 +1,32 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsModule" table="cms_module">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="iconList" column="icon_list" type="string" length="255" nullable="false"  />
+            <field name="name" column="name" type="string" length="60" nullable="false"  />
+            <field name="uniquecmsname" column="uniquecmsname" type="string" length="255" nullable="false"  />
+            <field name="cmsContentBoxId" column="cms_content_box_id" type="string"  nullable="false"  />
+            <field name="cmsUsergroupId" column="cms_usergroup_id" type="string"  nullable="false"  />
+            <field name="module" column="module" type="string" length="255" nullable="false"  />
+            <field name="parameter" column="parameter" type="string" length="100" nullable="false"  />
+            <field name="moduleLocation" column="module_location" type="string"  nullable="false"  />
+            <field name="showAsPopup" column="show_as_popup" type="string"  nullable="false"  />
+            <field name="width" column="width" type="string" length="4" nullable="false"  />
+            <field name="height" column="height" type="string" length="4" nullable="false"  />
+            <field name="active" column="active" type="string"  nullable="false"  />
+            <field name="iconFontCssClass" column="icon_font_css_class" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

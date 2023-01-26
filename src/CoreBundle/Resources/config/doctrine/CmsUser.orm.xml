@@ -1,0 +1,45 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsUser" table="cms_user">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="login" column="login" type="string"  nullable="false"  />
+            <field name="cryptedPw" column="crypted_pw" type="string" length="255" nullable="false"  />
+            <field name="firstname" column="firstname" type="string" length="60" nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="email" column="email" type="string"  nullable="false"  />
+            <field name="images" column="images" type="string"  nullable="false"  />
+            <field name="company" column="company" type="string" length="255" nullable="false"  />
+            <field name="department" column="department" type="string" length="255" nullable="false"  />
+            <field name="city" column="city" type="string" length="255" nullable="false"  />
+            <field name="tel" column="tel" type="string" length="255" nullable="false"  />
+            <field name="fax" column="fax" type="string" length="255" nullable="false"  />
+            <field name="cmsLanguageId" column="cms_language_id" type="string"  nullable="false"  />
+            <field name="languages" column="languages" type="string"  nullable="false"  />
+            <field name="cmsUsergroupMlt" column="cms_usergroup_mlt" type="string"  nullable="false"  />
+            <field name="cmsRoleMlt" column="cms_role_mlt" type="string"  nullable="false"  />
+            <field name="cmsPortalMlt" column="cms_portal_mlt" type="string"  nullable="false"  />
+            <field name="cmsLanguageMlt" column="cms_language_mlt" type="string"  nullable="false"  />
+            <field name="cmsCurrentEditLanguage" column="cms_current_edit_language" type="string" length="4" nullable="false"  />
+            <field name="allowCmsLogin" column="allow_cms_login" type="string"  nullable="false"  />
+            <field name="taskShowCount" column="task_show_count" type="string"  nullable="false"  />
+            <field name="isSystem" column="is_system" type="string"  nullable="false"  />
+            <field name="cmsWorkflowTransactionId" column="cms_workflow_transaction_id" type="string"  nullable="false"  />
+            <field name="showAsRightsTemplate" column="show_as_rights_template" type="string"  nullable="false"  />
+            <field name="cmsMenuItemMlt" column="cms_menu_item_mlt" type="string"  nullable="false"  />
+            <field name="dateModified" column="date_modified" type="string"  nullable="false"  />
+            <field name="googleId" column="google_id" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

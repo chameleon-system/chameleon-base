@@ -1,0 +1,29 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\TCountry" table="t_country">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="wikipediaName" column="wikipedia_name" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string" length="255" nullable="false"  />
+            <field name="isoCode2" column="iso_code_2" type="string" length="2" nullable="false"  />
+            <field name="isoCode3" column="iso_code_3" type="string" length="3" nullable="false"  />
+            <field name="internationalDiallingCode" column="international_dialling_code" type="string"  nullable="false"  />
+            <field name="germanName" column="german_name" type="string" length="255" nullable="false"  />
+            <field name="germanPostalcode" column="german_postalcode" type="string" length="255" nullable="false"  />
+            <field name="euMember" column="eu_member" type="string"  nullable="false"  />
+            <field name="toplevelDomain" column="toplevel_domain" type="string"  nullable="false"  />
+            <field name="primaryCurrencyIso4217" column="primary_currency_iso4217" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

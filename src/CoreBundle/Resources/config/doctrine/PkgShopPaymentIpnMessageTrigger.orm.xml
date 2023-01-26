@@ -1,0 +1,28 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessageTrigger" table="pkg_shop_payment_ipn_message_trigger">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="pkgShopPaymentIpnTriggerId" column="pkg_shop_payment_ipn_trigger_id" type="string"  nullable="false"  />
+            <field name="pkgShopPaymentIpnMessageId" column="pkg_shop_payment_ipn_message_id" type="string"  nullable="false"  />
+            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
+            <field name="done" column="done" type="string"  nullable="false"  />
+            <field name="doneDate" column="done_date" type="string"  nullable="false"  />
+            <field name="success" column="success" type="string"  nullable="false"  />
+            <field name="attemptCount" column="attempt_count" type="string"  nullable="false"  />
+            <field name="nextAttempt" column="next_attempt" type="string"  nullable="false"  />
+            <field name="log" column="log" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

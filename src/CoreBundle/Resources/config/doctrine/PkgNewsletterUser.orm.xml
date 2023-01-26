@@ -1,0 +1,33 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterUser" table="pkg_newsletter_user">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="dataExtranetUserId" column="data_extranet_user_id" type="string"  nullable="false"  />
+            <field name="pkgNewsletterGroupMlt" column="pkg_newsletter_group_mlt" type="string"  nullable="false"  />
+            <field name="pkgNewsletterConfirmationMlt" column="pkg_newsletter_confirmation_mlt" type="string"  nullable="false"  />
+            <field name="email" column="email" type="string"  nullable="false"  />
+            <field name="dataExtranetSalutationId" column="data_extranet_salutation_id" type="string"  nullable="false"  />
+            <field name="firstname" column="firstname" type="string"  nullable="false"  />
+            <field name="lastname" column="lastname" type="string"  nullable="false"  />
+            <field name="company" column="company" type="string"  nullable="false"  />
+            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
+            <field name="signupDate" column="signup_date" type="string"  nullable="false"  />
+            <field name="optincode" column="optincode" type="string"  nullable="false"  />
+            <field name="optin" column="optin" type="string"  nullable="false"  />
+            <field name="optinDate" column="optin_date" type="string"  nullable="false"  />
+            <field name="optoutcode" column="optoutcode" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

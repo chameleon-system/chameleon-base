@@ -1,0 +1,29 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsRecordRevision" table="cms_record_revision">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="cmsRecordRevisionId" column="cms_record_revision_id" type="string"  nullable="false"  />
+            <field name="cmsTblConfId" column="cms_tbl_conf_id" type="string"  nullable="false"  />
+            <field name="recordid" column="recordid" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="description" column="description" type="string"  nullable="false"  />
+            <field name="revisionNr" column="revision_nr" type="string" length="11" nullable="false"  />
+            <field name="cmsUserId" column="cms_user_id" type="string"  nullable="false"  />
+            <field name="createTimestamp" column="create_timestamp" type="string"  nullable="false"  />
+            <field name="lastActiveTimestamp" column="last_active_timestamp" type="string"  nullable="false"  />
+            <field name="data" column="data" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

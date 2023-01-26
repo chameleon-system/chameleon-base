@@ -1,0 +1,30 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterGroup" table="pkg_newsletter_group">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="logoHeader" column="logo_header" type="string"  nullable="false"  />
+            <field name="fromName" column="from_name" type="string"  nullable="false"  />
+            <field name="replyEmail" column="reply_email" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="fromEmail" column="from_email" type="string"  nullable="false"  />
+            <field name="imprint" column="imprint" type="string"  nullable="false"  />
+            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
+            <field name="includeAllNewsletterUsers" column="include_all_newsletter_users" type="string"  nullable="false"  />
+            <field name="includeNewsletterUserNotAssignedToAnyGroup" column="include_newsletter_user_not_assigned_to_any_group" type="string"  nullable="false"  />
+            <field name="includeAllNewsletterUsersWithNoExtranetAccount" column="include_all_newsletter_users_with_no_extranet_account" type="string"  nullable="false"  />
+            <field name="dataExtranetGroupMlt" column="data_extranet_group_mlt" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

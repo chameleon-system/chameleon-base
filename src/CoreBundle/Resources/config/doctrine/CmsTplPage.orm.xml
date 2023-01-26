@@ -1,0 +1,45 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsTplPage" table="cms_tpl_page">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="treePathSearchString" column="tree_path_search_string" type="string"  nullable="false"  />
+            <field name="cmsMasterPagedefId" column="cms_master_pagedef_id" type="string"  nullable="false"  />
+            <field name="cmsTplPageCmsMasterPagedefSpot" column="cms_tpl_page_cms_master_pagedef_spot" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="seoPattern" column="seo_pattern" type="string"  nullable="false"  />
+            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
+            <field name="primaryTreeIdHidden" column="primary_tree_id_hidden" type="string"  nullable="false"  />
+            <field name="images" column="images" type="string"  nullable="false"  />
+            <field name="backgroundImage" column="background_image" type="string"  nullable="false"  />
+            <field name="cmsUsergroupMlt" column="cms_usergroup_mlt" type="string"  nullable="false"  />
+            <field name="cmsUserId" column="cms_user_id" type="string"  nullable="false"  />
+            <field name="usessl" column="usessl" type="string"  nullable="false"  />
+            <field name="extranetPage" column="extranet_page" type="string"  nullable="false"  />
+            <field name="accessNotConfirmedUser" column="access_not_confirmed_user" type="string"  nullable="false"  />
+            <field name="dataExtranetGroupMlt" column="data_extranet_group_mlt" type="string"  nullable="false"  />
+            <field name="ivwCode" column="ivw_code" type="string"  nullable="false"  />
+            <field name="cmsLanguageId" column="cms_language_id" type="string"  nullable="false"  />
+            <field name="metaDescription" column="meta_description" type="string" length="200" nullable="false"  />
+            <field name="metaKeywords" column="meta_keywords" type="string"  nullable="false"  />
+            <field name="metaKeywordLanguage" column="meta_keyword_language" type="string" length="&#039;Deutsch&#039;,&#039;Englisch&#039;,&#039;US-Englisch&#039;,&#039;Franz&amp;ouml;sisch&#039;,&#039;Italienisch&#039;,&#039;Spanisch&#039;" nullable="false"  />
+            <field name="metaAuthor" column="meta_author" type="string"  nullable="false"  />
+            <field name="metaPublisher" column="meta_publisher" type="string"  nullable="false"  />
+            <field name="metaPageTopic" column="meta_page_topic" type="string"  nullable="false"  />
+            <field name="metaPragma" column="meta_pragma" type="string" length="&#039;cache&#039;,&#039;no-cache&#039;" nullable="false"  />
+            <field name="metaRobots" column="meta_robots" type="string" length="&#039;index, follow&#039;,&#039;index&#039;,&#039;noindex&#039;,&#039;follow&#039;,&#039;nofollow&#039;" nullable="false"  />
+            <field name="metaRevisitAfter" column="meta_revisit_after" type="string" length="4" nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

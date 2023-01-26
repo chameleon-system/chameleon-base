@@ -1,0 +1,35 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsFontImage" table="cms_font_image">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="profileName" column="profile_name" type="string"  nullable="false"  />
+            <field name="imgHeight" column="img_height" type="string"  nullable="false"  />
+            <field name="imgWidth" column="img_width" type="string"  nullable="false"  />
+            <field name="imgBackgroundColor" column="img_background_color" type="string"  nullable="false"  />
+            <field name="fontColor" column="font_color" type="string"  nullable="false"  />
+            <field name="fontSize" column="font_size" type="string"  nullable="false"  />
+            <field name="fontWeight" column="font_weight" type="string" length="&#039;normal&#039;,&#039;bold&#039;" nullable="false"  />
+            <field name="fontAlign" column="font_align" type="string" length="&#039;left&#039;,&#039;right&#039;,&#039;center&#039;" nullable="false"  />
+            <field name="fontVerticalAlign" column="font_vertical_align" type="string" length="&#039;top&#039;,&#039;middle&#039;,&#039;bottom&#039;" nullable="false"  />
+            <field name="fontFilename" column="font_filename" type="string"  nullable="false"  />
+            <field name="imgType" column="img_type" type="string" length="&#039;png&#039;,&#039;gif&#039;,&#039;jpg&#039;" nullable="false"  />
+            <field name="imgBackgroundImg" column="img_background_img" type="string"  nullable="false"  />
+            <field name="backgroundImgFile" column="background_img_file" type="string"  nullable="false"  />
+            <field name="textPositionX" column="text_position_x" type="string"  nullable="false"  />
+            <field name="textPositionY" column="text_position_y" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

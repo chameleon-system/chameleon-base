@@ -1,0 +1,32 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsFieldType" table="cms_field_type">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="049Trans" column="049_trans" type="string"  nullable="false"  />
+            <field name="forceAutoIncrement" column="force_auto_increment" type="string" length="&#039;0&#039;,&#039;1&#039;" nullable="false"  />
+            <field name="classSubtype" column="class_subtype" type="string"  nullable="false"  />
+            <field name="constname" column="constname" type="string"  nullable="false"  />
+            <field name="mysqlType" column="mysql_type" type="string"  nullable="false"  />
+            <field name="lengthSet" column="length_set" type="string"  nullable="false"  />
+            <field name="baseType" column="base_type" type="string" length="&#039;standard&#039;,&#039;mlt&#039;" nullable="false"  />
+            <field name="helpText" column="help_text" type="string"  nullable="false"  />
+            <field name="mysqlStandardValue" column="mysql_standard_value" type="string"  nullable="false"  />
+            <field name="fieldclass" column="fieldclass" type="string"  nullable="false"  />
+            <field name="classType" column="class_type" type="string" length="&#039;Core&#039;,&#039;Custom-Core&#039;,&#039;Customer&#039;" nullable="false"  />
+            <field name="containsImages" column="contains_images" type="string"  nullable="false"  />
+            <field name="indextype" column="indextype" type="string" length="&#039;none&#039;,&#039;index&#039;,&#039;unique&#039;" nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

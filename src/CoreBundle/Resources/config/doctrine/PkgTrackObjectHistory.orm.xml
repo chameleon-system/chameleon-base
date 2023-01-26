@@ -1,0 +1,28 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgTrackObjectHistory" table="pkg_track_object_history">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="tableName" column="table_name" type="string"  nullable="false"  />
+            <field name="ownerId" column="owner_id" type="string"  nullable="false"  />
+            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
+            <field name="dataExtranetUserId" column="data_extranet_user_id" type="string"  nullable="false"  />
+            <field name="sessionId" column="session_id" type="string"  nullable="false"  />
+            <field name="ip" column="ip" type="string"  nullable="false"  />
+            <field name="requestChecksum" column="request_checksum" type="string"  nullable="false"  />
+            <field name="pkgTrackObjectId" column="pkg_track_object_id" type="string"  nullable="false"  />
+            <field name="itemCounted" column="item_counted" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

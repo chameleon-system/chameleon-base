@@ -1,0 +1,25 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsTreeNode" table="cms_tree_node">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="active" column="active" type="string"  nullable="false"  />
+            <field name="startDate" column="start_date" type="string"  nullable="false"  />
+            <field name="endDate" column="end_date" type="string"  nullable="false"  />
+            <field name="tbl" column="tbl" type="string" length="255" nullable="false"  />
+            <field name="contid" column="contid" type="string"  nullable="false"  />
+            <field name="cmsTreeId" column="cms_tree_id" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

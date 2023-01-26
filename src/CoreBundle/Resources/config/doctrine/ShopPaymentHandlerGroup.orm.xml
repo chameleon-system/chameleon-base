@@ -1,0 +1,33 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup" table="shop_payment_handler_group">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="classname" column="classname" type="string"  nullable="false"  />
+            <field name="shopPaymentHandlerGroupConfig" column="shop_payment_handler_group_config" type="string"  nullable="false"  />
+            <field name="ipnGroupIdentifier" column="ipn_group_identifier" type="string"  nullable="false"  />
+            <field name="ipnPayloadCharacterCharset" column="ipn_payload_character_charset" type="string"  nullable="false"  />
+            <field name="pkgShopPaymentIpnStatus" column="pkg_shop_payment_ipn_status" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="systemName" column="system_name" type="string"  nullable="false"  />
+            <field name="description" column="description" type="string"  nullable="false"  />
+            <field name="shopPaymentHandler" column="shop_payment_handler" type="string"  nullable="false"  />
+            <field name="shopPaymentMethod" column="shop_payment_method" type="string"  nullable="false"  />
+            <field name="ipnAllowedIps" column="ipn_allowed_ips" type="string"  nullable="false"  />
+            <field name="pkgShopPaymentIpnTrigger" column="pkg_shop_payment_ipn_trigger" type="string"  nullable="false"  />
+            <field name="pkgShopPaymentIpnMessage" column="pkg_shop_payment_ipn_message" type="string"  nullable="false"  />
+            <field name="environment" column="environment" type="string" length="&#039;default&#039;,&#039;sandbox&#039;,&#039;production&#039;" nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

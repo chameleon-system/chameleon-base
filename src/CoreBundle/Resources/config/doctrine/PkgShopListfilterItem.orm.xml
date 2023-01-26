@@ -1,0 +1,35 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopListfilterItem" table="pkg_shop_listfilter_item">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="pkgShopListfilterId" column="pkg_shop_listfilter_id" type="string"  nullable="false"  />
+            <field name="pkgShopListfilterItemType" column="pkg_shop_listfilter_item_type" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="systemname" column="systemname" type="string"  nullable="false"  />
+            <field name="shopAttribute" column="shop_attribute" type="string"  nullable="false"  />
+            <field name="allowMultiSelection" column="allow_multi_selection" type="string"  nullable="false"  />
+            <field name="showAllOnPageLoad" column="show_all_on_page_load" type="string"  nullable="false"  />
+            <field name="previewSize" column="preview_size" type="string"  nullable="false"  />
+            <field name="showScrollbars" column="show_scrollbars" type="string"  nullable="false"  />
+            <field name="minValue" column="min_value" type="string"  nullable="false"  />
+            <field name="maxValue" column="max_value" type="string"  nullable="false"  />
+            <field name="mysqlFieldName" column="mysql_field_name" type="string"  nullable="false"  />
+            <field name="view" column="view" type="string"  nullable="false"  />
+            <field name="viewClassType" column="view_class_type" type="string" length="&#039;Core&#039;, &#039;Custom-Core&#039;, &#039;Customer&#039;" nullable="false"  />
+            <field name="position" column="position" type="string"  nullable="false"  />
+            <field name="variantIdentifier" column="variant_identifier" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

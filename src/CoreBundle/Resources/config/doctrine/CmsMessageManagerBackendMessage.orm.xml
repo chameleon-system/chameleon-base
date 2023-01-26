@@ -1,0 +1,24 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsMessageManagerBackendMessage" table="cms_message_manager_backend_message">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="cmsMessageManagerMessageTypeId" column="cms_message_manager_message_type_id" type="string"  nullable="false"  />
+            <field name="message" column="message" type="string"  nullable="false"  />
+            <field name="cmsConfigId" column="cms_config_id" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="description" column="description" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

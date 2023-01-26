@@ -1,0 +1,47 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsConfig" table="cms_config">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="cmsConfigImagemagick" column="cms_config_imagemagick" type="string"  nullable="false"  />
+            <field name="uploaderChunkSize" column="uploader_chunk_size" type="string"  nullable="false"  />
+            <field name="translationBaseLanguageId" column="translation_base_language_id" type="string"  nullable="false"  />
+            <field name="cmsLanguageMlt" column="cms_language_mlt" type="string"  nullable="false"  />
+            <field name="cmsConfigParameter" column="cms_config_parameter" type="string"  nullable="false"  />
+            <field name="cmsMessageManagerBackendMessage" column="cms_message_manager_backend_message" type="string"  nullable="false"  />
+            <field name="smtpServer" column="smtp_server" type="string"  nullable="false"  />
+            <field name="smtpUser" column="smtp_user" type="string"  nullable="false"  />
+            <field name="smtpPassword" column="smtp_password" type="string"  nullable="false"  />
+            <field name="smtpPort" column="smtp_port" type="string"  nullable="false"  />
+            <field name="cmsConfigCmsmoduleExtensions" column="cms_config_cmsmodule_extensions" type="string"  nullable="false"  />
+            <field name="pkgCmsThemeId" column="pkg_cms_theme_id" type="string"  nullable="false"  />
+            <field name="cmsConfigThemesId" column="cms_config_themes_id" type="string"  nullable="false"  />
+            <field name="showTemplateEngine" column="show_template_engine" type="string"  nullable="false"  />
+            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
+            <field name="cmsIpWhitelist" column="cms_ip_whitelist" type="string"  nullable="false"  />
+            <field name="maxDocumentUploadSize" column="max_document_upload_size" type="string"  nullable="false"  />
+            <field name="additionalFilesToDeleteFromCache" column="additional_files_to_delete_from_cache" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string" length="60" nullable="false"  />
+            <field name="wysiwygeditorCssUrl" column="wysiwygeditor_css_url" type="string" length="255" nullable="false"  />
+            <field name="maxImageUploadSize" column="max_image_upload_size" type="string"  nullable="false"  />
+            <field name="updateServer" column="update_server" type="string" length="255" nullable="false"  />
+            <field name="botlist" column="botlist" type="string"  nullable="false"  />
+            <field name="shutdownWebsites" column="shutdown_websites" type="string"  nullable="false"  />
+            <field name="cronjobsEnabled" column="cronjobs_enabled" type="string"  nullable="false"  />
+            <field name="entryPerPage" column="entry_per_page" type="string" length="3" nullable="false"  />
+            <field name="databaseversion" column="databaseversion" type="string"  nullable="false"  />
+            <field name="build" column="build" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

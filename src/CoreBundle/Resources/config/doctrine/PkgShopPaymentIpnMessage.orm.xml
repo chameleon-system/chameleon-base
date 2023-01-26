@@ -1,0 +1,32 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessage" table="pkg_shop_payment_ipn_message">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="pkgShopPaymentIpnMessageTrigger" column="pkg_shop_payment_ipn_message_trigger" type="string"  nullable="false"  />
+            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
+            <field name="shopOrderId" column="shop_order_id" type="string"  nullable="false"  />
+            <field name="shopPaymentHandlerGroupId" column="shop_payment_handler_group_id" type="string"  nullable="false"  />
+            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
+            <field name="pkgShopPaymentIpnStatusId" column="pkg_shop_payment_ipn_status_id" type="string"  nullable="false"  />
+            <field name="success" column="success" type="string"  nullable="false"  />
+            <field name="completed" column="completed" type="string"  nullable="false"  />
+            <field name="errorType" column="error_type" type="string"  nullable="false"  />
+            <field name="ip" column="ip" type="string"  nullable="false"  />
+            <field name="requestUrl" column="request_url" type="string"  nullable="false"  />
+            <field name="payload" column="payload" type="string"  nullable="false"  />
+            <field name="errors" column="errors" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

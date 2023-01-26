@@ -1,0 +1,25 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsRole" table="cms_role">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="cmsRoleMlt" column="cms_role_mlt" type="string"  nullable="false"  />
+            <field name="isChooseable" column="is_chooseable" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string" length="40" nullable="false"  />
+            <field name="cmsRightMlt" column="cms_right_mlt" type="string"  nullable="false"  />
+            <field name="isSystem" column="is_system" type="string"  nullable="false"  />
+            <field name="049Trans" column="049_trans" type="string" length="40" nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

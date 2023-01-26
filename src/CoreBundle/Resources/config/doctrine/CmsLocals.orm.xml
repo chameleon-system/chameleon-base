@@ -1,0 +1,25 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsLocals" table="cms_locals">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="dateFormat" column="date_format" type="string"  nullable="false"  />
+            <field name="timeFormat" column="time_format" type="string"  nullable="false"  />
+            <field name="phpLocalName" column="php_local_name" type="string"  nullable="false"  />
+            <field name="dateFormatCalendar" column="date_format_calendar" type="string"  nullable="false"  />
+            <field name="numbers" column="numbers" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

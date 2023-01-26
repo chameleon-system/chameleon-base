@@ -1,0 +1,27 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopArticleCatalogConf" table="shop_article_catalog_conf">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="shopArticleCatalogConfDefaultOrder" column="shop_article_catalog_conf_default_order" type="string"  nullable="false"  />
+            <field name="showSubcategoryProducts" column="show_subcategory_products" type="string"  nullable="false"  />
+            <field name="pageSize" column="page_size" type="string"  nullable="false"  />
+            <field name="shopModuleArticlelistOrderbyId" column="shop_module_articlelist_orderby_id" type="string"  nullable="false"  />
+            <field name="shopModuleArticlelistOrderbyMlt" column="shop_module_articlelist_orderby_mlt" type="string"  nullable="false"  />
+            <field name="intro" column="intro" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

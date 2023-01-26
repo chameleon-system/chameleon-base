@@ -1,0 +1,27 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopSuggestArticleLog" table="shop_suggest_article_log">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
+            <field name="dataExtranetUserId" column="data_extranet_user_id" type="string"  nullable="false"  />
+            <field name="shopArticleId" column="shop_article_id" type="string"  nullable="false"  />
+            <field name="fromEmail" column="from_email" type="string"  nullable="false"  />
+            <field name="fromName" column="from_name" type="string"  nullable="false"  />
+            <field name="toEmail" column="to_email" type="string"  nullable="false"  />
+            <field name="toName" column="to_name" type="string"  nullable="false"  />
+            <field name="comment" column="comment" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,25 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopVoucherUse" table="shop_voucher_use">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="shopVoucherId" column="shop_voucher_id" type="string"  nullable="false"  />
+            <field name="dateUsed" column="date_used" type="string"  nullable="false"  />
+            <field name="valueUsed" column="value_used" type="string" length="10,2" nullable="false"  />
+            <field name="shopOrderId" column="shop_order_id" type="string"  nullable="false"  />
+            <field name="valueUsedInOrderCurrency" column="value_used_in_order_currency" type="string" length="10,2" nullable="false"  />
+            <field name="pkgShopCurrencyId" column="pkg_shop_currency_id" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

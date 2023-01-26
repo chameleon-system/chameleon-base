@@ -1,0 +1,24 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopWishlistMailHistory" table="pkg_shop_wishlist_mail_history">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="pkgShopWishlistId" column="pkg_shop_wishlist_id" type="string"  nullable="false"  />
+            <field name="datesend" column="datesend" type="string"  nullable="false"  />
+            <field name="toName" column="to_name" type="string"  nullable="false"  />
+            <field name="toEmail" column="to_email" type="string"  nullable="false"  />
+            <field name="comment" column="comment" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>
