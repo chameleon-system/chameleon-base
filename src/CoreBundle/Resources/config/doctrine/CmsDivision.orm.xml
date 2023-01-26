@@ -1,0 +1,33 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsDivision" table="cms_division">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="cmsTreeIdTree" column="cms_tree_id_tree" type="string"  nullable="false"  />
+            <field name="cmsLanguageId" column="cms_language_id" type="string"  nullable="false"  />
+            <field name="images" column="images" type="string" length="50" nullable="false"  />
+            <field name="backgroundImage" column="background_image" type="string"  nullable="false"  />
+            <field name="colorPrimaryHexcolor" column="color_primary_hexcolor" type="string"  nullable="false"  />
+            <field name="colorSecondaryHexcolor" column="color_secondary_hexcolor" type="string"  nullable="false"  />
+            <field name="colorTertiaryHexcolor" column="color_tertiary_hexcolor" type="string"  nullable="false"  />
+            <field name="position" column="position" type="string" length="11" nullable="false"  />
+            <field name="menuDirection" column="menu_direction" type="string" length="&#039;Links&#039;,&#039;Rechts&#039;" nullable="false"  />
+            <field name="keywords" column="keywords" type="string"  nullable="false"  />
+            <field name="ivwCode" column="ivw_code" type="string"  nullable="false"  />
+            <field name="menuStopLevel" column="menu_stop_level" type="string" length="2" nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,57 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopOrderItem" table="shop_order_item">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="nameVariantInfo" column="name_variant_info" type="string" length="255" nullable="false"  />
+            <field name="shopOrderId" column="shop_order_id" type="string"  nullable="false"  />
+            <field name="basketItemKey" column="basket_item_key" type="string" length="32" nullable="false"  />
+            <field name="shopArticleId" column="shop_article_id" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="articlenumber" column="articlenumber" type="string"  nullable="false"  />
+            <field name="descriptionShort" column="description_short" type="string"  nullable="false"  />
+            <field name="description" column="description" type="string"  nullable="false"  />
+            <field name="shopManufacturerId" column="shop_manufacturer_id" type="string"  nullable="false"  />
+            <field name="shopManufacturerName" column="shop_manufacturer_name" type="string"  nullable="false"  />
+            <field name="price" column="price" type="string" length="10,2" nullable="false"  />
+            <field name="priceReference" column="price_reference" type="string" length="10,2" nullable="false"  />
+            <field name="priceDiscounted" column="price_discounted" type="string" length="18,10" nullable="false"  />
+            <field name="vatPercent" column="vat_percent" type="string" length="5,2" nullable="false"  />
+            <field name="sizeWeight" column="size_weight" type="string" length="10,2" nullable="false"  />
+            <field name="sizeWidth" column="size_width" type="string" length="10,2" nullable="false"  />
+            <field name="sizeHeight" column="size_height" type="string" length="10,2" nullable="false"  />
+            <field name="sizeLength" column="size_length" type="string" length="10,2" nullable="false"  />
+            <field name="stock" column="stock" type="string"  nullable="false"  />
+            <field name="quantityInUnits" column="quantity_in_units" type="string" length="10,4" nullable="false"  />
+            <field name="shopUnitOfMeasurementId" column="shop_unit_of_measurement_id" type="string"  nullable="false"  />
+            <field name="virtualArticle" column="virtual_article" type="string"  nullable="false"  />
+            <field name="excludeFromVouchers" column="exclude_from_vouchers" type="string"  nullable="false"  />
+            <field name="excludeFromDiscounts" column="exclude_from_discounts" type="string"  nullable="false"  />
+            <field name="subtitle" column="subtitle" type="string"  nullable="false"  />
+            <field name="isNew" column="is_new" type="string"  nullable="false"  />
+            <field name="pages" column="pages" type="string"  nullable="false"  />
+            <field name="usp" column="usp" type="string"  nullable="false"  />
+            <field name="customData" column="custom_data" type="string"  nullable="false"  />
+            <field name="orderAmount" column="order_amount" type="string" length="10,2" nullable="false"  />
+            <field name="orderPriceTotal" column="order_price_total" type="string" length="10,2" nullable="false"  />
+            <field name="orderPriceAfterDiscounts" column="order_price_after_discounts" type="string" length="10,2" nullable="false"  />
+            <field name="orderTotalWeight" column="order_total_weight" type="string" length="10,2" nullable="false"  />
+            <field name="orderTotalVolume" column="order_total_volume" type="string" length="10,2" nullable="false"  />
+            <field name="orderPrice" column="order_price" type="string" length="10,2" nullable="false"  />
+            <field name="isBundle" column="is_bundle" type="string"  nullable="false"  />
+            <field name="shopOrderBundleArticle" column="shop_order_bundle_article" type="string"  nullable="false"  />
+            <field name="download" column="download" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

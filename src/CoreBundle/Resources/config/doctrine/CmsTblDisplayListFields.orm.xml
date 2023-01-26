@@ -1,0 +1,31 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsTblDisplayListFields" table="cms_tbl_display_list_fields">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="title" column="title" type="string"  nullable="false"  />
+            <field name="cmsTblConfId" column="cms_tbl_conf_id" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="cmsTranslationFieldName" column="cms_translation_field_name" type="string"  nullable="false"  />
+            <field name="dbAlias" column="db_alias" type="string"  nullable="false"  />
+            <field name="position" column="position" type="string"  nullable="false"  />
+            <field name="width" column="width" type="string"  nullable="false"  />
+            <field name="align" column="align" type="string" length="&#039;left&#039;,&#039;right&#039;,&#039;center&#039;" nullable="false"  />
+            <field name="callbackFnc" column="callback_fnc" type="string"  nullable="false"  />
+            <field name="useCallback" column="use_callback" type="string"  nullable="false"  />
+            <field name="showInList" column="show_in_list" type="string"  nullable="false"  />
+            <field name="showInSort" column="show_in_sort" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

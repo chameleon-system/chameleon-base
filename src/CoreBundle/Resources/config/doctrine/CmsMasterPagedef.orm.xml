@@ -1,0 +1,29 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsMasterPagedef" table="cms_master_pagedef">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="description" column="description" type="string"  nullable="false"  />
+            <field name="layout" column="layout" type="string"  nullable="false"  />
+            <field name="cmsMasterPagedefSpot" column="cms_master_pagedef_spot" type="string"  nullable="false"  />
+            <field name="pkgCmsThemeBlockMlt" column="pkg_cms_theme_block_mlt" type="string"  nullable="false"  />
+            <field name="actionPluginList" column="action_plugin_list" type="string"  nullable="false"  />
+            <field name="restrictToPortals" column="restrict_to_portals" type="string"  nullable="false"  />
+            <field name="cmsPortalMlt" column="cms_portal_mlt" type="string"  nullable="false"  />
+            <field name="wysiwygCssUrl" column="wysiwyg_css_url" type="string"  nullable="false"  />
+            <field name="position" column="position" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

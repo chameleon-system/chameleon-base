@@ -1,0 +1,31 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterModuleSignupConfig" table="pkg_newsletter_module_signup_config">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
+            <field name="mainModuleInstanceId" column="main_module_instance_id" type="string"  nullable="false"  />
+            <field name="pkgNewsletterGroupMlt" column="pkg_newsletter_group_mlt" type="string"  nullable="false"  />
+            <field name="useDoubleoptin" column="use_doubleoptin" type="string"  nullable="false"  />
+            <field name="signupHeadline" column="signup_headline" type="string"  nullable="false"  />
+            <field name="signupText" column="signup_text" type="string"  nullable="false"  />
+            <field name="confirmTitle" column="confirm_title" type="string"  nullable="false"  />
+            <field name="confirmText" column="confirm_text" type="string"  nullable="false"  />
+            <field name="signedupHeadline" column="signedup_headline" type="string"  nullable="false"  />
+            <field name="signedupText" column="signedup_text" type="string"  nullable="false"  />
+            <field name="nonewsignupTitle" column="nonewsignup_title" type="string"  nullable="false"  />
+            <field name="nonewsignupText" column="nonewsignup_text" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

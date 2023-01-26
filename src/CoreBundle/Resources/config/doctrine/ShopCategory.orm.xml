@@ -1,0 +1,40 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopCategory" table="shop_category">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="shopCategoryId" column="shop_category_id" type="string"  nullable="false"  />
+            <field name="detailPageCmsTreeId" column="detail_page_cms_tree_id" type="string"  nullable="false"  />
+            <field name="naviIconCmsMediaId" column="navi_icon_cms_media_id" type="string"  nullable="false"  />
+            <field name="urlPath" column="url_path" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="active" column="active" type="string"  nullable="false"  />
+            <field name="treeActive" column="tree_active" type="string"  nullable="false"  />
+            <field name="nameProduct" column="name_product" type="string"  nullable="false"  />
+            <field name="seoPattern" column="seo_pattern" type="string"  nullable="false"  />
+            <field name="shopVatId" column="shop_vat_id" type="string"  nullable="false"  />
+            <field name="colorcode" column="colorcode" type="string"  nullable="false"  />
+            <field name="categoryHightlight" column="category_hightlight" type="string"  nullable="false"  />
+            <field name="image" column="image" type="string"  nullable="false"  />
+            <field name="position" column="position" type="string"  nullable="false"  />
+            <field name="shopCategory" column="shop_category" type="string"  nullable="false"  />
+            <field name="descriptionShort" column="description_short" type="string"  nullable="false"  />
+            <field name="description" column="description" type="string"  nullable="false"  />
+            <field name="metaKeywords" column="meta_keywords" type="string"  nullable="false"  />
+            <field name="pkgShopListfilterId" column="pkg_shop_listfilter_id" type="string"  nullable="false"  />
+            <field name="shopCategoryTab" column="shop_category_tab" type="string"  nullable="false"  />
+            <field name="metaDescription" column="meta_description" type="string" length="255" nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

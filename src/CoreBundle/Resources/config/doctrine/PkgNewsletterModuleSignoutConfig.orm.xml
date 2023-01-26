@@ -1,0 +1,29 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterModuleSignoutConfig" table="pkg_newsletter_module_signout_config">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
+            <field name="signoutTitle" column="signout_title" type="string"  nullable="false"  />
+            <field name="signoutText" column="signout_text" type="string"  nullable="false"  />
+            <field name="signoutConfirmTitle" column="signout_confirm_title" type="string"  nullable="false"  />
+            <field name="signoutConfirmText" column="signout_confirm_text" type="string"  nullable="false"  />
+            <field name="signedoutTitle" column="signedout_title" type="string"  nullable="false"  />
+            <field name="signedoutText" column="signedout_text" type="string"  nullable="false"  />
+            <field name="noNewsletterSignedup" column="no_newsletter_signedup" type="string"  nullable="false"  />
+            <field name="noNewsletterSignedupText" column="no_newsletter_signedup_text" type="string"  nullable="false"  />
+            <field name="useDoubleOptOut" column="use_double_opt_out" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

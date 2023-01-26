@@ -1,0 +1,81 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\Shop" table="shop">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="shopOrderStatusCode" column="shop_order_status_code" type="string"  nullable="false"  />
+            <field name="defaultPkgShopCurrencyId" column="default_pkg_shop_currency_id" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="cmsPortalMlt" column="cms_portal_mlt" type="string"  nullable="false"  />
+            <field name="shopCategoryId" column="shop_category_id" type="string"  nullable="false"  />
+            <field name="adrCompany" column="adr_company" type="string"  nullable="false"  />
+            <field name="adrStreet" column="adr_street" type="string"  nullable="false"  />
+            <field name="adrZip" column="adr_zip" type="string"  nullable="false"  />
+            <field name="adrCity" column="adr_city" type="string"  nullable="false"  />
+            <field name="tCountryId" column="t_country_id" type="string"  nullable="false"  />
+            <field name="customerServiceTelephone" column="customer_service_telephone" type="string"  nullable="false"  />
+            <field name="customerServiceEmail" column="customer_service_email" type="string"  nullable="false"  />
+            <field name="shopvatnumber" column="shopvatnumber" type="string"  nullable="false"  />
+            <field name="shopBankAccount" column="shop_bank_account" type="string"  nullable="false"  />
+            <field name="dataExtranetUser" column="data_extranet_user" type="string"  nullable="false"  />
+            <field name="dataExtranetUserShopArticleHistoryMaxArticleCount" column="data_extranet_user_shop_article_history_max_article_count" type="string"  nullable="false"  />
+            <field name="shopModuleArticlelistOrderbyId" column="shop_module_articlelist_orderby_id" type="string"  nullable="false"  />
+            <field name="shopVatId" column="shop_vat_id" type="string"  nullable="false"  />
+            <field name="shopShippingGroupId" column="shop_shipping_group_id" type="string"  nullable="false"  />
+            <field name="shippingVatDependsOnBasketContents" column="shipping_vat_depends_on_basket_contents" type="string"  nullable="false"  />
+            <field name="dataExtranetSalutationId" column="data_extranet_salutation_id" type="string"  nullable="false"  />
+            <field name="dataCountryId" column="data_country_id" type="string"  nullable="false"  />
+            <field name="affiliateParameterName" column="affiliate_parameter_name" type="string"  nullable="false"  />
+            <field name="pkgShopAffiliate" column="pkg_shop_affiliate" type="string"  nullable="false"  />
+            <field name="shopArticleImageSize" column="shop_article_image_size" type="string"  nullable="false"  />
+            <field name="shopSystemInfo" column="shop_system_info" type="string"  nullable="false"  />
+            <field name="notFoundImage" column="not_found_image" type="string"  nullable="false"  />
+            <field name="shopSearchWordBonus" column="shop_search_word_bonus" type="string" length="5,5" nullable="false"  />
+            <field name="shopSearchWordLengthFactor" column="shop_search_word_length_factor" type="string" length="5,5" nullable="false"  />
+            <field name="shopSearchSoundexPenalty" column="shop_search_soundex_penalty" type="string" length="5,5" nullable="false"  />
+            <field name="shopSearchMinIndexLength" column="shop_search_min_index_length" type="string"  nullable="false"  />
+            <field name="shopSearchMaxIndexLength" column="shop_search_max_index_length" type="string"  nullable="false"  />
+            <field name="shopSearchUseBooleanAnd" column="shop_search_use_boolean_and" type="string"  nullable="false"  />
+            <field name="maxSearchCacheAgeInHours" column="max_search_cache_age_in_hours" type="string"  nullable="false"  />
+            <field name="shopSearchLog" column="shop_search_log" type="string"  nullable="false"  />
+            <field name="shopSearchFieldWeight" column="shop_search_field_weight" type="string"  nullable="false"  />
+            <field name="shopSearchIgnoreWord" column="shop_search_ignore_word" type="string"  nullable="false"  />
+            <field name="shopSearchKeywordArticle" column="shop_search_keyword_article" type="string"  nullable="false"  />
+            <field name="shopSearchCache" column="shop_search_cache" type="string"  nullable="false"  />
+            <field name="basketSpotName" column="basket_spot_name" type="string"  nullable="false"  />
+            <field name="shopCentralHandlerSpotName" column="shop_central_handler_spot_name" type="string"  nullable="false"  />
+            <field name="showEmptyCategories" column="show_empty_categories" type="string"  nullable="false"  />
+            <field name="allowPurchaseOfVariantParents" column="allow_purchase_of_variant_parents" type="string"  nullable="false"  />
+            <field name="loadInactiveVariants" column="load_inactive_variants" type="string"  nullable="false"  />
+            <field name="syncProfileDataWithBillingData" column="sync_profile_data_with_billing_data" type="string"  nullable="false"  />
+            <field name="allowMultipleBillingAddresses" column="allow_multiple_billing_addresses" type="string"  nullable="false"  />
+            <field name="allowMultipleShippingAddresses" column="allow_multiple_shipping_addresses" type="string"  nullable="false"  />
+            <field name="allowGuestPurchase" column="allow_guest_purchase" type="string"  nullable="false"  />
+            <field name="logArticleSuggestions" column="log_article_suggestions" type="string"  nullable="false"  />
+            <field name="shopStockMessage" column="shop_stock_message" type="string"  nullable="false"  />
+            <field name="exportKey" column="export_key" type="string"  nullable="false"  />
+            <field name="cartInfoText" column="cart_info_text" type="string"  nullable="false"  />
+            <field name="pkgShopListfilterPostsearchId" column="pkg_shop_listfilter_postsearch_id" type="string"  nullable="false"  />
+            <field name="redirectToNotFoundPageProductSearchOnNoResults" column="redirect_to_not_found_page_product_search_on_no_results" type="string"  nullable="false"  />
+            <field name="useShopSearchLog" column="use_shop_search_log" type="string"  nullable="false"  />
+            <field name="pkgShopListfilterCategoryFilterId" column="pkg_shop_listfilter_category_filter_id" type="string"  nullable="false"  />
+            <field name="dataExtranetUserShopArticleHistoryMaxCookieSize" column="data_extranet_user_shop_article_history_max_cookie_size" type="string"  nullable="false"  />
+            <field name="productUrlMode" column="product_url_mode" type="string" length="&#039;V1&#039;,&#039;V2&#039;" nullable="false"  />
+            <field name="shopreviewmailMailDelay" column="shopreviewmail_mail_delay" type="string"  nullable="false"  />
+            <field name="shopreviewmailPercentOfCustomers" column="shopreviewmail_percent_of_customers" type="string" length="10,2" nullable="false"  />
+            <field name="shopreviewmailSendForEachOrder" column="shopreviewmail_send_for_each_order" type="string"  nullable="false"  />
+            <field name="pkgShopFooterCategory" column="pkg_shop_footer_category" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

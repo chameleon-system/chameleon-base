@@ -1,0 +1,28 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopSearchFieldWeight" table="shop_search_field_weight">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="shopId" column="shop_id" type="string"  nullable="false"  />
+            <field name="cmsLanguageId" column="cms_language_id" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="tablename" column="tablename" type="string"  nullable="false"  />
+            <field name="fieldname" column="fieldname" type="string"  nullable="false"  />
+            <field name="weight" column="weight" type="string" length="5,4" nullable="false"  />
+            <field name="shopSearchQueryId" column="shop_search_query_id" type="string"  nullable="false"  />
+            <field name="fieldNameInQuery" column="field_name_in_query" type="string"  nullable="false"  />
+            <field name="indexPartialWords" column="index_partial_words" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

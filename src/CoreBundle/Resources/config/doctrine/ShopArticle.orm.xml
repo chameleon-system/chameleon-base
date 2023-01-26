@@ -1,0 +1,77 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopArticle" table="shop_article">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="shopArticle2Mlt" column="shop_article2_mlt" type="string"  nullable="false"  />
+            <field name="seoPattern" column="seo_pattern" type="string"  nullable="false"  />
+            <field name="articlenumber" column="articlenumber" type="string"  nullable="false"  />
+            <field name="shopArticleImage" column="shop_article_image" type="string"  nullable="false"  />
+            <field name="cmsMediaDefaultPreviewImageId" column="cms_media_default_preview_image_id" type="string"  nullable="false"  />
+            <field name="shopArticlePreviewImage" column="shop_article_preview_image" type="string"  nullable="false"  />
+            <field name="shopArticleDocument" column="shop_article_document" type="string"  nullable="false"  />
+            <field name="listRank" column="list_rank" type="string"  nullable="false"  />
+            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
+            <field name="active" column="active" type="string"  nullable="false"  />
+            <field name="descriptionShort" column="description_short" type="string"  nullable="false"  />
+            <field name="description" column="description" type="string"  nullable="false"  />
+            <field name="shopManufacturerId" column="shop_manufacturer_id" type="string"  nullable="false"  />
+            <field name="price" column="price" type="string" length="10,2" nullable="false"  />
+            <field name="priceReference" column="price_reference" type="string" length="10,2" nullable="false"  />
+            <field name="shopVatId" column="shop_vat_id" type="string"  nullable="false"  />
+            <field name="sizeWeight" column="size_weight" type="string" length="10,2" nullable="false"  />
+            <field name="sizeWidth" column="size_width" type="string" length="10,3" nullable="false"  />
+            <field name="sizeHeight" column="size_height" type="string" length="10,3" nullable="false"  />
+            <field name="sizeLength" column="size_length" type="string" length="10,3" nullable="false"  />
+            <field name="quantityInUnits" column="quantity_in_units" type="string" length="10,4" nullable="false"  />
+            <field name="shopUnitOfMeasurementId" column="shop_unit_of_measurement_id" type="string"  nullable="false"  />
+            <field name="shopArticleStock" column="shop_article_stock" type="string"  nullable="false"  />
+            <field name="showPreorderOnZeroStock" column="show_preorder_on_zero_stock" type="string"  nullable="false"  />
+            <field name="shopStockMessageId" column="shop_stock_message_id" type="string"  nullable="false"  />
+            <field name="virtualArticle" column="virtual_article" type="string"  nullable="false"  />
+            <field name="isSearchable" column="is_searchable" type="string"  nullable="false"  />
+            <field name="excludeFromShippingCostCalculation" column="exclude_from_shipping_cost_calculation" type="string"  nullable="false"  />
+            <field name="excludeFromVouchers" column="exclude_from_vouchers" type="string"  nullable="false"  />
+            <field name="excludeFromDiscounts" column="exclude_from_discounts" type="string"  nullable="false"  />
+            <field name="shopArticleGroupMlt" column="shop_article_group_mlt" type="string"  nullable="false"  />
+            <field name="shopArticleTypeMlt" column="shop_article_type_mlt" type="string"  nullable="false"  />
+            <field name="shopCategoryMlt" column="shop_category_mlt" type="string"  nullable="false"  />
+            <field name="shopCategoryId" column="shop_category_id" type="string"  nullable="false"  />
+            <field name="shopArticleMarkerMlt" column="shop_article_marker_mlt" type="string"  nullable="false"  />
+            <field name="shopAttributeValueMlt" column="shop_attribute_value_mlt" type="string"  nullable="false"  />
+            <field name="shopMlt" column="shop_mlt" type="string"  nullable="false"  />
+            <field name="shopArticleContributor" column="shop_article_contributor" type="string"  nullable="false"  />
+            <field name="subtitle" column="subtitle" type="string"  nullable="false"  />
+            <field name="isNew" column="is_new" type="string"  nullable="false"  />
+            <field name="usp" column="usp" type="string"  nullable="false"  />
+            <field name="stars" column="stars" type="string"  nullable="false"  />
+            <field name="shopArticleReview" column="shop_article_review" type="string"  nullable="false"  />
+            <field name="isBundle" column="is_bundle" type="string"  nullable="false"  />
+            <field name="shopBundleArticle" column="shop_bundle_article" type="string"  nullable="false"  />
+            <field name="download" column="download" type="string"  nullable="false"  />
+            <field name="nameVariantInfo" column="name_variant_info" type="string"  nullable="false"  />
+            <field name="shopVariantSetId" column="shop_variant_set_id" type="string"  nullable="false"  />
+            <field name="variantParentId" column="variant_parent_id" type="string"  nullable="false"  />
+            <field name="variantParentIsActive" column="variant_parent_is_active" type="string"  nullable="false"  />
+            <field name="shopArticleVariants" column="shop_article_variants" type="string"  nullable="false"  />
+            <field name="shopVariantTypeValueMlt" column="shop_variant_type_value_mlt" type="string"  nullable="false"  />
+            <field name="metaKeywords" column="meta_keywords" type="string"  nullable="false"  />
+            <field name="metaDescription" column="meta_description" type="string" length="255" nullable="false"  />
+            <field name="shopArticleMlt" column="shop_article_mlt" type="string"  nullable="false"  />
+            <field name="cmsTagsMlt" column="cms_tags_mlt" type="string"  nullable="false"  />
+            <field name="shopArticleStats" column="shop_article_stats" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,22 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterRobinson" table="pkg_newsletter_robinson">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
+            <field name="email" column="email" type="string"  nullable="false"  />
+            <field name="reason" column="reason" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

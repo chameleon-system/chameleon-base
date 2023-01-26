@@ -1,0 +1,58 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsPortal" table="cms_portal">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="name" column="name" type="string" length="255" nullable="false"  />
+            <field name="title" column="title" type="string"  nullable="false"  />
+            <field name="identifier" column="identifier" type="string"  nullable="false"  />
+            <field name="externalIdentifier" column="external_identifier" type="string"  nullable="false"  />
+            <field name="cmsLanguageId" column="cms_language_id" type="string"  nullable="false"  />
+            <field name="useMultilanguage" column="use_multilanguage" type="string"  nullable="false"  />
+            <field name="showNotTanslated" column="show_not_tanslated" type="string"  nullable="false"  />
+            <field name="mainNodeTree" column="main_node_tree" type="string"  nullable="false"  />
+            <field name="propertyNavigations" column="property_navigations" type="string"  nullable="false"  />
+            <field name="homeNodeId" column="home_node_id" type="string"  nullable="false"  />
+            <field name="pageNotFoundNode" column="page_not_found_node" type="string"  nullable="false"  />
+            <field name="cmsPortalDivisions" column="cms_portal_divisions" type="string"  nullable="false"  />
+            <field name="sortOrder" column="sort_order" type="string"  nullable="false"  />
+            <field name="cmsPortalDomains" column="cms_portal_domains" type="string"  nullable="false"  />
+            <field name="faviconUrl" column="favicon_url" type="string"  nullable="false"  />
+            <field name="images" column="images" type="string"  nullable="false"  />
+            <field name="watermarkLogo" column="watermark_logo" type="string"  nullable="false"  />
+            <field name="backgroundImage" column="background_image" type="string"  nullable="false"  />
+            <field name="cmsMessageManagerMessage" column="cms_message_manager_message" type="string"  nullable="false"  />
+            <field name="cmsPortalSystemPage" column="cms_portal_system_page" type="string"  nullable="false"  />
+            <field name="cmsLanguageMlt" column="cms_language_mlt" type="string"  nullable="false"  />
+            <field name="useGooglesitemap" column="use_googlesitemap" type="string" length="&#039;0&#039;,&#039;1&#039;" nullable="false"  />
+            <field name="metaDescription" column="meta_description" type="string" length="200" nullable="false"  />
+            <field name="metaKeywords" column="meta_keywords" type="string"  nullable="false"  />
+            <field name="metaAuthor" column="meta_author" type="string"  nullable="false"  />
+            <field name="metaPublisher" column="meta_publisher" type="string"  nullable="false"  />
+            <field name="cmsLocalsId" column="cms_locals_id" type="string"  nullable="false"  />
+            <field name="customMetadata" column="custom_metadata" type="string"  nullable="false"  />
+            <field name="pkgCmsThemeId" column="pkg_cms_theme_id" type="string"  nullable="false"  />
+            <field name="actionPluginList" column="action_plugin_list" type="string"  nullable="false"  />
+            <field name="googleAnalyticNumber" column="google_analytic_number" type="string"  nullable="false"  />
+            <field name="etrackerId" column="etracker_id" type="string"  nullable="false"  />
+            <field name="ivwId" column="ivw_id" type="string"  nullable="false"  />
+            <field name="indexSearch" column="index_search" type="string"  nullable="false"  />
+            <field name="useSlashInSeoUrls" column="use_slash_in_seo_urls" type="string"  nullable="false"  />
+            <field name="deactivePortal" column="deactive_portal" type="string"  nullable="false"  />
+            <field name="wysiwygCssUrl" column="wysiwyg_css_url" type="string"  nullable="false"  />
+            <field name="cmsUrlAlias" column="cms_url_alias" type="string"  nullable="false"  />
+            <field name="robots" column="robots" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

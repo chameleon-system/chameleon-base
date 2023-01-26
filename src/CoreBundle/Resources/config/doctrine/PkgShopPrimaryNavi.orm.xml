@@ -1,0 +1,26 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopPrimaryNavi" table="pkg_shop_primary_navi">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="active" column="active" type="string"  nullable="false"  />
+            <field name="position" column="position" type="string"  nullable="false"  />
+            <field name="target" column="target" type="string"  nullable="false"  />
+            <field name="showRootCategoryTree" column="show_root_category_tree" type="string"  nullable="false"  />
+            <field name="cssClass" column="css_class" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

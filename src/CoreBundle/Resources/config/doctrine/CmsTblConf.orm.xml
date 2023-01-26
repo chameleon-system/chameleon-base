@@ -1,0 +1,70 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsTblConf" table="cms_tbl_conf">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="dbobjectType" column="dbobject_type" type="string" length="&#039;Core&#039;,&#039;Custom-Core&#039;,&#039;Customer&#039;" nullable="false"  />
+            <field name="translation" column="translation" type="string" length="255" nullable="false"  />
+            <field name="engine" column="engine" type="string" length="&#039;MyISAM&#039;, &#039;InnoDB&#039;, &#039;MEMORY&#039;, &#039;ARCHIVE&#039;" nullable="false"  />
+            <field name="cmsTblFieldTab" column="cms_tbl_field_tab" type="string"  nullable="false"  />
+            <field name="listQuery" column="list_query" type="string"  nullable="false"  />
+            <field name="cmsContentBoxId" column="cms_content_box_id" type="string"  nullable="false"  />
+            <field name="onlyOneRecordTbl" column="only_one_record_tbl" type="string"  nullable="false"  />
+            <field name="isMultilanguage" column="is_multilanguage" type="string" length="&#039;0&#039;,&#039;1&#039;" nullable="false"  />
+            <field name="isWorkflow" column="is_workflow" type="string"  nullable="false"  />
+            <field name="lockingActive" column="locking_active" type="string"  nullable="false"  />
+            <field name="changelogActive" column="changelog_active" type="string"  nullable="false"  />
+            <field name="revisionManagementActive" column="revision_management_active" type="string"  nullable="false"  />
+            <field name="cmsFieldConfMlt" column="cms_field_conf_mlt" type="string"  nullable="false"  />
+            <field name="propertyListFields" column="property_list_fields" type="string"  nullable="false"  />
+            <field name="propertyOrderFields" column="property_order_fields" type="string"  nullable="false"  />
+            <field name="nameColumn" column="name_column" type="string" length="255" nullable="false"  />
+            <field name="nameColumnCallback" column="name_column_callback" type="string" length="255" nullable="false"  />
+            <field name="displayColumn" column="display_column" type="string"  nullable="false"  />
+            <field name="displayColumnCallback" column="display_column_callback" type="string"  nullable="false"  />
+            <field name="listGroupField" column="list_group_field" type="string"  nullable="false"  />
+            <field name="listGroupFieldHeader" column="list_group_field_header" type="string"  nullable="false"  />
+            <field name="listGroupFieldColumn" column="list_group_field_column" type="string"  nullable="false"  />
+            <field name="cmsTblListClass" column="cms_tbl_list_class" type="string"  nullable="false"  />
+            <field name="cmsTblListClassId" column="cms_tbl_list_class_id" type="string"  nullable="false"  />
+            <field name="tableEditorClass" column="table_editor_class" type="string"  nullable="false"  />
+            <field name="tableEditorClassSubtype" column="table_editor_class_subtype" type="string"  nullable="false"  />
+            <field name="tableEditorClassType" column="table_editor_class_type" type="string" length="&#039;Core&#039;, &#039;Custom-Core&#039;, &#039;Customer&#039;" nullable="false"  />
+            <field name="cmsTblConfRestrictions" column="cms_tbl_conf_restrictions" type="string"  nullable="false"  />
+            <field name="iconList" column="icon_list" type="string" length="255" nullable="false"  />
+            <field name="showPreviewbutton" column="show_previewbutton" type="string"  nullable="false"  />
+            <field name="cmsTplPageId" column="cms_tpl_page_id" type="string"  nullable="false"  />
+            <field name="renameOnCopy" column="rename_on_copy" type="string"  nullable="false"  />
+            <field name="cmsUsergroupId" column="cms_usergroup_id" type="string"  nullable="false"  />
+            <field name="cmsRoleMlt" column="cms_role_mlt" type="string"  nullable="false"  />
+            <field name="cmsRole1Mlt" column="cms_role1_mlt" type="string"  nullable="false"  />
+            <field name="cmsRole2Mlt" column="cms_role2_mlt" type="string"  nullable="false"  />
+            <field name="cmsRole3Mlt" column="cms_role3_mlt" type="string"  nullable="false"  />
+            <field name="cmsRole6Mlt" column="cms_role6_mlt" type="string"  nullable="false"  />
+            <field name="cmsRole4Mlt" column="cms_role4_mlt" type="string"  nullable="false"  />
+            <field name="cmsRole5Mlt" column="cms_role5_mlt" type="string"  nullable="false"  />
+            <field name="cmsRole7Mlt" column="cms_role7_mlt" type="string"  nullable="false"  />
+            <field name="notes" column="notes" type="string"  nullable="false"  />
+            <field name="frontendAutoCacheClearEnabled" column="frontend_auto_cache_clear_enabled" type="string"  nullable="false"  />
+            <field name="dbobjectExtendClass" column="dbobject_extend_class" type="string"  nullable="false"  />
+            <field name="dbobjectExtendSubtype" column="dbobject_extend_subtype" type="string"  nullable="false"  />
+            <field name="dbobjectExtendType" column="dbobject_extend_type" type="string" length="&#039;Core&#039;,&#039;Custom-Core&#039;,&#039;Customer&#039;" nullable="false"  />
+            <field name="cmsTblExtension" column="cms_tbl_extension" type="string"  nullable="false"  />
+            <field name="autoLimitResults" column="auto_limit_results" type="string"  nullable="false"  />
+            <field name="cmsTblConfIndex" column="cms_tbl_conf_index" type="string"  nullable="false"  />
+            <field name="iconFontCssClass" column="icon_font_css_class" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

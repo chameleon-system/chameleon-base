@@ -1,0 +1,25 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsConfigImagemagick" table="cms_config_imagemagick">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="cmsConfigId" column="cms_config_id" type="string"  nullable="false"  />
+            <field name="fromImageSize" column="from_image_size" type="string"  nullable="false"  />
+            <field name="forceJpeg" column="force_jpeg" type="string"  nullable="false"  />
+            <field name="quality" column="quality" type="string"  nullable="false"  />
+            <field name="scharpen" column="scharpen" type="string"  nullable="false"  />
+            <field name="gamma" column="gamma" type="string" length="3,2" nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

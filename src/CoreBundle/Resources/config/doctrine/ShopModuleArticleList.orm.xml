@@ -1,0 +1,33 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopModuleArticleList" table="shop_module_article_list">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
+            <field name="canBeFiltered" column="can_be_filtered" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="icon" column="icon" type="string"  nullable="false"  />
+            <field name="shopModuleArticleListFilterId" column="shop_module_article_list_filter_id" type="string"  nullable="false"  />
+            <field name="shopModuleArticlelistOrderbyId" column="shop_module_articlelist_orderby_id" type="string"  nullable="false"  />
+            <field name="shopModuleArticlelistOrderbyMlt" column="shop_module_articlelist_orderby_mlt" type="string"  nullable="false"  />
+            <field name="numberOfArticles" column="number_of_articles" type="string"  nullable="false"  />
+            <field name="numberOfArticlesPerPage" column="number_of_articles_per_page" type="string"  nullable="false"  />
+            <field name="descriptionStart" column="description_start" type="string"  nullable="false"  />
+            <field name="descriptionEnd" column="description_end" type="string"  nullable="false"  />
+            <field name="shopArticleGroupMlt" column="shop_article_group_mlt" type="string"  nullable="false"  />
+            <field name="shopCategoryMlt" column="shop_category_mlt" type="string"  nullable="false"  />
+            <field name="shopModuleArticleListArticle" column="shop_module_article_list_article" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

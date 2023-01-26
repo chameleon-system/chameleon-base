@@ -1,0 +1,28 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopOrderDiscount" table="shop_order_discount">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="shopOrderId" column="shop_order_id" type="string"  nullable="false"  />
+            <field name="shopDiscountId" column="shop_discount_id" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="value" column="value" type="string"  nullable="false"  />
+            <field name="valuetype" column="valuetype" type="string"  nullable="false"  />
+            <field name="freearticleName" column="freearticle_name" type="string"  nullable="false"  />
+            <field name="freearticleArticlenumber" column="freearticle_articlenumber" type="string"  nullable="false"  />
+            <field name="freearticleId" column="freearticle_id" type="string"  nullable="false"  />
+            <field name="total" column="total" type="string" length="10,2" nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

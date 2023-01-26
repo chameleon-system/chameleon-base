@@ -1,0 +1,36 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgCmsCoreLog" table="pkg_cms_core_log">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="timestamp" column="timestamp" type="string"  nullable="false"  />
+            <field name="channel" column="channel" type="string"  nullable="false"  />
+            <field name="level" column="level" type="string"  nullable="false"  />
+            <field name="message" column="message" type="string" length="516" nullable="false"  />
+            <field name="session" column="session" type="string" length="32" nullable="false"  />
+            <field name="uid" column="uid" type="string" length="32" nullable="false"  />
+            <field name="file" column="file" type="string"  nullable="false"  />
+            <field name="line" column="line" type="string"  nullable="false"  />
+            <field name="requestUrl" column="request_url" type="string" length="512" nullable="false"  />
+            <field name="referrerUrl" column="referrer_url" type="string" length="512" nullable="false"  />
+            <field name="httpMethod" column="http_method" type="string" length="&#039;&#039;,&#039;get&#039;,&#039;post&#039;" nullable="false"  />
+            <field name="server" column="server" type="string"  nullable="false"  />
+            <field name="ip" column="ip" type="string" length="40" nullable="false"  />
+            <field name="dataExtranetUserId" column="data_extranet_user_id" type="string"  nullable="false"  />
+            <field name="dataExtranetUserName" column="data_extranet_user_name" type="string"  nullable="false"  />
+            <field name="cmsUserId" column="cms_user_id" type="string"  nullable="false"  />
+            <field name="context" column="context" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,32 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopArticleReviewModuleShopArticleReviewConfiguration" table="pkg_shop_article_review_module_shop_article_review_configuration">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
+            <field name="allowWriteReviewLoggedinUsersOnly" column="allow_write_review_loggedin_users_only" type="string"  nullable="false"  />
+            <field name="allowShowReviewLoggedinUsersOnly" column="allow_show_review_loggedin_users_only" type="string"  nullable="false"  />
+            <field name="manageReviews" column="manage_reviews" type="string"  nullable="false"  />
+            <field name="allowRateReview" column="allow_rate_review" type="string"  nullable="false"  />
+            <field name="allowReportReviews" column="allow_report_reviews" type="string"  nullable="false"  />
+            <field name="allowCommentReviews" column="allow_comment_reviews" type="string"  nullable="false"  />
+            <field name="ratingCount" column="rating_count" type="string"  nullable="false"  />
+            <field name="countShowReviews" column="count_show_reviews" type="string"  nullable="false"  />
+            <field name="optionShowAuthorName" column="option_show_author_name" type="string" length="&#039;full_name&#039;,&#039;initials&#039;,&#039;alias&#039;,&#039;anonymous&#039;,&#039;alias_provided&#039;" nullable="false"  />
+            <field name="title" column="title" type="string"  nullable="false"  />
+            <field name="introText" column="intro_text" type="string"  nullable="false"  />
+            <field name="outroText" column="outro_text" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

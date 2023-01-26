@@ -1,0 +1,25 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopSearchCache" table="shop_search_cache">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="shopId" column="shop_id" type="string"  nullable="false"  />
+            <field name="searchkey" column="searchkey" type="string" length="32" nullable="false"  />
+            <field name="lastUsedDate" column="last_used_date" type="string"  nullable="false"  />
+            <field name="shopSearchCacheItem" column="shop_search_cache_item" type="string"  nullable="false"  />
+            <field name="categoryHits" column="category_hits" type="string"  nullable="false"  />
+            <field name="numberOfRecordsFound" column="number_of_records_found" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,47 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopPaymentMethod" table="shop_payment_method">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="shopPaymentHandlerGroupId" column="shop_payment_handler_group_id" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="nameInternal" column="name_internal" type="string"  nullable="false"  />
+            <field name="shopPaymentHandlerId" column="shop_payment_handler_id" type="string"  nullable="false"  />
+            <field name="active" column="active" type="string"  nullable="false"  />
+            <field name="pkgDhlPackstationAllowForPackstation" column="pkg_dhl_packstation_allow_for_packstation" type="string"  nullable="false"  />
+            <field name="position" column="position" type="string"  nullable="false"  />
+            <field name="cmsPortalMlt" column="cms_portal_mlt" type="string"  nullable="false"  />
+            <field name="restrictToValueFrom" column="restrict_to_value_from" type="string" length="10,2" nullable="false"  />
+            <field name="restrictToValueTo" column="restrict_to_value_to" type="string" length="10,2" nullable="false"  />
+            <field name="restrictToBasketValueFrom" column="restrict_to_basket_value_from" type="string" length="10,2" nullable="false"  />
+            <field name="restrictToBasketValueTo" column="restrict_to_basket_value_to" type="string" length="10,2" nullable="false"  />
+            <field name="value" column="value" type="string" length="10,2" nullable="false"  />
+            <field name="valueType" column="value_type" type="string" length="&#039;absolut&#039;,&#039;prozent&#039;" nullable="false"  />
+            <field name="shopVatId" column="shop_vat_id" type="string"  nullable="false"  />
+            <field name="cmsMediaId" column="cms_media_id" type="string"  nullable="false"  />
+            <field name="description" column="description" type="string"  nullable="false"  />
+            <field name="dataExtranetUserMlt" column="data_extranet_user_mlt" type="string"  nullable="false"  />
+            <field name="dataExtranetGroupMlt" column="data_extranet_group_mlt" type="string"  nullable="false"  />
+            <field name="dataCountryMlt" column="data_country_mlt" type="string"  nullable="false"  />
+            <field name="dataCountryBilling" column="data_country_billing" type="string"  nullable="false"  />
+            <field name="positivListLooseMatch" column="positiv_list_loose_match" type="string"  nullable="false"  />
+            <field name="shopArticleGroupMlt" column="shop_article_group_mlt" type="string"  nullable="false"  />
+            <field name="shopCategoryMlt" column="shop_category_mlt" type="string"  nullable="false"  />
+            <field name="shopArticleMlt" column="shop_article_mlt" type="string"  nullable="false"  />
+            <field name="shopArticleGroup1Mlt" column="shop_article_group1_mlt" type="string"  nullable="false"  />
+            <field name="shopCategory1Mlt" column="shop_category1_mlt" type="string"  nullable="false"  />
+            <field name="shopArticle1Mlt" column="shop_article1_mlt" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,31 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransaction" table="pkg_shop_payment_transaction">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="shopOrderId" column="shop_order_id" type="string"  nullable="false"  />
+            <field name="dataExtranetUserId" column="data_extranet_user_id" type="string"  nullable="false"  />
+            <field name="pkgShopPaymentTransactionPosition" column="pkg_shop_payment_transaction_position" type="string"  nullable="false"  />
+            <field name="pkgShopPaymentTransactionTypeId" column="pkg_shop_payment_transaction_type_id" type="string"  nullable="false"  />
+            <field name="cmsUserId" column="cms_user_id" type="string"  nullable="false"  />
+            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
+            <field name="ip" column="ip" type="string"  nullable="false"  />
+            <field name="amount" column="amount" type="string" length="10,2" nullable="false"  />
+            <field name="context" column="context" type="string"  nullable="false"  />
+            <field name="sequenceNumber" column="sequence_number" type="string"  nullable="false"  />
+            <field name="confirmed" column="confirmed" type="string"  nullable="false"  />
+            <field name="confirmedDate" column="confirmed_date" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

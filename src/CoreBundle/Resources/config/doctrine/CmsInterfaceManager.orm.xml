@@ -1,0 +1,28 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsInterfaceManager" table="cms_interface_manager">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="systemname" column="systemname" type="string"  nullable="false"  />
+            <field name="class" column="class" type="string"  nullable="false"  />
+            <field name="classType" column="class_type" type="string" length="&#039;Core&#039;,&#039;Custom-Core&#039;,&#039;Customer&#039;" nullable="false"  />
+            <field name="classSubtype" column="class_subtype" type="string"  nullable="false"  />
+            <field name="description" column="description" type="string"  nullable="false"  />
+            <field name="cmsInterfaceManagerParameter" column="cms_interface_manager_parameter" type="string"  nullable="false"  />
+            <field name="restrictToUserGroups" column="restrict_to_user_groups" type="string"  nullable="false"  />
+            <field name="cmsUsergroupMlt" column="cms_usergroup_mlt" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

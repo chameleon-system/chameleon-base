@@ -1,0 +1,29 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopOrderBasket" table="shop_order_basket">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="orderIdent" column="order_ident" type="string" length="20" nullable="false"  />
+            <field name="sessionId" column="session_id" type="string"  nullable="false"  />
+            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
+            <field name="lastmodified" column="lastmodified" type="string"  nullable="false"  />
+            <field name="rawdataBasket" column="rawdata_basket" type="string"  nullable="false"  />
+            <field name="rawdataUser" column="rawdata_user" type="string"  nullable="false"  />
+            <field name="rawdataSession" column="rawdata_session" type="string"  nullable="false"  />
+            <field name="shopOrderId" column="shop_order_id" type="string"  nullable="false"  />
+            <field name="updateStepname" column="update_stepname" type="string"  nullable="false"  />
+            <field name="processed" column="processed" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

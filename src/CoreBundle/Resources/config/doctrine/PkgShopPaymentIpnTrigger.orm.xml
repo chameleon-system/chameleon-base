@@ -1,0 +1,25 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnTrigger" table="pkg_shop_payment_ipn_trigger">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="shopPaymentHandlerGroupId" column="shop_payment_handler_group_id" type="string"  nullable="false"  />
+            <field name="pkgShopPaymentIpnMessageTrigger" column="pkg_shop_payment_ipn_message_trigger" type="string"  nullable="false"  />
+            <field name="active" column="active" type="string"  nullable="false"  />
+            <field name="targetUrl" column="target_url" type="string"  nullable="false"  />
+            <field name="timeoutSeconds" column="timeout_seconds" type="string"  nullable="false"  />
+            <field name="pkgShopPaymentIpnStatusMlt" column="pkg_shop_payment_ipn_status_mlt" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

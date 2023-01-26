@@ -1,0 +1,28 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\AmazonPaymentIdMapping" table="amazon_payment_id_mapping">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="shopOrderId" column="shop_order_id" type="string"  nullable="false"  />
+            <field name="amazonOrderReferenceId" column="amazon_order_reference_id" type="string" length="32" nullable="false"  />
+            <field name="localId" column="local_id" type="string" length="32" nullable="false"  />
+            <field name="amazonId" column="amazon_id" type="string" length="32" nullable="false"  />
+            <field name="value" column="value" type="string"  nullable="false"  />
+            <field name="type" column="type" type="string"  nullable="false"  />
+            <field name="requestMode" column="request_mode" type="string"  nullable="false"  />
+            <field name="captureNow" column="capture_now" type="string"  nullable="false"  />
+            <field name="pkgShopPaymentTransactionId" column="pkg_shop_payment_transaction_id" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

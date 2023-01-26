@@ -1,0 +1,65 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser" table="data_extranet_user">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="shopId" column="shop_id" type="string"  nullable="false"  />
+            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
+            <field name="customerNumber" column="customer_number" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="password" column="password" type="string"  nullable="false"  />
+            <field name="passwordChangeKey" column="password_change_key" type="string"  nullable="false"  />
+            <field name="passwordChangeTimeStamp" column="password_change_time_stamp" type="string"  nullable="false"  />
+            <field name="dataExtranetSalutationId" column="data_extranet_salutation_id" type="string"  nullable="false"  />
+            <field name="firstname" column="firstname" type="string"  nullable="false"  />
+            <field name="lastname" column="lastname" type="string"  nullable="false"  />
+            <field name="company" column="company" type="string"  nullable="false"  />
+            <field name="street" column="street" type="string"  nullable="false"  />
+            <field name="streetnr" column="streetnr" type="string"  nullable="false"  />
+            <field name="postalcode" column="postalcode" type="string"  nullable="false"  />
+            <field name="city" column="city" type="string"  nullable="false"  />
+            <field name="dataCountryId" column="data_country_id" type="string"  nullable="false"  />
+            <field name="vatId" column="vat_id" type="string"  nullable="false"  />
+            <field name="telefon" column="telefon" type="string"  nullable="false"  />
+            <field name="mobile" column="mobile" type="string"  nullable="false"  />
+            <field name="addressAdditionalInfo" column="address_additional_info" type="string"  nullable="false"  />
+            <field name="aliasName" column="alias_name" type="string"  nullable="false"  />
+            <field name="email" column="email" type="string"  nullable="false"  />
+            <field name="dataExtranetGroupMlt" column="data_extranet_group_mlt" type="string"  nullable="false"  />
+            <field name="fax" column="fax" type="string"  nullable="false"  />
+            <field name="dataExtranetUserAddress" column="data_extranet_user_address" type="string"  nullable="false"  />
+            <field name="sessionKey" column="session_key" type="string" length="32" nullable="false"  />
+            <field name="loginTimestamp" column="login_timestamp" type="string"  nullable="false"  />
+            <field name="loginSalt" column="login_salt" type="string"  nullable="false"  />
+            <field name="dataExtranetUserLoginHistory" column="data_extranet_user_login_history" type="string"  nullable="false"  />
+            <field name="defaultBillingAddressId" column="default_billing_address_id" type="string"  nullable="false"  />
+            <field name="defaultShippingAddressId" column="default_shipping_address_id" type="string"  nullable="false"  />
+            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
+            <field name="confirmed" column="confirmed" type="string"  nullable="false"  />
+            <field name="tmpconfirmkey" column="tmpconfirmkey" type="string" length="32" nullable="false"  />
+            <field name="confirmedon" column="confirmedon" type="string"  nullable="false"  />
+            <field name="regEmailSend" column="reg_email_send" type="string"  nullable="false"  />
+            <field name="shopUserPurchasedVoucher" column="shop_user_purchased_voucher" type="string"  nullable="false"  />
+            <field name="shopUserNoticeList" column="shop_user_notice_list" type="string"  nullable="false"  />
+            <field name="shopOrder" column="shop_order" type="string"  nullable="false"  />
+            <field name="dataExtranetUserShopArticleHistory" column="data_extranet_user_shop_article_history" type="string"  nullable="false"  />
+            <field name="shopSearchLog" column="shop_search_log" type="string"  nullable="false"  />
+            <field name="shopSuggestArticleLog" column="shop_suggest_article_log" type="string"  nullable="false"  />
+            <field name="shopArticleReview" column="shop_article_review" type="string"  nullable="false"  />
+            <field name="pkgShopWishlist" column="pkg_shop_wishlist" type="string"  nullable="false"  />
+            <field name="birthdate" column="birthdate" type="string"  nullable="false"  />
+            <field name="pkgShopCurrencyId" column="pkg_shop_currency_id" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

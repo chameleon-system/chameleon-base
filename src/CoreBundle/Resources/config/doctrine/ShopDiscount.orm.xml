@@ -1,0 +1,38 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopDiscount" table="shop_discount">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="value" column="value" type="string" length="10,2" nullable="false"  />
+            <field name="valueType" column="value_type" type="string" length="&#039;absolut&#039;,&#039;prozent&#039;" nullable="false"  />
+            <field name="showDiscountOnArticleDetailpage" column="show_discount_on_article_detailpage" type="string"  nullable="false"  />
+            <field name="active" column="active" type="string"  nullable="false"  />
+            <field name="activeFrom" column="active_from" type="string"  nullable="false"  />
+            <field name="activeTo" column="active_to" type="string"  nullable="false"  />
+            <field name="position" column="position" type="string"  nullable="false"  />
+            <field name="restrictToArticlesFrom" column="restrict_to_articles_from" type="string"  nullable="false"  />
+            <field name="restrictToArticlesTo" column="restrict_to_articles_to" type="string"  nullable="false"  />
+            <field name="restrictToValueFrom" column="restrict_to_value_from" type="string" length="10,2" nullable="false"  />
+            <field name="restrictToValueTo" column="restrict_to_value_to" type="string" length="10,2" nullable="false"  />
+            <field name="shopCategoryMlt" column="shop_category_mlt" type="string"  nullable="false"  />
+            <field name="shopArticleMlt" column="shop_article_mlt" type="string"  nullable="false"  />
+            <field name="dataExtranetGroupMlt" column="data_extranet_group_mlt" type="string"  nullable="false"  />
+            <field name="dataExtranetUserMlt" column="data_extranet_user_mlt" type="string"  nullable="false"  />
+            <field name="dataCountryMlt" column="data_country_mlt" type="string"  nullable="false"  />
+            <field name="description" column="description" type="string"  nullable="false"  />
+            <field name="cacheClearLastExecuted" column="cache_clear_last_executed" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

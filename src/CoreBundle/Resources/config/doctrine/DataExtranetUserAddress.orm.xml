@@ -1,0 +1,35 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress" table="data_extranet_user_address">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="dataExtranetUserId" column="data_extranet_user_id" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="isDhlPackstation" column="is_dhl_packstation" type="string"  nullable="false"  />
+            <field name="company" column="company" type="string"  nullable="false"  />
+            <field name="vatId" column="vat_id" type="string"  nullable="false"  />
+            <field name="addressAdditionalInfo" column="address_additional_info" type="string"  nullable="false"  />
+            <field name="dataExtranetSalutationId" column="data_extranet_salutation_id" type="string"  nullable="false"  />
+            <field name="firstname" column="firstname" type="string"  nullable="false"  />
+            <field name="lastname" column="lastname" type="string"  nullable="false"  />
+            <field name="street" column="street" type="string"  nullable="false"  />
+            <field name="streetnr" column="streetnr" type="string"  nullable="false"  />
+            <field name="city" column="city" type="string"  nullable="false"  />
+            <field name="postalcode" column="postalcode" type="string"  nullable="false"  />
+            <field name="dataCountryId" column="data_country_id" type="string"  nullable="false"  />
+            <field name="telefon" column="telefon" type="string"  nullable="false"  />
+            <field name="fax" column="fax" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,33 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="\ChameleonSystem\CoreBundle\Entity\DataMailProfile" table="data_mail_profile">
+
+
+
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+            <field name="idcode" column="idcode" type="string"  nullable="false"  />
+            <field name="name" column="name" type="string"  nullable="false"  />
+            <field name="subject" column="subject" type="string"  nullable="false"  />
+            <field name="mailto" column="mailto" type="string"  nullable="false"  />
+            <field name="mailtoName" column="mailto_name" type="string"  nullable="false"  />
+            <field name="mailfrom" column="mailfrom" type="string"  nullable="false"  />
+            <field name="mailfromName" column="mailfrom_name" type="string"  nullable="false"  />
+            <field name="mailbcc" column="mailbcc" type="string"  nullable="false"  />
+            <field name="body" column="body" type="string"  nullable="false"  />
+            <field name="bodyText" column="body_text" type="string"  nullable="false"  />
+            <field name="attachment" column="attachment" type="string"  nullable="false"  />
+            <field name="template" column="template" type="string"  nullable="false"  />
+            <field name="templateText" column="template_text" type="string"  nullable="false"  />
+            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
+    </entity>
+
+</doctrine-mapping>
