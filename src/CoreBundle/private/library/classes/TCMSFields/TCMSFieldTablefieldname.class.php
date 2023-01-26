@@ -14,6 +14,11 @@
 /**/
 class TCMSFieldTablefieldname extends TCMSFieldOption
 {
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        // todo: implement
+        return parent::getDoctrineDataModelAttribute($namespace);
+    }
     public function GetOptions()
     {
         // use the field name to make a lookup of the right table

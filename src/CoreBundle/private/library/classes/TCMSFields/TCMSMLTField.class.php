@@ -16,6 +16,15 @@ abstract class TCMSMLTField extends TCMSField
         $this->isMLTField = true;
     }
 
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        $type = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetForeignTableName(), false));
+        $comment = sprintf('/** @var %s[] %s */', $type, $this->oDefinition->sqlData['translation']);
+        $attribute = sprintf('public readonly array $%s', $this->snakeToCamelCase($this->name));
+
+        return implode("\n", [$comment, $attribute]);
+    }
+
     public function getMltValues()
     {
         $sMltTableName = $this->GetMLTTableName();

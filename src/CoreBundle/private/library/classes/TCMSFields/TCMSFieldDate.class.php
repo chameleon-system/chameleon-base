@@ -23,6 +23,14 @@ class TCMSFieldDate extends TCMSField
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldDate';
 
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
+        $targetClass = '\DateTime';
+        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name));
+
+        return implode("\n", [$comment, $attribute]);
+    }
     /**
      * {@inheritdoc}
      */

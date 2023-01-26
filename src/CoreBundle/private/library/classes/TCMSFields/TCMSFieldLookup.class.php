@@ -48,6 +48,26 @@ class TCMSFieldLookup extends TCMSField
      */
     protected $options = array();
 
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
+        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
+        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name));
+
+        return implode("\n", [$comment, $attribute]);
+    }
+
+    public function getDoctrineDataModelXml(string $namespace): ?string
+    {
+        $mapperRenderer = $this->getDoctrineFieldMappingRenderer('many-to-one');
+        $definition = $this->oDefinition->sqlData;
+        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
+        $mapperRenderer->setVar('definition', $definition);
+        $mapperRenderer->setVar('targetClass', ltrim($targetClass, '\\'));
+        $mapperRenderer->setVar('fieldName', $this->snakeToCamelCase($this->name));
+        return $mapperRenderer->render();
+    }
+
     public function GetHTML()
     {
         $this->GetOptions();

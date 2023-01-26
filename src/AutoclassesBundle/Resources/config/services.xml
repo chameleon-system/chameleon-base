@@ -11,6 +11,17 @@
     </parameters>
 
     <services>
+        <service id="ChameleonSystem\AutoclassesBundle\Command\DumpTableConfCommand">
+            <tag name="console.command"/>
+            <argument type="service" id="ChameleonSystem\AutoclassesBundle\TableConfExport\TableConfExporter"/>
+            <argument>%kernel.project_dir%</argument>
+        </service>
+
+        <service id="ChameleonSystem\AutoclassesBundle\TableConfExport\TableConfExporter">
+            <argument type="service" id="chameleon_system_core.data_access_cms_tbl_conf" />
+            <argument type="service" id="chameleon_system_autoclasses.data_access.autoclasses" />
+            <argument type="service" id="chameleon_system_snippet_renderer.snippet_renderer" />
+        </service>
 
         <service id="chameleon_system_autoclasses.auto_class_manager" class="ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManager" public="false">
             <argument type="service" id="database_connection" />

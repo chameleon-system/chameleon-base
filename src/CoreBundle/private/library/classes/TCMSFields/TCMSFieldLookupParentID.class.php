@@ -36,6 +36,48 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
         return $sHTML;
     }
 
+    public function getDoctrineDataModelXml(string $namespace): ?string
+    {
+        $mapperRenderer = $this->getDoctrineFieldMappingRenderer('parent');
+
+        $definition = $this->oDefinition->sqlData;
+        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
+        $mapperRenderer->setVar('definition', $definition);
+        $mapperRenderer->setVar('targetClass', ltrim($targetClass, '\\'));
+        $mapperRenderer->setVar('fieldName', $this->snakeToCamelCase($this->name));
+        $owningFieldName = $this->getOwningFieldName();
+        $owningPropertyName = null !== $owningFieldName ? $this->snakeToCamelCase($owningFieldName): null;
+        $mapperRenderer->setVar('owningPropertyName', $owningPropertyName);
+        return $mapperRenderer->render();
+    }
+
+    private function getOwningFieldName(): ?string
+    {
+        $owningTable = $this->GetConnectedTableName();
+        $owningTableConf = TdbCmsTblConf::GetNewInstance();
+        $owningTableConf->LoadFromField('name', $owningTable);
+
+        $fields = $owningTableConf->GetFields(new TCMSRecord());
+        /** @var $field TCMSField */
+        $fields->GoToStart();
+        while ($field = $fields->Next()) {
+            if (false === ($field instanceof TCMSFieldPropertyTable)) {
+                continue;
+            }
+            if ($field->GetPropertyTableName() !== $this->sTableName) {
+                continue;
+            }
+
+            if ($field->GetMatchingParentFieldName() !== $this->name) {
+                continue;
+            }
+            return $field->name;
+        }
+
+        return null;
+    }
+
+
     /**
      * @return string
      */

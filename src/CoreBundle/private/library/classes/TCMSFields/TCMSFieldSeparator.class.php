@@ -14,6 +14,11 @@
 /**/
 class TCMSFieldSeparator extends TCMSField
 {
+
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        return null;
+    }
     public function __construct()
     {
         $this->completeRow = true;

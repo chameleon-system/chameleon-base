@@ -17,6 +17,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TCMSFieldBoolean extends TCMSFieldOption
 {
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
+        $targetClass = 'bool';
+        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name));
+
+        return implode("\n", [$comment, $attribute]);
+    }
     public function GetOptions()
     {
         parent::GetOptions();

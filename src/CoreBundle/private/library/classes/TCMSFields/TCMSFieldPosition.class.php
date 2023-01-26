@@ -21,6 +21,14 @@ class TCMSFieldPosition extends TCMSField
      */
     protected $oTableConf = null;
 
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
+        $targetClass = 'int';
+        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name));
+
+        return implode("\n", [$comment, $attribute]);
+    }
     public function GetHTML()
     {
         $this->GetTableConf();

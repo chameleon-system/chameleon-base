@@ -11,6 +11,11 @@
 
 class TCMSFieldDocumentProperties extends TCMSField
 {
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        // todo: implement
+        return parent::getDoctrineDataModelAttribute($namespace);
+    }
     public function GetHTML()
     {
         $oFileType = new TCMSRecord('cms_filetype', $this->oTableRow->sqlData['cms_filetype_id']);

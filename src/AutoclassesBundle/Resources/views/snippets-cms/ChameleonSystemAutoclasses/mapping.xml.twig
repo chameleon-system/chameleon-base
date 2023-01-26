@@ -1,0 +1,37 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="{{ fqn }}" table="{{ table.name }}">
+
+{#        <indexes>#}
+{#            <index name="name_idx" columns="name"/>#}
+{#            <index columns="user_email"/>#}
+{#        </indexes>#}
+
+{#        <unique-constraints>#}
+{#            <unique-constraint columns="name,user_email" name="search_idx" />#}
+{#        </unique-constraints>#}
+
+{#        <lifecycle-callbacks>#}
+{#            <lifecycle-callback type="prePersist" method="doStuffOnPrePersist"/>#}
+{#            <lifecycle-callback type="prePersist" method="doOtherStuffOnPrePersistToo"/>#}
+{#            <lifecycle-callback type="postPersist" method="doStuffOnPostPersist"/>#}
+{#        </lifecycle-callbacks>#}
+
+        <id name="id" type="uuid" column="id" unique="true">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="doctrine.uuid_generator"/>
+        </id>
+        <id name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+        </id>
+
+        {%- for propertyMapping in propertyMappings %}
+
+            {{ propertyMapping | raw }}
+        {%- endfor %}
+
+    </entity>
+
+</doctrine-mapping>

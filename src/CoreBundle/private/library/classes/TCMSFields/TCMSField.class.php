@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -20,7 +21,7 @@ use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class TCMSField implements TCMSFieldVisitableInterface
+class TCMSField implements TCMSFieldVisitableInterface, DoctrineTransformableInterface
 {
     /**
      * view path for frontend.
@@ -143,6 +144,50 @@ class TCMSField implements TCMSFieldVisitableInterface
      * @var bool
      */
     protected $bEncryptedData = false;
+
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
+        $attribute = sprintf('public readonly string $%s', $this->snakeToCamelCase($this->name));
+
+        return implode("\n", [$comment, $attribute]);
+    }
+
+    public function getDoctrineDataModelXml(string $namespace): ?string
+    {
+        $mapperRenderer = $this->getDoctrineFieldMappingRenderer('string');
+        $definition = $this->oDefinition->sqlData;
+        $mapperRenderer->setVar('definition', $definition);
+        $mapperRenderer->setVar('fieldName', $this->snakeToCamelCase($this->name));
+        return $mapperRenderer->render();
+    }
+
+    protected function getDoctrineFieldMappingRenderer(string $viewName): \IPkgSnippetRenderer
+    {
+        $snippetRenderer = clone ServiceLocator::get('chameleon_system_snippet_renderer.snippet_renderer');
+        $snippetRenderer->InitializeSource(
+            sprintf('ChameleonSystemAutoclasses/mapping/%s.xml.twig', $viewName),
+            \IPkgSnippetRenderer::SOURCE_TYPE_FILE
+        );
+
+        return $snippetRenderer;
+    }
+
+
+
+    protected function snakeToCamelCase(string $string, bool $lowerCaseFirst = true): string
+    {
+        $camelCasedName = preg_replace_callback('/(^|_|\.)+(.)/', function ($match) {
+            return ('.' === $match[1] ? '_' : '').strtoupper($match[2]);
+        }, $string);
+
+        if ($lowerCaseFirst) {
+            $camelCasedName = lcfirst($camelCasedName);
+        }
+
+        return $camelCasedName;
+    }
+
 
     /**
      * Sets methods that are allowed to be called via URL (ajax calls).
