@@ -18,6 +18,11 @@
 /**/
 class TCMSFieldClassParams extends TCMSField
 {
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        // todo: implement
+        return parent::getDoctrineDataModelAttribute($namespace);
+    }
     public function GetHTML()
     {
         parent::GetHTML();

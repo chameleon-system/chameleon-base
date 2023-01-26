@@ -25,6 +25,12 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
      */
     protected $treeNodeSelectAdditionalNodesPagedef = 'navigationTreePlain';
 
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        // todo: add support for this field type
+        return parent::getDoctrineDataModelAttribute($namespace);
+    }
+
     public function GetHTML()
     {
         $primaryPath = $this->GetHTMLPrimaryTree();

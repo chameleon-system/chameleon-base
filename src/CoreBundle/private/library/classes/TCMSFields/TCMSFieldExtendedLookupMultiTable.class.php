@@ -25,6 +25,21 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 
     const FIELD_SYSTEM_NAME = 'CMSFIELD_EXTENDEDMULTITABLELIST';
 
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        // todo - it is unclear how to solve this in doctrine.
+        $connectedTables = $this->GetAllowedTables();
+        $targetClasses = [];
+        foreach ($connectedTables as $connectedTable) {
+            $targetClasses[] = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($connectedTable, false));
+        }
+
+        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
+        $targetClass = implode('|', $targetClasses);
+        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name));
+
+        return implode("\n", [$comment, $attribute]);
+    }
     /**
      * returns the name of the table this field is connected with
      * depends on the hidden field fieldName_table_name that will be set after the save

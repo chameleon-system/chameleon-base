@@ -17,6 +17,18 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 /**/
 class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
 {
+
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        $original = parent::getDoctrineDataModelAttribute($namespace);
+        $comment = sprintf('/** %s path */', $this->oDefinition->sqlData['translation']);
+        $targetClass = 'string';
+        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name.'_path'));
+
+        return implode("\n", [$original, $comment, $attribute]);
+    }
+
+
     /**
      * changes an existing field definition (alter table).
      *

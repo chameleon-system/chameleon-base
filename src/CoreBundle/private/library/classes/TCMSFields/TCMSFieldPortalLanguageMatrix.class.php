@@ -32,6 +32,12 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField
      */
     protected $sMatrixTableName = 'cms_portal_language_matrix';
 
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        // todo: implement
+        return parent::getDoctrineDataModelAttribute($namespace);
+    }
+
     public function GetHTML()
     {
         $sEscapedNameField = TGlobal::OutHTML($this->name);

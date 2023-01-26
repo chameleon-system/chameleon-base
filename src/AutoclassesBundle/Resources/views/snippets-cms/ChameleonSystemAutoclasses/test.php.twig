@@ -1,0 +1,17 @@
+{#
+@var table array
+@var fields \TCMSField[]
+#}
+<?php
+namespace {{ namespace }};
+
+class {{ className }} {
+  public function __construct(
+    public readonly string $id,
+    public readonly int $cmsident,
+  {%- for property in classProperties %}
+
+    {{ property }}{% if not loop.last %}, {% endif %}
+  {%- endfor %}
+  ) {}
+}

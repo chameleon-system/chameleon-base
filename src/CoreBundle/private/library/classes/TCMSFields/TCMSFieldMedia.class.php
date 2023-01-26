@@ -12,7 +12,7 @@
 /**
  * The image pool.
 /**/
-class TCMSFieldMedia extends TCMSField
+class TCMSFieldMedia extends \TCMSField
 {
     /**
      * view path for frontend.
@@ -30,6 +30,14 @@ class TCMSFieldMedia extends TCMSField
      * @var TCMSTableConf
      */
     public $oTableConf = null;
+
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        $comment = sprintf('/** @var array<int,string> %s */', $this->oDefinition->sqlData['translation']);
+        $attribute = sprintf('public readonly array $%s', $this->snakeToCamelCase($this->name));
+
+        return implode("\n", [$comment, $attribute]);
+    }
 
     public function GetReadOnly()
     {

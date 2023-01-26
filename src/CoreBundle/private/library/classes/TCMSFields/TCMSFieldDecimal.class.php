@@ -26,6 +26,14 @@ class TCMSFieldDecimal extends TCMSField
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldDecimal';
 
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
+        $targetClass = 'float';
+        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name));
+
+        return implode("\n", [$comment, $attribute]);
+    }
     public function GetHTML()
     {
         // number of decimals can be retrived from the length set of the field definition

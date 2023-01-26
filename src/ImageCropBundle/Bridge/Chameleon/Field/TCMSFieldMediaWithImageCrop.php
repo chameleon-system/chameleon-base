@@ -36,6 +36,20 @@ use ViewRenderer;
  */
 class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 {
+
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        $rootField = parent::getDoctrineDataModelAttribute($namespace);
+
+
+        $comment = sprintf('/** %s - cropped image */', $this->oDefinition->sqlData['translation']);
+        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
+        $attribute = sprintf('public readonly %s %s',$targetClass,  $this->snakeToCamelCase($this->getFieldNameOfAdditionalField($this->name)));
+
+        return implode("\n", [$rootField, $comment, $attribute]);
+
+    }
+
     /**
      * {@inheritDoc}
      */

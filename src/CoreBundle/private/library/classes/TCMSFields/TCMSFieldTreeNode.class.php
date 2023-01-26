@@ -28,6 +28,14 @@ class TCMSFieldTreeNode extends TCMSField
 
         return $html;
     }
+    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    {
+        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
+        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase('cms_tree', false));
+        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name));
+
+        return implode("\n", [$comment, $attribute]);
+    }
 
     public function GetReadOnly()
     {
