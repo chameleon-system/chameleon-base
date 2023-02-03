@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ChameleonSystem\CmstextBlockBundle\Service;
+namespace ChameleonSystem\CmsTextBlockBundle\Service;
 
 use ChameleonSystem\CmsTextBlockBundle\Interfaces\TextBlockLookupInterface;
 use TdbPkgCmsTextBlock;
