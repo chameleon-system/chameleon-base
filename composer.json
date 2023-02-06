@@ -22,7 +22,7 @@
         "coreui/coreui": "^2.1",
         "dmhendricks/file-icon-vectors": "~1.0",
         "doctrine/annotations": "^1.13",
-        "doctrine/dbal": "^2.13",
+        "doctrine/dbal": "^2",
         "doctrine/doctrine-bundle": "~2.5.0",
         "ezyang/htmlpurifier": "~4.6",
         "kartik-v/strength-meter": "~1.1.0",
