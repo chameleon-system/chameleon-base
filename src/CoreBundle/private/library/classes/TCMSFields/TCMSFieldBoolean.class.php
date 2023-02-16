@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -17,13 +18,23 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TCMSFieldBoolean extends TCMSFieldOption
 {
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
-        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
-        $targetClass = 'bool';
-        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name));
+        $defaultValue = $this->oDefinition->sqlData['field_default_value'] ?? null;
+        if (null !== $defaultValue) {
+            if ('1' === $defaultValue) {
+                $defaultValue = 'true';
+            } else {
+                $defaultValue = 'false';
+            }
+        }
 
-        return implode("\n", [$comment, $attribute]);
+        $data = $this->getDoctrineDataModelViewData(['type' => 'bool', 'defaultValue' => $defaultValue]);
+        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
+        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
+
+        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
+
     }
     public function GetOptions()
     {

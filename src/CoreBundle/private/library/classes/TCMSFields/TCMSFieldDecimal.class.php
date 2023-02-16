@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+
 /**
  * a number (int).
  */
@@ -26,13 +28,17 @@ class TCMSFieldDecimal extends TCMSField
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldDecimal';
 
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
-        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
-        $targetClass = 'float';
-        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name));
+        $default = $this->oDefinition->sqlData['field_default_value'] ?? null;
+        if (null !== $default) {
+            $default = (float) $default;
+        }
+        $data = $this->getDoctrineDataModelViewData(['type' => 'float', 'defaultValue' => $default]);
+        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
+        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
 
-        return implode("\n", [$comment, $attribute]);
+        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
     }
     public function GetHTML()
     {

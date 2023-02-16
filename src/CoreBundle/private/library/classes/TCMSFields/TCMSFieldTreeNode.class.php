@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
@@ -28,14 +29,19 @@ class TCMSFieldTreeNode extends TCMSField
 
         return $html;
     }
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
-    {
-        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
-        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase('cms_tree', false));
-        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name));
 
-        return implode("\n", [$comment, $attribute]);
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
+    {
+        $type = sprintf('%s\%s', $namespace, $this->snakeToCamelCase('cms_tree', false));
+
+        $data = $this->getDoctrineDataModelViewData(['type' => $type]);
+
+        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
+        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
+
+        return new DataModelParts($rendererProperty->render(), $rendererMethod->render(), $data['allowDefaultValue']);
     }
+
 
     public function GetReadOnly()
     {

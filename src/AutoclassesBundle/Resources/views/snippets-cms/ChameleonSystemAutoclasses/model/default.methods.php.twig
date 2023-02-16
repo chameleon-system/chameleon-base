@@ -1,0 +1,7 @@
+{% autoescape false %}
+// {{ source }}
+public function {{ getterName }}(): {{ type }}
+{
+    return $this->{{ propertyName }};
+}
+{% endautoescape %}

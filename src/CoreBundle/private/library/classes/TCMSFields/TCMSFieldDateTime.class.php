@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
@@ -21,13 +22,20 @@ class TCMSFieldDateTime extends TCMSField
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldDateTime';
 
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
-        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
-        $targetClass = '\DateTime';
-        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name));
+        $defaultValue =  $this->oDefinition->sqlData['field_default_value'] ?? null;
+        if ($defaultValue === '0000-00-00' || $defaultValue === '0000-00-00 00:00:00') {
+            $defaultValue = null;
+        }
+        if (null !== $defaultValue) {
+            $defaultValue = \DateTime::createFromFormat('Y-m-d H:i:s', $defaultValue);
+        }
+        $data = $this->getDoctrineDataModelViewData(['type' => '\DateTime', 'defaultValue' => $defaultValue]);
+        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
+        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
 
-        return implode("\n", [$comment, $attribute]);
+        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
     }
     public function GetHTML()
     {

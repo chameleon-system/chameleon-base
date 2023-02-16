@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -25,10 +26,10 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
      */
     protected $treeNodeSelectAdditionalNodesPagedef = 'navigationTreePlain';
 
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
         // todo: add support for this field type
-        return parent::getDoctrineDataModelAttribute($namespace);
+        return parent::getDoctrineDataModelParts($namespace);
     }
 
     public function GetHTML()

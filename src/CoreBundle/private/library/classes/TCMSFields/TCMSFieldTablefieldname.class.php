@@ -9,15 +9,17 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+
 /**
  * field name in a table.
 /**/
 class TCMSFieldTablefieldname extends TCMSFieldOption
 {
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
         // todo: implement
-        return parent::getDoctrineDataModelAttribute($namespace);
+        return parent::getDoctrineDataModelParts($namespace);
     }
     public function GetOptions()
     {

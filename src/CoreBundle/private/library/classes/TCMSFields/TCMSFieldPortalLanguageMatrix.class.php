@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 
@@ -32,10 +33,10 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField
      */
     protected $sMatrixTableName = 'cms_portal_language_matrix';
 
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
         // todo: implement
-        return parent::getDoctrineDataModelAttribute($namespace);
+        return parent::getDoctrineDataModelParts($namespace);
     }
 
     public function GetHTML()

@@ -9,12 +9,14 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+
 class TCMSFieldDocumentProperties extends TCMSField
 {
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
         // todo: implement
-        return parent::getDoctrineDataModelAttribute($namespace);
+        return parent::getDoctrineDataModelParts($namespace);
     }
     public function GetHTML()
     {

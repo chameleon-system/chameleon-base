@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
@@ -37,21 +38,28 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         $this->isPropertyField = true;
     }
 
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
-        $type = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetPropertyTableName(), false));
-        $comment = sprintf('/** @var %s[] %s */', $type, $this->oDefinition->sqlData['translation']);
-        $attribute = sprintf('public readonly Doctrine\Common\Collections\Collection $%s = new \Doctrine\Common\Collections\ArrayCollection()', $this->snakeToCamelCase($this->name));
+        $type = sprintf('%s\%s[]', $namespace, $this->snakeToCamelCase($this->GetPropertyTableName(), false));
+        $data = $this->getDoctrineDataModelViewData(
+            [
+                'type' => '\Doctrine\Common\Collections\Collection',
+                'docCommentType' => $type,
+                'defaultValue' => 'new \Doctrine\Common\Collections\ArrayCollection()',
+            ]
+        );
+        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
+        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
 
-        return implode("\n", [$comment, $attribute]);
+        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
     }
 
     public function getDoctrineDataModelXml(string $namespace): ?string
     {
 
-        $mapperRenderer = $this->getDoctrineFieldMappingRenderer('one-to-many');
+        $mapperRenderer = $this->getDoctrineRenderer('mapping/one-to-many.xml.twig');
         $definition = $this->oDefinition->sqlData;
-        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
+        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetPropertyTableName(), false));
         $mapperRenderer->setVar('definition', $definition);
         $mapperRenderer->setVar('targetClass', ltrim($targetClass, '\\'));
         $mapperRenderer->setVar('parentFieldName', $this->snakeToCamelCase($this->GetMatchingParentFieldName()));
