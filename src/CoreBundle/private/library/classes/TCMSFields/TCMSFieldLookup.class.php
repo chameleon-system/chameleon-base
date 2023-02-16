@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -48,18 +49,26 @@ class TCMSFieldLookup extends TCMSField
      */
     protected $options = array();
 
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
-        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
-        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
-        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name));
+        $type = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
 
-        return implode("\n", [$comment, $attribute]);
+        $data = $this->getDoctrineDataModelViewData(
+            [
+                'type' => $type
+            ]
+        );
+        $data['defaultValue'] = null;
+
+        $rendererProperty = $this->getDoctrineRenderer('model/lookup.property.php.twig', $data);
+        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
+
+        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
     }
 
     public function getDoctrineDataModelXml(string $namespace): ?string
     {
-        $mapperRenderer = $this->getDoctrineFieldMappingRenderer('many-to-one');
+        $mapperRenderer = $this->getDoctrineRenderer('mapping/many-to-one.xml.twig');
         $definition = $this->oDefinition->sqlData;
         $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
         $mapperRenderer->setVar('definition', $definition);

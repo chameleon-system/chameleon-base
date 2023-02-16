@@ -9,13 +9,15 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+
 class TCMSFieldTailLog extends TCMSField
 {
     protected $methodCallAllowed = array('getLogData');
 
     protected $bLogNotReadable = false;
 
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
         return null;
     }

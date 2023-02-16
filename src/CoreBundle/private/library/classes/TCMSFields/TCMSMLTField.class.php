@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+
 abstract class TCMSMLTField extends TCMSField
 {
     public function __construct()
@@ -16,13 +18,21 @@ abstract class TCMSMLTField extends TCMSField
         $this->isMLTField = true;
     }
 
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
-        $type = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetForeignTableName(), false));
-        $comment = sprintf('/** @var %s[] %s */', $type, $this->oDefinition->sqlData['translation']);
-        $attribute = sprintf('public readonly array $%s', $this->snakeToCamelCase($this->name));
+        $type = sprintf('%s\%s[]', $namespace, $this->snakeToCamelCase($this->GetForeignTableName(), false));
+        $data = $this->getDoctrineDataModelViewData(
+            [
+                'type' => '\Doctrine\Common\Collections\Collection',
+                'docCommentType' => $type,
+                'defaultValue' => 'new \Doctrine\Common\Collections\ArrayCollection()',
+            ]
+        );
 
-        return implode("\n", [$comment, $attribute]);
+        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
+        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
+
+        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
     }
 
     public function getMltValues()

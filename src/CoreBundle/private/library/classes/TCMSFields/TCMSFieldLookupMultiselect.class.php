@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
@@ -22,6 +23,38 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      * view path for frontend.
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldLookupMultiselect';
+
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
+    {
+        $type = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
+
+        $data = $this->getDoctrineDataModelViewData(
+            [
+                'type' => $type
+            ]
+        );
+        $data['defaultValue'] = null;
+
+        $rendererProperty = $this->getDoctrineRenderer('model/lookup.property.php.twig', $data);
+        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
+
+        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
+    }
+
+
+
+    public function getDoctrineDataModelXml(string $namespace): ?string
+    {
+
+        $mapperRenderer = $this->getDoctrineRenderer('mapping/many-to-many.xml.twig');
+        $definition = $this->oDefinition->sqlData;
+        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
+        $mapperRenderer->setVar('definition', $definition);
+        $mapperRenderer->setVar('targetClass', ltrim($targetClass, '\\'));
+        $mapperRenderer->setVar('fieldName', $this->snakeToCamelCase($this->name));
+        $mapperRenderer->setVar('joinTable', $this->GetMLTTableName());
+        return $mapperRenderer->render();
+    }
 
     public function GetHTML()
     {

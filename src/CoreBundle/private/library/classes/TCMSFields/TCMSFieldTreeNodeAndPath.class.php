@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 
@@ -18,14 +19,22 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
 {
 
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
-        $original = parent::getDoctrineDataModelAttribute($namespace);
-        $comment = sprintf('/** %s path */', $this->oDefinition->sqlData['translation']);
-        $targetClass = 'string';
-        $attribute = sprintf('public readonly %s $%s',$targetClass,  $this->snakeToCamelCase($this->name.'_path'));
+        $original = parent::getDoctrineDataModelParts($namespace);
 
-        return implode("\n", [$original, $comment, $attribute]);
+        if (null === $original) {
+            return null;
+        }
+
+        $data = $this->getDoctrineDataModelViewData(['type' => 'string', 'propertyName' =>  $this->snakeToCamelCase($this->name.'_path')]);
+        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
+        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
+
+        return new DataModelParts(
+            implode("\n", [$original->getProperty(), $rendererProperty->render()]),
+            implode("\n", [$original->getMethods(), $rendererMethod->render()]), $data['allowDefaultValue']
+        );
     }
 
 

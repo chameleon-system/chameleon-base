@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
@@ -145,30 +146,67 @@ class TCMSField implements TCMSFieldVisitableInterface, DoctrineTransformableInt
      */
     protected $bEncryptedData = false;
 
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
-        $comment = sprintf('/** %s */', $this->oDefinition->sqlData['translation']);
-        $attribute = sprintf('public readonly string $%s', $this->snakeToCamelCase($this->name));
+        $data = $this->getDoctrineDataModelViewData(['type' => 'string']);
+        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
+        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
 
-        return implode("\n", [$comment, $attribute]);
+
+
+        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
+    }
+
+    protected function getDoctrineDataModelViewData(array $additionalData) : array
+    {
+        $data = $additionalData;
+        $data['type'] = isset($data['type']) ? $data['type'] : 'string';
+
+        $definition = $this->oDefinition->sqlData;
+        $getterPrefix = 'bool' === $data['type'] ? 'is' : 'get';
+
+        $data['source'] = get_class($this);
+        $data['docCommentType'] = $data['docCommentType'] ?? $data['type'];
+        $data['description'] = $data['description'] ?? $definition['translation'];
+        $data['definition'] = $data['definition'] ??$definition;
+        $data['propertyName'] = $data['propertyName'] ?? $this->snakeToCamelCase($this->name);
+        $data['defaultValue'] = $data['defaultValue'] ?? ('' !== $definition['field_default_value'] ? sprintf("'%s'", $definition['field_default_value']) : null);
+        $data['allowDefaultValue'] = false;
+
+        $data['getterName'] = $data['getterName'] ?? $this->getDoctrineDataModelGetterName($getterPrefix, $this->name);
+
+        // allow default?
+        if (true === in_array($data['type'], ['string', 'int', 'float', 'bool'], true)) {
+            $data['allowDefaultValue'] = true;
+        }
+
+        if (null === $data['defaultValue']) {
+            $data['allowDefaultValue'] = false;
+        }
+
+        return $data;
     }
 
     public function getDoctrineDataModelXml(string $namespace): ?string
     {
-        $mapperRenderer = $this->getDoctrineFieldMappingRenderer('string');
+        $mapperRenderer = $this->getDoctrineRenderer('mapping/string.xml.twig');
         $definition = $this->oDefinition->sqlData;
         $mapperRenderer->setVar('definition', $definition);
         $mapperRenderer->setVar('fieldName', $this->snakeToCamelCase($this->name));
         return $mapperRenderer->render();
     }
 
-    protected function getDoctrineFieldMappingRenderer(string $viewName): \IPkgSnippetRenderer
+    protected function getDoctrineRenderer(string $viewName, array $parameter = []): \IPkgSnippetRenderer
     {
+        /** @var TPkgSnippetRenderer $snippetRenderer */
         $snippetRenderer = clone ServiceLocator::get('chameleon_system_snippet_renderer.snippet_renderer');
         $snippetRenderer->InitializeSource(
-            sprintf('ChameleonSystemAutoclasses/mapping/%s.xml.twig', $viewName),
+            sprintf('ChameleonSystemAutoclasses/%s', $viewName),
             \IPkgSnippetRenderer::SOURCE_TYPE_FILE
         );
+        foreach ($parameter as $key => $value) {
+            $snippetRenderer->setVar($key, $value);
+        }
 
         return $snippetRenderer;
     }
@@ -177,6 +215,13 @@ class TCMSField implements TCMSFieldVisitableInterface, DoctrineTransformableInt
 
     protected function snakeToCamelCase(string $string, bool $lowerCaseFirst = true): string
     {
+        $firstPart = substr($string, 0, strpos($string, '_'));
+        if (is_numeric($firstPart)) {
+            // fields/tablenames may not start with a number
+            $string = substr($string, strpos($string, '_')+1);
+        }
+
+
         $camelCasedName = preg_replace_callback('/(^|_|\.)+(.)/', function ($match) {
             return ('.' === $match[1] ? '_' : '').strtoupper($match[2]);
         }, $string);
@@ -585,6 +630,11 @@ class TCMSField implements TCMSFieldVisitableInterface, DoctrineTransformableInt
         }
 
         $connection->query($updateQuery);
+    }
+
+    public function getDoctrineDataModelGetterName(string $getterPrefix, string $fieldName): string
+    {
+        return $getterPrefix.ucfirst($this->snakeToCamelCase($fieldName));
     }
 
     /**

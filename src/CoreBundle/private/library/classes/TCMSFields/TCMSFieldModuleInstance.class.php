@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
@@ -31,6 +32,10 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
      * @var TCMSTPLModule
      */
     public $oModule = null;
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts {
+        return parent::getDoctrineDataModelParts($namespace);
+    }
+
 
     public function GetHTML()
     {
@@ -114,6 +119,12 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
 
         return $js;
     }
+
+    public function GetConnectedTableName()
+    {
+        return 'cms_tpl_module_instance';
+    }
+
 
     public function _GetHTMLValue()
     {

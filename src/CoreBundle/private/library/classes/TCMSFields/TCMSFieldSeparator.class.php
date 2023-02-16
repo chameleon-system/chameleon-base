@@ -9,13 +9,15 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+
 /**
  * separator.
 /**/
 class TCMSFieldSeparator extends TCMSField
 {
 
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
         return null;
     }

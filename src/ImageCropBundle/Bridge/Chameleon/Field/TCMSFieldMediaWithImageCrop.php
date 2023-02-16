@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field;
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
@@ -37,16 +38,32 @@ use ViewRenderer;
 class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 {
 
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
-        $rootField = parent::getDoctrineDataModelAttribute($namespace);
+        $original = parent::getDoctrineDataModelParts($namespace);
 
+        if (null === $original) {
+            return null;
+        }
 
-        $comment = sprintf('/** %s - cropped image */', $this->oDefinition->sqlData['translation']);
-        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
-        $attribute = sprintf('public readonly %s %s',$targetClass,  $this->snakeToCamelCase($this->getFieldNameOfAdditionalField($this->name)));
+        $type = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
 
-        return implode("\n", [$rootField, $comment, $attribute]);
+        $data = $this->getDoctrineDataModelViewData(
+            [
+                'type' => $type,
+                'propertyName' => $this->snakeToCamelCase($this->name.'_path'),
+                'getterName' => $this->getDoctrineDataModelGetterName('get', $this->name.'_path'),
+
+                'description' => sprintf('%s - cropped image', $this->oDefinition->sqlData['translation']),
+            ]
+        );
+        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
+        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
+
+        return new DataModelParts(
+            implode(",\n", [$original->getProperty(), $rendererProperty->render()]),
+            implode("\n", [$original->getMethods(), $rendererMethod->render()]), $data['allowDefaultValue']
+        );
 
     }
 

@@ -14,7 +14,7 @@
 {#        </unique-constraints>#}
 
 {#        <lifecycle-callbacks>#}
-{#            <lifecycle-callback type="prePersist" method="doStuffOnPrePersist"/>#}
+{#            <lifecycle-callback type="prePersist" method="doStuffOknPrePersist"/>#}
 {#            <lifecycle-callback type="prePersist" method="doOtherStuffOnPrePersistToo"/>#}
 {#            <lifecycle-callback type="postPersist" method="doStuffOnPostPersist"/>#}
 {#        </lifecycle-callbacks>#}
@@ -23,9 +23,9 @@
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
+        </field>
 
         {%- for propertyMapping in propertyMappings %}
 

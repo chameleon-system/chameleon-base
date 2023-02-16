@@ -38,7 +38,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
 
     public function getDoctrineDataModelXml(string $namespace): ?string
     {
-        $mapperRenderer = $this->getDoctrineFieldMappingRenderer('parent');
+        $mapperRenderer = $this->getDoctrineRenderer('mapping/parent.xml.twig');
 
         $definition = $this->oDefinition->sqlData;
         $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
