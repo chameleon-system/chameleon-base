@@ -2,26 +2,32 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot" table="cms_master_pagedef_spot">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot" table="cms_master_pagedef_spot">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="cmsMasterPagedefId" column="cms_master_pagedef_id" type="string"  nullable="false"  />
-            <field name="pkgCmsThemeBlockId" column="pkg_cms_theme_block_id" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="model" column="model" type="string"  nullable="false"  />
-            <field name="view" column="view" type="string"  nullable="false"  />
-            <field name="static" column="static" type="string"  nullable="false"  />
-            <field name="cmsMasterPagedefSpotParameter" column="cms_master_pagedef_spot_parameter" type="string"  nullable="false"  />
-            <field name="cmsMasterPagedefSpotAccess" column="cms_master_pagedef_spot_access" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="cmsMasterPagedefId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsMasterPagedef" inversed-by="cmsMasterPagedefSpot">
+    <join-column name="cms_master_pagedef_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="pkgCmsThemeBlockId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock" inversed-by="cmsMasterPagedefSpot">
+    <join-column name="pkg_cms_theme_block_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="model"  column="model"  nullable="false"  />
+            <field name="view"  column="view"  nullable="false"  />
+            <field name="static"  column="static"  nullable="false"  />
+            <one-to-many field="cmsMasterPagedefSpotParameterCollection" target-entity="ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpotParameter" mapped-by="cmsMasterPagedefSpotId" />
+
+            <one-to-many field="cmsMasterPagedefSpotAccessCollection" target-entity="ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpotAccess" mapped-by="cmsMasterPagedefSpotId" />
+
     </entity>
 
 </doctrine-mapping>

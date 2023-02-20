@@ -2,20 +2,29 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgMultiModuleModuleConfig" table="pkg_multi_module_module_config">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgMultiModuleModuleConfig" table="pkg_multi_module_module_config">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
-            <field name="pkgMultiModuleSetId" column="pkg_multi_module_set_id" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="cmsTplModuleInstanceId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance" >
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="pkgMultiModuleSetId" type="string" field="pkg_multi_module_set_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="pkgMultiModuleSet" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSet">
+    <join-column name="pkg_multi_module_set_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

@@ -2,26 +2,35 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopSuggestArticleLog" table="shop_suggest_article_log">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopSuggestArticleLog" table="shop_suggest_article_log">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
-            <field name="dataExtranetUserId" column="data_extranet_user_id" type="string"  nullable="false"  />
-            <field name="shopArticleId" column="shop_article_id" type="string"  nullable="false"  />
-            <field name="fromEmail" column="from_email" type="string"  nullable="false"  />
-            <field name="fromName" column="from_name" type="string"  nullable="false"  />
-            <field name="toEmail" column="to_email" type="string"  nullable="false"  />
-            <field name="toName" column="to_name" type="string"  nullable="false"  />
-            <field name="comment" column="comment" type="string"  nullable="false"  />
+        </field>
+            <field name="datecreated"  column="datecreated"  nullable="false"  />
+            <many-to-one field="dataExtranetUserId" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUser" inversed-by="shopSuggestArticleLog">
+    <join-column name="data_extranet_user_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="shopArticleId" type="string" field="shop_article_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle">
+    <join-column name="shop_article_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="fromEmail"  column="from_email"  nullable="false"  />
+            <field name="fromName"  column="from_name"  nullable="false"  />
+            <field name="toEmail"  column="to_email"  nullable="false"  />
+            <field name="toName"  column="to_name"  nullable="false"  />
+            <field name="comment"  column="comment"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

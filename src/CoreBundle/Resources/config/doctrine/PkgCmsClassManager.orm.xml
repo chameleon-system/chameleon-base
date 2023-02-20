@@ -2,23 +2,24 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgCmsClassManager" table="pkg_cms_class_manager">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgCmsClassManager" table="pkg_cms_class_manager">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="nameOfEntryPoint" column="name_of_entry_point" type="string"  nullable="false"  />
-            <field name="exitClass" column="exit_class" type="string"  nullable="false"  />
-            <field name="exitClassSubtype" column="exit_class_subtype" type="string"  nullable="false"  />
-            <field name="exitClassType" column="exit_class_type" type="string" length="&#039;Core&#039;,&#039;Custom-Core&#039;,&#039;Customer&#039;" nullable="false"  />
-            <field name="pkgCmsClassManagerExtension" column="pkg_cms_class_manager_extension" type="string"  nullable="false"  />
+        </field>
+            <field name="nameOfEntryPoint"  column="name_of_entry_point"  nullable="false"  />
+            <field name="exitClass"  column="exit_class"  nullable="false"  />
+            <field name="exitClassSubtype"  column="exit_class_subtype"  nullable="false"  />
+            <field name="exitClassType"  column="exit_class_type"  nullable="false"  />
+            <one-to-many field="pkgCmsClassManagerExtensionCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgCmsClassManagerExtension" mapped-by="pkgCmsClassManagerId" />
+
     </entity>
 
 </doctrine-mapping>

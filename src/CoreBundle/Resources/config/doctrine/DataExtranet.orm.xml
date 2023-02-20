@@ -2,45 +2,61 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\DataExtranet" table="data_extranet">
+    <entity name="ChameleonSystem\CoreBundle\Entity\DataExtranet" table="data_extranet">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="sessionlife" column="sessionlife" type="string"  nullable="false"  />
-            <field name="fpwdTitle" column="fpwd_title" type="string"  nullable="false"  />
-            <field name="noaccessTitle" column="noaccess_title" type="string"  nullable="false"  />
-            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
-            <field name="loginIsEmail" column="login_is_email" type="string"  nullable="false"  />
-            <field name="extranetSpotName" column="extranet_spot_name" type="string"  nullable="false"  />
-            <field name="dataExtranetGroupMlt" column="data_extranet_group_mlt" type="string"  nullable="false"  />
-            <field name="nodeLoginId" column="node_login_id" type="string"  nullable="false"  />
-            <field name="loginSuccessNodeId" column="login_success_node_id" type="string"  nullable="false"  />
-            <field name="nodeMyAccountCmsTreeId" column="node_my_account_cms_tree_id" type="string"  nullable="false"  />
-            <field name="nodeRegisterId" column="node_register_id" type="string"  nullable="false"  />
-            <field name="nodeConfirmRegistration" column="node_confirm_registration" type="string"  nullable="false"  />
-            <field name="nodeRegistrationSuccessId" column="node_registration_success_id" type="string"  nullable="false"  />
-            <field name="forgotPasswordTreenodeId" column="forgot_password_treenode_id" type="string"  nullable="false"  />
-            <field name="accessRefusedNodeId" column="access_refused_node_id" type="string"  nullable="false"  />
-            <field name="groupRightDeniedNodeId" column="group_right_denied_node_id" type="string"  nullable="false"  />
-            <field name="logoutSuccessNodeId" column="logout_success_node_id" type="string"  nullable="false"  />
-            <field name="registrationSuccess" column="registration_success" type="string"  nullable="false"  />
-            <field name="registrationFailed" column="registration_failed" type="string"  nullable="false"  />
-            <field name="userMustConfirmRegistration" column="user_must_confirm_registration" type="string"  nullable="false"  />
-            <field name="fpwdIntro" column="fpwd_intro" type="string"  nullable="false"  />
-            <field name="fpwdEnd" column="fpwd_end" type="string"  nullable="false"  />
-            <field name="noaccessText" column="noaccess_text" type="string"  nullable="false"  />
-            <field name="communityPostRegistrationInfo" column="community_post_registration_info" type="string"  nullable="false"  />
-            <field name="useSaveForgotPassword" column="use_save_forgot_password" type="string"  nullable="false"  />
-            <field name="loginAllowedNotConfirmedUser" column="login_allowed_not_confirmed_user" type="string"  nullable="false"  />
-            <field name="passwordChangeKeyTimeValidity" column="password_change_key_time_validity" type="string"  nullable="false"  />
+        </field>
+            <field name="sessionlife"  column="sessionlife"  nullable="false"  />
+            <field name="fpwdTitle"  column="fpwd_title"  nullable="false"  />
+            <field name="noaccessTitle"  column="noaccess_title"  nullable="false"  />
+            <field name="cmsPortalId" type="string" field="cms_portal_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="loginIsEmail"  column="login_is_email"  nullable="false"  />
+            <field name="extranetSpotName"  column="extranet_spot_name"  nullable="false"  />
+            <many-to-many field="dataExtranetGroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetGroup">
+    <join-table name="data_extranet_data_extranet_group_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="nodeLoginId"  column="node_login_id"  nullable="false"  />
+            <field name="loginSuccessNodeId"  column="login_success_node_id"  nullable="false"  />
+            <field name="nodeMyAccountCmsTreeId"  column="node_my_account_cms_tree_id"  nullable="false"  />
+            <field name="nodeRegisterId"  column="node_register_id"  nullable="false"  />
+            <field name="nodeConfirmRegistration"  column="node_confirm_registration"  nullable="false"  />
+            <field name="nodeRegistrationSuccessId"  column="node_registration_success_id"  nullable="false"  />
+            <field name="forgotPasswordTreenodeId"  column="forgot_password_treenode_id"  nullable="false"  />
+            <field name="accessRefusedNodeId"  column="access_refused_node_id"  nullable="false"  />
+            <field name="groupRightDeniedNodeId"  column="group_right_denied_node_id"  nullable="false"  />
+            <field name="logoutSuccessNodeId"  column="logout_success_node_id"  nullable="false"  />
+            <field name="registrationSuccess"  column="registration_success"  nullable="false"  />
+            <field name="registrationFailed"  column="registration_failed"  nullable="false"  />
+            <field name="userMustConfirmRegistration"  column="user_must_confirm_registration"  nullable="false"  />
+            <field name="fpwdIntro"  column="fpwd_intro"  nullable="false"  />
+            <field name="fpwdEnd"  column="fpwd_end"  nullable="false"  />
+            <field name="noaccessText"  column="noaccess_text"  nullable="false"  />
+            <field name="communityPostRegistrationInfo"  column="community_post_registration_info"  nullable="false"  />
+            <field name="useSaveForgotPassword"  column="use_save_forgot_password"  nullable="false"  />
+            <field name="loginAllowedNotConfirmedUser"  column="login_allowed_not_confirmed_user"  nullable="false"  />
+            <field name="passwordChangeKeyTimeValidity"  column="password_change_key_time_validity"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

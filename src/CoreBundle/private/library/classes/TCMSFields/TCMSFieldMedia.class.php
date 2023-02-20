@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+
 /**
  * The image pool.
 /**/
@@ -31,12 +33,29 @@ class TCMSFieldMedia extends \TCMSField
      */
     public $oTableConf = null;
 
-    public function getDoctrineDataModelAttribute(string $namespace): ?string
-    {
-        $comment = sprintf('/** @var array<int,string> %s */', $this->oDefinition->sqlData['translation']);
-        $attribute = sprintf('public readonly array $%s', $this->snakeToCamelCase($this->name));
 
-        return implode("\n", [$comment, $attribute]);
+    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
+    {
+        $data = $this->getDoctrineDataModelViewData(
+            [
+                'type' => 'array',
+                'docCommentType' => 'array<string>',
+                'defaultValue' => '[]',
+            ]
+        );
+        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
+        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
+
+        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
+    }
+
+    public function getDoctrineDataModelXml(string $namespace): ?string
+    {
+        $mapperRenderer = $this->getDoctrineRenderer('mapping/array.xml.twig');
+        $definition = $this->oDefinition->sqlData;
+        $mapperRenderer->setVar('definition', $definition);
+        $mapperRenderer->setVar('fieldName', $this->snakeToCamelCase($this->name));
+        return $mapperRenderer->render();
     }
 
     public function GetReadOnly()

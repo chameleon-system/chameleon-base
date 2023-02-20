@@ -2,22 +2,24 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsConfigCmsmoduleExtensions" table="cms_config_cmsmodule_extensions">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsConfigCmsmoduleExtensions" table="cms_config_cmsmodule_extensions">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="newclass" column="newclass" type="string"  nullable="false"  />
-            <field name="cmsConfigId" column="cms_config_id" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="type" column="type" type="string" length="&#039;Core&#039;,&#039;Custom-Core&#039;,&#039;Customer&#039;" nullable="false"  />
+        </field>
+            <field name="newclass"  column="newclass"  nullable="false"  />
+            <many-to-one field="cmsConfigId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsConfig" inversed-by="cmsConfigCmsmoduleExtensions">
+    <join-column name="cms_config_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="type"  column="type"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

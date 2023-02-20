@@ -34,6 +34,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         foreach ($connectedTables as $connectedTable) {
             $targetClasses[] = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($connectedTable, false));
         }
+        $targetClasses[] = 'null';
 
         $targetClass = implode('|', $targetClasses);
 
@@ -47,6 +48,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
                 'type' => 'string',
                 'propertyName' => $this->snakeToCamelCase($this->name.'_table'),
                 'getterName' => $this->getDoctrineDataModelGetterName('get', $this->name.'_table'),
+                'setterName' => $this->getDoctrineDataModelGetterName('set', $this->name.'_table'),
             ]
         );
         $rendererPropertyTableName = $this->getDoctrineRenderer('model/default.property.php.twig', $data);

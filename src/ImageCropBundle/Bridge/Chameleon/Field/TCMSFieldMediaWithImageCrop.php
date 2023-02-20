@@ -44,13 +44,15 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
             return null;
         }
 
-        $type = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
+        $type = sprintf('%s\%s|null', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
 
         $data = $this->getDoctrineDataModelViewData(
             [
                 'type' => $type,
-                'propertyName' => $this->snakeToCamelCase($this->name.'_path'),
-                'getterName' => $this->getDoctrineDataModelGetterName('get', $this->name.'_path'),
+                'defaultValue' => 'null',
+                'propertyName' => $this->snakeToCamelCase($this->name.'_cropped'),
+                'getterName' => $this->getDoctrineDataModelGetterName('get', $this->name.'_cropped'),
+                'setterName' => $this->getDoctrineDataModelGetterName('set', $this->name.'_cropped'),
 
                 'description' => sprintf('%s - cropped image', $this->oDefinition->sqlData['translation']),
             ]

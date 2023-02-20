@@ -2,31 +2,99 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopShippingGroup" table="shop_shipping_group">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopShippingGroup" table="shop_shipping_group">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="shopShippingGroupHandlerId" column="shop_shipping_group_handler_id" type="string"  nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
-            <field name="active" column="active" type="string"  nullable="false"  />
-            <field name="activeFrom" column="active_from" type="string"  nullable="false"  />
-            <field name="activeTo" column="active_to" type="string"  nullable="false"  />
-            <field name="dataExtranetUserMlt" column="data_extranet_user_mlt" type="string"  nullable="false"  />
-            <field name="dataExtranetGroupMlt" column="data_extranet_group_mlt" type="string"  nullable="false"  />
-            <field name="shopVatId" column="shop_vat_id" type="string"  nullable="false"  />
-            <field name="shopShippingTypeMlt" column="shop_shipping_type_mlt" type="string"  nullable="false"  />
-            <field name="shopPaymentMethodMlt" column="shop_payment_method_mlt" type="string"  nullable="false"  />
-            <field name="shopShippingGroupMlt" column="shop_shipping_group_mlt" type="string"  nullable="false"  />
-            <field name="cmsPortalMlt" column="cms_portal_mlt" type="string"  nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="shopShippingGroupHandlerId" type="string" field="shop_shipping_group_handler_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopShippingGroupHandler" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopShippingGroupHandler">
+    <join-column name="shop_shipping_group_handler_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="position"  column="position"  nullable="false"  />
+            <field name="active"  column="active"  nullable="false"  />
+            <field name="activeFrom"  column="active_from"  nullable="false"  />
+            <field name="activeTo"  column="active_to"  nullable="false"  />
+            <many-to-many field="dataExtranetUserMlt" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUser">
+    <join-table name="shop_shipping_group_data_extranet_user_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <many-to-many field="dataExtranetGroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetGroup">
+    <join-table name="shop_shipping_group_data_extranet_group_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="shopVatId" type="string" field="shop_vat_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopVat" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVat">
+    <join-column name="shop_vat_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-many field="shopShippingTypeMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopShippingType">
+    <join-table name="shop_shipping_group_shop_shipping_type_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <many-to-many field="shopPaymentMethodMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopPaymentMethod">
+    <join-table name="shop_shipping_group_shop_payment_method_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <many-to-many field="shopShippingGroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopShippingGroup">
+    <join-table name="shop_shipping_group_shop_shipping_group_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <many-to-many field="cmsPortalMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-table name="shop_shipping_group_cms_portal_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
     </entity>
 
 </doctrine-mapping>

@@ -2,19 +2,22 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsMigrationFile" table="cms_migration_file">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsMigrationFile" table="cms_migration_file">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="buildNumber" column="build_number" type="string"  nullable="false"  />
+        </field>
+            <field name="buildNumber"  column="build_number"  nullable="false"  />
+            <many-to-one field="cmsMigrationCounterId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsMigrationCounter" inversed-by="cmsMigrationFile">
+    <join-column name="cms_migration_counter_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

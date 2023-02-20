@@ -2,64 +2,127 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser" table="data_extranet_user">
+    <entity name="ChameleonSystem\CoreBundle\Entity\DataExtranetUser" table="data_extranet_user">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="shopId" column="shop_id" type="string"  nullable="false"  />
-            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
-            <field name="customerNumber" column="customer_number" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="password" column="password" type="string"  nullable="false"  />
-            <field name="passwordChangeKey" column="password_change_key" type="string"  nullable="false"  />
-            <field name="passwordChangeTimeStamp" column="password_change_time_stamp" type="string"  nullable="false"  />
-            <field name="dataExtranetSalutationId" column="data_extranet_salutation_id" type="string"  nullable="false"  />
-            <field name="firstname" column="firstname" type="string"  nullable="false"  />
-            <field name="lastname" column="lastname" type="string"  nullable="false"  />
-            <field name="company" column="company" type="string"  nullable="false"  />
-            <field name="street" column="street" type="string"  nullable="false"  />
-            <field name="streetnr" column="streetnr" type="string"  nullable="false"  />
-            <field name="postalcode" column="postalcode" type="string"  nullable="false"  />
-            <field name="city" column="city" type="string"  nullable="false"  />
-            <field name="dataCountryId" column="data_country_id" type="string"  nullable="false"  />
-            <field name="vatId" column="vat_id" type="string"  nullable="false"  />
-            <field name="telefon" column="telefon" type="string"  nullable="false"  />
-            <field name="mobile" column="mobile" type="string"  nullable="false"  />
-            <field name="addressAdditionalInfo" column="address_additional_info" type="string"  nullable="false"  />
-            <field name="aliasName" column="alias_name" type="string"  nullable="false"  />
-            <field name="email" column="email" type="string"  nullable="false"  />
-            <field name="dataExtranetGroupMlt" column="data_extranet_group_mlt" type="string"  nullable="false"  />
-            <field name="fax" column="fax" type="string"  nullable="false"  />
-            <field name="dataExtranetUserAddress" column="data_extranet_user_address" type="string"  nullable="false"  />
-            <field name="sessionKey" column="session_key" type="string" length="32" nullable="false"  />
-            <field name="loginTimestamp" column="login_timestamp" type="string"  nullable="false"  />
-            <field name="loginSalt" column="login_salt" type="string"  nullable="false"  />
-            <field name="dataExtranetUserLoginHistory" column="data_extranet_user_login_history" type="string"  nullable="false"  />
-            <field name="defaultBillingAddressId" column="default_billing_address_id" type="string"  nullable="false"  />
-            <field name="defaultShippingAddressId" column="default_shipping_address_id" type="string"  nullable="false"  />
-            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
-            <field name="confirmed" column="confirmed" type="string"  nullable="false"  />
-            <field name="tmpconfirmkey" column="tmpconfirmkey" type="string" length="32" nullable="false"  />
-            <field name="confirmedon" column="confirmedon" type="string"  nullable="false"  />
-            <field name="regEmailSend" column="reg_email_send" type="string"  nullable="false"  />
-            <field name="shopUserPurchasedVoucher" column="shop_user_purchased_voucher" type="string"  nullable="false"  />
-            <field name="shopUserNoticeList" column="shop_user_notice_list" type="string"  nullable="false"  />
-            <field name="shopOrder" column="shop_order" type="string"  nullable="false"  />
-            <field name="dataExtranetUserShopArticleHistory" column="data_extranet_user_shop_article_history" type="string"  nullable="false"  />
-            <field name="shopSearchLog" column="shop_search_log" type="string"  nullable="false"  />
-            <field name="shopSuggestArticleLog" column="shop_suggest_article_log" type="string"  nullable="false"  />
-            <field name="shopArticleReview" column="shop_article_review" type="string"  nullable="false"  />
-            <field name="pkgShopWishlist" column="pkg_shop_wishlist" type="string"  nullable="false"  />
-            <field name="birthdate" column="birthdate" type="string"  nullable="false"  />
-            <field name="pkgShopCurrencyId" column="pkg_shop_currency_id" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="shopId" target-entity="ChameleonSystem\CoreBundle\Entity\Shop" inversed-by="dataExtranetUser">
+    <join-column name="shop_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="cmsPortalId" type="string" field="cms_portal_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="customerNumber"  column="customer_number"  nullable="false"  />
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="password"  column="password"  nullable="false"  />
+            <field name="passwordChangeKey"  column="password_change_key"  nullable="false"  />
+            <field name="passwordChangeTimeStamp"  column="password_change_time_stamp"  nullable="false"  />
+            <field name="dataExtranetSalutationId" type="string" field="data_extranet_salutation_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="dataExtranetSalutation" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation">
+    <join-column name="data_extranet_salutation_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="firstname"  column="firstname"  nullable="false"  />
+            <field name="lastname"  column="lastname"  nullable="false"  />
+            <field name="company"  column="company"  nullable="false"  />
+            <field name="street"  column="street"  nullable="false"  />
+            <field name="streetnr"  column="streetnr"  nullable="false"  />
+            <field name="postalcode"  column="postalcode"  nullable="false"  />
+            <field name="city"  column="city"  nullable="false"  />
+            <field name="dataCountryId" type="string" field="data_country_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="dataCountry" target-entity="\ChameleonSystem\CoreBundle\Entity\DataCountry">
+    <join-column name="data_country_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="vatId"  column="vat_id"  nullable="false"  />
+            <field name="telefon"  column="telefon"  nullable="false"  />
+            <field name="mobile"  column="mobile"  nullable="false"  />
+            <field name="addressAdditionalInfo"  column="address_additional_info"  nullable="false"  />
+            <field name="aliasName"  column="alias_name"  nullable="false"  />
+            <field name="email"  column="email"  nullable="false"  />
+            <many-to-many field="dataExtranetGroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetGroup">
+    <join-table name="data_extranet_user_data_extranet_group_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="fax"  column="fax"  nullable="false"  />
+            <one-to-many field="dataExtranetUserAddressCollection" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress" mapped-by="dataExtranetUserId" />
+
+            <field name="sessionKey"  column="session_key"  nullable="false"  />
+            <field name="loginTimestamp"  column="login_timestamp"  nullable="false"  />
+            <field name="loginSalt"  column="login_salt"  nullable="false"  />
+            <one-to-many field="dataExtranetUserLoginHistoryCollection" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUserLoginHistory" mapped-by="dataExtranetUserId" />
+
+            <field name="defaultBillingAddressId" type="string" field="default_billing_address_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="defaultBillingAddress" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress">
+    <join-column name="default_billing_address_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="defaultShippingAddressId" type="string" field="default_shipping_address_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="defaultShippingAddress" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress">
+    <join-column name="default_shipping_address_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="datecreated"  column="datecreated"  nullable="false"  />
+            <field name="confirmed"  column="confirmed"  nullable="false"  />
+            <field name="tmpconfirmkey"  column="tmpconfirmkey"  nullable="false"  />
+            <field name="confirmedon"  column="confirmedon"  nullable="false"  />
+            <field name="regEmailSend"  column="reg_email_send"  nullable="false"  />
+            <one-to-many field="shopUserPurchasedVoucherCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopUserPurchasedVoucher" mapped-by="dataExtranetUserId" />
+
+            <one-to-many field="shopUserNoticeListCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopUserNoticeList" mapped-by="dataExtranetUserId" />
+
+            <one-to-many field="shopOrderCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrder" mapped-by="dataExtranetUserId" />
+
+            <one-to-many field="dataExtranetUserShopArticleHistoryCollection" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUserShopArticleHistory" mapped-by="dataExtranetUserId" />
+
+            <one-to-many field="shopSearchLogCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSearchLog" mapped-by="dataExtranetUserId" />
+
+            <one-to-many field="shopSuggestArticleLogCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSuggestArticleLog" mapped-by="dataExtranetUserId" />
+
+            <one-to-many field="shopArticleReviewCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleReview" mapped-by="dataExtranetUserId" />
+
+            <one-to-many field="pkgShopWishlistCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopWishlist" mapped-by="dataExtranetUserId" />
+
+            <field name="birthdate"  column="birthdate"  nullable="false"  />
+            <field name="pkgShopCurrencyId" type="string" field="pkg_shop_currency_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="pkgShopCurrency" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopCurrency">
+    <join-column name="pkg_shop_currency_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

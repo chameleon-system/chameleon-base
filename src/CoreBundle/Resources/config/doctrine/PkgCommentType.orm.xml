@@ -2,26 +2,33 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgCommentType" table="pkg_comment_type">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgCommentType" table="pkg_comment_type">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="pkgCommentClassName" column="pkg_comment_class_name" type="string"  nullable="false"  />
-            <field name="pkgCommentClassSubType" column="pkg_comment_class_sub_type" type="string"  nullable="false"  />
-            <field name="cmsTblConfId" column="cms_tbl_conf_id" type="string"  nullable="false"  />
-            <field name="pkgCommentClassType" column="pkg_comment_class_type" type="string" length="&quot;Customer&quot;,&quot;Custom-Core&quot;,&quot;Core&quot;" nullable="false"  />
-            <field name="className" column="class_name" type="string"  nullable="false"  />
-            <field name="classSubType" column="class_sub_type" type="string"  nullable="false"  />
-            <field name="classType" column="class_type" type="string" length="&#039;Core&#039;,&#039;Custom-Core&#039;,&#039;Customer&#039;" nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="pkgCommentClassName"  column="pkg_comment_class_name"  nullable="false"  />
+            <field name="pkgCommentClassSubType"  column="pkg_comment_class_sub_type"  nullable="false"  />
+            <field name="cmsTblConfId" type="string" field="cms_tbl_conf_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsTblConf" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConf">
+    <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="pkgCommentClassType"  column="pkg_comment_class_type"  nullable="false"  />
+            <field name="className"  column="class_name"  nullable="false"  />
+            <field name="classSubType"  column="class_sub_type"  nullable="false"  />
+            <field name="classType"  column="class_type"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -2,24 +2,36 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnTrigger" table="pkg_shop_payment_ipn_trigger">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnTrigger" table="pkg_shop_payment_ipn_trigger">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="shopPaymentHandlerGroupId" column="shop_payment_handler_group_id" type="string"  nullable="false"  />
-            <field name="pkgShopPaymentIpnMessageTrigger" column="pkg_shop_payment_ipn_message_trigger" type="string"  nullable="false"  />
-            <field name="active" column="active" type="string"  nullable="false"  />
-            <field name="targetUrl" column="target_url" type="string"  nullable="false"  />
-            <field name="timeoutSeconds" column="timeout_seconds" type="string"  nullable="false"  />
-            <field name="pkgShopPaymentIpnStatusMlt" column="pkg_shop_payment_ipn_status_mlt" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="shopPaymentHandlerGroupId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup" inversed-by="pkgShopPaymentIpnTrigger">
+    <join-column name="shop_payment_handler_group_id" referenced-column-name="id" />
+</many-to-one>
+            <one-to-many field="pkgShopPaymentIpnMessageTriggerCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessageTrigger" mapped-by="pkgShopPaymentIpnTriggerId" />
+
+            <field name="active"  column="active"  nullable="false"  />
+            <field name="targetUrl"  column="target_url"  nullable="false"  />
+            <field name="timeoutSeconds"  column="timeout_seconds"  nullable="false"  />
+            <many-to-many field="pkgShopPaymentIpnStatusMlt" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnStatus">
+    <join-table name="pkg_shop_payment_ipn_trigger_pkg_shop_payment_ipn_status_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
     </entity>
 
 </doctrine-mapping>

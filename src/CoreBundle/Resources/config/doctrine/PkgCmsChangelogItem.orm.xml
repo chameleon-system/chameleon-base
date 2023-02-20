@@ -2,22 +2,26 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgCmsChangelogItem" table="pkg_cms_changelog_item">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgCmsChangelogItem" table="pkg_cms_changelog_item">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="pkgCmsChangelogSetId" column="pkg_cms_changelog_set_id" type="string"  nullable="false"  />
-            <field name="cmsFieldConf" column="cms_field_conf" type="string"  nullable="false"  />
-            <field name="valueOld" column="value_old" type="string"  nullable="false"  />
-            <field name="valueNew" column="value_new" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="pkgCmsChangelogSetId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgCmsChangelogSet" inversed-by="pkgCmsChangelogItem">
+    <join-column name="pkg_cms_changelog_set_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="cmsFieldConf" target-entity="ChameleonSystem\CoreBundle\Entity\CmsFieldConf" >
+    <join-column name="cms_field_conf" referenced-column-name="id" />
+</many-to-one>
+            <field name="valueOld"  column="value_old"  nullable="false"  />
+            <field name="valueNew"  column="value_new"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

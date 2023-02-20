@@ -2,30 +2,30 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsCronjobs" table="cms_cronjobs">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsCronjobs" table="cms_cronjobs">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="lock" column="lock" type="string"  nullable="false"  />
-            <field name="lastExecution" column="last_execution" type="string"  nullable="false"  />
-            <field name="realLastExecution" column="real_last_execution" type="string"  nullable="false"  />
-            <field name="cronClass" column="cron_class" type="string"  nullable="false"  />
-            <field name="classLocation" column="class_location" type="string" length="&#039;Core&#039;, &#039;Custom-Core&#039;, &#039;Customer&#039;" nullable="false"  />
-            <field name="classSubtype" column="class_subtype" type="string"  nullable="false"  />
-            <field name="unlockAfterNMinutes" column="unlock_after_n_minutes" type="string"  nullable="false"  />
-            <field name="executeEveryNMinutes" column="execute_every_n_minutes" type="string"  nullable="false"  />
-            <field name="endExecution" column="end_execution" type="string"  nullable="false"  />
-            <field name="startExecution" column="start_execution" type="string"  nullable="false"  />
-            <field name="active" column="active" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
+        </field>
+            <field name="lock"  column="lock"  nullable="false"  />
+            <field name="lastExecution"  column="last_execution"  nullable="false"  />
+            <field name="realLastExecution"  column="real_last_execution"  nullable="false"  />
+            <field name="cronClass"  column="cron_class"  nullable="false"  />
+            <field name="classLocation"  column="class_location"  nullable="false"  />
+            <field name="classSubtype"  column="class_subtype"  nullable="false"  />
+            <field name="unlockAfterNMinutes"  column="unlock_after_n_minutes"  nullable="false"  />
+            <field name="executeEveryNMinutes"  column="execute_every_n_minutes"  nullable="false"  />
+            <field name="endExecution"  column="end_execution"  nullable="false"  />
+            <field name="startExecution"  column="start_execution"  nullable="false"  />
+            <field name="active"  column="active"  nullable="false"  />
+            <field name="name"  column="name"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

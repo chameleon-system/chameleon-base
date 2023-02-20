@@ -2,24 +2,33 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSetItem" table="pkg_multi_module_set_item">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSetItem" table="pkg_multi_module_set_item">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="pkgMultiModuleSetId" column="pkg_multi_module_set_id" type="string"  nullable="false"  />
-            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
-            <field name="sortOrder" column="sort_order" type="string"  nullable="false"  />
-            <field name="systemName" column="system_name" type="string"  nullable="false"  />
-            <field name="alternativeTabUrlForAjax" column="alternative_tab_url_for_ajax" type="string"  nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <many-to-one field="pkgMultiModuleSetId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSet" inversed-by="pkgMultiModuleSetItem">
+    <join-column name="pkg_multi_module_set_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="cmsTplModuleInstanceId" type="string" field="cms_tpl_module_instance_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="sortOrder"  column="sort_order"  nullable="false"  />
+            <field name="systemName"  column="system_name"  nullable="false"  />
+            <field name="alternativeTabUrlForAjax"  column="alternative_tab_url_for_ajax"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

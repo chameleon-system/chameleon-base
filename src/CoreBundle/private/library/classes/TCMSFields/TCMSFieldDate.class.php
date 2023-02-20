@@ -26,15 +26,10 @@ class TCMSFieldDate extends TCMSField
 
     public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
-        $defaultValue = $this->oDefinition->sqlData['field_default_value'] ?? null;
-        if ($defaultValue === '0000-00-00' || $defaultValue === '0000-00-00 00:00:00') {
-            $defaultValue = null;
-        }
-        if (null !== $defaultValue) {
-            $defaultValue = \DateTime::createFromFormat('Y-m-d H:i:s', $defaultValue);
-        }
+        $data = $this->getDoctrineDataModelViewData(
+            ['type' => '\DateTime|null', 'defaultValue' => 'null', 'allowDefaultValue' => true]
+        );
 
-        $data = $this->getDoctrineDataModelViewData(['type' => '\DateTime', 'defaultValue' => $defaultValue]);
         $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
         $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
 

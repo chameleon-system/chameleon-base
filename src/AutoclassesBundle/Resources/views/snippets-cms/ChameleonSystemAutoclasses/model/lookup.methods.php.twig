@@ -1,0 +1,27 @@
+{% autoescape false %}
+// {{ source }}
+public function {{ objectGetterName }}(): {{ type }}
+{
+    return $this->{{ propertyObjectName }};
+}
+public function {{ objectSetterName }}({{ type }} ${{ propertyObjectName }}): self
+{
+    $this->{{ propertyObjectName }} = ${{ propertyObjectName }};
+    $this->{{ propertyIdName }} = ${{ propertyObjectName }}?->getId();
+
+    return $this;
+}
+public function {{ idGetterName }}(): ?string
+{
+    return $this->{{ propertyIdName }};
+}
+public function {{ idSetterName }}(?string ${{ propertyIdName }}): self
+{
+    $this->{{ propertyIdName }} = ${{ propertyIdName }};
+    // todo - load new id
+    //$this->{{ propertyIdName }} = ${{ propertyName }}?->getId();
+
+    return $this;
+}
+
+{% endautoescape %}

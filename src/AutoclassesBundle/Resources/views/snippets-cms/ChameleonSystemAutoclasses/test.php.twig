@@ -9,8 +9,8 @@ namespace {{ namespace }};
 
 class {{ className }} {
   public function __construct(
-    public readonly string $id,
-    public readonly int $cmsident,
+    private string|null $id = null,
+    private int|null $cmsident = null,
     {% set attributesNoDefaultValue = dataModelPartsList|filter(item => false == item.hasDefaultValue) %}
     {% set attributesWithDefaultValue = dataModelPartsList|filter(item => true == item.hasDefaultValue) %}
   {%- for dataModelParts in attributesNoDefaultValue %}
@@ -22,6 +22,27 @@ class {{ className }} {
     {{ dataModelParts.property }}{% if not loop.last %}, {% endif %}
   {%- endfor %}
   ) {}
+
+  public function getId(): ?string
+  {
+    return $this->id;
+  }
+  public function setId(string $id): self
+  {
+    $this->id = $id;
+    return $this;
+  }
+
+  public function getCmsident(): ?int
+  {
+    return $this->cmsident;
+  }
+  public function setCmsident(int $cmsident): self
+  {
+    $this->cmsident = $cmsident;
+    return $this;
+  }
+
 
   {%- for dataModelParts in dataModelPartsList %}
 

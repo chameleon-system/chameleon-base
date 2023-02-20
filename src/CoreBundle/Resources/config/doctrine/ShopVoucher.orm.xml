@@ -2,24 +2,27 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopVoucher" table="shop_voucher">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopVoucher" table="shop_voucher">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="shopVoucherSeriesId" column="shop_voucher_series_id" type="string"  nullable="false"  />
-            <field name="code" column="code" type="string"  nullable="false"  />
-            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
-            <field name="dateUsedUp" column="date_used_up" type="string"  nullable="false"  />
-            <field name="isUsedUp" column="is_used_up" type="string"  nullable="false"  />
-            <field name="shopVoucherUse" column="shop_voucher_use" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="shopVoucherSeriesId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopVoucherSeries" inversed-by="shopVoucher">
+    <join-column name="shop_voucher_series_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="code"  column="code"  nullable="false"  />
+            <field name="datecreated"  column="datecreated"  nullable="false"  />
+            <field name="dateUsedUp"  column="date_used_up"  nullable="false"  />
+            <field name="isUsedUp"  column="is_used_up"  nullable="false"  />
+            <one-to-many field="shopVoucherUseCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopVoucherUse" mapped-by="shopVoucherId" />
+
     </entity>
 
 </doctrine-mapping>

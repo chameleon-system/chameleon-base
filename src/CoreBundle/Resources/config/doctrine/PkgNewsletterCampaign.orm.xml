@@ -2,36 +2,57 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterCampaign" table="pkg_newsletter_campaign">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgNewsletterCampaign" table="pkg_newsletter_campaign">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="utmSource" column="utm_source" type="string"  nullable="false"  />
-            <field name="utmMedium" column="utm_medium" type="string"  nullable="false"  />
-            <field name="utmContent" column="utm_content" type="string"  nullable="false"  />
-            <field name="utmCampaign" column="utm_campaign" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="cmsTreeNodeId" column="cms_tree_node_id" type="string"  nullable="false"  />
-            <field name="active" column="active" type="string"  nullable="false"  />
-            <field name="subject" column="subject" type="string"  nullable="false"  />
-            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
-            <field name="pkgNewsletterQueue" column="pkg_newsletter_queue" type="string"  nullable="false"  />
-            <field name="contentPlain" column="content_plain" type="string"  nullable="false"  />
-            <field name="queueDate" column="queue_date" type="string"  nullable="false"  />
-            <field name="sendStatistics" column="send_statistics" type="string"  nullable="false"  />
-            <field name="sendStartDate" column="send_start_date" type="string"  nullable="false"  />
-            <field name="sendEndDate" column="send_end_date" type="string"  nullable="false"  />
-            <field name="generateUserDependingNewsletter" column="generate_user_depending_newsletter" type="string"  nullable="false"  />
-            <field name="pkgNewsletterGroupMlt" column="pkg_newsletter_group_mlt" type="string"  nullable="false"  />
-            <field name="googleAnalyticsActive" column="google_analytics_active" type="string"  nullable="false"  />
+        </field>
+            <field name="utmSource"  column="utm_source"  nullable="false"  />
+            <field name="utmMedium"  column="utm_medium"  nullable="false"  />
+            <field name="utmContent"  column="utm_content"  nullable="false"  />
+            <field name="utmCampaign"  column="utm_campaign"  nullable="false"  />
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="cmsTreeNodeId"  column="cms_tree_node_id"  nullable="false"  />
+            <field name="active"  column="active"  nullable="false"  />
+            <field name="subject"  column="subject"  nullable="false"  />
+            <field name="cmsPortalId" type="string" field="cms_portal_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
+            <one-to-many field="pkgNewsletterQueueCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgNewsletterQueue" mapped-by="pkgNewsletterCampaignId" />
+
+            <field name="contentPlain"  column="content_plain"  nullable="false"  />
+            <field name="queueDate"  column="queue_date"  nullable="false">
+    <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+    </options>
+</field>
+            <field name="sendStatistics"  column="send_statistics"  nullable="false"  />
+            <field name="sendStartDate"  column="send_start_date"  nullable="false"  />
+            <field name="sendEndDate"  column="send_end_date"  nullable="false"  />
+            <field name="generateUserDependingNewsletter"  column="generate_user_depending_newsletter"  nullable="false"  />
+            <many-to-many field="pkgNewsletterGroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\PkgNewsletterGroup">
+    <join-table name="pkg_newsletter_campaign_pkg_newsletter_group_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="googleAnalyticsActive"  column="google_analytics_active"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

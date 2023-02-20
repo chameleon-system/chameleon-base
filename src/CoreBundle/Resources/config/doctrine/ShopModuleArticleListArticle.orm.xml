@@ -2,22 +2,31 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopModuleArticleListArticle" table="shop_module_article_list_article">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopModuleArticleListArticle" table="shop_module_article_list_article">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="shopModuleArticleListId" column="shop_module_article_list_id" type="string"  nullable="false"  />
-            <field name="shopArticleId" column="shop_article_id" type="string"  nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="shopModuleArticleListId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopModuleArticleList" inversed-by="shopModuleArticleListArticle">
+    <join-column name="shop_module_article_list_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="shopArticleId" type="string" field="shop_article_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle">
+    <join-column name="shop_article_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="position"  column="position"  nullable="false"  />
+            <field name="name"  column="name"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

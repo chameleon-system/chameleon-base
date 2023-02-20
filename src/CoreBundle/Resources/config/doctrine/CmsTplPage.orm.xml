@@ -2,44 +2,98 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsTplPage" table="cms_tpl_page">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsTplPage" table="cms_tpl_page">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="treePathSearchString" column="tree_path_search_string" type="string"  nullable="false"  />
-            <field name="cmsMasterPagedefId" column="cms_master_pagedef_id" type="string"  nullable="false"  />
-            <field name="cmsTplPageCmsMasterPagedefSpot" column="cms_tpl_page_cms_master_pagedef_spot" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="seoPattern" column="seo_pattern" type="string"  nullable="false"  />
-            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
-            <field name="primaryTreeIdHidden" column="primary_tree_id_hidden" type="string"  nullable="false"  />
-            <field name="images" column="images" type="string"  nullable="false"  />
-            <field name="backgroundImage" column="background_image" type="string"  nullable="false"  />
-            <field name="cmsUsergroupMlt" column="cms_usergroup_mlt" type="string"  nullable="false"  />
-            <field name="cmsUserId" column="cms_user_id" type="string"  nullable="false"  />
-            <field name="usessl" column="usessl" type="string"  nullable="false"  />
-            <field name="extranetPage" column="extranet_page" type="string"  nullable="false"  />
-            <field name="accessNotConfirmedUser" column="access_not_confirmed_user" type="string"  nullable="false"  />
-            <field name="dataExtranetGroupMlt" column="data_extranet_group_mlt" type="string"  nullable="false"  />
-            <field name="ivwCode" column="ivw_code" type="string"  nullable="false"  />
-            <field name="cmsLanguageId" column="cms_language_id" type="string"  nullable="false"  />
-            <field name="metaDescription" column="meta_description" type="string" length="200" nullable="false"  />
-            <field name="metaKeywords" column="meta_keywords" type="string"  nullable="false"  />
-            <field name="metaKeywordLanguage" column="meta_keyword_language" type="string" length="&#039;Deutsch&#039;,&#039;Englisch&#039;,&#039;US-Englisch&#039;,&#039;Franz&amp;ouml;sisch&#039;,&#039;Italienisch&#039;,&#039;Spanisch&#039;" nullable="false"  />
-            <field name="metaAuthor" column="meta_author" type="string"  nullable="false"  />
-            <field name="metaPublisher" column="meta_publisher" type="string"  nullable="false"  />
-            <field name="metaPageTopic" column="meta_page_topic" type="string"  nullable="false"  />
-            <field name="metaPragma" column="meta_pragma" type="string" length="&#039;cache&#039;,&#039;no-cache&#039;" nullable="false"  />
-            <field name="metaRobots" column="meta_robots" type="string" length="&#039;index, follow&#039;,&#039;index&#039;,&#039;noindex&#039;,&#039;follow&#039;,&#039;nofollow&#039;" nullable="false"  />
-            <field name="metaRevisitAfter" column="meta_revisit_after" type="string" length="4" nullable="false"  />
+        </field>
+            <field name="treePathSearchString"  column="tree_path_search_string"  nullable="false"  />
+            <field name="cmsMasterPagedefId" type="string" field="cms_master_pagedef_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsMasterPagedef" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMasterPagedef">
+    <join-column name="cms_master_pagedef_id" referenced-column-name="id" />
+</many-to-one>
+            <one-to-many field="cmsTplPageCmsMasterPagedefSpotCollection" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplPageCmsMasterPagedefSpot" mapped-by="cmsTplPageId" />
+
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="seoPattern"  column="seo_pattern"  nullable="false"  />
+            <field name="cmsPortalId" type="string" field="cms_portal_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="primaryTreeIdHidden"  column="primary_tree_id_hidden"  nullable="false"  />
+            <field type="array" name="images" column="images"  nullable="false"  />
+            <field name="backgroundImageId" type="string" field="background_image_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="backgroundImage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="background_image_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-many field="cmsUsergroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsUsergroup">
+    <join-table name="cms_tpl_page_cms_usergroup_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="cmsUserId" type="string" field="cms_user_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsUser" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUser">
+    <join-column name="cms_user_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="usessl"  column="usessl"  nullable="false"  />
+            <field name="extranetPage"  column="extranet_page"  nullable="false"  />
+            <field name="accessNotConfirmedUser"  column="access_not_confirmed_user"  nullable="false"  />
+            <many-to-many field="dataExtranetGroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetGroup">
+    <join-table name="cms_tpl_page_data_extranet_group_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="ivwCode"  column="ivw_code"  nullable="false"  />
+            <field name="cmsLanguageId" type="string" field="cms_language_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsLanguage">
+    <join-column name="cms_language_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="metaDescription"  column="meta_description"  nullable="false"  />
+            <field name="metaKeywords"  column="meta_keywords"  nullable="false"  />
+            <field name="metaKeywordLanguage"  column="meta_keyword_language"  nullable="false"  />
+            <field name="metaAuthor"  column="meta_author"  nullable="false"  />
+            <field name="metaPublisher"  column="meta_publisher"  nullable="false"  />
+            <field name="metaPageTopic"  column="meta_page_topic"  nullable="false"  />
+            <field name="metaPragma"  column="meta_pragma"  nullable="false"  />
+            <field name="metaRobots"  column="meta_robots"  nullable="false"  />
+            <field name="metaRevisitAfter"  column="meta_revisit_after"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -2,30 +2,48 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterModuleSignupConfig" table="pkg_newsletter_module_signup_config">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgNewsletterModuleSignupConfig" table="pkg_newsletter_module_signup_config">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
-            <field name="mainModuleInstanceId" column="main_module_instance_id" type="string"  nullable="false"  />
-            <field name="pkgNewsletterGroupMlt" column="pkg_newsletter_group_mlt" type="string"  nullable="false"  />
-            <field name="useDoubleoptin" column="use_doubleoptin" type="string"  nullable="false"  />
-            <field name="signupHeadline" column="signup_headline" type="string"  nullable="false"  />
-            <field name="signupText" column="signup_text" type="string"  nullable="false"  />
-            <field name="confirmTitle" column="confirm_title" type="string"  nullable="false"  />
-            <field name="confirmText" column="confirm_text" type="string"  nullable="false"  />
-            <field name="signedupHeadline" column="signedup_headline" type="string"  nullable="false"  />
-            <field name="signedupText" column="signedup_text" type="string"  nullable="false"  />
-            <field name="nonewsignupTitle" column="nonewsignup_title" type="string"  nullable="false"  />
-            <field name="nonewsignupText" column="nonewsignup_text" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="cmsTplModuleInstanceId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance" >
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="mainModuleInstanceId" type="string" field="main_module_instance_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="mainModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
+    <join-column name="main_module_instance_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-many field="pkgNewsletterGroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\PkgNewsletterGroup">
+    <join-table name="pkg_newsletter_module_signup_config_pkg_newsletter_group_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="useDoubleoptin"  column="use_doubleoptin"  nullable="false"  />
+            <field name="signupHeadline"  column="signup_headline"  nullable="false"  />
+            <field name="signupText"  column="signup_text"  nullable="false"  />
+            <field name="confirmTitle"  column="confirm_title"  nullable="false"  />
+            <field name="confirmText"  column="confirm_text"  nullable="false"  />
+            <field name="signedupHeadline"  column="signedup_headline"  nullable="false"  />
+            <field name="signedupText"  column="signedup_text"  nullable="false"  />
+            <field name="nonewsignupTitle"  column="nonewsignup_title"  nullable="false"  />
+            <field name="nonewsignupText"  column="nonewsignup_text"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

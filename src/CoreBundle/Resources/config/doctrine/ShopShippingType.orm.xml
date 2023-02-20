@@ -2,48 +2,111 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopShippingType" table="shop_shipping_type">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopShippingType" table="shop_shipping_type">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="value" column="value" type="string" length="10,2" nullable="false"  />
-            <field name="valueType" column="value_type" type="string" length="&#039;absolut&#039;,&#039;prozent&#039;" nullable="false"  />
-            <field name="valueBasedOnEntireBasket" column="value_based_on_entire_basket" type="string"  nullable="false"  />
-            <field name="valueAdditional" column="value_additional" type="string" length="10,2" nullable="false"  />
-            <field name="valueMax" column="value_max" type="string" length="10,2" nullable="false"  />
-            <field name="valueMin" column="value_min" type="string" length="10,2" nullable="false"  />
-            <field name="addValueForEachArticle" column="add_value_for_each_article" type="string"  nullable="false"  />
-            <field name="restrictToSignedInUsers" column="restrict_to_signed_in_users" type="string"  nullable="false"  />
-            <field name="applyToAllProducts" column="apply_to_all_products" type="string"  nullable="false"  />
-            <field name="endShippingTypeChain" column="end_shipping_type_chain" type="string"  nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
-            <field name="active" column="active" type="string"  nullable="false"  />
-            <field name="activeFrom" column="active_from" type="string"  nullable="false"  />
-            <field name="activeTo" column="active_to" type="string"  nullable="false"  />
-            <field name="restrictToValueFrom" column="restrict_to_value_from" type="string" length="10,2" nullable="false"  />
-            <field name="restrictToValueTo" column="restrict_to_value_to" type="string" length="10,2" nullable="false"  />
-            <field name="restrictToArticlesFrom" column="restrict_to_articles_from" type="string"  nullable="false"  />
-            <field name="restrictToArticlesTo" column="restrict_to_articles_to" type="string"  nullable="false"  />
-            <field name="restrictToWeightFrom" column="restrict_to_weight_from" type="string"  nullable="false"  />
-            <field name="restrictToWeightTo" column="restrict_to_weight_to" type="string"  nullable="false"  />
-            <field name="restrictToVolumeFrom" column="restrict_to_volume_from" type="string"  nullable="false"  />
-            <field name="restrictToVolumeTo" column="restrict_to_volume_to" type="string"  nullable="false"  />
-            <field name="shopArticleGroupMlt" column="shop_article_group_mlt" type="string"  nullable="false"  />
-            <field name="shopCategoryMlt" column="shop_category_mlt" type="string"  nullable="false"  />
-            <field name="shopArticleMlt" column="shop_article_mlt" type="string"  nullable="false"  />
-            <field name="dataCountryMlt" column="data_country_mlt" type="string"  nullable="false"  />
-            <field name="dataExtranetUserMlt" column="data_extranet_user_mlt" type="string"  nullable="false"  />
-            <field name="dataExtranetGroupMlt" column="data_extranet_group_mlt" type="string"  nullable="false"  />
-            <field name="cmsPortalMlt" column="cms_portal_mlt" type="string"  nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="value"  column="value"  nullable="false"  />
+            <field name="valueType"  column="value_type"  nullable="false"  />
+            <field name="valueBasedOnEntireBasket"  column="value_based_on_entire_basket"  nullable="false"  />
+            <field name="valueAdditional"  column="value_additional"  nullable="false"  />
+            <field name="valueMax"  column="value_max"  nullable="false"  />
+            <field name="valueMin"  column="value_min"  nullable="false"  />
+            <field name="addValueForEachArticle"  column="add_value_for_each_article"  nullable="false"  />
+            <field name="restrictToSignedInUsers"  column="restrict_to_signed_in_users"  nullable="false"  />
+            <field name="applyToAllProducts"  column="apply_to_all_products"  nullable="false"  />
+            <field name="endShippingTypeChain"  column="end_shipping_type_chain"  nullable="false"  />
+            <field name="position"  column="position"  nullable="false"  />
+            <field name="active"  column="active"  nullable="false"  />
+            <field name="activeFrom"  column="active_from"  nullable="false"  />
+            <field name="activeTo"  column="active_to"  nullable="false"  />
+            <field name="restrictToValueFrom"  column="restrict_to_value_from"  nullable="false"  />
+            <field name="restrictToValueTo"  column="restrict_to_value_to"  nullable="false"  />
+            <field name="restrictToArticlesFrom"  column="restrict_to_articles_from"  nullable="false"  />
+            <field name="restrictToArticlesTo"  column="restrict_to_articles_to"  nullable="false"  />
+            <field name="restrictToWeightFrom"  column="restrict_to_weight_from"  nullable="false"  />
+            <field name="restrictToWeightTo"  column="restrict_to_weight_to"  nullable="false"  />
+            <field name="restrictToVolumeFrom"  column="restrict_to_volume_from"  nullable="false"  />
+            <field name="restrictToVolumeTo"  column="restrict_to_volume_to"  nullable="false"  />
+            <many-to-many field="shopArticleGroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleGroup">
+    <join-table name="shop_shipping_type_shop_article_group_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <many-to-many field="shopCategoryMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopCategory">
+    <join-table name="shop_shipping_type_shop_category_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <many-to-many field="shopArticleMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticle">
+    <join-table name="shop_shipping_type_shop_article_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <many-to-many field="dataCountryMlt" target-entity="ChameleonSystem\CoreBundle\Entity\DataCountry">
+    <join-table name="shop_shipping_type_data_country_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <many-to-many field="dataExtranetUserMlt" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUser">
+    <join-table name="shop_shipping_type_data_extranet_user_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <many-to-many field="dataExtranetGroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetGroup">
+    <join-table name="shop_shipping_type_data_extranet_group_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <many-to-many field="cmsPortalMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-table name="shop_shipping_type_cms_portal_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
     </entity>
 
 </doctrine-mapping>

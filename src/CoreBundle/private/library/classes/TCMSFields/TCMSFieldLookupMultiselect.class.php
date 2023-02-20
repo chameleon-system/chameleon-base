@@ -26,16 +26,16 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
 
     public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
-        $type = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
-
+        $type = sprintf('%s\%s[]', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
         $data = $this->getDoctrineDataModelViewData(
             [
-                'type' => $type
+                'type' => '\Doctrine\Common\Collections\Collection',
+                'docCommentType' => $type,
+                'defaultValue' => 'new \Doctrine\Common\Collections\ArrayCollection()',
+                'allowDefaultValue' => true,
             ]
         );
-        $data['defaultValue'] = null;
-
-        $rendererProperty = $this->getDoctrineRenderer('model/lookup.property.php.twig', $data);
+        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
         $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
 
         return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);

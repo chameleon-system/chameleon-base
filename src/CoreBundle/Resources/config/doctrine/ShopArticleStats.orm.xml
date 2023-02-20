@@ -2,23 +2,25 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopArticleStats" table="shop_article_stats">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopArticleStats" table="shop_article_stats">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="shopArticleId" column="shop_article_id" type="string"  nullable="false"  />
-            <field name="statsSales" column="stats_sales" type="string"  nullable="false"  />
-            <field name="statsDetailViews" column="stats_detail_views" type="string"  nullable="false"  />
-            <field name="statsReviewAverage" column="stats_review_average" type="string" length="10,2" nullable="false"  />
-            <field name="statsReviewCount" column="stats_review_count" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="shopArticleId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticle" inversed-by="shopArticleStats">
+    <join-column name="shop_article_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="statsSales"  column="stats_sales"  nullable="false"  />
+            <field name="statsDetailViews"  column="stats_detail_views"  nullable="false"  />
+            <field name="statsReviewAverage"  column="stats_review_average"  nullable="false"  />
+            <field name="statsReviewCount"  column="stats_review_count"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

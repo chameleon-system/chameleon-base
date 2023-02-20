@@ -2,28 +2,47 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsMasterPagedef" table="cms_master_pagedef">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsMasterPagedef" table="cms_master_pagedef">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="description" column="description" type="string"  nullable="false"  />
-            <field name="layout" column="layout" type="string"  nullable="false"  />
-            <field name="cmsMasterPagedefSpot" column="cms_master_pagedef_spot" type="string"  nullable="false"  />
-            <field name="pkgCmsThemeBlockMlt" column="pkg_cms_theme_block_mlt" type="string"  nullable="false"  />
-            <field name="actionPluginList" column="action_plugin_list" type="string"  nullable="false"  />
-            <field name="restrictToPortals" column="restrict_to_portals" type="string"  nullable="false"  />
-            <field name="cmsPortalMlt" column="cms_portal_mlt" type="string"  nullable="false"  />
-            <field name="wysiwygCssUrl" column="wysiwyg_css_url" type="string"  nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="description"  column="description"  nullable="false"  />
+            <field name="layout"  column="layout"  nullable="false"  />
+            <one-to-many field="cmsMasterPagedefSpotCollection" target-entity="ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot" mapped-by="cmsMasterPagedefId" />
+
+            <many-to-many field="pkgCmsThemeBlockMlt" target-entity="ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock">
+    <join-table name="cms_master_pagedef_pkg_cms_theme_block_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="actionPluginList"  column="action_plugin_list"  nullable="false"  />
+            <field name="restrictToPortals"  column="restrict_to_portals"  nullable="false"  />
+            <many-to-many field="cmsPortalMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-table name="cms_master_pagedef_cms_portal_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="wysiwygCssUrl"  column="wysiwyg_css_url"  nullable="false"  />
+            <field name="position"  column="position"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

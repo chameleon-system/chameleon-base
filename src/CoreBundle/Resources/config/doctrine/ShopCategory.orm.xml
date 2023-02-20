@@ -2,39 +2,71 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopCategory" table="shop_category">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopCategory" table="shop_category">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="shopCategoryId" column="shop_category_id" type="string"  nullable="false"  />
-            <field name="detailPageCmsTreeId" column="detail_page_cms_tree_id" type="string"  nullable="false"  />
-            <field name="naviIconCmsMediaId" column="navi_icon_cms_media_id" type="string"  nullable="false"  />
-            <field name="urlPath" column="url_path" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="active" column="active" type="string"  nullable="false"  />
-            <field name="treeActive" column="tree_active" type="string"  nullable="false"  />
-            <field name="nameProduct" column="name_product" type="string"  nullable="false"  />
-            <field name="seoPattern" column="seo_pattern" type="string"  nullable="false"  />
-            <field name="shopVatId" column="shop_vat_id" type="string"  nullable="false"  />
-            <field name="colorcode" column="colorcode" type="string"  nullable="false"  />
-            <field name="categoryHightlight" column="category_hightlight" type="string"  nullable="false"  />
-            <field name="image" column="image" type="string"  nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
-            <field name="shopCategory" column="shop_category" type="string"  nullable="false"  />
-            <field name="descriptionShort" column="description_short" type="string"  nullable="false"  />
-            <field name="description" column="description" type="string"  nullable="false"  />
-            <field name="metaKeywords" column="meta_keywords" type="string"  nullable="false"  />
-            <field name="pkgShopListfilterId" column="pkg_shop_listfilter_id" type="string"  nullable="false"  />
-            <field name="shopCategoryTab" column="shop_category_tab" type="string"  nullable="false"  />
-            <field name="metaDescription" column="meta_description" type="string" length="255" nullable="false"  />
+        </field>
+            <many-to-one field="shopCategoryId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopCategory" inversed-by="shopCategory">
+    <join-column name="shop_category_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="detailPageCmsTreeId"  column="detail_page_cms_tree_id"  nullable="false"  />
+            <field name="naviIconCmsMediaId" type="string" field="navi_icon_cms_media_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="naviIconCmsMedia" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="navi_icon_cms_media_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="urlPath"  column="url_path"  nullable="false"  />
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="active"  column="active"  nullable="false"  />
+            <field name="treeActive"  column="tree_active"  nullable="false"  />
+            <field name="nameProduct"  column="name_product"  nullable="false"  />
+            <field name="seoPattern"  column="seo_pattern"  nullable="false"  />
+            <field name="shopVatId" type="string" field="shop_vat_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopVat" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVat">
+    <join-column name="shop_vat_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="colorcode"  column="colorcode"  nullable="false"  />
+            <field name="categoryHightlight"  column="category_hightlight"  nullable="false"  />
+            <field name="imageId" type="string" field="image_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="image" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="image_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="position"  column="position"  nullable="false"  />
+            <one-to-many field="shopCategoryCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopCategory" mapped-by="shopCategoryId" />
+
+            <field name="descriptionShort"  column="description_short"  nullable="false"  />
+            <field name="description"  column="description"  nullable="false"  />
+            <field name="metaKeywords"  column="meta_keywords"  nullable="false"  />
+            <field name="pkgShopListfilterId" type="string" field="pkg_shop_listfilter_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="pkgShopListfilter" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopListfilter">
+    <join-column name="pkg_shop_listfilter_id" referenced-column-name="id" />
+</many-to-one>
+            <one-to-many field="shopCategoryTabCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopCategoryTab" mapped-by="shopCategoryId" />
+
+            <field name="metaDescription"  column="meta_description"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>
