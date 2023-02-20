@@ -2,22 +2,31 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopFooterCategory" table="pkg_shop_footer_category">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgShopFooterCategory" table="pkg_shop_footer_category">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="shopCategoryId" column="shop_category_id" type="string"  nullable="false"  />
-            <field name="sortOrder" column="sort_order" type="string"  nullable="false"  />
-            <field name="shopId" column="shop_id" type="string"  nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="shopCategoryId" type="string" field="shop_category_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopCategory" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopCategory">
+    <join-column name="shop_category_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="sortOrder"  column="sort_order"  nullable="false"  />
+            <many-to-one field="shopId" target-entity="ChameleonSystem\CoreBundle\Entity\Shop" inversed-by="pkgShopFooterCategory">
+    <join-column name="shop_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

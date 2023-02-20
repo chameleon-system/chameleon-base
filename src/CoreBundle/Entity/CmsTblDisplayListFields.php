@@ -3,30 +3,248 @@ namespace ChameleonSystem\CoreBundle\Entity;
 
 class CmsTblDisplayListFields {
   public function __construct(
-    public readonly string $id,
-    public readonly int $cmsident,
-    /** Field name */
-    public readonly string $title, 
-    /** Belongs to table */
-    public readonly \ChameleonSystem\CoreBundle\Entity\CmsTblConf $cmsTblConfId, 
-    /** Database field name */
-    public readonly string $name, 
-    /** Database field name of translation */
-    public readonly string $cmsTranslationFieldName, 
-    /** Field alias (abbreviated) */
-    public readonly string $dbAlias, 
-    /** Position */
-    public readonly int $position, 
-    /** Column width */
-    public readonly string $width, 
-    /** Orientation */
-    public readonly string $align, 
-    /** Call back function */
-    public readonly string $callbackFnc, 
-    /** Activate call back functions */
-    public readonly bool $useCallback, 
-    /** Show in list */
-    public readonly bool $showInList, 
-    /** Show in sorting */
-    public readonly bool $showInSort  ) {}
+    private string|null $id = null,
+    private int|null $cmsident = null,
+          
+    // TCMSFieldLookup
+/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null - Belongs to table */
+private \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null $cmsTblConf = null,
+/** @var null|string - Belongs to table */
+private ?string $cmsTblConfId = null
+, 
+    // TCMSFieldVarchar
+/** @var string - Field name */
+private string $title = '', 
+    // TCMSFieldVarchar
+/** @var string - Database field name */
+private string $name = '', 
+    // TCMSFieldVarchar
+/** @var string - Database field name of translation */
+private string $cmsTranslationFieldName = '', 
+    // TCMSFieldVarchar
+/** @var string - Field alias (abbreviated) */
+private string $dbAlias = '', 
+    // TCMSFieldPosition
+/** @var int - Position */
+private int $position = 0, 
+    // TCMSFieldNumber
+/** @var int - Column width */
+private int $width = -1, 
+    // TCMSFieldOption
+/** @var string - Orientation */
+private string $align = 'left', 
+    // TCMSFieldVarchar
+/** @var string - Call back function */
+private string $callbackFnc = '', 
+    // TCMSFieldBoolean
+/** @var bool - Activate call back functions */
+private bool $useCallback = false, 
+    // TCMSFieldBoolean
+/** @var bool - Show in list */
+private bool $showInList = true, 
+    // TCMSFieldBoolean
+/** @var bool - Show in sorting */
+private bool $showInSort = false  ) {}
+
+  public function getId(): ?string
+  {
+    return $this->id;
+  }
+  public function setId(string $id): self
+  {
+    $this->id = $id;
+    return $this;
+  }
+
+  public function getCmsident(): ?int
+  {
+    return $this->cmsident;
+  }
+  public function setCmsident(int $cmsident): self
+  {
+    $this->cmsident = $cmsident;
+    return $this;
+  }
+    // TCMSFieldVarchar
+public function getTitle(): string
+{
+    return $this->title;
+}
+public function setTitle(string $title): self
+{
+    $this->title = $title;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsTblConf(): \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null
+{
+    return $this->cmsTblConf;
+}
+public function setCmsTblConf(\ChameleonSystem\CoreBundle\Entity\CmsTblConf|null $cmsTblConf): self
+{
+    $this->cmsTblConf = $cmsTblConf;
+    $this->cmsTblConfId = $cmsTblConf?->getId();
+
+    return $this;
+}
+public function getCmsTblConfId(): ?string
+{
+    return $this->cmsTblConfId;
+}
+public function setCmsTblConfId(?string $cmsTblConfId): self
+{
+    $this->cmsTblConfId = $cmsTblConfId;
+    // todo - load new id
+    //$this->cmsTblConfId = $?->getId();
+
+    return $this;
+}
+
+
+
+  
+    // TCMSFieldVarchar
+public function getName(): string
+{
+    return $this->name;
+}
+public function setName(string $name): self
+{
+    $this->name = $name;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldVarchar
+public function getCmsTranslationFieldName(): string
+{
+    return $this->cmsTranslationFieldName;
+}
+public function setCmsTranslationFieldName(string $cmsTranslationFieldName): self
+{
+    $this->cmsTranslationFieldName = $cmsTranslationFieldName;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldVarchar
+public function getDbAlias(): string
+{
+    return $this->dbAlias;
+}
+public function setDbAlias(string $dbAlias): self
+{
+    $this->dbAlias = $dbAlias;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldPosition
+public function getPosition(): int
+{
+    return $this->position;
+}
+public function setPosition(int $position): self
+{
+    $this->position = $position;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldNumber
+public function getWidth(): int
+{
+    return $this->width;
+}
+public function setWidth(int $width): self
+{
+    $this->width = $width;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldOption
+public function getAlign(): string
+{
+    return $this->align;
+}
+public function setAlign(string $align): self
+{
+    $this->align = $align;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldVarchar
+public function getCallbackFnc(): string
+{
+    return $this->callbackFnc;
+}
+public function setCallbackFnc(string $callbackFnc): self
+{
+    $this->callbackFnc = $callbackFnc;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldBoolean
+public function isUseCallback(): bool
+{
+    return $this->useCallback;
+}
+public function setUseCallback(bool $useCallback): self
+{
+    $this->useCallback = $useCallback;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldBoolean
+public function isShowInList(): bool
+{
+    return $this->showInList;
+}
+public function setShowInList(bool $showInList): self
+{
+    $this->showInList = $showInList;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldBoolean
+public function isShowInSort(): bool
+{
+    return $this->showInSort;
+}
+public function setShowInSort(bool $showInSort): self
+{
+    $this->showInSort = $showInSort;
+
+    return $this;
+}
+
+
+  
 }

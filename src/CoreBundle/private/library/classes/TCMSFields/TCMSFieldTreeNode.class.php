@@ -18,6 +18,18 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 /**/
 class TCMSFieldTreeNode extends TCMSField
 {
+    protected function getDoctrineDataModelViewData(array $additionalData): array
+    {
+
+        $additionalData['defaultValue'] = 'null';
+        $newValues = parent::getDoctrineDataModelViewData($additionalData);
+
+        $newValues['type'] = $newValues['type'].'|null';
+
+        return $newValues;
+    }
+
+
     public function GetHTML()
     {
         $path = $this->_GetTreePath();

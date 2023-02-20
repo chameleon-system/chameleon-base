@@ -1,0 +1,8 @@
+<field name="{{ propertyIdName }}" type="string" field="{{ fieldNameId }}" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="{{ propertyObjectName }}" target-entity="{{ targetClass }}">
+    <join-column name="{{ fieldNameId }}" referenced-column-name="id" />
+</many-to-one>

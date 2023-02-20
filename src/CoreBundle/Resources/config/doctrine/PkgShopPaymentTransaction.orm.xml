@@ -2,30 +2,58 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransaction" table="pkg_shop_payment_transaction">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransaction" table="pkg_shop_payment_transaction">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="shopOrderId" column="shop_order_id" type="string"  nullable="false"  />
-            <field name="dataExtranetUserId" column="data_extranet_user_id" type="string"  nullable="false"  />
-            <field name="pkgShopPaymentTransactionPosition" column="pkg_shop_payment_transaction_position" type="string"  nullable="false"  />
-            <field name="pkgShopPaymentTransactionTypeId" column="pkg_shop_payment_transaction_type_id" type="string"  nullable="false"  />
-            <field name="cmsUserId" column="cms_user_id" type="string"  nullable="false"  />
-            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
-            <field name="ip" column="ip" type="string"  nullable="false"  />
-            <field name="amount" column="amount" type="string" length="10,2" nullable="false"  />
-            <field name="context" column="context" type="string"  nullable="false"  />
-            <field name="sequenceNumber" column="sequence_number" type="string"  nullable="false"  />
-            <field name="confirmed" column="confirmed" type="string"  nullable="false"  />
-            <field name="confirmedDate" column="confirmed_date" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="shopOrderId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="pkgShopPaymentTransaction">
+    <join-column name="shop_order_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="dataExtranetUserId" type="string" field="data_extranet_user_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser">
+    <join-column name="data_extranet_user_id" referenced-column-name="id" />
+</many-to-one>
+            <one-to-many field="pkgShopPaymentTransactionPositionCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransactionPosition" mapped-by="pkgShopPaymentTransactionId" />
+
+            <field name="pkgShopPaymentTransactionTypeId" type="string" field="pkg_shop_payment_transaction_type_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="pkgShopPaymentTransactionType" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransactionType">
+    <join-column name="pkg_shop_payment_transaction_type_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="cmsUserId" type="string" field="cms_user_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsUser" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUser">
+    <join-column name="cms_user_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="datecreated"  column="datecreated"  nullable="false">
+    <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+    </options>
+</field>
+            <field name="ip"  column="ip"  nullable="false"  />
+            <field name="amount"  column="amount"  nullable="false"  />
+            <field name="context"  column="context"  nullable="false"  />
+            <field name="sequenceNumber"  column="sequence_number"  nullable="false"  />
+            <field name="confirmed"  column="confirmed"  nullable="false"  />
+            <field name="confirmedDate"  column="confirmed_date"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

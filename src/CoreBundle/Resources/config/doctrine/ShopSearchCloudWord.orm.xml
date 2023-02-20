@@ -2,20 +2,20 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopSearchCloudWord" table="shop_search_cloud_word">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopSearchCloudWord" table="shop_search_cloud_word">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="weight" column="weight" type="string" length="10,2" nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="weight"  column="weight"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

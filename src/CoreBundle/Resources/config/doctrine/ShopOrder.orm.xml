@@ -2,105 +2,191 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopOrder" table="shop_order">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopOrder" table="shop_order">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="pkgShopRatingServiceMailProcessed" column="pkg_shop_rating_service_mail_processed" type="string"  nullable="false"  />
-            <field name="shopId" column="shop_id" type="string"  nullable="false"  />
-            <field name="newsletterSignup" column="newsletter_signup" type="string"  nullable="false"  />
-            <field name="pkgShopPaymentIpnMessage" column="pkg_shop_payment_ipn_message" type="string"  nullable="false"  />
-            <field name="amazonPaymentIdMapping" column="amazon_payment_id_mapping" type="string"  nullable="false"  />
-            <field name="pkgShopPaymentTransaction" column="pkg_shop_payment_transaction" type="string"  nullable="false"  />
-            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
-            <field name="ordernumber" column="ordernumber" type="string"  nullable="false"  />
-            <field name="pkgShopRatingServiceMailSent" column="pkg_shop_rating_service_mail_sent" type="string"  nullable="false"  />
-            <field name="pkgShopRatingServiceId" column="pkg_shop_rating_service_id" type="string"  nullable="false"  />
-            <field name="orderIdent" column="order_ident" type="string" length="20" nullable="false"  />
-            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
-            <field name="shopOrderItem" column="shop_order_item" type="string"  nullable="false"  />
-            <field name="dataExtranetUserId" column="data_extranet_user_id" type="string"  nullable="false"  />
-            <field name="customerNumber" column="customer_number" type="string"  nullable="false"  />
-            <field name="userEmail" column="user_email" type="string"  nullable="false"  />
-            <field name="adrBillingCompany" column="adr_billing_company" type="string"  nullable="false"  />
-            <field name="adrBillingSalutationId" column="adr_billing_salutation_id" type="string"  nullable="false"  />
-            <field name="adrBillingFirstname" column="adr_billing_firstname" type="string"  nullable="false"  />
-            <field name="adrBillingLastname" column="adr_billing_lastname" type="string"  nullable="false"  />
-            <field name="adrBillingAdditionalInfo" column="adr_billing_additional_info" type="string"  nullable="false"  />
-            <field name="adrBillingStreet" column="adr_billing_street" type="string"  nullable="false"  />
-            <field name="adrBillingStreetnr" column="adr_billing_streetnr" type="string"  nullable="false"  />
-            <field name="adrBillingCity" column="adr_billing_city" type="string"  nullable="false"  />
-            <field name="adrBillingPostalcode" column="adr_billing_postalcode" type="string"  nullable="false"  />
-            <field name="adrBillingCountryId" column="adr_billing_country_id" type="string"  nullable="false"  />
-            <field name="adrBillingTelefon" column="adr_billing_telefon" type="string"  nullable="false"  />
-            <field name="adrBillingFax" column="adr_billing_fax" type="string"  nullable="false"  />
-            <field name="cmsLanguageId" column="cms_language_id" type="string"  nullable="false"  />
-            <field name="userIp" column="user_ip" type="string" length="50" nullable="false"  />
-            <field name="adrShippingUseBilling" column="adr_shipping_use_billing" type="string"  nullable="false"  />
-            <field name="adrShippingIsDhlPackstation" column="adr_shipping_is_dhl_packstation" type="string"  nullable="false"  />
-            <field name="adrShippingCompany" column="adr_shipping_company" type="string"  nullable="false"  />
-            <field name="adrShippingSalutationId" column="adr_shipping_salutation_id" type="string"  nullable="false"  />
-            <field name="adrShippingFirstname" column="adr_shipping_firstname" type="string"  nullable="false"  />
-            <field name="adrShippingLastname" column="adr_shipping_lastname" type="string"  nullable="false"  />
-            <field name="adrShippingAdditionalInfo" column="adr_shipping_additional_info" type="string"  nullable="false"  />
-            <field name="adrShippingStreet" column="adr_shipping_street" type="string"  nullable="false"  />
-            <field name="adrShippingStreetnr" column="adr_shipping_streetnr" type="string"  nullable="false"  />
-            <field name="adrShippingCity" column="adr_shipping_city" type="string"  nullable="false"  />
-            <field name="adrShippingPostalcode" column="adr_shipping_postalcode" type="string"  nullable="false"  />
-            <field name="adrShippingCountryId" column="adr_shipping_country_id" type="string"  nullable="false"  />
-            <field name="adrShippingTelefon" column="adr_shipping_telefon" type="string"  nullable="false"  />
-            <field name="adrShippingFax" column="adr_shipping_fax" type="string"  nullable="false"  />
-            <field name="shopShippingGroupId" column="shop_shipping_group_id" type="string"  nullable="false"  />
-            <field name="shopShippingGroupName" column="shop_shipping_group_name" type="string"  nullable="false"  />
-            <field name="shopShippingGroupPrice" column="shop_shipping_group_price" type="string" length="10,2" nullable="false"  />
-            <field name="shopShippingGroupVatPercent" column="shop_shipping_group_vat_percent" type="string" length="5,2" nullable="false"  />
-            <field name="shopOrderShippingGroupParameter" column="shop_order_shipping_group_parameter" type="string"  nullable="false"  />
-            <field name="shopPaymentMethodId" column="shop_payment_method_id" type="string"  nullable="false"  />
-            <field name="shopPaymentMethodName" column="shop_payment_method_name" type="string"  nullable="false"  />
-            <field name="shopPaymentMethodPrice" column="shop_payment_method_price" type="string" length="10,2" nullable="false"  />
-            <field name="shopPaymentMethodVatPercent" column="shop_payment_method_vat_percent" type="string" length="5,2" nullable="false"  />
-            <field name="shopOrderPaymentMethodParameter" column="shop_order_payment_method_parameter" type="string"  nullable="false"  />
-            <field name="shopOrderVat" column="shop_order_vat" type="string"  nullable="false"  />
-            <field name="valueArticle" column="value_article" type="string" length="10,2" nullable="false"  />
-            <field name="valueTotal" column="value_total" type="string" length="10,2" nullable="false"  />
-            <field name="pkgShopCurrencyId" column="pkg_shop_currency_id" type="string"  nullable="false"  />
-            <field name="valueWrapping" column="value_wrapping" type="string" length="10,2" nullable="false"  />
-            <field name="valueWrappingCard" column="value_wrapping_card" type="string" length="10,2" nullable="false"  />
-            <field name="valueVouchers" column="value_vouchers" type="string" length="10,2" nullable="false"  />
-            <field name="valueVouchersNotSponsored" column="value_vouchers_not_sponsored" type="string" length="10,2" nullable="false"  />
-            <field name="valueDiscounts" column="value_discounts" type="string" length="10,2" nullable="false"  />
-            <field name="valueVatTotal" column="value_vat_total" type="string" length="10,2" nullable="false"  />
-            <field name="countArticles" column="count_articles" type="string" length="10,2" nullable="false"  />
-            <field name="countUniqueArticles" column="count_unique_articles" type="string"  nullable="false"  />
-            <field name="totalweight" column="totalweight" type="string" length="10,2" nullable="false"  />
-            <field name="totalvolume" column="totalvolume" type="string" length="10,2" nullable="false"  />
-            <field name="systemOrderSaveCompleted" column="system_order_save_completed" type="string"  nullable="false"  />
-            <field name="systemOrderNotificationSend" column="system_order_notification_send" type="string"  nullable="false"  />
-            <field name="systemOrderPaymentMethodExecuted" column="system_order_payment_method_executed" type="string"  nullable="false"  />
-            <field name="systemOrderPaymentMethodExecutedDate" column="system_order_payment_method_executed_date" type="string"  nullable="false"  />
-            <field name="orderIsPaid" column="order_is_paid" type="string"  nullable="false"  />
-            <field name="orderIsPaidDate" column="order_is_paid_date" type="string"  nullable="false"  />
-            <field name="canceled" column="canceled" type="string"  nullable="false"  />
-            <field name="canceledDate" column="canceled_date" type="string"  nullable="false"  />
-            <field name="systemOrderExportedDate" column="system_order_exported_date" type="string"  nullable="false"  />
-            <field name="affiliateCode" column="affiliate_code" type="string"  nullable="false"  />
-            <field name="pkgShopAffiliateId" column="pkg_shop_affiliate_id" type="string"  nullable="false"  />
-            <field name="shopVoucherUse" column="shop_voucher_use" type="string"  nullable="false"  />
-            <field name="shopOrderDiscount" column="shop_order_discount" type="string"  nullable="false"  />
-            <field name="shopOrderStatus" column="shop_order_status" type="string"  nullable="false"  />
-            <field name="objectMail" column="object_mail" type="string"  nullable="false"  />
-            <field name="pkgShopRatingServiceRatingProcessedOn" column="pkg_shop_rating_service_rating_processed_on" type="string"  nullable="false"  />
-            <field name="vatId" column="vat_id" type="string"  nullable="false"  />
-            <field name="internalComment" column="internal_comment" type="string"  nullable="false"  />
-            <field name="pkgShopRatingServiceOrderCompletelyShipped" column="pkg_shop_rating_service_order_completely_shipped" type="string"  nullable="false"  />
+        </field>
+            <field name="pkgShopRatingServiceMailProcessed"  column="pkg_shop_rating_service_mail_processed"  nullable="false"  />
+            <many-to-one field="shopId" target-entity="ChameleonSystem\CoreBundle\Entity\Shop" >
+    <join-column name="shop_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="newsletterSignup"  column="newsletter_signup"  nullable="false"  />
+            <one-to-many field="pkgShopPaymentIpnMessageCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessage" mapped-by="shopOrderId" />
+
+            <one-to-many field="amazonPaymentIdMappingCollection" target-entity="ChameleonSystem\CoreBundle\Entity\AmazonPaymentIdMapping" mapped-by="shopOrderId" />
+
+            <one-to-many field="pkgShopPaymentTransactionCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransaction" mapped-by="shopOrderId" />
+
+            <many-to-one field="cmsPortalId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal" >
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="ordernumber"  column="ordernumber"  nullable="false"  />
+            <field name="pkgShopRatingServiceMailSent"  column="pkg_shop_rating_service_mail_sent"  nullable="false"  />
+            <field name="pkgShopRatingServiceId" type="string" field="pkg_shop_rating_service_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="pkgShopRatingService" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopRatingService">
+    <join-column name="pkg_shop_rating_service_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="orderIdent"  column="order_ident"  nullable="false"  />
+            <field name="datecreated"  column="datecreated"  nullable="false"  />
+            <one-to-many field="shopOrderItemCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrderItem" mapped-by="shopOrderId" />
+
+            <many-to-one field="dataExtranetUserId" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUser" inversed-by="shopOrder">
+    <join-column name="data_extranet_user_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="customerNumber"  column="customer_number"  nullable="false"  />
+            <field name="userEmail"  column="user_email"  nullable="false"  />
+            <field name="adrBillingCompany"  column="adr_billing_company"  nullable="false"  />
+            <field name="adrBillingSalutationId" type="string" field="adr_billing_salutation_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="adrBillingSalutation" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation">
+    <join-column name="adr_billing_salutation_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="adrBillingFirstname"  column="adr_billing_firstname"  nullable="false"  />
+            <field name="adrBillingLastname"  column="adr_billing_lastname"  nullable="false"  />
+            <field name="adrBillingAdditionalInfo"  column="adr_billing_additional_info"  nullable="false"  />
+            <field name="adrBillingStreet"  column="adr_billing_street"  nullable="false"  />
+            <field name="adrBillingStreetnr"  column="adr_billing_streetnr"  nullable="false"  />
+            <field name="adrBillingCity"  column="adr_billing_city"  nullable="false"  />
+            <field name="adrBillingPostalcode"  column="adr_billing_postalcode"  nullable="false"  />
+            <field name="adrBillingCountryId" type="string" field="adr_billing_country_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="adrBillingCountry" target-entity="\ChameleonSystem\CoreBundle\Entity\DataCountry">
+    <join-column name="adr_billing_country_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="adrBillingTelefon"  column="adr_billing_telefon"  nullable="false"  />
+            <field name="adrBillingFax"  column="adr_billing_fax"  nullable="false"  />
+            <field name="cmsLanguageId" type="string" field="cms_language_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsLanguage">
+    <join-column name="cms_language_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="userIp"  column="user_ip"  nullable="false"  />
+            <field name="adrShippingUseBilling"  column="adr_shipping_use_billing"  nullable="false"  />
+            <field name="adrShippingIsDhlPackstation"  column="adr_shipping_is_dhl_packstation"  nullable="false"  />
+            <field name="adrShippingCompany"  column="adr_shipping_company"  nullable="false"  />
+            <field name="adrShippingSalutationId" type="string" field="adr_shipping_salutation_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="adrShippingSalutation" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation">
+    <join-column name="adr_shipping_salutation_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="adrShippingFirstname"  column="adr_shipping_firstname"  nullable="false"  />
+            <field name="adrShippingLastname"  column="adr_shipping_lastname"  nullable="false"  />
+            <field name="adrShippingAdditionalInfo"  column="adr_shipping_additional_info"  nullable="false"  />
+            <field name="adrShippingStreet"  column="adr_shipping_street"  nullable="false"  />
+            <field name="adrShippingStreetnr"  column="adr_shipping_streetnr"  nullable="false"  />
+            <field name="adrShippingCity"  column="adr_shipping_city"  nullable="false"  />
+            <field name="adrShippingPostalcode"  column="adr_shipping_postalcode"  nullable="false"  />
+            <field name="adrShippingCountryId" type="string" field="adr_shipping_country_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="adrShippingCountry" target-entity="\ChameleonSystem\CoreBundle\Entity\DataCountry">
+    <join-column name="adr_shipping_country_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="adrShippingTelefon"  column="adr_shipping_telefon"  nullable="false"  />
+            <field name="adrShippingFax"  column="adr_shipping_fax"  nullable="false"  />
+            <field name="shopShippingGroupId" type="string" field="shop_shipping_group_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopShippingGroup" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopShippingGroup">
+    <join-column name="shop_shipping_group_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="shopShippingGroupName"  column="shop_shipping_group_name"  nullable="false"  />
+            <field name="shopShippingGroupPrice"  column="shop_shipping_group_price"  nullable="false"  />
+            <field name="shopShippingGroupVatPercent"  column="shop_shipping_group_vat_percent"  nullable="false"  />
+            <one-to-many field="shopOrderShippingGroupParameterCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrderShippingGroupParameter" mapped-by="shopOrderId" />
+
+            <field name="shopPaymentMethodId" type="string" field="shop_payment_method_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopPaymentMethod" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopPaymentMethod">
+    <join-column name="shop_payment_method_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="shopPaymentMethodName"  column="shop_payment_method_name"  nullable="false"  />
+            <field name="shopPaymentMethodPrice"  column="shop_payment_method_price"  nullable="false"  />
+            <field name="shopPaymentMethodVatPercent"  column="shop_payment_method_vat_percent"  nullable="false"  />
+            <one-to-many field="shopOrderPaymentMethodParameterCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrderPaymentMethodParameter" mapped-by="shopOrderId" />
+
+            <one-to-many field="shopOrderVatCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrderVat" mapped-by="shopOrderId" />
+
+            <field name="valueArticle"  column="value_article"  nullable="false"  />
+            <field name="valueTotal"  column="value_total"  nullable="false"  />
+            <field name="pkgShopCurrencyId" type="string" field="pkg_shop_currency_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="pkgShopCurrency" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopCurrency">
+    <join-column name="pkg_shop_currency_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="valueWrapping"  column="value_wrapping"  nullable="false"  />
+            <field name="valueWrappingCard"  column="value_wrapping_card"  nullable="false"  />
+            <field name="valueVouchers"  column="value_vouchers"  nullable="false"  />
+            <field name="valueVouchersNotSponsored"  column="value_vouchers_not_sponsored"  nullable="false"  />
+            <field name="valueDiscounts"  column="value_discounts"  nullable="false"  />
+            <field name="valueVatTotal"  column="value_vat_total"  nullable="false"  />
+            <field name="countArticles"  column="count_articles"  nullable="false"  />
+            <field name="countUniqueArticles"  column="count_unique_articles"  nullable="false"  />
+            <field name="totalweight"  column="totalweight"  nullable="false"  />
+            <field name="totalvolume"  column="totalvolume"  nullable="false"  />
+            <field name="systemOrderSaveCompleted"  column="system_order_save_completed"  nullable="false"  />
+            <field name="systemOrderNotificationSend"  column="system_order_notification_send"  nullable="false"  />
+            <field name="systemOrderPaymentMethodExecuted"  column="system_order_payment_method_executed"  nullable="false"  />
+            <field name="systemOrderPaymentMethodExecutedDate"  column="system_order_payment_method_executed_date"  nullable="false"  />
+            <field name="orderIsPaid"  column="order_is_paid"  nullable="false"  />
+            <field name="orderIsPaidDate"  column="order_is_paid_date"  nullable="false"  />
+            <field name="canceled"  column="canceled"  nullable="false"  />
+            <field name="canceledDate"  column="canceled_date"  nullable="false"  />
+            <field name="systemOrderExportedDate"  column="system_order_exported_date"  nullable="false"  />
+            <field name="affiliateCode"  column="affiliate_code"  nullable="false"  />
+            <field name="pkgShopAffiliateId" type="string" field="pkg_shop_affiliate_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="pkgShopAffiliate" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopAffiliate">
+    <join-column name="pkg_shop_affiliate_id" referenced-column-name="id" />
+</many-to-one>
+            <one-to-many field="shopVoucherUseCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopVoucherUse" mapped-by="shopOrderId" />
+
+            <one-to-many field="shopOrderDiscountCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrderDiscount" mapped-by="shopOrderId" />
+
+            <one-to-many field="shopOrderStatusCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrderStatus" mapped-by="shopOrderId" />
+
+            <field name="objectMail"  column="object_mail"  nullable="false"  />
+            <field name="pkgShopRatingServiceRatingProcessedOn"  column="pkg_shop_rating_service_rating_processed_on"  nullable="false"  />
+            <field name="vatId"  column="vat_id"  nullable="false"  />
+            <field name="internalComment"  column="internal_comment"  nullable="false"  />
+            <field name="pkgShopRatingServiceOrderCompletelyShipped"  column="pkg_shop_rating_service_order_completely_shipped"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -2,21 +2,30 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsMenuCustomItem" table="cms_menu_custom_item">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsMenuCustomItem" table="cms_menu_custom_item">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="url" column="url" type="string"  nullable="false"  />
-            <field name="cmsRightMlt" column="cms_right_mlt" type="string"  nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="url"  column="url"  nullable="false"  />
+            <many-to-many field="cmsRightMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsRight">
+    <join-table name="cms_menu_custom_item_cms_right_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
     </entity>
 
 </doctrine-mapping>

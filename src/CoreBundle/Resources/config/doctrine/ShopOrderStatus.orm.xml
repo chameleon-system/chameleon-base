@@ -2,24 +2,38 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopOrderStatus" table="shop_order_status">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopOrderStatus" table="shop_order_status">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="shopOrderId" column="shop_order_id" type="string"  nullable="false"  />
-            <field name="statusDate" column="status_date" type="string"  nullable="false"  />
-            <field name="shopOrderStatusCodeId" column="shop_order_status_code_id" type="string"  nullable="false"  />
-            <field name="data" column="data" type="string"  nullable="false"  />
-            <field name="info" column="info" type="string"  nullable="false"  />
-            <field name="shopOrderStatusItem" column="shop_order_status_item" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="shopOrderId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="shopOrderStatus">
+    <join-column name="shop_order_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="statusDate"  column="status_date"  nullable="false">
+    <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+    </options>
+</field>
+            <field name="shopOrderStatusCodeId" type="string" field="shop_order_status_code_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopOrderStatusCode" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderStatusCode">
+    <join-column name="shop_order_status_code_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="data"  column="data"  nullable="false"  />
+            <field name="info"  column="info"  nullable="false"  />
+            <one-to-many field="shopOrderStatusItemCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrderStatusItem" mapped-by="shopOrderStatusId" />
+
     </entity>
 
 </doctrine-mapping>

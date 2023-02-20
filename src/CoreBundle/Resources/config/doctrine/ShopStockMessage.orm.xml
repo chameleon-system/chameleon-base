@@ -2,30 +2,33 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopStockMessage" table="shop_stock_message">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopStockMessage" table="shop_stock_message">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="className" column="class_name" type="string"  nullable="false"  />
-            <field name="classSubtype" column="class_subtype" type="string"  nullable="false"  />
-            <field name="classType" column="class_type" type="string" length="&#039;Core&#039;,&#039;Custom-Core&#039;,&#039;Customer&#039;" nullable="false"  />
-            <field name="shopId" column="shop_id" type="string"  nullable="false"  />
-            <field name="identifier" column="identifier" type="string"  nullable="false"  />
-            <field name="class" column="class" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="internalName" column="internal_name" type="string"  nullable="false"  />
-            <field name="shopStockMessageTrigger" column="shop_stock_message_trigger" type="string"  nullable="false"  />
-            <field name="autoDeactivateOnZeroStock" column="auto_deactivate_on_zero_stock" type="string"  nullable="false"  />
-            <field name="autoActivateOnStock" column="auto_activate_on_stock" type="string"  nullable="false"  />
-            <field name="googleAvailability" column="google_availability" type="string"  nullable="false"  />
+        </field>
+            <field name="className"  column="class_name"  nullable="false"  />
+            <field name="classSubtype"  column="class_subtype"  nullable="false"  />
+            <field name="classType"  column="class_type"  nullable="false"  />
+            <many-to-one field="shopId" target-entity="ChameleonSystem\CoreBundle\Entity\Shop" inversed-by="shopStockMessage">
+    <join-column name="shop_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="identifier"  column="identifier"  nullable="false"  />
+            <field name="class"  column="class"  nullable="false"  />
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="internalName"  column="internal_name"  nullable="false"  />
+            <one-to-many field="shopStockMessageTriggerCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopStockMessageTrigger" mapped-by="shopStockMessageId" />
+
+            <field name="autoDeactivateOnZeroStock"  column="auto_deactivate_on_zero_stock"  nullable="false"  />
+            <field name="autoActivateOnStock"  column="auto_activate_on_stock"  nullable="false"  />
+            <field name="googleAvailability"  column="google_availability"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

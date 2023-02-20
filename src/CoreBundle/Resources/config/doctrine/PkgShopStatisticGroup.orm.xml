@@ -2,24 +2,24 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopStatisticGroup" table="pkg_shop_statistic_group">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgShopStatisticGroup" table="pkg_shop_statistic_group">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="dateRestrictionField" column="date_restriction_field" type="string"  nullable="false"  />
-            <field name="groups" column="groups" type="string"  nullable="false"  />
-            <field name="query" column="query" type="string"  nullable="false"  />
-            <field name="portalRestrictionField" column="portal_restriction_field" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
+        </field>
+            <field name="dateRestrictionField"  column="date_restriction_field"  nullable="false"  />
+            <field name="groups"  column="groups"  nullable="false"  />
+            <field name="query"  column="query"  nullable="false"  />
+            <field name="portalRestrictionField"  column="portal_restriction_field"  nullable="false"  />
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="position"  column="position"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

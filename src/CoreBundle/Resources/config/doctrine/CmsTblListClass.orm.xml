@@ -2,23 +2,25 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsTblListClass" table="cms_tbl_list_class">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsTblListClass" table="cms_tbl_list_class">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string" length="255" nullable="false"  />
-            <field name="cmsTblConfId" column="cms_tbl_conf_id" type="string"  nullable="false"  />
-            <field name="classSubtype" column="class_subtype" type="string"  nullable="false"  />
-            <field name="classlocation" column="classlocation" type="string" length="&#039;Core&#039;,&#039;Custom-Core&#039;,&#039;Customer&#039;" nullable="false"  />
-            <field name="classname" column="classname" type="string"  nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="classSubtype"  column="class_subtype"  nullable="false"  />
+            <field name="classlocation"  column="classlocation"  nullable="false"  />
+            <field name="classname"  column="classname"  nullable="false"  />
+            <many-to-one field="cmsTblConfId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTblConf" inversed-by="cmsTblListClass">
+    <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

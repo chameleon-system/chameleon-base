@@ -2,30 +2,39 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgCommentModuleConfig" table="pkg_comment_module_config">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgCommentModuleConfig" table="pkg_comment_module_config">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="pkgCommentTypeId" column="pkg_comment_type_id" type="string"  nullable="false"  />
-            <field name="introText" column="intro_text" type="string"  nullable="false"  />
-            <field name="closingText" column="closing_text" type="string"  nullable="false"  />
-            <field name="numberOfCommentsPerPage" column="number_of_comments_per_page" type="string"  nullable="false"  />
-            <field name="guestCanSeeComments" column="guest_can_see_comments" type="string"  nullable="false"  />
-            <field name="guestCommentAllowed" column="guest_comment_allowed" type="string"  nullable="false"  />
-            <field name="commentOnDelete" column="comment_on_delete" type="string"  nullable="false"  />
-            <field name="newestOnTop" column="newest_on_top" type="string"  nullable="false"  />
-            <field name="useSimpleReporting" column="use_simple_reporting" type="string"  nullable="false"  />
-            <field name="showReportedComments" column="show_reported_comments" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="cmsTplModuleInstanceId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance" >
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="pkgCommentTypeId" type="string" field="pkg_comment_type_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="pkgCommentType" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgCommentType">
+    <join-column name="pkg_comment_type_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="introText"  column="intro_text"  nullable="false"  />
+            <field name="closingText"  column="closing_text"  nullable="false"  />
+            <field name="numberOfCommentsPerPage"  column="number_of_comments_per_page"  nullable="false"  />
+            <field name="guestCanSeeComments"  column="guest_can_see_comments"  nullable="false"  />
+            <field name="guestCommentAllowed"  column="guest_comment_allowed"  nullable="false"  />
+            <field name="commentOnDelete"  column="comment_on_delete"  nullable="false"  />
+            <field name="newestOnTop"  column="newest_on_top"  nullable="false"  />
+            <field name="useSimpleReporting"  column="use_simple_reporting"  nullable="false"  />
+            <field name="showReportedComments"  column="show_reported_comments"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

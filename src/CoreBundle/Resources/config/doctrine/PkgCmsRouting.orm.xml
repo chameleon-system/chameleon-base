@@ -2,26 +2,35 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgCmsRouting" table="pkg_cms_routing">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgCmsRouting" table="pkg_cms_routing">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="shortDescription" column="short_description" type="string"  nullable="false"  />
-            <field name="type" column="type" type="string" length="&#039;yaml&#039;,&#039;class&#039;,&#039;service&#039;" nullable="false"  />
-            <field name="resource" column="resource" type="string"  nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
-            <field name="systemPageName" column="system_page_name" type="string"  nullable="false"  />
-            <field name="cmsPortalMlt" column="cms_portal_mlt" type="string"  nullable="false"  />
-            <field name="active" column="active" type="string"  nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="shortDescription"  column="short_description"  nullable="false"  />
+            <field name="type"  column="type"  nullable="false"  />
+            <field name="resource"  column="resource"  nullable="false"  />
+            <field name="position"  column="position"  nullable="false"  />
+            <field name="systemPageName"  column="system_page_name"  nullable="false"  />
+            <many-to-many field="cmsPortalMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-table name="pkg_cms_routing_cms_portal_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="active"  column="active"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

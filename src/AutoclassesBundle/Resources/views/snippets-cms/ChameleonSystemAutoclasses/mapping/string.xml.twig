@@ -1,2 +1,2 @@
 {# @var definition array #}
-<field name="{{ fieldName }}" column="{{ definition.name }}" {% if definition.length_set != '' %}length="{{ definition.length_set }}"{% endif%} nullable="false"  />
+<field name="{{ fieldName }}" {% if fieldType.mysql_type %}type="{{ fieldType.mysql_type|lower }}"{% endif %} column="{{ definition.name }}" {% if length != '' %}length="{{ length }}"{% endif%} nullable="false"  />

@@ -2,80 +2,179 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\Shop" table="shop">
+    <entity name="ChameleonSystem\CoreBundle\Entity\Shop" table="shop">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="shopOrderStatusCode" column="shop_order_status_code" type="string"  nullable="false"  />
-            <field name="defaultPkgShopCurrencyId" column="default_pkg_shop_currency_id" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="cmsPortalMlt" column="cms_portal_mlt" type="string"  nullable="false"  />
-            <field name="shopCategoryId" column="shop_category_id" type="string"  nullable="false"  />
-            <field name="adrCompany" column="adr_company" type="string"  nullable="false"  />
-            <field name="adrStreet" column="adr_street" type="string"  nullable="false"  />
-            <field name="adrZip" column="adr_zip" type="string"  nullable="false"  />
-            <field name="adrCity" column="adr_city" type="string"  nullable="false"  />
-            <field name="tCountryId" column="t_country_id" type="string"  nullable="false"  />
-            <field name="customerServiceTelephone" column="customer_service_telephone" type="string"  nullable="false"  />
-            <field name="customerServiceEmail" column="customer_service_email" type="string"  nullable="false"  />
-            <field name="shopvatnumber" column="shopvatnumber" type="string"  nullable="false"  />
-            <field name="shopBankAccount" column="shop_bank_account" type="string"  nullable="false"  />
-            <field name="dataExtranetUser" column="data_extranet_user" type="string"  nullable="false"  />
-            <field name="dataExtranetUserShopArticleHistoryMaxArticleCount" column="data_extranet_user_shop_article_history_max_article_count" type="string"  nullable="false"  />
-            <field name="shopModuleArticlelistOrderbyId" column="shop_module_articlelist_orderby_id" type="string"  nullable="false"  />
-            <field name="shopVatId" column="shop_vat_id" type="string"  nullable="false"  />
-            <field name="shopShippingGroupId" column="shop_shipping_group_id" type="string"  nullable="false"  />
-            <field name="shippingVatDependsOnBasketContents" column="shipping_vat_depends_on_basket_contents" type="string"  nullable="false"  />
-            <field name="dataExtranetSalutationId" column="data_extranet_salutation_id" type="string"  nullable="false"  />
-            <field name="dataCountryId" column="data_country_id" type="string"  nullable="false"  />
-            <field name="affiliateParameterName" column="affiliate_parameter_name" type="string"  nullable="false"  />
-            <field name="pkgShopAffiliate" column="pkg_shop_affiliate" type="string"  nullable="false"  />
-            <field name="shopArticleImageSize" column="shop_article_image_size" type="string"  nullable="false"  />
-            <field name="shopSystemInfo" column="shop_system_info" type="string"  nullable="false"  />
-            <field name="notFoundImage" column="not_found_image" type="string"  nullable="false"  />
-            <field name="shopSearchWordBonus" column="shop_search_word_bonus" type="string" length="5,5" nullable="false"  />
-            <field name="shopSearchWordLengthFactor" column="shop_search_word_length_factor" type="string" length="5,5" nullable="false"  />
-            <field name="shopSearchSoundexPenalty" column="shop_search_soundex_penalty" type="string" length="5,5" nullable="false"  />
-            <field name="shopSearchMinIndexLength" column="shop_search_min_index_length" type="string"  nullable="false"  />
-            <field name="shopSearchMaxIndexLength" column="shop_search_max_index_length" type="string"  nullable="false"  />
-            <field name="shopSearchUseBooleanAnd" column="shop_search_use_boolean_and" type="string"  nullable="false"  />
-            <field name="maxSearchCacheAgeInHours" column="max_search_cache_age_in_hours" type="string"  nullable="false"  />
-            <field name="shopSearchLog" column="shop_search_log" type="string"  nullable="false"  />
-            <field name="shopSearchFieldWeight" column="shop_search_field_weight" type="string"  nullable="false"  />
-            <field name="shopSearchIgnoreWord" column="shop_search_ignore_word" type="string"  nullable="false"  />
-            <field name="shopSearchKeywordArticle" column="shop_search_keyword_article" type="string"  nullable="false"  />
-            <field name="shopSearchCache" column="shop_search_cache" type="string"  nullable="false"  />
-            <field name="basketSpotName" column="basket_spot_name" type="string"  nullable="false"  />
-            <field name="shopCentralHandlerSpotName" column="shop_central_handler_spot_name" type="string"  nullable="false"  />
-            <field name="showEmptyCategories" column="show_empty_categories" type="string"  nullable="false"  />
-            <field name="allowPurchaseOfVariantParents" column="allow_purchase_of_variant_parents" type="string"  nullable="false"  />
-            <field name="loadInactiveVariants" column="load_inactive_variants" type="string"  nullable="false"  />
-            <field name="syncProfileDataWithBillingData" column="sync_profile_data_with_billing_data" type="string"  nullable="false"  />
-            <field name="allowMultipleBillingAddresses" column="allow_multiple_billing_addresses" type="string"  nullable="false"  />
-            <field name="allowMultipleShippingAddresses" column="allow_multiple_shipping_addresses" type="string"  nullable="false"  />
-            <field name="allowGuestPurchase" column="allow_guest_purchase" type="string"  nullable="false"  />
-            <field name="logArticleSuggestions" column="log_article_suggestions" type="string"  nullable="false"  />
-            <field name="shopStockMessage" column="shop_stock_message" type="string"  nullable="false"  />
-            <field name="exportKey" column="export_key" type="string"  nullable="false"  />
-            <field name="cartInfoText" column="cart_info_text" type="string"  nullable="false"  />
-            <field name="pkgShopListfilterPostsearchId" column="pkg_shop_listfilter_postsearch_id" type="string"  nullable="false"  />
-            <field name="redirectToNotFoundPageProductSearchOnNoResults" column="redirect_to_not_found_page_product_search_on_no_results" type="string"  nullable="false"  />
-            <field name="useShopSearchLog" column="use_shop_search_log" type="string"  nullable="false"  />
-            <field name="pkgShopListfilterCategoryFilterId" column="pkg_shop_listfilter_category_filter_id" type="string"  nullable="false"  />
-            <field name="dataExtranetUserShopArticleHistoryMaxCookieSize" column="data_extranet_user_shop_article_history_max_cookie_size" type="string"  nullable="false"  />
-            <field name="productUrlMode" column="product_url_mode" type="string" length="&#039;V1&#039;,&#039;V2&#039;" nullable="false"  />
-            <field name="shopreviewmailMailDelay" column="shopreviewmail_mail_delay" type="string"  nullable="false"  />
-            <field name="shopreviewmailPercentOfCustomers" column="shopreviewmail_percent_of_customers" type="string" length="10,2" nullable="false"  />
-            <field name="shopreviewmailSendForEachOrder" column="shopreviewmail_send_for_each_order" type="string"  nullable="false"  />
-            <field name="pkgShopFooterCategory" column="pkg_shop_footer_category" type="string"  nullable="false"  />
+        </field>
+            <one-to-many field="shopOrderStatusCodeCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrderStatusCode" mapped-by="shopId" />
+
+            <field name="defaultPkgShopCurrencyId" type="string" field="default_pkg_shop_currency_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="defaultPkgShopCurrency" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopCurrency">
+    <join-column name="default_pkg_shop_currency_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="name"  column="name"  nullable="false"  />
+            <many-to-many field="cmsPortalMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-table name="shop_cms_portal_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="shopCategoryId" type="string" field="shop_category_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopCategory" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopCategory">
+    <join-column name="shop_category_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="adrCompany"  column="adr_company"  nullable="false"  />
+            <field name="adrStreet"  column="adr_street"  nullable="false"  />
+            <field name="adrZip"  column="adr_zip"  nullable="false"  />
+            <field name="adrCity"  column="adr_city"  nullable="false"  />
+            <field name="tCountryId" type="string" field="t_country_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="tCountry" target-entity="\ChameleonSystem\CoreBundle\Entity\TCountry">
+    <join-column name="t_country_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="customerServiceTelephone"  column="customer_service_telephone"  nullable="false"  />
+            <field name="customerServiceEmail"  column="customer_service_email"  nullable="false"  />
+            <field name="shopvatnumber"  column="shopvatnumber"  nullable="false"  />
+            <one-to-many field="shopBankAccountCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopBankAccount" mapped-by="shopId" />
+
+            <one-to-many field="dataExtranetUserCollection" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUser" mapped-by="shopId" />
+
+            <field name="dataExtranetUserShopArticleHistoryMaxArticleCount"  column="data_extranet_user_shop_article_history_max_article_count"  nullable="false"  />
+            <field name="shopModuleArticlelistOrderbyId" type="string" field="shop_module_articlelist_orderby_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopModuleArticlelistOrderby" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby">
+    <join-column name="shop_module_articlelist_orderby_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="shopVatId" type="string" field="shop_vat_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopVat" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVat">
+    <join-column name="shop_vat_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="shopShippingGroupId" type="string" field="shop_shipping_group_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopShippingGroup" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopShippingGroup">
+    <join-column name="shop_shipping_group_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="shippingVatDependsOnBasketContents"  column="shipping_vat_depends_on_basket_contents"  nullable="false"  />
+            <field name="dataExtranetSalutationId" type="string" field="data_extranet_salutation_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="dataExtranetSalutation" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation">
+    <join-column name="data_extranet_salutation_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="dataCountryId" type="string" field="data_country_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="dataCountry" target-entity="\ChameleonSystem\CoreBundle\Entity\DataCountry">
+    <join-column name="data_country_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="affiliateParameterName"  column="affiliate_parameter_name"  nullable="false"  />
+            <one-to-many field="pkgShopAffiliateCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopAffiliate" mapped-by="shopId" />
+
+            <one-to-many field="shopArticleImageSizeCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleImageSize" mapped-by="shopId" />
+
+            <one-to-many field="shopSystemInfoCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSystemInfo" mapped-by="shopId" />
+
+            <field name="notFoundImageId" type="string" field="not_found_image_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="notFoundImage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="not_found_image_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="shopSearchWordBonus"  column="shop_search_word_bonus"  nullable="false"  />
+            <field name="shopSearchWordLengthFactor"  column="shop_search_word_length_factor"  nullable="false"  />
+            <field name="shopSearchSoundexPenalty"  column="shop_search_soundex_penalty"  nullable="false"  />
+            <field name="shopSearchMinIndexLength"  column="shop_search_min_index_length"  nullable="false"  />
+            <field name="shopSearchMaxIndexLength"  column="shop_search_max_index_length"  nullable="false"  />
+            <field name="shopSearchUseBooleanAnd"  column="shop_search_use_boolean_and"  nullable="false"  />
+            <field name="maxSearchCacheAgeInHours"  column="max_search_cache_age_in_hours"  nullable="false"  />
+            <one-to-many field="shopSearchLogCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSearchLog" mapped-by="shopId" />
+
+            <one-to-many field="shopSearchFieldWeightCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSearchFieldWeight" mapped-by="shopId" />
+
+            <one-to-many field="shopSearchIgnoreWordCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSearchIgnoreWord" mapped-by="shopId" />
+
+            <one-to-many field="shopSearchKeywordArticleCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSearchKeywordArticle" mapped-by="shopId" />
+
+            <one-to-many field="shopSearchCacheCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSearchCache" mapped-by="shopId" />
+
+            <field name="basketSpotName"  column="basket_spot_name"  nullable="false"  />
+            <field name="shopCentralHandlerSpotName"  column="shop_central_handler_spot_name"  nullable="false"  />
+            <field name="showEmptyCategories"  column="show_empty_categories"  nullable="false"  />
+            <field name="allowPurchaseOfVariantParents"  column="allow_purchase_of_variant_parents"  nullable="false"  />
+            <field name="loadInactiveVariants"  column="load_inactive_variants"  nullable="false"  />
+            <field name="syncProfileDataWithBillingData"  column="sync_profile_data_with_billing_data"  nullable="false"  />
+            <field name="allowMultipleBillingAddresses"  column="allow_multiple_billing_addresses"  nullable="false"  />
+            <field name="allowMultipleShippingAddresses"  column="allow_multiple_shipping_addresses"  nullable="false"  />
+            <field name="allowGuestPurchase"  column="allow_guest_purchase"  nullable="false"  />
+            <field name="logArticleSuggestions"  column="log_article_suggestions"  nullable="false"  />
+            <one-to-many field="shopStockMessageCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopStockMessage" mapped-by="shopId" />
+
+            <field name="exportKey"  column="export_key"  nullable="false"  />
+            <field name="cartInfoText"  column="cart_info_text"  nullable="false"  />
+            <field name="pkgShopListfilterPostsearchId" type="string" field="pkg_shop_listfilter_postsearch_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="pkgShopListfilterPostsearch" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopListfilter">
+    <join-column name="pkg_shop_listfilter_postsearch_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="redirectToNotFoundPageProductSearchOnNoResults"  column="redirect_to_not_found_page_product_search_on_no_results"  nullable="false"  />
+            <field name="useShopSearchLog"  column="use_shop_search_log"  nullable="false"  />
+            <field name="pkgShopListfilterCategoryFilterId" type="string" field="pkg_shop_listfilter_category_filter_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="pkgShopListfilterCategoryFilter" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopListfilter">
+    <join-column name="pkg_shop_listfilter_category_filter_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="dataExtranetUserShopArticleHistoryMaxCookieSize"  column="data_extranet_user_shop_article_history_max_cookie_size"  nullable="false"  />
+            <field name="productUrlMode"  column="product_url_mode"  nullable="false"  />
+            <field name="shopreviewmailMailDelay"  column="shopreviewmail_mail_delay"  nullable="false"  />
+            <field name="shopreviewmailPercentOfCustomers"  column="shopreviewmail_percent_of_customers"  nullable="false"  />
+            <field name="shopreviewmailSendForEachOrder"  column="shopreviewmail_send_for_each_order"  nullable="false"  />
+            <one-to-many field="pkgShopFooterCategoryCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopFooterCategory" mapped-by="shopId" />
+
     </entity>
 
 </doctrine-mapping>

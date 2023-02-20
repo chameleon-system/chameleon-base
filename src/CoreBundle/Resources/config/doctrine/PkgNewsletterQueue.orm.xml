@@ -2,21 +2,30 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterQueue" table="pkg_newsletter_queue">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgNewsletterQueue" table="pkg_newsletter_queue">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="pkgNewsletterUser" column="pkg_newsletter_user" type="string"  nullable="false"  />
-            <field name="dateSent" column="date_sent" type="string"  nullable="false"  />
-            <field name="pkgNewsletterCampaignId" column="pkg_newsletter_campaign_id" type="string"  nullable="false"  />
+        </field>
+            <field name="pkgNewsletterUserId" type="string" field="pkg_newsletter_user_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="pkgNewsletterUser" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterUser">
+    <join-column name="pkg_newsletter_user_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="dateSent"  column="date_sent"  nullable="false"  />
+            <many-to-one field="pkgNewsletterCampaignId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgNewsletterCampaign" inversed-by="pkgNewsletterQueue">
+    <join-column name="pkg_newsletter_campaign_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

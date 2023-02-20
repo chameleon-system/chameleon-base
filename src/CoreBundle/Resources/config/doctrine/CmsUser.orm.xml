@@ -2,44 +2,102 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsUser" table="cms_user">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsUser" table="cms_user">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="login" column="login" type="string"  nullable="false"  />
-            <field name="cryptedPw" column="crypted_pw" type="string" length="255" nullable="false"  />
-            <field name="firstname" column="firstname" type="string" length="60" nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="email" column="email" type="string"  nullable="false"  />
-            <field name="images" column="images" type="string"  nullable="false"  />
-            <field name="company" column="company" type="string" length="255" nullable="false"  />
-            <field name="department" column="department" type="string" length="255" nullable="false"  />
-            <field name="city" column="city" type="string" length="255" nullable="false"  />
-            <field name="tel" column="tel" type="string" length="255" nullable="false"  />
-            <field name="fax" column="fax" type="string" length="255" nullable="false"  />
-            <field name="cmsLanguageId" column="cms_language_id" type="string"  nullable="false"  />
-            <field name="languages" column="languages" type="string"  nullable="false"  />
-            <field name="cmsUsergroupMlt" column="cms_usergroup_mlt" type="string"  nullable="false"  />
-            <field name="cmsRoleMlt" column="cms_role_mlt" type="string"  nullable="false"  />
-            <field name="cmsPortalMlt" column="cms_portal_mlt" type="string"  nullable="false"  />
-            <field name="cmsLanguageMlt" column="cms_language_mlt" type="string"  nullable="false"  />
-            <field name="cmsCurrentEditLanguage" column="cms_current_edit_language" type="string" length="4" nullable="false"  />
-            <field name="allowCmsLogin" column="allow_cms_login" type="string"  nullable="false"  />
-            <field name="taskShowCount" column="task_show_count" type="string"  nullable="false"  />
-            <field name="isSystem" column="is_system" type="string"  nullable="false"  />
-            <field name="cmsWorkflowTransactionId" column="cms_workflow_transaction_id" type="string"  nullable="false"  />
-            <field name="showAsRightsTemplate" column="show_as_rights_template" type="string"  nullable="false"  />
-            <field name="cmsMenuItemMlt" column="cms_menu_item_mlt" type="string"  nullable="false"  />
-            <field name="dateModified" column="date_modified" type="string"  nullable="false"  />
-            <field name="googleId" column="google_id" type="string"  nullable="false"  />
+        </field>
+            <field name="login"  column="login"  nullable="false"  />
+            <field name="cryptedPw"  column="crypted_pw"  nullable="false"  />
+            <field name="firstname"  column="firstname"  nullable="false"  />
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="email"  column="email"  nullable="false"  />
+            <field name="imagesId" type="string" field="images_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="images" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="images_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="company"  column="company"  nullable="false"  />
+            <field name="department"  column="department"  nullable="false"  />
+            <field name="city"  column="city"  nullable="false"  />
+            <field name="tel"  column="tel"  nullable="false"  />
+            <field name="fax"  column="fax"  nullable="false"  />
+            <field name="cmsLanguageId" type="string" field="cms_language_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsLanguage">
+    <join-column name="cms_language_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="languages"  column="languages"  nullable="false"  />
+            <many-to-many field="cmsUsergroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsUsergroup">
+    <join-table name="cms_user_cms_usergroup_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <many-to-many field="cmsRoleMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsRole">
+    <join-table name="cms_user_cms_role_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <many-to-many field="cmsPortalMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-table name="cms_user_cms_portal_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <many-to-many field="cmsLanguageMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsLanguage">
+    <join-table name="cms_user_cms_language_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="cmsCurrentEditLanguage"  column="cms_current_edit_language"  nullable="false"  />
+            <field name="allowCmsLogin"  column="allow_cms_login"  nullable="false"  />
+            <field name="taskShowCount"  column="task_show_count"  nullable="false"  />
+            <field name="isSystem"  column="is_system"  nullable="false"  />
+            <field name="showAsRightsTemplate"  column="show_as_rights_template"  nullable="false"  />
+            <many-to-many field="cmsMenuItemMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsMenuItem">
+    <join-table name="cms_user_cms_menu_item_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="dateModified"  column="date_modified"  nullable="false"  />
+            <field name="googleId"  column="google_id"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -2,22 +2,36 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsLock" table="cms_lock">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsLock" table="cms_lock">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="recordid" column="recordid" type="string" length="36" nullable="false"  />
-            <field name="cmsUserId" column="cms_user_id" type="string"  nullable="false"  />
-            <field name="timeStamp" column="time_stamp" type="string"  nullable="false"  />
-            <field name="cmsTblConfId" column="cms_tbl_conf_id" type="string"  nullable="false"  />
+        </field>
+            <field name="recordid"  column="recordid"  nullable="false"  />
+            <field name="cmsUserId" type="string" field="cms_user_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsUser" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUser">
+    <join-column name="cms_user_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="timeStamp"  column="time_stamp"  nullable="false"  />
+            <field name="cmsTblConfId" type="string" field="cms_tbl_conf_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsTblConf" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConf">
+    <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

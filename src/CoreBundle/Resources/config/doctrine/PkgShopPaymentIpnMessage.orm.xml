@@ -2,31 +2,54 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessage" table="pkg_shop_payment_ipn_message">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessage" table="pkg_shop_payment_ipn_message">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="pkgShopPaymentIpnMessageTrigger" column="pkg_shop_payment_ipn_message_trigger" type="string"  nullable="false"  />
-            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
-            <field name="shopOrderId" column="shop_order_id" type="string"  nullable="false"  />
-            <field name="shopPaymentHandlerGroupId" column="shop_payment_handler_group_id" type="string"  nullable="false"  />
-            <field name="datecreated" column="datecreated" type="string"  nullable="false"  />
-            <field name="pkgShopPaymentIpnStatusId" column="pkg_shop_payment_ipn_status_id" type="string"  nullable="false"  />
-            <field name="success" column="success" type="string"  nullable="false"  />
-            <field name="completed" column="completed" type="string"  nullable="false"  />
-            <field name="errorType" column="error_type" type="string"  nullable="false"  />
-            <field name="ip" column="ip" type="string"  nullable="false"  />
-            <field name="requestUrl" column="request_url" type="string"  nullable="false"  />
-            <field name="payload" column="payload" type="string"  nullable="false"  />
-            <field name="errors" column="errors" type="string"  nullable="false"  />
+        </field>
+            <one-to-many field="pkgShopPaymentIpnMessageTriggerCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessageTrigger" mapped-by="pkgShopPaymentIpnMessageId" />
+
+            <field name="cmsPortalId" type="string" field="cms_portal_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="shopOrderId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="pkgShopPaymentIpnMessage">
+    <join-column name="shop_order_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="shopPaymentHandlerGroupId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup" inversed-by="pkgShopPaymentIpnMessage">
+    <join-column name="shop_payment_handler_group_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="datecreated"  column="datecreated"  nullable="false">
+    <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+    </options>
+</field>
+            <field name="pkgShopPaymentIpnStatusId" type="string" field="pkg_shop_payment_ipn_status_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="pkgShopPaymentIpnStatus" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnStatus">
+    <join-column name="pkg_shop_payment_ipn_status_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="success"  column="success"  nullable="false"  />
+            <field name="completed"  column="completed"  nullable="false"  />
+            <field name="errorType"  column="error_type"  nullable="false"  />
+            <field name="ip"  column="ip"  nullable="false"  />
+            <field name="requestUrl"  column="request_url"  nullable="false"  />
+            <field name="payload"  column="payload"  nullable="false"  />
+            <field name="errors"  column="errors"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

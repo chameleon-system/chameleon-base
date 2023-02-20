@@ -2,30 +2,37 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgGenericTableExport" table="pkg_generic_table_export">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgGenericTableExport" table="pkg_generic_table_export">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="systemName" column="system_name" type="string"  nullable="false"  />
-            <field name="restriction" column="restriction" type="string"  nullable="false"  />
-            <field name="view" column="view" type="string"  nullable="false"  />
-            <field name="headerView" column="header_view" type="string"  nullable="false"  />
-            <field name="viewPath" column="view_path" type="string"  nullable="false"  />
-            <field name="exportFilename" column="export_filename" type="string"  nullable="false"  />
-            <field name="cmsTblConfId" column="cms_tbl_conf_id" type="string"  nullable="false"  />
-            <field name="mapperConfig" column="mapper_config" type="string"  nullable="false"  />
-            <field name="class" column="class" type="string"  nullable="false"  />
-            <field name="classSubtype" column="class_subtype" type="string"  nullable="false"  />
-            <field name="classType" column="class_type" type="string" length="&#039;Core&#039;,&#039;Customer&#039;,&#039;Custom-Core&#039;" nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="systemName"  column="system_name"  nullable="false"  />
+            <field name="restriction"  column="restriction"  nullable="false"  />
+            <field name="view"  column="view"  nullable="false"  />
+            <field name="headerView"  column="header_view"  nullable="false"  />
+            <field name="viewPath"  column="view_path"  nullable="false"  />
+            <field name="exportFilename"  column="export_filename"  nullable="false"  />
+            <field name="cmsTblConfId" type="string" field="cms_tbl_conf_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsTblConf" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConf">
+    <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="mapperConfig"  column="mapper_config"  nullable="false"  />
+            <field name="class"  column="class"  nullable="false"  />
+            <field name="classSubtype"  column="class_subtype"  nullable="false"  />
+            <field name="classType"  column="class_type"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

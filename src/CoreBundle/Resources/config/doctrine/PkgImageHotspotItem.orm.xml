@@ -2,25 +2,36 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItem" table="pkg_image_hotspot_item">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItem" table="pkg_image_hotspot_item">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="pkgImageHotspotId" column="pkg_image_hotspot_id" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="active" column="active" type="string"  nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
-            <field name="cmsMediaId" column="cms_media_id" type="string"  nullable="false"  />
-            <field name="pkgImageHotspotItemSpot" column="pkg_image_hotspot_item_spot" type="string"  nullable="false"  />
-            <field name="pkgImageHotspotItemMarker" column="pkg_image_hotspot_item_marker" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="pkgImageHotspotId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgImageHotspot" inversed-by="pkgImageHotspotItem">
+    <join-column name="pkg_image_hotspot_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="active"  column="active"  nullable="false"  />
+            <field name="position"  column="position"  nullable="false"  />
+            <field name="cmsMediaId" type="string" field="cms_media_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsMedia" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="cms_media_id" referenced-column-name="id" />
+</many-to-one>
+            <one-to-many field="pkgImageHotspotItemSpotCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItemSpot" mapped-by="pkgImageHotspotItemId" />
+
+            <one-to-many field="pkgImageHotspotItemMarkerCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItemMarker" mapped-by="pkgImageHotspotItemId" />
+
     </entity>
 
 </doctrine-mapping>

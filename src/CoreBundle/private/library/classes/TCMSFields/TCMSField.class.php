@@ -166,23 +166,50 @@ class TCMSField implements TCMSFieldVisitableInterface, DoctrineTransformableInt
         $getterPrefix = 'bool' === $data['type'] ? 'is' : 'get';
 
         $data['source'] = get_class($this);
+        $data['valueIsRequired'] = $data['valueIsRequired'] ?? '1' === $definition['isrequired'];
+        $data['length'] = $data['length'] ?? $definition['length_set'];
         $data['docCommentType'] = $data['docCommentType'] ?? $data['type'];
         $data['description'] = $data['description'] ?? $definition['translation'];
         $data['definition'] = $data['definition'] ??$definition;
         $data['propertyName'] = $data['propertyName'] ?? $this->snakeToCamelCase($this->name);
-        $data['defaultValue'] = $data['defaultValue'] ?? ('' !== $definition['field_default_value'] ? sprintf("'%s'", $definition['field_default_value']) : null);
-        $data['allowDefaultValue'] = false;
+        $data['defaultValue'] = $data['defaultValue'] ??  $definition['field_default_value'];
+        $data['allowDefaultValue'] = true;
 
-        $data['getterName'] = $data['getterName'] ?? $this->getDoctrineDataModelGetterName($getterPrefix, $this->name);
+        $data['getterName'] = $data['getterName'] ?? $this->getDoctrineDataModelGetterName($getterPrefix, $data['propertyName']);
+        $data['setterName'] = $data['setterName'] ?? $this->getDoctrineDataModelGetterName('set', $data['propertyName']);
 
+        if ('string' === $data['type'] && '' !== $data['defaultValue']) {
+            $data['defaultValue'] = sprintf("'%s'", $data['defaultValue']);
+        }
         // allow default?
-        if (true === in_array($data['type'], ['string', 'int', 'float', 'bool'], true)) {
-            $data['allowDefaultValue'] = true;
+        if ('' === $data['defaultValue']) {
+            switch($data['type']) {
+                case 'int':
+                    $data['defaultValue'] = 0;
+                    break;
+                case 'float':
+                    $data['defaultValue'] = 0.0;
+                    break;
+                case 'string':
+                    $data['defaultValue'] = "''";
+                    break;
+                case 'bool':
+                    $data['defaultValue'] = false;
+                    break;
+                default:
+                    $data['defaultValue'] = 'null';
+                    break;
+            }
+
+
         }
 
         if (null === $data['defaultValue']) {
-            $data['allowDefaultValue'] = false;
+            $data['defaultValue'] = 'null';
         }
+
+
+
 
         return $data;
     }
@@ -191,9 +218,67 @@ class TCMSField implements TCMSFieldVisitableInterface, DoctrineTransformableInt
     {
         $mapperRenderer = $this->getDoctrineRenderer('mapping/string.xml.twig');
         $definition = $this->oDefinition->sqlData;
+        $fieldType = $this->getDoctrineMappingType($this->oDefinition->GetFieldType()->sqlData);
         $mapperRenderer->setVar('definition', $definition);
         $mapperRenderer->setVar('fieldName', $this->snakeToCamelCase($this->name));
+        $mapperRenderer->setVar('fieldType', $fieldType);
         return $mapperRenderer->render();
+    }
+
+    protected function getDoctrineMappingType(array $fieldType): string
+    {
+        switch ($fieldType['mysql_type']) {
+
+            case 'VARCHAR':
+                if ('CMSFIELD_MEDIA' === $fieldType['constname']) {
+                    return 'simple_array';
+                }
+            case 'CHAR':
+                return 'string';
+                break;
+            case 'DATE':
+                return 'date';
+                break;
+            case 'TIME':
+                return 'time';
+                break;
+            case 'DATETIME':
+            case 'TIMESTAMP':
+                return 'datetime';
+                break;
+
+            case 'ENUM':
+                if (in_array($fieldType['constname'], ['CMSFIELD_BOOLEAN', 'CMSFIELD_UNIQUE'])) {
+                    return 'boolean';
+                }
+                return 'string';
+            case 'TINYINT':
+                return 'boolean';
+                break;
+            case 'DECIMAL':
+                return 'decimal';
+                break;
+
+            case 'INT':
+                return 'integer';
+                break;
+            case 'SMALLINT':
+                return 'smallint';
+                break;
+            case 'BIGINT':
+                return 'bigint';
+                break;
+
+            case 'LONGTEXT':
+                return 'text';
+                break;
+            case 'BLOB': //object: Type that maps a SQL CLOB to a PHP object using serialize() and unserialize()':
+                return 'object';
+                break;
+        }
+
+        return 'string';
+
     }
 
     protected function getDoctrineRenderer(string $viewName, array $parameter = []): \IPkgSnippetRenderer

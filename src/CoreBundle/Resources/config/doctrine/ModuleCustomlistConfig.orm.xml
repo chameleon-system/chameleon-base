@@ -2,24 +2,32 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ModuleCustomlistConfig" table="module_customlist_config">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ModuleCustomlistConfig" table="module_customlist_config">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="intro" column="intro" type="string"  nullable="false"  />
-            <field name="recordsPerPage" column="records_per_page" type="string"  nullable="false"  />
-            <field name="groupField" column="group_field" type="string"  nullable="false"  />
-            <field name="orderinfo" column="orderinfo" type="string"  nullable="false"  />
+        </field>
+            <field name="cmsTplModuleInstanceId" type="string" field="cms_tpl_module_instance_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="intro"  column="intro"  nullable="false"  />
+            <field name="recordsPerPage"  column="records_per_page"  nullable="false"  />
+            <field name="groupField"  column="group_field"  nullable="false"  />
+            <one-to-many field="orderinfoCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ModuleCustomlistConfigSortfields" mapped-by="moduleCustomlistConfigId" />
+
     </entity>
 
 </doctrine-mapping>

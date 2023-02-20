@@ -2,29 +2,52 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterGroup" table="pkg_newsletter_group">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgNewsletterGroup" table="pkg_newsletter_group">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="logoHeader" column="logo_header" type="string"  nullable="false"  />
-            <field name="fromName" column="from_name" type="string"  nullable="false"  />
-            <field name="replyEmail" column="reply_email" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="fromEmail" column="from_email" type="string"  nullable="false"  />
-            <field name="imprint" column="imprint" type="string"  nullable="false"  />
-            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
-            <field name="includeAllNewsletterUsers" column="include_all_newsletter_users" type="string"  nullable="false"  />
-            <field name="includeNewsletterUserNotAssignedToAnyGroup" column="include_newsletter_user_not_assigned_to_any_group" type="string"  nullable="false"  />
-            <field name="includeAllNewsletterUsersWithNoExtranetAccount" column="include_all_newsletter_users_with_no_extranet_account" type="string"  nullable="false"  />
-            <field name="dataExtranetGroupMlt" column="data_extranet_group_mlt" type="string"  nullable="false"  />
+        </field>
+            <field name="logoHeaderId" type="string" field="logo_header_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="logoHeader" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="logo_header_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="fromName"  column="from_name"  nullable="false"  />
+            <field name="replyEmail"  column="reply_email"  nullable="false"  />
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="fromEmail"  column="from_email"  nullable="false"  />
+            <field name="imprint"  column="imprint"  nullable="false"  />
+            <field name="cmsPortalId" type="string" field="cms_portal_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="includeAllNewsletterUsers"  column="include_all_newsletter_users"  nullable="false"  />
+            <field name="includeNewsletterUserNotAssignedToAnyGroup"  column="include_newsletter_user_not_assigned_to_any_group"  nullable="false"  />
+            <field name="includeAllNewsletterUsersWithNoExtranetAccount"  column="include_all_newsletter_users_with_no_extranet_account"  nullable="false"  />
+            <many-to-many field="dataExtranetGroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetGroup">
+    <join-table name="pkg_newsletter_group_data_extranet_group_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
     </entity>
 
 </doctrine-mapping>

@@ -2,23 +2,38 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsExportProfiles" table="cms_export_profiles">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsExportProfiles" table="cms_export_profiles">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="cmsPortalId" column="cms_portal_id" type="string"  nullable="false"  />
-            <field name="exportType" column="export_type" type="string" length="&#039;CSV&#039;,&#039;TABs&#039;,&#039;HTML&#039;" nullable="false"  />
-            <field name="cmsTblConfId" column="cms_tbl_conf_id" type="string"  nullable="false"  />
-            <field name="cmsExportProfilesFields" column="cms_export_profiles_fields" type="string"  nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="cmsPortalId" type="string" field="cms_portal_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="exportType"  column="export_type"  nullable="false"  />
+            <field name="cmsTblConfId" type="string" field="cms_tbl_conf_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsTblConf" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConf">
+    <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
+</many-to-one>
+            <one-to-many field="cmsExportProfilesFieldsCollection" target-entity="ChameleonSystem\CoreBundle\Entity\CmsExportProfilesFields" mapped-by="cmsExportProfilesId" />
+
     </entity>
 
 </doctrine-mapping>

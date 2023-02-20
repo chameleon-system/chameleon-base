@@ -2,39 +2,64 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsFieldConf" table="cms_field_conf">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsFieldConf" table="cms_field_conf">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="cmsTblConfId" column="cms_tbl_conf_id" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string" length="80" nullable="false"  />
-            <field name="translation" column="translation" type="string" length="80" nullable="false"  />
-            <field name="cmsFieldTypeId" column="cms_field_type_id" type="string"  nullable="false"  />
-            <field name="cmsTblFieldTab" column="cms_tbl_field_tab" type="string"  nullable="false"  />
-            <field name="isrequired" column="isrequired" type="string"  nullable="false"  />
-            <field name="fieldclass" column="fieldclass" type="string"  nullable="false"  />
-            <field name="fieldclassSubtype" column="fieldclass_subtype" type="string"  nullable="false"  />
-            <field name="classType" column="class_type" type="string" length="&#039;Core&#039;,&#039;Custom-Core&#039;,&#039;Customer&#039;" nullable="false"  />
-            <field name="modifier" column="modifier" type="string" length="&#039;none&#039;,&#039;readonly&#039;,&#039;hidden&#039;,&#039;edit-on-click&#039;,&#039;readonly-if-filled&#039;" nullable="false"  />
-            <field name="fieldDefaultValue" column="field_default_value" type="string" length="255" nullable="false"  />
-            <field name="lengthSet" column="length_set" type="string"  nullable="false"  />
-            <field name="fieldtypeConfig" column="fieldtype_config" type="string"  nullable="false"  />
-            <field name="restrictToGroups" column="restrict_to_groups" type="string"  nullable="false"  />
-            <field name="cmsUsergroupMlt" column="cms_usergroup_mlt" type="string"  nullable="false"  />
-            <field name="fieldWidth" column="field_width" type="string" length="11" nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
-            <field name="049Helptext" column="049_helptext" type="string"  nullable="false"  />
-            <field name="rowHexcolor" column="row_hexcolor" type="string" length="6" nullable="false"  />
-            <field name="isTranslatable" column="is_translatable" type="string"  nullable="false"  />
-            <field name="validationRegex" column="validation_regex" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="cmsTblConfId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTblConf" inversed-by="cmsFieldConfMlt">
+    <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="translation"  column="translation"  nullable="false"  />
+            <field name="cmsFieldTypeId" type="string" field="cms_field_type_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsFieldType" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsFieldType">
+    <join-column name="cms_field_type_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="cmsTblFieldTabId" type="string" field="cms_tbl_field_tab_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsTblFieldTab" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblFieldTab">
+    <join-column name="cms_tbl_field_tab_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="isrequired"  column="isrequired"  nullable="false"  />
+            <field name="fieldclass"  column="fieldclass"  nullable="false"  />
+            <field name="fieldclassSubtype"  column="fieldclass_subtype"  nullable="false"  />
+            <field name="classType"  column="class_type"  nullable="false"  />
+            <field name="modifier"  column="modifier"  nullable="false"  />
+            <field name="fieldDefaultValue"  column="field_default_value"  nullable="false"  />
+            <field name="lengthSet"  column="length_set"  nullable="false"  />
+            <field name="fieldtypeConfig"  column="fieldtype_config"  nullable="false"  />
+            <field name="restrictToGroups"  column="restrict_to_groups"  nullable="false"  />
+            <many-to-many field="cmsUsergroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsUsergroup">
+    <join-table name="cms_field_conf_cms_usergroup_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="fieldWidth"  column="field_width"  nullable="false"  />
+            <field name="position"  column="position"  nullable="false"  />
+            <field name="helptext"  column="049_helptext"  nullable="false"  />
+            <field name="rowHexcolor"  column="row_hexcolor"  nullable="false"  />
+            <field name="isTranslatable"  column="is_translatable"  nullable="false"  />
+            <field name="validationRegex"  column="validation_regex"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

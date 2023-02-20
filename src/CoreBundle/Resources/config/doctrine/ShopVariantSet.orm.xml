@@ -2,22 +2,39 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopVariantSet" table="shop_variant_set">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopVariantSet" table="shop_variant_set">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="shopVariantType" column="shop_variant_type" type="string"  nullable="false"  />
-            <field name="cmsFieldConfMlt" column="cms_field_conf_mlt" type="string"  nullable="false"  />
-            <field name="shopVariantDisplayHandlerId" column="shop_variant_display_handler_id" type="string"  nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <one-to-many field="shopVariantTypeCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopVariantType" mapped-by="shopVariantSetId" />
+
+            <many-to-many field="cmsFieldConfMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsFieldConf">
+    <join-table name="shop_variant_set_cms_field_conf_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="shopVariantDisplayHandlerId" type="string" field="shop_variant_display_handler_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopVariantDisplayHandler" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVariantDisplayHandler">
+    <join-column name="shop_variant_display_handler_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

@@ -2,25 +2,39 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsImageCrop" table="cms_image_crop">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsImageCrop" table="cms_image_crop">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="cmsMediaId" column="cms_media_id" type="string"  nullable="false"  />
-            <field name="cmsImageCropPresetId" column="cms_image_crop_preset_id" type="string"  nullable="false"  />
-            <field name="posX" column="pos_x" type="string"  nullable="false"  />
-            <field name="posY" column="pos_y" type="string"  nullable="false"  />
-            <field name="width" column="width" type="string"  nullable="false"  />
-            <field name="height" column="height" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
+        </field>
+            <field name="cmsMediaId" type="string" field="cms_media_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsMedia" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="cms_media_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="cmsImageCropPresetId" type="string" field="cms_image_crop_preset_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsImageCropPreset" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsImageCropPreset">
+    <join-column name="cms_image_crop_preset_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="posX"  column="pos_x"  nullable="false"  />
+            <field name="posY"  column="pos_y"  nullable="false"  />
+            <field name="width"  column="width"  nullable="false"  />
+            <field name="height"  column="height"  nullable="false"  />
+            <field name="name"  column="name"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

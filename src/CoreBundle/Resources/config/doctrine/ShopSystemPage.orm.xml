@@ -2,22 +2,24 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopSystemPage" table="shop_system_page">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopSystemPage" table="shop_system_page">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="shopId" column="shop_id" type="string"  nullable="false"  />
-            <field name="nameInternal" column="name_internal" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="cmsTreeId" column="cms_tree_id" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="shopId" target-entity="ChameleonSystem\CoreBundle\Entity\Shop" >
+    <join-column name="shop_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="nameInternal"  column="name_internal"  nullable="false"  />
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="cmsTreeId"  column="cms_tree_id"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

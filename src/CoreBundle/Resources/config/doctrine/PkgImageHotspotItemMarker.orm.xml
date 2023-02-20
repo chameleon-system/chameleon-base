@@ -2,27 +2,50 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItemMarker" table="pkg_image_hotspot_item_marker">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItemMarker" table="pkg_image_hotspot_item_marker">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="pkgImageHotspotItemId" column="pkg_image_hotspot_item_id" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="top" column="top" type="string"  nullable="false"  />
-            <field name="left" column="left" type="string"  nullable="false"  />
-            <field name="linkedRecord" column="linked_record" type="string"  nullable="false"  />
-            <field name="url" column="url" type="string"  nullable="false"  />
-            <field name="showObjectLayover" column="show_object_layover" type="string"  nullable="false"  />
-            <field name="cmsMediaId" column="cms_media_id" type="string"  nullable="false"  />
-            <field name="cmsMediaHoverId" column="cms_media_hover_id" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="pkgImageHotspotItemId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItem" inversed-by="pkgImageHotspotItemMarker">
+    <join-column name="pkg_image_hotspot_item_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="top"  column="top"  nullable="false"  />
+            <field name="left"  column="left"  nullable="false"  />
+            <field name="linkedRecordId" type="string" field="linked_record_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="linkedRecord" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplPage">
+    <join-column name="linked_record_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="url"  column="url"  nullable="false"  />
+            <field name="showObjectLayover"  column="show_object_layover"  nullable="false"  />
+            <field name="cmsMediaId" type="string" field="cms_media_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsMedia" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="cms_media_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="cmsMediaHoverId" type="string" field="cms_media_hover_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsMediaHover" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="cms_media_hover_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

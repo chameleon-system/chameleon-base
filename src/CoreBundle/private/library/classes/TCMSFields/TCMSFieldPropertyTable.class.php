@@ -41,8 +41,10 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
     public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
     {
         $type = sprintf('%s\%s[]', $namespace, $this->snakeToCamelCase($this->GetPropertyTableName(), false));
+
         $data = $this->getDoctrineDataModelViewData(
             [
+                'propertyName' => $this->snakeToCamelCase($this->name.'_collection'),
                 'type' => '\Doctrine\Common\Collections\Collection',
                 'docCommentType' => $type,
                 'defaultValue' => 'new \Doctrine\Common\Collections\ArrayCollection()',
@@ -63,7 +65,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         $mapperRenderer->setVar('definition', $definition);
         $mapperRenderer->setVar('targetClass', ltrim($targetClass, '\\'));
         $mapperRenderer->setVar('parentFieldName', $this->snakeToCamelCase($this->GetMatchingParentFieldName()));
-        $mapperRenderer->setVar('fieldName', $this->snakeToCamelCase($this->name));
+        $mapperRenderer->setVar('fieldName', $this->snakeToCamelCase($this->name.'_collection'));
         return $mapperRenderer->render();
     }
 

@@ -2,23 +2,32 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransactionPosition" table="pkg_shop_payment_transaction_position">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransactionPosition" table="pkg_shop_payment_transaction_position">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="pkgShopPaymentTransactionId" column="pkg_shop_payment_transaction_id" type="string"  nullable="false"  />
-            <field name="amount" column="amount" type="string"  nullable="false"  />
-            <field name="value" column="value" type="string" length="10,2" nullable="false"  />
-            <field name="type" column="type" type="string" length="&#039;product&#039;,&#039;discount-voucher&#039;, &#039;discount&#039;,&#039;shipping&#039;,&#039;payment&#039;,&#039;other&#039;,&#039;voucher&#039;" nullable="false"  />
-            <field name="shopOrderItemId" column="shop_order_item_id" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="pkgShopPaymentTransactionId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransaction" inversed-by="pkgShopPaymentTransactionPosition">
+    <join-column name="pkg_shop_payment_transaction_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="amount"  column="amount"  nullable="false"  />
+            <field name="value"  column="value"  nullable="false"  />
+            <field name="type"  column="type"  nullable="false"  />
+            <field name="shopOrderItemId" type="string" field="shop_order_item_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopOrderItem" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderItem">
+    <join-column name="shop_order_item_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

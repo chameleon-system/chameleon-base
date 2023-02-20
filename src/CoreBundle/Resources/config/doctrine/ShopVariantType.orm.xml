@@ -2,27 +2,37 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopVariantType" table="shop_variant_type">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopVariantType" table="shop_variant_type">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="shopVariantSetId" column="shop_variant_set_id" type="string"  nullable="false"  />
-            <field name="urlName" column="url_name" type="string"  nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
-            <field name="cmsMediaId" column="cms_media_id" type="string"  nullable="false"  />
-            <field name="valueSelectType" column="value_select_type" type="string" length="&#039;SelectBox&#039;,&#039;RadioButton&#039;" nullable="false"  />
-            <field name="shopVariantTypeValueCmsfieldname" column="shop_variant_type_value_cmsfieldname" type="string"  nullable="false"  />
-            <field name="shopVariantTypeValue" column="shop_variant_type_value" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="identifier" column="identifier" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="shopVariantSetId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopVariantSet" inversed-by="shopVariantType">
+    <join-column name="shop_variant_set_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="urlName"  column="url_name"  nullable="false"  />
+            <field name="position"  column="position"  nullable="false"  />
+            <field name="cmsMediaId" type="string" field="cms_media_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsMedia" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="cms_media_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="valueSelectType"  column="value_select_type"  nullable="false"  />
+            <field name="shopVariantTypeValueCmsfieldname"  column="shop_variant_type_value_cmsfieldname"  nullable="false"  />
+            <one-to-many field="shopVariantTypeValueCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopVariantTypeValue" mapped-by="shopVariantTypeId" />
+
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="identifier"  column="identifier"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

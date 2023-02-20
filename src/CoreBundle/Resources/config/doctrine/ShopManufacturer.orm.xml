@@ -2,27 +2,27 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopManufacturer" table="shop_manufacturer">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopManufacturer" table="shop_manufacturer">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="active" column="active" type="string"  nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
-            <field name="descriptionShort" column="description_short" type="string"  nullable="false"  />
-            <field name="cmsMediaId" column="cms_media_id" type="string"  nullable="false"  />
-            <field name="color" column="color" type="string"  nullable="false"  />
-            <field name="css" column="css" type="string"  nullable="false"  />
-            <field name="description" column="description" type="string"  nullable="false"  />
-            <field name="sizetable" column="sizetable" type="string"  nullable="false"  />
+        </field>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="active"  column="active"  nullable="false"  />
+            <field name="position"  column="position"  nullable="false"  />
+            <field name="descriptionShort"  column="description_short"  nullable="false"  />
+            <field type="array" name="cmsMediaId" column="cms_media_id"  nullable="false"  />
+            <field name="color"  column="color"  nullable="false"  />
+            <field name="css"  column="css"  nullable="false"  />
+            <field name="description"  column="description"  nullable="false"  />
+            <field name="sizetable"  column="sizetable"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

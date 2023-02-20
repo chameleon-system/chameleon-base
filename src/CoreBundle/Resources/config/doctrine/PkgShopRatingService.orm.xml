@@ -2,40 +2,47 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopRatingService" table="pkg_shop_rating_service">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgShopRatingService" table="pkg_shop_rating_service">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="active" column="active" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="systemName" column="system_name" type="string"  nullable="false"  />
-            <field name="ratingsContainHtml" column="ratings_contain_html" type="string"  nullable="false"  />
-            <field name="iconCmsMediaId" column="icon_cms_media_id" type="string"  nullable="false"  />
-            <field name="shopUrl" column="shop_url" type="string"  nullable="false"  />
-            <field name="ratingUrl" column="rating_url" type="string"  nullable="false"  />
-            <field name="ratingApiId" column="rating_api_id" type="string"  nullable="false"  />
-            <field name="affiliateValue" column="affiliate_value" type="string"  nullable="false"  />
-            <field name="emailText" column="email_text" type="string"  nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
-            <field name="weight" column="weight" type="string"  nullable="false"  />
-            <field name="numberOfTimesUsed" column="number_of_times_used" type="string"  nullable="false"  />
-            <field name="lastUsedYearWeek" column="last_used_year_week" type="string"  nullable="false"  />
-            <field name="allowImport" column="allow_import" type="string"  nullable="false"  />
-            <field name="allowSendingEmails" column="allow_sending_emails" type="string"  nullable="false"  />
-            <field name="currentRating" column="current_rating" type="string" length="10,2" nullable="false"  />
-            <field name="serviceEmail" column="service_email" type="string"  nullable="false"  />
-            <field name="currentRatingDate" column="current_rating_date" type="string"  nullable="false"  />
-            <field name="class" column="class" type="string"  nullable="false"  />
-            <field name="classSubtype" column="class_subtype" type="string"  nullable="false"  />
-            <field name="classType" column="class_type" type="string" length="&#039;Core&#039;,&#039;Custom-Core&#039;,&#039;Customer&#039;" nullable="false"  />
+        </field>
+            <field name="active"  column="active"  nullable="false"  />
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="systemName"  column="system_name"  nullable="false"  />
+            <field name="ratingsContainHtml"  column="ratings_contain_html"  nullable="false"  />
+            <field name="iconCmsMediaId" type="string" field="icon_cms_media_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="iconCmsMedia" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="icon_cms_media_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="shopUrl"  column="shop_url"  nullable="false"  />
+            <field name="ratingUrl"  column="rating_url"  nullable="false"  />
+            <field name="ratingApiId"  column="rating_api_id"  nullable="false"  />
+            <field name="affiliateValue"  column="affiliate_value"  nullable="false"  />
+            <field name="emailText"  column="email_text"  nullable="false"  />
+            <field name="position"  column="position"  nullable="false"  />
+            <field name="weight"  column="weight"  nullable="false"  />
+            <field name="numberOfTimesUsed"  column="number_of_times_used"  nullable="false"  />
+            <field name="lastUsedYearWeek"  column="last_used_year_week"  nullable="false"  />
+            <field name="allowImport"  column="allow_import"  nullable="false"  />
+            <field name="allowSendingEmails"  column="allow_sending_emails"  nullable="false"  />
+            <field name="currentRating"  column="current_rating"  nullable="false"  />
+            <field name="serviceEmail"  column="service_email"  nullable="false"  />
+            <field name="currentRatingDate"  column="current_rating_date"  nullable="false"  />
+            <field name="class"  column="class"  nullable="false"  />
+            <field name="classSubtype"  column="class_subtype"  nullable="false"  />
+            <field name="classType"  column="class_type"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

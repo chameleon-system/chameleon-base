@@ -2,25 +2,32 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopRatingServiceRating" table="pkg_shop_rating_service_rating">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgShopRatingServiceRating" table="pkg_shop_rating_service_rating">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="pkgShopRatingServiceId" column="pkg_shop_rating_service_id" type="string"  nullable="false"  />
-            <field name="remoteKey" column="remote_key" type="string" length="59" nullable="false"  />
-            <field name="score" column="score" type="string" length="10,2" nullable="false"  />
-            <field name="rawdata" column="rawdata" type="string"  nullable="false"  />
-            <field name="ratingUser" column="rating_user" type="string"  nullable="false"  />
-            <field name="ratingText" column="rating_text" type="string"  nullable="false"  />
-            <field name="ratingDate" column="rating_date" type="string"  nullable="false"  />
+        </field>
+            <field name="pkgShopRatingServiceId" type="string" field="pkg_shop_rating_service_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="pkgShopRatingService" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopRatingService">
+    <join-column name="pkg_shop_rating_service_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="remoteKey"  column="remote_key"  nullable="false"  />
+            <field name="score"  column="score"  nullable="false"  />
+            <field name="rawdata"  column="rawdata"  nullable="false"  />
+            <field name="ratingUser"  column="rating_user"  nullable="false"  />
+            <field name="ratingText"  column="rating_text"  nullable="false"  />
+            <field name="ratingDate"  column="rating_date"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

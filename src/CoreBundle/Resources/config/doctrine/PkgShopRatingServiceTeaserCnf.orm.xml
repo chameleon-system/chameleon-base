@@ -2,23 +2,34 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopRatingServiceTeaserCnf" table="pkg_shop_rating_service_teaser_cnf">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgShopRatingServiceTeaserCnf" table="pkg_shop_rating_service_teaser_cnf">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
-            <field name="numberOfRatingsToSelectFrom" column="number_of_ratings_to_select_from" type="string"  nullable="false"  />
-            <field name="headline" column="headline" type="string"  nullable="false"  />
-            <field name="showAllLinkName" column="show_all_link_name" type="string"  nullable="false"  />
-            <field name="pkgShopRatingServiceMlt" column="pkg_shop_rating_service_mlt" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="cmsTplModuleInstanceId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance" >
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="numberOfRatingsToSelectFrom"  column="number_of_ratings_to_select_from"  nullable="false"  />
+            <field name="headline"  column="headline"  nullable="false"  />
+            <field name="showAllLinkName"  column="show_all_link_name"  nullable="false"  />
+            <many-to-many field="pkgShopRatingServiceMlt" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopRatingService">
+    <join-table name="pkg_shop_rating_service_teaser_cnf_pkg_shop_rating_service_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
     </entity>
 
 </doctrine-mapping>

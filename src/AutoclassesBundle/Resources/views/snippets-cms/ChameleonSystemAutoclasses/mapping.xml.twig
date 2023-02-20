@@ -19,7 +19,7 @@
 {#            <lifecycle-callback type="postPersist" method="doStuffOnPostPersist"/>#}
 {#        </lifecycle-callbacks>#}
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>

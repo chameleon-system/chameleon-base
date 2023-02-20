@@ -2,22 +2,40 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ShopSearchKeywordArticle" table="shop_search_keyword_article">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ShopSearchKeywordArticle" table="shop_search_keyword_article">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="shopId" column="shop_id" type="string"  nullable="false"  />
-            <field name="cmsLanguageId" column="cms_language_id" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="shopArticleMlt" column="shop_article_mlt" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="shopId" target-entity="ChameleonSystem\CoreBundle\Entity\Shop" inversed-by="shopSearchKeywordArticle">
+    <join-column name="shop_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="cmsLanguageId" type="string" field="cms_language_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsLanguage">
+    <join-column name="cms_language_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="name"  column="name"  nullable="false"  />
+            <many-to-many field="shopArticleMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticle">
+    <join-table name="shop_search_keyword_article_shop_article_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
     </entity>
 
 </doctrine-mapping>

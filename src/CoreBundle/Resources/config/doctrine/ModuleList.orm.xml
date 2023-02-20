@@ -2,27 +2,50 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\ModuleList" table="module_list">
+    <entity name="ChameleonSystem\CoreBundle\Entity\ModuleList" table="module_list">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string" length="80" nullable="false"  />
-            <field name="subHeadline" column="sub_headline" type="string"  nullable="false"  />
-            <field name="dateToday" column="date_today" type="string"  nullable="false"  />
-            <field name="moduleListCatId" column="module_list_cat_id" type="string"  nullable="false"  />
-            <field name="teaserText" column="teaser_text" type="string"  nullable="false"  />
-            <field name="description" column="description" type="string"  nullable="false"  />
-            <field name="dataPool" column="data_pool" type="string" length="1" nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
+        </field>
+            <field name="cmsTplModuleInstanceId" type="string" field="cms_tpl_module_instance_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="subHeadline"  column="sub_headline"  nullable="false"  />
+            <field name="dateToday"  column="date_today"  nullable="false"  />
+            <field name="moduleListCatId" type="string" field="module_list_cat_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="moduleListCat" target-entity="\ChameleonSystem\CoreBundle\Entity\ModuleListCat">
+    <join-column name="module_list_cat_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="teaserText"  column="teaser_text"  nullable="false"  />
+            <field name="description"  column="description"  nullable="false"  />
+            <many-to-many field="dataPool" target-entity="ChameleonSystem\CoreBundle\Entity\CmsDocument">
+    <join-table name="module_list_data_pool_cms_document_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+</many-to-many>
+            <field name="position"  column="position"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

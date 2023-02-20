@@ -2,22 +2,36 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\PkgShopRatingServiceHistory" table="pkg_shop_rating_service_history">
+    <entity name="ChameleonSystem\CoreBundle\Entity\PkgShopRatingServiceHistory" table="pkg_shop_rating_service_history">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="dataExtranetUserId" column="data_extranet_user_id" type="string"  nullable="false"  />
-            <field name="shopOrderId" column="shop_order_id" type="string"  nullable="false"  />
-            <field name="date" column="date" type="string"  nullable="false"  />
-            <field name="pkgShopRatingServiceIdList" column="pkg_shop_rating_service_id_list" type="string"  nullable="false"  />
+        </field>
+            <field name="dataExtranetUserId" type="string" field="data_extranet_user_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser">
+    <join-column name="data_extranet_user_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="shopOrderId" type="string" field="shop_order_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="shopOrder" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrder">
+    <join-column name="shop_order_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="date"  column="date"  nullable="false"  />
+            <field name="pkgShopRatingServiceIdList"  column="pkg_shop_rating_service_id_list"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

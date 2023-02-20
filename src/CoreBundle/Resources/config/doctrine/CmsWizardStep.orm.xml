@@ -2,32 +2,34 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsWizardStep" table="cms_wizard_step">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsWizardStep" table="cms_wizard_step">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
-            <field name="displayName" column="display_name" type="string"  nullable="false"  />
-            <field name="name" column="name" type="string"  nullable="false"  />
-            <field name="description" column="description" type="string"  nullable="false"  />
-            <field name="systemname" column="systemname" type="string"  nullable="false"  />
-            <field name="position" column="position" type="string"  nullable="false"  />
-            <field name="urlName" column="url_name" type="string"  nullable="false"  />
-            <field name="class" column="class" type="string"  nullable="false"  />
-            <field name="classType" column="class_type" type="string" length="&#039;Core&#039;,&#039;Custom-Core&#039;,&#039;Customer&#039;" nullable="false"  />
-            <field name="classSubtype" column="class_subtype" type="string"  nullable="false"  />
-            <field name="renderViewName" column="render_view_name" type="string"  nullable="false"  />
-            <field name="renderViewType" column="render_view_type" type="string" length="&#039;Core&#039;,&#039;Custom-Core&#039;,&#039;Customer&#039;" nullable="false"  />
-            <field name="renderViewSubtype" column="render_view_subtype" type="string"  nullable="false"  />
-            <field name="isPackage" column="is_package" type="string"  nullable="false"  />
+        </field>
+            <many-to-one field="cmsTplModuleInstanceId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance" >
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="displayName"  column="display_name"  nullable="false"  />
+            <field name="name"  column="name"  nullable="false"  />
+            <field name="description"  column="description"  nullable="false"  />
+            <field name="systemname"  column="systemname"  nullable="false"  />
+            <field name="position"  column="position"  nullable="false"  />
+            <field name="urlName"  column="url_name"  nullable="false"  />
+            <field name="class"  column="class"  nullable="false"  />
+            <field name="classType"  column="class_type"  nullable="false"  />
+            <field name="classSubtype"  column="class_subtype"  nullable="false"  />
+            <field name="renderViewName"  column="render_view_name"  nullable="false"  />
+            <field name="renderViewType"  column="render_view_type"  nullable="false"  />
+            <field name="renderViewSubtype"  column="render_view_subtype"  nullable="false"  />
+            <field name="isPackage"  column="is_package"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

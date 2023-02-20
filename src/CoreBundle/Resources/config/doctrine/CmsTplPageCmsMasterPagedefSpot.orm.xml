@@ -2,23 +2,34 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="\ChameleonSystem\CoreBundle\Entity\CmsTplPageCmsMasterPagedefSpot" table="cms_tpl_page_cms_master_pagedef_spot">
+    <entity name="ChameleonSystem\CoreBundle\Entity\CmsTplPageCmsMasterPagedefSpot" table="cms_tpl_page_cms_master_pagedef_spot">
 
 
 
 
-        <id name="id" type="uuid" column="id" unique="true">
+        <id name="id" type="string" length="36" column="id" unique="true">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
-        <id name="cmsident" type="integer" column="cmsident" unique="true">
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
-        </id>
-            <field name="model" column="model" type="string"  nullable="false"  />
-            <field name="cmsTplPageId" column="cms_tpl_page_id" type="string"  nullable="false"  />
-            <field name="cmsMasterPagedefSpotId" column="cms_master_pagedef_spot_id" type="string"  nullable="false"  />
-            <field name="cmsTplModuleInstanceId" column="cms_tpl_module_instance_id" type="string"  nullable="false"  />
-            <field name="view" column="view" type="string"  nullable="false"  />
+        </field>
+            <field name="model"  column="model"  nullable="false"  />
+            <many-to-one field="cmsTplPageId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplPage" inversed-by="cmsTplPageCmsMasterPagedefSpot">
+    <join-column name="cms_tpl_page_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="cmsMasterPagedefSpotId" type="string" field="cms_master_pagedef_spot_id" length="36">
+    <options>
+        <option name="default"></option>
+    </options>
+</field>
+<many-to-one field="cmsMasterPagedefSpot" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot">
+    <join-column name="cms_master_pagedef_spot_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="cmsTplModuleInstanceId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance" inversed-by="cmsTplPageCmsMasterPagedefSpot">
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="view"  column="view"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>
