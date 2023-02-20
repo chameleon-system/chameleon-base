@@ -19,16 +19,6 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldDateTimeNow';
 
-    public function getDoctrineDataModelXml(string $namespace): ?string
-    {
-        $mapperRenderer = $this->getDoctrineRenderer('mapping/creation-timestamp.xml.twig');
-        $definition = $this->oDefinition->sqlData;
-        $fieldType = $this->getDoctrineMappingType($this->oDefinition->GetFieldType()->sqlData);
-        $mapperRenderer->setVar('definition', $definition);
-        $mapperRenderer->setVar('fieldName', $this->snakeToCamelCase($this->name));
-        $mapperRenderer->setVar('fieldType', $fieldType);
-        return $mapperRenderer->render();
-    }
     public function GetHTML()
     {
         /** @var SecurityHelperAccess $securityHelper */

@@ -1,17 +1,15 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsContentBox {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Widget class */
 private string $className = '', 
-    // TCMSFieldOption
-/** @var string - Widget class type */
-private string $classType = 'Core', 
     // TCMSFieldVarchar
 /** @var string - Widget class subfolder */
 private string $classPath = 'Core', 
@@ -20,18 +18,9 @@ private string $classPath = 'Core',
 private string $systemName = '', 
     // TCMSFieldVarchar
 /** @var string - Name */
-private string $name = '', 
-    // TCMSFieldColorpicker
-/** @var string - Headline color */
-private string $headlinecolHexcolor = '9CBBDE', 
-    // TCMSFieldIconList
-/** @var string - Headline icon */
-private string $iconList = 'Filefolder.gif', 
-    // TCMSFieldOption
-/** @var string - Display in column */
-private string $showInCol = 'left'  ) {}
+private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -58,20 +47,6 @@ public function getClassName(): string
 public function setClassName(string $className): self
 {
     $this->className = $className;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getClassType(): string
-{
-    return $this->classType;
-}
-public function setClassType(string $classType): self
-{
-    $this->classType = $classType;
 
     return $this;
 }
@@ -114,48 +89,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldColorpicker
-public function getHeadlinecolHexcolor(): string
-{
-    return $this->headlinecolHexcolor;
-}
-public function setHeadlinecolHexcolor(string $headlinecolHexcolor): self
-{
-    $this->headlinecolHexcolor = $headlinecolHexcolor;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldIconList
-public function getIconList(): string
-{
-    return $this->iconList;
-}
-public function setIconList(string $iconList): self
-{
-    $this->iconList = $iconList;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getShowInCol(): string
-{
-    return $this->showInCol;
-}
-public function setShowInCol(string $showInCol): self
-{
-    $this->showInCol = $showInCol;
 
     return $this;
 }

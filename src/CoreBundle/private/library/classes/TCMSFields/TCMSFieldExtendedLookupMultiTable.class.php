@@ -26,39 +26,6 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 
     const FIELD_SYSTEM_NAME = 'CMSFIELD_EXTENDEDMULTITABLELIST';
 
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        // todo - it is unclear how to solve this in doctrine.
-        $connectedTables = $this->GetAllowedTables();
-        $targetClasses = [];
-        foreach ($connectedTables as $connectedTable) {
-            $targetClasses[] = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($connectedTable, false));
-        }
-        $targetClasses[] = 'null';
-
-        $targetClass = implode('|', $targetClasses);
-
-        $data = $this->getDoctrineDataModelViewData(['type' => $targetClass]);
-        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
-        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
-
-
-        $data = $this->getDoctrineDataModelViewData(
-            [
-                'type' => 'string',
-                'propertyName' => $this->snakeToCamelCase($this->name.'_table'),
-                'getterName' => $this->getDoctrineDataModelGetterName('get', $this->name.'_table'),
-                'setterName' => $this->getDoctrineDataModelGetterName('set', $this->name.'_table'),
-            ]
-        );
-        $rendererPropertyTableName = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
-        $rendererMethodTableName = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
-
-        return new DataModelParts(
-            implode(",\n", [$rendererProperty->render(), $rendererPropertyTableName->render()]),
-            implode("\n", [$rendererMethod->render(), $rendererMethodTableName->render()]), $data['allowDefaultValue']
-        );
-    }
     /**
      * returns the name of the table this field is connected with
      * depends on the hidden field fieldName_table_name that will be set after the save

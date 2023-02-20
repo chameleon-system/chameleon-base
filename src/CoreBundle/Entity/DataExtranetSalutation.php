@@ -1,22 +1,17 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class DataExtranetSalutation {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Name */
-private string $name = '', 
-    // TCMSFieldPosition
-/** @var int - Position */
-private int $position = 0, 
-    // TCMSFieldOption
-/** @var string - Gender */
-private string $gender = ''  ) {}
+private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -43,34 +38,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getGender(): string
-{
-    return $this->gender;
-}
-public function setGender(string $gender): self
-{
-    $this->gender = $gender;
 
     return $this;
 }

@@ -1,26 +1,26 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\Shop;
+use ChameleonSystem\CoreBundle\Entity\ShopStockMessageTrigger;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class ShopStockMessage {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\Shop|null - Belongs to shop */
-private \ChameleonSystem\CoreBundle\Entity\Shop|null $shop = null,
-/** @var null|string - Belongs to shop */
-private ?string $shopId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Class */
 private string $className = '', 
     // TCMSFieldVarchar
 /** @var string - Class subtype (path) */
 private string $classSubtype = '', 
-    // TCMSFieldOption
-/** @var string - Class type */
-private string $classType = 'Customer', 
+    // TCMSFieldLookupParentID
+/** @var Shop|null - Belongs to shop */
+private ?Shop $shop = null
+, 
     // TCMSFieldVarchar
 /** @var string - Interface identifier */
 private string $identifier = '', 
@@ -34,19 +34,14 @@ private string $name = '',
 /** @var string - System name */
 private string $internalName = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopStockMessageTrigger[] - Stock messages */
-private \Doctrine\Common\Collections\Collection $shopStockMessageTriggerCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldBoolean
-/** @var bool - Automatically deactivate when stock = 0 */
-private bool $autoDeactivateOnZeroStock = true, 
-    // TCMSFieldBoolean
-/** @var bool - Automatically deactivate when stock > 0 */
-private bool $autoActivateOnStock = true, 
+/** @var Collection<int, shopStockMessageTrigger> - Stock messages */
+private Collection $shopStockMessageTriggerCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - Google availability */
 private string $googleAvailability = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -93,45 +88,18 @@ public function setClassSubtype(string $classSubtype): self
 
 
   
-    // TCMSFieldOption
-public function getClassType(): string
-{
-    return $this->classType;
-}
-public function setClassType(string $classType): self
-{
-    $this->classType = $classType;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getShop(): \ChameleonSystem\CoreBundle\Entity\Shop|null
+    // TCMSFieldLookupParentID
+public function getShop(): ?Shop
 {
     return $this->shop;
 }
-public function setShop(\ChameleonSystem\CoreBundle\Entity\Shop|null $shop): self
+
+public function setShop(?Shop $shop): self
 {
     $this->shop = $shop;
-    $this->shopId = $shop?->getId();
 
     return $this;
 }
-public function getShopId(): ?string
-{
-    return $this->shopId;
-}
-public function setShopId(?string $shopId): self
-{
-    $this->shopId = $shopId;
-    // todo - load new id
-    //$this->shopId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -192,41 +160,32 @@ public function setInternalName(string $internalName): self
 
   
     // TCMSFieldPropertyTable
-public function getShopStockMessageTriggerCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopStockMessageTrigger>
+*/
+public function getShopStockMessageTriggerCollection(): Collection
 {
     return $this->shopStockMessageTriggerCollection;
 }
-public function setShopStockMessageTriggerCollection(\Doctrine\Common\Collections\Collection $shopStockMessageTriggerCollection): self
+
+public function addShopStockMessageTriggerCollection(shopStockMessageTrigger $shopStockMessageTrigger): self
 {
-    $this->shopStockMessageTriggerCollection = $shopStockMessageTriggerCollection;
+    if (!$this->shopStockMessageTriggerCollection->contains($shopStockMessageTrigger)) {
+        $this->shopStockMessageTriggerCollection->add($shopStockMessageTrigger);
+        $shopStockMessageTrigger->setShopStockMessage($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldBoolean
-public function isAutoDeactivateOnZeroStock(): bool
+public function removeShopStockMessageTriggerCollection(shopStockMessageTrigger $shopStockMessageTrigger): self
 {
-    return $this->autoDeactivateOnZeroStock;
-}
-public function setAutoDeactivateOnZeroStock(bool $autoDeactivateOnZeroStock): self
-{
-    $this->autoDeactivateOnZeroStock = $autoDeactivateOnZeroStock;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isAutoActivateOnStock(): bool
-{
-    return $this->autoActivateOnStock;
-}
-public function setAutoActivateOnStock(bool $autoActivateOnStock): self
-{
-    $this->autoActivateOnStock = $autoActivateOnStock;
+    if ($this->shopStockMessageTriggerCollection->removeElement($shopStockMessageTrigger)) {
+        // set the owning side to null (unless already changed)
+        if ($shopStockMessageTrigger->getShopStockMessage() === $this) {
+            $shopStockMessageTrigger->setShopStockMessage(null);
+        }
+    }
 
     return $this;
 }

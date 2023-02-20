@@ -1,7 +1,5 @@
 {% autoescape false %}
 // {{ source }}
-/** @var {{ docCommentType }} - {{ description }} */
-private {{ type }} ${{ propertyObjectName }} = null,
-/** @var null|string - {{ description }} */
-private ?string ${{ propertyIdName }} = null
+/** @var {{ type }}|null - {{ description }} */
+private ?{{ type }} ${{ propertyName }} = null
 {% endautoescape %}

@@ -7,20 +7,16 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopArticleId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticle" inversed-by="shopArticleStats">
+            <many-to-one field="shopArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle" inversed-by="shopArticleStatsCollection" >
     <join-column name="shop_article_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="statsSales"  column="stats_sales"  nullable="false"  />
-            <field name="statsDetailViews"  column="stats_detail_views"  nullable="false"  />
-            <field name="statsReviewAverage"  column="stats_review_average"  nullable="false"  />
-            <field name="statsReviewCount"  column="stats_review_count"  nullable="false"  />
+            <field name="statsSales" type="string" column="stats_sales" length="255" nullable="false"  />
+            <field name="statsDetailViews" type="string" column="stats_detail_views" length="255" nullable="false"  />
+            <field name="statsReviewCount" type="string" column="stats_review_count" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -7,29 +7,15 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="cmsPortalId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal" >
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
     <join-column name="cms_portal_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="active"  column="active"  nullable="false"  />
-            <field name="position"  column="position"  nullable="false"  />
-            <field name="targetId" type="string" field="target_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="target" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTree">
-    <join-column name="target_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="showRootCategoryTree"  column="show_root_category_tree"  nullable="false"  />
-            <field name="cssClass"  column="css_class"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="cssClass" type="string" column="css_class" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

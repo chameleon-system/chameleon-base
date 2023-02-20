@@ -7,37 +7,12 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-many field="cmsRoleMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsRole">
-    <join-table name="cms_role_cms_role_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="isChooseable"  column="is_chooseable"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
-            <many-to-many field="cmsRightMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsRight">
-    <join-table name="cms_role_cms_right_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="isSystem"  column="is_system"  nullable="false"  />
-            <field name="trans"  column="049_trans"  nullable="false"  />
+            <field name="name" type="string" column="name" length="40" nullable="false"  />
+            <field name="trans" type="string" column="049_trans" length="40" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

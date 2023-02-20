@@ -7,15 +7,12 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="buildNumber"  column="build_number"  nullable="false"  />
-            <many-to-one field="cmsMigrationCounterId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsMigrationCounter" inversed-by="cmsMigrationFile">
+            <field name="buildNumber" type="string" column="build_number" length="255" nullable="false"  />
+            <many-to-one field="cmsMigrationCounter" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMigrationCounter" inversed-by="cmsMigrationFileCollection" >
     <join-column name="cms_migration_counter_id" referenced-column-name="id" />
 </many-to-one>
     </entity>

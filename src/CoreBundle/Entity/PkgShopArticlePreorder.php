@@ -1,31 +1,17 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class PkgShopArticlePreorder {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticle|null - Preordered product */
-private \ChameleonSystem\CoreBundle\Entity\ShopArticle|null $shopArticle = null,
-/** @var null|string - Preordered product */
-private ?string $shopArticleId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortal|null - Belongs to portal */
-private \ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal = null,
-/** @var null|string - Belongs to portal */
-private ?string $cmsPortalId = null
-, 
-    // TCMSFieldEmail
+        
+    // TCMSFieldVarchar
 /** @var string - Email address */
-private string $preorderUserEmail = '', 
-    // TCMSFieldDateTime
-/** @var \DateTime|null - Date */
-private \DateTime|null $preorderDate = null  ) {}
+private string $preorderUserEmail = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -44,35 +30,7 @@ private \DateTime|null $preorderDate = null  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShopArticle(): \ChameleonSystem\CoreBundle\Entity\ShopArticle|null
-{
-    return $this->shopArticle;
-}
-public function setShopArticle(\ChameleonSystem\CoreBundle\Entity\ShopArticle|null $shopArticle): self
-{
-    $this->shopArticle = $shopArticle;
-    $this->shopArticleId = $shopArticle?->getId();
-
-    return $this;
-}
-public function getShopArticleId(): ?string
-{
-    return $this->shopArticleId;
-}
-public function setShopArticleId(?string $shopArticleId): self
-{
-    $this->shopArticleId = $shopArticleId;
-    // todo - load new id
-    //$this->shopArticleId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldEmail
+    // TCMSFieldVarchar
 public function getPreorderUserEmail(): string
 {
     return $this->preorderUserEmail;
@@ -83,48 +41,6 @@ public function setPreorderUserEmail(string $preorderUserEmail): self
 
     return $this;
 }
-
-
-  
-    // TCMSFieldDateTime
-public function getPreorderDate(): \DateTime|null
-{
-    return $this->preorderDate;
-}
-public function setPreorderDate(\DateTime|null $preorderDate): self
-{
-    $this->preorderDate = $preorderDate;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsPortal(): \ChameleonSystem\CoreBundle\Entity\CmsPortal|null
-{
-    return $this->cmsPortal;
-}
-public function setCmsPortal(\ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal): self
-{
-    $this->cmsPortal = $cmsPortal;
-    $this->cmsPortalId = $cmsPortal?->getId();
-
-    return $this;
-}
-public function getCmsPortalId(): ?string
-{
-    return $this->cmsPortalId;
-}
-public function setCmsPortalId(?string $cmsPortalId): self
-{
-    $this->cmsPortalId = $cmsPortalId;
-    // todo - load new id
-    //$this->cmsPortalId = $?->getId();
-
-    return $this;
-}
-
 
 
   

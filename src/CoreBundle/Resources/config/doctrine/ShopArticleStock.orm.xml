@@ -7,17 +7,14 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopArticleId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticle" inversed-by="shopArticleStock">
+            <many-to-one field="shopArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle" inversed-by="shopArticleStockCollection" >
     <join-column name="shop_article_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="amount"  column="amount"  nullable="false"  />
+            <field name="amount" type="string" column="amount" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -7,29 +7,15 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="cmsPortalId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal" inversed-by="cmsMessageManagerMessage">
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal" inversed-by="cmsMessageManagerMessageCollection" >
     <join-column name="cms_portal_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="cmsMessageManagerMessageTypeId" type="string" field="cms_message_manager_message_type_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsMessageManagerMessageType" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMessageManagerMessageType">
-    <join-column name="cms_message_manager_message_type_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="description"  column="description"  nullable="false"  />
-            <field name="message"  column="message"  nullable="false"  />
-            <field name="messageLocationType"  column="message_location_type"  nullable="false"  />
-            <field name="messageView"  column="message_view"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="messageView" type="string" column="message_view" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

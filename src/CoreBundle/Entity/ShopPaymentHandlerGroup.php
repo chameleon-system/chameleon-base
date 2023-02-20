@@ -1,17 +1,27 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroupConfig;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnStatus;
+use ChameleonSystem\CoreBundle\Entity\ShopPaymentHandler;
+use ChameleonSystem\CoreBundle\Entity\ShopPaymentMethod;
+use ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnTrigger;
+use ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessage;
+
 class ShopPaymentHandlerGroup {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Overwrite Tdb with this class */
 private string $classname = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroupConfig[] - Configuration */
-private \Doctrine\Common\Collections\Collection $shopPaymentHandlerGroupConfigCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopPaymentHandlerGroupConfig> - Configuration */
+private Collection $shopPaymentHandlerGroupConfigCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - IPN Identifier */
 private string $ipnGroupIdentifier = '', 
@@ -19,37 +29,33 @@ private string $ipnGroupIdentifier = '',
 /** @var string - Character encoding of data transmitted by the provider */
 private string $ipnPayloadCharacterCharset = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnStatus[] - IPN status codes */
-private \Doctrine\Common\Collections\Collection $pkgShopPaymentIpnStatusCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, pkgShopPaymentIpnStatus> - IPN status codes */
+private Collection $pkgShopPaymentIpnStatusCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - System name */
 private string $systemName = '', 
-    // TCMSFieldWYSIWYG
-/** @var string - Description */
-private string $description = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopPaymentHandler[] - Payment handler */
-private \Doctrine\Common\Collections\Collection $shopPaymentHandlerCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopPaymentHandler> - Payment handler */
+private Collection $shopPaymentHandlerCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopPaymentMethod[] - Payment methods */
-private \Doctrine\Common\Collections\Collection $shopPaymentMethodCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldText
-/** @var string - IPN may come from the following IP */
-private string $ipnAllowedIps = '', 
+/** @var Collection<int, shopPaymentMethod> - Payment methods */
+private Collection $shopPaymentMethodCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnTrigger[] - Redirections */
-private \Doctrine\Common\Collections\Collection $pkgShopPaymentIpnTriggerCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, pkgShopPaymentIpnTrigger> - Redirections */
+private Collection $pkgShopPaymentIpnTriggerCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessage[] - IPN messages */
-private \Doctrine\Common\Collections\Collection $pkgShopPaymentIpnMessageCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldOption
-/** @var string - Environment */
-private string $environment = 'default'  ) {}
+/** @var Collection<int, pkgShopPaymentIpnMessage> - IPN messages */
+private Collection $pkgShopPaymentIpnMessageCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -83,13 +89,32 @@ public function setClassname(string $classname): self
 
   
     // TCMSFieldPropertyTable
-public function getShopPaymentHandlerGroupConfigCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopPaymentHandlerGroupConfig>
+*/
+public function getShopPaymentHandlerGroupConfigCollection(): Collection
 {
     return $this->shopPaymentHandlerGroupConfigCollection;
 }
-public function setShopPaymentHandlerGroupConfigCollection(\Doctrine\Common\Collections\Collection $shopPaymentHandlerGroupConfigCollection): self
+
+public function addShopPaymentHandlerGroupConfigCollection(shopPaymentHandlerGroupConfig $shopPaymentHandlerGroupConfig): self
 {
-    $this->shopPaymentHandlerGroupConfigCollection = $shopPaymentHandlerGroupConfigCollection;
+    if (!$this->shopPaymentHandlerGroupConfigCollection->contains($shopPaymentHandlerGroupConfig)) {
+        $this->shopPaymentHandlerGroupConfigCollection->add($shopPaymentHandlerGroupConfig);
+        $shopPaymentHandlerGroupConfig->setShopPaymentHandlerGroup($this);
+    }
+
+    return $this;
+}
+
+public function removeShopPaymentHandlerGroupConfigCollection(shopPaymentHandlerGroupConfig $shopPaymentHandlerGroupConfig): self
+{
+    if ($this->shopPaymentHandlerGroupConfigCollection->removeElement($shopPaymentHandlerGroupConfig)) {
+        // set the owning side to null (unless already changed)
+        if ($shopPaymentHandlerGroupConfig->getShopPaymentHandlerGroup() === $this) {
+            $shopPaymentHandlerGroupConfig->setShopPaymentHandlerGroup(null);
+        }
+    }
 
     return $this;
 }
@@ -125,13 +150,32 @@ public function setIpnPayloadCharacterCharset(string $ipnPayloadCharacterCharset
 
   
     // TCMSFieldPropertyTable
-public function getPkgShopPaymentIpnStatusCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgShopPaymentIpnStatus>
+*/
+public function getPkgShopPaymentIpnStatusCollection(): Collection
 {
     return $this->pkgShopPaymentIpnStatusCollection;
 }
-public function setPkgShopPaymentIpnStatusCollection(\Doctrine\Common\Collections\Collection $pkgShopPaymentIpnStatusCollection): self
+
+public function addPkgShopPaymentIpnStatusCollection(pkgShopPaymentIpnStatus $pkgShopPaymentIpnStatus): self
 {
-    $this->pkgShopPaymentIpnStatusCollection = $pkgShopPaymentIpnStatusCollection;
+    if (!$this->pkgShopPaymentIpnStatusCollection->contains($pkgShopPaymentIpnStatus)) {
+        $this->pkgShopPaymentIpnStatusCollection->add($pkgShopPaymentIpnStatus);
+        $pkgShopPaymentIpnStatus->setShopPaymentHandlerGroup($this);
+    }
+
+    return $this;
+}
+
+public function removePkgShopPaymentIpnStatusCollection(pkgShopPaymentIpnStatus $pkgShopPaymentIpnStatus): self
+{
+    if ($this->pkgShopPaymentIpnStatusCollection->removeElement($pkgShopPaymentIpnStatus)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgShopPaymentIpnStatus->getShopPaymentHandlerGroup() === $this) {
+            $pkgShopPaymentIpnStatus->setShopPaymentHandlerGroup(null);
+        }
+    }
 
     return $this;
 }
@@ -166,28 +210,33 @@ public function setSystemName(string $systemName): self
 
 
   
-    // TCMSFieldWYSIWYG
-public function getDescription(): string
-{
-    return $this->description;
-}
-public function setDescription(string $description): self
-{
-    $this->description = $description;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldPropertyTable
-public function getShopPaymentHandlerCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopPaymentHandler>
+*/
+public function getShopPaymentHandlerCollection(): Collection
 {
     return $this->shopPaymentHandlerCollection;
 }
-public function setShopPaymentHandlerCollection(\Doctrine\Common\Collections\Collection $shopPaymentHandlerCollection): self
+
+public function addShopPaymentHandlerCollection(shopPaymentHandler $shopPaymentHandler): self
 {
-    $this->shopPaymentHandlerCollection = $shopPaymentHandlerCollection;
+    if (!$this->shopPaymentHandlerCollection->contains($shopPaymentHandler)) {
+        $this->shopPaymentHandlerCollection->add($shopPaymentHandler);
+        $shopPaymentHandler->setShopPaymentHandlerGroup($this);
+    }
+
+    return $this;
+}
+
+public function removeShopPaymentHandlerCollection(shopPaymentHandler $shopPaymentHandler): self
+{
+    if ($this->shopPaymentHandlerCollection->removeElement($shopPaymentHandler)) {
+        // set the owning side to null (unless already changed)
+        if ($shopPaymentHandler->getShopPaymentHandlerGroup() === $this) {
+            $shopPaymentHandler->setShopPaymentHandlerGroup(null);
+        }
+    }
 
     return $this;
 }
@@ -195,27 +244,32 @@ public function setShopPaymentHandlerCollection(\Doctrine\Common\Collections\Col
 
   
     // TCMSFieldPropertyTable
-public function getShopPaymentMethodCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopPaymentMethod>
+*/
+public function getShopPaymentMethodCollection(): Collection
 {
     return $this->shopPaymentMethodCollection;
 }
-public function setShopPaymentMethodCollection(\Doctrine\Common\Collections\Collection $shopPaymentMethodCollection): self
+
+public function addShopPaymentMethodCollection(shopPaymentMethod $shopPaymentMethod): self
 {
-    $this->shopPaymentMethodCollection = $shopPaymentMethodCollection;
+    if (!$this->shopPaymentMethodCollection->contains($shopPaymentMethod)) {
+        $this->shopPaymentMethodCollection->add($shopPaymentMethod);
+        $shopPaymentMethod->setShopPaymentHandlerGroup($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldText
-public function getIpnAllowedIps(): string
+public function removeShopPaymentMethodCollection(shopPaymentMethod $shopPaymentMethod): self
 {
-    return $this->ipnAllowedIps;
-}
-public function setIpnAllowedIps(string $ipnAllowedIps): self
-{
-    $this->ipnAllowedIps = $ipnAllowedIps;
+    if ($this->shopPaymentMethodCollection->removeElement($shopPaymentMethod)) {
+        // set the owning side to null (unless already changed)
+        if ($shopPaymentMethod->getShopPaymentHandlerGroup() === $this) {
+            $shopPaymentMethod->setShopPaymentHandlerGroup(null);
+        }
+    }
 
     return $this;
 }
@@ -223,13 +277,32 @@ public function setIpnAllowedIps(string $ipnAllowedIps): self
 
   
     // TCMSFieldPropertyTable
-public function getPkgShopPaymentIpnTriggerCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgShopPaymentIpnTrigger>
+*/
+public function getPkgShopPaymentIpnTriggerCollection(): Collection
 {
     return $this->pkgShopPaymentIpnTriggerCollection;
 }
-public function setPkgShopPaymentIpnTriggerCollection(\Doctrine\Common\Collections\Collection $pkgShopPaymentIpnTriggerCollection): self
+
+public function addPkgShopPaymentIpnTriggerCollection(pkgShopPaymentIpnTrigger $pkgShopPaymentIpnTrigger): self
 {
-    $this->pkgShopPaymentIpnTriggerCollection = $pkgShopPaymentIpnTriggerCollection;
+    if (!$this->pkgShopPaymentIpnTriggerCollection->contains($pkgShopPaymentIpnTrigger)) {
+        $this->pkgShopPaymentIpnTriggerCollection->add($pkgShopPaymentIpnTrigger);
+        $pkgShopPaymentIpnTrigger->setShopPaymentHandlerGroup($this);
+    }
+
+    return $this;
+}
+
+public function removePkgShopPaymentIpnTriggerCollection(pkgShopPaymentIpnTrigger $pkgShopPaymentIpnTrigger): self
+{
+    if ($this->pkgShopPaymentIpnTriggerCollection->removeElement($pkgShopPaymentIpnTrigger)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgShopPaymentIpnTrigger->getShopPaymentHandlerGroup() === $this) {
+            $pkgShopPaymentIpnTrigger->setShopPaymentHandlerGroup(null);
+        }
+    }
 
     return $this;
 }
@@ -237,27 +310,32 @@ public function setPkgShopPaymentIpnTriggerCollection(\Doctrine\Common\Collectio
 
   
     // TCMSFieldPropertyTable
-public function getPkgShopPaymentIpnMessageCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgShopPaymentIpnMessage>
+*/
+public function getPkgShopPaymentIpnMessageCollection(): Collection
 {
     return $this->pkgShopPaymentIpnMessageCollection;
 }
-public function setPkgShopPaymentIpnMessageCollection(\Doctrine\Common\Collections\Collection $pkgShopPaymentIpnMessageCollection): self
+
+public function addPkgShopPaymentIpnMessageCollection(pkgShopPaymentIpnMessage $pkgShopPaymentIpnMessage): self
 {
-    $this->pkgShopPaymentIpnMessageCollection = $pkgShopPaymentIpnMessageCollection;
+    if (!$this->pkgShopPaymentIpnMessageCollection->contains($pkgShopPaymentIpnMessage)) {
+        $this->pkgShopPaymentIpnMessageCollection->add($pkgShopPaymentIpnMessage);
+        $pkgShopPaymentIpnMessage->setShopPaymentHandlerGroup($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldOption
-public function getEnvironment(): string
+public function removePkgShopPaymentIpnMessageCollection(pkgShopPaymentIpnMessage $pkgShopPaymentIpnMessage): self
 {
-    return $this->environment;
-}
-public function setEnvironment(string $environment): self
-{
-    $this->environment = $environment;
+    if ($this->pkgShopPaymentIpnMessageCollection->removeElement($pkgShopPaymentIpnMessage)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgShopPaymentIpnMessage->getShopPaymentHandlerGroup() === $this) {
+            $pkgShopPaymentIpnMessage->setShopPaymentHandlerGroup(null);
+        }
+    }
 
     return $this;
 }

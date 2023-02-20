@@ -19,25 +19,6 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
 {
 
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        $original = parent::getDoctrineDataModelParts($namespace);
-
-        if (null === $original) {
-            return null;
-        }
-
-        $data = $this->getDoctrineDataModelViewData(['type' => 'string', 'propertyName' =>  $this->snakeToCamelCase($this->name.'_path')]);
-        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
-        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
-
-        return new DataModelParts(
-            implode("\n", [$original->getProperty(), $rendererProperty->render()]),
-            implode("\n", [$original->getMethods(), $rendererMethod->render()]), $data['allowDefaultValue']
-        );
-    }
-
-
     /**
      * changes an existing field definition (alter table).
      *

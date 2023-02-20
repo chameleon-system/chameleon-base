@@ -1,26 +1,18 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsCronjobs {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldBoolean
-/** @var bool - Is running at the moment (locked) */
-private bool $lock = false, 
     // TCMSFieldVarchar
 /** @var string - Last executed on */
 private string $lastExecution = '', 
-    // TCMSFieldDateTime
-/** @var \DateTime|null - Last excecuted (real) */
-private \DateTime|null $realLastExecution = null, 
     // TCMSFieldVarchar
 /** @var string - Class name/service ID */
 private string $cronClass = '', 
-    // TCMSFieldOption
-/** @var string - Class type */
-private string $classLocation = 'Core', 
     // TCMSFieldVarchar
 /** @var string - Class path */
 private string $classSubtype = '', 
@@ -30,20 +22,11 @@ private string $unlockAfterNMinutes = '',
     // TCMSFieldVarchar
 /** @var string - Execute every N minutes */
 private string $executeEveryNMinutes = '', 
-    // TCMSFieldDate
-/** @var \DateTime|null - Active until */
-private \DateTime|null $endExecution = null, 
-    // TCMSFieldDate
-/** @var \DateTime|null - Active from */
-private \DateTime|null $startExecution = null, 
-    // TCMSFieldBoolean
-/** @var bool - Active */
-private bool $active = false, 
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -62,20 +45,6 @@ private string $name = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldBoolean
-public function isLock(): bool
-{
-    return $this->lock;
-}
-public function setLock(bool $lock): self
-{
-    $this->lock = $lock;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getLastExecution(): string
 {
@@ -90,20 +59,6 @@ public function setLastExecution(string $lastExecution): self
 
 
   
-    // TCMSFieldDateTime
-public function getRealLastExecution(): \DateTime|null
-{
-    return $this->realLastExecution;
-}
-public function setRealLastExecution(\DateTime|null $realLastExecution): self
-{
-    $this->realLastExecution = $realLastExecution;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getCronClass(): string
 {
@@ -112,20 +67,6 @@ public function getCronClass(): string
 public function setCronClass(string $cronClass): self
 {
     $this->cronClass = $cronClass;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getClassLocation(): string
-{
-    return $this->classLocation;
-}
-public function setClassLocation(string $classLocation): self
-{
-    $this->classLocation = $classLocation;
 
     return $this;
 }
@@ -168,48 +109,6 @@ public function getExecuteEveryNMinutes(): string
 public function setExecuteEveryNMinutes(string $executeEveryNMinutes): self
 {
     $this->executeEveryNMinutes = $executeEveryNMinutes;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDate
-public function getEndExecution(): \DateTime|null
-{
-    return $this->endExecution;
-}
-public function setEndExecution(\DateTime|null $endExecution): self
-{
-    $this->endExecution = $endExecution;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDate
-public function getStartExecution(): \DateTime|null
-{
-    return $this->startExecution;
-}
-public function setStartExecution(\DateTime|null $startExecution): self
-{
-    $this->startExecution = $startExecution;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isActive(): bool
-{
-    return $this->active;
-}
-public function setActive(bool $active): self
-{
-    $this->active = $active;
 
     return $this;
 }

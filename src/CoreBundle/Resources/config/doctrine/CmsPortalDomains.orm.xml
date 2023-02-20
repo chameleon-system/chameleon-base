@@ -7,28 +7,16 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="cmsPortalId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal" inversed-by="cmsPortalDomains">
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal" inversed-by="cmsPortalDomainsCollection" >
     <join-column name="cms_portal_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="sslname"  column="sslname"  nullable="false"  />
-            <field name="cmsLanguageId" type="string" field="cms_language_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsLanguage">
-    <join-column name="cms_language_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="isMasterDomain"  column="is_master_domain"  nullable="false"  />
-            <field name="googleApiKey"  column="google_api_key"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="sslname" type="string" column="sslname" length="255" nullable="false"  />
+            <field name="googleApiKey" type="string" column="google_api_key" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

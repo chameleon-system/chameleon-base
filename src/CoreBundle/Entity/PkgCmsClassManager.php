@@ -1,9 +1,13 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\PkgCmsClassManagerExtension;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class PkgCmsClassManager {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -15,14 +19,12 @@ private string $exitClass = '',
     // TCMSFieldVarchar
 /** @var string - End item class: path */
 private string $exitClassSubtype = '', 
-    // TCMSFieldOption
-/** @var string - End item class: type */
-private string $exitClassType = 'Core', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgCmsClassManagerExtension[] - Classes administered by the inheritance manager */
-private \Doctrine\Common\Collections\Collection $pkgCmsClassManagerExtensionCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, pkgCmsClassManagerExtension> - Classes administered by the inheritance manager */
+private Collection $pkgCmsClassManagerExtensionCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -83,28 +85,33 @@ public function setExitClassSubtype(string $exitClassSubtype): self
 
 
   
-    // TCMSFieldOption
-public function getExitClassType(): string
+    // TCMSFieldPropertyTable
+/**
+* @return Collection<int, pkgCmsClassManagerExtension>
+*/
+public function getPkgCmsClassManagerExtensionCollection(): Collection
 {
-    return $this->exitClassType;
+    return $this->pkgCmsClassManagerExtensionCollection;
 }
-public function setExitClassType(string $exitClassType): self
+
+public function addPkgCmsClassManagerExtensionCollection(pkgCmsClassManagerExtension $pkgCmsClassManagerExtension): self
 {
-    $this->exitClassType = $exitClassType;
+    if (!$this->pkgCmsClassManagerExtensionCollection->contains($pkgCmsClassManagerExtension)) {
+        $this->pkgCmsClassManagerExtensionCollection->add($pkgCmsClassManagerExtension);
+        $pkgCmsClassManagerExtension->setPkgCmsClassManager($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldPropertyTable
-public function getPkgCmsClassManagerExtensionCollection(): \Doctrine\Common\Collections\Collection
+public function removePkgCmsClassManagerExtensionCollection(pkgCmsClassManagerExtension $pkgCmsClassManagerExtension): self
 {
-    return $this->pkgCmsClassManagerExtensionCollection;
-}
-public function setPkgCmsClassManagerExtensionCollection(\Doctrine\Common\Collections\Collection $pkgCmsClassManagerExtensionCollection): self
-{
-    $this->pkgCmsClassManagerExtensionCollection = $pkgCmsClassManagerExtensionCollection;
+    if ($this->pkgCmsClassManagerExtensionCollection->removeElement($pkgCmsClassManagerExtension)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgCmsClassManagerExtension->getPkgCmsClassManager() === $this) {
+            $pkgCmsClassManagerExtension->setPkgCmsClassManager(null);
+        }
+    }
 
     return $this;
 }

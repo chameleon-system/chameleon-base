@@ -7,25 +7,11 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="registrationDate"  column="registration_date"  nullable="false"  />
-            <field name="confirmation"  column="confirmation"  nullable="false"  />
-            <field name="confirmationDate"  column="confirmation_date"  nullable="false"  />
-            <field name="pkgNewsletterGroupId" type="string" field="pkg_newsletter_group_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgNewsletterGroup" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterGroup">
-    <join-column name="pkg_newsletter_group_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="optoutKey"  column="optout_key"  nullable="false"  />
+            <field name="optoutKey" type="string" column="optout_key" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

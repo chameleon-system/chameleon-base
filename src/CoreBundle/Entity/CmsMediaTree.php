@@ -1,31 +1,23 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsMediaTree {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMediaTree|null - Is subitem of */
-private \ChameleonSystem\CoreBundle\Entity\CmsMediaTree|null $parent = null,
-/** @var null|string - Is subitem of */
-private ?string $parentId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Directoy name */
 private string $name = '', 
-    // TCMSFieldSmallIconList
-/** @var string - Icon */
-private string $icon = '', 
     // TCMSFieldVarchar
 /** @var string - URL path to the image */
 private string $pathCache = '', 
-    // TCMSFieldNumber
-/** @var int - Position */
-private int $entrySort = 0  ) {}
+    // TCMSFieldVarchar
+/** @var string - Position */
+private string $entrySort = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -58,20 +50,6 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldSmallIconList
-public function getIcon(): string
-{
-    return $this->icon;
-}
-public function setIcon(string $icon): self
-{
-    $this->icon = $icon;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getPathCache(): string
 {
@@ -86,40 +64,12 @@ public function setPathCache(string $pathCache): self
 
 
   
-    // TCMSFieldLookup
-public function getParent(): \ChameleonSystem\CoreBundle\Entity\CmsMediaTree|null
-{
-    return $this->parent;
-}
-public function setParent(\ChameleonSystem\CoreBundle\Entity\CmsMediaTree|null $parent): self
-{
-    $this->parent = $parent;
-    $this->parentId = $parent?->getId();
-
-    return $this;
-}
-public function getParentId(): ?string
-{
-    return $this->parentId;
-}
-public function setParentId(?string $parentId): self
-{
-    $this->parentId = $parentId;
-    // todo - load new id
-    //$this->parentId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldNumber
-public function getEntrySort(): int
+    // TCMSFieldVarchar
+public function getEntrySort(): string
 {
     return $this->entrySort;
 }
-public function setEntrySort(int $entrySort): self
+public function setEntrySort(string $entrySort): self
 {
     $this->entrySort = $entrySort;
 

@@ -7,33 +7,13 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopArticleId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticle" inversed-by="shopArticleDocument">
+            <many-to-one field="shopArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle" inversed-by="shopArticleDocumentCollection" >
     <join-column name="shop_article_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="shopArticleDocumentTypeId" type="string" field="shop_article_document_type_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopArticleDocumentType" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticleDocumentType">
-    <join-column name="shop_article_document_type_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="cmsDocumentId" type="string" field="cms_document_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsDocument" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsDocument">
-    <join-column name="cms_document_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="position"  column="position"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

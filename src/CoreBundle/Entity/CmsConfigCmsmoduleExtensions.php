@@ -1,28 +1,25 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsConfig;
+
 class CmsConfigCmsmoduleExtensions {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsConfig|null - Belongs to cms config */
-private \ChameleonSystem\CoreBundle\Entity\CmsConfig|null $cmsConfig = null,
-/** @var null|string - Belongs to cms config */
-private ?string $cmsConfigId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Overwritten by */
 private string $newclass = '', 
+    // TCMSFieldLookupParentID
+/** @var CmsConfig|null - Belongs to cms config */
+private ?CmsConfig $cmsConfig = null
+, 
     // TCMSFieldVarchar
 /** @var string - Module to overwrite */
-private string $name = '', 
-    // TCMSFieldOption
-/** @var string - Type */
-private string $type = 'Customer'  ) {}
+private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -55,31 +52,18 @@ public function setNewclass(string $newclass): self
 
 
   
-    // TCMSFieldLookup
-public function getCmsConfig(): \ChameleonSystem\CoreBundle\Entity\CmsConfig|null
+    // TCMSFieldLookupParentID
+public function getCmsConfig(): ?CmsConfig
 {
     return $this->cmsConfig;
 }
-public function setCmsConfig(\ChameleonSystem\CoreBundle\Entity\CmsConfig|null $cmsConfig): self
+
+public function setCmsConfig(?CmsConfig $cmsConfig): self
 {
     $this->cmsConfig = $cmsConfig;
-    $this->cmsConfigId = $cmsConfig?->getId();
 
     return $this;
 }
-public function getCmsConfigId(): ?string
-{
-    return $this->cmsConfigId;
-}
-public function setCmsConfigId(?string $cmsConfigId): self
-{
-    $this->cmsConfigId = $cmsConfigId;
-    // todo - load new id
-    //$this->cmsConfigId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -91,20 +75,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getType(): string
-{
-    return $this->type;
-}
-public function setType(string $type): self
-{
-    $this->type = $type;
 
     return $this;
 }

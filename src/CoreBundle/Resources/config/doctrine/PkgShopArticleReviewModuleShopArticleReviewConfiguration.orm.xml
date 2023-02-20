@@ -7,33 +7,13 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="cmsTplModuleInstanceId" type="string" field="cms_tpl_module_instance_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
-    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="allowWriteReviewLoggedinUsersOnly"  column="allow_write_review_loggedin_users_only"  nullable="false"  />
-            <field name="allowShowReviewLoggedinUsersOnly"  column="allow_show_review_loggedin_users_only"  nullable="false"  />
-            <field name="manageReviews"  column="manage_reviews"  nullable="false"  />
-            <field name="allowRateReview"  column="allow_rate_review"  nullable="false"  />
-            <field name="allowReportReviews"  column="allow_report_reviews"  nullable="false"  />
-            <field name="allowCommentReviews"  column="allow_comment_reviews"  nullable="false"  />
-            <field name="ratingCount"  column="rating_count"  nullable="false"  />
-            <field name="countShowReviews"  column="count_show_reviews"  nullable="false"  />
-            <field name="optionShowAuthorName"  column="option_show_author_name"  nullable="false"  />
-            <field name="title"  column="title"  nullable="false"  />
-            <field name="introText"  column="intro_text"  nullable="false"  />
-            <field name="outroText"  column="outro_text"  nullable="false"  />
+            <field name="ratingCount" type="string" column="rating_count" length="255" nullable="false"  />
+            <field name="countShowReviews" type="string" column="count_show_reviews" length="255" nullable="false"  />
+            <field name="title" type="string" column="title" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

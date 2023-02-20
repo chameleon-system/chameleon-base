@@ -1,22 +1,16 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+
 class CmsPortalDomains {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortal|null - Portal */
-private \ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal = null,
-/** @var null|string - Portal */
-private ?string $cmsPortalId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsLanguage|null - Language */
-private \ChameleonSystem\CoreBundle\Entity\CmsLanguage|null $cmsLanguage = null,
-/** @var null|string - Language */
-private ?string $cmsLanguageId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsPortal|null - Portal */
+private ?CmsPortal $cmsPortal = null
 , 
     // TCMSFieldVarchar
 /** @var string - Domain name */
@@ -24,14 +18,11 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - SSL domain name */
 private string $sslname = '', 
-    // TCMSFieldUniqueMarker
-/** @var bool - Primary domain of the portal */
-private bool $isMasterDomain = false, 
     // TCMSFieldVarchar
 /** @var string - Google API key */
 private string $googleApiKey = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -50,31 +41,18 @@ private string $googleApiKey = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsPortal(): \ChameleonSystem\CoreBundle\Entity\CmsPortal|null
+    // TCMSFieldLookupParentID
+public function getCmsPortal(): ?CmsPortal
 {
     return $this->cmsPortal;
 }
-public function setCmsPortal(\ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal): self
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
 {
     $this->cmsPortal = $cmsPortal;
-    $this->cmsPortalId = $cmsPortal?->getId();
 
     return $this;
 }
-public function getCmsPortalId(): ?string
-{
-    return $this->cmsPortalId;
-}
-public function setCmsPortalId(?string $cmsPortalId): self
-{
-    $this->cmsPortalId = $cmsPortalId;
-    // todo - load new id
-    //$this->cmsPortalId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -100,48 +78,6 @@ public function getSslname(): string
 public function setSslname(string $sslname): self
 {
     $this->sslname = $sslname;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsLanguage(): \ChameleonSystem\CoreBundle\Entity\CmsLanguage|null
-{
-    return $this->cmsLanguage;
-}
-public function setCmsLanguage(\ChameleonSystem\CoreBundle\Entity\CmsLanguage|null $cmsLanguage): self
-{
-    $this->cmsLanguage = $cmsLanguage;
-    $this->cmsLanguageId = $cmsLanguage?->getId();
-
-    return $this;
-}
-public function getCmsLanguageId(): ?string
-{
-    return $this->cmsLanguageId;
-}
-public function setCmsLanguageId(?string $cmsLanguageId): self
-{
-    $this->cmsLanguageId = $cmsLanguageId;
-    // todo - load new id
-    //$this->cmsLanguageId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldUniqueMarker
-public function isIsMasterDomain(): bool
-{
-    return $this->isMasterDomain;
-}
-public function setIsMasterDomain(bool $isMasterDomain): self
-{
-    $this->isMasterDomain = $isMasterDomain;
 
     return $this;
 }

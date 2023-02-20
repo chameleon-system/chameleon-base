@@ -1,43 +1,28 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopVariantType;
+
 class ShopVariantTypeValue {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopVariantType|null - Belongs to variant type */
-private \ChameleonSystem\CoreBundle\Entity\ShopVariantType|null $shopVariantType = null,
-/** @var null|string - Belongs to variant type */
-private ?string $shopVariantTypeId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMedia|null - Optional image or icon */
-private \ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMedia = null,
-/** @var null|string - Optional image or icon */
-private ?string $cmsMediaId = null
+        
+    // TCMSFieldLookupParentID
+/** @var ShopVariantType|null - Belongs to variant type */
+private ?ShopVariantType $shopVariantType = null
 , 
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldSEOURLTitle
+    // TCMSFieldVarchar
 /** @var string - URL name (for article link) */
 private string $urlName = '', 
-    // TCMSFieldPosition
-/** @var int - Position */
-private int $position = 0, 
-    // TCMSFieldColorpicker
-/** @var string - Color value (optional) */
-private string $colorCode = '', 
     // TCMSFieldVarchar
 /** @var string - Alternative name (grouping) */
-private string $nameGrouped = '', 
-    // TCMSFieldPrice
-/** @var float - Surcharge / reduction */
-private float $surcharge = 0  ) {}
+private string $nameGrouped = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -56,31 +41,18 @@ private float $surcharge = 0  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShopVariantType(): \ChameleonSystem\CoreBundle\Entity\ShopVariantType|null
+    // TCMSFieldLookupParentID
+public function getShopVariantType(): ?ShopVariantType
 {
     return $this->shopVariantType;
 }
-public function setShopVariantType(\ChameleonSystem\CoreBundle\Entity\ShopVariantType|null $shopVariantType): self
+
+public function setShopVariantType(?ShopVariantType $shopVariantType): self
 {
     $this->shopVariantType = $shopVariantType;
-    $this->shopVariantTypeId = $shopVariantType?->getId();
 
     return $this;
 }
-public function getShopVariantTypeId(): ?string
-{
-    return $this->shopVariantTypeId;
-}
-public function setShopVariantTypeId(?string $shopVariantTypeId): self
-{
-    $this->shopVariantTypeId = $shopVariantTypeId;
-    // todo - load new id
-    //$this->shopVariantTypeId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -98,7 +70,7 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldSEOURLTitle
+    // TCMSFieldVarchar
 public function getUrlName(): string
 {
     return $this->urlName;
@@ -112,62 +84,6 @@ public function setUrlName(string $urlName): self
 
 
   
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldColorpicker
-public function getColorCode(): string
-{
-    return $this->colorCode;
-}
-public function setColorCode(string $colorCode): self
-{
-    $this->colorCode = $colorCode;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsMedia(): \ChameleonSystem\CoreBundle\Entity\CmsMedia|null
-{
-    return $this->cmsMedia;
-}
-public function setCmsMedia(\ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMedia): self
-{
-    $this->cmsMedia = $cmsMedia;
-    $this->cmsMediaId = $cmsMedia?->getId();
-
-    return $this;
-}
-public function getCmsMediaId(): ?string
-{
-    return $this->cmsMediaId;
-}
-public function setCmsMediaId(?string $cmsMediaId): self
-{
-    $this->cmsMediaId = $cmsMediaId;
-    // todo - load new id
-    //$this->cmsMediaId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
     // TCMSFieldVarchar
 public function getNameGrouped(): string
 {
@@ -176,20 +92,6 @@ public function getNameGrouped(): string
 public function setNameGrouped(string $nameGrouped): self
 {
     $this->nameGrouped = $nameGrouped;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldPrice
-public function getSurcharge(): float
-{
-    return $this->surcharge;
-}
-public function setSurcharge(float $surcharge): self
-{
-    $this->surcharge = $surcharge;
 
     return $this;
 }

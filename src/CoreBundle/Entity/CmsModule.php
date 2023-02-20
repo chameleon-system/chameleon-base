@@ -1,26 +1,12 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsModule {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsContentBox|null - Show in category window */
-private \ChameleonSystem\CoreBundle\Entity\CmsContentBox|null $cmsContentBox = null,
-/** @var null|string - Show in category window */
-private ?string $cmsContentBoxId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsUsergroup|null - Module belongs to group */
-private \ChameleonSystem\CoreBundle\Entity\CmsUsergroup|null $cmsUsergroup = null,
-/** @var null|string - Module belongs to group */
-private ?string $cmsUsergroupId = null
-, 
-    // TCMSFieldSmallIconList
-/** @var string - Icon */
-private string $iconList = 'page_package.gif', 
+        
     // TCMSFieldVarchar
 /** @var string - Description */
 private string $name = '', 
@@ -36,23 +22,17 @@ private string $parameter = '',
     // TCMSFieldVarchar
 /** @var string - Module type */
 private string $moduleLocation = 'Core', 
-    // TCMSFieldBoolean
-/** @var bool - Open as popup */
-private bool $showAsPopup = false, 
-    // TCMSFieldNumber
-/** @var int - Popup window width */
-private int $width = 780, 
-    // TCMSFieldNumber
-/** @var int - Popup window height */
-private int $height = 650, 
-    // TCMSFieldBoolean
-/** @var bool - Active */
-private bool $active = false, 
+    // TCMSFieldVarchar
+/** @var string - Popup window width */
+private string $width = '780', 
+    // TCMSFieldVarchar
+/** @var string - Popup window height */
+private string $height = '650', 
     // TCMSFieldVarchar
 /** @var string - Icon Font CSS class */
 private string $iconFontCssClass = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -71,20 +51,6 @@ private string $iconFontCssClass = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldSmallIconList
-public function getIconList(): string
-{
-    return $this->iconList;
-}
-public function setIconList(string $iconList): self
-{
-    $this->iconList = $iconList;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getName(): string
 {
@@ -110,62 +76,6 @@ public function setUniquecmsname(string $uniquecmsname): self
 
     return $this;
 }
-
-
-  
-    // TCMSFieldLookup
-public function getCmsContentBox(): \ChameleonSystem\CoreBundle\Entity\CmsContentBox|null
-{
-    return $this->cmsContentBox;
-}
-public function setCmsContentBox(\ChameleonSystem\CoreBundle\Entity\CmsContentBox|null $cmsContentBox): self
-{
-    $this->cmsContentBox = $cmsContentBox;
-    $this->cmsContentBoxId = $cmsContentBox?->getId();
-
-    return $this;
-}
-public function getCmsContentBoxId(): ?string
-{
-    return $this->cmsContentBoxId;
-}
-public function setCmsContentBoxId(?string $cmsContentBoxId): self
-{
-    $this->cmsContentBoxId = $cmsContentBoxId;
-    // todo - load new id
-    //$this->cmsContentBoxId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookup
-public function getCmsUsergroup(): \ChameleonSystem\CoreBundle\Entity\CmsUsergroup|null
-{
-    return $this->cmsUsergroup;
-}
-public function setCmsUsergroup(\ChameleonSystem\CoreBundle\Entity\CmsUsergroup|null $cmsUsergroup): self
-{
-    $this->cmsUsergroup = $cmsUsergroup;
-    $this->cmsUsergroupId = $cmsUsergroup?->getId();
-
-    return $this;
-}
-public function getCmsUsergroupId(): ?string
-{
-    return $this->cmsUsergroupId;
-}
-public function setCmsUsergroupId(?string $cmsUsergroupId): self
-{
-    $this->cmsUsergroupId = $cmsUsergroupId;
-    // todo - load new id
-    //$this->cmsUsergroupId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -211,26 +121,12 @@ public function setModuleLocation(string $moduleLocation): self
 
 
   
-    // TCMSFieldBoolean
-public function isShowAsPopup(): bool
-{
-    return $this->showAsPopup;
-}
-public function setShowAsPopup(bool $showAsPopup): self
-{
-    $this->showAsPopup = $showAsPopup;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldNumber
-public function getWidth(): int
+    // TCMSFieldVarchar
+public function getWidth(): string
 {
     return $this->width;
 }
-public function setWidth(int $width): self
+public function setWidth(string $width): self
 {
     $this->width = $width;
 
@@ -239,28 +135,14 @@ public function setWidth(int $width): self
 
 
   
-    // TCMSFieldNumber
-public function getHeight(): int
+    // TCMSFieldVarchar
+public function getHeight(): string
 {
     return $this->height;
 }
-public function setHeight(int $height): self
+public function setHeight(string $height): self
 {
     $this->height = $height;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isActive(): bool
-{
-    return $this->active;
-}
-public function setActive(bool $active): self
-{
-    $this->active = $active;
 
     return $this;
 }

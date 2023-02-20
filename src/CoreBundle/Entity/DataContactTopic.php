@@ -1,16 +1,17 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class DataContactTopic {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }

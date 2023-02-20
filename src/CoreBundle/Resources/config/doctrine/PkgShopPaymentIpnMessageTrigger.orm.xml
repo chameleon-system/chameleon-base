@@ -7,30 +7,17 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="pkgShopPaymentIpnTriggerId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnTrigger" inversed-by="pkgShopPaymentIpnMessageTrigger">
+            <many-to-one field="pkgShopPaymentIpnTrigger" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnTrigger" inversed-by="pkgShopPaymentIpnMessageTriggerCollection" >
     <join-column name="pkg_shop_payment_ipn_trigger_id" referenced-column-name="id" />
 </many-to-one>
-            <many-to-one field="pkgShopPaymentIpnMessageId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessage" inversed-by="pkgShopPaymentIpnMessageTrigger">
+            <many-to-one field="pkgShopPaymentIpnMessage" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessage" inversed-by="pkgShopPaymentIpnMessageTriggerCollection" >
     <join-column name="pkg_shop_payment_ipn_message_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="datecreated"  column="datecreated"  nullable="false">
-    <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-    </options>
-</field>
-            <field name="done"  column="done"  nullable="false"  />
-            <field name="doneDate"  column="done_date"  nullable="false"  />
-            <field name="success"  column="success"  nullable="false"  />
-            <field name="attemptCount"  column="attempt_count"  nullable="false"  />
-            <field name="nextAttempt"  column="next_attempt"  nullable="false"  />
-            <field name="log"  column="log"  nullable="false"  />
+            <field name="attemptCount" type="string" column="attempt_count" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

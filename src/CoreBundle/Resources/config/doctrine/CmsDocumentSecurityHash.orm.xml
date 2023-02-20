@@ -7,31 +7,13 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="cmsDocumentId" type="string" field="cms_document_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsDocument" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsDocument">
-    <join-column name="cms_document_id" referenced-column-name="id" />
-</many-to-one>
-            <many-to-one field="dataExtranetUserId" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUser" >
+            <many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser">
     <join-column name="data_extranet_user_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="publishdate"  column="publishdate"  nullable="false">
-    <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-    </options>
-</field>
-            <field name="enddate"  column="enddate"  nullable="false"  />
-            <field name="token"  column="token"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

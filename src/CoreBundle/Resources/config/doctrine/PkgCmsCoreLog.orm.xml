@@ -7,44 +7,23 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="timestamp"  column="timestamp"  nullable="false"  />
-            <field name="channel"  column="channel"  nullable="false"  />
-            <field name="level"  column="level"  nullable="false"  />
-            <field name="message"  column="message"  nullable="false"  />
-            <field name="session"  column="session"  nullable="false"  />
-            <field name="uid"  column="uid"  nullable="false"  />
-            <field name="file"  column="file"  nullable="false"  />
-            <field name="line"  column="line"  nullable="false"  />
-            <field name="requestUrl"  column="request_url"  nullable="false"  />
-            <field name="referrerUrl"  column="referrer_url"  nullable="false"  />
-            <field name="httpMethod"  column="http_method"  nullable="false"  />
-            <field name="server"  column="server"  nullable="false"  />
-            <field name="ip"  column="ip"  nullable="false"  />
-            <field name="dataExtranetUserId" type="string" field="data_extranet_user_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser">
-    <join-column name="data_extranet_user_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="dataExtranetUserName"  column="data_extranet_user_name"  nullable="false"  />
-            <field name="cmsUserId" type="string" field="cms_user_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsUser" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUser">
-    <join-column name="cms_user_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="context"  column="context"  nullable="false"  />
+            <field name="timestamp" type="string" column="timestamp" length="255" nullable="false"  />
+            <field name="channel" type="string" column="channel" length="255" nullable="false"  />
+            <field name="level" type="string" column="level" length="255" nullable="false"  />
+            <field name="message" type="string" column="message" length="516" nullable="false"  />
+            <field name="session" type="string" column="session" length="32" nullable="false"  />
+            <field name="uid" type="string" column="uid" length="32" nullable="false"  />
+            <field name="file" type="string" column="file" length="255" nullable="false"  />
+            <field name="line" type="string" column="line" length="255" nullable="false"  />
+            <field name="requestUrl" type="string" column="request_url" length="512" nullable="false"  />
+            <field name="referrerUrl" type="string" column="referrer_url" length="512" nullable="false"  />
+            <field name="server" type="string" column="server" length="255" nullable="false"  />
+            <field name="ip" type="string" column="ip" length="40" nullable="false"  />
+            <field name="dataExtranetUserName" type="string" column="data_extranet_user_name" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -1,61 +1,35 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsDocument {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsUser|null - Last changed by */
-private \ChameleonSystem\CoreBundle\Entity\CmsUser|null $cmsUser = null,
-/** @var null|string - Last changed by */
-private ?string $cmsUserId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsDocumentTree|null - Folder */
-private \ChameleonSystem\CoreBundle\Entity\CmsDocumentTree|null $cmsDocumentTree = null,
-/** @var null|string - Folder */
-private ?string $cmsDocumentTreeId = null
-, 
-    // TCMSFieldDocumentProperties
-/** @var string - Properties */
-private string $cmsFiletypeId = '', 
+        
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - File name */
 private string $filename = '', 
-    // TCMSFieldText
-/** @var string - Description */
-private string $description = '', 
-    // TCMSFieldBoolean
-/** @var bool - Private */
-private bool $private = false, 
-    // TCMSFieldBoolean
-/** @var bool - Time-limited download authorization */
-private bool $tokenProtected = false, 
-    // TCMSFieldTimestamp
-/** @var \DateTime|null - Last changed on */
-private \DateTime|null $timeStamp = null, 
-    // TCMSFieldNumber
-/** @var int - Image width */
-private int $hiddenImageWidth = 0, 
-    // TCMSFieldNumber
-/** @var int - Image height */
-private int $hiddenImageHeight = 0, 
-    // TCMSFieldNumber
-/** @var int - User downloads */
-private int $counter = 0, 
-    // TCMSFieldNumber
-/** @var int - File size */
-private int $filesize = 0, 
+    // TCMSFieldVarchar
+/** @var string - Image width */
+private string $hiddenImageWidth = '', 
+    // TCMSFieldVarchar
+/** @var string - Image height */
+private string $hiddenImageHeight = '', 
+    // TCMSFieldVarchar
+/** @var string - User downloads */
+private string $counter = '', 
+    // TCMSFieldVarchar
+/** @var string - File size */
+private string $filesize = '', 
     // TCMSFieldVarchar
 /** @var string - SEO Name */
 private string $seoName = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -74,20 +48,6 @@ private string $seoName = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldDocumentProperties
-public function getCmsFiletypeId(): string
-{
-    return $this->cmsFiletypeId;
-}
-public function setCmsFiletypeId(string $cmsFiletypeId): self
-{
-    $this->cmsFiletypeId = $cmsFiletypeId;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getName(): string
 {
@@ -116,96 +76,12 @@ public function setFilename(string $filename): self
 
 
   
-    // TCMSFieldText
-public function getDescription(): string
-{
-    return $this->description;
-}
-public function setDescription(string $description): self
-{
-    $this->description = $description;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isPrivate(): bool
-{
-    return $this->private;
-}
-public function setPrivate(bool $private): self
-{
-    $this->private = $private;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isTokenProtected(): bool
-{
-    return $this->tokenProtected;
-}
-public function setTokenProtected(bool $tokenProtected): self
-{
-    $this->tokenProtected = $tokenProtected;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldTimestamp
-public function getTimeStamp(): \DateTime|null
-{
-    return $this->timeStamp;
-}
-public function setTimeStamp(\DateTime|null $timeStamp): self
-{
-    $this->timeStamp = $timeStamp;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsUser(): \ChameleonSystem\CoreBundle\Entity\CmsUser|null
-{
-    return $this->cmsUser;
-}
-public function setCmsUser(\ChameleonSystem\CoreBundle\Entity\CmsUser|null $cmsUser): self
-{
-    $this->cmsUser = $cmsUser;
-    $this->cmsUserId = $cmsUser?->getId();
-
-    return $this;
-}
-public function getCmsUserId(): ?string
-{
-    return $this->cmsUserId;
-}
-public function setCmsUserId(?string $cmsUserId): self
-{
-    $this->cmsUserId = $cmsUserId;
-    // todo - load new id
-    //$this->cmsUserId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldNumber
-public function getHiddenImageWidth(): int
+    // TCMSFieldVarchar
+public function getHiddenImageWidth(): string
 {
     return $this->hiddenImageWidth;
 }
-public function setHiddenImageWidth(int $hiddenImageWidth): self
+public function setHiddenImageWidth(string $hiddenImageWidth): self
 {
     $this->hiddenImageWidth = $hiddenImageWidth;
 
@@ -214,12 +90,12 @@ public function setHiddenImageWidth(int $hiddenImageWidth): self
 
 
   
-    // TCMSFieldNumber
-public function getHiddenImageHeight(): int
+    // TCMSFieldVarchar
+public function getHiddenImageHeight(): string
 {
     return $this->hiddenImageHeight;
 }
-public function setHiddenImageHeight(int $hiddenImageHeight): self
+public function setHiddenImageHeight(string $hiddenImageHeight): self
 {
     $this->hiddenImageHeight = $hiddenImageHeight;
 
@@ -228,12 +104,12 @@ public function setHiddenImageHeight(int $hiddenImageHeight): self
 
 
   
-    // TCMSFieldNumber
-public function getCounter(): int
+    // TCMSFieldVarchar
+public function getCounter(): string
 {
     return $this->counter;
 }
-public function setCounter(int $counter): self
+public function setCounter(string $counter): self
 {
     $this->counter = $counter;
 
@@ -242,40 +118,12 @@ public function setCounter(int $counter): self
 
 
   
-    // TCMSFieldLookup
-public function getCmsDocumentTree(): \ChameleonSystem\CoreBundle\Entity\CmsDocumentTree|null
-{
-    return $this->cmsDocumentTree;
-}
-public function setCmsDocumentTree(\ChameleonSystem\CoreBundle\Entity\CmsDocumentTree|null $cmsDocumentTree): self
-{
-    $this->cmsDocumentTree = $cmsDocumentTree;
-    $this->cmsDocumentTreeId = $cmsDocumentTree?->getId();
-
-    return $this;
-}
-public function getCmsDocumentTreeId(): ?string
-{
-    return $this->cmsDocumentTreeId;
-}
-public function setCmsDocumentTreeId(?string $cmsDocumentTreeId): self
-{
-    $this->cmsDocumentTreeId = $cmsDocumentTreeId;
-    // todo - load new id
-    //$this->cmsDocumentTreeId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldNumber
-public function getFilesize(): int
+    // TCMSFieldVarchar
+public function getFilesize(): string
 {
     return $this->filesize;
 }
-public function setFilesize(int $filesize): self
+public function setFilesize(string $filesize): self
 {
     $this->filesize = $filesize;
 

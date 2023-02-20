@@ -7,25 +7,16 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="lock"  column="lock"  nullable="false"  />
-            <field name="lastExecution"  column="last_execution"  nullable="false"  />
-            <field name="realLastExecution"  column="real_last_execution"  nullable="false"  />
-            <field name="cronClass"  column="cron_class"  nullable="false"  />
-            <field name="classLocation"  column="class_location"  nullable="false"  />
-            <field name="classSubtype"  column="class_subtype"  nullable="false"  />
-            <field name="unlockAfterNMinutes"  column="unlock_after_n_minutes"  nullable="false"  />
-            <field name="executeEveryNMinutes"  column="execute_every_n_minutes"  nullable="false"  />
-            <field name="endExecution"  column="end_execution"  nullable="false"  />
-            <field name="startExecution"  column="start_execution"  nullable="false"  />
-            <field name="active"  column="active"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
+            <field name="lastExecution" type="string" column="last_execution" length="255" nullable="false"  />
+            <field name="cronClass" type="string" column="cron_class" length="255" nullable="false"  />
+            <field name="classSubtype" type="string" column="class_subtype" length="255" nullable="false"  />
+            <field name="unlockAfterNMinutes" type="string" column="unlock_after_n_minutes" length="255" nullable="false"  />
+            <field name="executeEveryNMinutes" type="string" column="execute_every_n_minutes" length="255" nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

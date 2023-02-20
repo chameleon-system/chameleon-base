@@ -7,27 +7,19 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="title"  column="title"  nullable="false"  />
-            <many-to-one field="cmsTblConfId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTblConf" inversed-by="propertyListFields">
+            <field name="title" type="string" column="title" length="255" nullable="false"  />
+            <many-to-one field="cmsTblConf" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConf" inversed-by="propertyListFieldsCollection" >
     <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="cmsTranslationFieldName"  column="cms_translation_field_name"  nullable="false"  />
-            <field name="dbAlias"  column="db_alias"  nullable="false"  />
-            <field name="position"  column="position"  nullable="false"  />
-            <field name="width"  column="width"  nullable="false"  />
-            <field name="align"  column="align"  nullable="false"  />
-            <field name="callbackFnc"  column="callback_fnc"  nullable="false"  />
-            <field name="useCallback"  column="use_callback"  nullable="false"  />
-            <field name="showInList"  column="show_in_list"  nullable="false"  />
-            <field name="showInSort"  column="show_in_sort"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="cmsTranslationFieldName" type="string" column="cms_translation_field_name" length="255" nullable="false"  />
+            <field name="dbAlias" type="string" column="db_alias" length="255" nullable="false"  />
+            <field name="width" type="string" column="width" length="255" nullable="false"  />
+            <field name="callbackFnc" type="string" column="callback_fnc" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -7,38 +7,16 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="modifyDate"  column="modify_date"  nullable="false">
-    <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-    </options>
-</field>
-            <field name="cmsUserId" type="string" field="cms_user_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsUser" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUser">
-    <join-column name="cms_user_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="cmsTblConfId" type="string" field="cms_tbl_conf_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsTblConf" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConf">
-    <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="modifiedId"  column="modified_id"  nullable="false"  />
-            <field name="modifiedName"  column="modified_name"  nullable="false"  />
-            <field name="changeType"  column="change_type"  nullable="false"  />
-            <one-to-many field="pkgCmsChangelogItemCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgCmsChangelogItem" mapped-by="pkgCmsChangelogSetId" />
+            <field name="modifiedId" type="string" column="modified_id" length="255" nullable="false"  />
+            <field name="modifiedName" type="string" column="modified_name" length="255" nullable="false"  />
+            <field name="changeType" type="string" column="change_type" length="255" nullable="false"  />
+            <one-to-many field="pkgCmsChangelogItemCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgCmsChangelogItem" mapped-by="pkgCmsChangelogSet" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
     </entity>
 

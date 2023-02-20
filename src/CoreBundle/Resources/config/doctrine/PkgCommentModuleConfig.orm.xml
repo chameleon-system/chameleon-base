@@ -7,34 +7,16 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="cmsTplModuleInstanceId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance" >
+            <many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
     <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="pkgCommentTypeId" type="string" field="pkg_comment_type_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgCommentType" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgCommentType">
-    <join-column name="pkg_comment_type_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="introText"  column="intro_text"  nullable="false"  />
-            <field name="closingText"  column="closing_text"  nullable="false"  />
-            <field name="numberOfCommentsPerPage"  column="number_of_comments_per_page"  nullable="false"  />
-            <field name="guestCanSeeComments"  column="guest_can_see_comments"  nullable="false"  />
-            <field name="guestCommentAllowed"  column="guest_comment_allowed"  nullable="false"  />
-            <field name="commentOnDelete"  column="comment_on_delete"  nullable="false"  />
-            <field name="newestOnTop"  column="newest_on_top"  nullable="false"  />
-            <field name="useSimpleReporting"  column="use_simple_reporting"  nullable="false"  />
-            <field name="showReportedComments"  column="show_reported_comments"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="numberOfCommentsPerPage" type="string" column="number_of_comments_per_page" length="255" nullable="false"  />
+            <field name="commentOnDelete" type="string" column="comment_on_delete" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -1,31 +1,22 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopArticleCatalogConf;
+
 class ShopArticleCatalogConfDefaultOrder {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticleCatalogConf|null - Belongs to configuration */
-private \ChameleonSystem\CoreBundle\Entity\ShopArticleCatalogConf|null $shopArticleCatalogConf = null,
-/** @var null|string - Belongs to configuration */
-private ?string $shopArticleCatalogConfId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby|null - Sorting */
-private \ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby|null $shopModuleArticlelistOrderby = null,
-/** @var null|string - Sorting */
-private ?string $shopModuleArticlelistOrderbyId = null
+        
+    // TCMSFieldLookupParentID
+/** @var ShopArticleCatalogConf|null - Belongs to configuration */
+private ?ShopArticleCatalogConf $shopArticleCatalogConf = null
 , 
     // TCMSFieldVarchar
 /** @var string - Name (description) */
-private string $name = '', 
-    // TCMSFieldLookupMultiselect
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopCategory[] - Category */
-private \Doctrine\Common\Collections\Collection $shopCategoryMlt = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -44,31 +35,18 @@ private \Doctrine\Common\Collections\Collection $shopCategoryMlt = new \Doctrine
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShopArticleCatalogConf(): \ChameleonSystem\CoreBundle\Entity\ShopArticleCatalogConf|null
+    // TCMSFieldLookupParentID
+public function getShopArticleCatalogConf(): ?ShopArticleCatalogConf
 {
     return $this->shopArticleCatalogConf;
 }
-public function setShopArticleCatalogConf(\ChameleonSystem\CoreBundle\Entity\ShopArticleCatalogConf|null $shopArticleCatalogConf): self
+
+public function setShopArticleCatalogConf(?ShopArticleCatalogConf $shopArticleCatalogConf): self
 {
     $this->shopArticleCatalogConf = $shopArticleCatalogConf;
-    $this->shopArticleCatalogConfId = $shopArticleCatalogConf?->getId();
 
     return $this;
 }
-public function getShopArticleCatalogConfId(): ?string
-{
-    return $this->shopArticleCatalogConfId;
-}
-public function setShopArticleCatalogConfId(?string $shopArticleCatalogConfId): self
-{
-    $this->shopArticleCatalogConfId = $shopArticleCatalogConfId;
-    // todo - load new id
-    //$this->shopArticleCatalogConfId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -80,48 +58,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getShopModuleArticlelistOrderby(): \ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby|null
-{
-    return $this->shopModuleArticlelistOrderby;
-}
-public function setShopModuleArticlelistOrderby(\ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby|null $shopModuleArticlelistOrderby): self
-{
-    $this->shopModuleArticlelistOrderby = $shopModuleArticlelistOrderby;
-    $this->shopModuleArticlelistOrderbyId = $shopModuleArticlelistOrderby?->getId();
-
-    return $this;
-}
-public function getShopModuleArticlelistOrderbyId(): ?string
-{
-    return $this->shopModuleArticlelistOrderbyId;
-}
-public function setShopModuleArticlelistOrderbyId(?string $shopModuleArticlelistOrderbyId): self
-{
-    $this->shopModuleArticlelistOrderbyId = $shopModuleArticlelistOrderbyId;
-    // todo - load new id
-    //$this->shopModuleArticlelistOrderbyId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookupMultiselect
-public function getShopCategoryMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->shopCategoryMlt;
-}
-public function setShopCategoryMlt(\Doctrine\Common\Collections\Collection $shopCategoryMlt): self
-{
-    $this->shopCategoryMlt = $shopCategoryMlt;
 
     return $this;
 }

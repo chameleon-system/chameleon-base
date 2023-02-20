@@ -7,45 +7,17 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="pkgImageHotspotItemId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItem" inversed-by="pkgImageHotspotItemMarker">
+            <many-to-one field="pkgImageHotspotItem" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItem" inversed-by="pkgImageHotspotItemMarkerCollection" >
     <join-column name="pkg_image_hotspot_item_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="top"  column="top"  nullable="false"  />
-            <field name="left"  column="left"  nullable="false"  />
-            <field name="linkedRecordId" type="string" field="linked_record_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="linkedRecord" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplPage">
-    <join-column name="linked_record_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="url"  column="url"  nullable="false"  />
-            <field name="showObjectLayover"  column="show_object_layover"  nullable="false"  />
-            <field name="cmsMediaId" type="string" field="cms_media_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsMedia" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
-    <join-column name="cms_media_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="cmsMediaHoverId" type="string" field="cms_media_hover_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsMediaHover" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
-    <join-column name="cms_media_hover_id" referenced-column-name="id" />
-</many-to-one>
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="top" type="string" column="top" length="255" nullable="false"  />
+            <field name="left" type="string" column="left" length="255" nullable="false"  />
+            <field name="url" type="string" column="url" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

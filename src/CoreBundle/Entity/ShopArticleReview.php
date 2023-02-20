@@ -1,61 +1,48 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopArticle;
+use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
+
 class ShopArticleReview {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticle|null - Belongs to product */
-private \ChameleonSystem\CoreBundle\Entity\ShopArticle|null $shopArticle = null,
-/** @var null|string - Belongs to product */
-private ?string $shopArticleId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null - Written by */
-private \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null $dataExtranetUser = null,
-/** @var null|string - Written by */
-private ?string $dataExtranetUserId = null
+        
+    // TCMSFieldLookupParentID
+/** @var ShopArticle|null - Belongs to product */
+private ?ShopArticle $shopArticle = null
 , 
-    // TCMSFieldBoolean
-/** @var bool - Published */
-private bool $publish = false, 
+    // TCMSFieldLookupParentID
+/** @var DataExtranetUser|null - Written by */
+private ?DataExtranetUser $dataExtranetUser = null
+, 
     // TCMSFieldVarchar
 /** @var string - Author */
 private string $authorName = '', 
     // TCMSFieldVarchar
 /** @var string - Review title */
 private string $title = '', 
-    // TCMSFieldEmail
+    // TCMSFieldVarchar
 /** @var string - Author's email address */
 private string $authorEmail = '', 
-    // TCMSFieldBoolean
-/** @var bool - Send comment notification to the author */
-private bool $sendCommentNotification = false, 
-    // TCMSFieldNumber
-/** @var int - Rating */
-private int $rating = 0, 
-    // TCMSFieldNumber
-/** @var int - Helpful review */
-private int $helpfulCount = 0, 
-    // TCMSFieldNumber
-/** @var int - Review is not helpful */
-private int $notHelpfulCount = 0, 
+    // TCMSFieldVarchar
+/** @var string - Rating */
+private string $rating = '', 
+    // TCMSFieldVarchar
+/** @var string - Helpful review */
+private string $helpfulCount = '', 
+    // TCMSFieldVarchar
+/** @var string - Review is not helpful */
+private string $notHelpfulCount = '', 
     // TCMSFieldVarchar
 /** @var string - Action ID */
 private string $actionId = '', 
-    // TCMSFieldText
-/** @var string - Review */
-private string $comment = '', 
-    // TCMSFieldDateTime
-/** @var \DateTime|null - Created on */
-private \DateTime|null $datecreated = null, 
     // TCMSFieldVarchar
 /** @var string - IP address */
 private string $userIp = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -74,70 +61,30 @@ private string $userIp = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShopArticle(): \ChameleonSystem\CoreBundle\Entity\ShopArticle|null
+    // TCMSFieldLookupParentID
+public function getShopArticle(): ?ShopArticle
 {
     return $this->shopArticle;
 }
-public function setShopArticle(\ChameleonSystem\CoreBundle\Entity\ShopArticle|null $shopArticle): self
+
+public function setShopArticle(?ShopArticle $shopArticle): self
 {
     $this->shopArticle = $shopArticle;
-    $this->shopArticleId = $shopArticle?->getId();
 
     return $this;
 }
-public function getShopArticleId(): ?string
-{
-    return $this->shopArticleId;
-}
-public function setShopArticleId(?string $shopArticleId): self
-{
-    $this->shopArticleId = $shopArticleId;
-    // todo - load new id
-    //$this->shopArticleId = $?->getId();
-
-    return $this;
-}
-
 
 
   
-    // TCMSFieldLookup
-public function getDataExtranetUser(): \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null
+    // TCMSFieldLookupParentID
+public function getDataExtranetUser(): ?DataExtranetUser
 {
     return $this->dataExtranetUser;
 }
-public function setDataExtranetUser(\ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null $dataExtranetUser): self
+
+public function setDataExtranetUser(?DataExtranetUser $dataExtranetUser): self
 {
     $this->dataExtranetUser = $dataExtranetUser;
-    $this->dataExtranetUserId = $dataExtranetUser?->getId();
-
-    return $this;
-}
-public function getDataExtranetUserId(): ?string
-{
-    return $this->dataExtranetUserId;
-}
-public function setDataExtranetUserId(?string $dataExtranetUserId): self
-{
-    $this->dataExtranetUserId = $dataExtranetUserId;
-    // todo - load new id
-    //$this->dataExtranetUserId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldBoolean
-public function isPublish(): bool
-{
-    return $this->publish;
-}
-public function setPublish(bool $publish): self
-{
-    $this->publish = $publish;
 
     return $this;
 }
@@ -172,7 +119,7 @@ public function setTitle(string $title): self
 
 
   
-    // TCMSFieldEmail
+    // TCMSFieldVarchar
 public function getAuthorEmail(): string
 {
     return $this->authorEmail;
@@ -186,26 +133,12 @@ public function setAuthorEmail(string $authorEmail): self
 
 
   
-    // TCMSFieldBoolean
-public function isSendCommentNotification(): bool
-{
-    return $this->sendCommentNotification;
-}
-public function setSendCommentNotification(bool $sendCommentNotification): self
-{
-    $this->sendCommentNotification = $sendCommentNotification;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldNumber
-public function getRating(): int
+    // TCMSFieldVarchar
+public function getRating(): string
 {
     return $this->rating;
 }
-public function setRating(int $rating): self
+public function setRating(string $rating): self
 {
     $this->rating = $rating;
 
@@ -214,12 +147,12 @@ public function setRating(int $rating): self
 
 
   
-    // TCMSFieldNumber
-public function getHelpfulCount(): int
+    // TCMSFieldVarchar
+public function getHelpfulCount(): string
 {
     return $this->helpfulCount;
 }
-public function setHelpfulCount(int $helpfulCount): self
+public function setHelpfulCount(string $helpfulCount): self
 {
     $this->helpfulCount = $helpfulCount;
 
@@ -228,12 +161,12 @@ public function setHelpfulCount(int $helpfulCount): self
 
 
   
-    // TCMSFieldNumber
-public function getNotHelpfulCount(): int
+    // TCMSFieldVarchar
+public function getNotHelpfulCount(): string
 {
     return $this->notHelpfulCount;
 }
-public function setNotHelpfulCount(int $notHelpfulCount): self
+public function setNotHelpfulCount(string $notHelpfulCount): self
 {
     $this->notHelpfulCount = $notHelpfulCount;
 
@@ -250,34 +183,6 @@ public function getActionId(): string
 public function setActionId(string $actionId): self
 {
     $this->actionId = $actionId;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldText
-public function getComment(): string
-{
-    return $this->comment;
-}
-public function setComment(string $comment): self
-{
-    $this->comment = $comment;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDateTime
-public function getDatecreated(): \DateTime|null
-{
-    return $this->datecreated;
-}
-public function setDatecreated(\DateTime|null $datecreated): self
-{
-    $this->datecreated = $datecreated;
 
     return $this;
 }

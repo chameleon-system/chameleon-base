@@ -1,46 +1,29 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class ShopOrderBasket {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopOrder|null - Order */
-private \ChameleonSystem\CoreBundle\Entity\ShopOrder|null $shopOrder = null,
-/** @var null|string - Order */
-private ?string $shopOrderId = null
-, 
-    // TCMSFieldVarcharUnique
+        
+    // TCMSFieldVarchar
 /** @var string - Basket cart ID (will also be included in the order) */
 private string $orderIdent = '', 
     // TCMSFieldVarchar
 /** @var string - Session ID */
 private string $sessionId = '', 
-    // TCMSFieldNumber
-/** @var int - Created on */
-private int $datecreated = 0, 
-    // TCMSFieldNumber
-/** @var int - Last changed */
-private int $lastmodified = 0, 
-    // TCMSFieldText
-/** @var string - Basket */
-private string $rawdataBasket = '', 
-    // TCMSFieldText
-/** @var string - User data */
-private string $rawdataUser = '', 
-    // TCMSFieldText
-/** @var string - Session */
-private string $rawdataSession = '', 
+    // TCMSFieldVarchar
+/** @var string - Created on */
+private string $datecreated = '', 
+    // TCMSFieldVarchar
+/** @var string - Last changed */
+private string $lastmodified = '', 
     // TCMSFieldVarchar
 /** @var string - Last update in step */
-private string $updateStepname = '', 
-    // TCMSFieldBoolean
-/** @var bool - Processed */
-private bool $processed = false  ) {}
+private string $updateStepname = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -59,7 +42,7 @@ private bool $processed = false  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldVarcharUnique
+    // TCMSFieldVarchar
 public function getOrderIdent(): string
 {
     return $this->orderIdent;
@@ -87,12 +70,12 @@ public function setSessionId(string $sessionId): self
 
 
   
-    // TCMSFieldNumber
-public function getDatecreated(): int
+    // TCMSFieldVarchar
+public function getDatecreated(): string
 {
     return $this->datecreated;
 }
-public function setDatecreated(int $datecreated): self
+public function setDatecreated(string $datecreated): self
 {
     $this->datecreated = $datecreated;
 
@@ -101,87 +84,17 @@ public function setDatecreated(int $datecreated): self
 
 
   
-    // TCMSFieldNumber
-public function getLastmodified(): int
+    // TCMSFieldVarchar
+public function getLastmodified(): string
 {
     return $this->lastmodified;
 }
-public function setLastmodified(int $lastmodified): self
+public function setLastmodified(string $lastmodified): self
 {
     $this->lastmodified = $lastmodified;
 
     return $this;
 }
-
-
-  
-    // TCMSFieldText
-public function getRawdataBasket(): string
-{
-    return $this->rawdataBasket;
-}
-public function setRawdataBasket(string $rawdataBasket): self
-{
-    $this->rawdataBasket = $rawdataBasket;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldText
-public function getRawdataUser(): string
-{
-    return $this->rawdataUser;
-}
-public function setRawdataUser(string $rawdataUser): self
-{
-    $this->rawdataUser = $rawdataUser;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldText
-public function getRawdataSession(): string
-{
-    return $this->rawdataSession;
-}
-public function setRawdataSession(string $rawdataSession): self
-{
-    $this->rawdataSession = $rawdataSession;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getShopOrder(): \ChameleonSystem\CoreBundle\Entity\ShopOrder|null
-{
-    return $this->shopOrder;
-}
-public function setShopOrder(\ChameleonSystem\CoreBundle\Entity\ShopOrder|null $shopOrder): self
-{
-    $this->shopOrder = $shopOrder;
-    $this->shopOrderId = $shopOrder?->getId();
-
-    return $this;
-}
-public function getShopOrderId(): ?string
-{
-    return $this->shopOrderId;
-}
-public function setShopOrderId(?string $shopOrderId): self
-{
-    $this->shopOrderId = $shopOrderId;
-    // todo - load new id
-    //$this->shopOrderId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -193,20 +106,6 @@ public function getUpdateStepname(): string
 public function setUpdateStepname(string $updateStepname): self
 {
     $this->updateStepname = $updateStepname;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isProcessed(): bool
-{
-    return $this->processed;
-}
-public function setProcessed(bool $processed): self
-{
-    $this->processed = $processed;
 
     return $this;
 }

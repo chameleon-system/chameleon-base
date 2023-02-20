@@ -7,19 +7,16 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="dateFormat"  column="date_format"  nullable="false"  />
-            <field name="timeFormat"  column="time_format"  nullable="false"  />
-            <field name="phpLocalName"  column="php_local_name"  nullable="false"  />
-            <field name="dateFormatCalendar"  column="date_format_calendar"  nullable="false"  />
-            <field name="numbers"  column="numbers"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="dateFormat" type="string" column="date_format" length="255" nullable="false"  />
+            <field name="timeFormat" type="string" column="time_format" length="255" nullable="false"  />
+            <field name="phpLocalName" type="string" column="php_local_name" length="255" nullable="false"  />
+            <field name="dateFormatCalendar" type="string" column="date_format_calendar" length="255" nullable="false"  />
+            <field name="numbers" type="string" column="numbers" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -1,25 +1,19 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
+
 class PkgShopRatingServiceWidgetConfig {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null - Module instance */
-private \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance = null,
-/** @var null|string - Module instance */
-private ?string $cmsTplModuleInstanceId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopRatingService|null - Rating service */
-private \ChameleonSystem\CoreBundle\Entity\PkgShopRatingService|null $pkgShopRatingService = null,
-/** @var null|string - Rating service */
-private ?string $pkgShopRatingServiceId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsTplModuleInstance|null - Module instance */
+private ?CmsTplModuleInstance $cmsTplModuleInstance = null
   ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -38,59 +32,18 @@ private ?string $pkgShopRatingServiceId = null
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsTplModuleInstance(): \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null
+    // TCMSFieldLookupParentID
+public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;
 }
-public function setCmsTplModuleInstance(\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance): self
+
+public function setCmsTplModuleInstance(?CmsTplModuleInstance $cmsTplModuleInstance): self
 {
     $this->cmsTplModuleInstance = $cmsTplModuleInstance;
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstance?->getId();
 
     return $this;
 }
-public function getCmsTplModuleInstanceId(): ?string
-{
-    return $this->cmsTplModuleInstanceId;
-}
-public function setCmsTplModuleInstanceId(?string $cmsTplModuleInstanceId): self
-{
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstanceId;
-    // todo - load new id
-    //$this->cmsTplModuleInstanceId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookup
-public function getPkgShopRatingService(): \ChameleonSystem\CoreBundle\Entity\PkgShopRatingService|null
-{
-    return $this->pkgShopRatingService;
-}
-public function setPkgShopRatingService(\ChameleonSystem\CoreBundle\Entity\PkgShopRatingService|null $pkgShopRatingService): self
-{
-    $this->pkgShopRatingService = $pkgShopRatingService;
-    $this->pkgShopRatingServiceId = $pkgShopRatingService?->getId();
-
-    return $this;
-}
-public function getPkgShopRatingServiceId(): ?string
-{
-    return $this->pkgShopRatingServiceId;
-}
-public function setPkgShopRatingServiceId(?string $pkgShopRatingServiceId): self
-{
-    $this->pkgShopRatingServiceId = $pkgShopRatingServiceId;
-    // todo - load new id
-    //$this->pkgShopRatingServiceId = $?->getId();
-
-    return $this;
-}
-
 
 
   

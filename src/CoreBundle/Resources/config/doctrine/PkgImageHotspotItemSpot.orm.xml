@@ -7,30 +7,16 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="pkgImageHotspotItemId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItem" inversed-by="pkgImageHotspotItemSpot">
+            <many-to-one field="pkgImageHotspotItem" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItem" inversed-by="pkgImageHotspotItemSpotCollection" >
     <join-column name="pkg_image_hotspot_item_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="top"  column="top"  nullable="false"  />
-            <field name="left"  column="left"  nullable="false"  />
-            <field name="hotspotType"  column="hotspot_type"  nullable="false"  />
-            <field name="linkedRecordId" type="string" field="linked_record_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="linkedRecord" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle">
-    <join-column name="linked_record_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="externalUrl"  column="external_url"  nullable="false"  />
-            <field name="polygonArea"  column="polygon_area"  nullable="false"  />
-            <field name="showSpot"  column="show_spot"  nullable="false"  />
+            <field name="top" type="string" column="top" length="255" nullable="false"  />
+            <field name="left" type="string" column="left" length="255" nullable="false"  />
+            <field name="externalUrl" type="string" column="external_url" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

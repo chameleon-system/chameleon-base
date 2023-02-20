@@ -1,80 +1,44 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTblFieldTab;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\CmsFieldConf;
+use ChameleonSystem\CoreBundle\Entity\CmsTblDisplayListFields;
+use ChameleonSystem\CoreBundle\Entity\CmsTblDisplayOrderfields;
+use ChameleonSystem\CoreBundle\Entity\CmsTblListClass;
+use ChameleonSystem\CoreBundle\Entity\CmsTblConfRestrictions;
+use ChameleonSystem\CoreBundle\Entity\CmsTblExtension;
+use ChameleonSystem\CoreBundle\Entity\CmsTblConfIndex;
+
 class CmsTblConf {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsContentBox|null - View in category window */
-private \ChameleonSystem\CoreBundle\Entity\CmsContentBox|null $cmsContentBox = null,
-/** @var null|string - View in category window */
-private ?string $cmsContentBoxId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblListClass|null - List view default class */
-private \ChameleonSystem\CoreBundle\Entity\CmsTblListClass|null $cmsTblListClass = null,
-/** @var null|string - List view default class */
-private ?string $cmsTblListClassId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTplPage|null - Preview page */
-private \ChameleonSystem\CoreBundle\Entity\CmsTplPage|null $cmsTplPage = null,
-/** @var null|string - Preview page */
-private ?string $cmsTplPageId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsUsergroup|null - Table belongs to group */
-private \ChameleonSystem\CoreBundle\Entity\CmsUsergroup|null $cmsUsergroup = null,
-/** @var null|string - Table belongs to group */
-private ?string $cmsUsergroupId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - SQL table name */
 private string $name = '', 
-    // TCMSFieldOption
-/** @var string - Database object type */
-private string $dbobjectType = 'Customer', 
     // TCMSFieldVarchar
 /** @var string - Title */
 private string $translation = '', 
-    // TCMSFieldOption
-/** @var string - MySql Engine */
-private string $engine = 'InnoDB', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblFieldTab[] - Field category/tabs */
-private \Doctrine\Common\Collections\Collection $cmsTblFieldTabCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldText
-/** @var string - List query */
-private string $listQuery = '', 
-    // TCMSFieldBoolean
-/** @var bool - Table contains only one record */
-private bool $onlyOneRecordTbl = false, 
-    // TCMSFieldBoolean
-/** @var bool - Activate multi language */
-private bool $isMultilanguage = false, 
-    // TCMSFieldBoolean
-/** @var bool - Activate workflow */
-private bool $isWorkflow = false, 
-    // TCMSFieldBoolean
-/** @var bool - Activate locking */
-private bool $lockingActive = false, 
-    // TCMSFieldBoolean
-/** @var bool - Enable changelog */
-private bool $changelogActive = false, 
-    // TCMSFieldBoolean
-/** @var bool - Enable revision management */
-private bool $revisionManagementActive = false, 
+/** @var Collection<int, cmsTblFieldTab> - Field category/tabs */
+private Collection $cmsTblFieldTabCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsFieldConf[] - Record fields */
-private \Doctrine\Common\Collections\Collection $cmsFieldConfMltCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, cmsFieldConf> - Record fields */
+private Collection $cmsFieldConfMltCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblDisplayListFields[] - List fields */
-private \Doctrine\Common\Collections\Collection $propertyListFieldsCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, cmsTblDisplayListFields> - List fields */
+private Collection $propertyListFieldsCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblDisplayOrderfields[] - Sort fields */
-private \Doctrine\Common\Collections\Collection $propertyOrderFieldsCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, cmsTblDisplayOrderfields> - Sort fields */
+private Collection $propertyOrderFieldsCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - Name field */
 private string $nameColumn = '', 
@@ -97,82 +61,41 @@ private string $listGroupFieldHeader = '',
 /** @var string - Group field column name */
 private string $listGroupFieldColumn = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblListClass[] - List views */
-private \Doctrine\Common\Collections\Collection $cmsTblListClassCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, cmsTblListClass> - List views */
+private Collection $cmsTblListClassCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - Table editor php class */
 private string $tableEditorClass = '', 
     // TCMSFieldVarchar
 /** @var string - Path to table editor class */
 private string $tableEditorClassSubtype = '', 
-    // TCMSFieldOption
-/** @var string - Class type */
-private string $tableEditorClassType = 'Core', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblConfRestrictions[] - List restrictions */
-private \Doctrine\Common\Collections\Collection $cmsTblConfRestrictionsCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldSmallIconList
-/** @var string - Icon */
-private string $iconList = '', 
-    // TCMSFieldBoolean
-/** @var bool - Show preview button in records */
-private bool $showPreviewbutton = false, 
-    // TCMSFieldBoolean
-/** @var bool - Rename on copy */
-private bool $renameOnCopy = false, 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsRole[] - Rights - Create new record */
-private \Doctrine\Common\Collections\Collection $cmsRoleMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsRole[] - Rights - Modify record */
-private \Doctrine\Common\Collections\Collection $cmsRole1Mlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsRole[] - Rights - Delete record */
-private \Doctrine\Common\Collections\Collection $cmsRole2Mlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsRole[] - Rights - Show all records */
-private \Doctrine\Common\Collections\Collection $cmsRole3Mlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsRole[] - Rights – Show all records (readonly) */
-private \Doctrine\Common\Collections\Collection $cmsRole6Mlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsRole[] - Rights - Create new language */
-private \Doctrine\Common\Collections\Collection $cmsRole4Mlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsRole[] - Rights – Publish record via workflow */
-private \Doctrine\Common\Collections\Collection $cmsRole5Mlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsRole[] - Right - Revision management */
-private \Doctrine\Common\Collections\Collection $cmsRole7Mlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldText
-/** @var string - Notes */
-private string $notes = '', 
-    // TCMSFieldBoolean
-/** @var bool - Execute via frontend cache trigger when writing */
-private bool $frontendAutoCacheClearEnabled = true, 
+/** @var Collection<int, cmsTblConfRestrictions> - List restrictions */
+private Collection $cmsTblConfRestrictionsCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - Is derived from */
 private string $dbobjectExtendClass = 'TCMSRecord', 
     // TCMSFieldVarchar
 /** @var string - Is extended from: Classtype */
 private string $dbobjectExtendSubtype = 'dbobjects', 
-    // TCMSFieldOption
-/** @var string - Is extended from: Type */
-private string $dbobjectExtendType = 'Core', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblExtension[] - Extensions */
-private \Doctrine\Common\Collections\Collection $cmsTblExtensionCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldNumber
-/** @var int - Automatically limit list object to this number of entries */
-private int $autoLimitResults = -1, 
+/** @var Collection<int, cmsTblExtension> - Extensions */
+private Collection $cmsTblExtensionCollection = new ArrayCollection()
+, 
+    // TCMSFieldVarchar
+/** @var string - Automatically limit list object to this number of entries */
+private string $autoLimitResults = '-1', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblConfIndex[] - Index definitions */
-private \Doctrine\Common\Collections\Collection $cmsTblConfIndexCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, cmsTblConfIndex> - Index definitions */
+private Collection $cmsTblConfIndexCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - Icon Font CSS class */
 private string $iconFontCssClass = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -205,20 +128,6 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldOption
-public function getDbobjectType(): string
-{
-    return $this->dbobjectType;
-}
-public function setDbobjectType(string $dbobjectType): self
-{
-    $this->dbobjectType = $dbobjectType;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getTranslation(): string
 {
@@ -233,154 +142,33 @@ public function setTranslation(string $translation): self
 
 
   
-    // TCMSFieldOption
-public function getEngine(): string
-{
-    return $this->engine;
-}
-public function setEngine(string $engine): self
-{
-    $this->engine = $engine;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldPropertyTable
-public function getCmsTblFieldTabCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsTblFieldTab>
+*/
+public function getCmsTblFieldTabCollection(): Collection
 {
     return $this->cmsTblFieldTabCollection;
 }
-public function setCmsTblFieldTabCollection(\Doctrine\Common\Collections\Collection $cmsTblFieldTabCollection): self
+
+public function addCmsTblFieldTabCollection(cmsTblFieldTab $cmsTblFieldTab): self
 {
-    $this->cmsTblFieldTabCollection = $cmsTblFieldTabCollection;
+    if (!$this->cmsTblFieldTabCollection->contains($cmsTblFieldTab)) {
+        $this->cmsTblFieldTabCollection->add($cmsTblFieldTab);
+        $cmsTblFieldTab->setCmsTblConf($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldText
-public function getListQuery(): string
+public function removeCmsTblFieldTabCollection(cmsTblFieldTab $cmsTblFieldTab): self
 {
-    return $this->listQuery;
-}
-public function setListQuery(string $listQuery): self
-{
-    $this->listQuery = $listQuery;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsContentBox(): \ChameleonSystem\CoreBundle\Entity\CmsContentBox|null
-{
-    return $this->cmsContentBox;
-}
-public function setCmsContentBox(\ChameleonSystem\CoreBundle\Entity\CmsContentBox|null $cmsContentBox): self
-{
-    $this->cmsContentBox = $cmsContentBox;
-    $this->cmsContentBoxId = $cmsContentBox?->getId();
-
-    return $this;
-}
-public function getCmsContentBoxId(): ?string
-{
-    return $this->cmsContentBoxId;
-}
-public function setCmsContentBoxId(?string $cmsContentBoxId): self
-{
-    $this->cmsContentBoxId = $cmsContentBoxId;
-    // todo - load new id
-    //$this->cmsContentBoxId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldBoolean
-public function isOnlyOneRecordTbl(): bool
-{
-    return $this->onlyOneRecordTbl;
-}
-public function setOnlyOneRecordTbl(bool $onlyOneRecordTbl): self
-{
-    $this->onlyOneRecordTbl = $onlyOneRecordTbl;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isIsMultilanguage(): bool
-{
-    return $this->isMultilanguage;
-}
-public function setIsMultilanguage(bool $isMultilanguage): self
-{
-    $this->isMultilanguage = $isMultilanguage;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isIsWorkflow(): bool
-{
-    return $this->isWorkflow;
-}
-public function setIsWorkflow(bool $isWorkflow): self
-{
-    $this->isWorkflow = $isWorkflow;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isLockingActive(): bool
-{
-    return $this->lockingActive;
-}
-public function setLockingActive(bool $lockingActive): self
-{
-    $this->lockingActive = $lockingActive;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isChangelogActive(): bool
-{
-    return $this->changelogActive;
-}
-public function setChangelogActive(bool $changelogActive): self
-{
-    $this->changelogActive = $changelogActive;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isRevisionManagementActive(): bool
-{
-    return $this->revisionManagementActive;
-}
-public function setRevisionManagementActive(bool $revisionManagementActive): self
-{
-    $this->revisionManagementActive = $revisionManagementActive;
+    if ($this->cmsTblFieldTabCollection->removeElement($cmsTblFieldTab)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsTblFieldTab->getCmsTblConf() === $this) {
+            $cmsTblFieldTab->setCmsTblConf(null);
+        }
+    }
 
     return $this;
 }
@@ -388,13 +176,32 @@ public function setRevisionManagementActive(bool $revisionManagementActive): sel
 
   
     // TCMSFieldPropertyTable
-public function getCmsFieldConfMltCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsFieldConf>
+*/
+public function getCmsFieldConfMltCollection(): Collection
 {
     return $this->cmsFieldConfMltCollection;
 }
-public function setCmsFieldConfMltCollection(\Doctrine\Common\Collections\Collection $cmsFieldConfMltCollection): self
+
+public function addCmsFieldConfMltCollection(cmsFieldConf $cmsFieldConfMlt): self
 {
-    $this->cmsFieldConfMltCollection = $cmsFieldConfMltCollection;
+    if (!$this->cmsFieldConfMltCollection->contains($cmsFieldConfMlt)) {
+        $this->cmsFieldConfMltCollection->add($cmsFieldConfMlt);
+        $cmsFieldConfMlt->setCmsTblConf($this);
+    }
+
+    return $this;
+}
+
+public function removeCmsFieldConfMltCollection(cmsFieldConf $cmsFieldConfMlt): self
+{
+    if ($this->cmsFieldConfMltCollection->removeElement($cmsFieldConfMlt)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsFieldConfMlt->getCmsTblConf() === $this) {
+            $cmsFieldConfMlt->setCmsTblConf(null);
+        }
+    }
 
     return $this;
 }
@@ -402,13 +209,32 @@ public function setCmsFieldConfMltCollection(\Doctrine\Common\Collections\Collec
 
   
     // TCMSFieldPropertyTable
-public function getPropertyListFieldsCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsTblDisplayListFields>
+*/
+public function getPropertyListFieldsCollection(): Collection
 {
     return $this->propertyListFieldsCollection;
 }
-public function setPropertyListFieldsCollection(\Doctrine\Common\Collections\Collection $propertyListFieldsCollection): self
+
+public function addPropertyListFieldsCollection(cmsTblDisplayListFields $propertyListFields): self
 {
-    $this->propertyListFieldsCollection = $propertyListFieldsCollection;
+    if (!$this->propertyListFieldsCollection->contains($propertyListFields)) {
+        $this->propertyListFieldsCollection->add($propertyListFields);
+        $propertyListFields->setCmsTblConf($this);
+    }
+
+    return $this;
+}
+
+public function removePropertyListFieldsCollection(cmsTblDisplayListFields $propertyListFields): self
+{
+    if ($this->propertyListFieldsCollection->removeElement($propertyListFields)) {
+        // set the owning side to null (unless already changed)
+        if ($propertyListFields->getCmsTblConf() === $this) {
+            $propertyListFields->setCmsTblConf(null);
+        }
+    }
 
     return $this;
 }
@@ -416,13 +242,32 @@ public function setPropertyListFieldsCollection(\Doctrine\Common\Collections\Col
 
   
     // TCMSFieldPropertyTable
-public function getPropertyOrderFieldsCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsTblDisplayOrderfields>
+*/
+public function getPropertyOrderFieldsCollection(): Collection
 {
     return $this->propertyOrderFieldsCollection;
 }
-public function setPropertyOrderFieldsCollection(\Doctrine\Common\Collections\Collection $propertyOrderFieldsCollection): self
+
+public function addPropertyOrderFieldsCollection(cmsTblDisplayOrderfields $propertyOrderFields): self
 {
-    $this->propertyOrderFieldsCollection = $propertyOrderFieldsCollection;
+    if (!$this->propertyOrderFieldsCollection->contains($propertyOrderFields)) {
+        $this->propertyOrderFieldsCollection->add($propertyOrderFields);
+        $propertyOrderFields->setCmsTblConf($this);
+    }
+
+    return $this;
+}
+
+public function removePropertyOrderFieldsCollection(cmsTblDisplayOrderfields $propertyOrderFields): self
+{
+    if ($this->propertyOrderFieldsCollection->removeElement($propertyOrderFields)) {
+        // set the owning side to null (unless already changed)
+        if ($propertyOrderFields->getCmsTblConf() === $this) {
+            $propertyOrderFields->setCmsTblConf(null);
+        }
+    }
 
     return $this;
 }
@@ -528,44 +373,35 @@ public function setListGroupFieldColumn(string $listGroupFieldColumn): self
 
   
     // TCMSFieldPropertyTable
-public function getCmsTblListClassCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsTblListClass>
+*/
+public function getCmsTblListClassCollection(): Collection
 {
     return $this->cmsTblListClassCollection;
 }
-public function setCmsTblListClassCollection(\Doctrine\Common\Collections\Collection $cmsTblListClassCollection): self
+
+public function addCmsTblListClassCollection(cmsTblListClass $cmsTblListClass): self
 {
-    $this->cmsTblListClassCollection = $cmsTblListClassCollection;
+    if (!$this->cmsTblListClassCollection->contains($cmsTblListClass)) {
+        $this->cmsTblListClassCollection->add($cmsTblListClass);
+        $cmsTblListClass->setCmsTblConf($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldLookup
-public function getCmsTblListClass(): \ChameleonSystem\CoreBundle\Entity\CmsTblListClass|null
+public function removeCmsTblListClassCollection(cmsTblListClass $cmsTblListClass): self
 {
-    return $this->cmsTblListClass;
-}
-public function setCmsTblListClass(\ChameleonSystem\CoreBundle\Entity\CmsTblListClass|null $cmsTblListClass): self
-{
-    $this->cmsTblListClass = $cmsTblListClass;
-    $this->cmsTblListClassId = $cmsTblListClass?->getId();
+    if ($this->cmsTblListClassCollection->removeElement($cmsTblListClass)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsTblListClass->getCmsTblConf() === $this) {
+            $cmsTblListClass->setCmsTblConf(null);
+        }
+    }
 
     return $this;
 }
-public function getCmsTblListClassId(): ?string
-{
-    return $this->cmsTblListClassId;
-}
-public function setCmsTblListClassId(?string $cmsTblListClassId): self
-{
-    $this->cmsTblListClassId = $cmsTblListClassId;
-    // todo - load new id
-    //$this->cmsTblListClassId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -597,266 +433,33 @@ public function setTableEditorClassSubtype(string $tableEditorClassSubtype): sel
 
 
   
-    // TCMSFieldOption
-public function getTableEditorClassType(): string
-{
-    return $this->tableEditorClassType;
-}
-public function setTableEditorClassType(string $tableEditorClassType): self
-{
-    $this->tableEditorClassType = $tableEditorClassType;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldPropertyTable
-public function getCmsTblConfRestrictionsCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsTblConfRestrictions>
+*/
+public function getCmsTblConfRestrictionsCollection(): Collection
 {
     return $this->cmsTblConfRestrictionsCollection;
 }
-public function setCmsTblConfRestrictionsCollection(\Doctrine\Common\Collections\Collection $cmsTblConfRestrictionsCollection): self
+
+public function addCmsTblConfRestrictionsCollection(cmsTblConfRestrictions $cmsTblConfRestrictions): self
 {
-    $this->cmsTblConfRestrictionsCollection = $cmsTblConfRestrictionsCollection;
+    if (!$this->cmsTblConfRestrictionsCollection->contains($cmsTblConfRestrictions)) {
+        $this->cmsTblConfRestrictionsCollection->add($cmsTblConfRestrictions);
+        $cmsTblConfRestrictions->setCmsTblConf($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldSmallIconList
-public function getIconList(): string
+public function removeCmsTblConfRestrictionsCollection(cmsTblConfRestrictions $cmsTblConfRestrictions): self
 {
-    return $this->iconList;
-}
-public function setIconList(string $iconList): self
-{
-    $this->iconList = $iconList;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isShowPreviewbutton(): bool
-{
-    return $this->showPreviewbutton;
-}
-public function setShowPreviewbutton(bool $showPreviewbutton): self
-{
-    $this->showPreviewbutton = $showPreviewbutton;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsTplPage(): \ChameleonSystem\CoreBundle\Entity\CmsTplPage|null
-{
-    return $this->cmsTplPage;
-}
-public function setCmsTplPage(\ChameleonSystem\CoreBundle\Entity\CmsTplPage|null $cmsTplPage): self
-{
-    $this->cmsTplPage = $cmsTplPage;
-    $this->cmsTplPageId = $cmsTplPage?->getId();
-
-    return $this;
-}
-public function getCmsTplPageId(): ?string
-{
-    return $this->cmsTplPageId;
-}
-public function setCmsTplPageId(?string $cmsTplPageId): self
-{
-    $this->cmsTplPageId = $cmsTplPageId;
-    // todo - load new id
-    //$this->cmsTplPageId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldBoolean
-public function isRenameOnCopy(): bool
-{
-    return $this->renameOnCopy;
-}
-public function setRenameOnCopy(bool $renameOnCopy): self
-{
-    $this->renameOnCopy = $renameOnCopy;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsUsergroup(): \ChameleonSystem\CoreBundle\Entity\CmsUsergroup|null
-{
-    return $this->cmsUsergroup;
-}
-public function setCmsUsergroup(\ChameleonSystem\CoreBundle\Entity\CmsUsergroup|null $cmsUsergroup): self
-{
-    $this->cmsUsergroup = $cmsUsergroup;
-    $this->cmsUsergroupId = $cmsUsergroup?->getId();
-
-    return $this;
-}
-public function getCmsUsergroupId(): ?string
-{
-    return $this->cmsUsergroupId;
-}
-public function setCmsUsergroupId(?string $cmsUsergroupId): self
-{
-    $this->cmsUsergroupId = $cmsUsergroupId;
-    // todo - load new id
-    //$this->cmsUsergroupId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getCmsRoleMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsRoleMlt;
-}
-public function setCmsRoleMlt(\Doctrine\Common\Collections\Collection $cmsRoleMlt): self
-{
-    $this->cmsRoleMlt = $cmsRoleMlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getCmsRole1Mlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsRole1Mlt;
-}
-public function setCmsRole1Mlt(\Doctrine\Common\Collections\Collection $cmsRole1Mlt): self
-{
-    $this->cmsRole1Mlt = $cmsRole1Mlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getCmsRole2Mlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsRole2Mlt;
-}
-public function setCmsRole2Mlt(\Doctrine\Common\Collections\Collection $cmsRole2Mlt): self
-{
-    $this->cmsRole2Mlt = $cmsRole2Mlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getCmsRole3Mlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsRole3Mlt;
-}
-public function setCmsRole3Mlt(\Doctrine\Common\Collections\Collection $cmsRole3Mlt): self
-{
-    $this->cmsRole3Mlt = $cmsRole3Mlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getCmsRole6Mlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsRole6Mlt;
-}
-public function setCmsRole6Mlt(\Doctrine\Common\Collections\Collection $cmsRole6Mlt): self
-{
-    $this->cmsRole6Mlt = $cmsRole6Mlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getCmsRole4Mlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsRole4Mlt;
-}
-public function setCmsRole4Mlt(\Doctrine\Common\Collections\Collection $cmsRole4Mlt): self
-{
-    $this->cmsRole4Mlt = $cmsRole4Mlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getCmsRole5Mlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsRole5Mlt;
-}
-public function setCmsRole5Mlt(\Doctrine\Common\Collections\Collection $cmsRole5Mlt): self
-{
-    $this->cmsRole5Mlt = $cmsRole5Mlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getCmsRole7Mlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsRole7Mlt;
-}
-public function setCmsRole7Mlt(\Doctrine\Common\Collections\Collection $cmsRole7Mlt): self
-{
-    $this->cmsRole7Mlt = $cmsRole7Mlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldText
-public function getNotes(): string
-{
-    return $this->notes;
-}
-public function setNotes(string $notes): self
-{
-    $this->notes = $notes;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isFrontendAutoCacheClearEnabled(): bool
-{
-    return $this->frontendAutoCacheClearEnabled;
-}
-public function setFrontendAutoCacheClearEnabled(bool $frontendAutoCacheClearEnabled): self
-{
-    $this->frontendAutoCacheClearEnabled = $frontendAutoCacheClearEnabled;
+    if ($this->cmsTblConfRestrictionsCollection->removeElement($cmsTblConfRestrictions)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsTblConfRestrictions->getCmsTblConf() === $this) {
+            $cmsTblConfRestrictions->setCmsTblConf(null);
+        }
+    }
 
     return $this;
 }
@@ -891,40 +494,45 @@ public function setDbobjectExtendSubtype(string $dbobjectExtendSubtype): self
 
 
   
-    // TCMSFieldOption
-public function getDbobjectExtendType(): string
-{
-    return $this->dbobjectExtendType;
-}
-public function setDbobjectExtendType(string $dbobjectExtendType): self
-{
-    $this->dbobjectExtendType = $dbobjectExtendType;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldPropertyTable
-public function getCmsTblExtensionCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsTblExtension>
+*/
+public function getCmsTblExtensionCollection(): Collection
 {
     return $this->cmsTblExtensionCollection;
 }
-public function setCmsTblExtensionCollection(\Doctrine\Common\Collections\Collection $cmsTblExtensionCollection): self
+
+public function addCmsTblExtensionCollection(cmsTblExtension $cmsTblExtension): self
 {
-    $this->cmsTblExtensionCollection = $cmsTblExtensionCollection;
+    if (!$this->cmsTblExtensionCollection->contains($cmsTblExtension)) {
+        $this->cmsTblExtensionCollection->add($cmsTblExtension);
+        $cmsTblExtension->setCmsTblConf($this);
+    }
+
+    return $this;
+}
+
+public function removeCmsTblExtensionCollection(cmsTblExtension $cmsTblExtension): self
+{
+    if ($this->cmsTblExtensionCollection->removeElement($cmsTblExtension)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsTblExtension->getCmsTblConf() === $this) {
+            $cmsTblExtension->setCmsTblConf(null);
+        }
+    }
 
     return $this;
 }
 
 
   
-    // TCMSFieldNumber
-public function getAutoLimitResults(): int
+    // TCMSFieldVarchar
+public function getAutoLimitResults(): string
 {
     return $this->autoLimitResults;
 }
-public function setAutoLimitResults(int $autoLimitResults): self
+public function setAutoLimitResults(string $autoLimitResults): self
 {
     $this->autoLimitResults = $autoLimitResults;
 
@@ -934,13 +542,32 @@ public function setAutoLimitResults(int $autoLimitResults): self
 
   
     // TCMSFieldPropertyTable
-public function getCmsTblConfIndexCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsTblConfIndex>
+*/
+public function getCmsTblConfIndexCollection(): Collection
 {
     return $this->cmsTblConfIndexCollection;
 }
-public function setCmsTblConfIndexCollection(\Doctrine\Common\Collections\Collection $cmsTblConfIndexCollection): self
+
+public function addCmsTblConfIndexCollection(cmsTblConfIndex $cmsTblConfIndex): self
 {
-    $this->cmsTblConfIndexCollection = $cmsTblConfIndexCollection;
+    if (!$this->cmsTblConfIndexCollection->contains($cmsTblConfIndex)) {
+        $this->cmsTblConfIndexCollection->add($cmsTblConfIndex);
+        $cmsTblConfIndex->setCmsTblConf($this);
+    }
+
+    return $this;
+}
+
+public function removeCmsTblConfIndexCollection(cmsTblConfIndex $cmsTblConfIndex): self
+{
+    if ($this->cmsTblConfIndexCollection->removeElement($cmsTblConfIndex)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsTblConfIndex->getCmsTblConf() === $this) {
+            $cmsTblConfIndex->setCmsTblConf(null);
+        }
+    }
 
     return $this;
 }

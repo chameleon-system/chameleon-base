@@ -23,19 +23,6 @@ class TCMSFieldPosition extends TCMSField
      */
     protected $oTableConf = null;
 
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        $defaultValue =  $this->oDefinition->sqlData['field_default_value'] ?? null;
-        if (null !== $defaultValue) {
-            $defaultValue = (int) $defaultValue;
-        }
-
-        $data = $this->getDoctrineDataModelViewData(['type' => 'int', 'defaultValue' => $defaultValue]);
-        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
-        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
-
-        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
-    }
     public function GetHTML()
     {
         $this->GetTableConf();

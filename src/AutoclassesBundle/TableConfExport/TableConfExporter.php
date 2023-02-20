@@ -39,12 +39,16 @@ class TableConfExporter implements TableConfExporterInterface
         $propertyMappings = [];
         $fieldConfig->GoToStart();
         while ($field = $fieldConfig->Next()) {
+            if (false === $field instanceof DoctrineTransformableInterface) {
+                continue;
+            }
             $fields[] = $field;
             $propertyMapping = $field->getDoctrineDataModelXml($namespace);
             if (null !== $propertyMapping) {
                 $propertyMappings[] = $propertyMapping;
             }
-            $dataModelParts = $this->getDataModelParts($field, $namespace);
+
+            $dataModelParts = $field->getDoctrineDataModelParts($namespace);
             if (null === $dataModelParts) {
                 continue;
             }
@@ -61,15 +65,6 @@ class TableConfExporter implements TableConfExporterInterface
 
         return $fqn;
 
-    }
-
-    private function getDataModelParts(\TCMSField $field, string $namespace): ?DataModelParts
-    {
-        if ($field instanceof DoctrineTransformableInterface) {
-            return $field->getDoctrineDataModelParts($namespace);
-        }
-
-        return null;
     }
 
     /**
@@ -138,6 +133,19 @@ class TableConfExporter implements TableConfExporterInterface
         $oSnippetRenderer->setVar('namespace', ltrim($namespace, '\\'));
         $oSnippetRenderer->setVar('fields', $fields);
         $oSnippetRenderer->setVar('dataModelPartsList', $dataModelPartsList);
+
+        $selfName = ltrim(sprintf('%s\%s', $namespace, $className), '\\');
+        $imports = [];
+        foreach ($dataModelPartsList as $dataModel) {
+            foreach ($dataModel->getIncludes() as $include) {
+                if ($include === $selfName) {
+                    continue;
+                }
+                $imports[] = $include;
+            }
+        }
+        $imports = array_unique($imports);
+        $oSnippetRenderer->setVar('imports', $imports);
 
         $content = $oSnippetRenderer->render();
 

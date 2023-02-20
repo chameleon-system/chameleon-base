@@ -1,19 +1,24 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSetItem;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class PkgMultiModuleSet {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Name of the set */
 private string $name = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSetItem[] - Set consists of these modules */
-private \Doctrine\Common\Collections\Collection $pkgMultiModuleSetItemCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, pkgMultiModuleSetItem> - Set consists of these modules */
+private Collection $pkgMultiModuleSetItemCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -47,13 +52,32 @@ public function setName(string $name): self
 
   
     // TCMSFieldPropertyTable
-public function getPkgMultiModuleSetItemCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgMultiModuleSetItem>
+*/
+public function getPkgMultiModuleSetItemCollection(): Collection
 {
     return $this->pkgMultiModuleSetItemCollection;
 }
-public function setPkgMultiModuleSetItemCollection(\Doctrine\Common\Collections\Collection $pkgMultiModuleSetItemCollection): self
+
+public function addPkgMultiModuleSetItemCollection(pkgMultiModuleSetItem $pkgMultiModuleSetItem): self
 {
-    $this->pkgMultiModuleSetItemCollection = $pkgMultiModuleSetItemCollection;
+    if (!$this->pkgMultiModuleSetItemCollection->contains($pkgMultiModuleSetItem)) {
+        $this->pkgMultiModuleSetItemCollection->add($pkgMultiModuleSetItem);
+        $pkgMultiModuleSetItem->setPkgMultiModuleSet($this);
+    }
+
+    return $this;
+}
+
+public function removePkgMultiModuleSetItemCollection(pkgMultiModuleSetItem $pkgMultiModuleSetItem): self
+{
+    if ($this->pkgMultiModuleSetItemCollection->removeElement($pkgMultiModuleSetItem)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgMultiModuleSetItem->getPkgMultiModuleSet() === $this) {
+            $pkgMultiModuleSetItem->setPkgMultiModuleSet(null);
+        }
+    }
 
     return $this;
 }

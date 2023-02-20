@@ -1,47 +1,20 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsPortalNavigation;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\CmsDivision;
+use ChameleonSystem\CoreBundle\Entity\CmsPortalDomains;
+use ChameleonSystem\CoreBundle\Entity\CmsMessageManagerMessage;
+use ChameleonSystem\CoreBundle\Entity\CmsPortalSystemPage;
+use ChameleonSystem\CoreBundle\Entity\CmsUrlAlias;
+
 class CmsPortal {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsLanguage|null - Portal language */
-private \ChameleonSystem\CoreBundle\Entity\CmsLanguage|null $cmsLanguage = null,
-/** @var null|string - Portal language */
-private ?string $cmsLanguageId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMedia|null - Logo */
-private \ChameleonSystem\CoreBundle\Entity\CmsMedia|null $images = null,
-/** @var null|string - Logo */
-private ?string $imagesId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMedia|null - Logo for watermarking */
-private \ChameleonSystem\CoreBundle\Entity\CmsMedia|null $watermarkLogo = null,
-/** @var null|string - Logo for watermarking */
-private ?string $watermarkLogoId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMedia|null - Background image */
-private \ChameleonSystem\CoreBundle\Entity\CmsMedia|null $backgroundImage = null,
-/** @var null|string - Background image */
-private ?string $backgroundImageId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsLocals|null - Locale */
-private \ChameleonSystem\CoreBundle\Entity\CmsLocals|null $cmsLocals = null,
-/** @var null|string - Locale */
-private ?string $cmsLocalsId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgCmsTheme|null - Website presentation / theme */
-private \ChameleonSystem\CoreBundle\Entity\PkgCmsTheme|null $pkgCmsTheme = null,
-/** @var null|string - Website presentation / theme */
-private ?string $pkgCmsThemeId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
@@ -54,66 +27,38 @@ private string $identifier = '',
     // TCMSFieldVarchar
 /** @var string - External portal name */
 private string $externalIdentifier = '', 
-    // TCMSFieldBoolean
-/** @var bool - Enable multi-language ability */
-private bool $useMultilanguage = false, 
-    // TCMSFieldBoolean
-/** @var bool - Show untranslated links */
-private bool $showNotTanslated = false, 
-    // ChameleonSystem\CoreBundle\Field\FieldTreeNodePortalSelect
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTree - Navigation start node */
-private \ChameleonSystem\CoreBundle\Entity\CmsTree|null $mainNodeTree = null, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortalNavigation[] - Navigations */
-private \Doctrine\Common\Collections\Collection $propertyNavigationsCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldPortalHomeTreeNode
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTree - Portal home page */
-private \ChameleonSystem\CoreBundle\Entity\CmsTree|null $homeNodeId = null, 
-    // TCMSFieldPortalHomeTreeNode
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTree - Page not found */
-private \ChameleonSystem\CoreBundle\Entity\CmsTree|null $pageNotFoundNode = null, 
+/** @var Collection<int, cmsPortalNavigation> - Navigations */
+private Collection $propertyNavigationsCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsDivision[] - Sections */
-private \Doctrine\Common\Collections\Collection $cmsPortalDivisionsCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldPosition
-/** @var int - Sorting */
-private int $sortOrder = 0, 
+/** @var Collection<int, cmsDivision> - Sections */
+private Collection $cmsPortalDivisionsCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortalDomains[] - Domains */
-private \Doctrine\Common\Collections\Collection $cmsPortalDomainsCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldURL
+/** @var Collection<int, cmsPortalDomains> - Domains */
+private Collection $cmsPortalDomainsCollection = new ArrayCollection()
+, 
+    // TCMSFieldVarchar
 /** @var string - Favicon URL */
 private string $faviconUrl = '/favicon.ico', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMessageManagerMessage[] - System messages / error codes */
-private \Doctrine\Common\Collections\Collection $cmsMessageManagerMessageCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, cmsMessageManagerMessage> - System messages / error codes */
+private Collection $cmsMessageManagerMessageCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortalSystemPage[] - System pages */
-private \Doctrine\Common\Collections\Collection $cmsPortalSystemPageCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselectCheckboxesPossibleLanguages
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsLanguage[] - Portal languages */
-private \Doctrine\Common\Collections\Collection $cmsLanguageMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldBoolean
-/** @var bool - Google sitemap */
-private bool $useGooglesitemap = true, 
+/** @var Collection<int, cmsPortalSystemPage> - System pages */
+private Collection $cmsPortalSystemPageCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - Short description */
 private string $metaDescription = '', 
-    // TCMSFieldText
-/** @var string - Search terms */
-private string $metaKeywords = '', 
     // TCMSFieldVarchar
 /** @var string - Author */
 private string $metaAuthor = '', 
     // TCMSFieldVarchar
 /** @var string - Publisher */
 private string $metaPublisher = '', 
-    // TCMSFieldText
-/** @var string - Your meta data */
-private string $customMetadata = '', 
-    // TCMSFieldText
-/** @var string - Action-Plugins */
-private string $actionPluginList = '', 
     // TCMSFieldVarchar
 /** @var string - Google Analytics ID */
 private string $googleAnalyticNumber = '', 
@@ -123,26 +68,15 @@ private string $etrackerId = '',
     // TCMSFieldVarchar
 /** @var string - IVW ID */
 private string $ivwId = '', 
-    // TCMSFieldBoolean
-/** @var bool - Include in search index generation */
-private bool $indexSearch = true, 
-    // TCMSFieldBoolean
-/** @var bool - Use / instead of .html in SEO URLs */
-private bool $useSlashInSeoUrls = false, 
-    // TCMSFieldBoolean
-/** @var bool - Deactivate portal */
-private bool $deactivePortal = false, 
     // TCMSFieldVarchar
 /** @var string - WYSIWYG text editor CSS URL */
 private string $wysiwygCssUrl = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsUrlAlias[] - URL alias list */
-private \Doctrine\Common\Collections\Collection $cmsUrlAliasCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldText
-/** @var string - robots.txt */
-private string $robots = ''  ) {}
+/** @var Collection<int, cmsUrlAlias> - URL alias list */
+private Collection $cmsUrlAliasCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -217,112 +151,33 @@ public function setExternalIdentifier(string $externalIdentifier): self
 
 
   
-    // TCMSFieldLookup
-public function getCmsLanguage(): \ChameleonSystem\CoreBundle\Entity\CmsLanguage|null
-{
-    return $this->cmsLanguage;
-}
-public function setCmsLanguage(\ChameleonSystem\CoreBundle\Entity\CmsLanguage|null $cmsLanguage): self
-{
-    $this->cmsLanguage = $cmsLanguage;
-    $this->cmsLanguageId = $cmsLanguage?->getId();
-
-    return $this;
-}
-public function getCmsLanguageId(): ?string
-{
-    return $this->cmsLanguageId;
-}
-public function setCmsLanguageId(?string $cmsLanguageId): self
-{
-    $this->cmsLanguageId = $cmsLanguageId;
-    // todo - load new id
-    //$this->cmsLanguageId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldBoolean
-public function isUseMultilanguage(): bool
-{
-    return $this->useMultilanguage;
-}
-public function setUseMultilanguage(bool $useMultilanguage): self
-{
-    $this->useMultilanguage = $useMultilanguage;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isShowNotTanslated(): bool
-{
-    return $this->showNotTanslated;
-}
-public function setShowNotTanslated(bool $showNotTanslated): self
-{
-    $this->showNotTanslated = $showNotTanslated;
-
-    return $this;
-}
-
-
-  
-    // ChameleonSystem\CoreBundle\Field\FieldTreeNodePortalSelect
-public function getMainNodeTree(): \ChameleonSystem\CoreBundle\Entity\CmsTree|null
-{
-    return $this->mainNodeTree;
-}
-public function setMainNodeTree(\ChameleonSystem\CoreBundle\Entity\CmsTree|null $mainNodeTree): self
-{
-    $this->mainNodeTree = $mainNodeTree;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldPropertyTable
-public function getPropertyNavigationsCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsPortalNavigation>
+*/
+public function getPropertyNavigationsCollection(): Collection
 {
     return $this->propertyNavigationsCollection;
 }
-public function setPropertyNavigationsCollection(\Doctrine\Common\Collections\Collection $propertyNavigationsCollection): self
+
+public function addPropertyNavigationsCollection(cmsPortalNavigation $propertyNavigations): self
 {
-    $this->propertyNavigationsCollection = $propertyNavigationsCollection;
+    if (!$this->propertyNavigationsCollection->contains($propertyNavigations)) {
+        $this->propertyNavigationsCollection->add($propertyNavigations);
+        $propertyNavigations->setCmsPortal($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldPortalHomeTreeNode
-public function getHomeNodeId(): \ChameleonSystem\CoreBundle\Entity\CmsTree|null
+public function removePropertyNavigationsCollection(cmsPortalNavigation $propertyNavigations): self
 {
-    return $this->homeNodeId;
-}
-public function setHomeNodeId(\ChameleonSystem\CoreBundle\Entity\CmsTree|null $homeNodeId): self
-{
-    $this->homeNodeId = $homeNodeId;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldPortalHomeTreeNode
-public function getPageNotFoundNode(): \ChameleonSystem\CoreBundle\Entity\CmsTree|null
-{
-    return $this->pageNotFoundNode;
-}
-public function setPageNotFoundNode(\ChameleonSystem\CoreBundle\Entity\CmsTree|null $pageNotFoundNode): self
-{
-    $this->pageNotFoundNode = $pageNotFoundNode;
+    if ($this->propertyNavigationsCollection->removeElement($propertyNavigations)) {
+        // set the owning side to null (unless already changed)
+        if ($propertyNavigations->getCmsPortal() === $this) {
+            $propertyNavigations->setCmsPortal(null);
+        }
+    }
 
     return $this;
 }
@@ -330,27 +185,32 @@ public function setPageNotFoundNode(\ChameleonSystem\CoreBundle\Entity\CmsTree|n
 
   
     // TCMSFieldPropertyTable
-public function getCmsPortalDivisionsCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsDivision>
+*/
+public function getCmsPortalDivisionsCollection(): Collection
 {
     return $this->cmsPortalDivisionsCollection;
 }
-public function setCmsPortalDivisionsCollection(\Doctrine\Common\Collections\Collection $cmsPortalDivisionsCollection): self
+
+public function addCmsPortalDivisionsCollection(cmsDivision $cmsPortalDivisions): self
 {
-    $this->cmsPortalDivisionsCollection = $cmsPortalDivisionsCollection;
+    if (!$this->cmsPortalDivisionsCollection->contains($cmsPortalDivisions)) {
+        $this->cmsPortalDivisionsCollection->add($cmsPortalDivisions);
+        $cmsPortalDivisions->setCmsPortal($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldPosition
-public function getSortOrder(): int
+public function removeCmsPortalDivisionsCollection(cmsDivision $cmsPortalDivisions): self
 {
-    return $this->sortOrder;
-}
-public function setSortOrder(int $sortOrder): self
-{
-    $this->sortOrder = $sortOrder;
+    if ($this->cmsPortalDivisionsCollection->removeElement($cmsPortalDivisions)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsPortalDivisions->getCmsPortal() === $this) {
+            $cmsPortalDivisions->setCmsPortal(null);
+        }
+    }
 
     return $this;
 }
@@ -358,20 +218,39 @@ public function setSortOrder(int $sortOrder): self
 
   
     // TCMSFieldPropertyTable
-public function getCmsPortalDomainsCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsPortalDomains>
+*/
+public function getCmsPortalDomainsCollection(): Collection
 {
     return $this->cmsPortalDomainsCollection;
 }
-public function setCmsPortalDomainsCollection(\Doctrine\Common\Collections\Collection $cmsPortalDomainsCollection): self
+
+public function addCmsPortalDomainsCollection(cmsPortalDomains $cmsPortalDomains): self
 {
-    $this->cmsPortalDomainsCollection = $cmsPortalDomainsCollection;
+    if (!$this->cmsPortalDomainsCollection->contains($cmsPortalDomains)) {
+        $this->cmsPortalDomainsCollection->add($cmsPortalDomains);
+        $cmsPortalDomains->setCmsPortal($this);
+    }
+
+    return $this;
+}
+
+public function removeCmsPortalDomainsCollection(cmsPortalDomains $cmsPortalDomains): self
+{
+    if ($this->cmsPortalDomainsCollection->removeElement($cmsPortalDomains)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsPortalDomains->getCmsPortal() === $this) {
+            $cmsPortalDomains->setCmsPortal(null);
+        }
+    }
 
     return $this;
 }
 
 
   
-    // TCMSFieldURL
+    // TCMSFieldVarchar
 public function getFaviconUrl(): string
 {
     return $this->faviconUrl;
@@ -385,98 +264,33 @@ public function setFaviconUrl(string $faviconUrl): self
 
 
   
-    // TCMSFieldLookup
-public function getImages(): \ChameleonSystem\CoreBundle\Entity\CmsMedia|null
-{
-    return $this->images;
-}
-public function setImages(\ChameleonSystem\CoreBundle\Entity\CmsMedia|null $images): self
-{
-    $this->images = $images;
-    $this->imagesId = $images?->getId();
-
-    return $this;
-}
-public function getImagesId(): ?string
-{
-    return $this->imagesId;
-}
-public function setImagesId(?string $imagesId): self
-{
-    $this->imagesId = $imagesId;
-    // todo - load new id
-    //$this->imagesId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookup
-public function getWatermarkLogo(): \ChameleonSystem\CoreBundle\Entity\CmsMedia|null
-{
-    return $this->watermarkLogo;
-}
-public function setWatermarkLogo(\ChameleonSystem\CoreBundle\Entity\CmsMedia|null $watermarkLogo): self
-{
-    $this->watermarkLogo = $watermarkLogo;
-    $this->watermarkLogoId = $watermarkLogo?->getId();
-
-    return $this;
-}
-public function getWatermarkLogoId(): ?string
-{
-    return $this->watermarkLogoId;
-}
-public function setWatermarkLogoId(?string $watermarkLogoId): self
-{
-    $this->watermarkLogoId = $watermarkLogoId;
-    // todo - load new id
-    //$this->watermarkLogoId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookup
-public function getBackgroundImage(): \ChameleonSystem\CoreBundle\Entity\CmsMedia|null
-{
-    return $this->backgroundImage;
-}
-public function setBackgroundImage(\ChameleonSystem\CoreBundle\Entity\CmsMedia|null $backgroundImage): self
-{
-    $this->backgroundImage = $backgroundImage;
-    $this->backgroundImageId = $backgroundImage?->getId();
-
-    return $this;
-}
-public function getBackgroundImageId(): ?string
-{
-    return $this->backgroundImageId;
-}
-public function setBackgroundImageId(?string $backgroundImageId): self
-{
-    $this->backgroundImageId = $backgroundImageId;
-    // todo - load new id
-    //$this->backgroundImageId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
     // TCMSFieldPropertyTable
-public function getCmsMessageManagerMessageCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsMessageManagerMessage>
+*/
+public function getCmsMessageManagerMessageCollection(): Collection
 {
     return $this->cmsMessageManagerMessageCollection;
 }
-public function setCmsMessageManagerMessageCollection(\Doctrine\Common\Collections\Collection $cmsMessageManagerMessageCollection): self
+
+public function addCmsMessageManagerMessageCollection(cmsMessageManagerMessage $cmsMessageManagerMessage): self
 {
-    $this->cmsMessageManagerMessageCollection = $cmsMessageManagerMessageCollection;
+    if (!$this->cmsMessageManagerMessageCollection->contains($cmsMessageManagerMessage)) {
+        $this->cmsMessageManagerMessageCollection->add($cmsMessageManagerMessage);
+        $cmsMessageManagerMessage->setCmsPortal($this);
+    }
+
+    return $this;
+}
+
+public function removeCmsMessageManagerMessageCollection(cmsMessageManagerMessage $cmsMessageManagerMessage): self
+{
+    if ($this->cmsMessageManagerMessageCollection->removeElement($cmsMessageManagerMessage)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsMessageManagerMessage->getCmsPortal() === $this) {
+            $cmsMessageManagerMessage->setCmsPortal(null);
+        }
+    }
 
     return $this;
 }
@@ -484,41 +298,32 @@ public function setCmsMessageManagerMessageCollection(\Doctrine\Common\Collectio
 
   
     // TCMSFieldPropertyTable
-public function getCmsPortalSystemPageCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsPortalSystemPage>
+*/
+public function getCmsPortalSystemPageCollection(): Collection
 {
     return $this->cmsPortalSystemPageCollection;
 }
-public function setCmsPortalSystemPageCollection(\Doctrine\Common\Collections\Collection $cmsPortalSystemPageCollection): self
+
+public function addCmsPortalSystemPageCollection(cmsPortalSystemPage $cmsPortalSystemPage): self
 {
-    $this->cmsPortalSystemPageCollection = $cmsPortalSystemPageCollection;
+    if (!$this->cmsPortalSystemPageCollection->contains($cmsPortalSystemPage)) {
+        $this->cmsPortalSystemPageCollection->add($cmsPortalSystemPage);
+        $cmsPortalSystemPage->setCmsPortal($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldLookupMultiselectCheckboxesPossibleLanguages
-public function getCmsLanguageMlt(): \Doctrine\Common\Collections\Collection
+public function removeCmsPortalSystemPageCollection(cmsPortalSystemPage $cmsPortalSystemPage): self
 {
-    return $this->cmsLanguageMlt;
-}
-public function setCmsLanguageMlt(\Doctrine\Common\Collections\Collection $cmsLanguageMlt): self
-{
-    $this->cmsLanguageMlt = $cmsLanguageMlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isUseGooglesitemap(): bool
-{
-    return $this->useGooglesitemap;
-}
-public function setUseGooglesitemap(bool $useGooglesitemap): self
-{
-    $this->useGooglesitemap = $useGooglesitemap;
+    if ($this->cmsPortalSystemPageCollection->removeElement($cmsPortalSystemPage)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsPortalSystemPage->getCmsPortal() === $this) {
+            $cmsPortalSystemPage->setCmsPortal(null);
+        }
+    }
 
     return $this;
 }
@@ -533,20 +338,6 @@ public function getMetaDescription(): string
 public function setMetaDescription(string $metaDescription): self
 {
     $this->metaDescription = $metaDescription;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldText
-public function getMetaKeywords(): string
-{
-    return $this->metaKeywords;
-}
-public function setMetaKeywords(string $metaKeywords): self
-{
-    $this->metaKeywords = $metaKeywords;
 
     return $this;
 }
@@ -575,90 +366,6 @@ public function getMetaPublisher(): string
 public function setMetaPublisher(string $metaPublisher): self
 {
     $this->metaPublisher = $metaPublisher;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsLocals(): \ChameleonSystem\CoreBundle\Entity\CmsLocals|null
-{
-    return $this->cmsLocals;
-}
-public function setCmsLocals(\ChameleonSystem\CoreBundle\Entity\CmsLocals|null $cmsLocals): self
-{
-    $this->cmsLocals = $cmsLocals;
-    $this->cmsLocalsId = $cmsLocals?->getId();
-
-    return $this;
-}
-public function getCmsLocalsId(): ?string
-{
-    return $this->cmsLocalsId;
-}
-public function setCmsLocalsId(?string $cmsLocalsId): self
-{
-    $this->cmsLocalsId = $cmsLocalsId;
-    // todo - load new id
-    //$this->cmsLocalsId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldText
-public function getCustomMetadata(): string
-{
-    return $this->customMetadata;
-}
-public function setCustomMetadata(string $customMetadata): self
-{
-    $this->customMetadata = $customMetadata;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getPkgCmsTheme(): \ChameleonSystem\CoreBundle\Entity\PkgCmsTheme|null
-{
-    return $this->pkgCmsTheme;
-}
-public function setPkgCmsTheme(\ChameleonSystem\CoreBundle\Entity\PkgCmsTheme|null $pkgCmsTheme): self
-{
-    $this->pkgCmsTheme = $pkgCmsTheme;
-    $this->pkgCmsThemeId = $pkgCmsTheme?->getId();
-
-    return $this;
-}
-public function getPkgCmsThemeId(): ?string
-{
-    return $this->pkgCmsThemeId;
-}
-public function setPkgCmsThemeId(?string $pkgCmsThemeId): self
-{
-    $this->pkgCmsThemeId = $pkgCmsThemeId;
-    // todo - load new id
-    //$this->pkgCmsThemeId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldText
-public function getActionPluginList(): string
-{
-    return $this->actionPluginList;
-}
-public function setActionPluginList(string $actionPluginList): self
-{
-    $this->actionPluginList = $actionPluginList;
 
     return $this;
 }
@@ -707,48 +414,6 @@ public function setIvwId(string $ivwId): self
 
 
   
-    // TCMSFieldBoolean
-public function isIndexSearch(): bool
-{
-    return $this->indexSearch;
-}
-public function setIndexSearch(bool $indexSearch): self
-{
-    $this->indexSearch = $indexSearch;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isUseSlashInSeoUrls(): bool
-{
-    return $this->useSlashInSeoUrls;
-}
-public function setUseSlashInSeoUrls(bool $useSlashInSeoUrls): self
-{
-    $this->useSlashInSeoUrls = $useSlashInSeoUrls;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isDeactivePortal(): bool
-{
-    return $this->deactivePortal;
-}
-public function setDeactivePortal(bool $deactivePortal): self
-{
-    $this->deactivePortal = $deactivePortal;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getWysiwygCssUrl(): string
 {
@@ -764,27 +429,32 @@ public function setWysiwygCssUrl(string $wysiwygCssUrl): self
 
   
     // TCMSFieldPropertyTable
-public function getCmsUrlAliasCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsUrlAlias>
+*/
+public function getCmsUrlAliasCollection(): Collection
 {
     return $this->cmsUrlAliasCollection;
 }
-public function setCmsUrlAliasCollection(\Doctrine\Common\Collections\Collection $cmsUrlAliasCollection): self
+
+public function addCmsUrlAliasCollection(cmsUrlAlias $cmsUrlAlias): self
 {
-    $this->cmsUrlAliasCollection = $cmsUrlAliasCollection;
+    if (!$this->cmsUrlAliasCollection->contains($cmsUrlAlias)) {
+        $this->cmsUrlAliasCollection->add($cmsUrlAlias);
+        $cmsUrlAlias->setCmsPortal($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldText
-public function getRobots(): string
+public function removeCmsUrlAliasCollection(cmsUrlAlias $cmsUrlAlias): self
 {
-    return $this->robots;
-}
-public function setRobots(string $robots): self
-{
-    $this->robots = $robots;
+    if ($this->cmsUrlAliasCollection->removeElement($cmsUrlAlias)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsUrlAlias->getCmsPortal() === $this) {
+            $cmsUrlAlias->setCmsPortal(null);
+        }
+    }
 
     return $this;
 }

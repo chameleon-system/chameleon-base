@@ -1,22 +1,22 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsConfig;
+
 class CmsIpWhitelist {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsConfig|null - Belongs to cms settings */
-private \ChameleonSystem\CoreBundle\Entity\CmsConfig|null $cmsConfig = null,
-/** @var null|string - Belongs to cms settings */
-private ?string $cmsConfigId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsConfig|null - Belongs to cms settings */
+private ?CmsConfig $cmsConfig = null
 , 
     // TCMSFieldVarchar
 /** @var string - IP */
 private string $ip = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -35,31 +35,18 @@ private string $ip = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsConfig(): \ChameleonSystem\CoreBundle\Entity\CmsConfig|null
+    // TCMSFieldLookupParentID
+public function getCmsConfig(): ?CmsConfig
 {
     return $this->cmsConfig;
 }
-public function setCmsConfig(\ChameleonSystem\CoreBundle\Entity\CmsConfig|null $cmsConfig): self
+
+public function setCmsConfig(?CmsConfig $cmsConfig): self
 {
     $this->cmsConfig = $cmsConfig;
-    $this->cmsConfigId = $cmsConfig?->getId();
 
     return $this;
 }
-public function getCmsConfigId(): ?string
-{
-    return $this->cmsConfigId;
-}
-public function setCmsConfigId(?string $cmsConfigId): self
-{
-    $this->cmsConfigId = $cmsConfigId;
-    // todo - load new id
-    //$this->cmsConfigId = $?->getId();
-
-    return $this;
-}
-
 
 
   

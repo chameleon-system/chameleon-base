@@ -1,35 +1,20 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
+
 class DataExtranetUserAddress {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null - Belongs to customer */
-private \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null $dataExtranetUser = null,
-/** @var null|string - Belongs to customer */
-private ?string $dataExtranetUserId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation|null - Salutation */
-private \ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation|null $dataExtranetSalutation = null,
-/** @var null|string - Salutation */
-private ?string $dataExtranetSalutationId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\DataCountry|null - Country */
-private \ChameleonSystem\CoreBundle\Entity\DataCountry|null $dataCountry = null,
-/** @var null|string - Country */
-private ?string $dataCountryId = null
+        
+    // TCMSFieldLookupParentID
+/** @var DataExtranetUser|null - Belongs to customer */
+private ?DataExtranetUser $dataExtranetUser = null
 , 
     // TCMSFieldVarchar
 /** @var string - User-defined name for the address */
 private string $name = '', 
-    // TCMSFieldBoolean
-/** @var bool - It is a DHL packing station */
-private bool $isDhlPackstation = false, 
     // TCMSFieldVarchar
 /** @var string - Company */
 private string $company = '', 
@@ -64,7 +49,7 @@ private string $telefon = '',
 /** @var string - Fax */
 private string $fax = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -83,31 +68,18 @@ private string $fax = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getDataExtranetUser(): \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null
+    // TCMSFieldLookupParentID
+public function getDataExtranetUser(): ?DataExtranetUser
 {
     return $this->dataExtranetUser;
 }
-public function setDataExtranetUser(\ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null $dataExtranetUser): self
+
+public function setDataExtranetUser(?DataExtranetUser $dataExtranetUser): self
 {
     $this->dataExtranetUser = $dataExtranetUser;
-    $this->dataExtranetUserId = $dataExtranetUser?->getId();
 
     return $this;
 }
-public function getDataExtranetUserId(): ?string
-{
-    return $this->dataExtranetUserId;
-}
-public function setDataExtranetUserId(?string $dataExtranetUserId): self
-{
-    $this->dataExtranetUserId = $dataExtranetUserId;
-    // todo - load new id
-    //$this->dataExtranetUserId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -119,20 +91,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isIsDhlPackstation(): bool
-{
-    return $this->isDhlPackstation;
-}
-public function setIsDhlPackstation(bool $isDhlPackstation): self
-{
-    $this->isDhlPackstation = $isDhlPackstation;
 
     return $this;
 }
@@ -178,34 +136,6 @@ public function setAddressAdditionalInfo(string $addressAdditionalInfo): self
 
     return $this;
 }
-
-
-  
-    // TCMSFieldLookup
-public function getDataExtranetSalutation(): \ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation|null
-{
-    return $this->dataExtranetSalutation;
-}
-public function setDataExtranetSalutation(\ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation|null $dataExtranetSalutation): self
-{
-    $this->dataExtranetSalutation = $dataExtranetSalutation;
-    $this->dataExtranetSalutationId = $dataExtranetSalutation?->getId();
-
-    return $this;
-}
-public function getDataExtranetSalutationId(): ?string
-{
-    return $this->dataExtranetSalutationId;
-}
-public function setDataExtranetSalutationId(?string $dataExtranetSalutationId): self
-{
-    $this->dataExtranetSalutationId = $dataExtranetSalutationId;
-    // todo - load new id
-    //$this->dataExtranetSalutationId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -290,34 +220,6 @@ public function setPostalcode(string $postalcode): self
 
     return $this;
 }
-
-
-  
-    // TCMSFieldLookup
-public function getDataCountry(): \ChameleonSystem\CoreBundle\Entity\DataCountry|null
-{
-    return $this->dataCountry;
-}
-public function setDataCountry(\ChameleonSystem\CoreBundle\Entity\DataCountry|null $dataCountry): self
-{
-    $this->dataCountry = $dataCountry;
-    $this->dataCountryId = $dataCountry?->getId();
-
-    return $this;
-}
-public function getDataCountryId(): ?string
-{
-    return $this->dataCountryId;
-}
-public function setDataCountryId(?string $dataCountryId): self
-{
-    $this->dataCountryId = $dataCountryId;
-    // todo - load new id
-    //$this->dataCountryId = $?->getId();
-
-    return $this;
-}
-
 
 
   

@@ -1,28 +1,32 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
+use ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItem;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class PkgImageHotspot {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null - Belongs to module instance */
-private \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance = null,
-/** @var null|string - Belongs to module instance */
-private ?string $cmsTplModuleInstanceId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsTplModuleInstance|null - Belongs to module instance */
+private ?CmsTplModuleInstance $cmsTplModuleInstance = null
 , 
     // TCMSFieldVarchar
 /** @var string - Headline */
 private string $name = '', 
-    // TCMSFieldNumber
-/** @var int - How long should an image be displayed (in seconds)? */
-private int $autoSlideTime = 0, 
+    // TCMSFieldVarchar
+/** @var string - How long should an image be displayed (in seconds)? */
+private string $autoSlideTime = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItem[] - Images */
-private \Doctrine\Common\Collections\Collection $pkgImageHotspotItemCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, pkgImageHotspotItem> - Images */
+private Collection $pkgImageHotspotItemCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -41,31 +45,18 @@ private \Doctrine\Common\Collections\Collection $pkgImageHotspotItemCollection =
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsTplModuleInstance(): \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null
+    // TCMSFieldLookupParentID
+public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;
 }
-public function setCmsTplModuleInstance(\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance): self
+
+public function setCmsTplModuleInstance(?CmsTplModuleInstance $cmsTplModuleInstance): self
 {
     $this->cmsTplModuleInstance = $cmsTplModuleInstance;
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstance?->getId();
 
     return $this;
 }
-public function getCmsTplModuleInstanceId(): ?string
-{
-    return $this->cmsTplModuleInstanceId;
-}
-public function setCmsTplModuleInstanceId(?string $cmsTplModuleInstanceId): self
-{
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstanceId;
-    // todo - load new id
-    //$this->cmsTplModuleInstanceId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -83,12 +74,12 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldNumber
-public function getAutoSlideTime(): int
+    // TCMSFieldVarchar
+public function getAutoSlideTime(): string
 {
     return $this->autoSlideTime;
 }
-public function setAutoSlideTime(int $autoSlideTime): self
+public function setAutoSlideTime(string $autoSlideTime): self
 {
     $this->autoSlideTime = $autoSlideTime;
 
@@ -98,13 +89,32 @@ public function setAutoSlideTime(int $autoSlideTime): self
 
   
     // TCMSFieldPropertyTable
-public function getPkgImageHotspotItemCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgImageHotspotItem>
+*/
+public function getPkgImageHotspotItemCollection(): Collection
 {
     return $this->pkgImageHotspotItemCollection;
 }
-public function setPkgImageHotspotItemCollection(\Doctrine\Common\Collections\Collection $pkgImageHotspotItemCollection): self
+
+public function addPkgImageHotspotItemCollection(pkgImageHotspotItem $pkgImageHotspotItem): self
 {
-    $this->pkgImageHotspotItemCollection = $pkgImageHotspotItemCollection;
+    if (!$this->pkgImageHotspotItemCollection->contains($pkgImageHotspotItem)) {
+        $this->pkgImageHotspotItemCollection->add($pkgImageHotspotItem);
+        $pkgImageHotspotItem->setPkgImageHotspot($this);
+    }
+
+    return $this;
+}
+
+public function removePkgImageHotspotItemCollection(pkgImageHotspotItem $pkgImageHotspotItem): self
+{
+    if ($this->pkgImageHotspotItemCollection->removeElement($pkgImageHotspotItem)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgImageHotspotItem->getPkgImageHotspot() === $this) {
+            $pkgImageHotspotItem->setPkgImageHotspot(null);
+        }
+    }
 
     return $this;
 }

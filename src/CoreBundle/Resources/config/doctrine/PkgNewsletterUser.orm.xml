@@ -7,66 +7,16 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="dataExtranetUserId" type="string" field="data_extranet_user_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser">
-    <join-column name="data_extranet_user_id" referenced-column-name="id" />
-</many-to-one>
-            <many-to-many field="pkgNewsletterGroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\PkgNewsletterGroup">
-    <join-table name="pkg_newsletter_user_pkg_newsletter_group_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <many-to-many field="pkgNewsletterConfirmationMlt" target-entity="ChameleonSystem\CoreBundle\Entity\PkgNewsletterConfirmation">
-    <join-table name="pkg_newsletter_user_pkg_newsletter_confirmation_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="email"  column="email"  nullable="false"  />
-            <field name="dataExtranetSalutationId" type="string" field="data_extranet_salutation_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="dataExtranetSalutation" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation">
-    <join-column name="data_extranet_salutation_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="firstname"  column="firstname"  nullable="false"  />
-            <field name="lastname"  column="lastname"  nullable="false"  />
-            <field name="company"  column="company"  nullable="false"  />
-            <field name="cmsPortalId" type="string" field="cms_portal_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
-    <join-column name="cms_portal_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="signupDate"  column="signup_date"  nullable="false"  />
-            <field name="optincode"  column="optincode"  nullable="false"  />
-            <field name="optin"  column="optin"  nullable="false"  />
-            <field name="optinDate"  column="optin_date"  nullable="false"  />
-            <field name="optoutcode"  column="optoutcode"  nullable="false"  />
+            <field name="email" type="string" column="email" length="255" nullable="false"  />
+            <field name="firstname" type="string" column="firstname" length="255" nullable="false"  />
+            <field name="lastname" type="string" column="lastname" length="255" nullable="false"  />
+            <field name="company" type="string" column="company" length="255" nullable="false"  />
+            <field name="optincode" type="string" column="optincode" length="255" nullable="false"  />
+            <field name="optoutcode" type="string" column="optoutcode" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

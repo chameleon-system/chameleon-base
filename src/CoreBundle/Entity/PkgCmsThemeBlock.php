@@ -1,23 +1,16 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlockLayout;
+
 class PkgCmsThemeBlock {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlockLayout|null - Default layout */
-private \ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlockLayout|null $pkgCmsThemeBlockLayout = null,
-/** @var null|string - Default layout */
-private ?string $pkgCmsThemeBlockLayoutId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMedia|null - Preview image */
-private \ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMedia = null,
-/** @var null|string - Preview image */
-private ?string $cmsMediaId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Descriptive name */
 private string $name = '', 
@@ -25,13 +18,15 @@ private string $name = '',
 /** @var string - System name */
 private string $systemName = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot[] - Spots */
-private \Doctrine\Common\Collections\Collection $cmsMasterPagedefSpotCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, cmsMasterPagedefSpot> - Spots */
+private Collection $cmsMasterPagedefSpotCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlockLayout[] - Layouts */
-private \Doctrine\Common\Collections\Collection $pkgCmsThemeBlockLayoutCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, pkgCmsThemeBlockLayout> - Layouts */
+private Collection $pkgCmsThemeBlockLayoutCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -79,13 +74,32 @@ public function setSystemName(string $systemName): self
 
   
     // TCMSFieldPropertyTable
-public function getCmsMasterPagedefSpotCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsMasterPagedefSpot>
+*/
+public function getCmsMasterPagedefSpotCollection(): Collection
 {
     return $this->cmsMasterPagedefSpotCollection;
 }
-public function setCmsMasterPagedefSpotCollection(\Doctrine\Common\Collections\Collection $cmsMasterPagedefSpotCollection): self
+
+public function addCmsMasterPagedefSpotCollection(cmsMasterPagedefSpot $cmsMasterPagedefSpot): self
 {
-    $this->cmsMasterPagedefSpotCollection = $cmsMasterPagedefSpotCollection;
+    if (!$this->cmsMasterPagedefSpotCollection->contains($cmsMasterPagedefSpot)) {
+        $this->cmsMasterPagedefSpotCollection->add($cmsMasterPagedefSpot);
+        $cmsMasterPagedefSpot->setPkgCmsThemeBlock($this);
+    }
+
+    return $this;
+}
+
+public function removeCmsMasterPagedefSpotCollection(cmsMasterPagedefSpot $cmsMasterPagedefSpot): self
+{
+    if ($this->cmsMasterPagedefSpotCollection->removeElement($cmsMasterPagedefSpot)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsMasterPagedefSpot->getPkgCmsThemeBlock() === $this) {
+            $cmsMasterPagedefSpot->setPkgCmsThemeBlock(null);
+        }
+    }
 
     return $this;
 }
@@ -93,72 +107,35 @@ public function setCmsMasterPagedefSpotCollection(\Doctrine\Common\Collections\C
 
   
     // TCMSFieldPropertyTable
-public function getPkgCmsThemeBlockLayoutCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgCmsThemeBlockLayout>
+*/
+public function getPkgCmsThemeBlockLayoutCollection(): Collection
 {
     return $this->pkgCmsThemeBlockLayoutCollection;
 }
-public function setPkgCmsThemeBlockLayoutCollection(\Doctrine\Common\Collections\Collection $pkgCmsThemeBlockLayoutCollection): self
+
+public function addPkgCmsThemeBlockLayoutCollection(pkgCmsThemeBlockLayout $pkgCmsThemeBlockLayout): self
 {
-    $this->pkgCmsThemeBlockLayoutCollection = $pkgCmsThemeBlockLayoutCollection;
+    if (!$this->pkgCmsThemeBlockLayoutCollection->contains($pkgCmsThemeBlockLayout)) {
+        $this->pkgCmsThemeBlockLayoutCollection->add($pkgCmsThemeBlockLayout);
+        $pkgCmsThemeBlockLayout->setPkgCmsThemeBlock($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldLookup
-public function getPkgCmsThemeBlockLayout(): \ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlockLayout|null
+public function removePkgCmsThemeBlockLayoutCollection(pkgCmsThemeBlockLayout $pkgCmsThemeBlockLayout): self
 {
-    return $this->pkgCmsThemeBlockLayout;
-}
-public function setPkgCmsThemeBlockLayout(\ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlockLayout|null $pkgCmsThemeBlockLayout): self
-{
-    $this->pkgCmsThemeBlockLayout = $pkgCmsThemeBlockLayout;
-    $this->pkgCmsThemeBlockLayoutId = $pkgCmsThemeBlockLayout?->getId();
+    if ($this->pkgCmsThemeBlockLayoutCollection->removeElement($pkgCmsThemeBlockLayout)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgCmsThemeBlockLayout->getPkgCmsThemeBlock() === $this) {
+            $pkgCmsThemeBlockLayout->setPkgCmsThemeBlock(null);
+        }
+    }
 
     return $this;
 }
-public function getPkgCmsThemeBlockLayoutId(): ?string
-{
-    return $this->pkgCmsThemeBlockLayoutId;
-}
-public function setPkgCmsThemeBlockLayoutId(?string $pkgCmsThemeBlockLayoutId): self
-{
-    $this->pkgCmsThemeBlockLayoutId = $pkgCmsThemeBlockLayoutId;
-    // todo - load new id
-    //$this->pkgCmsThemeBlockLayoutId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookup
-public function getCmsMedia(): \ChameleonSystem\CoreBundle\Entity\CmsMedia|null
-{
-    return $this->cmsMedia;
-}
-public function setCmsMedia(\ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMedia): self
-{
-    $this->cmsMedia = $cmsMedia;
-    $this->cmsMediaId = $cmsMedia?->getId();
-
-    return $this;
-}
-public function getCmsMediaId(): ?string
-{
-    return $this->cmsMediaId;
-}
-public function setCmsMediaId(?string $cmsMediaId): self
-{
-    $this->cmsMediaId = $cmsMediaId;
-    // todo - load new id
-    //$this->cmsMediaId = $?->getId();
-
-    return $this;
-}
-
 
 
   

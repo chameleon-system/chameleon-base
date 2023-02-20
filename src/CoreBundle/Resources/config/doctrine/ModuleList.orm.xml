@@ -7,45 +7,12 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="cmsTplModuleInstanceId" type="string" field="cms_tpl_module_instance_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
-    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="subHeadline"  column="sub_headline"  nullable="false"  />
-            <field name="dateToday"  column="date_today"  nullable="false"  />
-            <field name="moduleListCatId" type="string" field="module_list_cat_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="moduleListCat" target-entity="\ChameleonSystem\CoreBundle\Entity\ModuleListCat">
-    <join-column name="module_list_cat_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="teaserText"  column="teaser_text"  nullable="false"  />
-            <field name="description"  column="description"  nullable="false"  />
-            <many-to-many field="dataPool" target-entity="ChameleonSystem\CoreBundle\Entity\CmsDocument">
-    <join-table name="module_list_data_pool_cms_document_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="position"  column="position"  nullable="false"  />
+            <field name="name" type="string" column="name" length="80" nullable="false"  />
+            <field name="subHeadline" type="string" column="sub_headline" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -1,22 +1,20 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsConfigThemes {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldOption
-/** @var string - Type */
-private string $type = 'Core', 
     // TCMSFieldVarchar
 /** @var string - Folder */
 private string $directory = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -43,20 +41,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getType(): string
-{
-    return $this->type;
-}
-public function setType(string $type): self
-{
-    $this->type = $type;
 
     return $this;
 }

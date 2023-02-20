@@ -1,16 +1,16 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\Shop;
+
 class ShopArticleImageSize {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\Shop|null - Belongs to shop */
-private \ChameleonSystem\CoreBundle\Entity\Shop|null $shop = null,
-/** @var null|string - Belongs to shop */
-private ?string $shopId = null
+        
+    // TCMSFieldLookupParentID
+/** @var Shop|null - Belongs to shop */
+private ?Shop $shop = null
 , 
     // TCMSFieldVarchar
 /** @var string - System name */
@@ -18,17 +18,14 @@ private string $nameInternal = '',
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldNumber
-/** @var int - Width */
-private int $width = 0, 
-    // TCMSFieldNumber
-/** @var int - Height */
-private int $height = 0, 
-    // TCMSFieldBoolean
-/** @var bool - Force size */
-private bool $forceSize = false  ) {}
+    // TCMSFieldVarchar
+/** @var string - Width */
+private string $width = '', 
+    // TCMSFieldVarchar
+/** @var string - Height */
+private string $height = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -47,31 +44,18 @@ private bool $forceSize = false  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShop(): \ChameleonSystem\CoreBundle\Entity\Shop|null
+    // TCMSFieldLookupParentID
+public function getShop(): ?Shop
 {
     return $this->shop;
 }
-public function setShop(\ChameleonSystem\CoreBundle\Entity\Shop|null $shop): self
+
+public function setShop(?Shop $shop): self
 {
     $this->shop = $shop;
-    $this->shopId = $shop?->getId();
 
     return $this;
 }
-public function getShopId(): ?string
-{
-    return $this->shopId;
-}
-public function setShopId(?string $shopId): self
-{
-    $this->shopId = $shopId;
-    // todo - load new id
-    //$this->shopId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -103,12 +87,12 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldNumber
-public function getWidth(): int
+    // TCMSFieldVarchar
+public function getWidth(): string
 {
     return $this->width;
 }
-public function setWidth(int $width): self
+public function setWidth(string $width): self
 {
     $this->width = $width;
 
@@ -117,28 +101,14 @@ public function setWidth(int $width): self
 
 
   
-    // TCMSFieldNumber
-public function getHeight(): int
+    // TCMSFieldVarchar
+public function getHeight(): string
 {
     return $this->height;
 }
-public function setHeight(int $height): self
+public function setHeight(string $height): self
 {
     $this->height = $height;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isForceSize(): bool
-{
-    return $this->forceSize;
-}
-public function setForceSize(bool $forceSize): self
-{
-    $this->forceSize = $forceSize;
 
     return $this;
 }

@@ -7,173 +7,79 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <one-to-many field="shopOrderStatusCodeCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrderStatusCode" mapped-by="shopId" />
+            <one-to-many field="shopOrderStatusCodeCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderStatusCode" mapped-by="shop" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="defaultPkgShopCurrencyId" type="string" field="default_pkg_shop_currency_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="defaultPkgShopCurrency" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopCurrency">
-    <join-column name="default_pkg_shop_currency_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <many-to-many field="cmsPortalMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal">
-    <join-table name="shop_cms_portal_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="shopCategoryId" type="string" field="shop_category_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopCategory" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopCategory">
-    <join-column name="shop_category_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="adrCompany"  column="adr_company"  nullable="false"  />
-            <field name="adrStreet"  column="adr_street"  nullable="false"  />
-            <field name="adrZip"  column="adr_zip"  nullable="false"  />
-            <field name="adrCity"  column="adr_city"  nullable="false"  />
-            <field name="tCountryId" type="string" field="t_country_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="tCountry" target-entity="\ChameleonSystem\CoreBundle\Entity\TCountry">
-    <join-column name="t_country_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="customerServiceTelephone"  column="customer_service_telephone"  nullable="false"  />
-            <field name="customerServiceEmail"  column="customer_service_email"  nullable="false"  />
-            <field name="shopvatnumber"  column="shopvatnumber"  nullable="false"  />
-            <one-to-many field="shopBankAccountCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopBankAccount" mapped-by="shopId" />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="adrCompany" type="string" column="adr_company" length="255" nullable="false"  />
+            <field name="adrStreet" type="string" column="adr_street" length="255" nullable="false"  />
+            <field name="adrZip" type="string" column="adr_zip" length="255" nullable="false"  />
+            <field name="adrCity" type="string" column="adr_city" length="255" nullable="false"  />
+            <field name="customerServiceTelephone" type="string" column="customer_service_telephone" length="255" nullable="false"  />
+            <field name="customerServiceEmail" type="string" column="customer_service_email" length="255" nullable="false"  />
+            <field name="shopvatnumber" type="string" column="shopvatnumber" length="255" nullable="false"  />
+            <one-to-many field="shopBankAccountCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopBankAccount" mapped-by="shop" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <one-to-many field="dataExtranetUserCollection" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUser" mapped-by="shopId" />
+            <one-to-many field="dataExtranetUserCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser" mapped-by="shop" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="dataExtranetUserShopArticleHistoryMaxArticleCount"  column="data_extranet_user_shop_article_history_max_article_count"  nullable="false"  />
-            <field name="shopModuleArticlelistOrderbyId" type="string" field="shop_module_articlelist_orderby_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopModuleArticlelistOrderby" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby">
-    <join-column name="shop_module_articlelist_orderby_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="shopVatId" type="string" field="shop_vat_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopVat" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVat">
-    <join-column name="shop_vat_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="shopShippingGroupId" type="string" field="shop_shipping_group_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopShippingGroup" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopShippingGroup">
-    <join-column name="shop_shipping_group_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="shippingVatDependsOnBasketContents"  column="shipping_vat_depends_on_basket_contents"  nullable="false"  />
-            <field name="dataExtranetSalutationId" type="string" field="data_extranet_salutation_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="dataExtranetSalutation" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation">
-    <join-column name="data_extranet_salutation_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="dataCountryId" type="string" field="data_country_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="dataCountry" target-entity="\ChameleonSystem\CoreBundle\Entity\DataCountry">
-    <join-column name="data_country_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="affiliateParameterName"  column="affiliate_parameter_name"  nullable="false"  />
-            <one-to-many field="pkgShopAffiliateCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopAffiliate" mapped-by="shopId" />
+            <field name="dataExtranetUserShopArticleHistoryMaxArticleCount" type="string" column="data_extranet_user_shop_article_history_max_article_count" length="255" nullable="false"  />
+            <field name="affiliateParameterName" type="string" column="affiliate_parameter_name" length="255" nullable="false"  />
+            <one-to-many field="pkgShopAffiliateCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopAffiliate" mapped-by="shop" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <one-to-many field="shopArticleImageSizeCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleImageSize" mapped-by="shopId" />
+            <one-to-many field="shopArticleImageSizeCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticleImageSize" mapped-by="shop" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <one-to-many field="shopSystemInfoCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSystemInfo" mapped-by="shopId" />
+            <one-to-many field="shopSystemInfoCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopSystemInfo" mapped-by="shop" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="notFoundImageId" type="string" field="not_found_image_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="notFoundImage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
-    <join-column name="not_found_image_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="shopSearchWordBonus"  column="shop_search_word_bonus"  nullable="false"  />
-            <field name="shopSearchWordLengthFactor"  column="shop_search_word_length_factor"  nullable="false"  />
-            <field name="shopSearchSoundexPenalty"  column="shop_search_soundex_penalty"  nullable="false"  />
-            <field name="shopSearchMinIndexLength"  column="shop_search_min_index_length"  nullable="false"  />
-            <field name="shopSearchMaxIndexLength"  column="shop_search_max_index_length"  nullable="false"  />
-            <field name="shopSearchUseBooleanAnd"  column="shop_search_use_boolean_and"  nullable="false"  />
-            <field name="maxSearchCacheAgeInHours"  column="max_search_cache_age_in_hours"  nullable="false"  />
-            <one-to-many field="shopSearchLogCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSearchLog" mapped-by="shopId" />
+            <field name="shopSearchMinIndexLength" type="string" column="shop_search_min_index_length" length="255" nullable="false"  />
+            <field name="shopSearchMaxIndexLength" type="string" column="shop_search_max_index_length" length="255" nullable="false"  />
+            <field name="maxSearchCacheAgeInHours" type="string" column="max_search_cache_age_in_hours" length="255" nullable="false"  />
+            <one-to-many field="shopSearchLogCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopSearchLog" mapped-by="shop" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <one-to-many field="shopSearchFieldWeightCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSearchFieldWeight" mapped-by="shopId" />
+            <one-to-many field="shopSearchFieldWeightCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopSearchFieldWeight" mapped-by="shop" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <one-to-many field="shopSearchIgnoreWordCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSearchIgnoreWord" mapped-by="shopId" />
+            <one-to-many field="shopSearchIgnoreWordCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopSearchIgnoreWord" mapped-by="shop" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <one-to-many field="shopSearchKeywordArticleCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSearchKeywordArticle" mapped-by="shopId" />
+            <one-to-many field="shopSearchKeywordArticleCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopSearchKeywordArticle" mapped-by="shop" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <one-to-many field="shopSearchCacheCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSearchCache" mapped-by="shopId" />
+            <one-to-many field="shopSearchCacheCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopSearchCache" mapped-by="shop" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="basketSpotName"  column="basket_spot_name"  nullable="false"  />
-            <field name="shopCentralHandlerSpotName"  column="shop_central_handler_spot_name"  nullable="false"  />
-            <field name="showEmptyCategories"  column="show_empty_categories"  nullable="false"  />
-            <field name="allowPurchaseOfVariantParents"  column="allow_purchase_of_variant_parents"  nullable="false"  />
-            <field name="loadInactiveVariants"  column="load_inactive_variants"  nullable="false"  />
-            <field name="syncProfileDataWithBillingData"  column="sync_profile_data_with_billing_data"  nullable="false"  />
-            <field name="allowMultipleBillingAddresses"  column="allow_multiple_billing_addresses"  nullable="false"  />
-            <field name="allowMultipleShippingAddresses"  column="allow_multiple_shipping_addresses"  nullable="false"  />
-            <field name="allowGuestPurchase"  column="allow_guest_purchase"  nullable="false"  />
-            <field name="logArticleSuggestions"  column="log_article_suggestions"  nullable="false"  />
-            <one-to-many field="shopStockMessageCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopStockMessage" mapped-by="shopId" />
+            <field name="basketSpotName" type="string" column="basket_spot_name" length="255" nullable="false"  />
+            <field name="shopCentralHandlerSpotName" type="string" column="shop_central_handler_spot_name" length="255" nullable="false"  />
+            <one-to-many field="shopStockMessageCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopStockMessage" mapped-by="shop" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="exportKey"  column="export_key"  nullable="false"  />
-            <field name="cartInfoText"  column="cart_info_text"  nullable="false"  />
-            <field name="pkgShopListfilterPostsearchId" type="string" field="pkg_shop_listfilter_postsearch_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgShopListfilterPostsearch" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopListfilter">
-    <join-column name="pkg_shop_listfilter_postsearch_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="redirectToNotFoundPageProductSearchOnNoResults"  column="redirect_to_not_found_page_product_search_on_no_results"  nullable="false"  />
-            <field name="useShopSearchLog"  column="use_shop_search_log"  nullable="false"  />
-            <field name="pkgShopListfilterCategoryFilterId" type="string" field="pkg_shop_listfilter_category_filter_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgShopListfilterCategoryFilter" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopListfilter">
-    <join-column name="pkg_shop_listfilter_category_filter_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="dataExtranetUserShopArticleHistoryMaxCookieSize"  column="data_extranet_user_shop_article_history_max_cookie_size"  nullable="false"  />
-            <field name="productUrlMode"  column="product_url_mode"  nullable="false"  />
-            <field name="shopreviewmailMailDelay"  column="shopreviewmail_mail_delay"  nullable="false"  />
-            <field name="shopreviewmailPercentOfCustomers"  column="shopreviewmail_percent_of_customers"  nullable="false"  />
-            <field name="shopreviewmailSendForEachOrder"  column="shopreviewmail_send_for_each_order"  nullable="false"  />
-            <one-to-many field="pkgShopFooterCategoryCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopFooterCategory" mapped-by="shopId" />
+            <field name="exportKey" type="string" column="export_key" length="255" nullable="false"  />
+            <field name="dataExtranetUserShopArticleHistoryMaxCookieSize" type="string" column="data_extranet_user_shop_article_history_max_cookie_size" length="255" nullable="false"  />
+            <field name="shopreviewmailMailDelay" type="string" column="shopreviewmail_mail_delay" length="255" nullable="false"  />
+            <one-to-many field="pkgShopFooterCategoryCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopFooterCategory" mapped-by="shop" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
     </entity>
 

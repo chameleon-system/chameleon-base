@@ -7,36 +7,15 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="name"  column="name"  nullable="false"  />
-            <many-to-one field="shopId" target-entity="ChameleonSystem\CoreBundle\Entity\Shop" inversed-by="shopOrderStatusCode">
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <many-to-one field="shop" target-entity="\ChameleonSystem\CoreBundle\Entity\Shop" inversed-by="shopOrderStatusCodeCollection" >
     <join-column name="shop_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="sendMailNotification"  column="send_mail_notification"  nullable="false"  />
-            <field name="systemName"  column="system_name"  nullable="false"  />
-            <field name="pkgShopPaymentTransactionTypeId" type="string" field="pkg_shop_payment_transaction_type_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgShopPaymentTransactionType" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransactionType">
-    <join-column name="pkg_shop_payment_transaction_type_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="dataMailProfileId" type="string" field="data_mail_profile_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="dataMailProfile" target-entity="\ChameleonSystem\CoreBundle\Entity\DataMailProfile">
-    <join-column name="data_mail_profile_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="infoText"  column="info_text"  nullable="false"  />
+            <field name="systemName" type="string" column="system_name" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

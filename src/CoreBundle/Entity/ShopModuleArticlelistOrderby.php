@@ -1,9 +1,10 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class ShopModuleArticlelistOrderby {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -15,20 +16,11 @@ private string $namePublic = '',
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldPosition
-/** @var int - Position */
-private int $position = 0, 
     // TCMSFieldVarchar
 /** @var string - SQL ORDER BY String */
-private string $sqlOrderBy = '', 
-    // TCMSFieldOption
-/** @var string - Sorting direction */
-private string $orderDirection = 'ASC', 
-    // TCMSFieldText
-/** @var string - SQL secondary sorting */
-private string $sqlSecondaryOrderByString = ''  ) {}
+private string $sqlOrderBy = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -89,20 +81,6 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getSqlOrderBy(): string
 {
@@ -111,34 +89,6 @@ public function getSqlOrderBy(): string
 public function setSqlOrderBy(string $sqlOrderBy): self
 {
     $this->sqlOrderBy = $sqlOrderBy;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getOrderDirection(): string
-{
-    return $this->orderDirection;
-}
-public function setOrderDirection(string $orderDirection): self
-{
-    $this->orderDirection = $orderDirection;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldText
-public function getSqlSecondaryOrderByString(): string
-{
-    return $this->sqlSecondaryOrderByString;
-}
-public function setSqlSecondaryOrderByString(string $sqlSecondaryOrderByString): self
-{
-    $this->sqlSecondaryOrderByString = $sqlSecondaryOrderByString;
 
     return $this;
 }

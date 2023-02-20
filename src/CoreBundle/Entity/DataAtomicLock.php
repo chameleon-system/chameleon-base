@@ -1,16 +1,17 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class DataAtomicLock {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldVarcharUnique
+    // TCMSFieldVarchar
 /** @var string -  */
 private string $lockkey = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -29,7 +30,7 @@ private string $lockkey = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldVarcharUnique
+    // TCMSFieldVarchar
 public function getLockkey(): string
 {
     return $this->lockkey;

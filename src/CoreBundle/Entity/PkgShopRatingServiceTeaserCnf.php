@@ -1,31 +1,28 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
+
 class PkgShopRatingServiceTeaserCnf {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null - Module instance */
-private \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance = null,
-/** @var null|string - Module instance */
-private ?string $cmsTplModuleInstanceId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsTplModuleInstance|null - Module instance */
+private ?CmsTplModuleInstance $cmsTplModuleInstance = null
 , 
-    // TCMSFieldNumber
-/** @var int - Number of ratings to be selected */
-private int $numberOfRatingsToSelectFrom = 0, 
+    // TCMSFieldVarchar
+/** @var string - Number of ratings to be selected */
+private string $numberOfRatingsToSelectFrom = '', 
     // TCMSFieldVarchar
 /** @var string - Headline */
 private string $headline = '', 
     // TCMSFieldVarchar
 /** @var string - Link name for "show all" */
-private string $showAllLinkName = '', 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopRatingService[] - Rating service */
-private \Doctrine\Common\Collections\Collection $pkgShopRatingServiceMlt = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+private string $showAllLinkName = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -44,40 +41,27 @@ private \Doctrine\Common\Collections\Collection $pkgShopRatingServiceMlt = new \
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsTplModuleInstance(): \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null
+    // TCMSFieldLookupParentID
+public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;
 }
-public function setCmsTplModuleInstance(\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance): self
+
+public function setCmsTplModuleInstance(?CmsTplModuleInstance $cmsTplModuleInstance): self
 {
     $this->cmsTplModuleInstance = $cmsTplModuleInstance;
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstance?->getId();
 
     return $this;
 }
-public function getCmsTplModuleInstanceId(): ?string
-{
-    return $this->cmsTplModuleInstanceId;
-}
-public function setCmsTplModuleInstanceId(?string $cmsTplModuleInstanceId): self
-{
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstanceId;
-    // todo - load new id
-    //$this->cmsTplModuleInstanceId = $?->getId();
-
-    return $this;
-}
-
 
 
   
-    // TCMSFieldNumber
-public function getNumberOfRatingsToSelectFrom(): int
+    // TCMSFieldVarchar
+public function getNumberOfRatingsToSelectFrom(): string
 {
     return $this->numberOfRatingsToSelectFrom;
 }
-public function setNumberOfRatingsToSelectFrom(int $numberOfRatingsToSelectFrom): self
+public function setNumberOfRatingsToSelectFrom(string $numberOfRatingsToSelectFrom): self
 {
     $this->numberOfRatingsToSelectFrom = $numberOfRatingsToSelectFrom;
 
@@ -108,20 +92,6 @@ public function getShowAllLinkName(): string
 public function setShowAllLinkName(string $showAllLinkName): self
 {
     $this->showAllLinkName = $showAllLinkName;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getPkgShopRatingServiceMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->pkgShopRatingServiceMlt;
-}
-public function setPkgShopRatingServiceMlt(\Doctrine\Common\Collections\Collection $pkgShopRatingServiceMlt): self
-{
-    $this->pkgShopRatingServiceMlt = $pkgShopRatingServiceMlt;
 
     return $this;
 }

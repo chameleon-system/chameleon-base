@@ -7,28 +7,15 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="name"  column="name"  nullable="false"  />
-            <many-to-one field="pkgMultiModuleSetId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSet" inversed-by="pkgMultiModuleSetItem">
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <many-to-one field="pkgMultiModuleSet" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSet" inversed-by="pkgMultiModuleSetItemCollection" >
     <join-column name="pkg_multi_module_set_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="cmsTplModuleInstanceId" type="string" field="cms_tpl_module_instance_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
-    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="sortOrder"  column="sort_order"  nullable="false"  />
-            <field name="systemName"  column="system_name"  nullable="false"  />
-            <field name="alternativeTabUrlForAjax"  column="alternative_tab_url_for_ajax"  nullable="false"  />
+            <field name="systemName" type="string" column="system_name" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

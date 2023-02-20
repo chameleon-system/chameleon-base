@@ -7,31 +7,24 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopArticleId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticle" inversed-by="shopArticleReview">
+            <many-to-one field="shopArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle" inversed-by="shopArticleReviewCollection" >
     <join-column name="shop_article_id" referenced-column-name="id" />
 </many-to-one>
-            <many-to-one field="dataExtranetUserId" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUser" inversed-by="shopArticleReview">
+            <many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser" inversed-by="shopArticleReviewCollection" >
     <join-column name="data_extranet_user_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="publish"  column="publish"  nullable="false"  />
-            <field name="authorName"  column="author_name"  nullable="false"  />
-            <field name="title"  column="title"  nullable="false"  />
-            <field name="authorEmail"  column="author_email"  nullable="false"  />
-            <field name="sendCommentNotification"  column="send_comment_notification"  nullable="false"  />
-            <field name="rating"  column="rating"  nullable="false"  />
-            <field name="helpfulCount"  column="helpful_count"  nullable="false"  />
-            <field name="notHelpfulCount"  column="not_helpful_count"  nullable="false"  />
-            <field name="actionId"  column="action_id"  nullable="false"  />
-            <field name="comment"  column="comment"  nullable="false"  />
-            <field name="datecreated"  column="datecreated"  nullable="false"  />
-            <field name="userIp"  column="user_ip"  nullable="false"  />
+            <field name="authorName" type="string" column="author_name" length="255" nullable="false"  />
+            <field name="title" type="string" column="title" length="255" nullable="false"  />
+            <field name="authorEmail" type="string" column="author_email" length="255" nullable="false"  />
+            <field name="rating" type="string" column="rating" length="255" nullable="false"  />
+            <field name="helpfulCount" type="string" column="helpful_count" length="255" nullable="false"  />
+            <field name="notHelpfulCount" type="string" column="not_helpful_count" length="255" nullable="false"  />
+            <field name="actionId" type="string" column="action_id" length="255" nullable="false"  />
+            <field name="userIp" type="string" column="user_ip" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

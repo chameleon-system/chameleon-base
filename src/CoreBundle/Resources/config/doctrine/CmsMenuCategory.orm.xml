@@ -7,18 +7,16 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="position"  column="position"  nullable="false"  />
-            <field name="systemName"  column="system_name"  nullable="false"  />
-            <field name="iconFontCssClass"  column="icon_font_css_class"  nullable="false"  />
-            <one-to-many field="cmsMenuItemCollection" target-entity="ChameleonSystem\CoreBundle\Entity\CmsMenuItem" mapped-by="cmsMenuCategoryId" />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="systemName" type="string" column="system_name" length="255" nullable="false"  />
+            <field name="iconFontCssClass" type="string" column="icon_font_css_class" length="255" nullable="false"  />
+            <one-to-many field="cmsMenuItemCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMenuItem" mapped-by="cmsMenuCategory" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
     </entity>
 

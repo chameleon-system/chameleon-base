@@ -20,11 +20,6 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 /**/
 class TCMSFieldClassParams extends TCMSField
 {
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        // todo: implement
-        return parent::getDoctrineDataModelParts($namespace);
-    }
     public function GetHTML()
     {
         parent::GetHTML();

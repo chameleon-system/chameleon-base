@@ -7,19 +7,15 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="newclass"  column="newclass"  nullable="false"  />
-            <many-to-one field="cmsConfigId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsConfig" inversed-by="cmsConfigCmsmoduleExtensions">
+            <field name="newclass" type="string" column="newclass" length="255" nullable="false"  />
+            <many-to-one field="cmsConfig" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsConfig" inversed-by="cmsConfigCmsmoduleExtensionsCollection" >
     <join-column name="cms_config_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="type"  column="type"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

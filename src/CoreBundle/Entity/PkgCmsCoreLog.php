@@ -1,32 +1,21 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class PkgCmsCoreLog {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null - Extranet user ID */
-private \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null $dataExtranetUser = null,
-/** @var null|string - Extranet user ID */
-private ?string $dataExtranetUserId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsUser|null - CMS user */
-private \ChameleonSystem\CoreBundle\Entity\CmsUser|null $cmsUser = null,
-/** @var null|string - CMS user */
-private ?string $cmsUserId = null
-, 
-    // TCMSFieldNumber
-/** @var int - Time stamp */
-private int $timestamp = 0, 
+        
+    // TCMSFieldVarchar
+/** @var string - Time stamp */
+private string $timestamp = '', 
     // TCMSFieldVarchar
 /** @var string - Channel */
 private string $channel = '', 
-    // TCMSFieldNumber
-/** @var int -  */
-private int $level = 0, 
+    // TCMSFieldVarchar
+/** @var string -  */
+private string $level = '', 
     // TCMSFieldVarchar
 /** @var string - Message */
 private string $message = '', 
@@ -39,18 +28,15 @@ private string $uid = '',
     // TCMSFieldVarchar
 /** @var string - File name */
 private string $file = '', 
-    // TCMSFieldNumber
-/** @var int - Line */
-private int $line = 0, 
+    // TCMSFieldVarchar
+/** @var string - Line */
+private string $line = '', 
     // TCMSFieldVarchar
 /** @var string - Request URL */
 private string $requestUrl = '', 
     // TCMSFieldVarchar
 /** @var string -  */
 private string $referrerUrl = '', 
-    // TCMSFieldOption
-/** @var string - HTTP method */
-private string $httpMethod = '', 
     // TCMSFieldVarchar
 /** @var string - Server name */
 private string $server = '', 
@@ -59,12 +45,9 @@ private string $server = '',
 private string $ip = '', 
     // TCMSFieldVarchar
 /** @var string - Extranet user login */
-private string $dataExtranetUserName = '', 
-    // TCMSFieldBlob
-/** @var string -  */
-private string $context = ''  ) {}
+private string $dataExtranetUserName = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -83,12 +66,12 @@ private string $context = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldNumber
-public function getTimestamp(): int
+    // TCMSFieldVarchar
+public function getTimestamp(): string
 {
     return $this->timestamp;
 }
-public function setTimestamp(int $timestamp): self
+public function setTimestamp(string $timestamp): self
 {
     $this->timestamp = $timestamp;
 
@@ -111,12 +94,12 @@ public function setChannel(string $channel): self
 
 
   
-    // TCMSFieldNumber
-public function getLevel(): int
+    // TCMSFieldVarchar
+public function getLevel(): string
 {
     return $this->level;
 }
-public function setLevel(int $level): self
+public function setLevel(string $level): self
 {
     $this->level = $level;
 
@@ -181,12 +164,12 @@ public function setFile(string $file): self
 
 
   
-    // TCMSFieldNumber
-public function getLine(): int
+    // TCMSFieldVarchar
+public function getLine(): string
 {
     return $this->line;
 }
-public function setLine(int $line): self
+public function setLine(string $line): self
 {
     $this->line = $line;
 
@@ -223,20 +206,6 @@ public function setReferrerUrl(string $referrerUrl): self
 
 
   
-    // TCMSFieldOption
-public function getHttpMethod(): string
-{
-    return $this->httpMethod;
-}
-public function setHttpMethod(string $httpMethod): self
-{
-    $this->httpMethod = $httpMethod;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getServer(): string
 {
@@ -265,34 +234,6 @@ public function setIp(string $ip): self
 
 
   
-    // TCMSFieldLookup
-public function getDataExtranetUser(): \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null
-{
-    return $this->dataExtranetUser;
-}
-public function setDataExtranetUser(\ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null $dataExtranetUser): self
-{
-    $this->dataExtranetUser = $dataExtranetUser;
-    $this->dataExtranetUserId = $dataExtranetUser?->getId();
-
-    return $this;
-}
-public function getDataExtranetUserId(): ?string
-{
-    return $this->dataExtranetUserId;
-}
-public function setDataExtranetUserId(?string $dataExtranetUserId): self
-{
-    $this->dataExtranetUserId = $dataExtranetUserId;
-    // todo - load new id
-    //$this->dataExtranetUserId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
     // TCMSFieldVarchar
 public function getDataExtranetUserName(): string
 {
@@ -301,48 +242,6 @@ public function getDataExtranetUserName(): string
 public function setDataExtranetUserName(string $dataExtranetUserName): self
 {
     $this->dataExtranetUserName = $dataExtranetUserName;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsUser(): \ChameleonSystem\CoreBundle\Entity\CmsUser|null
-{
-    return $this->cmsUser;
-}
-public function setCmsUser(\ChameleonSystem\CoreBundle\Entity\CmsUser|null $cmsUser): self
-{
-    $this->cmsUser = $cmsUser;
-    $this->cmsUserId = $cmsUser?->getId();
-
-    return $this;
-}
-public function getCmsUserId(): ?string
-{
-    return $this->cmsUserId;
-}
-public function setCmsUserId(?string $cmsUserId): self
-{
-    $this->cmsUserId = $cmsUserId;
-    // todo - load new id
-    //$this->cmsUserId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldBlob
-public function getContext(): string
-{
-    return $this->context;
-}
-public function setContext(string $context): self
-{
-    $this->context = $context;
 
     return $this;
 }

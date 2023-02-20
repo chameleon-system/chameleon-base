@@ -7,16 +7,13 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="contentType"  column="content_type"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="fileExtension"  column="file_extension"  nullable="false"  />
+            <field name="contentType" type="string" column="content_type" length="255" nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="fileExtension" type="string" column="file_extension" length="10" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

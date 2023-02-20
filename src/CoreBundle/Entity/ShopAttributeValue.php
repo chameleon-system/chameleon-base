@@ -1,25 +1,22 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopAttribute;
+
 class ShopAttributeValue {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopAttribute|null - Belongs to the attribute */
-private \ChameleonSystem\CoreBundle\Entity\ShopAttribute|null $shopAttribute = null,
-/** @var null|string - Belongs to the attribute */
-private ?string $shopAttributeId = null
+        
+    // TCMSFieldLookupParentID
+/** @var ShopAttribute|null - Belongs to the attribute */
+private ?ShopAttribute $shopAttribute = null
 , 
     // TCMSFieldVarchar
 /** @var string - Value */
-private string $name = '', 
-    // TCMSFieldPosition
-/** @var int - Sorting */
-private int $position = 0  ) {}
+private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -38,31 +35,18 @@ private int $position = 0  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShopAttribute(): \ChameleonSystem\CoreBundle\Entity\ShopAttribute|null
+    // TCMSFieldLookupParentID
+public function getShopAttribute(): ?ShopAttribute
 {
     return $this->shopAttribute;
 }
-public function setShopAttribute(\ChameleonSystem\CoreBundle\Entity\ShopAttribute|null $shopAttribute): self
+
+public function setShopAttribute(?ShopAttribute $shopAttribute): self
 {
     $this->shopAttribute = $shopAttribute;
-    $this->shopAttributeId = $shopAttribute?->getId();
 
     return $this;
 }
-public function getShopAttributeId(): ?string
-{
-    return $this->shopAttributeId;
-}
-public function setShopAttributeId(?string $shopAttributeId): self
-{
-    $this->shopAttributeId = $shopAttributeId;
-    // todo - load new id
-    //$this->shopAttributeId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -74,20 +58,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
 
     return $this;
 }

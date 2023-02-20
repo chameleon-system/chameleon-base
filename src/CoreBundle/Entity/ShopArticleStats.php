@@ -1,31 +1,28 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopArticle;
+
 class ShopArticleStats {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticle|null - Belongs to */
-private \ChameleonSystem\CoreBundle\Entity\ShopArticle|null $shopArticle = null,
-/** @var null|string - Belongs to */
-private ?string $shopArticleId = null
+        
+    // TCMSFieldLookupParentID
+/** @var ShopArticle|null - Belongs to */
+private ?ShopArticle $shopArticle = null
 , 
-    // TCMSFieldNumber
-/** @var int - Sales */
-private int $statsSales = 0, 
-    // TCMSFieldNumber
-/** @var int - Details on views */
-private int $statsDetailViews = 0, 
-    // TCMSFieldDecimal
-/** @var float - Average rating */
-private float $statsReviewAverage = 0, 
-    // TCMSFieldNumber
-/** @var int - Number of ratings */
-private int $statsReviewCount = 0  ) {}
+    // TCMSFieldVarchar
+/** @var string - Sales */
+private string $statsSales = '', 
+    // TCMSFieldVarchar
+/** @var string - Details on views */
+private string $statsDetailViews = '', 
+    // TCMSFieldVarchar
+/** @var string - Number of ratings */
+private string $statsReviewCount = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -44,40 +41,27 @@ private int $statsReviewCount = 0  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShopArticle(): \ChameleonSystem\CoreBundle\Entity\ShopArticle|null
+    // TCMSFieldLookupParentID
+public function getShopArticle(): ?ShopArticle
 {
     return $this->shopArticle;
 }
-public function setShopArticle(\ChameleonSystem\CoreBundle\Entity\ShopArticle|null $shopArticle): self
+
+public function setShopArticle(?ShopArticle $shopArticle): self
 {
     $this->shopArticle = $shopArticle;
-    $this->shopArticleId = $shopArticle?->getId();
 
     return $this;
 }
-public function getShopArticleId(): ?string
-{
-    return $this->shopArticleId;
-}
-public function setShopArticleId(?string $shopArticleId): self
-{
-    $this->shopArticleId = $shopArticleId;
-    // todo - load new id
-    //$this->shopArticleId = $?->getId();
-
-    return $this;
-}
-
 
 
   
-    // TCMSFieldNumber
-public function getStatsSales(): int
+    // TCMSFieldVarchar
+public function getStatsSales(): string
 {
     return $this->statsSales;
 }
-public function setStatsSales(int $statsSales): self
+public function setStatsSales(string $statsSales): self
 {
     $this->statsSales = $statsSales;
 
@@ -86,12 +70,12 @@ public function setStatsSales(int $statsSales): self
 
 
   
-    // TCMSFieldNumber
-public function getStatsDetailViews(): int
+    // TCMSFieldVarchar
+public function getStatsDetailViews(): string
 {
     return $this->statsDetailViews;
 }
-public function setStatsDetailViews(int $statsDetailViews): self
+public function setStatsDetailViews(string $statsDetailViews): self
 {
     $this->statsDetailViews = $statsDetailViews;
 
@@ -100,26 +84,12 @@ public function setStatsDetailViews(int $statsDetailViews): self
 
 
   
-    // TCMSFieldDecimal
-public function getStatsReviewAverage(): float
-{
-    return $this->statsReviewAverage;
-}
-public function setStatsReviewAverage(float $statsReviewAverage): self
-{
-    $this->statsReviewAverage = $statsReviewAverage;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldNumber
-public function getStatsReviewCount(): int
+    // TCMSFieldVarchar
+public function getStatsReviewCount(): string
 {
     return $this->statsReviewCount;
 }
-public function setStatsReviewCount(int $statsReviewCount): self
+public function setStatsReviewCount(string $statsReviewCount): self
 {
     $this->statsReviewCount = $statsReviewCount;
 

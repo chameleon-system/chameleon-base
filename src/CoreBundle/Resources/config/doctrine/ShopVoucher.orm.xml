@@ -7,21 +7,17 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopVoucherSeriesId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopVoucherSeries" inversed-by="shopVoucher">
+            <many-to-one field="shopVoucherSeries" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVoucherSeries" inversed-by="shopVoucherCollection" >
     <join-column name="shop_voucher_series_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="code"  column="code"  nullable="false"  />
-            <field name="datecreated"  column="datecreated"  nullable="false"  />
-            <field name="dateUsedUp"  column="date_used_up"  nullable="false"  />
-            <field name="isUsedUp"  column="is_used_up"  nullable="false"  />
-            <one-to-many field="shopVoucherUseCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopVoucherUse" mapped-by="shopVoucherId" />
+            <field name="code" type="string" column="code" length="255" nullable="false"  />
+            <one-to-many field="shopVoucherUseCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVoucherUse" mapped-by="shopVoucher" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
     </entity>
 

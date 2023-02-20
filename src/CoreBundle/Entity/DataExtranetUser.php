@@ -1,68 +1,41 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\Shop;
+use ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\DataExtranetUserLoginHistory;
+use ChameleonSystem\CoreBundle\Entity\ShopUserPurchasedVoucher;
+use ChameleonSystem\CoreBundle\Entity\ShopUserNoticeList;
+use ChameleonSystem\CoreBundle\Entity\ShopOrder;
+use ChameleonSystem\CoreBundle\Entity\DataExtranetUserShopArticleHistory;
+use ChameleonSystem\CoreBundle\Entity\ShopSearchLog;
+use ChameleonSystem\CoreBundle\Entity\ShopSuggestArticleLog;
+use ChameleonSystem\CoreBundle\Entity\ShopArticleReview;
+use ChameleonSystem\CoreBundle\Entity\PkgShopWishlist;
+
 class DataExtranetUser {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\Shop|null - Belongs to shop */
-private \ChameleonSystem\CoreBundle\Entity\Shop|null $shop = null,
-/** @var null|string - Belongs to shop */
-private ?string $shopId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortal|null - Belongs to portal */
-private \ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal = null,
-/** @var null|string - Belongs to portal */
-private ?string $cmsPortalId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation|null - Name */
-private \ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation|null $dataExtranetSalutation = null,
-/** @var null|string - Name */
-private ?string $dataExtranetSalutationId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\DataCountry|null - Country */
-private \ChameleonSystem\CoreBundle\Entity\DataCountry|null $dataCountry = null,
-/** @var null|string - Country */
-private ?string $dataCountryId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress|null - Last billing address */
-private \ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress|null $defaultBillingAddress = null,
-/** @var null|string - Last billing address */
-private ?string $defaultBillingAddressId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress|null - Last used shipping address */
-private \ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress|null $defaultShippingAddress = null,
-/** @var null|string - Last used shipping address */
-private ?string $defaultShippingAddressId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopCurrency|null - Currency */
-private \ChameleonSystem\CoreBundle\Entity\PkgShopCurrency|null $pkgShopCurrency = null,
-/** @var null|string - Currency */
-private ?string $pkgShopCurrencyId = null
+        
+    // TCMSFieldLookupParentID
+/** @var Shop|null - Belongs to shop */
+private ?Shop $shop = null
 , 
-    // TCMSFieldNumber
-/** @var int - Customer number */
-private int $customerNumber = 0, 
+    // TCMSFieldVarchar
+/** @var string - Customer number */
+private string $customerNumber = '', 
     // TCMSFieldVarchar
 /** @var string - Login */
 private string $name = '', 
-    // TCMSFieldPasswordEncrypted
+    // TCMSFieldVarchar
 /** @var string - Password */
 private string $password = '', 
-    // TCMSFieldPasswordEncrypted
+    // TCMSFieldVarchar
 /** @var string - Password change key */
 private string $passwordChangeKey = '', 
-    // TCMSFieldDateTime
-/** @var \DateTime|null - Date of the request to change password */
-private \DateTime|null $passwordChangeTimeStamp = null, 
     // TCMSFieldVarchar
 /** @var string - First name */
 private string $firstname = '', 
@@ -99,74 +72,66 @@ private string $addressAdditionalInfo = '',
     // TCMSFieldVarchar
 /** @var string - Alias */
 private string $aliasName = '', 
-    // TCMSFieldEmail
+    // TCMSFieldVarchar
 /** @var string - Email */
 private string $email = '', 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetGroup[] - Customer groups */
-private \Doctrine\Common\Collections\Collection $dataExtranetGroupMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
     // TCMSFieldVarchar
 /** @var string - Fax */
 private string $fax = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress[] - Addresses */
-private \Doctrine\Common\Collections\Collection $dataExtranetUserAddressCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, dataExtranetUserAddress> - Addresses */
+private Collection $dataExtranetUserAddressCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - Session key */
 private string $sessionKey = '', 
-    // TCMSFieldNumber
-/** @var int - Login timestamp */
-private int $loginTimestamp = 0, 
-    // TCMSFieldNumber
-/** @var int - Login salt */
-private int $loginSalt = 0, 
+    // TCMSFieldVarchar
+/** @var string - Login timestamp */
+private string $loginTimestamp = '', 
+    // TCMSFieldVarchar
+/** @var string - Login salt */
+private string $loginSalt = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetUserLoginHistory[] - Login process */
-private \Doctrine\Common\Collections\Collection $dataExtranetUserLoginHistoryCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldDateTime
-/** @var \DateTime|null - Date of subscription */
-private \DateTime|null $datecreated = null, 
-    // TCMSFieldBoolean
-/** @var bool - Confirmed */
-private bool $confirmed = false, 
+/** @var Collection<int, dataExtranetUserLoginHistory> - Login process */
+private Collection $dataExtranetUserLoginHistoryCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - Confirmation key */
 private string $tmpconfirmkey = '', 
-    // TCMSFieldDateTime
-/** @var \DateTime|null - Confirmed on */
-private \DateTime|null $confirmedon = null, 
-    // TCMSFieldBoolean
-/** @var bool - Registration email sent */
-private bool $regEmailSend = false, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopUserPurchasedVoucher[] - Bought vouchers */
-private \Doctrine\Common\Collections\Collection $shopUserPurchasedVoucherCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopUserPurchasedVoucher> - Bought vouchers */
+private Collection $shopUserPurchasedVoucherCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopUserNoticeList[] - Notice list */
-private \Doctrine\Common\Collections\Collection $shopUserNoticeListCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopUserNoticeList> - Notice list */
+private Collection $shopUserNoticeListCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopOrder[] - Orders */
-private \Doctrine\Common\Collections\Collection $shopOrderCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopOrder> - Orders */
+private Collection $shopOrderCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetUserShopArticleHistory[] - Last viewed */
-private \Doctrine\Common\Collections\Collection $dataExtranetUserShopArticleHistoryCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, dataExtranetUserShopArticleHistory> - Last viewed */
+private Collection $dataExtranetUserShopArticleHistoryCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopSearchLog[] - Searches executed by customer */
-private \Doctrine\Common\Collections\Collection $shopSearchLogCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopSearchLog> - Searches executed by customer */
+private Collection $shopSearchLogCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopSuggestArticleLog[] - Customer recommendations */
-private \Doctrine\Common\Collections\Collection $shopSuggestArticleLogCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopSuggestArticleLog> - Customer recommendations */
+private Collection $shopSuggestArticleLogCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticleReview[] - Reviews */
-private \Doctrine\Common\Collections\Collection $shopArticleReviewCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopArticleReview> - Reviews */
+private Collection $shopArticleReviewCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopWishlist[] - Wish list */
-private \Doctrine\Common\Collections\Collection $pkgShopWishlistCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldDate
-/** @var \DateTime|null - Date of birth */
-private \DateTime|null $birthdate = null  ) {}
+/** @var Collection<int, pkgShopWishlist> - Wish list */
+private Collection $pkgShopWishlistCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -185,68 +150,27 @@ private \DateTime|null $birthdate = null  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShop(): \ChameleonSystem\CoreBundle\Entity\Shop|null
+    // TCMSFieldLookupParentID
+public function getShop(): ?Shop
 {
     return $this->shop;
 }
-public function setShop(\ChameleonSystem\CoreBundle\Entity\Shop|null $shop): self
+
+public function setShop(?Shop $shop): self
 {
     $this->shop = $shop;
-    $this->shopId = $shop?->getId();
 
     return $this;
 }
-public function getShopId(): ?string
-{
-    return $this->shopId;
-}
-public function setShopId(?string $shopId): self
-{
-    $this->shopId = $shopId;
-    // todo - load new id
-    //$this->shopId = $?->getId();
-
-    return $this;
-}
-
 
 
   
-    // TCMSFieldLookup
-public function getCmsPortal(): \ChameleonSystem\CoreBundle\Entity\CmsPortal|null
-{
-    return $this->cmsPortal;
-}
-public function setCmsPortal(\ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal): self
-{
-    $this->cmsPortal = $cmsPortal;
-    $this->cmsPortalId = $cmsPortal?->getId();
-
-    return $this;
-}
-public function getCmsPortalId(): ?string
-{
-    return $this->cmsPortalId;
-}
-public function setCmsPortalId(?string $cmsPortalId): self
-{
-    $this->cmsPortalId = $cmsPortalId;
-    // todo - load new id
-    //$this->cmsPortalId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldNumber
-public function getCustomerNumber(): int
+    // TCMSFieldVarchar
+public function getCustomerNumber(): string
 {
     return $this->customerNumber;
 }
-public function setCustomerNumber(int $customerNumber): self
+public function setCustomerNumber(string $customerNumber): self
 {
     $this->customerNumber = $customerNumber;
 
@@ -269,7 +193,7 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldPasswordEncrypted
+    // TCMSFieldVarchar
 public function getPassword(): string
 {
     return $this->password;
@@ -283,7 +207,7 @@ public function setPassword(string $password): self
 
 
   
-    // TCMSFieldPasswordEncrypted
+    // TCMSFieldVarchar
 public function getPasswordChangeKey(): string
 {
     return $this->passwordChangeKey;
@@ -294,48 +218,6 @@ public function setPasswordChangeKey(string $passwordChangeKey): self
 
     return $this;
 }
-
-
-  
-    // TCMSFieldDateTime
-public function getPasswordChangeTimeStamp(): \DateTime|null
-{
-    return $this->passwordChangeTimeStamp;
-}
-public function setPasswordChangeTimeStamp(\DateTime|null $passwordChangeTimeStamp): self
-{
-    $this->passwordChangeTimeStamp = $passwordChangeTimeStamp;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getDataExtranetSalutation(): \ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation|null
-{
-    return $this->dataExtranetSalutation;
-}
-public function setDataExtranetSalutation(\ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation|null $dataExtranetSalutation): self
-{
-    $this->dataExtranetSalutation = $dataExtranetSalutation;
-    $this->dataExtranetSalutationId = $dataExtranetSalutation?->getId();
-
-    return $this;
-}
-public function getDataExtranetSalutationId(): ?string
-{
-    return $this->dataExtranetSalutationId;
-}
-public function setDataExtranetSalutationId(?string $dataExtranetSalutationId): self
-{
-    $this->dataExtranetSalutationId = $dataExtranetSalutationId;
-    // todo - load new id
-    //$this->dataExtranetSalutationId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -437,34 +319,6 @@ public function setCity(string $city): self
 
 
   
-    // TCMSFieldLookup
-public function getDataCountry(): \ChameleonSystem\CoreBundle\Entity\DataCountry|null
-{
-    return $this->dataCountry;
-}
-public function setDataCountry(\ChameleonSystem\CoreBundle\Entity\DataCountry|null $dataCountry): self
-{
-    $this->dataCountry = $dataCountry;
-    $this->dataCountryId = $dataCountry?->getId();
-
-    return $this;
-}
-public function getDataCountryId(): ?string
-{
-    return $this->dataCountryId;
-}
-public function setDataCountryId(?string $dataCountryId): self
-{
-    $this->dataCountryId = $dataCountryId;
-    // todo - load new id
-    //$this->dataCountryId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
     // TCMSFieldVarchar
 public function getVatId(): string
 {
@@ -535,7 +389,7 @@ public function setAliasName(string $aliasName): self
 
 
   
-    // TCMSFieldEmail
+    // TCMSFieldVarchar
 public function getEmail(): string
 {
     return $this->email;
@@ -543,20 +397,6 @@ public function getEmail(): string
 public function setEmail(string $email): self
 {
     $this->email = $email;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getDataExtranetGroupMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->dataExtranetGroupMlt;
-}
-public function setDataExtranetGroupMlt(\Doctrine\Common\Collections\Collection $dataExtranetGroupMlt): self
-{
-    $this->dataExtranetGroupMlt = $dataExtranetGroupMlt;
 
     return $this;
 }
@@ -578,13 +418,32 @@ public function setFax(string $fax): self
 
   
     // TCMSFieldPropertyTable
-public function getDataExtranetUserAddressCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, dataExtranetUserAddress>
+*/
+public function getDataExtranetUserAddressCollection(): Collection
 {
     return $this->dataExtranetUserAddressCollection;
 }
-public function setDataExtranetUserAddressCollection(\Doctrine\Common\Collections\Collection $dataExtranetUserAddressCollection): self
+
+public function addDataExtranetUserAddressCollection(dataExtranetUserAddress $dataExtranetUserAddress): self
 {
-    $this->dataExtranetUserAddressCollection = $dataExtranetUserAddressCollection;
+    if (!$this->dataExtranetUserAddressCollection->contains($dataExtranetUserAddress)) {
+        $this->dataExtranetUserAddressCollection->add($dataExtranetUserAddress);
+        $dataExtranetUserAddress->setDataExtranetUser($this);
+    }
+
+    return $this;
+}
+
+public function removeDataExtranetUserAddressCollection(dataExtranetUserAddress $dataExtranetUserAddress): self
+{
+    if ($this->dataExtranetUserAddressCollection->removeElement($dataExtranetUserAddress)) {
+        // set the owning side to null (unless already changed)
+        if ($dataExtranetUserAddress->getDataExtranetUser() === $this) {
+            $dataExtranetUserAddress->setDataExtranetUser(null);
+        }
+    }
 
     return $this;
 }
@@ -605,12 +464,12 @@ public function setSessionKey(string $sessionKey): self
 
 
   
-    // TCMSFieldNumber
-public function getLoginTimestamp(): int
+    // TCMSFieldVarchar
+public function getLoginTimestamp(): string
 {
     return $this->loginTimestamp;
 }
-public function setLoginTimestamp(int $loginTimestamp): self
+public function setLoginTimestamp(string $loginTimestamp): self
 {
     $this->loginTimestamp = $loginTimestamp;
 
@@ -619,12 +478,12 @@ public function setLoginTimestamp(int $loginTimestamp): self
 
 
   
-    // TCMSFieldNumber
-public function getLoginSalt(): int
+    // TCMSFieldVarchar
+public function getLoginSalt(): string
 {
     return $this->loginSalt;
 }
-public function setLoginSalt(int $loginSalt): self
+public function setLoginSalt(string $loginSalt): self
 {
     $this->loginSalt = $loginSalt;
 
@@ -634,97 +493,32 @@ public function setLoginSalt(int $loginSalt): self
 
   
     // TCMSFieldPropertyTable
-public function getDataExtranetUserLoginHistoryCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, dataExtranetUserLoginHistory>
+*/
+public function getDataExtranetUserLoginHistoryCollection(): Collection
 {
     return $this->dataExtranetUserLoginHistoryCollection;
 }
-public function setDataExtranetUserLoginHistoryCollection(\Doctrine\Common\Collections\Collection $dataExtranetUserLoginHistoryCollection): self
+
+public function addDataExtranetUserLoginHistoryCollection(dataExtranetUserLoginHistory $dataExtranetUserLoginHistory): self
 {
-    $this->dataExtranetUserLoginHistoryCollection = $dataExtranetUserLoginHistoryCollection;
+    if (!$this->dataExtranetUserLoginHistoryCollection->contains($dataExtranetUserLoginHistory)) {
+        $this->dataExtranetUserLoginHistoryCollection->add($dataExtranetUserLoginHistory);
+        $dataExtranetUserLoginHistory->setDataExtranetUser($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldLookup
-public function getDefaultBillingAddress(): \ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress|null
+public function removeDataExtranetUserLoginHistoryCollection(dataExtranetUserLoginHistory $dataExtranetUserLoginHistory): self
 {
-    return $this->defaultBillingAddress;
-}
-public function setDefaultBillingAddress(\ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress|null $defaultBillingAddress): self
-{
-    $this->defaultBillingAddress = $defaultBillingAddress;
-    $this->defaultBillingAddressId = $defaultBillingAddress?->getId();
-
-    return $this;
-}
-public function getDefaultBillingAddressId(): ?string
-{
-    return $this->defaultBillingAddressId;
-}
-public function setDefaultBillingAddressId(?string $defaultBillingAddressId): self
-{
-    $this->defaultBillingAddressId = $defaultBillingAddressId;
-    // todo - load new id
-    //$this->defaultBillingAddressId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookup
-public function getDefaultShippingAddress(): \ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress|null
-{
-    return $this->defaultShippingAddress;
-}
-public function setDefaultShippingAddress(\ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress|null $defaultShippingAddress): self
-{
-    $this->defaultShippingAddress = $defaultShippingAddress;
-    $this->defaultShippingAddressId = $defaultShippingAddress?->getId();
-
-    return $this;
-}
-public function getDefaultShippingAddressId(): ?string
-{
-    return $this->defaultShippingAddressId;
-}
-public function setDefaultShippingAddressId(?string $defaultShippingAddressId): self
-{
-    $this->defaultShippingAddressId = $defaultShippingAddressId;
-    // todo - load new id
-    //$this->defaultShippingAddressId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldDateTime
-public function getDatecreated(): \DateTime|null
-{
-    return $this->datecreated;
-}
-public function setDatecreated(\DateTime|null $datecreated): self
-{
-    $this->datecreated = $datecreated;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isConfirmed(): bool
-{
-    return $this->confirmed;
-}
-public function setConfirmed(bool $confirmed): self
-{
-    $this->confirmed = $confirmed;
+    if ($this->dataExtranetUserLoginHistoryCollection->removeElement($dataExtranetUserLoginHistory)) {
+        // set the owning side to null (unless already changed)
+        if ($dataExtranetUserLoginHistory->getDataExtranetUser() === $this) {
+            $dataExtranetUserLoginHistory->setDataExtranetUser(null);
+        }
+    }
 
     return $this;
 }
@@ -745,42 +539,33 @@ public function setTmpconfirmkey(string $tmpconfirmkey): self
 
 
   
-    // TCMSFieldDateTime
-public function getConfirmedon(): \DateTime|null
-{
-    return $this->confirmedon;
-}
-public function setConfirmedon(\DateTime|null $confirmedon): self
-{
-    $this->confirmedon = $confirmedon;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isRegEmailSend(): bool
-{
-    return $this->regEmailSend;
-}
-public function setRegEmailSend(bool $regEmailSend): self
-{
-    $this->regEmailSend = $regEmailSend;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldPropertyTable
-public function getShopUserPurchasedVoucherCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopUserPurchasedVoucher>
+*/
+public function getShopUserPurchasedVoucherCollection(): Collection
 {
     return $this->shopUserPurchasedVoucherCollection;
 }
-public function setShopUserPurchasedVoucherCollection(\Doctrine\Common\Collections\Collection $shopUserPurchasedVoucherCollection): self
+
+public function addShopUserPurchasedVoucherCollection(shopUserPurchasedVoucher $shopUserPurchasedVoucher): self
 {
-    $this->shopUserPurchasedVoucherCollection = $shopUserPurchasedVoucherCollection;
+    if (!$this->shopUserPurchasedVoucherCollection->contains($shopUserPurchasedVoucher)) {
+        $this->shopUserPurchasedVoucherCollection->add($shopUserPurchasedVoucher);
+        $shopUserPurchasedVoucher->setDataExtranetUser($this);
+    }
+
+    return $this;
+}
+
+public function removeShopUserPurchasedVoucherCollection(shopUserPurchasedVoucher $shopUserPurchasedVoucher): self
+{
+    if ($this->shopUserPurchasedVoucherCollection->removeElement($shopUserPurchasedVoucher)) {
+        // set the owning side to null (unless already changed)
+        if ($shopUserPurchasedVoucher->getDataExtranetUser() === $this) {
+            $shopUserPurchasedVoucher->setDataExtranetUser(null);
+        }
+    }
 
     return $this;
 }
@@ -788,13 +573,32 @@ public function setShopUserPurchasedVoucherCollection(\Doctrine\Common\Collectio
 
   
     // TCMSFieldPropertyTable
-public function getShopUserNoticeListCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopUserNoticeList>
+*/
+public function getShopUserNoticeListCollection(): Collection
 {
     return $this->shopUserNoticeListCollection;
 }
-public function setShopUserNoticeListCollection(\Doctrine\Common\Collections\Collection $shopUserNoticeListCollection): self
+
+public function addShopUserNoticeListCollection(shopUserNoticeList $shopUserNoticeList): self
 {
-    $this->shopUserNoticeListCollection = $shopUserNoticeListCollection;
+    if (!$this->shopUserNoticeListCollection->contains($shopUserNoticeList)) {
+        $this->shopUserNoticeListCollection->add($shopUserNoticeList);
+        $shopUserNoticeList->setDataExtranetUser($this);
+    }
+
+    return $this;
+}
+
+public function removeShopUserNoticeListCollection(shopUserNoticeList $shopUserNoticeList): self
+{
+    if ($this->shopUserNoticeListCollection->removeElement($shopUserNoticeList)) {
+        // set the owning side to null (unless already changed)
+        if ($shopUserNoticeList->getDataExtranetUser() === $this) {
+            $shopUserNoticeList->setDataExtranetUser(null);
+        }
+    }
 
     return $this;
 }
@@ -802,13 +606,32 @@ public function setShopUserNoticeListCollection(\Doctrine\Common\Collections\Col
 
   
     // TCMSFieldPropertyTable
-public function getShopOrderCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopOrder>
+*/
+public function getShopOrderCollection(): Collection
 {
     return $this->shopOrderCollection;
 }
-public function setShopOrderCollection(\Doctrine\Common\Collections\Collection $shopOrderCollection): self
+
+public function addShopOrderCollection(shopOrder $shopOrder): self
 {
-    $this->shopOrderCollection = $shopOrderCollection;
+    if (!$this->shopOrderCollection->contains($shopOrder)) {
+        $this->shopOrderCollection->add($shopOrder);
+        $shopOrder->setDataExtranetUser($this);
+    }
+
+    return $this;
+}
+
+public function removeShopOrderCollection(shopOrder $shopOrder): self
+{
+    if ($this->shopOrderCollection->removeElement($shopOrder)) {
+        // set the owning side to null (unless already changed)
+        if ($shopOrder->getDataExtranetUser() === $this) {
+            $shopOrder->setDataExtranetUser(null);
+        }
+    }
 
     return $this;
 }
@@ -816,13 +639,32 @@ public function setShopOrderCollection(\Doctrine\Common\Collections\Collection $
 
   
     // TCMSFieldPropertyTable
-public function getDataExtranetUserShopArticleHistoryCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, dataExtranetUserShopArticleHistory>
+*/
+public function getDataExtranetUserShopArticleHistoryCollection(): Collection
 {
     return $this->dataExtranetUserShopArticleHistoryCollection;
 }
-public function setDataExtranetUserShopArticleHistoryCollection(\Doctrine\Common\Collections\Collection $dataExtranetUserShopArticleHistoryCollection): self
+
+public function addDataExtranetUserShopArticleHistoryCollection(dataExtranetUserShopArticleHistory $dataExtranetUserShopArticleHistory): self
 {
-    $this->dataExtranetUserShopArticleHistoryCollection = $dataExtranetUserShopArticleHistoryCollection;
+    if (!$this->dataExtranetUserShopArticleHistoryCollection->contains($dataExtranetUserShopArticleHistory)) {
+        $this->dataExtranetUserShopArticleHistoryCollection->add($dataExtranetUserShopArticleHistory);
+        $dataExtranetUserShopArticleHistory->setDataExtranetUser($this);
+    }
+
+    return $this;
+}
+
+public function removeDataExtranetUserShopArticleHistoryCollection(dataExtranetUserShopArticleHistory $dataExtranetUserShopArticleHistory): self
+{
+    if ($this->dataExtranetUserShopArticleHistoryCollection->removeElement($dataExtranetUserShopArticleHistory)) {
+        // set the owning side to null (unless already changed)
+        if ($dataExtranetUserShopArticleHistory->getDataExtranetUser() === $this) {
+            $dataExtranetUserShopArticleHistory->setDataExtranetUser(null);
+        }
+    }
 
     return $this;
 }
@@ -830,13 +672,32 @@ public function setDataExtranetUserShopArticleHistoryCollection(\Doctrine\Common
 
   
     // TCMSFieldPropertyTable
-public function getShopSearchLogCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopSearchLog>
+*/
+public function getShopSearchLogCollection(): Collection
 {
     return $this->shopSearchLogCollection;
 }
-public function setShopSearchLogCollection(\Doctrine\Common\Collections\Collection $shopSearchLogCollection): self
+
+public function addShopSearchLogCollection(shopSearchLog $shopSearchLog): self
 {
-    $this->shopSearchLogCollection = $shopSearchLogCollection;
+    if (!$this->shopSearchLogCollection->contains($shopSearchLog)) {
+        $this->shopSearchLogCollection->add($shopSearchLog);
+        $shopSearchLog->setDataExtranetUser($this);
+    }
+
+    return $this;
+}
+
+public function removeShopSearchLogCollection(shopSearchLog $shopSearchLog): self
+{
+    if ($this->shopSearchLogCollection->removeElement($shopSearchLog)) {
+        // set the owning side to null (unless already changed)
+        if ($shopSearchLog->getDataExtranetUser() === $this) {
+            $shopSearchLog->setDataExtranetUser(null);
+        }
+    }
 
     return $this;
 }
@@ -844,13 +705,32 @@ public function setShopSearchLogCollection(\Doctrine\Common\Collections\Collecti
 
   
     // TCMSFieldPropertyTable
-public function getShopSuggestArticleLogCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopSuggestArticleLog>
+*/
+public function getShopSuggestArticleLogCollection(): Collection
 {
     return $this->shopSuggestArticleLogCollection;
 }
-public function setShopSuggestArticleLogCollection(\Doctrine\Common\Collections\Collection $shopSuggestArticleLogCollection): self
+
+public function addShopSuggestArticleLogCollection(shopSuggestArticleLog $shopSuggestArticleLog): self
 {
-    $this->shopSuggestArticleLogCollection = $shopSuggestArticleLogCollection;
+    if (!$this->shopSuggestArticleLogCollection->contains($shopSuggestArticleLog)) {
+        $this->shopSuggestArticleLogCollection->add($shopSuggestArticleLog);
+        $shopSuggestArticleLog->setDataExtranetUser($this);
+    }
+
+    return $this;
+}
+
+public function removeShopSuggestArticleLogCollection(shopSuggestArticleLog $shopSuggestArticleLog): self
+{
+    if ($this->shopSuggestArticleLogCollection->removeElement($shopSuggestArticleLog)) {
+        // set the owning side to null (unless already changed)
+        if ($shopSuggestArticleLog->getDataExtranetUser() === $this) {
+            $shopSuggestArticleLog->setDataExtranetUser(null);
+        }
+    }
 
     return $this;
 }
@@ -858,13 +738,32 @@ public function setShopSuggestArticleLogCollection(\Doctrine\Common\Collections\
 
   
     // TCMSFieldPropertyTable
-public function getShopArticleReviewCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopArticleReview>
+*/
+public function getShopArticleReviewCollection(): Collection
 {
     return $this->shopArticleReviewCollection;
 }
-public function setShopArticleReviewCollection(\Doctrine\Common\Collections\Collection $shopArticleReviewCollection): self
+
+public function addShopArticleReviewCollection(shopArticleReview $shopArticleReview): self
 {
-    $this->shopArticleReviewCollection = $shopArticleReviewCollection;
+    if (!$this->shopArticleReviewCollection->contains($shopArticleReview)) {
+        $this->shopArticleReviewCollection->add($shopArticleReview);
+        $shopArticleReview->setDataExtranetUser($this);
+    }
+
+    return $this;
+}
+
+public function removeShopArticleReviewCollection(shopArticleReview $shopArticleReview): self
+{
+    if ($this->shopArticleReviewCollection->removeElement($shopArticleReview)) {
+        // set the owning side to null (unless already changed)
+        if ($shopArticleReview->getDataExtranetUser() === $this) {
+            $shopArticleReview->setDataExtranetUser(null);
+        }
+    }
 
     return $this;
 }
@@ -872,58 +771,35 @@ public function setShopArticleReviewCollection(\Doctrine\Common\Collections\Coll
 
   
     // TCMSFieldPropertyTable
-public function getPkgShopWishlistCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgShopWishlist>
+*/
+public function getPkgShopWishlistCollection(): Collection
 {
     return $this->pkgShopWishlistCollection;
 }
-public function setPkgShopWishlistCollection(\Doctrine\Common\Collections\Collection $pkgShopWishlistCollection): self
+
+public function addPkgShopWishlistCollection(pkgShopWishlist $pkgShopWishlist): self
 {
-    $this->pkgShopWishlistCollection = $pkgShopWishlistCollection;
+    if (!$this->pkgShopWishlistCollection->contains($pkgShopWishlist)) {
+        $this->pkgShopWishlistCollection->add($pkgShopWishlist);
+        $pkgShopWishlist->setDataExtranetUser($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldDate
-public function getBirthdate(): \DateTime|null
+public function removePkgShopWishlistCollection(pkgShopWishlist $pkgShopWishlist): self
 {
-    return $this->birthdate;
-}
-public function setBirthdate(\DateTime|null $birthdate): self
-{
-    $this->birthdate = $birthdate;
+    if ($this->pkgShopWishlistCollection->removeElement($pkgShopWishlist)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgShopWishlist->getDataExtranetUser() === $this) {
+            $pkgShopWishlist->setDataExtranetUser(null);
+        }
+    }
 
     return $this;
 }
-
-
-  
-    // TCMSFieldLookup
-public function getPkgShopCurrency(): \ChameleonSystem\CoreBundle\Entity\PkgShopCurrency|null
-{
-    return $this->pkgShopCurrency;
-}
-public function setPkgShopCurrency(\ChameleonSystem\CoreBundle\Entity\PkgShopCurrency|null $pkgShopCurrency): self
-{
-    $this->pkgShopCurrency = $pkgShopCurrency;
-    $this->pkgShopCurrencyId = $pkgShopCurrency?->getId();
-
-    return $this;
-}
-public function getPkgShopCurrencyId(): ?string
-{
-    return $this->pkgShopCurrencyId;
-}
-public function setPkgShopCurrencyId(?string $pkgShopCurrencyId): self
-{
-    $this->pkgShopCurrencyId = $pkgShopCurrencyId;
-    // todo - load new id
-    //$this->pkgShopCurrencyId = $?->getId();
-
-    return $this;
-}
-
 
 
   

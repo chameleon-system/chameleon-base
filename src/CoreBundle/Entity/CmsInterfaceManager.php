@@ -1,9 +1,13 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsInterfaceManagerParameter;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class CmsInterfaceManager {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -15,26 +19,15 @@ private string $systemname = '',
     // TCMSFieldVarchar
 /** @var string - Used class */
 private string $class = '', 
-    // TCMSFieldOption
-/** @var string - Class type */
-private string $classType = 'Core', 
     // TCMSFieldVarchar
 /** @var string - Class subtype */
 private string $classSubtype = '', 
-    // TCMSFieldText
-/** @var string - Description */
-private string $description = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsInterfaceManagerParameter[] - Parameter */
-private \Doctrine\Common\Collections\Collection $cmsInterfaceManagerParameterCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldBoolean
-/** @var bool - Restrict to user groups */
-private bool $restrictToUserGroups = false, 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsUsergroup[] - Available for the following groups */
-private \Doctrine\Common\Collections\Collection $cmsUsergroupMlt = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, cmsInterfaceManagerParameter> - Parameter */
+private Collection $cmsInterfaceManagerParameterCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -95,20 +88,6 @@ public function setClass(string $class): self
 
 
   
-    // TCMSFieldOption
-public function getClassType(): string
-{
-    return $this->classType;
-}
-public function setClassType(string $classType): self
-{
-    $this->classType = $classType;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getClassSubtype(): string
 {
@@ -123,56 +102,33 @@ public function setClassSubtype(string $classSubtype): self
 
 
   
-    // TCMSFieldText
-public function getDescription(): string
-{
-    return $this->description;
-}
-public function setDescription(string $description): self
-{
-    $this->description = $description;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldPropertyTable
-public function getCmsInterfaceManagerParameterCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsInterfaceManagerParameter>
+*/
+public function getCmsInterfaceManagerParameterCollection(): Collection
 {
     return $this->cmsInterfaceManagerParameterCollection;
 }
-public function setCmsInterfaceManagerParameterCollection(\Doctrine\Common\Collections\Collection $cmsInterfaceManagerParameterCollection): self
+
+public function addCmsInterfaceManagerParameterCollection(cmsInterfaceManagerParameter $cmsInterfaceManagerParameter): self
 {
-    $this->cmsInterfaceManagerParameterCollection = $cmsInterfaceManagerParameterCollection;
+    if (!$this->cmsInterfaceManagerParameterCollection->contains($cmsInterfaceManagerParameter)) {
+        $this->cmsInterfaceManagerParameterCollection->add($cmsInterfaceManagerParameter);
+        $cmsInterfaceManagerParameter->setCmsInterfaceManager($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldBoolean
-public function isRestrictToUserGroups(): bool
+public function removeCmsInterfaceManagerParameterCollection(cmsInterfaceManagerParameter $cmsInterfaceManagerParameter): self
 {
-    return $this->restrictToUserGroups;
-}
-public function setRestrictToUserGroups(bool $restrictToUserGroups): self
-{
-    $this->restrictToUserGroups = $restrictToUserGroups;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getCmsUsergroupMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsUsergroupMlt;
-}
-public function setCmsUsergroupMlt(\Doctrine\Common\Collections\Collection $cmsUsergroupMlt): self
-{
-    $this->cmsUsergroupMlt = $cmsUsergroupMlt;
+    if ($this->cmsInterfaceManagerParameterCollection->removeElement($cmsInterfaceManagerParameter)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsInterfaceManagerParameter->getCmsInterfaceManager() === $this) {
+            $cmsInterfaceManagerParameter->setCmsInterfaceManager(null);
+        }
+    }
 
     return $this;
 }

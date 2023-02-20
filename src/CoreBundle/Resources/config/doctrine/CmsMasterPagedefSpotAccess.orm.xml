@@ -7,18 +7,14 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="cmsMasterPagedefSpotId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot" inversed-by="cmsMasterPagedefSpotAccess">
+            <many-to-one field="cmsMasterPagedefSpot" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot" inversed-by="cmsMasterPagedefSpotAccessCollection" >
     <join-column name="cms_master_pagedef_spot_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="model"  column="model"  nullable="false"  />
-            <field name="views"  column="views"  nullable="false"  />
+            <field name="model" type="string" column="model" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

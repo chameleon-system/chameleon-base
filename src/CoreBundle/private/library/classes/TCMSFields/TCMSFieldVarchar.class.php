@@ -9,12 +9,15 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
+
 /**
  * varchar text field (max 255 chars).
  *
  * {@inheritdoc}
  */
-class TCMSFieldVarchar extends TCMSField
+class TCMSFieldVarchar extends TCMSField implements DoctrineTransformableInterface
 {
     /**
      * @var string
@@ -30,6 +33,46 @@ class TCMSFieldVarchar extends TCMSField
      * view path for frontend.
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldVarchar';
+
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $parameters = [
+            'source' => __CLASS__,
+            'type' => 'string',
+            'docCommentType' => 'string',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToCamelCase($this->name, false),
+            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            [],
+            true
+        );
+    }
+
+    public function getDoctrineDataModelXml(string $namespace): string
+    {
+        return $this->getDoctrineRenderer('mapping/string.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'type' => 'string',
+            'column' => $this->name,
+            'length' => '' === $this->oDefinition->sqlData['length_set'] ? 255 : $this->oDefinition->sqlData['length_set'],
+        ])->render();
+    }
+
+    public function getDoctrineDataModelImports(string $namespace): array
+    {
+        return [];
+    }
+
 
     /**
      * {@inheritdoc}

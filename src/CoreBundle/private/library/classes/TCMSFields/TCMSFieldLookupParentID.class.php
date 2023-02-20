@@ -9,11 +9,14 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * through the config parameter "bShowLinkToParentRecord=true" you can activate a link
@@ -21,8 +24,56 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * by setting bAllowEdit=true you can activate the right to select a different parent
  * note: all items will be made available.
 /**/
-class TCMSFieldLookupParentID extends TCMSFieldLookup
+class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransformableInterface
 {
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $propertyName = $this->name;
+        if (stringEndsWith($propertyName, '_id')) {
+            $propertyName = substr($propertyName, 0, -3);
+        }
+
+        $parameters = [
+            'source' => __CLASS__,
+            'type' => $this->snakeToCamelCase($this->GetConnectedTableName(), false),
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($propertyName),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/lookup.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/lookup.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            [
+                ltrim(sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)), '\\'),
+            ],
+            true
+        );
+    }
+
+
+    public function getDoctrineDataModelXml(string $namespace): string
+    {
+        $propertyName = $this->name;
+        if (stringEndsWith($propertyName, '_id')) {
+            $propertyName = substr($propertyName, 0, -3);
+        }
+
+        $hasOwner = null !== $this->getOwningFieldName();
+        $viewName = 'mapping/many-to-one-owned.xml.twig';
+        if (false === $hasOwner) {
+            $viewName = 'mapping/many-to-one.xml.twig';
+        }
+
+        return $this->getDoctrineRenderer($viewName, [
+            'fieldName' => $this->snakeToCamelCase($propertyName),
+            'targetClass' => sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
+            'column' => $this->name,
+            'owningCollectionProperty' => $this->snakeToCamelCase($this->getOwningFieldName().'_collection'),
+        ])->render();
+    }
+
     public function GetHTML()
     {
         $sHTML = '';
@@ -34,23 +85,6 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
         }
 
         return $sHTML;
-    }
-
-
-
-    public function getDoctrineDataModelXml(string $namespace): ?string
-    {
-        $mapperRenderer = $this->getDoctrineRenderer('mapping/parent.xml.twig');
-
-        $definition = $this->oDefinition->sqlData;
-        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
-        $mapperRenderer->setVar('definition', $definition);
-        $mapperRenderer->setVar('targetClass', ltrim($targetClass, '\\'));
-        $mapperRenderer->setVar('fieldName', $this->snakeToCamelCase($this->name));
-        $owningFieldName = $this->getOwningFieldName();
-        $owningPropertyName = null !== $owningFieldName ? $this->snakeToCamelCase($owningFieldName): null;
-        $mapperRenderer->setVar('owningPropertyName', $owningPropertyName);
-        return $mapperRenderer->render();
     }
 
     private function getOwningFieldName(): ?string

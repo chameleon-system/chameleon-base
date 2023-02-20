@@ -1,16 +1,16 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
+
 class CmsWizardStep {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null - Belongs to module instance */
-private \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance = null,
-/** @var null|string - Belongs to module instance */
-private ?string $cmsTplModuleInstanceId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsTplModuleInstance|null - Belongs to module instance */
+private ?CmsTplModuleInstance $cmsTplModuleInstance = null
 , 
     // TCMSFieldVarchar
 /** @var string - CMS display name */
@@ -18,41 +18,26 @@ private string $displayName = '',
     // TCMSFieldVarchar
 /** @var string - Title / headline */
 private string $name = '', 
-    // TCMSFieldWYSIWYG
-/** @var string - Description */
-private string $description = '', 
     // TCMSFieldVarchar
 /** @var string - Internal name */
 private string $systemname = '', 
-    // TCMSFieldPosition
-/** @var int - Position */
-private int $position = 0, 
     // TCMSFieldVarchar
 /** @var string - URL name */
 private string $urlName = '', 
     // TCMSFieldVarchar
 /** @var string - Class name */
 private string $class = '', 
-    // TCMSFieldOption
-/** @var string - Class type */
-private string $classType = 'Customer', 
     // TCMSFieldVarchar
 /** @var string - Class subtype */
 private string $classSubtype = '', 
     // TCMSFieldVarchar
 /** @var string - View to be used for the step */
 private string $renderViewName = '', 
-    // TCMSFieldOption
-/** @var string - View type */
-private string $renderViewType = 'Customer', 
     // TCMSFieldVarchar
 /** @var string - View subtype – where is the view relative to view folder */
-private string $renderViewSubtype = '', 
-    // TCMSFieldBoolean
-/** @var bool - Classes / views come from a package */
-private bool $isPackage = false  ) {}
+private string $renderViewSubtype = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -71,31 +56,18 @@ private bool $isPackage = false  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsTplModuleInstance(): \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null
+    // TCMSFieldLookupParentID
+public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;
 }
-public function setCmsTplModuleInstance(\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance): self
+
+public function setCmsTplModuleInstance(?CmsTplModuleInstance $cmsTplModuleInstance): self
 {
     $this->cmsTplModuleInstance = $cmsTplModuleInstance;
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstance?->getId();
 
     return $this;
 }
-public function getCmsTplModuleInstanceId(): ?string
-{
-    return $this->cmsTplModuleInstanceId;
-}
-public function setCmsTplModuleInstanceId(?string $cmsTplModuleInstanceId): self
-{
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstanceId;
-    // todo - load new id
-    //$this->cmsTplModuleInstanceId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -127,20 +99,6 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldWYSIWYG
-public function getDescription(): string
-{
-    return $this->description;
-}
-public function setDescription(string $description): self
-{
-    $this->description = $description;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getSystemname(): string
 {
@@ -149,20 +107,6 @@ public function getSystemname(): string
 public function setSystemname(string $systemname): self
 {
     $this->systemname = $systemname;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
 
     return $this;
 }
@@ -197,20 +141,6 @@ public function setClass(string $class): self
 
 
   
-    // TCMSFieldOption
-public function getClassType(): string
-{
-    return $this->classType;
-}
-public function setClassType(string $classType): self
-{
-    $this->classType = $classType;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getClassSubtype(): string
 {
@@ -239,20 +169,6 @@ public function setRenderViewName(string $renderViewName): self
 
 
   
-    // TCMSFieldOption
-public function getRenderViewType(): string
-{
-    return $this->renderViewType;
-}
-public function setRenderViewType(string $renderViewType): self
-{
-    $this->renderViewType = $renderViewType;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getRenderViewSubtype(): string
 {
@@ -261,20 +177,6 @@ public function getRenderViewSubtype(): string
 public function setRenderViewSubtype(string $renderViewSubtype): self
 {
     $this->renderViewSubtype = $renderViewSubtype;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isIsPackage(): bool
-{
-    return $this->isPackage;
-}
-public function setIsPackage(bool $isPackage): self
-{
-    $this->isPackage = $isPackage;
 
     return $this;
 }

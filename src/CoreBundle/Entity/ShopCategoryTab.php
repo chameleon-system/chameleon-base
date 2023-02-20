@@ -1,25 +1,22 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopCategory;
+
 class ShopCategoryTab {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopCategory|null - Belongs to category */
-private \ChameleonSystem\CoreBundle\Entity\ShopCategory|null $shopCategory = null,
-/** @var null|string - Belongs to category */
-private ?string $shopCategoryId = null
+        
+    // TCMSFieldLookupParentID
+/** @var ShopCategory|null - Belongs to category */
+private ?ShopCategory $shopCategory = null
 , 
     // TCMSFieldVarchar
 /** @var string - Name */
-private string $name = '', 
-    // TCMSFieldWYSIWYG
-/** @var string - Description */
-private string $description = ''  ) {}
+private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -38,31 +35,18 @@ private string $description = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShopCategory(): \ChameleonSystem\CoreBundle\Entity\ShopCategory|null
+    // TCMSFieldLookupParentID
+public function getShopCategory(): ?ShopCategory
 {
     return $this->shopCategory;
 }
-public function setShopCategory(\ChameleonSystem\CoreBundle\Entity\ShopCategory|null $shopCategory): self
+
+public function setShopCategory(?ShopCategory $shopCategory): self
 {
     $this->shopCategory = $shopCategory;
-    $this->shopCategoryId = $shopCategory?->getId();
 
     return $this;
 }
-public function getShopCategoryId(): ?string
-{
-    return $this->shopCategoryId;
-}
-public function setShopCategoryId(?string $shopCategoryId): self
-{
-    $this->shopCategoryId = $shopCategoryId;
-    // todo - load new id
-    //$this->shopCategoryId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -74,20 +58,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldWYSIWYG
-public function getDescription(): string
-{
-    return $this->description;
-}
-public function setDescription(string $description): self
-{
-    $this->description = $description;
 
     return $this;
 }

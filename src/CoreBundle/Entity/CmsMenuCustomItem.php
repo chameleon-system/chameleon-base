@@ -1,9 +1,10 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsMenuCustomItem {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -11,12 +12,9 @@ class CmsMenuCustomItem {
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - Target URL */
-private string $url = '', 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsRight[] - Required rights */
-private \Doctrine\Common\Collections\Collection $cmsRightMlt = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+private string $url = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -57,20 +55,6 @@ public function getUrl(): string
 public function setUrl(string $url): self
 {
     $this->url = $url;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getCmsRightMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsRightMlt;
-}
-public function setCmsRightMlt(\Doctrine\Common\Collections\Collection $cmsRightMlt): self
-{
-    $this->cmsRightMlt = $cmsRightMlt;
 
     return $this;
 }

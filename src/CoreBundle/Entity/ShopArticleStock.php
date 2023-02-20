@@ -1,22 +1,22 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopArticle;
+
 class ShopArticleStock {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticle|null - Belongs to */
-private \ChameleonSystem\CoreBundle\Entity\ShopArticle|null $shopArticle = null,
-/** @var null|string - Belongs to */
-private ?string $shopArticleId = null
+        
+    // TCMSFieldLookupParentID
+/** @var ShopArticle|null - Belongs to */
+private ?ShopArticle $shopArticle = null
 , 
-    // TCMSFieldNumber
-/** @var int - Amount */
-private int $amount = 0  ) {}
+    // TCMSFieldVarchar
+/** @var string - Amount */
+private string $amount = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -35,40 +35,27 @@ private int $amount = 0  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShopArticle(): \ChameleonSystem\CoreBundle\Entity\ShopArticle|null
+    // TCMSFieldLookupParentID
+public function getShopArticle(): ?ShopArticle
 {
     return $this->shopArticle;
 }
-public function setShopArticle(\ChameleonSystem\CoreBundle\Entity\ShopArticle|null $shopArticle): self
+
+public function setShopArticle(?ShopArticle $shopArticle): self
 {
     $this->shopArticle = $shopArticle;
-    $this->shopArticleId = $shopArticle?->getId();
 
     return $this;
 }
-public function getShopArticleId(): ?string
-{
-    return $this->shopArticleId;
-}
-public function setShopArticleId(?string $shopArticleId): self
-{
-    $this->shopArticleId = $shopArticleId;
-    // todo - load new id
-    //$this->shopArticleId = $?->getId();
-
-    return $this;
-}
-
 
 
   
-    // TCMSFieldNumber
-public function getAmount(): int
+    // TCMSFieldVarchar
+public function getAmount(): string
 {
     return $this->amount;
 }
-public function setAmount(int $amount): self
+public function setAmount(string $amount): self
 {
     $this->amount = $amount;
 

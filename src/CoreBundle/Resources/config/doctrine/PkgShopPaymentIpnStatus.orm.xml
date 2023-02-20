@@ -7,19 +7,15 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopPaymentHandlerGroupId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup" inversed-by="pkgShopPaymentIpnStatus">
+            <many-to-one field="shopPaymentHandlerGroup" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup" inversed-by="pkgShopPaymentIpnStatusCollection" >
     <join-column name="shop_payment_handler_group_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="code"  column="code"  nullable="false"  />
-            <field name="description"  column="description"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="code" type="string" column="code" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

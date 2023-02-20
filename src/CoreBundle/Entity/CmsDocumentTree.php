@@ -1,31 +1,23 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsDocumentTree {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsDocumentTree|null - Parent ID */
-private \ChameleonSystem\CoreBundle\Entity\CmsDocumentTree|null $parent = null,
-/** @var null|string - Parent ID */
-private ?string $parentId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Category name */
 private string $name = '', 
-    // TCMSFieldNumber
-/** @var int - Depth */
-private int $depth = 0, 
-    // TCMSFieldBoolean
-/** @var bool - Hidden? */
-private bool $hidden = false, 
-    // TCMSFieldNumber
-/** @var int - Sort sequence */
-private int $entrySort = 0  ) {}
+    // TCMSFieldVarchar
+/** @var string - Depth */
+private string $depth = '', 
+    // TCMSFieldVarchar
+/** @var string - Sort sequence */
+private string $entrySort = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -58,40 +50,12 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldLookup
-public function getParent(): \ChameleonSystem\CoreBundle\Entity\CmsDocumentTree|null
-{
-    return $this->parent;
-}
-public function setParent(\ChameleonSystem\CoreBundle\Entity\CmsDocumentTree|null $parent): self
-{
-    $this->parent = $parent;
-    $this->parentId = $parent?->getId();
-
-    return $this;
-}
-public function getParentId(): ?string
-{
-    return $this->parentId;
-}
-public function setParentId(?string $parentId): self
-{
-    $this->parentId = $parentId;
-    // todo - load new id
-    //$this->parentId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldNumber
-public function getDepth(): int
+    // TCMSFieldVarchar
+public function getDepth(): string
 {
     return $this->depth;
 }
-public function setDepth(int $depth): self
+public function setDepth(string $depth): self
 {
     $this->depth = $depth;
 
@@ -100,26 +64,12 @@ public function setDepth(int $depth): self
 
 
   
-    // TCMSFieldBoolean
-public function isHidden(): bool
-{
-    return $this->hidden;
-}
-public function setHidden(bool $hidden): self
-{
-    $this->hidden = $hidden;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldNumber
-public function getEntrySort(): int
+    // TCMSFieldVarchar
+public function getEntrySort(): string
 {
     return $this->entrySort;
 }
-public function setEntrySort(int $entrySort): self
+public function setEntrySort(string $entrySort): self
 {
     $this->entrySort = $entrySort;
 

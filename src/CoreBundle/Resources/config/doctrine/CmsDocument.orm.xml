@@ -7,41 +7,17 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="cmsFiletypeId"  column="cms_filetype_id"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="filename"  column="filename"  nullable="false"  />
-            <field name="description"  column="description"  nullable="false"  />
-            <field name="private"  column="private"  nullable="false"  />
-            <field name="tokenProtected"  column="token_protected"  nullable="false"  />
-            <field name="timeStamp"  column="time_stamp"  nullable="false"  />
-            <field name="cmsUserId" type="string" field="cms_user_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsUser" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUser">
-    <join-column name="cms_user_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="hiddenImageWidth"  column="hidden_image_width"  nullable="false"  />
-            <field name="hiddenImageHeight"  column="hidden_image_height"  nullable="false"  />
-            <field name="counter"  column="counter"  nullable="false"  />
-            <field name="cmsDocumentTreeId" type="string" field="cms_document_tree_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsDocumentTree" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsDocumentTree">
-    <join-column name="cms_document_tree_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="filesize"  column="filesize"  nullable="false"  />
-            <field name="seoName"  column="seo_name"  nullable="false"  />
+            <field name="name" type="string" column="name" length="60" nullable="false"  />
+            <field name="filename" type="string" column="filename" length="255" nullable="false"  />
+            <field name="hiddenImageWidth" type="string" column="hidden_image_width" length="6" nullable="false"  />
+            <field name="hiddenImageHeight" type="string" column="hidden_image_height" length="6" nullable="false"  />
+            <field name="counter" type="string" column="counter" length="11" nullable="false"  />
+            <field name="filesize" type="string" column="filesize" length="16" nullable="false"  />
+            <field name="seoName" type="string" column="seo_name" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

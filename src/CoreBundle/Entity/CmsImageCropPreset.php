@@ -1,28 +1,26 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsImageCropPreset {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldNumber
-/** @var int - Width */
-private int $width = 0, 
-    // TCMSFieldNumber
-/** @var int - Height */
-private int $height = 0, 
-    // TCMSFieldVarcharUnique
+    // TCMSFieldVarchar
+/** @var string - Width */
+private string $width = '0', 
+    // TCMSFieldVarchar
+/** @var string - Height */
+private string $height = '0', 
+    // TCMSFieldVarchar
 /** @var string - System name */
-private string $systemName = '', 
-    // TCMSFieldPosition
-/** @var int - Sort */
-private int $position = 0  ) {}
+private string $systemName = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -55,12 +53,12 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldNumber
-public function getWidth(): int
+    // TCMSFieldVarchar
+public function getWidth(): string
 {
     return $this->width;
 }
-public function setWidth(int $width): self
+public function setWidth(string $width): self
 {
     $this->width = $width;
 
@@ -69,12 +67,12 @@ public function setWidth(int $width): self
 
 
   
-    // TCMSFieldNumber
-public function getHeight(): int
+    // TCMSFieldVarchar
+public function getHeight(): string
 {
     return $this->height;
 }
-public function setHeight(int $height): self
+public function setHeight(string $height): self
 {
     $this->height = $height;
 
@@ -83,7 +81,7 @@ public function setHeight(int $height): self
 
 
   
-    // TCMSFieldVarcharUnique
+    // TCMSFieldVarchar
 public function getSystemName(): string
 {
     return $this->systemName;
@@ -91,20 +89,6 @@ public function getSystemName(): string
 public function setSystemName(string $systemName): self
 {
     $this->systemName = $systemName;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
 
     return $this;
 }

@@ -1,19 +1,17 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class ShopSearchCloudWord {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Word */
-private string $name = '', 
-    // TCMSFieldDecimal
-/** @var float - Percentage weight relative to real search terms */
-private float $weight = 0  ) {}
+private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -40,20 +38,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDecimal
-public function getWeight(): float
-{
-    return $this->weight;
-}
-public function setWeight(float $weight): self
-{
-    $this->weight = $weight;
 
     return $this;
 }

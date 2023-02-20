@@ -7,42 +7,12 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="cmsTplModuleInstanceId" type="string" field="cms_tpl_module_instance_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
-    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="subheadline"  column="subheadline"  nullable="false"  />
-            <field name="iconId" type="string" field="icon_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="icon" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
-    <join-column name="icon_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="content"  column="content"  nullable="false"  />
-            <many-to-many field="dataPool" target-entity="ChameleonSystem\CoreBundle\Entity\CmsDocument">
-    <join-table name="module_text_data_pool_cms_document_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="subheadline" type="string" column="subheadline" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

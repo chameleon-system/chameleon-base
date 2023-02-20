@@ -7,45 +7,25 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="dataExtranetUserId" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUser" inversed-by="dataExtranetUserAddress">
+            <many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser" inversed-by="dataExtranetUserAddressCollection" >
     <join-column name="data_extranet_user_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="isDhlPackstation"  column="is_dhl_packstation"  nullable="false"  />
-            <field name="company"  column="company"  nullable="false"  />
-            <field name="vatId"  column="vat_id"  nullable="false"  />
-            <field name="addressAdditionalInfo"  column="address_additional_info"  nullable="false"  />
-            <field name="dataExtranetSalutationId" type="string" field="data_extranet_salutation_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="dataExtranetSalutation" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation">
-    <join-column name="data_extranet_salutation_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="firstname"  column="firstname"  nullable="false"  />
-            <field name="lastname"  column="lastname"  nullable="false"  />
-            <field name="street"  column="street"  nullable="false"  />
-            <field name="streetnr"  column="streetnr"  nullable="false"  />
-            <field name="city"  column="city"  nullable="false"  />
-            <field name="postalcode"  column="postalcode"  nullable="false"  />
-            <field name="dataCountryId" type="string" field="data_country_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="dataCountry" target-entity="\ChameleonSystem\CoreBundle\Entity\DataCountry">
-    <join-column name="data_country_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="telefon"  column="telefon"  nullable="false"  />
-            <field name="fax"  column="fax"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="company" type="string" column="company" length="255" nullable="false"  />
+            <field name="vatId" type="string" column="vat_id" length="255" nullable="false"  />
+            <field name="addressAdditionalInfo" type="string" column="address_additional_info" length="255" nullable="false"  />
+            <field name="firstname" type="string" column="firstname" length="255" nullable="false"  />
+            <field name="lastname" type="string" column="lastname" length="255" nullable="false"  />
+            <field name="street" type="string" column="street" length="255" nullable="false"  />
+            <field name="streetnr" type="string" column="streetnr" length="255" nullable="false"  />
+            <field name="city" type="string" column="city" length="255" nullable="false"  />
+            <field name="postalcode" type="string" column="postalcode" length="255" nullable="false"  />
+            <field name="telefon" type="string" column="telefon" length="255" nullable="false"  />
+            <field name="fax" type="string" column="fax" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

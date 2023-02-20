@@ -1,25 +1,25 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTblConf;
+
 class CmsTblConfRestrictions {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null - Table */
-private \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null $cmsTblConf = null,
-/** @var null|string - Table */
-private ?string $cmsTblConfId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Field name */
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - Callback function */
-private string $function = ''  ) {}
+private string $function = '', 
+    // TCMSFieldLookupParentID
+/** @var CmsTblConf|null - Table */
+private ?CmsTblConf $cmsTblConf = null
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -66,31 +66,18 @@ public function setFunction(string $function): self
 
 
   
-    // TCMSFieldLookup
-public function getCmsTblConf(): \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null
+    // TCMSFieldLookupParentID
+public function getCmsTblConf(): ?CmsTblConf
 {
     return $this->cmsTblConf;
 }
-public function setCmsTblConf(\ChameleonSystem\CoreBundle\Entity\CmsTblConf|null $cmsTblConf): self
+
+public function setCmsTblConf(?CmsTblConf $cmsTblConf): self
 {
     $this->cmsTblConf = $cmsTblConf;
-    $this->cmsTblConfId = $cmsTblConf?->getId();
 
     return $this;
 }
-public function getCmsTblConfId(): ?string
-{
-    return $this->cmsTblConfId;
-}
-public function setCmsTblConfId(?string $cmsTblConfId): self
-{
-    $this->cmsTblConfId = $cmsTblConfId;
-    // todo - load new id
-    //$this->cmsTblConfId = $?->getId();
-
-    return $this;
-}
-
 
 
   

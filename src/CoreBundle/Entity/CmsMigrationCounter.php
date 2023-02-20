@@ -1,19 +1,24 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMigrationFile;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class CmsMigrationCounter {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMigrationFile[] - Update data */
-private \Doctrine\Common\Collections\Collection $cmsMigrationFileCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, cmsMigrationFile> - Update data */
+private Collection $cmsMigrationFileCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -47,13 +52,32 @@ public function setName(string $name): self
 
   
     // TCMSFieldPropertyTable
-public function getCmsMigrationFileCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsMigrationFile>
+*/
+public function getCmsMigrationFileCollection(): Collection
 {
     return $this->cmsMigrationFileCollection;
 }
-public function setCmsMigrationFileCollection(\Doctrine\Common\Collections\Collection $cmsMigrationFileCollection): self
+
+public function addCmsMigrationFileCollection(cmsMigrationFile $cmsMigrationFile): self
 {
-    $this->cmsMigrationFileCollection = $cmsMigrationFileCollection;
+    if (!$this->cmsMigrationFileCollection->contains($cmsMigrationFile)) {
+        $this->cmsMigrationFileCollection->add($cmsMigrationFile);
+        $cmsMigrationFile->setCmsMigrationCounter($this);
+    }
+
+    return $this;
+}
+
+public function removeCmsMigrationFileCollection(cmsMigrationFile $cmsMigrationFile): self
+{
+    if ($this->cmsMigrationFileCollection->removeElement($cmsMigrationFile)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsMigrationFile->getCmsMigrationCounter() === $this) {
+            $cmsMigrationFile->setCmsMigrationCounter(null);
+        }
+    }
 
     return $this;
 }

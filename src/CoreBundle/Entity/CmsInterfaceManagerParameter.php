@@ -1,20 +1,17 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsInterfaceManager;
+
 class CmsInterfaceManagerParameter {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsInterfaceManager|null - Belongs to interface */
-private \ChameleonSystem\CoreBundle\Entity\CmsInterfaceManager|null $cmsInterfaceManager = null,
-/** @var null|string - Belongs to interface */
-private ?string $cmsInterfaceManagerId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsInterfaceManager|null - Belongs to interface */
+private ?CmsInterfaceManager $cmsInterfaceManager = null
 , 
-    // TCMSFieldText
-/** @var string - Description */
-private string $description = '', 
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
@@ -22,7 +19,7 @@ private string $name = '',
 /** @var string - Value */
 private string $value = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -41,42 +38,15 @@ private string $value = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsInterfaceManager(): \ChameleonSystem\CoreBundle\Entity\CmsInterfaceManager|null
+    // TCMSFieldLookupParentID
+public function getCmsInterfaceManager(): ?CmsInterfaceManager
 {
     return $this->cmsInterfaceManager;
 }
-public function setCmsInterfaceManager(\ChameleonSystem\CoreBundle\Entity\CmsInterfaceManager|null $cmsInterfaceManager): self
+
+public function setCmsInterfaceManager(?CmsInterfaceManager $cmsInterfaceManager): self
 {
     $this->cmsInterfaceManager = $cmsInterfaceManager;
-    $this->cmsInterfaceManagerId = $cmsInterfaceManager?->getId();
-
-    return $this;
-}
-public function getCmsInterfaceManagerId(): ?string
-{
-    return $this->cmsInterfaceManagerId;
-}
-public function setCmsInterfaceManagerId(?string $cmsInterfaceManagerId): self
-{
-    $this->cmsInterfaceManagerId = $cmsInterfaceManagerId;
-    // todo - load new id
-    //$this->cmsInterfaceManagerId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldText
-public function getDescription(): string
-{
-    return $this->description;
-}
-public function setDescription(string $description): self
-{
-    $this->description = $description;
 
     return $this;
 }

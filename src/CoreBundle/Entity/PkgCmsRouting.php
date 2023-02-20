@@ -1,37 +1,26 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class PkgCmsRouting {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldVarcharUnique
+    // TCMSFieldVarchar
 /** @var string - System name */
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - Brief description */
 private string $shortDescription = '', 
-    // TCMSFieldOption
-/** @var string - Type of resource */
-private string $type = 'yaml', 
     // TCMSFieldVarchar
 /** @var string - Resource */
 private string $resource = '', 
-    // TCMSFieldPosition
-/** @var int - Position */
-private int $position = 0, 
     // TCMSFieldVarchar
 /** @var string - System page */
-private string $systemPageName = '', 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortal[] - Restrict to the following portals */
-private \Doctrine\Common\Collections\Collection $cmsPortalMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldBoolean
-/** @var bool - Active */
-private bool $active = true  ) {}
+private string $systemPageName = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -50,7 +39,7 @@ private bool $active = true  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldVarcharUnique
+    // TCMSFieldVarchar
 public function getName(): string
 {
     return $this->name;
@@ -78,20 +67,6 @@ public function setShortDescription(string $shortDescription): self
 
 
   
-    // TCMSFieldOption
-public function getType(): string
-{
-    return $this->type;
-}
-public function setType(string $type): self
-{
-    $this->type = $type;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getResource(): string
 {
@@ -106,20 +81,6 @@ public function setResource(string $resource): self
 
 
   
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getSystemPageName(): string
 {
@@ -128,34 +89,6 @@ public function getSystemPageName(): string
 public function setSystemPageName(string $systemPageName): self
 {
     $this->systemPageName = $systemPageName;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getCmsPortalMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsPortalMlt;
-}
-public function setCmsPortalMlt(\Doctrine\Common\Collections\Collection $cmsPortalMlt): self
-{
-    $this->cmsPortalMlt = $cmsPortalMlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isActive(): bool
-{
-    return $this->active;
-}
-public function setActive(bool $active): self
-{
-    $this->active = $active;
 
     return $this;
 }

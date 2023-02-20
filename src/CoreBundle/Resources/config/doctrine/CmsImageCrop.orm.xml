@@ -7,34 +7,15 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="cmsMediaId" type="string" field="cms_media_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsMedia" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
-    <join-column name="cms_media_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="cmsImageCropPresetId" type="string" field="cms_image_crop_preset_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsImageCropPreset" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsImageCropPreset">
-    <join-column name="cms_image_crop_preset_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="posX"  column="pos_x"  nullable="false"  />
-            <field name="posY"  column="pos_y"  nullable="false"  />
-            <field name="width"  column="width"  nullable="false"  />
-            <field name="height"  column="height"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
+            <field name="posX" type="string" column="pos_x" length="255" nullable="false"  />
+            <field name="posY" type="string" column="pos_y" length="255" nullable="false"  />
+            <field name="width" type="string" column="width" length="255" nullable="false"  />
+            <field name="height" type="string" column="height" length="255" nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

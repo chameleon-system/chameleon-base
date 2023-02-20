@@ -18,22 +18,6 @@ abstract class TCMSMLTField extends TCMSField
         $this->isMLTField = true;
     }
 
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        $type = sprintf('%s\%s[]', $namespace, $this->snakeToCamelCase($this->GetForeignTableName(), false));
-        $data = $this->getDoctrineDataModelViewData(
-            [
-                'type' => '\Doctrine\Common\Collections\Collection',
-                'docCommentType' => $type,
-                'defaultValue' => 'new \Doctrine\Common\Collections\ArrayCollection()',
-            ]
-        );
-
-        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
-        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
-
-        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
-    }
 
     public function getMltValues()
     {

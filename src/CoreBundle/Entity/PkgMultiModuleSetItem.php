@@ -1,37 +1,25 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSet;
+
 class PkgMultiModuleSetItem {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSet|null - Belongs to set */
-private \ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSet|null $pkgMultiModuleSet = null,
-/** @var null|string - Belongs to set */
-private ?string $pkgMultiModuleSetId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null - Module instance */
-private \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance = null,
-/** @var null|string - Module instance */
-private ?string $cmsTplModuleInstanceId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Module name */
 private string $name = '', 
-    // TCMSFieldPosition
-/** @var int - Sorting */
-private int $sortOrder = 0, 
+    // TCMSFieldLookupParentID
+/** @var PkgMultiModuleSet|null - Belongs to set */
+private ?PkgMultiModuleSet $pkgMultiModuleSet = null
+, 
     // TCMSFieldVarchar
 /** @var string - System name */
-private string $systemName = '', 
-    // TCMSFieldTreeNode
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTree - Alternative link for tabs */
-private \ChameleonSystem\CoreBundle\Entity\CmsTree|null $alternativeTabUrlForAjax = null  ) {}
+private string $systemName = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -64,70 +52,15 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldLookup
-public function getPkgMultiModuleSet(): \ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSet|null
+    // TCMSFieldLookupParentID
+public function getPkgMultiModuleSet(): ?PkgMultiModuleSet
 {
     return $this->pkgMultiModuleSet;
 }
-public function setPkgMultiModuleSet(\ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSet|null $pkgMultiModuleSet): self
+
+public function setPkgMultiModuleSet(?PkgMultiModuleSet $pkgMultiModuleSet): self
 {
     $this->pkgMultiModuleSet = $pkgMultiModuleSet;
-    $this->pkgMultiModuleSetId = $pkgMultiModuleSet?->getId();
-
-    return $this;
-}
-public function getPkgMultiModuleSetId(): ?string
-{
-    return $this->pkgMultiModuleSetId;
-}
-public function setPkgMultiModuleSetId(?string $pkgMultiModuleSetId): self
-{
-    $this->pkgMultiModuleSetId = $pkgMultiModuleSetId;
-    // todo - load new id
-    //$this->pkgMultiModuleSetId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookup
-public function getCmsTplModuleInstance(): \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null
-{
-    return $this->cmsTplModuleInstance;
-}
-public function setCmsTplModuleInstance(\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance): self
-{
-    $this->cmsTplModuleInstance = $cmsTplModuleInstance;
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstance?->getId();
-
-    return $this;
-}
-public function getCmsTplModuleInstanceId(): ?string
-{
-    return $this->cmsTplModuleInstanceId;
-}
-public function setCmsTplModuleInstanceId(?string $cmsTplModuleInstanceId): self
-{
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstanceId;
-    // todo - load new id
-    //$this->cmsTplModuleInstanceId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldPosition
-public function getSortOrder(): int
-{
-    return $this->sortOrder;
-}
-public function setSortOrder(int $sortOrder): self
-{
-    $this->sortOrder = $sortOrder;
 
     return $this;
 }
@@ -142,20 +75,6 @@ public function getSystemName(): string
 public function setSystemName(string $systemName): self
 {
     $this->systemName = $systemName;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldTreeNode
-public function getAlternativeTabUrlForAjax(): \ChameleonSystem\CoreBundle\Entity\CmsTree|null
-{
-    return $this->alternativeTabUrlForAjax;
-}
-public function setAlternativeTabUrlForAjax(\ChameleonSystem\CoreBundle\Entity\CmsTree|null $alternativeTabUrlForAjax): self
-{
-    $this->alternativeTabUrlForAjax = $alternativeTabUrlForAjax;
 
     return $this;
 }

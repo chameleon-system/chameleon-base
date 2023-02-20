@@ -1,43 +1,34 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\PkgImageHotspot;
+use ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItemSpot;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItemMarker;
+
 class PkgImageHotspotItem {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgImageHotspot|null - Belongs to image hotspot */
-private \ChameleonSystem\CoreBundle\Entity\PkgImageHotspot|null $pkgImageHotspot = null,
-/** @var null|string - Belongs to image hotspot */
-private ?string $pkgImageHotspotId = null
+        
+    // TCMSFieldLookupParentID
+/** @var PkgImageHotspot|null - Belongs to image hotspot */
+private ?PkgImageHotspot $pkgImageHotspot = null
 , 
     // TCMSFieldVarchar
 /** @var string - Alternative text for image */
 private string $name = '', 
-    // TCMSFieldBoolean
-/** @var bool - Active */
-private bool $active = false, 
-    // TCMSFieldPosition
-/** @var int - Position */
-private int $position = 0, 
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMedia|null - Image */
-private \ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMedia = null,
-/** @var null|string - Image */
-private ?string $cmsMediaId = null
-,
-// ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field\TCMSFieldMediaWithImageCrop
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMedia|null - Image - cropped image */
-private \ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMediaIdCropped = null, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItemSpot[] - Hotspots and linked areas */
-private \Doctrine\Common\Collections\Collection $pkgImageHotspotItemSpotCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, pkgImageHotspotItemSpot> - Hotspots and linked areas */
+private Collection $pkgImageHotspotItemSpotCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItemMarker[] - Hotspots with image */
-private \Doctrine\Common\Collections\Collection $pkgImageHotspotItemMarkerCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, pkgImageHotspotItemMarker> - Hotspots with image */
+private Collection $pkgImageHotspotItemMarkerCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -56,31 +47,18 @@ private \Doctrine\Common\Collections\Collection $pkgImageHotspotItemMarkerCollec
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getPkgImageHotspot(): \ChameleonSystem\CoreBundle\Entity\PkgImageHotspot|null
+    // TCMSFieldLookupParentID
+public function getPkgImageHotspot(): ?PkgImageHotspot
 {
     return $this->pkgImageHotspot;
 }
-public function setPkgImageHotspot(\ChameleonSystem\CoreBundle\Entity\PkgImageHotspot|null $pkgImageHotspot): self
+
+public function setPkgImageHotspot(?PkgImageHotspot $pkgImageHotspot): self
 {
     $this->pkgImageHotspot = $pkgImageHotspot;
-    $this->pkgImageHotspotId = $pkgImageHotspot?->getId();
 
     return $this;
 }
-public function getPkgImageHotspotId(): ?string
-{
-    return $this->pkgImageHotspotId;
-}
-public function setPkgImageHotspotId(?string $pkgImageHotspotId): self
-{
-    $this->pkgImageHotspotId = $pkgImageHotspotId;
-    // todo - load new id
-    //$this->pkgImageHotspotId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -98,82 +76,33 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldBoolean
-public function isActive(): bool
-{
-    return $this->active;
-}
-public function setActive(bool $active): self
-{
-    $this->active = $active;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsMedia(): \ChameleonSystem\CoreBundle\Entity\CmsMedia|null
-{
-    return $this->cmsMedia;
-}
-public function setCmsMedia(\ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMedia): self
-{
-    $this->cmsMedia = $cmsMedia;
-    $this->cmsMediaId = $cmsMedia?->getId();
-
-    return $this;
-}
-public function getCmsMediaId(): ?string
-{
-    return $this->cmsMediaId;
-}
-public function setCmsMediaId(?string $cmsMediaId): self
-{
-    $this->cmsMediaId = $cmsMediaId;
-    // todo - load new id
-    //$this->cmsMediaId = $?->getId();
-
-    return $this;
-}
-
-
-// ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field\TCMSFieldMediaWithImageCrop
-public function getCmsMediaIdCropped(): \ChameleonSystem\CoreBundle\Entity\CmsMedia|null
-{
-    return $this->cmsMediaIdCropped;
-}
-public function setCmsMediaIdCropped(\ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMediaIdCropped): self
-{
-    $this->cmsMediaIdCropped = $cmsMediaIdCropped;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldPropertyTable
-public function getPkgImageHotspotItemSpotCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgImageHotspotItemSpot>
+*/
+public function getPkgImageHotspotItemSpotCollection(): Collection
 {
     return $this->pkgImageHotspotItemSpotCollection;
 }
-public function setPkgImageHotspotItemSpotCollection(\Doctrine\Common\Collections\Collection $pkgImageHotspotItemSpotCollection): self
+
+public function addPkgImageHotspotItemSpotCollection(pkgImageHotspotItemSpot $pkgImageHotspotItemSpot): self
 {
-    $this->pkgImageHotspotItemSpotCollection = $pkgImageHotspotItemSpotCollection;
+    if (!$this->pkgImageHotspotItemSpotCollection->contains($pkgImageHotspotItemSpot)) {
+        $this->pkgImageHotspotItemSpotCollection->add($pkgImageHotspotItemSpot);
+        $pkgImageHotspotItemSpot->setPkgImageHotspotItem($this);
+    }
+
+    return $this;
+}
+
+public function removePkgImageHotspotItemSpotCollection(pkgImageHotspotItemSpot $pkgImageHotspotItemSpot): self
+{
+    if ($this->pkgImageHotspotItemSpotCollection->removeElement($pkgImageHotspotItemSpot)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgImageHotspotItemSpot->getPkgImageHotspotItem() === $this) {
+            $pkgImageHotspotItemSpot->setPkgImageHotspotItem(null);
+        }
+    }
 
     return $this;
 }
@@ -181,13 +110,32 @@ public function setPkgImageHotspotItemSpotCollection(\Doctrine\Common\Collection
 
   
     // TCMSFieldPropertyTable
-public function getPkgImageHotspotItemMarkerCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgImageHotspotItemMarker>
+*/
+public function getPkgImageHotspotItemMarkerCollection(): Collection
 {
     return $this->pkgImageHotspotItemMarkerCollection;
 }
-public function setPkgImageHotspotItemMarkerCollection(\Doctrine\Common\Collections\Collection $pkgImageHotspotItemMarkerCollection): self
+
+public function addPkgImageHotspotItemMarkerCollection(pkgImageHotspotItemMarker $pkgImageHotspotItemMarker): self
 {
-    $this->pkgImageHotspotItemMarkerCollection = $pkgImageHotspotItemMarkerCollection;
+    if (!$this->pkgImageHotspotItemMarkerCollection->contains($pkgImageHotspotItemMarker)) {
+        $this->pkgImageHotspotItemMarkerCollection->add($pkgImageHotspotItemMarker);
+        $pkgImageHotspotItemMarker->setPkgImageHotspotItem($this);
+    }
+
+    return $this;
+}
+
+public function removePkgImageHotspotItemMarkerCollection(pkgImageHotspotItemMarker $pkgImageHotspotItemMarker): self
+{
+    if ($this->pkgImageHotspotItemMarkerCollection->removeElement($pkgImageHotspotItemMarker)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgImageHotspotItemMarker->getPkgImageHotspotItem() === $this) {
+            $pkgImageHotspotItemMarker->setPkgImageHotspotItem(null);
+        }
+    }
 
     return $this;
 }

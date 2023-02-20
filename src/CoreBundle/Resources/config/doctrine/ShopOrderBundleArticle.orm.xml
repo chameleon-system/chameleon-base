@@ -7,26 +7,14 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopOrderItemId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrderItem" inversed-by="shopOrderBundleArticle">
+            <many-to-one field="shopOrderItem" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderItem" inversed-by="shopOrderBundleArticleCollection" >
     <join-column name="shop_order_item_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="bundleArticleId" type="string" field="bundle_article_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="bundleArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderItem">
-    <join-column name="bundle_article_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="amount"  column="amount"  nullable="false"  />
-            <field name="position"  column="position"  nullable="false"  />
+            <field name="amount" type="string" column="amount" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -7,23 +7,18 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="cmsTblConfId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTblConf" inversed-by="cmsTblExtension">
+            <many-to-one field="cmsTblConf" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConf" inversed-by="cmsTblExtensionCollection" >
     <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="nameList"  column="name_list"  nullable="false"  />
-            <field name="subtype"  column="subtype"  nullable="false"  />
-            <field name="type"  column="type"  nullable="false"  />
-            <field name="position"  column="position"  nullable="false"  />
-            <field name="virtualItemClassName"  column="virtual_item_class_name"  nullable="false"  />
-            <field name="virtualItemClassListName"  column="virtual_item_class_list_name"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="nameList" type="string" column="name_list" length="255" nullable="false"  />
+            <field name="subtype" type="string" column="subtype" length="255" nullable="false"  />
+            <field name="virtualItemClassName" type="string" column="virtual_item_class_name" length="255" nullable="false"  />
+            <field name="virtualItemClassListName" type="string" column="virtual_item_class_list_name" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

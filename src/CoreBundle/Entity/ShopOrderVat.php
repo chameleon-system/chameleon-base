@@ -1,28 +1,22 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopOrder;
+
 class ShopOrderVat {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopOrder|null - Belongs to order */
-private \ChameleonSystem\CoreBundle\Entity\ShopOrder|null $shopOrder = null,
-/** @var null|string - Belongs to order */
-private ?string $shopOrderId = null
+        
+    // TCMSFieldLookupParentID
+/** @var ShopOrder|null - Belongs to order */
+private ?ShopOrder $shopOrder = null
 , 
     // TCMSFieldVarchar
 /** @var string - Name */
-private string $name = '', 
-    // TCMSFieldDecimal
-/** @var float - Percent */
-private float $vatPercent = 0, 
-    // TCMSFieldDecimal
-/** @var float - Value for order */
-private float $value = 0  ) {}
+private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -41,31 +35,18 @@ private float $value = 0  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShopOrder(): \ChameleonSystem\CoreBundle\Entity\ShopOrder|null
+    // TCMSFieldLookupParentID
+public function getShopOrder(): ?ShopOrder
 {
     return $this->shopOrder;
 }
-public function setShopOrder(\ChameleonSystem\CoreBundle\Entity\ShopOrder|null $shopOrder): self
+
+public function setShopOrder(?ShopOrder $shopOrder): self
 {
     $this->shopOrder = $shopOrder;
-    $this->shopOrderId = $shopOrder?->getId();
 
     return $this;
 }
-public function getShopOrderId(): ?string
-{
-    return $this->shopOrderId;
-}
-public function setShopOrderId(?string $shopOrderId): self
-{
-    $this->shopOrderId = $shopOrderId;
-    // todo - load new id
-    //$this->shopOrderId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -77,34 +58,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDecimal
-public function getVatPercent(): float
-{
-    return $this->vatPercent;
-}
-public function setVatPercent(float $vatPercent): self
-{
-    $this->vatPercent = $vatPercent;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDecimal
-public function getValue(): float
-{
-    return $this->value;
-}
-public function setValue(float $value): self
-{
-    $this->value = $value;
 
     return $this;
 }

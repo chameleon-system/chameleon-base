@@ -1,31 +1,28 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTblConf;
+
 class CmsTblListClass {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null - Belongs to */
-private \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null $cmsTblConf = null,
-/** @var null|string - Belongs to */
-private ?string $cmsTblConfId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Alias name */
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - Path to list class */
 private string $classSubtype = '', 
-    // TCMSFieldOption
-/** @var string - Class folder */
-private string $classlocation = 'Core', 
     // TCMSFieldVarchar
 /** @var string - Class name */
-private string $classname = ''  ) {}
+private string $classname = '', 
+    // TCMSFieldLookupParentID
+/** @var CmsTblConf|null - Belongs to */
+private ?CmsTblConf $cmsTblConf = null
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -72,20 +69,6 @@ public function setClassSubtype(string $classSubtype): self
 
 
   
-    // TCMSFieldOption
-public function getClasslocation(): string
-{
-    return $this->classlocation;
-}
-public function setClasslocation(string $classlocation): self
-{
-    $this->classlocation = $classlocation;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getClassname(): string
 {
@@ -100,31 +83,18 @@ public function setClassname(string $classname): self
 
 
   
-    // TCMSFieldLookup
-public function getCmsTblConf(): \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null
+    // TCMSFieldLookupParentID
+public function getCmsTblConf(): ?CmsTblConf
 {
     return $this->cmsTblConf;
 }
-public function setCmsTblConf(\ChameleonSystem\CoreBundle\Entity\CmsTblConf|null $cmsTblConf): self
+
+public function setCmsTblConf(?CmsTblConf $cmsTblConf): self
 {
     $this->cmsTblConf = $cmsTblConf;
-    $this->cmsTblConfId = $cmsTblConf?->getId();
 
     return $this;
 }
-public function getCmsTblConfId(): ?string
-{
-    return $this->cmsTblConfId;
-}
-public function setCmsTblConfId(?string $cmsTblConfId): self
-{
-    $this->cmsTblConfId = $cmsTblConfId;
-    // todo - load new id
-    //$this->cmsTblConfId = $?->getId();
-
-    return $this;
-}
-
 
 
   

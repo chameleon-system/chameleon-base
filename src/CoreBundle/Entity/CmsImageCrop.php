@@ -1,40 +1,29 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsImageCrop {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMedia|null - Image */
-private \ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMedia = null,
-/** @var null|string - Image */
-private ?string $cmsMediaId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsImageCropPreset|null - Preset */
-private \ChameleonSystem\CoreBundle\Entity\CmsImageCropPreset|null $cmsImageCropPreset = null,
-/** @var null|string - Preset */
-private ?string $cmsImageCropPresetId = null
-, 
-    // TCMSFieldNumber
-/** @var int - X position of crop */
-private int $posX = 0, 
-    // TCMSFieldNumber
-/** @var int - Y position of crop */
-private int $posY = 0, 
-    // TCMSFieldNumber
-/** @var int -  */
-private int $width = 0, 
-    // TCMSFieldNumber
-/** @var int - Crop height */
-private int $height = 0, 
+        
+    // TCMSFieldVarchar
+/** @var string - X position of crop */
+private string $posX = '0', 
+    // TCMSFieldVarchar
+/** @var string - Y position of crop */
+private string $posY = '0', 
+    // TCMSFieldVarchar
+/** @var string -  */
+private string $width = '0', 
+    // TCMSFieldVarchar
+/** @var string - Crop height */
+private string $height = '0', 
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -53,68 +42,12 @@ private string $name = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsMedia(): \ChameleonSystem\CoreBundle\Entity\CmsMedia|null
-{
-    return $this->cmsMedia;
-}
-public function setCmsMedia(\ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMedia): self
-{
-    $this->cmsMedia = $cmsMedia;
-    $this->cmsMediaId = $cmsMedia?->getId();
-
-    return $this;
-}
-public function getCmsMediaId(): ?string
-{
-    return $this->cmsMediaId;
-}
-public function setCmsMediaId(?string $cmsMediaId): self
-{
-    $this->cmsMediaId = $cmsMediaId;
-    // todo - load new id
-    //$this->cmsMediaId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookup
-public function getCmsImageCropPreset(): \ChameleonSystem\CoreBundle\Entity\CmsImageCropPreset|null
-{
-    return $this->cmsImageCropPreset;
-}
-public function setCmsImageCropPreset(\ChameleonSystem\CoreBundle\Entity\CmsImageCropPreset|null $cmsImageCropPreset): self
-{
-    $this->cmsImageCropPreset = $cmsImageCropPreset;
-    $this->cmsImageCropPresetId = $cmsImageCropPreset?->getId();
-
-    return $this;
-}
-public function getCmsImageCropPresetId(): ?string
-{
-    return $this->cmsImageCropPresetId;
-}
-public function setCmsImageCropPresetId(?string $cmsImageCropPresetId): self
-{
-    $this->cmsImageCropPresetId = $cmsImageCropPresetId;
-    // todo - load new id
-    //$this->cmsImageCropPresetId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldNumber
-public function getPosX(): int
+    // TCMSFieldVarchar
+public function getPosX(): string
 {
     return $this->posX;
 }
-public function setPosX(int $posX): self
+public function setPosX(string $posX): self
 {
     $this->posX = $posX;
 
@@ -123,12 +56,12 @@ public function setPosX(int $posX): self
 
 
   
-    // TCMSFieldNumber
-public function getPosY(): int
+    // TCMSFieldVarchar
+public function getPosY(): string
 {
     return $this->posY;
 }
-public function setPosY(int $posY): self
+public function setPosY(string $posY): self
 {
     $this->posY = $posY;
 
@@ -137,12 +70,12 @@ public function setPosY(int $posY): self
 
 
   
-    // TCMSFieldNumber
-public function getWidth(): int
+    // TCMSFieldVarchar
+public function getWidth(): string
 {
     return $this->width;
 }
-public function setWidth(int $width): self
+public function setWidth(string $width): self
 {
     $this->width = $width;
 
@@ -151,12 +84,12 @@ public function setWidth(int $width): self
 
 
   
-    // TCMSFieldNumber
-public function getHeight(): int
+    // TCMSFieldVarchar
+public function getHeight(): string
 {
     return $this->height;
 }
-public function setHeight(int $height): self
+public function setHeight(string $height): self
 {
     $this->height = $height;
 

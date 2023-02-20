@@ -7,40 +7,19 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="cmsTplModuleInstanceId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance" >
+            <many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
     <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <one-to-many field="shopArticleCatalogConfDefaultOrderCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleCatalogConfDefaultOrder" mapped-by="shopArticleCatalogConfId" />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <one-to-many field="shopArticleCatalogConfDefaultOrderCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticleCatalogConfDefaultOrder" mapped-by="shopArticleCatalogConf" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="showSubcategoryProducts"  column="show_subcategory_products"  nullable="false"  />
-            <field name="pageSize"  column="page_size"  nullable="false"  />
-            <field name="shopModuleArticlelistOrderbyId" type="string" field="shop_module_articlelist_orderby_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopModuleArticlelistOrderby" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby">
-    <join-column name="shop_module_articlelist_orderby_id" referenced-column-name="id" />
-</many-to-one>
-            <many-to-many field="shopModuleArticlelistOrderbyMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby">
-    <join-table name="shop_article_catalog_conf_shop_module_articlelist_orderby_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="intro"  column="intro"  nullable="false"  />
+            <field name="pageSize" type="string" column="page_size" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

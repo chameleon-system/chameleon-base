@@ -7,19 +7,14 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="cmsExportProfilesId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsExportProfiles" inversed-by="cmsExportProfilesFields">
+            <many-to-one field="cmsExportProfiles" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsExportProfiles" inversed-by="cmsExportProfilesFieldsCollection" >
     <join-column name="cms_export_profiles_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="fieldname"  column="fieldname"  nullable="false"  />
-            <field name="sortOrder"  column="sort_order"  nullable="false"  />
-            <field name="htmlTemplate"  column="html_template"  nullable="false"  />
+            <field name="htmlTemplate" type="string" column="html_template" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -1,22 +1,22 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMigrationCounter;
+
 class CmsMigrationFile {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMigrationCounter|null -  */
-private \ChameleonSystem\CoreBundle\Entity\CmsMigrationCounter|null $cmsMigrationCounter = null,
-/** @var null|string -  */
-private ?string $cmsMigrationCounterId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Build number */
-private string $buildNumber = ''  ) {}
+private string $buildNumber = '', 
+    // TCMSFieldLookupParentID
+/** @var CmsMigrationCounter|null -  */
+private ?CmsMigrationCounter $cmsMigrationCounter = null
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -49,31 +49,18 @@ public function setBuildNumber(string $buildNumber): self
 
 
   
-    // TCMSFieldLookup
-public function getCmsMigrationCounter(): \ChameleonSystem\CoreBundle\Entity\CmsMigrationCounter|null
+    // TCMSFieldLookupParentID
+public function getCmsMigrationCounter(): ?CmsMigrationCounter
 {
     return $this->cmsMigrationCounter;
 }
-public function setCmsMigrationCounter(\ChameleonSystem\CoreBundle\Entity\CmsMigrationCounter|null $cmsMigrationCounter): self
+
+public function setCmsMigrationCounter(?CmsMigrationCounter $cmsMigrationCounter): self
 {
     $this->cmsMigrationCounter = $cmsMigrationCounter;
-    $this->cmsMigrationCounterId = $cmsMigrationCounter?->getId();
 
     return $this;
 }
-public function getCmsMigrationCounterId(): ?string
-{
-    return $this->cmsMigrationCounterId;
-}
-public function setCmsMigrationCounterId(?string $cmsMigrationCounterId): self
-{
-    $this->cmsMigrationCounterId = $cmsMigrationCounterId;
-    // todo - load new id
-    //$this->cmsMigrationCounterId = $?->getId();
-
-    return $this;
-}
-
 
 
   

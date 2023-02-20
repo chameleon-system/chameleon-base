@@ -7,33 +7,39 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="classname"  column="classname"  nullable="false"  />
-            <one-to-many field="shopPaymentHandlerGroupConfigCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroupConfig" mapped-by="shopPaymentHandlerGroupId" />
+            <field name="classname" type="string" column="classname" length="255" nullable="false"  />
+            <one-to-many field="shopPaymentHandlerGroupConfigCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroupConfig" mapped-by="shopPaymentHandlerGroup" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="ipnGroupIdentifier"  column="ipn_group_identifier"  nullable="false"  />
-            <field name="ipnPayloadCharacterCharset"  column="ipn_payload_character_charset"  nullable="false"  />
-            <one-to-many field="pkgShopPaymentIpnStatusCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnStatus" mapped-by="shopPaymentHandlerGroupId" />
+            <field name="ipnGroupIdentifier" type="string" column="ipn_group_identifier" length="255" nullable="false"  />
+            <field name="ipnPayloadCharacterCharset" type="string" column="ipn_payload_character_charset" length="255" nullable="false"  />
+            <one-to-many field="pkgShopPaymentIpnStatusCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnStatus" mapped-by="shopPaymentHandlerGroup" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="systemName"  column="system_name"  nullable="false"  />
-            <field name="description"  column="description"  nullable="false"  />
-            <one-to-many field="shopPaymentHandlerCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopPaymentHandler" mapped-by="shopPaymentHandlerGroupId" />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="systemName" type="string" column="system_name" length="255" nullable="false"  />
+            <one-to-many field="shopPaymentHandlerCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopPaymentHandler" mapped-by="shopPaymentHandlerGroup" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <one-to-many field="shopPaymentMethodCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopPaymentMethod" mapped-by="shopPaymentHandlerGroupId" />
+            <one-to-many field="shopPaymentMethodCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopPaymentMethod" mapped-by="shopPaymentHandlerGroup" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="ipnAllowedIps"  column="ipn_allowed_ips"  nullable="false"  />
-            <one-to-many field="pkgShopPaymentIpnTriggerCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnTrigger" mapped-by="shopPaymentHandlerGroupId" />
+            <one-to-many field="pkgShopPaymentIpnTriggerCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnTrigger" mapped-by="shopPaymentHandlerGroup" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <one-to-many field="pkgShopPaymentIpnMessageCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessage" mapped-by="shopPaymentHandlerGroupId" />
+            <one-to-many field="pkgShopPaymentIpnMessageCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessage" mapped-by="shopPaymentHandlerGroup" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="environment"  column="environment"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

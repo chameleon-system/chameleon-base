@@ -17,10 +17,6 @@ class TCMSFieldTailLog extends TCMSField
 
     protected $bLogNotReadable = false;
 
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        return null;
-    }
     public function GetHTML()
     {
         parent::GetHTML();

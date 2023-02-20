@@ -1,9 +1,10 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class ShopVariantDisplayHandler {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -14,12 +15,9 @@ private string $name = '',
 private string $class = '', 
     // TCMSFieldVarchar
 /** @var string - Class subtype */
-private string $classSubtype = 'pkgShop/objects/db/TShopVariantDisplayHandler', 
-    // TCMSFieldOption
-/** @var string - Class type */
-private string $classType = 'Core'  ) {}
+private string $classSubtype = 'pkgShop/objects/db/TShopVariantDisplayHandler'  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -74,20 +72,6 @@ public function getClassSubtype(): string
 public function setClassSubtype(string $classSubtype): self
 {
     $this->classSubtype = $classSubtype;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getClassType(): string
-{
-    return $this->classType;
-}
-public function setClassType(string $classType): self
-{
-    $this->classType = $classType;
 
     return $this;
 }

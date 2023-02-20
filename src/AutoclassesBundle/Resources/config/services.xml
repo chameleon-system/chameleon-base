@@ -11,6 +11,10 @@
     </parameters>
 
     <services>
+        <service id="ChameleonSystem\AutoclassesBundle\TableConfExport\TwigExtension">
+            <tag name="twig.extension"/>
+        </service>
+
         <service id="ChameleonSystem\AutoclassesBundle\Command\DumpTableConfCommand">
             <tag name="console.command"/>
             <argument type="service" id="ChameleonSystem\AutoclassesBundle\TableConfExport\TableConfExporter"/>

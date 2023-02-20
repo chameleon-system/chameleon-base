@@ -7,25 +7,17 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="cmsTplModuleInstanceId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance" >
+            <many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
     <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="signoutTitle"  column="signout_title"  nullable="false"  />
-            <field name="signoutText"  column="signout_text"  nullable="false"  />
-            <field name="signoutConfirmTitle"  column="signout_confirm_title"  nullable="false"  />
-            <field name="signoutConfirmText"  column="signout_confirm_text"  nullable="false"  />
-            <field name="signedoutTitle"  column="signedout_title"  nullable="false"  />
-            <field name="signedoutText"  column="signedout_text"  nullable="false"  />
-            <field name="noNewsletterSignedup"  column="no_newsletter_signedup"  nullable="false"  />
-            <field name="noNewsletterSignedupText"  column="no_newsletter_signedup_text"  nullable="false"  />
-            <field name="useDoubleOptOut"  column="use_double_opt_out"  nullable="false"  />
+            <field name="signoutTitle" type="string" column="signout_title" length="255" nullable="false"  />
+            <field name="signoutConfirmTitle" type="string" column="signout_confirm_title" length="255" nullable="false"  />
+            <field name="signedoutTitle" type="string" column="signedout_title" length="255" nullable="false"  />
+            <field name="noNewsletterSignedup" type="string" column="no_newsletter_signedup" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

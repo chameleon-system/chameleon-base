@@ -28,18 +28,6 @@ class TCMSFieldDecimal extends TCMSField
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldDecimal';
 
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        $default = $this->oDefinition->sqlData['field_default_value'] ?? null;
-        if (null !== $default) {
-            $default = (float) $default;
-        }
-        $data = $this->getDoctrineDataModelViewData(['type' => 'float', 'defaultValue' => $default]);
-        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
-        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
-
-        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
-    }
     public function GetHTML()
     {
         // number of decimals can be retrived from the length set of the field definition

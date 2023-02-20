@@ -1,17 +1,18 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMenuItem;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class CmsMenuCategory {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldPosition
-/** @var int - Position */
-private int $position = 0, 
     // TCMSFieldVarchar
 /** @var string - System name */
 private string $systemName = '', 
@@ -19,10 +20,11 @@ private string $systemName = '',
 /** @var string -  */
 private string $iconFontCssClass = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMenuItem[] - Menu items */
-private \Doctrine\Common\Collections\Collection $cmsMenuItemCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, cmsMenuItem> - Menu items */
+private Collection $cmsMenuItemCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -49,20 +51,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
 
     return $this;
 }
@@ -98,13 +86,32 @@ public function setIconFontCssClass(string $iconFontCssClass): self
 
   
     // TCMSFieldPropertyTable
-public function getCmsMenuItemCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsMenuItem>
+*/
+public function getCmsMenuItemCollection(): Collection
 {
     return $this->cmsMenuItemCollection;
 }
-public function setCmsMenuItemCollection(\Doctrine\Common\Collections\Collection $cmsMenuItemCollection): self
+
+public function addCmsMenuItemCollection(cmsMenuItem $cmsMenuItem): self
 {
-    $this->cmsMenuItemCollection = $cmsMenuItemCollection;
+    if (!$this->cmsMenuItemCollection->contains($cmsMenuItem)) {
+        $this->cmsMenuItemCollection->add($cmsMenuItem);
+        $cmsMenuItem->setCmsMenuCategory($this);
+    }
+
+    return $this;
+}
+
+public function removeCmsMenuItemCollection(cmsMenuItem $cmsMenuItem): self
+{
+    if ($this->cmsMenuItemCollection->removeElement($cmsMenuItem)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsMenuItem->getCmsMenuCategory() === $this) {
+            $cmsMenuItem->setCmsMenuCategory(null);
+        }
+    }
 
     return $this;
 }

@@ -1,19 +1,20 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class PkgShopPaymentTransactionType {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldVarcharUnique
+    // TCMSFieldVarchar
 /** @var string - System name */
 private string $systemName = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -46,7 +47,7 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldVarcharUnique
+    // TCMSFieldVarchar
 public function getSystemName(): string
 {
     return $this->systemName;

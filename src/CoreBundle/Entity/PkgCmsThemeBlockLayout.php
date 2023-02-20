@@ -1,22 +1,16 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock;
+
 class PkgCmsThemeBlockLayout {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock|null - Belongs to theme block */
-private \ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock|null $pkgCmsThemeBlock = null,
-/** @var null|string - Belongs to theme block */
-private ?string $pkgCmsThemeBlockId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMedia|null - Preview image */
-private \ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMedia = null,
-/** @var null|string - Preview image */
-private ?string $cmsMediaId = null
+        
+    // TCMSFieldLookupParentID
+/** @var PkgCmsThemeBlock|null - Belongs to theme block */
+private ?PkgCmsThemeBlock $pkgCmsThemeBlock = null
 , 
     // TCMSFieldVarchar
 /** @var string - Descriptive name */
@@ -28,7 +22,7 @@ private string $layoutFile = '',
 /** @var string - Path to own LESS/CSS */
 private string $lessFile = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -47,31 +41,18 @@ private string $lessFile = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getPkgCmsThemeBlock(): \ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock|null
+    // TCMSFieldLookupParentID
+public function getPkgCmsThemeBlock(): ?PkgCmsThemeBlock
 {
     return $this->pkgCmsThemeBlock;
 }
-public function setPkgCmsThemeBlock(\ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock|null $pkgCmsThemeBlock): self
+
+public function setPkgCmsThemeBlock(?PkgCmsThemeBlock $pkgCmsThemeBlock): self
 {
     $this->pkgCmsThemeBlock = $pkgCmsThemeBlock;
-    $this->pkgCmsThemeBlockId = $pkgCmsThemeBlock?->getId();
 
     return $this;
 }
-public function getPkgCmsThemeBlockId(): ?string
-{
-    return $this->pkgCmsThemeBlockId;
-}
-public function setPkgCmsThemeBlockId(?string $pkgCmsThemeBlockId): self
-{
-    $this->pkgCmsThemeBlockId = $pkgCmsThemeBlockId;
-    // todo - load new id
-    //$this->pkgCmsThemeBlockId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -114,34 +95,6 @@ public function setLessFile(string $lessFile): self
 
     return $this;
 }
-
-
-  
-    // TCMSFieldLookup
-public function getCmsMedia(): \ChameleonSystem\CoreBundle\Entity\CmsMedia|null
-{
-    return $this->cmsMedia;
-}
-public function setCmsMedia(\ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMedia): self
-{
-    $this->cmsMedia = $cmsMedia;
-    $this->cmsMediaId = $cmsMedia?->getId();
-
-    return $this;
-}
-public function getCmsMediaId(): ?string
-{
-    return $this->cmsMediaId;
-}
-public function setCmsMediaId(?string $cmsMediaId): self
-{
-    $this->cmsMediaId = $cmsMediaId;
-    // todo - load new id
-    //$this->cmsMediaId = $?->getId();
-
-    return $this;
-}
-
 
 
   

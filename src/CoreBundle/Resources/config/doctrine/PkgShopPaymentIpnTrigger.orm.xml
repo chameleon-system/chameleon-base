@@ -7,31 +7,19 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopPaymentHandlerGroupId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup" inversed-by="pkgShopPaymentIpnTrigger">
+            <many-to-one field="shopPaymentHandlerGroup" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup" inversed-by="pkgShopPaymentIpnTriggerCollection" >
     <join-column name="shop_payment_handler_group_id" referenced-column-name="id" />
 </many-to-one>
-            <one-to-many field="pkgShopPaymentIpnMessageTriggerCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessageTrigger" mapped-by="pkgShopPaymentIpnTriggerId" />
+            <one-to-many field="pkgShopPaymentIpnMessageTriggerCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessageTrigger" mapped-by="pkgShopPaymentIpnTrigger" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="active"  column="active"  nullable="false"  />
-            <field name="targetUrl"  column="target_url"  nullable="false"  />
-            <field name="timeoutSeconds"  column="timeout_seconds"  nullable="false"  />
-            <many-to-many field="pkgShopPaymentIpnStatusMlt" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnStatus">
-    <join-table name="pkg_shop_payment_ipn_trigger_pkg_shop_payment_ipn_status_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
+            <field name="targetUrl" type="string" column="target_url" length="255" nullable="false"  />
+            <field name="timeoutSeconds" type="string" column="timeout_seconds" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

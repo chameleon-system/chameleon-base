@@ -35,38 +35,6 @@ use ViewRenderer;
  */
 class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 {
-
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        $original = parent::getDoctrineDataModelParts($namespace);
-
-        if (null === $original) {
-            return null;
-        }
-
-        $type = sprintf('%s\%s|null', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
-
-        $data = $this->getDoctrineDataModelViewData(
-            [
-                'type' => $type,
-                'defaultValue' => 'null',
-                'propertyName' => $this->snakeToCamelCase($this->name.'_cropped'),
-                'getterName' => $this->getDoctrineDataModelGetterName('get', $this->name.'_cropped'),
-                'setterName' => $this->getDoctrineDataModelGetterName('set', $this->name.'_cropped'),
-
-                'description' => sprintf('%s - cropped image', $this->oDefinition->sqlData['translation']),
-            ]
-        );
-        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
-        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
-
-        return new DataModelParts(
-            implode(",\n", [$original->getProperty(), $rendererProperty->render()]),
-            implode("\n", [$original->getMethods(), $rendererMethod->render()]), $data['allowDefaultValue']
-        );
-
-    }
-
     /**
      * {@inheritDoc}
      */

@@ -7,29 +7,15 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopVoucherId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopVoucher" inversed-by="shopVoucherUse">
+            <many-to-one field="shopVoucher" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVoucher" inversed-by="shopVoucherUseCollection" >
     <join-column name="shop_voucher_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="dateUsed"  column="date_used"  nullable="false"  />
-            <field name="valueUsed"  column="value_used"  nullable="false"  />
-            <many-to-one field="shopOrderId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="shopVoucherUse">
+            <many-to-one field="shopOrder" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="shopVoucherUseCollection" >
     <join-column name="shop_order_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="valueUsedInOrderCurrency"  column="value_used_in_order_currency"  nullable="false"  />
-            <field name="pkgShopCurrencyId" type="string" field="pkg_shop_currency_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgShopCurrency" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopCurrency">
-    <join-column name="pkg_shop_currency_id" referenced-column-name="id" />
 </many-to-one>
     </entity>
 

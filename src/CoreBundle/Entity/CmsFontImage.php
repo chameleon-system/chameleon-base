@@ -1,9 +1,10 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsFontImage {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -12,50 +13,35 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - Profile name */
 private string $profileName = '', 
-    // TCMSFieldNumber
-/** @var int - Image height */
-private int $imgHeight = -1, 
-    // TCMSFieldNumber
-/** @var int - Image width */
-private int $imgWidth = -1, 
+    // TCMSFieldVarchar
+/** @var string - Image height */
+private string $imgHeight = '-1', 
+    // TCMSFieldVarchar
+/** @var string - Image width */
+private string $imgWidth = '-1', 
     // TCMSFieldVarchar
 /** @var string - Image background color */
 private string $imgBackgroundColor = '-1', 
     // TCMSFieldVarchar
 /** @var string - Font color */
 private string $fontColor = '', 
-    // TCMSFieldNumber
-/** @var int - Font size */
-private int $fontSize = 0, 
-    // TCMSFieldOption
-/** @var string - Font width */
-private string $fontWeight = 'normal', 
-    // TCMSFieldOption
-/** @var string - Font alignment */
-private string $fontAlign = 'left', 
-    // TCMSFieldOption
-/** @var string - Font alignment vertical */
-private string $fontVerticalAlign = 'top', 
+    // TCMSFieldVarchar
+/** @var string - Font size */
+private string $fontSize = '', 
     // TCMSFieldVarchar
 /** @var string - Font file */
 private string $fontFilename = '', 
-    // TCMSFieldOption
-/** @var string - Image type */
-private string $imgType = 'png', 
-    // TCMSFieldBoolean
-/** @var bool - With background image */
-private bool $imgBackgroundImg = false, 
     // TCMSFieldVarchar
 /** @var string - Background image file */
 private string $backgroundImgFile = '', 
-    // TCMSFieldNumber
-/** @var int - Text position X-axis */
-private int $textPositionX = 0, 
-    // TCMSFieldNumber
-/** @var int - Text position Y-axis */
-private int $textPositionY = 0  ) {}
+    // TCMSFieldVarchar
+/** @var string - Text position X-axis */
+private string $textPositionX = '', 
+    // TCMSFieldVarchar
+/** @var string - Text position Y-axis */
+private string $textPositionY = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -102,12 +88,12 @@ public function setProfileName(string $profileName): self
 
 
   
-    // TCMSFieldNumber
-public function getImgHeight(): int
+    // TCMSFieldVarchar
+public function getImgHeight(): string
 {
     return $this->imgHeight;
 }
-public function setImgHeight(int $imgHeight): self
+public function setImgHeight(string $imgHeight): self
 {
     $this->imgHeight = $imgHeight;
 
@@ -116,12 +102,12 @@ public function setImgHeight(int $imgHeight): self
 
 
   
-    // TCMSFieldNumber
-public function getImgWidth(): int
+    // TCMSFieldVarchar
+public function getImgWidth(): string
 {
     return $this->imgWidth;
 }
-public function setImgWidth(int $imgWidth): self
+public function setImgWidth(string $imgWidth): self
 {
     $this->imgWidth = $imgWidth;
 
@@ -158,56 +144,14 @@ public function setFontColor(string $fontColor): self
 
 
   
-    // TCMSFieldNumber
-public function getFontSize(): int
+    // TCMSFieldVarchar
+public function getFontSize(): string
 {
     return $this->fontSize;
 }
-public function setFontSize(int $fontSize): self
+public function setFontSize(string $fontSize): self
 {
     $this->fontSize = $fontSize;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getFontWeight(): string
-{
-    return $this->fontWeight;
-}
-public function setFontWeight(string $fontWeight): self
-{
-    $this->fontWeight = $fontWeight;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getFontAlign(): string
-{
-    return $this->fontAlign;
-}
-public function setFontAlign(string $fontAlign): self
-{
-    $this->fontAlign = $fontAlign;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getFontVerticalAlign(): string
-{
-    return $this->fontVerticalAlign;
-}
-public function setFontVerticalAlign(string $fontVerticalAlign): self
-{
-    $this->fontVerticalAlign = $fontVerticalAlign;
 
     return $this;
 }
@@ -228,34 +172,6 @@ public function setFontFilename(string $fontFilename): self
 
 
   
-    // TCMSFieldOption
-public function getImgType(): string
-{
-    return $this->imgType;
-}
-public function setImgType(string $imgType): self
-{
-    $this->imgType = $imgType;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isImgBackgroundImg(): bool
-{
-    return $this->imgBackgroundImg;
-}
-public function setImgBackgroundImg(bool $imgBackgroundImg): self
-{
-    $this->imgBackgroundImg = $imgBackgroundImg;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getBackgroundImgFile(): string
 {
@@ -270,12 +186,12 @@ public function setBackgroundImgFile(string $backgroundImgFile): self
 
 
   
-    // TCMSFieldNumber
-public function getTextPositionX(): int
+    // TCMSFieldVarchar
+public function getTextPositionX(): string
 {
     return $this->textPositionX;
 }
-public function setTextPositionX(int $textPositionX): self
+public function setTextPositionX(string $textPositionX): self
 {
     $this->textPositionX = $textPositionX;
 
@@ -284,12 +200,12 @@ public function setTextPositionX(int $textPositionX): self
 
 
   
-    // TCMSFieldNumber
-public function getTextPositionY(): int
+    // TCMSFieldVarchar
+public function getTextPositionY(): string
 {
     return $this->textPositionY;
 }
-public function setTextPositionY(int $textPositionY): self
+public function setTextPositionY(string $textPositionY): self
 {
     $this->textPositionY = $textPositionY;
 
